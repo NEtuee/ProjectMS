@@ -1,0 +1,532 @@
+using System.Collections.Generic;
+using System.Xml;
+using System.IO;
+using System.Text;
+using UnityEngine;
+
+
+public static class ActionGraphLoader
+{
+    public static ActionGraphBaseData readFromXML(string path)
+    {
+        XmlDocument xmlDoc = new XmlDocument();
+        try
+        {
+            xmlDoc.Load(path);
+        }
+        catch(System.Exception ex)
+        {
+            DebugUtil.assert(false,"xml load exception : {0}",ex.Message);
+            return null;
+        }
+        
+        if(xmlDoc.HasChildNodes == false)
+        {
+            DebugUtil.assert(false,"xml is empty");
+            return null;
+        }
+
+
+        XmlNode node = xmlDoc.FirstChild;
+        if(node.Name.Equals("ActionGraph") == false)
+        {
+            DebugUtil.assert(false,"wrong xml type. name : {0}",node.Name);
+            return null;
+        }
+        
+        float defaultFramePerSecond = 0f;
+        string defaultActionName = "";
+
+        ActionGraphBaseData actionBaseData = new ActionGraphBaseData();
+        ReadTitle(node,actionBaseData,out defaultFramePerSecond, out defaultActionName);
+
+        List<ActionGraphNodeData> nodeDataList = new List<ActionGraphNodeData>();
+        List<ActionGraphBranchData> branchDataList = new List<ActionGraphBranchData>();
+        List<ActionGraphConditionCompareData> compareDataList = new List<ActionGraphConditionCompareData>();
+        List<AnimationPlayDataInfo> animationDataList = new List<AnimationPlayDataInfo>();
+
+        Dictionary<ActionGraphBranchData, string> actionCompareDic = new Dictionary<ActionGraphBranchData, string>();
+        Dictionary<string, int> actionIndexDic = new Dictionary<string, int>();
+        XmlNodeList nodeList = node.ChildNodes;
+        for(int i = 0; i < nodeList.Count; ++i)
+        {
+            ActionGraphNodeData nodeData = ReadAction(nodeList[i],defaultFramePerSecond, ref animationDataList, ref actionCompareDic, ref branchDataList,ref compareDataList);
+            if(nodeData == null)
+            {
+                DebugUtil.assert(false,"node data is null : {0}",nodeList[i].Name);
+                return null;
+            }
+
+            nodeDataList.Add(nodeData);
+            actionIndexDic.Add(nodeData._nodeName,i);
+        }
+
+        foreach(var item in actionCompareDic)
+        {
+            if(actionIndexDic.ContainsKey(item.Value) == false)
+            {
+                DebugUtil.assert(false,"target action is not exists : {0}",item.Value);
+                return null;
+            }
+            else if(item.Value == defaultActionName)
+            {
+                actionBaseData._defaultActionIndex = actionIndexDic[item.Value];
+            }
+
+            item.Key._branchActionIndex = actionIndexDic[item.Value];
+        }
+
+        actionBaseData._actionNodeCount = nodeDataList.Count;
+        actionBaseData._branchCount = branchDataList.Count;
+        actionBaseData._conditionCompareDataCount = compareDataList.Count;
+        actionBaseData._animationPlayDataCount = animationDataList.Count;
+
+        actionBaseData._actionNodeData = nodeDataList.ToArray();
+        actionBaseData._branchData = branchDataList.ToArray();
+        actionBaseData._conditionCompareData = compareDataList.ToArray();
+        actionBaseData._animationPlayData = animationDataList.ToArray();
+
+        return actionBaseData;
+    }
+
+    private static ActionGraphNodeData ReadAction(XmlNode node, float defaultFPS, ref List<AnimationPlayDataInfo> animationDataList,  ref Dictionary<ActionGraphBranchData, string> actionCompareDic,ref List<ActionGraphBranchData> branchDataList, ref List<ActionGraphConditionCompareData> compareDataList)
+    {
+        ActionGraphNodeData nodeData = new ActionGraphNodeData();
+        nodeData._nodeName = node.Name;
+
+        //action attribute
+        XmlAttributeCollection actionAttributes = node.Attributes;
+        for(int attrIndex = 0; attrIndex < actionAttributes.Count; ++attrIndex)
+        {
+            string targetName = actionAttributes[attrIndex].Name;
+            string targetValue = actionAttributes[attrIndex].Value;
+
+            if(targetName == "MovementType")
+            {
+                nodeData._movementType = (MovementBase.MovementType)System.Enum.Parse(typeof(MovementBase.MovementType), targetValue);
+            }
+            else if(targetName == "DirectionType")
+            {
+                nodeData._directionType = (DirectionType)System.Enum.Parse(typeof(DirectionType), targetValue);
+            }
+        }
+
+        XmlNodeList nodeList = node.ChildNodes;
+        int branchStartIndex = branchDataList.Count;
+
+        for(int i = 0; i < nodeList.Count; ++i)
+        {
+            if(nodeList[i].Name == "Animation")
+            {
+                AnimationPlayDataInfo animationData = ReadActionAnimation(nodeList[i],defaultFPS);
+                nodeData._animationInfoIndex = animationDataList.Count;
+                animationData._hasMovementGraph = nodeData._movementType == MovementBase.MovementType.RootMotion;
+                animationDataList.Add(animationData);
+            }
+            else if(nodeList[i].Name == "Branch")
+            {
+                ActionGraphBranchData branchData = ReadActionBranch(nodeList[i],nodeData,ref actionCompareDic,ref compareDataList);
+                if(branchData == null)
+                {
+                    DebugUtil.assert(false,"invalid branch data");
+                    return null;
+                }
+                    
+                    
+                branchDataList.Add(branchData);
+            }
+        }
+
+        if(branchStartIndex == branchDataList.Count)
+        {
+            DebugUtil.assert(false,"branch data not exists");
+            return null;
+        }
+
+        nodeData._branchIndexStart = branchStartIndex;
+        nodeData._branchCount = branchDataList.Count - branchStartIndex;
+
+        return nodeData;
+    }
+
+    public static AnimationPlayDataInfo ReadActionAnimation(XmlNode node, float defaultFPS)
+    {
+        AnimationPlayDataInfo playData = new AnimationPlayDataInfo();
+        playData._framePerSec = defaultFPS;
+
+        XmlAttributeCollection actionAttributes = node.Attributes;
+        for(int attrIndex = 0; attrIndex < actionAttributes.Count; ++attrIndex)
+        {
+            string targetName = actionAttributes[attrIndex].Name;
+            string targetValue = actionAttributes[attrIndex].Value;
+
+            if(targetName == "Path")
+            {
+                playData._path = targetValue;
+            }
+            else if(targetName == "FramePerSecond")
+            {
+                playData._framePerSec = float.Parse(targetValue);
+            }
+            else if(targetName == "StartFrame")
+            {
+                playData._startFrame = float.Parse(targetValue);
+            }
+            else if(targetName == "EndFrame")
+            {
+                playData._endFrame = float.Parse(targetValue);
+            }
+            else if(targetName == "XFlip")
+            {
+                playData._xFlipFollowDirection = bool.Parse(targetValue);
+            }
+            else if(targetName == "YFlip")
+            {
+                playData._yFlipFollowDirection = bool.Parse(targetValue);
+            }
+            else if(targetName == "Loop")
+            {
+                playData._isLoop = bool.Parse(targetValue);
+            }
+        }
+
+        if(node.HasChildNodes == true)
+        {
+            XmlNodeList nodeList = node.ChildNodes;
+            List<ActionFrameEventBase> frameEventList = new List<ActionFrameEventBase>();
+            for(int i = 0; i < nodeList.Count; ++i)
+            {
+                if(nodeList[i].Name == "FrameEvent")
+                {
+                    ActionFrameEventBase frameEvent = FrameEventLoader.readFromXMLNode(nodeList[i]);
+                    if(frameEvent == null)
+                        continue;
+                    
+                    frameEventList.Add(frameEvent);
+                }
+            }
+
+            playData._frameEventDataCount = frameEventList.Count;
+            playData._frameEventData = frameEventList.ToArray();
+        }
+
+        return playData;
+    }
+
+    private static ActionGraphBranchData ReadActionBranch(XmlNode node, ActionGraphNodeData data, ref Dictionary<ActionGraphBranchData, string> actionCompareDic,  ref List<ActionGraphConditionCompareData> compareDataList)
+    {
+        ActionGraphBranchData branchData = new ActionGraphBranchData();
+        XmlAttributeCollection actionAttributes = node.Attributes;
+        for(int attrIndex = 0; attrIndex < actionAttributes.Count; ++attrIndex)
+        {
+            string targetName = actionAttributes[attrIndex].Name;
+            string targetValue = actionAttributes[attrIndex].Value;
+
+            if(targetName == "Condition")
+            {
+                ActionGraphConditionCompareData conditionData = ReadConditionCompareData(targetValue);
+                if(conditionData == null)
+                    return null;
+
+                branchData._conditionCompareDataIndex = compareDataList.Count;
+                compareDataList.Add(conditionData);
+            }
+            else if(targetName == "Action")
+            {
+                actionCompareDic.Add(branchData, targetValue);
+            }
+        }
+
+
+        return branchData;
+    }
+
+    public static ActionGraphConditionCompareData ReadConditionCompareData(string formula)
+    {
+        formula = formula.Replace(" ","");
+        int end;
+        List<ActionGraphConditionNodeData> symbolList = new List<ActionGraphConditionNodeData>();
+        List<ConditionCompareType> compareTypeList = new List<ConditionCompareType>();
+        
+        int resultIndex = 0;
+        DebugUtil.assert(ReadConditionFormula(formula,0, ref resultIndex, out end,symbolList,compareTypeList) == true,"Tlqkfsusdk");
+
+        ActionGraphConditionCompareData compareData = new ActionGraphConditionCompareData();
+        compareData._compareTypeArray = compareTypeList.ToArray();
+        compareData._compareTypeCount = compareTypeList.Count;
+        compareData._conditionNodeDataArray = symbolList.ToArray();
+        compareData._conditionNodeDataCount = symbolList.Count;
+
+        return compareData;
+    }
+
+    private static bool ReadConditionFormula(string formula, int start, ref int resultIndex, out int end, in List<ActionGraphConditionNodeData> symbolList, in List<ConditionCompareType> compareTypeList )
+    {
+        end = -1;
+
+        if(formula.Length <= start || formula[start] == ')')
+        {
+            DebugUtil.assert(false, "condition formular is invalid {0}", formula);
+            return false;
+        }
+
+        string calcFormula = formula.Substring(start);
+        while(calcFormula.Contains("(") == true)
+        {
+            int brancketIndex = calcFormula.IndexOf("(",0);
+
+            if(calcFormula.Contains(")") && calcFormula.IndexOf(")") < brancketIndex)
+                break;
+
+            int brancketEndIndex = -1;
+            bool result = ReadConditionFormula(calcFormula, brancketIndex + 1, ref resultIndex, out brancketEndIndex, in symbolList, in compareTypeList);
+
+            if(brancketEndIndex == -1 || result == false)
+                return false;
+                
+            calcFormula = calcFormula.Remove(brancketIndex, brancketEndIndex - brancketIndex + 1);
+            calcFormula = calcFormula.Insert(brancketIndex, "RESULT_" + resultIndex++);
+
+        }
+
+        if(calcFormula.Contains(")"))
+        {
+            end = formula.IndexOf(")");
+            calcFormula = calcFormula.Substring(0,calcFormula.IndexOf(")"));
+        }
+
+        SplitToMark(calcFormula, ref resultIndex, in symbolList, in compareTypeList);
+
+        return true;
+    }
+
+    private static void SplitToMark(string formula, ref int resultIndex, in List<ActionGraphConditionNodeData> symbolList, in List<ConditionCompareType> compareTypeList)
+    {
+        string calcFormula = formula;
+        int symbolEndIndex = 0;
+        int markLength = 0;
+        ConditionCompareType compareType = ConditionCompareType.Count;
+
+        int loopCount = 0;
+        while(ReadNearestMark(calcFormula,out symbolEndIndex,out markLength, out compareType) == true)
+        {
+            string symbol = calcFormula.Substring(0,symbolEndIndex);
+            calcFormula = calcFormula.Remove(0,symbolEndIndex + markLength);
+
+            symbolList.Add(getConditionNodeData(symbol));
+            compareTypeList.Add(compareType);
+
+            if(++loopCount >= 2)
+                symbolList.Add(getConditionNodeData("RESULT_" + resultIndex++));
+  
+        }
+        
+
+        symbolList.Add(getConditionNodeData(calcFormula));
+
+        return;
+    }
+
+    private static ActionGraphConditionNodeData getConditionNodeData(string symbol)
+    {
+        ActionGraphConditionNodeData nodeData = isLiteral(symbol);
+        if(nodeData != null)
+            return nodeData;
+
+        nodeData = isResult(symbol);
+        if(nodeData != null)
+            return nodeData;
+
+        nodeData = new ActionGraphConditionNodeData();
+        if(ConditionNodeInfoPreset._nodePreset.ContainsKey(symbol) == false)
+        {
+            DebugUtil.assert(false,"Target Symbol does not exists : {0}",symbol);
+            return null;
+        }
+
+        nodeData._symbolName = symbol;
+        return nodeData;
+    }
+
+    private static ActionGraphConditionNodeData_ConditionResult isResult(string symbol)
+    {
+        if(symbol.Contains("RESULT_") == false)
+            return null;
+
+        string index = symbol.Substring(7);
+        int indexInt = 0;
+        if(int.TryParse(index,out indexInt) == false)
+        {
+            DebugUtil.assert(false,"result index invalid: {0}",symbol);
+            return null;
+        }
+
+        ActionGraphConditionNodeData_ConditionResult result = new ActionGraphConditionNodeData_ConditionResult();
+        result._resultIndex = indexInt;
+        result._symbolName = "RESULT";
+
+        return result;
+    }
+
+    private static ActionGraphConditionNodeData_Literal isLiteral(string symbol)
+    {
+        if(int.TryParse(symbol,out int intRresult))
+        {
+            ActionGraphConditionNodeData_Literal literal = new ActionGraphConditionNodeData_Literal();
+            literal._symbolName = "Literal_Int";
+            literal.setLiteral(System.BitConverter.GetBytes(intRresult));
+
+            return literal;
+        }
+        else if(float.TryParse(symbol,out float floatResult))
+        {
+            ActionGraphConditionNodeData_Literal literal = new ActionGraphConditionNodeData_Literal();
+            literal._symbolName = "Literal_Float";
+            literal.setLiteral(System.BitConverter.GetBytes(floatResult));
+
+            return literal;
+        }
+        else if(bool.TryParse(symbol,out bool boolResult))
+        {
+            ActionGraphConditionNodeData_Literal literal = new ActionGraphConditionNodeData_Literal();
+            literal._symbolName = "Literal_Bool";
+            literal.setLiteral(System.BitConverter.GetBytes(boolResult));
+
+            return literal;
+        }
+
+        return null;
+    }
+
+    private static bool ReadNearestMark(string formula, out int symbolEndIndex, out int markLength, out ConditionCompareType compareType)
+    {
+        compareType = ConditionCompareType.Count;
+        symbolEndIndex = int.MaxValue;
+        markLength = 0;
+        if(formula.Contains("&&") == true && formula.IndexOf("&&") < symbolEndIndex)
+        {
+            compareType = ConditionCompareType.And;
+            symbolEndIndex = formula.IndexOf("&&");
+            markLength = 2;
+        }
+        if(formula.Contains("||") == true && formula.IndexOf("||") < symbolEndIndex)
+        {
+            compareType = ConditionCompareType.Or;
+            symbolEndIndex = formula.IndexOf("||");
+            markLength = 2;
+        }
+        if(formula.Contains("==") == true && formula.IndexOf("==") < symbolEndIndex)
+        {
+            compareType = ConditionCompareType.Equals;
+            symbolEndIndex = formula.IndexOf("==");
+            markLength = 2;
+        }
+
+        if(formula.Contains(">") == true && formula.IndexOf(">") < symbolEndIndex)
+        {
+            compareType = ConditionCompareType.Greater;
+            symbolEndIndex = formula.IndexOf(">");
+            markLength = 1;
+        }
+        if(formula.Contains(">=") == true && formula.IndexOf(">=") <= symbolEndIndex)
+        {
+            compareType = ConditionCompareType.GreaterEqual;
+            symbolEndIndex = formula.IndexOf(">=");
+            markLength = 2;
+        }
+
+        if(formula.Contains("<") == true && formula.IndexOf("<") < symbolEndIndex)
+        {
+            compareType = ConditionCompareType.Smaller;
+            symbolEndIndex = formula.IndexOf("<=");
+            markLength = 2;
+        }
+        if(formula.Contains("<=") == true && formula.IndexOf("<=") <= symbolEndIndex)
+        {
+            compareType = ConditionCompareType.SmallerEqual;
+            symbolEndIndex = formula.IndexOf("<=");
+            markLength = 2;
+        }
+        if(formula.Contains("!=") == true && formula.IndexOf("!=") < symbolEndIndex)
+        {
+            compareType = ConditionCompareType.NotEquals;
+            symbolEndIndex = formula.IndexOf("!=");
+            markLength = 2;
+        }
+
+        if(markLength == 0 || symbolEndIndex == int.MaxValue || compareType == ConditionCompareType.Count)
+            return false;
+
+        return true;
+    }
+
+    private static void ReadTitle(XmlNode node, ActionGraphBaseData baseData, out float defaultFPS, out string defaultAction)
+    {
+        defaultFPS = -1f;
+        defaultAction = "";
+
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int attrIndex = 0; attrIndex < attributes.Count; ++attrIndex)
+        {
+            string targetName = attributes[attrIndex].Name;
+            string targetValue = attributes[attrIndex].Value;
+
+            if(targetName == "Name")
+            {
+                baseData._name = targetValue;
+            }
+            else if(targetName == "DefaultFramePerSecond")
+            {
+                defaultFPS = float.Parse(targetValue);
+            }
+            else if(targetName == "DefaultAction")
+            {
+                defaultAction = targetValue;
+            }
+
+        }
+    }
+
+
+    // public static MovementGraph readFromBinary(string path)
+    // {
+    //     if(File.Exists(path) == false)
+    //     {
+    //         DebugUtil.assert(false,"file does not exists : {0}", path);
+    //         return null;
+    //     }
+
+    //     var fileStream = File.Open(path, FileMode.Create);
+    //     var reader = new BinaryReader(fileStream,Encoding.UTF8,false);
+    //     MovementGraph graph = ScriptableObject.CreateInstance<MovementGraph>();
+
+    //     graph.deserialize(reader);
+
+    //     reader.Close();
+    //     fileStream.Close();
+    //     return graph;
+    // }
+
+    // public static MovementGraph readFromXMLAndExportToBinary(string xmlPath, string binaryPath)
+    // {
+    //     MovementGraph graph = readFromXML(xmlPath);
+    //     if(graph == null)
+    //     {
+    //         return null;
+    //     }
+
+    //     exportToBinary(graph, binaryPath);
+    //     return graph;
+    // }
+
+    // public static void exportToBinary(MovementGraph graph, string path)
+    // {
+    //     var fileStream = File.Open(path, FileMode.Create);
+    //     var writer = new BinaryWriter(fileStream,Encoding.UTF8,false);
+
+    //     graph.serialize(writer);
+
+    //     writer.Close();
+    //     fileStream.Close();
+    // }
+}

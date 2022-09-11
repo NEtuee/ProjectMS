@@ -1,0 +1,20 @@
+<ActionGraph Name="Test" DefaultAction="Idle" DefaultFramePerSecond="4">
+
+    <Idle DirectionType="Keep">
+        <Animation Path="Resources/Sprites/TestPlayer/Idle/" StartFrame="0" EndFrame="1" XFlip="true">
+        </Animation>
+
+        <Branch Condition="End == true" Action="Idle"/>
+        <Branch Condition="ActionTest == true" Action="Move"/>
+    </Idle>
+
+    <Move MovementType="RootMotion" DirectionType="MoveInput">
+        <Animation Path="Resources/Sprites/TestPlayer/Move/" StartFrame="0" EndFrame="4" FramePerSecond="12" XFlip="true">
+            <FrameEvent Type="Test" StartFrame="0" Log="Test Frame Event"/>
+        </Animation>
+
+        <Branch Condition="End == true" Action="Move"/>
+        <Branch Condition="ActionTest == false" Action="Idle"/>
+    </Move>
+
+</ActionGraph>
