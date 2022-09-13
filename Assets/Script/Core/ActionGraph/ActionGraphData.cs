@@ -30,6 +30,7 @@ public class ActionGraphNodeData
     public string                       _nodeName;
     public int                          _animationInfoIndex;
     public MovementBase.MovementType    _movementType;
+    public MovementGraphPresetData      _movementGraphPresetData;
     public DirectionType                _directionType;
 
     public int                          _index;
@@ -42,6 +43,7 @@ public enum DirectionType
     AlwaysRight = 0,
     Keep,
     MoveInput,
+    MousePoint,
     Count,
 }
 
@@ -72,6 +74,7 @@ public enum ConditionNodeUpdateType
     ConditionResult,
 
     Action_Test,
+    Action_Dash,
     Action_AnimationEnd,
     
     Count,
@@ -106,6 +109,7 @@ public static class ConditionNodeInfoPreset
         {"Literal_Float",new ConditionNodeInfo(ConditionNodeUpdateType.Literal, ConditionNodeType.Float)},
         {"RESULT",new ConditionNodeInfo(ConditionNodeUpdateType.ConditionResult, ConditionNodeType.Bool)},
         {"ActionTest",new ConditionNodeInfo(ConditionNodeUpdateType.Action_Test, ConditionNodeType.Bool)},
+        {"ActionDash",new ConditionNodeInfo(ConditionNodeUpdateType.Action_Dash, ConditionNodeType.Bool)},
         {"End",new ConditionNodeInfo(ConditionNodeUpdateType.Action_AnimationEnd, ConditionNodeType.Bool)},
         
     };

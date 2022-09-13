@@ -109,6 +109,11 @@ public static class ActionGraphLoader
             {
                 nodeData._directionType = (DirectionType)System.Enum.Parse(typeof(DirectionType), targetValue);
             }
+            else if(targetName == "MovementGraphPreset")
+            {
+                MovementGraphPreset preset = ResourceContainerEx.Instance().GetScriptableObject("Preset\\MovementGraphPreset") as MovementGraphPreset;
+                nodeData._movementGraphPresetData = preset.getPresetData(targetValue);
+            }
         }
 
         XmlNodeList nodeList = node.ChildNodes;

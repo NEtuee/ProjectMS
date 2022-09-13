@@ -100,7 +100,9 @@ public class ActionGraph
         _prevActionNodeIndex = _currentActionNodeIndex;
         _currentActionNodeIndex = actionIndex;
 
-        changeAnimation(getCurrentAction()._animationInfoIndex);
+        int animationInfoIndex = getCurrentAction()._animationInfoIndex;
+        if(animationInfoIndex != -1)
+            changeAnimation(animationInfoIndex);
     }
 
     private void changeAnimation(int animationIndex)
@@ -408,5 +410,6 @@ public class ActionGraph
     public FlipState getCurrentFlipState(UnityEngine.Vector3 direction) {return _animationPlayer.getCurrentFlipState(direction);}
     public MovementGraph getCurrentMovementGraph() {return _animationPlayer.getCurrentMovementGraph();}
     public MovementBase.MovementType getCurrentMovement() {return getCurrentAction()._movementType;}
+    public MovementGraphPresetData getCurrentMovementGraphPreset() {return getCurrentAction()._movementGraphPresetData;}
     private ActionGraphNodeData getCurrentAction() {return _actionGraphBaseData._actionNodeData[_currentActionNodeIndex];}
 }

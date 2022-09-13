@@ -43,6 +43,7 @@ public class GameEntityBase : SequencerObjectBase
 
             string prevActionName = _actionGraph.getCurrentActionName();
             _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Action_Test, MathEx.equals(input.sqrMagnitude,0f,float.Epsilon) == false);
+            _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Action_Dash, Input.GetKey(KeyCode.Space));
 
             //action ,animation, movementGraph 바뀌는 시점
             if(_actionGraph.progress(Time.deltaTime, this) == true)
@@ -86,6 +87,10 @@ public class GameEntityBase : SequencerObjectBase
                 _direction.Normalize();
             }
             break;
+        case DirectionType.MousePoint:
+            _direction = MathEx.deleteZ(Camera.main.ScreenToWorldPoint(Input.mousePosition)) - transform.position;
+            _direction.Normalize();
+            break;
         case DirectionType.Count:
             DebugUtil.assert(false, "invalid direction type : {0}",_actionGraph.getDirectionType());
             break;
@@ -103,5 +108,6 @@ public class GameEntityBase : SequencerObjectBase
 
     public MoveValuePerFrameFromTimeDesc getMoveValuePerFrameFromTimeDesc(){return _actionGraph.getMoveValuePerFrameFromTimeDesc();}
     public MovementGraph getCurrentMovementGraph(){return _actionGraph.getCurrentMovementGraph();}
+    public MovementGraphPresetData getCurrentMovementGraphPreset() {return _actionGraph.getCurrentMovementGraphPreset();}
     public MovementControl getMovementControl(){return _movementControl;}
 }

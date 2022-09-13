@@ -6,7 +6,9 @@
 
         <Branch Condition="End == true" Action="Idle"/>
         <Branch Condition="ActionTest == true" Action="Move"/>
+        <Branch Condition="ActionDash == true" Action="DashStart"/>
     </Idle>
+
 
     <Move MovementType="RootMotion" DirectionType="MoveInput">
         <Animation Path="Resources/Sprites/TestPlayer/Move/" StartFrame="0" EndFrame="4" FramePerSecond="12" XFlip="true">
@@ -15,6 +17,24 @@
 
         <Branch Condition="End == true" Action="Move"/>
         <Branch Condition="ActionTest == false" Action="Idle"/>
+        <Branch Condition="ActionDash == true" Action="DashStart"/>
     </Move>
+
+
+    <DashStart MovementType="Empty" DirectionType="MousePoint">
+        <Animation Path="Resources/Sprites/TestPlayer/Dash/" StartFrame="0" EndFrame="1" FramePerSecond="999" XFlip="true">
+        </Animation>
+
+        <Branch Condition="End == true" Action="Dash"/>
+    </DashStart>
+
+
+    <Dash MovementType="GraphPreset" DirectionType="Keep" MovementGraphPreset="Dash">
+        <Animation Path="Resources/Sprites/TestPlayer/Dash/" StartFrame="0" EndFrame="8" FramePerSecond="18" XFlip="true">
+        </Animation>
+
+        <Branch Condition="End == true &#38;&#38; ActionTest == true" Action="Move"/>
+        <Branch Condition="End == true" Action="Idle"/>
+    </Dash>
 
 </ActionGraph>
