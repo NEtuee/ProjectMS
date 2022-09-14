@@ -2,6 +2,7 @@
 public class CollisionInfoData
 {
     private BoundBox _boundBox;
+    private CollisionType _collisionType;
     private float _radius;
     private float _angle;
 
@@ -12,5 +13,29 @@ public class CollisionInfoData
         _angle = angle;
     }
 
+    public bool isValid()
+    {
+        return _radius != 0f && _boundBox.isValid();
+    }
+
+    public BoundBox getBoundBox() {return _boundBox;}
+    public CollisionType getCollisionType() {return _collisionType;}
+    public float getRadius() {return _radius;}
+    public float getSqrRadius() {return _radius * _radius;}
+
+    public float getAngle() {return _angle;}
+}
+
+
+public enum CollisionType
+{
+    Hard,
+    Trigger,
+
+}
+
+public enum CollisionLayer
+{
     
+    Count,
 }

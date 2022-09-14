@@ -1,7 +1,7 @@
 using UnityEngine;
 
 
-struct BoundBox
+public struct BoundBox
 {
     private float _width;
     private float _height;
@@ -19,6 +19,11 @@ struct BoundBox
         _localPivot = localPivot;
 
         _l = _r = _b = _t = 0f;
+    }
+
+    public bool isValid()
+    {
+        return _width > 0f && _height > 0f;
     }
 
     public void setPivot(Vector3 pivot)
@@ -39,7 +44,7 @@ struct BoundBox
         _t = pivotCenter.y + _height * 0.5f;
     }
 
-    public bool intersector(Vector3 point)
+    public bool intersection(Vector3 point)
     {
         return (_l < point.x && _r > point.x) && (_b < point.y && _t > point.y);
     }

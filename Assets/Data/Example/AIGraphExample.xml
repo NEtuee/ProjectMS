@@ -1,0 +1,47 @@
+
+
+<!-- AI그래프 예시 -->
+<AIGrpah Name="ExampleAI" DefaultState="Idle">
+
+    <Idle UpdateTick="1000">
+        <OnExecute >
+            <SetAction Name="IdleAction"/>
+        </OnExecute>
+
+        <Branch Condition="TargetDistance < 3.f" State="Attack"/>
+        <Branch Condition="TargetDistance < 10.f" State="Chase"/>
+    </Idle>
+
+    <Chase_Slow UpdateTick="1000">
+        <OnExecute>
+            <SetPathToTarget/>
+            <SetAction Name="SlowChaseAction"/>
+        </OnExecute>
+
+        <Branch Condition="Random(1,3) == 1" State="Chase_Fast"/>
+        <Branch Condition="TargetDistance < 3.f" State="Attack"/>
+        <Branch Condition="TargetDistance >= 10.f" State="Idle"/>
+    </Chase_Slow>
+
+    <Chase_Fast UpdateTick="1000">
+        <OnExecute>
+            <SetPathToTarget/>
+            <SetAction Name="FastChaseAction"/>
+        </OnExecute>
+
+        <Branch Condition="Random(1,3) >= 2" State="Chase_Slow"/>
+        <Branch Condition="TargetDistance < 3.f" State="Attack"/>
+        <Branch Condition="TargetDistance >= 10.f" State="Idle"/>
+    </Chase_Slow>
+
+    <Attack UpdateTick="1000">
+        <OnExecute>
+            <SetAction Name="AttackAction"/>
+        </OnExecute>
+
+        <Branch Condition="ActionEnd == true && TargetDistance < 3.f" State="Attack"/>
+        <Branch Condition="ActionEnd == true && TargetDistance < 10.f" State="Chase"/>
+        <Branch Condition="ActionEnd == true" State="Idle"/>
+    </Attack>
+
+</AIGrpah>

@@ -20,7 +20,7 @@ public class CameraControl : ObjectBase
     //fix
     public override void afterProgress(float deltaTime)
     {
-        base.fixedProgress(deltaTime);
+        base.afterProgress(deltaTime);
         Vector3 newPosition = Vector3.Lerp(this.transform.position,targetTransform.position,0.3f);
         newPosition.z = -10f;
         transform.position = newPosition;

@@ -6,7 +6,10 @@ public class GameEntityBase : SequencerObjectBase
 {
     private SpriteRenderer _spriteRenderer;
     private ActionGraph _actionGraph;
+    private CollisionInfo _collisionInfo;
+
     private MovementControl _movementControl = new MovementControl();
+    
 
     private Vector3 _direction = Vector3.right;
 
@@ -18,6 +21,9 @@ public class GameEntityBase : SequencerObjectBase
             Transform targetTransform = (Transform)msg.data;
             transform.position = targetTransform.position;
         });
+
+        CollisionInfoData data = new CollisionInfoData(0.1f,0f);
+        _collisionInfo = new CollisionInfo(data);
     }
 
     public override void initialize()
@@ -103,7 +109,7 @@ public class GameEntityBase : SequencerObjectBase
     }
     public bool isValid() 
     {
-        return _movementControl != null && _actionGraph != null && _spriteRenderer != null;
+        return _movementControl != null && _actionGraph != null && _spriteRenderer != null && _collisionInfo != null;
     }
 
     public MoveValuePerFrameFromTimeDesc getMoveValuePerFrameFromTimeDesc(){return _actionGraph.getMoveValuePerFrameFromTimeDesc();}

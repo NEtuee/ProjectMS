@@ -19,5 +19,4 @@ public static partial class MessageTitles
     //타겟 텔레포트
     public const ushort     game_teleportTarget         = 0x0203;
 
-
 }

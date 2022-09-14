@@ -35,6 +35,6 @@ public class StatusInfo
     public bool isDead()
     {
         StatusDataFloat data = _statusInfoData.getStatusData(StatusType.HP);
-        return data.isMin(_statusValues[(int)StatusType.HP]);
+        return _statusValues[(int)StatusType.HP] <= 0;
     }
 }
