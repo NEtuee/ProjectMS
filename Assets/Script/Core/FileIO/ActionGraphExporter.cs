@@ -174,6 +174,10 @@ public static class ActionGraphLoader
             {
                 nodeData._isActionSelection = bool.Parse(targetValue);
             }
+            else if(targetName == "RotationType")
+            {
+                nodeData._rotationType = (RotationType)System.Enum.Parse(typeof(RotationType), targetValue);
+            }
         }
 
         XmlNodeList nodeList = node.ChildNodes;

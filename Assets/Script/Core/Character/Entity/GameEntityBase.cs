@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class GameEntityBase : SequencerObjectBase
 {
-    private SpriteRenderer _spriteRenderer;
-    private ActionGraph _actionGraph;
+    private SpriteRenderer      _spriteRenderer;
+    private GameObject          _spriteObject;
+    private ActionGraph         _actionGraph;
 
-    private MovementControl _movementControl = new MovementControl();
+    private MovementControl     _movementControl = new MovementControl();
     
 
     private Vector3 _direction = Vector3.right;
     private FlipState _flipState = new FlipState();
+    private Quaternion _spriteRotation = Quaternion.identity;
 
     public override void assign()
     {
@@ -30,7 +32,7 @@ public class GameEntityBase : SequencerObjectBase
         _actionGraph.assign();
         _actionGraph.initialize();
 
-        _spriteRenderer = GetComponent<SpriteRenderer>();
+        createSpriteRenderObject();
     }
     
     public override void progress(float deltaTime)
@@ -61,6 +63,8 @@ public class GameEntityBase : SequencerObjectBase
             _spriteRenderer.flipX = _flipState.xFlip;
             _spriteRenderer.flipY = _flipState.yFlip;
         }
+
+        rotationUpdate();
     }
 
     public void updateConditionData()
@@ -68,13 +72,13 @@ public class GameEntityBase : SequencerObjectBase
         Vector3 input = new Vector3(Input.GetAxis("Horizontal"),Input.GetAxis("Vertical"),0f).normalized;
         Vector3 mousePosition = (MathEx.deleteZ(Camera.main.ScreenToWorldPoint(Input.mousePosition)) - transform.position).normalized;
 
-        float angleBetweenStick = Vector3.SignedAngle(input, mousePosition,Vector3.forward);
-        angleBetweenStick += angleBetweenStick < 0f ? 360f : 0f;
+        float angleBetweenStick = MathEx.clampDegree(Vector3.SignedAngle(input, mousePosition,Vector3.forward));
+        float angleDirection = MathEx.clampDegree(Vector3.SignedAngle(Vector3.right, _direction, Vector3.forward));
 
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Action_Test, MathEx.equals(input.sqrMagnitude,0f,float.Epsilon) == false);
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Action_Dash, Input.GetKey(KeyCode.Space));
         _actionGraph.setActionConditionData_Float(ConditionNodeUpdateType.Action_AngleBetweenStick, angleBetweenStick);
-        _actionGraph.setActionConditionData_Float(ConditionNodeUpdateType.Action_AngleDirection, Vector3.Angle(Vector3.right, _direction));
+        _actionGraph.setActionConditionData_Float(ConditionNodeUpdateType.Action_AngleDirection, angleDirection);
 
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Action_IsXFlip, _flipState.xFlip);
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Action_IsYFlip, _flipState.yFlip);
@@ -118,7 +122,7 @@ public class GameEntityBase : SequencerObjectBase
             break;
         }
 
-        DebugUtil.assert((int)FlipType.Count == 3, "flip type count error");
+        DebugUtil.assert((int)FlipType.Count == 4, "flip type count error");
 
         return flipState;
     }
@@ -126,7 +130,11 @@ public class GameEntityBase : SequencerObjectBase
     //todo : input manager 만들어서 거기서 moveiNput 가져오게 만들기
     private void directionUpdate()
     {
-        switch(_actionGraph.getDirectionType())
+        DirectionType directionType = DirectionType.AlwaysRight;
+        if(_actionGraph != null)
+            directionType = _actionGraph.getDirectionType();
+
+        switch(directionType)
         {
         case DirectionType.AlwaysRight:
             _direction = Vector3.right;
@@ -151,6 +159,32 @@ public class GameEntityBase : SequencerObjectBase
         }
     }
 
+    private void rotationUpdate()
+    {
+        RotationType rotationType = RotationType.AlwaysRight;
+        if(_actionGraph != null)
+            rotationType = _actionGraph.getCurrentRotationType();
+
+        switch(rotationType)
+        {
+        case RotationType.AlwaysRight:
+            _spriteRotation = Quaternion.identity;
+            break;
+        case RotationType.Direction:
+            _spriteRotation = Quaternion.FromToRotation(Vector3.right,_direction);
+            break;
+        case RotationType.MousePoint:
+            _spriteRotation = Quaternion.FromToRotation(Vector3.right,(MathEx.deleteZ(Camera.main.ScreenToWorldPoint(Input.mousePosition)) - transform.position).normalized);
+            break;
+        case RotationType.Keep:
+            break;
+
+        }
+
+        DebugUtil.assert((int)RotationType.Count == 4, "invalid rotation type");
+        _spriteObject.transform.localRotation = _spriteRotation;
+    }
+
     public bool isMoving()
     {
         return _movementControl.isMoving();
@@ -158,6 +192,20 @@ public class GameEntityBase : SequencerObjectBase
     public bool isValid() 
     {
         return _movementControl != null && _actionGraph != null && _spriteRenderer != null;
+    }
+
+    public void setSpriteRotation(Quaternion rotation)
+    {
+        _spriteObject.transform.rotation = rotation;
+    }
+
+    public void createSpriteRenderObject()
+    {
+        _spriteObject = new GameObject("SpriteObject");
+        _spriteObject.transform.SetParent(this.transform);
+        _spriteObject.transform.localPosition = Vector3.zero;
+
+        _spriteRenderer = _spriteObject.AddComponent<SpriteRenderer>();
     }
 
     public MoveValuePerFrameFromTimeDesc getMoveValuePerFrameFromTimeDesc(){return _actionGraph.getMoveValuePerFrameFromTimeDesc();}

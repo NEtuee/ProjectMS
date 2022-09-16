@@ -108,6 +108,7 @@ public class ActionGraph
 
         if(getCurrentAction()._isActionSelection == true)
         {
+            DebugUtil.log("Action Selection");
             if(processAction(getCurrentAction()) == false)
             {
                 _prevActionNodeIndex = prevIndex;
@@ -420,6 +421,7 @@ public class ActionGraph
 
 
     public float getCurrentMoveScale() {return getCurrentAction()._moveScale;}
+    public RotationType getCurrentRotationType() {return getCurrentAction()._rotationType;}
     public DirectionType getDirectionType() {return getCurrentAction()._directionType;}
     public MoveValuePerFrameFromTimeDesc getMoveValuePerFrameFromTimeDesc(){return _animationPlayer.getMoveValuePerFrameFromTimeDesc();}
     public string getCurrentActionName() {return getCurrentAction()._nodeName; }

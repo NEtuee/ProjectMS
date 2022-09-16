@@ -17,6 +17,13 @@ public static class MathEx
     public static int clampi(int value, int a, int b){return mini(maxi(value,a), b);}
     public static float clampf(float value, float a, float b){return minf(maxf(value,a), b);}
     public static float clamp01f(float value){return value < 0f ? 0f : (value > 1f ? 1f : value);}
+    public static float clampDegree(float degree)
+    {
+        while(degree < 0f) {degree += 360f;}
+        while(degree > 360f) {degree -= 360f;}
+        
+        return degree;
+    }
 
     public static float convergence0(float value, float a)
     {

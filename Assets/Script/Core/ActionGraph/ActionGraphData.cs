@@ -29,10 +29,11 @@ public class ActionGraphNodeData
 
     public string                       _nodeName;
     public int                          _animationInfoIndex;
-    public MovementBase.MovementType    _movementType;
-    public MovementGraphPresetData      _movementGraphPresetData;
-    public DirectionType                _directionType;
-    public FlipType                     _flipType;
+    public MovementBase.MovementType    _movementType = MovementBase.MovementType.Empty;
+    public MovementGraphPresetData      _movementGraphPresetData = null;
+    public DirectionType                _directionType = DirectionType.AlwaysRight;
+    public RotationType                 _rotationType = RotationType.AlwaysRight;
+    public FlipType                     _flipType = FlipType.AlwaysTurnOff;
 
     public float                        _moveScale = 1f;
 
@@ -75,11 +76,21 @@ public enum ConditionCompareType
 
 public enum FlipType
 {
+    AlwaysTurnOff = 0,
     Direction,
     MousePoint,
     Keep,
     Count,
 };
+
+public enum RotationType
+{
+    AlwaysRight = 0,
+    Direction,
+    MousePoint,
+    Keep,
+    Count,
+}
 
 public enum ConditionNodeUpdateType
 {
