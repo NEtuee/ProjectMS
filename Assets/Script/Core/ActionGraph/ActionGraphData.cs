@@ -1,10 +1,10 @@
 public class ActionGraphBaseData
 {
     public string                               _name;
-    public ActionGraphNodeData[]                _actionNodeData;
-    public ActionGraphBranchData[]              _branchData;
-    public ActionGraphConditionCompareData[]    _conditionCompareData;
-    public AnimationPlayDataInfo[]              _animationPlayData;
+    public ActionGraphNodeData[]                _actionNodeData = null;
+    public ActionGraphBranchData[]              _branchData = null;
+    public ActionGraphConditionCompareData[]    _conditionCompareData = null;
+    public AnimationPlayDataInfo[]              _animationPlayData = null;
 
     public int                                  _defaultActionIndex = -1;
 
@@ -32,6 +32,11 @@ public class ActionGraphNodeData
     public MovementBase.MovementType    _movementType;
     public MovementGraphPresetData      _movementGraphPresetData;
     public DirectionType                _directionType;
+    public FlipType                     _flipType;
+
+    public float                        _moveScale = 1f;
+
+    public bool                         _isActionSelection = false;
 
     public int                          _index;
     public int                          _branchIndexStart;
@@ -68,6 +73,14 @@ public enum ConditionCompareType
     Count,
 };
 
+public enum FlipType
+{
+    Direction,
+    MousePoint,
+    Keep,
+    Count,
+};
+
 public enum ConditionNodeUpdateType
 {
     Literal = 0,
@@ -76,7 +89,11 @@ public enum ConditionNodeUpdateType
     Action_Test,
     Action_Dash,
     Action_AnimationEnd,
-    
+    Action_AngleBetweenStick,
+    Action_AngleDirection,
+    Action_IsXFlip,
+    Action_IsYFlip,
+
     Count,
 }
 
@@ -111,6 +128,11 @@ public static class ConditionNodeInfoPreset
         {"ActionTest",new ConditionNodeInfo(ConditionNodeUpdateType.Action_Test, ConditionNodeType.Bool)},
         {"ActionDash",new ConditionNodeInfo(ConditionNodeUpdateType.Action_Dash, ConditionNodeType.Bool)},
         {"End",new ConditionNodeInfo(ConditionNodeUpdateType.Action_AnimationEnd, ConditionNodeType.Bool)},
+        {"AngleBetweenStick",new ConditionNodeInfo(ConditionNodeUpdateType.Action_AngleBetweenStick, ConditionNodeType.Float)},
+        {"AngleDirection",new ConditionNodeInfo(ConditionNodeUpdateType.Action_AngleDirection, ConditionNodeType.Float)},
+
+        {"IsXFlip",new ConditionNodeInfo(ConditionNodeUpdateType.Action_IsXFlip, ConditionNodeType.Bool)},
+        {"IsYFlip",new ConditionNodeInfo(ConditionNodeUpdateType.Action_IsYFlip, ConditionNodeType.Bool)},
         
     };
 

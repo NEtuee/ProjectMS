@@ -26,8 +26,10 @@ public static class ActionGraphLoader
             return null;
         }
 
+        Dictionary<string, XmlNodeList> branchSetDic = new Dictionary<string, XmlNodeList>();
 
         XmlNode node = xmlDoc.FirstChild;
+        
         if(node.Name.Equals("ActionGraph") == false)
         {
             DebugUtil.assert(false,"wrong xml type. name : {0}",node.Name);
@@ -45,12 +47,22 @@ public static class ActionGraphLoader
         List<ActionGraphConditionCompareData> compareDataList = new List<ActionGraphConditionCompareData>();
         List<AnimationPlayDataInfo> animationDataList = new List<AnimationPlayDataInfo>();
 
+
+
         Dictionary<ActionGraphBranchData, string> actionCompareDic = new Dictionary<ActionGraphBranchData, string>();
         Dictionary<string, int> actionIndexDic = new Dictionary<string, int>();
         XmlNodeList nodeList = node.ChildNodes;
+
+        int actionIndex = 0;
         for(int i = 0; i < nodeList.Count; ++i)
         {
-            ActionGraphNodeData nodeData = ReadAction(nodeList[i],defaultFramePerSecond, ref animationDataList, ref actionCompareDic, ref branchDataList,ref compareDataList);
+            if(nodeList[i].Name == "BranchSet")
+            {
+                readBranchSet(nodeList[i],ref branchSetDic);
+                continue;
+            }
+            
+            ActionGraphNodeData nodeData = ReadAction(nodeList[i],defaultFramePerSecond, ref animationDataList, ref actionCompareDic, ref branchDataList,ref compareDataList, in branchSetDic);
             if(nodeData == null)
             {
                 DebugUtil.assert(false,"node data is null : {0}",nodeList[i].Name);
@@ -58,7 +70,7 @@ public static class ActionGraphLoader
             }
 
             nodeDataList.Add(nodeData);
-            actionIndexDic.Add(nodeData._nodeName,i);
+            actionIndexDic.Add(nodeData._nodeName,actionIndex++);
         }
 
         foreach(var item in actionCompareDic)
@@ -89,13 +101,49 @@ public static class ActionGraphLoader
         return actionBaseData;
     }
 
-    private static ActionGraphNodeData ReadAction(XmlNode node, float defaultFPS, ref List<AnimationPlayDataInfo> animationDataList,  ref Dictionary<ActionGraphBranchData, string> actionCompareDic,ref List<ActionGraphBranchData> branchDataList, ref List<ActionGraphConditionCompareData> compareDataList)
+    private static void readBranchSet(XmlNode branchSetParent, ref Dictionary<string, XmlNodeList> targetDic)
+    {
+        string branchSetName = "";
+        XmlAttributeCollection branchSetAttr = branchSetParent.Attributes;
+        for(int attrIndex = 0; attrIndex < branchSetAttr.Count; ++attrIndex)
+        {
+            string targetName = branchSetAttr[attrIndex].Name;
+            string targetValue = branchSetAttr[attrIndex].Value;
+
+            if(targetName == "Name")
+            {
+                branchSetName = targetValue;
+            }
+        }
+
+        if(branchSetName == "")
+        {
+            DebugUtil.assert(false, "branchSet name can not be Empty");
+            return;
+        }
+
+        if(branchSetParent.ChildNodes.Count == 0)
+        {
+            DebugUtil.assert(false, "branchSet is empty : {0}",branchSetName);
+            return;
+        }
+
+        targetDic.Add(branchSetName,branchSetParent.ChildNodes);
+    }
+
+    private static ActionGraphNodeData ReadAction(XmlNode node, float defaultFPS, ref List<AnimationPlayDataInfo> animationDataList,  ref Dictionary<ActionGraphBranchData, string> actionCompareDic,ref List<ActionGraphBranchData> branchDataList, ref List<ActionGraphConditionCompareData> compareDataList, in Dictionary<string, XmlNodeList> branchSetDic)
     {
         ActionGraphNodeData nodeData = new ActionGraphNodeData();
         nodeData._nodeName = node.Name;
 
         //action attribute
         XmlAttributeCollection actionAttributes = node.Attributes;
+        if(actionAttributes == null)
+        {
+            Debug.Log(node.Name);
+            return null;
+        }
+
         for(int attrIndex = 0; attrIndex < actionAttributes.Count; ++attrIndex)
         {
             string targetName = actionAttributes[attrIndex].Name;
@@ -113,6 +161,18 @@ public static class ActionGraphLoader
             {
                 MovementGraphPreset preset = ResourceContainerEx.Instance().GetScriptableObject("Preset\\MovementGraphPreset") as MovementGraphPreset;
                 nodeData._movementGraphPresetData = preset.getPresetData(targetValue);
+            }
+            else if(targetName == "FlipType")
+            {
+                nodeData._flipType = (FlipType)System.Enum.Parse(typeof(FlipType), targetValue);
+            }
+            else if(targetName == "MoveScale")
+            {
+                nodeData._moveScale = float.Parse(targetValue);
+            }
+            else if(targetName == "IsActionSelection")
+            {
+                nodeData._isActionSelection = bool.Parse(targetValue);
             }
         }
 
@@ -139,6 +199,43 @@ public static class ActionGraphLoader
                     
                     
                 branchDataList.Add(branchData);
+            }
+            else if(nodeList[i].Name == "UseBranchSet")
+            {
+                string branchSetName = "";
+                XmlAttributeCollection branchSetAttr = nodeList[i].Attributes;
+                for(int branchSetAttrIndex = 0; branchSetAttrIndex < branchSetAttr.Count; ++branchSetAttrIndex)
+                {
+                    if(branchSetAttr[branchSetAttrIndex].Name == "Name")
+                    {
+                        branchSetName = branchSetAttr[branchSetAttrIndex].Value;
+                    }
+                }
+
+                if(branchSetDic.ContainsKey(branchSetName) == false)
+                {
+                    DebugUtil.assert(false, "branch set not exists : {0}",branchSetName);
+                    return null;
+                }
+
+                XmlNodeList branchSetNodeList = branchSetDic[branchSetName];
+                for(int branchSetNodeListIndex = 0; branchSetNodeListIndex < branchSetNodeList.Count; ++branchSetNodeListIndex)
+                {
+                    if(branchSetNodeList[branchSetNodeListIndex].Name != "Branch")
+                    {
+                        DebugUtil.assert(false, "wrong branch type : {0}",branchSetNodeList[branchSetNodeListIndex].Name);
+                        return null;
+                    }
+
+                    ActionGraphBranchData branchData = ReadActionBranch(branchSetNodeList[branchSetNodeListIndex],nodeData,ref actionCompareDic,ref compareDataList);
+                    if(branchData == null)
+                    {
+                        DebugUtil.assert(false,"invalid branch data");
+                        return null;
+                    }
+
+                    branchDataList.Add(branchData);
+                }
             }
         }
 
@@ -183,11 +280,11 @@ public static class ActionGraphLoader
             }
             else if(targetName == "XFlip")
             {
-                playData._xFlipFollowDirection = bool.Parse(targetValue);
+                playData._flipState.xFlip = bool.Parse(targetValue);
             }
             else if(targetName == "YFlip")
             {
-                playData._yFlipFollowDirection = bool.Parse(targetValue);
+                playData._flipState.yFlip = bool.Parse(targetValue);
             }
             else if(targetName == "Loop")
             {
@@ -443,8 +540,8 @@ public static class ActionGraphLoader
         if(formula.Contains("<") == true && formula.IndexOf("<") < symbolEndIndex)
         {
             compareType = ConditionCompareType.Smaller;
-            symbolEndIndex = formula.IndexOf("<=");
-            markLength = 2;
+            symbolEndIndex = formula.IndexOf("<");
+            markLength = 1;
         }
         if(formula.Contains("<=") == true && formula.IndexOf("<=") <= symbolEndIndex)
         {

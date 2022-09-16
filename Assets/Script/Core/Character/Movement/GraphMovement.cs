@@ -16,6 +16,11 @@ public class GraphMovement : MovementBase
         _targetEntity = targetEntity;
         _currentDirection = Vector3.right;
 
+        
+    }
+
+    public override void updateFirst(GameEntityBase targetEntity)
+    {
         setGraphData(targetEntity.getCurrentMovementGraph());
     }
 

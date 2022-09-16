@@ -13,7 +13,10 @@ public class GraphPresetMovement : MovementBase
     {
         _targetEntity = targetEntity;
         _currentDirection = Vector3.right;
+    }
 
+    public override void updateFirst(GameEntityBase targetEntity)
+    {
         setGraphPresetData(targetEntity.getCurrentMovementGraphPreset());
     }
 

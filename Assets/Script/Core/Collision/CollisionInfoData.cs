@@ -36,6 +36,7 @@ public enum CollisionType
 
 public enum CollisionLayer
 {
+    Default,
     
     Count,
 }

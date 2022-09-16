@@ -6,6 +6,7 @@ public class AnimationPlayDataInfo
 {
     public AnimationPlayDataInfo(){}
 
+    //따로 때내어야 함
     public ActionFrameEventBase[]       _frameEventData;
 
     public string                       _path = "";
@@ -17,8 +18,8 @@ public class AnimationPlayDataInfo
     public bool                         _isLoop = false;
     public bool                         _hasMovementGraph = false;
 
-    public bool                         _xFlipFollowDirection = false;
-    public bool                         _yFlipFollowDirection = false;
+
+    public FlipState                    _flipState;
 }
 
 public struct FlipState
@@ -35,7 +36,6 @@ public class AnimationPlayer
     private string _currentAnimationName;
     private Sprite[] _currentAnimationSprites;
     private MovementGraph _currentMovementGraph;
-    private FlipState _flipState;
 
     private int _currentFrameEventIndex;
 
@@ -132,15 +132,9 @@ public class AnimationPlayer
     public AnimationTimeProcessor getTimeProcessor(){return _animationTimeProcessor;}
     public MovementGraph getCurrentMovementGraph() {return _currentMovementGraph;}
 
-    public FlipState getCurrentFlipState(Vector3 direction) 
+    public FlipState getCurrentFlipState() 
     {
-        if(MathEx.abs(direction.x) != 0f && _currentAnimationPlayData._xFlipFollowDirection == true)
-            _flipState.xFlip = direction.x < 0;
-
-        if(MathEx.abs(direction.y) != 0f && _currentAnimationPlayData._yFlipFollowDirection == true)
-            _flipState.yFlip = direction.y < 0;
-
-        return _flipState;
+        return _currentAnimationPlayData._flipState;
     }
 
     public Sprite getCurrentSprite()

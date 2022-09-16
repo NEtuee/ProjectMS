@@ -1,27 +1,76 @@
+
+
 <ActionGraph Name="Test" DefaultAction="Idle" DefaultFramePerSecond="4">
 
-    <Idle DirectionType="Keep">
+    <BranchSet Name="CommonMoveBranchSet">
+        <Branch Condition="ActionDash == true" Action="DashStart"/>
+        <Branch Condition="ActionTest == false" Action="Idle"/>
+    </BranchSet>
+
+
+    <Idle DirectionType="MoveInput">
         <Animation Path="Resources/Sprites/TestPlayer/Idle/" StartFrame="0" EndFrame="1" XFlip="true">
         </Animation>
 
+        <Branch Condition="ActionTest == true" Action="MoveSelection"/>
         <Branch Condition="End == true" Action="Idle"/>
-        <Branch Condition="ActionTest == true" Action="Move"/>
-        <Branch Condition="ActionDash == true" Action="DashStart"/>
     </Idle>
 
+    <MoveSelection IsActionSelection="true">
+        
+        <Branch Condition="(AngleDirection &gt;= 45.0) &#38;&#38; (AngleDirection &lt; 135.0)" Action="MoveUp"/>
+        <Branch Condition="(AngleDirection &gt;= 315.0) || (AngleDirection &lt; 45.0)" Action="MoveForward"/>
+        <Branch Condition="(AngleDirection &gt;= 225.0) &#38;&#38; (AngleDirection &lt; 315.0)" Action="MoveDown"/>
+        <Branch Condition="(AngleDirection &gt;= 135.0) &#38;&#38; (AngleDirection &lt; 225.0)" Action="MoveBackward"/>
+        
+    </MoveSelection>
 
-    <Move MovementType="RootMotion" DirectionType="MoveInput">
-        <Animation Path="Resources/Sprites/TestPlayer/Move/" StartFrame="0" EndFrame="4" FramePerSecond="12" XFlip="true">
-            <FrameEvent Type="Test" StartFrame="0" Log="Test Frame Event"/>
+
+
+
+    <MoveUp MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="MoveInput" FlipType="MousePoint">
+        <Animation Path="Resources/Sprites/DummyPlayer/MoveUp/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
         </Animation>
 
-        <Branch Condition="End == true" Action="Move"/>
-        <Branch Condition="ActionTest == false" Action="Idle"/>
-        <Branch Condition="ActionDash == true" Action="DashStart"/>
-    </Move>
+        <UseBranchSet Name="CommonMoveBranchSet"/>
+
+        <Branch Condition="(AngleDirection &gt;= 45.0) == false &#38;&#38; (AngleDirection &lt; 135.0) == false" Action="MoveSelection"/>
+        <Branch Condition="End == true" Action="MoveUp"/>
+    </MoveUp>
+    
+    <MoveBackward MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="MoveInput" FlipType="MousePoint">
+        <Animation Path="Resources/Sprites/DummyPlayer/MoveBackward/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
+        </Animation>
+
+        <UseBranchSet Name="CommonMoveBranchSet"/>
+
+        <Branch Condition="(AngleDirection &gt;= 135.0) == false &#38;&#38; (AngleDirection &lt; 225.0) == false" Action="MoveSelection"/>
+        <Branch Condition="End == true" Action="MoveBackward"/>
+    </MoveBackward>
+
+    <MoveDown MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="MoveInput" FlipType="MousePoint">
+        <Animation Path="Resources/Sprites/DummyPlayer/MoveDown/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
+        </Animation>
+
+        <UseBranchSet Name="CommonMoveBranchSet"/>
+
+        <Branch Condition="(AngleDirection &gt;= 225.0) == false &#38;&#38; (AngleDirection &lt; 315.0) == false" Action="MoveSelection"/>
+        <Branch Condition="End == true" Action="MoveDown"/>
+    </MoveDown>
+
+    <MoveForward MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="MoveInput" FlipType="MousePoint">
+        <Animation Path="Resources/Sprites/DummyPlayer/MoveForward/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
+        </Animation>
+
+        <UseBranchSet Name="CommonMoveBranchSet"/>
+
+        <Branch Condition="(AngleDirection &gt;= 315.0) == false &#38;&#38; (AngleDirection &lt; 45.0) == false" Action="MoveSelection"/>
+        <Branch Condition="End == true" Action="MoveForward"/>
+    </MoveForward>
 
 
-    <DashStart MovementType="Empty" DirectionType="MousePoint">
+
+    <DashStart MovementType="Empty" DirectionType="Keep" FlipType="Keep">
         <Animation Path="Resources/Sprites/TestPlayer/Dash/" StartFrame="0" EndFrame="1" FramePerSecond="999" XFlip="true">
         </Animation>
 
@@ -29,11 +78,11 @@
     </DashStart>
 
 
-    <Dash MovementType="GraphPreset" DirectionType="Keep" MovementGraphPreset="Dash">
+    <Dash MovementType="GraphPreset" DirectionType="Keep" MovementGraphPreset="Dash" FlipType="Keep">
         <Animation Path="Resources/Sprites/TestPlayer/Dash/" StartFrame="0" EndFrame="8" FramePerSecond="18" XFlip="true">
         </Animation>
 
-        <Branch Condition="End == true &#38;&#38; ActionTest == true" Action="Move"/>
+        <Branch Condition="End == true &#38;&#38; ActionTest == true" Action="MoveSelection"/>
         <Branch Condition="End == true" Action="Idle"/>
     </Dash>
 

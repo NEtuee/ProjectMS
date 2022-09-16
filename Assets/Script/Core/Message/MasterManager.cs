@@ -55,6 +55,12 @@ public class MasterManager : MessageHub<ManagerBase>
         ManagersReceiveMessageProcessing();
         ReceiveMessageProcessing();
     }
+
+    public void LateUpdate()
+    {
+        CollisionManager.Instance().collisionUpdate();
+    }
+
     public void FixedUpdate()
     {
         ManagersFixedUpdate(Time.fixedDeltaTime);

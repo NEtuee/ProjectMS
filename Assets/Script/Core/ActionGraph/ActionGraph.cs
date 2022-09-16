@@ -80,8 +80,7 @@ public class ActionGraph
         {
             if(processActionBranch(_actionGraphBaseData._branchData[i]) == true)
             {
-                changeAction(_actionGraphBaseData._branchData[i]._branchActionIndex);
-                actionChanged = true;
+                actionChanged = changeAction(_actionGraphBaseData._branchData[i]._branchActionIndex);
                 break;
             }
         }
@@ -89,13 +88,16 @@ public class ActionGraph
         return actionChanged;
     }
 
-    private void changeAction(int actionIndex)
+    private bool changeAction(int actionIndex)
     {
         if(actionIndex < 0 || actionIndex >= _actionGraphBaseData._actionNodeCount)
         {
             DebugUtil.assert(false,"invalid action index");
-            return;
+            return false;
         }
+
+        int prevIndex = _prevActionNodeIndex;
+        int currIndex = _currentActionNodeIndex;
 
         _prevActionNodeIndex = _currentActionNodeIndex;
         _currentActionNodeIndex = actionIndex;
@@ -103,6 +105,19 @@ public class ActionGraph
         int animationInfoIndex = getCurrentAction()._animationInfoIndex;
         if(animationInfoIndex != -1)
             changeAnimation(animationInfoIndex);
+
+        if(getCurrentAction()._isActionSelection == true)
+        {
+            if(processAction(getCurrentAction()) == false)
+            {
+                _prevActionNodeIndex = prevIndex;
+                _currentActionNodeIndex = currIndex;
+
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private void changeAnimation(int animationIndex)
@@ -246,7 +261,7 @@ public class ActionGraph
 
         if(lvalueNodeInfo._nodeType != rvalueNodeInfo._nodeType)
         {
-            DebugUtil.assert(false,"value type is not match : {0} {1}",lvalueNodeInfo._nodeType, rvalueNodeInfo._nodeType);
+            DebugUtil.assert(false,"value type is not match : {0}[{1}] {2}[{3}]",lvalueNodeInfo._nodeType,lvalue._symbolName, rvalueNodeInfo._nodeType,rvalue._symbolName);
             return false;
         }
 
@@ -403,11 +418,14 @@ public class ActionGraph
             _conditionResultList[index][0] = value == true ? (byte)1 : (byte)0;
     }
 
+
+    public float getCurrentMoveScale() {return getCurrentAction()._moveScale;}
     public DirectionType getDirectionType() {return getCurrentAction()._directionType;}
     public MoveValuePerFrameFromTimeDesc getMoveValuePerFrameFromTimeDesc(){return _animationPlayer.getMoveValuePerFrameFromTimeDesc();}
     public string getCurrentActionName() {return getCurrentAction()._nodeName; }
     public UnityEngine.Sprite getCurrentSprite() {return _animationPlayer.getCurrentSprite();}
-    public FlipState getCurrentFlipState(UnityEngine.Vector3 direction) {return _animationPlayer.getCurrentFlipState(direction);}
+    public FlipState getCurrentFlipState() {return _animationPlayer.getCurrentFlipState();}
+    public FlipType getCurrentFlipType() {return getCurrentAction()._flipType;}
     public MovementGraph getCurrentMovementGraph() {return _animationPlayer.getCurrentMovementGraph();}
     public MovementBase.MovementType getCurrentMovement() {return getCurrentAction()._movementType;}
     public MovementGraphPresetData getCurrentMovementGraphPreset() {return getCurrentAction()._movementGraphPresetData;}

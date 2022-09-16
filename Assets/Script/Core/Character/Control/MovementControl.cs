@@ -30,6 +30,8 @@ public class MovementControl
         return _currentMovement.isMoving();
     }
 
+    public void setMoveScale(float moveScale){_currentMovement?.setMoveScale(moveScale);}
+
     public void addFrameToWorld(Transform targetTransform){_currentMovement?.AddFrameToWorldTransform(targetTransform);}
     public void addFrameToLocal(Transform targetTransform){_currentMovement?.AddFrameToLocalTransform(targetTransform);}
     public void setFrameToWorld(Transform targetTransform){_currentMovement?.SetFrameToWorldTransform(targetTransform);}
@@ -41,7 +43,10 @@ public class MovementControl
     public MovementBase changeMovement(GameEntityBase targetEntity,MovementBase.MovementType movementType)
     {
         if(_currentMovement != null && _currentMovement.getMovementType() == movementType)
+        {
+            _currentMovement.updateFirst(targetEntity);
             return _currentMovement;
+        }
 
         switch(movementType)
         {
@@ -82,6 +87,7 @@ public class MovementControl
         }
 
         _currentMovement.initialize(targetEntity);
+        _currentMovement.updateFirst(targetEntity);
         return newMovement;
     }
 }
