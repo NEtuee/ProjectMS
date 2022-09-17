@@ -39,6 +39,9 @@ public class GraphPresetMovement : MovementBase
             return false;
         }
 
+        if(direction == Vector3.zero)
+            return false;
+
         movementOfFrame += Quaternion.FromToRotation(Vector3.right,direction) * (Vector3.right * _presetData.getMoveValuePerFrameFromTime(_targetEntity.getMoveValuePerFrameFromTimeDesc()));
         return true;
     }

@@ -105,6 +105,9 @@ public enum ConditionNodeUpdateType
     Action_IsXFlip,
     Action_IsYFlip,
 
+    Input_AttackCharge,
+    Input_Guard,
+
     Count,
 }
 
@@ -144,6 +147,9 @@ public static class ConditionNodeInfoPreset
 
         {"IsXFlip",new ConditionNodeInfo(ConditionNodeUpdateType.Action_IsXFlip, ConditionNodeType.Bool)},
         {"IsYFlip",new ConditionNodeInfo(ConditionNodeUpdateType.Action_IsYFlip, ConditionNodeType.Bool)},
+
+        {"InputAttackCharge",new ConditionNodeInfo(ConditionNodeUpdateType.Input_AttackCharge, ConditionNodeType.Bool)},
+        {"InputGuard",new ConditionNodeInfo(ConditionNodeUpdateType.Input_Guard, ConditionNodeType.Bool)},
         
     };
 

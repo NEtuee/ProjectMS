@@ -54,7 +54,7 @@ public class GameEntityBase : SequencerObjectBase
                 //movement 바뀌는 시점
                 _movementControl.changeMovement(this,_actionGraph.getCurrentMovement());
                 _movementControl.setMoveScale(_actionGraph.getCurrentMoveScale());
-                Debug.Log("execute : " + prevActionName + " -> " + _actionGraph.getCurrentActionName());
+//                Debug.Log("execute : " + prevActionName + " -> " + _actionGraph.getCurrentActionName());
             }
 
             _spriteRenderer.sprite = _actionGraph.getCurrentSprite();
@@ -82,6 +82,9 @@ public class GameEntityBase : SequencerObjectBase
 
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Action_IsXFlip, _flipState.xFlip);
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Action_IsYFlip, _flipState.yFlip);
+
+        _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Input_AttackCharge, Input.GetMouseButton(0));
+        _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Input_Guard, Input.GetMouseButton(1));
     }
 
     public override void release(bool disposeFromMaster)
@@ -148,6 +151,11 @@ public class GameEntityBase : SequencerObjectBase
                 _direction = input;
                 _direction.Normalize();
             }
+            else
+            {
+                _direction = Vector3.zero;
+            }
+
             break;
         case DirectionType.MousePoint:
             _direction = MathEx.deleteZ(Camera.main.ScreenToWorldPoint(Input.mousePosition)) - transform.position;
@@ -208,6 +216,8 @@ public class GameEntityBase : SequencerObjectBase
         _spriteRenderer = _spriteObject.AddComponent<SpriteRenderer>();
     }
 
+    public Vector3 getDirection() {return _direction;}
+    public string getCurrentActionName() {return _actionGraph == null ? "" : _actionGraph.getCurrentActionName();}
     public MoveValuePerFrameFromTimeDesc getMoveValuePerFrameFromTimeDesc(){return _actionGraph.getMoveValuePerFrameFromTimeDesc();}
     public MovementGraph getCurrentMovementGraph(){return _actionGraph.getCurrentMovementGraph();}
     public MovementGraphPresetData getCurrentMovementGraphPreset() {return _actionGraph.getCurrentMovementGraphPreset();}

@@ -39,28 +39,6 @@ public class ProjectileEntityBase : ObjectBase
         transform.position += _projectileGraph.getMovementOfFrame();
 
         _collisionInfo.updateCollisionInfo(transform.position,Vector3.right);
-    }
-
-    private void OnDrawGizmos()
-    {
-        if(_collisionInfo == null)
-            return;
-        
-        Color color = Gizmos.color;
-
-        Gizmos.color = _debugColor;
-        for(int i = 0; i < 36; ++i)
-        {
-            float x = Mathf.Cos(10f * i * Mathf.Deg2Rad);
-            float y = Mathf.Sin(10f * i * Mathf.Deg2Rad);
-
-            float x2 = Mathf.Cos(10f * (i + 1) * Mathf.Deg2Rad);
-            float y2 = Mathf.Sin(10f * (i + 1) * Mathf.Deg2Rad);
-
-            Gizmos.DrawLine(new Vector3(x,y) * _collisionInfo.getRadius() + transform.position,new Vector3(x2,y2) * _collisionInfo.getRadius() + transform.position);
-        }
-        
-        _debugColor = Color.red;
-        Gizmos.color = color;
+        GizmoHelper.instance.drawCircle(transform.position,_collisionInfo.getRadius(),36,_debugColor);
     }
 }

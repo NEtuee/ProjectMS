@@ -44,4 +44,110 @@ public static class MathEx
     {
         return equals(a.r,b.r,epsilon) && equals(a.g,b.g,epsilon) && equals(a.b,b.b,epsilon) && equals(a.a,b.a,epsilon);
     }
+
+
+    public static void makeTriangle(UnityEngine.Vector3 centerPosition,float radius, float theta, float directionAngle, out UnityEngine.Vector3 triangleA, out UnityEngine.Vector3 triangleB, out UnityEngine.Vector3 triangleC)
+    {
+        UnityEngine.Vector3 directionVector = UnityEngine.Quaternion.Euler(0f,0f,directionAngle) * UnityEngine.Vector3.right * radius;
+        
+        triangleA = centerPosition;
+        triangleB = triangleA + UnityEngine.Quaternion.Euler(0f,0f,theta * .5f) * directionVector;
+        triangleC = triangleA + UnityEngine.Quaternion.Euler(0f,0f,-theta * .5f) * directionVector;
+    }
+
+    public static bool isInTriangle(UnityEngine.Vector3 target, UnityEngine.Vector3 a, UnityEngine.Vector3 b, UnityEngine.Vector3 c, out float t, out float s, out float ots)
+	{
+		getBarycentricWeight(target, a, b, c, out t, out s, out ots);
+
+		return t >= 0 && t <= 1 && s >= 0 && s <= 1 && ots >= 0 && ots <= 1;
+	}
+
+	public static void getBarycentricWeight(UnityEngine.Vector3 target, UnityEngine.Vector3 a, UnityEngine.Vector3 b, UnityEngine.Vector3 c, out float t, out float s, out float ots)
+	{
+		UnityEngine.Vector3 u = c - b;
+		UnityEngine.Vector3 v = a - b;
+
+		UnityEngine.Vector3 w = target - b;
+
+		float uu = UnityEngine.Vector3.Dot(u, u);
+		float vv = UnityEngine.Vector3.Dot(v, v);
+		float uv = UnityEngine.Vector3.Dot(u, v);
+		float wu = UnityEngine.Vector3.Dot(w, u);
+		float wv = UnityEngine.Vector3.Dot(w, v);
+
+		float denominator = uv * uv - uu * vv;
+		t = (wu * uv - wv * uu) / denominator;
+		s = (wv * uv - wu * vv) / denominator;
+		ots = 1f - s - t;
+	}
+
+	public static UnityEngine.Vector3 getPerpendicularPointOnLineSegment(UnityEngine.Vector3 lineA, UnityEngine.Vector3 lineB, UnityEngine.Vector3 point)
+	{
+		UnityEngine.Vector3 pa = point - lineA;
+		UnityEngine.Vector3 ab = lineB - lineA;
+
+		float len = ab.sqrMagnitude;
+		float dot = UnityEngine.Vector3.Dot(ab, pa);
+		float distance = dot / len;
+
+		if (distance < 0)
+			return lineA;
+		else if (distance > 1)
+			return lineB;
+		else
+			return lineA + ab * distance;
+
+	}
+
+	public static bool findNearestPointOnTriangle(UnityEngine.Vector3 target, UnityEngine.Vector3 a, UnityEngine.Vector3 b, UnityEngine.Vector3 c, out UnityEngine.Vector3 result, out float nearDistance )
+	{
+        float t = 0f;
+        float s = 0f;
+        float ots = 0f;
+
+        nearDistance = 0f;
+
+        result = UnityEngine.Vector3.zero;
+
+		if (isInTriangle(target, a, b, c, out t, out s, out ots))
+			return false;
+
+		result = target;
+		nearDistance = float.MaxValue;
+		if (s < 0)
+		{
+			result = getPerpendicularPointOnLineSegment(a, b, target);
+
+			nearDistance = UnityEngine.Vector3.Distance(result, target);
+		}
+
+		if (t < 0)
+		{
+			UnityEngine.Vector3 point = getPerpendicularPointOnLineSegment(b, c, target);
+
+			float distance = UnityEngine.Vector3.Distance(point, target);
+
+			if (nearDistance > distance)
+			{
+				nearDistance = distance;
+				result = point;
+			}
+		}
+
+		if (ots < 0)
+		{
+			UnityEngine.Vector3 point = getPerpendicularPointOnLineSegment(c, a, target);
+
+			float distance = UnityEngine.Vector3.Distance(point, target);
+
+			if (nearDistance > distance)
+			{
+				nearDistance = distance;
+				result = point;
+			}
+		}
+
+		getBarycentricWeight(result, a, b, c, out t, out s, out ots);
+		return true;
+	}
 }

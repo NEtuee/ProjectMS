@@ -7,6 +7,7 @@ public class CollisionInfo
     private Vector3 _centerPosition;
     private Vector3 _direction;
     private BoundBox _boundBox;
+    private Triangle _triangle;
 
     private int _uniqueID = 0;
 
@@ -16,6 +17,7 @@ public class CollisionInfo
         _centerPosition = Vector3.zero;
         
         _boundBox = data.getBoundBox();
+        _triangle = new Triangle(true);
 
         _uniqueID = _uniqueIDPointer++;
     }
@@ -33,21 +35,63 @@ public class CollisionInfo
             return false;
         }
 
-        // if(_boundBox.intersection(target.getBoundBox()) == false)
-        //     return false;
-
-        float distance = Vector3.Distance(_centerPosition, target.getCenterPosition());
-        if(distance >= getRadius() + target.getRadius())
+        if(_boundBox.intersection(target.getBoundBox()) == false)
             return false;
 
-        return true;
+
+        if(_collisionInfoData.getAngle() != 0f)
+        {
+            Vector3 result = Vector3.zero;
+            float nearDistance = 0f;
+            if(MathEx.findNearestPointOnTriangle(target._centerPosition,_triangle.get(0),_triangle.get(1),_triangle.get(2),out result,out nearDistance) == false)
+                return true;
+            
+            return nearDistance < target.getRadius();
+        }
+
+
+        float distance = Vector3.Distance(_centerPosition, target.getCenterPosition());
+        return distance < getRadius() + target.getRadius();
+    }
+
+    public void drawCollosionArea(Color color)
+    {
+        if(_collisionInfoData.getAngle() == 0f)
+            drawCircle(color);
+        else
+            drawTriangle(color);
+    }
+
+    public void drawCircle(Color color)
+    {
+        GizmoHelper.instance.drawCircle(_centerPosition,getRadius(),36,color);
+    }
+
+    public void drawTriangle(Color color)
+    {
+        GizmoHelper.instance.drawPolygon(_triangle.getVertices(),color);
+    }
+
+    public void drawBoundBox(Color color)
+    {
+        GizmoHelper.instance.drawPolygon(_boundBox.getVertices(),color);
     }
 
     public void updateCollisionInfo(Vector3 position, Vector3 direction)
     {
         _centerPosition = position;
         _direction = direction;
-        _boundBox.updateBoundBox(position);
+
+        if(_collisionInfoData.getAngle() != 0f)
+        {
+            _triangle.makeTriangle(position,_collisionInfoData.getRadius(), _collisionInfoData.getAngle(), MathEx.clampDegree(Quaternion.FromToRotation(Vector3.right, direction).eulerAngles.z));
+            _boundBox.updateBoundBox(_triangle);
+
+        }
+        else
+        {
+            _boundBox.updateBoundBox(position);
+        }
     }
 
     public int getUniqueID() {return _uniqueID;}

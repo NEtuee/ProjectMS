@@ -108,7 +108,6 @@ public class ActionGraph
 
         if(getCurrentAction()._isActionSelection == true)
         {
-            DebugUtil.log("Action Selection");
             if(processAction(getCurrentAction()) == false)
             {
                 _prevActionNodeIndex = prevIndex;

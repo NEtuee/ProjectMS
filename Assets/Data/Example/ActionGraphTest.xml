@@ -2,6 +2,11 @@
 
 <ActionGraph Name="Test" DefaultAction="Idle" DefaultFramePerSecond="4">
 
+    <BranchSet Name="CommonBattleBranchSet">
+        <Branch Condition="InputGuard == true" Action="Guard"/>
+        <Branch Condition="InputAttackCharge == true" Action="AttackCharge"/>
+    </BranchSet>
+
     <BranchSet Name="CommonMoveBranchSet">
         <Branch Condition="ActionDash == true" Action="DashStart"/>
         <Branch Condition="ActionTest == false" Action="Idle"/>
@@ -12,9 +17,17 @@
         <Animation Path="Resources/Sprites/DummyPlayer/Idle/" StartFrame="0" EndFrame="1" XFlip="true">
         </Animation>
 
+        <UseBranchSet Name="CommonBattleBranchSet"/>
+
         <Branch Condition="ActionTest == true" Action="MoveSelection"/>
         <Branch Condition="End == true" Action="Idle"/>
     </Idle>
+
+    <CommonMoveSelection IsActionSelection="true">
+        <Branch Condition="ActionTest == true" Action="MoveSelection"/>
+        <UseBranchSet Name="CommonMoveBranchSet"/>
+    </CommonMoveSelection>
+
 
     <MoveSelection IsActionSelection="true">
         
@@ -37,6 +50,7 @@
         </Animation>
 
         <UseBranchSet Name="CommonMoveBranchSet"/>
+        <UseBranchSet Name="CommonBattleBranchSet"/>
 
         <Branch Condition="(AngleDirection &gt;= 45.0) &#38;&#38; (AngleDirection &lt; 135.0) == false" Action="MoveSelection"/>
         <Branch Condition="End == true" Action="MoveUp"/>
@@ -57,6 +71,7 @@
         </Animation>
 
         <UseBranchSet Name="CommonMoveBranchSet"/>
+        <UseBranchSet Name="CommonBattleBranchSet"/>
 
         <Branch Condition="IsXFlip == true" Action="MoveSelection"/>
         <Branch Condition="(AngleDirection &gt;= 315.0) || (AngleDirection &lt; 45.0) == false" Action="MoveSelection"/>
@@ -68,6 +83,7 @@
         </Animation>
 
         <UseBranchSet Name="CommonMoveBranchSet"/>
+        <UseBranchSet Name="CommonBattleBranchSet"/>
 
         <Branch Condition="IsXFlip == true" Action="MoveSelection"/>
         <Branch Condition="(AngleDirection &gt;= 135.0) &#38;&#38; (AngleDirection &lt; 225.0) == false" Action="MoveSelection"/>
@@ -80,6 +96,7 @@
         </Animation>
 
         <UseBranchSet Name="CommonMoveBranchSet"/>
+        <UseBranchSet Name="CommonBattleBranchSet"/>
 
         <Branch Condition="IsXFlip == false" Action="MoveSelection"/>
         <Branch Condition="(AngleDirection &gt;= 135.0) &#38;&#38; (AngleDirection &lt; 225.0) == false" Action="MoveSelection"/>
@@ -91,11 +108,47 @@
         </Animation>
 
         <UseBranchSet Name="CommonMoveBranchSet"/>
+        <UseBranchSet Name="CommonBattleBranchSet"/>
 
         <Branch Condition="IsXFlip == false" Action="MoveSelection"/>
         <Branch Condition="(AngleDirection &gt;= 315.0) || (AngleDirection &lt; 45.0) == false" Action="MoveSelection"/>
         <Branch Condition="End == true" Action="MoveRightForward"/>
     </MoveRightForward>
+
+
+    <AttackCharge MovementType="GraphPreset" MovementGraphPreset="AttackCharge" DirectionType="MoveInput" FlipType="MousePoint">
+        <Animation Path="Resources/Sprites/DummyPlayer/AttackCharge/" StartFrame="0" EndFrame="1" FramePerSecond="1">
+        </Animation>
+
+        <Branch Condition="InputAttackCharge == false" Action="AttackPrepare"/>
+        <Branch Condition="End == true" Action="AttackCharge"/>
+    </AttackCharge>
+
+    <AttackPrepare MovementType="Empty" DirectionType="MousePoint" FlipType="Keep">
+        <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="999">
+        </Animation>
+
+        <Branch Condition="End == true" Action="Attack"/>
+    </AttackPrepare>
+
+    <Attack MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="Keep" FlipType="Keep">
+        <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="3">
+        </Animation>
+
+        <Branch Condition="End == true" Action="CommonMoveSelection"/>
+    </Attack>
+    
+
+
+    <Guard MovementType="GraphPreset" MovementGraphPreset="Guard" DirectionType="MoveInput" FlipType="Keep">
+        <Animation Path="Resources/Sprites/DummyPlayer/Guard/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
+        </Animation>
+
+        <Branch Condition="InputGuard == false" Action="CommonMoveSelection"/>
+        <Branch Condition="End == true" Action="Guard"/>
+    </Guard>
+
+
 
 
 
