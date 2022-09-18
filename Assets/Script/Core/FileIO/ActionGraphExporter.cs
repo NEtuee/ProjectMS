@@ -178,6 +178,10 @@ public static class ActionGraphLoader
             {
                 nodeData._rotationType = (RotationType)System.Enum.Parse(typeof(RotationType), targetValue);
             }
+            else if(targetName == "DefenceType")
+            {
+                nodeData._defenceType = (DefenceType)System.Enum.Parse(typeof(DefenceType), targetValue);
+            }
         }
 
         XmlNodeList nodeList = node.ChildNodes;

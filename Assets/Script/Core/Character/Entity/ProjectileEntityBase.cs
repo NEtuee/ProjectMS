@@ -19,10 +19,10 @@ public class ProjectileEntityBase : ObjectBase
         _projectileGraph = new ProjectileGraph(ProjectileGraphLoader.readFromXML(IOControl.PathForDocumentsFile("Assets\\Data\\Example\\ProjectileGraphExample.xml"))[0]);
         _projectileGraph.initialize();
 
-        CollisionInfoData data = new CollisionInfoData(.1f,0f);
+        CollisionInfoData data = new CollisionInfoData(.1f,0f, CollisionType.Character);
         _collisionInfo = new CollisionInfo(data);
 
-        CollisionManager.Instance().registerObject(_collisionInfo, this, CollisionLayer.Default);
+        CollisionManager.Instance().registerObject(_collisionInfo, this);
     }
 
     public void shot(ProjectileGraphShotInfoData shotInfoData, Vector3 startPosition)

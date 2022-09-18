@@ -5,6 +5,11 @@ public abstract class ObjectBase : MessageReceiver, IProgress
 {
     public System.Action    whenDeactive = ()=>{};
     protected int           _currentManagerNumber = -1;
+
+
+    protected Vector3 _direction = Vector3.right;
+
+
     protected override void Awake()
     {
         base.Awake();
@@ -93,4 +98,8 @@ public abstract class ObjectBase : MessageReceiver, IProgress
     {
         whenDeactive?.Invoke();
     }
+
+
+    public Vector3 getDirection() {return _direction;}
+
 }

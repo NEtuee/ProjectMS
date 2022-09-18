@@ -6,11 +6,12 @@ public class CollisionInfoData
     private float _radius;
     private float _angle;
 
-    public CollisionInfoData(float radius, float angle)
+    public CollisionInfoData(float radius, float angle, CollisionType collisionType)
     {
         _boundBox = new BoundBox(radius,radius,UnityEngine.Vector3.zero);
         _radius = radius;
         _angle = angle;
+        _collisionType = collisionType;
     }
 
     public bool isValid()
@@ -29,14 +30,8 @@ public class CollisionInfoData
 
 public enum CollisionType
 {
-    Hard,
-    Trigger,
-
-}
-
-public enum CollisionLayer
-{
-    Default,
-    
+    Default = 0,
+    Character,
+    Attack,
     Count,
 }

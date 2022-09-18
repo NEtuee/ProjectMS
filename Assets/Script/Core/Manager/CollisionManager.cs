@@ -2,12 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public delegate void CollisionDelegate(object collisionData);
+public delegate void CollisionDelegate(CollisionSuccessData collisionData);
+
+public struct CollisionSuccessData
+{
+    public object _requester;
+    public object _target;
+}
 
 public struct CollisionRequestData
 {
     public CollisionDelegate _collisionDelegate;
     public CollisionInfo _collision;
+
+    public object _requestObject;
 }
 
 public struct CollisionObjectData
@@ -19,46 +27,100 @@ public struct CollisionObjectData
 public class CollisionManager : Singleton<CollisionManager>
 {
     private Dictionary<int, List<CollisionObjectData>>          _collisionObjectList = new Dictionary<int, List<CollisionObjectData>>();
-    private Dictionary<int, Stack<CollisionRequestData>>        _collisionRequestStack = new Dictionary<int, Stack<CollisionRequestData>>();
+    private Stack<CollisionRequestData>        _collisionRequestStack = new Stack<CollisionRequestData>();
 
-    private int                                                 _collisionLayerCount = 0;
+
+    private bool[][] _collisionMatrix;
+
+    private int                                                 _collisionTypeCount = 0;
     private int                                                 _collisionRequestCount = 0;
 
     public CollisionManager()
     {
-        _collisionLayerCount = (int)CollisionLayer.Count;
+        _collisionTypeCount = (int)CollisionType.Count;
 
+        buildCollisionMatrix();
         buildCollisionInfoList();
+    }
+
+    private void buildCollisionMatrix()
+    {
+        int collisionTypeCount = (int)CollisionType.Count;
+        _collisionMatrix = new bool[collisionTypeCount][];
+
+        for(int i = 0; i < collisionTypeCount; ++i)
+        {
+            _collisionMatrix[i] = new bool[collisionTypeCount];
+
+            CollisionType type = (CollisionType)i;
+            if(type == CollisionType.Default)
+            {
+                setCollisionEnable(i,CollisionType.Default,true);
+                setCollisionEnable(i,CollisionType.Character,true);
+                setCollisionEnable(i,CollisionType.Attack,false);
+            }
+            else if(type == CollisionType.Character)
+            {
+                setCollisionEnable(i,CollisionType.Default,true);
+                setCollisionEnable(i,CollisionType.Character,true);
+                setCollisionEnable(i,CollisionType.Attack,false);
+            }
+            else if(type == CollisionType.Attack)
+            {
+                setCollisionEnable(i,CollisionType.Default,true);
+                setCollisionEnable(i,CollisionType.Character,true);
+                setCollisionEnable(i,CollisionType.Attack,false);
+            }
+        }
+    }
+
+    public bool canCollision(CollisionType type, CollisionType target)
+    {
+        return _collisionMatrix[(int)type][(int)target];
+    }
+
+    private void setCollisionEnable(int type, int target, bool value)
+    {
+        _collisionMatrix[type][target] = value;
+    }
+
+    private void setCollisionEnable(int type, CollisionType target, bool value)
+    {
+        setCollisionEnable(type,(int)target,value);
+    }
+
+    private void setCollisionEnable(CollisionType type, CollisionType target, bool value)
+    {
+        setCollisionEnable((int)type, (int)target, value);
     }
 
     private void buildCollisionInfoList()
     {
-        for(int i = 0; i < _collisionLayerCount; ++i)
+        for(int i = 0; i < _collisionTypeCount; ++i)
         {
             _collisionObjectList.Add(i, new List<CollisionObjectData>());
-            _collisionRequestStack.Add(i, new Stack<CollisionRequestData>());
         }
     }
 
-    public void registerObject(CollisionInfo collisionData, object collisionObject, CollisionLayer collisionLayer)
+    public void registerObject(CollisionInfo collisionData, object collisionObject)
     {
-        registerObject(new CollisionObjectData{_collisionInfo = collisionData, _collisionObject = collisionObject},collisionLayer);
+        registerObject(new CollisionObjectData{_collisionInfo = collisionData, _collisionObject = collisionObject},collisionData.getCollisionType());
     }
 
-    public void registerObject(CollisionObjectData objectData, CollisionLayer collisionLayer)
+    public void registerObject(CollisionObjectData objectData, CollisionType collisionType)
     {
-        _collisionObjectList[(int)collisionLayer].Add(objectData);
+        _collisionObjectList[(int)collisionType].Add(objectData);
     }
 
-    public void collisionRequest(CollisionInfo collisionData, CollisionDelegate collisionDelegate, CollisionLayer collisionLayer)
+    public void collisionRequest(CollisionInfo collisionData, object requestObject, CollisionDelegate collisionDelegate)
     {
-        collisionRequest(new CollisionRequestData{_collisionDelegate = collisionDelegate, _collision = collisionData}, collisionLayer);
+        collisionRequest(new CollisionRequestData{_collisionDelegate = collisionDelegate, _requestObject = requestObject, _collision = collisionData});
     }
 
-    public void collisionRequest(CollisionRequestData request, CollisionLayer collisionLayer)
+    public void collisionRequest(CollisionRequestData request)
     {
         ++_collisionRequestCount;
-        _collisionRequestStack[(int)collisionLayer].Push(request);
+        _collisionRequestStack.Push(request);
     }
 
     public void collisionUpdate()
@@ -66,14 +128,15 @@ public class CollisionManager : Singleton<CollisionManager>
         if(_collisionRequestCount == 0)
             return;
 
-        for(int i = 0; i < _collisionLayerCount; ++i)
+        while(_collisionRequestStack.Count != 0)
         {
-            while(_collisionRequestStack[i].Count != 0)
+            CollisionRequestData request = _collisionRequestStack.Pop();
+
+            for(int i = 0; i < _collisionTypeCount; ++i)
             {
-                CollisionRequestData request = _collisionRequestStack[i].Pop();
                 collisionCheck(i,request);
             }
-            
+
         }
 
         _collisionRequestCount = 0;
@@ -81,15 +144,25 @@ public class CollisionManager : Singleton<CollisionManager>
 
     private void collisionCheck(int layer, CollisionRequestData request)
     {
+        if(canCollision(request._collision.getCollisionType(), (CollisionType)layer) == false)
+            return;
+
         List<CollisionObjectData> collisionList = _collisionObjectList[layer];
         CollisionInfo collisionInfo = request._collision;
         for(int i = 0; i < collisionList.Count; ++i)
         {
-            if(collisionInfo.getUniqueID() == collisionList[i]._collisionInfo.getUniqueID())
+            if(collisionInfo.getUniqueID() == collisionList[i]._collisionInfo.getUniqueID() || request._requestObject == collisionList[i]._collisionObject)
                 continue;
-                
+            
             if(collisionInfo.collisionCheck(collisionList[i]._collisionInfo) == true)
-                request._collisionDelegate(collisionList[i]._collisionObject);
+            {
+                CollisionSuccessData data;
+                data._requester = request._requestObject;
+                data._target = collisionList[i]._collisionObject;
+
+                request._collisionDelegate(data);
+            }
+                
         }
     }
 }

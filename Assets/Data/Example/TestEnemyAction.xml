@@ -1,0 +1,47 @@
+
+
+<ActionGraph Name="Test" DefaultAction="Idle" DefaultFramePerSecond="0.5">
+
+    <BranchSet Name="CommonHitAction">
+        <Branch Condition="Hit == true" Action="Hit"/>
+    </BranchSet>
+
+    <Idle>
+        <Animation Path="Resources/Sprites/DummyPlayer/Idle/" StartFrame="0" EndFrame="1" XFlip="true">
+        </Animation>
+
+        <UseBranchSet Name="CommonHitAction"/>
+
+        <Branch Condition="End == true" Action="Guard"/>
+    </Idle>
+
+    <Guard DefenceType="Guard">
+        <Animation Path="Resources/Sprites/DummyPlayer/Guard/" StartFrame="0" EndFrame="1" XFlip="true">
+        </Animation>
+
+        <UseBranchSet Name="CommonHitAction"/>
+
+        <Branch Condition="DefenceSuccess == true" Action="GuardSuccess"/>
+        <Branch Condition="End == true" Action="Idle"/>
+    </Guard>
+
+    <GuardSuccess DefenceType="Guard" MovementType="GraphPreset" MovementGraphPreset="GuardSuccess">
+        <Animation Path="Resources/Sprites/DummyPlayer/Guard/" StartFrame="0" EndFrame="1" FramePerSecond="2" XFlip="true">
+        </Animation>
+
+        <UseBranchSet Name="CommonHitAction"/>
+
+        <Branch Condition="End == true" Action="Guard"/>
+    </GuardSuccess>
+
+    <Hit MovementType="GraphPreset" MovementGraphPreset="AttackHit">
+        <Animation Path="Resources/Sprites/DummyPlayer/Hit/" StartFrame="0" EndFrame="1" FramePerSecond="2" XFlip="true">
+        </Animation>
+
+        <UseBranchSet Name="CommonHitAction"/>
+
+        <Branch Condition="End == true" Action="Idle"/>
+    </Hit>
+
+
+</ActionGraph>

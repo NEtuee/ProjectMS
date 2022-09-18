@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class GameEntityBase : SequencerObjectBase
 {
+
+    public string actionGraphPath = "Assets\\Data\\Example\\ActionGraphTest.xml";
+
     private SpriteRenderer      _spriteRenderer;
     private GameObject          _spriteObject;
     private ActionGraph         _actionGraph;
@@ -11,9 +14,11 @@ public class GameEntityBase : SequencerObjectBase
     private MovementControl     _movementControl = new MovementControl();
     
 
-    private Vector3 _direction = Vector3.right;
     private FlipState _flipState = new FlipState();
     private Quaternion _spriteRotation = Quaternion.identity;
+
+    private AttackState _attackState = AttackState.Default;
+    private DefenceState _defenceState = DefenceState.Default;
 
     public override void assign()
     {
@@ -28,7 +33,7 @@ public class GameEntityBase : SequencerObjectBase
     public override void initialize()
     {
         base.initialize();
-        _actionGraph = new ActionGraph(ActionGraphLoader.readFromXML(IOControl.PathForDocumentsFile("Assets\\Data\\Example\\ActionGraphTest.xml")));
+        _actionGraph = new ActionGraph(ActionGraphLoader.readFromXML(IOControl.PathForDocumentsFile(actionGraphPath)));
         _actionGraph.assign();
         _actionGraph.initialize();
 
@@ -38,9 +43,6 @@ public class GameEntityBase : SequencerObjectBase
     public override void progress(float deltaTime)
     {
         base.progress(deltaTime);
-        directionUpdate();
-
-        _movementControl?.progress(deltaTime, _direction);
 
         if(_actionGraph != null)
         {
@@ -48,14 +50,20 @@ public class GameEntityBase : SequencerObjectBase
             
             updateConditionData();
 
-            //action ,animation, movementGraph 바뀌는 시점
-            if(_actionGraph.progress(Time.deltaTime, this) == true)
+            //action,movementGraph 바뀌는 시점
+            if(_actionGraph.progress() == true)
             {
                 //movement 바뀌는 시점
                 _movementControl.changeMovement(this,_actionGraph.getCurrentMovement());
                 _movementControl.setMoveScale(_actionGraph.getCurrentMoveScale());
-//                Debug.Log("execute : " + prevActionName + " -> " + _actionGraph.getCurrentActionName());
+                //Debug.Log("execute : " + prevActionName + " -> " + _actionGraph.getCurrentActionName());
             }
+
+            updateDirection();
+            _movementControl?.progress(deltaTime, _direction);
+
+            //animation 바뀌는 시점
+            _actionGraph.updateAnimation(Time.deltaTime, this);
 
             _spriteRenderer.sprite = _actionGraph.getCurrentSprite();
             _flipState = getCurrentFlipState();
@@ -65,6 +73,18 @@ public class GameEntityBase : SequencerObjectBase
         }
 
         rotationUpdate();
+    }
+
+    public override void afterProgress(float deltaTime)
+    {
+        base.afterProgress(deltaTime);
+        resetState();
+    }
+
+    public void resetState()
+    {
+        _attackState = AttackState.Default;
+        _defenceState = DefenceState.Default;
     }
 
     public void updateConditionData()
@@ -85,6 +105,13 @@ public class GameEntityBase : SequencerObjectBase
 
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Input_AttackCharge, Input.GetMouseButton(0));
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Input_Guard, Input.GetMouseButton(1));
+
+        _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Attack_Blocked, _attackState == AttackState.AttackBlocked);
+        _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Attack_Success, _attackState == AttackState.AttackSuccess);
+
+        _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Defence_Crash, _defenceState == DefenceState.DefenceCrash);
+        _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Defence_Success, _defenceState == DefenceState.DefenceSuccess);
+        _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Defence_Hit, _defenceState == DefenceState.Hit);
     }
 
     public override void release(bool disposeFromMaster)
@@ -131,7 +158,7 @@ public class GameEntityBase : SequencerObjectBase
     }
 
     //todo : input manager 만들어서 거기서 moveiNput 가져오게 만들기
-    private void directionUpdate()
+    private void updateDirection()
     {
         DirectionType directionType = DirectionType.AlwaysRight;
         if(_actionGraph != null)
@@ -216,8 +243,11 @@ public class GameEntityBase : SequencerObjectBase
         _spriteRenderer = _spriteObject.AddComponent<SpriteRenderer>();
     }
 
-    public Vector3 getDirection() {return _direction;}
+    public void setAttackState(AttackState state) {_attackState = state;}
+    public void setDefenceState(DefenceState state) {_defenceState = state;}
+
     public string getCurrentActionName() {return _actionGraph == null ? "" : _actionGraph.getCurrentActionName();}
+    public DefenceType getDefenceType() {return _actionGraph.getCurrentDefenceType();}
     public MoveValuePerFrameFromTimeDesc getMoveValuePerFrameFromTimeDesc(){return _actionGraph.getMoveValuePerFrameFromTimeDesc();}
     public MovementGraph getCurrentMovementGraph(){return _actionGraph.getCurrentMovementGraph();}
     public MovementGraphPresetData getCurrentMovementGraphPreset() {return _actionGraph.getCurrentMovementGraphPreset();}

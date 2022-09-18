@@ -12,9 +12,20 @@ public static class FrameEventLoader
 
         XmlAttributeCollection attributes = node.Attributes;
 
+
+
         string type = attributes[0].Value;
         if(type == "Test")
             outFrameEvent = new ActionFrameEvent_Test();
+        else if(type == "Attack")
+            outFrameEvent = new ActionFrameEvent_Attack();
+
+        DebugUtil.assert((int)FrameEventType.Count == 2, "check loader");
+
+
+
+
+
 
         if(outFrameEvent == null)
         {
@@ -23,6 +34,11 @@ public static class FrameEventLoader
         }
 
         outFrameEvent._startFrame = float.Parse(attributes[1].Value);
+        outFrameEvent._endFrame = outFrameEvent._startFrame;
+
+        if(attributes[2].Name == "EndFrame")
+            outFrameEvent._endFrame = float.Parse(attributes[2].Value);
+
         outFrameEvent.loadFromXML(node);
         
         return outFrameEvent;

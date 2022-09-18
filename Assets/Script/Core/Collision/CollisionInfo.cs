@@ -54,22 +54,22 @@ public class CollisionInfo
         return distance < getRadius() + target.getRadius();
     }
 
-    public void drawCollosionArea(Color color)
+    public void drawCollosionArea(Color color, float time = 0f)
     {
         if(_collisionInfoData.getAngle() == 0f)
-            drawCircle(color);
+            drawCircle(color, time);
         else
-            drawTriangle(color);
+            drawTriangle(color, time);
     }
 
-    public void drawCircle(Color color)
+    public void drawCircle(Color color, float time = 0f)
     {
-        GizmoHelper.instance.drawCircle(_centerPosition,getRadius(),36,color);
+        GizmoHelper.instance.drawCircle(_centerPosition,getRadius(),36,color, time);
     }
 
-    public void drawTriangle(Color color)
+    public void drawTriangle(Color color, float time = 0f)
     {
-        GizmoHelper.instance.drawPolygon(_triangle.getVertices(),color);
+        GizmoHelper.instance.drawPolygon(_triangle.getVertices(),color, time);
     }
 
     public void drawBoundBox(Color color)
@@ -84,7 +84,7 @@ public class CollisionInfo
 
         if(_collisionInfoData.getAngle() != 0f)
         {
-            _triangle.makeTriangle(position,_collisionInfoData.getRadius(), _collisionInfoData.getAngle(), MathEx.clampDegree(Quaternion.FromToRotation(Vector3.right, direction).eulerAngles.z));
+            _triangle.makeTriangle(position,_collisionInfoData.getRadius(), _collisionInfoData.getAngle(), MathEx.clampDegree(Vector3.SignedAngle(Vector3.right, direction, Vector3.forward)));
             _boundBox.updateBoundBox(_triangle);
 
         }
@@ -99,6 +99,7 @@ public class CollisionInfo
     public float getSqrRadius() {return _collisionInfoData.getSqrRadius();}
     public Vector3 getCenterPosition() {return _centerPosition;}
     public Vector3 getDirection() {return _direction;}
+    public CollisionType getCollisionType() {return _collisionInfoData.getCollisionType();}
     public CollisionInfoData getCollisionInfoData() {return _collisionInfoData;}
     public BoundBox getBoundBox() {return _boundBox;}
 }

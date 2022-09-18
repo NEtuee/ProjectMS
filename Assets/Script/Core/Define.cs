@@ -1,5 +1,21 @@
 using UnityEngine;
 
+public enum AttackState
+{
+    Default,
+    AttackSuccess,
+    AttackBlocked,
+}
+
+public enum DefenceState
+{
+    Default,
+    Hit,
+    DefenceSuccess,
+    DefenceCrash,
+}
+
+
 public struct Triangle
 {
     private Vector3[] _vertices;

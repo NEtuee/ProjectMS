@@ -5,52 +5,75 @@ using UnityEngine;
 public class GizmoHelper : MonoBehaviour
 {
     public static GizmoHelper instance;
-    struct GizmoCircleData
+    class GizmoCircleData
     {
         public Vector3 _center;
         public float _radius;
         public int _accuracy;
 
+        public float _timer;
+
         public Color _color;
         
     };
 
-    struct GizmoPolygonData
+    class GizmoPolygonData
     {
         public Vector3[] _verticies;
 
+        public float _timer;
         public Color _color;
     }
 
-    struct GizmoLineData
+    class GizmoLineData
     {
         public Vector3 _start;
         public Vector3 _end;
 
+        public float _timer;
         public Color _color;
     }
 
-    private Stack<GizmoCircleData> _circleRequestData = new Stack<GizmoCircleData>();
-    private Stack<GizmoPolygonData> _polygonData = new Stack<GizmoPolygonData>();
-    private Stack<GizmoLineData> _lineData = new Stack<GizmoLineData>();
+    private List<GizmoCircleData> _circleRequestData = new List<GizmoCircleData>();
+    private List<GizmoPolygonData> _polygonData = new List<GizmoPolygonData>();
+    private List<GizmoLineData> _lineData = new List<GizmoLineData>();
 
     private void Awake()
     {
         instance = this;
     }
 
-    public void drawCircle(Vector3 center, float radius, int accuracy, Color color)
+    private void Update()
+    {
+        for(int index = 0; index < _lineData.Count; ++index)
+        {
+            _lineData[index]._timer -= Time.deltaTime;
+        }
+
+        for(int index = 0; index < _circleRequestData.Count; ++index)
+        {
+            _circleRequestData[index]._timer -= Time.deltaTime;
+        }
+
+        for(int index = 0; index < _polygonData.Count; ++index)
+        {
+            _polygonData[index]._timer -= Time.deltaTime;
+        }
+    }
+
+    public void drawCircle(Vector3 center, float radius, int accuracy, Color color, float time = 0f)
     {
         GizmoCircleData circleData = new GizmoCircleData();
         circleData._center = center;
         circleData._radius = radius;
         circleData._accuracy = accuracy;
         circleData._color = color;
+        circleData._timer = time;
 
-        _circleRequestData.Push(circleData);
+        _circleRequestData.Add(circleData);
     }
 
-    public void drawPolygon(Vector3[] verticies, Color color)
+    public void drawPolygon(Vector3[] verticies, Color color, float time = 0f)
     {
         if(verticies.Length < 3)
         {
@@ -61,38 +84,48 @@ public class GizmoHelper : MonoBehaviour
         GizmoPolygonData polygonData = new GizmoPolygonData();
         polygonData._verticies = verticies;
         polygonData._color = color;
+        polygonData._timer = time;
 
-        _polygonData.Push(polygonData);
+        _polygonData.Add(polygonData);
     }
 
-    public void drawLine(Vector3 start, Vector3 end, Color color)
+    public void drawLine(Vector3 start, Vector3 end, Color color, float time = 0f)
     {
         GizmoLineData lineData = new GizmoLineData();
         lineData._start = start;
         lineData._end = end;
         lineData._color = color;
+        lineData._timer = time;
 
-        _lineData.Push(lineData);
+        _lineData.Add(lineData);
     }
 
     private void drawLine()
     {
         Color color = Gizmos.color;
-        foreach(var item in _lineData)
+        for(int index = 0; index < _lineData.Count;)
         {
+            GizmoLineData item = _lineData[index];
+
             Gizmos.color = item._color;
             Gizmos.DrawLine(item._start, item._end);
+
+            if(item._timer <= 0f)
+                _lineData.RemoveAt(index);
+            else
+                ++index;
         }
 
         Gizmos.color = color;
-        _lineData.Clear();
     }
 
     private void drawPolygon()
     {
         Color color = Gizmos.color;
-        foreach(var item in _polygonData)
+        for(int index = 0; index < _polygonData.Count;)
         {
+            GizmoPolygonData item = _polygonData[index];
+
             Gizmos.color = item._color;
             for(int i = 0; i < item._verticies.Length - 1; ++i)
             {
@@ -100,17 +133,22 @@ public class GizmoHelper : MonoBehaviour
             }
 
             Gizmos.DrawLine(item._verticies[item._verticies.Length - 1], item._verticies[0]);
+
+            if(item._timer <= 0f)
+                _polygonData.RemoveAt(index);
+            else
+                ++index;
         }
 
         Gizmos.color = color;
-        _polygonData.Clear();
     }
 
     private void drawCircle()
     {
         Color color = Gizmos.color;
-        foreach(var item in _circleRequestData)
+        for(int index = 0; index < _circleRequestData.Count;)
         {
+            GizmoCircleData item = _circleRequestData[index];
             Gizmos.color = item._color;
 
             float accur = 360f / (float)item._accuracy;
@@ -124,10 +162,14 @@ public class GizmoHelper : MonoBehaviour
 
                 Gizmos.DrawLine(new Vector3(x,y) * item._radius + item._center,new Vector3(x2,y2) * item._radius + item._center);
             }
+
+            if(item._timer <= 0f)
+                _circleRequestData.RemoveAt(index);
+            else
+                ++index;
         }
 
         Gizmos.color = color;
-        _circleRequestData.Clear();
     }
 
     private void OnDrawGizmos()

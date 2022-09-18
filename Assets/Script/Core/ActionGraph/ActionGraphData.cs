@@ -34,6 +34,7 @@ public class ActionGraphNodeData
     public DirectionType                _directionType = DirectionType.AlwaysRight;
     public RotationType                 _rotationType = RotationType.AlwaysRight;
     public FlipType                     _flipType = FlipType.AlwaysTurnOff;
+    public DefenceType                  _defenceType = DefenceType.Empty;
 
     public float                        _moveScale = 1f;
 
@@ -74,6 +75,13 @@ public enum ConditionCompareType
     Count,
 };
 
+public enum DefenceType
+{
+    Empty,
+    Guard,
+    Count,
+}
+
 public enum FlipType
 {
     AlwaysTurnOff = 0,
@@ -107,6 +115,14 @@ public enum ConditionNodeUpdateType
 
     Input_AttackCharge,
     Input_Guard,
+
+    Attack_Blocked,
+    Attack_Success,
+
+    Defence_Success,
+    Defence_Crash,
+
+    Defence_Hit,
 
     Count,
 }
@@ -150,6 +166,13 @@ public static class ConditionNodeInfoPreset
 
         {"InputAttackCharge",new ConditionNodeInfo(ConditionNodeUpdateType.Input_AttackCharge, ConditionNodeType.Bool)},
         {"InputGuard",new ConditionNodeInfo(ConditionNodeUpdateType.Input_Guard, ConditionNodeType.Bool)},
+
+        {"AttackBlocked",new ConditionNodeInfo(ConditionNodeUpdateType.Attack_Blocked, ConditionNodeType.Bool)},
+        {"AttackSuccess",new ConditionNodeInfo(ConditionNodeUpdateType.Attack_Success, ConditionNodeType.Bool)},
+
+        {"DefenceSuccess",new ConditionNodeInfo(ConditionNodeUpdateType.Defence_Success, ConditionNodeType.Bool)},
+        {"DefenceCrash",new ConditionNodeInfo(ConditionNodeUpdateType.Defence_Crash, ConditionNodeType.Bool)},
+        {"Hit",new ConditionNodeInfo(ConditionNodeUpdateType.Defence_Hit, ConditionNodeType.Bool)},
         
     };
 

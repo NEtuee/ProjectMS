@@ -42,9 +42,6 @@
         
     </MoveSelection>
 
-
-
-
     <MoveUp MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="MoveInput" FlipType="MousePoint">
         <Animation Path="Resources/Sprites/DummyPlayer/MoveUp/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
         </Animation>
@@ -61,6 +58,7 @@
         </Animation>
 
         <UseBranchSet Name="CommonMoveBranchSet"/>
+        <UseBranchSet Name="CommonBattleBranchSet"/>
 
         <Branch Condition="(AngleDirection &gt;= 225.0) &#38;&#38; (AngleDirection &lt; 315.0) == false" Action="MoveSelection"/>
         <Branch Condition="End == true" Action="MoveDown"/>
@@ -115,7 +113,6 @@
         <Branch Condition="End == true" Action="MoveRightForward"/>
     </MoveRightForward>
 
-
     <AttackCharge MovementType="GraphPreset" MovementGraphPreset="AttackCharge" DirectionType="MoveInput" FlipType="MousePoint">
         <Animation Path="Resources/Sprites/DummyPlayer/AttackCharge/" StartFrame="0" EndFrame="1" FramePerSecond="1">
         </Animation>
@@ -126,6 +123,7 @@
 
     <AttackPrepare MovementType="Empty" DirectionType="MousePoint" FlipType="Keep">
         <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="999">
+            <FrameEvent Type="Attack" StartFrame="0" Radius="1.5" Angle="8"/>
         </Animation>
 
         <Branch Condition="End == true" Action="Attack"/>

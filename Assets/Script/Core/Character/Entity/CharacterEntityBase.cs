@@ -19,10 +19,10 @@ public class CharacterEntityBase : GameEntityBase
         base.initialize();
         RegisterRequest(QueryUniqueID("SceneCharacterManager"));
 
-        CollisionInfoData data = new CollisionInfoData(1f,10f);
+        CollisionInfoData data = new CollisionInfoData(0.2f,0f, CollisionType.Character);
         _collisionInfo = new CollisionInfo(data);
 
-        CollisionManager.Instance().registerObject(_collisionInfo, this, CollisionLayer.Default);
+        CollisionManager.Instance().registerObject(_collisionInfo, this);
     }
 
     public override void progress(float deltaTime)
@@ -44,11 +44,11 @@ public class CharacterEntityBase : GameEntityBase
     {
         base.afterProgress(deltaTime);
 
-        CollisionManager.Instance().collisionRequest(_collisionInfo,collisionTest,CollisionLayer.Default);
+        CollisionManager.Instance().collisionRequest(_collisionInfo,this,collisionTest);
     }
 
 
-    private void collisionTest(object data)
+    private void collisionTest(CollisionSuccessData data)
     {
         _debugColor = Color.green;
     }

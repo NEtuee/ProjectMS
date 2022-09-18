@@ -28,14 +28,15 @@ public class ActionGraph
             changeAction(_actionGraphBaseData._defaultActionIndex);
     }
 
-    public bool progress(float deltaTime, GameEntityBase targetEntity)
+    public bool progress()
     {
-        bool success = processAction(getCurrentAction());
+        return processAction(getCurrentAction());
+    }
 
+    public void updateAnimation(float deltaTime, GameEntityBase targetEntity)
+    {
         bool isEnd = _animationPlayer.progress(deltaTime, targetEntity);
         setActionConditionData_Bool(ConditionNodeUpdateType.Action_AnimationEnd,isEnd);
-
-        return success;
     }
 
     public void release()
@@ -420,6 +421,7 @@ public class ActionGraph
 
 
     public float getCurrentMoveScale() {return getCurrentAction()._moveScale;}
+    public DefenceType getCurrentDefenceType() {return getCurrentAction()._defenceType;}
     public RotationType getCurrentRotationType() {return getCurrentAction()._rotationType;}
     public DirectionType getDirectionType() {return getCurrentAction()._directionType;}
     public MoveValuePerFrameFromTimeDesc getMoveValuePerFrameFromTimeDesc(){return _animationPlayer.getMoveValuePerFrameFromTimeDesc();}
