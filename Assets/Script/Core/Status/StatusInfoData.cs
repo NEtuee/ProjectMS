@@ -1,44 +1,43 @@
 
 public class StatusInfoData
 {
-    private StatusDataFloat[] _statusData;
+    public StatusDataFloat[] _statusData;
 
     public StatusInfoData(StatusDataFloat[] statusArray)
     {
         _statusData = statusArray;
     }
 
-    public StatusDataFloat getStatusData(StatusType type)
-    {
-        if(type == StatusType.Count)
-        {
-            DebugUtil.assert(false, "invalid status type: {0}", type);
-            return null;
-        }
-
-        return _statusData[(int)type];
-    }
 }
 
 public class StatusDataFloat
 {
+    private string _statusName;
     private StatusType _statusType;
 
     private float _maxValue;
     private float _minValue;
-
-    private float _autoRegenTime;
-    private float _autoRegenFactor;
+    private float _initialValue;
 
     public StatusDataFloat(){}
-    public StatusDataFloat(StatusType type, float min, float max, float regenTime, float regenFactor)
+    public StatusDataFloat(StatusType type, string name, float min, float max, float init)
     {
         _statusType = type;
+        _statusName = name;
 
         _maxValue = max;
         _minValue = min;
-        _autoRegenTime = regenTime;
-        _autoRegenFactor = regenFactor;
+        _initialValue = init;
+    }
+
+    public bool isStatusValid()
+    {
+        return _statusType != StatusType.Count && _maxValue >= _minValue;
+    }
+
+    public void initStat(ref float value)
+    {
+        value = _initialValue;
     }
 
     public void variStat(ref float value, float factor )
@@ -57,14 +56,12 @@ public class StatusDataFloat
         return value <= _minValue;
     }
 
-    public StatusType getStatustype() {return _statusType;}
+    public StatusType getStatusType() {return _statusType;}
+    public string getName() {return _statusName;}
 
+    public float getInitValue() {return _initialValue;}
     public float getMaxValue() {return _maxValue;}
     public float getMinValue() {return _minValue;}
-
-    public float getAutoRegenTime() {return _autoRegenTime;}
-    public float getAutoRegenFactor() {return _autoRegenFactor;}
-
 
 }
 
@@ -74,5 +71,6 @@ public enum StatusType
     HP,
     Stamina,
     Blood,
+    Custom,
     Count,
 }

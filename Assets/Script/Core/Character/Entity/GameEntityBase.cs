@@ -6,19 +6,21 @@ public class GameEntityBase : SequencerObjectBase
 {
 
     public string actionGraphPath = "Assets\\Data\\Example\\ActionGraphTest.xml";
+    public string statusInfoPath = "";
 
     private SpriteRenderer      _spriteRenderer;
     private GameObject          _spriteObject;
     private ActionGraph         _actionGraph;
+    private StatusInfo          _statusInfo;
+
 
     private MovementControl     _movementControl = new MovementControl();
-    
 
-    private FlipState _flipState = new FlipState();
-    private Quaternion _spriteRotation = Quaternion.identity;
+    private FlipState           _flipState = new FlipState();
+    private Quaternion          _spriteRotation = Quaternion.identity;
 
-    private AttackState _attackState = AttackState.Default;
-    private DefenceState _defenceState = DefenceState.Default;
+    private AttackState         _attackState = AttackState.Default;
+    private DefenceState        _defenceState = DefenceState.Default;
 
     public override void assign()
     {
@@ -132,24 +134,24 @@ public class GameEntityBase : SequencerObjectBase
 
         switch(flipType)
         {
-        case FlipType.Direction:
-            if(MathEx.abs(_direction.x) != 0f && currentFlipState.xFlip == true)
-                flipState.xFlip = _direction.x < 0;
-            if(MathEx.abs(_direction.y) != 0f && currentFlipState.yFlip == true)
-                flipState.yFlip = _direction.y < 0;
-            
-            break;
-        case FlipType.MousePoint:
-            Vector3 direction = MathEx.deleteZ(Camera.main.ScreenToWorldPoint(Input.mousePosition)) - transform.position;
-            if(MathEx.abs(direction.x) != 0f && currentFlipState.xFlip == true)
-                flipState.xFlip = direction.x < 0;
-            if(MathEx.abs(direction.y) != 0f && currentFlipState.yFlip == true)
-                flipState.yFlip = direction.y < 0;
-            break;
-        case FlipType.Keep:
-            flipState.xFlip = _spriteRenderer.flipX;
-            flipState.yFlip = _spriteRenderer.flipY;
-            break;
+            case FlipType.Direction:
+                if(MathEx.abs(_direction.x) != 0f && currentFlipState.xFlip == true)
+                    flipState.xFlip = _direction.x < 0;
+                if(MathEx.abs(_direction.y) != 0f && currentFlipState.yFlip == true)
+                    flipState.yFlip = _direction.y < 0;
+
+                break;
+            case FlipType.MousePoint:
+                Vector3 direction = MathEx.deleteZ(Camera.main.ScreenToWorldPoint(Input.mousePosition)) - transform.position;
+                if(MathEx.abs(direction.x) != 0f && currentFlipState.xFlip == true)
+                    flipState.xFlip = direction.x < 0;
+                if(MathEx.abs(direction.y) != 0f && currentFlipState.yFlip == true)
+                    flipState.yFlip = direction.y < 0;
+                break;
+            case FlipType.Keep:
+                flipState.xFlip = _spriteRenderer.flipX;
+                flipState.yFlip = _spriteRenderer.flipY;
+                break;
         }
 
         DebugUtil.assert((int)FlipType.Count == 4, "flip type count error");
@@ -166,31 +168,31 @@ public class GameEntityBase : SequencerObjectBase
 
         switch(directionType)
         {
-        case DirectionType.AlwaysRight:
-            _direction = Vector3.right;
-            break;
-        case DirectionType.Keep:
-            break;
-        case DirectionType.MoveInput:
-            Vector3 input = new Vector3(Input.GetAxis("Horizontal"),Input.GetAxis("Vertical"),0f);
-            if(MathEx.equals(input.sqrMagnitude,0f,float.Epsilon) == false )
-            {
-                _direction = input;
-                _direction.Normalize();
-            }
-            else
-            {
-                _direction = Vector3.zero;
-            }
+            case DirectionType.AlwaysRight:
+                _direction = Vector3.right;
+                break;
+            case DirectionType.Keep:
+                break;
+            case DirectionType.MoveInput:
+                Vector3 input = new Vector3(Input.GetAxis("Horizontal"),Input.GetAxis("Vertical"),0f);
+                if(MathEx.equals(input.sqrMagnitude,0f,float.Epsilon) == false )
+                {
+                    _direction = input;
+                    _direction.Normalize();
+                }
+                else
+                {
+                    _direction = Vector3.zero;
+                }
 
-            break;
-        case DirectionType.MousePoint:
-            _direction = MathEx.deleteZ(Camera.main.ScreenToWorldPoint(Input.mousePosition)) - transform.position;
-            _direction.Normalize();
-            break;
-        case DirectionType.Count:
-            DebugUtil.assert(false, "invalid direction type : {0}",_actionGraph.getDirectionType());
-            break;
+                break;
+            case DirectionType.MousePoint:
+                _direction = MathEx.deleteZ(Camera.main.ScreenToWorldPoint(Input.mousePosition)) - transform.position;
+                _direction.Normalize();
+                break;
+            case DirectionType.Count:
+                DebugUtil.assert(false, "invalid direction type : {0}",_actionGraph.getDirectionType());
+                break;
         }
     }
 
@@ -202,18 +204,18 @@ public class GameEntityBase : SequencerObjectBase
 
         switch(rotationType)
         {
-        case RotationType.AlwaysRight:
-            _spriteRotation = Quaternion.identity;
-            break;
-        case RotationType.Direction:
-            _spriteRotation = Quaternion.FromToRotation(Vector3.right,_direction);
-            break;
-        case RotationType.MousePoint:
-            _spriteRotation = Quaternion.FromToRotation(Vector3.right,(MathEx.deleteZ(Camera.main.ScreenToWorldPoint(Input.mousePosition)) - transform.position).normalized);
-            break;
-        case RotationType.Keep:
-            break;
-
+            case RotationType.AlwaysRight:
+                _spriteRotation = Quaternion.identity;
+                break;
+            case RotationType.Direction:
+                _spriteRotation = Quaternion.FromToRotation(Vector3.right,_direction);
+                break;
+            case RotationType.MousePoint:
+                _spriteRotation = Quaternion.FromToRotation(Vector3.right,(MathEx.deleteZ(Camera.main.ScreenToWorldPoint(Input.mousePosition)) - transform.position).normalized);
+                break;
+            case RotationType.Keep:
+                break;
+    
         }
 
         DebugUtil.assert((int)RotationType.Count == 4, "invalid rotation type");
