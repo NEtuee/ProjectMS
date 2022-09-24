@@ -25,6 +25,7 @@ public class BuffData
         _buffVaryStatFactor = 0f;
         _buffCustomValue0 = 0f;
         _buffCustomValue1 = 0f;
+
     }
 
     public bool isBuffValid()

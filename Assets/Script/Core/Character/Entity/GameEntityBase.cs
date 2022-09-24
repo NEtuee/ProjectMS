@@ -6,7 +6,7 @@ public class GameEntityBase : SequencerObjectBase
 {
 
     public string actionGraphPath = "Assets\\Data\\Example\\ActionGraphTest.xml";
-    public string statusInfoPath = "";
+    public string statusInfoName = "CommonPlayerStatus";
 
     private SpriteRenderer      _spriteRenderer;
     private GameObject          _spriteObject;
@@ -38,6 +38,8 @@ public class GameEntityBase : SequencerObjectBase
         _actionGraph = new ActionGraph(ActionGraphLoader.readFromXML(IOControl.PathForDocumentsFile(actionGraphPath)));
         _actionGraph.assign();
         _actionGraph.initialize();
+
+        _statusInfo = new StatusInfo(statusInfoName);
 
         createSpriteRenderObject();
     }
@@ -81,6 +83,9 @@ public class GameEntityBase : SequencerObjectBase
     {
         base.afterProgress(deltaTime);
         resetState();
+
+        _statusInfo.updateStatus(deltaTime);
+
     }
 
     public void resetState()
@@ -114,6 +119,9 @@ public class GameEntityBase : SequencerObjectBase
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Defence_Crash, _defenceState == DefenceState.DefenceCrash);
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Defence_Success, _defenceState == DefenceState.DefenceSuccess);
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Defence_Hit, _defenceState == DefenceState.Hit);
+
+        _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Entity_Dead, _statusInfo.isDead());
+
     }
 
     public override void release(bool disposeFromMaster)

@@ -1,10 +1,12 @@
 
 public class StatusInfoData
 {
+    public string _statusInfoName;
     public StatusDataFloat[] _statusData;
 
-    public StatusInfoData(StatusDataFloat[] statusArray)
+    public StatusInfoData(string name, StatusDataFloat[] statusArray)
     {
+        _statusInfoName = name;
         _statusData = statusArray;
     }
 
@@ -12,12 +14,12 @@ public class StatusInfoData
 
 public class StatusDataFloat
 {
-    private string _statusName;
-    private StatusType _statusType;
+    public string _statusName;
+    public StatusType _statusType;
 
-    private float _maxValue;
-    private float _minValue;
-    private float _initialValue;
+    public float _maxValue;
+    public float _minValue;
+    public float _initialValue;
 
     public StatusDataFloat(){}
     public StatusDataFloat(StatusType type, string name, float min, float max, float init)
@@ -64,6 +66,12 @@ public class StatusDataFloat
     public float getMinValue() {return _minValue;}
 
 }
+
+public enum StatusVariType
+{
+    Fixed,
+    List
+};
 
 
 public enum StatusType

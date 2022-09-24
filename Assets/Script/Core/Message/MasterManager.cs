@@ -46,6 +46,7 @@ public class MasterManager : MessageHub<ManagerBase>
     public void Update()
     {
         float deltaTime = Time.deltaTime;
+        GlobalTimer.Instance().updateGlobalTime(deltaTime);
         
         ManagersUpdate(deltaTime);
         ManagersAfterUpdate(deltaTime);

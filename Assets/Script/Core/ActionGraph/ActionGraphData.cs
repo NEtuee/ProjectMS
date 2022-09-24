@@ -124,6 +124,8 @@ public enum ConditionNodeUpdateType
 
     Defence_Hit,
 
+    Entity_Dead,
+
     Count,
 }
 
@@ -173,6 +175,8 @@ public static class ConditionNodeInfoPreset
         {"DefenceSuccess",new ConditionNodeInfo(ConditionNodeUpdateType.Defence_Success, ConditionNodeType.Bool)},
         {"DefenceCrash",new ConditionNodeInfo(ConditionNodeUpdateType.Defence_Crash, ConditionNodeType.Bool)},
         {"Hit",new ConditionNodeInfo(ConditionNodeUpdateType.Defence_Hit, ConditionNodeType.Bool)},
+
+        {"Dead",new ConditionNodeInfo(ConditionNodeUpdateType.Entity_Dead, ConditionNodeType.Bool)},
         
     };
 
