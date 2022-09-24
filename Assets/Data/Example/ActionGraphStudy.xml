@@ -1,0 +1,102 @@
+
+<ActionGraph Name="Test" DefaultAction="Idle" DefaultFramePerSecond="4">
+
+    <BranchSet Name="CommonMoveBranchSet">
+        <Branch Condition="ActionTest == false" Action="Idle"/>
+    </BranchSet>
+
+
+    <Idle DirectionType="Keep" FlipType="MousePoint">
+        <Animation Path="Resources/Sprites/DummyPlayer/Idle/" StartFrame="0" EndFrame="1" XFlip="true">
+        </Animation>
+
+
+        <Branch Condition="ActionTest == true" Action="MoveSelection"/>
+        <Branch Condition="End == true" Action="Idle"/>
+    </Idle>
+
+    <CommonMoveSelection IsActionSelection="true">
+        <Branch Condition="ActionTest == true" Action="MoveSelection"/>
+        <UseBranchSet Name="CommonMoveBranchSet"/>
+    </CommonMoveSelection>
+
+
+    <MoveSelection IsActionSelection="true">
+        
+        <Branch Condition="(AngleDirection &gt;= 45.0) &#38;&#38; (AngleDirection &lt; 135.0)" Action="MoveUp"/>
+        <Branch Condition="(AngleDirection &gt;= 225.0) &#38;&#38; (AngleDirection &lt; 315.0)" Action="MoveDown"/>
+
+        <Branch Condition="(AngleDirection &gt;= 315.0) || (AngleDirection &lt; 45.0) &#38;&#38; (IsXFlip == true)" Action="MoveRightForward"/>
+        <Branch Condition="(AngleDirection &gt;= 135.0) &#38;&#38; (AngleDirection &lt; 225.0) &#38;&#38; (IsXFlip == true)" Action="MoveRightBackward"/>
+
+        <Branch Condition="(AngleDirection &gt;= 135.0) &#38;&#38; (AngleDirection &lt; 225.0) &#38;&#38; (IsXFlip == false)" Action="MoveLeftForward"/>
+        <Branch Condition="(AngleDirection &gt;= 315.0) || (AngleDirection &lt; 45.0) &#38;&#38; (IsXFlip == false)" Action="MoveLeftBackward"/>
+        
+    </MoveSelection>
+
+    <MoveUp MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="MoveInput" FlipType="MousePoint">
+        <Animation Path="Resources/Sprites/DummyPlayer/MoveUp/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
+        </Animation>
+
+        <UseBranchSet Name="CommonMoveBranchSet"/>
+
+        <Branch Condition="(AngleDirection &gt;= 45.0) &#38;&#38; (AngleDirection &lt; 135.0) == false" Action="MoveSelection"/>
+        <Branch Condition="End == true" Action="MoveUp"/>
+    </MoveUp>
+
+    <MoveDown MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="MoveInput" FlipType="MousePoint">
+        <Animation Path="Resources/Sprites/DummyPlayer/MoveDown/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
+        </Animation>
+
+        <UseBranchSet Name="CommonMoveBranchSet"/>
+
+        <Branch Condition="(AngleDirection &gt;= 225.0) &#38;&#38; (AngleDirection &lt; 315.0) == false" Action="MoveSelection"/>
+        <Branch Condition="End == true" Action="MoveDown"/>
+    </MoveDown>
+
+    <MoveLeftBackward MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="MoveInput" FlipType="MousePoint">
+        <Animation Path="Resources/Sprites/DummyPlayer/MoveForward/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
+        </Animation>
+
+        <UseBranchSet Name="CommonMoveBranchSet"/>
+
+        <Branch Condition="IsXFlip == true" Action="MoveSelection"/>
+        <Branch Condition="(AngleDirection &gt;= 315.0) || (AngleDirection &lt; 45.0) == false" Action="MoveSelection"/>
+        <Branch Condition="End == true" Action="MoveLeftBackward"/>
+    </MoveLeftBackward>
+
+    <MoveLeftForward MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="MoveInput" FlipType="MousePoint">
+        <Animation Path="Resources/Sprites/DummyPlayer/MoveBackward/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
+        </Animation>
+
+        <UseBranchSet Name="CommonMoveBranchSet"/>
+
+        <Branch Condition="IsXFlip == true" Action="MoveSelection"/>
+        <Branch Condition="(AngleDirection &gt;= 135.0) &#38;&#38; (AngleDirection &lt; 225.0) == false" Action="MoveSelection"/>
+        <Branch Condition="End == true" Action="MoveLeftForward"/>
+    </MoveLeftForward>
+
+
+    <MoveRightBackward MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="MoveInput" FlipType="MousePoint">
+        <Animation Path="Resources/Sprites/DummyPlayer/MoveForward/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
+        </Animation>
+
+        <UseBranchSet Name="CommonMoveBranchSet"/>
+
+        <Branch Condition="IsXFlip == false" Action="MoveSelection"/>
+        <Branch Condition="(AngleDirection &gt;= 135.0) &#38;&#38; (AngleDirection &lt; 225.0) == false" Action="MoveSelection"/>
+        <Branch Condition="End == true" Action="MoveRightBackward"/>
+    </MoveRightBackward>
+
+    <MoveRightForward MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="MoveInput" FlipType="MousePoint">
+        <Animation Path="Resources/Sprites/DummyPlayer/MoveBackward/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
+        </Animation>
+
+        <UseBranchSet Name="CommonMoveBranchSet"/>
+
+        <Branch Condition="IsXFlip == false" Action="MoveSelection"/>
+        <Branch Condition="(AngleDirection &gt;= 315.0) || (AngleDirection &lt; 45.0) == false" Action="MoveSelection"/>
+        <Branch Condition="End == true" Action="MoveRightForward"/>
+    </MoveRightForward>
+
+</ActionGraph>
