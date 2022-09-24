@@ -4,7 +4,7 @@ public enum AttackState
 {
     Default,
     AttackSuccess,
-    AttackBlocked,
+    AttackGuarded,
     AttackParried,
 }
 

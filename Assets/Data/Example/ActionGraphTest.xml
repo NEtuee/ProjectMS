@@ -123,13 +123,8 @@
 
     <AttackPrepare MovementType="Empty" DirectionType="MousePoint" FlipType="Keep">
         <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="999">
-            <FrameEvent Type="Attack" StartFrame="0" Radius="1.5" Angle="8">
-                <OnHit>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
-                    <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
-                </OnHit>
-            </FrameEvent>
         </Animation>
+
 
         <Branch Condition="End == true &#38;&#38; (getStat_Charging >= 100.0)" Action="Attack_LV3"/>
         <Branch Condition="End == true &#38;&#38; (getStat_Charging >= 50.0)" Action="Attack_LV2"/>
@@ -137,24 +132,89 @@
 
     </AttackPrepare>
 
-    <Attack_LV1 MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="Keep" FlipType="Keep">
+    <Attack_Guarded MovementType="GraphPreset" MovementGraphPreset="AttackGuarded" DirectionType="Keep" FlipType="Keep">
         <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="3">
         </Animation>
 
+        <Branch Condition="End == true" Action="CommonMoveSelection"/>
+    </Attack_Guarded>
+
+    <Attack_Parried MovementType="GraphPreset" MovementGraphPreset="AttackGuarded" DirectionType="Keep" FlipType="Keep">
+        <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="0.3">
+        </Animation>
+
+        <Branch Condition="End == true" Action="CommonMoveSelection"/>
+    </Attack_Parried>
+
+    <Attack_LV1 MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="Keep" FlipType="Keep">
+        <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="3">
+            <FrameEvent Type="Attack" StartFrame="0" Radius="1.5" Angle="8">
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
+                    <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
+                </OnHit>
+
+                <OnGuard>
+                    <FrameEvent Type="TeleportToTarget"/>
+                </OnGuard>
+
+                <OnParry>
+                    <FrameEvent Type="TeleportToTarget"/>
+                </OnParry>
+
+            </FrameEvent>
+        </Animation>
+
+        <Branch Condition="AttackGuarded == true" Action="Attack_Guarded"/>
+        <Branch Condition="AttackParried == true" Action="Attack_Parried"/>
         <Branch Condition="End == true" Action="CommonMoveSelection"/>
     </Attack_LV1>
     
     <Attack_LV2 MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="Keep" FlipType="Keep">
         <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="3">
+            <FrameEvent Type="Attack" StartFrame="0" Radius="1.5" Angle="8">
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
+                    <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
+                </OnHit>
+
+                <OnGuard>
+                    <FrameEvent Type="TeleportToTarget"/>
+                </OnGuard>
+
+                <OnParry>
+                    <FrameEvent Type="TeleportToTarget"/>
+                </OnParry>
+
+            </FrameEvent>
         </Animation>
 
+        <Branch Condition="AttackGuarded == true" Action="Attack_Guarded"/>
+        <Branch Condition="AttackParried == true" Action="Attack_Parried"/>
         <Branch Condition="End == true" Action="CommonMoveSelection"/>
     </Attack_LV2>
 
     <Attack_LV3 MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="Keep" FlipType="Keep">
         <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="3">
+            <FrameEvent Type="Attack" StartFrame="0" Radius="1.5" Angle="8">
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
+                    <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
+                </OnHit>
+
+                <OnGuard>
+                    <FrameEvent Type="TeleportToTarget"/>
+                </OnGuard>
+
+                <OnParry>
+                    <FrameEvent Type="TeleportToTarget"/>
+                </OnParry>
+
+            </FrameEvent>
         </Animation>
 
+        <Branch Condition="AttackGuarded == true" Action="Attack_Guarded"/>
+        <Branch Condition="AttackParried == true" Action="Attack_Parried"/>
         <Branch Condition="End == true" Action="CommonMoveSelection"/>
     </Attack_LV3>
 

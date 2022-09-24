@@ -23,8 +23,10 @@ public static class FrameEventLoader
             outFrameEvent = new ActionFrameEvent_ApplyBuff();
         else if(type == "ApplyBuffTarget")
             outFrameEvent = new ActionFrameEvent_ApplyBuffTarget();
+        else if(type == "TeleportToTarget")
+            outFrameEvent = new ActionFrameEvent_TeleportToTarget();
 
-        DebugUtil.assert((int)FrameEventType.Count == 4, "check loader");
+        DebugUtil.assert((int)FrameEventType.Count == 5, "check here");
 
 
         if(outFrameEvent == null)

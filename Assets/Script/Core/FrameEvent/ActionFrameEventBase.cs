@@ -76,10 +76,7 @@ public class ActionFrameEvent_TeleportToTarget : ActionFrameEventBase
         for(int i = 0; i < attributes.Count; ++i)
         {
             if(attributes[i].Name == "DistanceOffset")
-            {
                 _distanceOffset = float.Parse(attributes[i].Value);
-
-            }
         }
     }
 }
@@ -183,7 +180,7 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
 
         if(target.getDefenceType() == DefenceType.Guard)
         {
-            requester.setAttackState(AttackState.AttackBlocked);
+            requester.setAttackState(AttackState.AttackGuarded);
             target.setDefenceState(DefenceState.DefenceSuccess);
 
             eventType = ChildFrameEventType.ChildFrameEvent_OnGuard;

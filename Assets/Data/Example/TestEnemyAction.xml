@@ -21,9 +21,19 @@
 
         <UseBranchSet Name="CommonHitAction"/>
 
-        <Branch Condition="DefenceSuccess == true" Action="GuardSuccess"/>
-        <Branch Condition="End == true" Action="Idle"/>
+        <Branch Condition="ParrySuccess == true" Action="GuardSuccess"/>
+        <Branch Condition="End == true" Action="Parry"/>
     </Guard>
+
+    <Parry DefenceType="Parry">
+        <Animation Path="Resources/Sprites/DummyPlayer/Guard/" StartFrame="0" EndFrame="1" XFlip="true">
+        </Animation>
+
+        <UseBranchSet Name="CommonHitAction"/>
+
+        <Branch Condition="ParrySuccess == true" Action="ParrySuccess"/>
+        <Branch Condition="End == true" Action="Idle"/>
+    </Parry>
 
     <GuardSuccess DefenceType="Guard" MovementType="GraphPreset" MovementGraphPreset="GuardSuccess">
         <Animation Path="Resources/Sprites/DummyPlayer/Guard/" StartFrame="0" EndFrame="1" FramePerSecond="2" XFlip="true">
@@ -33,6 +43,15 @@
 
         <Branch Condition="End == true" Action="Guard"/>
     </GuardSuccess>
+
+    <ParrySuccess DefenceType="Parry" MovementType="GraphPreset" MovementGraphPreset="GuardSuccess">
+        <Animation Path="Resources/Sprites/DummyPlayer/Guard/" StartFrame="0" EndFrame="1" FramePerSecond="2" XFlip="true">
+        </Animation>
+
+        <UseBranchSet Name="CommonHitAction"/>
+
+        <Branch Condition="End == true" Action="Parry"/>
+    </ParrySuccess>
 
     <Hit MovementType="GraphPreset" MovementGraphPreset="AttackHit">
         <Animation Path="Resources/Sprites/DummyPlayer/Hit/" StartFrame="0" EndFrame="1" FramePerSecond="2" XFlip="true">
