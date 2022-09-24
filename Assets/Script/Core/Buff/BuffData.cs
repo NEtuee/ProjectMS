@@ -4,7 +4,6 @@ public class BuffData
 {
     public string              _buffName;
     public int                 _buffKey;
-    public StatusType          _targetStatusType;
     public string              _targetStatusName;
     public BuffUpdateType      _buffUpdateType;
     public BuffApplyType       _buffApplyType;
@@ -13,12 +12,13 @@ public class BuffData
     public float               _buffCustomValue0;
     public float               _buffCustomValue1;
 
+    public string              _buffCustomStatusName;
+
     public BuffData()
     {
-        _buffName = "";
+        _buffName = null;
         _buffKey = -1;
-        _targetStatusType = StatusType.Count;
-        _targetStatusName = "";
+        _targetStatusName = null;
         _buffUpdateType = BuffUpdateType.Count;
         _buffApplyType = BuffApplyType.Count;
 
@@ -30,7 +30,7 @@ public class BuffData
 
     public bool isBuffValid()
     {
-        return _buffKey >= 0 && _targetStatusType != StatusType.Count && _buffUpdateType != BuffUpdateType.Count && _buffApplyType != BuffApplyType.Count;
+        return _buffKey >= 0 && _buffUpdateType != BuffUpdateType.Count && _buffApplyType != BuffApplyType.Count;
     }
 }
 
@@ -42,15 +42,16 @@ public struct BuffSet
 public enum BuffApplyType
 {
     Direct = 0,
+    DirectDelta,
     Additional,
-    Regen,
     Count
 }
 
 public enum BuffUpdateType
 {
     OneShot = 0,
-    Section,
+    Time,
+    StatSection,
     Continuous,
     DelayedContinuous,
     Count,

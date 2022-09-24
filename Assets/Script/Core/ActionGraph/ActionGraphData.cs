@@ -6,6 +6,8 @@ public class ActionGraphBaseData
     public ActionGraphConditionCompareData[]    _conditionCompareData = null;
     public AnimationPlayDataInfo[]              _animationPlayData = null;
 
+    public int[]                                _defaultBuffList = null;
+
     public int                                  _defaultActionIndex = -1;
 
     public int                                  _actionNodeCount = -1;
@@ -35,6 +37,8 @@ public class ActionGraphNodeData
     public RotationType                 _rotationType = RotationType.AlwaysRight;
     public FlipType                     _flipType = FlipType.AlwaysTurnOff;
     public DefenceType                  _defenceType = DefenceType.Empty;
+
+    public int[]                        _applyBuffList = null;
 
     public float                        _moveScale = 1f;
 
@@ -79,6 +83,7 @@ public enum DefenceType
 {
     Empty,
     Guard,
+    Parry,
     Count,
 }
 
@@ -118,6 +123,7 @@ public enum ConditionNodeUpdateType
 
     Attack_Blocked,
     Attack_Success,
+    Attack_Parried,
 
     Defence_Success,
     Defence_Crash,
@@ -125,6 +131,8 @@ public enum ConditionNodeUpdateType
     Defence_Hit,
 
     Entity_Dead,
+
+    Status,
 
     Count,
 }
@@ -171,12 +179,15 @@ public static class ConditionNodeInfoPreset
 
         {"AttackBlocked",new ConditionNodeInfo(ConditionNodeUpdateType.Attack_Blocked, ConditionNodeType.Bool)},
         {"AttackSuccess",new ConditionNodeInfo(ConditionNodeUpdateType.Attack_Success, ConditionNodeType.Bool)},
+        {"AttackParried",new ConditionNodeInfo(ConditionNodeUpdateType.Attack_Parried, ConditionNodeType.Bool)},
 
         {"DefenceSuccess",new ConditionNodeInfo(ConditionNodeUpdateType.Defence_Success, ConditionNodeType.Bool)},
         {"DefenceCrash",new ConditionNodeInfo(ConditionNodeUpdateType.Defence_Crash, ConditionNodeType.Bool)},
         {"Hit",new ConditionNodeInfo(ConditionNodeUpdateType.Defence_Hit, ConditionNodeType.Bool)},
 
         {"Dead",new ConditionNodeInfo(ConditionNodeUpdateType.Entity_Dead, ConditionNodeType.Bool)},
+
+        {"Status",new ConditionNodeInfo(ConditionNodeUpdateType.Status, ConditionNodeType.Float)},
         
     };
 
@@ -191,6 +202,19 @@ public static class ConditionNodeInfoPreset
 public class ActionGraphConditionNodeData
 {
     public string _symbolName;
+}
+
+public class ActionGraphConditionNodeData_Status : ActionGraphConditionNodeData
+{
+    public string _targetStatus = "";
+
+    public ActionGraphConditionNodeData_Status()
+    {
+        
+    }
+    
+    public string getStatus() {return _targetStatus;}
+    
 }
 
 public class ActionGraphConditionNodeData_Literal : ActionGraphConditionNodeData

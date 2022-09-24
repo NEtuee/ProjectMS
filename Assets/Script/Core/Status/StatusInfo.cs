@@ -4,11 +4,46 @@ public class StatusInfo
 {
     public class Status
     {
+        public string _statusName = "";
         public int _statusIndex = -1;
         public float _value = 0f;
         public float _realValue = 0f;
         public float _additionalValue = 0f;
         public float _regenFactor = 0f;
+
+        public HashSet<int> _updateListWhenValueChange = new HashSet<int>();
+
+        public bool _buffListUpdated = false;
+
+        public void updateBuffList(List<BuffItem> buffItems)
+        {
+            for(int i = 0; i < buffItems.Count; ++i)
+            {
+                if(_updateListWhenValueChange.Contains(buffItems[i]._buffData._buffKey))
+                {
+                    BuffItem itemCopy = buffItems[i];
+                    itemCopy._startedTime = GlobalTimer.Instance().getScaledGlobalTime();
+
+                    buffItems[i] = itemCopy;
+                }
+            }
+        }
+
+        public void addToUpdateList(int buffKey)
+        {
+            _updateListWhenValueChange.Add(buffKey);
+        }
+
+        public void deleteToUpdateList(int buffKey)
+        {
+            if(_updateListWhenValueChange.Contains(buffKey) == false)
+            {
+                DebugUtil.assert(false,"target buff key is not exists, must fix: {0}",buffKey);
+                return;
+            }
+
+            _updateListWhenValueChange.Remove(buffKey);
+        }
     }
 
     public struct BuffItem
@@ -17,7 +52,6 @@ public class StatusInfo
         //public BuffUpdateState _updateState;
 
         public float _startedTime;
-        public float _time;
 
         public void updateStartTime(float startedTime)
         {
@@ -33,11 +67,11 @@ public class StatusInfo
     };
 
     private static Dictionary<string, StatusInfoData> _statusInfoDataDictionary;
+    private static Dictionary<int, BuffData> _buffDataDictionary;
 
     private StatusInfoData _statusInfoData;
 
-    private Dictionary<StatusType, Status> _typeStatusValues = new Dictionary<StatusType, Status>();
-    private Dictionary<string, Status> _customStatusValues = new Dictionary<string, Status>();
+    private Dictionary<string, Status> _statusValues = new Dictionary<string, Status>();
     private List<BuffItem> _currentlyAppliedBuffList = new List<BuffItem>();
 
     private bool _isDead = false;
@@ -65,6 +99,22 @@ public class StatusInfo
         return _statusInfoDataDictionary[targetName];
     }
 
+    private BuffData getBuffData(int buffKey)
+    {
+        if(_buffDataDictionary.ContainsKey(buffKey) == false)
+        {
+            DebugUtil.assert(false, "target buff data not exists: {0}",buffKey);
+            return null;
+        }
+
+        return _buffDataDictionary[buffKey];
+    }
+
+    public static void setBuffDataDictionary(Dictionary<int, BuffData> data)
+    {
+        _buffDataDictionary = data;
+    }
+
     public static void setStatusInfoDataDictionary(Dictionary<string, StatusInfoData> data)
     {
         _statusInfoDataDictionary = data;
@@ -72,8 +122,7 @@ public class StatusInfo
 
     private void createStatusValueDictionary(StatusInfoData data)
     {
-        _typeStatusValues.Clear();
-        _customStatusValues.Clear();
+        _statusValues.Clear();
 
         for(int i = 0; i < data._statusData.Length; ++i)
         {
@@ -82,10 +131,8 @@ public class StatusInfo
             stat._statusIndex = i;
             statusDataFloat.initStat(ref stat._realValue);
 
-            if(statusDataFloat.getStatusType() == StatusType.Custom)
-                _customStatusValues.Add(statusDataFloat.getName(), stat);
-            else
-                _typeStatusValues.Add(statusDataFloat.getStatusType(),stat);
+            stat._statusName = statusDataFloat.getName();
+            _statusValues.Add(statusDataFloat.getName(), stat);
         }
     }
 
@@ -94,14 +141,44 @@ public class StatusInfo
         return _statusInfoData != null;
     }
 
-    public void applyBuff(BuffData buff, float startedTime)
+    public void updateActionConditionData(GameEntityBase target)
+    {
+        foreach(Status item in _statusValues.Values)
+        {
+            target.updateStatusConditionData(item._statusName,item._value);
+        }
+
+    }
+
+    public void applyBuff(int buffKey)
+    {
+        if(_buffDataDictionary.ContainsKey(buffKey) == false)
+        {
+            DebugUtil.assert(false, "invalid buff key: {0}", buffKey);
+            return;
+        }
+
+        for(int i = 0; i < _currentlyAppliedBuffList.Count; ++i)
+        {
+            if(_currentlyAppliedBuffList[i]._buffData._buffKey == buffKey)
+                return;
+        }
+
+        applyBuff(_buffDataDictionary[buffKey], GlobalTimer.Instance().getScaledGlobalTime());
+    }
+
+    private void applyBuff(BuffData buff, float startedTime)
     {
         BuffItem buffItem = new BuffItem();
         buffItem._buffData = buff;
         buffItem._startedTime = startedTime;
-        buffItem._time = buff._buffCustomValue0;
+        
+        _currentlyAppliedBuffList.Add(buffItem);
 
-        _currentlyAppliedBuffList[buff._buffKey] = buffItem;
+        if(buff._buffUpdateType == BuffUpdateType.DelayedContinuous)
+        {
+            getStatus(buff._targetStatusName).addToUpdateList(buff._buffKey);
+        }
     }
 
     // public void deleteBuff(int buffKey)
@@ -116,6 +193,9 @@ public class StatusInfo
         {
             if(_currentlyAppliedBuffList[i]._buffData._buffKey == buffKey)
             {
+                if(_currentlyAppliedBuffList[i]._buffData._buffUpdateType == BuffUpdateType.DelayedContinuous)
+                    getStatus((_currentlyAppliedBuffList[i]._buffData._targetStatusName)).deleteToUpdateList(buffKey);
+
                 _currentlyAppliedBuffList.RemoveAt(i);
                 return;
             }
@@ -126,16 +206,24 @@ public class StatusInfo
     {
         updateBuff();
 
-        foreach(Status item in _typeStatusValues.Values)
+        foreach(Status item in _statusValues.Values)
         {
-            _statusInfoData._statusData[item._statusIndex].variStat(ref item._realValue, item._regenFactor * deltaTime);
-            item._value = item._realValue + item._additionalValue;
+            item._buffListUpdated = false;
+
+            if(item._regenFactor == 0f && item._additionalValue == 0f)
+            {
+                item._value = item._realValue;
+                continue;
+            }
+
+            _statusInfoData._statusData[item._statusIndex].variStat(ref item._realValue, item._additionalValue, item._regenFactor * deltaTime);
+            item._value = item._realValue;
 
             item._additionalValue = 0f;
             item._regenFactor = 0f;
         }
 
-        Status hpStatus = getStatus(StatusType.HP);
+        Status hpStatus = getStatus("HP");
         if(hpStatus != null && hpStatus._value <= 0f)
             _isDead = true;
     }
@@ -147,26 +235,44 @@ public class StatusInfo
         for(int i = 0; i < _currentlyAppliedBuffList.Count;)
         {
             bool deleteBuff = false;
-            // bool canApply = true;
-            switch(_currentlyAppliedBuffList[i]._buffData._buffUpdateType)
+            bool canApply = true;
+
+            BuffItem buffItem = _currentlyAppliedBuffList[i];
+            BuffData buffData = buffItem._buffData;
+
+            switch(buffData._buffUpdateType)
             {
                 case BuffUpdateType.OneShot:
                     deleteBuff = true;
                     break;
-                case BuffUpdateType.Section:
-                    deleteBuff = globalTime - _currentlyAppliedBuffList[i]._startedTime > _currentlyAppliedBuffList[i]._time;
+                case BuffUpdateType.Time:
+                    deleteBuff = (globalTime - buffItem._startedTime) > buffData._buffCustomValue0;
+                    break;
+                case BuffUpdateType.StatSection:
+                    Status stat = getStatus(buffData._buffCustomStatusName);
+                    if(stat == null)
+                    {
+                        DebugUtil.assert(false,"statSection target status not found: {0}",buffData._buffCustomStatusName);
+                        break;
+                    }
+
+                    canApply = (stat._value >= buffData._buffCustomValue0) && (stat._value <= buffData._buffCustomValue1);
+
                     break;
                 case BuffUpdateType.Continuous:
                     break;
-                // case BuffUpdateType.DelayedContinuous:
-                //     canApply = globalTime - _currentlyAppliedBuffList[i]._startedTime > _currentlyAppliedBuffList[i]._time;
-                //     break;
+                case BuffUpdateType.DelayedContinuous:
+                    Status targetStatus = getStatus(buffData._targetStatusName);
+                    canApply = globalTime - buffItem._startedTime > buffData._buffCustomValue0;
+                    break;
             }
 
-            if(updateBuffXXX(_currentlyAppliedBuffList[i]._buffData))
+            if(canApply == true)
             {
-                DebugUtil.assert(false,"failed to update buff");
+                if(updateBuffXXX(buffData) == false)
+                    DebugUtil.assert(false,"failed to update buff: {0}",buffData._buffName);
             }
+                
 
             if(deleteBuff == true)
                 _currentlyAppliedBuffList.RemoveAt(i);
@@ -184,85 +290,87 @@ public class StatusInfo
         switch(buff._buffApplyType)
         {
             case BuffApplyType.Direct:
-                variStat(buff._targetStatusType, buff._targetStatusName, buff._buffVaryStatFactor);
-                return true;
+            {
+                getStatus(buff._targetStatusName).updateBuffList(_currentlyAppliedBuffList);
+                return variStat(buff._targetStatusName, buff._buffVaryStatFactor);
+            }
             case BuffApplyType.Additional:
-                variAddtionalStat(buff._targetStatusType, buff._targetStatusName, buff._buffVaryStatFactor);
-                return true;
-            case BuffApplyType.Regen:
-                variRegenStat(buff._targetStatusType, buff._targetStatusName, buff._buffVaryStatFactor);
-                return true;
+                return variAddtionalStat(buff._targetStatusName, buff._buffVaryStatFactor);
+            case BuffApplyType.DirectDelta:
+                return variRegenStat(buff._targetStatusName, buff._buffVaryStatFactor);
         }
 
-        DebugUtil.assert(false, "invalid buff apply type");
+        DebugUtil.assert(false, "invalid buff apply type: {0}",buff._buffApplyType);
         return false;
     }
 
 
-    public void variRegenStat(StatusType type, string name, float value)
+    public bool variRegenStat(string name, float value)
     {
-        if(type == StatusType.Count)
-        {
-            DebugUtil.assert(false, "invalid status type: {0}", type);
-            return;
-        }
-
-        int index = (int)type;
-        Status status = getStatus(type,name);
+        Status status = getStatus(name);
         if(status == null)
-            return;
+        {
+            DebugUtil.assert(false, "target status is not exists: {0}", name);
+            return false;
+        }
 
         status._regenFactor += value;
+        return true;
     }
 
-    public void variAddtionalStat(StatusType type, string name, float value)
+    public bool variAddtionalStat(string name, float value)
     {
-        if(type == StatusType.Count)
-        {
-            DebugUtil.assert(false, "invalid status type: {0}", type);
-            return;
-        }
-
-        int index = (int)type;
-        Status status = getStatus(type,name);
+        Status status = getStatus(name);
         if(status == null)
-            return;
+        {
+            DebugUtil.assert(false, "target status is not exists: {0}", name);
+            return false;
+        }
             
         status._additionalValue += value;
+        return true;
     }
 
-    public void variStat(StatusType type, string name, float value)
+    public bool variStat(string name, float value)
     {
-        if(type == StatusType.Count)
-        {
-            DebugUtil.assert(false, "invalid status type: {0}", type);
-            return;
-        }
-
-        int index = (int)type;
-        Status status = getStatus(type,name);
+        Status status = getStatus(name);
         if(status == null)
-            return;
+        {
+            DebugUtil.assert(false, "target status is not exists: {0}", name);
+            return false;
+        }
             
-        _statusInfoData._statusData[status._statusIndex].variStat(ref status._realValue, value);
-
+        _statusInfoData._statusData[status._statusIndex].variStat(ref status._realValue, 0f, value);
+        return true;
     }
 
-    private Status getStatus(StatusType type, string name = null)
+    private Status getStatus(string name)
     {
-        if(type == StatusType.Custom)
-        {
-            if(_customStatusValues.ContainsKey(name) == false)
-                return null;
+        if(_statusValues.ContainsKey(name) == false)
+            return null;
 
-            return _customStatusValues[name];
+        return _statusValues[name];
+        
+    }
+
+    public void updateDebugTextXXX(DebugTextManager debugTextManager)
+    {
+        for(int i = 0; i < _statusInfoData._statusData.Length; ++i)
+        {
+            StatusDataFloat statusDataFloat = _statusInfoData._statusData[i];
+            string debugText = "[" + (statusDataFloat._statusType == StatusType.Custom ? "Custom/" : "") + statusDataFloat._statusName + "]";
+            Status stat = getStatus(statusDataFloat._statusName);
+            string statText = ": " + stat._value;
+
+            debugTextManager.updateDebugText(debugText, debugText + statText);
         }
-        else
-        {
-            if(_typeStatusValues.ContainsKey(type) == false)
-                return null;
 
-            return _typeStatusValues[type];
+        for(int i = 0; i < _currentlyAppliedBuffList.Count; ++i)
+        {
+            BuffData data = _currentlyAppliedBuffList[i]._buffData;
+            string debugText = data._buffName;
+
+            debugTextManager.updateDebugText(debugText, "[Buff] " + debugText);
         }
     }
 

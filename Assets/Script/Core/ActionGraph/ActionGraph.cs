@@ -9,6 +9,8 @@ public class ActionGraph
 
     private Dictionary<ConditionNodeUpdateType, byte[]> _actionConditionNodeData = new Dictionary<ConditionNodeUpdateType, byte[]>();
 
+    private Dictionary<string, byte[]> _statusConditionData = new Dictionary<string, byte[]>();
+
     private ActionGraphBaseData _actionGraphBaseData;
     private AnimationPlayer _animationPlayer = new AnimationPlayer();
     private List<byte[]> _conditionResultList = new List<byte[]>();
@@ -46,9 +48,11 @@ public class ActionGraph
 
     private void createCoditionNodeDataAll()
     {
+        DebugUtil.assert((int)ConditionNodeUpdateType.Count == 19, "check this");
+
         foreach(var item in ConditionNodeInfoPreset._nodePreset.Values)
         {
-            if(item._updateType == ConditionNodeUpdateType.Literal || item._updateType == ConditionNodeUpdateType.ConditionResult)
+            if(item._updateType == ConditionNodeUpdateType.Literal || item._updateType == ConditionNodeUpdateType.ConditionResult || item._updateType == ConditionNodeUpdateType.Status)
                 continue;
 
             createConditionNodeData(item);
@@ -155,6 +159,14 @@ public class ActionGraph
         }
 
         return _conditionResultList[compareData._compareTypeCount - 1][0] == 1;
+    }
+
+    public bool setActionConditionData_Status(string statusName, float value)
+    {
+        if(_statusConditionData.ContainsKey(statusName) == false)
+            _statusConditionData.Add(statusName, new byte[4]);
+
+        return copyBytes_Float(value,_statusConditionData[statusName]);
     }
 
     public bool setActionConditionData_Int(ConditionNodeUpdateType updateType, int value)
@@ -401,6 +413,8 @@ public class ActionGraph
             return ((ActionGraphConditionNodeData_Literal)nodeData).getLiteral();
         else if(updateType == ConditionNodeUpdateType.ConditionResult)
             return _conditionResultList[((ActionGraphConditionNodeData_ConditionResult)nodeData).getResultIndex()];
+        else if(updateType == ConditionNodeUpdateType.Status)
+            return _statusConditionData[((ActionGraphConditionNodeData_Status)nodeData)._targetStatus];
 
         if(_actionConditionNodeData.ContainsKey(updateType) == false)
         {
@@ -419,7 +433,9 @@ public class ActionGraph
             _conditionResultList[index][0] = value == true ? (byte)1 : (byte)0;
     }
 
-
+    public bool isActionLoop() {return _currentActionNodeIndex == _prevActionNodeIndex;}
+    public int[] getDefaultBuffList() {return _actionGraphBaseData._defaultBuffList;}
+    public int[] getCurrentBuffList() {return getCurrentAction()._applyBuffList;}
     public float getCurrentMoveScale() {return getCurrentAction()._moveScale;}
     public DefenceType getCurrentDefenceType() {return getCurrentAction()._defenceType;}
     public RotationType getCurrentRotationType() {return getCurrentAction()._rotationType;}

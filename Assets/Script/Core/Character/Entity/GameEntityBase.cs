@@ -5,13 +5,17 @@ using UnityEngine;
 public class GameEntityBase : SequencerObjectBase
 {
 
-    public string actionGraphPath = "Assets\\Data\\Example\\ActionGraphTest.xml";
-    public string statusInfoName = "CommonPlayerStatus";
+    public string               actionGraphPath = "Assets\\Data\\Example\\ActionGraphTest.xml";
+    public string               statusInfoName = "CommonPlayerStatus";
+
+    public DebugTextManager     debugTextManager;
 
     private SpriteRenderer      _spriteRenderer;
     private GameObject          _spriteObject;
     private ActionGraph         _actionGraph;
     private StatusInfo          _statusInfo;
+
+    private CollisionInfo       _collisionInfo;
 
 
     private MovementControl     _movementControl = new MovementControl();
@@ -21,6 +25,11 @@ public class GameEntityBase : SequencerObjectBase
 
     private AttackState         _attackState = AttackState.Default;
     private DefenceState        _defenceState = DefenceState.Default;
+
+    private int[]               _currentActionBuffList = null;
+
+    private Color               _debugColor = Color.red;
+
 
     public override void assign()
     {
@@ -42,11 +51,21 @@ public class GameEntityBase : SequencerObjectBase
         _statusInfo = new StatusInfo(statusInfoName);
 
         createSpriteRenderObject();
+
+        applyActionBuffList(_actionGraph.getDefaultBuffList());
+
+        CollisionInfoData data = new CollisionInfoData(0.2f,0f, CollisionType.Character);
+        _collisionInfo = new CollisionInfo(data);
+
+        CollisionManager.Instance().registerObject(_collisionInfo, this);
     }
     
     public override void progress(float deltaTime)
     {
         base.progress(deltaTime);
+
+        _statusInfo.updateStatus(deltaTime);
+        _statusInfo.updateActionConditionData(this);
 
         if(_actionGraph != null)
         {
@@ -57,9 +76,13 @@ public class GameEntityBase : SequencerObjectBase
             //action,movementGraph 바뀌는 시점
             if(_actionGraph.progress() == true)
             {
-                //movement 바뀌는 시점
-                _movementControl.changeMovement(this,_actionGraph.getCurrentMovement());
-                _movementControl.setMoveScale(_actionGraph.getCurrentMoveScale());
+                if(_actionGraph.isActionLoop() == false)
+                {
+                    applyActionBuffList();
+                    _movementControl.changeMovement(this,_actionGraph.getCurrentMovement());
+                    _movementControl.setMoveScale(_actionGraph.getCurrentMoveScale());
+                }
+
                 //Debug.Log("execute : " + prevActionName + " -> " + _actionGraph.getCurrentActionName());
             }
 
@@ -76,7 +99,19 @@ public class GameEntityBase : SequencerObjectBase
             _spriteRenderer.flipY = _flipState.yFlip;
         }
 
+        debugTextManager.updateDebugText("Action","Action: " + getCurrentActionName());
+
         rotationUpdate();
+
+
+        _collisionInfo.updateCollisionInfo(transform.position,getDirection());
+
+        _collisionInfo.drawCollosionArea(_debugColor);
+        _collisionInfo.drawBoundBox(_debugColor);
+
+        debugTextManager.updatePosition(new Vector3(0f, _collisionInfo.getBoundBox().getBottom() - transform.position.y, 0f));
+
+        _debugColor = Color.red;
     }
 
     public override void afterProgress(float deltaTime)
@@ -84,14 +119,25 @@ public class GameEntityBase : SequencerObjectBase
         base.afterProgress(deltaTime);
         resetState();
 
-        _statusInfo.updateStatus(deltaTime);
+        _statusInfo.updateDebugTextXXX(debugTextManager);
 
+        CollisionManager.Instance().collisionRequest(_collisionInfo,this,collisionTest);
+    }
+
+    private void collisionTest(CollisionSuccessData data)
+    {
+        _debugColor = Color.green;
     }
 
     public void resetState()
     {
         _attackState = AttackState.Default;
         _defenceState = DefenceState.Default;
+    }
+
+    public void updateStatusConditionData(string targetName, float value)
+    {
+        _actionGraph.setActionConditionData_Status(targetName,value);
     }
 
     public void updateConditionData()
@@ -115,6 +161,7 @@ public class GameEntityBase : SequencerObjectBase
 
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Attack_Blocked, _attackState == AttackState.AttackBlocked);
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Attack_Success, _attackState == AttackState.AttackSuccess);
+        _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Attack_Parried, _attackState == AttackState.AttackParried);
 
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Defence_Crash, _defenceState == DefenceState.DefenceCrash);
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Defence_Success, _defenceState == DefenceState.DefenceSuccess);
@@ -165,6 +212,32 @@ public class GameEntityBase : SequencerObjectBase
         DebugUtil.assert((int)FlipType.Count == 4, "flip type count error");
 
         return flipState;
+    }
+
+    public void applyActionBuffList(int[] buffList)
+    {
+        if(buffList == null)
+            return;
+
+        for(int i = 0; i < buffList.Length; ++i)
+        {
+            _statusInfo.applyBuff(buffList[i]);
+        }
+    }
+
+    private void applyActionBuffList()
+    {
+        if(_currentActionBuffList != null)
+        {
+            for(int i = 0; i < _currentActionBuffList.Length; ++i)
+            {
+                _statusInfo.deleteBuff(_currentActionBuffList[i]);
+            }
+        }
+
+        _currentActionBuffList = _actionGraph.getCurrentBuffList();
+
+        applyActionBuffList(_currentActionBuffList);
     }
 
     //todo : input manager 만들어서 거기서 moveiNput 가져오게 만들기
@@ -256,6 +329,7 @@ public class GameEntityBase : SequencerObjectBase
     public void setAttackState(AttackState state) {_attackState = state;}
     public void setDefenceState(DefenceState state) {_defenceState = state;}
 
+    public CollisionInfo getCollisionInfo() {return _collisionInfo;}
     public string getCurrentActionName() {return _actionGraph == null ? "" : _actionGraph.getCurrentActionName();}
     public DefenceType getDefenceType() {return _actionGraph.getCurrentDefenceType();}
     public MoveValuePerFrameFromTimeDesc getMoveValuePerFrameFromTimeDesc(){return _actionGraph.getMoveValuePerFrameFromTimeDesc();}

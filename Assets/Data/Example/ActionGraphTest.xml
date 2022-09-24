@@ -1,6 +1,6 @@
 
 
-<ActionGraph Name="Test" DefaultAction="Idle" DefaultFramePerSecond="4">
+<ActionGraph Name="Test" DefaultAction="Idle" DefaultFramePerSecond="4" DefaultBuff="4 5 8">
 
     <BranchSet Name="CommonBattleBranchSet">
         <Branch Condition="InputGuard == true" Action="Guard"/>
@@ -8,7 +8,7 @@
     </BranchSet>
 
     <BranchSet Name="CommonMoveBranchSet">
-        <Branch Condition="ActionDash == true" Action="DashStart"/>
+        <Branch Condition="ActionDash == true &#38;&#38; (getStat_Stamina >= 20.0)" Action="DashStart"/>
         <Branch Condition="ActionTest == false" Action="Idle"/>
     </BranchSet>
 
@@ -113,7 +113,7 @@
         <Branch Condition="End == true" Action="MoveRightForward"/>
     </MoveRightForward>
 
-    <AttackCharge MovementType="GraphPreset" MovementGraphPreset="AttackCharge" DirectionType="MoveInput" FlipType="MousePoint">
+    <AttackCharge MovementType="GraphPreset" MovementGraphPreset="AttackCharge" DirectionType="MoveInput" FlipType="MousePoint" ApplyBuff="2 3">
         <Animation Path="Resources/Sprites/DummyPlayer/AttackCharge/" StartFrame="0" EndFrame="1" FramePerSecond="1">
         </Animation>
 
@@ -123,19 +123,40 @@
 
     <AttackPrepare MovementType="Empty" DirectionType="MousePoint" FlipType="Keep">
         <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="999">
-            <FrameEvent Type="Attack" StartFrame="0" Radius="1.5" Angle="8"/>
+            <FrameEvent Type="Attack" StartFrame="0" Radius="1.5" Angle="8">
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
+                    <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
+                </OnHit>
+            </FrameEvent>
         </Animation>
 
-        <Branch Condition="End == true" Action="Attack"/>
+        <Branch Condition="End == true &#38;&#38; (getStat_Charging >= 100.0)" Action="Attack_LV3"/>
+        <Branch Condition="End == true &#38;&#38; (getStat_Charging >= 50.0)" Action="Attack_LV2"/>
+        <Branch Condition="End == true" Action="Attack_LV1"/>
+
     </AttackPrepare>
 
-    <Attack MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="Keep" FlipType="Keep">
+    <Attack_LV1 MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="Keep" FlipType="Keep">
         <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="3">
         </Animation>
 
         <Branch Condition="End == true" Action="CommonMoveSelection"/>
-    </Attack>
+    </Attack_LV1>
     
+    <Attack_LV2 MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="Keep" FlipType="Keep">
+        <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="3">
+        </Animation>
+
+        <Branch Condition="End == true" Action="CommonMoveSelection"/>
+    </Attack_LV2>
+
+    <Attack_LV3 MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="Keep" FlipType="Keep">
+        <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="3">
+        </Animation>
+
+        <Branch Condition="End == true" Action="CommonMoveSelection"/>
+    </Attack_LV3>
 
 
     <Guard MovementType="GraphPreset" MovementGraphPreset="Guard" DirectionType="MoveInput" FlipType="Keep">
@@ -147,10 +168,7 @@
     </Guard>
 
 
-
-
-
-    <DashStart MovementType="Empty" DirectionType="Keep" FlipType="AlwaysTurnOff" RotationType="Direction">
+    <DashStart MovementType="Empty" DirectionType="Keep" FlipType="AlwaysTurnOff" RotationType="Direction" ApplyBuff="9">
         <Animation Path="Resources/Sprites/DummyPlayer/Dash/" StartFrame="0" EndFrame="1" FramePerSecond="999" XFlip="true">
         </Animation>
 

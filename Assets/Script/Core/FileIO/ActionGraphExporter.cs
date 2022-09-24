@@ -182,6 +182,16 @@ public static class ActionGraphLoader
             {
                 nodeData._defenceType = (DefenceType)System.Enum.Parse(typeof(DefenceType), targetValue);
             }
+            else if(targetName == "ApplyBuff")
+            {
+                string[] buffList = targetValue.Split(' ');
+                nodeData._applyBuffList = new int[buffList.Length];
+
+                for(int i = 0; i < buffList.Length; ++i)
+                {
+                    nodeData._applyBuffList[i] = int.Parse(buffList[i]);
+                }
+            }
         }
 
         XmlNodeList nodeList = node.ChildNodes;
@@ -447,7 +457,12 @@ public static class ActionGraphLoader
         if(nodeData != null)
             return nodeData;
 
+        nodeData = isStatus(symbol);
+        if(nodeData != null)
+            return nodeData;
+
         nodeData = new ActionGraphConditionNodeData();
+    
         if(ConditionNodeInfoPreset._nodePreset.ContainsKey(symbol) == false)
         {
             DebugUtil.assert(false,"Target Symbol does not exists : {0}",symbol);
@@ -456,6 +471,17 @@ public static class ActionGraphLoader
 
         nodeData._symbolName = symbol;
         return nodeData;
+    }
+
+    private static ActionGraphConditionNodeData_Status isStatus(string symbol)
+    {
+        if(symbol.Contains("getStat_") == false)
+            return null;
+
+        ActionGraphConditionNodeData_Status item = new ActionGraphConditionNodeData_Status();
+        item._symbolName = "Status";
+        item._targetStatus = symbol.Replace("getStat_","");
+        return item;
     }
 
     private static ActionGraphConditionNodeData_ConditionResult isResult(string symbol)
@@ -592,6 +618,18 @@ public static class ActionGraphLoader
             else if(targetName == "DefaultAction")
             {
                 defaultAction = targetValue;
+            }
+            else if(targetName == "DefaultBuff")
+            {
+                string[] buffList = targetValue.Split(' ');
+
+                int[] buffKeyList = new int[buffList.Length];
+                for(int j = 0; j < buffList.Length; ++j)
+                {
+                    buffKeyList[j] = int.Parse(buffList[j]);
+                }
+
+                baseData._defaultBuffList = buffKeyList;
             }
 
         }

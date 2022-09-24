@@ -5,6 +5,7 @@ public enum AttackState
     Default,
     AttackSuccess,
     AttackBlocked,
+    AttackParried,
 }
 
 public enum DefenceState
@@ -13,6 +14,7 @@ public enum DefenceState
     Hit,
     DefenceSuccess,
     DefenceCrash,
+    ParrySuccess,
 }
 
 
@@ -145,5 +147,7 @@ public struct BoundBox
     
         return true;
     }
+
+    public float getBottom() {return _b;}
 
 }

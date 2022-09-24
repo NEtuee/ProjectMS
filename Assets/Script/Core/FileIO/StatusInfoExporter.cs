@@ -44,6 +44,7 @@ public static class StatusInfoLoader
     private static StatusInfoData readStatusInfoData(XmlNode node)
     {
         List<StatusDataFloat> statusInfoDataList = new List<StatusDataFloat>();
+        HashSet<string> nameCheck = new HashSet<string>();
 
         XmlNodeList statusNodes = node.ChildNodes;
 
@@ -59,7 +60,10 @@ public static class StatusInfoLoader
                     string attrValue = attributes[j].Value;
 
                     if(attrName == "Type")
+                    {
                         data._statusType = (StatusType)System.Enum.Parse(typeof(StatusType), attrValue);
+                        data._statusName = data._statusType.ToString();
+                    }
                     else if(attrName == "Name")
                         data._statusName = attrValue;
                     else if(attrName == "Max")
@@ -74,6 +78,14 @@ public static class StatusInfoLoader
                         continue;
                     }
                 }
+
+                if(nameCheck.Contains(data._statusName))
+                {
+                    DebugUtil.assert(false,"status overlapError name: {0}",data._statusName);
+                    return null;
+                }
+
+                nameCheck.Add(data._statusName);
 
                 statusInfoDataList.Add(data);
             }

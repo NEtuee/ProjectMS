@@ -42,10 +42,9 @@ public class StatusDataFloat
         value = _initialValue;
     }
 
-    public void variStat(ref float value, float factor )
+    public void variStat(ref float value, float additionalMax, float factor )
     {
-        value += factor;
-        MathEx.clampf(value, _minValue, _maxValue);
+        value = MathEx.clampf(value + factor, _minValue, _maxValue + additionalMax);
     }
 
     public bool isMax(float value)
@@ -79,6 +78,7 @@ public enum StatusType
     HP,
     Stamina,
     Blood,
+    Battle,
     Custom,
     Count,
 }

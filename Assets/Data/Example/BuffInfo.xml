@@ -1,0 +1,103 @@
+
+<BuffInfo>
+    <CommonAttack
+        Key="1"
+        StatusName="HP"
+
+        UpdateType="OneShot"
+        ApplyType="Direct"
+
+        Factor="-1.0"
+    />
+
+    <ResetCharge
+        Key="2"
+        StatusName="Charging"
+
+        UpdateType="OneShot"
+        ApplyType="Direct"
+
+        Factor="-100.0"
+    />
+
+    <CommonCharging
+        Key="3"
+        StatusName="Charging"
+
+        UpdateType="Continuous"
+        ApplyType="DirectDelta"
+
+        Factor="33.0"
+    />
+
+    <BloodDecrementKeep
+        Key="4"
+        StatusName="Blood"
+
+        UpdateType="StatSection"
+        ApplyType="DirectDelta"
+
+        Factor="-10.0"
+
+        TargetStatusName="Battle"
+        MinValue="0"
+        MaxValue="0"
+    />
+
+    <BattleDecrementKeep
+        Key="5"
+        StatusName="Battle"
+
+        UpdateType="Continuous"
+        ApplyType="DirectDelta"
+
+        Factor="-10.0"
+
+    />
+
+    <BattleIncrement
+        Key="6"
+        StatusName="Battle"
+
+        UpdateType="OneShot"
+        ApplyType="Direct"
+
+        Factor="100.0"
+
+    />
+
+    <BloodIncrementAttackSuccess
+        Key="7"
+        StatusName="Blood"
+
+        UpdateType="OneShot"
+        ApplyType="Direct"
+
+        Factor="30.0"
+
+    />
+
+    <StaminaRegenDelayed
+        Key="8"
+        StatusName="Stamina"
+
+        UpdateType="DelayedContinuous"
+        ApplyType="DirectDelta"
+
+        Factor="30.0"
+
+        Time="3.0"
+
+    />
+
+    <DashStamina
+        Key="9"
+        StatusName="Stamina"
+
+        UpdateType="OneShot"
+        ApplyType="Direct"
+
+        Factor="-20.0"
+    />
+
+</BuffInfo>

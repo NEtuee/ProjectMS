@@ -8,21 +8,12 @@ using UnityEditor;
 
 public class CharacterEntityBase : GameEntityBase
 {
-    public TextMesh _actionText;
-
-    private CollisionInfo _collisionInfo;
     
-    private Color _debugColor = Color.red;
 
     public override void initialize()
     {
         base.initialize();
         RegisterRequest(QueryUniqueID("SceneCharacterManager"));
-
-        CollisionInfoData data = new CollisionInfoData(0.2f,0f, CollisionType.Character);
-        _collisionInfo = new CollisionInfo(data);
-
-        CollisionManager.Instance().registerObject(_collisionInfo, this);
     }
 
     public override void progress(float deltaTime)
@@ -30,26 +21,14 @@ public class CharacterEntityBase : GameEntityBase
         base.progress(deltaTime);
         getMovementControl().addFrameToWorld(this.transform);
 
-        _actionText.text = getCurrentActionName();
-
-        _collisionInfo.updateCollisionInfo(transform.position,getDirection());
-
-        _collisionInfo.drawCollosionArea(_debugColor);
-        _collisionInfo.drawBoundBox(_debugColor);
-
-        _debugColor = Color.red;
     }
 
     public override void afterProgress(float deltaTime)
     {
         base.afterProgress(deltaTime);
 
-        CollisionManager.Instance().collisionRequest(_collisionInfo,this,collisionTest);
     }
 
 
-    private void collisionTest(CollisionSuccessData data)
-    {
-        _debugColor = Color.green;
-    }
+    
 }
