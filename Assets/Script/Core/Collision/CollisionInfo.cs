@@ -46,7 +46,15 @@ public class CollisionInfo
             if(MathEx.findNearestPointOnTriangle(target._centerPosition,_triangle.get(0),_triangle.get(1),_triangle.get(2),out result,out nearDistance) == false)
                 return true;
             
-            return nearDistance < target.getRadius();
+            if(nearDistance < target.getRadius())
+                return true;
+
+            float targetDistance = Vector3.Distance(_centerPosition, target.getCenterPosition());
+            if( targetDistance < getRadius() + target.getRadius())
+                return true;
+    
+            // Vector3 direction = (target.getCenterPosition() - _centerPosition).normalized;
+            // return _collisionInfoData.getAngle() * 0.5f <= Vector3.Angle(direction,_direction);
         }
 
 
@@ -59,7 +67,7 @@ public class CollisionInfo
         if(_collisionInfoData.getAngle() == 0f)
             drawCircle(color, time);
         else
-            drawTriangle(color, time);
+            drawSection(color, time);
     }
 
     public void drawCircle(Color color, float time = 0f)
@@ -67,9 +75,10 @@ public class CollisionInfo
         GizmoHelper.instance.drawCircle(_centerPosition,getRadius(),36,color, time);
     }
 
-    public void drawTriangle(Color color, float time = 0f)
+    public void drawSection(Color color, float time = 0f)
     {
         GizmoHelper.instance.drawPolygon(_triangle.getVertices(),color, time);
+        //GizmoHelper.instance.drawArc(_centerPosition,getRadius(),_collisionInfoData.getAngle(),_direction,color,time);
     }
 
     public void drawBoundBox(Color color)

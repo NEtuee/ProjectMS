@@ -26,9 +26,13 @@ public class GameEntityBase : SequencerObjectBase
     private AttackState         _attackState = AttackState.Default;
     private DefenceState        _defenceState = DefenceState.Default;
 
+    private Vector3             _recentlyAttackPoint = Vector3.zero;
+
+
     private int[]               _currentActionBuffList = null;
 
     private Color               _debugColor = Color.red;
+
 
 
     public override void assign()
@@ -103,11 +107,18 @@ public class GameEntityBase : SequencerObjectBase
 
         rotationUpdate();
 
+        if(getDefenceAngle() != 0f)
+        {
+            GizmoHelper.instance.drawArc(transform.position,0.8f,getDefenceAngle(),_direction,Color.cyan,0f);
+        }
+
 
         _collisionInfo.updateCollisionInfo(transform.position,getDirection());
 
         _collisionInfo.drawCollosionArea(_debugColor);
         _collisionInfo.drawBoundBox(_debugColor);
+
+        GizmoHelper.instance.drawLine(transform.position, transform.position + _direction * 0.5f,Color.magenta);
 
         debugTextManager.updatePosition(new Vector3(0f, _collisionInfo.getBoundBox().getBottom() - transform.position.y, 0f));
 
@@ -269,8 +280,10 @@ public class GameEntityBase : SequencerObjectBase
 
                 break;
             case DirectionType.MousePoint:
-                _direction = MathEx.deleteZ(Camera.main.ScreenToWorldPoint(Input.mousePosition)) - transform.position;
-                _direction.Normalize();
+                _direction = (MathEx.deleteZ(Camera.main.ScreenToWorldPoint(Input.mousePosition)) - transform.position).normalized;
+                break;
+            case DirectionType.AttackedPoint:
+                _direction = (_recentlyAttackPoint - transform.position).normalized;
                 break;
             case DirectionType.Count:
                 DebugUtil.assert(false, "invalid direction type : {0}",_actionGraph.getDirectionType());
@@ -330,8 +343,11 @@ public class GameEntityBase : SequencerObjectBase
     public void setAttackState(AttackState state) {_attackState = state;}
     public void setDefenceState(DefenceState state) {_defenceState = state;}
 
+    public void setAttackPoint(Vector3 attackPoint) {_recentlyAttackPoint = attackPoint;}
+
     public CollisionInfo getCollisionInfo() {return _collisionInfo;}
     public string getCurrentActionName() {return _actionGraph == null ? "" : _actionGraph.getCurrentActionName();}
+    public float getDefenceAngle() {return _actionGraph.getCurrentDefenceAngle();}
     public DefenceType getDefenceType() {return _actionGraph.getCurrentDefenceType();}
     public MoveValuePerFrameFromTimeDesc getMoveValuePerFrameFromTimeDesc(){return _actionGraph.getMoveValuePerFrameFromTimeDesc();}
     public MovementGraph getCurrentMovementGraph(){return _actionGraph.getCurrentMovementGraph();}

@@ -34,9 +34,22 @@ public class GizmoHelper : MonoBehaviour
         public Color _color;
     }
 
+    class GizmoArcData
+    {
+        public Vector3 _start;
+        public Vector3 _direction;
+        public float _angle;
+        public float _radius;
+
+        public float _timer;
+        public Color _color;
+
+    }
+
     private List<GizmoCircleData> _circleRequestData = new List<GizmoCircleData>();
     private List<GizmoPolygonData> _polygonData = new List<GizmoPolygonData>();
     private List<GizmoLineData> _lineData = new List<GizmoLineData>();
+    private List<GizmoArcData> _arcData = new List<GizmoArcData>();
 
     private void Awake()
     {
@@ -58,6 +71,11 @@ public class GizmoHelper : MonoBehaviour
         for(int index = 0; index < _polygonData.Count; ++index)
         {
             _polygonData[index]._timer -= Time.deltaTime;
+        }
+
+        for(int index = 0; index < _arcData.Count; ++index)
+        {
+            _arcData[index]._timer -= Time.deltaTime;
         }
     }
 
@@ -89,6 +107,19 @@ public class GizmoHelper : MonoBehaviour
         _polygonData.Add(polygonData);
     }
 
+    public void drawArc(Vector3 start, float radius, float angle, Vector3 direction, Color color, float time = 0f)
+    {
+        GizmoArcData arcData = new GizmoArcData();
+        arcData._angle = angle;
+        arcData._color = color;
+        arcData._direction = direction;
+        arcData._radius = radius;
+        arcData._start = start;
+        arcData._timer = time;
+
+        _arcData.Add(arcData);
+    }
+
     public void drawLine(Vector3 start, Vector3 end, Color color, float time = 0f)
     {
         GizmoLineData lineData = new GizmoLineData();
@@ -112,6 +143,47 @@ public class GizmoHelper : MonoBehaviour
 
             if(item._timer <= 0f)
                 _lineData.RemoveAt(index);
+            else
+                ++index;
+        }
+
+        Gizmos.color = color;
+    }
+
+    private void drawArc()
+    {
+        Color color = Gizmos.color;
+        for(int index = 0; index < _arcData.Count;)
+        {
+            GizmoArcData item = _arcData[index];
+            Gizmos.color = item._color;
+
+            float directionAngle = MathEx.clampDegree(Vector3.SignedAngle(item._direction, Vector3.right,Vector3.forward));
+            directionAngle += item._angle * 0.5f;
+
+            float accur = item._angle / 36f;
+            for(int i = 0; i < 36; ++i)
+            {   
+                
+                float x = Mathf.Cos((accur * i - directionAngle) * Mathf.Deg2Rad);
+                float y = Mathf.Sin((accur * i - directionAngle) * Mathf.Deg2Rad);
+
+                float x2 = Mathf.Cos((accur * (i + 1) - directionAngle) * Mathf.Deg2Rad);
+                float y2 = Mathf.Sin((accur * (i + 1) - directionAngle) * Mathf.Deg2Rad);
+
+                if(i == 0)
+                {
+                    Gizmos.DrawLine(new Vector3(x,y) * item._radius + item._start,item._start);
+                }
+                else if(i == 35)
+                {
+                    Gizmos.DrawLine(item._start,new Vector3(x2,y2) * item._radius + item._start);
+                }
+                Gizmos.DrawLine(new Vector3(x,y) * item._radius + item._start,new Vector3(x2,y2) * item._radius + item._start);
+            }
+
+            if(item._timer <= 0f)
+                _arcData.RemoveAt(index);
             else
                 ++index;
         }
@@ -177,5 +249,6 @@ public class GizmoHelper : MonoBehaviour
         drawCircle();
         drawLine();
         drawPolygon();
+        drawArc();
     }
 }

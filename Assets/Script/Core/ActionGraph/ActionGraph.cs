@@ -437,6 +437,7 @@ public class ActionGraph
     public int[] getDefaultBuffList() {return _actionGraphBaseData._defaultBuffList;}
     public int[] getCurrentBuffList() {return getCurrentAction()._applyBuffList;}
     public float getCurrentMoveScale() {return getCurrentAction()._moveScale;}
+    public float getCurrentDefenceAngle() {return getCurrentAction()._defenceAngle;}
     public DefenceType getCurrentDefenceType() {return getCurrentAction()._defenceType;}
     public RotationType getCurrentRotationType() {return getCurrentAction()._rotationType;}
     public DirectionType getDirectionType() {return getCurrentAction()._directionType;}

@@ -159,6 +159,8 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
     private CollisionInfo _collisionInfo;
     private CollisionDelegate _collisionDelegate;
 
+    private AttackType _attackType;
+
     public override void onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
         _collisionInfo.updateCollisionInfo(executeEntity.transform.position,executeEntity.getDirection());
@@ -178,21 +180,30 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
 
         ChildFrameEventType eventType = ChildFrameEventType.Count;
 
-        if(target.getDefenceType() == DefenceType.Guard)
+        UnityEngine.Vector3 toTargetDirection = (requester.transform.position - target.transform.position).normalized;
+
+        target.setAttackPoint(successData._startPoint);
+
+        float attackInAngle = UnityEngine.Vector3.Angle(target.getDirection(), (successData._startPoint - target.transform.position).normalized);
+        bool guardSuccess = attackInAngle < target.getDefenceAngle() * 0.5f;
+
+        DebugUtil.log(attackInAngle.ToString());
+
+        if(guardSuccess && target.getDefenceType() == DefenceType.Guard)
         {
             requester.setAttackState(AttackState.AttackGuarded);
             target.setDefenceState(DefenceState.DefenceSuccess);
 
             eventType = ChildFrameEventType.ChildFrameEvent_OnGuard;
         }
-        else if(target.getDefenceType() == DefenceType.Parry)
+        else if(guardSuccess && target.getDefenceType() == DefenceType.Parry)
         {
             requester.setAttackState(AttackState.AttackParried);
             target.setDefenceState(DefenceState.ParrySuccess);
 
             eventType = ChildFrameEventType.ChildFrameEvent_OnParry;
         }
-        else if(target.getDefenceType() == DefenceType.Empty)
+        else if(guardSuccess == false || target.getDefenceType() == DefenceType.Empty)
         {
             requester.setAttackState(AttackState.AttackSuccess);
             target.setDefenceState(DefenceState.Hit);
@@ -208,6 +219,7 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
         XmlAttributeCollection attributes = node.Attributes;
         float radius = 0f;
         float angle = 0f;
+        _attackType = AttackType.Default;
 
 
         for(int i = 0; i < attributes.Count; ++i)
@@ -219,6 +231,10 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
             else if(attributes[i].Name == "Angle")
             {
                 angle = float.Parse(attributes[i].Value);
+            }
+            else if(attributes[i].Name == "AttackType")
+            {
+                _attackType = (AttackType)System.Enum.Parse(typeof(AttackType), attributes[i].Value);
             }
 
         }

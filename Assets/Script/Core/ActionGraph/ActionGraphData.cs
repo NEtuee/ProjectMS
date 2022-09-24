@@ -40,6 +40,7 @@ public class ActionGraphNodeData
 
     public int[]                        _applyBuffList = null;
 
+    public float                        _defenceAngle = 0f;
     public float                        _moveScale = 1f;
 
     public bool                         _isActionSelection = false;
@@ -55,6 +56,7 @@ public enum DirectionType
     Keep,
     MoveInput,
     MousePoint,
+    AttackedPoint,
     Count,
 }
 

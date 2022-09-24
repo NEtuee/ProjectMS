@@ -8,6 +8,7 @@ public struct CollisionSuccessData
 {
     public object _requester;
     public object _target;
+    public Vector3 _startPoint;
 }
 
 public struct CollisionRequestData
@@ -159,6 +160,7 @@ public class CollisionManager : Singleton<CollisionManager>
                 CollisionSuccessData data;
                 data._requester = request._requestObject;
                 data._target = collisionList[i]._collisionObject;
+                data._startPoint = request._collision.getCenterPosition();
 
                 request._collisionDelegate(data);
             }

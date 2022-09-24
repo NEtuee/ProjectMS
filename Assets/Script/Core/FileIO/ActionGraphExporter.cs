@@ -182,6 +182,10 @@ public static class ActionGraphLoader
             {
                 nodeData._defenceType = (DefenceType)System.Enum.Parse(typeof(DefenceType), targetValue);
             }
+            else if(targetName == "DefenceAngle")
+            {
+                nodeData._defenceAngle = float.Parse(targetValue);
+            }
             else if(targetName == "ApplyBuff")
             {
                 string[] buffList = targetValue.Split(' ');

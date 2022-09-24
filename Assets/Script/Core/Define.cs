@@ -1,5 +1,11 @@
 using UnityEngine;
 
+public enum AttackType
+{
+    Default,
+    GuardCrash,
+}
+
 public enum AttackState
 {
     Default,
