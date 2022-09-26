@@ -41,6 +41,14 @@ public class CollisionInfo
 
         if(_collisionInfoData.getAngle() != 0f)
         {
+            float circleDistance = Vector3.Distance(_centerPosition, target.getCenterPosition());
+            if(circleDistance >= getRadius() + target.getRadius())
+                return false;
+
+            Vector3 direction = (target.getCenterPosition() - _centerPosition).normalized;
+            if(_collisionInfoData.getAngle() * 0.5f > Vector3.Angle(direction,_direction))
+                return true;
+
             Vector3 result = Vector3.zero;
             float nearDistance = 0f;
             if(MathEx.findNearestPointOnTriangle(target._centerPosition,_triangle.get(0),_triangle.get(1),_triangle.get(2),out result,out nearDistance) == false)
@@ -49,12 +57,7 @@ public class CollisionInfo
             if(nearDistance < target.getRadius())
                 return true;
 
-            float targetDistance = Vector3.Distance(_centerPosition, target.getCenterPosition());
-            if( targetDistance < getRadius() + target.getRadius())
-                return true;
-    
-            // Vector3 direction = (target.getCenterPosition() - _centerPosition).normalized;
-            // return _collisionInfoData.getAngle() * 0.5f <= Vector3.Angle(direction,_direction);
+            return false;
         }
 
 
@@ -77,8 +80,8 @@ public class CollisionInfo
 
     public void drawSection(Color color, float time = 0f)
     {
-        GizmoHelper.instance.drawPolygon(_triangle.getVertices(),color, time);
-        //GizmoHelper.instance.drawArc(_centerPosition,getRadius(),_collisionInfoData.getAngle(),_direction,color,time);
+        //GizmoHelper.instance.drawPolygon(_triangle.getVertices(),color, time); 
+        GizmoHelper.instance.drawArc(_centerPosition,getRadius(),_collisionInfoData.getAngle(),_direction,color,time);
     }
 
     public void drawBoundBox(Color color)
@@ -94,13 +97,12 @@ public class CollisionInfo
         if(_collisionInfoData.getAngle() != 0f)
         {
             _triangle.makeTriangle(position,_collisionInfoData.getRadius(), _collisionInfoData.getAngle(), MathEx.clampDegree(Vector3.SignedAngle(Vector3.right, direction, Vector3.forward)));
-            _boundBox.updateBoundBox(_triangle);
+            //_boundBox.updateBoundBox(_triangle);
 
         }
-        else
-        {
-            _boundBox.updateBoundBox(position);
-        }
+
+
+        _boundBox.updateBoundBox(position);
     }
 
     public int getUniqueID() {return _uniqueID;}

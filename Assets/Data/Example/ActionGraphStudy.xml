@@ -10,7 +10,6 @@
         <Animation Path="Resources/Sprites/DummyPlayer/Idle/" StartFrame="0" EndFrame="1" XFlip="true">
         </Animation>
 
-
         <Branch Condition="ActionTest == true" Action="MoveSelection"/>
         <Branch Condition="End == true" Action="Idle"/>
     </Idle>

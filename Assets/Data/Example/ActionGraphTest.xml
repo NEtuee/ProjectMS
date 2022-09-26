@@ -5,6 +5,7 @@
     <BranchSet Name="CommonBattleBranchSet">
         <Branch Condition="InputGuard == true" Action="Guard"/>
         <Branch Condition="InputAttackCharge == true" Action="AttackCharge"/>
+        <Branch Condition="(getStat_Blood >= 20.0) &#38;&#38; InputAttackBlood == true" Action="BloodSpreadPrepare"/>
     </BranchSet>
 
     <BranchSet Name="CommonMoveBranchSet">
@@ -148,7 +149,7 @@
 
     <Attack_LV1 MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="Keep" FlipType="Keep">
         <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="3">
-            <FrameEvent Type="Attack" StartFrame="0" Radius="1.5" Angle="8">
+            <FrameEvent Type="Attack" StartFrame="0" AttackPreset="PlayerAttackTest">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
                     <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
@@ -172,7 +173,7 @@
     
     <Attack_LV2 MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="Keep" FlipType="Keep">
         <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="3">
-            <FrameEvent Type="Attack" StartFrame="0" Radius="1.5" Angle="8">
+            <FrameEvent Type="Attack" StartFrame="0" AttackPreset="PlayerAttackTest">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
                     <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
@@ -196,7 +197,7 @@
 
     <Attack_LV3 MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="Keep" FlipType="Keep">
         <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="3">
-            <FrameEvent Type="Attack" StartFrame="0" Radius="1.5" Angle="8">
+            <FrameEvent Type="Attack" StartFrame="0" AttackPreset="PlayerAttackTest">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
                     <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
@@ -217,6 +218,27 @@
         <Branch Condition="AttackParried == true" Action="Attack_Parried"/>
         <Branch Condition="End == true" Action="CommonMoveSelection"/>
     </Attack_LV3>
+
+    <BloodSpreadPrepare DirectionType="MousePoint" FlipType="MousePoint">
+        <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="999">
+        </Animation>
+
+        <Branch Condition="End == true" Action="BloodSpread"/>
+    </BloodSpreadPrepare>
+
+
+    <BloodSpread MovementType="GraphPreset" MovementGraphPreset="BloodSpread" DirectionType="Keep" FlipType="Keep" ApplyBuff="10">
+        <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="2">
+            <FrameEvent Type="Attack" StartFrame="0" AttackPreset="PlayerBloodSpreadTest">
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="11"/>
+                </OnHit>
+
+            </FrameEvent>
+        </Animation>
+
+        <Branch Condition="End == true" Action="CommonMoveSelection"/>
+    </BloodSpread>
 
 
     <Guard MovementType="GraphPreset" MovementGraphPreset="Guard" DirectionType="MoveInput" FlipType="Keep">

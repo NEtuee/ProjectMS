@@ -158,7 +158,6 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
 
     private CollisionInfo _collisionInfo;
     private CollisionDelegate _collisionDelegate;
-
     private AttackType _attackType;
 
     public override void onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
@@ -187,12 +186,11 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
         float attackInAngle = UnityEngine.Vector3.Angle(target.getDirection(), (successData._startPoint - target.transform.position).normalized);
         bool guardSuccess = attackInAngle < target.getDefenceAngle() * 0.5f;
 
-        DebugUtil.log(attackInAngle.ToString());
-
         if(guardSuccess && target.getDefenceType() == DefenceType.Guard)
         {
             requester.setAttackState(AttackState.AttackGuarded);
             target.setDefenceState(DefenceState.DefenceSuccess);
+
 
             eventType = ChildFrameEventType.ChildFrameEvent_OnGuard;
         }
@@ -235,6 +233,19 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
             else if(attributes[i].Name == "AttackType")
             {
                 _attackType = (AttackType)System.Enum.Parse(typeof(AttackType), attributes[i].Value);
+            }
+            else if(attributes[i].Name == "AttackPreset")
+            {
+                AttackPreset preset = ResourceContainerEx.Instance().GetScriptableObject("Preset\\AttackPreset") as AttackPreset;
+                AttackPresetData presetData = preset.getPresetData(attributes[i].Value);
+                if(presetData == null)
+                {
+                    DebugUtil.assert(false, "failed to load attack preset: {0}",attributes[i].Value);
+                    return;
+                }
+
+                radius = presetData._attackRadius;
+                angle = presetData._attackAngle;
             }
 
         }
