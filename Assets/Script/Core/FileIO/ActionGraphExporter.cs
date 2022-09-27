@@ -196,6 +196,10 @@ public static class ActionGraphLoader
                     nodeData._applyBuffList[i] = int.Parse(buffList[i]);
                 }
             }
+            else
+            {
+                DebugUtil.assert(false,"invalid attribute type !!! : {0}", targetName);
+            }
         }
 
         XmlNodeList nodeList = node.ChildNodes;
