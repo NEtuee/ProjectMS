@@ -121,6 +121,7 @@ public enum ConditionNodeUpdateType
     Action_IsYFlip,
 
     Input_AttackCharge,
+    Input_AttackBlood,
     Input_Guard,
 
     Attack_Guarded,
@@ -178,6 +179,7 @@ public static class ConditionNodeInfoPreset
         {"IsYFlip",new ConditionNodeInfo(ConditionNodeUpdateType.Action_IsYFlip, ConditionNodeType.Bool)},
 
         {"InputAttackCharge",new ConditionNodeInfo(ConditionNodeUpdateType.Input_AttackCharge, ConditionNodeType.Bool)},
+        {"InputAttackBlood",new ConditionNodeInfo(ConditionNodeUpdateType.Input_AttackBlood, ConditionNodeType.Bool)},
         {"InputGuard",new ConditionNodeInfo(ConditionNodeUpdateType.Input_Guard, ConditionNodeType.Bool)},
 
         {"AttackGuarded",new ConditionNodeInfo(ConditionNodeUpdateType.Attack_Guarded, ConditionNodeType.Bool)},
