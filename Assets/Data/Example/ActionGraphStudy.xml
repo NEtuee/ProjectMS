@@ -7,7 +7,7 @@
 
 
     <Idle DirectionType="Keep" FlipType="MousePoint">
-        <Animation Path="Resources/Sprites/DummyPlayer/Idle/" StartFrame="0" EndFrame="1" XFlip="true">
+        <Animation Path="Resources/Sprites/Player/idle/" StartFrame="0" EndFrame="7" FramePerSecond="8" XFlip="true">
         </Animation>
 
         <Branch Condition="ActionTest == true" Action="MoveSelection"/>
@@ -34,7 +34,7 @@
     </MoveSelection>
 
     <MoveUp MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="MoveInput" FlipType="MousePoint">
-        <Animation Path="Resources/Sprites/DummyPlayer/MoveUp/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
+        <Animation Path="Resources/Sprites/Player/moveUp/" StartFrame="0" EndFrame="5" FramePerSecond="8" XFlip="true">
         </Animation>
 
         <UseBranchSet Name="CommonMoveBranchSet"/>
@@ -44,7 +44,7 @@
     </MoveUp>
 
     <MoveDown MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="MoveInput" FlipType="MousePoint">
-        <Animation Path="Resources/Sprites/DummyPlayer/MoveDown/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
+        <Animation Path="Resources/Sprites/Player/moveDown/" StartFrame="0" EndFrame="5" FramePerSecond="8" XFlip="true">
         </Animation>
 
         <UseBranchSet Name="CommonMoveBranchSet"/>
@@ -54,7 +54,7 @@
     </MoveDown>
 
     <MoveLeftBackward MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="MoveInput" FlipType="MousePoint">
-        <Animation Path="Resources/Sprites/DummyPlayer/MoveForward/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
+        <Animation Path="Resources/Sprites/Player/moveBack/" StartFrame="0" EndFrame="5" FramePerSecond="8" XFlip="true">
         </Animation>
 
         <UseBranchSet Name="CommonMoveBranchSet"/>
@@ -65,7 +65,7 @@
     </MoveLeftBackward>
 
     <MoveLeftForward MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="MoveInput" FlipType="MousePoint">
-        <Animation Path="Resources/Sprites/DummyPlayer/MoveBackward/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
+        <Animation Path="Resources/Sprites/Player/moveFront/" StartFrame="0" EndFrame="5" FramePerSecond="8" XFlip="true">
         </Animation>
 
         <UseBranchSet Name="CommonMoveBranchSet"/>
@@ -77,7 +77,7 @@
 
 
     <MoveRightBackward MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="MoveInput" FlipType="MousePoint">
-        <Animation Path="Resources/Sprites/DummyPlayer/MoveForward/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
+        <Animation Path="Resources/Sprites/Player/moveBack/" StartFrame="0" EndFrame="5" FramePerSecond="8" XFlip="true">
         </Animation>
 
         <UseBranchSet Name="CommonMoveBranchSet"/>
@@ -88,7 +88,7 @@
     </MoveRightBackward>
 
     <MoveRightForward MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="MoveInput" FlipType="MousePoint">
-        <Animation Path="Resources/Sprites/DummyPlayer/MoveBackward/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
+        <Animation Path="Resources/Sprites/Player/moveFront/" StartFrame="0" EndFrame="5" FramePerSecond="8" XFlip="true">
         </Animation>
 
         <UseBranchSet Name="CommonMoveBranchSet"/>
