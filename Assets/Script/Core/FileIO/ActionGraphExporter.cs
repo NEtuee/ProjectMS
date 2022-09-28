@@ -316,6 +316,17 @@ public static class ActionGraphLoader
             {
                 playData._isLoop = bool.Parse(targetValue);
             }
+            else
+            {
+                DebugUtil.assert(false, "invalid animation attribute: {0}",targetName);
+                return null;
+            }
+        }
+
+        if(playData._startFrame > playData._endFrame)
+        {
+            DebugUtil.assert(false, "start frame cannot be greater than the end frame: {0}",playData._path);
+            return null;
         }
 
         if(node.HasChildNodes == true)

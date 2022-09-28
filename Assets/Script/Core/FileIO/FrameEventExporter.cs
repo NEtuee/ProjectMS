@@ -25,8 +25,15 @@ public static class FrameEventLoader
             outFrameEvent = new ActionFrameEvent_ApplyBuffTarget();
         else if(type == "TeleportToTarget")
             outFrameEvent = new ActionFrameEvent_TeleportToTarget();
+        else if(type == "SetDefenceType")
+            outFrameEvent = new ActionFrameEvent_SetDefenceType();
+        else
+        {
+            DebugUtil.assert(false, "invalid frameEvent type: {0}",type);
+            return null;
+        }
 
-        DebugUtil.assert((int)FrameEventType.Count == 5, "check here");
+        DebugUtil.assert((int)FrameEventType.Count == 6, "check here");
 
 
         if(outFrameEvent == null)
@@ -46,6 +53,12 @@ public static class FrameEventLoader
             else if(targetName == "EndFrame")
             {
                 outFrameEvent._endFrame = float.Parse(attributes[i].Value);
+
+                if(outFrameEvent._startFrame > outFrameEvent._endFrame)
+                {
+                    DebugUtil.assert(false,"start frame cant be greater than the end frame. {0}",node.Name);
+                    return null;
+                }
             }
         }
 

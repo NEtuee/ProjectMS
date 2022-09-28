@@ -26,6 +26,8 @@ public class GameEntityBase : SequencerObjectBase
     private AttackState         _attackState = AttackState.Default;
     private DefenceState        _defenceState = DefenceState.Default;
 
+    private DefenceType         _currentDefenceType = DefenceType.Empty;
+
     private Vector3             _recentlyAttackPoint = Vector3.zero;
 
 
@@ -87,6 +89,8 @@ public class GameEntityBase : SequencerObjectBase
                     _movementControl.setMoveScale(_actionGraph.getCurrentMoveScale());
                 }
 
+                _currentDefenceType = _actionGraph.getCurrentDefenceType();
+
                 //Debug.Log("execute : " + prevActionName + " -> " + _actionGraph.getCurrentActionName());
             }
 
@@ -104,6 +108,7 @@ public class GameEntityBase : SequencerObjectBase
         }
 
         debugTextManager.updateDebugText("Action","Action: " + getCurrentActionName());
+        debugTextManager.updateDebugText("Defence","Defence: " + getDefenceType());
 
         rotationUpdate();
 
@@ -346,10 +351,12 @@ public class GameEntityBase : SequencerObjectBase
 
     public void setAttackPoint(Vector3 attackPoint) {_recentlyAttackPoint = attackPoint;}
 
+    public void setDefenceType(DefenceType defenceType) {_currentDefenceType = defenceType;}
+
     public CollisionInfo getCollisionInfo() {return _collisionInfo;}
     public string getCurrentActionName() {return _actionGraph == null ? "" : _actionGraph.getCurrentActionName();}
     public float getDefenceAngle() {return _actionGraph.getCurrentDefenceAngle();}
-    public DefenceType getDefenceType() {return _actionGraph.getCurrentDefenceType();}
+    public DefenceType getDefenceType() {return _currentDefenceType;}
     public MoveValuePerFrameFromTimeDesc getMoveValuePerFrameFromTimeDesc(){return _actionGraph.getMoveValuePerFrameFromTimeDesc();}
     public MovementGraph getCurrentMovementGraph(){return _actionGraph.getCurrentMovementGraph();}
     public MovementGraphPresetData getCurrentMovementGraphPreset() {return _actionGraph.getCurrentMovementGraphPreset();}

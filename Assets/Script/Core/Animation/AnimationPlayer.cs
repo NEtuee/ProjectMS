@@ -77,12 +77,11 @@ public class AnimationPlayer
         }
 
         _animationTimeProcessor.updateTime(deltaTime);
-
         processFrameEventContinue();
         processFrameEvent(_currentAnimationPlayData, targetEntity);
 
         return _animationTimeProcessor.isEnd();
-    }
+    } 
 
     public void Release()
     {
@@ -95,8 +94,11 @@ public class AnimationPlayer
         {
             _frameEventProcessList[i].processFrameEvent();
 
-            if(_frameEventProcessList[i]._endTime <= _animationTimeProcessor.getAnimationTotalPlayTime())
+            if(_frameEventProcessList[i]._endTime <= _animationTimeProcessor.getAnimationTotalPlayTime() || 
+               MathEx.equals(_frameEventProcessList[i]._endTime, _animationTimeProcessor.getAnimationTotalPlayTime(), float.Epsilon))
+            {
                 _frameEventProcessList.RemoveAt(i);
+            }
             else
                 ++i;
         }
@@ -110,13 +112,14 @@ public class AnimationPlayer
             ActionFrameEventBase frameEvent = playData._frameEventData[i];
             if(MathEx.equals(frameEvent._startFrame, currentFrame,float.Epsilon) == true || frameEvent._startFrame < currentFrame)
             {
+                frameEvent.initialize();
                 frameEvent.onExecute(targetEntity);
 
                 if(frameEvent._endFrame != 0f)
                 {
                     FrameEventProcessDescription desc;
                     desc._executeObject = targetEntity;
-                    desc._endTime = _animationTimeProcessor.getAnimationTotalPlayTime() + _animationTimeProcessor.frameToTime(frameEvent._endFrame);
+                    desc._endTime = _animationTimeProcessor.frameToTime(frameEvent._endFrame);
                     desc._targetFrameEvent = frameEvent;
 
                     _frameEventProcessList.Add(desc);

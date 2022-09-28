@@ -108,6 +108,11 @@ public class AnimationTimeProcessor
         return _totalLoopCountPerFrame;
     }
 
+    public float getCurrentAnimationTime()
+    {
+        return _currentAnimationTime;
+    }
+
     public float getAnimationTotalPlayTime()
     {
         return _animationTotalPlayTime;
