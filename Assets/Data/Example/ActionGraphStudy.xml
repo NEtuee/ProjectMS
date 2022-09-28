@@ -30,6 +30,12 @@
         
     </MoveSelection>
 
+    <AttackSelection IsActionSelection="true">
+        <Branch Condition="(AngleDirection &lt; 45.0) || (AngleDirection &gt;= 315.0)" Action="Attack"/>
+        <Branch Condition="(AngleDirection &gt;= 45.0) &#38;&#38; (AngleDirection &lt; 135.0)" Action="AttackUp"/>
+        <Branch Condition="(AngleDirection &gt;= 135.0) &#38;&#38; (AngleDirection &lt; 225.0)" Action="Attack"/>
+        <Branch Condition="(AngleDirection &gt;= 225.0) &#38;&#38; (AngleDirection &lt; 315.0)" Action="AttackDown"/>
+    </AttackSelection>
 
 
 
@@ -137,7 +143,7 @@
         <Animation Path="Resources/Sprites/DummyPlayer/AttackCharge/" StartFrame="0" EndFrame="1" FramePerSecond="3" XFlip="true">
         </Animation>
 
-        <Branch Condition="InputAttackCharge == false" Action="Attack"/>
+        <Branch Condition="InputAttackCharge == false" Action="AttackSelection"/>
         <Branch Condition="End == true" Action="AttackCharge"/>
     </AttackCharge>
 
@@ -148,7 +154,19 @@
         <Branch Condition="End == true" Action="MoveSelection"/>    
     </Attack>
 
+    <AttackUp MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="Keep" FlipType="Keep">
+        <Animation Path="Resources/Sprites/DummyPlayer/AttackUp/" StartFrame="0" EndFrame="1" FramePerSecond="3">
+        </Animation>
 
+        <Branch Condition="End == true" Action="MoveSelection"/>
+    </AttackUp>
+
+    <AttackDown MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="Keep" FlipType="Keep">
+        <Animation Path="Resources/Sprites/DummyPlayer/AttackDown/" StartFrame="0" EndFrame="1" FramePerSecond="3">
+        </Animation>
+
+        <Branch Condition="End == true" Action="MoveSelection"/>
+    </AttackDown>
 
 
 </ActionGraph>
