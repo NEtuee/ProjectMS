@@ -18,6 +18,8 @@ public class AnimationTimeProcessor
     private float       _prevAnimationTime = 0f;
     private int         _prevIndex = 0;
 
+    private float       _animationTotalPlayTime = 0f;
+
     public bool isValid()
     {
         //return _frameCount != 0;
@@ -34,6 +36,8 @@ public class AnimationTimeProcessor
 
         _prevAnimationTime = 0f;
         _prevIndex = 0;
+
+        _animationTotalPlayTime = 0f;
     }
 
     public bool updateTime(float deltaTime)
@@ -50,6 +54,8 @@ public class AnimationTimeProcessor
 
         _currentAnimationTime += deltaTime;
         _isEnd = CurrentAnimationIsEndInner();
+
+        _animationTotalPlayTime += deltaTime;
 
         if(_isLoop == true && _isEnd == true)
         {
@@ -102,6 +108,11 @@ public class AnimationTimeProcessor
         return _totalLoopCountPerFrame;
     }
 
+    public float getAnimationTotalPlayTime()
+    {
+        return _animationTotalPlayTime;
+    }
+
     public float getCurrentNormalizedTime()
     {
         return (_currentAnimationTime - _animationStartTime) / _animationTime;
@@ -136,6 +147,11 @@ public class AnimationTimeProcessor
         _animationStartTime = startFrame * _frameToTime;
         _animationEndTime = endFrame * _frameToTime;
         _animationTime = _animationEndTime - _animationStartTime;
+    }
+
+    public float frameToTime(float frame)
+    {
+        return frame * _frameToTime;
     }
 
     public bool isEnd()

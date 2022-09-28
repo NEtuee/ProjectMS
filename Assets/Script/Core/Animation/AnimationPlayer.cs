@@ -28,6 +28,18 @@ public struct FlipState
     public bool yFlip;
 }
 
+public struct FrameEventProcessDescription
+{
+    public ActionFrameEventBase     _targetFrameEvent;
+    public ObjectBase               _executeObject;
+    public float                    _endTime;
+
+    public void processFrameEvent()
+    {
+        _targetFrameEvent.onExecute(_executeObject);
+    }
+}
+
 public class AnimationPlayer
 {
     private AnimationTimeProcessor _animationTimeProcessor;
@@ -38,6 +50,8 @@ public class AnimationPlayer
     private MovementGraph _currentMovementGraph;
 
     private int _currentFrameEventIndex;
+
+    private List<FrameEventProcessDescription> _frameEventProcessList = new List<FrameEventProcessDescription>();
 
     public AnimationPlayer()
     {
@@ -63,6 +77,8 @@ public class AnimationPlayer
         }
 
         _animationTimeProcessor.updateTime(deltaTime);
+
+        processFrameEventContinue();
         processFrameEvent(_currentAnimationPlayData, targetEntity);
 
         return _animationTimeProcessor.isEnd();
@@ -72,15 +88,40 @@ public class AnimationPlayer
     {
         
     }
+
+    public void processFrameEventContinue()
+    {
+        for(int i = 0; i < _frameEventProcessList.Count;)
+        {
+            _frameEventProcessList[i].processFrameEvent();
+
+            if(_frameEventProcessList[i]._endTime <= _animationTimeProcessor.getAnimationTotalPlayTime())
+                _frameEventProcessList.RemoveAt(i);
+            else
+                ++i;
+        }
+    }
     
     public void processFrameEvent(AnimationPlayDataInfo playData, ObjectBase targetEntity)
     {
         float currentFrame = _animationTimeProcessor.getCurrentFrame();
         for(int i = _currentFrameEventIndex; i < playData._frameEventDataCount; ++i)
         {
-            if(MathEx.equals(playData._frameEventData[i]._startFrame, currentFrame,float.Epsilon) == true || playData._frameEventData[i]._startFrame < currentFrame)
+            ActionFrameEventBase frameEvent = playData._frameEventData[i];
+            if(MathEx.equals(frameEvent._startFrame, currentFrame,float.Epsilon) == true || frameEvent._startFrame < currentFrame)
             {
-                playData._frameEventData[i].onExecute(targetEntity);
+                frameEvent.onExecute(targetEntity);
+
+                if(frameEvent._endFrame != 0f)
+                {
+                    FrameEventProcessDescription desc;
+                    desc._executeObject = targetEntity;
+                    desc._endTime = _animationTimeProcessor.getAnimationTotalPlayTime() + _animationTimeProcessor.frameToTime(frameEvent._endFrame);
+                    desc._targetFrameEvent = frameEvent;
+
+                    _frameEventProcessList.Add(desc);
+                }
+
                 _currentFrameEventIndex++;
             }
             else
@@ -123,6 +164,8 @@ public class AnimationPlayer
         _animationTimeProcessor.setFrame(startFrame,endFrame, playData._framePerSec);
         _animationTimeProcessor.setLoop(playData._isLoop);
         _animationTimeProcessor.setFrameToTime(playData._startFrame);
+
+        _frameEventProcessList.Clear();
 
         setCurrentFrameEventIndex(playData);
     }
