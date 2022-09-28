@@ -10,6 +10,8 @@
         <Branch Condition="InputAttackCharge == true" Action="AttackCharge"/>
     </BranchSet>
 
+
+
     <CommonMoveSelection IsActionSelection="true">
         <Branch Condition="ActionTest == true" Action="MoveSelection"/>
         <UseBranchSet Name="CommonMoveBranchSet"/>
@@ -20,13 +22,16 @@
         <Branch Condition="(AngleDirection &gt;= 45.0) &#38;&#38; (AngleDirection &lt; 135.0)" Action="MoveUp"/>
         <Branch Condition="(AngleDirection &gt;= 225.0) &#38;&#38; (AngleDirection &lt; 315.0)" Action="MoveDown"/>
 
-        <Branch Condition="(AngleDirection &gt;= 315.0) || (AngleDirection &lt; 45.0) &#38;&#38; (IsXFlip == true)" Action="MoveRightForward"/>
-        <Branch Condition="(AngleDirection &gt;= 135.0) &#38;&#38; (AngleDirection &lt; 225.0) &#38;&#38; (IsXFlip == true)" Action="MoveRightBackward"/>
-
-        <Branch Condition="(AngleDirection &gt;= 135.0) &#38;&#38; (AngleDirection &lt; 225.0) &#38;&#38; (IsXFlip == false)" Action="MoveLeftForward"/>
-        <Branch Condition="(AngleDirection &gt;= 315.0) || (AngleDirection &lt; 45.0) &#38;&#38; (IsXFlip == false)" Action="MoveLeftBackward"/>
+        <Branch Condition="(AngleDirection &lt; 45.0) || (AngleDirection &gt;= 315.0) &#38;&#38; (IsXFlip == false)" Action="MoveRightForward"/>
+        <Branch Condition="(AngleDirection &gt;= 135.0) &#38;&#38; (AngleDirection &lt; 225.0) &#38;&#38; (IsXFlip == false)" Action="MoveRightBackward"/>
+        
+        <Branch Condition="(AngleDirection &gt;= 135.0) &#38;&#38; (AngleDirection &lt; 225.0) &#38;&#38; (IsXFlip == true)" Action="MoveLeftForward"/>
+        <Branch Condition="(AngleDirection &lt; 45.0) || (AngleDirection &gt;= 315.0) &#38;&#38; (IsXFlip == true)" Action="MoveLeftBackward"/>
         
     </MoveSelection>
+
+
+
 
     <Idle DirectionType="Keep" FlipType="MousePoint">
         <Animation Path="Resources/Sprites/Player/idle/" StartFrame="0" EndFrame="7" FramePerSecond="8" XFlip="true">
@@ -36,6 +41,9 @@
         <Branch Condition="ActionTest == true" Action="MoveSelection"/>
         <Branch Condition="End == true" Action="Idle"/>
     </Idle>
+
+
+
 
     <MoveUp MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="MoveInput" FlipType="MousePoint">
         <Animation Path="Resources/Sprites/Player/moveUp/" StartFrame="0" EndFrame="5" FramePerSecond="8" XFlip="true">
@@ -58,39 +66,8 @@
         <Branch Condition="End == true" Action="MoveDown"/>
     </MoveDown>
 
-    <MoveLeftBackward MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="MoveInput" FlipType="MousePoint">
-        <Animation Path="Resources/Sprites/Player/moveBack/" StartFrame="0" EndFrame="5" FramePerSecond="8" XFlip="true">
-        </Animation>
-        <UseBranchSet Name="CommonBattleBranchSet"/>
-        <UseBranchSet Name="CommonMoveBranchSet"/>
-
-        <Branch Condition="IsXFlip == true" Action="MoveSelection"/>
-        <Branch Condition="(AngleDirection &gt;= 315.0) || (AngleDirection &lt; 45.0) == false" Action="MoveSelection"/>
-        <Branch Condition="End == true" Action="MoveLeftBackward"/>
-    </MoveLeftBackward>
-
-    <MoveLeftForward MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="MoveInput" FlipType="MousePoint">
-        <Animation Path="Resources/Sprites/Player/moveFront/" StartFrame="0" EndFrame="5" FramePerSecond="8" XFlip="true">
-        </Animation>
-        <UseBranchSet Name="CommonBattleBranchSet"/>
-        <UseBranchSet Name="CommonMoveBranchSet"/>
-
-        <Branch Condition="IsXFlip == true" Action="MoveSelection"/>
-        <Branch Condition="(AngleDirection &gt;= 135.0) &#38;&#38; (AngleDirection &lt; 225.0) == false" Action="MoveSelection"/>
-        <Branch Condition="End == true" Action="MoveLeftForward"/>
-    </MoveLeftForward>
 
 
-    <MoveRightBackward MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="MoveInput" FlipType="MousePoint">
-        <Animation Path="Resources/Sprites/Player/moveBack/" StartFrame="0" EndFrame="5" FramePerSecond="8" XFlip="true">
-        </Animation>
-        <UseBranchSet Name="CommonBattleBranchSet"/>
-        <UseBranchSet Name="CommonMoveBranchSet"/>
-
-        <Branch Condition="IsXFlip == false" Action="MoveSelection"/>
-        <Branch Condition="(AngleDirection &gt;= 135.0) &#38;&#38; (AngleDirection &lt; 225.0) == false" Action="MoveSelection"/>
-        <Branch Condition="End == true" Action="MoveRightBackward"/>
-    </MoveRightBackward>
 
     <MoveRightForward MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="MoveInput" FlipType="MousePoint">
         <Animation Path="Resources/Sprites/Player/moveFront/" StartFrame="0" EndFrame="5" FramePerSecond="8" XFlip="true">
@@ -98,10 +75,53 @@
         <UseBranchSet Name="CommonBattleBranchSet"/>
         <UseBranchSet Name="CommonMoveBranchSet"/>
 
-        <Branch Condition="IsXFlip == false" Action="MoveSelection"/>
-        <Branch Condition="(AngleDirection &gt;= 315.0) || (AngleDirection &lt; 45.0) == false" Action="MoveSelection"/>
+        <Branch Condition="IsXFlip == true" Action="MoveSelection"/>
+        <Branch Condition="(AngleDirection &lt; 45.0) || (AngleDirection &gt;= 315.0) == false" Action="MoveSelection"/>
         <Branch Condition="End == true" Action="MoveRightForward"/>
     </MoveRightForward>
+
+    <MoveRightBackward MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="MoveInput" FlipType="MousePoint">
+        <Animation Path="Resources/Sprites/Player/moveBack/" StartFrame="0" EndFrame="5" FramePerSecond="8" XFlip="true">
+        </Animation>
+        <UseBranchSet Name="CommonBattleBranchSet"/>
+        <UseBranchSet Name="CommonMoveBranchSet"/>
+
+        <Branch Condition="IsXFlip == true" Action="MoveSelection"/>
+        <Branch Condition="(AngleDirection &gt;= 135.0) &#38;&#38; (AngleDirection &lt; 225.0) == false" Action="MoveSelection"/>
+        <Branch Condition="End == true" Action="MoveRightBackward"/>
+    </MoveRightBackward>
+
+
+
+
+
+
+    <MoveLeftForward MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="MoveInput" FlipType="MousePoint">
+        <Animation Path="Resources/Sprites/Player/moveFront/" StartFrame="0" EndFrame="5" FramePerSecond="8" XFlip="true">
+        </Animation>
+        <UseBranchSet Name="CommonBattleBranchSet"/>
+        <UseBranchSet Name="CommonMoveBranchSet"/>
+
+        <Branch Condition="IsXFlip == false" Action="MoveSelection"/>
+        <Branch Condition="(AngleDirection &gt;= 135.0) &#38;&#38; (AngleDirection &lt; 225.0) == false" Action="MoveSelection"/>
+        <Branch Condition="End == true" Action="MoveLeftForward"/>
+    </MoveLeftForward>
+
+    <MoveLeftBackward MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="MoveInput" FlipType="MousePoint">
+        <Animation Path="Resources/Sprites/Player/moveBack/" StartFrame="0" EndFrame="5" FramePerSecond="8" XFlip="true">
+        </Animation>
+        <UseBranchSet Name="CommonBattleBranchSet"/>
+        <UseBranchSet Name="CommonMoveBranchSet"/>
+
+        <Branch Condition="IsXFlip == false" Action="MoveSelection"/>
+        <Branch Condition="(AngleDirection &lt; 45.0) || (AngleDirection &gt;= 315.0) == false" Action="MoveSelection"/>
+        <Branch Condition="End == true" Action="MoveLeftBackward"/>
+    </MoveLeftBackward>
+
+
+
+
+
 
     <Dash MovementType="GraphPreset" MovementGraphPreset="Dash" DirectionType="Keep" FlipType="AlwaysTurnOff" RotationType="Direction">
         <Animation Path="Resources/Sprites/DummyPlayer/dash/" StartFrame="0" EndFrame="1" FramePerSecond="3" XFlip="true">
@@ -109,6 +129,9 @@
         <UseBranchSet Name="CommonBattleBranchSet"/>
         <Branch Condition="End == true" Action="Idle"/>
     </Dash>
+
+
+
 
     <AttackCharge MovementType="Empty" DirectionType="MousePoint" FlipType="Direction">
         <Animation Path="Resources/Sprites/DummyPlayer/AttackCharge/" StartFrame="0" EndFrame="1" FramePerSecond="3" XFlip="true">
@@ -124,4 +147,8 @@
 
         <Branch Condition="End == true" Action="MoveSelection"/>    
     </Attack>
+
+
+
+
 </ActionGraph>
