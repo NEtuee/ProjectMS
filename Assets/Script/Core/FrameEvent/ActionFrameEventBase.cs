@@ -9,6 +9,7 @@ public enum FrameEventType
     FrameEvent_ApplyBuffTarget,
     FrameEvent_TeleportToTarget,
     FrameEvent_SetDefenceType,
+    FrameEvent_Effect,
 
     Count,
 }
