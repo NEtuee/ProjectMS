@@ -139,6 +139,23 @@
 
 
 
+    <Attack_Parried MovementType="GraphPreset" MovementGraphPreset="AttackGuarded" DirectionType="Keep" FlipType="Keep">
+        <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="1">
+        </Animation>
+
+        <Branch Condition="End == true" Action="MoveSelection"/>
+    </Attack_Parried>
+    
+    <Attack_Guarded MovementType="GraphPreset" MovementGraphPreset="AttackGuarded" DirectionType="Keep" FlipType="Keep">
+        <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="1">
+        </Animation>
+
+        <Branch Condition="End == true" Action="MoveSelection"/>
+    </Attack_Guarded>
+
+
+
+
     <AttackCharge MovementType="Empty" DirectionType="MousePoint" FlipType="Direction">
         <Animation Path="Resources/Sprites/DummyPlayer/AttackCharge/" StartFrame="0" EndFrame="1" FramePerSecond="3" XFlip="true">
         </Animation>
@@ -149,24 +166,75 @@
 
     <Attack MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="Keep" FlipType="Keep">
         <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="3">
+            <FrameEvent Type="Attack" StartFrame="0" AttackPreset="PlayerAttackTest">
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
+                    <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
+                </OnHit>
+                
+                <OnParry>
+                    <FrameEvent Type="TeleportToTarget"/>
+                </OnParry>
+                
+                <OnGuard>
+                    <FrameEvent Type="TeleportToTarget"/>
+                </OnGuard>
+            </FrameEvent>
         </Animation>
 
-        <Branch Condition="End == true" Action="MoveSelection"/>    
+
+        <Branch Condition="AttackParried == true" Action="Attack_Parried"/>
+        <Branch Condition="AttackGuarded == true" Action="Attack_Guarded"/>
+        <Branch Condition="End == true" Action="MoveSelection"/>
     </Attack>
 
     <AttackUp MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="Keep" FlipType="Keep">
         <Animation Path="Resources/Sprites/DummyPlayer/AttackUp/" StartFrame="0" EndFrame="1" FramePerSecond="3">
+            <FrameEvent Type="Attack" StartFrame="0" AttackPreset="PlayerAttackTest">
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
+                    <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
+                </OnHit>
+                
+                <OnParry>
+                    <FrameEvent Type="TeleportToTarget"/>
+                </OnParry>
+                
+                <OnGuard>
+                    <FrameEvent Type="TeleportToTarget"/>
+                </OnGuard>
+            </FrameEvent>
         </Animation>
 
+        <Branch Condition="AttackParried == true" Action="Attack_Parried"/>
+        <Branch Condition="AttackGuarded == true" Action="Attack_Guarded"/>
         <Branch Condition="End == true" Action="MoveSelection"/>
     </AttackUp>
 
     <AttackDown MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="Keep" FlipType="Keep">
         <Animation Path="Resources/Sprites/DummyPlayer/AttackDown/" StartFrame="0" EndFrame="1" FramePerSecond="3">
+            <FrameEvent Type="Attack" StartFrame="0" AttackPreset="PlayerAttackTest">
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
+                    <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
+                </OnHit>
+                
+                <OnParry>
+                    <FrameEvent Type="TeleportToTarget"/>
+                </OnParry>
+                
+                <OnGuard>
+                    <FrameEvent Type="TeleportToTarget"/>
+                </OnGuard>
+            </FrameEvent>
         </Animation>
 
+
+        <Branch Condition="AttackParried == true" Action="Attack_Parried"/>
+        <Branch Condition="AttackGuarded == true" Action="Attack_Guarded"/>
         <Branch Condition="End == true" Action="MoveSelection"/>
     </AttackDown>
 
+    
 
 </ActionGraph>
