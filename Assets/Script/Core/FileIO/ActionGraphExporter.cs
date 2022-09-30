@@ -7,12 +7,18 @@ using UnityEngine;
 
 public static class ActionGraphLoader
 {
+    private static Dictionary<string, string> _globalVariables = new Dictionary<string, string>();
     public static ActionGraphBaseData readFromXML(string path)
     {
         XmlDocument xmlDoc = new XmlDocument();
         try
         {
-            xmlDoc.Load(path);
+            XmlReaderSettings readerSettings = new XmlReaderSettings();
+            readerSettings.IgnoreComments = true;
+            using (XmlReader reader = XmlReader.Create(path,readerSettings))
+            {
+                xmlDoc.Load(reader);
+            }
         }
         catch(System.Exception ex)
         {
@@ -47,8 +53,7 @@ public static class ActionGraphLoader
         List<ActionGraphConditionCompareData> compareDataList = new List<ActionGraphConditionCompareData>();
         List<AnimationPlayDataInfo> animationDataList = new List<AnimationPlayDataInfo>();
 
-
-
+        _globalVariables.Clear();
         Dictionary<ActionGraphBranchData, string> actionCompareDic = new Dictionary<ActionGraphBranchData, string>();
         Dictionary<string, int> actionIndexDic = new Dictionary<string, int>();
         XmlNodeList nodeList = node.ChildNodes;
@@ -59,6 +64,11 @@ public static class ActionGraphLoader
             if(nodeList[i].Name == "BranchSet")
             {
                 readBranchSet(nodeList[i],ref branchSetDic);
+                continue;
+            }
+            else if(nodeList[i].Name == "GlobalVariable")
+            {
+                readGlobalVariable(nodeList[i], ref _globalVariables);
                 continue;
             }
             
@@ -99,6 +109,35 @@ public static class ActionGraphLoader
         actionBaseData._animationPlayData = animationDataList.ToArray();
 
         return actionBaseData;
+    }
+
+    private static void readGlobalVariable(XmlNode node, ref Dictionary<string, string> targetDic)
+    {
+        string name = "";
+        string value = "";
+        for(int i = 0; i < node.Attributes.Count; ++i)
+        {
+            if(node.Attributes[i].Name == "Name")
+                name = node.Attributes[i].Value;
+            else if(node.Attributes[i].Name == "Value")
+                value = node.Attributes[i].Value;
+        }
+
+        if(name == "" || value == "" || name.Contains("gv_") == false )
+        {
+            DebugUtil.assert(false, "invalid globalVariable, name:[{0}] value:[{1}]",name,value);
+            return;
+        }
+
+        targetDic.Add(name,value);
+    }
+
+    public static string getGlobalVariable(string value)
+    {
+        if(_globalVariables.ContainsKey(value))
+            return _globalVariables[value];
+
+        return value;
     }
 
     private static void readBranchSet(XmlNode branchSetParent, ref Dictionary<string, XmlNodeList> targetDic)
@@ -147,7 +186,7 @@ public static class ActionGraphLoader
         for(int attrIndex = 0; attrIndex < actionAttributes.Count; ++attrIndex)
         {
             string targetName = actionAttributes[attrIndex].Name;
-            string targetValue = actionAttributes[attrIndex].Value;
+            string targetValue = getGlobalVariable(actionAttributes[attrIndex].Value);
 
             if(targetName == "MovementType")
             {
@@ -195,6 +234,10 @@ public static class ActionGraphLoader
                 {
                     nodeData._applyBuffList[i] = int.Parse(buffList[i]);
                 }
+            }
+            else
+            {
+                DebugUtil.assert(false,"invalid attribute type !!! : {0}", targetName);
             }
         }
 
@@ -282,7 +325,7 @@ public static class ActionGraphLoader
         for(int attrIndex = 0; attrIndex < actionAttributes.Count; ++attrIndex)
         {
             string targetName = actionAttributes[attrIndex].Name;
-            string targetValue = actionAttributes[attrIndex].Value;
+            string targetValue = getGlobalVariable(actionAttributes[attrIndex].Value);
 
             if(targetName == "Path")
             {
@@ -312,6 +355,17 @@ public static class ActionGraphLoader
             {
                 playData._isLoop = bool.Parse(targetValue);
             }
+            else
+            {
+                DebugUtil.assert(false, "invalid animation attribute: {0}",targetName);
+                return null;
+            }
+        }
+
+        if(playData._startFrame > playData._endFrame)
+        {
+            DebugUtil.assert(false, "start frame cannot be greater than the end frame: {0}",playData._path);
+            return null;
         }
 
         if(node.HasChildNodes == true)
@@ -344,7 +398,7 @@ public static class ActionGraphLoader
         for(int attrIndex = 0; attrIndex < actionAttributes.Count; ++attrIndex)
         {
             string targetName = actionAttributes[attrIndex].Name;
-            string targetValue = actionAttributes[attrIndex].Value;
+            string targetValue = getGlobalVariable(actionAttributes[attrIndex].Value);
 
             if(targetName == "Condition")
             {
@@ -453,6 +507,7 @@ public static class ActionGraphLoader
 
     private static ActionGraphConditionNodeData getConditionNodeData(string symbol)
     {
+        symbol = getGlobalVariable(symbol);
         ActionGraphConditionNodeData nodeData = isLiteral(symbol);
         if(nodeData != null)
             return nodeData;

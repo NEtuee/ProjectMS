@@ -12,7 +12,12 @@ public static class ProjectileGraphLoader
         XmlDocument xmlDoc = new XmlDocument();
         try
         {
-            xmlDoc.Load(path);
+            XmlReaderSettings readerSettings = new XmlReaderSettings();
+            readerSettings.IgnoreComments = true;
+            using (XmlReader reader = XmlReader.Create(path,readerSettings))
+            {
+                xmlDoc.Load(reader);
+            }
         }
         catch(System.Exception ex)
         {

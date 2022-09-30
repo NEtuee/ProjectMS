@@ -8,6 +8,8 @@ public enum FrameEventType
     FrameEvent_ApplyBuff,
     FrameEvent_ApplyBuffTarget,
     FrameEvent_TeleportToTarget,
+    FrameEvent_SetDefenceType,
+    FrameEvent_Effect,
 
     Count,
 }
@@ -35,6 +37,7 @@ public abstract class ActionFrameEventBase
     public Dictionary<ChildFrameEventType, ChildFrameEventItem> _childFrameEventItems = null;
     
     public abstract FrameEventType getFrameEventType();
+    public virtual void initialize(){}
     public abstract void onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null);
     public abstract void loadFromXML(XmlNode node);
 
@@ -50,6 +53,34 @@ public abstract class ActionFrameEventBase
         }
     }
 }
+
+public class ActionFrameEvent_SetDefenceType : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_SetDefenceType;}
+
+    private DefenceType _defenceType;
+
+    public override void onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        if(executeEntity is GameEntityBase == false)
+            return;
+        
+        GameEntityBase requester = (GameEntityBase)executeEntity;
+        
+        requester.setDefenceType(_defenceType);
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            if(attributes[i].Name == "DefenceType")
+                _defenceType = (DefenceType)System.Enum.Parse(typeof(DefenceType), attributes[i].Value);
+        }
+    }
+}
+
 
 public class ActionFrameEvent_TeleportToTarget : ActionFrameEventBase
 {
@@ -160,6 +191,13 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
     private CollisionDelegate _collisionDelegate;
     private AttackType _attackType;
 
+    private HashSet<ObjectBase> _collisionList = new HashSet<ObjectBase>();
+
+    public override void initialize()
+    {
+        _collisionList.Clear();
+    }
+
     public override void onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
         _collisionInfo.updateCollisionInfo(executeEntity.transform.position,executeEntity.getDirection());
@@ -176,6 +214,11 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
         
         GameEntityBase requester = (GameEntityBase)successData._requester;
         GameEntityBase target = (GameEntityBase)successData._target;
+
+        if(_collisionList.Contains(target) == true)
+            return;
+        else
+            _collisionList.Add(target);
 
         ChildFrameEventType eventType = ChildFrameEventType.Count;
 

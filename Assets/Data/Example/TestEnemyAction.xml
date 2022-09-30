@@ -37,19 +37,23 @@
 
     <GuardSuccess DefenceType="Guard" DefenceAngle="180.0" MovementType="GraphPreset" MovementGraphPreset="GuardSuccess" DirectionType="AttackedPoint" FlipType="Direction">
         <Animation Path="Resources/Sprites/DummyPlayer/Guard/" StartFrame="0" EndFrame="1" FramePerSecond="2" XFlip="true">
+            <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc/" StartFrame="0" FramePerSecond="12" Offset="0.1 0.0 0.0"/>
         </Animation>
 
         <UseBranchSet Name="CommonHitAction"/>
 
+        <Branch Condition="DefenceSuccess == true" Action="GuardSuccess"/>
         <Branch Condition="End == true" Action="Guard"/>
     </GuardSuccess>
 
     <ParrySuccess DefenceType="Parry" DefenceAngle="140.0" MovementType="GraphPreset" MovementGraphPreset="GuardSuccess" DirectionType="AttackedPoint" FlipType="Direction">
         <Animation Path="Resources/Sprites/DummyPlayer/Parry/" StartFrame="0" EndFrame="1" FramePerSecond="2" XFlip="true">
+            <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc/" StartFrame="0" FramePerSecond="12" Offset="0.1 0.0 0.0"/>
         </Animation>
 
         <UseBranchSet Name="CommonHitAction"/>
 
+        <Branch Condition="ParrySuccess == true" Action="ParrySuccess"/>
         <Branch Condition="End == true" Action="Parry"/>
     </ParrySuccess>
 

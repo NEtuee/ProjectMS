@@ -11,12 +11,15 @@ public static partial class MessageTitles
     public const ushort     system_onTriggerExit        = 0x0103;
 
     //게임 시작 알림
-    public const ushort     game_gameStart            = 0x0200;
+    public const ushort     game_gameStart              = 0x0200;
     //게임 오버 알림
-    public const ushort     game_gameOver        = 0x0201;
+    public const ushort     game_gameOver               = 0x0201;
     //맵 변경 알림
-    public const ushort     game_mapChange       = 0x0202;
+    public const ushort     game_mapChange              = 0x0202;
     //타겟 텔레포트
     public const ushort     game_teleportTarget         = 0x0203;
+
+
+    public const ushort     effect_spawnEffect          = 0x0300;
 
 }
