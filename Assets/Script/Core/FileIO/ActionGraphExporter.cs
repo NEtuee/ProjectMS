@@ -372,6 +372,7 @@ public static class ActionGraphLoader
         {
             XmlNodeList nodeList = node.ChildNodes;
             List<ActionFrameEventBase> frameEventList = new List<ActionFrameEventBase>();
+            List<MultiSelectAnimationData> multiSelectAnimationList = new List<MultiSelectAnimationData>();
             for(int i = 0; i < nodeList.Count; ++i)
             {
                 if(nodeList[i].Name == "FrameEvent")
@@ -382,13 +383,71 @@ public static class ActionGraphLoader
                     
                     frameEventList.Add(frameEvent);
                 }
+                else if(nodeList[i].Name == "MultiSelectAnimation")
+                {
+                    MultiSelectAnimationData animationData = readMultiSelectAnimationData(nodeList[i]);
+                    if(animationData == null)
+                        continue;
+                    
+                    multiSelectAnimationList.Add(animationData);
+                }
+                else
+                {
+                    DebugUtil.assert(false,"invalid animation child: {0}",nodeList[i].Name);
+                    return null;
+                }
             }
 
             playData._frameEventDataCount = frameEventList.Count;
             playData._frameEventData = frameEventList.ToArray();
+            playData._multiSelectAnimationDataCount = multiSelectAnimationList.Count;
+            playData._multiSelectAnimationData = multiSelectAnimationList.ToArray();
         }
 
         return playData;
+    }
+
+    private static MultiSelectAnimationData readMultiSelectAnimationData(XmlNode node)
+    {
+        MultiSelectAnimationData animationData = new MultiSelectAnimationData();
+
+        XmlAttributeCollection actionAttributes = node.Attributes;
+        for(int attrIndex = 0; attrIndex < actionAttributes.Count; ++attrIndex)
+        {
+            string targetName = actionAttributes[attrIndex].Name;
+            string targetValue = getGlobalVariable(actionAttributes[attrIndex].Value);
+
+            if(targetName == "Path")
+            {
+                animationData._path = targetValue;
+            }
+            else if(targetName == "Condition")
+            {
+                ActionGraphConditionCompareData compareData = ReadConditionCompareData(targetValue);
+                if(compareData == null)
+                    return null;
+
+                animationData._actionConditionData = compareData;
+            }
+            else
+            {
+                DebugUtil.assert(false,"invalid multiSelect Animation Data: {0}", targetName);
+                return null;
+            }
+        }
+
+        if(animationData._path == "")
+        {
+            DebugUtil.assert(false,"animation path not exists");
+            return null;
+        }
+        else if(animationData._actionConditionData == null)
+        {
+            DebugUtil.assert(false,"multi select animation must have condition data");
+            return null;
+        }
+
+        return animationData;
     }
 
     private static ActionGraphBranchData ReadActionBranch(XmlNode node, ActionGraphNodeData data, ref Dictionary<ActionGraphBranchData, string> actionCompareDic,  ref List<ActionGraphConditionCompareData> compareDataList)

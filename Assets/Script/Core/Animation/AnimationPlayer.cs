@@ -7,7 +7,10 @@ public class AnimationPlayDataInfo
     public AnimationPlayDataInfo(){}
 
     //따로 때내어야 함
-    public ActionFrameEventBase[]       _frameEventData;
+    public ActionFrameEventBase[]       _frameEventData = null;
+    public MultiSelectAnimationData[]   _multiSelectAnimationData = null;
+
+    public int                          _multiSelectAnimationDataCount = 0;
 
     public string                       _path = "";
     public float                        _framePerSec = -1f;
@@ -20,6 +23,12 @@ public class AnimationPlayDataInfo
 
 
     public FlipState                    _flipState;
+}
+
+public class MultiSelectAnimationData
+{
+    public string                           _path = "";
+    public ActionGraphConditionCompareData  _actionConditionData = null;
 }
 
 public struct FlipState
@@ -87,6 +96,24 @@ public class AnimationPlayer
     {
         
     }
+
+    public void processMultiSelectAnimation(ActionGraph actionGraph)
+    {
+        if(_currentAnimationPlayData._multiSelectAnimationDataCount == 0)
+            return;
+
+        for(int i = 0; i < _currentAnimationPlayData._multiSelectAnimationDataCount; ++i)
+        {
+            if(actionGraph.processActionCondition(_currentAnimationPlayData._multiSelectAnimationData[i]._actionConditionData) == true)
+            {
+                _currentAnimationSprites = ResourceContainerEx.Instance().GetSpriteAll(_currentAnimationPlayData._multiSelectAnimationData[i]._path);
+                return;
+            }
+        }
+
+        _currentAnimationSprites = ResourceContainerEx.Instance().GetSpriteAll(_currentAnimationPlayData._path);
+    }
+    
 
     public void processFrameEventContinue()
     {

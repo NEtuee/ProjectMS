@@ -38,6 +38,7 @@ public class ActionGraph
     public void updateAnimation(float deltaTime, GameEntityBase targetEntity)
     {
         bool isEnd = _animationPlayer.progress(deltaTime, targetEntity);
+        _animationPlayer.processMultiSelectAnimation(this);
         setActionConditionData_Bool(ConditionNodeUpdateType.Action_AnimationEnd,isEnd);
     }
 
@@ -139,7 +140,11 @@ public class ActionGraph
     public bool processActionBranch(ActionGraphBranchData branchData)
     {
         ActionGraphConditionCompareData compareData = _actionGraphBaseData._conditionCompareData[branchData._conditionCompareDataIndex];
+        return processActionCondition(compareData);
+    }
 
+    public bool processActionCondition(ActionGraphConditionCompareData compareData)
+    {
         if(compareData._conditionNodeDataCount == 0)
             return true;
 

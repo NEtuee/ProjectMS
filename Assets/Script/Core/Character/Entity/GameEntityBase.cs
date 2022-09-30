@@ -9,6 +9,7 @@ public class GameEntityBase : SequencerObjectBase
     public string               statusInfoName = "CommonPlayerStatus";
 
     public DebugTextManager     debugTextManager;
+    public bool                 _debugEnable = false;
 
     private SpriteRenderer      _spriteRenderer;
     private GameObject          _spriteObject;
@@ -107,8 +108,12 @@ public class GameEntityBase : SequencerObjectBase
             _spriteRenderer.flipY = _flipState.yFlip;
         }
 
-        debugTextManager.updateDebugText("Action","Action: " + getCurrentActionName());
-        debugTextManager.updateDebugText("Defence","Defence: " + getDefenceType());
+        if(_debugEnable == true)
+        {
+            debugTextManager.updateDebugText("Action","Action: " + getCurrentActionName());
+            debugTextManager.updateDebugText("Defence","Defence: " + getDefenceType());
+        }
+    
 
         rotationUpdate();
 
@@ -123,9 +128,15 @@ public class GameEntityBase : SequencerObjectBase
         _collisionInfo.drawCollosionArea(_debugColor);
         _collisionInfo.drawBoundBox(_debugColor);
 
-        GizmoHelper.instance.drawLine(transform.position, transform.position + _direction * 0.5f,Color.magenta);
-
-        debugTextManager.updatePosition(new Vector3(0f, _collisionInfo.getBoundBox().getBottom() - transform.position.y, 0f));
+        if(getDefenceAngle() != 0f)
+        {
+            GizmoHelper.instance.drawLine(transform.position, transform.position + _direction * 0.5f,Color.magenta);
+        }
+        
+        if(_debugEnable == true)
+        {
+            debugTextManager.updatePosition(new Vector3(0f, _collisionInfo.getBoundBox().getBottom() - transform.position.y, 0f));
+        }
 
         _debugColor = Color.red;
     }
@@ -135,8 +146,11 @@ public class GameEntityBase : SequencerObjectBase
         base.afterProgress(deltaTime);
         resetState();
 
-        _statusInfo.updateDebugTextXXX(debugTextManager);
-
+        if(_debugEnable == true)
+        {
+            _statusInfo.updateDebugTextXXX(debugTextManager);
+        }
+        
         CollisionManager.Instance().collisionRequest(_collisionInfo,this,collisionTest);
     }
 

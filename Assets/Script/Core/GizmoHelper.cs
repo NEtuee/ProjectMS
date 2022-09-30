@@ -1,6 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class GizmoHelper : MonoBehaviour
 {
@@ -81,6 +87,9 @@ public class GizmoHelper : MonoBehaviour
 
     public void drawCircle(Vector3 center, float radius, int accuracy, Color color, float time = 0f)
     {
+        if(AreGizmosVisible() == false)
+            return;
+
         GizmoCircleData circleData = new GizmoCircleData();
         circleData._center = center;
         circleData._radius = radius;
@@ -93,6 +102,9 @@ public class GizmoHelper : MonoBehaviour
 
     public void drawPolygon(Vector3[] verticies, Color color, float time = 0f)
     {
+        if(AreGizmosVisible() == false)
+            return;
+            
         if(verticies.Length < 3)
         {
             DebugUtil.assert(false,"is not polygon");
@@ -109,6 +121,9 @@ public class GizmoHelper : MonoBehaviour
 
     public void drawArc(Vector3 start, float radius, float angle, Vector3 direction, Color color, float time = 0f)
     {
+        if(AreGizmosVisible() == false)
+            return;
+            
         GizmoArcData arcData = new GizmoArcData();
         arcData._angle = angle;
         arcData._color = color;
@@ -122,6 +137,9 @@ public class GizmoHelper : MonoBehaviour
 
     public void drawLine(Vector3 start, Vector3 end, Color color, float time = 0f)
     {
+        if(AreGizmosVisible() == false)
+            return;
+            
         GizmoLineData lineData = new GizmoLineData();
         lineData._start = start;
         lineData._end = end;
@@ -250,5 +268,19 @@ public class GizmoHelper : MonoBehaviour
         drawLine();
         drawPolygon();
         drawArc();
+    }
+
+    bool AreGizmosVisible()
+    {
+        Assembly asm = Assembly.GetAssembly(typeof(UnityEditor.Editor));
+        Type type = asm.GetType("UnityEditor.GameView");
+        if (type != null)
+        {
+            EditorWindow window = EditorWindow.GetWindow(type);
+            FieldInfo gizmosField = type.GetField("m_Gizmos", BindingFlags.NonPublic | BindingFlags.Instance);
+            if(gizmosField != null)
+                return (bool)gizmosField.GetValue(window);
+        }
+        return false;
     }
 }
