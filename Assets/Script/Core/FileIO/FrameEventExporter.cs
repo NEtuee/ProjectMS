@@ -47,6 +47,8 @@ public static class FrameEventLoader
         for(int i = 0; i < attributes.Count; ++i)
         {
             string targetName = attributes[i].Name;
+            attributes[i].Value = ActionGraphLoader.getGlobalVariable(attributes[i].Value);
+            
             if(targetName == "StartFrame")
             {
                 outFrameEvent._startFrame = float.Parse(attributes[i].Value);
