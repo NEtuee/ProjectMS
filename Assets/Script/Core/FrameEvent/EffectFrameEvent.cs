@@ -8,8 +8,6 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
 
     public string _effectPath = "";
 
-    private float _aniStartFrame = 0f;
-    private float _aniEndFrame = 1f;
     private float _framePerSecond = 1f;
 
     private Vector3 _spawnOffset = Vector3.zero;

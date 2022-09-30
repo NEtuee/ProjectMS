@@ -20,8 +20,6 @@ public class EffectItem
 
     private SpriteRenderer          _spriteRenderer;
 
-    private bool                    _isActive = false;
-
     public void createItem()
     {
         GameObject gameObject = new GameObject("Effect");
