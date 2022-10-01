@@ -235,6 +235,10 @@ public static class ActionGraphLoader
                     nodeData._applyBuffList[i] = int.Parse(buffList[i]);
                 }
             }
+            else if(targetName == "NormalizedSpeed")
+            {
+                nodeData._normalizedSpeed = bool.Parse(targetValue);
+            }
             else
             {
                 DebugUtil.assert(false,"invalid attribute type !!! : {0}", targetName);

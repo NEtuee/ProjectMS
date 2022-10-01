@@ -42,6 +42,7 @@ public class ActionGraphNodeData
 
     public float                        _defenceAngle = 0f;
     public float                        _moveScale = 1f;
+    public bool                         _normalizedSpeed = false;
 
     public bool                         _isActionSelection = false;
 

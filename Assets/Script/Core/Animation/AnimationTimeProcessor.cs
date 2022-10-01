@@ -113,6 +113,8 @@ public class AnimationTimeProcessor
         return _currentAnimationTime;
     }
 
+    public float getAnimationDuration() {return _animationTime;}
+
     public float getAnimationTotalPlayTime()
     {
         return _animationTotalPlayTime;

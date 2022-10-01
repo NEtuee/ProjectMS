@@ -441,7 +441,13 @@ public class ActionGraph
     public bool isActionLoop() {return _currentActionNodeIndex == _prevActionNodeIndex;}
     public int[] getDefaultBuffList() {return _actionGraphBaseData._defaultBuffList;}
     public int[] getCurrentBuffList() {return getCurrentAction()._applyBuffList;}
-    public float getCurrentMoveScale() {return getCurrentAction()._moveScale;}
+    public float getCurrentMoveScale() 
+    {
+        if(getCurrentAction()._normalizedSpeed == false)
+            return getCurrentAction()._moveScale;
+        else
+            return getCurrentAction()._moveScale * _animationPlayer.getCurrentAnimationDuration();
+    }
     public float getCurrentDefenceAngle() {return getCurrentAction()._defenceAngle;}
     public DefenceType getCurrentDefenceType() {return getCurrentAction()._defenceType;}
     public RotationType getCurrentRotationType() {return getCurrentAction()._rotationType;}
