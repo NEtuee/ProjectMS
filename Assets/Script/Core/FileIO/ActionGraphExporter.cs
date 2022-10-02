@@ -465,12 +465,27 @@ public static class ActionGraphLoader
 
             if(targetName == "Condition")
             {
+                if(targetValue == "")
+                    continue;
+
                 ActionGraphConditionCompareData conditionData = ReadConditionCompareData(targetValue);
                 if(conditionData == null)
                     return null;
 
                 branchData._conditionCompareDataIndex = compareDataList.Count;
                 compareDataList.Add(conditionData);
+            }
+            else if(targetName == "Key")
+            {
+                if(targetValue == "")
+                    continue;
+                    
+                ActionGraphConditionCompareData keyConditionData = ReadConditionCompareData(targetValue);
+                if(keyConditionData == null)
+                    return null;
+
+                branchData._keyConditionCompareDataIndex = compareDataList.Count;
+                compareDataList.Add(keyConditionData);
             }
             else if(targetName == "Action")
             {
@@ -583,6 +598,10 @@ public static class ActionGraphLoader
         if(nodeData != null)
             return nodeData;
 
+        nodeData = isKey(symbol);
+        if(nodeData != null)
+            return nodeData;
+
         nodeData = new ActionGraphConditionNodeData();
     
         if(ConditionNodeInfoPreset._nodePreset.ContainsKey(symbol) == false)
@@ -603,6 +622,17 @@ public static class ActionGraphLoader
         ActionGraphConditionNodeData_Status item = new ActionGraphConditionNodeData_Status();
         item._symbolName = "Status";
         item._targetStatus = symbol.Replace("getStat_","");
+        return item;
+    }
+
+    private static ActionGraphConditionNodeData_Key isKey(string symbol)
+    {
+        if(symbol.Contains("getKey_") == false)
+            return null;
+
+        ActionGraphConditionNodeData_Key item = new ActionGraphConditionNodeData_Key();
+        item._symbolName = "Key";
+        item._targetKeyName = symbol.Replace("getKey_","");
         return item;
     }
 

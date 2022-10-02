@@ -47,7 +47,8 @@ public class MasterManager : MessageHub<ManagerBase>
     {
         float deltaTime = Time.deltaTime;
         GlobalTimer.Instance().updateGlobalTime(deltaTime);
-        
+        ActionKeyInputManager.Instance().progress(deltaTime);
+
         ManagersUpdate(deltaTime);
         ManagersAfterUpdate(deltaTime);
         ManagersSendMessageProcessing();

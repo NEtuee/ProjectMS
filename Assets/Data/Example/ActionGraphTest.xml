@@ -9,7 +9,7 @@
     </BranchSet>
 
     <BranchSet Name="CommonMoveBranchSet">
-        <Branch Condition="ActionDash == true &#38;&#38; (getStat_Stamina >= 20.0)" Action="DashStart"/>
+        <Branch Key="getKey_Dash" Condition="(getStat_Stamina >= 20.0)" Action="DashStart"/>
         <Branch Condition="ActionTest == false" Action="Idle"/>
     </BranchSet>
 

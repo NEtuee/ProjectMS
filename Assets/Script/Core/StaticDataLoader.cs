@@ -6,11 +6,13 @@ public class StaticDataLoader : MonoBehaviour
 {
     public string statusInfoPath = "Assets\\Data\\Example\\StatusInfo.xml";
     public string buffInfoPath = "Assets\\Data\\Example\\BuffInfo.xml";
-
+    public string keyPresetPath = "Assets\\Data\\Example\\ActionKeyPreset.xml";
     
     void Awake()
     {
         StatusInfo.setStatusInfoDataDictionary(StatusInfoLoader.readFromXML(statusInfoPath));
         StatusInfo.setBuffDataDictionary(BuffDataLoader.readFromXML(buffInfoPath));
+        ActionKeyInputManager.Instance().setPresetData(ActionKeyPresetDataLoader.readFromXML(keyPresetPath));
+
     }
 }

@@ -49,11 +49,14 @@ public class ActionGraph
 
     private void createCoditionNodeDataAll()
     {
-        DebugUtil.assert((int)ConditionNodeUpdateType.Count == 21, "check this");
+        DebugUtil.assert((int)ConditionNodeUpdateType.Count == 22, "check this");
 
         foreach(var item in ConditionNodeInfoPreset._nodePreset.Values)
         {
-            if(item._updateType == ConditionNodeUpdateType.Literal || item._updateType == ConditionNodeUpdateType.ConditionResult || item._updateType == ConditionNodeUpdateType.Status)
+            if(item._updateType == ConditionNodeUpdateType.Literal || 
+                item._updateType == ConditionNodeUpdateType.ConditionResult || 
+                item._updateType == ConditionNodeUpdateType.Status ||
+                item._updateType == ConditionNodeUpdateType.Key)
                 continue;
 
             createConditionNodeData(item);
@@ -139,8 +142,22 @@ public class ActionGraph
 
     public bool processActionBranch(ActionGraphBranchData branchData)
     {
-        ActionGraphConditionCompareData compareData = _actionGraphBaseData._conditionCompareData[branchData._conditionCompareDataIndex];
-        return processActionCondition(compareData);
+        bool keyCondition = true;
+        if(branchData._keyConditionCompareDataIndex != -1)
+        {
+            ActionGraphConditionCompareData keyCompareData = _actionGraphBaseData._conditionCompareData[branchData._keyConditionCompareDataIndex];
+            keyCondition = processActionCondition(keyCompareData);
+        }
+
+        bool condition = true;
+        if(branchData._conditionCompareDataIndex != -1)
+        {
+            ActionGraphConditionCompareData compareData = _actionGraphBaseData._conditionCompareData[branchData._conditionCompareDataIndex];
+            condition = processActionCondition(compareData);
+        }
+
+        return keyCondition && condition;
+
     }
 
     public bool processActionCondition(ActionGraphConditionCompareData compareData)
@@ -420,6 +437,8 @@ public class ActionGraph
             return _conditionResultList[((ActionGraphConditionNodeData_ConditionResult)nodeData).getResultIndex()];
         else if(updateType == ConditionNodeUpdateType.Status)
             return _statusConditionData[((ActionGraphConditionNodeData_Status)nodeData)._targetStatus];
+        else if(updateType == ConditionNodeUpdateType.Key)
+            return ActionKeyInputManager.Instance().actionKeyCheck(((ActionGraphConditionNodeData_Key)nodeData)._targetKeyName);
 
         if(_actionConditionNodeData.ContainsKey(updateType) == false)
         {

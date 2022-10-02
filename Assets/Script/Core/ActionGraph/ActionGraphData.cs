@@ -65,7 +65,8 @@ public class ActionGraphBranchData
 {
     public int      _branchActionIndex;
 
-    public int      _conditionCompareDataIndex;
+    public int      _conditionCompareDataIndex = -1;
+    public int      _keyConditionCompareDataIndex = -1;
 }
 
 public enum ConditionCompareType
@@ -138,6 +139,7 @@ public enum ConditionNodeUpdateType
     Entity_Dead,
 
     Status,
+    Key,
 
     Count,
 }
@@ -195,6 +197,7 @@ public static class ConditionNodeInfoPreset
         {"Dead",new ConditionNodeInfo(ConditionNodeUpdateType.Entity_Dead, ConditionNodeType.Bool)},
 
         {"Status",new ConditionNodeInfo(ConditionNodeUpdateType.Status, ConditionNodeType.Float)},
+        {"Key",new ConditionNodeInfo(ConditionNodeUpdateType.Key, ConditionNodeType.Bool)},
         
     };
 
@@ -209,6 +212,19 @@ public static class ConditionNodeInfoPreset
 public class ActionGraphConditionNodeData
 {
     public string _symbolName;
+}
+
+public class ActionGraphConditionNodeData_Key : ActionGraphConditionNodeData
+{
+    public string _targetKeyName = "";
+
+    public ActionGraphConditionNodeData_Key()
+    {
+        
+    }
+    
+    public string getKeyName() {return _targetKeyName;}
+    
 }
 
 public class ActionGraphConditionNodeData_Status : ActionGraphConditionNodeData
