@@ -3,8 +3,8 @@
 <ActionGraph Name="Test" DefaultAction="Idle" DefaultFramePerSecond="4" DefaultBuff="4 5 8">
 
     <BranchSet Name="CommonBattleBranchSet">
-        <Branch Condition="InputGuard == true" Action="Guard"/>
-        <Branch Condition="InputAttackCharge == true" Action="AttackCharge"/>
+        <Branch Key="getKey_Guard" Condition="" Action="Guard"/>
+        <Branch Key="getKey_AttackCharge" Condition="" Action="AttackCharge"/>
         <Branch Condition="(getStat_Blood >= 20.0) &#38;&#38; InputAttackBlood == true" Action="BloodSpreadPrepare"/>
     </BranchSet>
 
@@ -50,7 +50,7 @@
         <Animation Path="Resources/Sprites/DummyPlayer/AttackCharge/" StartFrame="0" EndFrame="1" FramePerSecond="1">
         </Animation>
 
-        <Branch Condition="InputAttackCharge == false" Action="AttackPrepare"/>
+        <Branch Key="getKey_AttackCharge == false" Condition="" Action="AttackPrepare"/>
         <Branch Condition="End == true" Action="AttackCharge"/>
     </AttackCharge>
 
@@ -177,7 +177,7 @@
         <Animation Path="Resources/Sprites/DummyPlayer/Guard/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
         </Animation>
 
-        <Branch Condition="InputGuard == false" Action="CommonMoveSelection"/>
+        <Branch Key="getKey_Guard == false" Condition="" Action="CommonMoveSelection"/>
         <Branch Condition="End == true" Action="Guard"/>
     </Guard>
 

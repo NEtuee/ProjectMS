@@ -246,6 +246,9 @@ public class ControllerEx : Singleton<ControllerEx>
 
     private float _axisPushStr = 0.4f;
     private float _deviceCheckTimer = 1f;
+
+    private Vector3 _joystickRAxis = Vector3.right;
+
     private static readonly KeyCode[] keyCodes = System.Enum.GetValues(typeof(KeyCode))
                                                  .Cast<KeyCode>()
                                                  .Where(k => ((int)k < (int)KeyCode.Mouse2))
@@ -915,7 +918,26 @@ public class ControllerEx : Singleton<ControllerEx>
         if(MathEx.abs(axis.magnitude) >= _axisPushStr)
             return axis.normalized;
         else
-            return centerAxis;
+            return Vector2.zero;
+    }
+
+    public Vector3 getJoystickAxisR(Vector3 position)
+    {
+        Vector3 axis = Vector2.zero;
+        if(controller == ControllerType.XboxController)
+            axis = new Vector3(Input.GetAxis("XBoxRightHorizontal"),Input.GetAxis("XBoxRightVertical"));
+        else if(controller == ControllerType.PSController)
+            axis = new Vector3(Input.GetAxis("PSRightHorizontal"),Input.GetAxis("PSRightVertical"));
+        else if(controller == ControllerType.KeyboardMouse)
+            axis = (MathEx.deleteZ(Camera.main.ScreenToWorldPoint(Input.mousePosition)) - position).normalized;
+
+        if(MathEx.abs(axis.magnitude) >= _axisPushStr)
+        {
+            _joystickRAxis = axis.normalized;
+            return axis.normalized;
+        }
+        else
+            return _joystickRAxis;
     }
 
     public void SetMainViewCamera(Camera cam)

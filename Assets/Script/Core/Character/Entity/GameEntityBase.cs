@@ -128,9 +128,11 @@ public class GameEntityBase : SequencerObjectBase
         _collisionInfo.drawCollosionArea(_debugColor);
         _collisionInfo.drawBoundBox(_debugColor);
 
-        if(getDefenceAngle() != 0f)
+        if(_debugEnable)
         {
             GizmoHelper.instance.drawLine(transform.position, transform.position + _direction * 0.5f,Color.magenta);
+
+            GizmoHelper.instance.drawLine(transform.position, transform.position + ControllerEx.Instance().getJoystickAxisR(transform.position) * 0.5f,Color.cyan);
         }
         
         if(_debugEnable == true)
@@ -172,10 +174,10 @@ public class GameEntityBase : SequencerObjectBase
 
     public void updateConditionData()
     {
-        Vector3 input = new Vector3(Input.GetAxis("Horizontal"),Input.GetAxis("Vertical"),0f).normalized;
-        Vector3 mousePosition = (MathEx.deleteZ(Camera.main.ScreenToWorldPoint(Input.mousePosition)) - transform.position).normalized;
+        Vector3 input = ControllerEx.Instance().GetJoystickAxis();
+        Vector3 inputDirection = ControllerEx.Instance().getJoystickAxisR(transform.position);
 
-        float angleBetweenStick = MathEx.clampDegree(Vector3.SignedAngle(input, mousePosition,Vector3.forward));
+        float angleBetweenStick = MathEx.clampDegree(Vector3.SignedAngle(input, inputDirection,Vector3.forward));
         float angleDirection = MathEx.clampDegree(Vector3.SignedAngle(Vector3.right, _direction, Vector3.forward));
 
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Action_Test, MathEx.equals(input.sqrMagnitude,0f,float.Epsilon) == false);
@@ -229,7 +231,7 @@ public class GameEntityBase : SequencerObjectBase
 
                 break;
             case FlipType.MousePoint:
-                Vector3 direction = MathEx.deleteZ(Camera.main.ScreenToWorldPoint(Input.mousePosition)) - transform.position;
+                Vector3 direction = ControllerEx.Instance().getJoystickAxisR(transform.position);
                 if(MathEx.abs(direction.x) != 0f && currentFlipState.xFlip == true)
                     flipState.xFlip = direction.x < 0;
                 if(MathEx.abs(direction.y) != 0f && currentFlipState.yFlip == true)
@@ -287,7 +289,7 @@ public class GameEntityBase : SequencerObjectBase
             case DirectionType.Keep:
                 break;
             case DirectionType.MoveInput:
-                Vector3 input = new Vector3(Input.GetAxis("Horizontal"),Input.GetAxis("Vertical"),0f);
+                Vector3 input = ControllerEx.Instance().GetJoystickAxis();
                 if(MathEx.equals(input.sqrMagnitude,0f,float.Epsilon) == false )
                 {
                     _direction = input;
@@ -300,7 +302,7 @@ public class GameEntityBase : SequencerObjectBase
 
                 break;
             case DirectionType.MousePoint:
-                _direction = (MathEx.deleteZ(Camera.main.ScreenToWorldPoint(Input.mousePosition)) - transform.position).normalized;
+                _direction = ControllerEx.Instance().getJoystickAxisR(transform.position);
                 break;
             case DirectionType.AttackedPoint:
                 _direction = (_recentlyAttackPoint - transform.position).normalized;
@@ -326,7 +328,7 @@ public class GameEntityBase : SequencerObjectBase
                 _spriteRotation = Quaternion.FromToRotation(Vector3.right,_direction);
                 break;
             case RotationType.MousePoint:
-                _spriteRotation = Quaternion.FromToRotation(Vector3.right,(MathEx.deleteZ(Camera.main.ScreenToWorldPoint(Input.mousePosition)) - transform.position).normalized);
+                _spriteRotation = Quaternion.FromToRotation(Vector3.right, ControllerEx.Instance().getJoystickAxisR(transform.position));
                 break;
             case RotationType.Keep:
                 break;
