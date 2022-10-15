@@ -11,7 +11,7 @@ public static class ActionGraphLoader
     public static ActionGraphBaseData readFromXML(string path)
     {
         XmlDocument xmlDoc = new XmlDocument();
-       // try
+        try
         {
             XmlReaderSettings readerSettings = new XmlReaderSettings();
             readerSettings.IgnoreComments = true;
@@ -20,11 +20,11 @@ public static class ActionGraphLoader
                 xmlDoc.Load(reader);
             }
         }
-        // catch(System.Exception ex)
-        // {
-        //     DebugUtil.assert(false,"xml load exception : {0}",ex.Message);
-        //     return null;
-        // }
+        catch(System.Exception ex)
+        {
+            DebugUtil.assert(false,"xml load exception : {0}",ex.Message);
+            return null;
+        }
         
         if(xmlDoc.HasChildNodes == false)
         {
@@ -140,7 +140,7 @@ public static class ActionGraphLoader
         return value;
     }
 
-    private static void readBranchSet(XmlNode branchSetParent, ref Dictionary<string, XmlNodeList> targetDic)
+    public static void readBranchSet(XmlNode branchSetParent, ref Dictionary<string, XmlNodeList> targetDic)
     {
         string branchSetName = "";
         XmlAttributeCollection branchSetAttr = branchSetParent.Attributes;
@@ -259,7 +259,7 @@ public static class ActionGraphLoader
             }
             else if(nodeList[i].Name == "Branch")
             {
-                ActionGraphBranchData branchData = ReadActionBranch(nodeList[i],nodeData,ref actionCompareDic,ref compareDataList);
+                ActionGraphBranchData branchData = ReadActionBranch(nodeList[i],ref actionCompareDic,ref compareDataList);
                 if(branchData == null)
                 {
                     DebugUtil.assert(false,"invalid branch data");
@@ -296,7 +296,7 @@ public static class ActionGraphLoader
                         return null;
                     }
 
-                    ActionGraphBranchData branchData = ReadActionBranch(branchSetNodeList[branchSetNodeListIndex],nodeData,ref actionCompareDic,ref compareDataList);
+                    ActionGraphBranchData branchData = ReadActionBranch(branchSetNodeList[branchSetNodeListIndex],ref actionCompareDic,ref compareDataList);
                     if(branchData == null)
                     {
                         DebugUtil.assert(false,"invalid branch data");
@@ -454,7 +454,7 @@ public static class ActionGraphLoader
         return animationData;
     }
 
-    private static ActionGraphBranchData ReadActionBranch(XmlNode node, ActionGraphNodeData data, ref Dictionary<ActionGraphBranchData, string> actionCompareDic,  ref List<ActionGraphConditionCompareData> compareDataList)
+    public static ActionGraphBranchData ReadActionBranch(XmlNode node, ref Dictionary<ActionGraphBranchData, string> actionCompareDic,  ref List<ActionGraphConditionCompareData> compareDataList)
     {
         ActionGraphBranchData branchData = new ActionGraphBranchData();
         XmlAttributeCollection actionAttributes = node.Attributes;
