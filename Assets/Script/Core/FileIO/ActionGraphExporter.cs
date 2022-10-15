@@ -11,20 +11,20 @@ public static class ActionGraphLoader
     public static ActionGraphBaseData readFromXML(string path)
     {
         XmlDocument xmlDoc = new XmlDocument();
-        try
+       // try
         {
             XmlReaderSettings readerSettings = new XmlReaderSettings();
             readerSettings.IgnoreComments = true;
-            using (XmlReader reader = XmlReader.Create(path,readerSettings))
+            using (XmlReader reader = XmlReader.Create(XMLScriptConverter.convertXMLScriptSymbol(path),readerSettings))
             {
                 xmlDoc.Load(reader);
             }
         }
-        catch(System.Exception ex)
-        {
-            DebugUtil.assert(false,"xml load exception : {0}",ex.Message);
-            return null;
-        }
+        // catch(System.Exception ex)
+        // {
+        //     DebugUtil.assert(false,"xml load exception : {0}",ex.Message);
+        //     return null;
+        // }
         
         if(xmlDoc.HasChildNodes == false)
         {
@@ -500,12 +500,13 @@ public static class ActionGraphLoader
     public static ActionGraphConditionCompareData ReadConditionCompareData(string formula)
     {
         formula = formula.Replace(" ","");
-        int end;
         List<ActionGraphConditionNodeData> symbolList = new List<ActionGraphConditionNodeData>();
         List<ConditionCompareType> compareTypeList = new List<ConditionCompareType>();
         
-        int resultIndex = 0;
-        DebugUtil.assert(ReadConditionFormula(formula,0, ref resultIndex, out end,symbolList,compareTypeList) == true,"Tlqkfsusdk");
+        //int end;
+        //int resultIndex = 0;
+        //DebugUtil.assert(ReadConditionFormula(formula,0, ref resultIndex, out end,symbolList,compareTypeList) == true,"Tlqkfsusdk");
+        DebugUtil.assert(readConditionFormula(formula,ref symbolList,ref compareTypeList) == true,"Tlqkfsusdk");
 
         ActionGraphConditionCompareData compareData = new ActionGraphConditionCompareData();
         compareData._compareTypeArray = compareTypeList.ToArray();
@@ -516,44 +517,59 @@ public static class ActionGraphLoader
         return compareData;
     }
 
-    private static bool ReadConditionFormula(string formula, int start, ref int resultIndex, out int end, in List<ActionGraphConditionNodeData> symbolList, in List<ConditionCompareType> compareTypeList )
+    private static bool readConditionFormula(string formula, ref List<ActionGraphConditionNodeData> symbolList, ref List<ConditionCompareType> compareTypeList)
     {
-        end = -1;
+        string calcFormula = formula;
+        calcFormula = calcFormula.Insert(0,"(");
+        calcFormula += ")";
 
-        if(formula.Length <= start || formula[start] == ')')
+        int result = 0;
+        int finalIndex = readFormulaBracket(ref calcFormula,ref result,0,ref symbolList,ref compareTypeList);
+
+        return finalIndex != -1;
+    }
+
+    private static int readFormulaBracket(ref string formula, ref int resultIndex, int startOffset, ref List<ActionGraphConditionNodeData> symbolList, ref List<ConditionCompareType> compareTypeList )
+    {
+        if(formula.Length <= startOffset || formula[startOffset] == ')')
         {
             DebugUtil.assert(false, "condition formular is invalid {0}", formula);
-            return false;
+            return -1;
         }
 
-        string calcFormula = formula.Substring(start);
-        while(calcFormula.Contains("(") == true)
+        int stringLength = formula.Length;
+        int endOffset = -1;
+        for(int i = startOffset + 1; i < stringLength; ++i)
         {
-            int brancketIndex = calcFormula.IndexOf("(",0);
+            if(formula[i] == '(')
+            {
+                int length = readFormulaBracket(ref formula, ref resultIndex, i, ref symbolList, ref compareTypeList);
+                if(length == -1)
+                    return -1;
 
-            if(calcFormula.Contains(")") && calcFormula.IndexOf(")") < brancketIndex)
+                formula = formula.Remove(i, length + 1);
+                formula = formula.Insert(i, "RESULT_" + resultIndex++);
+            }
+            
+            if(formula[i] == ')')
+            {
+                endOffset = i;
                 break;
-
-            int brancketEndIndex = -1;
-            bool result = ReadConditionFormula(calcFormula, brancketIndex + 1, ref resultIndex, out brancketEndIndex, in symbolList, in compareTypeList);
-
-            if(brancketEndIndex == -1 || result == false)
-                return false;
-                
-            calcFormula = calcFormula.Remove(brancketIndex, brancketEndIndex - brancketIndex + 1);
-            calcFormula = calcFormula.Insert(brancketIndex, "RESULT_" + resultIndex++);
-
+            }
         }
 
-        if(calcFormula.Contains(")"))
+        if(endOffset == -1)
         {
-            end = formula.IndexOf(")");
-            calcFormula = calcFormula.Substring(0,calcFormula.IndexOf(")"));
+            DebugUtil.assert(false, "condition formular is invalid {0}", formula);
+            return -1;
         }
+
+        int finalLength = endOffset - startOffset;
+        string calcFormula = formula.Substring(startOffset + 1,finalLength - 1);
 
         SplitToMark(calcFormula, ref resultIndex, in symbolList, in compareTypeList);
 
-        return true;
+        return finalLength;
     }
 
     private static void SplitToMark(string formula, ref int resultIndex, in List<ActionGraphConditionNodeData> symbolList, in List<ConditionCompareType> compareTypeList)

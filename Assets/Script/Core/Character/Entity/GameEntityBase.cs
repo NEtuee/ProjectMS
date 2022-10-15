@@ -125,8 +125,8 @@ public class GameEntityBase : SequencerObjectBase
 
         _collisionInfo.updateCollisionInfo(transform.position,getDirection());
 
-        _collisionInfo.drawCollosionArea(_debugColor);
-        _collisionInfo.drawBoundBox(_debugColor);
+        // _collisionInfo.drawCollosionArea(_debugColor);
+        // _collisionInfo.drawBoundBox(_debugColor);
 
         if(_debugEnable)
         {

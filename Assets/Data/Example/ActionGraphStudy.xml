@@ -19,22 +19,22 @@
 
     <MoveSelection IsActionSelection="true">
         
-        <Branch Condition="(AngleDirection &gt;= 45.0) &#38;&#38; (AngleDirection &lt; 135.0)" Action="MoveUp"/>
-        <Branch Condition="(AngleDirection &gt;= 225.0) &#38;&#38; (AngleDirection &lt; 315.0)" Action="MoveDown"/>
+        <Branch Condition="(AngleDirection >= 45.0) && (AngleDirection < 135.0)" Action="MoveUp"/>
+        <Branch Condition="(AngleDirection >= 225.0) && (AngleDirection < 315.0)" Action="MoveDown"/>
 
-        <Branch Condition="(AngleDirection &lt; 45.0) || (AngleDirection &gt;= 315.0) &#38;&#38; (IsXFlip == false)" Action="MoveRightForward"/>
-        <Branch Condition="(AngleDirection &gt;= 135.0) &#38;&#38; (AngleDirection &lt; 225.0) &#38;&#38; (IsXFlip == false)" Action="MoveRightBackward"/>
+        <Branch Condition="(AngleDirection < 45.0) || (AngleDirection >= 315.0) && (IsXFlip == false)" Action="MoveRightForward"/>
+        <Branch Condition="(AngleDirection >= 135.0) && (AngleDirection < 225.0) && (IsXFlip == false)" Action="MoveRightBackward"/>
         
-        <Branch Condition="(AngleDirection &gt;= 135.0) &#38;&#38; (AngleDirection &lt; 225.0) &#38;&#38; (IsXFlip == true)" Action="MoveLeftForward"/>
-        <Branch Condition="(AngleDirection &lt; 45.0) || (AngleDirection &gt;= 315.0) &#38;&#38; (IsXFlip == true)" Action="MoveLeftBackward"/>
+        <Branch Condition="(AngleDirection >= 135.0) && (AngleDirection < 225.0) && (IsXFlip == true)" Action="MoveLeftForward"/>
+        <Branch Condition="(AngleDirection < 45.0) || (AngleDirection >= 315.0) && (IsXFlip == true)" Action="MoveLeftBackward"/>
         
     </MoveSelection>
 
     <AttackSelection IsActionSelection="true">
-        <Branch Condition="(AngleDirection &lt; 45.0) || (AngleDirection &gt;= 315.0)" Action="Attack"/>
-        <Branch Condition="(AngleDirection &gt;= 45.0) &#38;&#38; (AngleDirection &lt; 135.0)" Action="AttackUp"/>
-        <Branch Condition="(AngleDirection &gt;= 135.0) &#38;&#38; (AngleDirection &lt; 225.0)" Action="Attack"/>
-        <Branch Condition="(AngleDirection &gt;= 225.0) &#38;&#38; (AngleDirection &lt; 315.0)" Action="AttackDown"/>
+        <Branch Condition="(AngleDirection < 45.0) || (AngleDirection >= 315.0)" Action="Attack"/>
+        <Branch Condition="(AngleDirection >= 45.0) && (AngleDirection < 135.0)" Action="AttackUp"/>
+        <Branch Condition="(AngleDirection >= 135.0) && (AngleDirection < 225.0)" Action="Attack"/>
+        <Branch Condition="(AngleDirection >= 225.0) && (AngleDirection < 315.0)" Action="AttackDown"/>
     </AttackSelection>
 
 
@@ -58,7 +58,7 @@
         <UseBranchSet Name="CommonBattleBranchSet"/>
         <UseBranchSet Name="CommonMoveBranchSet"/>
 
-        <Branch Condition="(AngleDirection &gt;= 45.0) &#38;&#38; (AngleDirection &lt; 135.0) == false" Action="MoveSelection"/>
+        <Branch Condition="(AngleDirection >= 45.0) && (AngleDirection < 135.0) == false" Action="MoveSelection"/>
         <Branch Condition="End == true" Action="MoveUp"/>
     </MoveUp>
 
@@ -68,7 +68,7 @@
         <UseBranchSet Name="CommonBattleBranchSet"/>
         <UseBranchSet Name="CommonMoveBranchSet"/>
 
-        <Branch Condition="(AngleDirection &gt;= 225.0) &#38;&#38; (AngleDirection &lt; 315.0) == false" Action="MoveSelection"/>
+        <Branch Condition="(AngleDirection >= 225.0) && (AngleDirection < 315.0) == false" Action="MoveSelection"/>
         <Branch Condition="End == true" Action="MoveDown"/>
     </MoveDown>
 
@@ -82,7 +82,7 @@
         <UseBranchSet Name="CommonMoveBranchSet"/>
 
         <Branch Condition="IsXFlip == true" Action="MoveSelection"/>
-        <Branch Condition="(AngleDirection &lt; 45.0) || (AngleDirection &gt;= 315.0) == false" Action="MoveSelection"/>
+        <Branch Condition="(AngleDirection < 45.0) || (AngleDirection >= 315.0) == false" Action="MoveSelection"/>
         <Branch Condition="End == true" Action="MoveRightForward"/>
     </MoveRightForward>
 
@@ -93,7 +93,7 @@
         <UseBranchSet Name="CommonMoveBranchSet"/>
 
         <Branch Condition="IsXFlip == true" Action="MoveSelection"/>
-        <Branch Condition="(AngleDirection &gt;= 135.0) &#38;&#38; (AngleDirection &lt; 225.0) == false" Action="MoveSelection"/>
+        <Branch Condition="(AngleDirection >= 135.0) && (AngleDirection < 225.0) == false" Action="MoveSelection"/>
         <Branch Condition="End == true" Action="MoveRightBackward"/>
     </MoveRightBackward>
 
@@ -109,7 +109,7 @@
         <UseBranchSet Name="CommonMoveBranchSet"/>
 
         <Branch Condition="IsXFlip == false" Action="MoveSelection"/>
-        <Branch Condition="(AngleDirection &gt;= 135.0) &#38;&#38; (AngleDirection &lt; 225.0) == false" Action="MoveSelection"/>
+        <Branch Condition="(AngleDirection >= 135.0) && (AngleDirection < 225.0) == false" Action="MoveSelection"/>
         <Branch Condition="End == true" Action="MoveLeftForward"/>
     </MoveLeftForward>
 
@@ -120,7 +120,7 @@
         <UseBranchSet Name="CommonMoveBranchSet"/>
 
         <Branch Condition="IsXFlip == false" Action="MoveSelection"/>
-        <Branch Condition="(AngleDirection &lt; 45.0) || (AngleDirection &gt;= 315.0) == false" Action="MoveSelection"/>
+        <Branch Condition="(AngleDirection < 45.0) || (AngleDirection >= 315.0) == false" Action="MoveSelection"/>
         <Branch Condition="End == true" Action="MoveLeftBackward"/>
     </MoveLeftBackward>
 

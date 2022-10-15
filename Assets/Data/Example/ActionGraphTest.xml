@@ -5,7 +5,7 @@
     <BranchSet Name="CommonBattleBranchSet">
         <Branch Key="getKey_Guard" Condition="" Action="Guard"/>
         <Branch Key="getKey_AttackCharge" Condition="" Action="AttackCharge"/>
-        <Branch Condition="(getStat_Blood >= 20.0) &#38;&#38; InputAttackBlood == true" Action="BloodSpreadPrepare"/>
+        <Branch Condition="(getStat_Blood >= 20.0) && InputAttackBlood == true" Action="BloodSpreadPrepare"/>
     </BranchSet>
 
     <BranchSet Name="CommonMoveBranchSet">
@@ -31,12 +31,12 @@
 
     <MoveAll MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="MoveInput" FlipType="MousePoint" NormalizedSpeed="true">
         <Animation Path="Resources/Sprites/DummyPlayer/MoveForward/" StartFrame="0" EndFrame="5" FramePerSecond="12" XFlip="true">
-            <MultiSelectAnimation Path="Resources/Sprites/Player/moveUp/" Condition="(AngleDirection &gt;= 45.0) &#38;&#38; (AngleDirection &lt; 135.0)"/>
-            <MultiSelectAnimation Path="Resources/Sprites/Player/moveDown/" Condition="(AngleDirection &gt;= 225.0) &#38;&#38; (AngleDirection &lt; 315.0)"/>
-            <MultiSelectAnimation Path="Resources/Sprites/Player/moveBack/" Condition="(AngleDirection &gt;= 315.0) || (AngleDirection &lt; 45.0) &#38;&#38; (IsXFlip == true)"/>
-            <MultiSelectAnimation Path="Resources/Sprites/Player/moveFront/" Condition="(AngleDirection &gt;= 135.0) &#38;&#38; (AngleDirection &lt; 225.0) &#38;&#38; (IsXFlip == true)"/>
-            <MultiSelectAnimation Path="Resources/Sprites/Player/moveBack/" Condition="(AngleDirection &gt;= 135.0) &#38;&#38; (AngleDirection &lt; 225.0) &#38;&#38; (IsXFlip == false)"/>
-            <MultiSelectAnimation Path="Resources/Sprites/Player/moveFront/" Condition="(AngleDirection &gt;= 315.0) || (AngleDirection &lt; 45.0) &#38;&#38; (IsXFlip == false)"/>
+            <MultiSelectAnimation Path="Resources/Sprites/Player/moveUp/" Condition="(AngleDirection >= 45.0) && (AngleDirection < 135.0)"/>
+            <MultiSelectAnimation Path="Resources/Sprites/Player/moveDown/" Condition="(AngleDirection >= 225.0) && (AngleDirection < 315.0)"/>
+            <MultiSelectAnimation Path="Resources/Sprites/Player/moveBack/" Condition="(AngleDirection >= 315.0) || (AngleDirection < 45.0) && (IsXFlip == true)"/>
+            <MultiSelectAnimation Path="Resources/Sprites/Player/moveFront/" Condition="(AngleDirection >= 135.0) && (AngleDirection < 225.0) && (IsXFlip == true)"/>
+            <MultiSelectAnimation Path="Resources/Sprites/Player/moveBack/" Condition="(AngleDirection >= 135.0) && (AngleDirection < 225.0) && (IsXFlip == false)"/>
+            <MultiSelectAnimation Path="Resources/Sprites/Player/moveFront/" Condition="(AngleDirection >= 315.0) || (AngleDirection < 45.0) && (IsXFlip == false)"/>
         </Animation>
 
         <UseBranchSet Name="CommonMoveBranchSet"/>
@@ -59,8 +59,8 @@
         </Animation>
 
 
-        <Branch Condition="End == true &#38;&#38; (getStat_Charging >= 100.0)" Action="Attack_LV3"/>
-        <Branch Condition="End == true &#38;&#38; (getStat_Charging >= 50.0)" Action="Attack_LV2"/>
+        <Branch Condition="End == true && (getStat_Charging >= 100.0)" Action="Attack_LV3"/>
+        <Branch Condition="End == true && (getStat_Charging >= 50.0)" Action="Attack_LV2"/>
         <Branch Condition="End == true" Action="Attack_LV1"/>
 
     </AttackPrepare>
@@ -194,7 +194,7 @@
         <Animation Path="Resources/Sprites/DummyPlayer/Dash/" StartFrame="0" EndFrame="1" FramePerSecond="3" XFlip="true">
         </Animation>
 
-        <Branch Condition="End == true &#38;&#38; ActionTest == true" Action="MoveAll"/>
+        <Branch Condition="End == true && ActionTest == true" Action="MoveAll"/>
         <Branch Condition="End == true" Action="Idle"/>
     </Dash>
 
