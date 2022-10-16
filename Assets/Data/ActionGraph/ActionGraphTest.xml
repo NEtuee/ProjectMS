@@ -3,14 +3,14 @@
 <ActionGraph Name="Test" DefaultAction="Idle" DefaultFramePerSecond="4" DefaultBuff="4 5 8">
 
     <BranchSet Name="CommonBattleBranchSet">
-        <Branch Key="getKey_Guard" Condition="" Action="Guard"/>
-        <Branch Key="getKey_AttackCharge" Condition="" Action="AttackCharge"/>
-        <Branch Condition="(getStat_Blood >= 20.0) && InputAttackBlood == true" Action="BloodSpreadPrepare"/>
+        <Branch Key="getKey_Guard" Condition="" Execute="Guard"/>
+        <Branch Key="getKey_AttackCharge" Condition="" Execute="AttackCharge"/>
+        <Branch Condition="(getStat_Blood >= 20.0) && InputAttackBlood == true" Execute="BloodSpreadPrepare"/>
     </BranchSet>
 
     <BranchSet Name="CommonMoveBranchSet">
-        <Branch Key="getKey_Dash" Condition="(getStat_Stamina >= 20.0)" Action="DashStart"/>
-        <Branch Condition="ActionTest == false" Action="Idle"/>
+        <Branch Key="getKey_Dash" Condition="(getStat_Stamina >= 20.0)" Execute="DashStart"/>
+        <Branch Condition="ActionTest == false" Execute="Idle"/>
     </BranchSet>
 
     <Idle DirectionType="Keep" FlipType="MousePoint">
@@ -19,12 +19,12 @@
 
         <UseBranchSet Name="CommonBattleBranchSet"/>
 
-        <Branch Condition="ActionTest == true" Action="MoveAll"/>
-        <Branch Condition="End == true" Action="Idle"/>
+        <Branch Condition="ActionTest == true" Execute="MoveAll"/>
+        <Branch Condition="End == true" Execute="Idle"/>
     </Idle>
 
     <CommonMoveSelection IsActionSelection="true">
-        <Branch Condition="ActionTest == true" Action="MoveAll"/>
+        <Branch Condition="ActionTest == true" Execute="MoveAll"/>
         <UseBranchSet Name="CommonMoveBranchSet"/>
     </CommonMoveSelection>
 
@@ -42,7 +42,7 @@
         <UseBranchSet Name="CommonMoveBranchSet"/>
         <UseBranchSet Name="CommonBattleBranchSet"/>
 
-        <Branch Condition="End == true" Action="MoveAll"/>
+        <Branch Condition="End == true" Execute="MoveAll"/>
     </MoveAll>
 
 
@@ -50,8 +50,8 @@
         <Animation Path="Resources/Sprites/DummyPlayer/AttackCharge/" StartFrame="0" EndFrame="1" FramePerSecond="1">
         </Animation>
 
-        <Branch Key="getKey_AttackCharge == false" Condition="" Action="AttackPrepare"/>
-        <Branch Condition="End == true" Action="AttackCharge"/>
+        <Branch Key="getKey_AttackCharge == false" Condition="" Execute="AttackPrepare"/>
+        <Branch Condition="End == true" Execute="AttackCharge"/>
     </AttackCharge>
 
     <AttackPrepare MovementType="Empty" DirectionType="MousePoint" FlipType="Keep">
@@ -59,9 +59,9 @@
         </Animation>
 
 
-        <Branch Condition="End == true && (getStat_Charging >= 100.0)" Action="Attack_LV3"/>
-        <Branch Condition="End == true && (getStat_Charging >= 50.0)" Action="Attack_LV2"/>
-        <Branch Condition="End == true" Action="Attack_LV1"/>
+        <Branch Condition="End == true && (getStat_Charging >= 100.0)" Execute="Attack_LV3"/>
+        <Branch Condition="End == true && (getStat_Charging >= 50.0)" Execute="Attack_LV2"/>
+        <Branch Condition="End == true" Execute="Attack_LV1"/>
 
     </AttackPrepare>
 
@@ -69,14 +69,14 @@
         <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="3">
         </Animation>
 
-        <Branch Condition="End == true" Action="CommonMoveSelection"/>
+        <Branch Condition="End == true" Execute="CommonMoveSelection"/>
     </Attack_Guarded>
 
     <Attack_Parried MovementType="GraphPreset" MovementGraphPreset="AttackGuarded" DirectionType="Keep" FlipType="Keep">
         <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="0.3">
         </Animation>
 
-        <Branch Condition="End == true" Action="CommonMoveSelection"/>
+        <Branch Condition="End == true" Execute="CommonMoveSelection"/>
     </Attack_Parried>
 
     <Attack_LV1 MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="Keep" FlipType="Keep">
@@ -98,9 +98,9 @@
             </FrameEvent>
         </Animation>
 
-        <Branch Condition="AttackGuarded == true" Action="Attack_Guarded"/>
-        <Branch Condition="AttackParried == true" Action="Attack_Parried"/>
-        <Branch Condition="End == true" Action="CommonMoveSelection"/>
+        <Branch Condition="AttackGuarded == true" Execute="Attack_Guarded"/>
+        <Branch Condition="AttackParried == true" Execute="Attack_Parried"/>
+        <Branch Condition="End == true" Execute="CommonMoveSelection"/>
     </Attack_LV1>
     
     <Attack_LV2 MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="Keep" FlipType="Keep">
@@ -122,9 +122,9 @@
             </FrameEvent>
         </Animation>
 
-        <Branch Condition="AttackGuarded == true" Action="Attack_Guarded"/>
-        <Branch Condition="AttackParried == true" Action="Attack_Parried"/>
-        <Branch Condition="End == true" Action="CommonMoveSelection"/>
+        <Branch Condition="AttackGuarded == true" Execute="Attack_Guarded"/>
+        <Branch Condition="AttackParried == true" Execute="Attack_Parried"/>
+        <Branch Condition="End == true" Execute="CommonMoveSelection"/>
     </Attack_LV2>
 
     <Attack_LV3 MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="Keep" FlipType="Keep">
@@ -146,16 +146,16 @@
             </FrameEvent>
         </Animation>
 
-        <Branch Condition="AttackGuarded == true" Action="Attack_Guarded"/>
-        <Branch Condition="AttackParried == true" Action="Attack_Parried"/>
-        <Branch Condition="End == true" Action="CommonMoveSelection"/>
+        <Branch Condition="AttackGuarded == true" Execute="Attack_Guarded"/>
+        <Branch Condition="AttackParried == true" Execute="Attack_Parried"/>
+        <Branch Condition="End == true" Execute="CommonMoveSelection"/>
     </Attack_LV3>
 
     <BloodSpreadPrepare DirectionType="MousePoint" FlipType="MousePoint">
         <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="999">
         </Animation>
 
-        <Branch Condition="End == true" Action="BloodSpread"/>
+        <Branch Condition="End == true" Execute="BloodSpread"/>
     </BloodSpreadPrepare>
 
 
@@ -169,7 +169,7 @@
             </FrameEvent>
         </Animation>
 
-        <Branch Condition="End == true" Action="CommonMoveSelection"/>
+        <Branch Condition="End == true" Execute="CommonMoveSelection"/>
     </BloodSpread>
 
 
@@ -177,8 +177,8 @@
         <Animation Path="Resources/Sprites/DummyPlayer/Guard/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
         </Animation>
 
-        <Branch Key="getKey_Guard == false" Condition="" Action="CommonMoveSelection"/>
-        <Branch Condition="End == true" Action="Guard"/>
+        <Branch Key="getKey_Guard == false" Condition="" Execute="CommonMoveSelection"/>
+        <Branch Condition="End == true" Execute="Guard"/>
     </Guard>
 
 
@@ -186,7 +186,7 @@
         <Animation Path="Resources/Sprites/DummyPlayer/Dash/" StartFrame="0" EndFrame="1" FramePerSecond="999" XFlip="true">
         </Animation>
 
-        <Branch Condition="End == true" Action="Dash"/>
+        <Branch Condition="End == true" Execute="Dash"/>
     </DashStart>
 
 
@@ -194,8 +194,8 @@
         <Animation Path="Resources/Sprites/DummyPlayer/Dash/" StartFrame="0" EndFrame="1" FramePerSecond="3" XFlip="true">
         </Animation>
 
-        <Branch Condition="End == true && ActionTest == true" Action="MoveAll"/>
-        <Branch Condition="End == true" Action="Idle"/>
+        <Branch Condition="End == true && ActionTest == true" Execute="MoveAll"/>
+        <Branch Condition="End == true" Execute="Idle"/>
     </Dash>
 
 </ActionGraph>

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 public class AIGraphBaseData
 {
     public string                               _name;
@@ -5,6 +7,8 @@ public class AIGraphBaseData
     public AIPackageBaseData[]                  _aiPackageData = null;
     public ActionGraphBranchData[]              _branchData = null;
     public ActionGraphConditionCompareData[]    _conditionCompareData = null;
+
+    public Dictionary<AIChildEventType, AIChildFrameEventItem> _aiEvents;
 
     public int                                  _defaultAIIndex = -1;
 
@@ -24,6 +28,9 @@ public class AIGraphNodeData
     }
 
     public string                       _nodeName;
+
+    public Dictionary<AIChildEventType, AIChildFrameEventItem> _aiEvents;
+
     public int                          _packageIndex;
     public int                          _branchIndexStart;
     public int                          _branchCount;
@@ -40,6 +47,8 @@ public class AIPackageBaseData
     public AIPackageNodeData[]                  _aiPackageNodeData = null;
     public ActionGraphBranchData[]              _branchData = null;
     public ActionGraphConditionCompareData[]    _conditionCompareData = null;
+
+    public Dictionary<AIChildEventType, AIChildFrameEventItem> _aiEvents;
 
     public int                                  _defaultAIIndex = -1;
 
@@ -59,6 +68,8 @@ public class AIPackageNodeData
     public string                       _nodeName;
 
     public float                        _updateTime;
+
+    public Dictionary<AIChildEventType, AIChildFrameEventItem> _aiEvents;
 
     public int                          _branchIndexStart;
     public int                          _branchCount;

@@ -3,7 +3,7 @@
 <ActionGraph Name="Test" DefaultAction="Idle" DefaultFramePerSecond="0.5">
 
     <BranchSet Name="CommonHitAction">
-        <Branch Condition="Hit == true" Action="Hit"/>
+        <Branch Condition="Hit == true" Execute="Hit"/>
     </BranchSet>
 
     <Idle DirectionType="Keep" FlipType="Direction">
@@ -12,7 +12,7 @@
 
         <UseBranchSet Name="CommonHitAction"/>
 
-        <Branch Condition="End == true" Action="Guard"/>
+        <Branch Condition="End == true" Execute="Guard"/>
     </Idle>
 
     <Guard DefenceType="Guard" DefenceAngle="180.0" DirectionType="Keep" FlipType="Direction">
@@ -21,8 +21,8 @@
 
         <UseBranchSet Name="CommonHitAction"/>
 
-        <Branch Condition="DefenceSuccess == true" Action="GuardSuccess"/>
-        <Branch Condition="End == true" Action="Parry"/>
+        <Branch Condition="DefenceSuccess == true" Execute="GuardSuccess"/>
+        <Branch Condition="End == true" Execute="Parry"/>
     </Guard>
 
     <Parry DefenceType="Parry" DefenceAngle="140.0" DirectionType="Keep" FlipType="Direction">
@@ -31,8 +31,8 @@
 
         <UseBranchSet Name="CommonHitAction"/>
 
-        <Branch Condition="ParrySuccess == true" Action="ParrySuccess"/>
-        <Branch Condition="End == true" Action="Idle"/>
+        <Branch Condition="ParrySuccess == true" Execute="ParrySuccess"/>
+        <Branch Condition="End == true" Execute="Idle"/>
     </Parry>
 
     <GuardSuccess DefenceType="Guard" DefenceAngle="180.0" MovementType="GraphPreset" MovementGraphPreset="GuardSuccess" DirectionType="AttackedPoint" FlipType="Direction">
@@ -42,8 +42,8 @@
 
         <UseBranchSet Name="CommonHitAction"/>
 
-        <Branch Condition="DefenceSuccess == true" Action="GuardSuccess"/>
-        <Branch Condition="End == true" Action="Guard"/>
+        <Branch Condition="DefenceSuccess == true" Execute="GuardSuccess"/>
+        <Branch Condition="End == true" Execute="Guard"/>
     </GuardSuccess>
 
     <ParrySuccess DefenceType="Parry" DefenceAngle="140.0" MovementType="GraphPreset" MovementGraphPreset="GuardSuccess" DirectionType="AttackedPoint" FlipType="Direction">
@@ -53,8 +53,8 @@
 
         <UseBranchSet Name="CommonHitAction"/>
 
-        <Branch Condition="ParrySuccess == true" Action="ParrySuccess"/>
-        <Branch Condition="End == true" Action="Parry"/>
+        <Branch Condition="ParrySuccess == true" Execute="ParrySuccess"/>
+        <Branch Condition="End == true" Execute="Parry"/>
     </ParrySuccess>
 
     <Hit MovementType="GraphPreset" MovementGraphPreset="AttackHit" DirectionType="AttackedPoint" FlipType="Direction">
@@ -63,7 +63,7 @@
 
         <UseBranchSet Name="CommonHitAction"/>
 
-        <Branch Condition="End == true" Action="Idle"/>
+        <Branch Condition="End == true" Execute="Idle"/>
     </Hit>
 
 

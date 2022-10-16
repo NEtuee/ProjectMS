@@ -1,0 +1,46 @@
+
+<AIPackage Name="CommonMeleePackage" DefaultState="Entry">
+
+    
+    <PackageEvent_OnExecute>
+        <AIEvent Type="ExecuteAI" Execute="Entry"/>
+    </PackageEvent_OnExecute>
+
+    <PackageEvent_OnExit>
+        
+    </PackageEvent_OnExit>
+
+    <Event_OnAttacked>
+
+    </Event_OnAttacked>
+    
+    <BranchSet Name="">
+        <Branch Condition="" Execute=""/>
+        <Branch Condition="" Execute=""/>
+        <Branch Condition="" Execute=""/>
+    </BranchSet>
+
+    <AIState>
+        <Chase UpdateTime="1.0">
+            <Event_OnExecute>
+                <AIEvent Type="ChangeAction" Action="Test"/>
+            </Event_OnExecute>
+
+            <Event_OnFrame Consume="true">
+                <AIEvent Type="DirectionToTarget"/>
+            </Event_OnFrame>
+
+            <Event_OnUpdate>
+                <AIEvent Type="ApplyBuff" Action="Test"/>
+            </Event_OnUpdate>
+
+            <Branch Condition="" Execute=""/>
+        </Entry>
+
+
+
+
+
+    </AIState>
+
+</AIPackage>

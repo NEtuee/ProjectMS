@@ -487,7 +487,7 @@ public static class ActionGraphLoader
                 branchData._keyConditionCompareDataIndex = compareDataList.Count;
                 compareDataList.Add(keyConditionData);
             }
-            else if(targetName == "Action")
+            else if(targetName == "Execute")
             {
                 actionCompareDic.Add(branchData, targetValue);
             }

@@ -45,8 +45,8 @@ public class AIGraphExporter
         
         string defaultAiNodeName = "";
 
-        AIGraphBaseData actionBaseData = new AIGraphBaseData();
-        readAIGraphTitle(node,actionBaseData,out defaultAiNodeName);
+        AIGraphBaseData aiBaseData = new AIGraphBaseData();
+        readAIGraphTitle(node,aiBaseData,out defaultAiNodeName);
 
         List<AIGraphNodeData> nodeDataList = new List<AIGraphNodeData>();
         List<ActionGraphBranchData> branchDataList = new List<ActionGraphBranchData>();
@@ -104,6 +104,10 @@ public class AIGraphExporter
                 aiPackageIndexDic.Add(packageData._name,aiPackageList.Count);
                 aiPackageList.Add(packageData);
             }
+            else if(nodeList[i].Name.Contains("Event_"))
+            {
+                readAIChildEvent(nodeList[i], ref aiBaseData._aiEvents);
+            }
             
             AIGraphNodeData nodeData = readAIGraphNode(nodeList[i], ref aiPackageIndexDic, ref actionCompareDic, ref branchDataList,ref compareDataList, in branchSetDic);
             if(nodeData == null)
@@ -125,23 +129,23 @@ public class AIGraphExporter
             }
             else if(item.Value == defaultAiNodeName)
             {
-                actionBaseData._defaultAIIndex = actionIndexDic[item.Value];
+                aiBaseData._defaultAIIndex = actionIndexDic[item.Value];
             }
 
             item.Key._branchActionIndex = actionIndexDic[item.Value];
         }
 
-        actionBaseData._aiNodeCount = nodeDataList.Count;
-        actionBaseData._aiPackageCount = aiPackageList.Count;
-        actionBaseData._branchCount = branchDataList.Count;
-        actionBaseData._conditionCompareDataCount = compareDataList.Count;
+        aiBaseData._aiNodeCount = nodeDataList.Count;
+        aiBaseData._aiPackageCount = aiPackageList.Count;
+        aiBaseData._branchCount = branchDataList.Count;
+        aiBaseData._conditionCompareDataCount = compareDataList.Count;
 
-        actionBaseData._aiGraphNodeData = nodeDataList.ToArray();
-        actionBaseData._aiPackageData = aiPackageList.ToArray();
-        actionBaseData._branchData = branchDataList.ToArray();
-        actionBaseData._conditionCompareData = compareDataList.ToArray();
+        aiBaseData._aiGraphNodeData = nodeDataList.ToArray();
+        aiBaseData._aiPackageData = aiPackageList.ToArray();
+        aiBaseData._branchData = branchDataList.ToArray();
+        aiBaseData._conditionCompareData = compareDataList.ToArray();
 
-        return actionBaseData;
+        return aiBaseData;
     }
 
     private static AIGraphNodeData readAIGraphNode(XmlNode node, ref Dictionary<string, int> aiPackageIndexDic,ref Dictionary<ActionGraphBranchData, string> actionCompareDic,ref List<ActionGraphBranchData> branchDataList, ref List<ActionGraphConditionCompareData> compareDataList, in Dictionary<string, XmlNodeList> branchSetDic)
@@ -162,7 +166,17 @@ public class AIGraphExporter
             string targetName = actionAttributes[attrIndex].Name;
             string targetValue = getGlobalVariable(actionAttributes[attrIndex].Value);
 
+            if(targetName == "Package")
+            {
+                if(aiPackageIndexDic.ContainsKey(targetValue) == false)
+                {
+                    DebugUtil.assert(false, "ai package does not exists: {0}",targetValue);
+                    return null;
+                }
 
+                nodeData._packageIndex = aiPackageIndexDic[targetValue];
+            }
+            else
             {
                 DebugUtil.assert(false,"invalid attribute type !!! : {0}", targetName);
             }
@@ -173,16 +187,7 @@ public class AIGraphExporter
 
         for(int i = 0; i < nodeList.Count; ++i)
         {
-            if(nodeList[i].Name == "Package")
-            {
-                if(aiPackageIndexDic.ContainsKey(nodeList[i].Value) == false)
-                {
-                    DebugUtil.assert(false, "ai package does not exists: {0}",nodeList[i].Value);
-                    return null;
-                }
-
-                nodeData._packageIndex = aiPackageIndexDic[nodeList[i].Value];
-            }
+            
             if(nodeList[i].Name == "Branch")
             {
                 ActionGraphBranchData branchData = ActionGraphLoader.ReadActionBranch(nodeList[i],ref actionCompareDic,ref compareDataList);
@@ -364,16 +369,29 @@ public class AIGraphExporter
                 readGlobalVariable(nodeList[i], ref _globalVariables);
                 continue;
             }
-            
-            AIPackageNodeData nodeData = readAIPackageNode(nodeList[i], ref actionCompareDic, ref branchDataList,ref compareDataList, in branchSetDic);
-            if(nodeData == null)
+            else if(nodeList[i].Name == "AIState")
             {
-                DebugUtil.assert(false,"node data is null : {0}",nodeList[i].Name);
-                return null;
-            }
+                XmlNodeList aiStateNodeList = nodeList[i].ChildNodes;
+                for(int index = 0; index < aiStateNodeList.Count; ++index)
+                {
+                    AIPackageNodeData nodeData = readAIPackageNode(aiStateNodeList[index], ref actionCompareDic, ref branchDataList,ref compareDataList, in branchSetDic);
 
-            nodeDataList.Add(nodeData);
-            actionIndexDic.Add(nodeData._nodeName,actionIndex++);
+                    if(nodeData == null)
+                    {
+                        DebugUtil.assert(false,"node data is null : {0}",aiStateNodeList[index].Name);
+                        return null;
+                    }
+
+                    nodeDataList.Add(nodeData);
+                    actionIndexDic.Add(nodeData._nodeName,actionIndex++);
+                }
+                
+            }
+            else if(nodeList[i].Name.Contains("Event_"))
+            {
+                readAIChildEvent(nodeList[i], ref aiPackageBaseData._aiEvents);
+            }
+            
         }
 
         foreach(var item in actionCompareDic)
@@ -442,7 +460,11 @@ public class AIGraphExporter
             string targetName = actionAttributes[attrIndex].Name;
             string targetValue = getGlobalVariable(actionAttributes[attrIndex].Value);
 
-
+            if(targetName == "UpdateTime")
+            {
+                nodeData._updateTime = float.Parse(targetValue);
+            }
+            else
             {
                 DebugUtil.assert(false,"invalid attribute type !!! : {0}", targetName);
             }
@@ -501,6 +523,10 @@ public class AIGraphExporter
                     branchDataList.Add(branchData);
                 }
             }
+            else if(nodeList[i].Name.Contains("Event_"))
+            {
+                readAIChildEvent(nodeList[i], ref nodeData._aiEvents);
+            }
         }
 
         if(branchStartIndex == branchDataList.Count)
@@ -513,6 +539,90 @@ public class AIGraphExporter
         nodeData._branchCount = branchDataList.Count - branchStartIndex;
 
         return nodeData;
+    }
+
+    private static void readAIChildEvent(XmlNode node, ref Dictionary<AIChildEventType,AIChildFrameEventItem> childEventDic)
+    {
+        string eventType = node.Name.Replace("Event_","");
+
+        AIChildEventType currentEventType = AIChildEventType.Count;
+        AIChildFrameEventItem item = new AIChildFrameEventItem();
+
+        if(eventType == "OnExecute")
+            currentEventType = AIChildEventType.AIChildEvent_OnExecute;
+        else if(eventType == "OnAttacked")
+            currentEventType = AIChildEventType.AIChildEvent_OnAttacked;
+        else if(eventType == "OnExit")
+            currentEventType = AIChildEventType.AIChildEvent_OnExit;
+        else if(eventType == "OnGuarded")
+            currentEventType = AIChildEventType.AIChildEvent_OnGuarded;
+        else if(eventType == "OnHit")
+            currentEventType = AIChildEventType.AIChildEvent_OnHit;
+        else if(eventType == "OnParried")
+            currentEventType = AIChildEventType.AIChildEvent_OnParried;
+
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "Consume")
+            {
+                item._consume = bool.Parse(attrValue);
+            }
+        }
+
+        List<AIEventBase> aiEventList = new List<AIEventBase>();
+
+        XmlNodeList childNodes = node.ChildNodes;
+        for(int i = 0; i < childNodes.Count; ++i)
+        {
+            aiEventList.Add(readAiEvent(childNodes[i]));
+        }
+
+        item._childFrameEventCount = aiEventList.Count;
+        item._childFrameEvents = aiEventList.ToArray();
+
+        childEventDic.Add(currentEventType, item);
+    }
+
+    public static AIEventBase readAiEvent(XmlNode node)
+    {
+        if(node.Name != "AIEvent")
+        {
+            DebugUtil.assert(false,"target node is not aiEvent: {0}",node.Name);
+            return null;
+        }
+
+        XmlAttributeCollection attributes = node.Attributes;
+        AIEventBase aiEvent = null;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "Type")
+            {
+                if(attrValue == "Test")
+                {
+                    aiEvent = new AIEvent_Test();
+                }
+                else
+                {
+                    DebugUtil.assert(false,"invalid ai event type: {0}",attrValue);
+                    return null;
+                }
+            }
+        }
+
+        if(aiEvent == null)
+        {
+            return null;
+        }
+
+        aiEvent.loadFromXML(node);
+        return aiEvent;
     }
 
 }
