@@ -98,6 +98,17 @@ public static class ActionGraphLoader
             item.Key._branchActionIndex = actionIndexDic[item.Value];
         }
 
+        if(actionBaseData._defaultActionIndex == -1)
+        {
+            if(actionIndexDic.ContainsKey(defaultActionName) == false)
+            {
+                DebugUtil.assert(false, "invalid default action name: {0}",defaultActionName);
+                return null;
+            }
+
+            actionBaseData._defaultActionIndex = actionIndexDic[defaultActionName];
+        }
+
         actionBaseData._actionNodeCount = nodeDataList.Count;
         actionBaseData._branchCount = branchDataList.Count;
         actionBaseData._conditionCompareDataCount = compareDataList.Count;

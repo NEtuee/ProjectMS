@@ -1,3 +1,4 @@
+[System.Serializable]
 public class ActionGraphBaseData
 {
     public string                               _name;
@@ -16,6 +17,7 @@ public class ActionGraphBaseData
     public int                                  _animationPlayDataCount = -1;
 }
 
+[System.Serializable]
 public class ActionGraphNodeData
 {
     public ActionGraphNodeData()
@@ -61,6 +63,7 @@ public enum DirectionType
     Count,
 }
 
+[System.Serializable]
 public class ActionGraphBranchData
 {
     public int      _branchActionIndex;
@@ -152,6 +155,7 @@ public enum ConditionNodeType
     Count,
 }
 
+[System.Serializable]
 public class ConditionNodeInfo
 {
     public ConditionNodeInfo(ConditionNodeUpdateType updateType, ConditionNodeType nodeTpye)
@@ -208,12 +212,12 @@ public static class ConditionNodeInfoPreset
         1, // boolean
     };
 }
-
+[System.Serializable]
 public class ActionGraphConditionNodeData
 {
     public string _symbolName;
 }
-
+[System.Serializable]
 public class ActionGraphConditionNodeData_Key : ActionGraphConditionNodeData
 {
     public string _targetKeyName = "";
@@ -226,7 +230,7 @@ public class ActionGraphConditionNodeData_Key : ActionGraphConditionNodeData
     public string getKeyName() {return _targetKeyName;}
     
 }
-
+[System.Serializable]
 public class ActionGraphConditionNodeData_Status : ActionGraphConditionNodeData
 {
     public string _targetStatus = "";
@@ -239,7 +243,7 @@ public class ActionGraphConditionNodeData_Status : ActionGraphConditionNodeData
     public string getStatus() {return _targetStatus;}
     
 }
-
+[System.Serializable]
 public class ActionGraphConditionNodeData_Literal : ActionGraphConditionNodeData
 {
     private byte[]       _data;
@@ -262,7 +266,7 @@ public class ActionGraphConditionNodeData_Literal : ActionGraphConditionNodeData
     }
     
 }
-
+[System.Serializable]
 public class ActionGraphConditionNodeData_ConditionResult : ActionGraphConditionNodeData
 {
     public int          _resultIndex;
@@ -285,7 +289,7 @@ public class ActionGraphConditionNodeData_ConditionResult : ActionGraphCondition
     }
 }
 
-
+[System.Serializable]
 public class ActionGraphConditionCompareData
 {
     public ActionGraphConditionNodeData[]   _conditionNodeDataArray;

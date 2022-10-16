@@ -5,14 +5,17 @@ using System.Text;
 using UnityEngine;
 
 
-public class AIGraphExporter
+public class AIGraphLoader
 {
+
+    private static string _aiPackageRoot = "Assets/Data/AIPackage/";
+
     private static Dictionary<string, string> _globalVariables = new Dictionary<string, string>();
     private static Dictionary<string, AIPackageBaseData> _loadedAiPackage = new Dictionary<string, AIPackageBaseData>();
     public static AIGraphBaseData readFromXML(string path)
     {
         XmlDocument xmlDoc = new XmlDocument();
-       // try
+        try
         {
             XmlReaderSettings readerSettings = new XmlReaderSettings();
             readerSettings.IgnoreComments = true;
@@ -21,11 +24,11 @@ public class AIGraphExporter
                 xmlDoc.Load(reader);
             }
         }
-        // catch(System.Exception ex)
-        // {
-        //     DebugUtil.assert(false,"xml load exception : {0}",ex.Message);
-        //     return null;
-        // }
+        catch(System.Exception ex)
+        {
+            DebugUtil.assert(false,"xml load exception : {0}",ex.Message);
+            return null;
+        }
         
         if(xmlDoc.HasChildNodes == false)
         {
@@ -88,14 +91,15 @@ public class AIGraphExporter
                 }
 
                 AIPackageBaseData packageData = null;
-                if(_loadedAiPackage.ContainsKey(nodeList[i].Attributes[0].Value) == true)
+                string packagePath = _aiPackageRoot + nodeList[i].Attributes[0].Value;
+                if(_loadedAiPackage.ContainsKey(packagePath) == true)
                 {
-                    packageData = _loadedAiPackage[nodeList[i].Attributes[0].Value];
+                    packageData = _loadedAiPackage[packagePath];
                 }
                 else
                 {
-                    packageData = readAIPackageFromXML(nodeList[i].Attributes[0].Value);
-                    _loadedAiPackage.Add(nodeList[i].Attributes[0].Value,packageData);
+                    packageData = readAIPackageFromXML( packagePath);
+                    _loadedAiPackage.Add(packagePath,packageData);
                 }
 
                 if(packageData == null)
@@ -103,6 +107,8 @@ public class AIGraphExporter
 
                 aiPackageIndexDic.Add(packageData._name,aiPackageList.Count);
                 aiPackageList.Add(packageData);
+
+                continue;
             }
             else if(nodeList[i].Name.Contains("Event_"))
             {
@@ -133,6 +139,17 @@ public class AIGraphExporter
             }
 
             item.Key._branchActionIndex = actionIndexDic[item.Value];
+        }
+
+        if(aiBaseData._defaultAIIndex == -1)
+        {
+            if(actionIndexDic.ContainsKey(defaultAiNodeName) == false)
+            {
+                DebugUtil.assert(false, "invalid default state name: {0}",defaultAiNodeName);
+                return null;
+            }
+
+            aiBaseData._defaultAIIndex = actionIndexDic[defaultAiNodeName];
         }
 
         aiBaseData._aiNodeCount = nodeDataList.Count;
@@ -236,13 +253,21 @@ public class AIGraphExporter
                     branchDataList.Add(branchData);
                 }
             }
+            else if(nodeList[i].Name.Contains("Event_"))
+            {
+                readAIChildEvent(nodeList[i], ref nodeData._aiEvents);
+            }
+            else
+            {
+                DebugUtil.assert(false, "invalid attribute: {0}",nodeList[i].Name);
+            }
         }
 
-        if(branchStartIndex == branchDataList.Count)
-        {
-            DebugUtil.assert(false,"branch data not exists");
-            return null;
-        }
+        // if(branchStartIndex == branchDataList.Count)
+        // {
+        //     DebugUtil.assert(false,"branch data not exists");
+        //     return null;
+        // }
 
         nodeData._branchIndexStart = branchStartIndex;
         nodeData._branchCount = branchDataList.Count - branchStartIndex;
@@ -267,6 +292,10 @@ public class AIGraphExporter
             else if(targetName == "DefaultState")
             {
                 defaultState = targetValue;
+            }
+            else
+            {
+                DebugUtil.assert(false, "invalid attribute: {0}",targetName);
             }
 
         }
@@ -387,9 +416,18 @@ public class AIGraphExporter
                 }
                 
             }
+            else if(nodeList[i].Name.Contains("PackageEvent_"))
+            {
+                readAIPackageChildEvent(nodeList[i],ref aiPackageBaseData._aiPackageEvents);
+            }
             else if(nodeList[i].Name.Contains("Event_"))
             {
                 readAIChildEvent(nodeList[i], ref aiPackageBaseData._aiEvents);
+            }
+            else
+            {
+                DebugUtil.assert(false, "invalid attribute: {0}",nodeList[i].Name);
+                return null;
             }
             
         }
@@ -407,6 +445,17 @@ public class AIGraphExporter
             }
 
             item.Key._branchActionIndex = actionIndexDic[item.Value];
+        }
+
+        if(aiPackageBaseData._defaultAIIndex == -1)
+        {
+            if(actionIndexDic.ContainsKey(defaultAIName) == false)
+            {
+                DebugUtil.assert(false, "invalid default state name: {0}",defaultAIName);
+                return null;
+            }
+
+            aiPackageBaseData._defaultAIIndex = actionIndexDic[defaultAIName];
         }
 
         aiPackageBaseData._aiNodeCount = nodeDataList.Count;
@@ -463,6 +512,10 @@ public class AIGraphExporter
             if(targetName == "UpdateTime")
             {
                 nodeData._updateTime = float.Parse(targetValue);
+            }
+            else if(targetName == "SkipStart")
+            {
+                nodeData._skipStart = bool.Parse(targetValue);
             }
             else
             {
@@ -527,6 +580,7 @@ public class AIGraphExporter
             {
                 readAIChildEvent(nodeList[i], ref nodeData._aiEvents);
             }
+            
         }
 
         if(branchStartIndex == branchDataList.Count)
@@ -541,25 +595,25 @@ public class AIGraphExporter
         return nodeData;
     }
 
-    private static void readAIChildEvent(XmlNode node, ref Dictionary<AIChildEventType,AIChildFrameEventItem> childEventDic)
+    private static void readAIPackageChildEvent(XmlNode node, ref Dictionary<AIPackageEventType,AIChildFrameEventItem> childEventDic)
     {
-        string eventType = node.Name.Replace("Event_","");
+        string eventType = node.Name.Replace("PackageEvent_","");
 
-        AIChildEventType currentEventType = AIChildEventType.Count;
+        AIPackageEventType currentEventType = AIPackageEventType.Count;
         AIChildFrameEventItem item = new AIChildFrameEventItem();
 
         if(eventType == "OnExecute")
-            currentEventType = AIChildEventType.AIChildEvent_OnExecute;
-        else if(eventType == "OnAttacked")
-            currentEventType = AIChildEventType.AIChildEvent_OnAttacked;
+            currentEventType = AIPackageEventType.PackageEvent_OnExecute;
         else if(eventType == "OnExit")
-            currentEventType = AIChildEventType.AIChildEvent_OnExit;
-        else if(eventType == "OnGuarded")
-            currentEventType = AIChildEventType.AIChildEvent_OnGuarded;
-        else if(eventType == "OnHit")
-            currentEventType = AIChildEventType.AIChildEvent_OnHit;
-        else if(eventType == "OnParried")
-            currentEventType = AIChildEventType.AIChildEvent_OnParried;
+            currentEventType = AIPackageEventType.PackageEvent_OnExit;
+
+        DebugUtil.assert((int)AIPackageEventType.Count == 2, "check this");
+
+        if(childEventDic.ContainsKey(currentEventType))
+        {
+            DebugUtil.assert(false,"eventtype overlap: {0}",currentEventType.ToString());
+            return;
+        }
 
         XmlAttributeCollection attributes = node.Attributes;
         for(int i = 0; i < attributes.Count; ++i)
@@ -584,6 +638,61 @@ public class AIGraphExporter
         item._childFrameEventCount = aiEventList.Count;
         item._childFrameEvents = aiEventList.ToArray();
 
+        childEventDic.Add(currentEventType, item);
+    }
+
+    private static void readAIChildEvent(XmlNode node, ref Dictionary<AIChildEventType,AIChildFrameEventItem> childEventDic)
+    {
+        string eventType = node.Name.Replace("Event_","");
+
+        AIChildEventType currentEventType = AIChildEventType.Count;
+        AIChildFrameEventItem item = new AIChildFrameEventItem();
+
+        if(eventType == "OnExecute")
+            currentEventType = AIChildEventType.AIChildEvent_OnExecute;
+        else if(eventType == "OnAttacked")
+            currentEventType = AIChildEventType.AIChildEvent_OnAttacked;
+        else if(eventType == "OnExit")
+            currentEventType = AIChildEventType.AIChildEvent_OnExit;
+        else if(eventType == "OnGuarded")
+            currentEventType = AIChildEventType.AIChildEvent_OnGuarded;
+        else if(eventType == "OnHit")
+            currentEventType = AIChildEventType.AIChildEvent_OnHit;
+        else if(eventType == "OnParried")
+            currentEventType = AIChildEventType.AIChildEvent_OnParried;
+
+        DebugUtil.assert((int)AIChildEventType.Count == 6, "check this");
+
+        if(childEventDic.ContainsKey(currentEventType))
+        {
+            DebugUtil.assert(false,"eventtype overlap: {0}, {1}",currentEventType.ToString(), eventType);
+            return;
+        }
+
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "Consume")
+            {
+                item._consume = bool.Parse(attrValue);
+            }
+        }
+
+        List<AIEventBase> aiEventList = new List<AIEventBase>();
+
+        XmlNodeList childNodes = node.ChildNodes;
+        for(int i = 0; i < childNodes.Count; ++i)
+        {
+            aiEventList.Add(readAiEvent(childNodes[i]));
+        }
+
+        item._childFrameEventCount = aiEventList.Count;
+        item._childFrameEvents = aiEventList.ToArray();
+
+        
         childEventDic.Add(currentEventType, item);
     }
 
