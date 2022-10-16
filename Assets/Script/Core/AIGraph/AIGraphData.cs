@@ -72,7 +72,6 @@ public class AIPackageNodeData
     public string                       _nodeName;
 
     public float                        _updateTime = 1f;
-    public bool                         _skipStart = false;
 
     public Dictionary<AIChildEventType, AIChildFrameEventItem> _aiEvents = new Dictionary<AIChildEventType, AIChildFrameEventItem>();
 

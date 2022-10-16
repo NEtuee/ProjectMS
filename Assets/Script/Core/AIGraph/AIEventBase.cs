@@ -11,6 +11,7 @@ public enum AIChildEventType
 {
     AIChildEvent_OnExecute = 0,
     AIChildEvent_OnExit,
+    AIChildEvent_OnFrame,
     AIChildEvent_OnHit,
     AIChildEvent_OnAttacked,
     AIChildEvent_OnGuarded,

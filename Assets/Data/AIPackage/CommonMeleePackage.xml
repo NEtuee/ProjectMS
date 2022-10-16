@@ -1,13 +1,13 @@
 
 <AIPackage Name="CommonMeleePackage" DefaultState="Entry">
 
-    <PackageEvent_OnExecute>
-        <AIEvent Type="Test" Log="OnExecute"/>
-    </PackageEvent_OnExecute>
+    <Event_OnExecute>
+        <AIEvent Type="Test" Log="OnExecute Package"/>
+    </Event_OnExecute>
 
-    <PackageEvent_OnExit>
+    <Event_OnExit>
         <AIEvent Type="Test" Log="OnExit"/>
-    </PackageEvent_OnExit>
+    </Event_OnExit>
 
 
     <BranchSet Name="TestBranchSet">
@@ -17,22 +17,22 @@
 
 
     <AIState>
-        <Entry UpdateTime="1.0" SkipStart="true">
-            <Event_OnFrame>
-                <AIEvent Type="Test" Log="OnFrame Entry"/>
-            </Event_OnFrame>
+        <Entry UpdateTime="1.0">
+            <Event_OnExecute>
+                <AIEvent Type="Test" Log="entry"/>
+            </Event_OnExecute>
+
+            <Event_OnExit>
+                <AIEvent Type="Test" Log="entry end"/>
+            </Event_OnExit>
 
             <Branch Condition="true" Execute="Chase"/>
         </Entry>
 
-        <Chase UpdateTime="1.0" SkipStart="true">
+        <Chase UpdateTime="1.0">
             <Event_OnExecute>
-                <AIEvent Type="Test" Log="Check"/>
+                <AIEvent Type="Test" Log="chase"/>
             </Event_OnExecute>
-
-            <Event_OnFrame>
-                <AIEvent Type="Test" Log="Check"/>
-            </Event_OnFrame>
 
             <UseBranchSet Name="TestBranchSet"/>
         </Chase>

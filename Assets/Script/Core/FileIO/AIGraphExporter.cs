@@ -8,7 +8,7 @@ using UnityEngine;
 public class AIGraphLoader
 {
 
-    private static string _aiPackageRoot = "Assets/Data/AIPackage/";
+    private static string _aiPackageRoot = "Assets\\Data\\AIPackage\\";
 
     private static Dictionary<string, string> _globalVariables = new Dictionary<string, string>();
     private static Dictionary<string, AIPackageBaseData> _loadedAiPackage = new Dictionary<string, AIPackageBaseData>();
@@ -513,10 +513,6 @@ public class AIGraphLoader
             {
                 nodeData._updateTime = float.Parse(targetValue);
             }
-            else if(targetName == "SkipStart")
-            {
-                nodeData._skipStart = bool.Parse(targetValue);
-            }
             else
             {
                 DebugUtil.assert(false,"invalid attribute type !!! : {0}", targetName);
@@ -654,6 +650,8 @@ public class AIGraphLoader
             currentEventType = AIChildEventType.AIChildEvent_OnAttacked;
         else if(eventType == "OnExit")
             currentEventType = AIChildEventType.AIChildEvent_OnExit;
+        else if(eventType == "OnFrame")
+            currentEventType = AIChildEventType.AIChildEvent_OnFrame;
         else if(eventType == "OnGuarded")
             currentEventType = AIChildEventType.AIChildEvent_OnGuarded;
         else if(eventType == "OnHit")
@@ -661,7 +659,7 @@ public class AIGraphLoader
         else if(eventType == "OnParried")
             currentEventType = AIChildEventType.AIChildEvent_OnParried;
 
-        DebugUtil.assert((int)AIChildEventType.Count == 6, "check this");
+        DebugUtil.assert((int)AIChildEventType.Count == 7, "check this");
 
         if(childEventDic.ContainsKey(currentEventType))
         {

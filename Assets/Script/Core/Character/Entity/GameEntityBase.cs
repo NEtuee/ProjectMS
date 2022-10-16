@@ -5,7 +5,8 @@ using UnityEngine;
 public class GameEntityBase : SequencerObjectBase
 {
 
-    public string               actionGraphPath = "Assets\\Data\\Example\\ActionGraphTest.xml";
+    public string               actionGraphPath = "Assets\\Data\\ActionGraph\\ActionGraphTest.xml";
+    public string               aiGraphPath = "Assets\\Data\\AIGraph\\CommonEnemyAI.xml";
     public string               statusInfoName = "CommonPlayerStatus";
 
     public DebugTextManager     debugTextManager;
@@ -14,6 +15,7 @@ public class GameEntityBase : SequencerObjectBase
     private SpriteRenderer      _spriteRenderer;
     private GameObject          _spriteObject;
     private ActionGraph         _actionGraph;
+    private AIGraph             _aiGraph;
     private StatusInfo          _statusInfo;
 
     private CollisionInfo       _collisionInfo;
@@ -55,6 +57,10 @@ public class GameEntityBase : SequencerObjectBase
         _actionGraph.assign();
         _actionGraph.initialize();
 
+        _aiGraph = new AIGraph(_actionGraph, AIGraphLoader.readFromXML(IOControl.PathForDocumentsFile(aiGraphPath)));
+        _aiGraph.assign();
+        _aiGraph.initialize(this);
+
         _statusInfo = new StatusInfo(statusInfoName);
 
         createSpriteRenderObject();
@@ -73,6 +79,11 @@ public class GameEntityBase : SequencerObjectBase
 
         _statusInfo.updateStatus(deltaTime);
         _statusInfo.updateActionConditionData(this);
+
+        if(_aiGraph != null)
+        {
+            _aiGraph.progress(deltaTime,this);
+        }
 
         if(_actionGraph != null)
         {
