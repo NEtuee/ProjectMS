@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class TestScript : MonoBehaviour
 {
-    public string targetPath="";
-    public AIGraphBaseData _aiBaseData;
+    public ActionGraphConditionCompareData compareData;
+    public string targetFormula="(TargetDistance > 0.7) && true";
     void Start()
     {
-        _aiBaseData = AIGraphLoader.readFromXML(targetPath);
+        compareData = ActionGraphLoader.ReadConditionCompareData(targetFormula);
+        ActionGraph graph = new ActionGraph();
+        Debug.Log(graph.processActionCondition(compareData));
     }
 }

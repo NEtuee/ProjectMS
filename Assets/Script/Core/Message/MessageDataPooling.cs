@@ -68,6 +68,11 @@ public static class MessageDataPooling
         realData.isUsing = false;
         return realData;
     }
+
+    public static void ReturnData(MessageData data)
+    {
+        data.isUsing = false;
+    }
 }
 #region PrimaryMessageData
 

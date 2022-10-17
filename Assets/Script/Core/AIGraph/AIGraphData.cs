@@ -72,6 +72,9 @@ public class AIPackageNodeData
     public string                       _nodeName;
 
     public float                        _updateTime = 1f;
+    public TargetSearchType             _targetSearchType = TargetSearchType.None;
+    public SearchIdentifier             _searchIdentifier = SearchIdentifier.Count;
+    public float                        _targetSearchRange = 0f;
 
     public Dictionary<AIChildEventType, AIChildFrameEventItem> _aiEvents = new Dictionary<AIChildEventType, AIChildFrameEventItem>();
 

@@ -99,6 +99,14 @@ public abstract class ObjectBase : MessageReceiver, IProgress
         whenDeactive?.Invoke();
     }
 
+    public float getDistance(ObjectBase obj)
+    {
+        if(obj == null)
+            return -1f;
+        
+        return Vector3.Distance(transform.position,obj.transform.position);
+    }
+    public float getDistanceSq(ObjectBase obj) {return (transform.position - obj.transform.position).sqrMagnitude;}
 
     public Vector3 getDirection() {return _direction;}
 

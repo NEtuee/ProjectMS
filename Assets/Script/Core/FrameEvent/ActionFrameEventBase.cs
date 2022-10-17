@@ -234,6 +234,8 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
             requester.setAttackState(AttackState.AttackGuarded);
             target.setDefenceState(DefenceState.DefenceSuccess);
 
+            requester.executeAIEvent(AIChildEventType.AIChildEvent_OnGuarded);
+            target.executeAIEvent(AIChildEventType.AIChildEvent_OnGuard);
 
             eventType = ChildFrameEventType.ChildFrameEvent_OnGuard;
         }
@@ -242,12 +244,18 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
             requester.setAttackState(AttackState.AttackParried);
             target.setDefenceState(DefenceState.ParrySuccess);
 
+            requester.executeAIEvent(AIChildEventType.AIChildEvent_OnParried);
+            target.executeAIEvent(AIChildEventType.AIChildEvent_OnParry);
+
             eventType = ChildFrameEventType.ChildFrameEvent_OnParry;
         }
         else if(guardSuccess == false || target.getDefenceType() == DefenceType.Empty)
         {
             requester.setAttackState(AttackState.AttackSuccess);
             target.setDefenceState(DefenceState.Hit);
+
+            requester.executeAIEvent(AIChildEventType.AIChildEvent_OnAttack);
+            target.executeAIEvent(AIChildEventType.AIChildEvent_OnAttacked);
 
             eventType = ChildFrameEventType.ChildFrameEvent_OnHit;
         }

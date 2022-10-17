@@ -1,6 +1,6 @@
 using System.Collections.Generic;
+using UnityEngine;
 
-//todo : animation start, ed frame, 
 public class AIGraph
 {
     private int _currentAINodeIndex = -1;
@@ -11,6 +11,8 @@ public class AIGraph
     private int _prevPackageStateIndex = -1;
 
     private float _updateTimer = 0f;
+
+    private Vector3 _recentlyAiDirection = Vector3.zero;
 
     private ActionGraph _actionGraph;
 
@@ -23,7 +25,7 @@ public class AIGraph
 
     public bool isValid()
     {
-        return _aiGraphBaseData != null && _actionGraph != null;
+        return _aiGraphBaseData != null && _actionGraph != null && _aiGraphBaseData._aiPackageCount != 0;
     }
 
     public void assign()
@@ -51,6 +53,11 @@ public class AIGraph
         processAINode(getCurrentAINode(), targetEntity);
         processAIPackage(deltaTime, getCurrentAIPackageNode(), targetEntity);
         return true;
+    }
+
+    public void updateConditionData()
+    {
+        
     }
 
     public void release()
@@ -98,6 +105,7 @@ public class AIGraph
         else
             return false;
 
+        processAIEvent(AIChildEventType.AIChildEvent_OnUpdate, targetEntity, ref currentPackageNode._aiEvents);
 
         bool stateChanged = false;
         int startIndex = aiPackageNode._branchIndexStart;
@@ -242,6 +250,21 @@ public class AIGraph
         else
             _conditionResultList[index][0] = value == true ? (byte)1 : (byte)0;
     }
+
+    public Vector3 getRecentlyAIDirection() {return _recentlyAiDirection;}
+    public void setAIDirection(Vector3 direction){_recentlyAiDirection = direction;}
+    public void setAIDirection(float angle)
+    {
+        angle = angle * Mathf.Deg2Rad;
+        _recentlyAiDirection.x = Mathf.Cos(angle);
+        _recentlyAiDirection.y = Mathf.Sin(angle);
+        _recentlyAiDirection.z = 0f;
+    }
+
+    public TargetSearchType getCurrentTargetSearchType() {return getCurrentAIPackageNode()._targetSearchType;}
+    public SearchIdentifier getCurrentSearchIdentifier() {return getCurrentAIPackageNode()._searchIdentifier;}
+
+    public float getCurrentTargetSearchRange() {return getCurrentAIPackageNode()._targetSearchRange;}
 
     private AIPackageNodeData getCurrentAIPackageNode() {return getCurrentAIPackage()._aiPackageNodeData[_currentPackageStateIndex];}
     private AIPackageNodeData getPrevAIPackageNode() {return getCurrentAIPackage()._aiPackageNodeData[_prevPackageStateIndex];}

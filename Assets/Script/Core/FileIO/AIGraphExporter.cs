@@ -141,7 +141,7 @@ public class AIGraphLoader
             item.Key._branchActionIndex = actionIndexDic[item.Value];
         }
 
-        if(aiBaseData._defaultAIIndex == -1)
+        if(nodeDataList.Count != 0 && aiBaseData._defaultAIIndex == -1)
         {
             if(actionIndexDic.ContainsKey(defaultAiNodeName) == false)
             {
@@ -447,7 +447,7 @@ public class AIGraphLoader
             item.Key._branchActionIndex = actionIndexDic[item.Value];
         }
 
-        if(aiPackageBaseData._defaultAIIndex == -1)
+        if(nodeDataList.Count != 0 && aiPackageBaseData._defaultAIIndex == -1)
         {
             if(actionIndexDic.ContainsKey(defaultAIName) == false)
             {
@@ -512,6 +512,18 @@ public class AIGraphLoader
             if(targetName == "UpdateTime")
             {
                 nodeData._updateTime = float.Parse(targetValue);
+            }
+            else if(targetName == "TargetSearchType")
+            {
+                nodeData._targetSearchType = (TargetSearchType)System.Enum.Parse(typeof(TargetSearchType), targetValue);
+            }
+            else if(targetName == "TargetSearchRange")
+            {
+                nodeData._targetSearchRange = float.Parse(targetValue);
+            }
+            else if(targetName == "SearchIdentifier")
+            {
+                nodeData._searchIdentifier = (SearchIdentifier)System.Enum.Parse(typeof(SearchIdentifier), targetValue);
             }
             else
             {
@@ -646,20 +658,26 @@ public class AIGraphLoader
 
         if(eventType == "OnExecute")
             currentEventType = AIChildEventType.AIChildEvent_OnExecute;
+        else if(eventType == "OnAttack")
+            currentEventType = AIChildEventType.AIChildEvent_OnAttack;
         else if(eventType == "OnAttacked")
             currentEventType = AIChildEventType.AIChildEvent_OnAttacked;
         else if(eventType == "OnExit")
             currentEventType = AIChildEventType.AIChildEvent_OnExit;
         else if(eventType == "OnFrame")
             currentEventType = AIChildEventType.AIChildEvent_OnFrame;
+        else if(eventType == "OnUpdate")
+            currentEventType = AIChildEventType.AIChildEvent_OnUpdate;
+        else if(eventType == "OnGuard")
+            currentEventType = AIChildEventType.AIChildEvent_OnGuard;
         else if(eventType == "OnGuarded")
             currentEventType = AIChildEventType.AIChildEvent_OnGuarded;
-        else if(eventType == "OnHit")
-            currentEventType = AIChildEventType.AIChildEvent_OnHit;
+        else if(eventType == "OnParry")
+            currentEventType = AIChildEventType.AIChildEvent_OnParry;
         else if(eventType == "OnParried")
             currentEventType = AIChildEventType.AIChildEvent_OnParried;
 
-        DebugUtil.assert((int)AIChildEventType.Count == 7, "check this");
+        DebugUtil.assert((int)AIChildEventType.Count == 10, "check this");
 
         if(childEventDic.ContainsKey(currentEventType))
         {
@@ -714,6 +732,22 @@ public class AIGraphLoader
                 if(attrValue == "Test")
                 {
                     aiEvent = new AIEvent_Test();
+                }
+                else if(attrValue == "SetAngleDirection")
+                {
+                    aiEvent = new AIEvent_SetAngleDirection();
+                }
+                else if(attrValue == "SetDirectionToTarget")
+                {
+                    aiEvent = new AIEvent_SetDirectionToTarget();
+                }
+                else if(attrValue == "SetAction")
+                {
+                    aiEvent = new AIEvent_SetAction();
+                }
+                else if(attrValue == "ClearTarget")
+                {
+                    aiEvent = new AIEvent_ClearTarget();
                 }
                 else
                 {

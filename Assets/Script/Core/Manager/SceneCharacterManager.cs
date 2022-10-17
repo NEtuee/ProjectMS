@@ -2,6 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public class TargetSearchDescription : MessageData
+{
+    public ObjectBase              _requester;
+    public TargetSearchType        _searchType;
+    public SearchIdentifier        _searchIdentifier;
+    public float                   _searchRange;
+}
+
 public class SceneCharacterManager : ManagerBase
 {
     [System.Serializable]
@@ -11,8 +19,13 @@ public class SceneCharacterManager : ManagerBase
         public int uniqueID;
         public bool IsValid() {return name != null && name.Equals("") == false && uniqueID != 0;}
     }
+
+    
+
     //[SerializeField] private List<CharacterKeyValue> sceneCharacterList = new List<CharacterKeyValue>();
     private Dictionary<int, string> _characterIDCacheMap = new Dictionary<int, string>();
+    private List<TargetSearchDescription> _targetSearchRequestList = new List<TargetSearchDescription>();
+
     public override void RegisterReceiver(ObjectBase receiver)
     {
         base.RegisterReceiver(receiver);
@@ -29,12 +42,75 @@ public class SceneCharacterManager : ManagerBase
         CacheUniqueID("SceneCharacterManager");
         RegisterRequest();
         SceneMaster.Instance().SetCharacterManager(this);
-        //CreateCacheMap();
+
+        AddAction(MessageTitles.entity_searchNearest,(msg)=>{
+            TargetSearchDescription desc = msg.data as TargetSearchDescription;
+            _targetSearchRequestList.Add(desc);
+        });
     }
     public override void initialize()
     {
         base.initialize();
     }
+
+    public override void progress(float deltaTime)
+    {
+        processTargetSearch();
+        base.progress(deltaTime);
+    }
+
+
+    public void processTargetSearch()
+    {
+        int requestCount = _targetSearchRequestList.Count;
+        foreach(var receiver in _receivers.Values)
+        {
+            if(receiver == null || !receiver.gameObject.activeInHierarchy || !receiver.enabled)
+                continue;
+
+            for(int i = 0; i < requestCount; ++i)
+            {
+                float range = _targetSearchRequestList[i]._searchRange * _targetSearchRequestList[i]._searchRange;
+
+                if(_targetSearchRequestList[i]._requester is CharacterEntityBase == false || receiver is CharacterEntityBase == false)
+                {
+                    DebugUtil.assert(false,"must be character entity, code error");
+                    return;
+                }
+                else if(_targetSearchRequestList[i]._searchIdentifier == SearchIdentifier.Count)
+                {
+                    DebugUtil.assert(false,"invalid search identifier: Count");
+                    return;
+                }
+
+                CharacterEntityBase requester = _targetSearchRequestList[i]._requester as CharacterEntityBase;
+                CharacterEntityBase receiverCharacter = receiver as CharacterEntityBase;
+
+                if(requester == receiverCharacter || _targetSearchRequestList[i]._searchIdentifier != receiverCharacter._searchIdentifier)
+                    continue;
+
+                ObjectBase currentTarget = requester.getCurrentTargetEntity();
+                if(currentTarget == null)
+                {
+                    requester.setTargetEntity(receiverCharacter);
+                    continue;
+                }
+                
+                float toCurrent = currentTarget.getDistanceSq(requester);
+                float toNew = receiverCharacter.getDistanceSq(requester);
+                if(toNew < range && toCurrent > toNew)
+                    requester.setTargetEntity(receiverCharacter);
+                    
+            }
+        }
+
+        for(int i = 0; i < requestCount; ++i)
+        {
+            MessageDataPooling.ReturnData(_targetSearchRequestList[i]);
+        }
+        _targetSearchRequestList.Clear();
+    }
+
     public GameEntityBase GetCharacter(string targetName)
     {
         int key = FindCharacterKey(targetName);

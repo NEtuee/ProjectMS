@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 [System.Serializable]
 public class ActionGraphBaseData
 {
@@ -7,6 +9,8 @@ public class ActionGraphBaseData
     public ActionGraphConditionCompareData[]    _conditionCompareData = null;
     public AnimationPlayDataInfo[]              _animationPlayData = null;
 
+    public Dictionary<string, int>             _actionIndexMap = new Dictionary<string, int>();
+
     public int[]                                _defaultBuffList = null;
 
     public int                                  _defaultActionIndex = -1;
@@ -15,6 +19,14 @@ public class ActionGraphBaseData
     public int                                  _branchCount = -1;
     public int                                  _conditionCompareDataCount = -1;
     public int                                  _animationPlayDataCount = -1;
+
+    public void buildActionIndexMap()
+    {
+        for(int i = 0; i < _actionNodeCount; ++i)
+        {
+            _actionIndexMap.Add(_actionNodeData[i]._nodeName,i);
+        }
+    }
 }
 
 [System.Serializable]
@@ -60,6 +72,7 @@ public enum DirectionType
     MoveInput,
     MousePoint,
     AttackedPoint,
+    AI,
     Count,
 }
 
@@ -141,6 +154,9 @@ public enum ConditionNodeUpdateType
 
     Entity_Dead,
 
+    AI_TargetDistance,
+    AI_TargetExists,
+
     Status,
     Key,
 
@@ -199,6 +215,9 @@ public static class ConditionNodeInfoPreset
         {"Hit",new ConditionNodeInfo(ConditionNodeUpdateType.Defence_Hit, ConditionNodeType.Bool)},
 
         {"Dead",new ConditionNodeInfo(ConditionNodeUpdateType.Entity_Dead, ConditionNodeType.Bool)},
+
+        {"TargetExists",new ConditionNodeInfo(ConditionNodeUpdateType.AI_TargetExists, ConditionNodeType.Bool)},
+        {"TargetDistance",new ConditionNodeInfo(ConditionNodeUpdateType.AI_TargetDistance, ConditionNodeType.Float)},
 
         {"Status",new ConditionNodeInfo(ConditionNodeUpdateType.Status, ConditionNodeType.Float)},
         {"Key",new ConditionNodeInfo(ConditionNodeUpdateType.Key, ConditionNodeType.Bool)},

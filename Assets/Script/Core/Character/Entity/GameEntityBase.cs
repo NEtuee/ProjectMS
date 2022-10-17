@@ -9,6 +9,8 @@ public class GameEntityBase : SequencerObjectBase
     public string               aiGraphPath = "Assets\\Data\\AIGraph\\CommonEnemyAI.xml";
     public string               statusInfoName = "CommonPlayerStatus";
 
+    public SearchIdentifier     _searchIdentifier = SearchIdentifier.Enemy;
+
     public DebugTextManager     debugTextManager;
     public bool                 _debugEnable = false;
 
@@ -38,11 +40,16 @@ public class GameEntityBase : SequencerObjectBase
 
     private Color               _debugColor = Color.red;
 
-
+    [SerializeField]
+    private ObjectBase          _currentTarget;
 
     public override void assign()
     {
         base.assign();
+
+        AddAction(MessageTitles.entity_setTarget,(msg)=>{
+            _currentTarget = msg.data as ObjectBase;
+        });
 
         AddAction(MessageTitles.game_teleportTarget,(msg)=>{
             Transform targetTransform = (Transform)msg.data;
@@ -82,6 +89,11 @@ public class GameEntityBase : SequencerObjectBase
 
         if(_aiGraph != null)
         {
+            _aiGraph.updateConditionData();
+            
+            _actionGraph.setActionConditionData_Float(ConditionNodeUpdateType.AI_TargetDistance, getDistance(_currentTarget));
+            _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.AI_TargetExists, _currentTarget != null);
+
             _aiGraph.progress(deltaTime,this);
         }
 
@@ -318,6 +330,9 @@ public class GameEntityBase : SequencerObjectBase
             case DirectionType.AttackedPoint:
                 _direction = (_recentlyAttackPoint - transform.position).normalized;
                 break;
+            case DirectionType.AI:
+                _direction = _aiGraph.getRecentlyAIDirection();
+                break;
             case DirectionType.Count:
                 DebugUtil.assert(false, "invalid direction type : {0}",_actionGraph.getDirectionType());
                 break;
@@ -373,12 +388,28 @@ public class GameEntityBase : SequencerObjectBase
         _spriteRenderer = _spriteObject.AddComponent<SpriteRenderer>();
     }
 
+    public void executeAIEvent(AIChildEventType eventType) {_aiGraph.executeAIEvent(eventType);}
+
+    public bool isAIGraphValid() {return _aiGraph != null && _aiGraph.isValid();}
+    public TargetSearchType getCurrentTargetSearchType() {return _aiGraph.getCurrentTargetSearchType();}
+    public SearchIdentifier getCurrentSearchIdentifier() {return _aiGraph.getCurrentSearchIdentifier();}
+    public float getCurrentTargetSearchRange() {return _aiGraph.getCurrentTargetSearchRange();}
+
+    public void setAiDirection(float angle) {_aiGraph.setAIDirection(angle);}
+    public void setAiDirection(Vector3 direction) {_aiGraph.setAIDirection(direction);}
+
     public void setAttackState(AttackState state) {_attackState = state;}
     public void setDefenceState(DefenceState state) {_defenceState = state;}
 
     public void setAttackPoint(Vector3 attackPoint) {_recentlyAttackPoint = attackPoint;}
 
     public void setDefenceType(DefenceType defenceType) {_currentDefenceType = defenceType;}
+
+    public void setAction(int index) {_actionGraph.changeActionOther(index);}
+    public void setAction(string nodeName) {_actionGraph.changeActionOther(_actionGraph.getActionIndex(nodeName));}
+
+    public void setTargetEntity(ObjectBase target) {_currentTarget = target;}
+    public ObjectBase getCurrentTargetEntity() {return _currentTarget;}
 
     public CollisionInfo getCollisionInfo() {return _collisionInfo;}
     public string getCurrentActionName() {return _actionGraph == null ? "" : _actionGraph.getCurrentActionName();}

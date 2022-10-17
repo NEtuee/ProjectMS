@@ -21,6 +21,16 @@ public class CharacterEntityBase : GameEntityBase
         base.progress(deltaTime);
         getMovementControl().addFrameToWorld(this.transform);
 
+        if(isAIGraphValid() && getCurrentTargetSearchType() != TargetSearchType.None)
+        {
+            TargetSearchDescription desc = MessageDataPooling.GetMessageData<TargetSearchDescription>();
+            desc._requester = this;
+            desc._searchIdentifier = getCurrentSearchIdentifier();
+            desc._searchRange = getCurrentTargetSearchRange();
+            desc._searchType = getCurrentTargetSearchType();
+
+            SendMessageEx(MessageTitles.entity_searchNearest,QueryUniqueID("SceneCharacterManager"),desc);
+        }
     }
 
     public override void afterProgress(float deltaTime)

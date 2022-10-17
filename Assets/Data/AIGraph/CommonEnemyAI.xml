@@ -1,8 +1,8 @@
-<AIGraph Name="CommonMeleePackage" DefaultState="Entry">
+<AIGraph Name="CommonEnemyAI" DefaultState="Entry">
 
-    <Include Path="CommonMeleePackage.xml"/>
+    <Include Path="CommonChasePackage.xml"/>
     
-    <Entry Package="CommonMeleePackage">
+    <Entry Package="CommonChasePackage">
     </Entry>
 
 </AIGraph>

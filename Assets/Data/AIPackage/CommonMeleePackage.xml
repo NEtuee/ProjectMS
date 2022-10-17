@@ -14,28 +14,18 @@
         <Branch Condition="true" Execute="Entry"/>
     </BranchSet>
 
-
+    <Event_OnAttacked>
+        <AIEvent Type="Test" Log="Attacked_Package"/>
+    </Event_OnAttacked>
 
     <AIState>
-        <Entry UpdateTime="1.0">
+        <Entry UpdateTime="1.0" TargetSearchType="Near" TargetSearchRange="1.0" SearchIdentifier="Player">
             <Event_OnExecute>
-                <AIEvent Type="Test" Log="entry"/>
+                <AIEvent Type="SetAction" Action="Idle"/>
             </Event_OnExecute>
 
-            <Event_OnExit>
-                <AIEvent Type="Test" Log="entry end"/>
-            </Event_OnExit>
-
-            <Branch Condition="true" Execute="Chase"/>
+            <Branch Condition="TargetExists" Execute="Attack"/>
         </Entry>
-
-        <Chase UpdateTime="1.0">
-            <Event_OnExecute>
-                <AIEvent Type="Test" Log="chase"/>
-            </Event_OnExecute>
-
-            <UseBranchSet Name="TestBranchSet"/>
-        </Chase>
 
     </AIState>
 

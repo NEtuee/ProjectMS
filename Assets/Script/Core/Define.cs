@@ -1,4 +1,20 @@
+
 using UnityEngine;
+
+
+public enum SearchIdentifier
+{
+    Player = 0,
+    Enemy,
+    Count,
+}
+
+public enum TargetSearchType
+{
+    None = 0,
+    Near,
+    Count,
+}
 
 public enum AttackType
 {

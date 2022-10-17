@@ -123,61 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &163055950
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 163055952}
-  - component: {fileID: 163055951}
-  m_Layer: 0
-  m_Name: AITest
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &163055951
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 163055950}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b721b3e35d8d33c44b42733804924126, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetPath: Assets\Data\AIGraph\CommonEnemyAI.xml
-  _aiBaseData:
-    _name: 
-    _aiGraphNodeData: []
-    _aiPackageData: []
-    _branchData: []
-    _conditionCompareData: []
-    _defaultAIIndex: -1
-    _aiNodeCount: -1
-    _aiPackageCount: -1
-    _branchCount: -1
-    _conditionCompareDataCount: -1
---- !u!4 &163055952
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 163055950}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.0534108, y: 0.24465829, z: -7.993969}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &201717287
 GameObject:
   m_ObjectHideFlags: 0
@@ -262,9 +207,12 @@ MonoBehaviour:
   sendedCount: 0
   receivedCount: 0
   actionGraphPath: Assets\Data\ActionGraph\ActionGraphStudy.xml
+  aiGraphPath: Assets\Data\AIGraph\CommonEnemyAI.xml
   statusInfoName: CommonPlayerStatus
+  _searchIdentifier: 1
   debugTextManager: {fileID: 1875856657}
   _debugEnable: 0
+  _currentTarget: {fileID: 0}
 --- !u!212 &219847224
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -425,7 +373,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &463302351
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -444,9 +392,12 @@ MonoBehaviour:
   sendedCount: 0
   receivedCount: 0
   actionGraphPath: Assets\Data\ActionGraph\TestEnemyAction.xml
+  aiGraphPath: Assets\Data\AIGraph\CommonEnemyAI.xml
   statusInfoName: CommonEnemyStatus
+  _searchIdentifier: 1
   debugTextManager: {fileID: 228223018}
-  _debugEnable: 0
+  _debugEnable: 1
+  _currentTarget: {fileID: 0}
 --- !u!212 &463302352
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -617,6 +568,55 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &777347727
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 777347729}
+  - component: {fileID: 777347728}
+  m_Layer: 0
+  m_Name: Test
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &777347728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 777347727}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b721b3e35d8d33c44b42733804924126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  compareData:
+    _conditionNodeDataArray: []
+    _compareTypeArray: 
+    _conditionNodeDataCount: 0
+    _compareTypeCount: 0
+  targetFormula: (1.0 > 0.7) && true
+--- !u!4 &777347729
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 777347727}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.0534108, y: 0.24465829, z: -7.993969}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1141361130
 GameObject:
   m_ObjectHideFlags: 0
@@ -634,7 +634,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1141361131
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -653,9 +653,12 @@ MonoBehaviour:
   sendedCount: 0
   receivedCount: 0
   actionGraphPath: Assets\Data\ActionGraph\ActionGraphTest.xml
+  aiGraphPath: Assets\Data\AIGraph\PlayerAI.xml
   statusInfoName: CommonPlayerStatus
+  _searchIdentifier: 0
   debugTextManager: {fileID: 1805569310}
-  _debugEnable: 0
+  _debugEnable: 1
+  _currentTarget: {fileID: 0}
 --- !u!4 &1141361132
 Transform:
   m_ObjectHideFlags: 0

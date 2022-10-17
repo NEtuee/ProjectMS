@@ -119,6 +119,8 @@ public static class ActionGraphLoader
         actionBaseData._conditionCompareData = compareDataList.ToArray();
         actionBaseData._animationPlayData = animationDataList.ToArray();
 
+        actionBaseData._actionIndexMap = actionIndexDic;
+
         return actionBaseData;
     }
 
@@ -579,7 +581,7 @@ public static class ActionGraphLoader
         string calcFormula = formula.Substring(startOffset + 1,finalLength - 1);
 
         SplitToMark(calcFormula, ref resultIndex, in symbolList, in compareTypeList);
-
+        Debug.Log(calcFormula);
         return finalLength;
     }
 

@@ -9,14 +9,16 @@ public class ActionGraph
 
     private Dictionary<ConditionNodeUpdateType, byte[]> _actionConditionNodeData = new Dictionary<ConditionNodeUpdateType, byte[]>();
 
-    private Dictionary<string, byte[]> _statusConditionData = new Dictionary<string, byte[]>();
+    private Dictionary<string, byte[]>          _statusConditionData = new Dictionary<string, byte[]>();
 
-    private ActionGraphBaseData _actionGraphBaseData;
-    private AnimationPlayer _animationPlayer = new AnimationPlayer();
-    private List<byte[]> _conditionResultList = new List<byte[]>();
+    private ActionGraphBaseData                 _actionGraphBaseData;
+    private AnimationPlayer                     _animationPlayer = new AnimationPlayer();
+    private List<byte[]>                        _conditionResultList = new List<byte[]>();
 
     public ActionGraph(){}
     public ActionGraph(ActionGraphBaseData baseData){_actionGraphBaseData = baseData;}
+
+    public bool _actionChangedByOther = false;
 
     public void assign()
     {
@@ -32,6 +34,12 @@ public class ActionGraph
 
     public bool progress()
     {
+        if(_actionChangedByOther == true)
+        {
+            _actionChangedByOther = false;
+            return true;
+        }
+
         return processAction(getCurrentAction());
     }
 
@@ -47,9 +55,11 @@ public class ActionGraph
 
     }
 
+    
+
     private void createCoditionNodeDataAll()
     {
-        DebugUtil.assert((int)ConditionNodeUpdateType.Count == 22, "check this");
+        DebugUtil.assert((int)ConditionNodeUpdateType.Count == 24, "check this");
 
         foreach(var item in ConditionNodeInfoPreset._nodePreset.Values)
         {
@@ -95,6 +105,11 @@ public class ActionGraph
         }
 
         return actionChanged;
+    }
+
+    public void changeActionOther(int actionIndex)
+    {
+        _actionChangedByOther = changeAction(actionIndex);
     }
 
     private bool changeAction(int actionIndex)
@@ -457,6 +472,17 @@ public class ActionGraph
             _conditionResultList[index][0] = value == true ? (byte)1 : (byte)0;
     }
 
+    public int getActionIndex(string nodeName) 
+    {
+        if(_actionGraphBaseData._actionIndexMap.ContainsKey(nodeName) == false)
+        {
+            DebugUtil.assert(false, "target action is not exists: {0}",nodeName);
+            return -1;
+        }
+
+        return _actionGraphBaseData._actionIndexMap[nodeName];
+    }
+
     public bool isActionLoop() {return _currentActionNodeIndex == _prevActionNodeIndex;}
     public int[] getDefaultBuffList() {return _actionGraphBaseData._defaultBuffList;}
     public int[] getCurrentBuffList() {return getCurrentAction()._applyBuffList;}
@@ -467,6 +493,7 @@ public class ActionGraph
         else
             return getCurrentAction()._moveScale * _animationPlayer.getCurrentAnimationDuration();
     }
+
     public float getCurrentDefenceAngle() {return getCurrentAction()._defenceAngle;}
     public DefenceType getCurrentDefenceType() {return getCurrentAction()._defenceType;}
     public RotationType getCurrentRotationType() {return getCurrentAction()._rotationType;}
