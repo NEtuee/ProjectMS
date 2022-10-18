@@ -10,52 +10,9 @@
         <Animation Path="Resources/Sprites/DummyPlayer/Idle/" StartFrame="0" EndFrame="1" XFlip="true">
         </Animation>
 
-        <UseBranchSet Name="CommonHitAction"/>
-
-        <Branch Condition="End == true" Execute="Guard"/>
+        <Branch Condition="End == true" Execute="Idle"/>
     </Idle>
 
-    <Guard DefenceType="Guard" DefenceAngle="180.0" DirectionType="Keep" FlipType="Direction">
-        <Animation Path="Resources/Sprites/DummyPlayer/Guard/" StartFrame="0" EndFrame="1" XFlip="true">
-        </Animation>
-
-        <UseBranchSet Name="CommonHitAction"/>
-
-        <Branch Condition="DefenceSuccess == true" Execute="GuardSuccess"/>
-        <Branch Condition="End == true" Execute="Parry"/>
-    </Guard>
-
-    <Parry DefenceType="Parry" DefenceAngle="140.0" DirectionType="Keep" FlipType="Direction">
-        <Animation Path="Resources/Sprites/DummyPlayer/Guard/" StartFrame="0" EndFrame="1" XFlip="true">
-        </Animation>
-
-        <UseBranchSet Name="CommonHitAction"/>
-
-        <Branch Condition="ParrySuccess == true" Execute="ParrySuccess"/>
-        <Branch Condition="End == true" Execute="Idle"/>
-    </Parry>
-
-    <GuardSuccess DefenceType="Guard" DefenceAngle="180.0" MovementType="GraphPreset" MovementGraphPreset="GuardSuccess" DirectionType="AttackedPoint" FlipType="Direction">
-        <Animation Path="Resources/Sprites/DummyPlayer/Guard/" StartFrame="0" EndFrame="1" FramePerSecond="2" XFlip="true">
-            <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc/" StartFrame="0" FramePerSecond="12" Offset="0.1 0.0 0.0"/>
-        </Animation>
-
-        <UseBranchSet Name="CommonHitAction"/>
-
-        <Branch Condition="DefenceSuccess == true" Execute="GuardSuccess"/>
-        <Branch Condition="End == true" Execute="Guard"/>
-    </GuardSuccess>
-
-    <ParrySuccess DefenceType="Parry" DefenceAngle="140.0" MovementType="GraphPreset" MovementGraphPreset="GuardSuccess" DirectionType="AttackedPoint" FlipType="Direction">
-        <Animation Path="Resources/Sprites/DummyPlayer/Parry/" StartFrame="0" EndFrame="1" FramePerSecond="2" XFlip="true">
-            <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc/" StartFrame="0" FramePerSecond="12" Offset="0.1 0.0 0.0"/>
-        </Animation>
-
-        <UseBranchSet Name="CommonHitAction"/>
-
-        <Branch Condition="ParrySuccess == true" Execute="ParrySuccess"/>
-        <Branch Condition="End == true" Execute="Parry"/>
-    </ParrySuccess>
 
     <Hit MovementType="GraphPreset" MovementGraphPreset="AttackHit" DirectionType="AttackedPoint" FlipType="Direction">
         <Animation Path="Resources/Sprites/DummyPlayer/Hit/" StartFrame="0" EndFrame="1" FramePerSecond="2" XFlip="true">
@@ -78,6 +35,69 @@
 
         <Branch Condition="End == true" Execute="MoveAll"/>
     </MoveAll>
+
+
+    <SideDash MovementType="GraphPreset" DirectionType="AI" MovementGraphPreset="SideDash" FlipType="Direction" RotationType="Direction">
+        <Animation Path="Resources/Sprites/DummyPlayer/Dash/" StartFrame="0" EndFrame="1" FramePerSecond="2" XFlip="true">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="SideDash"/>
+    </SideDash>
+
+    
+    <AttackCharge DirectionType="Keep" FlipType="Direction">
+        <Animation Path="Resources/Sprites/DummyPlayer/AttackCharge/" StartFrame="0" EndFrame="1" FramePerSecond="4">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AttackPrepare"/>
+    </AttackCharge>
+
+    <AttackPrepare MovementType="Empty" DirectionType="AI" FlipType="Direction">
+        <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="999">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Attack_LV1"/>
+
+    </AttackPrepare>
+
+    <Attack_Guarded MovementType="GraphPreset" MovementGraphPreset="AttackGuarded" DirectionType="Keep" FlipType="Keep">
+        <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="3">
+            <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc" FramePerSecond="12.0" Offset="0.1 0.0 0.0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Idle"/>
+    </Attack_Guarded>
+
+    <Attack_Parried MovementType="GraphPreset" MovementGraphPreset="AttackGuarded" DirectionType="Keep" FlipType="Keep">
+        <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="0.3">
+            <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc" FramePerSecond="12.0" Offset="0.1 0.0 0.0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Idle"/>
+    </Attack_Parried>
+
+    <Attack_LV1 MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="Keep" FlipType="Keep">
+        <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="3">
+            <FrameEvent Type="Attack" StartFrame="0" AttackPreset="PlayerAttackTest">
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
+                </OnHit>
+
+                <OnGuard>
+                    <FrameEvent Type="TeleportToTarget"/>
+                </OnGuard>
+
+                <OnParry>
+                    <FrameEvent Type="TeleportToTarget"/>
+                </OnParry>
+
+            </FrameEvent>
+        </Animation>
+
+        <Branch Condition="AttackGuarded == true" Execute="Attack_Guarded"/>
+        <Branch Condition="AttackParried == true" Execute="Attack_Parried"/>
+        <Branch Condition="End == true" Execute="Idle"/>
+    </Attack_LV1>
 
 
 </ActionGraph>

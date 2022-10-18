@@ -581,7 +581,6 @@ public static class ActionGraphLoader
         string calcFormula = formula.Substring(startOffset + 1,finalLength - 1);
 
         SplitToMark(calcFormula, ref resultIndex, in symbolList, in compareTypeList);
-        Debug.Log(calcFormula);
         return finalLength;
     }
 

@@ -1,7 +1,7 @@
 
 using System.Collections.Generic;
 
-//todo : animation start, ed frame, 
+[System.Serializable]
 public class ActionGraph
 {
     private int _currentActionNodeIndex = -1;
@@ -13,6 +13,7 @@ public class ActionGraph
 
     private ActionGraphBaseData                 _actionGraphBaseData;
     private AnimationPlayer                     _animationPlayer = new AnimationPlayer();
+
     private List<byte[]>                        _conditionResultList = new List<byte[]>();
 
     public ActionGraph(){}

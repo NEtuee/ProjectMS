@@ -116,6 +116,7 @@ public class AIGraph
                 stateChanged = changeAIPackageState(getCurrentAIPackage()._branchData[i]._branchActionIndex);
                 break;
             }
+
         }
 
         if(stateChanged == true)
@@ -206,41 +207,18 @@ public class AIGraph
         if(branchData._keyConditionCompareDataIndex != -1)
         {
             ActionGraphConditionCompareData keyCompareData = compareDatas[branchData._keyConditionCompareDataIndex];
-            keyCondition = processActionCondition(keyCompareData);
+            keyCondition = _actionGraph.processActionCondition(keyCompareData);
         }
 
         bool condition = true;
         if(branchData._conditionCompareDataIndex != -1)
         {
             ActionGraphConditionCompareData compareData = compareDatas[branchData._conditionCompareDataIndex];
-            condition = processActionCondition(compareData);
+            condition = _actionGraph.processActionCondition(compareData);
         }
 
         return keyCondition && condition;
 
-    }
-
-    public bool processActionCondition(ActionGraphConditionCompareData compareData)
-    {
-        if(compareData._conditionNodeDataCount == 0)
-            return true;
-
-        if(compareData._conditionNodeDataCount == 1)
-        {
-            DebugUtil.assert(_actionGraph.isNodeType(compareData._conditionNodeDataArray[0],ConditionNodeType.Bool) == true, "invalid node data type!!! : {0}",compareData._conditionNodeDataArray[0]._symbolName);
-
-            return _actionGraph.getDataFromConditionNode(compareData._conditionNodeDataArray[0])[0] == 1;
-        }
-
-        for(int i = 0; i < compareData._compareTypeCount; ++i)
-        {
-            ActionGraphConditionNodeData lvalue = compareData._conditionNodeDataArray[i * 2];
-            ActionGraphConditionNodeData rvalue = compareData._conditionNodeDataArray[i * 2 + 1];
-
-            addResultData(_actionGraph.compareTwoCondition(lvalue,rvalue,compareData._compareTypeArray[i]), i);
-        }
-
-        return _conditionResultList[compareData._compareTypeCount - 1][0] == 1;
     }
 
     public void addResultData(bool value, int index)
@@ -265,6 +243,7 @@ public class AIGraph
     public SearchIdentifier getCurrentSearchIdentifier() {return getCurrentAIPackageNode()._searchIdentifier;}
 
     public float getCurrentTargetSearchRange() {return getCurrentAIPackageNode()._targetSearchRange;}
+    public string getCurrentAIStateName() {return getCurrentAIPackageNode()._nodeName;}
 
     private AIPackageNodeData getCurrentAIPackageNode() {return getCurrentAIPackage()._aiPackageNodeData[_currentPackageStateIndex];}
     private AIPackageNodeData getPrevAIPackageNode() {return getCurrentAIPackage()._aiPackageNodeData[_prevPackageStateIndex];}

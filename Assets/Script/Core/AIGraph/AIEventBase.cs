@@ -73,7 +73,7 @@ public class AIEvent_SetAction : AIEventBase
 
 public class AIEvent_ExecuteState : AIEventBase
 {
-    public string targetState = "";
+    public int targetStateIndex = -1;
     public override AIEventType getFrameEventType() {return AIEventType.AIEvent_ExecuteState;}
     public override void onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {

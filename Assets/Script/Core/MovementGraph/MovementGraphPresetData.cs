@@ -6,6 +6,7 @@ public class MovementGraphPresetData
     [SerializeField]private string _name;
     [SerializeField]private AnimationCurve _movementCurve;
     [SerializeField]private float _magnification = 1f;
+    [SerializeField]private float _directionAngle = 0f;
 
     public float evaulate(float normalizedTime)
     {
@@ -38,6 +39,8 @@ public class MovementGraphPresetData
         
         return moveValue;
     }
+
+    public float getDirectionAngle() {return _directionAngle;}
 
     public float getTotalMovement()
     {

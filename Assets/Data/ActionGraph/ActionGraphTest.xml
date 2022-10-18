@@ -6,6 +6,8 @@
         <Branch Key="getKey_Guard" Condition="" Execute="Guard"/>
         <Branch Key="getKey_AttackCharge" Condition="" Execute="AttackCharge"/>
         <Branch Condition="(getStat_Blood >= 20.0) && InputAttackBlood == true" Execute="BloodSpreadPrepare"/>
+
+        <Branch Condition="Hit == true" Execute="Hit"/>
     </BranchSet>
 
     <BranchSet Name="CommonMoveBranchSet">
@@ -173,10 +175,11 @@
     </BloodSpread>
 
 
-    <Guard MovementType="GraphPreset" MovementGraphPreset="Guard" DirectionType="MoveInput" FlipType="Keep">
+    <Guard MovementType="GraphPreset" MovementGraphPreset="Guard" DirectionType="MoveInput" FlipType="Keep" DefenceType="Guard" DefenceAngle="180.0">
         <Animation Path="Resources/Sprites/DummyPlayer/Guard/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
         </Animation>
 
+        <Branch Condition="Hit == true" Execute="Hit"/>
         <Branch Key="getKey_Guard == false" Condition="" Execute="CommonMoveSelection"/>
         <Branch Condition="End == true" Execute="Guard"/>
     </Guard>
@@ -197,5 +200,13 @@
         <Branch Condition="End == true && ActionTest == true" Execute="MoveAll"/>
         <Branch Condition="End == true" Execute="Idle"/>
     </Dash>
+
+    <Hit MovementType="GraphPreset" MovementGraphPreset="AttackHit" DirectionType="AttackedPoint" FlipType="Direction">
+        <Animation Path="Resources/Sprites/DummyPlayer/Hit/" StartFrame="0" EndFrame="1" FramePerSecond="2" XFlip="true">
+        </Animation>
+
+        <Branch Condition="End == true && ActionTest == true" Execute="MoveAll"/>
+        <Branch Condition="End == true" Execute="Idle"/>
+    </Hit>
 
 </ActionGraph>

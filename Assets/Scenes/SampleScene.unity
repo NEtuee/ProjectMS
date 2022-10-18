@@ -212,6 +212,8 @@ MonoBehaviour:
   _searchIdentifier: 1
   debugTextManager: {fileID: 1875856657}
   _debugEnable: 0
+  _actionGraph:
+    _actionChangedByOther: 0
   _currentTarget: {fileID: 0}
 --- !u!212 &219847224
 SpriteRenderer:
@@ -396,7 +398,9 @@ MonoBehaviour:
   statusInfoName: CommonEnemyStatus
   _searchIdentifier: 1
   debugTextManager: {fileID: 228223018}
-  _debugEnable: 1
+  _debugEnable: 0
+  _actionGraph:
+    _actionChangedByOther: 0
   _currentTarget: {fileID: 0}
 --- !u!212 &463302352
 SpriteRenderer:
@@ -602,7 +606,8 @@ MonoBehaviour:
     _compareTypeArray: 
     _conditionNodeDataCount: 0
     _compareTypeCount: 0
-  targetFormula: (1.0 > 0.7) && true
+  character: {fileID: 0}
+  targetFormula: ((1.0 > 0.7) && true)
 --- !u!4 &777347729
 Transform:
   m_ObjectHideFlags: 0
@@ -657,7 +662,9 @@ MonoBehaviour:
   statusInfoName: CommonPlayerStatus
   _searchIdentifier: 0
   debugTextManager: {fileID: 1805569310}
-  _debugEnable: 1
+  _debugEnable: 0
+  _actionGraph:
+    _actionChangedByOther: 0
   _currentTarget: {fileID: 0}
 --- !u!4 &1141361132
 Transform:

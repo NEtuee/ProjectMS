@@ -16,8 +16,8 @@ public class GameEntityBase : SequencerObjectBase
 
     private SpriteRenderer      _spriteRenderer;
     private GameObject          _spriteObject;
-    private ActionGraph         _actionGraph;
-    private AIGraph             _aiGraph;
+    public ActionGraph         _actionGraph;
+    public AIGraph             _aiGraph;
     private StatusInfo          _statusInfo;
 
     private CollisionInfo       _collisionInfo;
@@ -135,6 +135,8 @@ public class GameEntityBase : SequencerObjectBase
         {
             debugTextManager.updateDebugText("Action","Action: " + getCurrentActionName());
             debugTextManager.updateDebugText("Defence","Defence: " + getDefenceType());
+
+            debugTextManager.updateDebugText("AI","AIState: " + getCurrentAIName());
         }
     
 
@@ -412,6 +414,7 @@ public class GameEntityBase : SequencerObjectBase
     public ObjectBase getCurrentTargetEntity() {return _currentTarget;}
 
     public CollisionInfo getCollisionInfo() {return _collisionInfo;}
+    public string getCurrentAIName() {return _aiGraph.getCurrentAIStateName();}
     public string getCurrentActionName() {return _actionGraph == null ? "" : _actionGraph.getCurrentActionName();}
     public float getDefenceAngle() {return _actionGraph.getCurrentDefenceAngle();}
     public DefenceType getDefenceType() {return _currentDefenceType;}
