@@ -10,6 +10,7 @@ public enum AIEventType
     AIEvent_SetAction,
     AIEvent_ClearTarget,
     AIEvent_ExecuteState,
+    AIEvent_TerminatePackage,
     Count,
 }
 
@@ -28,6 +29,9 @@ public enum AIChildEventType
 
     AIChildEvent_OnParry,
     AIChildEvent_OnParried,
+
+    AIChildEvent_OnEvade,
+    AIChildEvent_OnEvaded,
 
     Count,
 }
@@ -70,6 +74,23 @@ public class AIEvent_SetAction : AIEventBase
     }
 }
 
+public class AIEvent_TerminatePackage : AIEventBase
+{
+    public override AIEventType getFrameEventType() {return AIEventType.AIEvent_TerminatePackage;}
+    public override void onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        if(executeEntity is GameEntityBase == false)
+            return;
+        
+        GameEntityBase executeGameEntity = (GameEntityBase)executeEntity;
+        executeGameEntity.terminateAIPackage();
+    }
+
+    public override void loadFromXML(XmlNode node) 
+    {
+
+    }
+}
 
 public class AIEvent_ExecuteState : AIEventBase
 {
@@ -81,10 +102,13 @@ public class AIEvent_ExecuteState : AIEventBase
             return;
         
         GameEntityBase executeGameEntity = (GameEntityBase)executeEntity;
-        executeGameEntity.setTargetEntity(null);
+        executeGameEntity.setAIState(targetStateIndex);
     }
 
-    public override void loadFromXML(XmlNode node) {}
+    public override void loadFromXML(XmlNode node) 
+    {
+
+    }
 }
 
 public class AIEvent_ClearTarget : AIEventBase
@@ -105,6 +129,7 @@ public class AIEvent_ClearTarget : AIEventBase
 
 public class AIEvent_SetDirectionToTarget : AIEventBase
 {
+    float _directionAngle = 0f;
     public override AIEventType getFrameEventType() {return AIEventType.AIEvent_SetDirectionToTarget;}
     public override void onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
@@ -117,11 +142,24 @@ public class AIEvent_SetDirectionToTarget : AIEventBase
         
         Vector3 direction = executeGameEntity.getCurrentTargetEntity().transform.position - executeGameEntity.transform.position;
         direction.Normalize();
-
+        direction = Quaternion.Euler(0f,0f,_directionAngle) * direction;
         executeGameEntity.setAiDirection(direction);
     }
 
-    public override void loadFromXML(XmlNode node) {}
+    public override void loadFromXML(XmlNode node) 
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "Angle")
+            {
+                _directionAngle = float.Parse(attrValue);
+            }
+        }
+    }
 }
 
 public class AIEvent_SetAngleDirection : AIEventBase

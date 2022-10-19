@@ -17,7 +17,7 @@ public abstract class MovementBase
     protected float     _moveScale = 1f;
 
     protected Vector2   _currentPosition = Vector2.zero;
-    protected Vector2   _currentDirection = Vector2.right;
+    protected Vector3   _currentDirection = Vector2.right;
 
     protected Vector3   movementOfFrame;
 
@@ -60,5 +60,7 @@ public abstract class MovementBase
     {
         _moveScale = moveScale;
     }
+
+    public Vector3 getCurrentDirection() {return _currentDirection;}
 
 }

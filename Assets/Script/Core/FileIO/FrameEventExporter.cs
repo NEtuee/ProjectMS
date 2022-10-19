@@ -94,6 +94,8 @@ public static class FrameEventLoader
                 eventType = ChildFrameEventType.ChildFrameEvent_OnGuard;
             else if(targetName == "OnParry")
                 eventType = ChildFrameEventType.ChildFrameEvent_OnParry;
+            else if(targetName == "OnEvade")
+                eventType = ChildFrameEventType.ChildFrameEvent_OnEvade;
             else
                 DebugUtil.assert(false, "invalid child frame event type: {0}", targetName);
 

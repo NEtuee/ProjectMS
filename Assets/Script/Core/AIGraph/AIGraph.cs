@@ -10,7 +10,11 @@ public class AIGraph
     private int _currentPackageStateIndex = -1;
     private int _prevPackageStateIndex = -1;
 
+    private int _changePackageStateIndex = -1;
+
     private float _updateTimer = 0f;
+
+    private bool _packageEnd = false;
 
     private Vector3 _recentlyAiDirection = Vector3.zero;
 
@@ -85,6 +89,9 @@ public class AIGraph
 
         if(nodeChanged == true)
         {
+            _packageEnd = false;
+            _changePackageStateIndex = -1;
+
             processAIEvent(AIChildEventType.AIChildEvent_OnExit, targetEntity, ref getPrevAINode()._aiEvents);
             processAIEvent(AIChildEventType.AIChildEvent_OnExecute, targetEntity, ref getCurrentAINode()._aiEvents);
         }
@@ -94,29 +101,41 @@ public class AIGraph
 
     private bool processAIPackage(float deltaTime, AIPackageNodeData aiPackageNode, GameEntityBase targetEntity)
     {
-        AIPackageNodeData currentPackageNode = getCurrentAIPackageNode();
-        _updateTimer -= deltaTime;
-
-        processAIEvent(AIChildEventType.AIChildEvent_OnFrame, targetEntity, ref currentPackageNode._aiEvents);
-
-
-        if(_updateTimer <= 0f)
-            _updateTimer = currentPackageNode._updateTime;
-        else
+        if(_packageEnd == true)
             return false;
 
-        processAIEvent(AIChildEventType.AIChildEvent_OnUpdate, targetEntity, ref currentPackageNode._aiEvents);
-
         bool stateChanged = false;
-        int startIndex = aiPackageNode._branchIndexStart;
-        for(int i = startIndex; i < startIndex + aiPackageNode._branchCount; ++i)
-        {
-            if(processActionBranch(getCurrentAIPackage()._branchData[i],getCurrentAIPackage()._conditionCompareData) == true)
-            {
-                stateChanged = changeAIPackageState(getCurrentAIPackage()._branchData[i]._branchActionIndex);
-                break;
-            }
 
+        if(_changePackageStateIndex == -1)
+        {
+            AIPackageNodeData currentPackageNode = getCurrentAIPackageNode();
+            _updateTimer -= deltaTime;
+
+            processAIEvent(AIChildEventType.AIChildEvent_OnFrame, targetEntity, ref currentPackageNode._aiEvents);
+
+
+            if(_updateTimer <= 0f)
+                _updateTimer = currentPackageNode._updateTime;
+            else
+                return false;
+
+            processAIEvent(AIChildEventType.AIChildEvent_OnUpdate, targetEntity, ref currentPackageNode._aiEvents);
+
+            int startIndex = aiPackageNode._branchIndexStart;
+            for(int i = startIndex; i < startIndex + aiPackageNode._branchCount; ++i)
+            {
+                if(processActionBranch(getCurrentAIPackage()._branchData[i],getCurrentAIPackage()._conditionCompareData) == true)
+                {
+                    stateChanged = changeAIPackageState(getCurrentAIPackage()._branchData[i]._branchActionIndex);
+                    break;
+                }
+
+            }
+        }
+        else
+        {
+            stateChanged = changeAIPackageState(_changePackageStateIndex);
+            _changePackageStateIndex = -1;
         }
 
         if(stateChanged == true)
@@ -153,6 +172,16 @@ public class AIGraph
         return true;
     }
 
+    public void changeAIPackageStateOther(int aiPackageStateIndex)
+    {
+        if(aiPackageStateIndex == -1)
+        {
+            DebugUtil.assert(false,"invalid package state index: {0}",aiPackageStateIndex);
+            return;
+        }
+        _changePackageStateIndex = aiPackageStateIndex;
+        _packageEnd = false;
+    }
 
     private bool changeAIPackageState(int aiPackageStateIndex)
     {
@@ -173,15 +202,14 @@ public class AIGraph
 
     private void processAIEvent(AIChildEventType aiEventType, GameEntityBase targetEntity)
     {
-        if(processAIEvent(aiEventType,targetEntity, ref _aiGraphBaseData._aiEvents))
-            return;
-        else if(processAIEvent(aiEventType,targetEntity, ref getCurrentAINode()._aiEvents))
+        if(processAIEvent(aiEventType,targetEntity, ref getCurrentAIPackageNode()._aiEvents))
             return;
         else if(processAIEvent(aiEventType,targetEntity, ref getCurrentAIPackage()._aiEvents))
             return;
-        else if(processAIEvent(aiEventType,targetEntity, ref getCurrentAIPackageNode()._aiEvents))
+        else if(processAIEvent(aiEventType,targetEntity, ref getCurrentAINode()._aiEvents))
             return;
-
+        else if(processAIEvent(aiEventType,targetEntity, ref _aiGraphBaseData._aiEvents))
+            return;
     }
 
     private bool processAIEvent(AIChildEventType aiEventType, GameEntityBase targetEntity, ref Dictionary<AIChildEventType,AIChildFrameEventItem> aiEventDic)
@@ -242,8 +270,10 @@ public class AIGraph
     public TargetSearchType getCurrentTargetSearchType() {return getCurrentAIPackageNode()._targetSearchType;}
     public SearchIdentifier getCurrentSearchIdentifier() {return getCurrentAIPackageNode()._searchIdentifier;}
 
+    public void terminatePackage() {_packageEnd = true;}
+    public bool isCurrentPackageEnd() {return _packageEnd;}
     public float getCurrentTargetSearchRange() {return getCurrentAIPackageNode()._targetSearchRange;}
-    public string getCurrentAIStateName() {return getCurrentAIPackageNode()._nodeName;}
+    public string getCurrentAIStateName() {return _packageEnd ? "Package End" : getCurrentAIPackageNode()._nodeName;}
 
     private AIPackageNodeData getCurrentAIPackageNode() {return getCurrentAIPackage()._aiPackageNodeData[_currentPackageStateIndex];}
     private AIPackageNodeData getPrevAIPackageNode() {return getCurrentAIPackage()._aiPackageNodeData[_prevPackageStateIndex];}

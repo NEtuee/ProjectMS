@@ -16,8 +16,8 @@ public class GameEntityBase : SequencerObjectBase
 
     private SpriteRenderer      _spriteRenderer;
     private GameObject          _spriteObject;
-    public ActionGraph         _actionGraph;
-    public AIGraph             _aiGraph;
+    private ActionGraph         _actionGraph;
+    private AIGraph             _aiGraph;
     private StatusInfo          _statusInfo;
 
     private CollisionInfo       _collisionInfo;
@@ -34,6 +34,7 @@ public class GameEntityBase : SequencerObjectBase
     private DefenceType         _currentDefenceType = DefenceType.Empty;
 
     private Vector3             _recentlyAttackPoint = Vector3.zero;
+    private Vector3             _defenceDirection = Vector3.zero;
 
 
     private int[]               _currentActionBuffList = null;
@@ -136,7 +137,8 @@ public class GameEntityBase : SequencerObjectBase
             debugTextManager.updateDebugText("Action","Action: " + getCurrentActionName());
             debugTextManager.updateDebugText("Defence","Defence: " + getDefenceType());
 
-            debugTextManager.updateDebugText("AI","AIState: " + getCurrentAIName());
+            if(_aiGraph != null && _aiGraph.isValid())
+                debugTextManager.updateDebugText("AI","AIState: " + getCurrentAIName());
         }
     
 
@@ -144,7 +146,7 @@ public class GameEntityBase : SequencerObjectBase
 
         if(getDefenceAngle() != 0f)
         {
-            GizmoHelper.instance.drawArc(transform.position,0.8f,getDefenceAngle(),_direction,Color.cyan,0f);
+            GizmoHelper.instance.drawArc(transform.position,0.8f,getDefenceAngle(),_defenceDirection,Color.cyan,0f);
         }
 
 
@@ -220,11 +222,13 @@ public class GameEntityBase : SequencerObjectBase
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Attack_Guarded, _attackState == AttackState.AttackGuarded);
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Attack_Success, _attackState == AttackState.AttackSuccess);
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Attack_Parried, _attackState == AttackState.AttackParried);
+        _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Attack_Evaded, _attackState == AttackState.AttackEvade);
 
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Defence_Crash, _defenceState == DefenceState.DefenceCrash);
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Defence_Success, _defenceState == DefenceState.DefenceSuccess);
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Defence_Parry, _defenceState == DefenceState.ParrySuccess);
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Defence_Hit, _defenceState == DefenceState.Hit);
+        _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Defence_Evade, _defenceState == DefenceState.EvadeSuccess);
 
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Entity_Dead, _statusInfo.isDead());
 
@@ -303,8 +307,13 @@ public class GameEntityBase : SequencerObjectBase
     private void updateDirection()
     {
         DirectionType directionType = DirectionType.AlwaysRight;
+        DefenceDirectionType defenceDirectionType = DefenceDirectionType.Direction;
+
         if(_actionGraph != null)
+        {
             directionType = _actionGraph.getDirectionType();
+            defenceDirectionType = _actionGraph.getDefenceDirectionType();
+        }
 
         switch(directionType)
         {
@@ -335,8 +344,22 @@ public class GameEntityBase : SequencerObjectBase
             case DirectionType.AI:
                 _direction = _aiGraph.getRecentlyAIDirection();
                 break;
+            case DirectionType.MoveDirection:
+                _direction = getMovementControl().getMoveDirection();
+                break;
             case DirectionType.Count:
                 DebugUtil.assert(false, "invalid direction type : {0}",_actionGraph.getDirectionType());
+                break;
+        }
+
+
+        switch(defenceDirectionType)
+        {
+            case DefenceDirectionType.Direction:
+                _defenceDirection = _direction;
+                break;
+            case DefenceDirectionType.MousePoint:
+                _defenceDirection = ControllerEx.Instance().getJoystickAxisR(transform.position);
                 break;
         }
     }
@@ -358,12 +381,15 @@ public class GameEntityBase : SequencerObjectBase
             case RotationType.MousePoint:
                 _spriteRotation = Quaternion.FromToRotation(Vector3.right, ControllerEx.Instance().getJoystickAxisR(transform.position));
                 break;
+            case RotationType.MoveDirection:
+                _spriteRotation = Quaternion.FromToRotation(Vector3.right,getMovementControl().getMoveDirection());
+                break;
             case RotationType.Keep:
                 break;
     
         }
 
-        DebugUtil.assert((int)RotationType.Count == 4, "invalid rotation type");
+        DebugUtil.assert((int)RotationType.Count == 5, "check this");
         _spriteObject.transform.localRotation = _spriteRotation;
     }
 
@@ -396,6 +422,11 @@ public class GameEntityBase : SequencerObjectBase
     public TargetSearchType getCurrentTargetSearchType() {return _aiGraph.getCurrentTargetSearchType();}
     public SearchIdentifier getCurrentSearchIdentifier() {return _aiGraph.getCurrentSearchIdentifier();}
     public float getCurrentTargetSearchRange() {return _aiGraph.getCurrentTargetSearchRange();}
+
+    public Vector3 getCurrentDefenceDirection() {return _defenceDirection;}
+
+    public void terminateAIPackage() {_aiGraph.terminatePackage();}
+    public void setAIState(int index) {_aiGraph.changeAIPackageStateOther(index);}
 
     public void setAiDirection(float angle) {_aiGraph.setAIDirection(angle);}
     public void setAiDirection(Vector3 direction) {_aiGraph.setAIDirection(direction);}

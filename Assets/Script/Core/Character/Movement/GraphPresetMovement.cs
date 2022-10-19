@@ -39,11 +39,13 @@ public class GraphPresetMovement : MovementBase
             return false;
         }
 
+        _currentDirection = Vector3.right;
+
         if(direction == Vector3.zero)
             return false;
 
-        movementOfFrame += (Quaternion.FromToRotation(Vector3.right,direction) * Quaternion.Euler(0f,0f,_presetData.getDirectionAngle())) * 
-                            (Vector3.right * _presetData.getMoveValuePerFrameFromTime(_targetEntity.getMoveValuePerFrameFromTimeDesc()));
+        _currentDirection = (Quaternion.FromToRotation(Vector3.right,direction) * Quaternion.Euler(0f,0f,_presetData.getDirectionAngle())) * Vector3.right;
+        movementOfFrame += _currentDirection * _presetData.getMoveValuePerFrameFromTime(_targetEntity.getMoveValuePerFrameFromTimeDesc());
         return true;
     }
 

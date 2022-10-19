@@ -10,6 +10,8 @@ public class EffectRequestData : MessageData
     public float _endFrame;
     public float _framePerSecond;
 
+    public float _angle;
+
     public Vector3 _position;
 }
 
@@ -44,6 +46,7 @@ public class EffectItem
         _animationPlayer.changeAnimation(_animationPlayData);
 
         _spriteRenderer.transform.position = effectData._position;
+        _spriteRenderer.transform.localRotation = Quaternion.Euler(0f,0f,effectData._angle);
         _spriteRenderer.gameObject.SetActive(true);
         
     }

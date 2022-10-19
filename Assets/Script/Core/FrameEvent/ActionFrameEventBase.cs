@@ -19,6 +19,7 @@ public enum ChildFrameEventType
     ChildFrameEvent_OnHit,
     ChildFrameEvent_OnGuard,
     ChildFrameEvent_OnParry,
+    ChildFrameEvent_OnEvade,
     Count,
 }
 
@@ -226,7 +227,7 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
 
         target.setAttackPoint(successData._startPoint);
 
-        float attackInAngle = UnityEngine.Vector3.Angle(target.getDirection(), (successData._startPoint - target.transform.position).normalized);
+        float attackInAngle = UnityEngine.Vector3.Angle(target.getCurrentDefenceDirection(), (successData._startPoint - target.transform.position).normalized);
         bool guardSuccess = attackInAngle < target.getDefenceAngle() * 0.5f;
 
         if(guardSuccess && target.getDefenceType() == DefenceType.Guard)
@@ -243,13 +244,23 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
         {
             requester.setAttackState(AttackState.AttackParried);
             target.setDefenceState(DefenceState.ParrySuccess);
-
+            
             requester.executeAIEvent(AIChildEventType.AIChildEvent_OnParried);
             target.executeAIEvent(AIChildEventType.AIChildEvent_OnParry);
 
             eventType = ChildFrameEventType.ChildFrameEvent_OnParry;
         }
-        else if(guardSuccess == false || target.getDefenceType() == DefenceType.Empty)
+        else if(guardSuccess && target.getDefenceType() == DefenceType.Evade)
+        {
+            requester.setAttackState(AttackState.AttackEvade);
+            target.setDefenceState(DefenceState.EvadeSuccess);
+
+            requester.executeAIEvent(AIChildEventType.AIChildEvent_OnEvaded);
+            target.executeAIEvent(AIChildEventType.AIChildEvent_OnEvade);
+
+            eventType = ChildFrameEventType.ChildFrameEvent_OnEvade;
+        }
+        else if((guardSuccess == false || target.getDefenceType() == DefenceType.Empty) && target.getDefenceType() != DefenceType.Evade)
         {
             requester.setAttackState(AttackState.AttackSuccess);
             target.setDefenceState(DefenceState.Hit);
@@ -259,6 +270,7 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
 
             eventType = ChildFrameEventType.ChildFrameEvent_OnHit;
         }
+        
 
         executeChildFrameEvent(eventType, requester, target);
     }

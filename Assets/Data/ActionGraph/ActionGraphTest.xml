@@ -87,6 +87,8 @@
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
                     <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
+
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random" ToTarget="true"/>
                 </OnHit>
 
                 <OnGuard>
@@ -111,6 +113,8 @@
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
                     <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
+
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random" ToTarget="true"/>
                 </OnHit>
 
                 <OnGuard>
@@ -135,6 +139,8 @@
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
                     <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
+
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random" ToTarget="true"/>
                 </OnHit>
 
                 <OnGuard>
@@ -175,13 +181,15 @@
     </BloodSpread>
 
 
-    <Guard MovementType="GraphPreset" MovementGraphPreset="Guard" DirectionType="MoveInput" FlipType="Keep" DefenceType="Guard" DefenceAngle="180.0">
+    <Guard MovementType="GraphPreset" MovementGraphPreset="Guard" DirectionType="MoveInput" DefenceDirectionType="MousePoint" FlipType="Keep" DefenceType="Guard" DefenceAngle="180.0">
         <Animation Path="Resources/Sprites/DummyPlayer/Guard/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
+            <FrameEvent Type="SetDefenceType" StartFrame="0" DefenceType="Parry"/>
+            <FrameEvent Type="SetDefenceType" StartFrame="0.1" DefenceType="Guard"/>
         </Animation>
 
         <Branch Condition="Hit == true" Execute="Hit"/>
         <Branch Key="getKey_Guard == false" Condition="" Execute="CommonMoveSelection"/>
-        <Branch Condition="End == true" Execute="Guard"/>
+        <!-- <Branch Condition="End == true" Execute="Guard"/> -->
     </Guard>
 
 

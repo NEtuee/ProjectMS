@@ -209,6 +209,10 @@ public static class ActionGraphLoader
             {
                 nodeData._directionType = (DirectionType)System.Enum.Parse(typeof(DirectionType), targetValue);
             }
+            else if(targetName == "DefenceDirectionType")
+            {
+                nodeData._defenceDirectionType = (DefenceDirectionType)System.Enum.Parse(typeof(DefenceDirectionType), targetValue);
+            }
             else if(targetName == "MovementGraphPreset")
             {
                 MovementGraphPreset preset = ResourceContainerEx.Instance().GetScriptableObject("Preset\\MovementGraphPreset") as MovementGraphPreset;

@@ -37,6 +37,7 @@ public class ActionGraphNodeData
         _animationInfoIndex = -1;
         _movementType = MovementBase.MovementType.Empty;
         _directionType = DirectionType.AlwaysRight;
+        _defenceDirectionType = DefenceDirectionType.Direction;
         
         _index = -1;
         _branchIndexStart = 0;
@@ -48,6 +49,7 @@ public class ActionGraphNodeData
     public MovementBase.MovementType    _movementType = MovementBase.MovementType.Empty;
     public MovementGraphPresetData      _movementGraphPresetData = null;
     public DirectionType                _directionType = DirectionType.AlwaysRight;
+    public DefenceDirectionType         _defenceDirectionType = DefenceDirectionType.Direction;
     public RotationType                 _rotationType = RotationType.AlwaysRight;
     public FlipType                     _flipType = FlipType.AlwaysTurnOff;
     public DefenceType                  _defenceType = DefenceType.Empty;
@@ -72,7 +74,15 @@ public enum DirectionType
     MoveInput,
     MousePoint,
     AttackedPoint,
+    MoveDirection,
     AI,
+    Count,
+}
+
+public enum DefenceDirectionType
+{
+    Direction = 0,
+    MousePoint,
     Count,
 }
 
@@ -104,6 +114,7 @@ public enum DefenceType
     Empty,
     Guard,
     Parry,
+    Evade,
     Count,
 }
 
@@ -121,6 +132,7 @@ public enum RotationType
     AlwaysRight = 0,
     Direction,
     MousePoint,
+    MoveDirection,
     Keep,
     Count,
 }
@@ -145,10 +157,12 @@ public enum ConditionNodeUpdateType
     Attack_Guarded,
     Attack_Success,
     Attack_Parried,
+    Attack_Evaded,
 
     Defence_Success,
     Defence_Crash,
     Defence_Parry,
+    Defence_Evade,
 
     Defence_Hit,
 
@@ -208,11 +222,13 @@ public static class ConditionNodeInfoPreset
         {"AttackGuarded",new ConditionNodeInfo(ConditionNodeUpdateType.Attack_Guarded, ConditionNodeType.Bool)},
         {"AttackSuccess",new ConditionNodeInfo(ConditionNodeUpdateType.Attack_Success, ConditionNodeType.Bool)},
         {"AttackParried",new ConditionNodeInfo(ConditionNodeUpdateType.Attack_Parried, ConditionNodeType.Bool)},
+        {"AttackEvaded",new ConditionNodeInfo(ConditionNodeUpdateType.Attack_Evaded, ConditionNodeType.Bool)},
 
         {"DefenceSuccess",new ConditionNodeInfo(ConditionNodeUpdateType.Defence_Success, ConditionNodeType.Bool)},
         {"DefenceCrash",new ConditionNodeInfo(ConditionNodeUpdateType.Defence_Crash, ConditionNodeType.Bool)},
         {"ParrySuccess",new ConditionNodeInfo(ConditionNodeUpdateType.Defence_Parry, ConditionNodeType.Bool)},
         {"Hit",new ConditionNodeInfo(ConditionNodeUpdateType.Defence_Hit, ConditionNodeType.Bool)},
+        {"EvadeSuccess",new ConditionNodeInfo(ConditionNodeUpdateType.Defence_Evade, ConditionNodeType.Bool)},
 
         {"Dead",new ConditionNodeInfo(ConditionNodeUpdateType.Entity_Dead, ConditionNodeType.Bool)},
 

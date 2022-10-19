@@ -37,6 +37,13 @@ public class MovementControl
     public void setFrameToWorld(Transform targetTransform){_currentMovement?.SetFrameToWorldTransform(targetTransform);}
     public void setFrameToLocal(Transform targetTransform){_currentMovement?.SetFrameToLocalTransform(targetTransform);}
 
+    public Vector3 getMoveDirection()
+    {
+        if(_currentMovement == null)
+            return Vector3.zero;
+        return _currentMovement.getCurrentDirection();
+    }
+
     public MovementBase getCurrentMovement(){return _currentMovement;}
     public MovementBase.MovementType getCurrentMovementType(){return _currentMovement.getMovementType();}
 

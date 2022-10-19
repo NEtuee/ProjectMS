@@ -23,7 +23,7 @@
         <Branch Condition="End == true" Execute="Idle"/>
     </Hit>
 
-    <MoveAll MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="AI" FlipType="Direction" NormalizedSpeed="true">
+    <MoveAll MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="AI" FlipType="Direction" NormalizedSpeed="true" DefenceType="Evade" DefenceAngle="360.0" MoveScale="0.8">
         <Animation Path="Resources/Sprites/DummyPlayer/MoveForward/" StartFrame="0" EndFrame="5" FramePerSecond="12" XFlip="true">
             <MultiSelectAnimation Path="Resources/Sprites/Player/moveUp/" Condition="(AngleDirection >= 45.0) && (AngleDirection < 135.0)"/>
             <MultiSelectAnimation Path="Resources/Sprites/Player/moveDown/" Condition="(AngleDirection >= 225.0) && (AngleDirection < 315.0)"/>
@@ -37,7 +37,7 @@
     </MoveAll>
 
 
-    <SideDash MovementType="GraphPreset" DirectionType="AI" MovementGraphPreset="SideDash" FlipType="Direction" RotationType="Direction">
+    <SideDash MovementType="GraphPreset" DirectionType="AI" MovementGraphPreset="SideDash" FlipType="Direction" RotationType="MoveDirection">
         <Animation Path="Resources/Sprites/DummyPlayer/Dash/" StartFrame="0" EndFrame="1" FramePerSecond="2" XFlip="true">
         </Animation>
 
@@ -81,6 +81,7 @@
             <FrameEvent Type="Attack" StartFrame="0" AttackPreset="PlayerAttackTest">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random" ToTarget="true"/>
                 </OnHit>
 
                 <OnGuard>

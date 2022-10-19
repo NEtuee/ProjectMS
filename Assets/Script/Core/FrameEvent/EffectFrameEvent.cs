@@ -10,23 +10,39 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
 
     private float _framePerSecond = 1f;
 
+    private float _spawnAngle = 0f;
+
+    private bool _random = false;
+    private bool _toTarget = false;
+
     private Vector3 _spawnOffset = Vector3.zero;
 
     public override void onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
         if(executeEntity is GameEntityBase == false)
             return;
+
+        if(_toTarget && targetEntity is GameEntityBase == false)
+            return;
         
         GameEntityBase requester = (GameEntityBase)executeEntity;
+
+        Vector3 centerPosition;
+        if(_toTarget)
+            centerPosition = targetEntity.transform.position;
+        else
+            centerPosition = requester.transform.position;
         
         EffectRequestData requestData = MessageDataPooling.GetMessageData<EffectRequestData>();
         requestData._effectPath = _effectPath;
         requestData._startFrame = 0f;
         requestData._endFrame = -1f;
         requestData._framePerSecond = _framePerSecond;
-        requestData._position = requester.transform.position 
+        requestData._position = centerPosition 
                 + (Quaternion.Euler(0f,0f,Vector3.SignedAngle(Vector3.right, requester.getDirection(), Vector3.forward)) 
                 * _spawnOffset);
+
+        requestData._angle = _random ? Random.Range(0f,360f) : _spawnAngle;
 
         requester.SendMessageEx(MessageTitles.effect_spawnEffect,UniqueIDBase.QueryUniqueID("EffectManager"),requestData);
     }
@@ -57,6 +73,22 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
                 _spawnOffset.y = float.Parse(vector[1]);
                 _spawnOffset.z = float.Parse(vector[2]);
             }
+            else if(attributes[i].Name == "Angle")
+            {
+                if(attributes[i].Value == "Random")
+                {
+                    _random = true;
+                }
+                else
+                {
+                    _spawnAngle = float.Parse(attributes[i].Value);
+                }
+            }
+            else if(attributes[i].Name == "ToTarget")
+            {
+                _toTarget = bool.Parse(attributes[i].Value);
+            }
+
         }
 
         if(_effectPath == "")
