@@ -149,6 +149,7 @@ public enum ConditionNodeUpdateType
     Action_AngleDirection,
     Action_IsXFlip,
     Action_IsYFlip,
+    Action_CurrentFrame,
 
     Input_AttackCharge,
     Input_AttackBlood,
@@ -214,6 +215,7 @@ public static class ConditionNodeInfoPreset
 
         {"IsXFlip",new ConditionNodeInfo(ConditionNodeUpdateType.Action_IsXFlip, ConditionNodeType.Bool)},
         {"IsYFlip",new ConditionNodeInfo(ConditionNodeUpdateType.Action_IsYFlip, ConditionNodeType.Bool)},
+        {"CurrentFrame",new ConditionNodeInfo(ConditionNodeUpdateType.Action_CurrentFrame, ConditionNodeType.Float)},
 
         {"InputAttackCharge",new ConditionNodeInfo(ConditionNodeUpdateType.Input_AttackCharge, ConditionNodeType.Bool)},
         {"InputAttackBlood",new ConditionNodeInfo(ConditionNodeUpdateType.Input_AttackBlood, ConditionNodeType.Bool)},

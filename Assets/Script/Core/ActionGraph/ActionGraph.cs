@@ -60,7 +60,7 @@ public class ActionGraph
 
     private void createCoditionNodeDataAll()
     {
-        DebugUtil.assert((int)ConditionNodeUpdateType.Count == 26, "check this");
+        DebugUtil.assert((int)ConditionNodeUpdateType.Count == 27, "check this");
 
         foreach(var item in ConditionNodeInfoPreset._nodePreset.Values)
         {
@@ -495,6 +495,7 @@ public class ActionGraph
             return getCurrentAction()._moveScale * _animationPlayer.getCurrentAnimationDuration();
     }
 
+    public float getCurrentFrame() {return _animationPlayer.getCurrentFrame();}
     public float getCurrentDefenceAngle() {return getCurrentAction()._defenceAngle;}
     public DefenceType getCurrentDefenceType() {return getCurrentAction()._defenceType;}
     public RotationType getCurrentRotationType() {return getCurrentAction()._rotationType;}

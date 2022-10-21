@@ -200,6 +200,7 @@ public class AnimationPlayer
         setCurrentFrameEventIndex(playData);
     }
 
+    public float getCurrentFrame() {return _animationTimeProcessor.getCurrentFrame();}
     public float getCurrentAnimationDuration() {return _animationTimeProcessor.getAnimationDuration();}
 
     public int getCurrentIndex() {return _animationTimeProcessor.getCurrentIndex();}
