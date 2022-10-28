@@ -78,11 +78,11 @@
 
     <Attack_LV1 MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="Keep" FlipType="Keep">
         <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="3">
-            <FrameEvent Type="Attack" StartFrame="0" AttackPreset="PlayerAttackTest">
-                <OnHit>
+            <FrameEvent Type="Attack" AttackType="GuardBreak" StartFrame="0" AttackPreset="PlayerAttackTest" IgnoreDefenceType="Guard">
+                <OnGuardBreak>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random" ToTarget="true"/>
-                </OnHit>
+                </OnGuardBreak>
 
                 <OnGuard>
                     <FrameEvent Type="TeleportToTarget"/>

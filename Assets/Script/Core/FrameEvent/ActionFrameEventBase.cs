@@ -20,6 +20,7 @@ public enum ChildFrameEventType
     ChildFrameEvent_OnGuard,
     ChildFrameEvent_OnParry,
     ChildFrameEvent_OnEvade,
+    ChildFrameEvent_OnGuardBreak,
     Count,
 }
 
@@ -190,7 +191,10 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
 
     private CollisionInfo _collisionInfo;
     private CollisionDelegate _collisionDelegate;
+    private DefenceType[] _ignoreDefenceType = null;
+
     private AttackType _attackType;
+    
 
     private HashSet<ObjectBase> _collisionList = new HashSet<ObjectBase>();
 
@@ -228,9 +232,36 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
         target.setAttackPoint(successData._startPoint);
 
         float attackInAngle = UnityEngine.Vector3.Angle(target.getCurrentDefenceDirection(), (successData._startPoint - target.transform.position).normalized);
-        bool guardSuccess = attackInAngle < target.getDefenceAngle() * 0.5f;
 
-        if(guardSuccess && target.getDefenceType() == DefenceType.Guard)
+        bool guardSuccess = (attackInAngle < target.getDefenceAngle() * 0.5f);
+        bool canIgnore = canIgnoreDefenceType(target.getDefenceType());
+
+        if(((guardSuccess == false || target.getDefenceType() == DefenceType.Empty) && target.getDefenceType() != DefenceType.Evade) || canIgnore)
+        {
+            if(_attackType == AttackType.Default)
+            {
+                requester.setAttackState(AttackState.AttackSuccess);
+                target.setDefenceState(DefenceState.Hit);
+
+                requester.executeAIEvent(AIChildEventType.AIChildEvent_OnAttack);
+                target.executeAIEvent(AIChildEventType.AIChildEvent_OnAttacked);
+
+                eventType = ChildFrameEventType.ChildFrameEvent_OnHit;
+
+            }
+            else if(_attackType == AttackType.GuardBreak)
+            {
+                requester.setAttackState(AttackState.AttackGuardBreak);
+                target.setDefenceState(DefenceState.GuardBroken);
+
+                requester.executeAIEvent(AIChildEventType.AIChildEvent_OnGuardBreak);
+                target.executeAIEvent(AIChildEventType.AIChildEvent_OnGuardBroken);
+
+                eventType = ChildFrameEventType.ChildFrameEvent_OnGuardBreak;
+            }
+
+        }
+        else if(guardSuccess && target.getDefenceType() == DefenceType.Guard)
         {
             requester.setAttackState(AttackState.AttackGuarded);
             target.setDefenceState(DefenceState.DefenceSuccess);
@@ -260,19 +291,23 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
 
             eventType = ChildFrameEventType.ChildFrameEvent_OnEvade;
         }
-        else if((guardSuccess == false || target.getDefenceType() == DefenceType.Empty) && target.getDefenceType() != DefenceType.Evade)
-        {
-            requester.setAttackState(AttackState.AttackSuccess);
-            target.setDefenceState(DefenceState.Hit);
-
-            requester.executeAIEvent(AIChildEventType.AIChildEvent_OnAttack);
-            target.executeAIEvent(AIChildEventType.AIChildEvent_OnAttacked);
-
-            eventType = ChildFrameEventType.ChildFrameEvent_OnHit;
-        }
         
 
         executeChildFrameEvent(eventType, requester, target);
+    }
+
+    private bool canIgnoreDefenceType(DefenceType defenceType)
+    {
+        if(_ignoreDefenceType == null || _ignoreDefenceType.Length == 0)
+            return false;
+
+        for(int i = 0; i < _ignoreDefenceType.Length; ++i)
+        {
+            if(_ignoreDefenceType[i] == defenceType)
+                return true;
+        }
+
+        return false;
     }
 
     public override void loadFromXML(XmlNode node)
@@ -309,6 +344,24 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
 
                 radius = presetData._attackRadius;
                 angle = presetData._attackAngle;
+            }
+            else if(attributes[i].Name == "IgnoreDefenceType")
+            {
+                string value = attributes[i].Value;
+                
+                if(value == null || value == "")
+                {
+                    DebugUtil.assert(false,"ignoreDefenceType must need type");
+                    return;
+                }
+
+                string[] defencies = value.Split(' ');
+                _ignoreDefenceType = new DefenceType[defencies.Length];
+
+                for(int index = 0; index < defencies.Length; ++index)
+                {
+                    _ignoreDefenceType[index] = (DefenceType)System.Enum.Parse(typeof(DefenceType), defencies[index]);
+                }
             }
 
         }

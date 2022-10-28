@@ -695,8 +695,12 @@ public class AIGraphLoader
             currentEventType = AIChildEventType.AIChildEvent_OnEvade;
         else if(eventType == "OnEvaded")
             currentEventType = AIChildEventType.AIChildEvent_OnEvaded;
+        else if(eventType == "OnGuardBreak")
+            currentEventType = AIChildEventType.AIChildEvent_OnGuardBreak;
+        else if(eventType == "OnGuardBroken")
+            currentEventType = AIChildEventType.AIChildEvent_OnGuardBroken;
 
-        DebugUtil.assert((int)AIChildEventType.Count == 12, "check this");
+        DebugUtil.assert((int)AIChildEventType.Count == 14, "check this");
 
         if(childEventDic.ContainsKey(currentEventType))
         {

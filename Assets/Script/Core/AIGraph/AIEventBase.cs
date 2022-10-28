@@ -33,6 +33,9 @@ public enum AIChildEventType
     AIChildEvent_OnEvade,
     AIChildEvent_OnEvaded,
 
+    AIChildEvent_OnGuardBreak,
+    AIChildEvent_OnGuardBroken,
+
     Count,
 }
 

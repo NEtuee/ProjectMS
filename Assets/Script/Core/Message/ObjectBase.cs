@@ -7,7 +7,7 @@ public abstract class ObjectBase : MessageReceiver, IProgress
     protected int           _currentManagerNumber = -1;
 
 
-    protected Vector3 _direction = Vector3.right;
+    public Vector3 _direction = Vector3.right;
 
 
     protected override void Awake()

@@ -19,7 +19,8 @@ public enum TargetSearchType
 public enum AttackType
 {
     Default,
-    GuardCrash,
+    GuardBreak,
+    Count,
 }
 
 public enum AttackState
@@ -29,6 +30,7 @@ public enum AttackState
     AttackGuarded,
     AttackParried,
     AttackEvade,
+    AttackGuardBreak,
 }
 
 public enum DefenceState
@@ -39,6 +41,7 @@ public enum DefenceState
     DefenceCrash,
     ParrySuccess,
     EvadeSuccess,
+    GuardBroken,
 }
 
 
