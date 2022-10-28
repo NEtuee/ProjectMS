@@ -120,4 +120,24 @@
         Factor="20.0"
     />
 
+    <JustGuardBreakHit 
+        Key="12"
+        StatusName="GuardBroken"
+
+        UpdateType="OneShot"
+        ApplyType="Direct"
+
+        Factor="1.0"
+    />
+
+    <JustGuardBreakRelease
+        Key="13"
+        StatusName="GuardBroken"
+    
+        UpdateType="OneShot"
+        ApplyType="Direct"
+
+        Factor="-1.0"
+    />
+
 </BuffInfo>

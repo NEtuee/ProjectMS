@@ -72,8 +72,36 @@
         <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="3">
         </Animation>
 
+        <Branch Key="getKey_Guard" Condition="(CurrentFrame < 0.1)" Execute="JustGuardBreak"/>
         <Branch Condition="End == true" Execute="CommonMoveSelection"/>
     </Attack_Guarded>
+
+    <JustGuardBreak DirectionType="Keep" FlipType="Keep">
+        <Animation Path="Resources/Sprites/DummyPlayer/JustGuardBreak/" StartFrame="0" EndFrame="1" FramePerSecond="12">
+            <FrameEvent Type="Test" Log="Just Guard Break Excuted"/>
+            
+            <FrameEvent Type="Attack" StartFrame="0" AttackPreset="Player_JustGuardBreak">
+            
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="12"/>
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random" ToTarget="true"/>
+                </OnHit>
+
+                <OnGuard>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="12"/>
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random" ToTarget="true"/>
+                </OnGuard>
+
+                <OnParry>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="12"/>
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random" ToTarget="true"/>
+                </OnParry>
+
+            </FrameEvent> 
+        </Animation>
+        
+        <Branch Condition="End == true" Execute="CommonMoveSelection"/>
+    </JustGuardBreak>
 
     <Attack_Parried MovementType="GraphPreset" MovementGraphPreset="AttackGuarded" DirectionType="Keep" FlipType="Keep">
         <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="0.3">
