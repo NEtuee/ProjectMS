@@ -23,6 +23,8 @@ public static class FrameEventLoader
             outFrameEvent = new ActionFrameEvent_ApplyBuff();
         else if(type == "ApplyBuffTarget")
             outFrameEvent = new ActionFrameEvent_ApplyBuffTarget();
+        else if(type == "DeleteBuff")
+            outFrameEvent = new ActionFrameEvent_DeleteBuff();
         else if(type == "TeleportToTarget")
             outFrameEvent = new ActionFrameEvent_TeleportToTarget();
         else if(type == "SetDefenceType")
@@ -35,7 +37,7 @@ public static class FrameEventLoader
             return null;
         }
 
-        DebugUtil.assert((int)FrameEventType.Count == 7, "check here");
+        DebugUtil.assert((int)FrameEventType.Count == 8, "check here");
 
 
         if(outFrameEvent == null)
@@ -96,6 +98,8 @@ public static class FrameEventLoader
                 eventType = ChildFrameEventType.ChildFrameEvent_OnParry;
             else if(targetName == "OnEvade")
                 eventType = ChildFrameEventType.ChildFrameEvent_OnEvade;
+            else if(targetName == "OnGuardBreak")
+                eventType = ChildFrameEventType.ChildFrameEvent_OnGuardBreak;
             else
                 DebugUtil.assert(false, "invalid child frame event type: {0}", targetName);
 

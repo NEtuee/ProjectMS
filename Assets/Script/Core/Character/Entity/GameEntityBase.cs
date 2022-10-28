@@ -41,7 +41,6 @@ public class GameEntityBase : SequencerObjectBase
 
     private Color               _debugColor = Color.red;
 
-    [SerializeField]
     private ObjectBase          _currentTarget;
 
     public override void assign()
@@ -224,12 +223,14 @@ public class GameEntityBase : SequencerObjectBase
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Attack_Success, _attackState == AttackState.AttackSuccess);
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Attack_Parried, _attackState == AttackState.AttackParried);
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Attack_Evaded, _attackState == AttackState.AttackEvade);
+        _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Attack_GuardBreak, _attackState == AttackState.AttackGuardBreak);
 
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Defence_Crash, _defenceState == DefenceState.DefenceCrash);
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Defence_Success, _defenceState == DefenceState.DefenceSuccess);
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Defence_Parry, _defenceState == DefenceState.ParrySuccess);
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Defence_Hit, _defenceState == DefenceState.Hit);
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Defence_Evade, _defenceState == DefenceState.EvadeSuccess);
+        _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Defence_GuardBroken, _defenceState == DefenceState.GuardBroken);
 
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Entity_Dead, _statusInfo.isDead());
 
@@ -276,6 +277,17 @@ public class GameEntityBase : SequencerObjectBase
         DebugUtil.assert((int)FlipType.Count == 4, "flip type count error");
 
         return flipState;
+    }
+
+    public void deleteActionBuffList(int[] buffList)
+    {
+        if(buffList == null)
+            return;
+
+        for(int i = 0; i < buffList.Length; ++i)
+        {
+            _statusInfo.deleteBuff(buffList[i]);
+        }
     }
 
     public void applyActionBuffList(int[] buffList)
