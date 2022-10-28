@@ -279,6 +279,17 @@ public class GameEntityBase : SequencerObjectBase
         return flipState;
     }
 
+    public void deleteActionBuffList(int[] buffList)
+    {
+        if(buffList == null)
+            return;
+
+        for(int i = 0; i < buffList.Length; ++i)
+        {
+            _statusInfo.deleteBuff(buffList[i]);
+        }
+    }
+
     public void applyActionBuffList(int[] buffList)
     {
         if(buffList == null)

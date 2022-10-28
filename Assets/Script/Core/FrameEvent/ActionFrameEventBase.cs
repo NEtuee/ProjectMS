@@ -7,6 +7,7 @@ public enum FrameEventType
     FrameEvent_Attack,
     FrameEvent_ApplyBuff,
     FrameEvent_ApplyBuffTarget,
+    FrameEvent_DeleteBuff,
     FrameEvent_TeleportToTarget,
     FrameEvent_SetDefenceType,
     FrameEvent_Effect,
@@ -110,6 +111,40 @@ public class ActionFrameEvent_TeleportToTarget : ActionFrameEventBase
         {
             if(attributes[i].Name == "DistanceOffset")
                 _distanceOffset = float.Parse(attributes[i].Value);
+        }
+    }
+}
+
+public class ActionFrameEvent_DeleteBuff : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_DeleteBuff;}
+
+    private int[] buffKeyList = null;
+
+    public override void onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        if(executeEntity is GameEntityBase == false)
+            return;
+        
+        ((GameEntityBase)executeEntity).deleteActionBuffList(buffKeyList);
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            if(attributes[i].Name == "BuffList")
+            {
+                string[] buffList = attributes[i].Value.Split(' ');
+
+                buffKeyList = new int[buffList.Length];
+                for(int j = 0; j < buffList.Length; ++j)
+                {
+                    buffKeyList[j] = int.Parse(buffList[j]);
+                }
+
+            }
         }
     }
 }
