@@ -59,7 +59,7 @@ public class AIGraphLoader
         _globalVariables.Clear();
         Dictionary<ActionGraphBranchData, string> actionCompareDic = new Dictionary<ActionGraphBranchData, string>();
         Dictionary<string, int> actionIndexDic = new Dictionary<string, int>();
-        Dictionary<string, AIEvent_ExecuteState> aiExecuteStateDic = new Dictionary<string, AIEvent_ExecuteState>();
+        Dictionary<string, List<AIEvent_ExecuteState>> aiExecuteStateDic = new Dictionary<string, List<AIEvent_ExecuteState>>();
 
         Dictionary<string, int> aiPackageIndexDic = new Dictionary<string, int>();
 
@@ -203,7 +203,7 @@ public class AIGraphLoader
         XmlNodeList nodeList = node.ChildNodes;
         int branchStartIndex = branchDataList.Count;
 
-        Dictionary<string, AIEvent_ExecuteState> aiExecuteStateDic = new Dictionary<string, AIEvent_ExecuteState>();
+        Dictionary<string, List<AIEvent_ExecuteState>> aiExecuteStateDic = new Dictionary<string, List<AIEvent_ExecuteState>>();
 
         for(int i = 0; i < nodeList.Count; ++i)
         {
@@ -265,13 +265,7 @@ public class AIGraphLoader
                 DebugUtil.assert(false, "invalid attribute: {0}",nodeList[i].Name);
             }
         }
-
-        // if(branchStartIndex == branchDataList.Count)
-        // {
-        //     DebugUtil.assert(false,"branch data not exists");
-        //     return null;
-        // }
-
+        
         nodeData._branchIndexStart = branchStartIndex;
         nodeData._branchCount = branchDataList.Count - branchStartIndex;
 
@@ -386,7 +380,7 @@ public class AIGraphLoader
         _globalVariables.Clear();
         Dictionary<ActionGraphBranchData, string> actionCompareDic = new Dictionary<ActionGraphBranchData, string>();
         Dictionary<string, int> aiIndexDic = new Dictionary<string, int>();
-        Dictionary<string, AIEvent_ExecuteState> aiExecuteEventDic = new Dictionary<string, AIEvent_ExecuteState>();
+        Dictionary<string, List<AIEvent_ExecuteState>> aiExecuteEventDic = new Dictionary<string, List<AIEvent_ExecuteState>>();
         XmlNodeList nodeList = node.ChildNodes;
 
         int actionIndex = 0;
@@ -459,7 +453,11 @@ public class AIGraphLoader
                 return null;
             }
 
-            item.Value.targetStateIndex = aiIndexDic[item.Key];
+            for(int i = 0; i < item.Value.Count; ++i)
+            {
+                item.Value[i].targetStateIndex = aiIndexDic[item.Key];
+            }
+            
         }
 
         if(nodeDataList.Count != 0 && aiPackageBaseData._defaultAIIndex == -1)
@@ -506,7 +504,7 @@ public class AIGraphLoader
         }
     }
 
-    private static AIPackageNodeData readAIPackageNode(XmlNode node, ref Dictionary<ActionGraphBranchData, string> actionCompareDic,ref List<ActionGraphBranchData> branchDataList, ref List<ActionGraphConditionCompareData> compareDataList, in Dictionary<string, XmlNodeList> branchSetDic, ref Dictionary<string, AIEvent_ExecuteState> aiExecuteEventDic)
+    private static AIPackageNodeData readAIPackageNode(XmlNode node, ref Dictionary<ActionGraphBranchData, string> actionCompareDic,ref List<ActionGraphBranchData> branchDataList, ref List<ActionGraphConditionCompareData> compareDataList, in Dictionary<string, XmlNodeList> branchSetDic, ref Dictionary<string, List<AIEvent_ExecuteState>> aiExecuteEventDic)
     {
         AIPackageNodeData nodeData = new AIPackageNodeData();
         nodeData._nodeName = node.Name;
@@ -618,7 +616,7 @@ public class AIGraphLoader
         return nodeData;
     }
 
-    private static void readAIPackageChildEvent(XmlNode node, ref Dictionary<AIPackageEventType,AIChildFrameEventItem> childEventDic, ref Dictionary<string, AIEvent_ExecuteState> aiExecuteEventDic)
+    private static void readAIPackageChildEvent(XmlNode node, ref Dictionary<AIPackageEventType,AIChildFrameEventItem> childEventDic, ref Dictionary<string, List<AIEvent_ExecuteState>> aiExecuteEventDic)
     {
         string eventType = node.Name.Replace("PackageEvent_","");
 
@@ -664,7 +662,7 @@ public class AIGraphLoader
         childEventDic.Add(currentEventType, item);
     }
 
-    private static void readAIChildEvent(XmlNode node, ref Dictionary<AIChildEventType,AIChildFrameEventItem> childEventDic, ref Dictionary<string, AIEvent_ExecuteState> aiExecuteEventDic)
+    private static void readAIChildEvent(XmlNode node, ref Dictionary<AIChildEventType,AIChildFrameEventItem> childEventDic, ref Dictionary<string, List<AIEvent_ExecuteState>> aiExecuteEventDic)
     {
         string eventType = node.Name.Replace("Event_","");
 
@@ -735,7 +733,7 @@ public class AIGraphLoader
         childEventDic.Add(currentEventType, item);
     }
 
-    public static AIEventBase readAiEvent(XmlNode node, ref Dictionary<string, AIEvent_ExecuteState> aiExecuteEventDic)
+    public static AIEventBase readAiEvent(XmlNode node, ref Dictionary<string, List<AIEvent_ExecuteState>> aiExecuteEventDic)
     {
         if(node.Name != "AIEvent")
         {
@@ -804,7 +802,10 @@ public class AIGraphLoader
                 if(attrName != "Execute")
                     continue;
 
-                aiExecuteEventDic.Add(attrValue,(AIEvent_ExecuteState)aiEvent);
+                if(aiExecuteEventDic.ContainsKey(attrValue) == false)
+                    aiExecuteEventDic.Add(attrValue,new List<AIEvent_ExecuteState>());
+
+                aiExecuteEventDic[attrValue].Add((AIEvent_ExecuteState)aiEvent);
                 find = true;
                 break;
             }
