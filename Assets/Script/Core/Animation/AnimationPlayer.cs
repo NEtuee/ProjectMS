@@ -147,7 +147,7 @@ public class AnimationPlayer
             {
                 frameEvent.initialize();
 
-                if(frameEvent.onExecute(targetEntity) == true && frameEvent._endFrame != 0f)
+                if(frameEvent.onExecute(targetEntity) == true && frameEvent._endFrame > frameEvent._startFrame)
                 {
                     FrameEventProcessDescription desc;
                     desc._executeObject = targetEntity;
