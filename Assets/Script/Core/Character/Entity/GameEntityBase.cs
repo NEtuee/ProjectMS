@@ -186,12 +186,17 @@ public class GameEntityBase : SequencerObjectBase
             _statusInfo.updateDebugTextXXX(debugTextManager);
         }
         
-        CollisionManager.Instance().collisionRequest(_collisionInfo,this,collisionTest);
+        CollisionManager.Instance().collisionRequest(_collisionInfo,this,collisionTest,collisionEndEvent);
     }
 
     private void collisionTest(CollisionSuccessData data)
     {
         _debugColor = Color.green;
+    }
+
+    private void collisionEndEvent()
+    {
+
     }
 
     public void resetState()

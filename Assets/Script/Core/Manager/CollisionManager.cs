@@ -14,6 +14,7 @@ public struct CollisionSuccessData
 public struct CollisionRequestData
 {
     public CollisionDelegate _collisionDelegate;
+    public System.Action _collisionEndEvent;
     public CollisionInfo _collision;
 
     public object _requestObject;
@@ -113,9 +114,9 @@ public class CollisionManager : Singleton<CollisionManager>
         _collisionObjectList[(int)collisionType].Add(objectData);
     }
 
-    public void collisionRequest(CollisionInfo collisionData, object requestObject, CollisionDelegate collisionDelegate)
+    public void collisionRequest(CollisionInfo collisionData, object requestObject, CollisionDelegate collisionDelegate, System.Action collisionEndEvent)
     {
-        collisionRequest(new CollisionRequestData{_collisionDelegate = collisionDelegate, _requestObject = requestObject, _collision = collisionData});
+        collisionRequest(new CollisionRequestData{_collisionDelegate = collisionDelegate, _collisionEndEvent = collisionEndEvent, _requestObject = requestObject, _collision = collisionData});
     }
 
     public void collisionRequest(CollisionRequestData request)
@@ -138,6 +139,7 @@ public class CollisionManager : Singleton<CollisionManager>
                 collisionCheck(i,request);
             }
 
+            request._collisionEndEvent();
         }
 
         _collisionRequestCount = 0;

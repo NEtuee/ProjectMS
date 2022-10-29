@@ -276,45 +276,76 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
 {
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_Attack;}
 
-    private CollisionInfo _collisionInfo;
-    private CollisionDelegate _collisionDelegate;
+    private CollisionInfo           _collisionInfo;
+    private CollisionDelegate       _collisionDelegate;
+    private System.Action           _collisionEndEvent;
     
-    private DefenceType[] _ignoreDefenceType = null;
+    private DefenceType[]           _ignoreDefenceType = null;
 
-    private AttackType _attackType;
+    private AttackType              _attackType;
     
 
     private HashSet<ObjectBase> _collisionList = new HashSet<ObjectBase>();
+    private List<CollisionSuccessData> _collisionOrder = new List<CollisionSuccessData>();
 
     public override void initialize()
     {
         _collisionList.Clear();
+        _collisionOrder.Clear();
     }
 
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
         _collisionInfo.updateCollisionInfo(executeEntity.transform.position,executeEntity.getDirection());
         _collisionInfo.drawCollosionArea(UnityEngine.Color.red,1f);
-        CollisionManager.Instance().collisionRequest(_collisionInfo,executeEntity,_collisionDelegate);
+        CollisionManager.Instance().collisionRequest(_collisionInfo,executeEntity,_collisionDelegate,_collisionEndEvent);
 
         return true;
     }   
 
-    public void attackProcess(CollisionSuccessData successData)
+    public void attackProcess()
+    {
+        for(int i = 0; i < _collisionOrder.Count; ++i)
+        {
+            if(attackTarget(_collisionOrder[i]) == false)
+                break;
+        }
+
+        _collisionOrder.Clear();
+    }
+
+    public void attackPrepare(CollisionSuccessData successData)
+    {
+        if(successData._requester is GameEntityBase == false || successData._target is GameEntityBase == false)
+            return;
+
+        float distanceSq = (((GameEntityBase)successData._target).transform.position - successData._startPoint).sqrMagnitude;
+        for(int i = 0; i < _collisionOrder.Count; ++i)
+        {
+            GameEntityBase target = (GameEntityBase)_collisionOrder[i]._target;
+
+            if((target.transform.position - successData._startPoint).sqrMagnitude > distanceSq)
+            {
+                _collisionOrder.Insert(i,successData);
+                return;
+            }
+        }
+
+        _collisionOrder.Add(successData);
+    }
+
+    private bool attackTarget(CollisionSuccessData successData)
     {
         _collisionInfo.drawCollosionArea(UnityEngine.Color.green,1f);
 
-        if(successData._requester is GameEntityBase == false || successData._target is GameEntityBase == false)
-            return;
-        
         GameEntityBase requester = (GameEntityBase)successData._requester;
         GameEntityBase target = (GameEntityBase)successData._target;
 
         if(target._searchIdentifier == requester._searchIdentifier)
-            return;
+            return true;
 
         if(_collisionList.Contains(target) == true)
-            return;
+            return true;
         else
             _collisionList.Add(target);
 
@@ -328,6 +359,8 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
 
         bool guardSuccess = (attackInAngle < target.getDefenceAngle() * 0.5f);
         bool canIgnore = canIgnoreDefenceType(target.getDefenceType());
+
+        bool attackSuccess = false;
 
         if(((guardSuccess == false || target.getDefenceType() == DefenceType.Empty) && target.getDefenceType() != DefenceType.Evade) || canIgnore)
         {
@@ -352,6 +385,8 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
 
                 eventType = ChildFrameEventType.ChildFrameEvent_OnGuardBreak;
             }
+
+            attackSuccess = true;
 
         }
         else if(guardSuccess && target.getDefenceType() == DefenceType.Guard)
@@ -387,6 +422,8 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
         
 
         executeChildFrameEvent(eventType, requester, target);
+
+        return attackSuccess;
     }
 
     private bool canIgnoreDefenceType(DefenceType defenceType)
@@ -462,7 +499,8 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
         CollisionInfoData data = new CollisionInfoData(radius,angle, CollisionType.Attack);
         _collisionInfo = new CollisionInfo(data);
 
-        _collisionDelegate = attackProcess;
+        _collisionDelegate = attackPrepare;
+        _collisionEndEvent = attackProcess;
     }
 }
 
