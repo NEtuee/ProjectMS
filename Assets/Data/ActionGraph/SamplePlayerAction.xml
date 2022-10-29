@@ -72,8 +72,24 @@
         <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="3">
         </Animation>
 
+        <Branch Key="getKey_GuardBreak" Condition="(CurrentFrame < 0.5)" Execute="JustGuardBreak"/>
         <Branch Condition="End == true" Execute="CommonMoveSelection"/>
     </Attack_Guarded>
+
+    <JustGuardBreak DirectionType="Keep" FlipType="Direction">
+        <Animation Path="Resources/Sprites/DummyPlayer/JustGuardBreak/" StartFrame="0" EndFrame="1" FramePerSecond="3" XFlip="true">
+            <FrameEvent Type="Test" Log="Just Guard Break Excuted"/>
+            
+            <FrameEvent Type="Attack" AttackType="GuardBreak" StartFrame="0" AttackPreset="Player_JustGuardBreak" IgnoreDefenceType="Guard">
+                <OnGuardBreak>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="12"/>
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random" ToTarget="true"/>
+                </OnGuardBreak>
+            </FrameEvent> 
+        </Animation>
+        
+        <Branch Condition="End == true" Execute="CommonMoveSelection"/>
+    </JustGuardBreak>
 
     <Attack_Parried MovementType="GraphPreset" MovementGraphPreset="AttackGuarded" DirectionType="Keep" FlipType="Keep">
         <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="0.3">
@@ -83,7 +99,7 @@
     </Attack_Parried>
 
     <Attack_LV1 MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="Keep" FlipType="Keep">
-        <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="3">
+        <Animation Path="Resources/Sprites/DummyPlayer/Attack" StartFrame="0" EndFrame="1" FramePerSecond="3">
             <FrameEvent Type="Attack" StartFrame="0" AttackPreset="PlayerAttackTest">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
@@ -185,7 +201,7 @@
     <Guard MovementType="GraphPreset" MovementGraphPreset="Guard" DirectionType="MoveInput" DefenceDirectionType="MousePoint" FlipType="Keep" DefenceType="Guard" DefenceAngle="180.0">
         <Animation Path="Resources/Sprites/DummyPlayer/Guard/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
             <FrameEvent Type="SetDefenceType" StartFrame="0" DefenceType="Parry"/>
-            <FrameEvent Type="SetDefenceType" StartFrame="0.1" DefenceType="Guard"/>
+            <FrameEvent Type="SetDefenceType" StartFrame="0.2" DefenceType="Guard"/>
         </Animation>
 
         <Branch Condition="Hit == true" Execute="Hit"/>
