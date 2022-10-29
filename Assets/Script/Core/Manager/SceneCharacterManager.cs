@@ -89,7 +89,7 @@ public class SceneCharacterManager : ManagerBase
                 if(requester == receiverCharacter || _targetSearchRequestList[i]._searchIdentifier != receiverCharacter._searchIdentifier)
                     continue;
 
-                ObjectBase currentTarget = requester.getCurrentTargetEntity();
+                GameEntityBase currentTarget = requester.getCurrentTargetEntity();
                 if(currentTarget == null)
                 {
                     requester.setTargetEntity(receiverCharacter);

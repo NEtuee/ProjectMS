@@ -10,6 +10,7 @@ public class ActionGraph
     private Dictionary<ConditionNodeUpdateType, byte[]> _actionConditionNodeData = new Dictionary<ConditionNodeUpdateType, byte[]>();
 
     private Dictionary<string, byte[]>          _statusConditionData = new Dictionary<string, byte[]>();
+    private HashSet<string>                     _targetFrameTagData = new HashSet<string>();
 
     private ActionGraphBaseData                 _actionGraphBaseData;
     private AnimationPlayer                     _animationPlayer = new AnimationPlayer();
@@ -61,7 +62,7 @@ public class ActionGraph
 
     private void createCoditionNodeDataAll()
     {
-        DebugUtil.assert((int)ConditionNodeUpdateType.Count == 30, "check this");
+        DebugUtil.assert((int)ConditionNodeUpdateType.Count == 31, "check this");
 
         foreach(var item in ConditionNodeInfoPreset._nodePreset.Values)
         {
@@ -69,7 +70,8 @@ public class ActionGraph
                 item._updateType == ConditionNodeUpdateType.ConditionResult || 
                 item._updateType == ConditionNodeUpdateType.Status ||
                 item._updateType == ConditionNodeUpdateType.Key || 
-                item._updateType == ConditionNodeUpdateType.FrameTag)
+                item._updateType == ConditionNodeUpdateType.FrameTag || 
+                item._updateType == ConditionNodeUpdateType.TargetFrameTag)
                 continue;
 
             createConditionNodeData(item);
@@ -199,6 +201,11 @@ public class ActionGraph
         }
 
         return _conditionResultList[compareData._compareTypeCount - 1][0] == 1;
+    }
+
+    public void setActionConditionData_TargetFrameTag(HashSet<string> targetFrameTagHashset)
+    {
+        _targetFrameTagData = targetFrameTagHashset;
     }
 
     public bool setActionConditionData_Status(string statusName, float value)
@@ -450,15 +457,32 @@ public class ActionGraph
         ConditionNodeUpdateType updateType = ConditionNodeInfoPreset._nodePreset[nodeData._symbolName]._updateType;
 
         if(updateType == ConditionNodeUpdateType.Literal)
+        {
             return ((ActionGraphConditionNodeData_Literal)nodeData).getLiteral();
+        }
         else if(updateType == ConditionNodeUpdateType.ConditionResult)
+        {
             return _conditionResultList[((ActionGraphConditionNodeData_ConditionResult)nodeData).getResultIndex()];
+        }
         else if(updateType == ConditionNodeUpdateType.Status)
+        {
             return _statusConditionData[((ActionGraphConditionNodeData_Status)nodeData)._targetStatus];
+        }
         else if(updateType == ConditionNodeUpdateType.FrameTag)
+        {
             return _currentFrameTag.Contains(((ActionGraphConditionNodeData_FrameTag)nodeData)._targetFrameTag) ? CommonConditionNodeData.trueByte : CommonConditionNodeData.falseByte;
+        }
+        else if(updateType == ConditionNodeUpdateType.TargetFrameTag)
+        {
+            if(_targetFrameTagData == null)
+                return CommonConditionNodeData.falseByte;
+                
+            return _targetFrameTagData.Contains(((ActionGraphConditionNodeData_FrameTag)nodeData)._targetFrameTag) ? CommonConditionNodeData.trueByte : CommonConditionNodeData.falseByte;
+        }
         else if(updateType == ConditionNodeUpdateType.Key)
+        {
             return ActionKeyInputManager.Instance().actionKeyCheck(((ActionGraphConditionNodeData_Key)nodeData)._targetKeyName);
+        }
 
         if(_actionConditionNodeData.ContainsKey(updateType) == false)
         {

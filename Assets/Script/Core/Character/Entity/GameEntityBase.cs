@@ -42,14 +42,14 @@ public class GameEntityBase : SequencerObjectBase
 
     private Color               _debugColor = Color.red;
 
-    private ObjectBase          _currentTarget;
+    private GameEntityBase      _currentTarget;
 
     public override void assign()
     {
         base.assign();
 
         AddAction(MessageTitles.entity_setTarget,(msg)=>{
-            _currentTarget = msg.data as ObjectBase;
+            _currentTarget = msg.data as GameEntityBase;
         });
 
         AddAction(MessageTitles.game_teleportTarget,(msg)=>{
@@ -94,6 +94,7 @@ public class GameEntityBase : SequencerObjectBase
             
             _actionGraph.setActionConditionData_Float(ConditionNodeUpdateType.AI_TargetDistance, getDistance(_currentTarget));
             _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.AI_TargetExists, _currentTarget != null);
+            _actionGraph.setActionConditionData_TargetFrameTag(_currentTarget == null ? null : _currentTarget.getCurrentFrameTagList());
 
             _aiGraph.progress(deltaTime,this);
         }
@@ -437,6 +438,8 @@ public class GameEntityBase : SequencerObjectBase
 
     public void executeAIEvent(AIChildEventType eventType) {_aiGraph.executeAIEvent(eventType);}
 
+    public HashSet<string> getCurrentFrameTagList() {return _actionGraph.getCurrentFrameTagList();}
+
     public bool applyFrameTag(string tag) {return _actionGraph.applyFrameTag(tag);}
     public void deleteFrameTag(string tag) {_actionGraph.deleteFrameTag(tag);}
     public bool checkFrameTag(string tag) {return _actionGraph.checkFrameTag(tag);}
@@ -464,8 +467,8 @@ public class GameEntityBase : SequencerObjectBase
     public void setAction(int index) {_actionGraph.changeActionOther(index);}
     public void setAction(string nodeName) {_actionGraph.changeActionOther(_actionGraph.getActionIndex(nodeName));}
 
-    public void setTargetEntity(ObjectBase target) {_currentTarget = target;}
-    public ObjectBase getCurrentTargetEntity() {return _currentTarget;}
+    public void setTargetEntity(GameEntityBase target) {_currentTarget = target;}
+    public GameEntityBase getCurrentTargetEntity() {return _currentTarget;}
 
     public CollisionInfo getCollisionInfo() {return _collisionInfo;}
     public string getCurrentAIName() {return _aiGraph.getCurrentAIStateName();}

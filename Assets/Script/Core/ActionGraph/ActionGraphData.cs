@@ -177,6 +177,7 @@ public enum ConditionNodeUpdateType
     Status,
     Key,
     FrameTag,
+    TargetFrameTag,
 
     Count,
 }
@@ -251,6 +252,7 @@ public static class ConditionNodeInfoPreset
         {"Status",new ConditionNodeInfo(ConditionNodeUpdateType.Status, ConditionNodeType.Float)},
         {"Key",new ConditionNodeInfo(ConditionNodeUpdateType.Key, ConditionNodeType.Bool)},
         {"FrameTag",new ConditionNodeInfo(ConditionNodeUpdateType.FrameTag, ConditionNodeType.Bool)},
+        {"TargetFrameTag",new ConditionNodeInfo(ConditionNodeUpdateType.TargetFrameTag, ConditionNodeType.Bool)},
         
     };
 
