@@ -47,6 +47,11 @@ public struct FrameEventProcessDescription
     {
         _targetFrameEvent.onExecute(_executeObject);
     }
+
+    public void exitFrameEvent()
+    {
+        _targetFrameEvent.onExit(_executeObject);
+    }
 }
 
 public class AnimationPlayer
@@ -124,6 +129,7 @@ public class AnimationPlayer
             if(_frameEventProcessList[i]._endTime <= _animationTimeProcessor.getAnimationTotalPlayTime() || 
                MathEx.equals(_frameEventProcessList[i]._endTime, _animationTimeProcessor.getAnimationTotalPlayTime(), float.Epsilon))
             {
+                _frameEventProcessList[i].exitFrameEvent();
                 _frameEventProcessList.RemoveAt(i);
             }
             else
@@ -140,9 +146,8 @@ public class AnimationPlayer
             if(MathEx.equals(frameEvent._startFrame, currentFrame,float.Epsilon) == true || frameEvent._startFrame < currentFrame)
             {
                 frameEvent.initialize();
-                frameEvent.onExecute(targetEntity);
 
-                if(frameEvent._endFrame != 0f)
+                if(frameEvent.onExecute(targetEntity) == true && frameEvent._endFrame != 0f)
                 {
                     FrameEventProcessDescription desc;
                     desc._executeObject = targetEntity;
@@ -150,6 +155,10 @@ public class AnimationPlayer
                     desc._targetFrameEvent = frameEvent;
 
                     _frameEventProcessList.Add(desc);
+                }
+                else
+                {
+                    frameEvent.onExit(targetEntity);
                 }
 
                 _currentFrameEventIndex++;
@@ -195,6 +204,10 @@ public class AnimationPlayer
         _animationTimeProcessor.setLoop(playData._isLoop);
         _animationTimeProcessor.setFrameToTime(playData._startFrame);
 
+        for(int i = 0; i < _frameEventProcessList.Count; ++i)
+        {
+            _frameEventProcessList[i].exitFrameEvent();
+        }
         _frameEventProcessList.Clear();
 
         setCurrentFrameEventIndex(playData);

@@ -31,13 +31,15 @@ public static class FrameEventLoader
             outFrameEvent = new ActionFrameEvent_SetDefenceType();
         else if(type == "Effect")
             outFrameEvent = new ActionFrameEvent_Effect();
+        else if(type == "FrameTag")
+            outFrameEvent = new ActionFrameEvent_SetFrameTag();
         else
         {
             DebugUtil.assert(false, "invalid frameEvent type: {0}",type);
             return null;
         }
 
-        DebugUtil.assert((int)FrameEventType.Count == 8, "check here");
+        DebugUtil.assert((int)FrameEventType.Count == 9, "check here");
 
 
         if(outFrameEvent == null)

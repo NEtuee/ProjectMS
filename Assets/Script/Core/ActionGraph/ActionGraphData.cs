@@ -176,6 +176,7 @@ public enum ConditionNodeUpdateType
 
     Status,
     Key,
+    FrameTag,
 
     Count,
 }
@@ -199,6 +200,12 @@ public class ConditionNodeInfo
 
     public ConditionNodeUpdateType  _updateType;
     public ConditionNodeType        _nodeType;
+}
+
+static public class CommonConditionNodeData
+{
+    static public byte[] trueByte = new byte[1]{1};
+    static public byte[] falseByte = new byte[1]{0};
 }
 
 public static class ConditionNodeInfoPreset
@@ -243,6 +250,7 @@ public static class ConditionNodeInfoPreset
 
         {"Status",new ConditionNodeInfo(ConditionNodeUpdateType.Status, ConditionNodeType.Float)},
         {"Key",new ConditionNodeInfo(ConditionNodeUpdateType.Key, ConditionNodeType.Bool)},
+        {"FrameTag",new ConditionNodeInfo(ConditionNodeUpdateType.FrameTag, ConditionNodeType.Bool)},
         
     };
 
@@ -257,6 +265,20 @@ public static class ConditionNodeInfoPreset
 public class ActionGraphConditionNodeData
 {
     public string _symbolName;
+}
+
+[System.Serializable]
+public class ActionGraphConditionNodeData_FrameTag : ActionGraphConditionNodeData
+{
+    public string _targetFrameTag = "";
+
+    public ActionGraphConditionNodeData_FrameTag()
+    {
+        
+    }
+    
+    public string getFrameTag() {return _targetFrameTag;}
+    
 }
 [System.Serializable]
 public class ActionGraphConditionNodeData_Key : ActionGraphConditionNodeData

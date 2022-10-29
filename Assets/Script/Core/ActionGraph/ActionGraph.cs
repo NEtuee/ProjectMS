@@ -14,6 +14,7 @@ public class ActionGraph
     private ActionGraphBaseData                 _actionGraphBaseData;
     private AnimationPlayer                     _animationPlayer = new AnimationPlayer();
 
+    private HashSet<string>                     _currentFrameTag = new HashSet<string>();
     private List<byte[]>                        _conditionResultList = new List<byte[]>();
 
     public ActionGraph(){}
@@ -60,14 +61,15 @@ public class ActionGraph
 
     private void createCoditionNodeDataAll()
     {
-        DebugUtil.assert((int)ConditionNodeUpdateType.Count == 29, "check this");
+        DebugUtil.assert((int)ConditionNodeUpdateType.Count == 30, "check this");
 
         foreach(var item in ConditionNodeInfoPreset._nodePreset.Values)
         {
             if(item._updateType == ConditionNodeUpdateType.Literal || 
                 item._updateType == ConditionNodeUpdateType.ConditionResult || 
                 item._updateType == ConditionNodeUpdateType.Status ||
-                item._updateType == ConditionNodeUpdateType.Key)
+                item._updateType == ConditionNodeUpdateType.Key || 
+                item._updateType == ConditionNodeUpdateType.FrameTag)
                 continue;
 
             createConditionNodeData(item);
@@ -453,6 +455,8 @@ public class ActionGraph
             return _conditionResultList[((ActionGraphConditionNodeData_ConditionResult)nodeData).getResultIndex()];
         else if(updateType == ConditionNodeUpdateType.Status)
             return _statusConditionData[((ActionGraphConditionNodeData_Status)nodeData)._targetStatus];
+        else if(updateType == ConditionNodeUpdateType.FrameTag)
+            return _currentFrameTag.Contains(((ActionGraphConditionNodeData_FrameTag)nodeData)._targetFrameTag) ? CommonConditionNodeData.trueByte : CommonConditionNodeData.falseByte;
         else if(updateType == ConditionNodeUpdateType.Key)
             return ActionKeyInputManager.Instance().actionKeyCheck(((ActionGraphConditionNodeData_Key)nodeData)._targetKeyName);
 
@@ -483,6 +487,25 @@ public class ActionGraph
 
         return _actionGraphBaseData._actionIndexMap[nodeName];
     }
+
+    public bool applyFrameTag(string tag)
+    {
+        if(_currentFrameTag.Contains(tag) == true)
+            return false;
+
+        _currentFrameTag.Add(tag);
+        return true;
+    }
+
+    public void deleteFrameTag(string tag)
+    {
+        if(_currentFrameTag.Contains(tag))
+            _currentFrameTag.Remove(tag);
+    }
+
+    public HashSet<string> getCurrentFrameTagList() {return _currentFrameTag;}
+
+    public bool checkFrameTag(string tag) {return _currentFrameTag.Contains(tag);}
 
     public bool isActionLoop() {return _currentActionNodeIndex == _prevActionNodeIndex;}
     public int[] getDefaultBuffList() {return _actionGraphBaseData._defaultBuffList;}

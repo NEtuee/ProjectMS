@@ -11,6 +11,7 @@ public enum FrameEventType
     FrameEvent_TeleportToTarget,
     FrameEvent_SetDefenceType,
     FrameEvent_Effect,
+    FrameEvent_SetFrameTag,
 
     Count,
 }
@@ -41,7 +42,8 @@ public abstract class ActionFrameEventBase
     
     public abstract FrameEventType getFrameEventType();
     public virtual void initialize(){}
-    public abstract void onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null);
+    public abstract bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null);
+    public virtual void onExit(ObjectBase executeEntity){}
     public abstract void loadFromXML(XmlNode node);
 
     public void executeChildFrameEvent(ChildFrameEventType eventType, ObjectBase executeEntity, ObjectBase targetEntity)
@@ -57,20 +59,62 @@ public abstract class ActionFrameEventBase
     }
 }
 
-public class ActionFrameEvent_SetDefenceType : ActionFrameEventBase
+public class ActionFrameEvent_SetFrameTag : ActionFrameEventBase
 {
-    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_SetDefenceType;}
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_SetFrameTag;}
 
-    private DefenceType _defenceType;
+    private string _frameTag;
 
-    public override void onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        if(executeEntity is GameEntityBase == false)
+            return false;
+        
+        GameEntityBase requester = (GameEntityBase)executeEntity;
+        
+        return requester.applyFrameTag(_frameTag);
+    }
+
+    public override void onExit(ObjectBase executeEntity)
     {
         if(executeEntity is GameEntityBase == false)
             return;
         
         GameEntityBase requester = (GameEntityBase)executeEntity;
         
+        requester.deleteFrameTag(_frameTag);
+
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            if(attributes[i].Name == "Tag")
+                _frameTag = attributes[i].Value;
+        }
+    }
+}
+
+
+
+public class ActionFrameEvent_SetDefenceType : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_SetDefenceType;}
+
+    private DefenceType _defenceType;
+
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        if(executeEntity is GameEntityBase == false)
+            return false;
+        
+        GameEntityBase requester = (GameEntityBase)executeEntity;
+        
         requester.setDefenceType(_defenceType);
+        
+        return true;
     }
 
     public override void loadFromXML(XmlNode node)
@@ -91,10 +135,10 @@ public class ActionFrameEvent_TeleportToTarget : ActionFrameEventBase
 
     private float _distanceOffset = 0f;
 
-    public override void onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
         if(executeEntity is GameEntityBase == false || targetEntity is GameEntityBase == false)
-            return;
+            return false;
         
         GameEntityBase requester = (GameEntityBase)executeEntity;
         GameEntityBase target = (GameEntityBase)targetEntity;
@@ -102,6 +146,8 @@ public class ActionFrameEvent_TeleportToTarget : ActionFrameEventBase
         UnityEngine.Vector3 direction = (requester.transform.position - target.transform.position).normalized;
 
         requester.transform.position = target.transform.position + direction * (requester.getCollisionInfo().getRadius() + target.getCollisionInfo().getRadius() + _distanceOffset);
+
+        return true;
     }
 
     public override void loadFromXML(XmlNode node)
@@ -121,12 +167,14 @@ public class ActionFrameEvent_DeleteBuff : ActionFrameEventBase
 
     private int[] buffKeyList = null;
 
-    public override void onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
         if(executeEntity is GameEntityBase == false)
-            return;
+            return false;
         
         ((GameEntityBase)executeEntity).deleteActionBuffList(buffKeyList);
+
+        return true;
     }
 
     public override void loadFromXML(XmlNode node)
@@ -155,12 +203,14 @@ public class ActionFrameEvent_ApplyBuff : ActionFrameEventBase
 
     private int[] buffKeyList = null;
 
-    public override void onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
         if(executeEntity is GameEntityBase == false)
-            return;
+            return false;
         
         ((GameEntityBase)executeEntity).applyActionBuffList(buffKeyList);
+        
+        return true;
     }
 
     public override void loadFromXML(XmlNode node)
@@ -189,15 +239,17 @@ public class ActionFrameEvent_ApplyBuffTarget : ActionFrameEventBase
 
     private int[] buffKeyList = null;
 
-    public override void onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
         if(executeEntity is GameEntityBase == false || targetEntity is GameEntityBase == false)
-            return;
+            return false;
         
         GameEntityBase requester = (GameEntityBase)executeEntity;
         GameEntityBase target = (GameEntityBase)targetEntity;
 
         target.applyActionBuffList(buffKeyList);
+
+        return true;
     }
 
     public override void loadFromXML(XmlNode node)
@@ -226,6 +278,7 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
 
     private CollisionInfo _collisionInfo;
     private CollisionDelegate _collisionDelegate;
+    
     private DefenceType[] _ignoreDefenceType = null;
 
     private AttackType _attackType;
@@ -238,11 +291,13 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
         _collisionList.Clear();
     }
 
-    public override void onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
         _collisionInfo.updateCollisionInfo(executeEntity.transform.position,executeEntity.getDirection());
         _collisionInfo.drawCollosionArea(UnityEngine.Color.red,1f);
         CollisionManager.Instance().collisionRequest(_collisionInfo,executeEntity,_collisionDelegate);
+
+        return true;
     }   
 
     public void attackProcess(CollisionSuccessData successData)
@@ -254,6 +309,9 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
         
         GameEntityBase requester = (GameEntityBase)successData._requester;
         GameEntityBase target = (GameEntityBase)successData._target;
+
+        if(target._searchIdentifier == requester._searchIdentifier)
+            return;
 
         if(_collisionList.Contains(target) == true)
             return;
@@ -414,9 +472,11 @@ public class ActionFrameEvent_Test : ActionFrameEventBase
 
     private string _debugLog = "";
 
-    public override void onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
         UnityEngine.Debug.Log("Test Frame Event : " + _debugLog);
+
+        return true;
     }
 
     public override void loadFromXML(XmlNode node)

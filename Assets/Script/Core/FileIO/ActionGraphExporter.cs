@@ -634,6 +634,10 @@ public static class ActionGraphLoader
         if(nodeData != null)
             return nodeData;
 
+        nodeData = isFrameTag(symbol);
+        if(nodeData != null)
+            return nodeData;
+
         nodeData = new ActionGraphConditionNodeData();
     
         if(ConditionNodeInfoPreset._nodePreset.ContainsKey(symbol) == false)
@@ -644,6 +648,17 @@ public static class ActionGraphLoader
 
         nodeData._symbolName = symbol;
         return nodeData;
+    }
+
+    private static ActionGraphConditionNodeData_FrameTag isFrameTag(string symbol)
+    {
+        if(symbol.Contains("getFrameTag_") == false)
+            return null;
+
+        ActionGraphConditionNodeData_FrameTag item = new ActionGraphConditionNodeData_FrameTag();
+        item._symbolName = "FrameTag";
+        item._targetFrameTag = symbol.Replace("getFrameTag_","");
+        return item;
     }
 
     private static ActionGraphConditionNodeData_Status isStatus(string symbol)

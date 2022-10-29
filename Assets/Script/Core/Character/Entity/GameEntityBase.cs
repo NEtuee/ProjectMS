@@ -12,7 +12,8 @@ public class GameEntityBase : SequencerObjectBase
     public SearchIdentifier     _searchIdentifier = SearchIdentifier.Enemy;
 
     public DebugTextManager     debugTextManager;
-    public bool                 _debugEnable = false;
+    public bool                 _actionDebug = false;
+    public bool                 _statusDebug = false;
 
     private SpriteRenderer      _spriteRenderer;
     private GameObject          _spriteObject;
@@ -131,13 +132,22 @@ public class GameEntityBase : SequencerObjectBase
             _spriteRenderer.flipY = _flipState.yFlip;
         }
 
-        if(_debugEnable == true)
+        if(_actionDebug == true)
         {
             debugTextManager.updateDebugText("Action","Action: " + getCurrentActionName());
             debugTextManager.updateDebugText("Defence","Defence: " + getDefenceType());
 
             if(_aiGraph != null && _aiGraph.isValid())
                 debugTextManager.updateDebugText("AI","AIState: " + getCurrentAIName());
+
+            string frameTag = "";
+            HashSet<string> frameTagList = _actionGraph.getCurrentFrameTagList();
+            foreach(var item in frameTagList)
+            {
+                frameTag += item + ", ";
+            }
+
+            debugTextManager.updateDebugText("FrameTag","FrameTag: " + frameTag);
         }
     
 
@@ -148,20 +158,16 @@ public class GameEntityBase : SequencerObjectBase
             GizmoHelper.instance.drawArc(transform.position,0.8f,getDefenceAngle(),_defenceDirection,Color.cyan,0f);
         }
 
-
         _collisionInfo.updateCollisionInfo(transform.position,getDirection());
 
-        // _collisionInfo.drawCollosionArea(_debugColor);
-        // _collisionInfo.drawBoundBox(_debugColor);
-
-        if(_debugEnable)
+        if(_actionDebug)
         {
             GizmoHelper.instance.drawLine(transform.position, transform.position + _direction * 0.5f,Color.magenta);
 
             GizmoHelper.instance.drawLine(transform.position, transform.position + ControllerEx.Instance().getJoystickAxisR(transform.position) * 0.5f,Color.cyan);
         }
         
-        if(_debugEnable == true)
+        if(_actionDebug == true)
         {
             debugTextManager.updatePosition(new Vector3(0f, _collisionInfo.getBoundBox().getBottom() - transform.position.y, 0f));
         }
@@ -174,7 +180,7 @@ public class GameEntityBase : SequencerObjectBase
         base.afterProgress(deltaTime);
         resetState();
 
-        if(_debugEnable == true)
+        if(_statusDebug == true)
         {
             _statusInfo.updateDebugTextXXX(debugTextManager);
         }
@@ -430,6 +436,10 @@ public class GameEntityBase : SequencerObjectBase
     }
 
     public void executeAIEvent(AIChildEventType eventType) {_aiGraph.executeAIEvent(eventType);}
+
+    public bool applyFrameTag(string tag) {return _actionGraph.applyFrameTag(tag);}
+    public void deleteFrameTag(string tag) {_actionGraph.deleteFrameTag(tag);}
+    public bool checkFrameTag(string tag) {return _actionGraph.checkFrameTag(tag);}
 
     public bool isAIGraphValid() {return _aiGraph != null && _aiGraph.isValid();}
     public TargetSearchType getCurrentTargetSearchType() {return _aiGraph.getCurrentTargetSearchType();}

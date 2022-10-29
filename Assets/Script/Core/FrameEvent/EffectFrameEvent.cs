@@ -17,13 +17,13 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
 
     private Vector3 _spawnOffset = Vector3.zero;
 
-    public override void onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
         if(executeEntity is GameEntityBase == false)
-            return;
+            return false;
 
         if(_toTarget && targetEntity is GameEntityBase == false)
-            return;
+            return false;
         
         GameEntityBase requester = (GameEntityBase)executeEntity;
 
@@ -45,6 +45,8 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
         requestData._angle = _random ? Random.Range(0f,360f) : _spawnAngle;
 
         requester.SendMessageEx(MessageTitles.effect_spawnEffect,UniqueIDBase.QueryUniqueID("EffectManager"),requestData);
+
+        return true;
     }
 
     public override void loadFromXML(XmlNode node)
