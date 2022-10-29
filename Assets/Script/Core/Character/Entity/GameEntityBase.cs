@@ -44,6 +44,8 @@ public class GameEntityBase : SequencerObjectBase
 
     private GameEntityBase      _currentTarget;
 
+    private bool                _updateDirection = true;
+
     public override void assign()
     {
         base.assign();
@@ -116,6 +118,7 @@ public class GameEntityBase : SequencerObjectBase
                 }
 
                 _currentDefenceType = _actionGraph.getCurrentDefenceType();
+                _updateDirection = true;
 
                 //Debug.Log("execute : " + prevActionName + " -> " + _actionGraph.getCurrentActionName());
             }
@@ -331,6 +334,9 @@ public class GameEntityBase : SequencerObjectBase
     //todo : input manager 만들어서 거기서 moveiNput 가져오게 만들기
     private void updateDirection()
     {
+        if(_updateDirection == false)
+            return;
+
         DirectionType directionType = DirectionType.AlwaysRight;
         DefenceDirectionType defenceDirectionType = DefenceDirectionType.Direction;
 
@@ -387,6 +393,8 @@ public class GameEntityBase : SequencerObjectBase
                 _defenceDirection = ControllerEx.Instance().getJoystickAxisR(transform.position);
                 break;
         }
+
+        _updateDirection = _actionGraph.getCurrentDirectionUpdateOnce() == false;
     }
 
     private void rotationUpdate()

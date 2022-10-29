@@ -256,6 +256,10 @@ public static class ActionGraphLoader
             {
                 nodeData._normalizedSpeed = bool.Parse(targetValue);
             }
+            else if(targetName == "DirectionUpdateOnce")
+            {
+                nodeData._directionUpdateOnce = bool.Parse(targetValue);
+            }
             else
             {
                 DebugUtil.assert(false,"invalid attribute type !!! : {0}", targetName);

@@ -476,7 +476,7 @@ public class ActionGraph
         {
             if(_targetFrameTagData == null)
                 return CommonConditionNodeData.falseByte;
-                
+
             return _targetFrameTagData.Contains(((ActionGraphConditionNodeData_FrameTag)nodeData)._targetFrameTag) ? CommonConditionNodeData.trueByte : CommonConditionNodeData.falseByte;
         }
         else if(updateType == ConditionNodeUpdateType.Key)
@@ -547,6 +547,7 @@ public class ActionGraph
     public DefenceType getCurrentDefenceType() {return getCurrentAction()._defenceType;}
     public RotationType getCurrentRotationType() {return getCurrentAction()._rotationType;}
     public DirectionType getDirectionType() {return getCurrentAction()._directionType;}
+    public bool getCurrentDirectionUpdateOnce() {return getCurrentAction()._directionUpdateOnce;}
 
     public DefenceDirectionType getDefenceDirectionType() {return getCurrentAction()._defenceDirectionType;}
     public MoveValuePerFrameFromTimeDesc getMoveValuePerFrameFromTimeDesc(){return _animationPlayer.getMoveValuePerFrameFromTimeDesc();}
