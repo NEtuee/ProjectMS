@@ -9,14 +9,12 @@ public class GameEntityBase : SequencerObjectBase
     public string               aiGraphPath = "Assets\\Data\\AIGraph\\CommonEnemyAI.xml";
     public string               statusInfoName = "CommonPlayerStatus";
 
-    public SearchIdentifier     _searchIdentifier = SearchIdentifier.Enemy;
 
     public DebugTextManager     debugTextManager;
     public bool                 _actionDebug = false;
     public bool                 _statusDebug = false;
 
-    private SpriteRenderer      _spriteRenderer;
-    private GameObject          _spriteObject;
+    
     private ActionGraph         _actionGraph;
     private AIGraph             _aiGraph;
     private StatusInfo          _statusInfo;
@@ -28,9 +26,6 @@ public class GameEntityBase : SequencerObjectBase
 
     private FlipState           _flipState = new FlipState();
     private Quaternion          _spriteRotation = Quaternion.identity;
-
-    private AttackState         _attackState = AttackState.Default;
-    private DefenceState        _defenceState = DefenceState.Default;
 
     private DefenceType         _currentDefenceType = DefenceType.Empty;
 
@@ -58,22 +53,26 @@ public class GameEntityBase : SequencerObjectBase
             Transform targetTransform = (Transform)msg.data;
             transform.position = targetTransform.position;
         });
+
+        _actionGraph = new ActionGraph(ActionGraphLoader.readFromXML(IOControl.PathForDocumentsFile(actionGraphPath)));
+        _actionGraph.assign();
+
+        _aiGraph = new AIGraph(_actionGraph, AIGraphLoader.readFromXML(IOControl.PathForDocumentsFile(aiGraphPath)));
+        _aiGraph.assign();
+
+        _statusInfo = new StatusInfo(statusInfoName);
+
+        createSpriteRenderObject();
     }
 
     public override void initialize()
     {
         base.initialize();
-        _actionGraph = new ActionGraph(ActionGraphLoader.readFromXML(IOControl.PathForDocumentsFile(actionGraphPath)));
-        _actionGraph.assign();
+        
         _actionGraph.initialize();
-
-        _aiGraph = new AIGraph(_actionGraph, AIGraphLoader.readFromXML(IOControl.PathForDocumentsFile(aiGraphPath)));
-        _aiGraph.assign();
         _aiGraph.initialize(this);
 
-        _statusInfo = new StatusInfo(statusInfoName);
-
-        createSpriteRenderObject();
+        _statusInfo.initialize();
 
         applyActionBuffList(_actionGraph.getDefaultBuffList());
 
@@ -166,13 +165,16 @@ public class GameEntityBase : SequencerObjectBase
 
         if(_actionDebug)
         {
-            GizmoHelper.instance.drawLine(transform.position, transform.position + _direction * 0.5f,Color.magenta);
-
-            GizmoHelper.instance.drawLine(transform.position, transform.position + ControllerEx.Instance().getJoystickAxisR(transform.position) * 0.5f,Color.cyan);
+            
         }
         
         if(_actionDebug == true)
         {
+            GizmoHelper.instance.drawLine(transform.position, transform.position + _direction * 0.5f,Color.magenta);
+            GizmoHelper.instance.drawLine(transform.position, transform.position + ControllerEx.Instance().getJoystickAxisR(transform.position) * 0.5f,Color.cyan);
+
+            _collisionInfo.drawCollosionArea(_debugColor);
+
             debugTextManager.updatePosition(new Vector3(0f, _collisionInfo.getBoundBox().getBottom() - transform.position.y, 0f));
         }
 
@@ -440,15 +442,6 @@ public class GameEntityBase : SequencerObjectBase
         _spriteObject.transform.rotation = rotation;
     }
 
-    public void createSpriteRenderObject()
-    {
-        _spriteObject = new GameObject("SpriteObject");
-        _spriteObject.transform.SetParent(this.transform);
-        _spriteObject.transform.localPosition = Vector3.zero;
-
-        _spriteRenderer = _spriteObject.AddComponent<SpriteRenderer>();
-    }
-
     public void executeAIEvent(AIChildEventType eventType) {_aiGraph.executeAIEvent(eventType);}
 
     public HashSet<string> getCurrentFrameTagList() {return _actionGraph.getCurrentFrameTagList();}
@@ -470,8 +463,7 @@ public class GameEntityBase : SequencerObjectBase
     public void setAiDirection(float angle) {_aiGraph.setAIDirection(angle);}
     public void setAiDirection(Vector3 direction) {_aiGraph.setAIDirection(direction);}
 
-    public void setAttackState(AttackState state) {_attackState = state;}
-    public void setDefenceState(DefenceState state) {_defenceState = state;}
+
 
     public void setAttackPoint(Vector3 attackPoint) {_recentlyAttackPoint = attackPoint;}
 

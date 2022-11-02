@@ -1,8 +1,38 @@
 
 <ProjectileGraph Name="Test" DefaultFramePerSecond="4">
-    <Animation Path="Resources/Sprites/TestPlayer/Idle/" StartFrame="0" EndFrame="1" XFlip="true">
+    <Animation Path="Resources/Sprites/Projectile/" StartFrame="0" EndFrame="1" XFlip="true">
         <FrameEvent Type="Test" StartFrame="0" Log="Test Frame Event"/>
     </Animation>
 
-    <DefaultShotInfo Velocity="4" Acceleration="-3" Friction="0" Angle="10" AngularAcceleration="-20" LifeTime="5"/>
+    <DefaultShotInfo Velocity="0.1" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="5"/>
+
+    <Event>
+        <OnHit>
+            <FrameEvent Type="Attack" StartFrame="0" AttackPreset="projectileTest">
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
+                    <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
+
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random" ToTarget="true"/>
+                </OnHit>
+
+                <OnGuard>
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" ToTarget="true"/>
+                </OnGuard>
+
+                <OnParry>
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" ToTarget="true"/>
+                </OnParry>
+
+            </FrameEvent>
+        </OnHit>
+
+        <OnHitEnd>
+            <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0"/>
+        </OnHitEnd>
+
+        <OnEnd>
+            <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc" FramePerSecond="18.0" Offset="0.0 0.0 0.0"/>
+        </OnEnd>
+    </Event>
 </ProjectileGraph>

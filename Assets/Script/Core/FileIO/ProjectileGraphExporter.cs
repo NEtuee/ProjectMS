@@ -82,6 +82,10 @@ public static class ProjectileGraphLoader
             {
                 projectileBaseData._defaultProjectileShotInfoData = readDefaultShotInfo(nodes[nodeIndex]);
             }
+            else if(targetName == "Event")
+            {
+                readChildFrameEvent(nodes[nodeIndex],projectileBaseData);
+            }
                 
         }
 
@@ -145,12 +149,55 @@ public static class ProjectileGraphLoader
             {
                 defaultFPS = float.Parse(targetValue);
             }
+            else if(targetName == "PenetrateCount")
+            {
+                baseData._penetrateCount = int.Parse(targetValue);
+            }
             else
             {
                 DebugUtil.assert(false,"invalid Attribute : {0}", targetName);
             }
 
         }
+    }
+
+    private static void readChildFrameEvent(XmlNode node, ProjectileGraphBaseData baseData)
+    {
+        XmlNodeList childNodeList = node.ChildNodes;
+
+        if(childNodeList == null || childNodeList.Count == 0)
+            return;
+
+        Dictionary<ProjectileChildFrameEventType, ChildFrameEventItem> childFrameEventList = new Dictionary<ProjectileChildFrameEventType, ChildFrameEventItem>();
+
+        for(int i = 0; i < childNodeList.Count; ++i)
+        {
+            string targetName = childNodeList[i].Name;
+
+            ChildFrameEventItem childItem = new ChildFrameEventItem();
+            ProjectileChildFrameEventType eventType = ProjectileChildFrameEventType.Count;
+
+            if(targetName == "OnHit")
+                eventType = ProjectileChildFrameEventType.ChildFrameEvent_OnHit;
+            else if(targetName == "OnHitEnd")
+                eventType = ProjectileChildFrameEventType.ChildFrameEvent_OnHitEnd;
+            else if(targetName == "OnEnd")
+                eventType = ProjectileChildFrameEventType.ChildFrameEvent_OnEnd;
+
+            List<ActionFrameEventBase> actionFrameEventList = new List<ActionFrameEventBase>();
+            XmlNodeList childNodes = childNodeList[i].ChildNodes;
+            for(int j = 0; j < childNodes.Count; ++j)
+            {
+                actionFrameEventList.Add(FrameEventLoader.readFromXMLNode(childNodes[j]));
+            }
+
+            childItem._childFrameEventCount = actionFrameEventList.Count;
+            childItem._childFrameEvents = actionFrameEventList.ToArray();
+
+            childFrameEventList.Add(eventType, childItem);
+        }
+
+        baseData._projectileChildFrameEvent = childFrameEventList;
     }
 
 }

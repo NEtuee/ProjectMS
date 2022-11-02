@@ -15,6 +15,8 @@ public class ProjectileGraph
 
     private bool _isEnd = false;
 
+    private int     _currentPenetrateCount = 0;
+
     private float _currentVelocity = 0f;
     private float _currentAngle = 0f;
     private float _currentLifeTime = 0f;
@@ -32,6 +34,7 @@ public class ProjectileGraph
         _animationPlayer.changeAnimation(_projectileGraphBaseData._animationPlayData[0]);
 
         _movementOfFrame = UnityEngine.Vector3.zero;
+        _currentPenetrateCount = _projectileGraphBaseData._penetrateCount;
 
         _isEnd = false;
     }
@@ -47,7 +50,7 @@ public class ProjectileGraph
 
     public bool progress(float deltaTime, ObjectBase targetEntity)
     {
-        if(isEnd(deltaTime) == true)
+        if(isEnd() == true)
             return true;
 
         if(isOutOfBound() == true)
@@ -64,12 +67,24 @@ public class ProjectileGraph
             
         _movementOfFrame += (_currentVelocity * deltaTime) * (UnityEngine.Quaternion.Euler(0f,0f,_currentAngle) * UnityEngine.Vector3.right);
 
-        return isEnd(deltaTime);
+        return isEnd();
     }
 
     public void release()
     {
         _animationPlayer.Release();
+    }
+
+    public void executeChildFrameEvent(ProjectileChildFrameEventType eventType, ObjectBase executeEntity, ObjectBase targetEntity)
+    {
+        if(_projectileGraphBaseData._projectileChildFrameEvent == null || _projectileGraphBaseData._projectileChildFrameEvent.ContainsKey(eventType) == false)
+            return;
+        
+        ChildFrameEventItem childFrameEventItem = _projectileGraphBaseData._projectileChildFrameEvent[eventType];
+        for(int i = 0; i < childFrameEventItem._childFrameEventCount; ++i)
+        {
+            childFrameEventItem._childFrameEvents[i].onExecute(executeEntity, targetEntity);
+        }
     }
 
     public UnityEngine.Vector3 getMovementOfFrame() 
@@ -85,13 +100,21 @@ public class ProjectileGraph
         return false;
     }
 
-    public bool isEnd(float deltaTime)
-    {
-        if(_isEnd == true)
-            return true;
+    public void decreasePenetrateCount() {--_currentPenetrateCount;}
+    public int getPenetrateCount() {return _currentPenetrateCount;}
 
+    public bool isPenetrateEnd() {return _currentPenetrateCount <= 0;}
+
+    public void updateLifeTime(float deltaTime)
+    {
         _currentLifeTime -= deltaTime;
         _isEnd = _currentLifeTime <= 0f;
+    }
+
+    public bool isEnd()
+    {
+        if(_isEnd == true || _currentPenetrateCount == 0)
+            return true;
 
         return _isEnd;
     }

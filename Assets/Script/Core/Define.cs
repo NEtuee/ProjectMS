@@ -6,6 +6,7 @@ public enum SearchIdentifier
 {
     Player = 0,
     Enemy,
+    Projectile,
     Count,
 }
 

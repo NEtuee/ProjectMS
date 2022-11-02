@@ -32,6 +32,7 @@ public enum CollisionType
 {
     Default = 0,
     Character,
+    Projectile,
     Attack,
     Count,
 }

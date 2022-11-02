@@ -38,7 +38,6 @@ public class CollisionInfo
         if(_boundBox.intersection(target.getBoundBox()) == false)
             return false;
 
-
         if(_collisionInfoData.getAngle() != 0f)
         {
             float circleDistance = Vector3.Distance(_centerPosition, target.getCenterPosition());
@@ -59,7 +58,6 @@ public class CollisionInfo
 
             return false;
         }
-
 
         float distance = Vector3.Distance(_centerPosition, target.getCenterPosition());
         return distance < getRadius() + target.getRadius();

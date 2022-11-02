@@ -19,19 +19,11 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
 
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
-        if(executeEntity is GameEntityBase == false)
-            return false;
-
-        if(_toTarget && targetEntity is GameEntityBase == false)
-            return false;
-        
-        GameEntityBase requester = (GameEntityBase)executeEntity;
-
         Vector3 centerPosition;
         if(_toTarget)
             centerPosition = targetEntity.transform.position;
         else
-            centerPosition = requester.transform.position;
+            centerPosition = executeEntity.transform.position;
         
         EffectRequestData requestData = MessageDataPooling.GetMessageData<EffectRequestData>();
         requestData._effectPath = _effectPath;
@@ -39,12 +31,12 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
         requestData._endFrame = -1f;
         requestData._framePerSecond = _framePerSecond;
         requestData._position = centerPosition 
-                + (Quaternion.Euler(0f,0f,Vector3.SignedAngle(Vector3.right, requester.getDirection(), Vector3.forward)) 
+                + (Quaternion.Euler(0f,0f,Vector3.SignedAngle(Vector3.right, executeEntity.getDirection(), Vector3.forward)) 
                 * _spawnOffset);
 
         requestData._angle = _random ? Random.Range(0f,360f) : _spawnAngle;
 
-        requester.SendMessageEx(MessageTitles.effect_spawnEffect,UniqueIDBase.QueryUniqueID("EffectManager"),requestData);
+        executeEntity.SendMessageEx(MessageTitles.effect_spawnEffect,UniqueIDBase.QueryUniqueID("EffectManager"),requestData);
 
         return true;
     }

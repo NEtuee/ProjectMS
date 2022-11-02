@@ -241,10 +241,9 @@ public class ActionFrameEvent_ApplyBuffTarget : ActionFrameEventBase
 
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
-        if(executeEntity is GameEntityBase == false || targetEntity is GameEntityBase == false)
+        if(targetEntity is GameEntityBase == false)
             return false;
         
-        GameEntityBase requester = (GameEntityBase)executeEntity;
         GameEntityBase target = (GameEntityBase)targetEntity;
 
         target.applyActionBuffList(buffKeyList);
@@ -316,7 +315,7 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
 
     public void attackPrepare(CollisionSuccessData successData)
     {
-        if(successData._requester is GameEntityBase == false || successData._target is GameEntityBase == false)
+        if(successData._requester is ObjectBase == false || successData._target is GameEntityBase == false)
             return;
 
         float distanceSq = (((GameEntityBase)successData._target).transform.position - successData._startPoint).sqrMagnitude;
@@ -338,7 +337,7 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
     {
         _collisionInfo.drawCollosionArea(UnityEngine.Color.green,1f);
 
-        GameEntityBase requester = (GameEntityBase)successData._requester;
+        ObjectBase requester = (ObjectBase)successData._requester;
         GameEntityBase target = (GameEntityBase)successData._target;
 
         if(target._searchIdentifier == requester._searchIdentifier)
@@ -369,7 +368,8 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
                 requester.setAttackState(AttackState.AttackSuccess);
                 target.setDefenceState(DefenceState.Hit);
 
-                requester.executeAIEvent(AIChildEventType.AIChildEvent_OnAttack);
+                if(requester is GameEntityBase)
+                    ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnAttack);
                 target.executeAIEvent(AIChildEventType.AIChildEvent_OnAttacked);
 
                 eventType = ChildFrameEventType.ChildFrameEvent_OnHit;
@@ -380,7 +380,8 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
                 requester.setAttackState(AttackState.AttackGuardBreak);
                 target.setDefenceState(DefenceState.GuardBroken);
 
-                requester.executeAIEvent(AIChildEventType.AIChildEvent_OnGuardBreak);
+                if(requester is GameEntityBase)
+                    ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnGuardBreak);
                 target.executeAIEvent(AIChildEventType.AIChildEvent_OnGuardBroken);
 
                 eventType = ChildFrameEventType.ChildFrameEvent_OnGuardBreak;
@@ -394,7 +395,8 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
             requester.setAttackState(AttackState.AttackGuarded);
             target.setDefenceState(DefenceState.DefenceSuccess);
 
-            requester.executeAIEvent(AIChildEventType.AIChildEvent_OnGuarded);
+            if(requester is GameEntityBase)
+                    ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnGuarded);
             target.executeAIEvent(AIChildEventType.AIChildEvent_OnGuard);
 
             eventType = ChildFrameEventType.ChildFrameEvent_OnGuard;
@@ -404,7 +406,8 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
             requester.setAttackState(AttackState.AttackParried);
             target.setDefenceState(DefenceState.ParrySuccess);
             
-            requester.executeAIEvent(AIChildEventType.AIChildEvent_OnParried);
+            if(requester is GameEntityBase)
+                    ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnParried);
             target.executeAIEvent(AIChildEventType.AIChildEvent_OnParry);
 
             eventType = ChildFrameEventType.ChildFrameEvent_OnParry;
@@ -414,7 +417,8 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
             requester.setAttackState(AttackState.AttackEvade);
             target.setDefenceState(DefenceState.EvadeSuccess);
 
-            requester.executeAIEvent(AIChildEventType.AIChildEvent_OnEvaded);
+            if(requester is GameEntityBase)
+                    ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnEvaded);
             target.executeAIEvent(AIChildEventType.AIChildEvent_OnEvade);
 
             eventType = ChildFrameEventType.ChildFrameEvent_OnEvade;
