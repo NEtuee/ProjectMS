@@ -68,9 +68,10 @@ public abstract class ObjectBase : MessageReceiver, IProgress
     }
     public void DeregisterRequest()
     {
-        _currentManagerNumber = -1;
         var msg = MessagePack(MessageTitles.system_deregisterRequest,_currentManagerNumber,GetUniqueID());
-        MasterManager.instance.SendMessageDirectInMasterQuick(msg);
+        _currentManagerNumber = -1;
+
+        MasterManager.instance.SendMessageDirectInMaster(msg);
 #if UNITY_EDITOR
         Debug_AddSendedQueue(msg);
 #endif
@@ -90,7 +91,7 @@ public abstract class ObjectBase : MessageReceiver, IProgress
     
     public virtual void release(bool disposeFromMaster)
     {
-        if(disposeFromMaster == false)
+        if(disposeFromMaster == false && _currentManagerNumber != -1)
             DeregisterRequest();
 #if UNITY_EDITOR
         Debug_ClearQueue();

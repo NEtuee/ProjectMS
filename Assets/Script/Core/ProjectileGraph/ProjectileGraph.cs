@@ -64,7 +64,7 @@ public class ProjectileGraph
             _currentVelocity = MathEx.convergence0(_currentVelocity,_projectileGraphShotInfoData._friction * deltaTime);
         if(_projectileGraphShotInfoData._angularAcceleration != 0f)
             _currentAngle += _projectileGraphShotInfoData._angularAcceleration * deltaTime;
-            
+        
         _movementOfFrame += (_currentVelocity * deltaTime) * (UnityEngine.Quaternion.Euler(0f,0f,_currentAngle) * UnityEngine.Vector3.right);
 
         return isEnd();
@@ -83,6 +83,7 @@ public class ProjectileGraph
         ChildFrameEventItem childFrameEventItem = _projectileGraphBaseData._projectileChildFrameEvent[eventType];
         for(int i = 0; i < childFrameEventItem._childFrameEventCount; ++i)
         {
+            childFrameEventItem._childFrameEvents[i].initialize();
             childFrameEventItem._childFrameEvents[i].onExecute(executeEntity, targetEntity);
         }
     }
@@ -98,6 +99,12 @@ public class ProjectileGraph
     public bool isOutOfBound()
     {
         return false;
+    }
+
+    public void setData(ProjectileGraphBaseData baesData) 
+    {
+        _projectileGraphBaseData = baesData;
+        initialize();
     }
 
     public void decreasePenetrateCount() {--_currentPenetrateCount;}

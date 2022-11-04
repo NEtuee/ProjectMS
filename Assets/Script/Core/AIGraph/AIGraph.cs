@@ -219,6 +219,7 @@ public class AIGraph
             AIChildFrameEventItem item = aiEventDic[aiEventType];
             for(int i = 0; i < item._childFrameEventCount; ++i)
             {
+                item._childFrameEvents[i].initialize();
                 item._childFrameEvents[i].onExecute(targetEntity);
             }
 

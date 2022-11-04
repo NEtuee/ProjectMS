@@ -12,6 +12,7 @@ public enum FrameEventType
     FrameEvent_SetDefenceType,
     FrameEvent_Effect,
     FrameEvent_SetFrameTag,
+    FrameEvent_Projectile,
 
     Count,
 }
@@ -54,6 +55,7 @@ public abstract class ActionFrameEventBase
         ChildFrameEventItem childFrameEventItem = _childFrameEventItems[eventType];
         for(int i = 0; i < childFrameEventItem._childFrameEventCount; ++i)
         {
+            childFrameEventItem._childFrameEvents[i].initialize();
             childFrameEventItem._childFrameEvents[i].onExecute(executeEntity, targetEntity);
         }
     }
@@ -287,6 +289,12 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
     private HashSet<ObjectBase> _collisionList = new HashSet<ObjectBase>();
     private List<CollisionSuccessData> _collisionOrder = new List<CollisionSuccessData>();
 
+    public ActionFrameEvent_Attack()
+    {
+        _collisionDelegate = attackPrepare;
+        _collisionEndEvent = attackProcess;
+    }
+
     public override void initialize()
     {
         _collisionList.Clear();
@@ -318,6 +326,12 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
         if(successData._requester is ObjectBase == false || successData._target is GameEntityBase == false)
             return;
 
+        ObjectBase requester = (ObjectBase)successData._requester;
+        GameEntityBase targetEntity = (GameEntityBase)successData._target;
+
+        if(targetEntity._searchIdentifier == requester._searchIdentifier)
+            return;
+        
         float distanceSq = (((GameEntityBase)successData._target).transform.position - successData._startPoint).sqrMagnitude;
         for(int i = 0; i < _collisionOrder.Count; ++i)
         {
@@ -340,13 +354,11 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
         ObjectBase requester = (ObjectBase)successData._requester;
         GameEntityBase target = (GameEntityBase)successData._target;
 
-        if(target._searchIdentifier == requester._searchIdentifier)
-            return true;
-
         if(_collisionList.Contains(target) == true)
             return true;
         else
             _collisionList.Add(target);
+
 
         ChildFrameEventType eventType = ChildFrameEventType.Count;
 
@@ -503,8 +515,7 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
         CollisionInfoData data = new CollisionInfoData(radius,angle, CollisionType.Attack);
         _collisionInfo = new CollisionInfo(data);
 
-        _collisionDelegate = attackPrepare;
-        _collisionEndEvent = attackProcess;
+        
     }
 }
 

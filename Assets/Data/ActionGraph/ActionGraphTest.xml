@@ -204,6 +204,7 @@
 
     <Dash MovementType="GraphPreset" DirectionType="Keep" MovementGraphPreset="Dash" FlipType="Keep" RotationType="Direction">
         <Animation Path="Resources/Sprites/DummyPlayer/Dash/" StartFrame="0" EndFrame="1" FramePerSecond="3" XFlip="true">
+            <FrameEvent Type="Projectile" GraphPath="Assets\\Data\\ProjectileGraph\\ProjectileGraphExample.xml"/>
         </Animation>
         
         <Branch Condition="Hit == true" Execute="Hit"/>

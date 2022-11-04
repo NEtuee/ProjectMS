@@ -423,6 +423,10 @@ public static class ActionGraphLoader
                 }
             }
 
+            frameEventList.Sort((x,y)=>{
+                return x._startFrame.CompareTo(y._startFrame);
+            });
+
             playData._frameEventDataCount = frameEventList.Count;
             playData._frameEventData = frameEventList.ToArray();
             playData._multiSelectAnimationDataCount = multiSelectAnimationList.Count;

@@ -31,9 +31,15 @@ public static class ProjectileGraphLoader
             return null;
         }
 
+        if(xmlDoc.FirstChild.Name.Equals("ProjectileGraph") == false)
+        {
+            DebugUtil.assert(false,"wrong xml type. name : {0}",xmlDoc.FirstChild.Name);
+            return null;
+        }
+
         List<ProjectileGraphBaseData> projectileBaseDataList = new List<ProjectileGraphBaseData>();
 
-        XmlNodeList projectileNodes = xmlDoc.ChildNodes;
+        XmlNodeList projectileNodes = xmlDoc.FirstChild.ChildNodes;
         for(int nodeIndex = 0; nodeIndex < projectileNodes.Count; ++nodeIndex)
         {
             ProjectileGraphBaseData baseData = readProjectile(projectileNodes[nodeIndex]);
@@ -48,12 +54,6 @@ public static class ProjectileGraphLoader
 
     private static ProjectileGraphBaseData readProjectile(XmlNode node)
     {
-        if(node.Name.Equals("ProjectileGraph") == false)
-        {
-            DebugUtil.assert(false,"wrong xml type. name : {0}",node.Name);
-            return null;
-        }
-
         float defaultFramePerSecond = 0f;
 
         ProjectileGraphBaseData projectileBaseData = new ProjectileGraphBaseData();
@@ -81,6 +81,17 @@ public static class ProjectileGraphLoader
             else if(targetName == "DefaultShotInfo")
             {
                 projectileBaseData._defaultProjectileShotInfoData = readDefaultShotInfo(nodes[nodeIndex]);
+            }
+            else if(targetName == "CollisionInfo")
+            {
+                XmlAttributeCollection attributes = nodes[nodeIndex].Attributes;
+                for(int attrIndex = 0; attrIndex < attributes.Count; ++attrIndex)
+                {
+                    if(attributes[attrIndex].Name == "Radius")
+                        projectileBaseData._collisionRadius = float.Parse(attributes[attrIndex].Value);
+                    else if(attributes[attrIndex].Name == "Angle")
+                        projectileBaseData._collisionAngle = float.Parse(attributes[attrIndex].Value);
+                }
             }
             else if(targetName == "Event")
             {
@@ -135,23 +146,25 @@ public static class ProjectileGraphLoader
     {
         defaultFPS = -1f;
 
+        baseData._name = node.Name;
+
         XmlAttributeCollection attributes = node.Attributes;
         for(int attrIndex = 0; attrIndex < attributes.Count; ++attrIndex)
         {
             string targetName = attributes[attrIndex].Name;
             string targetValue = attributes[attrIndex].Value;
 
-            if(targetName == "Name")
-            {
-                baseData._name = targetValue;
-            }
-            else if(targetName == "DefaultFramePerSecond")
+            if(targetName == "DefaultFramePerSecond")
             {
                 defaultFPS = float.Parse(targetValue);
             }
             else if(targetName == "PenetrateCount")
             {
                 baseData._penetrateCount = int.Parse(targetValue);
+            }
+            else if(targetName == "UseSpriteRotation")
+            {
+                baseData._useSpriteRotation = bool.Parse(targetValue);
             }
             else
             {
@@ -190,6 +203,10 @@ public static class ProjectileGraphLoader
             {
                 actionFrameEventList.Add(FrameEventLoader.readFromXMLNode(childNodes[j]));
             }
+
+            actionFrameEventList.Sort((x,y)=>{
+                return x._startFrame.CompareTo(y._startFrame);
+            });
 
             childItem._childFrameEventCount = actionFrameEventList.Count;
             childItem._childFrameEvents = actionFrameEventList.ToArray();

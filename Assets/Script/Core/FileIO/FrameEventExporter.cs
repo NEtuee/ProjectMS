@@ -33,13 +33,15 @@ public static class FrameEventLoader
             outFrameEvent = new ActionFrameEvent_Effect();
         else if(type == "FrameTag")
             outFrameEvent = new ActionFrameEvent_SetFrameTag();
+        else if(type == "Projectile")
+            outFrameEvent = new ActionFrameEvent_Projectile();
         else
         {
             DebugUtil.assert(false, "invalid frameEvent type: {0}",type);
             return null;
         }
 
-        DebugUtil.assert((int)FrameEventType.Count == 9, "check here");
+        DebugUtil.assert((int)FrameEventType.Count == 10, "check here");
 
 
         if(outFrameEvent == null)
@@ -112,6 +114,10 @@ public static class FrameEventLoader
             {
                 actionFrameEventList.Add(readFromXMLNode(childNodes[j]));
             }
+
+            actionFrameEventList.Sort((x,y)=>{
+                return x._startFrame.CompareTo(y._startFrame);
+            });
 
             childItem._childFrameEventCount = actionFrameEventList.Count;
             childItem._childFrameEvents = actionFrameEventList.ToArray();

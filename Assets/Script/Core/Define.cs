@@ -98,6 +98,17 @@ public struct BoundBox
         _localPivot = pivot;
     }
 
+    public void setData(float width, float height, Vector3 localPivot)
+    {
+        _width = width;
+        _height = height;
+
+        _worldCenter = Vector3.zero;
+        _localPivot = localPivot;
+
+        _l = _r = _b = _t = 0f;
+    }
+
     public void updateBoundBox(Triangle triangle)
     {
         Vector3 triangleA = triangle.get(0);

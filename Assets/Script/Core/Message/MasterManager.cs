@@ -154,6 +154,7 @@ public class MasterManager : MessageHub<ManagerBase>
 #if UNITY_EDITOR
                     other.GetReciever(msg.target).Debug_AddReceivedQueue(msg);
 #endif
+                    Debug.Log("End");
                     other.GetReciever(msg.target).MessageProcessing(msg);
                     MessagePool.ReturnMessage(msg);
                     find = true;

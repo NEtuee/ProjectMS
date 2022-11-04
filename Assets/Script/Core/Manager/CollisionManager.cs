@@ -124,6 +124,26 @@ public class CollisionManager : Singleton<CollisionManager>
     {
         _collisionObjectList[(int)collisionType].Add(objectData);
     }
+    
+    public void deregisterObject(CollisionInfoData collisionInfo, object collisionObject)
+    {
+        for(int i = 0; i < _collisionObjectList[(int)collisionInfo.getCollisionType()].Count;)
+        {
+            if(_collisionObjectList[(int)collisionInfo.getCollisionType()][i]._collisionObject == collisionObject)
+                deregisterObject(i,collisionInfo.getCollisionType());
+            else
+                ++i;
+
+        }
+    }
+
+    public void deregisterObject(int index, CollisionType collisionType)
+    {
+        if(index < 0 || index >= _collisionObjectList[(int)collisionType].Count)
+            return;
+
+        _collisionObjectList[(int)collisionType].RemoveAt(index);
+    }
 
     public void collisionRequest(CollisionInfo collisionData, object requestObject, CollisionDelegate collisionDelegate, System.Action collisionEndEvent)
     {

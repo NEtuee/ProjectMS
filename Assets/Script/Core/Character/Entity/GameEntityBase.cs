@@ -348,43 +348,7 @@ public class GameEntityBase : SequencerObjectBase
             defenceDirectionType = _actionGraph.getDefenceDirectionType();
         }
 
-        switch(directionType)
-        {
-            case DirectionType.AlwaysRight:
-                _direction = Vector3.right;
-                break;
-            case DirectionType.Keep:
-                break;
-            case DirectionType.MoveInput:
-                Vector3 input = ControllerEx.Instance().GetJoystickAxis();
-                if(MathEx.equals(input.sqrMagnitude,0f,float.Epsilon) == false )
-                {
-                    _direction = input;
-                    _direction.Normalize();
-                }
-                else
-                {
-                    _direction = Vector3.zero;
-                }
-
-                break;
-            case DirectionType.MousePoint:
-                _direction = ControllerEx.Instance().getJoystickAxisR(transform.position);
-                break;
-            case DirectionType.AttackedPoint:
-                _direction = (_recentlyAttackPoint - transform.position).normalized;
-                break;
-            case DirectionType.AI:
-                _direction = _aiGraph.getRecentlyAIDirection();
-                break;
-            case DirectionType.MoveDirection:
-                _direction = getMovementControl().getMoveDirection();
-                break;
-            case DirectionType.Count:
-                DebugUtil.assert(false, "invalid direction type : {0}",_actionGraph.getDirectionType());
-                break;
-        }
-
+        _direction = getDirectionFromType(directionType);
 
         switch(defenceDirectionType)
         {
@@ -397,6 +361,53 @@ public class GameEntityBase : SequencerObjectBase
         }
 
         _updateDirection = _actionGraph.getCurrentDirectionUpdateOnce() == false;
+    }
+
+    public Vector3 getDirectionFromType(DirectionType directionType)
+    {
+        Vector3 direction = _direction;
+        switch(directionType)
+        {
+            case DirectionType.AlwaysRight:
+                direction = Vector3.right;
+                break;
+            case DirectionType.Keep:
+                break;
+            case DirectionType.MoveInput:
+                Vector3 input = ControllerEx.Instance().GetJoystickAxis();
+                if(MathEx.equals(input.sqrMagnitude,0f,float.Epsilon) == false )
+                {
+                    direction = input;
+                    direction.Normalize();
+                }
+                else
+                {
+                    direction = Vector3.zero;
+                }
+
+                break;
+            case DirectionType.MousePoint:
+                direction = ControllerEx.Instance().getJoystickAxisR(transform.position);
+                break;
+            case DirectionType.AttackedPoint:
+                direction = (_recentlyAttackPoint - transform.position).normalized;
+                break;
+            case DirectionType.AI:
+                direction = _aiGraph.getRecentlyAIDirection();
+                break;
+            case DirectionType.AITarget:
+                if(_currentTarget != null && _currentTarget.isValid())
+                    direction = (_currentTarget.transform.position - transform.position).normalized;
+                break;
+            case DirectionType.MoveDirection:
+                direction = getMovementControl().getMoveDirection();
+                break;
+            case DirectionType.Count:
+                DebugUtil.assert(false, "invalid direction type : {0}",_actionGraph.getDirectionType());
+                break;
+        }
+
+        return direction;
     }
 
     private void rotationUpdate()
@@ -434,7 +445,7 @@ public class GameEntityBase : SequencerObjectBase
     }
     public bool isValid() 
     {
-        return _movementControl != null && _actionGraph != null && _spriteRenderer != null;
+        return _movementControl != null && _actionGraph != null && _spriteRenderer != null && gameObject.activeInHierarchy;
     }
 
     public void setSpriteRotation(Quaternion rotation)

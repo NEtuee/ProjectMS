@@ -5,20 +5,23 @@ using UnityEditor;
 
 public class ProjectileEntityBase : ObjectBase
 {
-    private ProjectileGraph _projectileGraph;
+    protected ProjectileGraph _projectileGraph;
 
     private CollisionInfo _collisionInfo;
 
     private Color _debugColor = Color.red;
     private CollisionDelegate _collisionDelegate;
 
+    private HashSet<int> _collisionUniqueIDList = new HashSet<int>();
+
+    private bool _spriteRotation = false;
+
     public override void assign()
     {
         base.assign();
-        _projectileGraph = new ProjectileGraph(ProjectileGraphLoader.readFromXML(IOControl.PathForDocumentsFile("Assets\\Data\\ProjectileGraph\\ProjectileGraphExample.xml"))[0]);
-        CollisionInfoData data = new CollisionInfoData(.1f,0f, CollisionType.Projectile);
+        _projectileGraph = new ProjectileGraph();
+        CollisionInfoData data = new CollisionInfoData(0f,0f,CollisionType.Projectile);
         _collisionInfo = new CollisionInfo(data);
-
         _collisionDelegate = onProjectileHit;
         
         createSpriteRenderObject();
@@ -27,26 +30,50 @@ public class ProjectileEntityBase : ObjectBase
     public override void initialize()
     {
         base.initialize();
-        RegisterRequest(QueryUniqueID("ProjectileManager"));
 
+        _collisionUniqueIDList.Clear();
+    }
+
+    public void setData(ProjectileGraphBaseData baseData)
+    {
+        _spriteRotation = baseData._useSpriteRotation;
+        _projectileGraph.setData(baseData);
+        _collisionInfo.setCollisionInfo(baseData._collisionRadius, baseData._collisionAngle);
+    }
+
+    public void shot(Vector3 startPosition)
+    {
+        transform.position = startPosition;
         _projectileGraph.initialize();
 
+        RegisterRequest(QueryUniqueID("ProjectileManager"));
         CollisionManager.Instance().registerObject(_collisionInfo, this);
     }
 
     public void shot(ProjectileGraphShotInfoData shotInfoData, Vector3 startPosition)
     {
         transform.position = startPosition;
+
+        if(_spriteRotation)
+            _spriteObject.transform.rotation = Quaternion.Euler(0f,0f,shotInfoData._defaultAngle);
+        else
+            _spriteObject.transform.rotation = Quaternion.identity;
+
         _projectileGraph.initialize(shotInfoData);
+
+        RegisterRequest(QueryUniqueID("ProjectileManager"));
+        CollisionManager.Instance().registerObject(_collisionInfo, this);
     }
 
     public override void progress(float deltaTime)
     {
         if(_projectileGraph.isEnd() == true)
         {
-            _projectileGraph.executeChildFrameEvent(ProjectileChildFrameEventType.ChildFrameEvent_OnEnd,this,null);
+            if(_projectileGraph.isPenetrateEnd() == false)
+                _projectileGraph.executeChildFrameEvent(ProjectileChildFrameEventType.ChildFrameEvent_OnEnd,this,null);
 
-            gameObject.SetActive(false);
+            DeregisterRequest();
+            CollisionManager.Instance().deregisterObject(_collisionInfo.getCollisionInfoData(),this);
             return;
         }
 
@@ -55,7 +82,10 @@ public class ProjectileEntityBase : ObjectBase
         bool isEnd = _projectileGraph.progress(deltaTime, this);
         _projectileGraph.updateLifeTime(deltaTime);
 
-        transform.position += _projectileGraph.getMovementOfFrame();
+        Vector3 movementOfFrame = _projectileGraph.getMovementOfFrame();
+        transform.position += movementOfFrame;
+        if(_spriteRotation && movementOfFrame.sqrMagnitude != 0f)
+            _spriteObject.transform.rotation = Quaternion.Euler(0f,0f,Mathf.Atan2(movementOfFrame.y,movementOfFrame.x) * Mathf.Rad2Deg);
 
         _spriteRenderer.sprite = _projectileGraph.getCurrentSprite();
         
@@ -72,6 +102,14 @@ public class ProjectileEntityBase : ObjectBase
 
         ProjectileEntityBase requester = successData._requester as ProjectileEntityBase;
         GameEntityBase target = successData._target as GameEntityBase;
+
+        if(requester._searchIdentifier == target._searchIdentifier)
+            return;
+
+        if(_collisionUniqueIDList.Contains(target.GetUniqueID()))
+            return;
+        
+        _collisionUniqueIDList.Add(target.GetUniqueID());
 
         _projectileGraph.executeChildFrameEvent(ProjectileChildFrameEventType.ChildFrameEvent_OnHit,requester,target);
 
