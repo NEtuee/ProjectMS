@@ -61,6 +61,7 @@ public class MasterManager : MessageHub<ManagerBase>
     public void LateUpdate()
     {
         CollisionManager.Instance().collisionUpdate();
+        WeightRandomManager.Instance().updateRandom();
     }
 
     public void FixedUpdate()

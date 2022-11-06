@@ -95,6 +95,10 @@ public static class WeightRandomExporter
             
         }
 
+        weightDataList.Sort((x,y)=>{
+            return x._weight.CompareTo(y._weight);
+        });
+
         group._weightCount = weightDataList.Count;
         for(int i = 0; i < group._weightCount; ++i)
         {

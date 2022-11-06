@@ -26,10 +26,12 @@ public class WeightRandomManager : Singleton<WeightRandomManager>
 
     private bool isWeightValid(WeightGroupData groupData, string key)
     {
+        float weight = 0f;
         for(int i = 0; i < groupData._weightCount; ++i)
         {
-            if(groupData._weights[i]._key == key)
-                return groupData._weights[i]._weight < _randomWeightThisFrame;
+            weight += groupData._weights[i]._weight;
+            if(weight >= _randomWeightThisFrame)
+                return groupData._weights[i]._key == key;
         }
 
         return false;
