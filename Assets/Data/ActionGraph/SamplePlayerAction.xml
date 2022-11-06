@@ -16,7 +16,7 @@
     </BranchSet>
 
     <Idle DirectionType="Keep" FlipType="MousePoint">
-        <Animation Path="Resources/Sprites/Player/idle/" StartFrame="0" EndFrame="8" FramePerSecond="12" XFlip="true">
+        <Animation Path="Resources/Sprites/NewPlayer/idle/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
         </Animation>
 
         <UseBranchSet Name="CommonBattleBranchSet"/>
@@ -32,13 +32,13 @@
 
 
     <MoveAll MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="MoveInput" FlipType="MousePoint" NormalizedSpeed="true">
-        <Animation Path="Resources/Sprites/DummyPlayer/MoveForward/" StartFrame="0" EndFrame="5" FramePerSecond="12" XFlip="true">
-            <MultiSelectAnimation Path="Resources/Sprites/Player/moveUp/" Condition="(AngleDirection >= 45.0) && (AngleDirection < 135.0)"/>
-            <MultiSelectAnimation Path="Resources/Sprites/Player/moveDown/" Condition="(AngleDirection >= 225.0) && (AngleDirection < 315.0)"/>
-            <MultiSelectAnimation Path="Resources/Sprites/Player/moveBack/" Condition="(AngleDirection >= 315.0) || (AngleDirection < 45.0) && (IsXFlip == true)"/>
-            <MultiSelectAnimation Path="Resources/Sprites/Player/moveFront/" Condition="(AngleDirection >= 135.0) && (AngleDirection < 225.0) && (IsXFlip == true)"/>
-            <MultiSelectAnimation Path="Resources/Sprites/Player/moveBack/" Condition="(AngleDirection >= 135.0) && (AngleDirection < 225.0) && (IsXFlip == false)"/>
-            <MultiSelectAnimation Path="Resources/Sprites/Player/moveFront/" Condition="(AngleDirection >= 315.0) || (AngleDirection < 45.0) && (IsXFlip == false)"/>
+        <Animation Path="Resources/Sprites/DummyPlayer/MoveForward/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
+            <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/moveUp/" Condition="(AngleDirection >= 45.0) && (AngleDirection < 135.0)"/>
+            <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/moveDown/" Condition="(AngleDirection >= 225.0) && (AngleDirection < 315.0)"/>
+            <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/moveBack/" Condition="(AngleDirection >= 315.0) || (AngleDirection < 45.0) && (IsXFlip == true)"/>
+            <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/moveFront/" Condition="(AngleDirection >= 135.0) && (AngleDirection < 225.0) && (IsXFlip == true)"/>
+            <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/moveBack/" Condition="(AngleDirection >= 135.0) && (AngleDirection < 225.0) && (IsXFlip == false)"/>
+            <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/moveFront/" Condition="(AngleDirection >= 315.0) || (AngleDirection < 45.0) && (IsXFlip == false)"/>
         </Animation>
 
         <UseBranchSet Name="CommonMoveBranchSet"/>
