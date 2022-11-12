@@ -11,7 +11,7 @@
     </BranchSet>
 
     <BranchSet Name="CommonMoveBranchSet">
-        <Branch Key="getKey_Dash" Condition="(getStat_Stamina >= 20.0)" Execute="DashStart"/>
+        <Branch Key="getKey_Dash" Condition="(getStat_Stamina >= 20.0)" Execute="Dash"/>
         <Branch Condition="ActionTest == false" Execute="Idle"/>
     </BranchSet>
 
@@ -59,6 +59,7 @@
 
     <AttackPrepare MovementType="Empty" DirectionType="MousePoint" FlipType="Keep">
         <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="999">
+            <FrameEvent Type="FrameTag" StartFrame="0" EndFrame="999" Tag="Attack"/>
         </Animation>
 
         <Branch Condition="Hit == true" Execute="Hit"/>
@@ -79,7 +80,7 @@
     <JustGuardBreak DirectionType="Keep" FlipType="Direction">
         <Animation Path="Resources/Sprites/DummyPlayer/JustGuardBreak/" StartFrame="0" EndFrame="1" FramePerSecond="3" XFlip="true">
             <FrameEvent Type="Test" Log="Just Guard Break Excuted"/>
-            
+            <FrameEvent Type="FrameTag" StartFrame="0" EndFrame="999" Tag="JustGuardBreak"/>
             <FrameEvent Type="Attack" AttackType="GuardBreak" StartFrame="0" AttackPreset="Player_JustGuardBreak" IgnoreDefenceType="Guard">
                 <OnGuardBreak>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="12"/>
@@ -200,6 +201,7 @@
 
     <Guard MovementType="GraphPreset" MovementGraphPreset="Guard" DirectionType="MoveInput" DefenceDirectionType="MousePoint" FlipType="Keep" DefenceType="Guard" DefenceAngle="180.0">
         <Animation Path="Resources/Sprites/DummyPlayer/Guard/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
+            <FrameEvent Type="FrameTag" StartFrame="0" EndFrame="999" Tag="Guard"/>
             <FrameEvent Type="SetDefenceType" StartFrame="0" DefenceType="Parry"/>
             <FrameEvent Type="SetDefenceType" StartFrame="0.2" DefenceType="Guard"/>
         </Animation>
@@ -229,6 +231,7 @@
 
     <Hit MovementType="GraphPreset" MovementGraphPreset="AttackHit" DirectionType="AttackedPoint" FlipType="Direction">
         <Animation Path="Resources/Sprites/DummyPlayer/Hit/" StartFrame="0" EndFrame="1" FramePerSecond="2" XFlip="true">
+            <FrameEvent Type="FrameTag" StartFrame="0" EndFrame="999" Tag="Hit"/>
         </Animation>
 
         <Branch Condition="End == true && ActionTest == true" Execute="MoveAll"/>

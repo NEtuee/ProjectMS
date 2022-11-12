@@ -35,6 +35,19 @@
         <Branch Condition="End == true" Execute="MoveAll"/>
     </MoveAll>
 
+    <Dash MovementType="GraphPreset" MovementGraphPreset="Dash" DirectionType="AI" FlipType="Direction" RotationType="Direction" DefenceType="Evade" DefenceAngle="360.0">
+        <Animation Path="Resources/Sprites/SampleBoss/DashRight/" StartFrame="0" EndFrame="1" FramePerSecond="3" XFlip="true">
+            <MultiSelectAnimation Path="Resources/Sprites/SampleBoss/DashUp/" Condition="(AngleDirection >= 45.0) && (AngleDirection < 135.0)"/>
+            <MultiSelectAnimation Path="Resources/Sprites/SampleBoss/DashDown/" Condition="(AngleDirection >= 225.0) && (AngleDirection < 315.0)"/>
+            <MultiSelectAnimation Path="Resources/Sprites/SampleBoss/DashLeft/" Condition="(AngleDirection >= 315.0) || (AngleDirection < 45.0) && (IsXFlip == true)"/>
+            <MultiSelectAnimation Path="Resources/Sprites/SampleBoss/DashRight/" Condition="(AngleDirection >= 135.0) && (AngleDirection < 225.0) && (IsXFlip == true)"/>
+            <MultiSelectAnimation Path="Resources/Sprites/SampleBoss/DashLeft/" Condition="(AngleDirection >= 135.0) && (AngleDirection < 225.0) && (IsXFlip == false)"/>
+            <MultiSelectAnimation Path="Resources/Sprites/SampleBoss/DashRight/" Condition="(AngleDirection >= 315.0) || (AngleDirection < 45.0) && (IsXFlip == false)"/>
+        </Animation>
+        
+        <Branch Condition="End == true" Execute="Idle"/>
+    </Dash>
+
     <AttackCharge DirectionType="Keep" FlipType="Direction">
         <Animation Path="Resources/Sprites/SampleBoss/Charge/" StartFrame="0" EndFrame="1" FramePerSecond="4">
         </Animation>
