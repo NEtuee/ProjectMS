@@ -35,13 +35,15 @@ public static class FrameEventLoader
             outFrameEvent = new ActionFrameEvent_SetFrameTag();
         else if(type == "Projectile")
             outFrameEvent = new ActionFrameEvent_Projectile();
+        else if(type == "Danmaku")
+            outFrameEvent = new ActionFrameEvent_Danmaku();
         else
         {
             DebugUtil.assert(false, "invalid frameEvent type: {0}",type);
             return null;
         }
 
-        DebugUtil.assert((int)FrameEventType.Count == 10, "check here");
+        DebugUtil.assert((int)FrameEventType.Count == 11, "check here");
 
 
         if(outFrameEvent == null)
