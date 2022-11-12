@@ -77,6 +77,7 @@ public enum DirectionType
     AttackedPoint,
     MoveDirection,
     AI,
+    AITarget,
     Count,
 }
 
@@ -94,6 +95,7 @@ public class ActionGraphBranchData
 
     public int      _conditionCompareDataIndex = -1;
     public int      _keyConditionCompareDataIndex = -1;
+    public int      _weightConditionCompareDataIndex = -1;
 }
 
 public enum ConditionCompareType
@@ -179,6 +181,7 @@ public enum ConditionNodeUpdateType
     Key,
     FrameTag,
     TargetFrameTag,
+    Weight,
 
     Count,
 }
@@ -254,6 +257,7 @@ public static class ConditionNodeInfoPreset
         {"Key",new ConditionNodeInfo(ConditionNodeUpdateType.Key, ConditionNodeType.Bool)},
         {"FrameTag",new ConditionNodeInfo(ConditionNodeUpdateType.FrameTag, ConditionNodeType.Bool)},
         {"TargetFrameTag",new ConditionNodeInfo(ConditionNodeUpdateType.TargetFrameTag, ConditionNodeType.Bool)},
+        {"Weight",new ConditionNodeInfo(ConditionNodeUpdateType.Weight, ConditionNodeType.Bool)},
         
     };
 
@@ -281,6 +285,18 @@ public class ActionGraphConditionNodeData_FrameTag : ActionGraphConditionNodeDat
     }
     
     public string getFrameTag() {return _targetFrameTag;}
+    
+}
+[System.Serializable]
+public class ActionGraphConditionNodeData_Weight : ActionGraphConditionNodeData
+{
+    public string _weightGroupKey = "";
+    public string _weightName = "";
+
+    public ActionGraphConditionNodeData_Weight()
+    {
+        
+    }
     
 }
 [System.Serializable]

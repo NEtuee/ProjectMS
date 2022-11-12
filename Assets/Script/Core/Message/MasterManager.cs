@@ -61,6 +61,7 @@ public class MasterManager : MessageHub<ManagerBase>
     public void LateUpdate()
     {
         CollisionManager.Instance().collisionUpdate();
+        WeightRandomManager.Instance().updateRandom();
     }
 
     public void FixedUpdate()
@@ -154,6 +155,7 @@ public class MasterManager : MessageHub<ManagerBase>
 #if UNITY_EDITOR
                     other.GetReciever(msg.target).Debug_AddReceivedQueue(msg);
 #endif
+                    Debug.Log("End");
                     other.GetReciever(msg.target).MessageProcessing(msg);
                     MessagePool.ReturnMessage(msg);
                     find = true;

@@ -4,10 +4,21 @@ using UnityEngine;
 public abstract class ObjectBase : MessageReceiver, IProgress
 {
     public System.Action    whenDeactive = ()=>{};
+
+    public SearchIdentifier     _searchIdentifier = SearchIdentifier.Enemy;
+
+
     protected int           _currentManagerNumber = -1;
 
+    protected AttackState         _attackState = AttackState.Default;
+    protected DefenceState        _defenceState = DefenceState.Default;
 
+    protected GameObject          _spriteObject;
+    protected SpriteRenderer      _spriteRenderer;
     protected Vector3 _direction = Vector3.right;
+
+    public void setAttackState(AttackState state) {_attackState = state;}
+    public void setDefenceState(DefenceState state) {_defenceState = state;}
 
 
     protected override void Awake()
@@ -21,6 +32,16 @@ public abstract class ObjectBase : MessageReceiver, IProgress
     {
         initialize();
     }
+
+    public void createSpriteRenderObject()
+    {
+        _spriteObject = new GameObject("SpriteObject");
+        _spriteObject.transform.SetParent(this.transform);
+        _spriteObject.transform.localPosition = Vector3.zero;
+
+        _spriteRenderer = _spriteObject.AddComponent<SpriteRenderer>();
+    }
+
     public void SendMessageQuick(Message msg)
     {
         MasterManager.instance.HandleMessageQuick(msg);
@@ -47,9 +68,10 @@ public abstract class ObjectBase : MessageReceiver, IProgress
     }
     public void DeregisterRequest()
     {
-        _currentManagerNumber = -1;
         var msg = MessagePack(MessageTitles.system_deregisterRequest,_currentManagerNumber,GetUniqueID());
-        MasterManager.instance.SendMessageDirectInMasterQuick(msg);
+        _currentManagerNumber = -1;
+
+        MasterManager.instance.SendMessageDirectInMaster(msg);
 #if UNITY_EDITOR
         Debug_AddSendedQueue(msg);
 #endif
@@ -69,7 +91,7 @@ public abstract class ObjectBase : MessageReceiver, IProgress
     
     public virtual void release(bool disposeFromMaster)
     {
-        if(disposeFromMaster == false)
+        if(disposeFromMaster == false && _currentManagerNumber != -1)
             DeregisterRequest();
 #if UNITY_EDITOR
         Debug_ClearQueue();

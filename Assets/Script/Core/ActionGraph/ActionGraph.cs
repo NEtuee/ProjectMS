@@ -62,7 +62,7 @@ public class ActionGraph
 
     private void createCoditionNodeDataAll()
     {
-        DebugUtil.assert((int)ConditionNodeUpdateType.Count == 31, "check this");
+        DebugUtil.assert((int)ConditionNodeUpdateType.Count == 32, "check this");
 
         foreach(var item in ConditionNodeInfoPreset._nodePreset.Values)
         {
@@ -71,7 +71,8 @@ public class ActionGraph
                 item._updateType == ConditionNodeUpdateType.Status ||
                 item._updateType == ConditionNodeUpdateType.Key || 
                 item._updateType == ConditionNodeUpdateType.FrameTag || 
-                item._updateType == ConditionNodeUpdateType.TargetFrameTag)
+                item._updateType == ConditionNodeUpdateType.TargetFrameTag ||
+                item._updateType == ConditionNodeUpdateType.Weight)
                 continue;
 
             createConditionNodeData(item);
@@ -162,6 +163,13 @@ public class ActionGraph
 
     public bool processActionBranch(ActionGraphBranchData branchData)
     {
+        bool weightCondition = true;
+        if(branchData._weightConditionCompareDataIndex != -1)
+        {
+            ActionGraphConditionCompareData compareData = _actionGraphBaseData._conditionCompareData[branchData._weightConditionCompareDataIndex];
+            weightCondition = processActionCondition(compareData);
+        }
+        
         bool keyCondition = true;
         if(branchData._keyConditionCompareDataIndex != -1)
         {
@@ -176,7 +184,7 @@ public class ActionGraph
             condition = processActionCondition(compareData);
         }
 
-        return keyCondition && condition;
+        return weightCondition && keyCondition && condition;
 
     }
 
@@ -478,6 +486,12 @@ public class ActionGraph
                 return CommonConditionNodeData.falseByte;
 
             return _targetFrameTagData.Contains(((ActionGraphConditionNodeData_FrameTag)nodeData)._targetFrameTag) ? CommonConditionNodeData.trueByte : CommonConditionNodeData.falseByte;
+        }
+        else if(updateType == ConditionNodeUpdateType.Weight)
+        {
+            ActionGraphConditionNodeData_Weight data = (ActionGraphConditionNodeData_Weight)nodeData;
+            return WeightRandomManager.Instance().getRandom(data._weightGroupKey, data._weightName) ? CommonConditionNodeData.trueByte : CommonConditionNodeData.falseByte;
+
         }
         else if(updateType == ConditionNodeUpdateType.Key)
         {

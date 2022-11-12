@@ -1,3 +1,5 @@
-<AIGraph Name="CommonMeleePackage">
-
+<AIGraph Name="CommonMeleePackage" DefaultState="Entry">
+    <Include Path="PlayerTargetSearchPackage.xml"/>
+    <Entry Package="PlayerTargetSearchPackage">
+    </Entry>
 </AIGraph>

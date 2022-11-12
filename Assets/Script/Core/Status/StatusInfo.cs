@@ -88,6 +88,18 @@ public class StatusInfo
         createStatusValueDictionary(_statusInfoData);
     }
 
+    public void initialize()
+    {
+        clearBuff();
+        foreach(Status item in _statusValues.Values)
+        {
+            _statusInfoData._statusData[item._statusIndex].initStat(ref item._value);
+            item._value = item._realValue;
+            item._additionalValue = 0f;
+            item._regenFactor = 0f;
+        }
+    }
+
     private StatusInfoData getStatusInfoData(string targetName)
     {
         if(_statusInfoDataDictionary.ContainsKey(targetName) == false)
@@ -186,6 +198,17 @@ public class StatusInfo
     //     if(_currentlyAppliedBuffList.ContainsKey(buffKey) == true)
     //         _currentlyAppliedBuffList.Remove(buffKey);
     // }
+
+    public void clearBuff()
+    {
+        for(int i = 0; i < _currentlyAppliedBuffList.Count; ++i)
+        {
+            if(_currentlyAppliedBuffList[i]._buffData._buffUpdateType == BuffUpdateType.DelayedContinuous)
+                getStatus((_currentlyAppliedBuffList[i]._buffData._targetStatusName)).deleteToUpdateList(_currentlyAppliedBuffList[i]._buffData._buffKey);        
+        }
+
+        _currentlyAppliedBuffList.Clear();
+    }
 
     public void deleteBuff(int buffKey)
     {

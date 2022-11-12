@@ -60,19 +60,30 @@ public class CollisionManager : Singleton<CollisionManager>
                 setCollisionEnable(i,CollisionType.Default,true);
                 setCollisionEnable(i,CollisionType.Character,true);
                 setCollisionEnable(i,CollisionType.Attack,false);
+                setCollisionEnable(i,CollisionType.Projectile,false);
             }
             else if(type == CollisionType.Character)
             {
                 setCollisionEnable(i,CollisionType.Default,true);
                 setCollisionEnable(i,CollisionType.Character,true);
                 setCollisionEnable(i,CollisionType.Attack,false);
+                setCollisionEnable(i,CollisionType.Projectile,false);
+            }
+            else if(type == CollisionType.Projectile)
+            {
+                setCollisionEnable(i,CollisionType.Default,true);
+                setCollisionEnable(i,CollisionType.Character,true);
+                setCollisionEnable(i,CollisionType.Attack,false);
+                setCollisionEnable(i,CollisionType.Projectile,false);
             }
             else if(type == CollisionType.Attack)
             {
                 setCollisionEnable(i,CollisionType.Default,true);
                 setCollisionEnable(i,CollisionType.Character,true);
                 setCollisionEnable(i,CollisionType.Attack,false);
+                setCollisionEnable(i,CollisionType.Projectile,false);
             }
+            
         }
     }
 
@@ -113,6 +124,26 @@ public class CollisionManager : Singleton<CollisionManager>
     {
         _collisionObjectList[(int)collisionType].Add(objectData);
     }
+    
+    public void deregisterObject(CollisionInfoData collisionInfo, object collisionObject)
+    {
+        for(int i = 0; i < _collisionObjectList[(int)collisionInfo.getCollisionType()].Count;)
+        {
+            if(_collisionObjectList[(int)collisionInfo.getCollisionType()][i]._collisionObject == collisionObject)
+                deregisterObject(i,collisionInfo.getCollisionType());
+            else
+                ++i;
+
+        }
+    }
+
+    public void deregisterObject(int index, CollisionType collisionType)
+    {
+        if(index < 0 || index >= _collisionObjectList[(int)collisionType].Count)
+            return;
+
+        _collisionObjectList[(int)collisionType].RemoveAt(index);
+    }
 
     public void collisionRequest(CollisionInfo collisionData, object requestObject, CollisionDelegate collisionDelegate, System.Action collisionEndEvent)
     {
@@ -139,7 +170,7 @@ public class CollisionManager : Singleton<CollisionManager>
                 collisionCheck(i,request);
             }
 
-            request._collisionEndEvent();
+            request._collisionEndEvent?.Invoke();
         }
 
         _collisionRequestCount = 0;
@@ -156,6 +187,7 @@ public class CollisionManager : Singleton<CollisionManager>
         {
             if(collisionInfo.getUniqueID() == collisionList[i]._collisionInfo.getUniqueID() || request._requestObject == collisionList[i]._collisionObject)
                 continue;
+
             
             if(collisionInfo.collisionCheck(collisionList[i]._collisionInfo) == true)
             {
@@ -164,7 +196,7 @@ public class CollisionManager : Singleton<CollisionManager>
                 data._target = collisionList[i]._collisionObject;
                 data._startPoint = request._collision.getCenterPosition();
 
-                request._collisionDelegate(data);
+                request._collisionDelegate?.Invoke(data);
             }
                 
         }

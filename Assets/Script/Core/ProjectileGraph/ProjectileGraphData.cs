@@ -1,4 +1,13 @@
 using UnityEngine;
+using System.Collections.Generic;
+
+public enum ProjectileChildFrameEventType
+{
+    ChildFrameEvent_OnHit,
+    ChildFrameEvent_OnHitEnd,
+    ChildFrameEvent_OnEnd,
+    Count,
+}
 
 public class ProjectileGraphBaseData
 {
@@ -6,16 +15,57 @@ public class ProjectileGraphBaseData
     public ProjectileType               _projectileType;
     public ProjectileGraphShotInfoData  _defaultProjectileShotInfoData;
     public AnimationPlayDataInfo[]      _animationPlayData;
+
+    public Dictionary<ProjectileChildFrameEventType,ChildFrameEventItem> _projectileChildFrameEvent = null;
+
+    public float                        _collisionRadius = 0.1f;
+    public float                        _collisionAngle = 0f;
+
+    public bool                         _useSpriteRotation = false;
+
+    public int                          _penetrateCount = 1;
 }
 
-public class ProjectileGraphShotInfoData
+public struct ProjectileGraphShotInfoData
 {
-    public float                    _deafaultVelocity = 0f;
-    public float                    _acceleration = 0f;
-    public float                    _friction = 0f;
-    public float                    _defaultAngle = 0f;
-    public float                    _angularAcceleration = 0f;
-    public float                    _lifeTime = 0f;
+    public float                    _deafaultVelocity;
+    public float                    _acceleration;
+    public float                    _friction;
+    public float                    _defaultAngle;
+    public float                    _angularAcceleration;
+    public float                    _lifeTime;
+
+    public ProjectileGraphShotInfoData(float defaultVelocity, float acceleration, float friction, float defaultAngle, float angularAcceleration, float lifeTime)
+    {
+        _deafaultVelocity = defaultVelocity;
+        _acceleration = acceleration;
+        _friction = friction;
+        _defaultAngle = defaultAngle;
+        _angularAcceleration = angularAcceleration;
+        _lifeTime = lifeTime;
+    }
+
+    public static ProjectileGraphShotInfoData operator +(ProjectileGraphShotInfoData a, ProjectileGraphShotInfoData b)
+    {
+        return new ProjectileGraphShotInfoData{
+            _acceleration = a._acceleration + b._acceleration
+            , _angularAcceleration = a._angularAcceleration + b._angularAcceleration
+            , _deafaultVelocity = a._deafaultVelocity + b._deafaultVelocity
+            , _defaultAngle = a._defaultAngle + b._defaultAngle
+            , _friction = a._friction + b._friction
+            , _lifeTime = a._lifeTime + b._lifeTime};
+    }
+
+    public void clear()
+    {
+        _deafaultVelocity = 0f;
+        _acceleration = 0f;
+        _friction = 0f;
+        _defaultAngle = 0f;
+        _angularAcceleration = 0f;
+        _lifeTime = 0f;
+    }
+
 }
 
 

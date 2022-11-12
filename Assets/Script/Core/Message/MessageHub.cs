@@ -18,7 +18,7 @@ public abstract class MessageHub<T> : MessageReceiver where T : MessageReceiver
         }
             
     }
-    public void DeregisteReceiver(MessageReceiver target)
+    public virtual void DeregisteReceiver(MessageReceiver target)
     {
         if(_receivers.ContainsKey(target.GetUniqueID()))
             _receivers.Remove(target.GetUniqueID());

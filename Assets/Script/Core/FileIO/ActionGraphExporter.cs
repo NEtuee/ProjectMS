@@ -423,6 +423,10 @@ public static class ActionGraphLoader
                 }
             }
 
+            frameEventList.Sort((x,y)=>{
+                return x._startFrame.CompareTo(y._startFrame);
+            });
+
             playData._frameEventDataCount = frameEventList.Count;
             playData._frameEventData = frameEventList.ToArray();
             playData._multiSelectAnimationDataCount = multiSelectAnimationList.Count;
@@ -506,6 +510,19 @@ public static class ActionGraphLoader
                     return null;
 
                 branchData._keyConditionCompareDataIndex = compareDataList.Count;
+                compareDataList.Add(keyConditionData);
+            }
+            else if(targetName == "Weight")
+            {
+                if(targetValue == "")
+                    continue;
+                
+                targetValue = "getWeight_" + targetValue;
+                ActionGraphConditionCompareData keyConditionData = ReadConditionCompareData(targetValue);
+                if(keyConditionData == null)
+                    return null;
+
+                branchData._weightConditionCompareDataIndex = compareDataList.Count;
                 compareDataList.Add(keyConditionData);
             }
             else if(targetName == "Execute")
@@ -646,6 +663,10 @@ public static class ActionGraphLoader
         if(nodeData != null)
             return nodeData;
 
+        nodeData = isWeight(symbol);
+        if(nodeData != null)
+            return nodeData;
+
         nodeData = new ActionGraphConditionNodeData();
     
         if(ConditionNodeInfoPreset._nodePreset.ContainsKey(symbol) == false)
@@ -677,6 +698,21 @@ public static class ActionGraphLoader
         ActionGraphConditionNodeData_FrameTag item = new ActionGraphConditionNodeData_FrameTag();
         item._symbolName = "FrameTag";
         item._targetFrameTag = symbol.Replace("getFrameTag_","");
+        return item;
+    }
+
+    private static ActionGraphConditionNodeData_Weight isWeight(string symbol)
+    {
+        if(symbol.Contains("getWeight_") == false)
+            return null;
+
+        symbol = symbol.Replace("getWeight_","");
+        string[] groupData = symbol.Split('_');
+
+        ActionGraphConditionNodeData_Weight item = new ActionGraphConditionNodeData_Weight();
+        item._symbolName = "Weight";
+        item._weightGroupKey = groupData[0];
+        item._weightName = groupData[1];
         return item;
     }
 

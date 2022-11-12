@@ -219,6 +219,7 @@ public class AIGraph
             AIChildFrameEventItem item = aiEventDic[aiEventType];
             for(int i = 0; i < item._childFrameEventCount; ++i)
             {
+                item._childFrameEvents[i].initialize();
                 item._childFrameEvents[i].onExecute(targetEntity);
             }
 
@@ -231,6 +232,13 @@ public class AIGraph
 
     public bool processActionBranch(ActionGraphBranchData branchData, ActionGraphConditionCompareData[] compareDatas)
     {
+        bool weightCondition = true;
+        if(branchData._weightConditionCompareDataIndex != -1)
+        {
+            ActionGraphConditionCompareData compareData = compareDatas[branchData._weightConditionCompareDataIndex];
+            weightCondition = _actionGraph.processActionCondition(compareData);
+        }
+
         bool keyCondition = true;
         if(branchData._keyConditionCompareDataIndex != -1)
         {
@@ -245,7 +253,7 @@ public class AIGraph
             condition = _actionGraph.processActionCondition(compareData);
         }
 
-        return keyCondition && condition;
+        return weightCondition && keyCondition && condition;
 
     }
 

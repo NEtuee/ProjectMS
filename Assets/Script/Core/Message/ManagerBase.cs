@@ -53,6 +53,7 @@ public abstract class ManagerBase : MessageHub<ObjectBase>, IProgress
             }
             RegisterReceiver(receiver);
         });
+        
         AddAction(MessageTitles.system_deregisterRequest,(msg)=>
         {
             DeregisteReceiver(((ObjectBase)msg.sender).GetUniqueID());

@@ -2,9 +2,9 @@
 public class CollisionInfoData
 {
     private BoundBox _boundBox;
-    private CollisionType _collisionType;
-    private float _radius;
-    private float _angle;
+    private CollisionType _collisionType = CollisionType.Default;
+    private float _radius = 0f;
+    private float _angle = 0f;
 
     public CollisionInfoData(float radius, float angle, CollisionType collisionType)
     {
@@ -25,6 +25,15 @@ public class CollisionInfoData
     public float getSqrRadius() {return _radius * _radius;}
 
     public float getAngle() {return _angle;}
+
+    public void setCollisionInfoData(float radius, float angle, CollisionType type)
+    {
+        _radius = radius;
+        _angle = angle;
+        _collisionType = type;
+
+        _boundBox.setData(radius,radius,UnityEngine.Vector3.zero);
+    }
 }
 
 
@@ -32,6 +41,7 @@ public enum CollisionType
 {
     Default = 0,
     Character,
+    Projectile,
     Attack,
     Count,
 }

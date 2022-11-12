@@ -31,13 +31,12 @@ public class CollisionInfo
     {
         if(isValid() == false || target.isValid() == false)
         {
-            DebugUtil.assert(false,"collision data is invalid");
+            DebugUtil.assert(false,"collision data is invalid : [{0}/{1}], [{2}/{3}]",getCollisionType(),isValid(),target.getCollisionType(), target.isValid());
             return false;
         }
 
         if(_boundBox.intersection(target.getBoundBox()) == false)
             return false;
-
 
         if(_collisionInfoData.getAngle() != 0f)
         {
@@ -59,7 +58,6 @@ public class CollisionInfo
 
             return false;
         }
-
 
         float distance = Vector3.Distance(_centerPosition, target.getCenterPosition());
         return distance < getRadius() + target.getRadius();
@@ -87,6 +85,11 @@ public class CollisionInfo
     public void drawBoundBox(Color color)
     {
         GizmoHelper.instance.drawPolygon(_boundBox.getVertices(),color);
+    }
+
+    public void setCollisionInfo(float radius, float angle)
+    {
+        _collisionInfoData.setCollisionInfoData(radius,angle,CollisionType.Projectile);
     }
 
     public void updateCollisionInfo(Vector3 position, Vector3 direction)

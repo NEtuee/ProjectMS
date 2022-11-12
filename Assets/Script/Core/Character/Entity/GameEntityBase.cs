@@ -9,14 +9,12 @@ public class GameEntityBase : SequencerObjectBase
     public string               aiGraphPath = "Assets\\Data\\AIGraph\\CommonEnemyAI.xml";
     public string               statusInfoName = "CommonPlayerStatus";
 
-    public SearchIdentifier     _searchIdentifier = SearchIdentifier.Enemy;
 
     public DebugTextManager     debugTextManager;
     public bool                 _actionDebug = false;
     public bool                 _statusDebug = false;
 
-    private SpriteRenderer      _spriteRenderer;
-    private GameObject          _spriteObject;
+    
     private ActionGraph         _actionGraph;
     private AIGraph             _aiGraph;
     private StatusInfo          _statusInfo;
@@ -28,9 +26,6 @@ public class GameEntityBase : SequencerObjectBase
 
     private FlipState           _flipState = new FlipState();
     private Quaternion          _spriteRotation = Quaternion.identity;
-
-    private AttackState         _attackState = AttackState.Default;
-    private DefenceState        _defenceState = DefenceState.Default;
 
     private DefenceType         _currentDefenceType = DefenceType.Empty;
 
@@ -58,22 +53,26 @@ public class GameEntityBase : SequencerObjectBase
             Transform targetTransform = (Transform)msg.data;
             transform.position = targetTransform.position;
         });
+
+        _actionGraph = new ActionGraph(ActionGraphLoader.readFromXML(IOControl.PathForDocumentsFile(actionGraphPath)));
+        _actionGraph.assign();
+
+        _aiGraph = new AIGraph(_actionGraph, AIGraphLoader.readFromXML(IOControl.PathForDocumentsFile(aiGraphPath)));
+        _aiGraph.assign();
+
+        _statusInfo = new StatusInfo(statusInfoName);
+
+        createSpriteRenderObject();
     }
 
     public override void initialize()
     {
         base.initialize();
-        _actionGraph = new ActionGraph(ActionGraphLoader.readFromXML(IOControl.PathForDocumentsFile(actionGraphPath)));
-        _actionGraph.assign();
+        
         _actionGraph.initialize();
-
-        _aiGraph = new AIGraph(_actionGraph, AIGraphLoader.readFromXML(IOControl.PathForDocumentsFile(aiGraphPath)));
-        _aiGraph.assign();
         _aiGraph.initialize(this);
 
-        _statusInfo = new StatusInfo(statusInfoName);
-
-        createSpriteRenderObject();
+        _statusInfo.initialize();
 
         applyActionBuffList(_actionGraph.getDefaultBuffList());
 
@@ -166,13 +165,16 @@ public class GameEntityBase : SequencerObjectBase
 
         if(_actionDebug)
         {
-            GizmoHelper.instance.drawLine(transform.position, transform.position + _direction * 0.5f,Color.magenta);
-
-            GizmoHelper.instance.drawLine(transform.position, transform.position + ControllerEx.Instance().getJoystickAxisR(transform.position) * 0.5f,Color.cyan);
+            
         }
         
         if(_actionDebug == true)
         {
+            GizmoHelper.instance.drawLine(transform.position, transform.position + _direction * 0.5f,Color.magenta);
+            GizmoHelper.instance.drawLine(transform.position, transform.position + ControllerEx.Instance().getJoystickAxisR(transform.position) * 0.5f,Color.cyan);
+
+            _collisionInfo.drawCollosionArea(_debugColor);
+
             debugTextManager.updatePosition(new Vector3(0f, _collisionInfo.getBoundBox().getBottom() - transform.position.y, 0f));
         }
 
@@ -346,43 +348,7 @@ public class GameEntityBase : SequencerObjectBase
             defenceDirectionType = _actionGraph.getDefenceDirectionType();
         }
 
-        switch(directionType)
-        {
-            case DirectionType.AlwaysRight:
-                _direction = Vector3.right;
-                break;
-            case DirectionType.Keep:
-                break;
-            case DirectionType.MoveInput:
-                Vector3 input = ControllerEx.Instance().GetJoystickAxis();
-                if(MathEx.equals(input.sqrMagnitude,0f,float.Epsilon) == false )
-                {
-                    _direction = input;
-                    _direction.Normalize();
-                }
-                else
-                {
-                    _direction = Vector3.zero;
-                }
-
-                break;
-            case DirectionType.MousePoint:
-                _direction = ControllerEx.Instance().getJoystickAxisR(transform.position);
-                break;
-            case DirectionType.AttackedPoint:
-                _direction = (_recentlyAttackPoint - transform.position).normalized;
-                break;
-            case DirectionType.AI:
-                _direction = _aiGraph.getRecentlyAIDirection();
-                break;
-            case DirectionType.MoveDirection:
-                _direction = getMovementControl().getMoveDirection();
-                break;
-            case DirectionType.Count:
-                DebugUtil.assert(false, "invalid direction type : {0}",_actionGraph.getDirectionType());
-                break;
-        }
-
+        _direction = getDirectionFromType(directionType);
 
         switch(defenceDirectionType)
         {
@@ -395,6 +361,53 @@ public class GameEntityBase : SequencerObjectBase
         }
 
         _updateDirection = _actionGraph.getCurrentDirectionUpdateOnce() == false;
+    }
+
+    public Vector3 getDirectionFromType(DirectionType directionType)
+    {
+        Vector3 direction = _direction;
+        switch(directionType)
+        {
+            case DirectionType.AlwaysRight:
+                direction = Vector3.right;
+                break;
+            case DirectionType.Keep:
+                break;
+            case DirectionType.MoveInput:
+                Vector3 input = ControllerEx.Instance().GetJoystickAxis();
+                if(MathEx.equals(input.sqrMagnitude,0f,float.Epsilon) == false )
+                {
+                    direction = input;
+                    direction.Normalize();
+                }
+                else
+                {
+                    direction = Vector3.zero;
+                }
+
+                break;
+            case DirectionType.MousePoint:
+                direction = ControllerEx.Instance().getJoystickAxisR(transform.position);
+                break;
+            case DirectionType.AttackedPoint:
+                direction = (_recentlyAttackPoint - transform.position).normalized;
+                break;
+            case DirectionType.AI:
+                direction = _aiGraph.getRecentlyAIDirection();
+                break;
+            case DirectionType.AITarget:
+                if(_currentTarget != null && _currentTarget.isValid())
+                    direction = (_currentTarget.transform.position - transform.position).normalized;
+                break;
+            case DirectionType.MoveDirection:
+                direction = getMovementControl().getMoveDirection();
+                break;
+            case DirectionType.Count:
+                DebugUtil.assert(false, "invalid direction type : {0}",_actionGraph.getDirectionType());
+                break;
+        }
+
+        return direction;
     }
 
     private void rotationUpdate()
@@ -432,21 +445,12 @@ public class GameEntityBase : SequencerObjectBase
     }
     public bool isValid() 
     {
-        return _movementControl != null && _actionGraph != null && _spriteRenderer != null;
+        return _movementControl != null && _actionGraph != null && _spriteRenderer != null && gameObject.activeInHierarchy;
     }
 
     public void setSpriteRotation(Quaternion rotation)
     {
         _spriteObject.transform.rotation = rotation;
-    }
-
-    public void createSpriteRenderObject()
-    {
-        _spriteObject = new GameObject("SpriteObject");
-        _spriteObject.transform.SetParent(this.transform);
-        _spriteObject.transform.localPosition = Vector3.zero;
-
-        _spriteRenderer = _spriteObject.AddComponent<SpriteRenderer>();
     }
 
     public void executeAIEvent(AIChildEventType eventType) {_aiGraph.executeAIEvent(eventType);}
@@ -470,8 +474,7 @@ public class GameEntityBase : SequencerObjectBase
     public void setAiDirection(float angle) {_aiGraph.setAIDirection(angle);}
     public void setAiDirection(Vector3 direction) {_aiGraph.setAIDirection(direction);}
 
-    public void setAttackState(AttackState state) {_attackState = state;}
-    public void setDefenceState(DefenceState state) {_defenceState = state;}
+
 
     public void setAttackPoint(Vector3 attackPoint) {_recentlyAttackPoint = attackPoint;}
 
