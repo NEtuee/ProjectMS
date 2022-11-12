@@ -222,9 +222,7 @@
 
     <Dash MovementType="GraphPreset" DirectionType="Keep" MovementGraphPreset="Dash" FlipType="Keep" RotationType="Direction">
         <Animation Path="Resources/Sprites/DummyPlayer/Dash/" StartFrame="0" EndFrame="1" FramePerSecond="3" XFlip="true">
-            <FrameEvent Type="Projectile" StartFrame="0" GraphName="TestProjectile" DirectionType="AITarget"/>
-            <FrameEvent Type="Projectile" StartFrame="0.333" GraphName="TestProjectile" DirectionType="AITarget"/>
-            <FrameEvent Type="Projectile" StartFrame="0.666" GraphName="TestProjectile" DirectionType="AITarget"/>
+            <FrameEvent Type="Danmaku" StartFrame="0" Path="DanmakuTest.xml"/>
         </Animation>
         
         <Branch Condition="Hit == true" Execute="Hit"/>

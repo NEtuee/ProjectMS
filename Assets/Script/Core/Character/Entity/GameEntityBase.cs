@@ -17,6 +17,7 @@ public class GameEntityBase : SequencerObjectBase
     
     private ActionGraph         _actionGraph;
     private AIGraph             _aiGraph;
+    private DanmakuGraph        _danmakuGraph;
     private StatusInfo          _statusInfo;
 
     private CollisionInfo       _collisionInfo;
@@ -60,6 +61,8 @@ public class GameEntityBase : SequencerObjectBase
         _aiGraph = new AIGraph(_actionGraph, AIGraphLoader.readFromXML(IOControl.PathForDocumentsFile(aiGraphPath)));
         _aiGraph.assign();
 
+        _danmakuGraph = new DanmakuGraph();
+
         _statusInfo = new StatusInfo(statusInfoName);
 
         createSpriteRenderObject();
@@ -71,6 +74,7 @@ public class GameEntityBase : SequencerObjectBase
         
         _actionGraph.initialize();
         _aiGraph.initialize(this);
+        _danmakuGraph.initialize(this);
 
         _statusInfo.initialize();
 
@@ -88,6 +92,8 @@ public class GameEntityBase : SequencerObjectBase
 
         _statusInfo.updateStatus(deltaTime);
         _statusInfo.updateActionConditionData(this);
+
+        _danmakuGraph.process(deltaTime);
 
         if(_aiGraph != null)
         {
@@ -259,7 +265,10 @@ public class GameEntityBase : SequencerObjectBase
 
         if(disposeFromMaster == false)
             _movementControl?.release();
-            
+        
+        _aiGraph.release();
+        _actionGraph.release();
+        _danmakuGraph.release();
     }
 
     private FlipState getCurrentFlipState()
@@ -451,6 +460,11 @@ public class GameEntityBase : SequencerObjectBase
     public void setSpriteRotation(Quaternion rotation)
     {
         _spriteObject.transform.rotation = rotation;
+    }
+
+    public void addDanmaku(string path)
+    {
+        _danmakuGraph.addDanmakuGraph(path);
     }
 
     public void executeAIEvent(AIChildEventType eventType) {_aiGraph.executeAIEvent(eventType);}

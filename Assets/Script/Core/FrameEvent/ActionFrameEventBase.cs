@@ -13,6 +13,7 @@ public enum FrameEventType
     FrameEvent_Effect,
     FrameEvent_SetFrameTag,
     FrameEvent_Projectile,
+    FrameEvent_Danmaku,
 
     Count,
 }
@@ -60,6 +61,36 @@ public abstract class ActionFrameEventBase
         }
     }
 }
+
+public class ActionFrameEvent_Danmaku : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_Danmaku;}
+
+    private string _path;
+
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        if(executeEntity is GameEntityBase == false)
+            return false;
+        
+        GameEntityBase requester = (GameEntityBase)executeEntity;
+        
+        requester.addDanmaku(_path);
+
+        return true;
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            if(attributes[i].Name == "Path")
+                _path = attributes[i].Value;
+        }
+    }
+}
+
 
 public class ActionFrameEvent_SetFrameTag : ActionFrameEventBase
 {
