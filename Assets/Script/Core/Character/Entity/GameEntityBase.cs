@@ -13,6 +13,7 @@ public class GameEntityBase : SequencerObjectBase
     public DebugTextManager     debugTextManager;
     public bool                 _actionDebug = false;
     public bool                 _statusDebug = false;
+    public bool                 _aiDebug = false;
 
     
     private ActionGraph         _actionGraph;
@@ -101,9 +102,16 @@ public class GameEntityBase : SequencerObjectBase
             
             _actionGraph.setActionConditionData_Float(ConditionNodeUpdateType.AI_TargetDistance, getDistance(_currentTarget));
             _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.AI_TargetExists, _currentTarget != null);
+            _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.AI_ArrivedTarget, _aiGraph.isAIArrivedTarget());
             _actionGraph.setActionConditionData_TargetFrameTag(_currentTarget == null ? null : _currentTarget.getCurrentFrameTagList());
 
             _aiGraph.progress(deltaTime,this);
+        }
+        else
+        {
+            _actionGraph.setActionConditionData_Float(ConditionNodeUpdateType.AI_TargetDistance, 0f);
+            _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.AI_TargetExists, false);
+            _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.AI_ArrivedTarget, false);
         }
 
         if(_actionGraph != null)
@@ -169,11 +177,6 @@ public class GameEntityBase : SequencerObjectBase
 
         _collisionInfo.updateCollisionInfo(transform.position,getDirection());
 
-        if(_actionDebug)
-        {
-            
-        }
-        
         if(_actionDebug == true)
         {
             GizmoHelper.instance.drawLine(transform.position, transform.position + _direction * 0.5f,Color.magenta);
@@ -182,6 +185,16 @@ public class GameEntityBase : SequencerObjectBase
             _collisionInfo.drawCollosionArea(_debugColor);
 
             debugTextManager.updatePosition(new Vector3(0f, _collisionInfo.getBoundBox().getBottom() - transform.position.y, 0f));
+        }
+
+        if(_aiDebug == true)
+        {
+            if(_aiGraph.hasTargetPosition() == true)
+            {
+                Color targetColor = _aiGraph.isAIArrivedTarget() ? Color.green : Color.red;
+                GizmoHelper.instance.drawCircle(_aiGraph.getCurrentTargetPosition(),0.1f,18,targetColor);
+                GizmoHelper.instance.drawLine(_aiGraph.getCurrentTargetPosition(), transform.position, targetColor);
+            }
         }
 
         _debugColor = Color.red;

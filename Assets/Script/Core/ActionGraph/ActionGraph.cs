@@ -62,7 +62,7 @@ public class ActionGraph
 
     private void createCoditionNodeDataAll()
     {
-        DebugUtil.assert((int)ConditionNodeUpdateType.Count == 32, "check this");
+        DebugUtil.assert((int)ConditionNodeUpdateType.Count == 33, "check this");
 
         foreach(var item in ConditionNodeInfoPreset._nodePreset.Values)
         {

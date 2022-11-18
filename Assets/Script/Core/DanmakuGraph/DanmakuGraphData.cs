@@ -20,12 +20,6 @@ public enum DanmakuVariableType
     Count
 };
 
-public enum DanmakuShotInfoSetType
-{
-    Add,
-    Mul,
-}
-
 public enum DanmakuEventType
 {
     VariableEvent,
