@@ -449,7 +449,7 @@ public class AIGraphLoader
         {
             if(aiIndexDic.ContainsKey(item.Key) == false)
             {
-                DebugUtil.assert(false,"target state is not exists : {0}",item.Value);
+                DebugUtil.assert(false,"target state is not exists : {0}",item.Key);
                 return null;
             }
 
