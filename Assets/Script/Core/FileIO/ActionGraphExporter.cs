@@ -529,6 +529,11 @@ public static class ActionGraphLoader
             {
                 actionCompareDic.Add(branchData, targetValue);
             }
+            else
+            {
+                DebugUtil.assert(false, "invalid branch attribute: {0}",targetName);
+                return null;
+            }
         }
 
 
