@@ -6,17 +6,20 @@ public class AIGraph
     private int _currentAINodeIndex = -1;
     private int _prevAINodeIndex = -1;
 
-
     private int _currentPackageStateIndex = -1;
     private int _prevPackageStateIndex = -1;
 
     private int _changePackageStateIndex = -1;
 
     private float _updateTimer = 0f;
+    private float _arriveThreshold = 0f;
 
     private bool _packageEnd = false;
+    private bool _arrived = false;
 
     private Vector3 _recentlyAiDirection = Vector3.zero;
+
+    private Vector3 _recentlyAiTargetPosition = Vector3.zero;
 
     private ActionGraph _actionGraph;
 
@@ -113,6 +116,12 @@ public class AIGraph
 
             processAIEvent(AIChildEventType.AIChildEvent_OnFrame, targetEntity, ref currentPackageNode._aiEvents);
 
+            if(currentPackageNode._hasTargetPosition)
+            {
+                _recentlyAiDirection = (_recentlyAiTargetPosition - targetEntity.transform.position);
+                _arrived = _recentlyAiDirection.sqrMagnitude < (_arriveThreshold * _arriveThreshold);
+                _recentlyAiDirection.Normalize();
+            }
 
             if(_updateTimer <= 0f)
                 _updateTimer = currentPackageNode._updateTime;
@@ -197,6 +206,10 @@ public class AIGraph
         _prevPackageStateIndex = _currentPackageStateIndex;
         _currentPackageStateIndex = aiPackageStateIndex;
 
+        _arrived = false;
+        _arriveThreshold = getCurrentAIPackageNode()._arriveThreshold;
+        _recentlyAiTargetPosition = getCurrentAIPackageNode()._targetPosition;
+
         return true;
     }
 
@@ -280,8 +293,11 @@ public class AIGraph
 
     public void terminatePackage() {_packageEnd = true;}
     public bool isCurrentPackageEnd() {return _packageEnd;}
+    public bool isAIArrivedTarget() {return _arrived;}
+    public bool hasTargetPosition() {return getCurrentAIPackageNode()._hasTargetPosition;}
     public float getCurrentTargetSearchRange() {return getCurrentAIPackageNode()._targetSearchRange;}
     public string getCurrentAIStateName() {return _packageEnd ? "Package End" : getCurrentAIPackageNode()._nodeName;}
+    public Vector3 getCurrentTargetPosition() {return _recentlyAiTargetPosition;}
 
     private AIPackageNodeData getCurrentAIPackageNode() {return getCurrentAIPackage()._aiPackageNodeData[_currentPackageStateIndex];}
     private AIPackageNodeData getPrevAIPackageNode() {return getCurrentAIPackage()._aiPackageNodeData[_prevPackageStateIndex];}

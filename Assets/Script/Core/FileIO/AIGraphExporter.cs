@@ -538,6 +538,19 @@ public class AIGraphLoader
             {
                 nodeData._searchIdentifier = (SearchIdentifier)System.Enum.Parse(typeof(SearchIdentifier), targetValue);
             }
+            else if(targetName == "TargetPosition")
+            {
+                nodeData._hasTargetPosition = true;
+
+                string[] xy = targetValue.Split(' ');
+                nodeData._targetPosition = new Vector3(float.Parse(xy[0]), float.Parse(xy[1]),0f);
+
+                Debug.Log(nodeData._targetPosition);
+            }
+            else if(targetName == "ArriveThreshold")
+            {
+                nodeData._arriveThreshold = float.Parse(targetValue);
+            }
             else
             {
                 DebugUtil.assert(false,"invalid attribute type !!! : {0}", targetName);
