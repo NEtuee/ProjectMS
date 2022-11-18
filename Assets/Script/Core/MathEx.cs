@@ -25,6 +25,17 @@ public static class MathEx
         return degree;
     }
 
+	public static UnityEngine.Vector3 convergence0(UnityEngine.Vector3 value, float a)
+	{
+		if(value.sqrMagnitude < float.Epsilon)
+			return UnityEngine.Vector3.zero;
+			
+		UnityEngine.Vector3 vector = value.normalized * a;
+		float result = value.sqrMagnitude - vector.sqrMagnitude;
+
+		return result <= 0f ? UnityEngine.Vector3.zero : value - vector;
+	}
+
     public static float convergence0(float value, float a)
     {
         if(equals(value,0f,float.Epsilon))

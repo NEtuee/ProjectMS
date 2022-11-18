@@ -709,6 +709,12 @@ public static class ActionGraphLoader
         symbol = symbol.Replace("getWeight_","");
         string[] groupData = symbol.Split('_');
 
+        if(groupData == null || groupData.Length > 2)
+        {
+            DebugUtil.assert(false, "invalid weight data: {0}",symbol);
+            return null;
+        }
+
         ActionGraphConditionNodeData_Weight item = new ActionGraphConditionNodeData_Weight();
         item._symbolName = "Weight";
         item._weightGroupKey = groupData[0];
