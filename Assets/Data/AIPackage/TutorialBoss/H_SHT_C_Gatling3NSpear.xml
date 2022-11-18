@@ -1,10 +1,6 @@
 
 <AIPackage Name="H_SHT_C_Gatling3NSpear" DefaultState="Entry">
 
-    <Event_OnAttacked>
-        <AIEvent Type="ExecuteState" Execute="Hit"/>
-    </Event_OnAttacked>
-
     <AIState>
         <Entry UpdateTime="0.5" TargetSearchType="Near" TargetSearchRange="1.0" SearchIdentifier="Player">
             <Event_OnExecute>

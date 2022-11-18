@@ -1,9 +1,6 @@
 
 <AIPackage Name="H_Judge_AttackByRandom" DefaultState="Entry">
 
-    <Event_OnAttacked>
-        <AIEvent Type="ExecuteState" Execute="Hit"/>
-    </Event_OnAttacked>
 
     <AIState>
         <Entry UpdateTime="0.5" TargetSearchType="Near" TargetSearchRange="1.0" SearchIdentifier="Player">

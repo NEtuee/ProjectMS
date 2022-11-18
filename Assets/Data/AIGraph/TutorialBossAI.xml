@@ -18,8 +18,8 @@
     <Include Path="TutorialBoss/H_STA_Defenseless.xml"/>
 
     <H_Judge_AttackSTD Package="H_Judge_AttackSTD">
-        <Branch Weight="TutorialBossJudgeAttackSTD" Condition="getWeight_TutorialBossJudgeAttackSTD_ByDistance" Execute="H_Judge_AttackByDistance"/>
-        <Branch Weight="TutorialBossJudgeAttackSTD" Condition="getWeight_TutorialBossJudgeAttackSTD_ByRandom" Execute="H_Judge_AttackByRandom"/>
+        <Branch Weight="TutorialBossJudgeAttackSTD_ByDistance" Execute="H_Judge_AttackByDistance"/>
+        <Branch Weight="TutorialBossJudgeAttackSTD_ByRandom" Execute="H_Judge_AttackByRandom"/>
     </H_Judge_AttackSTD>
 
     <H_Judge_AttackByDistance Package="H_Judge_AttackByDistance">

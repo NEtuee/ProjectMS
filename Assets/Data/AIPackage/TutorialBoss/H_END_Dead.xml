@@ -1,9 +1,5 @@
 
-<AIPackage Name="H_End_Dead" DefaultState="Entry">
-
-    <Event_OnAttacked>
-        <AIEvent Type="ExecuteState" Execute="Hit"/>
-    </Event_OnAttacked>
+<AIPackage Name="H_END_Dead" DefaultState="Entry">
 
     <AIState>
         <Entry UpdateTime="0.5" TargetSearchType="Near" TargetSearchRange="1.0" SearchIdentifier="Player">
