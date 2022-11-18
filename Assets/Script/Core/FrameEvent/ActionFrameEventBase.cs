@@ -315,7 +315,7 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
     private DefenceType[]           _ignoreDefenceType = null;
 
     private AttackType              _attackType;
-    
+    private UnityEngine.Vector3     _pushVector = UnityEngine.Vector3.zero;
 
     private HashSet<ObjectBase> _collisionList = new HashSet<ObjectBase>();
     private List<CollisionSuccessData> _collisionOrder = new List<CollisionSuccessData>();
@@ -403,6 +403,11 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
         bool canIgnore = canIgnoreDefenceType(target.getDefenceType());
 
         bool attackSuccess = false;
+
+        UnityEngine.Vector3 attackPointDirection = (target.transform.position - successData._startPoint).normalized;
+
+        if(_pushVector.sqrMagnitude > float.Epsilon)
+            target.addVelocity(UnityEngine.Quaternion.Euler(0f,0f,UnityEngine.Mathf.Atan2(attackPointDirection.y,attackPointDirection.x)) * _pushVector);
 
         if(((guardSuccess == false || target.getDefenceType() == DefenceType.Empty) && target.getDefenceType() != DefenceType.Evade) || canIgnore)
         {
@@ -539,6 +544,17 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
                 {
                     _ignoreDefenceType[index] = (DefenceType)System.Enum.Parse(typeof(DefenceType), defencies[index]);
                 }
+            }
+            else if(attributes[i].Name == "Push")
+            {
+                string[] value = attributes[i].Value.Split(' ');
+                if(value == null || value.Length > 3)
+                {
+                    DebugUtil.assert(false, "invalid Action Frame Event Data: Push, {0}",attributes[i].Value);
+                    return;
+                }
+
+                _pushVector = new UnityEngine.Vector3(float.Parse(value[0]),float.Parse(value[1]),float.Parse(value[2]));
             }
 
         }

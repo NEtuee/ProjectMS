@@ -5,6 +5,9 @@ using UnityEngine;
 public class GameEntityBase : SequencerObjectBase
 {
 
+    public static float         _defaultFriction = 0.1f;
+
+
     public string               actionGraphPath = "Assets\\Data\\ActionGraph\\ActionGraphTest.xml";
     public string               aiGraphPath = "Assets\\Data\\AIGraph\\CommonEnemyAI.xml";
     public string               statusInfoName = "CommonPlayerStatus";
@@ -31,6 +34,8 @@ public class GameEntityBase : SequencerObjectBase
 
     private DefenceType         _currentDefenceType = DefenceType.Empty;
 
+
+    private Vector3             _currentVelocity = Vector3.zero;
     private Vector3             _recentlyAttackPoint = Vector3.zero;
     private Vector3             _defenceDirection = Vector3.zero;
 
@@ -103,6 +108,7 @@ public class GameEntityBase : SequencerObjectBase
             _actionGraph.setActionConditionData_Float(ConditionNodeUpdateType.AI_TargetDistance, getDistance(_currentTarget));
             _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.AI_TargetExists, _currentTarget != null);
             _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.AI_ArrivedTarget, _aiGraph.isAIArrivedTarget());
+            _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.AI_CurrentPackageEnd, _aiGraph.isCurrentPackageEnd());
             _actionGraph.setActionConditionData_TargetFrameTag(_currentTarget == null ? null : _currentTarget.getCurrentFrameTagList());
 
             _aiGraph.progress(deltaTime,this);
@@ -112,6 +118,7 @@ public class GameEntityBase : SequencerObjectBase
             _actionGraph.setActionConditionData_Float(ConditionNodeUpdateType.AI_TargetDistance, 0f);
             _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.AI_TargetExists, false);
             _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.AI_ArrivedTarget, false);
+            _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.AI_CurrentPackageEnd, false);
         }
 
         if(_actionGraph != null)
@@ -138,6 +145,8 @@ public class GameEntityBase : SequencerObjectBase
 
             updateDirection();
             _movementControl?.progress(deltaTime, _direction);
+            updatePhysics(deltaTime);
+
 
             //animation 바뀌는 시점
             _actionGraph.updateAnimation(Time.deltaTime, this);
@@ -168,7 +177,7 @@ public class GameEntityBase : SequencerObjectBase
         }
     
 
-        rotationUpdate();
+        updateRotation();
 
         if(getDefenceAngle() != 0f)
         {
@@ -355,6 +364,12 @@ public class GameEntityBase : SequencerObjectBase
         applyActionBuffList(_currentActionBuffList);
     }
 
+    private void updatePhysics(float deltaTime)
+    {
+        transform.position += _currentVelocity * deltaTime;
+        _currentVelocity = MathEx.convergence0(_currentVelocity, _defaultFriction * deltaTime);
+    }
+
     //todo : input manager 만들어서 거기서 moveiNput 가져오게 만들기
     private void updateDirection()
     {
@@ -432,7 +447,7 @@ public class GameEntityBase : SequencerObjectBase
         return direction;
     }
 
-    private void rotationUpdate()
+    private void updateRotation()
     {
         RotationType rotationType = RotationType.AlwaysRight;
         if(_actionGraph != null)
@@ -483,6 +498,8 @@ public class GameEntityBase : SequencerObjectBase
     public void executeAIEvent(AIChildEventType eventType) {_aiGraph.executeAIEvent(eventType);}
 
     public HashSet<string> getCurrentFrameTagList() {return _actionGraph.getCurrentFrameTagList();}
+
+    public void addVelocity(Vector3 velocity) {_currentVelocity += velocity;}
 
     public bool applyFrameTag(string tag) {return _actionGraph.applyFrameTag(tag);}
     public void deleteFrameTag(string tag) {_actionGraph.deleteFrameTag(tag);}
