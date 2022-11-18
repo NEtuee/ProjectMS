@@ -1,0 +1,72 @@
+<AIGraph Name="SampleBossAI" DefaultState="H_Judge_AttackSTD">
+
+    <Include Path="TutorialBoss/H_ATK_F_ChargeThrust.xml"/>
+    <Include Path="TutorialBoss/H_DEF_ActionGuard.xml"/>
+    <Include Path="TutorialBoss/H_DEF_MoveDodge.xml"/>
+    <Include Path="TutorialBoss/H_END_Dead.xml"/>
+    <Include Path="TutorialBoss/H_Hit.xml"/>
+    <Include Path="TutorialBoss/H_Judge_AttackByDistance.xml"/>
+    <Include Path="TutorialBoss/H_Judge_AttackByRandom.xml"/>
+    <Include Path="TutorialBoss/H_Judge_AttackSTD.xml"/>
+    <Include Path="TutorialBoss/H_MIX_C_RushNCaseShot.xml"/>
+    <Include Path="TutorialBoss/H_MIX_C_SwingComboNCaseShot.xml"/>
+    <Include Path="TutorialBoss/H_MIX_C_ThrustComboNCaseShot.xml"/>
+    <Include Path="TutorialBoss/H_MOV_Alert.xml"/>
+    <Include Path="TutorialBoss/H_SHT_C_Gatling3NSpear.xml"/>
+    <Include Path="TutorialBoss/H_SHT_F_ChargeSpear.xml"/>
+    <Include Path="TutorialBoss/H_SHT_N_DefenseShot.xml"/>
+    <Include Path="TutorialBoss/H_STA_Defenseless.xml"/>
+
+    <H_Judge_AttackSTD Package="H_Judge_AttackSTD">
+        <Branch Weight="TutorialBossJudgeAttackSTD_ByDistance" Execute="H_Judge_AttackByDistance"/>
+        <Branch Weight="TutorialBossJudgeAttackSTD_ByRandom" Execute="H_Judge_AttackByRandom"/>
+    </H_Judge_AttackSTD>
+
+    <H_Judge_AttackByDistance Package="H_Judge_AttackByDistance">
+        <Branch Condition="true" Excute="H_Judge_AttackSTD"/>
+    </H_Judge_AttackByDistance>
+    
+    <H_Judge_AttackByRandom Package="H_Judge_AttackByRandom"> 
+        <Branch Condition="true" Excute="H_Judge_AttackSTD"/>
+    </H_Judge_AttackByRandom>
+
+    <H_ATK_F_ChargeThrust Package="H_ATK_F_ChargeThrust">
+    </H_ATK_F_ChargeThrust>
+
+    <H_DEF_ActionGuard Package="H_DEF_ActionGuard">
+    </H_DEF_ActionGuard>
+
+    <H_DEF_MoveDodge Package="H_DEF_MoveDodge"> 
+    </H_DEF_MoveDodge>
+
+    <H_END_Dead Package="H_END_Dead">
+    </H_END_Dead>
+
+    <H_Hit Package="H_Hit">
+    </H_Hit>
+
+    <H_MIX_C_RushNCaseShot Package="H_MIX_C_RushNCaseShot">
+    </H_MIX_C_RushNCaseShot>
+
+    <H_MIX_C_SwingComboNCaseShot Package="H_MIX_C_SwingComboNCaseShot">
+    </H_MIX_C_SwingComboNCaseShot>
+
+    <H_MIX_C_ThrustComboNCaseShot Package="H_MIX_C_ThrustComboNCaseShot">
+    </H_MIX_C_ThrustComboNCaseShot>
+
+    <H_MOV_Alert Package="H_MOV_Alert">
+    </H_MOV_Alert>
+
+    <H_SHT_C_Gatling3NSpear Package="H_SHT_C_Gatling3NSpear">
+    </H_SHT_C_Gatling3NSpear>
+
+    <H_SHT_F_ChargeSpear Package="H_SHT_F_ChargeSpear">
+    </H_SHT_F_ChargeSpear>
+
+    <H_SHT_N_DefenseShot Package="H_SHT_N_DefenseShot">
+    </H_SHT_N_DefenseShot>
+
+    <H_STA_Defenseless Package="H_STA_Defenseless">
+    </H_STA_Defenseless>
+
+</AIGraph>

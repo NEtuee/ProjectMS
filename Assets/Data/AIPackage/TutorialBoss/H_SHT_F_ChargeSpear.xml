@@ -1,0 +1,14 @@
+
+<AIPackage Name="H_SHT_F_ChargeSpear" DefaultState="Entry">
+
+    <AIState>
+        <Entry UpdateTime="0.5" TargetSearchType="Near" TargetSearchRange="1.0" SearchIdentifier="Player">
+            <Event_OnExecute>
+                <AIEvent Type="SetAction" Action="Idle"/>
+            </Event_OnExecute>
+
+        </Entry>
+
+       
+    </AIState>
+</AIPackage>

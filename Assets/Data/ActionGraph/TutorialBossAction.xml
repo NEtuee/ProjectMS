@@ -1,6 +1,6 @@
 
 
-<ActionGraph Name="SampleBoss" DefaultAction="Idle" DefaultFramePerSecond="0.5">
+<ActionGraph Name="TutorialBoss" DefaultAction="Idle" DefaultFramePerSecond="0.5">
     
     <BranchSet Name="CommonHitAction">
         <Branch Condition="Hit == true" Execute="Hit"/>
