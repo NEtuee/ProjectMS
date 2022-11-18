@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameEntityBase : SequencerObjectBase
 {
 
-    public static float         _defaultFriction = 0.1f;
+    public static float         _defaultFriction = 2f;
 
 
     public string               actionGraphPath = "Assets\\Data\\ActionGraph\\ActionGraphTest.xml";

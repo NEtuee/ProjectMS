@@ -404,10 +404,12 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
 
         bool attackSuccess = false;
 
-        UnityEngine.Vector3 attackPointDirection = (target.transform.position - successData._startPoint).normalized;
 
         if(_pushVector.sqrMagnitude > float.Epsilon)
-            target.addVelocity(UnityEngine.Quaternion.Euler(0f,0f,UnityEngine.Mathf.Atan2(attackPointDirection.y,attackPointDirection.x)) * _pushVector);
+        {
+            UnityEngine.Vector3 attackPointDirection = (target.transform.position - successData._startPoint).normalized;
+            target.addVelocity(UnityEngine.Quaternion.Euler(0f,0f,UnityEngine.Mathf.Atan2(attackPointDirection.y,attackPointDirection.x) * UnityEngine.Mathf.Rad2Deg) * _pushVector);
+        }
 
         if(((guardSuccess == false || target.getDefenceType() == DefenceType.Empty) && target.getDefenceType() != DefenceType.Evade) || canIgnore)
         {
@@ -526,6 +528,7 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
 
                 radius = presetData._attackRadius;
                 angle = presetData._attackAngle;
+                _pushVector = presetData._pushVector;
             }
             else if(attributes[i].Name == "IgnoreDefenceType")
             {
