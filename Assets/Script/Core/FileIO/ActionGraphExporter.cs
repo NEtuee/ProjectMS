@@ -153,6 +153,15 @@ public static class ActionGraphLoader
         return value;
     }
 
+
+    public static string getGlobalVariable(string value, Dictionary<string,string> globalVariableContainer)
+    {
+        if(globalVariableContainer.ContainsKey(value))
+            return globalVariableContainer[value];
+
+        return value;
+    }
+
     public static void readBranchSet(XmlNode branchSetParent, ref Dictionary<string, XmlNodeList> targetDic)
     {
         string branchSetName = "";
@@ -199,7 +208,7 @@ public static class ActionGraphLoader
         for(int attrIndex = 0; attrIndex < actionAttributes.Count; ++attrIndex)
         {
             string targetName = actionAttributes[attrIndex].Name;
-            string targetValue = getGlobalVariable(actionAttributes[attrIndex].Value);
+            string targetValue = getGlobalVariable(actionAttributes[attrIndex].Value,_globalVariables);
 
             if(targetName == "MovementType")
             {
@@ -280,7 +289,7 @@ public static class ActionGraphLoader
             }
             else if(nodeList[i].Name == "Branch")
             {
-                ActionGraphBranchData branchData = ReadActionBranch(nodeList[i],ref actionCompareDic,ref compareDataList);
+                ActionGraphBranchData branchData = ReadActionBranch(nodeList[i],ref actionCompareDic,ref compareDataList, ref _globalVariables);
                 if(branchData == null)
                 {
                     DebugUtil.assert(false,"invalid branch data");
@@ -317,7 +326,7 @@ public static class ActionGraphLoader
                         return null;
                     }
 
-                    ActionGraphBranchData branchData = ReadActionBranch(branchSetNodeList[branchSetNodeListIndex],ref actionCompareDic,ref compareDataList);
+                    ActionGraphBranchData branchData = ReadActionBranch(branchSetNodeList[branchSetNodeListIndex],ref actionCompareDic,ref compareDataList, ref _globalVariables);
                     if(branchData == null)
                     {
                         DebugUtil.assert(false,"invalid branch data");
@@ -350,7 +359,7 @@ public static class ActionGraphLoader
         for(int attrIndex = 0; attrIndex < actionAttributes.Count; ++attrIndex)
         {
             string targetName = actionAttributes[attrIndex].Name;
-            string targetValue = getGlobalVariable(actionAttributes[attrIndex].Value);
+            string targetValue = getGlobalVariable(actionAttributes[attrIndex].Value, _globalVariables);
 
             if(targetName == "Path")
             {
@@ -444,7 +453,7 @@ public static class ActionGraphLoader
         for(int attrIndex = 0; attrIndex < actionAttributes.Count; ++attrIndex)
         {
             string targetName = actionAttributes[attrIndex].Name;
-            string targetValue = getGlobalVariable(actionAttributes[attrIndex].Value);
+            string targetValue = getGlobalVariable(actionAttributes[attrIndex].Value, _globalVariables);
 
             if(targetName == "Path")
             {
@@ -479,14 +488,14 @@ public static class ActionGraphLoader
         return animationData;
     }
 
-    public static ActionGraphBranchData ReadActionBranch(XmlNode node, ref Dictionary<ActionGraphBranchData, string> actionCompareDic,  ref List<ActionGraphConditionCompareData> compareDataList)
+    public static ActionGraphBranchData ReadActionBranch(XmlNode node, ref Dictionary<ActionGraphBranchData, string> actionCompareDic,  ref List<ActionGraphConditionCompareData> compareDataList, ref Dictionary<string, string> globalVariableContainer)
     {
         ActionGraphBranchData branchData = new ActionGraphBranchData();
         XmlAttributeCollection actionAttributes = node.Attributes;
         for(int attrIndex = 0; attrIndex < actionAttributes.Count; ++attrIndex)
         {
             string targetName = actionAttributes[attrIndex].Name;
-            string targetValue = getGlobalVariable(actionAttributes[attrIndex].Value);
+            string targetValue = getGlobalVariable(actionAttributes[attrIndex].Value, globalVariableContainer);
 
             if(targetName == "Condition")
             {
@@ -643,7 +652,7 @@ public static class ActionGraphLoader
 
     private static ActionGraphConditionNodeData getConditionNodeData(string symbol)
     {
-        symbol = getGlobalVariable(symbol);
+        symbol = getGlobalVariable(symbol, _globalVariables);
         ActionGraphConditionNodeData nodeData = isLiteral(symbol);
         if(nodeData != null)
             return nodeData;
@@ -714,7 +723,7 @@ public static class ActionGraphLoader
         symbol = symbol.Replace("getWeight_","");
         string[] groupData = symbol.Split('^');
 
-        if(groupData == null || groupData.Length > 2)
+        if(groupData == null || groupData.Length > 2 || groupData.Length < 2)
         {
             DebugUtil.assert(false, "invalid weight data: {0}",symbol);
             return null;

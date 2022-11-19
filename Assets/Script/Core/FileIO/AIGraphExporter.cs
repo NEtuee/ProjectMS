@@ -10,7 +10,8 @@ public class AIGraphLoader
 
     private static string _aiPackageRoot = "Assets\\Data\\AIPackage\\";
 
-    private static Dictionary<string, string> _globalVariables = new Dictionary<string, string>();
+    private static Dictionary<string, string> _aiGraphGlobalVariables = new Dictionary<string, string>();
+    private static Dictionary<string, string> _aiPackageGlobalVariables = new Dictionary<string, string>();
     private static Dictionary<string, AIPackageBaseData> _loadedAiPackage = new Dictionary<string, AIPackageBaseData>();
     public static AIGraphBaseData readFromXML(string path)
     {
@@ -56,7 +57,7 @@ public class AIGraphLoader
         List<ActionGraphConditionCompareData> compareDataList = new List<ActionGraphConditionCompareData>();
         List<AIPackageBaseData> aiPackageList = new List<AIPackageBaseData>();
 
-        _globalVariables.Clear();
+        _aiGraphGlobalVariables.Clear();
         Dictionary<ActionGraphBranchData, string> actionCompareDic = new Dictionary<ActionGraphBranchData, string>();
         Dictionary<string, int> actionIndexDic = new Dictionary<string, int>();
         Dictionary<string, List<AIEvent_ExecuteState>> aiExecuteStateDic = new Dictionary<string, List<AIEvent_ExecuteState>>();
@@ -75,7 +76,7 @@ public class AIGraphLoader
             }
             else if(nodeList[i].Name == "GlobalVariable")
             {
-                readGlobalVariable(nodeList[i], ref _globalVariables);
+                readGlobalVariable(nodeList[i], ref _aiGraphGlobalVariables);
                 continue;
             }
             else if(nodeList[i].Name == "Include")
@@ -182,7 +183,7 @@ public class AIGraphLoader
         for(int attrIndex = 0; attrIndex < actionAttributes.Count; ++attrIndex)
         {
             string targetName = actionAttributes[attrIndex].Name;
-            string targetValue = getGlobalVariable(actionAttributes[attrIndex].Value);
+            string targetValue = getGlobalVariable(actionAttributes[attrIndex].Value, _aiGraphGlobalVariables);
 
             if(targetName == "Package")
             {
@@ -210,7 +211,7 @@ public class AIGraphLoader
             
             if(nodeList[i].Name == "Branch")
             {
-                ActionGraphBranchData branchData = ActionGraphLoader.ReadActionBranch(nodeList[i],ref actionCompareDic,ref compareDataList);
+                ActionGraphBranchData branchData = ActionGraphLoader.ReadActionBranch(nodeList[i],ref actionCompareDic,ref compareDataList, ref _aiGraphGlobalVariables);
                 if(branchData == null)
                 {
                     DebugUtil.assert(false,"invalid branch data");
@@ -246,7 +247,7 @@ public class AIGraphLoader
                         return null;
                     }
 
-                    ActionGraphBranchData branchData = ActionGraphLoader.ReadActionBranch(branchSetNodeList[branchSetNodeListIndex],ref actionCompareDic,ref compareDataList);
+                    ActionGraphBranchData branchData = ActionGraphLoader.ReadActionBranch(branchSetNodeList[branchSetNodeListIndex],ref actionCompareDic,ref compareDataList, ref _aiGraphGlobalVariables);
                     if(branchData == null)
                     {
                         DebugUtil.assert(false,"invalid branch data");
@@ -323,10 +324,10 @@ public class AIGraphLoader
         targetDic.Add(name,value);
     }
 
-    public static string getGlobalVariable(string value)
+    public static string getGlobalVariable(string value, Dictionary<string, string> globalVariableContainer)
     {
-        if(_globalVariables.ContainsKey(value))
-            return _globalVariables[value];
+        if(globalVariableContainer.ContainsKey(value))
+            return globalVariableContainer[value];
 
         return value;
     }
@@ -377,7 +378,7 @@ public class AIGraphLoader
         List<ActionGraphBranchData> branchDataList = new List<ActionGraphBranchData>();
         List<ActionGraphConditionCompareData> compareDataList = new List<ActionGraphConditionCompareData>();
 
-        _globalVariables.Clear();
+        _aiPackageGlobalVariables.Clear();
         Dictionary<ActionGraphBranchData, string> actionCompareDic = new Dictionary<ActionGraphBranchData, string>();
         Dictionary<string, int> aiIndexDic = new Dictionary<string, int>();
         Dictionary<string, List<AIEvent_ExecuteState>> aiExecuteEventDic = new Dictionary<string, List<AIEvent_ExecuteState>>();
@@ -393,7 +394,7 @@ public class AIGraphLoader
             }
             else if(nodeList[i].Name == "GlobalVariable")
             {
-                readGlobalVariable(nodeList[i], ref _globalVariables);
+                readGlobalVariable(nodeList[i], ref _aiPackageGlobalVariables);
                 continue;
             }
             else if(nodeList[i].Name == "AIState")
@@ -520,7 +521,7 @@ public class AIGraphLoader
         for(int attrIndex = 0; attrIndex < actionAttributes.Count; ++attrIndex)
         {
             string targetName = actionAttributes[attrIndex].Name;
-            string targetValue = getGlobalVariable(actionAttributes[attrIndex].Value);
+            string targetValue = getGlobalVariable(actionAttributes[attrIndex].Value, _aiPackageGlobalVariables);
 
             if(targetName == "UpdateTime")
             {
@@ -564,7 +565,7 @@ public class AIGraphLoader
         {
             if(nodeList[i].Name == "Branch")
             {
-                ActionGraphBranchData branchData = ActionGraphLoader.ReadActionBranch(nodeList[i],ref actionCompareDic,ref compareDataList);
+                ActionGraphBranchData branchData = ActionGraphLoader.ReadActionBranch(nodeList[i],ref actionCompareDic,ref compareDataList, ref _aiPackageGlobalVariables);
                 if(branchData == null)
                 {
                     DebugUtil.assert(false,"invalid branch data");
@@ -600,7 +601,7 @@ public class AIGraphLoader
                         return null;
                     }
 
-                    ActionGraphBranchData branchData = ActionGraphLoader.ReadActionBranch(branchSetNodeList[branchSetNodeListIndex],ref actionCompareDic,ref compareDataList);
+                    ActionGraphBranchData branchData = ActionGraphLoader.ReadActionBranch(branchSetNodeList[branchSetNodeListIndex],ref actionCompareDic,ref compareDataList, ref _aiPackageGlobalVariables);
                     if(branchData == null)
                     {
                         DebugUtil.assert(false,"invalid branch data");
