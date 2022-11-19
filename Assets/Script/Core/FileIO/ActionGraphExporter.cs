@@ -712,7 +712,7 @@ public static class ActionGraphLoader
             return null;
 
         symbol = symbol.Replace("getWeight_","");
-        string[] groupData = symbol.Split('_');
+        string[] groupData = symbol.Split('^');
 
         if(groupData == null || groupData.Length > 2)
         {
