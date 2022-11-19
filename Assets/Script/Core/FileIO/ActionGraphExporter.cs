@@ -461,7 +461,7 @@ public static class ActionGraphLoader
             }
             else if(targetName == "Condition")
             {
-                ActionGraphConditionCompareData compareData = ReadConditionCompareData(targetValue);
+                ActionGraphConditionCompareData compareData = ReadConditionCompareData(targetValue, _globalVariables);
                 if(compareData == null)
                     return null;
 
@@ -502,7 +502,7 @@ public static class ActionGraphLoader
                 if(targetValue == "")
                     continue;
 
-                ActionGraphConditionCompareData conditionData = ReadConditionCompareData(targetValue);
+                ActionGraphConditionCompareData conditionData = ReadConditionCompareData(targetValue, globalVariableContainer);
                 if(conditionData == null)
                     return null;
 
@@ -514,7 +514,7 @@ public static class ActionGraphLoader
                 if(targetValue == "")
                     continue;
                     
-                ActionGraphConditionCompareData keyConditionData = ReadConditionCompareData(targetValue);
+                ActionGraphConditionCompareData keyConditionData = ReadConditionCompareData(targetValue, globalVariableContainer);
                 if(keyConditionData == null)
                     return null;
 
@@ -527,7 +527,7 @@ public static class ActionGraphLoader
                     continue;
                 
                 targetValue = "getWeight_" + targetValue;
-                ActionGraphConditionCompareData keyConditionData = ReadConditionCompareData(targetValue);
+                ActionGraphConditionCompareData keyConditionData = ReadConditionCompareData(targetValue, globalVariableContainer);
                 if(keyConditionData == null)
                     return null;
 
@@ -549,7 +549,7 @@ public static class ActionGraphLoader
         return branchData;
     }
 
-    public static ActionGraphConditionCompareData ReadConditionCompareData(string formula)
+    public static ActionGraphConditionCompareData ReadConditionCompareData(string formula, Dictionary<string, string> globalVariableContainer)
     {
         formula = formula.Replace(" ","");
         List<ActionGraphConditionNodeData> symbolList = new List<ActionGraphConditionNodeData>();
@@ -558,7 +558,7 @@ public static class ActionGraphLoader
         //int end;
         //int resultIndex = 0;
         //DebugUtil.assert(ReadConditionFormula(formula,0, ref resultIndex, out end,symbolList,compareTypeList) == true,"Tlqkfsusdk");
-        DebugUtil.assert(readConditionFormula(formula,ref symbolList,ref compareTypeList) == true,"Tlqkfsusdk");
+        DebugUtil.assert(readConditionFormula(formula,ref symbolList,ref compareTypeList, globalVariableContainer) == true,"Tlqkfsusdk");
 
         ActionGraphConditionCompareData compareData = new ActionGraphConditionCompareData();
         compareData._compareTypeArray = compareTypeList.ToArray();
@@ -569,19 +569,19 @@ public static class ActionGraphLoader
         return compareData;
     }
 
-    private static bool readConditionFormula(string formula, ref List<ActionGraphConditionNodeData> symbolList, ref List<ConditionCompareType> compareTypeList)
+    private static bool readConditionFormula(string formula, ref List<ActionGraphConditionNodeData> symbolList, ref List<ConditionCompareType> compareTypeList, Dictionary<string, string> globalVariableContainer)
     {
         string calcFormula = formula;
         calcFormula = calcFormula.Insert(0,"(");
         calcFormula += ")";
 
         int result = 0;
-        int finalIndex = readFormulaBracket(ref calcFormula,ref result,0,ref symbolList,ref compareTypeList);
+        int finalIndex = readFormulaBracket(ref calcFormula,ref result,0,ref symbolList,ref compareTypeList, globalVariableContainer);
 
         return finalIndex != -1;
     }
 
-    private static int readFormulaBracket(ref string formula, ref int resultIndex, int startOffset, ref List<ActionGraphConditionNodeData> symbolList, ref List<ConditionCompareType> compareTypeList )
+    private static int readFormulaBracket(ref string formula, ref int resultIndex, int startOffset, ref List<ActionGraphConditionNodeData> symbolList, ref List<ConditionCompareType> compareTypeList, Dictionary<string, string> globalVariableContainer )
     {
         if(formula.Length <= startOffset || formula[startOffset] == ')')
         {
@@ -595,7 +595,7 @@ public static class ActionGraphLoader
         {
             if(formula[i] == '(')
             {
-                int length = readFormulaBracket(ref formula, ref resultIndex, i, ref symbolList, ref compareTypeList);
+                int length = readFormulaBracket(ref formula, ref resultIndex, i, ref symbolList, ref compareTypeList, globalVariableContainer);
                 if(length == -1)
                     return -1;
 
@@ -619,11 +619,11 @@ public static class ActionGraphLoader
         int finalLength = endOffset - startOffset;
         string calcFormula = formula.Substring(startOffset + 1,finalLength - 1);
 
-        SplitToMark(calcFormula, ref resultIndex, in symbolList, in compareTypeList);
+        SplitToMark(calcFormula, ref resultIndex, in symbolList, in compareTypeList, globalVariableContainer);
         return finalLength;
     }
 
-    private static void SplitToMark(string formula, ref int resultIndex, in List<ActionGraphConditionNodeData> symbolList, in List<ConditionCompareType> compareTypeList)
+    private static void SplitToMark(string formula, ref int resultIndex, in List<ActionGraphConditionNodeData> symbolList, in List<ConditionCompareType> compareTypeList, Dictionary<string, string> globalVariableContainer)
     {
         string calcFormula = formula;
         int symbolEndIndex = 0;
@@ -636,23 +636,23 @@ public static class ActionGraphLoader
             string symbol = calcFormula.Substring(0,symbolEndIndex);
             calcFormula = calcFormula.Remove(0,symbolEndIndex + markLength);
 
-            symbolList.Add(getConditionNodeData(symbol));
+            symbolList.Add(getConditionNodeData(symbol, globalVariableContainer));
             compareTypeList.Add(compareType);
 
             if(++loopCount >= 2)
-                symbolList.Add(getConditionNodeData("RESULT_" + resultIndex++));
+                symbolList.Add(getConditionNodeData("RESULT_" + resultIndex++, globalVariableContainer));
   
         }
         
 
-        symbolList.Add(getConditionNodeData(calcFormula));
+        symbolList.Add(getConditionNodeData(calcFormula,globalVariableContainer));
 
         return;
     }
 
-    private static ActionGraphConditionNodeData getConditionNodeData(string symbol)
+    private static ActionGraphConditionNodeData getConditionNodeData(string symbol, Dictionary<string, string> globalVariableContainer)
     {
-        symbol = getGlobalVariable(symbol, _globalVariables);
+        symbol = getGlobalVariable(symbol, globalVariableContainer);
         ActionGraphConditionNodeData nodeData = isLiteral(symbol);
         if(nodeData != null)
             return nodeData;

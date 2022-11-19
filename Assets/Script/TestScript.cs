@@ -11,7 +11,7 @@ public class TestScript : MonoBehaviour
 
     void Start()
     {
-        compareData = ActionGraphLoader.ReadConditionCompareData(targetFormula);
+        //compareData = ActionGraphLoader.ReadConditionCompareData(targetFormula);
     }
 
     void Update()
