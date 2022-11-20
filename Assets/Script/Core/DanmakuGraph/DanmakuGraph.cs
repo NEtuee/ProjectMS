@@ -44,6 +44,8 @@ public class DanmakuGraph
             shotInfoData._friction = _danmakuVariables[(int)DanmakuVariableType.Friction];
             shotInfoData._lifeTime = _danmakuVariables[(int)DanmakuVariableType.LifeTime];
             shotInfoData._deafaultVelocity = _danmakuVariables[(int)DanmakuVariableType.Velocity];
+            shotInfoData._useRandomAngle = false;
+            shotInfoData._randomAngle = Vector2.zero;
 
             return shotInfoData;
         }

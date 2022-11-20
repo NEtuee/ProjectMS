@@ -44,7 +44,15 @@ public class ProjectileGraph
         _projectileGraphShotInfoData = shotInfoData;
 
         _currentVelocity = _projectileGraphShotInfoData._deafaultVelocity;
-        _currentAngle = _projectileGraphShotInfoData._defaultAngle;
+
+        if(_projectileGraphShotInfoData._useRandomAngle)
+        {
+            _currentAngle = UnityEngine.Random.Range(_projectileGraphShotInfoData._randomAngle.x,_projectileGraphShotInfoData._randomAngle.y);
+        }
+        else
+        {
+            _currentAngle = _projectileGraphShotInfoData._defaultAngle;
+        }
         _currentLifeTime = _projectileGraphShotInfoData._lifeTime;
     }
 
@@ -95,6 +103,8 @@ public class ProjectileGraph
         return movement;
     }
     public UnityEngine.Sprite getCurrentSprite() {return _animationPlayer.getCurrentSprite();}
+    public UnityEngine.Quaternion getCurrentAnimationRotation() {return _animationPlayer.getCurrentAnimationRotation();}
+    public UnityEngine.Vector3 getCurrentAnimationScale() {return _animationPlayer.getCurrentAnimationScale();}
 
     public bool isOutOfBound()
     {

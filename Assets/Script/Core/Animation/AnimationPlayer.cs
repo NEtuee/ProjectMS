@@ -9,6 +9,9 @@ public class AnimationPlayDataInfo
     //따로 때내어야 함
     public ActionFrameEventBase[]       _frameEventData = null;
     public MultiSelectAnimationData[]   _multiSelectAnimationData = null;
+    
+    public AnimationRotationPresetData  _rotationPresetData = null;
+    public AnimationScalePresetData     _scalePresetData = null;
 
     public int                          _multiSelectAnimationDataCount = 0;
 
@@ -220,6 +223,43 @@ public class AnimationPlayer
     public MoveValuePerFrameFromTimeDesc getMoveValuePerFrameFromTimeDesc() {return _animationTimeProcessor.getMoveValuePerFrameFromTimeDesc();}
     public AnimationTimeProcessor getTimeProcessor(){return _animationTimeProcessor;}
     public MovementGraph getCurrentMovementGraph() {return _currentMovementGraph;}
+
+
+    public Vector3 getCurrentAnimationScale()
+    {
+        if(_currentAnimationPlayData._scalePresetData == null)
+            return Vector3.one;
+        
+        Vector2 currentScale = _currentAnimationPlayData._scalePresetData.evaulate(_animationTimeProcessor.getCurrentNormalizedTime());
+        return new Vector3(currentScale.x,currentScale.y,1f);
+    }
+
+    public Vector3 getAnimationScalePerFrame()
+    {
+        if(_currentAnimationPlayData._scalePresetData == null)
+            return Vector3.one;
+        
+
+        Vector2 scale = _currentAnimationPlayData._scalePresetData.getScaleValuePerFrameFromTime(getMoveValuePerFrameFromTimeDesc());
+        return new Vector3(scale.x,scale.y,1f);
+    }
+
+
+    public Quaternion getCurrentAnimationRotation()
+    {
+        if(_currentAnimationPlayData._rotationPresetData == null)
+            return Quaternion.identity;
+
+        return Quaternion.Euler(0f,0f,_currentAnimationPlayData._rotationPresetData.evaulate(_animationTimeProcessor.getCurrentNormalizedTime()));
+    }
+
+    public Quaternion getAnimationRotationPerFrame()
+    {
+        if(_currentAnimationPlayData._rotationPresetData == null)
+            return Quaternion.identity;
+        
+        return Quaternion.Euler(0f,0f,_currentAnimationPlayData._rotationPresetData.getRotateValuePerFrameFromTime(getMoveValuePerFrameFromTimeDesc()));
+    }
 
     public FlipState getCurrentFlipState() 
     {

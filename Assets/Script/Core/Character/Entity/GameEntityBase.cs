@@ -152,6 +152,9 @@ public class GameEntityBase : SequencerObjectBase
             _actionGraph.updateAnimation(Time.deltaTime, this);
 
             _spriteRenderer.sprite = _actionGraph.getCurrentSprite();
+            _spriteRenderer.transform.localRotation = _actionGraph.getCurrentAnimationRotation();
+            _spriteRenderer.transform.localScale = _actionGraph.getCurrentAnimationScale();
+            
             _flipState = getCurrentFlipState();
 
             _spriteRenderer.flipX = _flipState.xFlip;
@@ -473,7 +476,7 @@ public class GameEntityBase : SequencerObjectBase
         }
 
         DebugUtil.assert((int)RotationType.Count == 5, "check this");
-        _spriteObject.transform.localRotation = _spriteRotation;
+        _spriteObject.transform.localRotation *= _spriteRotation;
     }
 
     public bool isMoving()

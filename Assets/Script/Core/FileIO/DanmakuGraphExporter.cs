@@ -121,7 +121,23 @@ public static class DanmakuGraphLoader
                     }
 
                     eventTypeList.Add(variableEventType);
-                    eventValueList.Add(float.Parse(attributes[i].Value));
+
+                    if(attributes[i].Value.Contains("Random_"))
+                    {
+                        string randomData = attributes[i].Value.Replace("Random_","");
+                        string[] randomValue = randomData.Split('^');
+                        if(randomValue == null || randomValue.Length != 2)
+                        {
+                            DebugUtil.assert(false, "invalid danmaku variable event random: {0}", attributes[i].Value);
+                            return null;
+                        }
+                        
+                        eventValueList.Add(Random.Range(float.Parse(randomValue[0]),float.Parse(randomValue[1])));
+                    }
+                    else
+                    {
+                        eventValueList.Add(float.Parse(attributes[i].Value));
+                    }
                 }
 
                 variableEventData._eventCount = eventTypeList.Count;

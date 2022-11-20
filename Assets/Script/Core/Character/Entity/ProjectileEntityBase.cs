@@ -55,9 +55,11 @@ public class ProjectileEntityBase : ObjectBase
         transform.position = startPosition;
 
         if(_spriteRotation)
-            _spriteObject.transform.rotation = Quaternion.Euler(0f,0f,shotInfoData._defaultAngle);
+            _spriteObject.transform.localRotation = Quaternion.Euler(0f,0f,shotInfoData._defaultAngle);
         else
-            _spriteObject.transform.rotation = Quaternion.identity;
+            _spriteObject.transform.localRotation = Quaternion.identity;
+
+        _spriteObject.transform.localScale = Vector3.one;
 
         _projectileGraph.initialize(shotInfoData);
 
@@ -84,10 +86,13 @@ public class ProjectileEntityBase : ObjectBase
 
         Vector3 movementOfFrame = _projectileGraph.getMovementOfFrame();
         transform.position += movementOfFrame;
-        if(_spriteRotation && movementOfFrame.sqrMagnitude != 0f)
-            _spriteObject.transform.rotation = Quaternion.Euler(0f,0f,Mathf.Atan2(movementOfFrame.y,movementOfFrame.x) * Mathf.Rad2Deg);
 
         _spriteRenderer.sprite = _projectileGraph.getCurrentSprite();
+        _spriteRenderer.transform.localRotation = _projectileGraph.getCurrentAnimationRotation();
+        _spriteRenderer.transform.localScale = _projectileGraph.getCurrentAnimationScale();
+
+        if(_spriteRotation && movementOfFrame.sqrMagnitude != 0f)
+            _spriteObject.transform.localRotation *= Quaternion.Euler(0f,0f,Mathf.Atan2(movementOfFrame.y,movementOfFrame.x) * Mathf.Rad2Deg);
         
         _collisionInfo.updateCollisionInfo(transform.position,Vector3.right);
         CollisionManager.Instance().collisionRequest(_collisionInfo,this,_collisionDelegate,null);

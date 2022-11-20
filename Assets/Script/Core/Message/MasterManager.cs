@@ -6,6 +6,9 @@ using UnityEngine;
 public class MasterManager : MessageHub<ManagerBase>
 {
     public static MasterManager     instance;
+
+   // public ObjectBase               player;
+
     public List<ManagerBase>        managers;
     protected override void Awake()
     {
@@ -38,6 +41,9 @@ public class MasterManager : MessageHub<ManagerBase>
                 
             m.initialize();
         }
+
+        CameraControll.Instance().assign();
+       // CameraControll.Instance().SetTarget(player);
     }
     public void Start()
     {
@@ -48,6 +54,7 @@ public class MasterManager : MessageHub<ManagerBase>
         float deltaTime = Time.deltaTime;
         GlobalTimer.Instance().updateGlobalTime(deltaTime);
         ActionKeyInputManager.Instance().progress(deltaTime);
+        CameraControll.Instance().SyncPosition();
 
         ManagersUpdate(deltaTime);
         ManagersAfterUpdate(deltaTime);
@@ -56,12 +63,16 @@ public class MasterManager : MessageHub<ManagerBase>
         CallReceiveMessageProcessing();
         ManagersReceiveMessageProcessing();
         ReceiveMessageProcessing();
+
+        CameraControll.Instance().progress(deltaTime);
     }
 
     public void LateUpdate()
     {
         CollisionManager.Instance().collisionUpdate();
         WeightRandomManager.Instance().updateRandom();
+        
+
     }
 
     public void FixedUpdate()

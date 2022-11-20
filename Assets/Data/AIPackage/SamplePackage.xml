@@ -90,7 +90,7 @@
             </Event_OnExecute>
 
             <UseBranchSet Name="EvadeTypeBranchSet"/>
-            <Branch Condition="End == true" Excuted="Entry"/>
+            <Branch Condition="End == true" Execute="Entry"/>
         </Guarded>
 
         <Parried UpdateTime="0.0">
@@ -98,7 +98,7 @@
                 <AIEvent Type="SetAction" Action="Attack_Guarded"/>
             </Event_OnExecute>
 
-            <Branch Condition="End == true" Excuted="Entry"/>
+            <Branch Condition="End == true" Execute="Entry"/>
         </Parried>
 
         <ATK_C_Thrust_Charge UpdateTime="0.0">

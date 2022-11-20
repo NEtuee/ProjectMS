@@ -214,7 +214,7 @@
         <Animation Path="Resources/Sprites/SampleBoss/GuardBroken/" StartFrame="0" EndFrame="1" FramePerSecond="2"/>
         
 
-        <Branch Condition="End == true" Excuted="Idle"/>
+        <Branch Condition="End == true" Execute="Idle"/>
     </JustGuardBroken>
     
     <Attack_Guarded MovementType="GraphPreset" MovementGraphPreset="AttackGuarded" DirectionType="Keep" FlipType="Keep">

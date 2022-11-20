@@ -35,7 +35,10 @@ public struct ProjectileGraphShotInfoData
     public float                    _angularAcceleration;
     public float                    _lifeTime;
 
-    public ProjectileGraphShotInfoData(float defaultVelocity, float acceleration, float friction, float defaultAngle, float angularAcceleration, float lifeTime)
+    public bool                     _useRandomAngle;
+    public Vector2                  _randomAngle;
+
+    public ProjectileGraphShotInfoData(float defaultVelocity, float acceleration, float friction, float defaultAngle, float angularAcceleration, float lifeTime, bool useRandomAngle, Vector2 randomAngle)
     {
         _deafaultVelocity = defaultVelocity;
         _acceleration = acceleration;
@@ -43,6 +46,9 @@ public struct ProjectileGraphShotInfoData
         _defaultAngle = defaultAngle;
         _angularAcceleration = angularAcceleration;
         _lifeTime = lifeTime;
+
+        _useRandomAngle = useRandomAngle;
+        _randomAngle = randomAngle;
     }
 
     public static ProjectileGraphShotInfoData operator +(ProjectileGraphShotInfoData a, ProjectileGraphShotInfoData b)
@@ -53,7 +59,9 @@ public struct ProjectileGraphShotInfoData
             , _deafaultVelocity = a._deafaultVelocity + b._deafaultVelocity
             , _defaultAngle = a._defaultAngle + b._defaultAngle
             , _friction = a._friction + b._friction
-            , _lifeTime = a._lifeTime + b._lifeTime};
+            , _lifeTime = a._lifeTime + b._lifeTime
+            , _useRandomAngle = a._useRandomAngle | b._useRandomAngle
+            , _randomAngle = a._randomAngle + b._randomAngle};
     }
 
     public void clear()
@@ -64,6 +72,9 @@ public struct ProjectileGraphShotInfoData
         _defaultAngle = 0f;
         _angularAcceleration = 0f;
         _lifeTime = 0f;
+
+        _useRandomAngle = false;
+        _randomAngle = Vector2.zero;
     }
 
 }

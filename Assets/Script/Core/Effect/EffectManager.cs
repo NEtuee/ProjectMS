@@ -47,6 +47,7 @@ public class EffectItem
 
         _spriteRenderer.transform.position = effectData._position;
         _spriteRenderer.transform.localRotation = Quaternion.Euler(0f,0f,effectData._angle);
+        _spriteRenderer.transform.localScale = Vector3.one;
         _spriteRenderer.gameObject.SetActive(true);
         
     }
@@ -55,6 +56,8 @@ public class EffectItem
     {
         bool isEnd = _animationPlayer.progress(deltaTime,null);
         _spriteRenderer.sprite = _animationPlayer.getCurrentSprite();
+        _spriteRenderer.transform.localRotation *= _animationPlayer.getAnimationRotationPerFrame();
+        _spriteRenderer.transform.localScale = _animationPlayer.getCurrentAnimationScale();
 
         return isEnd;
     }

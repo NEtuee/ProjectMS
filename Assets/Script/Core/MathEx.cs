@@ -57,6 +57,23 @@ public static class MathEx
     }
 
 
+	public static float directionToAngle(UnityEngine.Vector2 dir) 
+	{
+		float val = UnityEngine.Mathf.Atan2(dir.y, dir.x) * UnityEngine.Mathf.Rad2Deg;
+
+		return clamp360Degree(val);
+	}
+	public static UnityEngine.Vector3 angleToDirection(float angle) {return new UnityEngine.Vector3(UnityEngine.Mathf.Cos(angle),UnityEngine.Mathf.Sin(angle));}
+	public static float clamp360Degree(float eulerAngle)
+    {
+        //  float val = eulerAngle - Mathf.CeilToInt(eulerAngle / 360f) * 360f;
+		//  val = val < 0 ? val + 360f : val;
+		float val = eulerAngle + ((float)((int)-eulerAngle / 360) * 360f);
+		val = val < 0 ? val + 360f : val;
+		return val;
+    }
+
+
     public static void makeTriangle(UnityEngine.Vector3 centerPosition,float radius, float theta, float directionAngle, out UnityEngine.Vector3 triangleA, out UnityEngine.Vector3 triangleB, out UnityEngine.Vector3 triangleC)
     {
         UnityEngine.Vector3 directionVector = UnityEngine.Quaternion.Euler(0f,0f,directionAngle) * UnityEngine.Vector3.right * radius;
