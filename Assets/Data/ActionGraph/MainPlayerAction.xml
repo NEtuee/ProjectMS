@@ -49,7 +49,7 @@
 
 
     <AttackCharge MovementType="GraphPreset" MovementGraphPreset="AttackCharge" DirectionType="MoveInput" FlipType="MousePoint" ApplyBuff="2 3">
-        <Animation Path="Resources/Sprites/DummyPlayer/AttackCharge/" StartFrame="0" EndFrame="1" FramePerSecond="1">
+        <Animation Path="Resources/Sprites/NewPlayer/charge/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
         </Animation>
 
         <Branch Condition="Hit == true" Execute="Hit"/>
@@ -58,7 +58,7 @@
     </AttackCharge>
 
     <AttackPrepare MovementType="Empty" DirectionType="MousePoint" FlipType="Keep">
-        <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="999">
+        <Animation Path="Resources/Sprites/NewPlayer/charge/" StartFrame="0" EndFrame="1" FramePerSecond="999">
             <FrameEvent Type="FrameTag" StartFrame="0" EndFrame="999" Tag="Attack"/>
         </Animation>
 
@@ -99,8 +99,8 @@
         <Branch Condition="End == true" Execute="CommonMoveSelection"/>
     </Attack_Parried>
 
-    <Attack_LV1 MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="Keep" FlipType="Keep">
-        <Animation Path="Resources/Sprites/DummyPlayer/Attack" StartFrame="0" EndFrame="1" FramePerSecond="3">
+    <Attack_LV1 MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="Keep" RotationType="Direction" FlipType="Keep">
+        <Animation Path="Resources/Sprites/NewPlayer/attack" StartFrame="0" EndFrame="3" FramePerSecond="9">
             <FrameEvent Type="Attack" StartFrame="0" AttackPreset="PlayerAttackTest">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
@@ -118,6 +118,9 @@
                 </OnParry>
 
             </FrameEvent>
+
+
+            <FrameEvent Type="Effect" StartFrame="0.15" Path="Resources/Sprites/Effect/Slash" FramePerSecond="6" Offset="0.0 0.0 0.0" Angle="FollowEntity"/>
         </Animation>
 
         <Branch Condition="AttackGuarded == true" Execute="Attack_Guarded"/>

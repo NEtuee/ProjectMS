@@ -130,6 +130,13 @@ public abstract class ObjectBase : MessageReceiver, IProgress
     }
     public float getDistanceSq(ObjectBase obj) {return (transform.position - obj.transform.position).sqrMagnitude;}
 
+    public Transform getSpriteRendererTransform()
+    {
+        if(_spriteRenderer == null)
+            return null;
+
+        return _spriteRenderer.transform;
+    }
     public Vector3 getDirection() {return _direction;}
 
 }

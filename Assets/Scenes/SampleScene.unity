@@ -214,6 +214,7 @@ MonoBehaviour:
   debugTextManager: {fileID: 1875856657}
   _actionDebug: 0
   _statusDebug: 0
+  _aiDebug: 0
 --- !u!212 &219847224
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -399,6 +400,7 @@ MonoBehaviour:
   debugTextManager: {fileID: 228223018}
   _actionDebug: 0
   _statusDebug: 0
+  _aiDebug: 0
 --- !u!212 &463302352
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -539,7 +541,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 3
+  orthographic size: 2
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -754,6 +756,7 @@ MonoBehaviour:
   debugTextManager: {fileID: 1805569310}
   _actionDebug: 0
   _statusDebug: 0
+  _aiDebug: 0
 --- !u!4 &1141361132
 Transform:
   m_ObjectHideFlags: 0
@@ -862,6 +865,7 @@ MonoBehaviour:
   debugTextManager: {fileID: 688124046}
   _actionDebug: 0
   _statusDebug: 0
+  _aiDebug: 0
 --- !u!212 &1279927610
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1295,7 +1299,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1904793574
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1320,6 +1324,7 @@ MonoBehaviour:
   debugTextManager: {fileID: 1066837034}
   _actionDebug: 0
   _statusDebug: 0
+  _aiDebug: 0
 --- !u!212 &1904793575
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1500,6 +1505,10 @@ PrefabInstance:
     - target: {fileID: 154424180479579028, guid: 6355b385544936d44854d831532a9d95, type: 3}
       propertyPath: m_Name
       value: TutorialBoss
+      objectReference: {fileID: 0}
+    - target: {fileID: 154424180479579028, guid: 6355b385544936d44854d831532a9d95, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8012511158956264363, guid: 6355b385544936d44854d831532a9d95, type: 3}
       propertyPath: m_RootOrder

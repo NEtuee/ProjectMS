@@ -13,6 +13,7 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
     private float _spawnAngle = 0f;
 
     private bool _random = false;
+    private bool _followEntity = false;
     private bool _toTarget = false;
 
     private Vector3 _spawnOffset = Vector3.zero;
@@ -34,7 +35,18 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
                 + (Quaternion.Euler(0f,0f,Vector3.SignedAngle(Vector3.right, executeEntity.getDirection(), Vector3.forward)) 
                 * _spawnOffset);
 
-        requestData._angle = _random ? Random.Range(0f,360f) : _spawnAngle;
+        if(_followEntity == true)
+        {
+            requestData._angle = executeEntity.getSpriteRendererTransform().rotation.eulerAngles.z;
+        }
+        else if(_random == true)
+        {
+            requestData._angle = Random.Range(0f,360f);
+        }
+        else
+        {
+            requestData._angle = _spawnAngle;
+        }
 
         executeEntity.SendMessageEx(MessageTitles.effect_spawnEffect,UniqueIDBase.QueryUniqueID("EffectManager"),requestData);
 
@@ -72,6 +84,10 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
                 if(attributes[i].Value == "Random")
                 {
                     _random = true;
+                }
+                else if(attributes[i].Value == "FollowEntity")
+                {
+                    _followEntity = true;
                 }
                 else
                 {
