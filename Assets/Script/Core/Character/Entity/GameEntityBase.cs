@@ -462,13 +462,13 @@ public class GameEntityBase : SequencerObjectBase
                 _spriteRotation = Quaternion.identity;
                 break;
             case RotationType.Direction:
-                _spriteRotation = Quaternion.FromToRotation(Vector3.right,_direction);
+                _spriteRotation = Quaternion.Euler(0f,0f,MathEx.directionToAngle(_direction));
                 break;
             case RotationType.MousePoint:
-                _spriteRotation = Quaternion.FromToRotation(Vector3.right, ControllerEx.Instance().getJoystickAxisR(transform.position));
+                _spriteRotation = Quaternion.Euler(0f,0f,MathEx.directionToAngle( ControllerEx.Instance().getJoystickAxisR(transform.position)));
                 break;
             case RotationType.MoveDirection:
-                _spriteRotation = Quaternion.FromToRotation(Vector3.right,getMovementControl().getMoveDirection());
+                _spriteRotation = Quaternion.Euler(0f,0f,MathEx.directionToAngle(getMovementControl().getMoveDirection()));
                 break;
             case RotationType.Keep:
                 break;
@@ -476,7 +476,12 @@ public class GameEntityBase : SequencerObjectBase
         }
 
         DebugUtil.assert((int)RotationType.Count == 5, "check this");
-        _spriteObject.transform.localRotation *= _spriteRotation;
+
+        float zRotation = _spriteRotation.eulerAngles.z;
+        if(rotationType != RotationType.AlwaysRight)
+            zRotation -= (getCurrentFlipState().xFlip ? -180f : 0f);
+
+        _spriteObject.transform.localRotation *= Quaternion.Euler(0f,0f,zRotation);
     }
 
     public bool isMoving()
