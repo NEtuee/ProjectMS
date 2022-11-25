@@ -206,6 +206,7 @@ public class AnimationPlayer
         _animationTimeProcessor.setFrame(startFrame,endFrame, playData._framePerSec);
         _animationTimeProcessor.setLoop(playData._isLoop);
         _animationTimeProcessor.setFrameToTime(playData._startFrame);
+        _animationTimeProcessor.setAnimationSpeed(1f);
 
         for(int i = 0; i < _frameEventProcessList.Count; ++i)
         {
@@ -215,6 +216,8 @@ public class AnimationPlayer
 
         setCurrentFrameEventIndex(playData);
     }
+
+    public void setAnimationSpeed(float speed) {_animationTimeProcessor.setAnimationSpeed(speed);}
 
     public float getCurrentFrame() {return _animationTimeProcessor.getCurrentFrame();}
     public float getCurrentAnimationDuration() {return _animationTimeProcessor.getAnimationDuration();}

@@ -99,8 +99,14 @@
         <Branch Condition="End == true" Execute="CommonMoveSelection"/>
     </Attack_Parried>
 
-    <Attack_LV1 MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="Keep" RotationType="Direction" FlipType="Keep">
-        <Animation Path="Resources/Sprites/NewPlayer/attack" StartFrame="0" EndFrame="3" FramePerSecond="9">
+    <Attack_LV1 MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="Keep" RotationType="Direction" FlipType="Keep" NormalizedSpeed="True">
+        <Animation Path="Resources/Sprites/NewPlayer/attack" StartFrame="0" EndFrame="4" FramePerSecond="9" ScalePreset="YSpring">
+            <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="1"/>
+            <FrameEvent Type="SetAnimationSpeed" StartFrame="0.3" Speed="2.6"/>
+            <FrameEvent Type="SetAnimationSpeed" StartFrame="2" Speed="2"/>
+            <FrameEvent Type="SetAnimationSpeed" StartFrame="3" Speed="1"/>
+
+
             <FrameEvent Type="Attack" StartFrame="0" AttackPreset="PlayerAttackTest">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
@@ -120,7 +126,6 @@
             </FrameEvent>
 
 
-            <FrameEvent Type="Effect" StartFrame="0.15" Path="Resources/Sprites/Effect/Slash" FramePerSecond="6" Offset="0.0 0.0 0.0" Angle="FollowEntity"/>
         </Animation>
 
         <Branch Condition="AttackGuarded == true" Execute="Attack_Guarded"/>
@@ -215,7 +220,7 @@
     </Guard>
 
 
-    <DashStart MovementType="Empty" DirectionType="Keep" FlipType="AlwaysTurnOff" RotationType="Direction" ApplyBuff="9">
+    <DashStart MovementType="Empty" DirectionType="Keep" FlipType="Direction" RotationType="Direction" ApplyBuff="9">
         <Animation Path="Resources/Sprites/DummyPlayer/Dash/" StartFrame="0" EndFrame="1" FramePerSecond="999" XFlip="true">
         </Animation>
 
@@ -223,7 +228,7 @@
     </DashStart>
 
 
-    <Dash MovementType="GraphPreset" DirectionType="Keep" MovementGraphPreset="Dash" FlipType="Keep" RotationType="Direction">
+    <Dash MovementType="GraphPreset" DirectionType="Keep" MovementGraphPreset="Dash" FlipType="Direction" RotationType="Direction">
         <Animation Path="Resources/Sprites/DummyPlayer/Dash/" StartFrame="0" EndFrame="1" FramePerSecond="3" XFlip="true">
         </Animation>
         

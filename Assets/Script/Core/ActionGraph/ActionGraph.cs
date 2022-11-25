@@ -543,6 +543,8 @@ public class ActionGraph
 
     public HashSet<string> getCurrentFrameTagList() {return _currentFrameTag;}
 
+    public void setAnimationSpeed(float speed) {_animationPlayer.setAnimationSpeed(speed);}
+
     public bool checkFrameTag(string tag) {return _currentFrameTag.Contains(tag);}
 
     public bool isActionLoop() {return _currentActionNodeIndex == _prevActionNodeIndex;}

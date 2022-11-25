@@ -526,7 +526,7 @@ public class GameEntityBase : SequencerObjectBase
     public void setAiDirection(float angle) {_aiGraph.setAIDirection(angle);}
     public void setAiDirection(Vector3 direction) {_aiGraph.setAIDirection(direction);}
 
-
+    public void setAnimationSpeed(float speed) {_actionGraph.setAnimationSpeed(speed);}
 
     public void setAttackPoint(Vector3 attackPoint) {_recentlyAttackPoint = attackPoint;}
 
