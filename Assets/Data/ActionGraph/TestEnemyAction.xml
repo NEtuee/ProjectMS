@@ -81,7 +81,7 @@
             <FrameEvent Type="Attack" AttackType="GuardBreak" StartFrame="0" AttackPreset="PlayerAttackTest" IgnoreDefenceType="Guard">
                 <OnGuardBreak>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
-                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random" ToTarget="true"/>
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
                 </OnGuardBreak>
 
                 <OnGuard>

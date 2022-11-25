@@ -12,7 +12,15 @@ public class EffectRequestData : MessageData
 
     public float _angle;
 
+    public bool _usePhysics;
+    public bool _useFlip;
+
     public Vector3 _position;
+    public Quaternion _rotation;
+
+    public Transform _parentTransform = null;
+
+    public PhysicsBodyDescription _physicsBodyDesc;
 }
 
 public class EffectItem
@@ -20,7 +28,15 @@ public class EffectItem
     private AnimationPlayer         _animationPlayer = new AnimationPlayer();
     private AnimationPlayDataInfo   _animationPlayData = new AnimationPlayDataInfo();
 
+    private PhysicsBodyEx           _physicsBody = new PhysicsBodyEx();
+
     private SpriteRenderer          _spriteRenderer;
+    private Transform               _parentTransform = null;
+
+    private Vector3                 _localPosition;
+    private Quaternion              _rotation;
+    private bool                    _usePhysics = false;
+    private bool                    _useFlip = false;
 
     public void createItem()
     {
@@ -45,11 +61,25 @@ public class EffectItem
         _animationPlayer.initialize();
         _animationPlayer.changeAnimation(_animationPlayData);
 
+        _parentTransform = effectData._parentTransform;
+
+        if(_parentTransform != null && _parentTransform.gameObject.activeInHierarchy == false)
+            _parentTransform = null;
+
         _spriteRenderer.transform.position = effectData._position;
         _spriteRenderer.transform.localRotation = Quaternion.Euler(0f,0f,effectData._angle);
         _spriteRenderer.transform.localScale = Vector3.one;
         _spriteRenderer.gameObject.SetActive(true);
-        
+
+        _localPosition = _spriteRenderer.transform.position;
+        if(_parentTransform != null)
+            _localPosition = _parentTransform.position - _spriteRenderer.transform.position;
+
+        _physicsBody.initialize(effectData._physicsBodyDesc);
+        _usePhysics = effectData._usePhysics;
+
+        _useFlip = effectData._useFlip;
+        _rotation = effectData._rotation;
     }
 
     public bool progress(float deltaTime)
@@ -58,6 +88,29 @@ public class EffectItem
         _spriteRenderer.sprite = _animationPlayer.getCurrentSprite();
         _spriteRenderer.transform.localRotation *= _animationPlayer.getAnimationRotationPerFrame();
         _spriteRenderer.transform.localScale = _animationPlayer.getCurrentAnimationScale();
+
+        if(_usePhysics)
+        {
+            _physicsBody.progress(deltaTime);
+
+            Vector3 velocity = _physicsBody.getCurrentVelocity();
+            float torque = _physicsBody.getCurrentTorqueValue();
+
+            if(_useFlip)
+            {
+                torque *= -1f;
+                velocity.x *= -1f;
+            }
+
+            _localPosition += (velocity * deltaTime);
+            _spriteRenderer.transform.localRotation *= Quaternion.Euler(0f,0f,torque * deltaTime);
+        }
+
+        Vector3 worldPosition = _localPosition;
+        if(_parentTransform != null)
+            worldPosition = _parentTransform.position + _localPosition;
+
+        _spriteRenderer.transform.position = worldPosition;
 
         return isEnd;
     }

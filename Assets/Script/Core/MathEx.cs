@@ -27,6 +27,9 @@ public static class MathEx
 
 	public static UnityEngine.Vector3 convergence0(UnityEngine.Vector3 value, float a)
 	{
+		if(MathEx.equals(a,0f,float.Epsilon))
+			return value;
+			
 		if(value.sqrMagnitude < float.Epsilon)
 			return UnityEngine.Vector3.zero;
 			

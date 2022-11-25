@@ -84,6 +84,9 @@ public static class FrameEventLoader
 
     public static void readChildFrameEvent(XmlNode node, ref ActionFrameEventBase frameEvent)
     {
+        if(frameEvent.getFrameEventType() == FrameEventType.FrameEvent_Effect)
+            return;
+
         XmlNodeList childNodeList = node.ChildNodes;
 
         if(childNodeList == null || childNodeList.Count == 0)

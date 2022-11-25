@@ -538,6 +538,8 @@ public class GameEntityBase : SequencerObjectBase
     public void setTargetEntity(GameEntityBase target) {_currentTarget = target;}
     public GameEntityBase getCurrentTargetEntity() {return _currentTarget;}
 
+    public FlipState getFlipState() {return _flipState;}
+
     public CollisionInfo getCollisionInfo() {return _collisionInfo;}
     public string getCurrentAIName() {return _aiGraph.getCurrentAIStateName();}
     public string getCurrentActionName() {return _actionGraph == null ? "" : _actionGraph.getCurrentActionName();}
