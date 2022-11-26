@@ -17,24 +17,30 @@
     <Include Path="TutorialBoss/H_SHT_N_DefenseShot.xml"/>
     <Include Path="TutorialBoss/H_STA_Defenseless.xml"/>
 
+    <BranchSet Name="EvadeTypeBranchSet">
+        <Branch Condition="getTargetFrameTag_Attack && (TargetDistance < 2.0)" Execute="H_DEF_MoveDodge"/>
+    </BranchSet>
+    
     <H_Judge_AttackSTD Package="H_Judge_AttackSTD">
         <Branch Weight="TutorialBossJudgeAttackSTD^ByDistance" Execute="H_Judge_AttackByDistance"/>
         <Branch Weight="TutorialBossJudgeAttackSTD^ByRandom" Execute="H_Judge_AttackByRandom"/>
     </H_Judge_AttackSTD>
 
     <GlobalVariable Name="gv_NearDist" Value="1.5"/>
-    <GlobalVariable Name="gv_CommonDist" Value="3.0"/>
-    <GlobalVariable Name="gv_FarDist" Value="4.5"/>
+    <GlobalVariable Name="gv_CommonDist" Value="4.0"/>
+    <GlobalVariable Name="gv_FarDist" Value="5.0"/>
     <H_Judge_AttackByDistance Package="H_Judge_AttackByDistance">
 
-        <!-- <Branch Condition="CurrentPackageEnd && (TargetDistance <= gv_NearDist)" Weight="TutorialBossJudgeNearAttack^H_SHT_N_DefenseShot" Execute="H_SHT_N_DefenseShot"/> -->
+        <Branch Condition="CurrentPackageEnd && (TargetDistance <= gv_CommonDist)" Weight="RandBoolean^True" Execute="H_MOV_Alert"/>
+        <Branch Condition="CurrentPackageEnd && (TargetDistance <= gv_NearDist)" Weight="TutorialBossJudgeNearAttack^H_SHT_N_DefenseShot" Execute="H_SHT_N_DefenseShot"/>
         <!-- <Branch Condition="CurrentPackageEnd && ((gv_NearDist < TargetDistance) && (TargetDistance <= gv_CommonDist))" Weight="TutorialBossJudgeCommonAttack^H_MIX_C_RushNCaseShot" Execute="H_MIX_C_RushNCaseShot"/> -->
         <!-- <Branch Condition="CurrentPackageEnd && ((gv_NearDist < TargetDistance) && (TargetDistance <= gv_CommonDist))" Weight="TutorialBossJudgeCommonAttack^H_MIX_C_SwingComboNCaseShot" Execute="H_MIX_C_SwingComboNCaseShot"/> -->
         <Branch Condition="CurrentPackageEnd && ((gv_NearDist < TargetDistance) && (TargetDistance <= gv_CommonDist))" Weight="TutorialBossJudgeCommonAttack^H_MIX_C_ThrustComboNCaseShot" Execute="H_MIX_C_ThrustComboNCaseShot"/>
         <!-- <Branch Condition="CurrentPackageEnd && ((gv_NearDist < TargetDistance) && (TargetDistance <= gv_CommonDist))" Weight="TutorialBossJudgeCommonAttack^H_SHT_C_Gatling3NSpear" Execute="H_SHT_C_Gatling3NSpear"/> -->
         <Branch Condition="CurrentPackageEnd && ((gv_CommonDist < TargetDistance) && (TargetDistance <= gv_FarDist))" Weight="TutorialBossJudgeFarAttack^H_ATK_F_ChargeThrust" Execute="H_ATK_F_ChargeThrust"/>
         <!-- <Branch Condition="CurrentPackageEnd && ((gv_CommonDist < TargetDistance) && (TargetDistance <= gv_FarDist))" Weight="TutorialBossJudgeFarAttack^H_SHT_F_ChargeSpear" Execute="H_SHT_F_ChargeSpear"/> -->
-        <!-- <Branch Condition="CurrentPackageEnd && (gv_FarDist < TargetDistance)" Execute="H_MOV_Alert"/> -->
+        
+        <Branch Condition="CurrentPackageEnd" Execute="H_Judge_AttackByDistance"/>
         <!-- -->
     </H_Judge_AttackByDistance>
     

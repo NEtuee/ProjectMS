@@ -3,9 +3,9 @@
 
 
     <AIState>
-        <Entry UpdateTime="0.5" TargetSearchType="Near" TargetSearchRange="1.0" SearchIdentifier="Player">
+        <Entry UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="1.0" SearchIdentifier="Player">
             <Event_OnExecute>
-                <AIEvent Type="SetAction" Action="Idle"/>
+                <AIEvent Type="SetAction" Action="MOV_Idle"/>
                 <AIEvent Type="Test" Log="Attack By Distance"/>
             </Event_OnExecute>
 

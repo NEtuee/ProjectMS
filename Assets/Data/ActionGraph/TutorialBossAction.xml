@@ -3,7 +3,7 @@
 <ActionGraph Name="TutorialBoss" DefaultAction="MOV_Idle" DefaultFramePerSecond="0.5">
     
     <BranchSet Name="CommonHitAction">
-        <Branch Condition="Hit == true" Execute="Hit"/>
+        <Branch Condition="Hit == true" Execute="STA_Hit"/>
     </BranchSet>
 
     <MOV_Idle DirectionType="Keep" FlipType="Direction">
@@ -42,28 +42,28 @@
             <MultiSelectAnimation Path="Resources/Sprites/SampleBoss/DashRight/" Condition="(AngleDirection >= 315.0) || (AngleDirection < 45.0) && (IsXFlip == false)"/>
         </Animation>
         
-        <Branch Condition="End == true" Execute="Idle"/>
+        <Branch Condition="End == true" Execute="MOV_Idle"/>
     </MOV_Dash>
 
     <AttackCharge DirectionType="Keep" FlipType="Direction">
         <Animation Path="Resources/Sprites/SampleBoss/Charge/" StartFrame="0" EndFrame="1" FramePerSecond="4">
         </Animation>
 
-        <Branch Condition="End == true" Execute="Idle"/>
+        <Branch Condition="End == true" Execute="MOV_Idle"/>
     </AttackCharge>
 
     <FarAttackCharge DirectionType="Keep" FlipType="Direction">
         <Animation Path="Resources/Sprites/SampleBoss/Charge/" StartFrame="0" EndFrame="3" FramePerSecond="1">
         </Animation>
 
-        <Branch Condition="End == true" Execute="Idle"/>
+        <Branch Condition="End == true" Execute="MOV_Idle"/>
     </FarAttackCharge>
 
     <AttackPrepare MovementType="Empty" DirectionType="AI" FlipType="Direction">
         <Animation Path="Resources/Sprites/SampleBoss/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="999">
         </Animation>
 
-        <Branch Condition="End == true" Execute="Idle"/>
+        <Branch Condition="End == true" Execute="MOV_Idle"/>
 
     </AttackPrepare>
 
@@ -72,7 +72,7 @@
             <FrameEvent Type="Attack" StartFrame="0" AttackPreset="ATK_C_Thrust">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
-                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random" ToTarget="true"/>
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
                 </OnHit>
 
                 <OnGuard>
@@ -86,7 +86,7 @@
             </FrameEvent>
         </Animation>
 
-        <Branch Condition="End == true" Execute="Idle"/>
+        <Branch Condition="End == true" Execute="MOV_Idle"/>
     </ATK_C_Thrust>
 
     <ATK_C_Swing MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="AI" FlipType="Direction">
@@ -94,7 +94,7 @@
             <FrameEvent Type="Attack" StartFrame="0" AttackPreset="ATK_C_Thrust">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
-                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random" ToTarget="true"/>
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
                 </OnHit>
 
                 <OnGuard>
@@ -108,7 +108,7 @@
             </FrameEvent>
         </Animation>
 
-        <Branch Condition="End == true" Execute="Idle"/>
+        <Branch Condition="End == true" Execute="MOV_Idle"/>
     </ATK_C_Swing>
 
     <ATK_N_Shove MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="AI" FlipType="Direction">
@@ -116,7 +116,7 @@
             <FrameEvent Type="Attack" StartFrame="0" AttackPreset="ATK_C_Thrust">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
-                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random" ToTarget="true"/>
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
                 </OnHit>
 
                 <OnGuard>
@@ -130,7 +130,7 @@
             </FrameEvent>
         </Animation>
 
-        <Branch Condition="End == true" Execute="Idle"/>
+        <Branch Condition="End == true" Execute="MOV_Idle"/>
     </ATK_N_Shove>
 
     <ATK_N_Windmill MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="AI" FlipType="Direction">
@@ -138,7 +138,7 @@
             <FrameEvent Type="Attack" StartFrame="0" AttackPreset="ATK_C_Thrust">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
-                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random" ToTarget="true"/>
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
                 </OnHit>
 
                 <OnGuard>
@@ -152,7 +152,7 @@
             </FrameEvent>
         </Animation>
 
-        <Branch Condition="End == true" Execute="Idle"/>
+        <Branch Condition="End == true" Execute="MOV_Idle"/>
     </ATK_N_Windmill>
 
     <ATK_F_ChargeAttack MovementType="GraphPreset" MovementGraphPreset="SampleBossAttack" DirectionType="Keep" FlipType="Keep">
@@ -160,7 +160,7 @@
             <FrameEvent Type="Attack" StartFrame="0" AttackPreset="ATK_F_ChargeAttack" IgnoreDefenceType="Guard">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
-                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random" ToTarget="true"/>
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
                 </OnHit>
 
                 <OnGuard>
@@ -174,7 +174,7 @@
             </FrameEvent>
         </Animation>
 
-        <Branch Condition="End == true" Execute="Idle"/>
+        <Branch Condition="End == true" Execute="MOV_Idle"/>
     </ATK_F_ChargeAttack>
     
     <SHT_N_DefenseShot MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="AI" FlipType="Direction">
@@ -182,7 +182,7 @@
             <FrameEvent Type="Attack" StartFrame="0" AttackPreset="ATK_C_Thrust">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
-                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random" ToTarget="true"/>
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
                 </OnHit>
 
                 <OnGuard>
@@ -196,29 +196,15 @@
             </FrameEvent>
         </Animation>
 
-        <Branch Condition="End == true" Execute="Idle"/>
+        <Branch Condition="End == true" Execute="MOV_Idle"/>
     </SHT_N_DefenseShot>
 
-    <SHT_N_CaseShot MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="AI" FlipType="Direction">
+    <SHT_N_CaseShot DirectionType="AI" FlipType="Direction">
         <Animation Path="Resources/Sprites/SampleBoss/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="3">
-            <FrameEvent Type="Attack" StartFrame="0" AttackPreset="ATK_C_Thrust">
-                <OnHit>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
-                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random" ToTarget="true"/>
-                </OnHit>
-
-                <OnGuard>
-                    <FrameEvent Type="TeleportToTarget"/>
-                </OnGuard>
-
-                <OnParry>
-                    <FrameEvent Type="TeleportToTarget"/>
-                </OnParry>
-
-            </FrameEvent>
+            <FrameEvent Type="Danmaku" StartFrame="0" Path="TutorialBoss/SHT_N_CaseShot.xml"/>
         </Animation>
 
-        <Branch Condition="End == true" Execute="Idle"/>
+        <Branch Condition="End == true" Execute="MOV_Idle"/>
     </SHT_N_CaseShot>
 
     <SHT_C_GatlingShot MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="AI" FlipType="Direction">
@@ -226,7 +212,7 @@
             <FrameEvent Type="Attack" StartFrame="0" AttackPreset="ATK_C_Thrust">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
-                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random" ToTarget="true"/>
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
                 </OnHit>
 
                 <OnGuard>
@@ -240,7 +226,7 @@
             </FrameEvent>
         </Animation>
 
-        <Branch Condition="End == true" Execute="Idle"/>
+        <Branch Condition="End == true" Execute="MOV_Idle"/>
     </SHT_C_GatlingShot>
 
     <SHT_C_Tornado2Way MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="AI" FlipType="Direction">
@@ -248,7 +234,7 @@
             <FrameEvent Type="Attack" StartFrame="0" AttackPreset="ATK_C_Thrust">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
-                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random" ToTarget="true"/>
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
                 </OnHit>
 
                 <OnGuard>
@@ -262,7 +248,7 @@
             </FrameEvent>
         </Animation>
 
-        <Branch Condition="End == true" Execute="Idle"/>
+        <Branch Condition="End == true" Execute="MOV_Idle"/>
     </SHT_C_Tornado2Way>
 
     <SHT_C_Tornado4Way MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="AI" FlipType="Direction">
@@ -270,7 +256,7 @@
             <FrameEvent Type="Attack" StartFrame="0" AttackPreset="ATK_C_Thrust">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
-                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random" ToTarget="true"/>
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
                 </OnHit>
 
                 <OnGuard>
@@ -284,7 +270,7 @@
             </FrameEvent>
         </Animation>
 
-        <Branch Condition="End == true" Execute="Idle"/>
+        <Branch Condition="End == true" Execute="MOV_Idle"/>
     </SHT_C_Tornado4Way>
     
     <SHT_F_ThrowSpear MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="AI" FlipType="Direction">
@@ -292,7 +278,7 @@
             <FrameEvent Type="Attack" StartFrame="0" AttackPreset="ATK_C_Thrust">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
-                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random" ToTarget="true"/>
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
                 </OnHit>
 
                 <OnGuard>
@@ -306,7 +292,7 @@
             </FrameEvent>
         </Animation>
 
-        <Branch Condition="End == true" Execute="Idle"/>
+        <Branch Condition="End == true" Execute="MOV_Idle"/>
     </SHT_F_ThrowSpear>
 
     <SHT_F_ChargeThrowSpear MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="AI" FlipType="Direction">
@@ -314,7 +300,7 @@
             <FrameEvent Type="Attack" StartFrame="0" AttackPreset="ATK_C_Thrust">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
-                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random" ToTarget="true"/>
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
                 </OnHit>
 
                 <OnGuard>
@@ -328,7 +314,7 @@
             </FrameEvent>
         </Animation>
 
-        <Branch Condition="End == true" Execute="Idle"/>
+        <Branch Condition="End == true" Execute="MOV_Idle"/>
     </SHT_F_ChargeThrowSpear>
 
     <DEF_C_Guard DirectionType="AI" DefenceDirectionType="Direction" FlipType="Keep" DefenceType="Guard" DefenceAngle="180.0">
@@ -336,28 +322,28 @@
             <FrameEvent Type="SetDefenceType" StartFrame="0" DefenceType="Guard"/>
         </Animation>
 
-        <Branch Condition="End == true" Execute="Guard"/>
+        <Branch Condition="End == true" Execute="MOV_Idle"/>
     </DEF_C_Guard>
 
     <STA_GuardBroken MovementType="GraphPreset" MovementGraphPreset="AttackGuarded" DirectionType="AI" FlipType="Keep">
         <Animation Path="Resources/Sprites/SampleBoss/GuardBroken/" StartFrame="0" EndFrame="1" FramePerSecond="2"/>
         
 
-        <Branch Condition="End == true" Execute="Idle"/>
+        <Branch Condition="End == true" Execute="MOV_Idle"/>
     </STA_GuardBroken>
     
     <STA_Guarded MovementType="GraphPreset" MovementGraphPreset="AttackGuarded" DirectionType="Keep" FlipType="Keep">
         <Animation Path="Resources/Sprites/SampleBoss/GuardBroken/" StartFrame="0" EndFrame="1" FramePerSecond="3">
         </Animation>
 
-        <Branch Condition="End == true" Execute="Idle"/>
+        <Branch Condition="End == true" Execute="MOV_Idle"/>
     </STA_Guarded>
 
     <STA_Parried MovementType="GraphPreset" MovementGraphPreset="AttackGuarded" DirectionType="Keep" FlipType="Keep">
         <Animation Path="Resources/Sprites/SampleBoss/GuardBroken/" StartFrame="0" EndFrame="1" FramePerSecond="0.3">
         </Animation>
 
-        <Branch Condition="End == true" Execute="Idle"/>
+        <Branch Condition="End == true" Execute="MOV_Idle"/>
     </STA_Parried>
 
     <STA_Hit MovementType="GraphPreset" MovementGraphPreset="AttackHit" DirectionType="AttackedPoint" FlipType="Direction">
@@ -366,6 +352,6 @@
 
         <UseBranchSet Name="CommonHitAction"/>
 
-        <Branch Condition="End == true" Execute="Idle"/>
+        <Branch Condition="End == true" Execute="MOV_Idle"/>
     </STA_Hit>
 </ActionGraph>
