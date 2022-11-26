@@ -43,15 +43,16 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
         requestData._usePhysics = _usePhysics;
         requestData._rotation = directionAngle;
 
-        GameEntityBase requester = (GameEntityBase)executeEntity;
         if(_useFlip && executeEntity is GameEntityBase == true)
         {
+            GameEntityBase requester = (GameEntityBase)executeEntity;
             requestData._useFlip = requester.getFlipState().xFlip;
         }
         
         PhysicsBodyDescription physicsBody = _physicsBodyDesc;
         if(_usePhysics)
         {
+            GameEntityBase requester = (GameEntityBase)executeEntity;
             float angle = MathEx.directionToAngle(executeEntity.getDirection());
             if(_useFlip && requester.getFlipState().xFlip)
             {
