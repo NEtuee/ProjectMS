@@ -23,7 +23,7 @@ public class CameraControl : Singleton<CameraControl> {
 	private float camWidth;
 	private float camHeight;
 
-	private float _delayTimer = 0f;
+	private bool _isDelayed = false;
 
 	public void assign()
 	{
@@ -78,15 +78,8 @@ public class CameraControl : Singleton<CameraControl> {
 
 		if(_followTarget != null)
 		{
-			if(_delayTimer == 0f)
-			{
+			if(_isDelayed == false)
 				updateTargetPosition(_followTarget.transform);
-			}
-			else
-			{
-				_delayTimer -= deltaTime;
-				_delayTimer = _delayTimer < 0f ? 0f : _delayTimer;
-			}
 
 			Follow(deltaTime);
 
@@ -106,9 +99,9 @@ public class CameraControl : Singleton<CameraControl> {
 			_main.orthographicSize = scale;
 	}
 
-	public void setDelay(float time)
+	public void setDelay(bool value)
 	{
-		_delayTimer = time;
+		_isDelayed = value;
 	}
 
 	public void release()

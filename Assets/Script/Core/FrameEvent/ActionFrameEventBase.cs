@@ -141,18 +141,19 @@ public class ActionFrameEvent_SetCameraDelay : ActionFrameEventBase
 
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
-        CameraControl.Instance().setDelay(_time);
+        CameraControl.Instance().setDelay(true);
         return true;
+    }
+
+    public override void onExit(ObjectBase executeEntity)
+    {
+        CameraControl.Instance().setDelay(false);
+
     }
 
     public override void loadFromXML(XmlNode node)
     {
-        XmlAttributeCollection attributes = node.Attributes;
-        for(int i = 0; i < attributes.Count; ++i)
-        {
-            if(attributes[i].Name == "Time")
-                _time = StringDataUtil.readFloat(attributes[i].Value);
-        }
+
     }
 }
 
