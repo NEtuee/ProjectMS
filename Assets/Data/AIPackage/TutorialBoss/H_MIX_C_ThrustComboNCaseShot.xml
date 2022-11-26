@@ -9,7 +9,7 @@
                 <AIEvent Type="Test" Log="H_MIX_C_ThrustComboNCaseShot"/>
             </Event_OnExecute>
 
-            <Branch Condition="End == true" Execute="ATK_C_Thrust_Charge"/> 
+            <Branch Condition="true" Execute="ATK_C_Thrust_Charge"/> 
         </Entry>
 
         <ATK_C_Thrust_Charge UpdateTime="0.0">

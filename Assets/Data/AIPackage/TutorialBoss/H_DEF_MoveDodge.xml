@@ -2,13 +2,28 @@
 <AIPackage Name="H_DEF_MoveDodge" DefaultState="Entry">
 
     <AIState>
-        <Entry UpdateTime="0.5" TargetSearchType="Near" TargetSearchRange="1.0" SearchIdentifier="Player">
+        <Entry UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="1.0" SearchIdentifier="Player">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="MOV_Idle"/>
             </Event_OnExecute>
 
+            <Branch Condition="true" Execute="MOV_Dodge"/>
         </Entry>
 
+        <MOV_Dodge UpdateTime="0.0">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget" Angle="90.0"/>
+                <AIEvent Type="SetAction" Action="MOV_Dash"/>
+            </Event_OnExecute>
+            
+            <Branch Condition="End == true" Execute="TerminatePackage"/>
+        </MOV_Dodge>
        
+        <TerminatePackage>
+            <Event_OnExecute>
+                <AIEvent Type="Test" Log="Terminate H_DEF_MoveDodge Package"/>
+                <AIEvent Type="TerminatePackage"/>
+            </Event_OnExecute>
+        </TerminatePackage>
     </AIState>
 </AIPackage>

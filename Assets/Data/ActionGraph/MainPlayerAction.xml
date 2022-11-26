@@ -101,7 +101,7 @@
 
     <Attack_LV1 MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="Keep" RotationType="Direction" FlipType="Keep" NormalizedSpeed="false">
         <Animation Path="Resources/Sprites/NewPlayer/attack" StartFrame="0" EndFrame="4" FramePerSecond="12" ScalePreset="YSpring">
-            <FrameEvent Type="SetCameraDelay" StartFrame="0" Time="0.4"/>
+            <FrameEvent Type="SetCameraDelay" StartFrame="0" EndFrame="0"/>
             <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="4"/>
             <!-- <FrameEvent Type="SetAnimationSpeed" StartFrame="0.3" Speed="2.6"/>-->
             <FrameEvent Type="SetAnimationSpeed" StartFrame="2" Speed="2"/>
