@@ -7,7 +7,7 @@ public class MasterManager : MessageHub<ManagerBase>
 {
     public static MasterManager     instance;
 
-   // public ObjectBase               player;
+    public ObjectBase               player;
 
     public List<ManagerBase>        managers;
     protected override void Awake()
@@ -42,8 +42,8 @@ public class MasterManager : MessageHub<ManagerBase>
             m.initialize();
         }
 
-        CameraControll.Instance().assign();
-       // CameraControll.Instance().SetTarget(player);
+        CameraControl.Instance().assign();
+        CameraControl.Instance().SetTarget(player);
     }
     public void Start()
     {
@@ -54,7 +54,7 @@ public class MasterManager : MessageHub<ManagerBase>
         float deltaTime = Time.deltaTime;
         GlobalTimer.Instance().updateGlobalTime(deltaTime);
         ActionKeyInputManager.Instance().progress(deltaTime);
-        CameraControll.Instance().SyncPosition();
+        CameraControl.Instance().SyncPosition();
 
         ManagersUpdate(deltaTime);
         ManagersAfterUpdate(deltaTime);
@@ -64,7 +64,7 @@ public class MasterManager : MessageHub<ManagerBase>
         ManagersReceiveMessageProcessing();
         ReceiveMessageProcessing();
 
-        CameraControll.Instance().progress(deltaTime);
+        CameraControl.Instance().progress(deltaTime);
     }
 
     public void LateUpdate()

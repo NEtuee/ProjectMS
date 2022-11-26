@@ -39,13 +39,15 @@ public static class FrameEventLoader
             outFrameEvent = new ActionFrameEvent_Danmaku();
         else if(type == "SetAnimationSpeed")
             outFrameEvent = new ActionFrameEvent_SetAnimationSpeed();
+        else if(type == "SetCameraDelay")
+            outFrameEvent = new ActionFrameEvent_SetCameraDelay();
         else
         {
             DebugUtil.assert(false, "invalid frameEvent type: {0}",type);
             return null;
         }
 
-        DebugUtil.assert((int)FrameEventType.Count == 12, "check here");
+        DebugUtil.assert((int)FrameEventType.Count == 13, "check here");
 
 
         if(outFrameEvent == null)

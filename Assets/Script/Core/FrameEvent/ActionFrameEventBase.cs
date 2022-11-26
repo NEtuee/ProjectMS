@@ -15,6 +15,7 @@ public enum FrameEventType
     FrameEvent_Projectile,
     FrameEvent_Danmaku,
     FrameEvent_SetAnimationSpeed,
+    FrameEvent_SetCameraDelay,
 
     Count,
 }
@@ -127,6 +128,30 @@ public class ActionFrameEvent_SetFrameTag : ActionFrameEventBase
         {
             if(attributes[i].Name == "Tag")
                 _frameTag = attributes[i].Value;
+        }
+    }
+}
+
+
+public class ActionFrameEvent_SetCameraDelay : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_SetCameraDelay;}
+
+    private float _time;
+
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        CameraControl.Instance().setDelay(_time);
+        return true;
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            if(attributes[i].Name == "Time")
+                _time = StringDataUtil.readFloat(attributes[i].Value);
         }
     }
 }
