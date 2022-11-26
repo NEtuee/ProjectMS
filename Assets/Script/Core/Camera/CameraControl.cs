@@ -8,7 +8,7 @@ public class CameraControl : Singleton<CameraControl> {
 	public Vector3 position{get{return _position;}}
 
 	private ObjectBase _followTarget = null;
-	private float _followSpeed = 2.5f;
+	private float _followSpeed = 1f;
 
 	private Transform _tp;
 	private Camera _main;
