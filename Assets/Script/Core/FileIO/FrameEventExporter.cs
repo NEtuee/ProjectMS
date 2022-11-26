@@ -37,13 +37,15 @@ public static class FrameEventLoader
             outFrameEvent = new ActionFrameEvent_Projectile();
         else if(type == "Danmaku")
             outFrameEvent = new ActionFrameEvent_Danmaku();
+        else if(type == "SetAnimationSpeed")
+            outFrameEvent = new ActionFrameEvent_SetAnimationSpeed();
         else
         {
             DebugUtil.assert(false, "invalid frameEvent type: {0}",type);
             return null;
         }
 
-        DebugUtil.assert((int)FrameEventType.Count == 11, "check here");
+        DebugUtil.assert((int)FrameEventType.Count == 12, "check here");
 
 
         if(outFrameEvent == null)
@@ -82,6 +84,9 @@ public static class FrameEventLoader
 
     public static void readChildFrameEvent(XmlNode node, ref ActionFrameEventBase frameEvent)
     {
+        if(frameEvent.getFrameEventType() == FrameEventType.FrameEvent_Effect)
+            return;
+
         XmlNodeList childNodeList = node.ChildNodes;
 
         if(childNodeList == null || childNodeList.Count == 0)

@@ -88,7 +88,23 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
             }
             else if(attrName == "Angle")
             {
-                _shotInfo._defaultAngle = float.Parse(attrValue);
+                if(attrValue.Contains("Random"))
+                {
+                    string randomData = attrValue.Replace("Random_","");
+                    string[] randomValue = randomData.Split('^');
+                    if(randomValue == null || randomValue.Length != 2)
+                    {
+                        DebugUtil.assert(false, "invalid random angle attrubute: {0}", attrValue);
+                        continue;
+                    }
+
+                    _shotInfo._useRandomAngle = true;
+                    _shotInfo._randomAngle = new Vector2(float.Parse(randomValue[0]),float.Parse(randomValue[1]));
+                }
+                else
+                {
+                    _shotInfo._defaultAngle = float.Parse(attrValue);
+                }
             }
             else if(attrName == "AngularAcceleration")
             {

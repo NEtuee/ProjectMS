@@ -49,7 +49,7 @@
 
 
     <AttackCharge MovementType="GraphPreset" MovementGraphPreset="AttackCharge" DirectionType="MoveInput" FlipType="MousePoint" ApplyBuff="2 3">
-        <Animation Path="Resources/Sprites/DummyPlayer/AttackCharge/" StartFrame="0" EndFrame="1" FramePerSecond="1">
+        <Animation Path="Resources/Sprites/NewPlayer/charge/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
         </Animation>
 
         <Branch Condition="Hit == true" Execute="Hit"/>
@@ -58,7 +58,7 @@
     </AttackCharge>
 
     <AttackPrepare MovementType="Empty" DirectionType="MousePoint" FlipType="Keep">
-        <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="999">
+        <Animation Path="Resources/Sprites/NewPlayer/charge/" StartFrame="0" EndFrame="1" FramePerSecond="999">
             <FrameEvent Type="FrameTag" StartFrame="0" EndFrame="999" Tag="Attack"/>
         </Animation>
 
@@ -84,7 +84,7 @@
             <FrameEvent Type="Attack" AttackType="GuardBreak" StartFrame="0" AttackPreset="Player_JustGuardBreak" IgnoreDefenceType="Guard">
                 <OnGuardBreak>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="12"/>
-                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random" ToTarget="true"/>
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
                 </OnGuardBreak>
             </FrameEvent> 
         </Animation>
@@ -99,14 +99,23 @@
         <Branch Condition="End == true" Execute="CommonMoveSelection"/>
     </Attack_Parried>
 
-    <Attack_LV1 MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="Keep" FlipType="Keep">
-        <Animation Path="Resources/Sprites/DummyPlayer/Attack" StartFrame="0" EndFrame="1" FramePerSecond="3">
+    <Attack_LV1 MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="Keep" RotationType="Direction" FlipType="Keep" NormalizedSpeed="True">
+        <Animation Path="Resources/Sprites/NewPlayer/attack" StartFrame="0" EndFrame="4" FramePerSecond="9" ScalePreset="YSpring">
+            <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="1"/>
+            <FrameEvent Type="SetAnimationSpeed" StartFrame="0.3" Speed="2.6"/>
+            <FrameEvent Type="SetAnimationSpeed" StartFrame="2" Speed="2"/>
+            <FrameEvent Type="SetAnimationSpeed" StartFrame="3" Speed="1"/>
+
+            <FrameEvent Type="Effect" StartFrame="0" Path="Resources/Sprites/Effect/Sheath" FramePerSecond="0.5" Offset="0.0 0.0 0.0" Angle="Random_0^360" UseFlip="True">
+                <Physics UseGravity="True" Velocity="-1.5^3.5" Friction="1.0" Torque="Random_25^30" AngularFriction="10.0"/>
+            </FrameEvent>
+
             <FrameEvent Type="Attack" StartFrame="0" AttackPreset="PlayerAttackTest">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
                     <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
 
-                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random" ToTarget="true"/>
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
                 </OnHit>
 
                 <OnGuard>
@@ -118,6 +127,8 @@
                 </OnParry>
 
             </FrameEvent>
+
+
         </Animation>
 
         <Branch Condition="AttackGuarded == true" Execute="Attack_Guarded"/>
@@ -132,7 +143,7 @@
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
                     <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
 
-                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random" ToTarget="true"/>
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
                 </OnHit>
 
                 <OnGuard>
@@ -158,7 +169,7 @@
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
                     <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
 
-                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random" ToTarget="true"/>
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
                 </OnHit>
 
                 <OnGuard>
@@ -212,7 +223,7 @@
     </Guard>
 
 
-    <DashStart MovementType="Empty" DirectionType="Keep" FlipType="AlwaysTurnOff" RotationType="Direction" ApplyBuff="9">
+    <DashStart MovementType="Empty" DirectionType="Keep" FlipType="Direction" RotationType="Direction" ApplyBuff="9">
         <Animation Path="Resources/Sprites/DummyPlayer/Dash/" StartFrame="0" EndFrame="1" FramePerSecond="999" XFlip="true">
         </Animation>
 
@@ -220,7 +231,7 @@
     </DashStart>
 
 
-    <Dash MovementType="GraphPreset" DirectionType="Keep" MovementGraphPreset="Dash" FlipType="Keep" RotationType="Direction">
+    <Dash MovementType="GraphPreset" DirectionType="Keep" MovementGraphPreset="Dash" FlipType="Direction" RotationType="Direction">
         <Animation Path="Resources/Sprites/DummyPlayer/Dash/" StartFrame="0" EndFrame="1" FramePerSecond="3" XFlip="true">
         </Animation>
         

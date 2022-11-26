@@ -128,7 +128,23 @@ public static class ProjectileGraphLoader
             }
             else if(targetName == "Angle")
             {
-                shotInfoData._defaultAngle = float.Parse(targetValue);
+                if(targetValue.Contains("Random"))
+                {
+                    string randomData = targetValue.Replace("Random_","");
+                    string[] randomValue = randomData.Split('^');
+                    if(randomValue == null || randomValue.Length != 2)
+                    {
+                        DebugUtil.assert(false, "invalid random angle attrubute: {0}", targetValue);
+                        continue;
+                    }
+
+                    shotInfoData._useRandomAngle = true;
+                    shotInfoData._randomAngle = new Vector2(float.Parse(randomValue[0]),float.Parse(randomValue[1]));
+                }
+                else
+                {
+                    shotInfoData._defaultAngle = float.Parse(targetValue);
+                }
             }
             else if(targetName == "AngularAcceleration")
             {

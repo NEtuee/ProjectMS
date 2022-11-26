@@ -152,6 +152,9 @@ public class GameEntityBase : SequencerObjectBase
             _actionGraph.updateAnimation(Time.deltaTime, this);
 
             _spriteRenderer.sprite = _actionGraph.getCurrentSprite();
+            _spriteRenderer.transform.localRotation = _actionGraph.getCurrentAnimationRotation();
+            _spriteRenderer.transform.localScale = _actionGraph.getCurrentAnimationScale();
+            
             _flipState = getCurrentFlipState();
 
             _spriteRenderer.flipX = _flipState.xFlip;
@@ -459,13 +462,13 @@ public class GameEntityBase : SequencerObjectBase
                 _spriteRotation = Quaternion.identity;
                 break;
             case RotationType.Direction:
-                _spriteRotation = Quaternion.FromToRotation(Vector3.right,_direction);
+                _spriteRotation = Quaternion.Euler(0f,0f,MathEx.directionToAngle(_direction));
                 break;
             case RotationType.MousePoint:
-                _spriteRotation = Quaternion.FromToRotation(Vector3.right, ControllerEx.Instance().getJoystickAxisR(transform.position));
+                _spriteRotation = Quaternion.Euler(0f,0f,MathEx.directionToAngle( ControllerEx.Instance().getJoystickAxisR(transform.position)));
                 break;
             case RotationType.MoveDirection:
-                _spriteRotation = Quaternion.FromToRotation(Vector3.right,getMovementControl().getMoveDirection());
+                _spriteRotation = Quaternion.Euler(0f,0f,MathEx.directionToAngle(getMovementControl().getMoveDirection()));
                 break;
             case RotationType.Keep:
                 break;
@@ -473,7 +476,12 @@ public class GameEntityBase : SequencerObjectBase
         }
 
         DebugUtil.assert((int)RotationType.Count == 5, "check this");
-        _spriteObject.transform.localRotation = _spriteRotation;
+
+        float zRotation = _spriteRotation.eulerAngles.z;
+        if(rotationType != RotationType.AlwaysRight)
+            zRotation -= (getCurrentFlipState().xFlip ? -180f : 0f);
+
+        _spriteObject.transform.localRotation *= Quaternion.Euler(0f,0f,zRotation);
     }
 
     public bool isMoving()
@@ -518,7 +526,7 @@ public class GameEntityBase : SequencerObjectBase
     public void setAiDirection(float angle) {_aiGraph.setAIDirection(angle);}
     public void setAiDirection(Vector3 direction) {_aiGraph.setAIDirection(direction);}
 
-
+    public void setAnimationSpeed(float speed) {_actionGraph.setAnimationSpeed(speed);}
 
     public void setAttackPoint(Vector3 attackPoint) {_recentlyAttackPoint = attackPoint;}
 
@@ -529,6 +537,8 @@ public class GameEntityBase : SequencerObjectBase
 
     public void setTargetEntity(GameEntityBase target) {_currentTarget = target;}
     public GameEntityBase getCurrentTargetEntity() {return _currentTarget;}
+
+    public FlipState getFlipState() {return _flipState;}
 
     public CollisionInfo getCollisionInfo() {return _collisionInfo;}
     public string getCurrentAIName() {return _aiGraph.getCurrentAIStateName();}

@@ -27,6 +27,9 @@ public static class MathEx
 
 	public static UnityEngine.Vector3 convergence0(UnityEngine.Vector3 value, float a)
 	{
+		if(MathEx.equals(a,0f,float.Epsilon))
+			return value;
+			
 		if(value.sqrMagnitude < float.Epsilon)
 			return UnityEngine.Vector3.zero;
 			
@@ -54,6 +57,23 @@ public static class MathEx
     public static bool equals(UnityEngine.Color a, UnityEngine.Color b, float epsilon)
     {
         return equals(a.r,b.r,epsilon) && equals(a.g,b.g,epsilon) && equals(a.b,b.b,epsilon) && equals(a.a,b.a,epsilon);
+    }
+
+
+	public static float directionToAngle(UnityEngine.Vector2 dir) 
+	{
+		float val = UnityEngine.Mathf.Atan2(dir.y, dir.x) * UnityEngine.Mathf.Rad2Deg;
+
+		return clamp360Degree(val);
+	}
+	public static UnityEngine.Vector3 angleToDirection(float angle) {return new UnityEngine.Vector3(UnityEngine.Mathf.Cos(angle),UnityEngine.Mathf.Sin(angle));}
+	public static float clamp360Degree(float eulerAngle)
+    {
+        //  float val = eulerAngle - Mathf.CeilToInt(eulerAngle / 360f) * 360f;
+		//  val = val < 0 ? val + 360f : val;
+		float val = eulerAngle + ((float)((int)-eulerAngle / 360) * 360f);
+		val = val < 0 ? val + 360f : val;
+		return val;
     }
 
 

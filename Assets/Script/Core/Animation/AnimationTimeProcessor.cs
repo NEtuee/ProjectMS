@@ -19,6 +19,7 @@ public class AnimationTimeProcessor
     private int         _prevIndex = 0;
 
     private float       _animationTotalPlayTime = 0f;
+    private float       _animationSpeed = 1f;
 
     public bool isValid()
     {
@@ -49,6 +50,14 @@ public class AnimationTimeProcessor
         if(_isEnd == true)
             return true;
 
+        if(_animationSpeed == 0f)
+        {
+            DebugUtil.assert(false, "animation speed can not be zero");
+            _animationSpeed = 1f;
+        }
+
+        deltaTime *= _animationSpeed;
+
         _prevAnimationTime = _currentAnimationTime;
         _prevIndex = _currentIndex;
 
@@ -71,6 +80,7 @@ public class AnimationTimeProcessor
             }
 
             _isEnd = false;
+            setAnimationSpeed(1f);
         }
         else if(_isEnd == true)
         {
@@ -139,6 +149,15 @@ public class AnimationTimeProcessor
     {
         _currentAnimationTime = frame * _frameToTime;
         updateTime(0f);
+    }
+
+    public float getAnimationSpeed()
+    {
+        return _animationSpeed;
+    }
+    public void setAnimationSpeed(float speed)
+    {
+        _animationSpeed = speed;
     }
 
     public void setLoop(bool isLoop) 

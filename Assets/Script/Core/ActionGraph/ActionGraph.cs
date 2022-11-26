@@ -543,6 +543,8 @@ public class ActionGraph
 
     public HashSet<string> getCurrentFrameTagList() {return _currentFrameTag;}
 
+    public void setAnimationSpeed(float speed) {_animationPlayer.setAnimationSpeed(speed);}
+
     public bool checkFrameTag(string tag) {return _currentFrameTag.Contains(tag);}
 
     public bool isActionLoop() {return _currentActionNodeIndex == _prevActionNodeIndex;}
@@ -567,6 +569,10 @@ public class ActionGraph
     public MoveValuePerFrameFromTimeDesc getMoveValuePerFrameFromTimeDesc(){return _animationPlayer.getMoveValuePerFrameFromTimeDesc();}
     public string getCurrentActionName() {return getCurrentAction()._nodeName; }
     public UnityEngine.Sprite getCurrentSprite() {return _animationPlayer.getCurrentSprite();}
+    public UnityEngine.Quaternion getAnimationRotationPerFrame() {return _animationPlayer.getAnimationRotationPerFrame();}
+    public UnityEngine.Quaternion getCurrentAnimationRotation() {return _animationPlayer.getCurrentAnimationRotation();}
+    public UnityEngine.Vector3 getAnimationScalePerFrame() {return _animationPlayer.getAnimationScalePerFrame();}
+    public UnityEngine.Vector3 getCurrentAnimationScale() {return _animationPlayer.getCurrentAnimationScale();}
     public FlipState getCurrentFlipState() {return _animationPlayer.getCurrentFlipState();}
     public FlipType getCurrentFlipType() {return getCurrentAction()._flipType;}
     public MovementGraph getCurrentMovementGraph() {return _animationPlayer.getCurrentMovementGraph();}

@@ -389,6 +389,16 @@ public static class ActionGraphLoader
             {
                 playData._isLoop = bool.Parse(targetValue);
             }
+            else if(targetName == "RotationPreset")
+            {
+                AnimationRotationPreset preset = ResourceContainerEx.Instance().GetScriptableObject("Preset\\AnimationRotationPreset") as AnimationRotationPreset;
+                playData._rotationPresetData = preset.getPresetData(targetValue);
+            }
+            else if(targetName == "ScalePreset")
+            {
+                AnimationScalePreset preset = ResourceContainerEx.Instance().GetScriptableObject("Preset\\AnimationScalePreset") as AnimationScalePreset;
+                playData._scalePresetData = preset.getPresetData(targetValue);
+            }
             else
             {
                 DebugUtil.assert(false, "invalid animation attribute: {0}",targetName);

@@ -14,6 +14,7 @@ public enum FrameEventType
     FrameEvent_SetFrameTag,
     FrameEvent_Projectile,
     FrameEvent_Danmaku,
+    FrameEvent_SetAnimationSpeed,
 
     Count,
 }
@@ -161,6 +162,33 @@ public class ActionFrameEvent_SetDefenceType : ActionFrameEventBase
     }
 }
 
+public class ActionFrameEvent_SetAnimationSpeed : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_SetAnimationSpeed;}
+
+    private float _speed = 1f;
+
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        if(executeEntity is GameEntityBase == false)
+            return false;
+        
+        GameEntityBase requester = (GameEntityBase)executeEntity;
+        requester.setAnimationSpeed(_speed);
+
+        return true;
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            if(attributes[i].Name == "Speed")
+                _speed = float.Parse(attributes[i].Value);
+        }
+    }
+}
 
 public class ActionFrameEvent_TeleportToTarget : ActionFrameEventBase
 {
