@@ -79,11 +79,10 @@
 
     <JustGuardBreak DirectionType="Keep" FlipType="Direction">
         <Animation Path="Resources/Sprites/DummyPlayer/JustGuardBreak/" StartFrame="0" EndFrame="1" FramePerSecond="3" XFlip="true">
-            <FrameEvent Type="Test" Log="Just Guard Break Excuted"/>
+            <FrameEvent Type="Test" Log="Just Guard Break Executed"/>
             <FrameEvent Type="FrameTag" StartFrame="0" EndFrame="999" Tag="JustGuardBreak"/>
             <FrameEvent Type="Attack" AttackType="GuardBreak" StartFrame="0" AttackPreset="Player_JustGuardBreak" IgnoreDefenceType="Guard">
                 <OnGuardBreak>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="12"/>
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
                 </OnGuardBreak>
             </FrameEvent> 

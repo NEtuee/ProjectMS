@@ -4,7 +4,7 @@
     <Include Path="TutorialBoss/H_DEF_ActionGuard.xml"/>
     <Include Path="TutorialBoss/H_DEF_MoveDodge.xml"/>
     <Include Path="TutorialBoss/H_END_Dead.xml"/>
-    <Include Path="TutorialBoss/H_Hit.xml"/>
+    <Include Path="TutorialBoss/H_STA_Hit.xml"/>
     <Include Path="TutorialBoss/H_Judge_AttackByDistance.xml"/>
     <Include Path="TutorialBoss/H_Judge_AttackByRandom.xml"/>
     <Include Path="TutorialBoss/H_Judge_AttackSTD.xml"/>
@@ -17,12 +17,23 @@
     <Include Path="TutorialBoss/H_SHT_N_DefenseShot.xml"/>
     <Include Path="TutorialBoss/H_STA_Defenseless.xml"/>
 
-    <BranchSet Name="EvadeTypeBranchSet">
+
+    <BranchSet Name="IsHitBranchSet">
+       <!--  <Branch Condition="getStat_IsHit >= 1.0" Execute="H_STA_Hit"/> -->
+       <Branch Condition="Hit == true" Execute="H_STA_Hit"/>
+    </BranchSet>
+    
+    <BranchSet Name="IsDefenselessBranchSet">
+        <Branch Condition="AttackParried == true" Execute="H_STA_Defenseless"/>
+        <Branch Condition="GuardBroken == true" Execute="H_STA_Defenseless"/>
+    </BranchSet>
+    
+    <BranchSet Name="IsEvadableBranchSet">
         <Branch Condition="getTargetFrameTag_Attack && (TargetDistance < 2.0)" Execute="H_DEF_MoveDodge"/>
     </BranchSet>
     
     <H_Judge_AttackSTD Package="H_Judge_AttackSTD">
-        <UseBranchSet Name="EvadeTypeBranchSet"/>
+        <UseBranchSet Name="IsEvadableBranchSet"/>
         
         <Branch Weight="TutorialBossJudgeAttackSTD^ByDistance" Execute="H_Judge_AttackByDistance"/>
         <Branch Weight="TutorialBossJudgeAttackSTD^ByRandom" Execute="H_Judge_AttackByRandom"/>
@@ -32,7 +43,7 @@
     <GlobalVariable Name="gv_CommonDist" Value="4.0"/>
     <GlobalVariable Name="gv_FarDist" Value="5.0"/>
     <H_Judge_AttackByDistance Package="H_Judge_AttackByDistance">
-        <UseBranchSet Name="EvadeTypeBranchSet"/>
+        <UseBranchSet Name="IsEvadableBranchSet"/>
 
         <Branch Condition="CurrentPackageEnd && (TargetDistance <= gv_CommonDist)" Weight="RandBoolean^True" Execute="H_MOV_Alert"/>
         <!-- <Branch Condition="CurrentPackageEnd && (TargetDistance <= gv_NearDist)" Weight="TutorialBossJudgeNearAttack^H_SHT_N_DefenseShot" Execute="H_SHT_N_DefenseShot"/> -->
@@ -48,7 +59,8 @@
     </H_Judge_AttackByDistance>
     
     <H_Judge_AttackByRandom Package="H_Judge_AttackByRandom"> 
-        <UseBranchSet Name="EvadeTypeBranchSet"/>
+        <UseBranchSet Name="IsHitBranchSet"/>
+        <UseBranchSet Name="IsEvadableBranchSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="H_Judge_AttackSTD"/>
     </H_Judge_AttackByRandom>
 
@@ -65,7 +77,9 @@
     </H_MIX_C_SwingComboNCaseShot>
 
     <H_MIX_C_ThrustComboNCaseShot Package="H_MIX_C_ThrustComboNCaseShot">
-        <UseBranchSet Name="EvadeTypeBranchSet"/>
+        <UseBranchSet Name="IsDefenselessBranchSet"/>
+        <UseBranchSet Name="IsEvadableBranchSet"/>
+        <UseBranchSet Name="IsHitBranchSet"/>
 
         <Branch Condition="CurrentPackageEnd" Execute="H_Judge_AttackSTD"/>
     </H_MIX_C_ThrustComboNCaseShot>
@@ -75,7 +89,9 @@
     </H_SHT_C_Gatling3NSpear>
     
     <H_ATK_F_ChargeThrust Package="H_ATK_F_ChargeThrust">
-        <UseBranchSet Name="EvadeTypeBranchSet"/>
+        <UseBranchSet Name="IsDefenselessBranchSet"/>
+        <UseBranchSet Name="IsHitBranchSet"/>
+        <UseBranchSet Name="IsEvadableBranchSet"/>
 
         <Branch Condition="CurrentPackageEnd" Execute="H_Judge_AttackSTD"/>
     </H_ATK_F_ChargeThrust>
@@ -85,7 +101,8 @@
     </H_SHT_F_ChargeSpear>
     
     <H_MOV_Alert Package="H_MOV_Alert">
-        <UseBranchSet Name="EvadeTypeBranchSet"/>
+        <UseBranchSet Name="IsHitBranchSet"/>
+        <UseBranchSet Name="IsEvadableBranchSet"/>
 
         <Branch Condition="CurrentPackageEnd" Execute="H_Judge_AttackSTD"/>
     </H_MOV_Alert>
@@ -94,15 +111,19 @@
     </H_DEF_ActionGuard>
 
     <H_DEF_MoveDodge Package="H_DEF_MoveDodge"> 
-        <UseBranchSet Name="EvadeTypeBranchSet"/>
+        <UseBranchSet Name="IsHitBranchSet"/>
+        <UseBranchSet Name="IsEvadableBranchSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="H_Judge_AttackSTD"/>
     </H_DEF_MoveDodge>
 
     <H_STA_Defenseless Package="H_STA_Defenseless">
+        <UseBranchSet Name="IsHitBranchSet"/>
+        <Branch Condition="CurrentPackageEnd" Execute="H_Judge_AttackSTD"/>
     </H_STA_Defenseless>
 
-    <H_Hit Package="H_Hit">
-    </H_Hit>
+    <H_STA_Hit Package="H_STA_Hit">
+        <Branch Condition="CurrentPackageEnd" Execute="H_Judge_AttackSTD"/>
+    </H_STA_Hit>
 
     <H_END_Dead Package="H_END_Dead">
     </H_END_Dead>

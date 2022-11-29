@@ -2,13 +2,42 @@
 <AIPackage Name="H_STA_Defenseless" DefaultState="Entry">
 
     <AIState>
-        <Entry UpdateTime="0.5" TargetSearchType="Near" TargetSearchRange="1.0" SearchIdentifier="Player">
+        <Entry UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="1.0" SearchIdentifier="Player">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="MOV_Idle"/>
+                <AIEvent Type="Test" Log="H_STA_Defenseless"/>
             </Event_OnExecute>
 
+            <Branch Condition="AttackParried == true" Execute="STA_Parried"/>
+            <Branch Condition="GuardBroken == true" Execute="STA_GuardBroken"/>
+            <Branch Condition="End == true" Execute="TerminatePackage"/>
         </Entry>
 
-       
+        <STA_Parried UpdateTime="0.0">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="STA_Parried"/>
+                <AIEvent Type="Test" Log="STA_Parried"/>
+            </Event_OnExecute>
+
+            <Branch Condition="End == true" Execute="TerminatePackage"/>
+        </STA_Parried>
+
+        <STA_GuardBroken>
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="STA_GuardBroken"/>
+                <AIEvent Type="Test" Log="STA_GuardBroken"/>
+            </Event_OnExecute>
+
+            <Branch Condition="End == true" Execute="TerminatePackage"/>
+        </STA_GuardBroken>
+        
+        <TerminatePackage>
+            <Event_OnExecute>
+                <AIEvent Type="Test" Log="Terminate H_STA_Defenseless Package"/>
+                <AIEvent Type="TerminatePackage"/>
+            </Event_OnExecute>
+        </TerminatePackage>
     </AIState>
 </AIPackage>
