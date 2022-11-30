@@ -47,8 +47,18 @@
                 <!--<AIEvent Type="SetDirectionToTarget"/>-->
             </Event_OnFrame>
 
+            <Branch Condition="AttackGuarded == true" Execute="ATK_C_Thrust_A_Guarded"/>
             <Branch Condition="End == true" Execute="ATK_C_Thrust_B"/>
         </ATK_C_Thrust_A>
+
+        <ATK_C_Thrust_A_Guarded UpdateTime="0.0">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="STA_Guarded"/>
+            </Event_OnExecute>
+
+            <Branch Condition="End == true" Execute="ATK_C_Thrust_B"/>
+        </ATK_C_Thrust_A_Guarded>
 
         <ATK_C_Thrust_B UpdateTime="0.0">
             <Event_OnExecute>
@@ -59,8 +69,18 @@
                 <!--<AIEvent Type="SetDirectionToTarget"/>-->
             </Event_OnFrame>
 
+            <Branch Condition="AttackGuarded == true" Execute="ATK_C_Thrust_B_Guarded"/>
             <Branch Condition="End == true" Execute="SHT_N_CaseShot"/>
         </ATK_C_Thrust_B>
+
+        <ATK_C_Thrust_B_Guarded UpdateTime="0.0">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="STA_Guarded"/>
+            </Event_OnExecute>
+            
+            <Branch Condition="End == true" Execute="SHT_N_CaseShot"/>
+        </ATK_C_Thrust_B_Guarded>
 
         <SHT_N_CaseShot UpdateTime="0.0">
             <Event_OnExecute>

@@ -86,7 +86,7 @@
 
         Factor="30.0"
 
-        Time="3.0"
+        Time="1.5"
 
     />
 
@@ -97,7 +97,7 @@
         UpdateType="OneShot"
         ApplyType="Direct"
 
-        Factor="-20.0"
+        Factor="-30.0"
     />
 
     <BloodSpreadUse
@@ -118,6 +118,16 @@
         ApplyType="Direct"
 
         Factor="20.0"
+    />
+
+    <CommonAttackStamina
+        Key="12"
+        StatusName="Stamina"
+
+        UpdateType="OneShot"
+        ApplyType="Direct"
+
+        Factor="-10.0"
     />
 
 </BuffInfo>

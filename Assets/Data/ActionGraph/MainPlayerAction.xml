@@ -3,8 +3,8 @@
 <ActionGraph Name="Test" DefaultAction="Idle" DefaultFramePerSecond="4" DefaultBuff="4 5 8">
 
     <BranchSet Name="CommonBattleBranchSet">
-        <Branch Key="getKey_Guard" Condition="" Execute="Guard"/>
-        <Branch Key="getKey_AttackCharge" Condition="" Execute="AttackCharge"/>
+        <Branch Key="getKey_Guard" Condition="true" Execute="Guard"/>
+        <Branch Key="getKey_AttackCharge && (getStat_Stamina >= 10.0)" Condition="" Execute="AttackCharge"/>
         <Branch Condition="(getStat_Blood >= 20.0) && InputAttackBlood == true" Execute="BloodSpreadPrepare"/>
 
         <Branch Condition="Hit == true" Execute="Hit"/>
@@ -59,6 +59,7 @@
 
     <AttackPrepare MovementType="Empty" DirectionType="MousePoint" FlipType="Keep">
         <Animation Path="Resources/Sprites/NewPlayer/charge/" StartFrame="0" EndFrame="1" FramePerSecond="999">
+            <FrameEvent Type="ApplyBuff" ApplyBuff="12" StartFrame="0"/>
             <FrameEvent Type="FrameTag" StartFrame="0" EndFrame="999" Tag="Attack"/>
         </Animation>
 
@@ -113,6 +114,7 @@
             <FrameEvent Type="Attack" StartFrame="0" AttackPreset="PlayerAttackTest">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
+                    
                     <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
 
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
@@ -231,8 +233,9 @@
     </DashStart>
 
 
-    <Dash MovementType="GraphPreset" DirectionType="Keep" MovementGraphPreset="Dash" FlipType="Direction" RotationType="Direction">
+    <Dash MovementType="GraphPreset" DirectionType="Keep" MovementGraphPreset="Dash" FlipType="Direction" RotationType="Direction" DefenceType="Evade" DefenceAngle="360.0">
         <Animation Path="Resources/Sprites/DummyPlayer/Dash/" StartFrame="0" EndFrame="1" FramePerSecond="3" XFlip="true">
+            <FrameEvent Type="ApplyBuff" ApplyBuff="9" StartFrame="0"/>
         </Animation>
         
         <Branch Condition="Hit == true" Execute="Hit"/>

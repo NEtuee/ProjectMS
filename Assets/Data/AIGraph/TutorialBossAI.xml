@@ -28,12 +28,13 @@
         <Branch Condition="GuardBroken == true" Execute="H_STA_Defenseless"/>
     </BranchSet>
     
-    <BranchSet Name="IsEvadableBranchSet">
-        <Branch Condition="getTargetFrameTag_Attack && (TargetDistance < 2.0)" Execute="H_DEF_MoveDodge"/>
+    <BranchSet Name="IsDefensibleBranchSet">
+        <Branch Condition="getTargetFrameTag_Attack && (TargetDistance < 3.0) && (getStat_Stamina >= 30.0)" Execute="H_DEF_MoveDodge"/>
+        <Branch Condition="getTargetFrameTag_Attack && (TargetDistance < 3.0) && (getStat_Stamina < 30.0)" Execute="H_DEF_ActionGuard"/>
     </BranchSet>
     
     <H_Judge_AttackSTD Package="H_Judge_AttackSTD">
-        <UseBranchSet Name="IsEvadableBranchSet"/>
+        <UseBranchSet Name="IsDefensibleBranchSet"/>
         
         <Branch Weight="TutorialBossJudgeAttackSTD^ByDistance" Execute="H_Judge_AttackByDistance"/>
         <Branch Weight="TutorialBossJudgeAttackSTD^ByRandom" Execute="H_Judge_AttackByRandom"/>
@@ -43,7 +44,7 @@
     <GlobalVariable Name="gv_CommonDist" Value="4.0"/>
     <GlobalVariable Name="gv_FarDist" Value="5.0"/>
     <H_Judge_AttackByDistance Package="H_Judge_AttackByDistance">
-        <UseBranchSet Name="IsEvadableBranchSet"/>
+        <UseBranchSet Name="IsDefensibleBranchSet"/>
 
         <Branch Condition="CurrentPackageEnd && (TargetDistance <= gv_CommonDist)" Weight="RandBoolean^True" Execute="H_MOV_Alert"/>
         <!-- <Branch Condition="CurrentPackageEnd && (TargetDistance <= gv_NearDist)" Weight="TutorialBossJudgeNearAttack^H_SHT_N_DefenseShot" Execute="H_SHT_N_DefenseShot"/> -->
@@ -60,7 +61,7 @@
     
     <H_Judge_AttackByRandom Package="H_Judge_AttackByRandom"> 
         <UseBranchSet Name="IsHitBranchSet"/>
-        <UseBranchSet Name="IsEvadableBranchSet"/>
+        <UseBranchSet Name="IsDefensibleBranchSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="H_Judge_AttackSTD"/>
     </H_Judge_AttackByRandom>
 
@@ -78,7 +79,7 @@
 
     <H_MIX_C_ThrustComboNCaseShot Package="H_MIX_C_ThrustComboNCaseShot">
         <UseBranchSet Name="IsDefenselessBranchSet"/>
-        <UseBranchSet Name="IsEvadableBranchSet"/>
+        <UseBranchSet Name="IsDefensibleBranchSet"/>
         <UseBranchSet Name="IsHitBranchSet"/>
 
         <Branch Condition="CurrentPackageEnd" Execute="H_Judge_AttackSTD"/>
@@ -91,7 +92,7 @@
     <H_ATK_F_ChargeThrust Package="H_ATK_F_ChargeThrust">
         <UseBranchSet Name="IsDefenselessBranchSet"/>
         <UseBranchSet Name="IsHitBranchSet"/>
-        <UseBranchSet Name="IsEvadableBranchSet"/>
+        <UseBranchSet Name="IsDefensibleBranchSet"/>
 
         <Branch Condition="CurrentPackageEnd" Execute="H_Judge_AttackSTD"/>
     </H_ATK_F_ChargeThrust>
@@ -102,17 +103,19 @@
     
     <H_MOV_Alert Package="H_MOV_Alert">
         <UseBranchSet Name="IsHitBranchSet"/>
-        <UseBranchSet Name="IsEvadableBranchSet"/>
+        <UseBranchSet Name="IsDefensibleBranchSet"/>
 
         <Branch Condition="CurrentPackageEnd" Execute="H_Judge_AttackSTD"/>
     </H_MOV_Alert>
 
     <H_DEF_ActionGuard Package="H_DEF_ActionGuard">
+        <UseBranchSet Name="IsDefenselessBranchSet"/>
+        <UseBranchSet Name="IsDefensibleBranchSet"/>
+        <Branch Condition="CurrentPackageEnd" Execute="H_Judge_AttackSTD"/>
     </H_DEF_ActionGuard>
 
     <H_DEF_MoveDodge Package="H_DEF_MoveDodge"> 
-        <UseBranchSet Name="IsHitBranchSet"/>
-        <UseBranchSet Name="IsEvadableBranchSet"/>
+        <UseBranchSet Name="IsDefensibleBranchSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="H_Judge_AttackSTD"/>
     </H_DEF_MoveDodge>
 

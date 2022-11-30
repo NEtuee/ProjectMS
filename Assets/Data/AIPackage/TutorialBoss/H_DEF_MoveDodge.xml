@@ -5,6 +5,7 @@
         <Entry UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="1.0" SearchIdentifier="Player">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="MOV_Idle"/>
+                <AIEvent Type="Test" Log="H_DEF_MoveDodge"/>
             </Event_OnExecute>
 
             <Branch Condition="true" Execute="MOV_Dodge"/>
