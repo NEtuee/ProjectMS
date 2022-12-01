@@ -236,6 +236,7 @@
         </Animation>
 
         <Branch Condition="Hit == true" Execute="Hit"/>
+        <Branch Condition="getStat_Stamina <= 0.0" Execute="Hit"/>
         <Branch Key="getKey_Guard == false" Condition="" Execute="CommonMoveSelection"/>
         <!-- <Branch Condition="End == true" Execute="Guard"/> -->
     </Guard>
@@ -264,8 +265,17 @@
             <FrameEvent Type="FrameTag" StartFrame="0" EndFrame="999" Tag="Hit"/>
         </Animation>
 
+        <Branch Condition="getStat_HP <= 0.0" Execute="Dead"/>
         <Branch Condition="End == true && ActionTest == true" Execute="MoveAll"/>
         <Branch Condition="End == true" Execute="Idle"/>
     </Hit>
+
+    <Dead DirectionType="Keep" FlipType="Direction">
+        <Animation Path="Resources/Sprites/DummyPlayer/Hit/" StartFrame="0" EndFrame="1" FramePerSecond="2" XFlip="true">
+            <FrameEvent Type="FrameTag" StartFrame="0" EndFrame="999" Tag="Hit"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Dead"/>
+    </Dead>
 
 </ActionGraph>
