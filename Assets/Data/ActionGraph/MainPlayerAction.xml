@@ -99,6 +99,19 @@
         <Branch Condition="End == true" Execute="CommonMoveSelection"/>
     </Attack_Parried>
 
+    <Attack_Success MovementType="GraphPreset" MovementGraphPreset="AttackSuccess" DirectionType="Keep" RotationType="Keep" FlipType="Keep" NormalizedSpeed="false">
+        <Animation Path="Resources/Sprites/NewPlayer/attack" StartFrame="0" EndFrame="4" FramePerSecond="12" ScalePreset="YSpring">
+            <FrameEvent Type="SetAnimationSpeed" StartFrame="0"/>
+
+            <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="4"/>
+            <FrameEvent Type="SetAnimationSpeed" StartFrame="2" Speed="2"/>
+            <FrameEvent Type="SetAnimationSpeed" StartFrame="3" Speed="0.3"/>
+        </Animation>
+
+            
+        <Branch Condition="End == true" Execute="CommonMoveSelection"/>
+    </Attack_Success>
+
     <Attack_LV1 MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="Keep" RotationType="Direction" FlipType="Keep" NormalizedSpeed="false">
         <Animation Path="Resources/Sprites/NewPlayer/attack" StartFrame="0" EndFrame="4" FramePerSecond="12" ScalePreset="YSpring">
             <FrameEvent Type="SetCameraDelay" StartFrame="0" EndFrame="0"/>
@@ -114,9 +127,9 @@
             <FrameEvent Type="Attack" StartFrame="0" AttackPreset="PlayerAttackTest">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
-                    
                     <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
 
+                    <FrameEvent Type="TeleportToTargetBack"/>
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
                 </OnHit>
 
@@ -133,6 +146,7 @@
 
         </Animation>
 
+        <Branch Condition="AttackSuccess == true" Execute="Attack_Success"/>
         <Branch Condition="AttackGuarded == true" Execute="Attack_Guarded"/>
         <Branch Condition="AttackParried == true" Execute="Attack_Parried"/>
         <Branch Condition="End == true" Execute="CommonMoveSelection"/>
@@ -159,6 +173,7 @@
             </FrameEvent>
         </Animation>
 
+        <Branch Condition="AttackSuccess == true" Execute="Attack_Success"/>
         <Branch Condition="AttackGuarded == true" Execute="Attack_Guarded"/>
         <Branch Condition="AttackParried == true" Execute="Attack_Parried"/>
         <Branch Condition="End == true" Execute="CommonMoveSelection"/>
@@ -185,6 +200,7 @@
             </FrameEvent>
         </Animation>
 
+        <Branch Condition="AttackSuccess == true" Execute="Attack_Success"/>
         <Branch Condition="AttackGuarded == true" Execute="Attack_Guarded"/>
         <Branch Condition="AttackParried == true" Execute="Attack_Parried"/>
         <Branch Condition="End == true" Execute="CommonMoveSelection"/>

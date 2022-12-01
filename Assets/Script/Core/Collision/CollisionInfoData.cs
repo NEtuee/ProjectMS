@@ -5,12 +5,14 @@ public class CollisionInfoData
     private CollisionType _collisionType = CollisionType.Default;
     private float _radius = 0f;
     private float _angle = 0f;
+    private float _startDistance = 0f;
 
-    public CollisionInfoData(float radius, float angle, CollisionType collisionType)
+    public CollisionInfoData(float radius, float angle, float startDistance, CollisionType collisionType)
     {
         _boundBox = new BoundBox(radius,radius,UnityEngine.Vector3.zero);
         _radius = radius;
         _angle = angle;
+        _startDistance = startDistance;
         _collisionType = collisionType;
     }
 
@@ -25,11 +27,13 @@ public class CollisionInfoData
     public float getSqrRadius() {return _radius * _radius;}
 
     public float getAngle() {return _angle;}
+    public float getStartDistance() {return _startDistance;}
 
-    public void setCollisionInfoData(float radius, float angle, CollisionType type)
+    public void setCollisionInfoData(float radius, float angle, float startDistance, CollisionType type)
     {
         _radius = radius;
         _angle = angle;
+        _startDistance = startDistance;
         _collisionType = type;
 
         _boundBox.setData(radius,radius,UnityEngine.Vector3.zero);

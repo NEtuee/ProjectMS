@@ -27,6 +27,8 @@ public static class FrameEventLoader
             outFrameEvent = new ActionFrameEvent_DeleteBuff();
         else if(type == "TeleportToTarget")
             outFrameEvent = new ActionFrameEvent_TeleportToTarget();
+        else if(type == "TeleportToTargetBack")
+            outFrameEvent = new ActionFrameEvent_TeleportToTargetBack();
         else if(type == "SetDefenceType")
             outFrameEvent = new ActionFrameEvent_SetDefenceType();
         else if(type == "Effect")
@@ -47,7 +49,7 @@ public static class FrameEventLoader
             return null;
         }
 
-        DebugUtil.assert((int)FrameEventType.Count == 13, "check here");
+        DebugUtil.assert((int)FrameEventType.Count == 14, "check here");
 
 
         if(outFrameEvent == null)

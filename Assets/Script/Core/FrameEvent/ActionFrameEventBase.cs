@@ -9,6 +9,7 @@ public enum FrameEventType
     FrameEvent_ApplyBuffTarget,
     FrameEvent_DeleteBuff,
     FrameEvent_TeleportToTarget,
+    FrameEvent_TeleportToTargetBack,
     FrameEvent_SetDefenceType,
     FrameEvent_Effect,
     FrameEvent_SetFrameTag,
@@ -231,6 +232,38 @@ public class ActionFrameEvent_TeleportToTarget : ActionFrameEventBase
         GameEntityBase target = (GameEntityBase)targetEntity;
 
         UnityEngine.Vector3 direction = (requester.transform.position - target.transform.position).normalized;
+
+        requester.transform.position = target.transform.position + direction * (requester.getCollisionInfo().getRadius() + target.getCollisionInfo().getRadius() + _distanceOffset);
+
+        return true;
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            if(attributes[i].Name == "DistanceOffset")
+                _distanceOffset = float.Parse(attributes[i].Value);
+        }
+    }
+}
+
+public class ActionFrameEvent_TeleportToTargetBack : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_TeleportToTargetBack;}
+
+    private float _distanceOffset = 0f;
+
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        if(executeEntity is GameEntityBase == false || targetEntity is GameEntityBase == false)
+            return false;
+        
+        GameEntityBase requester = (GameEntityBase)executeEntity;
+        GameEntityBase target = (GameEntityBase)targetEntity;
+
+        UnityEngine.Vector3 direction = (target.transform.position - requester.transform.position).normalized;
 
         requester.transform.position = target.transform.position + direction * (requester.getCollisionInfo().getRadius() + target.getCollisionInfo().getRadius() + _distanceOffset);
 
@@ -553,6 +586,7 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
         XmlAttributeCollection attributes = node.Attributes;
         float radius = 0f;
         float angle = 0f;
+        float startDistance = 0f;
         _attackType = AttackType.Default;
 
 
@@ -565,6 +599,10 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
             else if(attributes[i].Name == "Angle")
             {
                 angle = float.Parse(attributes[i].Value);
+            }
+            else if(attributes[i].Name == "StartDistance")
+            {
+                startDistance = float.Parse(attributes[i].Value);
             }
             else if(attributes[i].Name == "AttackType")
             {
@@ -582,6 +620,7 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
 
                 radius = presetData._attackRadius;
                 angle = presetData._attackAngle;
+                startDistance = presetData._attackStartDistance;
                 _pushVector = presetData._pushVector;
             }
             else if(attributes[i].Name == "IgnoreDefenceType")
@@ -616,7 +655,7 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
 
         }
 
-        CollisionInfoData data = new CollisionInfoData(radius,angle, CollisionType.Attack);
+        CollisionInfoData data = new CollisionInfoData(radius,angle,startDistance, CollisionType.Attack);
         _collisionInfo = new CollisionInfo(data);
 
         

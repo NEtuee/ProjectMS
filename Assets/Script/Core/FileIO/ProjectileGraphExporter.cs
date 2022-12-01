@@ -91,6 +91,8 @@ public static class ProjectileGraphLoader
                         projectileBaseData._collisionRadius = float.Parse(attributes[attrIndex].Value);
                     else if(attributes[attrIndex].Name == "Angle")
                         projectileBaseData._collisionAngle = float.Parse(attributes[attrIndex].Value);
+                    else if(attributes[attrIndex].Name == "StartDistance")
+                        projectileBaseData._collisionStartDistance = float.Parse(attributes[attrIndex].Value);
                 }
             }
             else if(targetName == "Event")
