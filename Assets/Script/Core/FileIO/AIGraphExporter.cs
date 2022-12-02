@@ -792,6 +792,10 @@ public class AIGraphLoader
                 {
                     aiEvent = new AIEvent_TerminatePackage();
                 }
+                else if(attrValue == "KillEntity")
+                {
+                    aiEvent = new AIEvent_KillEntity();
+                }
                 else
                 {
                     DebugUtil.assert(false,"invalid ai event type: {0}",attrValue);

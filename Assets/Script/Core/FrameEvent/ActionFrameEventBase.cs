@@ -17,6 +17,7 @@ public enum FrameEventType
     FrameEvent_Danmaku,
     FrameEvent_SetAnimationSpeed,
     FrameEvent_SetCameraDelay,
+    FrameEvent_KillEntity,
 
     Count,
 }
@@ -64,6 +65,27 @@ public abstract class ActionFrameEventBase
         }
     }
 }
+
+
+public class ActionFrameEvent_KillEntity : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_KillEntity;}
+
+    private string _path;
+
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        executeEntity.dispose(false);
+        executeEntity.gameObject.SetActive(false);
+        
+        return true;
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
+    }
+}
+
 
 public class ActionFrameEvent_Danmaku : ActionFrameEventBase
 {

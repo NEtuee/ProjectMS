@@ -225,6 +225,16 @@ public class GameEntityBase : SequencerObjectBase
         CollisionManager.Instance().collisionRequest(_collisionInfo,this,collisionTest,collisionEndEvent);
     }
 
+    public override void dispose(bool disposeFromMaster)
+    {
+        CollisionManager.Instance().deregisterObject(_collisionInfo.getCollisionInfoData(),this);
+        _aiGraph.release();
+        _actionGraph.release();
+        _danmakuGraph.release();
+
+        base.dispose(disposeFromMaster);
+    }
+
     private void collisionTest(CollisionSuccessData data)
     {
         _debugColor = Color.green;

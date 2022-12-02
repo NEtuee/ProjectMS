@@ -7,7 +7,6 @@ public abstract class ObjectBase : MessageReceiver, IProgress
 
     public SearchIdentifier     _searchIdentifier = SearchIdentifier.Enemy;
 
-
     protected int           _currentManagerNumber = -1;
 
     protected AttackState         _attackState = AttackState.Default;
