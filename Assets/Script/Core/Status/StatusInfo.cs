@@ -321,6 +321,11 @@ public class StatusInfo
                 return variAddtionalStat(buff._targetStatusName, buff._buffVaryStatFactor);
             case BuffApplyType.DirectDelta:
                 return variRegenStat(buff._targetStatusName, buff._buffVaryStatFactor);
+            case BuffApplyType.DirectSet:
+            {
+                getStatus(buff._targetStatusName).updateBuffList(_currentlyAppliedBuffList);
+                return setStat(buff._targetStatusName, buff._buffVaryStatFactor);
+            }
         }
 
         DebugUtil.assert(false, "invalid buff apply type: {0}",buff._buffApplyType);
@@ -364,6 +369,19 @@ public class StatusInfo
         }
             
         _statusInfoData._statusData[status._statusIndex].variStat(ref status._realValue, 0f, value);
+        return true;
+    }
+
+    public bool setStat(string name, float value)
+    {
+        Status status = getStatus(name);
+        if(status == null)
+        {
+            DebugUtil.assert(false, "target status is not exists: {0}", name);
+            return false;
+        }
+            
+        _statusInfoData._statusData[status._statusIndex].setStat(ref status._realValue, 0f, value);
         return true;
     }
 

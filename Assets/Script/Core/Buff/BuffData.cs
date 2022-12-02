@@ -56,6 +56,7 @@ public enum BuffApplyType
     Direct = 0,
     DirectDelta,
     Additional,
+    DirectSet,
     Count
 }
 
