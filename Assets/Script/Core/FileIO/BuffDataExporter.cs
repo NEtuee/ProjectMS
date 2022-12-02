@@ -36,7 +36,7 @@ public static class BuffDataLoader
         XmlNodeList projectileNodes = xmlDoc.FirstChild.ChildNodes;
         for(int nodeIndex = 0; nodeIndex < projectileNodes.Count; ++nodeIndex)
         {
-            BuffData baseData = readBuffData(projectileNodes[nodeIndex]);
+            BuffData baseData = readBuffData(projectileNodes[nodeIndex], ref buffDataList);
             if(baseData == null)
                 return null;
 
@@ -51,7 +51,7 @@ public static class BuffDataLoader
         return buffDataList;
     }
 
-    private static BuffData readBuffData(XmlNode node)
+    private static BuffData readBuffData(XmlNode node, ref Dictionary<int, BuffData> buffDataList)
     {
         BuffData buffData = new BuffData();
         buffData._buffName = node.Name;
@@ -62,6 +62,19 @@ public static class BuffDataLoader
         {
             string attrName = buffDataNodes[i].Name;
             string attrValue = buffDataNodes[i].Value;
+
+            if(attrName == "Parent")
+            {
+                int targetKey = int.Parse(attrValue);
+                if(buffDataList.ContainsKey(targetKey) == false)
+                {
+                    DebugUtil.assert(false, "target Buff is not exists: Key {0}", targetKey);
+                    return null;
+                }
+
+                buffData.copy(buffDataList[targetKey]);
+                continue;
+            }
 
             if(attrName == "Key")
                 buffData._buffKey = int.Parse(attrValue);

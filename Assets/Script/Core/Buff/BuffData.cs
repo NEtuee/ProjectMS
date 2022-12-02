@@ -28,6 +28,18 @@ public class BuffData
 
     }
 
+    public void copy(BuffData target)
+    {
+        _buffKey = target._buffKey;
+        _targetStatusName = target._targetStatusName;
+        _buffUpdateType = target._buffUpdateType;
+        _buffApplyType = target._buffApplyType;
+        _buffVaryStatFactor = target._buffVaryStatFactor;
+        _buffCustomValue0 = target._buffCustomValue0;
+        _buffCustomValue1 = target._buffCustomValue1;
+    }
+
+
     public bool isBuffValid()
     {
         return _buffKey >= 0 && _buffUpdateType != BuffUpdateType.Count && _buffApplyType != BuffApplyType.Count;
