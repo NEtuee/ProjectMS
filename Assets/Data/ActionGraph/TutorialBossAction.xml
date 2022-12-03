@@ -338,7 +338,7 @@
     </DEF_C_Guard>
 
     <STA_GuardBroken MovementType="GraphPreset" MovementGraphPreset="AttackGuarded" DirectionType="AI" FlipType="Keep">
-        <Animation Path="Resources/Sprites/SampleBoss/GuardBroken/" StartFrame="0" EndFrame="1" FramePerSecond="2"/>
+        <Animation Path="Resources/Sprites/SampleBoss/GuardBroken/" StartFrame="0" EndFrame="1" FramePerSecond="1"/>
         
 
         <Branch Condition="End == true" Execute="MOV_Idle"/>

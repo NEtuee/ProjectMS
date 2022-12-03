@@ -23,7 +23,7 @@
             <Branch Condition="End == true" Execute="TerminatePackage"/>
         </STA_Parried>
 
-        <STA_GuardBroken>
+        <STA_GuardBroken UpdateTime="0.0">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="STA_GuardBroken"/>

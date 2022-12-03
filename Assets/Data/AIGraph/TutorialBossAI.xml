@@ -8,6 +8,7 @@
     <Include Path="TutorialBoss/H_Judge_AttackByDistance.xml"/>
     <Include Path="TutorialBoss/H_Judge_AttackByRandom.xml"/>
     <Include Path="TutorialBoss/H_Judge_AttackSTD.xml"/>
+    <Include Path="TutorialBoss/H_Judge_AttackDelay.xml"/>
     <Include Path="TutorialBoss/H_MIX_C_RushNCaseShot.xml"/>
     <Include Path="TutorialBoss/H_MIX_C_SwingComboNCaseShot.xml"/>
     <Include Path="TutorialBoss/H_MIX_C_ThrustComboNCaseShot.xml"/>
@@ -34,6 +35,14 @@
         <Branch Condition="getTargetFrameTag_Attack && (TargetDistance < 3.0) && (getStat_Stamina < 30.0)" Execute="H_DEF_ActionGuard"/>
     </BranchSet>
     
+    <H_Judge_AttackDelay>
+        <UseBranchSet Name="IsDefensibleBranchSet"/>
+        <UseBranchSet Name="IsHitBranchSet"/>
+
+        <Branch Condition="true" Weight="RandBoolean^True" Execute="H_MOV_Alert"/>
+        <Branch Condition="true" Weight="RandBoolean^False" Execute="H_Judge_AttackSTD"/>
+    </H_Judge_AttackDelay> 
+
     <H_Judge_AttackSTD Package="H_Judge_AttackSTD">
         <UseBranchSet Name="IsDefensibleBranchSet"/>
         
