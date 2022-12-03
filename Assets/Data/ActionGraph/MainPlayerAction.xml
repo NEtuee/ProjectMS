@@ -159,6 +159,7 @@
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
                     <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
 
+                    <FrameEvent Type="TeleportToTargetBack"/>
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
                 </OnHit>
 
@@ -186,6 +187,7 @@
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
                     <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
 
+                    <FrameEvent Type="TeleportToTargetBack"/>
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
                 </OnHit>
 
@@ -271,11 +273,19 @@
     </Hit>
 
     <Dead DirectionType="Keep" FlipType="Direction">
-        <Animation Path="Resources/Sprites/DummyPlayer/Hit/" StartFrame="0" EndFrame="1" FramePerSecond="2" XFlip="true">
+        <Animation Path="Resources/Sprites/DummyPlayer/Hit/" StartFrame="0" EndFrame="3" FramePerSecond="1" XFlip="true">
             <FrameEvent Type="FrameTag" StartFrame="0" EndFrame="999" Tag="Hit"/>
         </Animation>
 
-        <Branch Condition="End == true" Execute="Dead"/>
+        <Branch Condition="End == true" Execute="Kiiled"/>
     </Dead>
+
+    <Kiiled DirectionType="Keep" FlipType="Direction">
+        <Animation Path="Resources/Sprites/DummyPlayer/Hit/" StartFrame="0" EndFrame="1" FramePerSecond="99" XFlip="true">
+            <FrameEvent Type="KillEntity" StartFrame="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Kiiled"/>
+    </Kiiled>
 
 </ActionGraph>
