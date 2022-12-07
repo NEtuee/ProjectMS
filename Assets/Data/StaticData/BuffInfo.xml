@@ -86,7 +86,7 @@
 
         Factor="30.0"
 
-        Time="3.0"
+        Time="1.5"
 
     />
 
@@ -97,7 +97,7 @@
         UpdateType="OneShot"
         ApplyType="Direct"
 
-        Factor="-20.0"
+        Factor="-30.0"
     />
 
     <BloodSpreadUse
@@ -120,21 +120,40 @@
         Factor="20.0"
     />
 
-    <JustGuardBreakHit 
+    <CommonAttackStamina
         Key="12"
-        StatusName="GuardBroken"
+        StatusName="Stamina"
 
         UpdateType="OneShot"
         ApplyType="Direct"
 
-        Factor="1.0"
+        Factor="-10.0"
     />
 
-    <JustGuardBreakRelease
+    <TestProjectileAttack
         Key="13"
-        StatusName="GuardBroken"
-    
+        StatusName="HP"
+
         UpdateType="OneShot"
+        ApplyType="Direct"
+
+        Factor="-0.1"
+    />
+
+    <AttackGuardStamina
+        Key="14"
+        StatusName="Stamina"
+
+        UpdateType="OneShot"    
+        ApplyType="Direct"
+
+        Factor="-15.0"
+    />
+    <ProjectileGuardStamina
+        Key="15"
+        StatusName="Stamina"
+
+        UpdateType="OneShot"    
         ApplyType="Direct"
 
         Factor="-1.0"

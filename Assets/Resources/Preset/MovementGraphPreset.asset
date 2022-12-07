@@ -182,7 +182,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 0
-    _magnification: 5
+    _magnification: 3
     _directionAngle: 0
   - _name: AttackHit
     _movementCurve:
@@ -403,6 +403,42 @@ MonoBehaviour:
         tangentMode: 0
         weightedMode: 0
         inWeight: 0.5143968
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 0
+    _magnification: 1
+    _directionAngle: 0
+  - _name: AttackSuccess
+    _movementCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 14.341694
+        outSlope: 14.341694
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.056273498
+        value: 0.80705726
+        inSlope: 3.040759
+        outSlope: 3.040759
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.45129332
+      - serializedVersion: 3
+        time: 0.193573
+        value: 0.98181677
+        inSlope: 0.9763583
+        outSlope: 0.9763583
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.23197691
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2

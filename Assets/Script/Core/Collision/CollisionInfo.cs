@@ -38,10 +38,15 @@ public class CollisionInfo
         if(_boundBox.intersection(target.getBoundBox()) == false)
             return false;
 
+        float circleDistance = Vector3.Distance(_centerPosition, target.getCenterPosition());
+        if((circleDistance + target.getRadius()) < _collisionInfoData.getStartDistance() || (circleDistance + getRadius()) < target.getCollisionInfoData().getStartDistance())
+            return false;
+
+        bool circleCollision = circleDistance < getRadius() + target.getRadius();
+
         if(_collisionInfoData.getAngle() != 0f)
         {
-            float circleDistance = Vector3.Distance(_centerPosition, target.getCenterPosition());
-            if(circleDistance >= getRadius() + target.getRadius())
+            if(circleCollision == false)
                 return false;
 
             Vector3 direction = (target.getCenterPosition() - _centerPosition).normalized;
@@ -59,27 +64,31 @@ public class CollisionInfo
             return false;
         }
 
-        float distance = Vector3.Distance(_centerPosition, target.getCenterPosition());
-        return distance < getRadius() + target.getRadius();
+        return circleCollision;
     }
 
     public void drawCollosionArea(Color color, float time = 0f)
     {
         if(_collisionInfoData.getAngle() == 0f)
-            drawCircle(color, time);
+            drawCircle(color,Color.red, time);
         else
-            drawSection(color, time);
+            drawSection(color,Color.red, time);
     }
 
-    public void drawCircle(Color color, float time = 0f)
+    public void drawCircle(Color mainColor, Color startDistanceColor, float time = 0f)
     {
-        GizmoHelper.instance.drawCircle(_centerPosition,getRadius(),36,color, time);
+        GizmoHelper.instance.drawCircle(_centerPosition,getRadius(),36,mainColor, time);
+        if(_collisionInfoData.getStartDistance() != 0f)
+            GizmoHelper.instance.drawCircle(_centerPosition,_collisionInfoData.getStartDistance(),36,startDistanceColor, time);
     }
 
-    public void drawSection(Color color, float time = 0f)
+    public void drawSection(Color mainColor, Color startDistanceColor, float time = 0f)
     {
         //GizmoHelper.instance.drawPolygon(_triangle.getVertices(),color, time); 
-        GizmoHelper.instance.drawArc(_centerPosition,getRadius(),_collisionInfoData.getAngle(),_direction,color,time);
+        GizmoHelper.instance.drawArc(_centerPosition,getRadius(),_collisionInfoData.getAngle(),_direction,mainColor,time);
+
+        if(_collisionInfoData.getStartDistance() != 0f)
+            GizmoHelper.instance.drawArc(_centerPosition,_collisionInfoData.getStartDistance(),_collisionInfoData.getAngle(),_direction,startDistanceColor,time);
     }
 
     public void drawBoundBox(Color color)
@@ -87,9 +96,9 @@ public class CollisionInfo
         GizmoHelper.instance.drawPolygon(_boundBox.getVertices(),color);
     }
 
-    public void setCollisionInfo(float radius, float angle)
+    public void setCollisionInfo(float radius, float angle, float startDistance)
     {
-        _collisionInfoData.setCollisionInfoData(radius,angle,CollisionType.Projectile);
+        _collisionInfoData.setCollisionInfoData(radius,angle,startDistance,CollisionType.Projectile);
     }
 
     public void updateCollisionInfo(Vector3 position, Vector3 direction)

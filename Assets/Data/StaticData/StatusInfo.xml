@@ -1,7 +1,7 @@
 
 <StatusInfo>
     <CommonPlayerStatus>
-        <Stat Type="HP" Max="3" Min="0" Init="3"/>
+        <Stat Type="HP" Max="10" Min="0" Init="10"/>
         <Stat Type="Stamina" Max="100" Min="0" Init="100"/>
         <Stat Type="Blood" Max="100" Min="0" Init="0"/>
         <Stat Type="Battle" Max="100" Min="0" Init="0"/>
@@ -12,14 +12,12 @@
     <CommonEnemyStatus>
         <Stat Type="HP" Max="3" Min="0" Init="3"/>
         <Stat Type="Blood" Max="100" Min="0" Init="3"/>
-        <Stat Type="Custom" Name="GuardBroken" Max="1" Min="0" Init="0"/>
     </CommonEnemyStatus>
 
     <TutorialBossStatus>
-        <Stat Type="HP" Max="7" Min="0" Init="7"/>
+        <Stat Type="HP" Max="10" Min="0" Init="10"/>
         <Stat Type="Stamina" Max="100" Min="0" Init="100"/>
         <Stat Type="Custom" Name="Phase" Max="3" Min="1" Init="1"/>
-        <Stat Type="Custom" Name="ConsecutiveDodgeCount" Max="3" Min="0" Init="0"/>
         <Stat Type="Custom" Name="Posture" Max="100" Min="0" Init="100"/>
     </TutorialBossStatus>
 

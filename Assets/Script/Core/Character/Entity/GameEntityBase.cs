@@ -86,7 +86,7 @@ public class GameEntityBase : SequencerObjectBase
 
         applyActionBuffList(_actionGraph.getDefaultBuffList());
 
-        CollisionInfoData data = new CollisionInfoData(0.2f,0f, CollisionType.Character);
+        CollisionInfoData data = new CollisionInfoData(0.2f,0f,0f, CollisionType.Character);
         _collisionInfo = new CollisionInfo(data);
 
         CollisionManager.Instance().registerObject(_collisionInfo, this);
@@ -223,6 +223,16 @@ public class GameEntityBase : SequencerObjectBase
         }
         
         CollisionManager.Instance().collisionRequest(_collisionInfo,this,collisionTest,collisionEndEvent);
+    }
+
+    public override void dispose(bool disposeFromMaster)
+    {
+        CollisionManager.Instance().deregisterObject(_collisionInfo.getCollisionInfoData(),this);
+        _aiGraph.release();
+        _actionGraph.release();
+        _danmakuGraph.release();
+
+        base.dispose(disposeFromMaster);
     }
 
     private void collisionTest(CollisionSuccessData data)

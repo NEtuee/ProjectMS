@@ -10,13 +10,14 @@
             <OnHit>
                 <FrameEvent Type="Attack" StartFrame="0" AttackPreset="projectileTest">
                     <OnHit>
-                        <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
+                        <FrameEvent Type="ApplyBuffTarget" ApplyBuff="13"/>
                         <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
     
                         <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
                     </OnHit>
     
                     <OnGuard>
+                        <FrameEvent Type="ApplyBuffTarget" ApplyBuff="15"/>
                     </OnGuard>
     
                     <OnParry>

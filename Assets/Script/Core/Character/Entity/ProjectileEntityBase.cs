@@ -20,7 +20,7 @@ public class ProjectileEntityBase : ObjectBase
     {
         base.assign();
         _projectileGraph = new ProjectileGraph();
-        CollisionInfoData data = new CollisionInfoData(0f,0f,CollisionType.Projectile);
+        CollisionInfoData data = new CollisionInfoData(0f,0f,0f,CollisionType.Projectile);
         _collisionInfo = new CollisionInfo(data);
         _collisionDelegate = onProjectileHit;
         
@@ -38,7 +38,7 @@ public class ProjectileEntityBase : ObjectBase
     {
         _spriteRotation = baseData._useSpriteRotation;
         _projectileGraph.setData(baseData);
-        _collisionInfo.setCollisionInfo(baseData._collisionRadius, baseData._collisionAngle);
+        _collisionInfo.setCollisionInfo(baseData._collisionRadius, baseData._collisionAngle, baseData._collisionStartDistance);
     }
 
     public void shot(Vector3 startPosition)

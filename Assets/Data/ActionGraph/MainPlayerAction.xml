@@ -3,8 +3,8 @@
 <ActionGraph Name="Test" DefaultAction="Idle" DefaultFramePerSecond="4" DefaultBuff="4 5 8">
 
     <BranchSet Name="CommonBattleBranchSet">
-        <Branch Key="getKey_Guard" Condition="" Execute="Guard"/>
-        <Branch Key="getKey_AttackCharge" Condition="" Execute="AttackCharge"/>
+        <Branch Key="getKey_Guard" Condition="true" Execute="Guard"/>
+        <Branch Key="getKey_AttackCharge && (getStat_Stamina >= 10.0)" Condition="" Execute="AttackCharge"/>
         <Branch Condition="(getStat_Blood >= 20.0) && InputAttackBlood == true" Execute="BloodSpreadPrepare"/>
 
         <Branch Condition="Hit == true" Execute="Hit"/>
@@ -59,6 +59,7 @@
 
     <AttackPrepare MovementType="Empty" DirectionType="MousePoint" FlipType="Keep">
         <Animation Path="Resources/Sprites/NewPlayer/charge/" StartFrame="0" EndFrame="1" FramePerSecond="999">
+            <FrameEvent Type="ApplyBuff" ApplyBuff="12" StartFrame="0"/>
             <FrameEvent Type="FrameTag" StartFrame="0" EndFrame="999" Tag="Attack"/>
         </Animation>
 
@@ -79,11 +80,10 @@
 
     <JustGuardBreak DirectionType="Keep" FlipType="Direction">
         <Animation Path="Resources/Sprites/DummyPlayer/JustGuardBreak/" StartFrame="0" EndFrame="1" FramePerSecond="3" XFlip="true">
-            <FrameEvent Type="Test" Log="Just Guard Break Excuted"/>
+            <FrameEvent Type="Test" Log="Just Guard Break Executed"/>
             <FrameEvent Type="FrameTag" StartFrame="0" EndFrame="999" Tag="JustGuardBreak"/>
             <FrameEvent Type="Attack" AttackType="GuardBreak" StartFrame="0" AttackPreset="Player_JustGuardBreak" IgnoreDefenceType="Guard">
                 <OnGuardBreak>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="12"/>
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
                 </OnGuardBreak>
             </FrameEvent> 
@@ -99,12 +99,26 @@
         <Branch Condition="End == true" Execute="CommonMoveSelection"/>
     </Attack_Parried>
 
-    <Attack_LV1 MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="Keep" RotationType="Direction" FlipType="Keep" NormalizedSpeed="True">
-        <Animation Path="Resources/Sprites/NewPlayer/attack" StartFrame="0" EndFrame="4" FramePerSecond="9" ScalePreset="YSpring">
-            <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="1"/>
-            <FrameEvent Type="SetAnimationSpeed" StartFrame="0.3" Speed="2.6"/>
+    <Attack_Success MovementType="GraphPreset" MovementGraphPreset="AttackSuccess" DirectionType="Keep" RotationType="Keep" FlipType="Keep" NormalizedSpeed="false">
+        <Animation Path="Resources/Sprites/NewPlayer/attack" StartFrame="0" EndFrame="4" FramePerSecond="12" ScalePreset="YSpring">
+            <FrameEvent Type="SetAnimationSpeed" StartFrame="0"/>
+
+            <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="4"/>
             <FrameEvent Type="SetAnimationSpeed" StartFrame="2" Speed="2"/>
-            <FrameEvent Type="SetAnimationSpeed" StartFrame="3" Speed="1"/>
+            <FrameEvent Type="SetAnimationSpeed" StartFrame="3" Speed="0.3"/>
+        </Animation>
+
+            
+        <Branch Condition="End == true" Execute="CommonMoveSelection"/>
+    </Attack_Success>
+
+    <Attack_LV1 MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="Keep" RotationType="Direction" FlipType="Keep" NormalizedSpeed="false">
+        <Animation Path="Resources/Sprites/NewPlayer/attack" StartFrame="0" EndFrame="4" FramePerSecond="12" ScalePreset="YSpring">
+            <FrameEvent Type="SetCameraDelay" StartFrame="0" EndFrame="0"/>
+            <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="4"/>
+            <!-- <FrameEvent Type="SetAnimationSpeed" StartFrame="0.3" Speed="2.6"/>-->
+            <FrameEvent Type="SetAnimationSpeed" StartFrame="2" Speed="2"/>
+            <FrameEvent Type="SetAnimationSpeed" StartFrame="3" Speed="0.3"/>
 
             <FrameEvent Type="Effect" StartFrame="0" Path="Resources/Sprites/Effect/Sheath" FramePerSecond="0.5" Offset="0.0 0.0 0.0" Angle="Random_0^360" UseFlip="True">
                 <Physics UseGravity="True" Velocity="-1.5^3.5" Friction="1.0" Torque="Random_25^30" AngularFriction="10.0"/>
@@ -115,6 +129,7 @@
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
                     <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
 
+                    <FrameEvent Type="TeleportToTargetBack"/>
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
                 </OnHit>
 
@@ -131,6 +146,7 @@
 
         </Animation>
 
+        <Branch Condition="AttackSuccess == true" Execute="Attack_Success"/>
         <Branch Condition="AttackGuarded == true" Execute="Attack_Guarded"/>
         <Branch Condition="AttackParried == true" Execute="Attack_Parried"/>
         <Branch Condition="End == true" Execute="CommonMoveSelection"/>
@@ -157,6 +173,7 @@
             </FrameEvent>
         </Animation>
 
+        <Branch Condition="AttackSuccess == true" Execute="Attack_Success"/>
         <Branch Condition="AttackGuarded == true" Execute="Attack_Guarded"/>
         <Branch Condition="AttackParried == true" Execute="Attack_Parried"/>
         <Branch Condition="End == true" Execute="CommonMoveSelection"/>
@@ -183,6 +200,7 @@
             </FrameEvent>
         </Animation>
 
+        <Branch Condition="AttackSuccess == true" Execute="Attack_Success"/>
         <Branch Condition="AttackGuarded == true" Execute="Attack_Guarded"/>
         <Branch Condition="AttackParried == true" Execute="Attack_Parried"/>
         <Branch Condition="End == true" Execute="CommonMoveSelection"/>
@@ -218,6 +236,7 @@
         </Animation>
 
         <Branch Condition="Hit == true" Execute="Hit"/>
+        <Branch Condition="getStat_Stamina <= 0.0" Execute="Hit"/>
         <Branch Key="getKey_Guard == false" Condition="" Execute="CommonMoveSelection"/>
         <!-- <Branch Condition="End == true" Execute="Guard"/> -->
     </Guard>
@@ -231,8 +250,9 @@
     </DashStart>
 
 
-    <Dash MovementType="GraphPreset" DirectionType="Keep" MovementGraphPreset="Dash" FlipType="Direction" RotationType="Direction">
+    <Dash MovementType="GraphPreset" DirectionType="Keep" MovementGraphPreset="Dash" FlipType="Direction" RotationType="Direction" DefenceType="Evade" DefenceAngle="360.0">
         <Animation Path="Resources/Sprites/DummyPlayer/Dash/" StartFrame="0" EndFrame="1" FramePerSecond="3" XFlip="true">
+            <FrameEvent Type="ApplyBuff" ApplyBuff="9" StartFrame="0"/>
         </Animation>
         
         <Branch Condition="Hit == true" Execute="Hit"/>
@@ -245,8 +265,17 @@
             <FrameEvent Type="FrameTag" StartFrame="0" EndFrame="999" Tag="Hit"/>
         </Animation>
 
+        <Branch Condition="getStat_HP <= 0.0" Execute="Dead"/>
         <Branch Condition="End == true && ActionTest == true" Execute="MoveAll"/>
         <Branch Condition="End == true" Execute="Idle"/>
     </Hit>
+
+    <Dead DirectionType="Keep" FlipType="Direction">
+        <Animation Path="Resources/Sprites/DummyPlayer/Hit/" StartFrame="0" EndFrame="1" FramePerSecond="2" XFlip="true">
+            <FrameEvent Type="FrameTag" StartFrame="0" EndFrame="999" Tag="Hit"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Dead"/>
+    </Dead>
 
 </ActionGraph>

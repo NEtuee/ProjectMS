@@ -3,12 +3,15 @@
 
 
     <AIState>
-        <Entry UpdateTime="0.5" TargetSearchType="Near" TargetSearchRange="1.0" SearchIdentifier="Player">
+        <Entry UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="1.0" SearchIdentifier="Player">
             <Event_OnExecute>
-                <AIEvent Type="SetAction" Action="Idle"/>
+                <AIEvent Type="SetAction" Action="JDG_Idle"/>
                 <AIEvent Type="Test" Log="Attack By Random"/>
             </Event_OnExecute>
 
+            <Event_OnUpdate>
+                <AIEvent Type="TerminatePackage"/>
+            </Event_OnUpdate>
         </Entry>
 
        

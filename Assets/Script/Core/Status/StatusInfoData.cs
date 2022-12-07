@@ -47,6 +47,12 @@ public class StatusDataFloat
         value = MathEx.clampf(value + factor, _minValue, _maxValue + additionalMax);
     }
 
+    public void setStat(ref float value, float additionalMax, float factor )
+    {
+        value = MathEx.clampf(factor,_minValue,_maxValue + additionalMax);
+    }
+
+
     public bool isMax(float value)
     {
         return value >= _maxValue;

@@ -11,6 +11,7 @@ public enum AIEventType
     AIEvent_ClearTarget,
     AIEvent_ExecuteState,
     AIEvent_TerminatePackage,
+    AIEvent_KillEntity,
     Count,
 }
 
@@ -47,6 +48,22 @@ public abstract class AIEventBase
     public abstract void loadFromXML(XmlNode node);
 
 }
+
+public class AIEvent_KillEntity : AIEventBase
+{
+    public override AIEventType getFrameEventType() {return AIEventType.AIEvent_KillEntity;}
+    public override void onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        executeEntity.dispose(false);
+        executeEntity.gameObject.SetActive(false);
+    }
+
+    public override void loadFromXML(XmlNode node) 
+    {
+
+    }
+}
+
 
 public class AIEvent_SetAction : AIEventBase
 {

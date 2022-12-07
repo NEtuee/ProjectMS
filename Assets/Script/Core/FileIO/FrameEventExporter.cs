@@ -27,6 +27,8 @@ public static class FrameEventLoader
             outFrameEvent = new ActionFrameEvent_DeleteBuff();
         else if(type == "TeleportToTarget")
             outFrameEvent = new ActionFrameEvent_TeleportToTarget();
+        else if(type == "TeleportToTargetBack")
+            outFrameEvent = new ActionFrameEvent_TeleportToTargetBack();
         else if(type == "SetDefenceType")
             outFrameEvent = new ActionFrameEvent_SetDefenceType();
         else if(type == "Effect")
@@ -39,13 +41,17 @@ public static class FrameEventLoader
             outFrameEvent = new ActionFrameEvent_Danmaku();
         else if(type == "SetAnimationSpeed")
             outFrameEvent = new ActionFrameEvent_SetAnimationSpeed();
+        else if(type == "SetCameraDelay")
+            outFrameEvent = new ActionFrameEvent_SetCameraDelay();
+        else if(type == "KillEntity")
+            outFrameEvent = new ActionFrameEvent_KillEntity();
         else
         {
             DebugUtil.assert(false, "invalid frameEvent type: {0}",type);
             return null;
         }
 
-        DebugUtil.assert((int)FrameEventType.Count == 12, "check here");
+        DebugUtil.assert((int)FrameEventType.Count == 15, "check here");
 
 
         if(outFrameEvent == null)
