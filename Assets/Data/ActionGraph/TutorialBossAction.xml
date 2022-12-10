@@ -67,6 +67,7 @@
         <Branch Condition="End == true" Execute="MOV_Idle"/>
     </FarAttackCharge>
 
+    
     <AttackPrepare MovementType="Empty" DirectionType="AI" FlipType="Direction">
         <Animation Path="Resources/Sprites/SampleBoss/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="999">
         </Animation>
@@ -189,23 +190,22 @@
         <Branch Condition="End == true" Execute="MOV_Idle"/>
     </ATK_F_ChargeAttack>
     
-    <SHT_N_DefenseShot MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="AI" FlipType="Direction">
-        <Animation Path="Resources/Sprites/SampleBoss/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="3">
-            <FrameEvent Type="Attack" StartFrame="0" AttackPreset="ATK_C_Thrust">
+    <ATK_N_DefenseWave DirectionType="AI" FlipType="Direction">
+        <Animation Path="Resources/Sprites/SampleBoss/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="0.5">
+            <FrameEvent Type="Attack" StartFrame="1" AttackPreset="ATK_N_DefenseWave" IgnoreDefenceType="Guard">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
                 </OnHit>
-
-                <OnGuard>
-                    <FrameEvent Type="TeleportToTarget"/>
-                </OnGuard>
-
-                <OnParry>
-                    <FrameEvent Type="TeleportToTarget"/>
-                </OnParry>
-
             </FrameEvent>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="MOV_Idle"/>
+    </ATK_N_DefenseWave>
+
+    <SHT_N_DefenseShot DirectionType="AI" FlipType="Direction">
+        <Animation Path="Resources/Sprites/SampleBoss/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="0.5">
+            <FrameEvent Type="Danmaku" StartFrame="0" Path="TutorialBoss/SHT_N_DefenseShot.xml"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="MOV_Idle"/>
@@ -338,7 +338,7 @@
     </DEF_C_Guard>
 
     <STA_GuardBroken MovementType="GraphPreset" MovementGraphPreset="AttackGuarded" DirectionType="AI" FlipType="Keep">
-        <Animation Path="Resources/Sprites/SampleBoss/GuardBroken/" StartFrame="0" EndFrame="1" FramePerSecond="2"/>
+        <Animation Path="Resources/Sprites/SampleBoss/GuardBroken/" StartFrame="0" EndFrame="1" FramePerSecond="1"/>
         
 
         <Branch Condition="End == true" Execute="MOV_Idle"/>
@@ -358,7 +358,7 @@
         <Branch Condition="End == true" Execute="MOV_Idle"/>
     </STA_Parried>
 
-    <STA_Hit MovementType="GraphPreset" MovementGraphPreset="AttackHit" DirectionType="AttackedPoint" FlipType="Direction">
+    <STA_Hit MovementType="GraphPreset" MovementGraphPreset="AttackHit" DirectionType="AttackedPoint" FlipType="Direction" DefenceType="Evade">
         <Animation Path="Resources/Sprites/SampleBoss/Hit/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
         </Animation>
 
