@@ -2,7 +2,7 @@
 <AIPackage Name="H_ATK_F_ChargeThrust" DefaultState="Entry">
 
     <AIState>
-        <Entry UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="1.0" SearchIdentifier="Player">
+        <Entry UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="5.0" SearchIdentifier="Player">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="MOV_Idle"/>
                 <AIEvent Type="Test" Log="H_ATK_F_ChargeThrust"/>

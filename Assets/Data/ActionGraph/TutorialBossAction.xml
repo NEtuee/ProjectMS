@@ -285,49 +285,14 @@
         <Branch Condition="End == true" Execute="MOV_Idle"/>
     </SHT_C_Tornado4Way>
     
-    <SHT_F_ThrowSpear MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="AI" FlipType="Direction">
-        <Animation Path="Resources/Sprites/SampleBoss/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="3">
-            <FrameEvent Type="Attack" StartFrame="0" AttackPreset="ATK_C_Thrust">
-                <OnHit>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
-                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
-                </OnHit>
-
-                <OnGuard>
-                    <FrameEvent Type="TeleportToTarget"/>
-                </OnGuard>
-
-                <OnParry>
-                    <FrameEvent Type="TeleportToTarget"/>
-                </OnParry>
-
-            </FrameEvent>
+    <SHT_F_ChargeSpear DirectionType="AI" FlipType="Direction">
+        <Animation Path="Resources/Sprites/SampleBoss/Charge/" StartFrame="0" EndFrame="3" FramePerSecond="1">
+            <!-- <FrameEvent Type="Projectile" StartFrame="3" GraphName="tutorial_spear" DirectionType="AI"/> -->
+            <FrameEvent Type="Danmaku" StartFrame="3" Path="TutorialBoss/SHT_F_ChargeSpear.xml"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="MOV_Idle"/>
-    </SHT_F_ThrowSpear>
-
-    <SHT_F_ChargeThrowSpear MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="AI" FlipType="Direction">
-        <Animation Path="Resources/Sprites/SampleBoss/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="3">
-            <FrameEvent Type="Attack" StartFrame="0" AttackPreset="ATK_C_Thrust">
-                <OnHit>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
-                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
-                </OnHit>
-
-                <OnGuard>
-                    <FrameEvent Type="TeleportToTarget"/>
-                </OnGuard>
-
-                <OnParry>
-                    <FrameEvent Type="TeleportToTarget"/>
-                </OnParry>
-
-            </FrameEvent>
-        </Animation>
-
-        <Branch Condition="End == true" Execute="MOV_Idle"/>
-    </SHT_F_ChargeThrowSpear>
+    </SHT_F_ChargeSpear>
 
     <DEF_C_Guard DirectionType="AI" DefenceDirectionType="Direction" FlipType="Keep" DefenceType="Guard" DefenceAngle="180.0">
         <Animation Path="Resources/Sprites/SampleBoss/Guard/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">

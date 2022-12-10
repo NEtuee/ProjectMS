@@ -2,18 +2,32 @@
 <AIPackage Name="H_SHT_F_ChargeSpear" DefaultState="Entry">
 
     <AIState>
-        <Entry UpdateTime="0.5" TargetSearchType="Near" TargetSearchRange="1.0" SearchIdentifier="Player">
+        <Entry UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="5.0" SearchIdentifier="Player">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="MOV_Idle"/>
                 <AIEvent Type="Test" Log="H_SHT_F_ChargeSpear"/>
             </Event_OnExecute>
 
-            <Event_OnUpdate>
-                <AIEvent Type="TerminatePackage"/>
-            </Event_OnUpdate>
-
+            <Branch Condition="true" Execute="SHT_F_ChargeSpear"/>
         </Entry>
 
-       
+
+        <SHT_F_ChargeSpear UpdateTime="0.0">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="SHT_F_ChargeSpear"/>
+            </Event_OnExecute>
+            <Event_OnFrame>
+                <AIEvent Type="SetDirectionToTarget"/>
+            </Event_OnFrame>
+            <Branch Condition="End == true" Execute="TerminatePackage"/>
+        </SHT_F_ChargeSpear>
+
+        <TerminatePackage>
+            <Event_OnExecute>
+                <AIEvent Type="Test" Log="Terminate H_MIX_C_ThrustComboNCaseShot Package"/>
+                <AIEvent Type="TerminatePackage"/>
+            </Event_OnExecute>
+        </TerminatePackage>
     </AIState>
 </AIPackage>
