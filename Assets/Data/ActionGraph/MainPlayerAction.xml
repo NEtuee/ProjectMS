@@ -32,7 +32,7 @@
 
 
     <MoveAll MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="MoveInput" FlipType="MousePoint" NormalizedSpeed="true">
-        <Animation Path="Resources/Sprites/DummyPlayer/MoveForward/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
+        <Animation Path="Resources/Sprites/NewPlayer/moveFront/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="false"> <!--XFilp="true"-->
             <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/moveUp/" Condition="(AngleDirection >= 45.0) && (AngleDirection < 135.0)"/>
             <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/moveDown/" Condition="(AngleDirection >= 225.0) && (AngleDirection < 315.0)"/>
             <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/moveBack/" Condition="(AngleDirection >= 315.0) || (AngleDirection < 45.0) && (IsXFlip == true)"/>
@@ -252,11 +252,15 @@
     </DashStart>
 
 
-    <Dash MovementType="GraphPreset" DirectionType="Keep" MovementGraphPreset="Dash" FlipType="Direction" RotationType="Direction" DefenceType="Evade" DefenceAngle="360.0">
-        <Animation Path="Resources/Sprites/DummyPlayer/Dash/" StartFrame="0" EndFrame="1" FramePerSecond="3" XFlip="true">
+    <Dash MovementType="GraphPreset" DirectionType="Keep" MovementGraphPreset="Dash" FlipType="Keep" RotationType="AlwaysRight " DefenceType="Evade" DefenceAngle="360.0">
+        <Animation Path="Resources/Sprites/NewPlayer/moveFront/" StartFrame="0" EndFrame="1" FramePerSecond="3" XFlip="false">
+            <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/moveUp/" Condition="(AngleDirection >= 45.0) && (AngleDirection < 135.0)"/>
+            <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/moveDown/" Condition="(AngleDirection >= 225.0) && (AngleDirection < 315.0)"/>
+            <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/moveBack/" Condition="(AngleDirection >= 135.0) && (AngleDirection < 225.0) && (IsXFlip == false)"/>
+            <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/moveFront/" Condition="(AngleDirection >= 315.0) || (AngleDirection < 45.0) && (IsXFlip == false)"/>
             <FrameEvent Type="ApplyBuff" ApplyBuff="9" StartFrame="0"/>
         </Animation>
-        
+
         <Branch Condition="Hit == true" Execute="Hit"/>
         <Branch Condition="End == true && ActionTest == true" Execute="MoveAll"/>
         <Branch Condition="End == true" Execute="Idle"/>
