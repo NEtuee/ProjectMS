@@ -77,6 +77,8 @@
     </H_Judge_AttackByRandom>
 
     <H_SHT_N_DefenseShot Package="H_SHT_N_DefenseShot">
+        <UseBranchSet Name="IsHitBranchSet"/>
+
         <Branch Condition="CurrentPackageEnd" Execute="H_Judge_AttackSTD"/>
     </H_SHT_N_DefenseShot>
 
@@ -141,6 +143,9 @@
     </H_STA_Defenseless>
 
     <H_STA_Hit Package="H_STA_Hit">
+        <Branch Condition="(getStat_HP == 7.0)" Execute="H_SHT_N_DefenseShot"/>
+        <Branch Condition="(getStat_HP == 4.0)" Execute="H_SHT_N_DefenseShot"/>
+        <Branch Condition="(getStat_HP == 1.0)" Execute="H_SHT_N_DefenseShot"/>
         <Branch Condition="CurrentPackageEnd && (getStat_HP <= 0.0)" Execute="H_END_Dead"/>
         <Branch Condition="CurrentPackageEnd" Execute="H_Judge_AttackSTD"/>
     </H_STA_Hit>
