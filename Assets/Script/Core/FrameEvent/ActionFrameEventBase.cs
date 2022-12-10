@@ -32,6 +32,13 @@ public enum ChildFrameEventType
     Count,
 }
 
+public enum SetTargetType
+{
+    SetTargetType_Self,
+    SetTargetType_Target,
+    SetTargetType_AITarget,
+}
+
 public class ChildFrameEventItem
 {
     public ActionFrameEventBase[] _childFrameEvents;
@@ -77,7 +84,7 @@ public class ActionFrameEvent_KillEntity : ActionFrameEventBase
     {
         executeEntity.dispose(false);
         executeEntity.gameObject.SetActive(false);
-        
+
         return true;
     }
 

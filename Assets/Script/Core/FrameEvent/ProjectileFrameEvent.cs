@@ -13,11 +13,13 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
 
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_Projectile;}
 
-    public string _projectileGraphName = "";
+    public string                           _projectileGraphName = "";
 
-    private ProjectileGraphShotInfoData _shotInfo;
-    private ShotInfoUseType _useType = ShotInfoUseType.UseDefault;
-    private DirectionType _directionType = DirectionType.Count;
+    private ProjectileGraphShotInfoData     _shotInfo;
+    private ShotInfoUseType                 _useType = ShotInfoUseType.UseDefault;
+    private DirectionType                   _directionType = DirectionType.Count;
+
+    private SetTargetType                   _setTargetType = SetTargetType.SetTargetType_Self;
 
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
@@ -55,7 +57,23 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
 
         shotInfo._defaultAngle += Quaternion.Euler(0f,0f,Mathf.Atan2(direction.y,direction.x) * Mathf.Rad2Deg).eulerAngles.z;
 
-        ProjectileManager._instance.spawnProjectile(_projectileGraphName,ref shotInfo,executeEntity.transform.position,executeEntity._searchIdentifier);
+        Vector3 spawnPosition = Vector3.zero;
+        switch(_setTargetType)
+        {
+            case SetTargetType.SetTargetType_Self:
+            spawnPosition = executeEntity.transform.position;
+            break;
+            case SetTargetType.SetTargetType_Target:
+            spawnPosition = targetEntity.transform.position;
+            break;
+            case SetTargetType.SetTargetType_AITarget:
+            GameEntityBase aiTarget = ((GameEntityBase)executeEntity).getCurrentTargetEntity();
+            spawnPosition = aiTarget == null ? executeEntity.transform.position : aiTarget.transform.position;
+            break;
+        }
+
+
+        ProjectileManager._instance.spawnProjectile(_projectileGraphName,ref shotInfo,spawnPosition,executeEntity._searchIdentifier);
 
         return true;
     }
@@ -121,6 +139,19 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
             else if(attrName == "ShotInfoUseType")
             {
                 _useType = (ShotInfoUseType)System.Enum.Parse(typeof(ShotInfoUseType), attrValue);
+            }
+            else if(attrName == "SpawnTargetType")
+            {
+                if(attrValue == "Self")
+                    _setTargetType = SetTargetType.SetTargetType_Self;
+                else if(attrValue == "Target")
+                    _setTargetType = SetTargetType.SetTargetType_Target;
+                else if(attrValue == "AITarget")
+                    _setTargetType = SetTargetType.SetTargetType_AITarget;
+                else
+                {
+                    DebugUtil.assert(false,"invalid targetType: {0}", attrValue);
+                }
             }
         }
 
