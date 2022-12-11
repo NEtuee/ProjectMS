@@ -8,7 +8,7 @@
     <Include Path="TutorialBoss/H_Judge_AttackByDistance.xml"/>
     <Include Path="TutorialBoss/H_Judge_AttackByRandom.xml"/>
     <Include Path="TutorialBoss/H_Judge_AttackSTD.xml"/>
-    <Include Path="TutorialBoss/H_Judge_AttackDelay.xml"/>
+    <!-- <Include Path="TutorialBoss/H_Judge_AttackDelay.xml"/> -->
     <Include Path="TutorialBoss/H_MIX_C_RushNCaseShot.xml"/>
     <Include Path="TutorialBoss/H_MIX_C_SwingComboNCaseShot.xml"/>
     <Include Path="TutorialBoss/H_MIX_C_ThrustComboNCaseShot.xml"/>
@@ -35,6 +35,7 @@
         <Branch Condition="getTargetFrameTag_Attack && (TargetDistance < 3.0) && (getStat_Stamina < 30.0)" Execute="H_DEF_ActionGuard"/>
     </BranchSet>
     
+    <!--
     <H_Judge_AttackDelay>
         <UseBranchSet Name="IsDefensibleBranchSet"/>
         <UseBranchSet Name="IsHitBranchSet"/>
@@ -42,7 +43,7 @@
         <Branch Condition="true" Weight="RandBoolean^True" Execute="H_MOV_Alert"/>
         <Branch Condition="true" Weight="RandBoolean^False" Execute="H_Judge_AttackSTD"/>
     </H_Judge_AttackDelay> 
-
+    -->
     <H_Judge_AttackSTD Package="H_Judge_AttackSTD">
         <UseBranchSet Name="IsDefensibleBranchSet"/>
         
@@ -64,7 +65,7 @@
         <Branch Condition="CurrentPackageEnd && (TargetDistance <= gv_CommonDist)" Weight="TutorialBossJudgeCommonAttack^H_MIX_C_ThrustComboNCaseShot" Execute="H_MIX_C_ThrustComboNCaseShot"/>
         <!-- <Branch Condition="CurrentPackageEnd && ((gv_NearDist < TargetDistance) && (TargetDistance <= gv_CommonDist))" Weight="TutorialBossJudgeCommonAttack^H_SHT_C_Gatling3NSpear" Execute="H_SHT_C_Gatling3NSpear"/> -->
         <Branch Condition="CurrentPackageEnd && ((gv_CommonDist < TargetDistance) && (TargetDistance <= gv_FarDist))" Weight="TutorialBossJudgeFarAttack^H_ATK_F_ChargeThrust" Execute="H_ATK_F_ChargeThrust"/>
-        <!-- <Branch Condition="CurrentPackageEnd && ((gv_CommonDist < TargetDistance) && (TargetDistance <= gv_FarDist))" Weight="TutorialBossJudgeFarAttack^H_SHT_F_ChargeSpear" Execute="H_SHT_F_ChargeSpear"/> -->
+        <Branch Condition="CurrentPackageEnd && ((gv_CommonDist < TargetDistance) && (TargetDistance <= gv_FarDist))" Weight="TutorialBossJudgeFarAttack^H_SHT_F_ChargeSpear" Execute="H_SHT_F_ChargeSpear"/>
         
         <Branch Condition="CurrentPackageEnd" Execute="H_Judge_AttackByDistance"/>
         <!-- -->
@@ -111,6 +112,10 @@
     </H_ATK_F_ChargeThrust>
 
     <H_SHT_F_ChargeSpear Package="H_SHT_F_ChargeSpear">
+        <UseBranchSet Name="IsDefenselessBranchSet"/>
+        <UseBranchSet Name="IsDefensibleBranchSet"/>
+        <UseBranchSet Name="IsHitBranchSet"/>
+        
         <Branch Condition="CurrentPackageEnd" Execute="H_Judge_AttackSTD"/>
     </H_SHT_F_ChargeSpear>
     
