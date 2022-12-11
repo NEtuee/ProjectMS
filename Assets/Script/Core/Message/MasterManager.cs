@@ -42,8 +42,8 @@ public class MasterManager : MessageHub<ManagerBase>
             m.initialize();
         }
 
-        CameraControl.Instance().assign();
-        CameraControl.Instance().SetTarget(player);
+        CameraControlEx.Instance().setCameraTarget(player);
+        CameraControlEx.Instance().initialize();
     }
     public void Start()
     {
@@ -54,7 +54,7 @@ public class MasterManager : MessageHub<ManagerBase>
         float deltaTime = Time.deltaTime;
         GlobalTimer.Instance().updateGlobalTime(deltaTime);
         ActionKeyInputManager.Instance().progress(deltaTime);
-        CameraControl.Instance().SyncPosition();
+        CameraControlEx.Instance().SyncPosition();
 
         ManagersUpdate(deltaTime);
         ManagersAfterUpdate(deltaTime);
@@ -64,15 +64,13 @@ public class MasterManager : MessageHub<ManagerBase>
         ManagersReceiveMessageProcessing();
         ReceiveMessageProcessing();
 
-        CameraControl.Instance().progress(deltaTime);
+        CameraControlEx.Instance().progress(deltaTime);
     }
 
     public void LateUpdate()
     {
         CollisionManager.Instance().collisionUpdate();
         WeightRandomManager.Instance().updateRandom();
-        
-
     }
 
     public void FixedUpdate()
