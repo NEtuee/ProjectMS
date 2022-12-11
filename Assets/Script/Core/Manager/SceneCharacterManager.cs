@@ -86,7 +86,7 @@ public class SceneCharacterManager : ManagerBase
                 CharacterEntityBase requester = _targetSearchRequestList[i]._requester as CharacterEntityBase;
                 CharacterEntityBase receiverCharacter = receiver as CharacterEntityBase;
 
-                if(requester == receiverCharacter || _targetSearchRequestList[i]._searchIdentifier != receiverCharacter._searchIdentifier)
+                if(requester == receiverCharacter || _targetSearchRequestList[i]._searchIdentifier != receiverCharacter._searchIdentifier || receiverCharacter.isDead())
                     continue;
 
                 GameEntityBase currentTarget = requester.getCurrentTargetEntity();

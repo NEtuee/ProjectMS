@@ -512,6 +512,8 @@ public class GameEntityBase : SequencerObjectBase
     {
         _danmakuGraph.addDanmakuGraph(path);
     }
+    
+    public bool isDead() {return _statusInfo.isDead();}
 
     public void executeAIEvent(AIChildEventType eventType) {_aiGraph.executeAIEvent(eventType);}
 
