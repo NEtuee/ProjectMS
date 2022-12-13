@@ -9,6 +9,7 @@ public abstract class MovementBase
         Empty = 0,
         RootMotion,
         GraphPreset,
+        FrameEvent,
         Count,
     }
 

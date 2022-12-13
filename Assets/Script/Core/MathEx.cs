@@ -39,6 +39,19 @@ public static class MathEx
 		return result <= 0f ? UnityEngine.Vector3.zero : value - vector;
 	}
 
+	public static UnityEngine.Vector3 convergenceTarget(UnityEngine.Vector3 value, UnityEngine.Vector3 target, float a)
+	{
+		if(MathEx.equals(a,0f,float.Epsilon))
+			return value;
+			
+		UnityEngine.Vector3 direction = (target - value).normalized;
+
+        UnityEngine.Vector3 result = value + (direction * a);
+		UnityEngine.Vector3 resultDirection = (target - result).normalized;
+
+		return UnityEngine.Vector3.Angle(direction,resultDirection) > 100f ? target : result;
+	}
+
     public static float convergence0(float value, float a)
     {
         if(equals(value,0f,float.Epsilon))
@@ -48,6 +61,17 @@ public static class MathEx
         float result = abs(value) - abs(a);
 
         return result <= 0f ? 0f : result * mark;
+    }
+
+    public static float convergenceTarget(float value, float target, float a)
+    {
+        if(equals(value,target,float.Epsilon))
+            return target;
+            
+		float mark = target > value ? 1f : -1f;
+        float result = value + (abs(a) * mark);
+
+        return (abs(target) - abs(result)) * mark <= 0f ? target : result;
     }
 
     public static float normalize(float value) {return value < 0f ? -1f : 1f;}

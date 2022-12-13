@@ -18,6 +18,7 @@ public enum FrameEventType
     FrameEvent_SetAnimationSpeed,
     FrameEvent_SetCameraDelay,
     FrameEvent_KillEntity,
+    FrameEvent_Movement,
 
     Count,
 }
@@ -73,6 +74,45 @@ public abstract class ActionFrameEventBase
     }
 }
 
+
+public class ActionFrameEvent_Movement : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_KillEntity;}
+
+    private float _value;
+    private int _targetValue;
+
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        if(executeEntity is GameEntityBase == false)
+            return false;
+
+        MovementBase currentMovement = ((GameEntityBase)executeEntity).getCurrentMovement();
+        if(currentMovement == null)
+            return false;
+            
+        if(currentMovement.getMovementType() != MovementBase.MovementType.FrameEvent)
+        {
+            DebugUtil.assert(false,"movement frame event is only can use, when movement type is frameEvent movement : currentType[{0}]", currentMovement.getMovementType().ToString());
+            return false;
+        }
+
+        ((FrameEventMovement)currentMovement).setMovementValue(_value,_targetValue);
+        return true;
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            if(attributes[i].Name == "Value")
+                _value = float.Parse(attributes[i].Value);
+            else if(attributes[i].Name == "ValueType")
+                _targetValue = (int)((FrameEventMovement.FrameEventMovementValueType)System.Enum.Parse(typeof(FrameEventMovement.FrameEventMovementValueType), attributes[i].Value));
+        }
+    }
+}
 
 public class ActionFrameEvent_KillEntity : ActionFrameEventBase
 {

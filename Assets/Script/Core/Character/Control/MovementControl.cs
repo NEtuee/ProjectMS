@@ -64,6 +64,8 @@ public class MovementControl
             return changeMovement<GraphMovement>(targetEntity);
         case MovementBase.MovementType.GraphPreset:
             return changeMovement<GraphPresetMovement>(targetEntity);
+        case MovementBase.MovementType.FrameEvent:
+            return changeMovement<FrameEventMovement>(targetEntity);
         default:
             DebugUtil.assert(false,"invalid movement type: {0}",movementType);
             break;
