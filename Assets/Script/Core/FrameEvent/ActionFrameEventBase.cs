@@ -77,11 +77,16 @@ public abstract class ActionFrameEventBase
 
 public class ActionFrameEvent_Movement : ActionFrameEventBase
 {
+    struct MovementSetValueType
+    {
+        public float _value;
+        public int _targetValue;
+    };
+
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_KillEntity;}
 
-    private float _value;
-    private int _targetValue;
-
+    private MovementSetValueType[] _setValueList = null;
+    private int _valueListCount = 0;
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
         if(executeEntity is GameEntityBase == false)
@@ -97,20 +102,39 @@ public class ActionFrameEvent_Movement : ActionFrameEventBase
             return false;
         }
 
-        ((FrameEventMovement)currentMovement).setMovementValue(_value,_targetValue);
+        for(int i = 0; i < _valueListCount; ++i)
+        {
+            ((FrameEventMovement)currentMovement).setMovementValue(_setValueList[i]._value,_setValueList[i]._targetValue);
+        }
+        
         return true;
     }
 
     public override void loadFromXML(XmlNode node)
     {
+        List<MovementSetValueType> movementSetValueList = new List<MovementSetValueType>();
         XmlAttributeCollection attributes = node.Attributes;
         for(int i = 0; i < attributes.Count; ++i)
         {
-            if(attributes[i].Name == "Value")
-                _value = float.Parse(attributes[i].Value);
-            else if(attributes[i].Name == "ValueType")
-                _targetValue = (int)((FrameEventMovement.FrameEventMovementValueType)System.Enum.Parse(typeof(FrameEventMovement.FrameEventMovementValueType), attributes[i].Value));
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName != "Speed" && attrName != "Velocity" && attrName != "MaxVelocity" && attrName != "Friction")
+                continue;
+
+            float value;
+            if(float.TryParse(attrValue, out value) == false)
+            {
+                DebugUtil.assert(false,"invalid movement frameeevent value string: {0}",attrValue);
+                continue;
+            }
+
+            int targetValue = (int)((FrameEventMovement.FrameEventMovementValueType)System.Enum.Parse(typeof(FrameEventMovement.FrameEventMovementValueType), attrName));
+            movementSetValueList.Add(new MovementSetValueType{_value = value, _targetValue = targetValue});
         }
+
+        _setValueList = movementSetValueList.ToArray();
+        _valueListCount = movementSetValueList.Count;
     }
 }
 

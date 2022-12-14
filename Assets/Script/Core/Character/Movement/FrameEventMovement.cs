@@ -48,18 +48,23 @@ public class FrameEventMovement : MovementBase
         }
 
         _currentDirection = direction;//(Quaternion.FromToRotation(Vector3.right,direction) * Quaternion.Euler(0f,0f,0f)) * Vector3.right;
-        if(_currentDirection.sqrMagnitude >= float.Epsilon)
+        float resultSpeed = MathEx.convergenceTarget(_movementValues[0], 0f, _movementValues[3]);
+        if(MathEx.abs(resultSpeed) >= float.Epsilon && _currentDirection.sqrMagnitude >= float.Epsilon)
         {
             _currentVelocity = MathEx.convergenceTarget(
                 _currentVelocity,
                 _currentDirection * _movementValues[2],
-                _movementValues[0] * deltaTime);
+                (MathEx.convergenceTarget(_movementValues[0], 0f, _movementValues[3]) * deltaTime));
         }
         
+        if(_movementValues[0] == 0f)
+        {
+            _currentVelocity = MathEx.convergence0(
+                _currentVelocity,
+                _movementValues[3] * deltaTime);
+        }
 
-        _currentVelocity = MathEx.convergence0(
-            _currentVelocity,
-            _movementValues[3] * deltaTime);
+        
 
         movementOfFrame += _currentVelocity * deltaTime;
 
