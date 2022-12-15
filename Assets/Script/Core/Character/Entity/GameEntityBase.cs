@@ -144,12 +144,12 @@ public class GameEntityBase : SequencerObjectBase
             }
 
             updateDirection();
-            _movementControl?.progress(deltaTime, _direction);
-            updatePhysics(deltaTime);
-
-
+            
             //animation 바뀌는 시점
             _actionGraph.updateAnimation(Time.deltaTime, this);
+            _movementControl?.progress(deltaTime, _direction);
+            
+            updatePhysics(deltaTime);
 
             _spriteRenderer.sprite = _actionGraph.getCurrentSprite();
             _spriteRenderer.transform.localRotation = _actionGraph.getCurrentAnimationRotation();
@@ -512,6 +512,8 @@ public class GameEntityBase : SequencerObjectBase
     {
         _danmakuGraph.addDanmakuGraph(path);
     }
+    
+    public bool isDead() {return _statusInfo.isDead();}
 
     public void executeAIEvent(AIChildEventType eventType) {_aiGraph.executeAIEvent(eventType);}
 
@@ -558,5 +560,6 @@ public class GameEntityBase : SequencerObjectBase
     public MoveValuePerFrameFromTimeDesc getMoveValuePerFrameFromTimeDesc(){return _actionGraph.getMoveValuePerFrameFromTimeDesc();}
     public MovementGraph getCurrentMovementGraph(){return _actionGraph.getCurrentMovementGraph();}
     public MovementGraphPresetData getCurrentMovementGraphPreset() {return _actionGraph.getCurrentMovementGraphPreset();}
+    public MovementBase getCurrentMovement() {return _movementControl.getCurrentMovement();}
     public MovementControl getMovementControl(){return _movementControl;}
 }

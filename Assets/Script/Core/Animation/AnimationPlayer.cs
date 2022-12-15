@@ -271,6 +271,12 @@ public class AnimationPlayer
 
     public Sprite getCurrentSprite()
     {
+        if(_currentAnimationSprites.Length <= _animationTimeProcessor.getCurrentIndex())
+        {
+            DebugUtil.assert(false, "sprite out of index, check end Frame of Action");
+            return null;
+        }
+
         return _currentAnimationSprites[_animationTimeProcessor.getCurrentIndex()];
     }
 }

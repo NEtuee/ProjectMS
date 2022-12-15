@@ -135,6 +135,23 @@ public class GizmoHelper : MonoBehaviour
         _arcData.Add(arcData);
     }
 
+    public void drawRectangle(Vector3 center, Vector3 widthHeightHalf, Color color, float time = 0f)
+    {
+        if(AreGizmosVisible() == false)
+            return;
+            
+        Vector3 leftTop = new Vector3(center.x - widthHeightHalf.x, center.y + widthHeightHalf.y, 0f);
+        Vector3 rightTop = new Vector3(center.x + widthHeightHalf.x, center.y + widthHeightHalf.y, 0f);
+        Vector3 leftBottom = new Vector3(center.x - widthHeightHalf.x, center.y - widthHeightHalf.y, 0f);
+        Vector3 rightbottom = new Vector3(center.x + widthHeightHalf.x, center.y - widthHeightHalf.y, 0f);
+
+        drawLine(leftTop, rightTop, color, time);
+        drawLine(rightTop, rightbottom, color, time);
+        drawLine(rightbottom, leftBottom, color, time);
+        drawLine(leftBottom, leftTop, color, time);
+    }
+
+
     public void drawLine(Vector3 start, Vector3 end, Color color, float time = 0f)
     {
         if(AreGizmosVisible() == false)

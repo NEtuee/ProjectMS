@@ -16,7 +16,7 @@
     </BranchSet>
 
     <Idle DirectionType="Keep" FlipType="MousePoint">
-        <Animation Path="Resources/Sprites/NewPlayer/idle/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
+        <Animation Path="Resources/Sprites/NewPlayer/idle/" StartFrame="0" EndFrame="1" FramePerSecond="12" XFlip="true" Loop="false">
         </Animation>
 
         <UseBranchSet Name="CommonBattleBranchSet"/>
@@ -32,13 +32,24 @@
 
 
     <MoveAll MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="MoveInput" FlipType="MousePoint" NormalizedSpeed="true">
-        <Animation Path="Resources/Sprites/NewPlayer/moveFront/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="false"> <!--XFilp="true"-->
-            <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/moveUp/" Condition="(AngleDirection >= 45.0) && (AngleDirection < 135.0)"/>
-            <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/moveDown/" Condition="(AngleDirection >= 225.0) && (AngleDirection < 315.0)"/>
-            <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/moveBack/" Condition="(AngleDirection >= 315.0) || (AngleDirection < 45.0) && (IsXFlip == true)"/>
-            <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/moveFront/" Condition="(AngleDirection >= 135.0) && (AngleDirection < 225.0) && (IsXFlip == true)"/>
-            <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/moveBack/" Condition="(AngleDirection >= 135.0) && (AngleDirection < 225.0) && (IsXFlip == false)"/>
-            <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/moveFront/" Condition="(AngleDirection >= 315.0) || (AngleDirection < 45.0) && (IsXFlip == false)"/>
+        <Animation Path="Resources/Sprites/DummyPlayer/MoveForward/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
+            <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/right/" Condition="(AngleDirection < 22.5) || (AngleDirection >= 337.5) && (IsXFlip == false)"/>
+            <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/topright/" Condition="(AngleDirection < 67.5) && (AngleDirection >= 22.5) && (IsXFlip == false)"/>
+            <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/top/" Condition="(AngleDirection < 112.5) && (AngleDirection >= 67.5) && (IsXFlip == false)"/>
+            <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/topleft/" Condition="(AngleDirection < 157.5) && (AngleDirection >= 112.5) && (IsXFlip == false)"/>
+            <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/left/" Condition="(AngleDirection < 202.5) && (AngleDirection >= 157.5) && (IsXFlip == false)"/>
+            <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/bottomleft/" Condition="(AngleDirection < 247.5) && (AngleDirection >= 202.5) && (IsXFlip == false)"/>
+            <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/bottom/" Condition="(AngleDirection < 292.5) && (AngleDirection >= 247.5) && (IsXFlip == false)"/>
+            <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/bottomright/" Condition="(AngleDirection < 337.5) && (AngleDirection >= 292.5) && (IsXFlip == false)"/>
+
+            <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/left/" Condition="(AngleDirection < 22.5) || (AngleDirection >= 337.5) && (IsXFlip == true)"/>
+            <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/topleft/" Condition="(AngleDirection < 67.5) && (AngleDirection >= 22.5) && (IsXFlip == true)"/>
+            <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/top/" Condition="(AngleDirection < 112.5) && (AngleDirection >= 67.5) && (IsXFlip == true)"/>
+            <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/topright/" Condition="(AngleDirection < 157.5) && (AngleDirection >= 112.5) && (IsXFlip == true)"/>
+            <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/right/" Condition="(AngleDirection < 202.5) && (AngleDirection >= 157.5)) && (IsXFlip == true)"/>
+            <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/bottomright/" Condition="(AngleDirection < 247.5) && (AngleDirection >= 202.5) && (IsXFlip == true)"/>
+            <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/bottom/" Condition="(AngleDirection < 292.5) && (AngleDirection >= 247.5) && (IsXFlip == true)"/>
+            <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/bottomleft/" Condition="(AngleDirection < 337.5) && (AngleDirection >= 292.5) && (IsXFlip == true)"/>
         </Animation>
 
         <UseBranchSet Name="CommonMoveBranchSet"/>
@@ -49,7 +60,7 @@
 
 
     <AttackCharge MovementType="GraphPreset" MovementGraphPreset="AttackCharge" DirectionType="MoveInput" FlipType="MousePoint" ApplyBuff="2 3">
-        <Animation Path="Resources/Sprites/NewPlayer/charge/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
+        <Animation Path="Resources/Sprites/NewPlayer/charge/" StartFrame="0" EndFrame="1" FramePerSecond="3" XFlip="true" Loop="false">
         </Animation>
 
         <Branch Condition="Hit == true" Execute="Hit"/>
@@ -100,12 +111,8 @@
     </Attack_Parried>
 
     <Attack_Success MovementType="GraphPreset" MovementGraphPreset="AttackSuccess" DirectionType="Keep" RotationType="Keep" FlipType="Keep" NormalizedSpeed="false">
-        <Animation Path="Resources/Sprites/NewPlayer/attack" StartFrame="0" EndFrame="4" FramePerSecond="12" ScalePreset="YSpring">
-            <FrameEvent Type="SetAnimationSpeed" StartFrame="0"/>
+        <Animation Path="Resources/Sprites/NewPlayer/attack" StartFrame="0" EndFrame="4" FramePerSecond="18" ScalePreset="YSpring">
 
-            <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="4"/>
-            <FrameEvent Type="SetAnimationSpeed" StartFrame="2" Speed="2"/>
-            <FrameEvent Type="SetAnimationSpeed" StartFrame="3" Speed="0.3"/>
         </Animation>
 
             
@@ -113,13 +120,9 @@
     </Attack_Success>
 
     <Attack_LV1 MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="Keep" RotationType="Direction" FlipType="Keep" NormalizedSpeed="false">
-        <Animation Path="Resources/Sprites/NewPlayer/attack" StartFrame="0" EndFrame="4" FramePerSecond="12" ScalePreset="YSpring">
+        <Animation Path="Resources/Sprites/NewPlayer/attack" StartFrame="0" EndFrame="4" FramePerSecond="18" ScalePreset="YSpring">
             <FrameEvent Type="SetCameraDelay" StartFrame="0" EndFrame="0"/>
-            <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="4"/>
-            <!-- <FrameEvent Type="SetAnimationSpeed" StartFrame="0.3" Speed="2.6"/>-->
-            <FrameEvent Type="SetAnimationSpeed" StartFrame="2" Speed="2"/>
-            <FrameEvent Type="SetAnimationSpeed" StartFrame="3" Speed="0.3"/>
-
+            
             <FrameEvent Type="Effect" StartFrame="0" Path="Resources/Sprites/Effect/Sheath" FramePerSecond="0.5" Offset="0.0 0.0 0.0" Angle="Random_0^360" UseFlip="True">
                 <Physics UseGravity="True" Velocity="-1.5^3.5" Friction="1.0" Torque="Random_25^30" AngularFriction="10.0"/>
             </FrameEvent>
@@ -153,7 +156,7 @@
     </Attack_LV1>
     
     <Attack_LV2 MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="Keep" FlipType="Keep">
-        <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="3">
+        <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="4" FramePerSecond="12">
             <FrameEvent Type="Attack" StartFrame="0" AttackPreset="PlayerAttackTest">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
@@ -181,7 +184,7 @@
     </Attack_LV2>
 
     <Attack_LV3 MovementType="GraphPreset" MovementGraphPreset="Attack" DirectionType="Keep" FlipType="Keep">
-        <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="3">
+        <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="3" FramePerSecond="12">
             <FrameEvent Type="Attack" StartFrame="0" AttackPreset="PlayerAttackTest">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
@@ -252,12 +255,8 @@
     </DashStart>
 
 
-    <Dash MovementType="GraphPreset" DirectionType="Keep" MovementGraphPreset="Dash" FlipType="Keep" RotationType="AlwaysRight " DefenceType="Evade" DefenceAngle="360.0">
-        <Animation Path="Resources/Sprites/NewPlayer/moveFront/" StartFrame="0" EndFrame="1" FramePerSecond="3" XFlip="false">
-            <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/moveUp/" Condition="(AngleDirection >= 45.0) && (AngleDirection < 135.0)"/>
-            <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/moveDown/" Condition="(AngleDirection >= 225.0) && (AngleDirection < 315.0)"/>
-            <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/moveBack/" Condition="(AngleDirection >= 135.0) && (AngleDirection < 225.0) && (IsXFlip == false)"/>
-            <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/moveFront/" Condition="(AngleDirection >= 315.0) || (AngleDirection < 45.0) && (IsXFlip == false)"/>
+    <Dash MovementType="GraphPreset" DirectionType="Keep" MovementGraphPreset="Dash" FlipType="Direction" RotationType="Direction" DefenceType="Evade" DefenceAngle="360.0">
+        <Animation Path="Resources/Sprites/DummyPlayer/dash/" StartFrame="0" EndFrame="4" FramePerSecond="30.0" XFlip="true">
             <FrameEvent Type="ApplyBuff" ApplyBuff="9" StartFrame="0"/>
         </Animation>
 
@@ -277,7 +276,7 @@
     </Hit>
 
     <Dead DirectionType="Keep" FlipType="Direction">
-        <Animation Path="Resources/Sprites/DummyPlayer/Hit/" StartFrame="0" EndFrame="3" FramePerSecond="1" XFlip="true">
+        <Animation Path="Resources/Sprites/DummyPlayer/Hit/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
             <FrameEvent Type="FrameTag" StartFrame="0" EndFrame="999" Tag="Hit"/>
         </Animation>
 

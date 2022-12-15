@@ -45,13 +45,15 @@ public static class FrameEventLoader
             outFrameEvent = new ActionFrameEvent_SetCameraDelay();
         else if(type == "KillEntity")
             outFrameEvent = new ActionFrameEvent_KillEntity();
+        else if(type == "Movement")
+            outFrameEvent = new ActionFrameEvent_Movement();
         else
         {
             DebugUtil.assert(false, "invalid frameEvent type: {0}",type);
             return null;
         }
 
-        DebugUtil.assert((int)FrameEventType.Count == 15, "check here");
+        DebugUtil.assert((int)FrameEventType.Count == 16, "check here");
 
 
         if(outFrameEvent == null)
