@@ -149,7 +149,6 @@ public class AnimationPlayer
             if(MathEx.equals(frameEvent._startFrame, currentFrame,float.Epsilon) == true || frameEvent._startFrame < currentFrame)
             {
                 frameEvent.initialize();
-
                 if(frameEvent.onExecute(targetEntity) == true && frameEvent._endFrame > frameEvent._startFrame)
                 {
                     FrameEventProcessDescription desc;
@@ -201,11 +200,11 @@ public class AnimationPlayer
 
         float endFrame = playData._endFrame;
         endFrame = endFrame == -1f ? (float)_currentAnimationSprites.Length : endFrame;
-
+        
         _animationTimeProcessor.initialize();
         _animationTimeProcessor.setFrame(startFrame,endFrame, playData._framePerSec);
         _animationTimeProcessor.setLoop(playData._isLoop);
-        _animationTimeProcessor.setFrameToTime(playData._startFrame);
+        _animationTimeProcessor.setFrameToTime(startFrame);
         _animationTimeProcessor.setAnimationSpeed(1f);
 
         for(int i = 0; i < _frameEventProcessList.Count; ++i)
