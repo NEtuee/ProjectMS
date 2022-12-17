@@ -14,6 +14,8 @@ public class AIGraph
     private float _updateTimer = 0f;
     private float _arriveThreshold = 0f;
 
+    private float _aiPackageExecutedTimer = 0f;
+
     private bool _packageEnd = false;
     private bool _arrived = false;
 
@@ -108,6 +110,8 @@ public class AIGraph
             return false;
 
         bool stateChanged = false;
+
+        _aiPackageExecutedTimer += deltaTime;
 
         if(_changePackageStateIndex == -1)
         {
@@ -206,6 +210,8 @@ public class AIGraph
         _prevPackageStateIndex = _currentPackageStateIndex;
         _currentPackageStateIndex = aiPackageStateIndex;
 
+        _aiPackageExecutedTimer = 0f;
+
         _arrived = false;
         _arriveThreshold = getCurrentAIPackageNode()._arriveThreshold;
         _recentlyAiTargetPosition = getCurrentAIPackageNode()._targetPosition;
@@ -295,6 +301,8 @@ public class AIGraph
     public bool isCurrentPackageEnd() {return _packageEnd;}
     public bool isAIArrivedTarget() {return _arrived;}
     public bool hasTargetPosition() {return getCurrentAIPackageNode()._hasTargetPosition;}
+
+    public float getCurrentPackageExecutedTime() {return _aiPackageExecutedTimer;}
     public float getCurrentTargetSearchRange() {return getCurrentAIPackageNode()._targetSearchRange;}
     public string getCurrentAIStateName() {return _packageEnd ? "Package End" : getCurrentAIPackageNode()._nodeName;}
     public Vector3 getCurrentTargetPosition() {return _recentlyAiTargetPosition;}
