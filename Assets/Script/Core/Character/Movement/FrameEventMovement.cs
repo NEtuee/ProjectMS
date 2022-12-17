@@ -47,24 +47,18 @@ public class FrameEventMovement : MovementBase
             return false;
         }
 
-        _currentDirection = direction;//(Quaternion.FromToRotation(Vector3.right,direction) * Quaternion.Euler(0f,0f,0f)) * Vector3.right;
-        float resultSpeed = MathEx.convergenceTarget(_movementValues[0], 0f, _movementValues[3]);
-        if(MathEx.abs(resultSpeed) >= float.Epsilon && _currentDirection.sqrMagnitude >= float.Epsilon)
-        {
-            _currentVelocity = MathEx.convergenceTarget(
-                _currentVelocity,
-                _currentDirection * _movementValues[2],
-                (MathEx.convergenceTarget(_movementValues[0], 0f, _movementValues[3]) * deltaTime));
-        }
+        _currentDirection = direction;
+        float resultSpeed = _movementValues[0] + (_movementValues[0] >= 0 ? -_movementValues[3] : _movementValues[3]);
         
-        if(_movementValues[0] == 0f)
-        {
-            _currentVelocity = MathEx.convergence0(
-                _currentVelocity,
-                _movementValues[3] * deltaTime);
-        }
+        _currentVelocity += (_currentDirection * _movementValues[0]) * deltaTime;
+        Vector3 velocityDirection = _currentVelocity.normalized;
 
-        
+        _currentVelocity -= _currentVelocity.normalized * _movementValues[3] * deltaTime;
+
+        if(Vector3.Angle(_currentVelocity.normalized, velocityDirection) > 100f)
+            _currentVelocity = Vector3.zero;
+        else if(_currentVelocity.sqrMagnitude > _movementValues[2] * _movementValues[2])
+            _currentVelocity = _currentVelocity.normalized * _movementValues[2];
 
         movementOfFrame += _currentVelocity * deltaTime;
 
@@ -80,7 +74,9 @@ public class FrameEventMovement : MovementBase
     {
         if(valueType == 1)
         {
-            _currentVelocity = _currentDirection * value;
+            if(MathEx.equals(_targetEntity.getDirection().sqrMagnitude, 0f, float.Epsilon) == false)
+                _currentVelocity = _targetEntity.getDirection() * value;
+
             return;
         }
 
