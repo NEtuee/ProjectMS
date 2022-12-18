@@ -9,6 +9,9 @@ public static partial class MessageTitles
     public const ushort     system_deregisterRequest    = 0x0101;
     public const ushort     system_onTriggerEnter       = 0x0102;
     public const ushort     system_onTriggerExit        = 0x0103;
+    public const ushort     system_pauseUpdate          = 0x0104;
+    public const ushort     system_playUpdate           = 0x0105;
+    public const ushort     system_updateFrame          = 0x0106;
 
     //게임 시작 알림
     public const ushort     game_gameStart              = 0x0200;
