@@ -8,6 +8,8 @@ public class ActionKeyInputData
     public int          _presetDataIndex;
     public float        _thresholdTime = 0f;
 
+    public bool         _consumed = false;
+
     public byte[]       _isValid = new byte[1];
 
 
@@ -63,17 +65,41 @@ public class ActionKeyInputManager : Singleton<ActionKeyInputManager>
 
         foreach(ActionKeyInputData item in _actionKeyInputData.Values)
         {
+            bool check = false;
+
             ActionKeyPresetData presetData = _actionKeyPresetData[item._presetDataIndex];
             switch(presetData._multiInputType)
             {
                 case ActionKeyMultiInputType.Single:
-                    item._isValid[0] = singleInputCheck(presetData) == true ? (byte)1 : (byte)0;
+                    check = singleInputCheck(presetData);
                     break;
                 case ActionKeyMultiInputType.SameTime:
-                    item._isValid[0] = sameTimeInputCheck(deltaTime,item,presetData) == true ? (byte)1 : (byte)0;
+                    check = sameTimeInputCheck(deltaTime,item,presetData);
                     break;
             }
+
+            if(check == false && item._consumed)
+                item._consumed = false;
+            item._isValid[0] = item._consumed ? (byte)0 : (check ? (byte)1 : (byte)0);
         }
+    }
+
+    public bool keyCheck(string keyName)
+    {
+        if(isValid() == false)
+        {
+            DebugUtil.assert(false,"action key preset data is null");
+            return false;
+        }
+
+        if(_actionKeyInputData.ContainsKey(keyName) == false)
+        {
+            DebugUtil.assert(false,"target key is not exists: {0}",keyName);
+            return false;
+        }
+
+        bool check = _actionKeyInputData[keyName]._isValid[0] == (byte)1;
+        return check;
     }
 
     public byte[] actionKeyCheck(string keyName)

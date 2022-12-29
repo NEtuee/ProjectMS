@@ -178,6 +178,8 @@ public enum ConditionNodeUpdateType
     AI_TargetExists,
     AI_ArrivedTarget,
     AI_CurrentPackageEnd,
+    AI_PackageStateExecutedTime,
+    AI_GraphStateExecutedTime,
 
     Status,
     Key,
@@ -256,6 +258,8 @@ public static class ConditionNodeInfoPreset
         {"TargetDistance",new ConditionNodeInfo(ConditionNodeUpdateType.AI_TargetDistance, ConditionNodeType.Float)},
         {"ArrivedTarget",new ConditionNodeInfo(ConditionNodeUpdateType.AI_ArrivedTarget, ConditionNodeType.Bool)},
         {"CurrentPackageEnd",new ConditionNodeInfo(ConditionNodeUpdateType.AI_CurrentPackageEnd, ConditionNodeType.Bool)},
+        {"PackageExecutedTime",new ConditionNodeInfo(ConditionNodeUpdateType.AI_PackageStateExecutedTime, ConditionNodeType.Float)},
+        {"GraphExecutedTime",new ConditionNodeInfo(ConditionNodeUpdateType.AI_GraphStateExecutedTime, ConditionNodeType.Float)},
 
         {"Status",new ConditionNodeInfo(ConditionNodeUpdateType.Status, ConditionNodeType.Float)},
         {"Key",new ConditionNodeInfo(ConditionNodeUpdateType.Key, ConditionNodeType.Bool)},

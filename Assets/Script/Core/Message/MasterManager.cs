@@ -10,6 +10,11 @@ public class MasterManager : MessageHub<ManagerBase>
     public ObjectBase               player;
 
     public List<ManagerBase>        managers;
+
+    private bool                    _update = true;
+
+    private bool                    _frameUpdate = false;
+
     protected override void Awake()
     {
         base.Awake();
@@ -26,6 +31,20 @@ public class MasterManager : MessageHub<ManagerBase>
         {
             DeregisteReceiver(msg);
         });
+
+        AddAction(MessageTitles.system_pauseUpdate,(msg)=>
+        {
+            _update = false;
+        });
+        AddAction(MessageTitles.system_playUpdate,(msg)=>
+        {
+            _update = true;
+        });
+        AddAction(MessageTitles.system_updateFrame,(msg)=>
+        {
+            _frameUpdate = true;
+        });
+
         foreach(var m in managers)
         {
             if(m == null)
@@ -52,8 +71,21 @@ public class MasterManager : MessageHub<ManagerBase>
     public void Update()
     {
         float deltaTime = Time.deltaTime;
-        GlobalTimer.Instance().updateGlobalTime(deltaTime);
         ActionKeyInputManager.Instance().progress(deltaTime);
+
+        if(_update == false && _frameUpdate == false)
+        {
+            ReceiveMessageProcessing();
+            return;
+        }
+        
+        if(_frameUpdate)
+        {
+            deltaTime = 0.01666f * 2f;
+            _frameUpdate = false;
+        }
+
+        GlobalTimer.Instance().updateGlobalTime(deltaTime);
         CameraControlEx.Instance().SyncPosition();
 
         ManagersUpdate(deltaTime);
