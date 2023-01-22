@@ -1,0 +1,40 @@
+﻿HintType,Symbol,TextList
+FrameEvent,Test,Log=~~
+FrameEventAndInQuote,Test Log=,Check
+InQuote,MovementType=,"Empty,RootMotion,GraphPreset,FrameEvent"
+InQuote,DirectionType=,"AlywaysRight,Keep,MoveInput,MousePoint,AttackedPoint,MoveDirection,AI,AITarget"
+InQuote,DefenceDirectionType=,"Direction,MousePoint"
+InQuote,FlipType=,"AlwaysTurnOff,Direction,MousePoint,Keep"
+InQuote,RotationType=,"AlwaysTurnOff,Direction,MousePoint,Keep"
+InQuote,DefenceType=,"Empty,Guard,Parry,Evade"
+InQuote,IsActionSelection=,"true,false"
+InQuote,NormalizedSpeed=,"true,false"
+InQuote,DirectionUpdateOnce=,"true,false"
+InScope,,"MovementType=~~,MovementGraphPreset=~~,DirectionType=~~,DefenceDirectionType=~~,FlipType=~~,RotationType=~~,MoveScale=~~,IsActionSelection=~~,ApplyBuff=~~,NormalizedSpeed=~~,DefenceType=~~,DefenceAngle=~~,DirectionUpdateOnce=~~,IsActionSelection=~~"
+LineStart,<Branch,"Key=~~,Condition=~~,Execute=~~,Weight=~~"
+LineStart,<Animation,"Path=~~,StartFrame=~~,EndFrame=~~,FramePerSecond=~~,Loop=~~,Xflip=~~,YFlip=~~,RotationPreset=~~,ScalePreset=~~"
+LineStart,<MultiSelectAnimation,"Path=~~,Condition=~~"
+LineStart,<Branch,"Weight=~~,Key=~~,Condition=~~,Execute=~~"
+LineStartAndInQuote,<Animation XFlip=,"true,false"
+LineStartAndInQuote,<Branch Condition=,"ActionTest,ActionDash,End,AngleBetweenStick,AngleDirection,IsXFlip,IsYFlip,CurrentFrame,AttackSuccess,AttackGuarded,AttackParried,AttackGuardBreak,DefenceSuccess,ParrySuccess,Hit,EvadeSuccess,GuardBroken,CurrentFrame,TargetExists,TargetDistance,ArrivedTarget,CurrentPackageEnd,getStat_,getKey_,getFrameTag_,getTargetFrameTag_,getWeight_"
+LineStartAndInQuote,<Animation YFlip=,"true,false"
+LineStartAndInQuote,<Animation Loop=,"true,false"
+LineStartAndInQuote,<FrameEvent Type=,"Test,Attack,ApplyBuff,ApplyBuffTarget,DeleteBuff,TeleportToTarget,TeleportToTargetBack,SetDefenceType,Effect,SetFrameTag,Projectile,Danmaku,SetAnimationSpeed,KillEntity,Movement"
+ShortCut,__Action,<${1}>#n#t<Animation Path=~~>#n#t</Animation>#n</${1}>
+ShortCut,__UseBranchSet,<UseBranchSet Name=~~/>
+ShortCut,__FrameEvent,<FrameEvent Type=~~ StartFrame=~0~/>
+ShortCut,__Branch,<Branch Condition=~~ Execute=~~/>
+ShortCut,__BranchSet,<BranchSet Name=~~>#n#t#n</BranchSet>
+ShortCut,__GlobalVariable,<GlobalVariable Name=~~ Value=~~/>
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,

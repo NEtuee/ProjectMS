@@ -39,6 +39,17 @@ public class AnimationTimeProcessor
         _prevIndex = 0;
 
         _animationTotalPlayTime = 0f;
+
+        _framePerSecond = 0f;
+        _frameToTime = 0f;
+
+        _animationTime = 0f;
+
+        _animationStartTime = 0f;
+        _animationEndTime = 0f;
+
+        _totalLoopCountPerFrame = 0;
+        _animationSpeed = 1f;
     }
 
     public bool updateTime(float deltaTime)

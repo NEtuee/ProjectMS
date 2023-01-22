@@ -94,8 +94,13 @@ public class AnimationPlayer
         }
 
         _animationTimeProcessor.updateTime(deltaTime);
-        processFrameEventContinue();
-        processFrameEvent(_currentAnimationPlayData, targetEntity);
+
+        if(targetEntity != null)
+        {
+            processFrameEventContinue();
+            processFrameEvent(_currentAnimationPlayData, targetEntity);
+        }
+        
 
         return _animationTimeProcessor.isEnd();
     } 
