@@ -42,8 +42,9 @@ public class AIGraph
     {
     }
 
-    public void initialize(GameEntityBase targetEntity, AIGraphBaseData baseData)
+    public void initialize(GameEntityBase targetEntity, ActionGraph actionGraph, AIGraphBaseData baseData)
     {
+        _actionGraph = actionGraph;
         _aiGraphBaseData = baseData;
 
         initialize(targetEntity);

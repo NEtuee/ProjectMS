@@ -22,6 +22,7 @@ public class StageGraphManager : Singleton<StageGraphManager>
         _isStageEventEnd = true;
         for(int index = _currentIndex; index < _currentStage._stageGraphPhase[1]._stageGraphEventCount;)
         {
+            _currentIndex = index;
             if(_currentStage._stageGraphPhase[1]._stageGraphEventList[index].Execute(deltaTime) == false)
             {
                 _isStageEventEnd = false;

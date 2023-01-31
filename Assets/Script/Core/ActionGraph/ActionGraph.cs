@@ -37,6 +37,7 @@ public class ActionGraph
 
     public void initialize()
     {
+        initializeConditionData();
         _animationPlayer.initialize();
         if(_actionGraphBaseData._defaultActionIndex != -1)
             changeAction(_actionGraphBaseData._defaultActionIndex);
@@ -102,6 +103,15 @@ public class ActionGraph
 
 
         _actionConditionNodeData.Add(info._updateType, new byte[ConditionNodeInfoPreset._dataSize[(int)info._nodeType]]);
+    }
+
+    private void initializeConditionData()
+    {
+        foreach(var item in _actionConditionNodeData)
+        {
+            for(int i = 0; i < item.Value.Length; ++i)
+                item.Value[i] = 0;
+        }
     }
 
     private bool processAction(ActionGraphNodeData actionData)

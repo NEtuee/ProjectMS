@@ -156,13 +156,14 @@ public class SceneCharacterManager : ManagerBase
         if(_disableCharacterPoolCacheMap.Count != 0)
         {
             characterEntity = _disableCharacterPoolCacheMap.Dequeue();
-            characterEntity.gameObject.SetActive(true);
         }
         else
         {
             GameObject characterObject = new GameObject(characterData._displayName);
             characterEntity = characterObject.AddComponent<CharacterEntityBase>();
         }
+
+        characterEntity.gameObject.SetActive(true);
 
         _enableCharacterPoolCacheMap.Add(characterEntity.GetUniqueID(), characterEntity);
 

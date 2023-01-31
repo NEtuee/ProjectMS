@@ -77,12 +77,12 @@ public class GameEntityBase : SequencerObjectBase
         createSpriteRenderObject();
     }
 
-    public void initializeCharacter(CharacterInfoData characterInfo)
+    public virtual void initializeCharacter(CharacterInfoData characterInfo)
     {
         base.initialize();
         
         _actionGraph.initialize(ResourceContainerEx.Instance().GetActionGraph(characterInfo._actionGraphPath));
-        _aiGraph.initialize(this, ResourceContainerEx.Instance().GetAIGraph(aiGraphPath));
+        _aiGraph.initialize(this, _actionGraph, ResourceContainerEx.Instance().GetAIGraph(characterInfo._aiGraphPath));
         _danmakuGraph.initialize(this);
 
         _statusInfo.initialize(characterInfo._statusName);
@@ -101,11 +101,10 @@ public class GameEntityBase : SequencerObjectBase
     {
         if(_initializeFromCharacter)
             return;
-            
         base.initialize();
         
         _actionGraph.initialize(ResourceContainerEx.Instance().GetActionGraph(actionGraphPath));
-        _aiGraph.initialize(this, ResourceContainerEx.Instance().GetAIGraph(aiGraphPath));
+        _aiGraph.initialize(this, _actionGraph, ResourceContainerEx.Instance().GetAIGraph(aiGraphPath));
         _danmakuGraph.initialize(this);
 
         _statusInfo.initialize(statusInfoName);
@@ -319,7 +318,6 @@ public class GameEntityBase : SequencerObjectBase
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Defence_Hit, _defenceState == DefenceState.Hit);
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Defence_Evade, _defenceState == DefenceState.EvadeSuccess);
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Defence_GuardBroken, _defenceState == DefenceState.GuardBroken);
-
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Entity_Dead, _statusInfo.isDead());
 
     }

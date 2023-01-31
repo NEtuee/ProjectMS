@@ -54,8 +54,8 @@ public class AIEvent_KillEntity : AIEventBase
     public override AIEventType getFrameEventType() {return AIEventType.AIEvent_KillEntity;}
     public override void onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
-        executeEntity.dispose(false);
         executeEntity.gameObject.SetActive(false);
+        executeEntity.DeregisterRequest();
     }
 
     public override void loadFromXML(XmlNode node) 

@@ -147,6 +147,7 @@ public class ActionFrameEvent_KillEntity : ActionFrameEventBase
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
         executeEntity.gameObject.SetActive(false);
+        executeEntity.DeregisterRequest();
 
         return true;
     }

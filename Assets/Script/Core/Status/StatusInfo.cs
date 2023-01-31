@@ -94,6 +94,7 @@ public class StatusInfo
     {
         clearBuff();
         
+        _isDead = false;
         _statusInfoData = getStatusInfoData(dataName);
         createStatusValueDictionary(_statusInfoData);
 
@@ -109,6 +110,8 @@ public class StatusInfo
     public void initialize()
     {
         clearBuff();
+
+        _isDead = false;
         foreach(Status item in _statusValues.Values)
         {
             _statusInfoData._statusData[item._statusIndex].initStat(ref item._value);

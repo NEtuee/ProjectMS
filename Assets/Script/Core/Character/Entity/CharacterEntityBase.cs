@@ -8,11 +8,10 @@ using UnityEditor;
 
 public class CharacterEntityBase : GameEntityBase
 {
-    
-
-    public override void initialize()
+    public override void initializeCharacter(CharacterInfoData characterInfo)
     {
-        base.initialize();
+        base.initializeCharacter(characterInfo);
+
         RegisterRequest(QueryUniqueID("SceneCharacterManager"));
     }
 

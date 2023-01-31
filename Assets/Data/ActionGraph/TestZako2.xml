@@ -1,0 +1,11 @@
+
+<ActionGraph Name="TestZako2" DefaultAction="Idle" DefaultFramePerSecond="0.5">
+
+    <Idle DirectionType="Keep" FlipType="Direction">
+        <Animation Path="Resources/Sprites/NewPlayer/idle/" StartFrame="0" EndFrame="1" XFlip="true">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Idle"/>
+    </Idle>
+    
+</ActionGraph>

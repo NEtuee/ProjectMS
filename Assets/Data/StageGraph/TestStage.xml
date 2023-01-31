@@ -3,11 +3,13 @@
 
     <InitializePhase>
         <SpawnCharacter CharacterKey="Akane" Position="0 0 0" SearchIdentifier="Player"/>
-
     </InitializePhase>
 
     <UpdatePhase>
         <WaitSecond Time="1.0"/>
+        <SpawnCharacter CharacterKey="TestZako" Position="0 0 0" SearchIdentifier="Enemy"/>
+        <WaitSecond Time="2.0"/>
+        <SpawnCharacter CharacterKey="TestZako2" Position="1 0 0" SearchIdentifier="Enemy"/>
 
     </UpdatePhase>
 
