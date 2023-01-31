@@ -28,6 +28,13 @@ public class ActionGraph
         createCoditionNodeDataAll();
     }
 
+    public void initialize(ActionGraphBaseData baseData)
+    {
+        _actionGraphBaseData = baseData;
+
+        initialize();
+    }
+
     public void initialize()
     {
         _animationPlayer.initialize();

@@ -5,10 +5,10 @@ using System.Text;
 using UnityEngine;
 
 
-public static class ActionGraphLoader
+public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
 {
     private static Dictionary<string, string> _globalVariables = new Dictionary<string, string>();
-    public static ActionGraphBaseData readFromXML(string path)
+    public override ActionGraphBaseData readFromXML(string path)
     {
         XmlDocument xmlDoc = new XmlDocument();
         try

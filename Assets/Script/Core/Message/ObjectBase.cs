@@ -23,13 +23,13 @@ public abstract class ObjectBase : MessageReceiver, IProgress
     protected override void Awake()
     {
         base.Awake();
-        
         assign(); 
         //Initialize();
     }
     protected virtual void Start()
     {
-        initialize();
+        if(gameObject.activeInHierarchy)
+            initialize();
     }
 
     public void createSpriteRenderObject()

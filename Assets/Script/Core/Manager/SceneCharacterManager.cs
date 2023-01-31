@@ -10,6 +10,23 @@ public class TargetSearchDescription : MessageData
     public float                   _searchRange;
 }
 
+public struct SpawnCharacterOptionDesc
+{
+    public Vector3          _position;
+    public Quaternion       _rotation;
+    public SearchIdentifier _searchIdentifier;
+
+    public static SpawnCharacterOptionDesc defaultValue = new SpawnCharacterOptionDesc{ _position = Vector3.zero, _rotation = Quaternion.identity, _searchIdentifier = SearchIdentifier.Count};
+}
+
+public class SpawnCharacterOptionDescData : MessageData
+{
+    public SpawnCharacterOptionDesc _spawnCharacterOptionDesc;
+    public CharacterInfoData _characterInfoData;
+}
+
+
+
 public class SceneCharacterManager : ManagerBase
 {
     [System.Serializable]
@@ -20,10 +37,11 @@ public class SceneCharacterManager : ManagerBase
         public bool IsValid() {return name != null && name.Equals("") == false && uniqueID != 0;}
     }
 
-    
-
-    //[SerializeField] private List<CharacterKeyValue> sceneCharacterList = new List<CharacterKeyValue>();
     private Dictionary<int, string> _characterIDCacheMap = new Dictionary<int, string>();
+
+    private Dictionary<int, CharacterEntityBase> _enableCharacterPoolCacheMap = new Dictionary<int, CharacterEntityBase>();
+    private Queue<CharacterEntityBase> _disableCharacterPoolCacheMap = new Queue<CharacterEntityBase>();
+
     private List<TargetSearchDescription> _targetSearchRequestList = new List<TargetSearchDescription>();
 
     public override void RegisterReceiver(ObjectBase receiver)
@@ -31,11 +49,27 @@ public class SceneCharacterManager : ManagerBase
         base.RegisterReceiver(receiver);
         _characterIDCacheMap.Add(receiver.GetUniqueID(),receiver.gameObject.name);
     }
+
     public override void DeregisteReceiver(int target)
     {
-        base.DeregisteReceiver(target);
+        ObjectBase targetReciver = GetReciever(target);
+        if(targetReciver != null && targetReciver is CharacterEntityBase)
+        {
+            CharacterEntityBase characterEntity = targetReciver as CharacterEntityBase;
+            CollisionManager.Instance().deregisterObject(characterEntity.getCollisionInfo().getCollisionInfoData(),characterEntity);
+
+            if(_enableCharacterPoolCacheMap.ContainsKey(target))
+            {
+                _disableCharacterPoolCacheMap.Enqueue(_enableCharacterPoolCacheMap[target]);
+                _enableCharacterPoolCacheMap.Remove(target);
+
+            }
+        }
+
         _characterIDCacheMap.Remove(target);
+        base.DeregisteReceiver(target);
     }
+
     public override void assign()
     {
         base.assign();
@@ -47,7 +81,13 @@ public class SceneCharacterManager : ManagerBase
             TargetSearchDescription desc = msg.data as TargetSearchDescription;
             _targetSearchRequestList.Add(desc);
         });
+
+        AddAction(MessageTitles.entity_spawnCharacter, (msg)=>{
+            SpawnCharacterOptionDescData desc = MessageDataPooling.CastData<SpawnCharacterOptionDescData>(msg.data);
+            createCharacterFromPool(desc._characterInfoData, desc._spawnCharacterOptionDesc);
+        });
     }
+
     public override void initialize()
     {
         base.initialize();
@@ -58,7 +98,6 @@ public class SceneCharacterManager : ManagerBase
         processTargetSearch();
         base.progress(deltaTime);
     }
-
 
     public void processTargetSearch()
     {
@@ -111,6 +150,31 @@ public class SceneCharacterManager : ManagerBase
         _targetSearchRequestList.Clear();
     }
 
+    public CharacterEntityBase createCharacterFromPool(CharacterInfoData characterData, SpawnCharacterOptionDesc spawnDesc)
+    {
+        CharacterEntityBase characterEntity = null;
+        if(_disableCharacterPoolCacheMap.Count != 0)
+        {
+            characterEntity = _disableCharacterPoolCacheMap.Dequeue();
+            characterEntity.gameObject.SetActive(true);
+        }
+        else
+        {
+            GameObject characterObject = new GameObject(characterData._displayName);
+            characterEntity = characterObject.AddComponent<CharacterEntityBase>();
+        }
+
+        _enableCharacterPoolCacheMap.Add(characterEntity.GetUniqueID(), characterEntity);
+
+        characterEntity._searchIdentifier = spawnDesc._searchIdentifier;
+        characterEntity.transform.position = spawnDesc._position;
+        characterEntity.transform.rotation = spawnDesc._rotation;
+
+        characterEntity.initializeCharacter(characterData);
+        
+        return characterEntity;
+    }
+
     public GameEntityBase GetCharacter(string targetName)
     {
         int key = FindCharacterKey(targetName);
@@ -121,41 +185,17 @@ public class SceneCharacterManager : ManagerBase
         }
         return GetReciever(key) as GameEntityBase;
     }
-    // private void CreateCacheMap()
-    // {
-    //     _characterIDCacheMap = new Dictionary<string, int>();
-    //     foreach(var character in sceneCharacterList)
-    //     {
-    //         if(_characterIDCacheMap.ContainsKey(character.name) == true)
-    //         {
-    //             DebugUtil.assert(false,"duplicate characters found, name : {0}",character.name);
-    //             return;
-    //         }
-            
-    //         _characterIDCacheMap.Add(character.name,character.uniqueID);
-    //     }
-    // }
+
     private int FindCharacterKey(string targetName)
     {
-        //CharacterKeyValue findKey = new CharacterKeyValue();
-        // if(_characterIDCacheMap == null)
-        // {
-        //     findKey = sceneCharacterList.Find((x)=>{return x.name.Equals(targetName);});
-        //     DebugUtil.assert(findKey.IsValid(),"attempt to find an invalid target [{0}]",targetName);
-        //     return findKey.uniqueID;
-        // }
-        // else
+        foreach(var character in _characterIDCacheMap)
         {
-            foreach(var character in _characterIDCacheMap)
+            if(character.Value.CompareTo(targetName) == 0)
             {
-                if(character.Value.CompareTo(targetName) == 0)
-                {
-                    return character.Key;
-                }
+                return character.Key;
             }
-            DebugUtil.assert(false,"attempt to find an invalid target: {0}",targetName);
-            return -1;
         }
-        
+        DebugUtil.assert(false,"attempt to find an invalid target: {0}",targetName);
+        return -1;
     }
 }

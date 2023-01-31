@@ -5,9 +5,9 @@ using System.IO;
 using System.Text;
 using UnityEngine;
 
-public static class MovementGraphExporter
+public class MovementGraphExporter : LoaderBase<MovementGraph>
 {
-    public static MovementGraph readFromXML(string path)
+    public override MovementGraph readFromXML(string path)
     {
         XmlDocument xmlDoc = new XmlDocument();
         try
@@ -103,7 +103,7 @@ public static class MovementGraphExporter
         return graph;
     }
 
-    public static MovementGraph readFromXMLAndExportToBinary(string xmlPath, string binaryPath)
+    public MovementGraph readFromXMLAndExportToBinary(string xmlPath, string binaryPath)
     {
         MovementGraph graph = readFromXML(xmlPath);
         if(graph == null)

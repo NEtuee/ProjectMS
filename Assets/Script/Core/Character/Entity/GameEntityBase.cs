@@ -48,6 +48,8 @@ public class GameEntityBase : SequencerObjectBase
 
     private bool                _updateDirection = true;
 
+    private bool                _initializeFromCharacter = false;
+
     public override void assign()
     {
         base.assign();
@@ -61,28 +63,52 @@ public class GameEntityBase : SequencerObjectBase
             transform.position = targetTransform.position;
         });
 
-        _actionGraph = new ActionGraph(ActionGraphLoader.readFromXML(IOControl.PathForDocumentsFile(actionGraphPath)));
+        
+        _actionGraph = new ActionGraph();
         _actionGraph.assign();
 
-        _aiGraph = new AIGraph(_actionGraph, AIGraphLoader.readFromXML(IOControl.PathForDocumentsFile(aiGraphPath)));
+        _aiGraph = new AIGraph();
         _aiGraph.assign();
 
         _danmakuGraph = new DanmakuGraph();
 
-        _statusInfo = new StatusInfo(statusInfoName);
+        _statusInfo = new StatusInfo();
 
         createSpriteRenderObject();
     }
 
-    public override void initialize()
+    public void initializeCharacter(CharacterInfoData characterInfo)
     {
         base.initialize();
         
-        _actionGraph.initialize();
-        _aiGraph.initialize(this);
+        _actionGraph.initialize(ResourceContainerEx.Instance().GetActionGraph(characterInfo._actionGraphPath));
+        _aiGraph.initialize(this, ResourceContainerEx.Instance().GetAIGraph(aiGraphPath));
         _danmakuGraph.initialize(this);
 
-        _statusInfo.initialize();
+        _statusInfo.initialize(characterInfo._statusName);
+
+        applyActionBuffList(_actionGraph.getDefaultBuffList());
+
+        CollisionInfoData data = new CollisionInfoData(characterInfo._characterRadius,0f,0f, CollisionType.Character);
+        _collisionInfo = new CollisionInfo(data);
+
+        CollisionManager.Instance().registerObject(_collisionInfo, this);
+
+        _initializeFromCharacter = true;
+    }
+
+    public override void initialize()
+    {
+        if(_initializeFromCharacter)
+            return;
+            
+        base.initialize();
+        
+        _actionGraph.initialize(ResourceContainerEx.Instance().GetActionGraph(actionGraphPath));
+        _aiGraph.initialize(this, ResourceContainerEx.Instance().GetAIGraph(aiGraphPath));
+        _danmakuGraph.initialize(this);
+
+        _statusInfo.initialize(statusInfoName);
 
         applyActionBuffList(_actionGraph.getDefaultBuffList());
 
@@ -342,6 +368,11 @@ public class GameEntityBase : SequencerObjectBase
         DebugUtil.assert((int)FlipType.Count == 4, "flip type count error");
 
         return flipState;
+    }
+
+    public void clearActionBuffList()
+    {
+        _statusInfo.clearBuff();
     }
 
     public void deleteActionBuffList(int[] buffList)

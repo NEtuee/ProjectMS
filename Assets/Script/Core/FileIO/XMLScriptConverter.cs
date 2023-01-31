@@ -70,4 +70,16 @@ public static class XMLScriptConverter
 
         return new MemoryStream(System.Text.Encoding.UTF8.GetBytes(xmlFile));
     }
+
+    public static Vector3 valueToVector3(string valueString)
+    {
+        string[] splitted = valueString.Split(' ');
+        if(splitted.Length != 3)
+        {
+            DebugUtil.assert(false,"invalid vector3 string: {0}", valueString);
+            return Vector3.zero;
+        }
+
+        return new Vector3(float.Parse(splitted[0]), float.Parse(splitted[1]), float.Parse(splitted[2]));
+    }
 }

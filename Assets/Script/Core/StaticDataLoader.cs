@@ -8,13 +8,14 @@ public class StaticDataLoader : MonoBehaviour
     public string buffInfoPath = "Assets\\Data\\Example\\BuffInfo.xml";
     public string keyPresetPath = "Assets\\Data\\Example\\ActionKeyPreset.xml";
     public string weightRandomPath = "Assets\\Data\\Example\\ActionKeyPreset.xml";
-    
+    public string characterInfoPath = "Assets\\Data\\StaticData\\CharacterInfo.xml";
+
     void Awake()
     {
         StatusInfo.setStatusInfoDataDictionary(StatusInfoLoader.readFromXML(statusInfoPath));
         StatusInfo.setBuffDataDictionary(BuffDataLoader.readFromXML(buffInfoPath));
         ActionKeyInputManager.Instance().setPresetData(ActionKeyPresetDataLoader.readFromXML(keyPresetPath));
         WeightRandomManager.Instance().setWeightGroupData(WeightRandomExporter.readFromXML(weightRandomPath));
-
+        CharacterInfoManager.Instance().SetCharacterInfo(CharacterInfoLoader.readFromXML(characterInfoPath));
     }
 }

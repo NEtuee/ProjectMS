@@ -20,7 +20,7 @@ public class ProjectileManager : PoolingManagerBase<ProjectileEntityBase>
         RegisterRequest();
         
         _projectileGraphDataList.Clear();
-        ProjectileGraphBaseData[] graphDataList = ProjectileGraphLoader.readFromXML(IOControl.PathForDocumentsFile(_projectileGraphPath));
+        ProjectileGraphBaseData[] graphDataList = ResourceContainerEx.Instance().GetProjectileGraphBaseData(IOControl.PathForDocumentsFile(_projectileGraphPath));
 
         if(graphDataList == null)
         {

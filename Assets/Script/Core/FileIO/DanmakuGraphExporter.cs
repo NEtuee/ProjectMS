@@ -5,9 +5,9 @@ using System.Text;
 using UnityEngine;
 
 
-public static class DanmakuGraphLoader
+public class DanmakuGraphLoader : LoaderBase<DanmakuGraphBaseData>
 {
-    public static DanmakuGraphBaseData readFromXML(string path)
+    public override DanmakuGraphBaseData readFromXML(string path)
     {
         path = "Assets\\Data\\DanmakuGraph\\" + path;
         XmlDocument xmlDoc = new XmlDocument();

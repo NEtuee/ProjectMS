@@ -42,6 +42,13 @@ public class AIGraph
     {
     }
 
+    public void initialize(GameEntityBase targetEntity, AIGraphBaseData baseData)
+    {
+        _aiGraphBaseData = baseData;
+
+        initialize(targetEntity);
+    }
+
     public void initialize(GameEntityBase targetEntity)
     {
         if(_aiGraphBaseData._defaultAIIndex != -1)

@@ -5,9 +5,9 @@ using System.Text;
 using UnityEngine;
 
 
-public static class ProjectileGraphLoader
+public class ProjectileGraphLoader : LoaderBase<ProjectileGraphBaseData[]>
 {
-    public static ProjectileGraphBaseData[] readFromXML(string path)
+    public override ProjectileGraphBaseData[] readFromXML(string path)
     {
         XmlDocument xmlDoc = new XmlDocument();
         try

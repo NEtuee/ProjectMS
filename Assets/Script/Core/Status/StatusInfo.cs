@@ -76,6 +76,8 @@ public class StatusInfo
 
     private bool _isDead = false;
 
+    public StatusInfo(){}
+
     public StatusInfo(string dataName)
     {
         _statusInfoData = getStatusInfoData(dataName);
@@ -86,6 +88,22 @@ public class StatusInfo
     {
         _statusInfoData = data;
         createStatusValueDictionary(_statusInfoData);
+    }
+
+    public void initialize(string dataName)
+    {
+        clearBuff();
+        
+        _statusInfoData = getStatusInfoData(dataName);
+        createStatusValueDictionary(_statusInfoData);
+
+        foreach(Status item in _statusValues.Values)
+        {
+            _statusInfoData._statusData[item._statusIndex].initStat(ref item._value);
+            item._value = item._realValue;
+            item._additionalValue = 0f;
+            item._regenFactor = 0f;
+        }
     }
 
     public void initialize()

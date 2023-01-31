@@ -66,7 +66,7 @@ public class MovementDataExporter
 
     public void readAndExportData(string filePath, Color pivotAnchorColor)
     {
-        _rawSpriteData = ResourceContainerEx.Instance().GetSpriteAll(filePath,true);
+        _rawSpriteData = ResourceContainerEx.Instance().GetSpriteAll(filePath);
 
         if(_rawSpriteData == null)
         {

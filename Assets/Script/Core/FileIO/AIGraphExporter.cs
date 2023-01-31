@@ -5,7 +5,7 @@ using System.Text;
 using UnityEngine;
 
 
-public class AIGraphLoader
+public class AIGraphLoader : LoaderBase<AIGraphBaseData>
 {
 
     private static string _aiPackageRoot = "Assets\\Data\\AIPackage\\";
@@ -13,7 +13,7 @@ public class AIGraphLoader
     private static Dictionary<string, string> _aiGraphGlobalVariables = new Dictionary<string, string>();
     private static Dictionary<string, string> _aiPackageGlobalVariables = new Dictionary<string, string>();
     private static Dictionary<string, AIPackageBaseData> _loadedAiPackage = new Dictionary<string, AIPackageBaseData>();
-    public static AIGraphBaseData readFromXML(string path)
+    public override AIGraphBaseData readFromXML(string path)
     {
         XmlDocument xmlDoc = new XmlDocument();
         try

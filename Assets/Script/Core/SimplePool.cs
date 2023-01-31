@@ -11,6 +11,11 @@ public class SimplePool<T> where T : new()
         enqueue();
     }
 
+    public SimplePool(int count)
+    {
+        enqueueCount(count);
+    }
+
     public void enqueue(T t)
     {
         _queue.Enqueue(t);
@@ -19,6 +24,14 @@ public class SimplePool<T> where T : new()
     private void enqueue()
     {
         _queue.Enqueue(new T());
+    }
+
+    private void enqueueCount(int count)
+    {
+        for(int i = 0; i < count; ++i)
+        {
+            _queue.Enqueue(new T());
+        }
     }
 
     public T dequeue()

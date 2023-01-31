@@ -63,6 +63,8 @@ public class MasterManager : MessageHub<ManagerBase>
 
         CameraControlEx.Instance().setCameraTarget(player);
         CameraControlEx.Instance().initialize();
+
+        StageGraphManager.Instance().initialize();
     }
     public void Start()
     {
@@ -86,6 +88,8 @@ public class MasterManager : MessageHub<ManagerBase>
         }
 
         GlobalTimer.Instance().updateGlobalTime(deltaTime);
+        StageGraphManager.Instance().progress(deltaTime);
+
         CameraControlEx.Instance().SyncPosition();
 
         ManagersUpdate(deltaTime);
@@ -97,6 +101,11 @@ public class MasterManager : MessageHub<ManagerBase>
         ReceiveMessageProcessing();
 
         CameraControlEx.Instance().progress(deltaTime);
+
+        if(Input.GetKeyDown(KeyCode.Return))
+        {
+            StageGraphManager.Instance().startStage("Assets\\Data\\StageGraph\\TestStage.xml");
+        }
     }
 
     public void LateUpdate()

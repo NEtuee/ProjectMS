@@ -3,174 +3,54 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class ResourceContainerEx : Singleton<ResourceContainerEx>
+public class ManagedResourceItem<Value> where Value : class
 {
-    private Dictionary<string ,Sprite> sprite = new Dictionary<string, Sprite>();
-	private Dictionary<string ,Sprite[]> spriteSet = new Dictionary<string, Sprite[]>();
-	private Dictionary<string ,MovementGraph> _movementGraphSet = new Dictionary<string, MovementGraph>();
-
-	private static string spritesFilePath = "Sprites/";
-
-	private static Type _spriteType = typeof(Sprite);
-	private static Type _scriptableType = typeof(ScriptableObject);
-	private static Type _movementGraphType = typeof(MovementGraph);
-
-	public MovementGraph getMovementgraph(string folderName, bool ignorePreload = false)
+	public Dictionary<string, Value> _singleResourceContainer = new Dictionary<string, Value>();
+	public Dictionary<string, Value[]> _multiResourceContainer = new Dictionary<string, Value[]>();
+	public Type _resourceType = typeof(Value);
+	
+	public Value GetOrLoadResource(string path)
 	{
-		string cut = folderName.Substring(folderName.IndexOf("Resources") + 10);
-		if(_movementGraphSet.ContainsKey(cut) && ignorePreload == false)
-			return _movementGraphSet[cut];
-
-		string path = cut;
-		UnityEngine.Object[] obj = LoadAll(path, _movementGraphType);
-		if(obj.Length == 0)
-		{
-			DebugUtil.assert(false, "file does not exist : {0}",cut);
-			return null;
-		}
+		if(_singleResourceContainer.ContainsKey(path))
+			return _singleResourceContainer[path];
 		
-
-		MovementGraph movementGraph = obj[0] as MovementGraph;
-
-		if(ignorePreload == false)
-			_movementGraphSet.Add(cut,movementGraph);
-
-		return movementGraph;
-	}
-
-	public ScriptableObject GetScriptableObject(string fileName)
-	{
-		if(Load(fileName, _scriptableType) != null)
-		{
-			if(Load(fileName, _scriptableType) as ScriptableObject == null)
-				DebugUtil.assert(false, "???");
-		}
-
-		ScriptableObject obj = Load(fileName,_scriptableType) as ScriptableObject;
-		if(obj == null)
-		{
-            DebugUtil.assert(false, "file does not exist : {0}",fileName);
-			return null;
-		}
-
-		return obj;
-	}
-
-	public Sprite GetSprite(string fileName)
-	{
-		if(sprite.ContainsKey(fileName) == true)
-			return sprite[fileName];
-
-		string path = spritesFilePath + fileName;
-
-		if(Load(path, _spriteType) != null)
-		{
-			if(Load(path, _spriteType) as Sprite == null)
-				DebugUtil.assert(false, "???");
-		}
-
-		Sprite obj = Load(path,_spriteType) as Sprite;
+		Value obj = Load(path,GetResourceType()) as Value;
 		if(obj == null)
 		{
             DebugUtil.assert(false, "file does not exist : {0}",path);
 			return null;
 		}
-		sprite.Add(fileName,obj);
 
+		_singleResourceContainer.Add(path,obj);
 		return obj;
 	}
 
-	public Sprite[] GetSpriteAll(string folderName, bool ignorePreload = false)
+	public Value[] GetOrLoadResources(string path)
 	{
-		string cut = folderName.Substring(folderName.IndexOf("Resources") + 10);
-		if(spriteSet.ContainsKey(cut) && ignorePreload == false)
-			return spriteSet[cut];
+		if(_multiResourceContainer.ContainsKey(path))
+			return _multiResourceContainer[path];
 
-		string path = cut;
-		UnityEngine.Object[] obj = LoadAll(path, _spriteType);
-		if(obj.Length == 0)
-		{
-			DebugUtil.assert(false, "file does not exist : {0}",cut);
-			return null;
-		}
-
-		Sprite[] sprites = new Sprite[obj.Length];
-		for(int i = 0; i < obj.Length; ++i)
-		{
-			sprites[i] = obj[i] as Sprite;
-		}
-
-		if(ignorePreload && spriteSet.ContainsKey(cut))
-			spriteSet[cut] = sprites;
-		else
-			spriteSet.Add(cut,sprites);
-
-		return sprites;
-	}
-
-	public Sprite[] GetSpriteSet(string folderName)
-	{
-		if(spriteSet.ContainsKey(folderName))
-			return spriteSet[folderName];
-
-		string path = spritesFilePath + folderName;
-		UnityEngine.Object[] obj = LoadAll(path, _spriteType);
+		UnityEngine.Object[] obj = LoadAll(path, GetResourceType());
 		if(obj.Length == 0)
 		{
 			DebugUtil.assert(false, "file does not exist : {0}",path);
 			return null;
 		}
 
-		Sprite[] sprites = new Sprite[obj.Length];
+		Value[] items = new Value[obj.Length];
 		for(int i = 0; i < obj.Length; ++i)
 		{
-			sprites[i] = obj[i] as Sprite;
+			items[i] = obj[i] as Value;
 		}
 
-		spriteSet.Add(folderName,sprites);
+		_multiResourceContainer.Add(path,items);
 
-		return sprites;
+		return items;
 	}
 
-	public bool UnLoadSpriteSet(string fileName)
+	public Type GetResourceType()
 	{
-		string path = spritesFilePath + fileName;
-		if(sprite.ContainsKey(path))
-		{
-			Sprite[] res = spriteSet[path];
-			spriteSet.Remove(path);
-			for(int i = 0; i < res.Length; ++i)
-				UnLoad(res[i]);
-
-			return true;
-		}
-
-		return false;
-	}
-
-	public bool UnLoadSprite(string fileName)
-	{
-		string path = spritesFilePath + fileName;
-		if(sprite.ContainsKey(path))
-		{
-			Sprite res = sprite[path];
-			sprite.Remove(path);
-			UnLoad(res);
-
-			return true;
-		}
-
-		return false;
-	}
-
-	public void UnLoadUnused()
-	{
-		Resources.UnloadUnusedAssets();
-	}
-
-	public void UnLoad(UnityEngine.Object obj)
-	{
-		Resources.UnloadAsset(obj);
+		return _resourceType;
 	}
 
 	public UnityEngine.Object Load(string path, Type type)
@@ -181,5 +61,95 @@ public class ResourceContainerEx : Singleton<ResourceContainerEx>
 	public UnityEngine.Object[] LoadAll(string path, Type type)
 	{
 		return Resources.LoadAll(path,type);
+	}
+}
+
+public class DataResourceItem<Value, Loader> where Value : class where Loader : LoaderBase<Value>, new()
+{
+	private Dictionary<string, Value> _resourceContainer = new Dictionary<string, Value>();
+	private Loader loader = new Loader();
+
+	public Value GetOrLoadResource(string path)
+	{
+		if(_resourceContainer.ContainsKey(path))
+			return _resourceContainer[path];
+		
+		Value obj = loader.readFromXML(path);
+		if(obj == null)
+			return null;
+
+		_resourceContainer.Add(path,obj);
+		return obj;
+	}
+}
+
+public class ResourceContainerEx : Singleton<ResourceContainerEx>
+{
+    private ManagedResourceItem<Sprite> 				_spriteResource = new ManagedResourceItem<Sprite>();
+	private ManagedResourceItem<ScriptableObject> 		_scriptableResource = new ManagedResourceItem<ScriptableObject>();
+
+	private DataResourceItem<ActionGraphBaseData,ActionGraphLoader>				_actionGraphResource = new DataResourceItem<ActionGraphBaseData,ActionGraphLoader>();
+	private DataResourceItem<AIGraphBaseData,AIGraphLoader>						_aiGraphResource = new DataResourceItem<AIGraphBaseData,AIGraphLoader>();
+	private DataResourceItem<ProjectileGraphBaseData[],ProjectileGraphLoader>	_projectileGraphResource = new DataResourceItem<ProjectileGraphBaseData[],ProjectileGraphLoader>();
+	private DataResourceItem<DanmakuGraphBaseData,DanmakuGraphLoader>			_danmakuGraphResource = new DataResourceItem<DanmakuGraphBaseData,DanmakuGraphLoader>();
+	private DataResourceItem<StageGraphBaseData,StageGraphLoader>				_stageGraphResource = new DataResourceItem<StageGraphBaseData,StageGraphLoader>();
+
+
+	public MovementGraph getMovementgraph(string folderName, bool ignorePreload = false)
+	{
+		DebugUtil.assert(false,"movement graph is unavailable");
+		return null;
+	}
+
+	public ScriptableObject GetScriptableObject(string fileName)
+	{
+		return _scriptableResource.GetOrLoadResource(fileName);
+	}
+
+	public Sprite GetSprite(string fileName)
+	{
+		return _spriteResource.GetOrLoadResource(fileName);
+	}
+
+	public Sprite[] GetSpriteAll(string folderName)
+	{
+		string cut = folderName.Substring(folderName.IndexOf("Resources") + 10);
+		
+		return _spriteResource.GetOrLoadResources(cut);
+	}
+
+	public ActionGraphBaseData GetActionGraph(string path)
+	{
+		return _actionGraphResource.GetOrLoadResource(path);
+	}
+
+	public AIGraphBaseData GetAIGraph(string path)
+	{
+		return _aiGraphResource.GetOrLoadResource(path);
+	}
+
+	public StageGraphBaseData GetStageGraph(string path)
+	{
+		return _stageGraphResource.GetOrLoadResource(path);
+	}
+
+	public DanmakuGraphBaseData GetDanmakuGraph(string path)
+	{
+		return _danmakuGraphResource.GetOrLoadResource(path);
+	}
+
+	public ProjectileGraphBaseData[] GetProjectileGraphBaseData(string path)
+	{
+		return _projectileGraphResource.GetOrLoadResource(path);
+	}
+
+	public void UnLoadUnused()
+	{
+		Resources.UnloadUnusedAssets();
+	}
+
+	public void UnLoad(UnityEngine.Object obj)
+	{
+		Resources.UnloadAsset(obj);
 	}
 }

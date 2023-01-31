@@ -95,8 +95,6 @@ public class DanmakuGraph
         }
     }
 
-    private static Dictionary<string, DanmakuGraphBaseData> _danmakuGraphDataList = new Dictionary<string, DanmakuGraphBaseData>();
-
     private ObjectBase _ownerEntity;
 
     private List<DanmakuPlayItem> _currentPlayList = new List<DanmakuPlayItem>();
@@ -263,7 +261,8 @@ public class DanmakuGraph
 
     public void addDanmakuGraph(string graphPath)
     {
-        DanmakuGraphBaseData graphData = getDanmakuGraphData(graphPath);
+        
+        DanmakuGraphBaseData graphData = ResourceContainerEx.Instance().GetDanmakuGraph(graphPath);
         if(graphData == null)
             return;
 
@@ -273,13 +272,4 @@ public class DanmakuGraph
         _currentPlayList.Add(playItem);
     }
 
-    private DanmakuGraphBaseData getDanmakuGraphData(string graphPath)
-    {
-        if(_danmakuGraphDataList.ContainsKey(graphPath) == false)
-        {
-            _danmakuGraphDataList.Add(graphPath, DanmakuGraphLoader.readFromXML(graphPath));
-        }
-
-        return _danmakuGraphDataList[graphPath];
-    }
 }
