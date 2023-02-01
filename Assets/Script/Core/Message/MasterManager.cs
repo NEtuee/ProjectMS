@@ -106,6 +106,11 @@ public class MasterManager : MessageHub<ManagerBase>
         {
             StageGraphManager.Instance().startStage("Assets\\Data\\StageGraph\\TestStage.xml");
         }
+
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            StageGraphManager.Instance().stopStage();
+        }
     }
 
     public void LateUpdate()

@@ -105,6 +105,19 @@ public abstract class ManagerBase : MessageHub<ObjectBase>, IProgress
         Debug_ClearQueue();
 #endif
     }
+    public void deregisterAll()
+    {
+        foreach(var receiver in _receivers.Values)
+        {
+            if(receiver == null || !receiver.gameObject.activeInHierarchy || !receiver.enabled)
+            {
+                continue;
+            }
+
+            receiver.gameObject.SetActive(false);
+            receiver.DeregisterRequest();
+        }
+    }
     public void RegisterRequest()
     {
         var msg = MessagePack(MessageTitles.system_registerRequest,0,null);

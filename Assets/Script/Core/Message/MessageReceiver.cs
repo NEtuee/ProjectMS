@@ -7,8 +7,10 @@ public abstract class MessageReceiver : UniqueIDBase
     private Queue<Message>      _sendQueue = new Queue<Message>();
     private Queue<Message>      _receiveQueue = new Queue<Message>();
     protected Object            _recentlySender;
-    protected const int         _boradcastNumber = int.MinValue;
-    protected const int         _boradcastWithoutSenderNumber = int.MinValue + 1;
+
+    public const int            _boradcastNumber = int.MinValue;
+    public const int            _boradcastWithoutSenderNumber = int.MinValue + 1;
+
     public void ReceiveMessage(Message msg)
     {
 #if UNITY_EDITOR
@@ -38,10 +40,21 @@ public abstract class MessageReceiver : UniqueIDBase
     }
     public void ReceiveMessageProcessing()
     {
-        foreach(var msg in _receiveQueue)
+        //foreach(var msg in _receiveQueue)
+        int messageLimit = 100;
+        while(_receiveQueue.Count != 0)
         {
+            Message msg = _receiveQueue.Dequeue();
+
             MessageProcessing(msg);
             MessagePool.ReturnMessage(msg);
+
+            --messageLimit;
+            if(messageLimit <= 0)
+            {
+                DebugUtil.assert(false, "messageLimit assert");
+                break;
+            }
         }
         _receiveQueue.Clear();
     }

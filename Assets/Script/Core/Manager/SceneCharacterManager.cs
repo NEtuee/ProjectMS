@@ -8,6 +8,8 @@ public class TargetSearchDescription : MessageData
     public TargetSearchType        _searchType;
     public SearchIdentifier        _searchIdentifier;
     public float                   _searchRange;
+    public float                   _searchStartRange;
+    public float                   _searchSphereRadius;
 }
 
 public struct SpawnCharacterOptionDesc
@@ -86,6 +88,10 @@ public class SceneCharacterManager : ManagerBase
             SpawnCharacterOptionDescData desc = MessageDataPooling.CastData<SpawnCharacterOptionDescData>(msg.data);
             createCharacterFromPool(desc._characterInfoData, desc._spawnCharacterOptionDesc);
         });
+
+        AddAction(MessageTitles.game_stageEnd, (msg)=>{
+            deregisterAll();
+        });
     }
 
     public override void initialize()
@@ -109,36 +115,87 @@ public class SceneCharacterManager : ManagerBase
 
             for(int i = 0; i < requestCount; ++i)
             {
-                float range = _targetSearchRequestList[i]._searchRange * _targetSearchRequestList[i]._searchRange;
+                TargetSearchDescription desc = _targetSearchRequestList[i];
 
-                if(_targetSearchRequestList[i]._requester is CharacterEntityBase == false || receiver is CharacterEntityBase == false)
+                float range = desc._searchRange * desc._searchRange;
+
+                if(desc._requester is CharacterEntityBase == false || receiver is CharacterEntityBase == false)
                 {
                     DebugUtil.assert(false,"must be character entity, code error");
                     return;
                 }
-                else if(_targetSearchRequestList[i]._searchIdentifier == SearchIdentifier.Count)
+                else if(desc._searchIdentifier == SearchIdentifier.Count)
                 {
                     DebugUtil.assert(false,"invalid search identifier: Count");
                     return;
                 }
 
-                CharacterEntityBase requester = _targetSearchRequestList[i]._requester as CharacterEntityBase;
+                CharacterEntityBase requester = desc._requester as CharacterEntityBase;
                 CharacterEntityBase receiverCharacter = receiver as CharacterEntityBase;
 
-                if(requester == receiverCharacter || _targetSearchRequestList[i]._searchIdentifier != receiverCharacter._searchIdentifier || receiverCharacter.isDead())
-                    continue;
-
                 GameEntityBase currentTarget = requester.getCurrentTargetEntity();
-                if(currentTarget == null)
+                float toNewDistanceSq = receiverCharacter.getDistanceSq(requester);
+
+                if(targetIsValid(requester,currentTarget,desc) == false)
+                    requester.setTargetEntity(null);
+
+                switch(desc._searchType)
                 {
-                    requester.setTargetEntity(receiverCharacter);
-                    continue;
+                    case TargetSearchType.Near:
+                    {
+                        if(requester == receiverCharacter || desc._searchIdentifier != receiverCharacter._searchIdentifier || receiverCharacter.isDead())
+                            continue;
+
+                        if(currentTarget == null)
+                        {
+                            if(toNewDistanceSq < range)
+                                requester.setTargetEntity(receiverCharacter);
+                            continue;
+                        }
+
+                        float toCurrent = currentTarget.getDistanceSq(requester);
+                        if(toNewDistanceSq < range && toCurrent > toNewDistanceSq)
+                            requester.setTargetEntity(receiverCharacter);
+                    }
+                    break;
+                    case TargetSearchType.NearDirection:
+                    case TargetSearchType.NearMousePointDirection:
+                    {
+                        if(requester == receiverCharacter || desc._searchIdentifier != receiverCharacter._searchIdentifier || receiverCharacter.isDead())
+                            continue;
+
+                        Vector3 direction = Vector3.right;
+                        if(desc._searchType == TargetSearchType.NearDirection)
+                            direction = requester.getDirection();
+                        else if(desc._searchType == TargetSearchType.NearMousePointDirection)
+                            direction = requester.getDirectionFromType(DirectionType.MousePoint);
+
+                        if(MathEx.pointSphereRayCast(requester.transform.position + direction * requester.getCurrentTargetSearchStartRange()
+                                    , receiverCharacter.transform.position,direction * desc._searchRange
+                                    , desc._searchSphereRadius) == false)
+                        {
+                            continue;
+                        }
+
+                        if(currentTarget == null)
+                        {
+                            if(toNewDistanceSq < range)
+                                requester.setTargetEntity(receiverCharacter);
+                            continue;
+                        }
+
+                        bool currentTargetValid = MathEx.pointSphereRayCast(requester.transform.position + direction * requester.getCurrentTargetSearchStartRange()
+                                    , currentTarget.transform.position,direction * desc._searchRange
+                                    , desc._searchSphereRadius);
+
+                        float toCurrent = currentTarget.getDistanceSq(requester);
+                        if(toNewDistanceSq < range && (toCurrent > toNewDistanceSq || currentTargetValid == false))
+                            requester.setTargetEntity(receiverCharacter);
+                    }
+                    break;
+
                 }
                 
-                float toCurrent = currentTarget.getDistanceSq(requester);
-                float toNew = receiverCharacter.getDistanceSq(requester);
-                if(toNew < range && toCurrent > toNew)
-                    requester.setTargetEntity(receiverCharacter);
                     
             }
         }
@@ -148,6 +205,41 @@ public class SceneCharacterManager : ManagerBase
             MessageDataPooling.ReturnData(_targetSearchRequestList[i]);
         }
         _targetSearchRequestList.Clear();
+    }
+
+    public bool targetIsValid(GameEntityBase currentCharacter, GameEntityBase targetCharacter, TargetSearchDescription searchDesc)
+    {
+        if(targetCharacter == null || targetCharacter.gameObject.activeInHierarchy == false)
+            return false;
+
+        float range = searchDesc._searchRange * searchDesc._searchRange;
+
+        switch(searchDesc._searchType)
+        {
+            case TargetSearchType.Near:
+            {
+                return currentCharacter.getDistanceSq(targetCharacter) < range;
+            }
+            case TargetSearchType.NearDirection:
+            case TargetSearchType.NearMousePointDirection:
+            {
+                Vector3 direction = Vector3.right;
+                if(searchDesc._searchType == TargetSearchType.NearDirection)
+                    direction = currentCharacter.getDirection();
+                else if(searchDesc._searchType == TargetSearchType.NearMousePointDirection)
+                    direction = currentCharacter.getDirectionFromType(DirectionType.MousePoint);
+
+                bool currentTargetIsValid = MathEx.pointSphereRayCast(
+                            currentCharacter.transform.position + direction * currentCharacter.getCurrentTargetSearchStartRange()
+                            , targetCharacter.transform.position
+                            , direction * searchDesc._searchRange
+                            , searchDesc._searchSphereRadius);
+
+                return currentCharacter.getDistanceSq(targetCharacter) < range && currentTargetIsValid;
+            }
+        }
+
+        return false;
     }
 
     public CharacterEntityBase createCharacterFromPool(CharacterInfoData characterData, SpawnCharacterOptionDesc spawnDesc)

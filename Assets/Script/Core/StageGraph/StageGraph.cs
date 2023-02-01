@@ -32,7 +32,17 @@ public class StageGraphManager : Singleton<StageGraphManager>
             ++index;
         }
 
+    }
 
+    public void stopStage()
+    {
+        initialize();
+        _currentStage = null;
+
+        Message msg = MessagePool.GetMessage();
+        msg.Set(MessageTitles.game_stageEnd,MessageReceiver._boradcastNumber,null,null);
+
+        MasterManager.instance.HandleBroadcastMessage(msg);
     }
 
     public void startStage(string stageGraphPath)

@@ -64,9 +64,23 @@
         </Animation>
 
         <Branch Condition="Hit == true" Execute="Hit"/>
-        <Branch Key="getKey_AttackCharge == false" Condition="" Execute="AttackPrepare"/>
+        <Branch Key="getKey_AttackCharge == false" Condition="TargetExists" Execute="AttackPrepareAIExist"/>
+        <Branch Key="getKey_AttackCharge == false" Condition="TargetExists == false" Execute="AttackPrepare"/>
         <Branch Condition="End == true" Execute="AttackCharge"/>
     </AttackCharge>
+
+    <AttackPrepareAIExist MovementType="Empty" DirectionType="AITarget" FlipType="Keep" DirectionUpdateOnce="true">
+        <Animation Path="Resources/Sprites/NewPlayer/charge/" StartFrame="0" EndFrame="1" FramePerSecond="999">
+            <FrameEvent Type="ApplyBuff" ApplyBuff="12" StartFrame="0"/>
+            <FrameEvent Type="FrameTag" StartFrame="0" EndFrame="999" Tag="Attack"/>
+        </Animation>
+
+        <Branch Condition="Hit == true" Execute="Hit"/>
+        <Branch Condition="End == true && (getStat_Charging >= 100.0)" Execute="Attack_LV3"/>
+        <Branch Condition="End == true && (getStat_Charging >= 50.0)" Execute="Attack_LV2"/>
+        <Branch Condition="End == true" Execute="Attack_LV1"/>
+
+    </AttackPrepareAIExist>
 
     <AttackPrepare MovementType="Empty" DirectionType="MousePoint" FlipType="Keep">
         <Animation Path="Resources/Sprites/NewPlayer/charge/" StartFrame="0" EndFrame="1" FramePerSecond="999">

@@ -52,6 +52,11 @@ public class GizmoHelper : MonoBehaviour
 
     }
 
+    private SimplePool<GizmoCircleData> _circleDataPool = new SimplePool<GizmoCircleData>();
+    private SimplePool<GizmoPolygonData> _polygonDataPool = new SimplePool<GizmoPolygonData>();
+    private SimplePool<GizmoLineData> _lineDataPool = new SimplePool<GizmoLineData>();
+    private SimplePool<GizmoArcData> _arcDataPool = new SimplePool<GizmoArcData>();
+
     private List<GizmoCircleData> _circleRequestData = new List<GizmoCircleData>();
     private List<GizmoPolygonData> _polygonData = new List<GizmoPolygonData>();
     private List<GizmoLineData> _lineData = new List<GizmoLineData>();
@@ -90,7 +95,7 @@ public class GizmoHelper : MonoBehaviour
         if(AreGizmosVisible() == false)
             return;
 
-        GizmoCircleData circleData = new GizmoCircleData();
+        GizmoCircleData circleData = _circleDataPool.dequeue();// new GizmoCircleData();
         circleData._center = center;
         circleData._radius = radius;
         circleData._accuracy = accuracy;
@@ -111,7 +116,7 @@ public class GizmoHelper : MonoBehaviour
             return;
         }
 
-        GizmoPolygonData polygonData = new GizmoPolygonData();
+        GizmoPolygonData polygonData = _polygonDataPool.dequeue();// new GizmoPolygonData();
         polygonData._verticies = verticies;
         polygonData._color = color;
         polygonData._timer = time;
@@ -124,7 +129,7 @@ public class GizmoHelper : MonoBehaviour
         if(AreGizmosVisible() == false)
             return;
             
-        GizmoArcData arcData = new GizmoArcData();
+        GizmoArcData arcData = _arcDataPool.dequeue();// new GizmoArcData();
         arcData._angle = angle;
         arcData._color = color;
         arcData._direction = direction;
@@ -157,7 +162,7 @@ public class GizmoHelper : MonoBehaviour
         if(AreGizmosVisible() == false)
             return;
             
-        GizmoLineData lineData = new GizmoLineData();
+        GizmoLineData lineData = _lineDataPool.dequeue();// new GizmoLineData();
         lineData._start = start;
         lineData._end = end;
         lineData._color = color;
@@ -177,7 +182,10 @@ public class GizmoHelper : MonoBehaviour
             Gizmos.DrawLine(item._start, item._end);
 
             if(item._timer <= 0f)
+            {
+                _lineDataPool.enqueue(_lineData[index]);
                 _lineData.RemoveAt(index);
+            }
             else
                 ++index;
         }
@@ -218,7 +226,10 @@ public class GizmoHelper : MonoBehaviour
             }
 
             if(item._timer <= 0f)
+            {
+                _arcDataPool.enqueue(_arcData[index]);
                 _arcData.RemoveAt(index);
+            }
             else
                 ++index;
         }
@@ -242,7 +253,10 @@ public class GizmoHelper : MonoBehaviour
             Gizmos.DrawLine(item._verticies[item._verticies.Length - 1], item._verticies[0]);
 
             if(item._timer <= 0f)
+            {
+                _polygonDataPool.enqueue(_polygonData[index]);
                 _polygonData.RemoveAt(index);
+            }
             else
                 ++index;
         }
@@ -271,7 +285,10 @@ public class GizmoHelper : MonoBehaviour
             }
 
             if(item._timer <= 0f)
+            {
+                _circleDataPool.enqueue(_circleRequestData[index]);
                 _circleRequestData.RemoveAt(index);
+            }
             else
                 ++index;
         }

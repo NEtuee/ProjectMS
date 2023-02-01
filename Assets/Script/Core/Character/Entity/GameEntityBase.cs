@@ -81,6 +81,11 @@ public class GameEntityBase : SequencerObjectBase
     {
         base.initialize();
         
+        gameObject.name = characterInfo._displayName;
+        actionGraphPath = characterInfo._actionGraphPath;
+        aiGraphPath = characterInfo._aiGraphPath;
+        statusInfoName = characterInfo._statusName;
+
         _actionGraph.initialize(ResourceContainerEx.Instance().GetActionGraph(characterInfo._actionGraphPath));
         _aiGraph.initialize(this, _actionGraph, ResourceContainerEx.Instance().GetAIGraph(characterInfo._aiGraphPath));
         _danmakuGraph.initialize(this);
@@ -235,6 +240,35 @@ public class GameEntityBase : SequencerObjectBase
                 Color targetColor = _aiGraph.isAIArrivedTarget() ? Color.green : Color.red;
                 GizmoHelper.instance.drawCircle(_aiGraph.getCurrentTargetPosition(),0.1f,18,targetColor);
                 GizmoHelper.instance.drawLine(_aiGraph.getCurrentTargetPosition(), transform.position, targetColor);
+            }
+
+            bool hasTarget = _currentTarget != null;
+            switch(_aiGraph.getCurrentTargetSearchType())
+            {
+                case TargetSearchType.Near:
+                    GizmoHelper.instance.drawCircle(transform.position,_aiGraph.getCurrentTargetSearchRange(),18,hasTarget ? Color.green : Color.red);
+                break;
+                case TargetSearchType.NearDirection:
+                case TargetSearchType.NearMousePointDirection:
+                {
+                    Vector3 direction = Vector3.right;
+                    if(_aiGraph.getCurrentTargetSearchType() == TargetSearchType.NearDirection)
+                        direction = getDirection();
+                    else if(_aiGraph.getCurrentTargetSearchType() == TargetSearchType.NearMousePointDirection)
+                        direction = getDirectionFromType(DirectionType.MousePoint);
+
+                    GizmoHelper.instance.drawCircle(transform.position,_aiGraph.getCurrentTargetSearchRange(),18,hasTarget ? Color.green : Color.red);
+                    GizmoHelper.instance.drawCircle(transform.position + direction * _aiGraph.getCurrentTargetSearchStartRange(),_aiGraph.getCurrentTargetSearchSphereRadius(),18,hasTarget ? Color.green : Color.red);
+
+                    GizmoHelper.instance.drawLine(transform.position + direction * _aiGraph.getCurrentTargetSearchStartRange(), transform.position + direction * _aiGraph.getCurrentTargetSearchRange(), hasTarget ? Color.green : Color.red);
+                    GizmoHelper.instance.drawCircle(transform.position + direction * _aiGraph.getCurrentTargetSearchRange(),_aiGraph.getCurrentTargetSearchSphereRadius(),18,hasTarget ? Color.green : Color.red);
+                }
+                break;
+            }
+
+            if(_currentTarget != null)
+            {
+                GizmoHelper.instance.drawLine(_currentTarget.transform.position, transform.position, Color.cyan);
             }
         }
 
@@ -562,6 +596,8 @@ public class GameEntityBase : SequencerObjectBase
     public TargetSearchType getCurrentTargetSearchType() {return _aiGraph.getCurrentTargetSearchType();}
     public SearchIdentifier getCurrentSearchIdentifier() {return _aiGraph.getCurrentSearchIdentifier();}
     public float getCurrentTargetSearchRange() {return _aiGraph.getCurrentTargetSearchRange();}
+    public float getCurrentTargetSearchStartRange() {return _aiGraph.getCurrentTargetSearchStartRange();}
+    public float getCurrentTargetSearchSphereRadius() {return _aiGraph.getCurrentTargetSearchSphereRadius();}
 
     public Vector3 getCurrentDefenceDirection() {return _defenceDirection;}
 

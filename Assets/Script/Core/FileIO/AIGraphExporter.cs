@@ -535,6 +535,14 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
             {
                 nodeData._targetSearchRange = float.Parse(targetValue);
             }
+            else if(targetName == "TargetSearchStartRange")
+            {
+                nodeData._targetSearchStartRange = float.Parse(targetValue);
+            }
+            else if(targetName == "TargetSearchSphereRadius")
+            {
+                nodeData._targetSearchSphereRadius = float.Parse(targetValue);
+            }
             else if(targetName == "SearchIdentifier")
             {
                 nodeData._searchIdentifier = (SearchIdentifier)System.Enum.Parse(typeof(SearchIdentifier), targetValue);

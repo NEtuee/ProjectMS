@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.IO;
 
 public class ManagedResourceItem<Value> where Value : class
 {
@@ -66,20 +67,61 @@ public class ManagedResourceItem<Value> where Value : class
 
 public class DataResourceItem<Value, Loader> where Value : class where Loader : LoaderBase<Value>, new()
 {
+	class ValueWithTimeStamp
+	{
+		public Value 		_value;
+		public DateTime 	_timeStamp;
+	}
+
+#if UNITY_EDITOR
+	private Dictionary<string, ValueWithTimeStamp> _resourceContainer = new Dictionary<string, ValueWithTimeStamp>();
+#else
 	private Dictionary<string, Value> _resourceContainer = new Dictionary<string, Value>();
+#endif
+
 	private Loader loader = new Loader();
 
 	public Value GetOrLoadResource(string path)
 	{
+#if UNITY_EDITOR
+		DateTime timeStamp = getTimeStamp(path);
+		if(_resourceContainer.ContainsKey(path))
+		{
+			if(_resourceContainer[path]._timeStamp == timeStamp)
+				return _resourceContainer[path]._value;
+		}
+#else
 		if(_resourceContainer.ContainsKey(path))
 			return _resourceContainer[path];
-		
+#endif
+
 		Value obj = loader.readFromXML(path);
 		if(obj == null)
 			return null;
-
+#if UNITY_EDITOR
+		if(_resourceContainer.ContainsKey(path))
+		{
+			ValueWithTimeStamp item = _resourceContainer[path];
+			item._value = obj;
+			item._timeStamp = timeStamp;
+		}
+		else
+		{
+			_resourceContainer.Add(path,new ValueWithTimeStamp(){_value = obj, _timeStamp = timeStamp});
+		}
+#else
 		_resourceContainer.Add(path,obj);
+#endif
+
 		return obj;
+	}
+
+	private DateTime getTimeStamp(string path)
+	{
+        if (File.Exists(path) == false)
+            return DateTime.MinValue;
+
+        return File.GetLastWriteTime(path);
 	}
 }
 
@@ -87,6 +129,7 @@ public class ResourceContainerEx : Singleton<ResourceContainerEx>
 {
     private ManagedResourceItem<Sprite> 				_spriteResource = new ManagedResourceItem<Sprite>();
 	private ManagedResourceItem<ScriptableObject> 		_scriptableResource = new ManagedResourceItem<ScriptableObject>();
+	private ManagedResourceItem<GameObject>		 		_prefabResource = new ManagedResourceItem<GameObject>();
 
 	private DataResourceItem<ActionGraphBaseData,ActionGraphLoader>				_actionGraphResource = new DataResourceItem<ActionGraphBaseData,ActionGraphLoader>();
 	private DataResourceItem<AIGraphBaseData,AIGraphLoader>						_aiGraphResource = new DataResourceItem<AIGraphBaseData,AIGraphLoader>();
@@ -116,6 +159,11 @@ public class ResourceContainerEx : Singleton<ResourceContainerEx>
 		string cut = folderName.Substring(folderName.IndexOf("Resources") + 10);
 		
 		return _spriteResource.GetOrLoadResources(cut);
+	}
+
+	public GameObject GetPrefab(string fileName)
+	{
+		return _prefabResource.GetOrLoadResource(fileName);
 	}
 
 	public ActionGraphBaseData GetActionGraph(string path)

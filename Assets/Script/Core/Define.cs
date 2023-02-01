@@ -14,6 +14,8 @@ public enum TargetSearchType
 {
     None = 0,
     Near,
+    NearDirection,
+    NearMousePointDirection,
     Count,
 }
 

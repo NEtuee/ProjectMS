@@ -21,6 +21,7 @@ public static partial class MessageTitles
     public const ushort     game_mapChange              = 0x0202;
     //타겟 텔레포트
     public const ushort     game_teleportTarget         = 0x0203;
+    public const ushort     game_stageEnd               = 0x0204;
 
 
     public const ushort     effect_spawnEffect          = 0x0300;

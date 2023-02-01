@@ -136,6 +136,12 @@ public static class MathEx
 		ots = 1f - s - t;
 	}
 
+	public static bool pointSphereRayCast(UnityEngine.Vector3 currentPosition,UnityEngine.Vector3 targetPosition, UnityEngine.Vector3 direction, float radius)
+	{
+		UnityEngine.Vector3 perpendicularPoint = getPerpendicularPointOnLineSegment(currentPosition,currentPosition + direction,targetPosition);
+		return UnityEngine.Vector3.Distance(perpendicularPoint, targetPosition) < radius;
+	}
+
 	public static UnityEngine.Vector3 getPerpendicularPointOnLineSegment(UnityEngine.Vector3 lineA, UnityEngine.Vector3 lineB, UnityEngine.Vector3 point)
 	{
 		UnityEngine.Vector3 pa = point - lineA;
