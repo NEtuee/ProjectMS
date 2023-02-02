@@ -402,7 +402,17 @@ public class ActionFrameEvent_DeleteBuff : ActionFrameEventBase
                 buffKeyList = new int[buffList.Length];
                 for(int j = 0; j < buffList.Length; ++j)
                 {
-                    buffKeyList[j] = int.Parse(buffList[j]);
+                    bool parse = int.TryParse(buffList[j],out int buffKey);
+                    if(parse == false)
+                        buffKey = StatusInfo.getBuffKeyFromName(buffList[j]);
+
+                    if(buffKey == -1)
+                    {
+                        DebugUtil.assert(false, "invalidBuff : {0}", buffList[j]);
+                        continue;
+                    }
+
+                    buffKeyList[j] = buffKey;
                 }
 
             }
@@ -438,7 +448,17 @@ public class ActionFrameEvent_ApplyBuff : ActionFrameEventBase
                 buffKeyList = new int[buffList.Length];
                 for(int j = 0; j < buffList.Length; ++j)
                 {
-                    buffKeyList[j] = int.Parse(buffList[j]);
+                    bool parse = int.TryParse(buffList[j],out int buffKey);
+                    if(parse == false)
+                        buffKey = StatusInfo.getBuffKeyFromName(buffList[j]);
+
+                    if(buffKey == -1)
+                    {
+                        DebugUtil.assert(false, "invalidBuff : {0}", buffList[j]);
+                        continue;
+                    }
+
+                    buffKeyList[j] = buffKey;
                 }
 
             }
@@ -476,7 +496,17 @@ public class ActionFrameEvent_ApplyBuffTarget : ActionFrameEventBase
                 buffKeyList = new int[buffList.Length];
                 for(int j = 0; j < buffList.Length; ++j)
                 {
-                    buffKeyList[j] = int.Parse(buffList[j]);
+                    bool parse = int.TryParse(buffList[j],out int buffKey);
+                    if(parse == false)
+                        buffKey = StatusInfo.getBuffKeyFromName(buffList[j]);
+
+                    if(buffKey == -1)
+                    {
+                        DebugUtil.assert(false, "invalidBuff : {0}", buffList[j]);
+                        continue;
+                    }
+
+                    buffKeyList[j] = buffKey;
                 }
 
             }

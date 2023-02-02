@@ -68,6 +68,7 @@ public class StatusInfo
 
     private static Dictionary<string, StatusInfoData> _statusInfoDataDictionary;
     private static Dictionary<int, BuffData> _buffDataDictionary;
+    private static Dictionary<string, int> _buffKeyDictinary = new Dictionary<string, int>();
 
     private StatusInfoData _statusInfoData;
 
@@ -143,9 +144,24 @@ public class StatusInfo
         return _buffDataDictionary[buffKey];
     }
 
+    public static int getBuffKeyFromName(string buffName)
+    {
+        if(_buffKeyDictinary.ContainsKey(buffName) == false)
+            return -1;
+        
+        return _buffKeyDictinary[buffName];
+    }
+
     public static void setBuffDataDictionary(Dictionary<int, BuffData> data)
     {
         _buffDataDictionary = data;
+
+        _buffKeyDictinary.Clear();
+
+        foreach(var item in _buffDataDictionary)
+        {
+            _buffKeyDictinary.Add(item.Value._buffName, item.Value._buffKey);
+        }
     }
 
     public static void setStatusInfoDataDictionary(Dictionary<string, StatusInfoData> data)

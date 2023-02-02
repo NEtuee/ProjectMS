@@ -258,7 +258,17 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
 
                 for(int i = 0; i < buffList.Length; ++i)
                 {
-                    nodeData._applyBuffList[i] = int.Parse(buffList[i]);
+                    bool parse = int.TryParse(buffList[i],out int buffKey);
+                    if(parse == false)
+                        buffKey = StatusInfo.getBuffKeyFromName(buffList[i]);
+
+                    if(buffKey == -1)
+                    {
+                        DebugUtil.assert(false, "invalidBuff : {0}", buffList[i]);
+                        continue;
+                    }
+
+                    nodeData._applyBuffList[i] = buffKey;
                 }
             }
             else if(targetName == "NormalizedSpeed")
@@ -910,7 +920,17 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
                 int[] buffKeyList = new int[buffList.Length];
                 for(int j = 0; j < buffList.Length; ++j)
                 {
-                    buffKeyList[j] = int.Parse(buffList[j]);
+                    bool parse = int.TryParse(buffList[j],out int buffKey);
+                    if(parse == false)
+                        buffKey = StatusInfo.getBuffKeyFromName(buffList[j]);
+
+                    if(buffKey == -1)
+                    {
+                        DebugUtil.assert(false, "invalidBuff : {0}", buffList[j]);
+                        continue;
+                    }
+
+                    buffKeyList[j] = buffKey;
                 }
 
                 baseData._defaultBuffList = buffKeyList;
