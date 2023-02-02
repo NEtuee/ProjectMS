@@ -1,0 +1,10 @@
+<ActionGraph Name="#SCRIPTNAME#" DefaultAction="Idle" DefaultFramePerSecond="12">
+
+    <Idle MovementType="Empty" DirectionType="MoveInput">
+        <Animation Path="" StartFrame="0" EndFrame="1" FramePerSecond="999">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Idle"/>
+    </Idle>
+
+</ActionGraph>
