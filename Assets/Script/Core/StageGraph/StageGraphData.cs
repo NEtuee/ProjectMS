@@ -5,7 +5,7 @@ public abstract class StageGraphEventBase
 {
     public abstract StageGraphEventType getStageGraphEventType();
     public abstract void Initialize();
-    public abstract bool Execute(float deltaTime);
+    public abstract bool Execute(StageGraphManager graphManager, float deltaTime);
     public abstract void loadXml(XmlNode node);
 }
 
@@ -16,6 +16,8 @@ public class StageGraphEvent_SpawnCharacter : StageGraphEventBase
     private CharacterInfoData           _characterInfoData;
     private SpawnCharacterOptionDesc    _spawnDesc = SpawnCharacterOptionDesc.defaultValue;
 
+    private string                      _uniqueEntityKey = "";
+
     public override StageGraphEventType getStageGraphEventType() => StageGraphEventType.SpawnCharacter;
     
     public override void Initialize()
@@ -23,16 +25,17 @@ public class StageGraphEvent_SpawnCharacter : StageGraphEventBase
         _characterInfoData = CharacterInfoManager.Instance().GetCharacterInfoData(_characterKey);
     }
 
-    public override bool Execute(float deltaTime)
+    public override bool Execute(StageGraphManager graphManager,float deltaTime)
     {
-        Message spawnMessage = MessagePool.GetMessage();
-        SpawnCharacterOptionDescData messageData = MessageDataPooling.GetMessageData<SpawnCharacterOptionDescData>();
+        SceneCharacterManager sceneCharacterManager = SceneCharacterManager._managerInstance as SceneCharacterManager;
+        CharacterEntityBase createdCharacter = sceneCharacterManager.createCharacterFromPool(_characterInfoData,_spawnDesc);
 
-        messageData._characterInfoData = _characterInfoData;
-        messageData._spawnCharacterOptionDesc = _spawnDesc;
+        if(createdCharacter == null)
+            return true;
 
-        spawnMessage.Set(MessageTitles.entity_spawnCharacter,MessageReceiver.QueryUniqueID("SceneCharacterManager"),messageData,null);
-        MasterManager.instance.HandleMessage(spawnMessage);
+        if(_uniqueEntityKey != "")
+            graphManager.addUniqueEntity(_uniqueEntityKey, createdCharacter);
+        
         return true;
     }
 
@@ -57,6 +60,10 @@ public class StageGraphEvent_SpawnCharacter : StageGraphEventBase
             {
                 _spawnDesc._searchIdentifier = (SearchIdentifier)System.Enum.Parse(typeof(SearchIdentifier), attrValue);
             }
+            else if(attrName == "UniqueKey")
+            {
+                _uniqueEntityKey = attrValue;
+            }
 
         }
     }
@@ -74,7 +81,7 @@ public class StageGraphEvent_WaitSecond : StageGraphEventBase
         _timer = 0f;
     }
 
-    public override bool Execute(float deltaTime)
+    public override bool Execute(StageGraphManager graphManager,float deltaTime)
     {
         _timer += deltaTime;
         return _waitTime <= _timer;
@@ -95,10 +102,48 @@ public class StageGraphEvent_WaitSecond : StageGraphEventBase
     }
 }
 
+public class StageGraphEvent_SetCameraTarget : StageGraphEventBase
+{
+    private string _uniqueKey = "";
+    private CameraModeType _cameraMode = CameraModeType.Count;
+
+    public override StageGraphEventType getStageGraphEventType() => StageGraphEventType.SetCameraTarget;
+    
+    public override void Initialize()
+    {
+        
+    }
+
+    public override bool Execute(StageGraphManager graphManager,float deltaTime)
+    {
+        CameraControlEx.Instance().setCameraTarget(graphManager.getUniqueEntity(_uniqueKey));
+        CameraControlEx.Instance().initialize();
+
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "UniqueKey")
+                _uniqueKey = attrValue;
+            else if(attrName == "CameraMode")
+                _cameraMode = (CameraModeType)System.Enum.Parse(typeof(CameraModeType), attrValue);
+        }
+    }
+}
+
 public enum StageGraphEventType
 {
     SpawnCharacter,
     WaitSecond,
+    SetCameraTarget,
     Count,
 }
 

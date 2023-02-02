@@ -5,6 +5,8 @@ using UnityEngine;
 
 public abstract class ManagerBase : MessageHub<ObjectBase>, IProgress
 {
+    public static ManagerBase _managerInstance;
+
     private List<ObjectBase> _addedObject = new List<ObjectBase>();
     public override void RegisterReceiver(ObjectBase receiver)
     {
@@ -28,6 +30,8 @@ public abstract class ManagerBase : MessageHub<ObjectBase>, IProgress
     }
     protected override void Awake()
     {
+        _managerInstance = this;
+
         base.Awake();
         
         assign();

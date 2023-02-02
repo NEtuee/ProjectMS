@@ -61,9 +61,7 @@ public class MasterManager : MessageHub<ManagerBase>
             m.initialize();
         }
 
-        CameraControlEx.Instance().setCameraTarget(player);
         CameraControlEx.Instance().initialize();
-
         StageGraphManager.Instance().initialize();
     }
     public void Start()

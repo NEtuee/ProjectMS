@@ -87,7 +87,11 @@ public class StageGraphLoader : LoaderBase<StageGraphBaseData>
         }
         else if(node.Name == "WaitSecond")
         {
-            spawnEvent = new StageGraphEvent_WaitSecond();
+            spawnEvent = new StageGraphEvent_WaitSecond(); 
+        }
+        else if(node.Name == "SetCameraTarget")
+        {
+            spawnEvent = new StageGraphEvent_SetCameraTarget();
         }
 
         if(spawnEvent == null)

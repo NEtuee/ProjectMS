@@ -2,7 +2,8 @@
 <StageGraph Name="Test">
 
     <InitializePhase>
-        <SpawnCharacter CharacterKey="Akane" Position="0 0 0" SearchIdentifier="Player"/>
+        <SpawnCharacter CharacterKey="Akane" Position="0 0 0" SearchIdentifier="Player" UniqueKey="Player"/>
+        <SetCameraTarget UniqueKey="Player" CameraMode="ArenaMode"/>
     </InitializePhase>
 
     <UpdatePhase>
