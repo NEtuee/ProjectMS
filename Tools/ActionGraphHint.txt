@@ -1,6 +1,20 @@
-﻿HintType,Symbol,TextList
+HintType,Symbol,TextList
 FrameEvent,Test,Log=~~
-FrameEventAndInQuote,Test Log=,Check
+FrameEvent,Attack,"Radius=~~,Angle=~~,StartDistance=~~,AttackPreset=~~,PushVector=~~,IgnoreDefenceType=~~"
+FrameEvent,ApplyBuff,ApplyBuff=~~
+FrameEvent,ApplyBuffTarget,ApplyBuff=~~
+FrameEvent,DeleteBuff,BuffList=~~
+FrameEvent,SetDefenceType,DefenceType=~/${1|Empty Guard Parry Evade}~
+FrameEvent,Effect,"Path=~~,FramePerSecond=~~,Offset=~~,Angle=~~,ToTarget=~~,UseFlip=~~"
+FrameEvent,SetFrameTag,"EndFrame=~~,Tag=~~,Tag=~~"
+FrameEvent,Projectile,"GraphName=~~,DirectionType=~~,ShotInfoUseType=~~,SpawnTargetType=~~"
+FrameEvent,Danmaku,Path=~~
+FrameEvent,SetAnimationSpeed,Speed=~~
+FrameEvent,Movement,"Friction=~~,MaxVelocity=~~,Speed=~~"
+FrameEventAndInQuote,Attack IgnoreDefenceType=,"Guard,Parry,Evade"
+FrameEventAndInQuote,SetDefenceType DefenceType=,"Empty,Guard,Parry,Evade"
+FrameEventAndInQuote,Projectile ShotInfoUseType=,"UseDefault,Overlap,Add"
+FrameEventAndInQuote,Projectile SpawnTargetType=,"Self,Target,AITarget"
 InQuote,MovementType=,"Empty,RootMotion,GraphPreset,FrameEvent"
 InQuote,DirectionType=,"AlywaysRight,Keep,MoveInput,MousePoint,AttackedPoint,MoveDirection,AI,AITarget"
 InQuote,DefenceDirectionType=,"Direction,MousePoint"
@@ -10,13 +24,15 @@ InQuote,DefenceType=,"Empty,Guard,Parry,Evade"
 InQuote,IsActionSelection=,"true,false"
 InQuote,NormalizedSpeed=,"true,false"
 InQuote,DirectionUpdateOnce=,"true,false"
+InQuote,Condition=,"ActionTest,ActionDash,End,AngleBetweenStick,AngleDirection,IsXFlip,IsYFlip,CurrentFrame,AttackSuccess,AttackGuarded,AttackParried,AttackGuardBreak,DefenceSuccess,ParrySuccess,Hit,EvadeSuccess,GuardBroken,CurrentFrame,TargetExists,TargetDistance,ArrivedTarget,CurrentPackageEnd,getStat_,getKey_,getFrameTag_,getTargetFrameTag_,getWeight_,true,false,PackageExecutedTime,GraphExecutedTime"
 InScope,,"MovementType=~~,MovementGraphPreset=~~,DirectionType=~~,DefenceDirectionType=~~,FlipType=~~,RotationType=~~,MoveScale=~~,IsActionSelection=~~,ApplyBuff=~~,NormalizedSpeed=~~,DefenceType=~~,DefenceAngle=~~,DirectionUpdateOnce=~~,IsActionSelection=~~"
 LineStart,<Branch,"Key=~~,Condition=~~,Execute=~~,Weight=~~"
 LineStart,<Animation,"Path=~~,StartFrame=~~,EndFrame=~~,FramePerSecond=~~,Loop=~~,Xflip=~~,YFlip=~~,RotationPreset=~~,ScalePreset=~~"
 LineStart,<MultiSelectAnimation,"Path=~~,Condition=~~"
-LineStart,<Branch,"Weight=~~,Key=~~,Condition=~~,Execute=~~"
+LineStart,<Physics,"UseGravity=~~,Velocity=~~,Friction=~~,Torque=~~,AngularFriction=~~"
+LineStart,<BranchSet,Name=~~
+LineStart,<GlobalVariable,"Name=~~,Value=~~"
 LineStartAndInQuote,<Animation XFlip=,"true,false"
-LineStartAndInQuote,<Branch Condition=,"ActionTest,ActionDash,End,AngleBetweenStick,AngleDirection,IsXFlip,IsYFlip,CurrentFrame,AttackSuccess,AttackGuarded,AttackParried,AttackGuardBreak,DefenceSuccess,ParrySuccess,Hit,EvadeSuccess,GuardBroken,CurrentFrame,TargetExists,TargetDistance,ArrivedTarget,CurrentPackageEnd,getStat_,getKey_,getFrameTag_,getTargetFrameTag_,getWeight_"
 LineStartAndInQuote,<Animation YFlip=,"true,false"
 LineStartAndInQuote,<Animation Loop=,"true,false"
 LineStartAndInQuote,<FrameEvent Type=,"Test,Attack,ApplyBuff,ApplyBuffTarget,DeleteBuff,TeleportToTarget,TeleportToTargetBack,SetDefenceType,Effect,SetFrameTag,Projectile,Danmaku,SetAnimationSpeed,KillEntity,Movement"
@@ -26,6 +42,34 @@ ShortCut,__FrameEvent,<FrameEvent Type=~~ StartFrame=~0~/>
 ShortCut,__Branch,<Branch Condition=~~ Execute=~~/>
 ShortCut,__BranchSet,<BranchSet Name=~~>#n#t#n</BranchSet>
 ShortCut,__GlobalVariable,<GlobalVariable Name=~~ Value=~~/>
+ShortCut,__FrameEvent_Attack,<FrameEvent Type=~Attack~ StartFrame=~0~ AttackPreset=~~>#n#t<OnHit>#n#t</OnHit>#n#n#t<OnGuard>#n#t</OnGuard>#n#n#t<OnParry>#n#t</OnParry>#n</FrameEvent>
+ShortCut,__FrameEvent_AppyBuff,<FrameEvent Type=~~ StartFrame=~0~ ApplyBuff=~~/>
+ShortCut,__FrameEvent_AppyBuffTarget,<FrameEvent Type=~~ StartFrame=~0~ ApplyBuff=~~/>
+ShortCut,__FrameEvent_DeleteBuff,<FrameEvent Type=~DeleteBuff~ StartFrame=~0~ BuffList=~~/>
+ShortCut,__FrameEvent_TeleportToTarget,<FrameEvent Type=~TeleportToTarget~ StartFrame=~0~/>
+ShortCut,__FrameEvent_TeleportToTargetBack,<FrameEvent Type=~TeleportToTargetBack~ StartFrame=~0~/>
+ShortCut,__FrameEvent_SetDefenceType,<FrameEvent Type=~SetDefenceType~ StartFrame=~0~ DefenceType=~~/>
+ShortCut,__EffectPhysics,<Physics UseGravity=~True~ Velocity=~0.0^10.0~ Friction=~1~ Torque=~360~ AngularFriction=~360~/>
+ShortCut,__FrameEvent_Effect,<FrameEvent Type=~Effect~ StartFrame=~0~ Path=~~ FramePerSecond=~~/>
+ShortCut,__FrameEvent_SetFrameTag,<FrameEvent Type=~FrameTag~ StartFrame=~0~ EndFrame=~999~ Tag=~~/>
+ShortCut,__FrameEvent_Projectile,<FrameEvent Type=~Projectile~ StartFrame=~0~ GraphName=~~ DirectionType=~~ SpawnTargetType=~~/>
+ShortCut,__FrameEvent_Danmaku,<FrameEvent Type=~Danmaku~ StartFrame=~0~ Path=~~/>
+ShortCut,__FrameEvent_SetAnimationSpeed,<FrameEvent Type=~SetAnimationSpeed~ StartFrame=~0~ Speed=~~/>
+ShortCut,__FrameEvent_KillEntity,<FrameEvent Type=~KillEntity~ StartFrame=~0~/>
+ShortCut,__FrameEvent_Movement,<FrameEvent Type=~Movement~ StartFrame=~0~ Friction=~~ MaxVelocity=~~ Speed=~~/>
+ShortCut,__MultiSelectAnimation,<MultiSelectAnimation Path=~~ Condition=~~/>
+LineStart,<ActionGraph,"Name=~~,DefaultAction=~~,DefaultFramePerSecond=~~,DefaultBuff=~~"
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
 ,,
 ,,
 ,,
