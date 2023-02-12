@@ -20,9 +20,11 @@ public class AnimationPlayDataInfo
     public float                        _startFrame = -1f;
     public float                        _endFrame = -1f;
     public int                          _frameEventDataCount = -1;
+    public int                          _angleBaseAnimationSpriteCount = -1;
 
     public bool                         _isLoop = false;
     public bool                         _hasMovementGraph = false;
+    public bool                         _isAngleBaseAnimation = false;
 
 
     public FlipState                    _flipState;
@@ -205,7 +207,12 @@ public class AnimationPlayer
 
         float endFrame = playData._endFrame;
         endFrame = endFrame == -1f ? (float)_currentAnimationSprites.Length : endFrame;
-        
+
+        if(playData._isAngleBaseAnimation)
+        {
+            endFrame = playData._angleBaseAnimationSpriteCount;
+            endFrame = endFrame == -1f ? 1f : endFrame;
+        }
         _animationTimeProcessor.initialize();
         _animationTimeProcessor.setFrame(startFrame,endFrame, playData._framePerSec);
         _animationTimeProcessor.setLoop(playData._isLoop);
@@ -219,6 +226,16 @@ public class AnimationPlayer
         _frameEventProcessList.Clear();
 
         setCurrentFrameEventIndex(playData);
+    }
+
+    public int angleToSectorNumberByAngleBaseSpriteCount(float angleDegree)
+    {
+        angleDegree = MathEx.clamp360Degree(angleDegree);
+        float baseAngle = 360f / (float)_currentAnimationSprites.Length;
+        if(angleDegree < baseAngle * 0.5f || angleDegree > 360f - baseAngle * 0.5f)
+            return 0;
+
+        return (int)((angleDegree + baseAngle * 0.5f) / baseAngle);
     }
 
     public void setAnimationSpeed(float speed) {_animationTimeProcessor.setAnimationSpeed(speed);}
@@ -273,13 +290,16 @@ public class AnimationPlayer
         return _currentAnimationPlayData._flipState;
     }
 
-    public Sprite getCurrentSprite()
+    public Sprite getCurrentSprite(float currentAngleDegree = 0f)
     {
         if(_currentAnimationSprites.Length <= _animationTimeProcessor.getCurrentIndex())
         {
             DebugUtil.assert(false, "sprite out of index, check end Frame of Action");
             return null;
         }
+
+        if(_currentAnimationPlayData._isAngleBaseAnimation)
+            return _currentAnimationSprites[angleToSectorNumberByAngleBaseSpriteCount(currentAngleDegree) + _animationTimeProcessor.getCurrentIndex()];
 
         return _currentAnimationSprites[_animationTimeProcessor.getCurrentIndex()];
     }

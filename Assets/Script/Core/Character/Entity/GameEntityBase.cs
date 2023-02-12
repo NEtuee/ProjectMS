@@ -47,8 +47,13 @@ public class GameEntityBase : SequencerObjectBase
     private GameEntityBase      _currentTarget;
 
     private bool                _updateDirection = true;
+    private bool                _updateFlipState = true;
 
     private bool                _initializeFromCharacter = false;
+
+
+    private Quaternion          _actionStartRotation = Quaternion.identity;
+    private Quaternion          _angleBaseRotation = Quaternion.identity;
 
     public override void assign()
     {
@@ -164,32 +169,46 @@ public class GameEntityBase : SequencerObjectBase
             //action,movementGraph 바뀌는 시점
             if(_actionGraph.progress() == true)
             {
+                _currentDefenceType = _actionGraph.getCurrentDefenceType();
+                
                 if(_actionGraph.isActionLoop() == false)
                 {
                     applyActionBuffList();
                     _movementControl.changeMovement(this,_actionGraph.getCurrentMovement());
                     _movementControl.setMoveScale(_actionGraph.getCurrentMoveScale());
+
+                    _updateDirection = true;
+                    _updateFlipState = true;
+
+                    updateDirection();
+                    updateRotation();
+
+                    _angleBaseRotation = _spriteRotation;
+                    _actionStartRotation = _spriteRotation;
+                    _actionStartRotation = Quaternion.Inverse(_actionStartRotation);
                 }
-
-                _currentDefenceType = _actionGraph.getCurrentDefenceType();
-                _updateDirection = true;
-
-                //Debug.Log("execute : " + prevActionName + " -> " + _actionGraph.getCurrentActionName());
             }
 
             updateDirection();
             
+            if(_updateFlipState)
+            {
+                _flipState = getCurrentFlipState();
+                _updateFlipState = _actionGraph.getCurrentFlipTypeUpdateOnce() == false;
+            }
+
             //animation 바뀌는 시점
             _actionGraph.updateAnimation(deltaTime, this);
             _movementControl?.progress(deltaTime, _direction);
             
             updatePhysics(deltaTime);
 
-            _spriteRenderer.sprite = _actionGraph.getCurrentSprite();
             _spriteRenderer.transform.localRotation = _actionGraph.getCurrentAnimationRotation();
             _spriteRenderer.transform.localScale = _actionGraph.getCurrentAnimationScale();
-            
-            _flipState = getCurrentFlipState();
+
+            updateRotation();
+
+            _spriteRenderer.sprite = _actionGraph.getCurrentSprite((_spriteRotation * _actionStartRotation).eulerAngles.z);
 
             _spriteRenderer.flipX = _flipState.xFlip;
             _spriteRenderer.flipY = _flipState.yFlip;
@@ -214,7 +233,6 @@ public class GameEntityBase : SequencerObjectBase
         }
     
 
-        updateRotation();
 
         if(getDefenceAngle() != 0f)
         {
@@ -385,19 +403,30 @@ public class GameEntityBase : SequencerObjectBase
 
                 break;
             case FlipType.MousePoint:
+            {
                 Vector3 direction = ControllerEx.Instance().getJoystickAxisR(transform.position);
                 if(MathEx.abs(direction.x) != 0f && currentFlipState.xFlip == true)
                     flipState.xFlip = direction.x < 0;
                 if(MathEx.abs(direction.y) != 0f && currentFlipState.yFlip == true)
                     flipState.yFlip = direction.y < 0;
-                break;
+            }
+            break;
+            case FlipType.MoveDirection:
+            {
+                Vector3 direction = getMovementControl().getMoveDirection();
+                if(MathEx.abs(direction.x) != 0f && currentFlipState.xFlip == true)
+                    flipState.xFlip = direction.x < 0;
+                if(MathEx.abs(direction.y) != 0f && currentFlipState.yFlip == true)
+                    flipState.yFlip = direction.y < 0;
+            }
+            break;
             case FlipType.Keep:
                 flipState.xFlip = _spriteRenderer.flipX;
                 flipState.yFlip = _spriteRenderer.flipY;
                 break;
         }
 
-        DebugUtil.assert((int)FlipType.Count == 4, "flip type count error");
+        DebugUtil.assert((int)FlipType.Count == 5, "flip type count error");
 
         return flipState;
     }
@@ -463,6 +492,8 @@ public class GameEntityBase : SequencerObjectBase
         {
             directionType = _actionGraph.getDirectionType();
             defenceDirectionType = _actionGraph.getDefenceDirectionType();
+
+            Debug.Log(directionType);
         }
 
         _direction = getDirectionFromType(directionType);
@@ -533,30 +564,43 @@ public class GameEntityBase : SequencerObjectBase
         if(_actionGraph != null)
             rotationType = _actionGraph.getCurrentRotationType();
 
+        float targetRotation = 0f;
         switch(rotationType)
         {
             case RotationType.AlwaysRight:
-                _spriteRotation = Quaternion.identity;
+                targetRotation = 0f;
                 break;
             case RotationType.Direction:
-                _spriteRotation = Quaternion.Euler(0f,0f,MathEx.directionToAngle(_direction));
+                targetRotation = MathEx.directionToAngle(_direction);
                 break;
             case RotationType.MousePoint:
-                _spriteRotation = Quaternion.Euler(0f,0f,MathEx.directionToAngle( ControllerEx.Instance().getJoystickAxisR(transform.position)));
+                targetRotation = MathEx.directionToAngle( ControllerEx.Instance().getJoystickAxisR(transform.position));
                 break;
             case RotationType.MoveDirection:
-                _spriteRotation = Quaternion.Euler(0f,0f,MathEx.directionToAngle(getMovementControl().getMoveDirection()));
+                targetRotation = MathEx.directionToAngle(getMovementControl().getMoveDirection());
                 break;
             case RotationType.Keep:
                 break;
     
         }
-
         DebugUtil.assert((int)RotationType.Count == 5, "check this");
+
+        if(_actionGraph != null && _actionGraph.isRotateBySpeed())
+        {
+            if (MathEx.equals(_spriteRotation.eulerAngles.z, targetRotation, float.Epsilon) == false)
+            {
+                float angle = Mathf.MoveTowardsAngle(_spriteRotation.eulerAngles.z, targetRotation, _actionGraph.getCurrentRotateSpeed() * Time.deltaTime);
+                _spriteRotation = Quaternion.Euler(0f,0f,angle);
+            }
+        }
+        else
+        {
+            _spriteRotation = Quaternion.Euler(0f,0f, targetRotation);
+        }
 
         float zRotation = _spriteRotation.eulerAngles.z;
         if(rotationType != RotationType.AlwaysRight)
-            zRotation -= (getCurrentFlipState().xFlip ? -180f : 0f);
+            zRotation -= (getFlipState().xFlip ? -180f : 0f);
 
         _spriteObject.transform.localRotation *= Quaternion.Euler(0f,0f,zRotation);
     }

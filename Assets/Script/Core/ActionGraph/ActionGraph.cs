@@ -66,11 +66,9 @@ public class ActionGraph
 
     }
 
-    
-
     private void createCoditionNodeDataAll()
     {
-        DebugUtil.assert((int)ConditionNodeUpdateType.Count == 36, "check this");
+        DebugUtil.assert((int)ConditionNodeUpdateType.Count == 37, "check this");
 
         foreach(var item in ConditionNodeInfoPreset._nodePreset.Values)
         {
@@ -80,7 +78,8 @@ public class ActionGraph
                 item._updateType == ConditionNodeUpdateType.Key || 
                 item._updateType == ConditionNodeUpdateType.FrameTag || 
                 item._updateType == ConditionNodeUpdateType.TargetFrameTag ||
-                item._updateType == ConditionNodeUpdateType.Weight)
+                item._updateType == ConditionNodeUpdateType.Weight ||
+                item._updateType == ConditionNodeUpdateType.AngleSector)
                 continue;
 
             createConditionNodeData(item);
@@ -514,6 +513,11 @@ public class ActionGraph
         {
             return ActionKeyInputManager.Instance().actionKeyCheck(((ActionGraphConditionNodeData_Key)nodeData)._targetKeyName);
         }
+        else if(updateType == ConditionNodeUpdateType.AngleSector)
+        {
+            return ActionKeyInputManager.Instance().actionKeyCheck(((ActionGraphConditionNodeData_Key)nodeData)._targetKeyName);
+        }
+
 
         if(_actionConditionNodeData.ContainsKey(updateType) == false)
         {
@@ -575,17 +579,20 @@ public class ActionGraph
             return getCurrentAction()._moveScale * _animationPlayer.getCurrentAnimationDuration();
     }
 
+    public bool isRotateBySpeed() {return getCurrentAction()._rotateBySpeed;}
+    public float getCurrentRotateSpeed() {return getCurrentAction()._rotateSpeed;}
     public float getCurrentFrame() {return _animationPlayer.getCurrentFrame();}
     public float getCurrentDefenceAngle() {return getCurrentAction()._defenceAngle;}
     public DefenceType getCurrentDefenceType() {return getCurrentAction()._defenceType;}
     public RotationType getCurrentRotationType() {return getCurrentAction()._rotationType;}
     public DirectionType getDirectionType() {return getCurrentAction()._directionType;}
     public bool getCurrentDirectionUpdateOnce() {return getCurrentAction()._directionUpdateOnce;}
+    public bool getCurrentFlipTypeUpdateOnce() {return getCurrentAction()._flipTypeUpdateOnce;}
 
     public DefenceDirectionType getDefenceDirectionType() {return getCurrentAction()._defenceDirectionType;}
     public MoveValuePerFrameFromTimeDesc getMoveValuePerFrameFromTimeDesc(){return _animationPlayer.getMoveValuePerFrameFromTimeDesc();}
     public string getCurrentActionName() {return getCurrentAction()._nodeName; }
-    public UnityEngine.Sprite getCurrentSprite() {return _animationPlayer.getCurrentSprite();}
+    public UnityEngine.Sprite getCurrentSprite(float currentAngleDegree) {return _animationPlayer.getCurrentSprite(currentAngleDegree);}
     public UnityEngine.Quaternion getAnimationRotationPerFrame() {return _animationPlayer.getAnimationRotationPerFrame();}
     public UnityEngine.Quaternion getCurrentAnimationRotation() {return _animationPlayer.getCurrentAnimationRotation();}
     public UnityEngine.Vector3 getAnimationScalePerFrame() {return _animationPlayer.getAnimationScalePerFrame();}

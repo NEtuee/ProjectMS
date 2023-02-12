@@ -3,7 +3,10 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - CameraSet
+  - BackgroundCamera
+  - CharacterCamera
   layers:
   - Default
   - TransparentFX
@@ -11,16 +14,16 @@ TagManager:
   - 
   - Water
   - UI
+  - Background
+  - BackgroundDepth
+  - Character
   - 
   - 
   - 
   - 
   - 
   - 
-  - 
-  - 
-  - 
-  - 
+  - AllTogether
   - 
   - 
   - 
@@ -40,4 +43,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 2214128405
+    locked: 0
+  - name: Character
+    uniqueID: 1626700843
     locked: 0

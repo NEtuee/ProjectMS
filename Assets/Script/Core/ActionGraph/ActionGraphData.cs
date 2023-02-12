@@ -58,10 +58,15 @@ public class ActionGraphNodeData
 
     public float                        _defenceAngle = 0f;
     public float                        _moveScale = 1f;
+    public float                        _rotateSpeed = -1f;
     public bool                         _normalizedSpeed = false;
+    public bool                         _rotateBySpeed = false;
 
     public bool                         _isActionSelection = false;
     public bool                         _directionUpdateOnce = false;
+    public bool                         _flipTypeUpdateOnce = false;
+
+    public int                          _angleSectorCount = -1;
 
     public int                          _index;
     public int                          _branchIndexStart;
@@ -126,6 +131,7 @@ public enum FlipType
     AlwaysTurnOff = 0,
     Direction,
     MousePoint,
+    MoveDirection,
     Keep,
     Count,
 };
@@ -186,6 +192,7 @@ public enum ConditionNodeUpdateType
     FrameTag,
     TargetFrameTag,
     Weight,
+    AngleSector,
 
     Count,
 }
@@ -266,6 +273,7 @@ public static class ConditionNodeInfoPreset
         {"FrameTag",new ConditionNodeInfo(ConditionNodeUpdateType.FrameTag, ConditionNodeType.Bool)},
         {"TargetFrameTag",new ConditionNodeInfo(ConditionNodeUpdateType.TargetFrameTag, ConditionNodeType.Bool)},
         {"Weight",new ConditionNodeInfo(ConditionNodeUpdateType.Weight, ConditionNodeType.Bool)},
+        {"AngleSector",new ConditionNodeInfo(ConditionNodeUpdateType.AngleSector, ConditionNodeType.Int)},
         
     };
 

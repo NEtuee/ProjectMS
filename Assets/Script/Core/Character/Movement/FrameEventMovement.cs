@@ -47,10 +47,9 @@ public class FrameEventMovement : MovementBase
             return false;
         }
 
-        _currentDirection = direction;
         float resultSpeed = _movementValues[0] + (_movementValues[0] >= 0 ? -_movementValues[3] : _movementValues[3]);
         
-        _currentVelocity += (_currentDirection * _movementValues[0]) * deltaTime;
+        _currentVelocity += (direction * _movementValues[0]) * deltaTime;
         Vector3 velocityDirection = _currentVelocity.normalized;
 
         _currentVelocity -= _currentVelocity.normalized * _movementValues[3] * deltaTime;
@@ -61,6 +60,7 @@ public class FrameEventMovement : MovementBase
             _currentVelocity = _currentVelocity.normalized * _movementValues[2];
 
         movementOfFrame += _currentVelocity * deltaTime;
+        _currentDirection = _currentVelocity.normalized;
 
         return true;
     }
@@ -75,8 +75,10 @@ public class FrameEventMovement : MovementBase
         if(valueType == 1)
         {
             if(MathEx.equals(_targetEntity.getDirection().sqrMagnitude, 0f, float.Epsilon) == false)
-                _currentVelocity = _targetEntity.getDirection() * value;
-
+            {
+                float targetVelocity = value > _movementValues[2] ? _movementValues[2] : value;
+                _currentVelocity = _targetEntity.getDirection() * targetVelocity;
+            }
             return;
         }
 

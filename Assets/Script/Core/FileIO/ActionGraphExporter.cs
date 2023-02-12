@@ -275,9 +275,25 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             {
                 nodeData._normalizedSpeed = bool.Parse(targetValue);
             }
+            else if(targetName == "RotateBySpeed")
+            {
+                nodeData._rotateBySpeed = bool.Parse(targetValue);
+            }
+            else if(targetName == "RotateSpeed")
+            {
+                nodeData._rotateSpeed = float.Parse(targetValue);
+            }
             else if(targetName == "DirectionUpdateOnce")
             {
                 nodeData._directionUpdateOnce = bool.Parse(targetValue);
+            }
+            else if(targetName == "FlipTypeUpdateOnce")
+            {
+                nodeData._flipTypeUpdateOnce = bool.Parse(targetValue);
+            }
+            else if(targetName == "AngleSectorCount")
+            {
+                nodeData._angleSectorCount = int.Parse(targetValue);
             }
             else
             {
@@ -408,6 +424,14 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             {
                 AnimationScalePreset preset = ResourceContainerEx.Instance().GetScriptableObject("Preset\\AnimationScalePreset") as AnimationScalePreset;
                 playData._scalePresetData = preset.getPresetData(targetValue);
+            }
+            else if(targetName == "AngleBaseAnimation")
+            {
+                playData._isAngleBaseAnimation = bool.Parse(targetValue);
+            }
+            else if(targetName == "AngleBaseAnimationCount")
+            {
+                playData._angleBaseAnimationSpriteCount = int.Parse(targetValue);
             }
             else
             {
