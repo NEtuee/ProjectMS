@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameEntityBase : SequencerObjectBase
 {
 
-    public static float         _defaultFriction = 2f;
+    public static float         _defaultFriction = 4f;
 
 
     public string               actionGraphPath = "Assets\\Data\\ActionGraph\\ActionGraphTest.xml";
@@ -492,8 +492,6 @@ public class GameEntityBase : SequencerObjectBase
         {
             directionType = _actionGraph.getDirectionType();
             defenceDirectionType = _actionGraph.getDefenceDirectionType();
-
-            Debug.Log(directionType);
         }
 
         _direction = getDirectionFromType(directionType);

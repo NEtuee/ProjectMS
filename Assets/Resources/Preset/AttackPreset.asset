@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _presetData:
   - _name: PlayerAttackTest
-    _attackRadius: 2.8
+    _attackRadius: 1.5
     _attackAngle: 8
-    _attackStartDistance: 0.4
-    _pushVector: {x: 0, y: 0, z: 0}
+    _attackStartDistance: 0.1
+    _pushVector: {x: 2, y: 0, z: 0}
   - _name: PlayerBloodSpreadTest
     _attackRadius: 1
     _attackAngle: 140
@@ -47,7 +47,7 @@ MonoBehaviour:
     _attackRadius: 0.1
     _attackAngle: 360
     _attackStartDistance: 0
-    _pushVector: {x: 0, y: 0, z: 0}
+    _pushVector: {x: 2, y: 0, z: 0}
   - _name: ATK_N_DefenseWave
     _attackRadius: 3
     _attackAngle: 360

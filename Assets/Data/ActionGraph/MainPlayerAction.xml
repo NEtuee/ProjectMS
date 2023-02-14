@@ -8,10 +8,10 @@
     <GlobalVariable Name="gv_MoveSpeed" Value="45"/>
     <GlobalVariable Name="gv_MoveVelocityMax" Value="3"/>
 
-    <GlobalVariable Name="gv_AttackVelocity" Value="3"/>
-    <GlobalVariable Name="gv_AttackFriction" Value="12"/>
+    <GlobalVariable Name="gv_AttackVelocity" Value="6"/>
+    <GlobalVariable Name="gv_AttackFriction" Value="15"/>
 
-    <GlobalVariable Name="gv_IdleFriction" Value="10"/>
+    <GlobalVariable Name="gv_IdleFriction" Value="8"/>
 
     <GlobalVariable Name="gv_rotateSpeed" Value="840"/>
 
@@ -26,17 +26,19 @@
 
         <UseBranchSet Name="CommonBattleBranchSet"/>
 
+        <Branch Key="getKey_StunShot && getKey_AttackCharge" Execute="StunShot"/>
         <Branch Key="getKey_AttackCharge == true" Execute="DashRoll"/>
         <Branch Condition="End == true" Execute="Idle"/>
     </Idle>
 
-    <MoveStop MovementType="FrameEvent" DirectionType="Keep" FlipType="MoveDirection">
+    <MoveStop MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <Animation Path="Resources/Sprites/NewPlayer/MoveStop/" FramePerSecond="16" XFlip="true" Loop="false">
             <FrameEvent Type="Movement" StartFrame="0" Friction="gv_IdleFriction" Speed="0" Velocity="gv_MoveVelocityMax"/>
         </Animation>
 
         <UseBranchSet Name="CommonBattleBranchSet"/>
 
+        <Branch Key="getKey_StunShot && getKey_AttackCharge" Execute="StunShot"/>
         <Branch Key="getKey_AttackCharge == true" Execute="DashRoll"/>
         <Branch Condition="End == true" Execute="Idle"/>
     </MoveStop>
@@ -59,7 +61,7 @@
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
                     <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
 
-                    <FrameEvent Type="TeleportToTargetBack"/>
+                    <FrameEvent Type="TeleportToTargetBack" DistanceOffset="-0.3"/>
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
                 </OnHit>
 
@@ -72,7 +74,7 @@
                 </OnParry>
 
             </FrameEvent>
-            <FrameEvent Type="FrameTag" StartFrame="4" EndFrame="999" Tag="MoveCancel"/>
+            <FrameEvent Type="FrameTag" StartFrame="5" EndFrame="999" Tag="MoveCancel"/>
 
             <FrameEvent Type="Movement" StartFrame="0" Friction="gv_DashFriction" MaxVelocity="gv_DashVelocity" Speed="0" Velocity="gv_DashVelocity"/>
         </Animation>
@@ -82,6 +84,18 @@
         <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="MoveStop"/>
         <Branch Key="getKey_AttackCharge == false" Condition="getFrameTag_MoveCancel" Execute="MoveStop"/>
     </DashRoll>
+
+    <StunShot MovementType="FrameEvent" DirectionType="MousePoint" FlipType="Direction" DirectionUpdateOnce="true">
+        <Animation Path="Resources/Sprites/DummyPlayer/Guard/" FramePerSecond="3" AngleBaseAnimation="True" XFlip="true">
+            <FrameEvent Type="Movement" StartFrame="0" Friction="25" MaxVelocity="18" Speed="0" Velocity="-6"/>
+
+            <FrameEvent Type="Projectile" StartFrame="0" GraphName="StunShot" DirectionType="MousePoint"/>
+        </Animation>
+
+        <Branch Condition="AttackSuccess" Execute="AttackSuccess"/>
+        <Branch Key="getKey_AttackCharge == true" Condition="End" Execute="DashRoll"/>
+        <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="Idle"/>
+    </StunShot>
 
     <AttackSuccess MovementType="FrameEvent" DirectionType="MousePoint" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
         <Animation Path="Resources/Sprites/NewPlayer/attack/" FramePerSecond="12" XFlip="true">

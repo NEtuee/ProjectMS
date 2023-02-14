@@ -36,6 +36,43 @@
         </Event>
     </TestProjectile>
 
+
+    <StunShot DefaultFramePerSecond="4" PenetrateCount="1">
+        <Animation Path="Resources/Sprites/Effect/Sheath" FramePerSecond="5" XFlip="true" RotationPreset="SpinOne" Loop="True">
+        </Animation>
+        <CollisionInfo Radius="0.1" Angle="0"/>
+        <DefaultShotInfo Velocity="7" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="5"/>
+        <Event>
+            <OnHit>
+                <FrameEvent Type="Attack" StartFrame="0" AttackPreset="projectileTest">
+                    <OnHit>
+                        <FrameEvent Type="ApplyBuffTarget" ApplyBuff="13"/>
+                        <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
+    
+                        <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
+                    </OnHit>
+    
+                    <OnGuard>
+                        <FrameEvent Type="ApplyBuffTarget" ApplyBuff="15"/>
+                    </OnGuard>
+    
+                    <OnParry>
+                    </OnParry>
+    
+                </FrameEvent>
+            </OnHit>
+    
+            <OnHitEnd>
+                <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0"/>
+            </OnHitEnd>
+    
+            <OnEnd>
+                <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc" FramePerSecond="18.0" Offset="0.0 0.0 0.0"/>
+            </OnEnd>
+        </Event>
+    </StunShot>
+
+
     <tutorial_spear DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">
         <Animation Path="Resources/Sprites/Projectile/tutorial_spear/" StartFrame="0" EndFrame="1" XFlip="true">
         </Animation>
