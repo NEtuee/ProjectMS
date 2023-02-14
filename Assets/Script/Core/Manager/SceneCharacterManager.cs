@@ -46,6 +46,7 @@ public class SceneCharacterManager : ManagerBase
 
     private List<TargetSearchDescription> _targetSearchRequestList = new List<TargetSearchDescription>();
 
+
     public override void RegisterReceiver(ObjectBase receiver)
     {
         base.RegisterReceiver(receiver);
@@ -105,6 +106,7 @@ public class SceneCharacterManager : ManagerBase
         base.progress(deltaTime);
     }
 
+   
     public void processTargetSearch()
     {
         int requestCount = _targetSearchRequestList.Count;

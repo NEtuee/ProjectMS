@@ -208,8 +208,19 @@ public class CameraControlEx : Singleton<CameraControlEx>
 
         updateCameraMode(deltaTime);
 
+        if(MathEx.equals(_currentCamera.orthographicSize,_mainCamSize,float.Epsilon) == true)
+			_currentCamera.orthographicSize = _mainCamSize;
+		else	
+			_currentCamera.orthographicSize = Mathf.Lerp(_currentCamera.orthographicSize,_mainCamSize,4f * deltaTime);
+
         GizmoHelper.instance.drawRectangle(_currentCamera.transform.position,_cameraBoundHalf,Color.green);
     }
+
+    public void Zoom(float scale)
+	{
+		if(_currentCamera.orthographicSize > scale)
+			_currentCamera.orthographicSize = scale;
+	}
 
     private void setCameraMode(CameraModeType mode)
     {

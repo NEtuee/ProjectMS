@@ -40,7 +40,7 @@
     <StunShot DefaultFramePerSecond="4" PenetrateCount="1">
         <Animation Path="Resources/Sprites/Effect/Sheath" FramePerSecond="5" XFlip="true" RotationPreset="SpinOne" Loop="True">
         </Animation>
-        <CollisionInfo Radius="0.1" Angle="0"/>
+        <CollisionInfo Radius="0.2" Angle="0"/>
         <DefaultShotInfo Velocity="7" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="5"/>
         <Event>
             <OnHit>
@@ -50,6 +50,7 @@
                         <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
     
                         <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
+                        <FrameEvent Type="ZoomEffect" StartFrame="0" Scale="3.0"/>
                     </OnHit>
     
                     <OnGuard>

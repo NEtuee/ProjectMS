@@ -15,6 +15,9 @@ public class MasterManager : MessageHub<ManagerBase>
 
     private bool                    _frameUpdate = false;
 
+    private float                   _updateStopTimer = 0f;
+
+
     protected override void Awake()
     {
         base.Awake();
@@ -43,6 +46,9 @@ public class MasterManager : MessageHub<ManagerBase>
         AddAction(MessageTitles.system_updateFrame,(msg)=>
         {
             _frameUpdate = true;
+        });
+        AddAction(MessageTitles.entity_stopUpdate, (msg)=>{
+            StopUpdateSecond(MessageDataPooling.CastData<FloatData>(msg.data).value);
         });
 
         foreach(var m in managers)
@@ -85,6 +91,12 @@ public class MasterManager : MessageHub<ManagerBase>
             _frameUpdate = false;
         }
 
+        if(_updateStopTimer > 0f)
+        {
+            _updateStopTimer -= deltaTime;
+            return;
+        }
+
         GlobalTimer.Instance().updateGlobalTime(deltaTime);
         StageGraphManager.Instance().progress(deltaTime);
 
@@ -121,6 +133,14 @@ public class MasterManager : MessageHub<ManagerBase>
     {
         ManagersFixedUpdate(Time.fixedDeltaTime);
     }
+
+    public void StopUpdateSecond(float time)
+    {
+        if(_updateStopTimer < time)
+            _updateStopTimer = time;
+    }
+
+
     public void ManagersUpdate(float deltaTime)
     {
         foreach(var receiver in _receivers.Values)

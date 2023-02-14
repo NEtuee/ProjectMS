@@ -19,6 +19,8 @@ public enum FrameEventType
     FrameEvent_SetCameraDelay,
     FrameEvent_KillEntity,
     FrameEvent_Movement,
+    FrameEvent_ZoomEffect,
+    FrameEvent_StopUpdate,
 
     Count,
 }
@@ -74,6 +76,57 @@ public abstract class ActionFrameEventBase
     }
 }
 
+public class ActionFrameEvent_StopUpdate : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_StopUpdate;}
+
+    public float _stopTime = 0f;
+
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        FloatData data = MessageDataPooling.GetMessageData<FloatData>();
+        data.value = _stopTime;
+
+        Message msg = MessagePool.GetMessage();
+        msg.Set(MessageTitles.entity_stopUpdate,0,data,null);
+        MasterManager.instance.HandleMessage(msg);
+
+        return true;
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            if(attributes[i].Name == "Time")
+                _stopTime = float.Parse(attributes[i].Value);
+        }
+    }
+}
+
+public class ActionFrameEvent_ZoomEffect : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_ZoomEffect;}
+
+    public float _zoomScale = 0f;
+
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        CameraControlEx.Instance().Zoom(_zoomScale);
+        return true;
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            if(attributes[i].Name == "Scale")
+                _zoomScale = float.Parse(attributes[i].Value);
+        }
+    }
+}
 
 public class ActionFrameEvent_Movement : ActionFrameEventBase
 {
@@ -83,7 +136,7 @@ public class ActionFrameEvent_Movement : ActionFrameEventBase
         public int _targetValue;
     };
 
-    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_KillEntity;}
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_Movement;}
 
     private MovementSetValueType[] _setValueList = null;
     private int _valueListCount = 0;

@@ -29,5 +29,6 @@ public static partial class MessageTitles
     public const ushort     entity_setTarget            = 0x0400;
     public const ushort     entity_searchNearest        = 0x0401;
     public const ushort     entity_spawnCharacter       = 0x0402;
+    public const ushort     entity_stopUpdate           = 0x0403;
 
 }
