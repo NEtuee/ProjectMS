@@ -73,7 +73,7 @@ public class CameraArenaMode : CameraModeBase
 
 public class CameraTargetCenterMode : CameraModeBase
 {
-    public static float _cameraMoveSpeedRate = 2f;
+    public static float _cameraMoveSpeedRate = 2.5f;
 
     private Vector3 _currentCenterPosition;
 
@@ -83,35 +83,11 @@ public class CameraTargetCenterMode : CameraModeBase
     public override void initialize(Vector3 position)
     {
         _cameraPosition = position;
-        _targetEntity = null;
-
-        if(_currentTarget != null && _currentTarget is GameEntityBase)
-        {
-            GameEntityBase target = ((GameEntityBase)_currentTarget).getCurrentTargetEntity();
-            if(target != null && target.isDead() == false)
-            {
-                _targetEntity = target;
-            }
-            else
-                _targetEntity = null;
-        }
-
         updateCameraCenter();
     }
 
     public override void progress(float deltaTime, Vector3 targetPosition)
     {
-        if(_currentTarget != null && _currentTarget is GameEntityBase)
-        {
-            GameEntityBase target = ((GameEntityBase)_currentTarget).getCurrentTargetEntity();
-            if(target != null && target.isDead() == false)
-            {
-                _targetEntity = target;
-            }
-            else
-                _targetEntity = null;
-        }
-
         updateCameraCenter();
         _cameraPosition = Vector3.Lerp(_cameraPosition, _currentCenterPosition, _cameraMoveSpeedRate * deltaTime);
         GizmoHelper.instance.drawLine(_currentCenterPosition, targetPosition, Color.red);
@@ -161,51 +137,11 @@ public class CameraControlEx : Singleton<CameraControlEx>
 
         _cameraModes = new CameraModeBase[(int)CameraModeType.Count];
 
-        setCameraMode(CameraModeType.ArenaMode);
+        setCameraMode(CameraModeType.TargetCenterMode);
     }
 
     public void progress(float deltaTime)
     {
-        if(_currentCameraMode != null)
-        {
-            switch(_currentCameraMode.getCameraModeType())
-            {
-                case CameraModeType.ArenaMode:
-                {
-                    if(_currentTarget != null && IsInCameraBound(_currentTarget.transform.position) == false)
-                    {
-                        setCameraMode(CameraModeType.TargetCenterMode);
-                    }
-                    else if(_currentTarget != null && _currentTarget is GameEntityBase)
-                    {
-                        GameEntityBase target = ((GameEntityBase)_currentTarget).getCurrentTargetEntity();
-                        if(target != null && target.isDead() == false && IsInCameraBound(target.transform.position) == false)
-                            setCameraMode(CameraModeType.TargetCenterMode);
-                    }
-                }
-                break;
-                case CameraModeType.TargetCenterMode:
-                {
-                    if(_currentTarget != null && IsInCameraBound(_currentTarget.transform.position))
-                    {
-                        if(_currentTarget != null && _currentTarget is GameEntityBase)
-                        {
-                            GameEntityBase target = ((GameEntityBase)_currentTarget).getCurrentTargetEntity();
-                            if(target != null && target.isDead() == false)
-                                setCameraMode(CameraModeType.ArenaMode);
-                        }
-                        else
-                        {
-                            setCameraMode(CameraModeType.ArenaMode);
-                        }
-
-                    }
-                }
-                break;
-            }
-        }
-
-
         updateCameraMode(deltaTime);
 
         if(MathEx.equals(_currentCamera.orthographicSize,_mainCamSize,float.Epsilon) == true)
@@ -258,6 +194,8 @@ public class CameraControlEx : Singleton<CameraControlEx>
     public void setCameraTarget(ObjectBase obj)
     {
         _currentTarget = obj;
+        _currentCameraMode?.setCurrentTarget(_currentTarget);
+        _currentCameraMode?.initialize(_currentTarget.transform.position);
     }
 
     private void updateCameraMode(float deltaTime)

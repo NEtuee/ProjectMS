@@ -1,11 +1,21 @@
 
 <ActionGraph Name="TestZako" DefaultAction="Idle" DefaultFramePerSecond="0.5">
 
-    <Idle DirectionType="Keep" FlipType="Direction">
+    <Idle DirectionType="Keep" FlipType="Direction" DefenceType="Guard" DefenceAngle="360.0" DefenceDirectionType="Direction">
         <Animation Path="Resources/Sprites/DummyPlayer/Idle/" StartFrame="0" EndFrame="1" XFlip="true">
         </Animation>
 
         <Branch Condition="End == true" Execute="Idle"/>
+        <Branch Condition="GuardBroken" Execute="GuardBroken"/>
     </Idle>
     
+    <GuardBroken DirectionType="Keep" FlipType="Direction">
+        <Animation Path="Resources/Sprites/DummyPlayer/JustGuardBreak/" StartFrame="0" EndFrame="1" XFlip="true">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Idle"/>
+    </GuardBroken>
+    
+    
+
 </ActionGraph>
