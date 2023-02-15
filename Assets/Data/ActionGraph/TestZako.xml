@@ -13,6 +13,7 @@
         <Animation Path="Resources/Sprites/DummyPlayer/JustGuardBreak/" StartFrame="0" EndFrame="1" XFlip="true">
         </Animation>
 
+        <Branch Condition="GuardBroken" Execute="GuardBroken"/>
         <Branch Condition="End == true" Execute="Idle"/>
     </GuardBroken>
     

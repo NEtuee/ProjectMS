@@ -69,6 +69,8 @@
                     <FrameEvent Type="StopUpdate" StartFrame="0" Time="0.07"/>
                 </OnHit>
                 <OnGuard>
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" ToTarget="True"/>
+
                     <FrameEvent Type="TeleportToTarget"/>
                     <FrameEvent Type="ZoomEffect" StartFrame="0" Scale="3.1"/>
                     <FrameEvent Type="StopUpdate" StartFrame="0" Time="0.01"/>
@@ -111,9 +113,9 @@
 
             <FrameEvent Type="Attack" StartFrame="0" AttackType="GuardBreak" AttackPreset="AttackGuardBreak" IgnoreDefenceType="Guard">
                 <OnGuardBreak>
-                    <FrameEvent Type="TeleportToTarget"/>
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
-
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc" FramePerSecond="18.0" Offset="0.0 0.0 0.0" ToTarget="true"/>
+                    
                     <FrameEvent Type="ZoomEffect" StartFrame="0" Scale="2.8"/>
                     <FrameEvent Type="StopUpdate" StartFrame="0" Time="0.15"/>
                 </OnGuardBreak>
@@ -152,7 +154,7 @@
         <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="Idle"/>
     </AttackSuccess>
 
-    <AttackGuarded MovementType="FrameEvent" DirectionType="Keep" FlipType="Keep">
+    <AttackGuarded MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Keep">
         <Animation Path="Resources/Sprites/NewPlayer/Attack/" FramePerSecond="12">
             <FrameEvent Type="Movement" StartFrame="0" Friction="12" MaxVelocity="6" Speed="0" Velocity="-3"/>
         </Animation>
