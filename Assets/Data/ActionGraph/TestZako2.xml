@@ -8,4 +8,15 @@
         <Branch Condition="End == true" Execute="Idle"/>
     </Idle>
     
+    <Dead DirectionType="Keep" FlipType="Direction">
+        <Animation Path="Resources/Sprites/NewPlayer/Idle/" StartFrame="0" EndFrame="1" XFlip="true">
+            <FrameEvent Type="Effect" StartFrame="0" Path="Resources/Sprites/NewPlayer/Idle/" FramePerSecond="0.2">
+                <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
+            </FrameEvent>
+            <FrameEvent Type="KillEntity" StartFrame="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Dead"/>
+    </Dead>
+
 </ActionGraph>

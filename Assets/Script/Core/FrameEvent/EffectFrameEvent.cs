@@ -171,14 +171,14 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
                         }
                         else if(physicsAttributes[j].Name == "Velocity")
                         {
-                            string[] floatList = physicsAttributes[j].Value.Split('^');
+                            string[] floatList = physicsAttributes[j].Value.Split(' ');
                             if(floatList == null || floatList.Length != 2)
                             {
                                 DebugUtil.assert(false, "invalid float3 data: {0}, {1}",physicsAttributes[j].Name, physicsAttributes[j].Value);
                                 return;
                             }
-
-                            _physicsBodyDesc._velocity = new Vector3(float.Parse(floatList[0]),float.Parse(floatList[1]),0f);
+                            
+                            _physicsBodyDesc._velocity = new Vector3(StringDataUtil.readFloat(floatList[0]),StringDataUtil.readFloat(floatList[1]),0f);
                         }
                         else if(physicsAttributes[j].Name == "Friction")
                         {
