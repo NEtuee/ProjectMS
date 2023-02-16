@@ -112,7 +112,7 @@ public class MasterManager : MessageHub<ManagerBase>
 
         CameraControlEx.Instance().progress(deltaTime);
 
-        if(StageGraphManager.Instance().isStagePlaying() == false && Input.GetKeyDown(KeyCode.Return))
+        if(Input.GetKeyDown(KeyCode.Return))
         {
             StageGraphManager.Instance().startStage("Assets\\Data\\StageGraph\\TestStage.xml");
         }

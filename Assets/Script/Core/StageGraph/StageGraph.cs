@@ -58,11 +58,6 @@ public class StageGraphManager : Singleton<StageGraphManager>
         return _uniqueEntityDictionary[uniqueKey];
     }
 
-    public bool isStagePlaying()
-    {
-        return _currentStage != null;
-    }
-
     public void stopStage()
     {
         initialize();
