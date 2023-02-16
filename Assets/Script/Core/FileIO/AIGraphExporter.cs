@@ -13,8 +13,12 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
     private static Dictionary<string, string> _aiGraphGlobalVariables = new Dictionary<string, string>();
     private static Dictionary<string, string> _aiPackageGlobalVariables = new Dictionary<string, string>();
     private static Dictionary<string, AIPackageBaseData> _loadedAiPackage = new Dictionary<string, AIPackageBaseData>();
+
+
+    private static string _currentFileName = "";
     public override AIGraphBaseData readFromXML(string path)
     {
+        _currentFileName = path;
         XmlDocument xmlDoc = new XmlDocument();
         try
         {
@@ -825,6 +829,8 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
                 string attrName = attributes[i].Name;
                 string attrValue = attributes[i].Value;
 
+                Debug.Log(attrName);
+
                 if(attrName != "Execute")
                     continue;
 
@@ -838,7 +844,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
 
             if(find == false)
             {
-                DebugUtil.assert(false, "Execute State not found");
+                DebugUtil.assert(false, "Execute State not found : [{0}]",_currentFileName);
                 return null;
             }
         }

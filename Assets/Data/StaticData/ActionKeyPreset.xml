@@ -21,6 +21,14 @@
         Key_PS="X"
     />
 
+    <NormalMove
+        PressType="KeyPressed"
+        MultiInputType="Single"
+        Threshold="0.0"
+        
+        Key_KM="Mouse1"
+    />
+
     <StunShot
         PressType="KeyPressed"
         MultiInputType="Single"
@@ -29,14 +37,20 @@
         Key_KM="Q"
     />
 
+    <GuardBreak2
+        PressType="KeyPressed"
+        MultiInputType="Single"
+        Threshold="0.0"
+        
+        Key_KM="W"
+    />
+
     <Guard
         PressType="KeyPressed"
         MultiInputType="Single"
         Threshold="0.0"
         
-        Key_KM="Mouse1"
-        Key_XBOX="LB"
-        Key_PS="X"
+        Key_KM="E"
     />
 
     <GuardBreak

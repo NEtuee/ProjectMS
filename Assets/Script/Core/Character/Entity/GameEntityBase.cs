@@ -105,6 +105,8 @@ public class GameEntityBase : SequencerObjectBase
         CollisionManager.Instance().registerObject(_collisionInfo, this);
 
         _initializeFromCharacter = true;
+
+        initializeActionValue();
     }
 
     public override void initialize()
@@ -125,6 +127,14 @@ public class GameEntityBase : SequencerObjectBase
         _collisionInfo = new CollisionInfo(data);
 
         CollisionManager.Instance().registerObject(_collisionInfo, this);
+
+        initializeActionValue();
+    }
+
+    private void initializeActionValue()
+    {
+        _currentDefenceType = _actionGraph.getCurrentDefenceType();
+        _currentVelocity = Vector3.zero;
     }
     
     public override void progress(float deltaTime)

@@ -52,14 +52,6 @@
                         <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
                         <FrameEvent Type="ZoomEffect" StartFrame="0" Scale="3.0"/>
                     </OnHit>
-    
-                    <OnGuard>
-                        <FrameEvent Type="ApplyBuffTarget" ApplyBuff="15"/>
-                    </OnGuard>
-    
-                    <OnParry>
-                    </OnParry>
-    
                 </FrameEvent>
             </OnHit>
     

@@ -667,7 +667,6 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
 
         bool attackSuccess = false;
 
-
         if(_pushVector.sqrMagnitude > float.Epsilon)
         {
             UnityEngine.Vector3 attackPointDirection = (target.transform.position - successData._startPoint).normalized;

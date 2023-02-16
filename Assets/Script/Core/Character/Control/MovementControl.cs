@@ -8,7 +8,7 @@ public class MovementControl
 
     public void initialize()
     {
-
+        _currentMovement = null;
     }
     public bool progress(float deltaTime, Vector3 direction)
     {

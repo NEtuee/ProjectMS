@@ -3,7 +3,8 @@
     <AIState>
         <Entry UpdateTime="999.0">
             <Event_OnExecute>
-                <AIEvent Type="KillEntity"/>
+                <AIEvent Type="SetAction" Action="Dead"/>
+                <AIEvent Type="TerminatePackage"/>
             </Event_OnExecute>
 
         </Entry>

@@ -17,7 +17,7 @@ MonoBehaviour:
     _attackRadius: 1.5
     _attackAngle: 8
     _attackStartDistance: 0.1
-    _pushVector: {x: 2, y: 0, z: 0}
+    _pushVector: {x: 1.5, y: 0, z: 0}
   - _name: PlayerBloodSpreadTest
     _attackRadius: 1
     _attackAngle: 140
@@ -58,3 +58,8 @@ MonoBehaviour:
     _attackAngle: 360
     _attackStartDistance: 0
     _pushVector: {x: 1, y: 0, z: 0}
+  - _name: AttackGuardBreak
+    _attackRadius: 0.8
+    _attackAngle: 180
+    _attackStartDistance: 0.1
+    _pushVector: {x: 1.5, y: 0, z: 0}
