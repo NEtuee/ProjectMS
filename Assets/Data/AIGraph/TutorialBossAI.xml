@@ -22,7 +22,7 @@
     <BranchSet Name="IsHitBranchSet">
        <!--  <Branch Condition="getStat_IsHit >= 1.0" Execute="H_STA_Hit"/> -->
        <Branch Condition="Hit == true" Execute="H_STA_Hit"/>
-       <Branch Condition="getStat_HP <= 0.0" Execute="H_END_Dead"/>
+       <Branch Condition="getStat_HitPoint <= 0.0" Execute="H_END_Dead"/>
     </BranchSet>
     
     <BranchSet Name="IsDefenselessBranchSet">
@@ -148,10 +148,8 @@
     </H_STA_Defenseless>
 
     <H_STA_Hit Package="H_STA_Hit">
-        <Branch Condition="(getStat_HP == 7.0)" Execute="H_SHT_N_DefenseShot"/>
-        <Branch Condition="(getStat_HP == 4.0)" Execute="H_SHT_N_DefenseShot"/>
-        <Branch Condition="(getStat_HP == 1.0)" Execute="H_SHT_N_DefenseShot"/>
-        <Branch Condition="CurrentPackageEnd && (getStat_HP <= 0.0)" Execute="H_END_Dead"/>
+        <Branch Condition="(getStat_HP == 0.0)" Execute="H_SHT_N_DefenseShot"/>
+        <Branch Condition="CurrentPackageEnd && (getStat_HitPoint <= 0.0)" Execute="H_END_Dead"/>
         <Branch Condition="CurrentPackageEnd" Execute="H_Judge_AttackSTD"/>
     </H_STA_Hit>
 
