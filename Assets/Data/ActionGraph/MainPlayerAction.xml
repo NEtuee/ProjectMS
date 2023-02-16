@@ -85,7 +85,7 @@
         <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="3">
         </Animation>
 
-        <Branch Key="getKey_GuardBreak" Condition="(CurrentFrame < 0.5)" Execute="JustGuardBreak"/>
+        <Branch Key="getKey_GuardBreak" Condition="(CurrentFrame < 0.33)" Execute="JustGuardBreak"/>
         <Branch Condition="End == true" Execute="CommonMoveSelection"/>
     </Attack_Guarded>
 
@@ -96,6 +96,7 @@
             <FrameEvent Type="Attack" AttackType="GuardBreak" StartFrame="0" AttackPreset="Player_JustGuardBreak" IgnoreDefenceType="Guard">
                 <OnGuardBreak>
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="16"/>
                 </OnGuardBreak>
             </FrameEvent> 
         </Animation>
@@ -129,7 +130,7 @@
 
             <FrameEvent Type="Attack" StartFrame="0" AttackPreset="PlayerAttackTest">
                 <OnHit>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="19"/>
                     <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
 
                     <FrameEvent Type="TeleportToTargetBack"/>
@@ -138,6 +139,7 @@
 
                 <OnGuard>
                     <FrameEvent Type="TeleportToTarget"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="16"/>
                 </OnGuard>
 
                 <OnParry>
@@ -159,7 +161,7 @@
         <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="4" FramePerSecond="12">
             <FrameEvent Type="Attack" StartFrame="0" AttackPreset="PlayerAttackTest">
                 <OnHit>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="19"/>
                     <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
 
                     <FrameEvent Type="TeleportToTargetBack"/>
@@ -168,6 +170,7 @@
 
                 <OnGuard>
                     <FrameEvent Type="TeleportToTarget"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="16"/>
                 </OnGuard>
 
                 <OnParry>
@@ -187,7 +190,7 @@
         <Animation Path="Resources/Sprites/DummyPlayer/Attack/" StartFrame="0" EndFrame="3" FramePerSecond="12">
             <FrameEvent Type="Attack" StartFrame="0" AttackPreset="PlayerAttackTest">
                 <OnHit>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="19"/>
                     <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
 
                     <FrameEvent Type="TeleportToTargetBack"/>
@@ -196,6 +199,7 @@
 
                 <OnGuard>
                     <FrameEvent Type="TeleportToTarget"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="16"/>
                 </OnGuard>
 
                 <OnParry>

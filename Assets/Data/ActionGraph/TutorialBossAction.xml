@@ -1,6 +1,6 @@
 
 
-<ActionGraph Name="TutorialBoss" DefaultAction="MOV_Idle" DefaultFramePerSecond="0.5" DefaultBuff="8">
+<ActionGraph Name="TutorialBoss" DefaultAction="MOV_Idle" DefaultFramePerSecond="0.5" DefaultBuff="5 8">
     
     <BranchSet Name="CommonHitAction">
         <Branch Condition="Hit == true" Execute="STA_Hit"/>
@@ -42,6 +42,7 @@
     <MOV_Dash MovementType="GraphPreset" MovementGraphPreset="Dash" DirectionType="AI" FlipType="Direction" RotationType="Direction" DefenceType="Evade" DefenceAngle="360.0">
         <Animation Path="Resources/Sprites/SampleBoss/DashRight/" StartFrame="0" EndFrame="1" FramePerSecond="3" XFlip="true">
             <FrameEvent Type="ApplyBuff" ApplyBuff="9" StartFrame="0.0"/>
+            
             <MultiSelectAnimation Path="Resources/Sprites/SampleBoss/DashUp/" Condition="(AngleDirection >= 45.0) && (AngleDirection < 135.0)"/>
             <MultiSelectAnimation Path="Resources/Sprites/SampleBoss/DashDown/" Condition="(AngleDirection >= 225.0) && (AngleDirection < 315.0)"/>
             <MultiSelectAnimation Path="Resources/Sprites/SampleBoss/DashLeft/" Condition="(AngleDirection >= 315.0) || (AngleDirection < 45.0) && (IsXFlip == true)"/>
@@ -189,9 +190,17 @@
 
         <Branch Condition="End == true" Execute="MOV_Idle"/>
     </ATK_F_ChargeAttack>
-    
+
+    <PhaseTransition DirectionType="AI" FlipType="Direction">
+        <Animation Path="Resources/Sprites/SampleBoss/Hit/" StartFrame="0" EndFrame="1" FramePerSecond="999">
+            <FrameEvent Type="ApplyBuff" ApplyBuff="20"/>
+        </Animation>
+        <Branch Condition="End == true" Execute="MOV_Idle"/>
+    </PhaseTransition>
+
     <ATK_N_DefenseWave DirectionType="AI" FlipType="Direction">
         <Animation Path="Resources/Sprites/SampleBoss/Attack/" StartFrame="0" EndFrame="1" FramePerSecond="0.5">
+            <FrameEvent Type="ApplyBuff" ApplyBuff="18"/>
             <FrameEvent Type="Attack" StartFrame="1" AttackPreset="ATK_N_DefenseWave" IgnoreDefenceType="Guard">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
@@ -295,7 +304,7 @@
     </SHT_F_ChargeSpear>
 
     <DEF_C_Guard DirectionType="AI" DefenceDirectionType="Direction" FlipType="Keep" DefenceType="Guard" DefenceAngle="180.0">
-        <Animation Path="Resources/Sprites/SampleBoss/Guard/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
+        <Animation Path="Resources/Sprites/SampleBoss/Guard/" StartFrame="0" EndFrame="1" FramePerSecond="3" XFlip="true">
             <FrameEvent Type="SetDefenceType" StartFrame="0" DefenceType="Guard"/>
         </Animation>
 
@@ -325,6 +334,7 @@
 
     <STA_Hit MovementType="GraphPreset" MovementGraphPreset="AttackHit" DirectionType="AttackedPoint" FlipType="Direction" DefenceType="Evade">
         <Animation Path="Resources/Sprites/SampleBoss/Hit/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
+            <FrameEvent Type="ApplyBuff" ApplyBuff="17" StartFrame="0.0"/>
         </Animation>
 
         <UseBranchSet Name="CommonHitAction"/>
