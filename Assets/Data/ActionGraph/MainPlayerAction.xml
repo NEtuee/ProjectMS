@@ -44,6 +44,20 @@
         <Branch Condition="End == true" Execute="Idle"/>
     </MoveStop>
 
+    <AttackStop MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+        <Animation Path="Resources/Sprites/NewPlayer/attackStop/" FramePerSecond="16" XFlip="true" Loop="false">
+            <FrameEvent Type="Movement" StartFrame="0" Friction="gv_IdleFriction" Speed="0" Velocity="gv_MoveVelocityMax"/>
+        </Animation>
+
+        <Branch Key="getKey_Guard && getKey_AttackCharge" Condition="true" Execute="Guard"/>
+        <Branch Key="getKey_GuardBreak2 && getKey_AttackCharge" Execute="GuardBreak"/>
+        <Branch Key="getKey_StunShot && getKey_AttackCharge" Execute="StunShot"/>
+        <Branch Key="getKey_AttackCharge == true" Execute="DashRoll"/>
+        <Branch Key="getKey_NormalMove == true" Execute="MoveAll"/>
+
+        <Branch Condition="End == true" Execute="Idle"/>
+    </AttackStop>
+
     <MoveAll MovementType="FrameEvent" DirectionType="MousePoint" RotationType="MoveDirection" FlipType="MousePoint" FlipTypeUpdateOnce="True" RotateBySpeed="True" RotateSpeed="gv_rotateSpeed">
         <Animation Path="Resources/Sprites/NewPlayer/MoveRotate/" FramePerSecond="1" AngleBaseAnimation="True" XFlip="true">
             <FrameEvent Type="Movement" StartFrame="0" Friction="0" MaxVelocity="gv_MoveVelocityMax" Speed="gv_MoveSpeed"/>
@@ -151,7 +165,7 @@
         </Animation>
 
         <Branch Key="(getKey_AttackCharge == true) || (getKey_NormalMove == true)" Condition="End" Execute="MoveAll"/>
-        <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="Idle"/>
+        <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="AttackStop"/>
     </AttackSuccess>
 
     <AttackGuarded MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Keep">
