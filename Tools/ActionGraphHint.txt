@@ -10,7 +10,9 @@ FrameEvent,SetFrameTag,"EndFrame=~~,Tag=~~,Tag=~~"
 FrameEvent,Projectile,"GraphName=~~,DirectionType=~~,ShotInfoUseType=~~,SpawnTargetType=~~"
 FrameEvent,Danmaku,Path=~~
 FrameEvent,SetAnimationSpeed,Speed=~~
-FrameEvent,Movement,"Friction=~~,MaxVelocity=~~,Speed=~~"
+FrameEvent,Movement,"Friction=~~,MaxVelocity=~~,Speed=~~,Velocity=~~"
+FrameEvent,ZoomEffect,Scale=~~
+FrameEvent,StopUpdate,Time=~~
 FrameEventAndInQuote,Attack IgnoreDefenceType=,"Guard,Parry,Evade"
 FrameEventAndInQuote,SetDefenceType DefenceType=,"Empty,Guard,Parry,Evade"
 FrameEventAndInQuote,Projectile ShotInfoUseType=,"UseDefault,Overlap,Add"
@@ -19,23 +21,24 @@ InQuote,MovementType=,"Empty,RootMotion,GraphPreset,FrameEvent"
 InQuote,DirectionType=,"AlywaysRight,Keep,MoveInput,MousePoint,AttackedPoint,MoveDirection,AI,AITarget"
 InQuote,DefenceDirectionType=,"Direction,MousePoint"
 InQuote,FlipType=,"AlwaysTurnOff,Direction,MousePoint,Keep"
-InQuote,RotationType=,"AlwaysTurnOff,Direction,MousePoint,Keep"
+InQuote,RotationType=,"AlwaysTurnOff,Direction,MousePoint,MoveDirection,Keep"
 InQuote,DefenceType=,"Empty,Guard,Parry,Evade"
 InQuote,IsActionSelection=,"true,false"
 InQuote,NormalizedSpeed=,"true,false"
 InQuote,DirectionUpdateOnce=,"true,false"
 InQuote,Condition=,"ActionTest,ActionDash,End,AngleBetweenStick,AngleDirection,IsXFlip,IsYFlip,CurrentFrame,AttackSuccess,AttackGuarded,AttackParried,AttackGuardBreak,DefenceSuccess,ParrySuccess,Hit,EvadeSuccess,GuardBroken,CurrentFrame,TargetExists,TargetDistance,ArrivedTarget,CurrentPackageEnd,getStat_,getKey_,getFrameTag_,getTargetFrameTag_,getWeight_,true,false,PackageExecutedTime,GraphExecutedTime"
-InScope,,"MovementType=~~,MovementGraphPreset=~~,DirectionType=~~,DefenceDirectionType=~~,FlipType=~~,RotationType=~~,MoveScale=~~,IsActionSelection=~~,ApplyBuff=~~,NormalizedSpeed=~~,DefenceType=~~,DefenceAngle=~~,DirectionUpdateOnce=~~,IsActionSelection=~~"
+InScope,,"MovementType=~~,MovementGraphPreset=~~,DirectionType=~~,DefenceDirectionType=~~,FlipType=~~,RotationType=~~,MoveScale=~~,IsActionSelection=~~,ApplyBuff=~~,NormalizedSpeed=~~,DefenceType=~~,DefenceAngle=~~,DirectionUpdateOnce=~~,IsActionSelection=~~,FlipTypeUpdateOnce=~~,RotateBySpeed=~~,RotateSpeed=~~"
 LineStart,<Branch,"Key=~~,Condition=~~,Execute=~~,Weight=~~"
-LineStart,<Animation,"Path=~~,StartFrame=~~,EndFrame=~~,FramePerSecond=~~,Loop=~~,Xflip=~~,YFlip=~~,RotationPreset=~~,ScalePreset=~~"
+LineStart,<Animation,"Path=~~,StartFrame=~~,EndFrame=~~,FramePerSecond=~~,Loop=~~,XFlip=~~,YFlip=~~,RotationPreset=~~,ScalePreset=~~,AngleBaseAnimation=~~"
 LineStart,<MultiSelectAnimation,"Path=~~,Condition=~~"
 LineStart,<Physics,"UseGravity=~~,Velocity=~~,Friction=~~,Torque=~~,AngularFriction=~~"
 LineStart,<BranchSet,Name=~~
 LineStart,<GlobalVariable,"Name=~~,Value=~~"
+LineStart,<ActionGraph,"Name=~~,DefaultAction=~~,DefaultFramePerSecond=~~,DefaultBuff=~~"
 LineStartAndInQuote,<Animation XFlip=,"true,false"
 LineStartAndInQuote,<Animation YFlip=,"true,false"
 LineStartAndInQuote,<Animation Loop=,"true,false"
-LineStartAndInQuote,<FrameEvent Type=,"Test,Attack,ApplyBuff,ApplyBuffTarget,DeleteBuff,TeleportToTarget,TeleportToTargetBack,SetDefenceType,Effect,SetFrameTag,Projectile,Danmaku,SetAnimationSpeed,KillEntity,Movement"
+LineStartAndInQuote,<FrameEvent Type=,"Test,Attack,ApplyBuff,ApplyBuffTarget,DeleteBuff,TeleportToTarget,TeleportToTargetBack,SetDefenceType,Effect,SetFrameTag,Projectile,Danmaku,SetAnimationSpeed,KillEntity,Movement,ZoomEffect,StopUpdate"
 ShortCut,__Action,<${1}>#n#t<Animation Path=~~>#n#t</Animation>#n</${1}>
 ShortCut,__UseBranchSet,<UseBranchSet Name=~~/>
 ShortCut,__FrameEvent,<FrameEvent Type=~~ StartFrame=~0~/>
@@ -58,11 +61,8 @@ ShortCut,__FrameEvent_SetAnimationSpeed,<FrameEvent Type=~SetAnimationSpeed~ Sta
 ShortCut,__FrameEvent_KillEntity,<FrameEvent Type=~KillEntity~ StartFrame=~0~/>
 ShortCut,__FrameEvent_Movement,<FrameEvent Type=~Movement~ StartFrame=~0~ Friction=~~ MaxVelocity=~~ Speed=~~/>
 ShortCut,__MultiSelectAnimation,<MultiSelectAnimation Path=~~ Condition=~~/>
-LineStart,<ActionGraph,"Name=~~,DefaultAction=~~,DefaultFramePerSecond=~~,DefaultBuff=~~"
-,,
-,,
-,,
-,,
+ShortCut,__FrameEvent_ZoomEffect,<FrameEvent Type=~ZoomEffect~ Scale=~~/>
+ShortCut,__FrameEvent_StopUpdate,<FrameEvent Type=~StopUpdate~ Time=~~/>
 ,,
 ,,
 ,,
