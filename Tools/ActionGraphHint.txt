@@ -26,7 +26,7 @@ InQuote,DefenceType=,"Empty,Guard,Parry,Evade"
 InQuote,IsActionSelection=,"true,false"
 InQuote,NormalizedSpeed=,"true,false"
 InQuote,DirectionUpdateOnce=,"true,false"
-InQuote,Condition=,"ActionTest,ActionDash,End,AngleBetweenStick,AngleDirection,IsXFlip,IsYFlip,CurrentFrame,AttackSuccess,AttackGuarded,AttackParried,AttackGuardBreak,DefenceSuccess,ParrySuccess,Hit,EvadeSuccess,GuardBroken,CurrentFrame,TargetExists,TargetDistance,ArrivedTarget,CurrentPackageEnd,getStat_,getKey_,getFrameTag_,getTargetFrameTag_,getWeight_,true,false,PackageExecutedTime,GraphExecutedTime"
+InQuote,Condition=,"ActionTest,ActionDash,End,AngleBetweenStick,AngleDirection,IsXFlip,IsYFlip,CurrentFrame,AttackSuccess,AttackGuarded,AttackParried,AttackGuardBreak,DefenceSuccess,ParrySuccess,Hit,EvadeSuccess,GuardBroken,CurrentFrame,TargetExists,TargetDistance,ArrivedTarget,CurrentPackageEnd,getStat_,getKey_,getFrameTag_,getTargetFrameTag_,getWeight_,true,false,PackageExecutedTime,GraphExecutedTime,AttackGuardBreakFail,GuardBreakFail"
 InScope,,"MovementType=~~,MovementGraphPreset=~~,DirectionType=~~,DefenceDirectionType=~~,FlipType=~~,RotationType=~~,MoveScale=~~,IsActionSelection=~~,ApplyBuff=~~,NormalizedSpeed=~~,DefenceType=~~,DefenceAngle=~~,DirectionUpdateOnce=~~,IsActionSelection=~~,FlipTypeUpdateOnce=~~,RotateBySpeed=~~,RotateSpeed=~~"
 LineStart,<Branch,"Key=~~,Condition=~~,Execute=~~,Weight=~~"
 LineStart,<Animation,"Path=~~,StartFrame=~~,EndFrame=~~,FramePerSecond=~~,Loop=~~,XFlip=~~,YFlip=~~,RotationPreset=~~,ScalePreset=~~,AngleBaseAnimation=~~"
@@ -45,7 +45,7 @@ ShortCut,__FrameEvent,<FrameEvent Type=~~ StartFrame=~0~/>
 ShortCut,__Branch,<Branch Condition=~~ Execute=~~/>
 ShortCut,__BranchSet,<BranchSet Name=~~>#n#t#n</BranchSet>
 ShortCut,__GlobalVariable,<GlobalVariable Name=~~ Value=~~/>
-ShortCut,__FrameEvent_Attack,<FrameEvent Type=~Attack~ StartFrame=~0~ AttackPreset=~~>#n#t<OnHit>#n#t</OnHit>#n#n#t<OnGuard>#n#t</OnGuard>#n#n#t<OnParry>#n#t</OnParry>#n</FrameEvent>
+ShortCut,__FrameEvent_Attack,<FrameEvent Type=~Attack~ StartFrame=~0~ AttackPreset=~~>#n#t<OnHit>#n#t</OnHit>#n#n#t<OnGuard>#n#t</OnGuard>#n#n#t<OnParry>#n#t</OnParry>#n#n#t<OnGuardBreakFail>#n#t</OnGuardBreakFail>#n</FrameEvent>
 ShortCut,__FrameEvent_AppyBuff,<FrameEvent Type=~~ StartFrame=~0~ ApplyBuff=~~/>
 ShortCut,__FrameEvent_AppyBuffTarget,<FrameEvent Type=~~ StartFrame=~0~ ApplyBuff=~~/>
 ShortCut,__FrameEvent_DeleteBuff,<FrameEvent Type=~DeleteBuff~ StartFrame=~0~ BuffList=~~/>
