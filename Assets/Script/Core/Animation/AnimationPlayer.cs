@@ -238,6 +238,16 @@ public class AnimationPlayer
         return (int)((angleDegree + baseAngle * 0.5f) / baseAngle);
     }
 
+    public int angleToSectorNumberByCount(float angleDegree, int count)
+    {
+        angleDegree = MathEx.clamp360Degree(angleDegree);
+        float baseAngle = 360f / (float)count;
+        if(angleDegree < baseAngle * 0.5f || angleDegree > 360f - baseAngle * 0.5f)
+            return 0;
+
+        return (int)((angleDegree + baseAngle * 0.5f) / baseAngle);
+    }
+
     public void setAnimationSpeed(float speed) {_animationTimeProcessor.setAnimationSpeed(speed);}
 
     public float getCurrentFrame() {return _animationTimeProcessor.getCurrentFrame();}

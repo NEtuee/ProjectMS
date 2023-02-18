@@ -828,6 +828,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
         if(aiEvent.getFrameEventType() == AIEventType.AIEvent_ExecuteState)
         {
             bool find = false;
+            string targetAction = "";
             for(int i = 0; i < attributes.Count; ++i)
             {
                 string attrName = attributes[i].Name;
@@ -837,6 +838,8 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
 
                 if(attrName != "Execute")
                     continue;
+
+                targetAction = attrValue;
 
                 if(aiExecuteEventDic.ContainsKey(attrValue) == false)
                     aiExecuteEventDic.Add(attrValue,new List<AIEvent_ExecuteState>());
@@ -848,7 +851,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
 
             if(find == false)
             {
-                DebugUtil.assert(false, "Execute State not found : [{0}]",_currentFileName);
+                DebugUtil.assert(false, "Execute State not found : [{0}]",targetAction);
                 return null;
             }
         }

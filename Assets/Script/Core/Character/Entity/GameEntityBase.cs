@@ -218,7 +218,7 @@ public class GameEntityBase : SequencerObjectBase
 
             updateRotation();
 
-            _spriteRenderer.sprite = _actionGraph.getCurrentSprite((_spriteRotation * _actionStartRotation).eulerAngles.z);
+            _spriteRenderer.sprite = _actionGraph.getCurrentSprite(_actionGraph.getCurrentRotationType() != RotationType.AlwaysRight ? (_spriteRotation * _actionStartRotation).eulerAngles.z : MathEx.directionToAngle(_direction));
 
             _spriteRenderer.flipX = _flipState.xFlip;
             _spriteRenderer.flipY = _flipState.yFlip;
@@ -564,6 +564,9 @@ public class GameEntityBase : SequencerObjectBase
                 DebugUtil.assert(false, "invalid direction type : {0}",_actionGraph.getDirectionType());
                 break;
         }
+
+        if(direction.sqrMagnitude == 0f)
+            direction = Vector3.right;
 
         return direction;
     }

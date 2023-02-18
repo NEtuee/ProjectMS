@@ -291,6 +291,10 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             {
                 nodeData._flipTypeUpdateOnce = bool.Parse(targetValue);
             }
+            else if(targetName == "HasAngleSector")
+            {
+                nodeData._hasAngleSector = bool.Parse(targetValue);
+            }
             else if(targetName == "AngleSectorCount")
             {
                 nodeData._angleSectorCount = int.Parse(targetValue);

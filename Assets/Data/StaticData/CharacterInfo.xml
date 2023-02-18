@@ -11,6 +11,16 @@
         ProjectileCollisionRadius=""
     />
     
+    <TateChan
+        DisplayName="타테짱"
+        ActionGraph="Assets\Data\ActionGraph\Enemy\TateChanAction.xml"
+        AIGraph="Assets\Data\AIGraph\Enemy\TateChanAI.xml"
+        StatusInfoName="CommonEnemyStatus"
+
+        CollisionRadius="0.2"
+        ProjectileCollisionRadius=""
+    />
+
     <TestZako
         DisplayName="자코"
         ActionGraph="Assets\Data\ActionGraph\TestZako.xml"

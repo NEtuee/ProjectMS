@@ -66,6 +66,7 @@ public class ActionGraphNodeData
     public bool                         _directionUpdateOnce = false;
     public bool                         _flipTypeUpdateOnce = false;
 
+    public bool                         _hasAngleSector = false;
     public int                          _angleSectorCount = -1;
 
     public int                          _index;
