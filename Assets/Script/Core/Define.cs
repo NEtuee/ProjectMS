@@ -34,6 +34,7 @@ public enum AttackState
     AttackParried,
     AttackEvade,
     AttackGuardBreak,
+    AttackGuardBreakFail,
 }
 
 public enum DefenceState
@@ -45,6 +46,7 @@ public enum DefenceState
     ParrySuccess,
     EvadeSuccess,
     GuardBroken,
+    GuardBreakFail,
 }
 
 

@@ -32,6 +32,7 @@ public enum ChildFrameEventType
     ChildFrameEvent_OnParry,
     ChildFrameEvent_OnEvade,
     ChildFrameEvent_OnGuardBreak,
+    ChildFrameEvent_OnGuardBreakFail,
     Count,
 }
 
@@ -689,14 +690,30 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
             }
             else if(_attackType == AttackType.GuardBreak)
             {
-                requester.setAttackState(AttackState.AttackGuardBreak);
-                target.setDefenceState(DefenceState.GuardBroken);
 
-                if(requester is GameEntityBase)
-                    ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnGuardBreak);
-                target.executeAIEvent(AIChildEventType.AIChildEvent_OnGuardBroken);
+                if(target.getDefenceType() == DefenceType.Empty)
+                {
+                    requester.setAttackState(AttackState.AttackGuardBreakFail);
+                    target.setDefenceState(DefenceState.GuardBreakFail);
 
-                eventType = ChildFrameEventType.ChildFrameEvent_OnGuardBreak;
+                    if(requester is GameEntityBase)
+                        ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnAttackGuardBreakFail);
+                    target.executeAIEvent(AIChildEventType.AIChildEvent_OnGuardBreakFail);
+
+                    eventType = ChildFrameEventType.ChildFrameEvent_OnGuardBreakFail;
+                }
+                else
+                {
+                    requester.setAttackState(AttackState.AttackGuardBreak);
+                    target.setDefenceState(DefenceState.GuardBroken);
+
+                    if(requester is GameEntityBase)
+                        ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnGuardBreak);
+                    target.executeAIEvent(AIChildEventType.AIChildEvent_OnGuardBroken);
+
+                    eventType = ChildFrameEventType.ChildFrameEvent_OnGuardBreak;
+                }
+                
             }
 
             attackSuccess = true;

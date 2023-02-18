@@ -169,12 +169,14 @@ public enum ConditionNodeUpdateType
     Attack_Parried,
     Attack_Evaded,
     Attack_GuardBreak,
+    Attack_GuardBreakFail,
 
     Defence_Success,
     Defence_Crash,
     Defence_Parry,
     Defence_Evade,
     Defence_GuardBroken,
+    Defence_GuardBreakFail,
 
     Defence_Hit,
 
@@ -251,6 +253,7 @@ public static class ConditionNodeInfoPreset
         {"AttackParried",new ConditionNodeInfo(ConditionNodeUpdateType.Attack_Parried, ConditionNodeType.Bool)},
         {"AttackEvaded",new ConditionNodeInfo(ConditionNodeUpdateType.Attack_Evaded, ConditionNodeType.Bool)},
         {"AttackGuardBreak",new ConditionNodeInfo(ConditionNodeUpdateType.Attack_GuardBreak, ConditionNodeType.Bool)},
+        {"AttackGuardBreakFail",new ConditionNodeInfo(ConditionNodeUpdateType.Attack_GuardBreakFail, ConditionNodeType.Bool)},
 
         {"DefenceSuccess",new ConditionNodeInfo(ConditionNodeUpdateType.Defence_Success, ConditionNodeType.Bool)},
         {"DefenceCrash",new ConditionNodeInfo(ConditionNodeUpdateType.Defence_Crash, ConditionNodeType.Bool)},
@@ -258,6 +261,7 @@ public static class ConditionNodeInfoPreset
         {"Hit",new ConditionNodeInfo(ConditionNodeUpdateType.Defence_Hit, ConditionNodeType.Bool)},
         {"EvadeSuccess",new ConditionNodeInfo(ConditionNodeUpdateType.Defence_Evade, ConditionNodeType.Bool)},
         {"GuardBroken",new ConditionNodeInfo(ConditionNodeUpdateType.Defence_GuardBroken, ConditionNodeType.Bool)},
+        {"GuardBreakFail",new ConditionNodeInfo(ConditionNodeUpdateType.Defence_GuardBreakFail, ConditionNodeType.Bool)},
 
         {"Dead",new ConditionNodeInfo(ConditionNodeUpdateType.Entity_Dead, ConditionNodeType.Bool)},
 

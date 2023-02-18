@@ -123,6 +123,8 @@ public static class FrameEventLoader
                 eventType = ChildFrameEventType.ChildFrameEvent_OnEvade;
             else if(targetName == "OnGuardBreak")
                 eventType = ChildFrameEventType.ChildFrameEvent_OnGuardBreak;
+            else if(targetName == "OnGuardBreakFail")
+                eventType = ChildFrameEventType.ChildFrameEvent_OnGuardBreakFail;
             else
                 DebugUtil.assert(false, "invalid child frame event type: {0}", targetName);
 

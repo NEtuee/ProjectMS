@@ -723,8 +723,12 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
             currentEventType = AIChildEventType.AIChildEvent_OnGuardBreak;
         else if(eventType == "OnGuardBroken")
             currentEventType = AIChildEventType.AIChildEvent_OnGuardBroken;
+        else if(eventType == "OnGuardBreakFail")
+            currentEventType = AIChildEventType.AIChildEvent_OnGuardBreakFail;
+        else if(eventType == "OnAttackGuardBreakFail")
+            currentEventType = AIChildEventType.AIChildEvent_OnAttackGuardBreakFail;
 
-        DebugUtil.assert((int)AIChildEventType.Count == 14, "check this");
+        DebugUtil.assert((int)AIChildEventType.Count == 16, "check this");
 
         if(childEventDic.ContainsKey(currentEventType))
         {
