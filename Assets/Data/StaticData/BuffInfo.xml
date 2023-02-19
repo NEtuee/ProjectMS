@@ -207,6 +207,22 @@
         Factor="-1.0"
     />
 
+    <GuardPointDecrease
+        Key="21"
+        StatusName="GuardPoint"
+        UpdateType="OneShot"
+        ApplyType="Direct"
+
+        Factor="-1.0"
+    />
+    <GuardPointReset
+        Key="22"
+        StatusName="GuardPoint"
+        UpdateType="OneShot"
+        ApplyType="DirectSet"
+
+        Factor="3.0"
+    />
 
 
 </BuffInfo>

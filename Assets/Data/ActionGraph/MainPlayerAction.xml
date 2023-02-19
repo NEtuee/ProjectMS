@@ -22,7 +22,7 @@
         </Animation>
 
         <!-- <Branch Key="getKey_Guard && getKey_AttackCharge" Condition="true" Execute="Guard"/> -->
-        <Branch Key="getKey_GuardBreak2 && getKey_AttackCharge" Execute="DashRoll_GuardBreak"/>
+        <Branch Key="getKey_GuardBreak2 && getKey_AttackCharge" Execute="DashRoll_GuardBreak_Weak"/>
         <Branch Key="getKey_StunShot && getKey_AttackCharge" Execute="StunShot"/>
         <Branch Key="getKey_AttackCharge == true" Execute="DashRoll"/>
         <Branch Key="getKey_NormalMove == true" Execute="MoveAll"/>
@@ -36,7 +36,7 @@
         </Animation>
         
         <!-- <Branch Key="getKey_Guard && getKey_AttackCharge" Condition="true" Execute="Guard"/> -->
-        <Branch Key="getKey_GuardBreak2 && getKey_AttackCharge" Execute="DashRoll_GuardBreak"/>
+        <Branch Key="getKey_GuardBreak2 && getKey_AttackCharge" Execute="DashRoll_GuardBreak_Weak"/>
         <Branch Key="getKey_StunShot && getKey_AttackCharge" Execute="StunShot"/>
         <Branch Key="getKey_AttackCharge == true" Execute="DashRoll"/>
         <Branch Key="getKey_NormalMove == true" Execute="MoveAll"/>
@@ -50,7 +50,7 @@
         </Animation>
 
         <!-- <Branch Key="getKey_Guard && getKey_AttackCharge" Condition="true" Execute="Guard"/> -->
-        <Branch Key="getKey_GuardBreak2 && getKey_AttackCharge" Execute="DashRoll_GuardBreak"/>
+        <Branch Key="getKey_GuardBreak2 && getKey_AttackCharge" Execute="DashRoll_GuardBreak_Weak"/>
         <Branch Key="getKey_StunShot && getKey_AttackCharge" Execute="StunShot"/>
         <Branch Key="getKey_AttackCharge == true" Execute="DashRoll"/>
         <Branch Key="getKey_NormalMove == true" Execute="MoveAll"/>
@@ -133,6 +133,38 @@
         <Branch Key="getKey_AttackCharge == false" Condition="getFrameTag_MoveCancel" Execute="MoveStop"/>
     </DashRoll_GuardBreak>
 
+    <DashRoll_GuardBreak_Weak MovementType="FrameEvent" DirectionType="MousePoint" RotationType="MoveDirection" FlipType="MousePoint" DirectionUpdateOnce="true">
+        <Animation Path="Resources/Sprites/NewPlayer/DashRoll/" FramePerSecond="32" XFlip="true" ScalePreset="YSpring">
+            <FrameEvent Type="Attack" StartFrame="0" AttackPreset="PlayerAttackTest">
+
+                <OnHit>
+                    <FrameEvent Type="TeleportToTarget"/>
+                </OnHit>
+            
+                <OnGuard>
+                    <FrameEvent Type="ApplyBuffTarget" StartFrame="0" ApplyBuff="21"/>
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc" FramePerSecond="18.0" Offset="0.0 0.0 0.0" ToTarget="true"/>
+                    
+                    <FrameEvent Type="TeleportToTargetBack" DistanceOffset="-0.3"/>
+                    <FrameEvent Type="ZoomEffect" StartFrame="0" Scale="2.8"/>
+                    <FrameEvent Type="StopUpdate" StartFrame="0" Time="0.15"/>
+                </OnGuard>
+
+            </FrameEvent>
+
+            <FrameEvent Type="Movement" StartFrame="0" Friction="gv_DashFriction" MaxVelocity="gv_DashVelocity" Speed="0" Velocity="gv_DashVelocity"/>
+            <FrameEvent Type="FrameTag" StartFrame="5" EndFrame="999" Tag="MoveCancel"/>
+        </Animation>
+        
+        <Branch Condition="AttackGuarded" Execute="GuardBreakSuccess_Weak"/>
+        <Branch Condition="AttackSuccess" Execute="GuardBreakFailed"/>
+        <Branch Key="getKey_AttackCharge == true" Condition="End" Execute="MoveAll"/>
+        <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="MoveStop"/>
+        <Branch Key="getKey_AttackCharge == false" Condition="getFrameTag_MoveCancel" Execute="MoveStop"/>
+    </DashRoll_GuardBreak_Weak>
+
+
     <StunShot MovementType="FrameEvent" DirectionType="MousePoint" FlipType="Direction" DirectionUpdateOnce="true">
         <Animation Path="Resources/Sprites/DummyPlayer/Guard/" FramePerSecond="3" AngleBaseAnimation="True" XFlip="true" ScalePreset="XSpring">
             <FrameEvent Type="Movement" StartFrame="0" Friction="22" MaxVelocity="18" Speed="0" Velocity="-6"/>
@@ -148,7 +180,7 @@
         <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="Idle"/>
     </StunShot>
 
-    <GuardBreak MovementType="FrameEvent" DirectionType="MousePoint" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
+    <GuardBreak MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
         <Animation Path="Resources/Sprites/NewPlayer/attack/" FramePerSecond="5" XFlip="true" ScalePreset="YSpring">
             <FrameEvent Type="Movement" StartFrame="0" Friction="15" MaxVelocity="3" Speed="0" Velocity="3"/>
 
@@ -172,7 +204,7 @@
         <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="Idle"/>
     </GuardBreak>
 
-    <GuardBreakSuccess MovementType="FrameEvent" DirectionType="MousePoint" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
+    <GuardBreakSuccess MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
         <Animation Path="Resources/Sprites/NewPlayer/attack/" FramePerSecond="18" XFlip="true" ScalePreset="YSpring">
             <FrameEvent Type="Movement" StartFrame="0" Friction="3" Speed="0" Velocity="-1"/>
             <FrameEvent Type="Test" StartFrame="0" Log="GuardBreakSuccess Executed"/>
@@ -182,8 +214,19 @@
         <Branch Key="(getKey_AttackCharge == true) || (getKey_NormalMove == true)" Condition="End" Execute="MoveAll"/>
         <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="Idle"/>
     </GuardBreakSuccess>
-    
-    <GuardBreakFailed MovementType="FrameEvent" DirectionType="MousePoint" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
+    <GuardBreakSuccess_Weak MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
+        <Animation Path="Resources/Sprites/NewPlayer/attack/" FramePerSecond="18" XFlip="true" ScalePreset="YSpring">
+            <FrameEvent Type="Movement" StartFrame="0" Friction="gv_AttackFriction" Speed="0" Velocity="gv_AttackVelocity"/>
+            <!-- <FrameEvent Type="Movement" StartFrame="0" Friction="gv_AttackFriction" MaxVelocity="gv_AttackVelocity" Speed="0" Velocity="gv_AttackVelocity"/> -->
+            <FrameEvent Type="Test" StartFrame="0" Log="GuardBreakSuccess_Weak Executed"/>
+        </Animation>
+
+        <!-- <Branch Condition="AttackSuccess" Execute="AttackSuccess"/> -->
+        <Branch Key="(getKey_AttackCharge == true) || (getKey_NormalMove == true)" Condition="End" Execute="MoveAll"/>
+        <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="Idle"/>
+    </GuardBreakSuccess_Weak>
+
+    <GuardBreakFailed MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
         <Animation Path="Resources/Sprites/NewPlayer/MoveStop/" FramePerSecond="10" XFlip="true" ScalePreset="YSpring">
             <FrameEvent Type="Test" StartFrame="0" Log="GuardBreakFailed Executed"/>
             <FrameEvent Type="Movement" StartFrame="0" Friction="3" Speed="0" Velocity="-2"/>
@@ -195,7 +238,7 @@
         <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="Idle"/>
     </GuardBreakFailed>
 
-    <AttackSuccess MovementType="FrameEvent" DirectionType="MousePoint" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
+    <AttackSuccess MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
         <Animation Path="Resources/Sprites/NewPlayer/attack/" FramePerSecond="24" XFlip="true" ScalePreset="YSpring">
             <FrameEvent Type="Effect" StartFrame="0" Path="Resources/Sprites/Effect/Sheath" FramePerSecond="0.5" Offset="0.0 0.0 0.0" Angle="Random_0^360" UseFlip="True">
                 <Physics UseGravity="True" Velocity="-1.5 3.5" Friction="1.0" Torque="Random_25^30" AngularFriction="10.0"/>
