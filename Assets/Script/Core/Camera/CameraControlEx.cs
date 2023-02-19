@@ -73,7 +73,7 @@ public class CameraArenaMode : CameraModeBase
 
 public class CameraTargetCenterMode : CameraModeBase
 {
-    public static float _cameraMoveSpeedRate = 2.5f;
+    public static float _cameraMoveSpeedRate = 8.0f;
 
     private Vector3 _currentCenterPosition;
 
