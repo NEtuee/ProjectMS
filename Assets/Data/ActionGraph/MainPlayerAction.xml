@@ -172,7 +172,7 @@
         <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="Idle"/>
     </GuardBreak>
 
-    <GuardBreakSuccess MovementType="FrameEvent" DirectionType="MousePoint" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
+    <GuardBreakSuccess MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
         <Animation Path="Resources/Sprites/NewPlayer/attack/" FramePerSecond="18" XFlip="true" ScalePreset="YSpring">
             <FrameEvent Type="Movement" StartFrame="0" Friction="3" Speed="0" Velocity="-1"/>
             <FrameEvent Type="Test" StartFrame="0" Log="GuardBreakSuccess Executed"/>
@@ -183,7 +183,7 @@
         <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="Idle"/>
     </GuardBreakSuccess>
     
-    <GuardBreakFailed MovementType="FrameEvent" DirectionType="MousePoint" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
+    <GuardBreakFailed MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
         <Animation Path="Resources/Sprites/NewPlayer/MoveStop/" FramePerSecond="10" XFlip="true" ScalePreset="YSpring">
             <FrameEvent Type="Test" StartFrame="0" Log="GuardBreakFailed Executed"/>
             <FrameEvent Type="Movement" StartFrame="0" Friction="3" Speed="0" Velocity="-2"/>
@@ -195,7 +195,7 @@
         <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="Idle"/>
     </GuardBreakFailed>
 
-    <AttackSuccess MovementType="FrameEvent" DirectionType="MousePoint" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
+    <AttackSuccess MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
         <Animation Path="Resources/Sprites/NewPlayer/attack/" FramePerSecond="24" XFlip="true" ScalePreset="YSpring">
             <FrameEvent Type="Effect" StartFrame="0" Path="Resources/Sprites/Effect/Sheath" FramePerSecond="0.5" Offset="0.0 0.0 0.0" Angle="Random_0^360" UseFlip="True">
                 <Physics UseGravity="True" Velocity="-1.5 3.5" Friction="1.0" Torque="Random_25^30" AngularFriction="10.0"/>
