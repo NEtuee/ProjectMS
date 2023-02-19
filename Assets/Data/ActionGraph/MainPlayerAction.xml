@@ -108,33 +108,42 @@
 
     <DashRoll_Kick MovementType="FrameEvent" DirectionType="MousePoint" RotationType="MoveDirection" FlipType="MousePoint" DirectionUpdateOnce="true">
         <Animation Path="Resources/Sprites/NewPlayer/DashRoll/" FramePerSecond="32" XFlip="true" ScalePreset="YSpring">
-            <FrameEvent Type="Attack" StartFrame="0" AttackPreset="Akane_Kick">
+            <FrameEvent Type="Attack" StartFrame="0" AttackType="GuardBreak" AttackPreset="Akane_Kick" IgnoreDefenceType="Guard">
                 <OnHit>
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc" FramePerSecond="18.0" Offset="0.0 0.0 0.0" ToTarget="true"/>
                     
-                    <FrameEvent Type="TeleportToTarget"/>
+                    <FrameEvent Type="TeleportToTarget" DistanceOffset="-0.3"/>
                     
                     <FrameEvent Type="ZoomEffect" StartFrame="0" Scale="2.8"/>
                     <FrameEvent Type="StopUpdate" StartFrame="0" Time="0.15"/>
                 </OnHit>
-                <OnGuard>
+                <OnGuardBreak>
                     <FrameEvent Type="ApplyBuffTarget" StartFrame="0" ApplyBuff="21"/>
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc" FramePerSecond="18.0" Offset="0.0 0.0 0.0" ToTarget="true"/>
                     
-                    <FrameEvent Type="TeleportToTarget"/>
+                    <FrameEvent Type="TeleportToTarget" DistanceOffset="-0.3"/>
                     <FrameEvent Type="ZoomEffect" StartFrame="0" Scale="2.8"/>
                     <FrameEvent Type="StopUpdate" StartFrame="0" Time="0.15"/>
-                </OnGuard>
+                </OnGuardBreak>
+
+                <OnGuardBreakFail>
+                    <FrameEvent Type="ApplyBuffTarget" StartFrame="0" ApplyBuff="21"/>
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc" FramePerSecond="18.0" Offset="0.0 0.0 0.0" ToTarget="true"/>
+                    
+                    <FrameEvent Type="TeleportToTarget" DistanceOffset="-0.3"/>
+                    <FrameEvent Type="ZoomEffect" StartFrame="0" Scale="2.8"/>
+                    <FrameEvent Type="StopUpdate" StartFrame="0" Time="0.15"/>
+                </OnGuardBreakFail>
             </FrameEvent>
 
             <FrameEvent Type="Movement" StartFrame="0" Friction="gv_DashFriction" MaxVelocity="gv_DashVelocity" Speed="0" Velocity="gv_DashVelocity"/>
             <FrameEvent Type="FrameTag" StartFrame="5" EndFrame="999" Tag="MoveCancel"/>
         </Animation>
         
-        <Branch Condition="AttackSuccess" Execute="Kicked"/>
-        <Branch Condition="AttackGuarded" Execute="Kicked"/>
+        <Branch Condition="AttackSuccess || AttackGuarded || AttackGuardBreak || AttackGuardBreakFail" Execute="Kicked"/>
         <Branch Key="getKey_AttackCharge == true" Condition="End" Execute="MoveAll"/>
         <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="MoveStop"/>
         <Branch Key="getKey_AttackCharge == false" Condition="getFrameTag_MoveCancel" Execute="MoveStop"/>
@@ -157,7 +166,7 @@
 
     <Kicked MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
         <Animation Path="Resources/Sprites/NewPlayer/attack/" FramePerSecond="18" XFlip="true" ScalePreset="YSpring">
-            <FrameEvent Type="Movement" StartFrame="0" Friction="3" Speed="0" Velocity="-1"/>
+            <FrameEvent Type="Movement" StartFrame="0" Friction="3" Speed="0" Velocity="-2 "/>
             <FrameEvent Type="Test" StartFrame="0" Log="Kicked Executed"/>
         </Animation>
 

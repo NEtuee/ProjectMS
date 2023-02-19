@@ -262,6 +262,17 @@ public class ActionGraph
         return copyBytes_Float(value,_actionConditionNodeData[updateType]);
     }
 
+    public bool getActionConditionData_Bool(ConditionNodeUpdateType updateType)
+    {
+        if((int)updateType <= (int)ConditionNodeUpdateType.ConditionResult )
+        {
+            DebugUtil.assert(false,"invalud type : {0}",updateType);
+            return false;
+        }
+
+        return _actionConditionNodeData[updateType][0] == 1;
+    }
+
     public bool setActionConditionData_Bool(ConditionNodeUpdateType updateType, bool value)
     {
         if((int)updateType <= (int)ConditionNodeUpdateType.ConditionResult )

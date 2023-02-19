@@ -661,6 +661,9 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
 
         target.setAttackPoint(successData._startPoint);
 
+        if(requester is GameEntityBase)
+            ((GameEntityBase)requester).setAttackPoint(successData._startPoint);
+
         float attackInAngle = UnityEngine.Vector3.Angle(target.getCurrentDefenceDirection(), (successData._startPoint - target.transform.position).normalized);
 
         bool guardSuccess = (attackInAngle < target.getDefenceAngle() * 0.5f);
@@ -668,13 +671,10 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
 
         bool attackSuccess = false;
 
-        DebugUtil.log(target.getCurrentDefenceDirection().ToString());
-        DebugUtil.log((successData._startPoint - target.transform.position).normalized.ToString());
-
         if(_pushVector.sqrMagnitude > float.Epsilon)
         {
             UnityEngine.Vector3 attackPointDirection = (target.transform.position - successData._startPoint).normalized;
-            target.addVelocity(UnityEngine.Quaternion.Euler(0f,0f,UnityEngine.Mathf.Atan2(attackPointDirection.y,attackPointDirection.x) * UnityEngine.Mathf.Rad2Deg) * _pushVector);
+            target.setVelocity(UnityEngine.Quaternion.Euler(0f,0f,UnityEngine.Mathf.Atan2(attackPointDirection.y,attackPointDirection.x) * UnityEngine.Mathf.Rad2Deg) * _pushVector);
         }
 
         if(((guardSuccess == false || target.getDefenceType() == DefenceType.Empty) && target.getDefenceType() != DefenceType.Evade) || canIgnore)

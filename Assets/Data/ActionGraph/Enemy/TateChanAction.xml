@@ -1,5 +1,5 @@
 
-<ActionGraph Name="TateChan" DefaultAction="AC_Idle" DefaultFramePerSecond="12">
+<ActionGraph Name="TateChan" DefaultAction="AC_Idle" DefaultFramePerSecond="12" DefaultBuff="23">
 
     <AC_Idle DirectionType="Keep" FlipType="Direction">
         <Animation Path="Resources/Sprites/SampleBoss/Idle/" XFlip="true">
@@ -11,21 +11,37 @@
     
     <AC_MoveAll MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <Animation Path="Resources/Sprites/SampleBoss/MoveAll/" AngleBaseAnimation="True" AngleBaseAnimationCount="1">
-            <FrameEvent Type="Movement" StartFrame="0" Friction="0" MaxVelocity="3" Speed="15"/>
+            <FrameEvent Type="Movement" StartFrame="0" Friction="0" MaxVelocity="2" Speed="15"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_MoveAll"/>
     </AC_MoveAll>
 
-    <AC_Guard MovementType="FrameEvent" DirectionType="AI" DefenceType="Guard" DefenceAngle="270.0" DefenceDirectionType="Direction">
+    <AC_GuardForward MovementType="FrameEvent" DirectionType="AI" DefenceType="Guard" DefenceAngle="270.0" DefenceDirectionType="Direction">
+        <Animation Path="Resources/Sprites/SampleBoss/Guard/" AngleBaseAnimation="True" AngleBaseAnimationCount="1">
+            <FrameEvent Type="Movement" StartFrame="0" Friction="0" MaxVelocity="0.2" Speed="1"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_GuardForward"/>
+    </AC_GuardForward>
+
+    <AC_GuardBack MovementType="FrameEvent" DirectionType="AI" DefenceType="Guard" DefenceAngle="270.0" DefenceDirectionType="Direction" FlipType="Direction">
         <Animation Path="Resources/Sprites/SampleBoss/Guard/" AngleBaseAnimation="True" AngleBaseAnimationCount="1">
             <FrameEvent Type="Movement" StartFrame="0" Friction="0" MaxVelocity="0.2" Speed="-1"/>
         </Animation>
 
-        <Branch Condition="End == true" Execute="AC_Guard"/>
-    </AC_Guard>
+        <Branch Condition="End == true" Execute="AC_GuardBack"/>
+    </AC_GuardBack>
 
-    <AC_GuardBreak MovementType="FrameEvent" DirectionType="AttackedPoint">
+    <AC_GuardSuccess MovementType="FrameEvent" DirectionType="AttackedPoint" DefenceType="Guard" DefenceAngle="270.0" DefenceDirectionType="Direction" FlipType="Direction">
+        <Animation Path="Resources/Sprites/SampleBoss/Guard/" FramePerSecond="1.0" AngleBaseAnimation="True" AngleBaseAnimationCount="1">
+            <FrameEvent Type="Movement" StartFrame="0" Friction="12" MaxVelocity="0" Speed="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_GuardSuccess"/>
+    </AC_GuardSuccess>
+
+    <AC_GuardBreak MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
         <Animation Path="Resources/Sprites/SampleBoss/GuardBroken/" FramePerSecond="0.75">
             <FrameEvent Type="Movement" StartFrame="0" Friction="12" MaxVelocity="3"/>
         </Animation>
@@ -33,6 +49,67 @@
         <Branch Condition="End == true" Execute="AC_GuardBreak"/>
     </AC_GuardBreak>
 
+    <AC_GuardBreakSuccess MovementType="FrameEvent" DirectionType="AttackedPoint" DefenceType="Guard" DefenceAngle="270.0" DefenceDirectionType="Direction" FlipType="Direction">
+        <Animation Path="Resources/Sprites/SampleBoss/Guard/" FramePerSecond="1">
+            <FrameEvent Type="Movement" StartFrame="0" Friction="12" Speed="0" Velocity="-3.0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_GuardBreakSuccess"/>
+    </AC_GuardBreakSuccess>
+
+    <AC_GuardAttack MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" DefenceType="Guard" DefenceAngle="270.0" DefenceDirectionType="Direction">
+        <Animation Path="Resources/Sprites/SampleBoss/Attack/" FramePerSecond="1" XFlip="true">
+            <FrameEvent Type="Attack" StartFrame="0" EndFrame="1" AttackPreset="TateChanGuardAttack">
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" ToTarget="true"/>
+                    
+                    <FrameEvent Type="ZoomEffect" StartFrame="0" Scale="2.8"/>
+                    <FrameEvent Type="StopUpdate" StartFrame="0" Time="0.15"/>
+
+                    <FrameEvent Type="Test" StartFrame="0" Log="Attack"/>
+                </OnHit>
+            
+                <OnGuard>
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" ToTarget="true"/>
+                    
+                    <FrameEvent Type="ZoomEffect" StartFrame="0" Scale="3.1"/>
+                    <FrameEvent Type="StopUpdate" StartFrame="0" Time="0.05"/>
+                </OnGuard>
+            
+                <OnParry>
+                </OnParry>
+            </FrameEvent>
+
+            <FrameEvent Type="Movement" StartFrame="0" Friction="24" MaxVelocity="12" Velocity="12" Speed="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_GuardAttack"/>
+    </AC_GuardAttack>
+
+    <AC_GuardAttackCharge MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <Animation Path="Resources/Sprites/SampleBoss/Charge/" FramePerSecond="3" XFlip="true">
+            <FrameEvent Type="Movement" StartFrame="0" Friction="12" Speed="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_GuardAttackCharge"/>
+    </AC_GuardAttackCharge>
+
+    <AC_GuardAttackSuccess MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+        <Animation Path="Resources/Sprites/SampleBoss/Charge/" FramePerSecond="3" XFlip="true">
+            <FrameEvent Type="Movement" StartFrame="0" Friction="12" Speed="0" Velocity="-3.0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_GuardAttackSuccess"/>
+    </AC_GuardAttackSuccess>
+
+    <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
+        <Animation Path="Resources/Sprites/SampleBoss/Hit/" FramePerSecond="1" XFlip="true">
+            <FrameEvent Type="Movement" StartFrame="0" Friction="0" Speed="0" Velocity="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Hit"/>
+    </AC_Hit>
 
     <Dead DirectionType="Keep" FlipType="Direction">
         <Animation Path="Resources/Sprites/DummyPlayer/dash/" StartFrame="0" EndFrame="1" XFlip="true">

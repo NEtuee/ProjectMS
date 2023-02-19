@@ -146,6 +146,9 @@ public class GameEntityBase : SequencerObjectBase
 
         _danmakuGraph.process(deltaTime);
 
+        if(_actionGraph != null)
+            updateConditionData();
+
         if(_aiGraph != null)
         {
             _aiGraph.updateConditionData();
@@ -173,8 +176,6 @@ public class GameEntityBase : SequencerObjectBase
         if(_actionGraph != null)
         {
             string prevActionName = _actionGraph.getCurrentActionName();
-            
-            updateConditionData();
 
             //action,movementGraph 바뀌는 시점
             if(_actionGraph.progress() == true)
@@ -246,6 +247,7 @@ public class GameEntityBase : SequencerObjectBase
 
         if(getDefenceAngle() != 0f)
         {
+            Debug.Log(getDefenceAngle());
             GizmoHelper.instance.drawArc(transform.position,0.8f,getDefenceAngle(),_defenceDirection,Color.cyan,0f);
         }
 
@@ -644,6 +646,7 @@ public class GameEntityBase : SequencerObjectBase
     public HashSet<string> getCurrentFrameTagList() {return _actionGraph.getCurrentFrameTagList();}
 
     public void addVelocity(Vector3 velocity) {_currentVelocity += velocity;}
+    public void setVelocity(Vector3 velocity) {_currentVelocity = velocity;}
 
     public bool applyFrameTag(string tag) {return _actionGraph.applyFrameTag(tag);}
     public void deleteFrameTag(string tag) {_actionGraph.deleteFrameTag(tag);}

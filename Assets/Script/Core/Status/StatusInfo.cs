@@ -323,7 +323,7 @@ public class StatusInfo
                     break;
                 case BuffUpdateType.DelayedContinuous:
                     Status targetStatus = getStatus(buffData._targetStatusName);
-                    canApply = globalTime - buffItem._startedTime > buffData._buffCustomValue0;
+                    canApply = globalTime - buffItem._startedTime >= buffData._buffCustomValue0;
                     break;
             }
 
@@ -346,6 +346,9 @@ public class StatusInfo
     {
         if(buff.isBuffValid() == false)
             return false;
+
+        if(getStatus(buff._targetStatusName) == null)
+            DebugUtil.assert(false, "target status is not exists: {0}", buff._targetStatusName);
 
         switch(buff._buffApplyType)
         {

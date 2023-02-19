@@ -87,7 +87,6 @@
         Factor="30.0"
 
         Time="1.5"
-
     />
 
     <DashStamina
@@ -222,6 +221,18 @@
         ApplyType="DirectSet"
 
         Factor="3.0"
+    />
+
+    <GuardPointRegenDelayed
+        Key="23"
+        StatusName="GuardPoint"
+
+        UpdateType="DelayedContinuous"
+        ApplyType="DirectDelta"
+
+        Factor="3.0"
+
+        Time="1.5"
     />
 
 
