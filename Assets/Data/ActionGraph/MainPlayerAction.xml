@@ -109,15 +109,6 @@
     <DashRoll_Kick MovementType="FrameEvent" DirectionType="MousePoint" RotationType="MoveDirection" FlipType="MousePoint" DirectionUpdateOnce="true">
         <Animation Path="Resources/Sprites/NewPlayer/DashRoll/" FramePerSecond="32" XFlip="true" ScalePreset="YSpring">
             <FrameEvent Type="Attack" StartFrame="0" AttackType="GuardBreak" AttackPreset="Akane_Kick" IgnoreDefenceType="Guard">
-                <OnHit>
-                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
-                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc" FramePerSecond="18.0" Offset="0.0 0.0 0.0" ToTarget="true"/>
-                    
-                    <FrameEvent Type="TeleportToTarget" DistanceOffset="-0.3"/>
-                    
-                    <FrameEvent Type="ZoomEffect" StartFrame="0" Scale="2.8"/>
-                    <FrameEvent Type="StopUpdate" StartFrame="0" Time="0.15"/>
-                </OnHit>
                 <OnGuardBreak>
                     <FrameEvent Type="ApplyBuffTarget" StartFrame="0" ApplyBuff="21"/>
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
@@ -129,13 +120,11 @@
                 </OnGuardBreak>
 
                 <OnGuardBreakFail>
-                    <FrameEvent Type="ApplyBuffTarget" StartFrame="0" ApplyBuff="21"/>
-                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc" FramePerSecond="18.0" Offset="0.0 0.0 0.0" ToTarget="true"/>
                     
                     <FrameEvent Type="TeleportToTarget" DistanceOffset="-0.3"/>
-                    <FrameEvent Type="ZoomEffect" StartFrame="0" Scale="2.8"/>
-                    <FrameEvent Type="StopUpdate" StartFrame="0" Time="0.15"/>
+                    <FrameEvent Type="ZoomEffect" StartFrame="0" Scale="3.1"/>
+                    <FrameEvent Type="StopUpdate" StartFrame="0" Time="0.07"/>
                 </OnGuardBreakFail>
             </FrameEvent>
 
