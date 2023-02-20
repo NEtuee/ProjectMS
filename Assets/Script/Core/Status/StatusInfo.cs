@@ -276,6 +276,8 @@ public class StatusInfo
                 continue;
             }
 
+            DebugUtil.log(item._statusName + ", " + item._regenFactor );
+
             _statusInfoData._statusData[item._statusIndex].variStat(ref item._realValue, item._additionalValue, item._regenFactor * deltaTime);
             item._value = item._realValue;
 
@@ -323,14 +325,16 @@ public class StatusInfo
                     break;
                 case BuffUpdateType.DelayedContinuous:
                     Status targetStatus = getStatus(buffData._targetStatusName);
+
                     canApply = globalTime - buffItem._startedTime >= buffData._buffCustomValue0;
                     break;
             }
 
             if(canApply == true)
             {
-                if(updateBuffXXX(buffData) == false)
+                if(updateBuffXXX(buffData, i) == false)
                     DebugUtil.assert(false,"failed to update buff: {0}",buffData._buffName);
+                
             }
                 
 
@@ -342,7 +346,7 @@ public class StatusInfo
         }
     }
 
-    private bool updateBuffXXX(BuffData buff)
+    private bool updateBuffXXX(BuffData buff, int buffIndex)
     {
         if(buff.isBuffValid() == false)
             return false;
@@ -354,7 +358,10 @@ public class StatusInfo
         {
             case BuffApplyType.Direct:
             {
-                getStatus(buff._targetStatusName).updateBuffList(_currentlyAppliedBuffList);
+                Status status = getStatus(buff._targetStatusName);
+                variRegenStat(buff._targetStatusName, -status._regenFactor);
+
+                status.updateBuffList(_currentlyAppliedBuffList);
                 return variStat(buff._targetStatusName, buff._buffVaryStatFactor);
             }
             case BuffApplyType.Additional:

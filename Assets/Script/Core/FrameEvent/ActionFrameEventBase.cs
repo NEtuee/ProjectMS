@@ -599,7 +599,7 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
         _collisionInfo.updateCollisionInfo(executeEntity.transform.position,executeEntity.getDirection());
-        _collisionInfo.drawCollosionArea(UnityEngine.Color.red,1f);
+        _collisionInfo.drawCollosionArea(UnityEngine.Color.red, _startFrame != _endFrame ? 0f : 1f);
         CollisionManager.Instance().collisionRequest(_collisionInfo,executeEntity,_collisionDelegate,_collisionEndEvent);
 
         return true;

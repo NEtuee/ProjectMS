@@ -243,13 +243,8 @@ public class GameEntityBase : SequencerObjectBase
             debugTextManager.updateDebugText("FrameTag","FrameTag: " + frameTag);
         }
     
-
-
         if(getDefenceAngle() != 0f)
-        {
-            Debug.Log(getDefenceAngle());
             GizmoHelper.instance.drawArc(transform.position,0.8f,getDefenceAngle(),_defenceDirection,Color.cyan,0f);
-        }
 
         _collisionInfo.updateCollisionInfo(transform.position,getDirection());
 

@@ -139,7 +139,7 @@
             <Branch Condition="TargetExists == false" Execute="AI_Entry"/>
             
             <Branch Condition="AttackSuccess" Execute="AI_GuardAttackSuccess"/>
-            <Branch Condition="AttackGuarded" Execute="AI_GuardBroken"/>
+            <Branch Condition="(PackageExecutedTime < 0.7) && GuardBroken" Execute="AI_GuardBroken"/>
             <Branch Condition="Hit" Execute="AI_Hit"/>
             <Branch Condition="End" Execute="AI_Entry"/>
         </AI_GuardAttack>

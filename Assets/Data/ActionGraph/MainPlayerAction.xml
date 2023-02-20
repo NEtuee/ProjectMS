@@ -207,6 +207,16 @@
         <Branch Key="(getKey_Guard == false) && (getKey_AttackCharge == false)" Execute="Idle"/>
     </Guard>
 
+    <Hit MovementType="FrameEvent" DirectionType="MousePoint" DefenceDirectionType="MousePoint" FlipType="Keep" DefenceType="Guard" DefenceAngle="180.0">
+        <Animation Path="Resources/Sprites/NewPlayer/Hit/" FramePerSecond="1" XFlip="true">
+            <FrameEvent Type="Movement" StartFrame="0" Friction="gv_IdleFriction" Speed="0"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="Idle"/>
+        <Branch Key="(getKey_Guard == false) && ((getKey_AttackCharge == true) || (getKey_NormalMove == true))" Condition="End" Execute="MoveAll"/>
+        <Branch Key="(getKey_Guard == false) && (getKey_AttackCharge == false)" Condition="End" Execute="Idle"/>
+    </Hit>
+
     <Kiiled DirectionType="Keep" FlipType="Direction">
         <Animation Path="Resources/Sprites/DummyPlayer/Hit/" StartFrame="0" EndFrame="1" FramePerSecond="99" XFlip="true">
             <FrameEvent Type="KillEntity" StartFrame="0"/>

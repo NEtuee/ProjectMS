@@ -2,6 +2,9 @@
 <AIPackage Name="PlayerTargetSearchPackage" DefaultState="Entry">
     <AIState>
         <Entry UpdateTime="1.0" TargetSearchType="NearMousePointDirection" TargetSearchRange="2.0" TargetSearchStartRange="0.5" TargetSearchSphereRadius="0.3" SearchIdentifier="Enemy">
+            <Event_OnAttacked>
+                <AIEvent Type="SetAction" Action="Hit"/>
+            </Event_OnAttacked>
         </Entry>
 
     </AIState>

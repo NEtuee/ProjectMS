@@ -87,7 +87,7 @@
         <Branch Condition="End == true" Execute="AC_GuardAttack"/>
     </AC_GuardAttack>
 
-    <AC_GuardAttackCharge MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+    <AC_GuardAttackCharge MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" DefenceType="Guard" DefenceAngle="270.0" DefenceDirectionType="Direction">
         <Animation Path="Resources/Sprites/SampleBoss/Charge/" FramePerSecond="3" XFlip="true">
             <FrameEvent Type="Movement" StartFrame="0" Friction="12" Speed="0"/>
         </Animation>
@@ -95,7 +95,7 @@
         <Branch Condition="End == true" Execute="AC_GuardAttackCharge"/>
     </AC_GuardAttackCharge>
 
-    <AC_GuardAttackSuccess MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+    <AC_GuardAttackSuccess MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" DefenceType="Guard" DefenceAngle="270.0" DefenceDirectionType="Direction">
         <Animation Path="Resources/Sprites/SampleBoss/Charge/" FramePerSecond="3" XFlip="true">
             <FrameEvent Type="Movement" StartFrame="0" Friction="12" Speed="0" Velocity="-3.0"/>
         </Animation>
