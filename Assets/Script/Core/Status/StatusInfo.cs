@@ -276,8 +276,6 @@ public class StatusInfo
                 continue;
             }
 
-            DebugUtil.log(item._statusName + ", " + item._regenFactor );
-
             _statusInfoData._statusData[item._statusIndex].variStat(ref item._realValue, item._additionalValue, item._regenFactor * deltaTime);
             item._value = item._realValue;
 

@@ -3,12 +3,12 @@
 
     <GlobalVariable Name="gv_TargetSearchRange" Value="10.0"/>
     
-    <GlobalVariable Name="gv_guardOnDistance" Value="2.0"/>
-    <GlobalVariable Name="gv_guardOffDistance" Value="3.0"/>
+    <GlobalVariable Name="gv_guardOnDistance" Value="2.5"/>
+    <GlobalVariable Name="gv_guardOffDistance" Value="4.0"/>
     <GlobalVariable Name="gv_guardAttackDistance" Value="1.0"/>
 
-    <GlobalVariable Name="gv_standTime" Value="1.0"/>
-    <GlobalVariable Name="gv_movingTime" Value="1.0"/>
+    <GlobalVariable Name="gv_standTime" Value="0.5"/>
+    <GlobalVariable Name="gv_movingTime" Value="0.5"/>
 
     <AIState>
         <AI_Entry UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="gv_TargetSearchRange" SearchIdentifier="Player">
@@ -35,7 +35,7 @@
 
             <Branch Condition="Hit" Execute="AI_Hit"/>
             
-            <Branch Condition="TargetDistance <= gv_guardAttackDistance" Execute="AI_GuardAttackCharge"/>
+            <Branch Condition="(TargetDistance <= gv_guardAttackDistance) && (getStat_AttackDelay >= 1.0)" Execute="AI_GuardAttackCharge"/>
             <Branch Condition="(TargetDistance <= gv_guardOnDistance)" Execute="AI_GuardForward"/>
 
             <Branch Condition="PackageExecutedTime >= gv_movingTime" Execute="AI_Entry"/>
@@ -59,7 +59,7 @@
             <Branch Condition="GuardBroken" Execute="AI_GuardBreakAttackSuccess"/>
 
             <Branch Condition="TargetDistance >= gv_guardOffDistance" Execute="AI_Entry"/>
-            <Branch Condition="TargetDistance <= gv_guardAttackDistance" Execute="AI_GuardAttackCharge"/>
+            <Branch Condition="(TargetDistance <= gv_guardAttackDistance) && (getStat_AttackDelay >= 1.0)" Execute="AI_GuardAttackCharge"/>
         </AI_GuardForward>
 
         <AI_GuardBack UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="gv_TargetSearchRange" SearchIdentifier="Player">
@@ -80,7 +80,7 @@
             <Branch Condition="GuardBroken" Execute="AI_GuardBreakAttackSuccess"/>
 
             <Branch Condition="TargetDistance >= gv_guardOffDistance" Execute="AI_Entry"/>
-            <Branch Condition="TargetDistance <= gv_guardAttackDistance" Execute="AI_GuardAttackCharge"/>
+            <Branch Condition="(TargetDistance <= gv_guardAttackDistance) && (getStat_AttackDelay >= 1.0)" Execute="AI_GuardAttackCharge"/>
         </AI_GuardBack>
 
         <AI_GuardSuccess UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="gv_TargetSearchRange" SearchIdentifier="Player">
@@ -161,6 +161,9 @@
             </Event_OnExecute>
 
             <Branch Condition="TargetExists == false" Execute="AI_Entry"/>
+
+            <Branch Condition="DefenceSuccess" Execute="AI_GuardSuccess"/>
+            <Branch Condition="GuardBroken" Execute="AI_GuardBreakAttackSuccess"/>
         
             <Branch Condition="Hit" Execute="AI_Hit"/>
             <Branch Condition="End" Execute="AI_Entry"/>

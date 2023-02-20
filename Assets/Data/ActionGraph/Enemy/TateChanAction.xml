@@ -1,5 +1,5 @@
 
-<ActionGraph Name="TateChan" DefaultAction="AC_Idle" DefaultFramePerSecond="12" DefaultBuff="23">
+<ActionGraph Name="TateChan" DefaultAction="AC_Idle" DefaultFramePerSecond="12" DefaultBuff="23 25">
 
     <AC_Idle DirectionType="Keep" FlipType="Direction">
         <Animation Path="Resources/Sprites/SampleBoss/Idle/" XFlip="true">
@@ -57,8 +57,8 @@
         <Branch Condition="End == true" Execute="AC_GuardBreakSuccess"/>
     </AC_GuardBreakSuccess>
 
-    <AC_GuardAttack MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" DefenceType="Guard" DefenceAngle="270.0" DefenceDirectionType="Direction">
-        <Animation Path="Resources/Sprites/SampleBoss/Attack/" FramePerSecond="1" XFlip="true">
+    <AC_GuardAttack MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" DefenceType="Guard" DefenceAngle="270.0" DefenceDirectionType="Direction" ApplyBuff="24">
+        <Animation Path="Resources/Sprites/SampleBoss/Attack/" FramePerSecond="1.5" XFlip="true">
             <FrameEvent Type="Attack" StartFrame="0" EndFrame="1" AttackPreset="TateChanGuardAttack">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
@@ -103,7 +103,7 @@
         <Branch Condition="End == true" Execute="AC_GuardAttackSuccess"/>
     </AC_GuardAttackSuccess>
 
-    <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
+    <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction" DefenceType="Guard" DefenceAngle="360.0" DefenceDirectionType="Direction" ApplyBuff="22">
         <Animation Path="Resources/Sprites/SampleBoss/Hit/" FramePerSecond="1" XFlip="true">
             <FrameEvent Type="Movement" StartFrame="0" Friction="0" Speed="0" Velocity="0"/>
         </Animation>
