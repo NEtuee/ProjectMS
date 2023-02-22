@@ -2,7 +2,7 @@ HintType,Symbol,TextList
 ShortCut,__AIEvent_ClearTarget,<AIEvent Type=~ClearTarget~/>
 ShortCut,__AIEvent_ExecuteState,<AIEvent Type=~ExecuteState~ Execute=~~/>
 ShortCut,__AIEvent_KillEntity,<AIEvent Type=~KillEntity~/>
-ShortCut,__AIEvent_SetAction,<AIEvent Type=~ExecuteState~ Action=~~/>
+ShortCut,__AIEvent_SetAction,<AIEvent Type=~SetAction~ Action=~~/>
 ShortCut,__AIEvent_SetAngleDirection,<AIEvent Type=~SetAngleDirection~ Angle=~~/>
 ShortCut,__AIEvent_SetDirectionToTarget,<AIEvent Type=~SetDirectionToTarget~/>
 ShortCut,__AIEvent_TerminatePackage,<AIEvent Type=~TerminatePackage~/>
@@ -47,7 +47,7 @@ LineStart,<Event_OnParried,Consume=~~
 LineStart,<Event_OnParry,Consume=~~
 LineStart,<Event_OnUpdate,Consume=~~
 InQuote,Consume=,"true,false"
-,,
+InQuote,Type=,"Test,SetAngleDirection,SetDirectionToTarget,SetAction,ClearTarget,ExecuteState,TerminatePackage,KillEntity"
 ,,
 ,,
 ,,
