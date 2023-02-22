@@ -3,13 +3,15 @@ using System.Xml;
 using System.IO;
 using System.Text;
 using UnityEngine;
-
+using ICSharpCode.WpfDesign.XamlDom;
 
 public class ProjectileGraphLoader : LoaderBase<ProjectileGraphBaseData[]>
 {
+    static string _currentFileName = "";
     public override ProjectileGraphBaseData[] readFromXML(string path)
     {
-        XmlDocument xmlDoc = new XmlDocument();
+        _currentFileName = path;
+        PositionXmlDocument xmlDoc = new PositionXmlDocument();
         try
         {
             XmlReaderSettings readerSettings = new XmlReaderSettings();
@@ -69,10 +71,10 @@ public class ProjectileGraphLoader : LoaderBase<ProjectileGraphBaseData[]>
 
             if(targetName == "Animation")
             {
-                AnimationPlayDataInfo playData = ActionGraphLoader.ReadActionAnimation(nodes[nodeIndex],defaultFramePerSecond);
+                AnimationPlayDataInfo playData = ActionGraphLoader.ReadActionAnimation(nodes[nodeIndex],defaultFramePerSecond,_currentFileName);
                 if(playData == null)
                 {
-                    DebugUtil.assert(false,"invalid animation : {0}",node.Name);
+                    DebugUtil.assert(false,"invalid animation : {0} [Line: {1}] [FileName: {2}]",node.Name, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
                     return null;
                 }
 
@@ -136,7 +138,7 @@ public class ProjectileGraphLoader : LoaderBase<ProjectileGraphBaseData[]>
                     string[] randomValue = randomData.Split('^');
                     if(randomValue == null || randomValue.Length != 2)
                     {
-                        DebugUtil.assert(false, "invalid random angle attrubute: {0}", targetValue);
+                        DebugUtil.assert(false, "invalid random angle attrubute: {0} [Line: {1}] [FileName: {2}]", targetValue, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
                         continue;
                     }
 
@@ -186,7 +188,7 @@ public class ProjectileGraphLoader : LoaderBase<ProjectileGraphBaseData[]>
             }
             else
             {
-                DebugUtil.assert(false,"invalid Attribute : {0}", targetName);
+                DebugUtil.assert(false,"invalid Attribute : {0} [Line: {1}] [FileName: {2}]", targetName, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
             }
 
         }

@@ -3,7 +3,7 @@ using System.Xml;
 using System.IO;
 using System.Text;
 using UnityEngine;
-
+using ICSharpCode.WpfDesign.XamlDom;
 
 public class AIGraphLoader : LoaderBase<AIGraphBaseData>
 {
@@ -16,10 +16,11 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
 
 
     private static string _currentFileName = "";
+    private static string _currentPackageFileName = "";
     public override AIGraphBaseData readFromXML(string path)
     {
         _currentFileName = path;
-        XmlDocument xmlDoc = new XmlDocument();
+        PositionXmlDocument xmlDoc = new PositionXmlDocument();
         try
         {
             XmlReaderSettings readerSettings = new XmlReaderSettings();
@@ -47,7 +48,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
         
         if(node.Name.Equals("AIGraph") == false)
         {
-            DebugUtil.assert(false,"wrong xml type. name : {0}",node.Name);
+            DebugUtil.assert(false,"wrong xml type. name : [FileName: {0}] [NodeName: {0}]",_currentFileName, node.Name);
             return null;
         }
         
@@ -75,7 +76,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
         {
             if(nodeList[i].Name == "BranchSet")
             {
-                ActionGraphLoader.readBranchSet(nodeList[i],ref branchSetDic);
+                ActionGraphLoader.readBranchSet(nodeList[i],ref branchSetDic,path);
                 continue;
             }
             else if(nodeList[i].Name == "GlobalVariable")
@@ -87,12 +88,12 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
             {
                 if(nodeList[i].Attributes.Count == 0)
                 {
-                    DebugUtil.assert(false,"path does not exists");
+                    DebugUtil.assert(false,"path does not exists [Line: {0}] [FileName: {1}]", XMLScriptConverter.getLineFromXMLNode(nodeList[i]), _currentFileName);
                     return null;
                 }
                 else if(nodeList[i].Attributes[0].Name != "Path")
                 {
-                    DebugUtil.assert(false,"first attribute must path");
+                    DebugUtil.assert(false,"first attribute must path [Line: {0}] [FileName: {1}]", XMLScriptConverter.getLineFromXMLNode(nodeList[i]), _currentFileName);
                     return null;
                 }
 
@@ -124,7 +125,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
             AIGraphNodeData nodeData = readAIGraphNode(nodeList[i], ref aiPackageIndexDic, ref actionCompareDic, ref branchDataList,ref compareDataList, in branchSetDic);
             if(nodeData == null)
             {
-                DebugUtil.assert(false,"node data is null : {0}",nodeList[i].Name);
+                DebugUtil.assert(false,"node data is null : [NodeName: {0}] [Line: {1}] [FileName: {2}]", nodeList[i].Name, XMLScriptConverter.getLineFromXMLNode(nodeList[i]), _currentFileName);
                 return null;
             }
 
@@ -136,7 +137,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
         {
             if(actionIndexDic.ContainsKey(item.Value) == false)
             {
-                DebugUtil.assert(false,"target action is not exists : {0}",item.Value);
+                DebugUtil.assert(false,"target action is not exists : [Action: {0}] [FileName: {1}]",item.Value, _currentFileName);
                 return null;
             }
             else if(item.Value == defaultAiNodeName)
@@ -151,7 +152,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
         {
             if(actionIndexDic.ContainsKey(defaultAiNodeName) == false)
             {
-                DebugUtil.assert(false, "invalid default state name: {0}",defaultAiNodeName);
+                DebugUtil.assert(false, "invalid default state name: [StateName: {0}] [FileName: {1}]",defaultAiNodeName, _currentFileName);
                 return null;
             }
 
@@ -193,7 +194,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
             {
                 if(aiPackageIndexDic.ContainsKey(targetValue) == false)
                 {
-                    DebugUtil.assert(false, "ai package does not exists: {0}",targetValue);
+                    DebugUtil.assert(false, "ai package does not exists: [Package: {0}] [Line: {1}] [FileName: {2}]",targetValue, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
                     return null;
                 }
 
@@ -201,7 +202,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
             }
             else
             {
-                DebugUtil.assert(false,"invalid attribute type !!! : {0}", targetName);
+                DebugUtil.assert(false,"invalid attribute type !!! : [Type: {0}] [Line: {1}] [FileName: {2}]", targetName, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
             }
         }
 
@@ -215,10 +216,10 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
             
             if(nodeList[i].Name == "Branch")
             {
-                ActionGraphBranchData branchData = ActionGraphLoader.ReadActionBranch(nodeList[i],ref actionCompareDic,ref compareDataList, ref _aiGraphGlobalVariables);
+                ActionGraphBranchData branchData = ActionGraphLoader.ReadActionBranch(nodeList[i],ref actionCompareDic,ref compareDataList, ref _aiGraphGlobalVariables, _currentFileName);
                 if(branchData == null)
                 {
-                    DebugUtil.assert(false,"invalid branch data");
+                    DebugUtil.assert(false,"invalid branch data [Line: {0}] [FileName: {1}]", XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
                     return null;
                 }
                     
@@ -238,7 +239,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
 
                 if(branchSetDic.ContainsKey(branchSetName) == false)
                 {
-                    DebugUtil.assert(false, "branch set not exists : {0}",branchSetName);
+                    DebugUtil.assert(false, "branch set not exists : [BranchSetName: {0}] [Line: {1}] [FileName: {2}]",branchSetName, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
                     return null;
                 }
 
@@ -247,14 +248,14 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
                 {
                     if(branchSetNodeList[branchSetNodeListIndex].Name != "Branch")
                     {
-                        DebugUtil.assert(false, "wrong branch type : {0}",branchSetNodeList[branchSetNodeListIndex].Name);
+                        DebugUtil.assert(false, "wrong branch type : [BranchType: {0}] [Line: {1}] [FileName: {2}]",branchSetNodeList[branchSetNodeListIndex].Name, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
                         return null;
                     }
 
-                    ActionGraphBranchData branchData = ActionGraphLoader.ReadActionBranch(branchSetNodeList[branchSetNodeListIndex],ref actionCompareDic,ref compareDataList, ref _aiGraphGlobalVariables);
+                    ActionGraphBranchData branchData = ActionGraphLoader.ReadActionBranch(branchSetNodeList[branchSetNodeListIndex],ref actionCompareDic,ref compareDataList, ref _aiGraphGlobalVariables,_currentFileName);
                     if(branchData == null)
                     {
-                        DebugUtil.assert(false,"invalid branch data");
+                        DebugUtil.assert(false,"invalid branch data [Line: {0}] [FileName: {1}]", XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
                         return null;
                     }
 
@@ -267,7 +268,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
             }
             else
             {
-                DebugUtil.assert(false, "invalid attribute: {0}",nodeList[i].Name);
+                DebugUtil.assert(false, "invalid attribute: [Name: {0}] [Line: {1}] [FileName: {2}]",nodeList[i].Name, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
             }
         }
         
@@ -297,7 +298,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
             }
             else
             {
-                DebugUtil.assert(false, "invalid attribute: {0}",targetName);
+                DebugUtil.assert(false, "invalid attribute: [Attribute: {0}] [Line: {1}] [FileName: {2}]",targetName, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
             }
 
         }
@@ -321,7 +322,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
 
         if(name == "" || value == "" || name.Contains("gv_") == false )
         {
-            DebugUtil.assert(false, "invalid globalVariable, name:[{0}] value:[{1}]",name,value);
+            DebugUtil.assert(false, "invalid globalVariable, name:[{0}] value:[{1}] [Line: {2}] [FileName: {3}]",name,value,XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
             return;
         }
 
@@ -341,7 +342,8 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
 
     private static AIPackageBaseData readAIPackageFromXML(string path)
     {
-        XmlDocument xmlDoc = new XmlDocument();
+        _currentPackageFileName = path;
+        PositionXmlDocument xmlDoc = new PositionXmlDocument();
         try
         {
             XmlReaderSettings readerSettings = new XmlReaderSettings();
@@ -393,7 +395,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
         {
             if(nodeList[i].Name == "BranchSet")
             {
-                ActionGraphLoader.readBranchSet(nodeList[i],ref branchSetDic);
+                ActionGraphLoader.readBranchSet(nodeList[i],ref branchSetDic,_currentPackageFileName);
                 continue;
             }
             else if(nodeList[i].Name == "GlobalVariable")
@@ -410,7 +412,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
 
                     if(nodeData == null)
                     {
-                        DebugUtil.assert(false,"node data is null : {0}",aiStateNodeList[index].Name);
+                        DebugUtil.assert(false,"node data is null : [Name: {0}] [Line: {1}] [FileName: {2}]",aiStateNodeList[index].Name,XMLScriptConverter.getLineFromXMLNode(node), _currentPackageFileName);
                         return null;
                     }
 
@@ -429,7 +431,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
             }
             else
             {
-                DebugUtil.assert(false, "invalid attribute: {0}",nodeList[i].Name);
+                DebugUtil.assert(false, "invalid attribute: [Attribute: {0}] [Line: {1}] [FileName: {2}]",nodeList[i].Name,XMLScriptConverter.getLineFromXMLNode(node), _currentPackageFileName);
                 return null;
             }
             
@@ -439,7 +441,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
         {
             if(aiIndexDic.ContainsKey(item.Value) == false)
             {
-                DebugUtil.assert(false,"target state is not exists : {0}",item.Value);
+                DebugUtil.assert(false,"target state is not exists : {0} [FileName: {1}]",item.Value, _currentPackageFileName);
                 return null;
             }
             else if(item.Value == defaultAIName)
@@ -454,7 +456,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
         {
             if(aiIndexDic.ContainsKey(item.Key) == false)
             {
-                DebugUtil.assert(false,"aiExecuteEvent target is not exists : {0}",item.Key);
+                DebugUtil.assert(false,"aiExecuteEvent target is not exists : {0} [FileName: {1}]",item.Key, _currentPackageFileName);
                 return null;
             }
 
@@ -469,7 +471,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
         {
             if(aiIndexDic.ContainsKey(defaultAIName) == false)
             {
-                DebugUtil.assert(false, "invalid default state name: {0}",defaultAIName);
+                DebugUtil.assert(false, "invalid default state name: {0} [FileName: {1}]",defaultAIName, _currentPackageFileName);
                 return null;
             }
 
@@ -557,8 +559,6 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
 
                 string[] xy = targetValue.Split(' ');
                 nodeData._targetPosition = new Vector3(float.Parse(xy[0]), float.Parse(xy[1]),0f);
-
-                Debug.Log(nodeData._targetPosition);
             }
             else if(targetName == "ArriveThreshold")
             {
@@ -566,7 +566,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
             }
             else
             {
-                DebugUtil.assert(false,"invalid attribute type !!! : {0}", targetName);
+                DebugUtil.assert(false,"invalid attribute type !!! : [Attribute: {0}] [Line: {1}] [FileName: {2}]", targetName, XMLScriptConverter.getLineFromXMLNode(node), _currentPackageFileName);
             }
         }
 
@@ -577,10 +577,10 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
         {
             if(nodeList[i].Name == "Branch")
             {
-                ActionGraphBranchData branchData = ActionGraphLoader.ReadActionBranch(nodeList[i],ref actionCompareDic,ref compareDataList, ref _aiPackageGlobalVariables);
+                ActionGraphBranchData branchData = ActionGraphLoader.ReadActionBranch(nodeList[i],ref actionCompareDic,ref compareDataList, ref _aiPackageGlobalVariables,_currentPackageFileName);
                 if(branchData == null)
                 {
-                    DebugUtil.assert(false,"invalid branch data");
+                    DebugUtil.assert(false,"invalid branch data [Line: {0}] [FileName: {1}]", XMLScriptConverter.getLineFromXMLNode(node), _currentPackageFileName);
                     return null;
                 }
                     
@@ -600,7 +600,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
 
                 if(branchSetDic.ContainsKey(branchSetName) == false)
                 {
-                    DebugUtil.assert(false, "branch set not exists : {0}",branchSetName);
+                    DebugUtil.assert(false, "branch set not exists : [BranchSetName: {0}] [Line: {1}] [FileName: {2}]",branchSetName, XMLScriptConverter.getLineFromXMLNode(node), _currentPackageFileName);
                     return null;
                 }
 
@@ -609,14 +609,14 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
                 {
                     if(branchSetNodeList[branchSetNodeListIndex].Name != "Branch")
                     {
-                        DebugUtil.assert(false, "wrong branch type : {0}",branchSetNodeList[branchSetNodeListIndex].Name);
+                        DebugUtil.assert(false, "wrong branch type : [Type: {0}] [Line: {1}] [FileName: {2}]",branchSetNodeList[branchSetNodeListIndex].Name, XMLScriptConverter.getLineFromXMLNode(node), _currentPackageFileName);
                         return null;
                     }
 
-                    ActionGraphBranchData branchData = ActionGraphLoader.ReadActionBranch(branchSetNodeList[branchSetNodeListIndex],ref actionCompareDic,ref compareDataList, ref _aiPackageGlobalVariables);
+                    ActionGraphBranchData branchData = ActionGraphLoader.ReadActionBranch(branchSetNodeList[branchSetNodeListIndex],ref actionCompareDic,ref compareDataList, ref _aiPackageGlobalVariables,_currentPackageFileName);
                     if(branchData == null)
                     {
-                        DebugUtil.assert(false,"invalid branch data");
+                        DebugUtil.assert(false,"invalid branch data [Line: {0}] [FileName: {1}]", XMLScriptConverter.getLineFromXMLNode(node), _currentPackageFileName);
                         return null;
                     }
 
@@ -658,7 +658,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
 
         if(childEventDic.ContainsKey(currentEventType))
         {
-            DebugUtil.assert(false,"eventtype overlap: {0}",currentEventType.ToString());
+            DebugUtil.assert(false,"eventtype overlap: {0} [Line: {1}] [FileName: {2}]",currentEventType.ToString(), XMLScriptConverter.getLineFromXMLNode(node), _currentPackageFileName);
             return;
         }
 
@@ -732,7 +732,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
 
         if(childEventDic.ContainsKey(currentEventType))
         {
-            DebugUtil.assert(false,"eventtype overlap: {0}, {1}",currentEventType.ToString(), eventType);
+            DebugUtil.assert(false,"eventtype overlap: {0}, {1} [Line: {2}] [FileName: {3}]",currentEventType.ToString(), eventType, XMLScriptConverter.getLineFromXMLNode(node), _currentPackageFileName);
             return;
         }
 
@@ -767,7 +767,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
     {
         if(node.Name != "AIEvent")
         {
-            DebugUtil.assert(false,"target node is not aiEvent: {0}",node.Name);
+            DebugUtil.assert(false,"target node is not aiEvent: {0} [Line: {1}] [FileName: {2}]",node.Name, XMLScriptConverter.getLineFromXMLNode(node), _currentPackageFileName);
             return null;
         }
 
@@ -814,7 +814,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
                 }
                 else
                 {
-                    DebugUtil.assert(false,"invalid ai event type: {0}",attrValue);
+                    DebugUtil.assert(false,"invalid ai event type: [{0}] [Line: {1}] [FileName: {2}]",attrValue, XMLScriptConverter.getLineFromXMLNode(node), _currentPackageFileName);
                     return null;
                 }
             }
@@ -851,7 +851,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
 
             if(find == false)
             {
-                DebugUtil.assert(false, "Execute State not found : [{0}]",targetAction);
+                DebugUtil.assert(false, "Execute State not found : [{0}] [Line: {1}] [FileName: {2}]",targetAction, XMLScriptConverter.getLineFromXMLNode(node), _currentPackageFileName);
                 return null;
             }
         }

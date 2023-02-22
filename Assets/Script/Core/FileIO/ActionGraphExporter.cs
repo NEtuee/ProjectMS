@@ -3,21 +3,25 @@ using System.Xml;
 using System.IO;
 using System.Text;
 using UnityEngine;
-
+using ICSharpCode.WpfDesign.XamlDom;
 
 public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
 {
     private static Dictionary<string, string> _globalVariables = new Dictionary<string, string>();
+
+    private static string _currentFileName = "";
+    PositionXmlDocument _xmlDoc = null;
     public override ActionGraphBaseData readFromXML(string path)
     {
-        XmlDocument xmlDoc = new XmlDocument();
+        _currentFileName = path;
+        _xmlDoc = new PositionXmlDocument();
         try
         {
             XmlReaderSettings readerSettings = new XmlReaderSettings();
             readerSettings.IgnoreComments = true;
             using (XmlReader reader = XmlReader.Create(XMLScriptConverter.convertXMLScriptSymbol(path),readerSettings))
             {
-                xmlDoc.Load(reader);
+                _xmlDoc.Load(reader);
             }
         }
         catch(System.Exception ex)
@@ -26,7 +30,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             return null;
         }
         
-        if(xmlDoc.HasChildNodes == false)
+        if(_xmlDoc.HasChildNodes == false)
         {
             DebugUtil.assert(false,"xml is empty");
             return null;
@@ -34,11 +38,11 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
 
         Dictionary<string, XmlNodeList> branchSetDic = new Dictionary<string, XmlNodeList>();
 
-        XmlNode node = xmlDoc.FirstChild;
+        XmlNode node = _xmlDoc.FirstChild;
         
         if(node.Name.Equals("ActionGraph") == false)
         {
-            DebugUtil.assert(false,"wrong xml type. name : {0}",node.Name);
+            DebugUtil.assert(false,"wrong xml type. name : {0} [FileName {1}]",node.Name, _currentFileName);
             return null;
         }
         
@@ -46,7 +50,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         string defaultActionName = "";
 
         ActionGraphBaseData actionBaseData = new ActionGraphBaseData();
-        ReadTitle(node,actionBaseData,out defaultFramePerSecond, out defaultActionName);
+        ReadTitle(node,actionBaseData,out defaultFramePerSecond, out defaultActionName, path);
 
         List<ActionGraphNodeData> nodeDataList = new List<ActionGraphNodeData>();
         List<ActionGraphBranchData> branchDataList = new List<ActionGraphBranchData>();
@@ -63,19 +67,19 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         {
             if(nodeList[i].Name == "BranchSet")
             {
-                readBranchSet(nodeList[i],ref branchSetDic);
+                readBranchSet(nodeList[i],ref branchSetDic, path);
                 continue;
             }
             else if(nodeList[i].Name == "GlobalVariable")
             {
-                readGlobalVariable(nodeList[i], ref _globalVariables);
+                readGlobalVariable(nodeList[i], ref _globalVariables, path);
                 continue;
             }
             
-            ActionGraphNodeData nodeData = ReadAction(nodeList[i],defaultFramePerSecond, ref animationDataList, ref actionCompareDic, ref branchDataList,ref compareDataList, in branchSetDic);
+            ActionGraphNodeData nodeData = ReadAction(nodeList[i],defaultFramePerSecond, ref animationDataList, ref actionCompareDic, ref branchDataList,ref compareDataList, in branchSetDic, path);
             if(nodeData == null)
             {
-                DebugUtil.assert(false,"node data is null : {0}",nodeList[i].Name);
+                DebugUtil.assert(false,"node data is null : [NodeName: {0}] [Line: {1}] [FileName: {2}]",nodeList[i].Name, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
                 return null;
             }
 
@@ -87,7 +91,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         {
             if(actionIndexDic.ContainsKey(item.Value) == false)
             {
-                DebugUtil.assert(false,"target action is not exists : {0}",item.Value);
+                DebugUtil.assert(false,"target action is not exists : {0} [FileName: {1}]",item.Value, _currentFileName);
                 return null;
             }
             else if(item.Value == defaultActionName)
@@ -102,7 +106,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         {
             if(actionIndexDic.ContainsKey(defaultActionName) == false)
             {
-                DebugUtil.assert(false, "invalid default action name: {0}",defaultActionName);
+                DebugUtil.assert(false, "invalid default action name: {0} [FileName: {1}]",defaultActionName, _currentFileName);
                 return null;
             }
 
@@ -124,7 +128,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         return actionBaseData;
     }
 
-    private static void readGlobalVariable(XmlNode node, ref Dictionary<string, string> targetDic)
+    private static void readGlobalVariable(XmlNode node, ref Dictionary<string, string> targetDic, string filePath)
     {
         string name = "";
         string value = "";
@@ -138,7 +142,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
 
         if(name == "" || value == "" || name.Contains("gv_") == false )
         {
-            DebugUtil.assert(false, "invalid globalVariable, name:[{0}] value:[{1}]",name,value);
+            DebugUtil.assert(false, "invalid globalVariable, [name: {0}] [value: {1}] [Line: {2}] [FileName: {3}]",name,value, XMLScriptConverter.getLineFromXMLNode(node), filePath);
             return;
         }
 
@@ -162,7 +166,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         return value;
     }
 
-    public static void readBranchSet(XmlNode branchSetParent, ref Dictionary<string, XmlNodeList> targetDic)
+    public static void readBranchSet(XmlNode branchSetParent, ref Dictionary<string, XmlNodeList> targetDic, string filePath)
     {
         string branchSetName = "";
         XmlAttributeCollection branchSetAttr = branchSetParent.Attributes;
@@ -185,14 +189,14 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
 
         if(branchSetParent.ChildNodes.Count == 0)
         {
-            DebugUtil.assert(false, "branchSet is empty : {0}",branchSetName);
+            DebugUtil.assert(false, "branchSet is empty : [Name: {0}] [Line: {1}] [FileName: {2}]",branchSetName, XMLScriptConverter.getLineFromXMLNode(branchSetParent), filePath);
             return;
         }
 
         targetDic.Add(branchSetName,branchSetParent.ChildNodes);
     }
 
-    private static ActionGraphNodeData ReadAction(XmlNode node, float defaultFPS, ref List<AnimationPlayDataInfo> animationDataList,  ref Dictionary<ActionGraphBranchData, string> actionCompareDic,ref List<ActionGraphBranchData> branchDataList, ref List<ActionGraphConditionCompareData> compareDataList, in Dictionary<string, XmlNodeList> branchSetDic)
+    private static ActionGraphNodeData ReadAction(XmlNode node, float defaultFPS, ref List<AnimationPlayDataInfo> animationDataList,  ref Dictionary<ActionGraphBranchData, string> actionCompareDic,ref List<ActionGraphBranchData> branchDataList, ref List<ActionGraphConditionCompareData> compareDataList, in Dictionary<string, XmlNodeList> branchSetDic, string filePath)
     {
         ActionGraphNodeData nodeData = new ActionGraphNodeData();
         nodeData._nodeName = node.Name;
@@ -264,7 +268,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
 
                     if(buffKey == -1)
                     {
-                        DebugUtil.assert(false, "invalidBuff : {0}", buffList[i]);
+                        DebugUtil.assert(false, "invalidBuff : {0} [Line: {1}] [FileName: {2}]", buffList[i], XMLScriptConverter.getLineFromXMLNode(node), filePath);
                         continue;
                     }
 
@@ -301,7 +305,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             }
             else
             {
-                DebugUtil.assert(false,"invalid attribute type !!! : {0}", targetName);
+                DebugUtil.assert(false,"invalid attribute type !!! : {0} [Line: {1}] [FileName: {2}]", targetName, XMLScriptConverter.getLineFromXMLNode(node), filePath);
             }
         }
 
@@ -312,17 +316,17 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         {
             if(nodeList[i].Name == "Animation")
             {
-                AnimationPlayDataInfo animationData = ReadActionAnimation(nodeList[i],defaultFPS);
+                AnimationPlayDataInfo animationData = ReadActionAnimation(nodeList[i],defaultFPS, filePath);
                 nodeData._animationInfoIndex = animationDataList.Count;
                 animationData._hasMovementGraph = nodeData._movementType == MovementBase.MovementType.RootMotion;
                 animationDataList.Add(animationData);
             }
             else if(nodeList[i].Name == "Branch")
             {
-                ActionGraphBranchData branchData = ReadActionBranch(nodeList[i],ref actionCompareDic,ref compareDataList, ref _globalVariables);
+                ActionGraphBranchData branchData = ReadActionBranch(nodeList[i],ref actionCompareDic,ref compareDataList, ref _globalVariables, filePath);
                 if(branchData == null)
                 {
-                    DebugUtil.assert(false,"invalid branch data");
+                    DebugUtil.assert(false,"invalid branch data [Line: {0}] [FileName: {1}]", XMLScriptConverter.getLineFromXMLNode(node), filePath);
                     return null;
                 }
                     
@@ -343,7 +347,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
 
                 if(branchSetDic.ContainsKey(branchSetName) == false)
                 {
-                    DebugUtil.assert(false, "branch set not exists : {0}",branchSetName);
+                    DebugUtil.assert(false, "branch set not exists : {0} [Line: {1}] [FileName: {2}]",branchSetName, XMLScriptConverter.getLineFromXMLNode(node), filePath);
                     return null;
                 }
 
@@ -352,14 +356,14 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
                 {
                     if(branchSetNodeList[branchSetNodeListIndex].Name != "Branch")
                     {
-                        DebugUtil.assert(false, "wrong branch type : {0}",branchSetNodeList[branchSetNodeListIndex].Name);
+                        DebugUtil.assert(false, "wrong branch type : {0} [Line: {1}] [FileName: {2}]",branchSetNodeList[branchSetNodeListIndex].Name, XMLScriptConverter.getLineFromXMLNode(node), filePath);
                         return null;
                     }
 
-                    ActionGraphBranchData branchData = ReadActionBranch(branchSetNodeList[branchSetNodeListIndex],ref actionCompareDic,ref compareDataList, ref _globalVariables);
+                    ActionGraphBranchData branchData = ReadActionBranch(branchSetNodeList[branchSetNodeListIndex],ref actionCompareDic,ref compareDataList, ref _globalVariables, filePath);
                     if(branchData == null)
                     {
-                        DebugUtil.assert(false,"invalid branch data");
+                        DebugUtil.assert(false,"invalid branch data [Line: {0}] [FileName: {1}]", XMLScriptConverter.getLineFromXMLNode(node), filePath);
                         return null;
                     }
 
@@ -370,7 +374,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
 
         if(branchStartIndex == branchDataList.Count)
         {
-            DebugUtil.assert(false,"branch data not exists");
+            DebugUtil.assert(false,"branch data not exists [Line: {0}] [FileName: {1}]", XMLScriptConverter.getLineFromXMLNode(node), filePath);
             return null;
         }
 
@@ -380,7 +384,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         return nodeData;
     }
 
-    public static AnimationPlayDataInfo ReadActionAnimation(XmlNode node, float defaultFPS)
+    public static AnimationPlayDataInfo ReadActionAnimation(XmlNode node, float defaultFPS, string filePath)
     {
         AnimationPlayDataInfo playData = new AnimationPlayDataInfo();
         playData._framePerSec = defaultFPS;
@@ -439,14 +443,14 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             }
             else
             {
-                DebugUtil.assert(false, "invalid animation attribute: {0}",targetName);
+                DebugUtil.assert(false, "invalid animation attribute: {0} [Line: {1}] [FileName: {2}]",targetName, XMLScriptConverter.getLineFromXMLNode(node), filePath);
                 return null;
             }
         }
 
         if(playData._startFrame > playData._endFrame)
         {
-            DebugUtil.assert(false, "start frame cannot be greater than the end frame: {0}",playData._path);
+            DebugUtil.assert(false, "start frame cannot be greater than the end frame: [Path: {0}] [Line: {1}] [FileName: {2}]",playData._path, XMLScriptConverter.getLineFromXMLNode(node), filePath);
             return null;
         }
 
@@ -467,7 +471,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
                 }
                 else if(nodeList[i].Name == "MultiSelectAnimation")
                 {
-                    MultiSelectAnimationData animationData = readMultiSelectAnimationData(nodeList[i]);
+                    MultiSelectAnimationData animationData = readMultiSelectAnimationData(nodeList[i], filePath);
                     if(animationData == null)
                         continue;
                     
@@ -475,7 +479,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
                 }
                 else
                 {
-                    DebugUtil.assert(false,"invalid animation child: {0}",nodeList[i].Name);
+                    DebugUtil.assert(false,"invalid animation child: {0} [Line: {1}] [FileName: {2}]",nodeList[i].Name, XMLScriptConverter.getLineFromXMLNode(node), filePath);
                     return null;
                 }
             }
@@ -493,7 +497,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         return playData;
     }
 
-    private static MultiSelectAnimationData readMultiSelectAnimationData(XmlNode node)
+    private static MultiSelectAnimationData readMultiSelectAnimationData(XmlNode node, string filePath)
     {
         MultiSelectAnimationData animationData = new MultiSelectAnimationData();
 
@@ -509,7 +513,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             }
             else if(targetName == "Condition")
             {
-                ActionGraphConditionCompareData compareData = ReadConditionCompareData(targetValue, _globalVariables);
+                ActionGraphConditionCompareData compareData = ReadConditionCompareData(targetValue, _globalVariables, node, filePath);
                 if(compareData == null)
                     return null;
 
@@ -517,26 +521,26 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             }
             else
             {
-                DebugUtil.assert(false,"invalid multiSelect Animation Data: {0}", targetName);
+                DebugUtil.assert(false,"invalid multiSelect Animation Data: {0} [Line: {1}] [FileName: {2}]", targetName, XMLScriptConverter.getLineFromXMLNode(node), filePath);
                 return null;
             }
         }
 
         if(animationData._path == "")
         {
-            DebugUtil.assert(false,"animation path not exists");
+            DebugUtil.assert(false,"animation path not exists [Line: {0}] [FileName: {1}]", XMLScriptConverter.getLineFromXMLNode(node), filePath);
             return null;
         }
         else if(animationData._actionConditionData == null)
         {
-            DebugUtil.assert(false,"multi select animation must have condition data");
+            DebugUtil.assert(false,"multi select animation must have condition data [Line: {0}] [FileName: {1}]", XMLScriptConverter.getLineFromXMLNode(node), filePath);
             return null;
         }
 
         return animationData;
     }
 
-    public static ActionGraphBranchData ReadActionBranch(XmlNode node, ref Dictionary<ActionGraphBranchData, string> actionCompareDic,  ref List<ActionGraphConditionCompareData> compareDataList, ref Dictionary<string, string> globalVariableContainer)
+    public static ActionGraphBranchData ReadActionBranch(XmlNode node, ref Dictionary<ActionGraphBranchData, string> actionCompareDic,  ref List<ActionGraphConditionCompareData> compareDataList, ref Dictionary<string, string> globalVariableContainer, string filePath)
     {
         ActionGraphBranchData branchData = new ActionGraphBranchData();
         XmlAttributeCollection actionAttributes = node.Attributes;
@@ -550,7 +554,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
                 if(targetValue == "")
                     continue;
 
-                ActionGraphConditionCompareData conditionData = ReadConditionCompareData(targetValue, globalVariableContainer);
+                ActionGraphConditionCompareData conditionData = ReadConditionCompareData(targetValue, globalVariableContainer, node, filePath);
                 if(conditionData == null)
                     return null;
 
@@ -562,7 +566,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
                 if(targetValue == "")
                     continue;
                     
-                ActionGraphConditionCompareData keyConditionData = ReadConditionCompareData(targetValue, globalVariableContainer);
+                ActionGraphConditionCompareData keyConditionData = ReadConditionCompareData(targetValue, globalVariableContainer, node, filePath);
                 if(keyConditionData == null)
                     return null;
 
@@ -575,7 +579,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
                     continue;
                 
                 targetValue = "getWeight_" + targetValue;
-                ActionGraphConditionCompareData keyConditionData = ReadConditionCompareData(targetValue, globalVariableContainer);
+                ActionGraphConditionCompareData keyConditionData = ReadConditionCompareData(targetValue, globalVariableContainer, node, filePath);
                 if(keyConditionData == null)
                     return null;
 
@@ -588,7 +592,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             }
             else
             {
-                DebugUtil.assert(false, "invalid branch attribute: {0}",targetName);
+                DebugUtil.assert(false, "invalid branch attribute: {0} [Line: {1}] [FileName: {2}]",targetName, XMLScriptConverter.getLineFromXMLNode(node), filePath);
                 return null;
             }
         }
@@ -597,7 +601,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         return branchData;
     }
 
-    public static ActionGraphConditionCompareData ReadConditionCompareData(string formula, Dictionary<string, string> globalVariableContainer)
+    public static ActionGraphConditionCompareData ReadConditionCompareData(string formula, Dictionary<string, string> globalVariableContainer, XmlNode node, string filePath)
     {
         formula = formula.Replace(" ","");
         List<ActionGraphConditionNodeData> symbolList = new List<ActionGraphConditionNodeData>();
@@ -606,7 +610,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         //int end;
         //int resultIndex = 0;
         //DebugUtil.assert(ReadConditionFormula(formula,0, ref resultIndex, out end,symbolList,compareTypeList) == true,"Tlqkfsusdk");
-        DebugUtil.assert(readConditionFormula(formula,ref symbolList,ref compareTypeList, globalVariableContainer) == true,"Tlqkfsusdk");
+        DebugUtil.assert(readConditionFormula(formula,ref symbolList,ref compareTypeList, globalVariableContainer, node, filePath) == true,"[Line: {0}] [FileName: {1}]", XMLScriptConverter.getLineFromXMLNode(node), filePath);
 
         ActionGraphConditionCompareData compareData = new ActionGraphConditionCompareData();
         compareData._compareTypeArray = compareTypeList.ToArray();
@@ -617,23 +621,23 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         return compareData;
     }
 
-    private static bool readConditionFormula(string formula, ref List<ActionGraphConditionNodeData> symbolList, ref List<ConditionCompareType> compareTypeList, Dictionary<string, string> globalVariableContainer)
+    private static bool readConditionFormula(string formula, ref List<ActionGraphConditionNodeData> symbolList, ref List<ConditionCompareType> compareTypeList, Dictionary<string, string> globalVariableContainer, XmlNode node, string filePath)
     {
         string calcFormula = formula;
         calcFormula = calcFormula.Insert(0,"(");
         calcFormula += ")";
 
         int result = 0;
-        int finalIndex = readFormulaBracket(ref calcFormula,ref result,0,ref symbolList,ref compareTypeList, globalVariableContainer);
+        int finalIndex = readFormulaBracket(ref calcFormula,ref result,0,ref symbolList,ref compareTypeList, globalVariableContainer, node, filePath);
 
         return finalIndex != -1;
     }
 
-    private static int readFormulaBracket(ref string formula, ref int resultIndex, int startOffset, ref List<ActionGraphConditionNodeData> symbolList, ref List<ConditionCompareType> compareTypeList, Dictionary<string, string> globalVariableContainer )
+    private static int readFormulaBracket(ref string formula, ref int resultIndex, int startOffset, ref List<ActionGraphConditionNodeData> symbolList, ref List<ConditionCompareType> compareTypeList, Dictionary<string, string> globalVariableContainer, XmlNode node, string filePath )
     {
         if(formula.Length <= startOffset || formula[startOffset] == ')')
         {
-            DebugUtil.assert(false, "condition formular is invalid {0}", formula);
+            DebugUtil.assert(false, "condition formular is invalid {0} [Line: {1}] [FileName: {2}]", formula, XMLScriptConverter.getLineFromXMLNode(node), filePath);
             return -1;
         }
 
@@ -643,7 +647,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         {
             if(formula[i] == '(')
             {
-                int length = readFormulaBracket(ref formula, ref resultIndex, i, ref symbolList, ref compareTypeList, globalVariableContainer);
+                int length = readFormulaBracket(ref formula, ref resultIndex, i, ref symbolList, ref compareTypeList, globalVariableContainer, node, filePath);
                 if(length == -1)
                     return -1;
 
@@ -660,18 +664,18 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
 
         if(endOffset == -1)
         {
-            DebugUtil.assert(false, "condition formular is invalid {0}", formula);
+            DebugUtil.assert(false, "condition formular is invalid {0} [Line: {1}] [FileName: {2}]", formula, XMLScriptConverter.getLineFromXMLNode(node), filePath);
             return -1;
         }
 
         int finalLength = endOffset - startOffset;
         string calcFormula = formula.Substring(startOffset + 1,finalLength - 1);
 
-        SplitToMark(calcFormula, ref resultIndex, in symbolList, in compareTypeList, globalVariableContainer);
+        SplitToMark(calcFormula, ref resultIndex, in symbolList, in compareTypeList, globalVariableContainer, node, filePath);
         return finalLength;
     }
 
-    private static void SplitToMark(string formula, ref int resultIndex, in List<ActionGraphConditionNodeData> symbolList, in List<ConditionCompareType> compareTypeList, Dictionary<string, string> globalVariableContainer)
+    private static void SplitToMark(string formula, ref int resultIndex, in List<ActionGraphConditionNodeData> symbolList, in List<ConditionCompareType> compareTypeList, Dictionary<string, string> globalVariableContainer, XmlNode node, string filePath)
     {
         string calcFormula = formula;
         int symbolEndIndex = 0;
@@ -684,28 +688,28 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             string symbol = calcFormula.Substring(0,symbolEndIndex);
             calcFormula = calcFormula.Remove(0,symbolEndIndex + markLength);
 
-            symbolList.Add(getConditionNodeData(symbol, globalVariableContainer));
+            symbolList.Add(getConditionNodeData(symbol, globalVariableContainer, node, filePath));
             compareTypeList.Add(compareType);
 
             if(++loopCount >= 2)
-                symbolList.Add(getConditionNodeData("RESULT_" + resultIndex++, globalVariableContainer));
+                symbolList.Add(getConditionNodeData("RESULT_" + resultIndex++, globalVariableContainer, node, filePath));
   
         }
         
 
-        symbolList.Add(getConditionNodeData(calcFormula,globalVariableContainer));
+        symbolList.Add(getConditionNodeData(calcFormula,globalVariableContainer, node, filePath));
 
         return;
     }
 
-    private static ActionGraphConditionNodeData getConditionNodeData(string symbol, Dictionary<string, string> globalVariableContainer)
+    private static ActionGraphConditionNodeData getConditionNodeData(string symbol, Dictionary<string, string> globalVariableContainer, XmlNode node, string filePath)
     {
         symbol = getGlobalVariable(symbol, globalVariableContainer);
         ActionGraphConditionNodeData nodeData = isLiteral(symbol);
         if(nodeData != null)
             return nodeData;
 
-        nodeData = isResult(symbol);
+        nodeData = isResult(symbol, node, filePath);
         if(nodeData != null)
             return nodeData;
 
@@ -733,7 +737,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
     
         if(ConditionNodeInfoPreset._nodePreset.ContainsKey(symbol) == false)
         {
-            DebugUtil.assert(false,"Target Symbol does not exists : {0}",symbol);
+            DebugUtil.assert(false,"Target Symbol does not exists : {0} [Line: {1}] [FileName: {2}]",symbol, XMLScriptConverter.getLineFromXMLNode(node), filePath);
             return null;
         }
 
@@ -806,7 +810,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         return item;
     }
 
-    private static ActionGraphConditionNodeData_ConditionResult isResult(string symbol)
+    private static ActionGraphConditionNodeData_ConditionResult isResult(string symbol, XmlNode node, string filePath)
     {
         if(symbol.Contains("RESULT_") == false)
             return null;
@@ -815,7 +819,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         int indexInt = 0;
         if(int.TryParse(index,out indexInt) == false)
         {
-            DebugUtil.assert(false,"result index invalid: {0}",symbol);
+            DebugUtil.assert(false,"result index invalid: {0} [Line: {1}] [FileName: {2}]",symbol, XMLScriptConverter.getLineFromXMLNode(node), filePath);
             return null;
         }
 
@@ -918,7 +922,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         return true;
     }
 
-    private static void ReadTitle(XmlNode node, ActionGraphBaseData baseData, out float defaultFPS, out string defaultAction)
+    private static void ReadTitle(XmlNode node, ActionGraphBaseData baseData, out float defaultFPS, out string defaultAction, string filePath)
     {
         defaultFPS = -1f;
         defaultAction = "";
@@ -954,7 +958,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
 
                     if(buffKey == -1)
                     {
-                        DebugUtil.assert(false, "invalidBuff : {0}", buffList[j]);
+                        DebugUtil.assert(false, "invalidBuff : {0} [Line: {1}] [FileName: {2}]", buffList[j], XMLScriptConverter.getLineFromXMLNode(node), filePath);
                         continue;
                     }
 

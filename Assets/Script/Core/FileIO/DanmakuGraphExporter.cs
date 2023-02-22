@@ -3,14 +3,16 @@ using System.Xml;
 using System.IO;
 using System.Text;
 using UnityEngine;
-
+using ICSharpCode.WpfDesign.XamlDom;
 
 public class DanmakuGraphLoader : LoaderBase<DanmakuGraphBaseData>
 {
+    static string _currentFileName = "";
     public override DanmakuGraphBaseData readFromXML(string path)
     {
         path = "Assets\\Data\\DanmakuGraph\\" + path;
-        XmlDocument xmlDoc = new XmlDocument();
+        _currentFileName = path;
+        PositionXmlDocument xmlDoc = new PositionXmlDocument();
         try
         {
             XmlReaderSettings readerSettings = new XmlReaderSettings();
@@ -116,7 +118,7 @@ public class DanmakuGraphLoader : LoaderBase<DanmakuGraphBaseData>
                     DanmakuVariableEventType variableEventType = DanmakuVariableEventType.Count;
                     if(System.Enum.TryParse<DanmakuVariableEventType>(attributes[i].Name, out variableEventType) == false)
                     {
-                        DebugUtil.assert(false,"invalid danmaku variable event type: {0}", attributes[i].Name);
+                        DebugUtil.assert(false,"invalid danmaku variable event type: {0} [Line: {1}] [FileName: {2}]", attributes[i].Name, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
                         return null;
                     }
 
@@ -128,7 +130,7 @@ public class DanmakuGraphLoader : LoaderBase<DanmakuGraphBaseData>
                         string[] randomValue = randomData.Split('^');
                         if(randomValue == null || randomValue.Length != 2)
                         {
-                            DebugUtil.assert(false, "invalid danmaku variable event random: {0}", attributes[i].Value);
+                            DebugUtil.assert(false, "invalid danmaku variable event random: {0} [Line: {1}] [FileName: {2}]", attributes[i].Value, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
                             return null;
                         }
                         
@@ -149,7 +151,7 @@ public class DanmakuGraphLoader : LoaderBase<DanmakuGraphBaseData>
             }
             else
             {
-                DebugUtil.assert(false,"invalid danmaku event type: {0}", node.Name);
+                DebugUtil.assert(false,"invalid danmaku event type: {0} [Line: {1}] [FileName: {2}]", node.Name, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
             }
         }
 
