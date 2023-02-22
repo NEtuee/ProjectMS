@@ -1,0 +1,34 @@
+<AIGraph Name="NigeChanAI" DefaultState="Entry">
+
+    <Include Path="Common\CommonRandMovePackage.xml"/>
+    <Include Path="Common\CommonDeadPackage.xml"/>
+    <Include Path="Common\CommonHitPackage.xml"/>
+    <Include Path="Common\CommonRunawayPackage.xml"/>
+
+    <GlobalVariable Name="gv_nigeChanSightRange" Value="2.5"/>
+    <GlobalVariable Name="gv_nigeChanSafeRange" Value="3.0"/>
+
+    <Entry Package="CommonRandMovePackage">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="Hit" Execute="Hit"/> 
+        <Branch Condition="TargetExists && (gv_nigeChanSightRange >= TargetDistance)" Execute="Runaway"/>
+    </Entry>
+    
+    <Runaway Package="CommonRunawayPackage">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="Hit" Execute="Hit"/> 
+        <Branch Condition="TargetExists && (gv_nigeChanSafeRange < TargetDistance)" Execute="Entry"/>
+    </Runaway>
+
+    <!--나중에 도망치고 나서 숨돌리는 상태 하나 있으면 재미있을 듯-->
+
+    <Hit Package="CommonHitPackage">
+        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="Hit" Execute="Hit"/>
+    </Hit>
+    
+    <Dead Package="CommonDeadPackage">
+    </Dead>
+
+</AIGraph>
