@@ -1,0 +1,23 @@
+<AIGraph Name="BakaChanAI" DefaultState="Entry">
+
+    <Include Path="Common\CommonRandMovePackage.xml"/>
+    
+    <Include Path="Common\CommonDeadPackage.xml"/>
+
+    <Include Path="Common\CommonHitPackage.xml"/>
+
+    <Entry Package="CommonRandMovePackage">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="Hit" Execute="Hit"/> 
+    </Entry>
+    
+    <Hit Package="CommonHitPackage">
+        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="Hit" Execute="Hit"/>
+    </Hit>
+    
+    <Dead Package="CommonDeadPackage">
+    </Dead>
+
+</AIGraph>
