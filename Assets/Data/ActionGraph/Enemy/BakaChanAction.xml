@@ -10,7 +10,7 @@
 
     <!-- AI에서 랜덤 8방향 지정-->
     <AC_Move MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <Animation Path="Resources/Sprites/SampleBoss/Hit/" AngleBaseAnimation="True" AngleBaseAnimationCount="1">
+        <Animation Path="Resources/Sprites/SampleBoss/MoveAll/" AngleBaseAnimation="True" AngleBaseAnimationCount="1">
             <FrameEvent Type="Movement" StartFrame="0" Friction="0" MaxVelocity="5" Speed="15"/>
         </Animation>
 

@@ -1,4 +1,4 @@
-<ActionGraph Name="NigeChanAction" DefaultAction="AC_Idle" DefaultFramePerSecond="12">
+<ActionGraph Name="GakiChanAction" DefaultAction="AC_Idle" DefaultFramePerSecond="12">
 
     <AC_Idle MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <Animation Path="Resources/Sprites/SampleBoss/Idle/" XFlip="true">
@@ -21,8 +21,17 @@
             <FrameEvent Type="Movement" StartFrame="0" Friction="0" Speed="0" Velocity="0"/>
         </Animation>
 
-        <Branch Condition="End == true" Execute="AC_Idle"/>
+        <Branch Condition="End == true" Execute="AC_Hit"/>
     </AC_Hit>
+
+    <AC_Shot MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <Animation Path="Resources/Sprites/SampleBoss/Attack/" FramePerSecond="1" XFlip="true">
+            <FrameEvent Type="Movement" StartFrame="0" Friction="12" Speed="0"/>
+            <FrameEvent Type="Danmaku" StartFrame="0.5" Path="Enemy/MagicalBullet.xml"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Shot"/>
+    </AC_Shot>
 
     <Dead DirectionType="Keep" FlipType="Direction">
         <Animation Path="Resources/Sprites/DummyPlayer/dash/" StartFrame="0" EndFrame="1" XFlip="true">
