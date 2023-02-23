@@ -232,7 +232,7 @@ public class AnimationPlayer
     {
         angleDegree = MathEx.clamp360Degree(angleDegree);
         float baseAngle = 360f / (float)_currentAnimationSprites.Length;
-        if(angleDegree < baseAngle * 0.5f || angleDegree > 360f - baseAngle * 0.5f)
+        if(angleDegree < baseAngle * 0.5f || angleDegree >= 360f - baseAngle * 0.5f)
             return 0;
 
         return (int)((angleDegree + baseAngle * 0.5f) / baseAngle);
@@ -309,7 +309,16 @@ public class AnimationPlayer
         }
 
         if(_currentAnimationPlayData._isAngleBaseAnimation)
+        {
+            int index = angleToSectorNumberByAngleBaseSpriteCount(currentAngleDegree) + _animationTimeProcessor.getCurrentIndex();
+            if(_currentAnimationSprites.Length <= index)
+            {
+                DebugUtil.assert(false, "invalid index : [index : {0}] [angle : {1}] [timerProcessorIndex : {2}] [spriteCount : {3}]", index, currentAngleDegree,angleToSectorNumberByAngleBaseSpriteCount(currentAngleDegree), _animationTimeProcessor.getCurrentIndex() );
+                return null;
+            }
+
             return _currentAnimationSprites[angleToSectorNumberByAngleBaseSpriteCount(currentAngleDegree) + _animationTimeProcessor.getCurrentIndex()];
+        }
 
         return _currentAnimationSprites[_animationTimeProcessor.getCurrentIndex()];
     }
