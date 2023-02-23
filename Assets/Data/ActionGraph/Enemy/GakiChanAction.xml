@@ -27,7 +27,7 @@
     <AC_Shot MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <Animation Path="Resources/Sprites/SampleBoss/Attack/" FramePerSecond="0.5" XFlip="true">
             <FrameEvent Type="Movement" StartFrame="0" Friction="12" Speed="0"/>
-            <FrameEvent Type="Danmaku" StartFrame="0.5" Path="Enemy/MagicalBullet.xml"/>
+            <FrameEvent Type="Danmaku" StartFrame="0.25" Path="Enemy/MagicalBullet.xml"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Shot"/>
