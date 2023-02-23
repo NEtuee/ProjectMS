@@ -3,12 +3,13 @@ using System.Xml;
 using System.IO;
 using System.Text;
 using UnityEngine;
+using ICSharpCode.WpfDesign.XamlDom;
 
 public class CharacterInfoLoader
 {
     public static Dictionary<string,CharacterInfoData> readFromXML(string path)
     {
-        XmlDocument xmlDoc = new XmlDocument();
+        PositionXmlDocument xmlDoc = new PositionXmlDocument();
         try
         {
             XmlReaderSettings readerSettings = new XmlReaderSettings();

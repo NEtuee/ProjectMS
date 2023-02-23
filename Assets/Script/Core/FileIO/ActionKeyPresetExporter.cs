@@ -3,7 +3,7 @@ using System.Xml;
 using System.IO;
 using System.Text;
 using UnityEngine;
-
+using ICSharpCode.WpfDesign.XamlDom;
 
 public static class ActionKeyPresetDataLoader
 {
@@ -73,7 +73,7 @@ public static class ActionKeyPresetDataLoader
 
     public static ActionKeyPresetData[] readFromXML(string path)
     {
-        XmlDocument xmlDoc = new XmlDocument();
+        PositionXmlDocument xmlDoc = new PositionXmlDocument();
         try
         {
             XmlReaderSettings readerSettings = new XmlReaderSettings();

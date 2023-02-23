@@ -4,12 +4,13 @@ using System.Xml;
 using System.IO;
 using System.Text;
 using UnityEngine;
+using ICSharpCode.WpfDesign.XamlDom;
 
 public class MovementGraphExporter : LoaderBase<MovementGraph>
 {
     public override MovementGraph readFromXML(string path)
     {
-        XmlDocument xmlDoc = new XmlDocument();
+        PositionXmlDocument xmlDoc = new PositionXmlDocument();
         try
         {
             XmlReaderSettings readerSettings = new XmlReaderSettings();

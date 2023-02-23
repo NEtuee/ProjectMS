@@ -3,13 +3,15 @@ using System.Xml;
 using System.IO;
 using System.Text;
 using UnityEngine;
-
+using ICSharpCode.WpfDesign.XamlDom;
 
 public class StageGraphLoader : LoaderBase<StageGraphBaseData>
 {
+    static string _currentFileName = "";
     public override StageGraphBaseData readFromXML(string path)
     {
-        XmlDocument xmlDoc = new XmlDocument();
+        _currentFileName = path;
+        PositionXmlDocument xmlDoc = new PositionXmlDocument();
         try
         {
             XmlReaderSettings readerSettings = new XmlReaderSettings();
@@ -96,7 +98,7 @@ public class StageGraphLoader : LoaderBase<StageGraphBaseData>
 
         if(spawnEvent == null)
         {
-            DebugUtil.assert(false,"invalid stage graph event type: {0}", node.Name);
+            DebugUtil.assert(false,"invalid stage graph event type: {0} [Line: {1}] [FileName: {2}]", node.Name, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
             return null;
         }
 
@@ -121,7 +123,7 @@ public class StageGraphLoader : LoaderBase<StageGraphBaseData>
                 int targetKey = int.Parse(attrValue);
                 if(buffDataList.ContainsKey(targetKey) == false)
                 {
-                    DebugUtil.assert(false, "target Buff is not exists: Key {0}", targetKey);
+                    DebugUtil.assert(false, "target Buff is not exists: Key {0} [Line: {1}] [FileName: {2}]", targetKey, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
                     return null;
                 }
 
@@ -149,7 +151,7 @@ public class StageGraphLoader : LoaderBase<StageGraphBaseData>
                 buffData._buffCustomValue1 = float.Parse(attrValue);
             else
             {
-                DebugUtil.assert(false, "invalid attribute name from buffInfo: {0}",attrName);
+                DebugUtil.assert(false, "invalid attribute name from buffInfo: {0} [Line: {1}] [FileName: {2}]",attrName, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
                 continue;
             }
 

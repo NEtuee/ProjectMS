@@ -1,9 +1,12 @@
 using System.Collections.Generic;
 using System.Xml;
+using System.Xml.Schema;
+using System.Xml.XPath;
 using System.IO;
 using System;
 using System.Text;
 using UnityEngine;
+using ICSharpCode.WpfDesign.XamlDom;
 
 public static class XMLScriptConverter
 {
@@ -71,6 +74,11 @@ public static class XMLScriptConverter
         return new MemoryStream(System.Text.Encoding.UTF8.GetBytes(xmlFile));
     }
 
+    public static string getLineFromXMLNode(XmlNode xmlNode)
+    {
+        return ((PositionXmlElement) xmlNode).LineNumber.ToString();
+    }
+        
     public static Vector3 valueToVector3(string valueString)
     {
         string[] splitted = valueString.Split(' ');

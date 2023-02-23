@@ -3,13 +3,15 @@ using System.Xml;
 using System.IO;
 using System.Text;
 using UnityEngine;
-
+using ICSharpCode.WpfDesign.XamlDom;
 
 public static class BuffDataLoader
 {
+    static string _currentFileName = "";
     public static Dictionary<int, BuffData> readFromXML(string path)
     {
-        XmlDocument xmlDoc = new XmlDocument();
+        _currentFileName = path;
+        PositionXmlDocument xmlDoc = new PositionXmlDocument();
         try
         {
             XmlReaderSettings readerSettings = new XmlReaderSettings();
@@ -42,7 +44,7 @@ public static class BuffDataLoader
 
             if(buffDataList.ContainsKey(baseData._buffKey) == true)
             {
-                DebugUtil.assert(false, "buff key overlap: key {0}", baseData._buffKey);
+                DebugUtil.assert(false, "buff key overlap: key {0} [FileName: {1}]", baseData._buffKey, _currentFileName);
                 continue;
             }
             buffDataList.Add(baseData._buffKey,baseData);
@@ -68,7 +70,7 @@ public static class BuffDataLoader
                 int targetKey = int.Parse(attrValue);
                 if(buffDataList.ContainsKey(targetKey) == false)
                 {
-                    DebugUtil.assert(false, "target Buff is not exists: Key {0}", targetKey);
+                    DebugUtil.assert(false, "target Buff is not exists: Key {0} [Line: {1}] [FileName: {2}]", targetKey, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
                     return null;
                 }
 
@@ -96,7 +98,7 @@ public static class BuffDataLoader
                 buffData._buffCustomValue1 = float.Parse(attrValue);
             else
             {
-                DebugUtil.assert(false, "invalid attribute name from buffInfo: {0}",attrName);
+                DebugUtil.assert(false, "invalid attribute name from buffInfo: {0} [Line: {1}] [FileName: {2}]",attrName, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
                 continue;
             }
 
