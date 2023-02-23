@@ -33,6 +33,8 @@ public static class FrameEventLoader
             outFrameEvent = new ActionFrameEvent_SetDefenceType();
         else if(type == "Effect")
             outFrameEvent = new ActionFrameEvent_Effect();
+        else if(type == "TimelineEffect")
+            outFrameEvent = new ActionFrameEvent_TimelineEffect();
         else if(type == "FrameTag")
             outFrameEvent = new ActionFrameEvent_SetFrameTag();
         else if(type == "Projectile")
@@ -57,7 +59,7 @@ public static class FrameEventLoader
             return null;
         }
 
-        DebugUtil.assert((int)FrameEventType.Count == 18, "check here");
+        DebugUtil.assert((int)FrameEventType.Count == 19, "check here");
 
 
         if(outFrameEvent == null)
