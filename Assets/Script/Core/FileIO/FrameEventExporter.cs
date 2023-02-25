@@ -6,7 +6,7 @@ using UnityEngine;
 
 public static class FrameEventLoader
 {
-    public static ActionFrameEventBase readFromXMLNode(XmlNode node)
+    public static ActionFrameEventBase readFromXMLNode(XmlNode node, string filePath)
     {
         ActionFrameEventBase outFrameEvent = null;
 
@@ -88,15 +88,19 @@ public static class FrameEventLoader
                     return null;
                 }
             }
+            else if(targetName == "Condition")
+            {
+                outFrameEvent._conditionCompareData = ActionGraphLoader.ReadConditionCompareData(attributes[i].Value, ActionGraphLoader.getGlobalVariableContainer(),node,filePath);
+            }
         }
 
         outFrameEvent.loadFromXML(node);
-        readChildFrameEvent(node,ref outFrameEvent);
+        readChildFrameEvent(node,ref outFrameEvent, filePath);
         
         return outFrameEvent;
     }
 
-    public static void readChildFrameEvent(XmlNode node, ref ActionFrameEventBase frameEvent)
+    public static void readChildFrameEvent(XmlNode node, ref ActionFrameEventBase frameEvent, string filePath)
     {
         if(frameEvent.getFrameEventType() == FrameEventType.FrameEvent_Effect)
             return;
@@ -135,7 +139,7 @@ public static class FrameEventLoader
             XmlNodeList childNodes = childNodeList[i].ChildNodes;
             for(int j = 0; j < childNodes.Count; ++j)
             {
-                actionFrameEventList.Add(readFromXMLNode(childNodes[j]));
+                actionFrameEventList.Add(readFromXMLNode(childNodes[j],filePath));
             }
 
             actionFrameEventList.Sort((x,y)=>{

@@ -91,6 +91,9 @@ public class ProjectileGraph
         ChildFrameEventItem childFrameEventItem = _projectileGraphBaseData._projectileChildFrameEvent[eventType];
         for(int i = 0; i < childFrameEventItem._childFrameEventCount; ++i)
         {
+            if(executeEntity is GameEntityBase && childFrameEventItem._childFrameEvents[i].checkCondition(executeEntity as GameEntityBase) == false)
+                continue;
+                
             childFrameEventItem._childFrameEvents[i].initialize();
             childFrameEventItem._childFrameEvents[i].onExecute(executeEntity, targetEntity);
         }

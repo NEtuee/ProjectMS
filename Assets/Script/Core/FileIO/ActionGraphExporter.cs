@@ -149,6 +149,11 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         targetDic.Add(name,value);
     }
 
+    public static Dictionary<string, string> getGlobalVariableContainer()
+    {
+        return _globalVariables;
+    }
+
     public static string getGlobalVariable(string value)
     {
         if(_globalVariables.ContainsKey(value))
@@ -463,7 +468,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             {
                 if(nodeList[i].Name == "FrameEvent")
                 {
-                    ActionFrameEventBase frameEvent = FrameEventLoader.readFromXMLNode(nodeList[i]);
+                    ActionFrameEventBase frameEvent = FrameEventLoader.readFromXMLNode(nodeList[i], filePath);
                     if(frameEvent == null)
                         continue;
                     

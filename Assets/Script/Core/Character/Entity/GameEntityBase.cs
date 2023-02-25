@@ -637,6 +637,7 @@ public class GameEntityBase : SequencerObjectBase
     public bool isDead() {return _statusInfo.isDead();}
 
     public void executeAIEvent(AIChildEventType eventType) {_aiGraph.executeAIEvent(eventType);}
+    public bool processActionCondition(ActionGraphConditionCompareData compareData) {return _actionGraph.processActionCondition(compareData);}
 
     public HashSet<string> getCurrentFrameTagList() {return _actionGraph.getCurrentFrameTagList();}
 
