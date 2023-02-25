@@ -35,14 +35,6 @@
         <Branch Condition="CurrentPackageEnd" Execute="Chase"/>
     </Attack>
 
-    <Recover Package="CommonIdlePackage">
-        <Branch Condition="Dead" Execute="Dead"/>
-        <Branch Condition="Hit" Execute="Hit"/> 
-        <Branch Condition="TargetExists &&
-                           (gv_atariChanAttackRange < TargetDistance) && 
-                           (GraphExecutedTime > gv_atariChanTransitionTime)" Execute="Chase"/>
-    </Recover>
-
     <Hit Package="CommonHitPackage">
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
         <Branch Condition="Dead" Execute="Dead"/>
