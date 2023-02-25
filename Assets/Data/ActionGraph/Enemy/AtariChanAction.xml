@@ -35,14 +35,18 @@
 
                     <FrameEvent Type="ZoomEffect" StartFrame="0" Scale="2.8"/>
                     <FrameEvent Type="StopUpdate" StartFrame="0" Time="0.15"/>
+
+                    <FrameEvent Type="Movement" StartFrame="0" Friction="12" Velocity="-3" Speed="0"/>
                 </OnHit>
             
                 <OnGuard>
                     <FrameEvent Type="TeleportToTarget"/>
+                    <FrameEvent Type="Movement" StartFrame="0" Friction="12" Velocity="-3" Speed="0"/>
                 </OnGuard>
             
                 <OnParry>
                     <FrameEvent Type="TeleportToTarget"/>
+                    <FrameEvent Type="Movement" StartFrame="0" Friction="12" Velocity="-3" Speed="0"/>
                 </OnParry>
             </FrameEvent>
             
