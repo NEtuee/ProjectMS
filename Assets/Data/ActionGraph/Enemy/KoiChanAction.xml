@@ -25,7 +25,7 @@
     </AC_Hit>
 
     <AC_MoveShot MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <Animation Path="Resources/Sprites/SampleBoss/MoveAll/" FramePerSecond="1" XFlip="true" AngleBaseAnimation="True" AngleBaseAnimationCount="1">
+        <Animation Path="Resources/Sprites/SampleBoss/MoveAll/" FramePerSecond="0.8" XFlip="true" AngleBaseAnimation="True" AngleBaseAnimationCount="1">
             <FrameEvent Type="Movement" StartFrame="0" Friction="0" MaxVelocity="5" Speed="10"/>
             <FrameEvent Type="Danmaku" StartFrame="0.5" Path="Enemy/MagicalBullet.xml"/>
         </Animation>

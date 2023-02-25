@@ -1,4 +1,4 @@
-<AIPackage Name="CommonShotPackage" DefaultState="AI_Entry">
+<AIPackage Name="CommonAttackPackage" DefaultState="AI_Entry">
 
     <AIState>
         <AI_Entry UpdateTime="0.0">
@@ -14,8 +14,15 @@
                 <AIEvent Type="SetAction" Action="AC_Attack"/>
             </Event_OnExecute>
             
-            <Branch Condition="End" Execute="AI_Attack"/>
+            <Branch Condition="End" Execute="TerminatePackage"/>
         </AI_Attack>
+
+        <TerminatePackage>
+            <Event_OnExecute>
+                <AIEvent Type="TerminatePackage"/>
+            </Event_OnExecute>
+        </TerminatePackage>
+
     </AIState>
 
 </AIPackage>
