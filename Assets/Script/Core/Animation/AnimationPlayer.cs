@@ -50,6 +50,9 @@ public struct FrameEventProcessDescription
 
     public void processFrameEvent()
     {
+        if(_executeObject is GameEntityBase && _targetFrameEvent.checkCondition(_executeObject as GameEntityBase) == false)
+            return;
+
         _targetFrameEvent.onExecute(_executeObject);
     }
 
@@ -155,6 +158,12 @@ public class AnimationPlayer
             ActionFrameEventBase frameEvent = playData._frameEventData[i];
             if(MathEx.equals(frameEvent._startFrame, currentFrame,float.Epsilon) == true || frameEvent._startFrame < currentFrame)
             {
+                if(targetEntity is GameEntityBase && frameEvent.checkCondition(targetEntity as GameEntityBase) == false)
+                {
+                    _currentFrameEventIndex++;
+                    continue;
+                }
+                
                 frameEvent.initialize();
                 if(frameEvent.onExecute(targetEntity) == true && frameEvent._endFrame > frameEvent._startFrame)
                 {

@@ -12,6 +12,7 @@ public enum FrameEventType
     FrameEvent_TeleportToTargetBack,
     FrameEvent_SetDefenceType,
     FrameEvent_Effect,
+    FrameEvent_TimelineEffect,
     FrameEvent_SetFrameTag,
     FrameEvent_Projectile,
     FrameEvent_Danmaku,
@@ -52,8 +53,10 @@ public class ChildFrameEventItem
 
 public abstract class ActionFrameEventBase
 {
-    public float _startFrame;
-    public float _endFrame;
+    public float                                _startFrame;
+    public float                                _endFrame;
+
+    public ActionGraphConditionCompareData      _conditionCompareData = null;
 
     public Dictionary<ChildFrameEventType, ChildFrameEventItem> _childFrameEventItems = null;
     
@@ -63,6 +66,14 @@ public abstract class ActionFrameEventBase
     public virtual void onExit(ObjectBase executeEntity){}
     public abstract void loadFromXML(XmlNode node);
 
+    public bool checkCondition(GameEntityBase targetEntity)
+    {
+        if(_conditionCompareData == null)
+            return true;
+
+        return targetEntity.processActionCondition(_conditionCompareData);
+    }
+
     public void executeChildFrameEvent(ChildFrameEventType eventType, ObjectBase executeEntity, ObjectBase targetEntity)
     {
         if(_childFrameEventItems == null || _childFrameEventItems.ContainsKey(eventType) == false)
@@ -71,6 +82,9 @@ public abstract class ActionFrameEventBase
         ChildFrameEventItem childFrameEventItem = _childFrameEventItems[eventType];
         for(int i = 0; i < childFrameEventItem._childFrameEventCount; ++i)
         {
+            if(executeEntity is GameEntityBase && childFrameEventItem._childFrameEvents[i].checkCondition(executeEntity as GameEntityBase) == false)
+                continue;
+
             childFrameEventItem._childFrameEvents[i].initialize();
             childFrameEventItem._childFrameEvents[i].onExecute(executeEntity, targetEntity);
         }

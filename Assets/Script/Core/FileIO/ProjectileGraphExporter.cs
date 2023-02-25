@@ -44,7 +44,7 @@ public class ProjectileGraphLoader : LoaderBase<ProjectileGraphBaseData[]>
         XmlNodeList projectileNodes = xmlDoc.FirstChild.ChildNodes;
         for(int nodeIndex = 0; nodeIndex < projectileNodes.Count; ++nodeIndex)
         {
-            ProjectileGraphBaseData baseData = readProjectile(projectileNodes[nodeIndex]);
+            ProjectileGraphBaseData baseData = readProjectile(projectileNodes[nodeIndex],_currentFileName);
             if(baseData == null)
                 return null;
 
@@ -54,7 +54,7 @@ public class ProjectileGraphLoader : LoaderBase<ProjectileGraphBaseData[]>
         return projectileBaseDataList.ToArray();
     }
 
-    private static ProjectileGraphBaseData readProjectile(XmlNode node)
+    private static ProjectileGraphBaseData readProjectile(XmlNode node, string filePath)
     {
         float defaultFramePerSecond = 0f;
 
@@ -99,7 +99,7 @@ public class ProjectileGraphLoader : LoaderBase<ProjectileGraphBaseData[]>
             }
             else if(targetName == "Event")
             {
-                readChildFrameEvent(nodes[nodeIndex],projectileBaseData);
+                readChildFrameEvent(nodes[nodeIndex],projectileBaseData, filePath);
             }
                 
         }
@@ -194,7 +194,7 @@ public class ProjectileGraphLoader : LoaderBase<ProjectileGraphBaseData[]>
         }
     }
 
-    private static void readChildFrameEvent(XmlNode node, ProjectileGraphBaseData baseData)
+    private static void readChildFrameEvent(XmlNode node, ProjectileGraphBaseData baseData, string filePath)
     {
         XmlNodeList childNodeList = node.ChildNodes;
 
@@ -221,7 +221,7 @@ public class ProjectileGraphLoader : LoaderBase<ProjectileGraphBaseData[]>
             XmlNodeList childNodes = childNodeList[i].ChildNodes;
             for(int j = 0; j < childNodes.Count; ++j)
             {
-                actionFrameEventList.Add(FrameEventLoader.readFromXMLNode(childNodes[j]));
+                actionFrameEventList.Add(FrameEventLoader.readFromXMLNode(childNodes[j], filePath));
             }
 
             actionFrameEventList.Sort((x,y)=>{

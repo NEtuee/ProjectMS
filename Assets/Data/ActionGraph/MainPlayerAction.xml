@@ -113,6 +113,8 @@
                     <FrameEvent Type="ApplyBuffTarget" StartFrame="0" ApplyBuff="21"/>
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc" FramePerSecond="18.0" Offset="0.0 0.0 0.0" ToTarget="true"/>
+
+                    <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/Crosslight_Timeline" Offset="0.0 0.0 0.0" ToTarget="true"/>
                     
                     <FrameEvent Type="TeleportToTarget" DistanceOffset="-0.3"/>
                     <FrameEvent Type="ZoomEffect" StartFrame="0" Scale="2.8"/>

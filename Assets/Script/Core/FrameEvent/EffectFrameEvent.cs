@@ -2,6 +2,72 @@ using System.Xml;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+public class ActionFrameEvent_TimelineEffect : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_TimelineEffect;}
+
+    public string _effectPath = "";
+    private bool _toTarget = false;
+
+    private Vector3 _spawnOffset = Vector3.zero;
+    private EffectUpdateType _effectUpdateType = EffectUpdateType.ScaledDeltaTime;
+
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        Vector3 centerPosition;
+        if(_toTarget)
+            centerPosition = targetEntity.transform.position;
+        else
+            centerPosition = executeEntity.transform.position;
+
+        EffectRequestData requestData = MessageDataPooling.GetMessageData<EffectRequestData>();
+        requestData._effectPath = _effectPath;
+        requestData._position = centerPosition + _spawnOffset;
+        requestData._rotation = Quaternion.identity;
+        requestData._updateType = _effectUpdateType;
+        requestData._effectType = EffectType.TimelineEffect;
+
+        executeEntity.SendMessageEx(MessageTitles.effect_spawnEffect,UniqueIDBase.QueryUniqueID("EffectManager"),requestData);
+
+        return true;
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            if(attributes[i].Name == "Path")
+            {
+                _effectPath = attributes[i].Value;
+            }
+            else if(attributes[i].Name == "Offset")
+            {
+                string[] vector = attributes[i].Value.Split(' ');
+                if(vector == null || vector.Length != 3)
+                {
+                    DebugUtil.assert(false, "invalid vector3 data: {0}",attributes[i].Value);
+                    return;
+                }
+
+                _spawnOffset.x = float.Parse(vector[0]);
+                _spawnOffset.y = float.Parse(vector[1]);
+                _spawnOffset.z = float.Parse(vector[2]);
+            }
+            else if(attributes[i].Name == "ToTarget")
+            {
+                _toTarget = bool.Parse(attributes[i].Value);
+            }
+        }
+
+        if(_effectPath == "")
+            DebugUtil.assert(false, "effect path is essential");
+    }
+}
+
+
+
 public class ActionFrameEvent_Effect : ActionFrameEventBase
 {
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_Effect;}
@@ -23,6 +89,7 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
     private bool _usePhysics = false;
     private bool _useFlip = false;
     private PhysicsBodyDescription _physicsBodyDesc = PhysicsBodyDescription._empty;
+    private EffectUpdateType _effectUpdateType = EffectUpdateType.ScaledDeltaTime;
 
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
@@ -42,6 +109,8 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
         requestData._position = centerPosition + (directionAngle  * _spawnOffset);
         requestData._usePhysics = _usePhysics;
         requestData._rotation = directionAngle;
+        requestData._effectType = EffectType.SpriteEffect;
+        requestData._updateType = _effectUpdateType;
 
         if(_useFlip && executeEntity is GameEntityBase == true)
         {
@@ -147,6 +216,10 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
             else if(attributes[i].Name == "UseFlip")
             {
                 _useFlip = bool.Parse(attributes[i].Value);
+            }
+            else if(attributes[i].Name == "UpdateType")
+            {
+                _effectUpdateType = (EffectUpdateType)System.Enum.Parse(typeof(EffectUpdateType), attributes[i].Value);
             }
 
         }
