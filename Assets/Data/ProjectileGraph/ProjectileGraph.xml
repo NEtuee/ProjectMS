@@ -115,6 +115,10 @@
                         <FrameEvent Type="ApplyBuffTarget" ApplyBuff="TestProjectileAttack"/>
                         <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
                     </OnHit>
+
+                    <OnGuard>
+                        <FrameEvent Type="TimelineEffect" StartFrame="0" Path="Prefab/Effect/Test_Timeline" Attach="true" ToTarget="true"/>
+                    </OnGuard>
                 </FrameEvent>
             </OnHit>
     

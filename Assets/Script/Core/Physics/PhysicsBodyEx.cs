@@ -18,6 +18,15 @@ public struct PhysicsBodyDescription
         _angularFriction = 0f,
         _useGravity = false
     };
+
+    public void clearPhysicsBody()
+    {
+        _velocity = Vector3.zero;
+        _torque = 0f;
+        _friction = 0f;
+        _angularFriction = 0f;
+        _useGravity = false;
+    }
 }
 
 public class PhysicsBodyEx

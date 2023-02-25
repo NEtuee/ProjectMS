@@ -36,8 +36,27 @@ public class EffectRequestData : MessageData
     public Quaternion _rotation;
 
     public Transform _parentTransform = null;
+    public Animator _timelineAnimator = null;
 
     public PhysicsBodyDescription _physicsBodyDesc;
+
+    public void clearRequestData()
+    {
+        _effectPath = "";
+        _startFrame = 0f;
+        _endFrame = -1f;
+        _framePerSecond = 0f;
+        _angle = 0f;
+        _usePhysics = false;
+        _useFlip = false;
+        _effectType = EffectType.SpriteEffect;
+        _updateType = EffectUpdateType.ScaledDeltaTime;
+        _position = Vector3.zero;
+        _rotation = Quaternion.identity;
+        _parentTransform = null;
+        _timelineAnimator = null;
+        _physicsBodyDesc.clearPhysicsBody();
+    }
 }  
 
 public abstract class EffectItemBase
@@ -153,6 +172,7 @@ public class EffectItem : EffectItemBase
 
     public override void release()
     {
+        _spriteRenderer.gameObject.transform.SetParent(null);
         _spriteRenderer.gameObject.SetActive(false);
     }
 
@@ -166,6 +186,9 @@ public class TimelineEffectItem : EffectItemBase
 {
     private GameObject              _effectObject;
     private PlayableDirector        _playableDirector;
+    private TimelineEffectControl   _timelineEffectControl;
+
+    public Transform                _parentTransform = null;
 
 
     public void createItem(string prefabPath)
@@ -179,6 +202,7 @@ public class TimelineEffectItem : EffectItemBase
 
         _effectObject = GameObject.Instantiate(effectPrefab);
         _playableDirector = _effectObject.GetComponent<PlayableDirector>();
+        _timelineEffectControl = _effectObject.GetComponent<TimelineEffectControl>();
 
         if(_playableDirector == null)
         {
@@ -198,6 +222,16 @@ public class TimelineEffectItem : EffectItemBase
         _effectObject.transform.position = effectData._position;
         _effectObject.transform.rotation = effectData._rotation;
 
+        _parentTransform = effectData._parentTransform;
+
+        if(_parentTransform != null && _parentTransform.gameObject.activeInHierarchy == false)
+            _parentTransform = null;
+
+        if(_parentTransform != null)
+            _effectObject.transform.SetParent(_parentTransform);
+
+        _timelineEffectControl.setCharacterAnimator(effectData._timelineAnimator);
+
         _effectObject.SetActive(true);
         _playableDirector.Stop();
         _playableDirector.Play();
@@ -205,7 +239,7 @@ public class TimelineEffectItem : EffectItemBase
 
     public override bool progress(float deltaTime)
     {
-        if(isValid() == false)
+        if(isValid() == false || _playableDirector.playableGraph.IsValid() == false)
             return false;
 
         _playableDirector.playableGraph.Evaluate(deltaTime);
@@ -215,6 +249,7 @@ public class TimelineEffectItem : EffectItemBase
     public override void release()
     {
         _playableDirector.Stop();
+        _effectObject.transform.SetParent(null);
         _effectObject.SetActive(false);
     }
 

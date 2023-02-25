@@ -9,6 +9,7 @@ public class ActionFrameEvent_TimelineEffect : ActionFrameEventBase
 
     public string _effectPath = "";
     private bool _toTarget = false;
+    private bool _attach = false;
 
     private Vector3 _spawnOffset = Vector3.zero;
     private EffectUpdateType _effectUpdateType = EffectUpdateType.ScaledDeltaTime;
@@ -22,11 +23,19 @@ public class ActionFrameEvent_TimelineEffect : ActionFrameEventBase
             centerPosition = executeEntity.transform.position;
 
         EffectRequestData requestData = MessageDataPooling.GetMessageData<EffectRequestData>();
+        requestData.clearRequestData();
         requestData._effectPath = _effectPath;
         requestData._position = centerPosition + _spawnOffset;
         requestData._rotation = Quaternion.identity;
         requestData._updateType = _effectUpdateType;
         requestData._effectType = EffectType.TimelineEffect;
+
+        if(_attach)
+        {
+            requestData._parentTransform = _toTarget ? targetEntity.transform : executeEntity.transform;
+            requestData._timelineAnimator = _toTarget ? targetEntity.getAnimator() : executeEntity.getAnimator();
+        }
+
 
         executeEntity.SendMessageEx(MessageTitles.effect_spawnEffect,UniqueIDBase.QueryUniqueID("EffectManager"),requestData);
 
@@ -59,6 +68,14 @@ public class ActionFrameEvent_TimelineEffect : ActionFrameEventBase
             {
                 _toTarget = bool.Parse(attributes[i].Value);
             }
+            else if(attributes[i].Name == "UpdateType")
+            {
+                _effectUpdateType = (EffectUpdateType)System.Enum.Parse(typeof(EffectUpdateType), attributes[i].Value);
+            }
+            else if(attributes[i].Name == "Attach")
+            {
+                _attach = bool.Parse(attributes[i].Value);
+            }
         }
 
         if(_effectPath == "")
@@ -84,6 +101,8 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
     private bool _followEntity = false;
     private bool _toTarget = false;
 
+    private bool _attach = false;
+
     private Vector3 _spawnOffset = Vector3.zero;
 
     private bool _usePhysics = false;
@@ -102,6 +121,7 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
         Quaternion directionAngle = Quaternion.Euler(0f,0f,Vector3.SignedAngle(Vector3.right, executeEntity.getDirection(), Vector3.forward));
 
         EffectRequestData requestData = MessageDataPooling.GetMessageData<EffectRequestData>();
+        requestData.clearRequestData();
         requestData._effectPath = _effectPath;
         requestData._startFrame = 0f;
         requestData._endFrame = -1f;
@@ -111,6 +131,9 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
         requestData._rotation = directionAngle;
         requestData._effectType = EffectType.SpriteEffect;
         requestData._updateType = _effectUpdateType;
+
+        if(_attach)
+            requestData._parentTransform = _toTarget ? targetEntity.transform : executeEntity.transform;
 
         if(_useFlip && executeEntity is GameEntityBase == true)
         {
@@ -220,6 +243,10 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
             else if(attributes[i].Name == "UpdateType")
             {
                 _effectUpdateType = (EffectUpdateType)System.Enum.Parse(typeof(EffectUpdateType), attributes[i].Value);
+            }
+            else if(attributes[i].Name == "Attach")
+            {
+                _attach = bool.Parse(attributes[i].Value);
             }
 
         }
