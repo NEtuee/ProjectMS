@@ -1,0 +1,55 @@
+<AIGraph Name="GakiChanAI" DefaultState="Entry">
+
+    <Include Path="Common\CommonRandMovePackage.xml"/>
+    <Include Path="Common\CommonDeadPackage.xml"/>
+    <Include Path="Common\CommonHitPackage.xml"/>
+    <Include Path="Common\CommonChasePackage.xml"/>
+    <Include Path="Common\CommonAttackPackage.xml"/>
+    <Include Path="Common\COmmonIdlePackage.xml"/>
+
+    <!-- 가키가 플레이어를 인지하는 거리 -->
+    <GlobalVariable Name="gv_atariChanSightRange" Value="3.5"/>
+    <!-- 가키가 플레이어를 공격할 수 있는 거리-->
+    <GlobalVariable Name="gv_atariChanAttackRange" Value="3.5"/>
+    <!-- 가키가 행동을 전환하는데 걸리는 시간-->
+    <GlobalVariable Name="gv_atariChanTransitionTime" Value="0.4"/>
+
+    <Entry Package="CommonRandMovePackage">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="Hit" Execute="Hit"/> 
+        <Branch Condition="TargetExists && (gv_atariChanSightRange >= TargetDistance)" Execute="Chase"/>
+        
+    </Entry>
+    
+    <Chase Package="CommonChasePackage">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="Hit" Execute="Hit"/> 
+        <Branch Condition="TargetExists && 
+                           (gv_atariChanAttackRange >= TargetDistance) && 
+                           (GraphExecutedTime > gv_atariChanTransitionTime)" Execute="Attack"/>
+    </Chase>
+
+    <Attack Package="CommonAttackPackage">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="Hit" Execute="Hit"/> 
+        <Branch Condition="CurrentPackageEnd" Execute="Chase"/>
+    </Attack>
+
+    <Recover Package="CommonIdlePackage">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="Hit" Execute="Hit"/> 
+        <Branch Condition="TargetExists &&
+                           (gv_atariChanAttackRange < TargetDistance) && 
+                           (GraphExecutedTime > gv_atariChanTransitionTime)" Execute="Chase"/>
+    </Recover>
+
+    <Hit Package="CommonHitPackage">
+        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="Hit" Execute="Hit"/>
+    </Hit>
+    
+    <Dead Package="CommonDeadPackage">
+    </Dead>
+
+</AIGraph>
