@@ -24,6 +24,14 @@
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_Hit>
 
+    <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
+        <Animation Path="Resources/Sprites/SampleBoss/GuardBroken/" FramePerSecond="1" XFlip="true">
+            <FrameEvent Type="Movement" StartFrame="0" Friction="0" Speed="0" Velocity="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_GuardBroken>
+    
     <Dead DirectionType="Keep" FlipType="Direction">
         <Animation Path="Resources/Sprites/DummyPlayer/dash/" StartFrame="0" EndFrame="1" XFlip="true">
             <FrameEvent Type="Effect" StartFrame="0" Path="Resources/Sprites/DummyPlayer/dead/" FramePerSecond="0.2">

@@ -4,30 +4,42 @@
     <Include Path="Common\CommonDeadPackage.xml"/>
     <Include Path="Common\CommonHitPackage.xml"/>
     <Include Path="Common\CommonRunawayPackage.xml"/>
+    <Include Path="Common\CommonGuardBrokenPackage.xml"/>
 
     <GlobalVariable Name="gv_nigeChanSightRange" Value="2.5"/>
     <GlobalVariable Name="gv_nigeChanSafeRange" Value="3.0"/>
 
+    <!-- 니게는 가드를 하지 않는다. 가드가 아닌 상태에서 가드 브레이크를 당할 수 있다.-->
     <Entry Package="CommonRandMovePackage">
         <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="Hit" Execute="Hit"/> 
+        <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
         <Branch Condition="TargetExists && (gv_nigeChanSightRange >= TargetDistance)" Execute="Runaway"/>
     </Entry>
     
     <Runaway Package="CommonRunawayPackage">
         <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="Hit" Execute="Hit"/> 
+        <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
         <Branch Condition="TargetExists && (gv_nigeChanSafeRange < TargetDistance)" Execute="Entry"/>
     </Runaway>
 
     <!--나중에 도망치고 나서 숨돌리는 상태 하나 있으면 재미있을 듯-->
 
     <Hit Package="CommonHitPackage">
-        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
         <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="Hit" Execute="Hit"/>
+        <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </Hit>
     
+    <GuardBroken Package="CommonGuardBrokenPackage">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="Hit" Execute="Hit"/>
+        <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+    </GuardBroken>
+
     <Dead Package="CommonDeadPackage">
     </Dead>
 

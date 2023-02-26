@@ -24,10 +24,18 @@
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_Hit>
 
+    <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
+        <Animation Path="Resources/Sprites/SampleBoss/GuardBroken/" FramePerSecond="1" XFlip="true">
+            <FrameEvent Type="Movement" StartFrame="0" Friction="0" Speed="0" Velocity="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_GuardBroken>
+
     <AC_Attack MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <Animation Path="Resources/Sprites/SampleBoss/Attack/" FramePerSecond="1" XFlip="true">
             <FrameEvent Type="Movement" StartFrame="0" Friction="24" MaxVelocity="12" Velocity="12" Speed="0"/>
-            <FrameEvent Type="Attack" StartFrame="0" EndFrame="0.8" AttackPreset="AtrariRush">
+            <FrameEvent Type="Attack" StartFrame="0" EndFrame="0.4" AttackPreset="AtrariRush">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
