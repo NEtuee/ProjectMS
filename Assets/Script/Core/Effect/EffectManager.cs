@@ -230,7 +230,8 @@ public class TimelineEffectItem : EffectItemBase
         if(_parentTransform != null)
             _effectObject.transform.SetParent(_parentTransform);
 
-        _timelineEffectControl.setCharacterAnimator(effectData._timelineAnimator);
+        if(_timelineEffectControl != null && _timelineEffectControl._isCharacterMaterialEffect)
+            _timelineEffectControl.setCharacterAnimator(effectData._timelineAnimator);
 
         _effectObject.SetActive(true);
         _playableDirector.Stop();
