@@ -254,6 +254,7 @@ public class SceneCharacterManager : ManagerBase
         else
         {
             GameObject characterObject = new GameObject(characterData._displayName);
+            characterObject.layer = LayerMask.NameToLayer("Character");
             characterEntity = characterObject.AddComponent<CharacterEntityBase>();
         }
 
