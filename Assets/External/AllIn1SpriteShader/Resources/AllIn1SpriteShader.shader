@@ -2,6 +2,7 @@
 {
     Properties
     {
+		[MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
         _MainTex ("Main Texture", 2D) = "white" {}	//0
 		_Color("Main Color", Color) = (1,1,1,1)		//1
 		_Alpha("General Alpha",  Range(0,1)) = 1	//2
@@ -318,12 +319,15 @@
 			#pragma shader_feature BILBOARDY_ON
 			#pragma shader_feature FOG_ON
 
+			#pragma multi_compile _ PIXELSNAP_ON
+
             #include "UnityCG.cginc"
 			#include "AllIn1OneShaderFunctions.cginc"
 
 			#if FOG_ON
 			#pragma multi_compile_fog
 			#endif
+
 
             struct appdata
             {
@@ -605,6 +609,10 @@
 				#endif
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
 				o.color = v.color;
+
+				#ifdef PIXELSNAP_ON
+				OUT.vertex = UnityPixelSnap (OUT.vertex);
+				#endif
 
 				half2 center = half2(0.5, 0.5);
 				#if ATLAS_ON

@@ -12,6 +12,7 @@ Shader "Custom/SpriteShadowScreenShader"
 		_ShadowDistanceRatio ("Shadow Distance Ratio", Range(0.0, 10.0)) = 0.0
 
 		_ScreenSize("Screen Size", Vector) = (1024, 1024, 0, 0)
+		_ShadowDistanceOffset("Shadow Distance Offset", Range(0.0, 10.0)) = 0.0
 
 		_ShadowColor ("ShadowColor", Color) = (0,0,0,1)
 		_Color ("Tint", Color) = (1,1,1,1)
@@ -85,6 +86,8 @@ Shader "Custom/SpriteShadowScreenShader"
 
 			float _AlphaSplitEnabled;
 
+			float _ShadowDistanceOffset;
+
 			float4 _ScreenSize;
 
 			float _toRadian = 0.0174532925;
@@ -101,9 +104,8 @@ Shader "Custom/SpriteShadowScreenShader"
 				return color;
 			}
 
-			fixed4 frag(v2f IN) : SV_Target
+			fixed4 allTogether(v2f IN)
 			{
-				//IN.color;
 				fixed4 characterColor = SampleSpriteTexture (_CharacterTexture, IN.texcoord);
 				fixed4 backgroundSample = SampleSpriteTexture(_BackgroundTexture, IN.texcoord);
 				fixed4 shadowMap = SampleSpriteTexture(_ShadowMapTexture, IN.texcoord);
@@ -118,9 +120,13 @@ Shader "Custom/SpriteShadowScreenShader"
 				float sunAngle = _SunAngle * 0.0174532925 + 3.141592;
 				float additionalShadowDistance = _ShadowDistance * ((1.0 - shadowMap.r) * _ShadowDistanceRatio);
 				float2 toUV = (1.0 / _ScreenSize.xy);
-				float2 shadowOffset = toUV * ((float2(cos(sunAngle),sin(sunAngle)) * (_ShadowDistance + additionalShadowDistance)));
 
-				float characterShadowSample = SampleSpriteTexture(_CharacterTexture, IN.texcoord + shadowOffset).a;
+				float2 shadowDirection = float2(cos(sunAngle),sin(sunAngle));
+
+				float2 shadowSampleTarget = toUV * (shadowDirection * (_ShadowDistance + additionalShadowDistance));
+				float2 shadowOffset = toUV * shadowDirection * _ShadowDistanceOffset;
+
+				float characterShadowSample = SampleSpriteTexture(_CharacterTexture, IN.texcoord + shadowOffset + shadowSampleTarget).a;
 				float shadowAlpha = _ShadowColor.a;
 				fixed4 shadowColorInverse = -_ShadowColor;
 				shadowColorInverse.a = shadowAlpha;
@@ -134,8 +140,34 @@ Shader "Custom/SpriteShadowScreenShader"
 				backgroundSample *= fixed4(1.0,1.0,1.0,1.0) + shadowColorInverse * (characterShadowSample);
 
 				return backgroundSample;
-				// c.rgb *= c.a;
-				// return c;
+			}
+
+			fixed4 onlyShadow(v2f IN)
+			{
+				fixed4 characterColor = SampleSpriteTexture (_CharacterTexture, IN.texcoord);
+				fixed4 backgroundSample = SampleSpriteTexture(_BackgroundTexture, IN.texcoord);
+				fixed4 shadowMap = SampleSpriteTexture(_ShadowMapTexture, IN.texcoord);
+
+				if(characterColor.a != 0.0 || shadowMap.r == 0.0)
+					return fixed4(0.0, 0.0, 0.0 ,0.0);
+
+				float sunAngle = _SunAngle * 0.0174532925 + 3.141592;
+				float additionalShadowDistance = _ShadowDistance * ((1.0 - shadowMap.r) * _ShadowDistanceRatio);
+				float2 toUV = (1.0 / _ScreenSize.xy);
+
+				float2 shadowDirection = float2(cos(sunAngle),sin(sunAngle));
+
+				float2 shadowSampleTarget = toUV * (shadowDirection * (_ShadowDistance + additionalShadowDistance));
+				float2 shadowOffset = toUV * shadowDirection * _ShadowDistanceOffset;
+
+				float characterShadowSample = SampleSpriteTexture(_CharacterTexture, IN.texcoord + shadowOffset + shadowSampleTarget).a;
+
+				return _ShadowColor * characterShadowSample;
+			}
+
+			fixed4 frag(v2f IN) : SV_Target
+			{
+				return onlyShadow(IN);
 			}
 		ENDCG
 		}
