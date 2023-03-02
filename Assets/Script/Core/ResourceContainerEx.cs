@@ -130,6 +130,7 @@ public class ResourceContainerEx : Singleton<ResourceContainerEx>
     private ManagedResourceItem<Sprite> 				_spriteResource = new ManagedResourceItem<Sprite>();
 	private ManagedResourceItem<ScriptableObject> 		_scriptableResource = new ManagedResourceItem<ScriptableObject>();
 	private ManagedResourceItem<GameObject>		 		_prefabResource = new ManagedResourceItem<GameObject>();
+	private ManagedResourceItem<Material>		 		_materialResource = new ManagedResourceItem<Material>();
 
 	private DataResourceItem<ActionGraphBaseData,ActionGraphLoader>				_actionGraphResource = new DataResourceItem<ActionGraphBaseData,ActionGraphLoader>();
 	private DataResourceItem<AIGraphBaseData,AIGraphLoader>						_aiGraphResource = new DataResourceItem<AIGraphBaseData,AIGraphLoader>();
@@ -164,6 +165,11 @@ public class ResourceContainerEx : Singleton<ResourceContainerEx>
 	public GameObject GetPrefab(string fileName)
 	{
 		return _prefabResource.GetOrLoadResource(fileName);
+	}
+	
+	public Material GetMaterial(string fileName)
+	{
+		return _materialResource.GetOrLoadResource(fileName);
 	}
 
 	public ActionGraphBaseData GetActionGraph(string path)

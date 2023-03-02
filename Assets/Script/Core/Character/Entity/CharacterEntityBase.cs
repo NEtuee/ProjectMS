@@ -12,6 +12,8 @@ public class CharacterEntityBase : GameEntityBase
     {
         base.assign();
 
+        _spriteRenderer.gameObject.layer = LayerMask.NameToLayer("Character");
+
 #if UNITY_EDITOR
         GameObject debugText = Instantiate(ResourceContainerEx.Instance().GetPrefab("Prefab/DebugTextManager"),Vector3.zero,Quaternion.identity);
         debugTextManager = debugText.GetComponent<DebugTextManager>();

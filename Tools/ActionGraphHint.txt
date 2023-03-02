@@ -5,7 +5,7 @@ FrameEvent,ApplyBuff,ApplyBuff=~~
 FrameEvent,ApplyBuffTarget,ApplyBuff=~~
 FrameEvent,DeleteBuff,BuffList=~~
 FrameEvent,SetDefenceType,DefenceType=~/${1|Empty Guard Parry Evade}~
-FrameEvent,Effect,"Path=~~,FramePerSecond=~~,Offset=~~,Angle=~~,ToTarget=~~,UseFlip=~~"
+FrameEvent,Effect,"Path=~~,FramePerSecond=~~,Offset=~~,Angle=~~,ToTarget=~~,UseFlip=~~,Attach=~~,UpdateType=~~"
 FrameEvent,SetFrameTag,"EndFrame=~~,Tag=~~,Tag=~~"
 FrameEvent,Projectile,"GraphName=~~,DirectionType=~~,ShotInfoUseType=~~,SpawnTargetType=~~"
 FrameEvent,Danmaku,Path=~~
@@ -25,6 +25,7 @@ InQuote,RotationType=,"AlwaysTurnOff,Direction,MousePoint,MoveDirection,Keep"
 InQuote,DefenceType=,"Empty,Guard,Parry,Evade"
 InQuote,IsActionSelection=,"true,false"
 InQuote,NormalizedSpeed=,"true,false"
+InQuote,Attach=,"true,false"
 InQuote,DirectionUpdateOnce=,"true,false"
 InQuote,Condition=,"ActionTest,ActionDash,End,AngleBetweenStick,AngleDirection,IsXFlip,IsYFlip,CurrentFrame,AttackSuccess,AttackGuarded,AttackParried,AttackGuardBreak,DefenceSuccess,ParrySuccess,Hit,EvadeSuccess,GuardBroken,CurrentFrame,TargetExists,TargetDistance,ArrivedTarget,CurrentPackageEnd,getStat_,getKey_,getFrameTag_,getTargetFrameTag_,getWeight_,true,false,PackageExecutedTime,GraphExecutedTime,AttackGuardBreakFail,GuardBreakFail"
 InScope,,"MovementType=~~,MovementGraphPreset=~~,DirectionType=~~,DefenceDirectionType=~~,FlipType=~~,RotationType=~~,MoveScale=~~,IsActionSelection=~~,ApplyBuff=~~,NormalizedSpeed=~~,DefenceType=~~,DefenceAngle=~~,DirectionUpdateOnce=~~,IsActionSelection=~~,FlipTypeUpdateOnce=~~,RotateBySpeed=~~,RotateSpeed=~~"
@@ -63,8 +64,8 @@ ShortCut,__FrameEvent_Movement,<FrameEvent Type=~Movement~ StartFrame=~0~ Fricti
 ShortCut,__MultiSelectAnimation,<MultiSelectAnimation Path=~~ Condition=~~/>
 ShortCut,__FrameEvent_ZoomEffect,<FrameEvent Type=~ZoomEffect~ Scale=~~/>
 ShortCut,__FrameEvent_StopUpdate,<FrameEvent Type=~StopUpdate~ Time=~~/>
-,,
-,,
+FrameEvent,TimelineEffect,"Path=~~,Offset=~~,ToTarget=~~,Attach=~~,UpdateType=~~"
+InQuote,UpdateType=,"ScaledDeltaTime,NoneScaledDeltaTime"
 ,,
 ,,
 ,,
