@@ -128,4 +128,31 @@
         </Event>
     </MagicalBullet>
 
+    <MagicalMissile DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">
+        <Animation Path="Resources/Sprites/Projectile/MagicalBullet/" StartFrame="0" EndFrame="1" XFlip="true">
+        </Animation>
+        <CollisionInfo Radius="0.1" Angle="0"/>
+        <DefaultShotInfo Velocity="7" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="5"/>
+        
+        <Event>
+            <OnHit>
+                <FrameEvent Type="Attack" StartFrame="0" AttackPreset="MagicalBullet">
+                    <OnHit>
+                        <FrameEvent Type="Test" Log="MagicalBullet OnHit"/>
+                        <FrameEvent Type="ApplyBuffTarget" ApplyBuff="TestProjectileAttack"/>
+                        <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
+                    </OnHit>
+                </FrameEvent>
+            </OnHit>
+    
+            <OnHitEnd>
+                <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0"/>
+            </OnHitEnd>
+    
+            <OnEnd>
+                <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc" FramePerSecond="18.0" Offset="0.0 0.0 0.0"/>
+            </OnEnd>
+        </Event>
+    </MagicalMissile>
+
 </ProjectileGraph>
