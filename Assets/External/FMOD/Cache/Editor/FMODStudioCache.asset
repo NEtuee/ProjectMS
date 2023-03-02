@@ -12,10 +12,133 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d32cf7c32a3ed8347bac48ef5ed56d82, type: 3}
   m_Name: FMODStudioCache
   m_EditorClassIdentifier: 
-  EditorBanks: []
-  EditorEvents: []
+  EditorBanks:
+  - {fileID: 2503122441539236048}
+  - {fileID: 1638245402476482819}
+  EditorEvents:
+  - {fileID: 3878002837303219473}
+  - {fileID: 20708546717393574}
   EditorParameters: []
-  MasterBanks: []
-  StringsBanks: []
-  cacheTime: 0
+  MasterBanks:
+  - {fileID: 1638245402476482819}
+  StringsBanks:
+  - {fileID: 2503122441539236048}
+  cacheTime: 638133976293693432
   cacheVersion: 131601
+--- !u!114 &20708546717393574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/TestAmbient
+  m_EditorClassIdentifier: 
+  Path: event:/TestAmbient
+  Guid:
+    Data1: 1387696320
+    Data2: 1169272970
+    Data3: 852113824
+    Data4: -161327987
+  Banks:
+  - {fileID: 1638245402476482819}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 0
+  Parameters:
+  - {fileID: 4869883304806060042}
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 9542
+--- !u!114 &1638245402476482819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: 
+  Path: Assets/Data/Audio/Bank/Master.bank
+  Name: Master
+  StudioPath: bank:/Master
+  lastModified: 638133976274105049
+  FileSizes: []
+  Exists: 1
+--- !u!114 &2503122441539236048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.strings.bank
+  m_EditorClassIdentifier: 
+  Path: Assets/Data/Audio/Bank/Master.strings.bank
+  Name: Master.strings
+  StudioPath: bank:/Master.strings
+  lastModified: 638133976293693432
+  FileSizes:
+  - Name: 
+    Value: 864
+  Exists: 1
+--- !u!114 &3878002837303219473
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/TestSFX
+  m_EditorClassIdentifier: 
+  Path: event:/TestSFX
+  Guid:
+    Data1: -2136835437
+    Data2: 1116838091
+    Data3: -673111138
+    Data4: 1864590840
+  Banks:
+  - {fileID: 1638245402476482819}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 1416
+--- !u!114 &4869883304806060042
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/TestAmbient/AmbVolumeControl
+  m_EditorClassIdentifier: 
+  Name: AmbVolumeControl
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 1
+  ID:
+    data1: 3820470921
+    data2: 1996171865
+  Type: 0
+  IsGlobal: 0
+  Labels: []
+  Exists: 1

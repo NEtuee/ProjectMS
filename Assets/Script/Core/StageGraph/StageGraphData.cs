@@ -102,6 +102,42 @@ public class StageGraphEvent_WaitSecond : StageGraphEventBase
     }
 }
 
+public class StageGraphEvent_SetAudioListner : StageGraphEventBase
+{
+    private string _uniqueKey = "";
+
+    public override StageGraphEventType getStageGraphEventType() => StageGraphEventType.SetAudioListner;
+    
+    public override void Initialize()
+    {
+        
+    }
+
+    public override bool Execute(StageGraphManager graphManager,float deltaTime)
+    {
+        GameEntityBase unqueEntity = graphManager.getUniqueEntity(_uniqueKey);
+        if(unqueEntity == null)
+            return true;
+
+        FMODAudioManager.Instance().setListener(unqueEntity.transform);
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "UniqueKey")
+                _uniqueKey = attrValue;
+        }
+    }
+}
+
 public class StageGraphEvent_SetCameraTarget : StageGraphEventBase
 {
     private string _uniqueKey = "";
@@ -144,6 +180,7 @@ public enum StageGraphEventType
     SpawnCharacter,
     WaitSecond,
     SetCameraTarget,
+    SetAudioListner,
     Count,
 }
 
