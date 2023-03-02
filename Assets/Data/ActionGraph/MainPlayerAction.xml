@@ -168,7 +168,7 @@
 
     <AttackSuccess MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
         <Animation Path="Resources/Sprites/NewPlayer/attack/" FramePerSecond="24" XFlip="true" ScalePreset="YSpring">
-            <FrameEvent Type="Effect" StartFrame="0" Path="Resources/Sprites/Effect/Sheath" FramePerSecond="0.5" Offset="0.0 0.0 0.0" Angle="Random_0^360" UseFlip="True">
+            <FrameEvent Type="Effect" StartFrame="0" Path="Resources/Sprites/Effect/Sheath" FramePerSecond="0.5" Offset="0.0 0.0 0.0" Angle="Random_0^360" UseFlip="True" CastShadow="True">
                 <Physics UseGravity="True" Velocity="-1.5 3.5" Friction="1.0" Torque="Random_25^30" AngularFriction="10.0"/>
             </FrameEvent>
 

@@ -107,6 +107,7 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
 
     private bool _usePhysics = false;
     private bool _useFlip = false;
+    private bool _castShadow = false;
     private PhysicsBodyDescription _physicsBodyDesc = PhysicsBodyDescription._empty;
     private EffectUpdateType _effectUpdateType = EffectUpdateType.ScaledDeltaTime;
 
@@ -131,6 +132,7 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
         requestData._rotation = directionAngle;
         requestData._effectType = EffectType.SpriteEffect;
         requestData._updateType = _effectUpdateType;
+        requestData._castShadow = _castShadow;
 
         if(_attach)
             requestData._parentTransform = _toTarget ? targetEntity.transform : executeEntity.transform;
@@ -247,6 +249,10 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
             else if(attributes[i].Name == "Attach")
             {
                 _attach = bool.Parse(attributes[i].Value);
+            }
+            else if(attributes[i].Name == "CastShadow")
+            {
+                _castShadow = bool.Parse(attributes[i].Value);
             }
 
         }
