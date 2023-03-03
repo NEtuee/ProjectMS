@@ -16,19 +16,48 @@
     <GlobalVariable Name="gv_rotateSpeed" Value="840"/>
 
 
-    <Idle MovementType="FrameEvent" DirectionType="Keep" FlipType="MousePoint">
-        <Animation Path="Resources/Sprites/NewPlayer/idle/" FramePerSecond="12" XFlip="true" Loop="false">
-            <FrameEvent Type="Movement" StartFrame="0" Friction="gv_IdleFriction" Speed="0"/>
-        </Animation>
-
+    <BranchSet Name="IdleBranchSet">
         <Branch Key="getKey_Guard" Condition="true" Execute="Guard"/>
         <Branch Key="getKey_GuardBreak2 && getKey_AttackCharge" Execute="DashRoll_Kick"/>
         <Branch Key="getKey_StunShot && getKey_AttackCharge" Execute="StunShot"/>
         <Branch Key="getKey_AttackCharge == true" Execute="DashRoll"/>
         <Branch Key="getKey_NormalMove == true" Execute="MoveAll"/>
+    </BranchSet>
+
+
+    <Idle MovementType="FrameEvent" DirectionType="Keep" FlipType="Keep">
+        <Animation Path="Resources/Sprites/NewPlayer/idle/" FramePerSecond="12" XFlip="true" Loop="false">
+            <FrameEvent Type="Movement" StartFrame="0" Friction="gv_IdleFriction" Speed="0"/>
+        </Animation>
+
+        <UseBranchSet Name="IdleBranchSet"/>
+        <Branch Condition="AngleFlipDirectionToStick >= 90.0" Execute="Idle_Transition"/>
 
         <Branch Condition="End == true" Execute="Idle"/>
     </Idle>
+
+    <Idle_Transition MovementType="FrameEvent" DirectionType="Keep" FlipType="Keep">
+        <Animation Path="Resources/Sprites/NewPlayer/idle_ing/" FramePerSecond="12" XFlip="true" Loop="false">
+            <FrameEvent Type="Movement" StartFrame="0" Friction="gv_IdleFriction" Speed="0"/>
+        </Animation>
+
+        <UseBranchSet Name="IdleBranchSet"/>
+
+        <Branch Condition="End && (AngleFlipDirectionToStick >= 90.0)" Execute="Idle_LookBack"/>
+        <Branch Condition="End && (AngleFlipDirectionToStick < 90.0)" Execute="Idle"/>
+        <Branch Condition="End == true" Execute="Idle_LookBack"/>
+    </Idle_Transition>
+
+    <Idle_LookBack MovementType="FrameEvent" DirectionType="Keep" FlipType="Keep">
+        <Animation Path="Resources/Sprites/NewPlayer/idle_back/" FramePerSecond="2" XFlip="true" Loop="false">
+            <FrameEvent Type="Movement" StartFrame="0" Friction="gv_IdleFriction" Speed="0"/>
+        </Animation>
+
+        <UseBranchSet Name="IdleBranchSet"/>
+        <Branch Condition="AngleFlipDirectionToStick < 90.0" Execute="Idle_Transition"/>
+
+        <Branch Condition="End == true" Execute="Idle_LookBack"/>
+    </Idle_LookBack>
     
     <MoveStop MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <Animation Path="Resources/Sprites/NewPlayer/MoveStop/" FramePerSecond="16" XFlip="true" Loop="false" >
