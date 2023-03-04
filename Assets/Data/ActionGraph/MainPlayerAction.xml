@@ -24,6 +24,16 @@
         <Branch Key="getKey_NormalMove == true" Execute="MoveAll"/>
     </BranchSet>
 
+    <BranchSet Name="StopToIdle">
+    <!-- <Branch Key="getKey_Guard && getKey_AttackCharge" Condition="true" Execute="Guard"/> -->
+        <Branch Key="getKey_GuardBreak2 && getKey_AttackCharge" Execute="DashRoll_Kick"/>
+        <Branch Key="getKey_StunShot && getKey_AttackCharge" Execute="StunShot"/>
+        <Branch Key="getKey_AttackCharge == true" Execute="DashRoll"/>
+        <Branch Key="getKey_NormalMove == true" Execute="MoveAll"/>
+
+        <Branch Condition="End == true" Execute="Idle"/>
+    </BranchSet>
+
 
     <Idle MovementType="FrameEvent" DirectionType="Keep" FlipType="Keep">
         <Animation Path="Resources/Sprites/NewPlayer/idle/" FramePerSecond="12" XFlip="true" Loop="false">
@@ -64,13 +74,8 @@
             <FrameEvent Type="Movement" StartFrame="0" Friction="gv_IdleFriction" Speed="0" Velocity="gv_MoveVelocityMax"/>
         </Animation>
         
-        <!-- <Branch Key="getKey_Guard && getKey_AttackCharge" Condition="true" Execute="Guard"/> -->
-        <Branch Key="getKey_GuardBreak2 && getKey_AttackCharge" Execute="DashRoll_Kick"/>
-        <Branch Key="getKey_StunShot && getKey_AttackCharge" Execute="StunShot"/>
-        <Branch Key="getKey_AttackCharge == true" Execute="DashRoll"/>
-        <Branch Key="getKey_NormalMove == true" Execute="MoveAll"/>
-
-        <Branch Condition="End == true" Execute="Idle"/>
+        <UseBranchSet Name="StopToIdle"/>
+        
     </MoveStop>
 
     <AttackStop MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
@@ -78,14 +83,16 @@
             <FrameEvent Type="Movement" StartFrame="0" Friction="gv_IdleFriction" Speed="0" Velocity="0"/>
         </Animation>
 
-        <!-- <Branch Key="getKey_Guard && getKey_AttackCharge" Condition="true" Execute="Guard"/> -->
-        <Branch Key="getKey_GuardBreak2 && getKey_AttackCharge" Execute="DashRoll_Kick"/>
-        <Branch Key="getKey_StunShot && getKey_AttackCharge" Execute="StunShot"/>
-        <Branch Key="getKey_AttackCharge == true" Execute="DashRoll"/>
-        <Branch Key="getKey_NormalMove == true" Execute="MoveAll"/>
-
-        <Branch Condition="End == true" Execute="Idle"/>
+        <UseBranchSet Name="StopToIdle"/>
     </AttackStop>
+
+    <KickStop MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+        <Animation Path="Resources/Sprites/NewPlayer/kick_stop/" FramePerSecond="16" XFlip="true" Loop="false" >
+            <FrameEvent Type="Movement" StartFrame="0" Friction="gv_IdleFriction" Speed="0" Velocity="0"/>
+        </Animation>
+        
+        <UseBranchSet Name="StopToIdle"/>
+    </KickStop>
 
     <MoveAll MovementType="FrameEvent" DirectionType="MousePoint" RotationType="MoveDirection" FlipType="MousePoint" FlipTypeUpdateOnce="True" RotateBySpeed="True" RotateSpeed="gv_rotateSpeed">
         <Animation Path="Resources/Sprites/NewPlayer/MoveRotate/" FramePerSecond="1" AngleBaseAnimation="True" XFlip="true">
@@ -136,7 +143,7 @@
     </DashRoll>
 
     <DashRoll_Kick MovementType="FrameEvent" DirectionType="MousePoint" RotationType="MoveDirection" FlipType="MousePoint" DirectionUpdateOnce="true">
-        <Animation Path="Resources/Sprites/NewPlayer/DashRoll/" FramePerSecond="32" XFlip="true" ScalePreset="YSpring">
+        <Animation Path="Resources/Sprites/NewPlayer/DashRoll/" FramePerSecond="32" XFlip="true">
             <FrameEvent Type="Attack" StartFrame="0" AttackType="GuardBreak" AttackPreset="Akane_Kick" IgnoreDefenceType="Guard">
                 <OnGuardBreak>
                     <FrameEvent Type="ApplyBuffTarget" StartFrame="0" ApplyBuff="21"/>
@@ -145,7 +152,7 @@
 
                     <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/Crosslight_Timeline" Offset="0.0 0.0 0.0" ToTarget="true"/>
                     
-                    <FrameEvent Type="TeleportToTarget" DistanceOffset="-0.3"/>
+                    <FrameEvent Type="TeleportToTarget" DistanceOffset="0"/>
                     <FrameEvent Type="ZoomEffect" StartFrame="0" Scale="2.8"/>
                     <FrameEvent Type="StopUpdate" StartFrame="0" Time="0.15"/>
                 </OnGuardBreak>
@@ -153,9 +160,9 @@
                 <OnGuardBreakFail>
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc" FramePerSecond="18.0" Offset="0.0 0.0 0.0" ToTarget="true"/>
                     
-                    <FrameEvent Type="TeleportToTarget" DistanceOffset="-0.3"/>
+                    <FrameEvent Type="TeleportToTarget" DistanceOffset="0"/>
                     <FrameEvent Type="ZoomEffect" StartFrame="0" Scale="3.1"/>
-                    <FrameEvent Type="StopUpdate" StartFrame="0" Time="0.07"/>
+                    <FrameEvent Type="StopUpdate" StartFrame="0" Time="0.15"/>
                 </OnGuardBreakFail>
             </FrameEvent>
 
@@ -185,14 +192,14 @@
     </StunShot>
 
     <Kicked MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
-        <Animation Path="Resources/Sprites/NewPlayer/attack/" FramePerSecond="18" XFlip="true" ScalePreset="YSpring">
-            <FrameEvent Type="Movement" StartFrame="0" Friction="3" Speed="0" Velocity="-2 "/>
+        <Animation Path="Resources/Sprites/NewPlayer/kick/" FramePerSecond="9" XFlip="true" ScalePreset="YSpring">
+            <FrameEvent Type="Movement" StartFrame="0" Friction="3" Speed="0" Velocity="-1.5 "/>
             <FrameEvent Type="Test" StartFrame="0" Log="Kicked Executed"/>
         </Animation>
 
         <!-- <Branch Condition="AttackSuccess" Execute="AttackSuccess"/> -->
         <Branch Key="(getKey_AttackCharge == true) || (getKey_NormalMove == true)" Condition="End" Execute="MoveAll"/>
-        <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="Idle"/>
+        <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="KickStop"/>
     </Kicked>
 
     <AttackSuccess MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
