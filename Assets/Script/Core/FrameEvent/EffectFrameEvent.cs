@@ -2,17 +2,25 @@ using System.Xml;
 using System.Collections.Generic;
 using UnityEngine;
 
+enum AngleDirectionType
+{
+    Normal,
+    AttackPoint,
+}
 
 public class ActionFrameEvent_TimelineEffect : ActionFrameEventBase
 {
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_TimelineEffect;}
 
-    public string _effectPath = "";
-    private bool _toTarget = false;
-    private bool _attach = false;
+    public string               _effectPath = "";
+    private bool                _toTarget = false;
+    private bool                _attach = false;
 
-    private Vector3 _spawnOffset = Vector3.zero;
-    private EffectUpdateType _effectUpdateType = EffectUpdateType.ScaledDeltaTime;
+    private Vector3             _spawnOffset = Vector3.zero;
+    private Quaternion          _effectRotation = Quaternion.identity;
+    private EffectUpdateType    _effectUpdateType = EffectUpdateType.ScaledDeltaTime;
+
+    private AngleDirectionType  _angleDirectionType = AngleDirectionType.Normal;
 
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
@@ -26,7 +34,7 @@ public class ActionFrameEvent_TimelineEffect : ActionFrameEventBase
         requestData.clearRequestData();
         requestData._effectPath = _effectPath;
         requestData._position = centerPosition + _spawnOffset;
-        requestData._rotation = Quaternion.identity;
+        requestData._rotation = getAngleByType(executeEntity, requestData._position);
         requestData._updateType = _effectUpdateType;
         requestData._effectType = EffectType.TimelineEffect;
 
@@ -40,6 +48,27 @@ public class ActionFrameEvent_TimelineEffect : ActionFrameEventBase
         executeEntity.SendMessageEx(MessageTitles.effect_spawnEffect,UniqueIDBase.QueryUniqueID("EffectManager"),requestData);
 
         return true;
+    }
+
+    public Quaternion getAngleByType(ObjectBase executeEntity, Vector3 effectPosition)
+    {
+        switch(_angleDirectionType)
+        {
+            case AngleDirectionType.Normal:
+                return Quaternion.identity;
+            case AngleDirectionType.AttackPoint:
+            {
+                if(executeEntity is GameEntityBase == false)
+                    return Quaternion.identity;
+
+                Vector3 direction = effectPosition - (executeEntity as GameEntityBase).getAttackPoint();
+                direction.Normalize();
+
+                return Quaternion.Euler(0f,0f,MathEx.directionToAngle(direction));
+            }
+        }
+
+        return Quaternion.identity;
     }
 
     public override void loadFromXML(XmlNode node)
@@ -75,6 +104,10 @@ public class ActionFrameEvent_TimelineEffect : ActionFrameEventBase
             else if(attributes[i].Name == "Attach")
             {
                 _attach = bool.Parse(attributes[i].Value);
+            }
+            else if(attributes[i].Name == "AngleType")
+            {
+                _angleDirectionType = (AngleDirectionType)System.Enum.Parse(typeof(AngleDirectionType), attributes[i].Value);
             }
         }
 

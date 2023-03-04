@@ -677,6 +677,8 @@ public class GameEntityBase : SequencerObjectBase
     public void setTargetEntity(GameEntityBase target) {_currentTarget = target;}
     public GameEntityBase getCurrentTargetEntity() {return _currentTarget;}
 
+    public Vector3 getAttackPoint() {return _recentlyAttackPoint;}
+
     public FlipState getFlipState() {return _flipState;}
 
     public CollisionInfo getCollisionInfo() {return _collisionInfo;}
