@@ -192,12 +192,14 @@ PlayableDirector:
   m_GameObject: {fileID: 4614801700774157034}
   m_Enabled: 1
   serializedVersion: 3
-  m_PlayableAsset: {fileID: 0}
+  m_PlayableAsset: {fileID: 11400000, guid: 1bb21933f4b806949b748f9a4663977b, type: 2}
   m_InitialState: 1
   m_WrapMode: 2
   m_DirectorUpdateMode: 1
   m_InitialTime: 0
-  m_SceneBindings: []
+  m_SceneBindings:
+  - key: {fileID: -6196529924368229110, guid: 1bb21933f4b806949b748f9a4663977b, type: 2}
+    value: {fileID: 2668555722786034863}
   m_ExposedReferences:
     m_References: []
 --- !u!114 &1433694753186207231
@@ -212,5 +214,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9797d4a3836acaf43831ebf9e30eeeea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playableDirector: {fileID: 5297954144489380521}
+  _playableDirector: {fileID: 5645257416780805238, guid: c99bf4501fd17ad428c7c880a31e888a, type: 3}
   _isCharacterMaterialEffect: 0
