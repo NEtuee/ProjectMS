@@ -95,6 +95,10 @@ public class StageGraphLoader : LoaderBase<StageGraphBaseData>
         {
             spawnEvent = new StageGraphEvent_SetCameraTarget();
         }
+        else if(node.Name == "SetAudioListner")
+        {
+            spawnEvent = new StageGraphEvent_SetAudioListner();
+        }
 
         if(spawnEvent == null)
         {

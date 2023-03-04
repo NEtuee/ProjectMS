@@ -157,6 +157,7 @@ public enum ConditionNodeUpdateType
     Action_AnimationEnd,
     Action_AngleBetweenStick,
     Action_AngleDirection,
+    Action_AngleFlipDirectionToStick,
     Action_IsXFlip,
     Action_IsYFlip,
     Action_CurrentFrame,
@@ -240,6 +241,7 @@ public static class ConditionNodeInfoPreset
         {"End",new ConditionNodeInfo(ConditionNodeUpdateType.Action_AnimationEnd, ConditionNodeType.Bool)},
         {"AngleBetweenStick",new ConditionNodeInfo(ConditionNodeUpdateType.Action_AngleBetweenStick, ConditionNodeType.Float)},
         {"AngleDirection",new ConditionNodeInfo(ConditionNodeUpdateType.Action_AngleDirection, ConditionNodeType.Float)},
+        {"AngleFlipDirectionToStick",new ConditionNodeInfo(ConditionNodeUpdateType.Action_AngleFlipDirectionToStick, ConditionNodeType.Float)},
 
         {"IsXFlip",new ConditionNodeInfo(ConditionNodeUpdateType.Action_IsXFlip, ConditionNodeType.Bool)},
         {"IsYFlip",new ConditionNodeInfo(ConditionNodeUpdateType.Action_IsYFlip, ConditionNodeType.Bool)},

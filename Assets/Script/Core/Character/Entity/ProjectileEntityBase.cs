@@ -39,6 +39,8 @@ public class ProjectileEntityBase : ObjectBase
         _spriteRotation = baseData._useSpriteRotation;
         _projectileGraph.setData(baseData);
         _collisionInfo.setCollisionInfo(baseData._collisionRadius, baseData._collisionAngle, baseData._collisionStartDistance);
+
+        _spriteRenderer.gameObject.layer = baseData._castShadow ? LayerMask.NameToLayer("Character") : LayerMask.NameToLayer("Projectile");
     }
 
     public void shot(Vector3 startPosition)

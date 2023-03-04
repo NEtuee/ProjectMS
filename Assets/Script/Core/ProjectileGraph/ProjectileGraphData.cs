@@ -23,6 +23,7 @@ public class ProjectileGraphBaseData
     public float                        _collisionStartDistance = 0f;
 
     public bool                         _useSpriteRotation = false;
+    public bool                         _castShadow = false;
 
     public int                          _penetrateCount = 1;
 }

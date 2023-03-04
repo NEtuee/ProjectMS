@@ -67,6 +67,7 @@ public class MasterManager : MessageHub<ManagerBase>
             m.initialize();
         }
 
+        FMODAudioManager.Instance().initialize();
         CameraControlEx.Instance().initialize();
         StageGraphManager.Instance().initialize();
     }
@@ -111,6 +112,7 @@ public class MasterManager : MessageHub<ManagerBase>
         ReceiveMessageProcessing();
 
         CameraControlEx.Instance().progress(deltaTime);
+        FMODAudioManager.Instance().updateAudio();
 
         if(Input.GetKeyDown(KeyCode.Return))
         {

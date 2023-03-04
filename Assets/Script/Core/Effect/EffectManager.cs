@@ -28,6 +28,7 @@ public class EffectRequestData : MessageData
 
     public bool _usePhysics;
     public bool _useFlip;
+    public bool _castShadow;
 
     public EffectType _effectType;
     public EffectUpdateType _updateType = EffectUpdateType.ScaledDeltaTime;
@@ -49,6 +50,7 @@ public class EffectRequestData : MessageData
         _angle = 0f;
         _usePhysics = false;
         _useFlip = false;
+        _castShadow = false;
         _effectType = EffectType.SpriteEffect;
         _updateType = EffectUpdateType.ScaledDeltaTime;
         _position = Vector3.zero;
@@ -120,6 +122,8 @@ public class EffectItem : EffectItemBase
 
         if(_parentTransform != null && _parentTransform.gameObject.activeInHierarchy == false)
             _parentTransform = null;
+
+        _spriteRenderer.gameObject.layer = effectData._castShadow ? LayerMask.NameToLayer("Character") : LayerMask.NameToLayer("Effect");
 
         _spriteRenderer.transform.position = effectData._position;
         _spriteRenderer.transform.localRotation = Quaternion.Euler(0f,0f,effectData._angle);
