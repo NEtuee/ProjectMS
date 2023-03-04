@@ -44,11 +44,34 @@
     </Dead>
 
     <AC_Kick MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <Animation Path="Resources/Sprites/SampleBoss/Attack/" FramePerSecond="12" XFlip="true">           
+        <Animation Path="Resources/Sprites/SampleBoss/Attack/" FramePerSecond="2" XFlip="true"> 
+            <FrameEvent Type="Attack" StartFrame="0.2" AttackPreset="Sister_Kick">
+                <OnHit>
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc" FramePerSecond="18.0" Offset="0.0 0.0 0.0" ToTarget="true"/>
+                    
+                    <FrameEvent Type="TeleportToTarget" DistanceOffset="-0.3"/>
+                    <FrameEvent Type="ZoomEffect" StartFrame="0" Scale="2.8"/>
+                    <FrameEvent Type="StopUpdate" StartFrame="0" Time="0.15"/>
+                </OnHit>
+
+            </FrameEvent>
+            <FrameEvent Type="Movement" StartFrame="0.2" Friction="24" MaxVelocity="10" Speed="0" Velocity="10"/>
+            <FrameEvent Type="FrameTag" StartFrame="5" EndFrame="999" Tag="MoveCancel"/>
         </Animation>
 
-        <Branch Condition="End" Execute="AC_Kick"/>
+        <Branch Condition="End" Execute="AC_Idle"/>
     </AC_Kick>
+
+    <AC_Kicked MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
+        <Animation Path="Resources/Sprites/SampleBoss/Attack/" FramePerSecond="18" XFlip="true" ScalePreset="YSpring">
+            <FrameEvent Type="Movement" StartFrame="0" Friction="3" Speed="0" Velocity="-2 "/>
+            <FrameEvent Type="Test" StartFrame="0" Log="Kicked Executed"/>
+        </Animation>
+
+        <!-- <Branch Condition="AttackSuccess" Execute="AttackSuccess"/> -->
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_Kicked>
 
     <AC_Chainsaw MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <Animation Path="Resources/Sprites/SampleBoss/Attack/" FramePerSecond="12" XFlip="true">           
@@ -70,5 +93,12 @@
 
         <Branch Condition="End" Execute="AC_SwordMissile"/>
     </AC_SwordMissile>
+
+    <AC_Chat DirectionType="AI" FlipType="Direction">
+        <Animation Path="Resources/Sprites/DummyPlayer/idle" FramePerSecond="12" XFlip="true">           
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Chat"/>
+    </AC_Chat>
 
 </ActionGraph>
