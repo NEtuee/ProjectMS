@@ -1,0 +1,13 @@
+<AIGraph Name="SisterAIGraph" DefaultState="Entry">
+
+    <Include Path="Enemy\SisterChanPackage.xml"/>
+    <Include Path="Common\CommonDeadPackage.xml"/>
+    
+    <Entry Package="SisterChanPackage">
+        <Branch Condition="Dead" Execute="Dead"/>
+    </Entry>
+
+    <Dead Package="CommonDeadPackage">
+    </Dead>
+
+</AIGraph>

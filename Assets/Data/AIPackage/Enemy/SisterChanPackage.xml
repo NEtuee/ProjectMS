@@ -1,0 +1,44 @@
+<AIPackage Name="SisterChanPackage" DefaultState="AI_Entry">
+
+    <AIState>
+        <AI_Entry UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <Event_OnExecute>
+                <AIEvent Type="SetAction" Action="AC_Idle"/>
+            </Event_OnExecute>
+        </AI_Entry>
+
+        <AI_Chase UpdateTime="0.2" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="AC_Move"/>
+            </Event_OnExecute>
+            
+            <Branch Condition="true" Execute="AI_Chase"/>
+        </AI_Chase>
+
+        <AI_Hit UpdateTime="0.0">
+            <Event_OnExecute>
+                <AIEvent Type="SetAction" Action="AC_Hit"/>
+            </Event_OnExecute>
+            <Branch Condition="End == true" Execute="AI_Entry"/>
+        </AI_Hit>
+
+        <AI_Kick UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="AC_Attack"/>
+            </Event_OnExecute>
+            
+            <Branch Condition="End" Execute="AI_Entry"/>
+        </AI_Kick>
+        
+        <AI_GuardBroken UpdateTime="0.0">
+            <Event_OnExecute>
+                <AIEvent Type="SetAction" Action="AC_GuardBroken"/>
+            </Event_OnExecute>
+            <Branch Condition="End == true" Execute="AI_Entry"/>
+        </AI_GuardBroken>
+
+    </AIState>
+
+</AIPackage>
