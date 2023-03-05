@@ -30,4 +30,10 @@
         <Stat Type="Custom" Name="AttackDelay" Max="1" Min="0" Init="1"/>
     </TateChanStatus>
 
+    <TestEnemyStatus>
+        <Stat Type="HP" Max="100" Min="0" Init="100"/>
+        <Stat Type="Blood" Max="100" Min="0" Init="3"/>
+        <Stat Type="Custom" Name="GuardPoint" Max="3" Min="0" Init="3"/>
+    </TestEnemyStatus>
+
 </StatusInfo>

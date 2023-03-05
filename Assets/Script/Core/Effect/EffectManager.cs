@@ -247,7 +247,7 @@ public class TimelineEffectItem : EffectItemBase
         if(isValid() == false || _playableDirector.playableGraph.IsValid() == false)
             return false;
 
-        _playableDirector.playableGraph.Evaluate(deltaTime);
+        _playableDirector.playableGraph.Evaluate(Time.deltaTime);
         return _playableDirector.state != PlayState.Playing;
     }
 

@@ -34,6 +34,14 @@
         <Branch Condition="End == true" Execute="Idle"/>
     </BranchSet>
 
+    <BranchSet Name="CancelBranch">
+    <!-- <Branch Key="getKey_Guard && getKey_AttackCharge" Condition="true" Execute="Guard"/> -->
+        <Branch Key="getKey_GuardBreak2 && getKey_AttackCharge" Condition="getFrameTag_MoveCancel" Execute="DashRoll_Kick"/>
+        <Branch Key="getKey_StunShot && getKey_AttackCharge" Condition="getFrameTag_MoveCancel" Execute="StunShot"/>
+        <Branch Key="getKey_AttackCharge == true" Condition="getFrameTag_MoveCancel" Execute="DashRoll"/>
+        <Branch Key="getKey_NormalMove == true" Condition="getFrameTag_MoveCancel" Execute="MoveAll"/>
+    </BranchSet>
+
 
     <Idle MovementType="FrameEvent" DirectionType="Keep" FlipType="Keep">
         <Animation Path="Resources/Sprites/NewPlayer/idle/" FramePerSecond="12" XFlip="true" Loop="false">
@@ -113,18 +121,17 @@
                     <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
 
                     <FrameEvent Type="TeleportToTargetBack" DistanceOffset="-0.3"/>
-                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
+
+                    <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/Slash_Timeline" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
                     <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/Blood_Timeline" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
+                    <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/Impact_Timeline" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true" AngleType="AttackPoint"/>
 
-
-                    <FrameEvent Type="ZoomEffect" StartFrame="0" Scale="2.9"/>
                     <FrameEvent Type="StopUpdate" StartFrame="0" Time="0.07"/>
                 </OnHit>
                 <OnGuard>
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" ToTarget="True"/>
 
                     <FrameEvent Type="TeleportToTarget"/>
-                    <FrameEvent Type="ZoomEffect" StartFrame="0" Scale="3.1"/>
                     <FrameEvent Type="StopUpdate" StartFrame="0" Time="0.01"/>
                 </OnGuard>
                 <OnParry>
@@ -149,23 +156,20 @@
             <FrameEvent Type="Attack" StartFrame="0" AttackType="GuardBreak" AttackPreset="Akane_Kick" IgnoreDefenceType="Guard">
                 <OnGuardBreak>
                     <FrameEvent Type="ApplyBuffTarget" StartFrame="0" ApplyBuff="21"/>
-                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
-                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc" FramePerSecond="18.0" Offset="0.0 0.0 0.0" ToTarget="true"/>
-                    <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/Blood_Timeline" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
 
-                    <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/Crosslight_Timeline" Offset="0.0 0.0 0.0" ToTarget="true"/>
-                    
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc" FramePerSecond="18.0" Offset="0.0 0.0 0.0" ToTarget="true"/>
+                    <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/Impact_Timeline" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true" AngleType="AttackPoint"/>
+
                     <FrameEvent Type="TeleportToTarget" DistanceOffset="0"/>
-                    <FrameEvent Type="ZoomEffect" StartFrame="0" Scale="2.8"/>
                     <FrameEvent Type="StopUpdate" StartFrame="0" Time="0.15"/>
                 </OnGuardBreak>
 
                 <OnGuardBreakFail>
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc" FramePerSecond="18.0" Offset="0.0 0.0 0.0" ToTarget="true"/>
-                    <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/Blood_Timeline" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
+
+                    <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/Impact_Timeline" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true" AngleType="AttackPoint"/>
 
                     <FrameEvent Type="TeleportToTarget" DistanceOffset="0"/>
-                    <FrameEvent Type="ZoomEffect" StartFrame="0" Scale="3.1"/>
                     <FrameEvent Type="StopUpdate" StartFrame="0" Time="0.15"/>
                 </OnGuardBreakFail>
             </FrameEvent>
@@ -199,8 +203,11 @@
         <Animation Path="Resources/Sprites/NewPlayer/kick/" FramePerSecond="9" XFlip="true" ScalePreset="YSpring">
             <FrameEvent Type="Movement" StartFrame="0" Friction="3" Speed="0" Velocity="-1.5 "/>
             <FrameEvent Type="Test" StartFrame="0" Log="Kicked Executed"/>
+
+            <FrameEvent Type="FrameTag" StartFrame="3" EndFrame="999" Tag="MoveCancel"/>
         </Animation>
 
+        <UseBranchSet Name="CancelBranch"/>
         <!-- <Branch Condition="AttackSuccess" Execute="AttackSuccess"/> -->
         <Branch Key="(getKey_AttackCharge == true) || (getKey_NormalMove == true)" Condition="End" Execute="MoveAll"/>
         <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="KickStop"/>

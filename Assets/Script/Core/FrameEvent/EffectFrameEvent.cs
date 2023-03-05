@@ -343,6 +343,6 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
         }
 
         if(_effectPath == "")
-            DebugUtil.assert(false, "effect path is essential");
+            DebugUtil.assert(false, "effect path is essential [Line: {0}]", XMLScriptConverter.getLineFromXMLNode(node));
     }
 }

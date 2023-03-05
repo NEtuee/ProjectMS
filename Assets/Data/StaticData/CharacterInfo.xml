@@ -111,6 +111,16 @@
         ProjectileCollisionRadius=""
     />
 
+    <TestEnemy
+        DisplayName="테스트용"
+        ActionGraph="Assets\Data\ActionGraph\TestZako.xml"
+        AIGraph="Assets\Data\AIGraph\EmptyAIGraph.xml"
+        StatusInfoName="TestEnemyStatus"
+        
+        CollisionRadius="0.2"
+        ProjectileCollisionRadius=""
+    />
+
     <SisterChainSaw
         DisplayName="시스터 체인소"
         ActionGraph="Assets\Data\ActionGraph\Enemy\SisterChanAction.xml"
