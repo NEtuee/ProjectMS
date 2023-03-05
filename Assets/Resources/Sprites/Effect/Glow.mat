@@ -7,10 +7,9 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Dust
+  m_Name: Glow
   m_Shader: {fileID: 4800000, guid: a36b7719ff0465b42ab1407d67672c5f, type: 3}
-  m_ShaderKeywords: BLUR_ON GLOWTEX_ON GLOW_ON ONLYINNEROUTLINE_ON _ONLYOUTLINE_ON
-    _POSTERIZEOUTLINE_ON
+  m_ShaderKeywords: GLOWTEX_ON ONLYINNEROUTLINE_ON _ONLYOUTLINE_ON _POSTERIZEOUTLINE_ON
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -73,7 +72,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 16742c0ab4a23ae44aeee9fcc9f62d94, type: 3}
+        m_Texture: {fileID: 2800000, guid: 0bd8a684496bafc4dae773a072016be2, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -112,7 +111,7 @@ Material:
     - _AlphaOutlineGlow: 5
     - _AlphaOutlineMinAlpha: 0
     - _AlphaOutlinePower: 1
-    - _AlphaRoundThreshold: 0.005
+    - _AlphaRoundThreshold: 0.5
     - _BillboardY: 0
     - _BlendOp: 0
     - _BlurHD: 0
@@ -122,13 +121,13 @@ Material:
     - _CameraFadingEnabled: 0
     - _CameraFarFadeDistance: 2
     - _CameraNearFadeDistance: 1
-    - _ChromAberrAlpha: 0.356
-    - _ChromAberrAmount: 0.954
+    - _ChromAberrAlpha: 1
+    - _ChromAberrAmount: 0.194
     - _ClipUvDown: 0
     - _ClipUvLeft: 0
     - _ClipUvRight: 0
     - _ClipUvUp: 0
-    - _ColorChangeLuminosity: 0.217
+    - _ColorChangeLuminosity: 0
     - _ColorChangeTolerance: 0.25
     - _ColorChangeTolerance2: 0.25
     - _ColorChangeTolerance3: 0.25
@@ -155,7 +154,7 @@ Material:
     - _EditorDrawers: 7
     - _EmissionEnabled: 0
     - _EnableExternalAlpha: 0
-    - _FadeAmount: 0.834
+    - _FadeAmount: 0.914
     - _FadeBurnGlow: 1
     - _FadeBurnTransition: 0.252
     - _FadeBurnWidth: 0
@@ -173,7 +172,7 @@ Material:
     - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _Glow: 0
-    - _GlowGlobal: 1
+    - _GlowGlobal: 100
     - _GradBlend: 1
     - _GradBoostX: 1.2
     - _GradBoostY: 1.2
@@ -181,17 +180,17 @@ Material:
     - _GrassManualAnim: 1
     - _GrassManualToggle: 0
     - _GrassRadialBend: 0.1
-    - _GrassSpeed: 50
-    - _GrassWind: 0
+    - _GrassSpeed: 2
+    - _GrassWind: 20
     - _GreyscaleBlend: 1
     - _GreyscaleLuminosity: 0
     - _GreyscaleOutline: 0
     - _HandDrawnAmount: 20
-    - _HandDrawnSpeed: 15
+    - _HandDrawnSpeed: 5
     - _HitEffectBlend: 1
     - _HitEffectGlow: 5
     - _HologramBlend: 1
-    - _HologramMaxAlpha: 93.1
+    - _HologramMaxAlpha: 100
     - _HologramMinAlpha: 0.1
     - _HologramStripesAmount: 0.1
     - _HologramStripesSpeed: 4.5
@@ -240,7 +239,7 @@ Material:
     - _RectSize: 1
     - _RotateUvAmount: 6.28
     - _RoundWaveSpeed: 2
-    - _RoundWaveStrength: 1
+    - _RoundWaveStrength: 0.7
     - _ShadowAlpha: 0.5
     - _ShadowX: 0.1
     - _ShadowY: -0.05
@@ -264,9 +263,9 @@ Material:
     - _TwistUvPosY: 0.5
     - _TwistUvRadius: 0.67
     - _UVSec: 0
-    - _WaveAmount: 24
-    - _WaveSpeed: 23.4
-    - _WaveStrength: 19.3
+    - _WaveAmount: 7
+    - _WaveSpeed: 10
+    - _WaveStrength: 7.5
     - _WaveX: 0
     - _WaveY: 0.5
     - _ZTestMode: 4
