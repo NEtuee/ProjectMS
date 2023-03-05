@@ -64,10 +64,10 @@ ShortCut,__FrameEvent_Movement,<FrameEvent Type=~Movement~ StartFrame=~0~ Fricti
 ShortCut,__MultiSelectAnimation,<MultiSelectAnimation Path=~~ Condition=~~/>
 ShortCut,__FrameEvent_ZoomEffect,<FrameEvent Type=~ZoomEffect~ Scale=~~/>
 ShortCut,__FrameEvent_StopUpdate,<FrameEvent Type=~StopUpdate~ Time=~~/>
-FrameEvent,TimelineEffect,"Path=~~,Offset=~~,ToTarget=~~,Attach=~~,UpdateType=~~"
+FrameEvent,TimelineEffect,"Path=~~,Offset=~~,ToTarget=~~,Attach=~~,UpdateType=~~,AngleType=~~"
 InQuote,UpdateType=,"ScaledDeltaTime,NoneScaledDeltaTime"
-,,
-,,
+InQuote,ToTarget=,"true,false"
+InQuote,AngleType=,"Normal,AttackPoint"
 ,,
 ,,
 ,,
