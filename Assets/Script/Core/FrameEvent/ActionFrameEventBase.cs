@@ -22,6 +22,7 @@ public enum FrameEventType
     FrameEvent_Movement,
     FrameEvent_ZoomEffect,
     FrameEvent_StopUpdate,
+    FrameEvent_SpawnCharacter,
 
     Count,
 }
@@ -87,6 +88,58 @@ public abstract class ActionFrameEventBase
 
             childFrameEventItem._childFrameEvents[i].initialize();
             childFrameEventItem._childFrameEvents[i].onExecute(executeEntity, targetEntity);
+        }
+    }
+}
+
+public class ActionFrameEvent_SpawnCharacter : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_SpawnCharacter;}
+
+    private string                      _characterKey;
+
+    private CharacterInfoData           _characterInfoData;
+    private SpawnCharacterOptionDesc    _spawnDesc = SpawnCharacterOptionDesc.defaultValue;
+
+    private UnityEngine.Vector3         _spawnOffset;
+
+    public override void initialize()
+    {
+        _characterInfoData = CharacterInfoManager.Instance().GetCharacterInfoData(_characterKey);
+    }
+
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        SceneCharacterManager sceneCharacterManager = SceneCharacterManager._managerInstance as SceneCharacterManager;
+
+        _spawnDesc._position = executeEntity.transform.position + _spawnOffset;
+        CharacterEntityBase createdCharacter = sceneCharacterManager.createCharacterFromPool(_characterInfoData,_spawnDesc);
+
+        return true;
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "CharacterKey")
+            {
+                _characterKey = attrValue;
+            }
+            else if(attrName == "Offset")
+            {
+                _spawnOffset = XMLScriptConverter.valueToVector3(attrValue);
+            }
+            else if(attrName == "SearchIdentifier")
+            {
+                _spawnDesc._searchIdentifier = (SearchIdentifier)System.Enum.Parse(typeof(SearchIdentifier), attrValue);
+            }
+
         }
     }
 }

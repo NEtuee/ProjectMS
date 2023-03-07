@@ -53,13 +53,15 @@ public static class FrameEventLoader
             outFrameEvent = new ActionFrameEvent_ZoomEffect();
         else if(type == "StopUpdate")
             outFrameEvent = new ActionFrameEvent_StopUpdate();
+        else if(type == "SpawnCharacter")
+            outFrameEvent = new ActionFrameEvent_SpawnCharacter();
         else
         {
             DebugUtil.assert(false, "invalid frameEvent type: {0}",type);
             return null;
         }
 
-        DebugUtil.assert((int)FrameEventType.Count == 19, "check here");
+        DebugUtil.assert((int)FrameEventType.Count == 20, "check here");
 
 
         if(outFrameEvent == null)
