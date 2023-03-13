@@ -40,6 +40,9 @@ public enum AIChildEventType
     AIChildEvent_OnGuardBreakFail,
     AIChildEvent_OnAttackGuardBreakFail,
 
+    AIChildEvent_OnCatchTarget,
+    AIChildEvent_OnCatched,
+
     Count,
 }
 

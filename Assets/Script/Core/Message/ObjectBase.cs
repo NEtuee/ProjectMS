@@ -1,21 +1,31 @@
 using UnityEngine;
+using System.Collections.Generic;
 
+public struct AttachChildDescription
+{
+    public ObjectBase   _childObject;
+    public Vector3      _pivot;
+}
 
 public abstract class ObjectBase : MessageReceiver, IProgress
 {
-    public System.Action    whenDeactive = ()=>{};
+    public System.Action            whenDeactive = ()=>{};
 
-    public SearchIdentifier     _searchIdentifier = SearchIdentifier.Enemy;
+    public SearchIdentifier         _searchIdentifier = SearchIdentifier.Enemy;
 
-    protected int               _currentManagerNumber = -1;
+    protected int                   _currentManagerNumber = -1;
 
-    protected AttackState         _attackState = AttackState.Default;
-    protected DefenceState        _defenceState = DefenceState.Default;
+    protected AttackState           _attackState = AttackState.Default;
+    protected DefenceState          _defenceState = DefenceState.Default;
 
-    protected GameObject          _spriteObject;
-    protected SpriteRenderer      _spriteRenderer;
-    protected Animator            _animator;
-    protected Vector3 _direction = Vector3.right;
+    protected GameObject            _spriteObject;
+    protected SpriteRenderer        _spriteRenderer;
+    protected Animator              _animator;
+    protected Vector3               _direction = Vector3.right;
+
+    protected ObjectBase            _parentObject = null;
+    protected ObjectBase            _childObject = null;
+    private Vector3                 _childPivot = Vector3.zero;
 
     public void setAttackState(AttackState state) {_attackState = state;}
     public void setDefenceState(DefenceState state) {_defenceState = state;}
@@ -33,6 +43,15 @@ public abstract class ObjectBase : MessageReceiver, IProgress
             initialize();
     }
 
+    public void updatePosition(Vector3 position)
+    {
+        if(hasParentObject())
+            return;
+            
+        transform.position = position;
+        updateChildTransform();
+    }
+
     public void createSpriteRenderObject()
     {
         _spriteObject = new GameObject("SpriteObject");
@@ -42,6 +61,61 @@ public abstract class ObjectBase : MessageReceiver, IProgress
         _animator = _spriteObject.AddComponent<Animator>();
         _spriteRenderer = _spriteObject.AddComponent<SpriteRenderer>();
         _spriteRenderer.material = Material.Instantiate(getBaseMaterial());
+    }
+
+    public void updateChildTransform()
+    {
+        if(hasChildObject() == false)
+            return;
+
+        _childObject.transform.position = transform.position + (_spriteRenderer.transform.rotation * _childPivot);
+    }
+
+    public bool attachChildObject(AttachChildDescription childDescription)
+    {
+        if(hasParentObject())
+            return false;
+
+        detachChildObject();
+
+        _childPivot = childDescription._pivot;
+        _childObject = childDescription._childObject;
+        _childObject.setParentObject(this);
+        return true;
+    }
+
+    public void detachChildObject()
+    {
+        if(hasChildObject() == false)
+            return;
+
+        _childObject.setParentObject(null);
+        _childObject = null;
+    }
+
+    public void setParentObject(ObjectBase parentObject)
+    {
+        _parentObject = parentObject;
+    }
+
+    public ObjectBase getChildObject()
+    {
+        return _childObject;
+    }
+
+    public ObjectBase getParentObject()
+    {
+        return _parentObject;
+    }
+
+    public bool hasParentObject()
+    {
+        return _parentObject != null;
+    }
+
+    public bool hasChildObject()
+    {
+        return _childObject != null;
     }
 
     public Material getBaseMaterial()

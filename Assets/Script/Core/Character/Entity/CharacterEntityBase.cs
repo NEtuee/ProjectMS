@@ -35,7 +35,7 @@ public class CharacterEntityBase : GameEntityBase
     public override void progress(float deltaTime)
     {
         base.progress(deltaTime);
-        getMovementControl().addFrameToWorld(this.transform);
+        getMovementControl().addFrameToWorld(this);
 
         if(isAIGraphValid() && getCurrentTargetSearchType() != TargetSearchType.None)
         {

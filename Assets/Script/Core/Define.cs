@@ -23,6 +23,7 @@ public enum AttackType
 {
     Default,
     GuardBreak,
+    Catch,
     Count,
 }
 
@@ -35,12 +36,14 @@ public enum AttackState
     AttackEvade,
     AttackGuardBreak,
     AttackGuardBreakFail,
+    AttackCatch,
 }
 
 public enum DefenceState
 {
     Default,
     Hit,
+    Catched,
     DefenceSuccess,
     DefenceCrash,
     ParrySuccess,

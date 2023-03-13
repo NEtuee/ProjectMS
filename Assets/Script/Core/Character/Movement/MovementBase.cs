@@ -30,26 +30,16 @@ public abstract class MovementBase
     public abstract bool progress(float deltaTime, Vector3 direction);
     public abstract void release();
     public bool isMoving() {return _isMoving;}
-    public virtual void AddFrameToLocalTransform(Transform target)
+
+    public virtual void AddFrameToWorldTransform(ObjectBase target)
     {
-        target.localPosition += movementOfFrame * _moveScale;
-        movementOfFrame = Vector3.zero;
-    }
-    public virtual void AddFrameToWorldTransform(Transform target)
-    {
-        target.position += movementOfFrame * _moveScale;
+        target.updatePosition(target.transform.position + movementOfFrame * _moveScale);
         movementOfFrame = Vector3.zero;
     }
 
-    public virtual void SetFrameToWorldTransform(Transform target)
+    public virtual void SetFrameToLocalTransform(ObjectBase target)
     {
-        target.position = movementOfFrame * _moveScale;
-        movementOfFrame = Vector3.zero;
-    }
-    public virtual void SetFrameToLocalTransform(Transform target)
-    {
-        target.localPosition = movementOfFrame * _moveScale;
-        movementOfFrame = Vector3.zero;
+        DebugUtil.assert(false,"do not use this");
     }
     
     public void UpdatePosition(Vector3 currentPosition)

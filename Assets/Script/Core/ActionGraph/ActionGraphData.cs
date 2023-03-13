@@ -161,6 +161,8 @@ public enum ConditionNodeUpdateType
     Action_IsXFlip,
     Action_IsYFlip,
     Action_CurrentFrame,
+    Action_IsCatcher,
+    Action_IsCatchTarget,
 
     Input_AttackCharge,
     Input_AttackBlood,
@@ -172,6 +174,7 @@ public enum ConditionNodeUpdateType
     Attack_Evaded,
     Attack_GuardBreak,
     Attack_GuardBreakFail,
+    Attack_CatchTarget,
 
     Defence_Success,
     Defence_Crash,
@@ -179,6 +182,7 @@ public enum ConditionNodeUpdateType
     Defence_Evade,
     Defence_GuardBroken,
     Defence_GuardBreakFail,
+    Defence_Catched,
 
     Defence_Hit,
 
@@ -246,6 +250,8 @@ public static class ConditionNodeInfoPreset
         {"IsXFlip",new ConditionNodeInfo(ConditionNodeUpdateType.Action_IsXFlip, ConditionNodeType.Bool)},
         {"IsYFlip",new ConditionNodeInfo(ConditionNodeUpdateType.Action_IsYFlip, ConditionNodeType.Bool)},
         {"CurrentFrame",new ConditionNodeInfo(ConditionNodeUpdateType.Action_CurrentFrame, ConditionNodeType.Float)},
+        {"IsCatcher",new ConditionNodeInfo(ConditionNodeUpdateType.Action_IsCatcher, ConditionNodeType.Bool)},
+        {"IsCatchTarget",new ConditionNodeInfo(ConditionNodeUpdateType.Action_IsCatchTarget, ConditionNodeType.Bool)},
 
         {"InputAttackCharge",new ConditionNodeInfo(ConditionNodeUpdateType.Input_AttackCharge, ConditionNodeType.Bool)},
         {"InputAttackBlood",new ConditionNodeInfo(ConditionNodeUpdateType.Input_AttackBlood, ConditionNodeType.Bool)},
@@ -257,6 +263,7 @@ public static class ConditionNodeInfoPreset
         {"AttackEvaded",new ConditionNodeInfo(ConditionNodeUpdateType.Attack_Evaded, ConditionNodeType.Bool)},
         {"AttackGuardBreak",new ConditionNodeInfo(ConditionNodeUpdateType.Attack_GuardBreak, ConditionNodeType.Bool)},
         {"AttackGuardBreakFail",new ConditionNodeInfo(ConditionNodeUpdateType.Attack_GuardBreakFail, ConditionNodeType.Bool)},
+        {"AttackCatchTarget",new ConditionNodeInfo(ConditionNodeUpdateType.Attack_CatchTarget, ConditionNodeType.Bool)},
 
         {"DefenceSuccess",new ConditionNodeInfo(ConditionNodeUpdateType.Defence_Success, ConditionNodeType.Bool)},
         {"DefenceCrash",new ConditionNodeInfo(ConditionNodeUpdateType.Defence_Crash, ConditionNodeType.Bool)},
@@ -265,6 +272,7 @@ public static class ConditionNodeInfoPreset
         {"EvadeSuccess",new ConditionNodeInfo(ConditionNodeUpdateType.Defence_Evade, ConditionNodeType.Bool)},
         {"GuardBroken",new ConditionNodeInfo(ConditionNodeUpdateType.Defence_GuardBroken, ConditionNodeType.Bool)},
         {"GuardBreakFail",new ConditionNodeInfo(ConditionNodeUpdateType.Defence_GuardBreakFail, ConditionNodeType.Bool)},
+        {"Catched",new ConditionNodeInfo(ConditionNodeUpdateType.Defence_Catched, ConditionNodeType.Bool)},
 
         {"Dead",new ConditionNodeInfo(ConditionNodeUpdateType.Entity_Dead, ConditionNodeType.Bool)},
 

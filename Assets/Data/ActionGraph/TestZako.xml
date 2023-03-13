@@ -5,6 +5,7 @@
         <Animation Path="Resources/Sprites/DummyPlayer/Idle/" StartFrame="0" EndFrame="1" XFlip="true">
         </Animation>
 
+        <Branch Condition="Catched" Execute="Catched"/>
         <Branch Condition="End == true" Execute="Idle"/>
         <Branch Condition="GuardBroken" Execute="GuardBroken"/>
     </Idle>
@@ -13,9 +14,18 @@
         <Animation Path="Resources/Sprites/DummyPlayer/JustGuardBreak/" StartFrame="0" EndFrame="1" XFlip="true">
         </Animation>
 
+        <Branch Condition="Catched" Execute="Catched"/>
         <Branch Condition="GuardBroken" Execute="GuardBroken"/>
         <Branch Condition="End == true" Execute="Idle"/>
     </GuardBroken>
+
+    <Catched DirectionType="Keep" FlipType="Direction">
+        <Animation Path="Resources/Sprites/DummyPlayer/JustGuardBreak/" StartFrame="0" EndFrame="1" XFlip="true">
+        </Animation>
+
+        <Branch Condition="IsCatchTarget == false" Execute="Idle"/>
+        <Branch Condition="End == true" Execute="Catched"/>
+    </Catched>
 
     <Dead DirectionType="Keep" FlipType="Direction">
         <Animation Path="Resources/Sprites/DummyPlayer/dash/" StartFrame="0" EndFrame="1" XFlip="true">

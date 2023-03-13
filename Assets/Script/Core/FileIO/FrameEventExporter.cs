@@ -55,13 +55,15 @@ public static class FrameEventLoader
             outFrameEvent = new ActionFrameEvent_StopUpdate();
         else if(type == "SpawnCharacter")
             outFrameEvent = new ActionFrameEvent_SpawnCharacter();
+        else if(type == "ReleaseCatch")
+            outFrameEvent = new ActionFrameEvent_ReleaseCatch();
         else
         {
             DebugUtil.assert(false, "invalid frameEvent type: {0}",type);
             return null;
         }
 
-        DebugUtil.assert((int)FrameEventType.Count == 20, "check here");
+        DebugUtil.assert((int)FrameEventType.Count == 21, "check here");
 
 
         if(outFrameEvent == null)
@@ -133,6 +135,8 @@ public static class FrameEventLoader
                 eventType = ChildFrameEventType.ChildFrameEvent_OnGuardBreak;
             else if(targetName == "OnGuardBreakFail")
                 eventType = ChildFrameEventType.ChildFrameEvent_OnGuardBreakFail;
+            else if(targetName == "OnCatch")
+                eventType = ChildFrameEventType.ChildFrameEvent_OnCatch;
             else
                 DebugUtil.assert(false, "invalid child frame event type: {0}", targetName);
 

@@ -1,6 +1,6 @@
 HintType,Symbol,TextList
 FrameEvent,Test,Log=~~
-FrameEvent,Attack,"Radius=~~,Angle=~~,StartDistance=~~,AttackPreset=~~,PushVector=~~,IgnoreDefenceType=~~"
+FrameEvent,Attack,"Radius=~~,Angle=~~,StartDistance=~~,AttackPreset=~~,Push=~~,IgnoreDefenceType=~~,CatchOffset=~~,AttackType=~~"
 FrameEvent,ApplyBuff,ApplyBuff=~~
 FrameEvent,ApplyBuffTarget,ApplyBuff=~~
 FrameEvent,DeleteBuff,BuffList=~~
@@ -29,7 +29,7 @@ InQuote,IsActionSelection=,"true,false"
 InQuote,NormalizedSpeed=,"true,false"
 InQuote,Attach=,"true,false"
 InQuote,DirectionUpdateOnce=,"true,false"
-InQuote,Condition=,"ActionTest,ActionDash,End,AngleBetweenStick,AngleDirection,IsXFlip,IsYFlip,CurrentFrame,AttackSuccess,AttackGuarded,AttackParried,AttackGuardBreak,DefenceSuccess,ParrySuccess,Hit,EvadeSuccess,GuardBroken,CurrentFrame,TargetExists,TargetDistance,ArrivedTarget,CurrentPackageEnd,getStat_,getKey_,getFrameTag_,getTargetFrameTag_,getWeight_,true,false,PackageExecutedTime,GraphExecutedTime,AttackGuardBreakFail,GuardBreakFail"
+InQuote,Condition=,"ActionTest,ActionDash,End,AngleBetweenStick,AngleDirection,IsXFlip,IsYFlip,CurrentFrame,AttackSuccess,AttackGuarded,AttackParried,AttackGuardBreak,DefenceSuccess,ParrySuccess,Hit,EvadeSuccess,GuardBroken,CurrentFrame,TargetExists,TargetDistance,ArrivedTarget,CurrentPackageEnd,getStat_,getKey_,getFrameTag_,getTargetFrameTag_,getWeight_,true,false,PackageExecutedTime,GraphExecutedTime,AttackGuardBreakFail,GuardBreakFail,IsCatcher,IsCatchTarget,AttackCatchTarget,Catched"
 InQuote,UpdateType=,"ScaledDeltaTime,NoneScaledDeltaTime"
 InQuote,ToTarget=,"true,false"
 InQuote,AngleType=,"Normal,AttackPoint"
@@ -52,7 +52,7 @@ ShortCut,__FrameEvent,<FrameEvent Type=~~ StartFrame=~0~/>
 ShortCut,__Branch,<Branch Condition=~~ Execute=~~/>
 ShortCut,__BranchSet,<BranchSet Name=~~>#n#t#n</BranchSet>
 ShortCut,__GlobalVariable,<GlobalVariable Name=~~ Value=~~/>
-ShortCut,__FrameEvent_Attack,<FrameEvent Type=~Attack~ StartFrame=~0~ AttackPreset=~~>#n#t<OnHit>#n#t</OnHit>#n#n#t<OnGuard>#n#t</OnGuard>#n#n#t<OnParry>#n#t</OnParry>#n#n#t<OnGuardBreakFail>#n#t</OnGuardBreakFail>#n</FrameEvent>
+ShortCut,__FrameEvent_Attack,<FrameEvent Type=~Attack~ StartFrame=~0~ AttackPreset=~~>#n#t<OnHit>#n#t</OnHit>#n#n#t<OnGuard>#n#t</OnGuard>#n#n#t<OnParry>#n#t</OnParry>#n#n#t<OnGuardBreakFail>#n#t</OnGuardBreakFail>#n#n#t<OnCatch>#n#t</OnCatch>#n</FrameEvent>
 ShortCut,__FrameEvent_AppyBuff,<FrameEvent Type=~AppyBuff~ StartFrame=~0~ ApplyBuff=~~/>
 ShortCut,__FrameEvent_AppyBuffTarget,<FrameEvent Type=~AppyBuffTarget~ StartFrame=~0~ ApplyBuff=~~/>
 ShortCut,__FrameEvent_DeleteBuff,<FrameEvent Type=~DeleteBuff~ StartFrame=~0~ BuffList=~~/>
@@ -71,9 +71,9 @@ ShortCut,__MultiSelectAnimation,<MultiSelectAnimation Path=~~ Condition=~~/>
 ShortCut,__FrameEvent_ZoomEffect,<FrameEvent Type=~ZoomEffect~ Scale=~~/>
 ShortCut,__FrameEvent_StopUpdate,<FrameEvent Type=~StopUpdate~ Time=~~/>
 ShortCut,__FrameEvent_SpawnCharacter,<FrameEvent Type=~SpawnCharacter~ StartFrame=~0~ CharacterKey=~~ Offset=~0 0 0~ SearchIdentifier=~~/>
-,,
-,,
-,,
+InQuote,AttackType=,"Default,GuardBreak,Catch"
+ShortCut,__FrameEvent_ReleaseCatch,<FrameEvent Type=~ReleaseCatch~ StartFrame=~0~ Push=~~/>
+FrameEvent,ReleaseCatch,Push=~~
 ,,
 ,,
 ,,

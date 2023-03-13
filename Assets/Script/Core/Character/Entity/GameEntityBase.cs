@@ -65,7 +65,7 @@ public class GameEntityBase : SequencerObjectBase
 
         AddAction(MessageTitles.game_teleportTarget,(msg)=>{
             Transform targetTransform = (Transform)msg.data;
-            transform.position = targetTransform.position;
+            updatePosition(targetTransform.position);
         });
 
         
@@ -96,6 +96,9 @@ public class GameEntityBase : SequencerObjectBase
         _danmakuGraph.initialize(this);
 
         _statusInfo.initialize(characterInfo._statusName);
+
+        detachChildObject();
+        setParentObject(null);
 
         applyActionBuffList(_actionGraph.getDefaultBuffList());
 
@@ -362,6 +365,8 @@ public class GameEntityBase : SequencerObjectBase
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Action_IsXFlip, _flipState.xFlip);
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Action_IsYFlip, _flipState.yFlip);
         _actionGraph.setActionConditionData_Float(ConditionNodeUpdateType.Action_CurrentFrame, _actionGraph.getCurrentFrame());
+        _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Action_IsCatcher, hasChildObject());
+        _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Action_IsCatchTarget, hasParentObject());
 
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Input_AttackCharge, Input.GetMouseButton(0));
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Input_AttackBlood, Input.GetKey(KeyCode.R));
@@ -373,6 +378,7 @@ public class GameEntityBase : SequencerObjectBase
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Attack_Evaded, _attackState == AttackState.AttackEvade);
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Attack_GuardBreak, _attackState == AttackState.AttackGuardBreak);
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Attack_GuardBreakFail, _attackState == AttackState.AttackGuardBreakFail);
+        _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Attack_CatchTarget, _attackState == AttackState.AttackCatch);
 
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Defence_Crash, _defenceState == DefenceState.DefenceCrash);
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Defence_Success, _defenceState == DefenceState.DefenceSuccess);
@@ -381,6 +387,8 @@ public class GameEntityBase : SequencerObjectBase
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Defence_Evade, _defenceState == DefenceState.EvadeSuccess);
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Defence_GuardBroken, _defenceState == DefenceState.GuardBroken);
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Defence_GuardBreakFail, _defenceState == DefenceState.GuardBreakFail);
+        _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Defence_Catched, _defenceState == DefenceState.Catched);
+
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Entity_Dead, _statusInfo.isDead());
 
     }

@@ -23,6 +23,7 @@ public enum FrameEventType
     FrameEvent_ZoomEffect,
     FrameEvent_StopUpdate,
     FrameEvent_SpawnCharacter,
+    FrameEvent_ReleaseCatch,
 
     Count,
 }
@@ -35,6 +36,8 @@ public enum ChildFrameEventType
     ChildFrameEvent_OnEvade,
     ChildFrameEvent_OnGuardBreak,
     ChildFrameEvent_OnGuardBreakFail,
+    ChildFrameEvent_OnCatch,
+
     Count,
 }
 
@@ -91,6 +94,52 @@ public abstract class ActionFrameEventBase
         }
     }
 }
+
+public class ActionFrameEvent_ReleaseCatch : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_ReleaseCatch;}
+
+    private UnityEngine.Vector3         _pushVector;
+
+    public override void initialize()
+    {
+    }
+
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        if(executeEntity.hasChildObject() == false)
+            return true;
+
+        if(_pushVector.sqrMagnitude > float.Epsilon && executeEntity.getChildObject() is GameEntityBase)
+        {
+            GameEntityBase target = (executeEntity.getChildObject() as GameEntityBase);
+            UnityEngine.Vector3 attackPointDirection = executeEntity.getDirection();
+            target.setVelocity(UnityEngine.Quaternion.Euler(0f,0f,UnityEngine.Mathf.Atan2(attackPointDirection.y,attackPointDirection.x) * UnityEngine.Mathf.Rad2Deg) * _pushVector);
+        }
+
+        executeEntity.detachChildObject();
+
+        return true;
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attributes[i].Name == "Push")
+            {
+                _pushVector = XMLScriptConverter.valueToVector3(attributes[i].Value);
+            }
+
+        }
+    }
+}
+
 
 public class ActionFrameEvent_SpawnCharacter : ActionFrameEventBase
 {
@@ -447,8 +496,7 @@ public class ActionFrameEvent_TeleportToTarget : ActionFrameEventBase
 
         UnityEngine.Vector3 direction = (requester.transform.position - target.transform.position).normalized;
 
-        requester.transform.position = target.transform.position + direction * (requester.getCollisionInfo().getRadius() + target.getCollisionInfo().getRadius() + _distanceOffset);
-
+        requester.updatePosition(target.transform.position + direction * (requester.getCollisionInfo().getRadius() + target.getCollisionInfo().getRadius() + _distanceOffset));
         return true;
     }
 
@@ -479,7 +527,7 @@ public class ActionFrameEvent_TeleportToTargetBack : ActionFrameEventBase
 
         UnityEngine.Vector3 direction = (target.transform.position - requester.transform.position).normalized;
 
-        requester.transform.position = target.transform.position + direction * (requester.getCollisionInfo().getRadius() + target.getCollisionInfo().getRadius() + _distanceOffset);
+        requester.updatePosition(target.transform.position + direction * (requester.getCollisionInfo().getRadius() + target.getCollisionInfo().getRadius() + _distanceOffset));
 
         return true;
     }
@@ -647,8 +695,9 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
 
     private AttackType              _attackType;
     private UnityEngine.Vector3     _pushVector = UnityEngine.Vector3.zero;
+    private UnityEngine.Vector3     _catchOffset = UnityEngine.Vector3.zero;
 
-    private HashSet<ObjectBase> _collisionList = new HashSet<ObjectBase>();
+    private HashSet<ObjectBase>     _collisionList = new HashSet<ObjectBase>();
     private List<CollisionSuccessData> _collisionOrder = new List<CollisionSuccessData>();
 
     public ActionFrameEvent_Attack()
@@ -756,11 +805,10 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
                 target.executeAIEvent(AIChildEventType.AIChildEvent_OnAttacked);
 
                 eventType = ChildFrameEventType.ChildFrameEvent_OnHit;
-
+                attackSuccess = true;
             }
             else if(_attackType == AttackType.GuardBreak)
             {
-
                 if(target.getDefenceType() == DefenceType.Empty)
                 {
                     requester.setAttackState(AttackState.AttackGuardBreakFail);
@@ -784,10 +832,27 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
                     eventType = ChildFrameEventType.ChildFrameEvent_OnGuardBreak;
                 }
                 
+                attackSuccess = true;
             }
+            else if(_attackType == AttackType.Catch)
+            {
+                requester.setAttackState(AttackState.AttackCatch);
+                target.setDefenceState(DefenceState.Catched);
 
-            attackSuccess = true;
+                AttachChildDescription description;
+                description._childObject = target;
+                description._pivot = _catchOffset;
 
+                requester.attachChildObject(description);
+
+                if(requester is GameEntityBase)
+                    ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnCatchTarget);
+                target.executeAIEvent(AIChildEventType.AIChildEvent_OnCatched);
+
+                eventType = ChildFrameEventType.ChildFrameEvent_OnCatch;
+
+                attackSuccess = false;
+            }
         }
         else if(guardSuccess && target.getDefenceType() == DefenceType.Guard)
         {
@@ -913,6 +978,10 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
                 }
 
                 _pushVector = new UnityEngine.Vector3(float.Parse(value[0]),float.Parse(value[1]),float.Parse(value[2]));
+            }
+            else if(attributes[i].Name == "CatchOffset")
+            {
+                _catchOffset = XMLScriptConverter.valueToVector3(attributes[i].Value);
             }
 
         }
