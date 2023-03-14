@@ -120,7 +120,7 @@ public class StatusGraphicInterface
         if(_targetStatusInfoData._graphicInterfaceData == null)
             return;
 
-        for(int index = 0; index < _targetStatusInfoData._graphicInterfaceData.Length; ++index)
+        for(int index = _targetStatusInfoData._graphicInterfaceData.Length - 1; index >= 0; --index)
         {
             GraphicInterface graphicInterface = _graphicInterfacePool.dequeue();
             if(graphicInterface.isValidGraphicinterface() == false)
