@@ -123,7 +123,7 @@ public class EffectItem : EffectItemBase
         if(_parentTransform != null && _parentTransform.gameObject.activeInHierarchy == false)
             _parentTransform = null;
 
-        _spriteRenderer.gameObject.layer = effectData._castShadow ? LayerMask.NameToLayer("Character") : LayerMask.NameToLayer("Effect");
+        _spriteRenderer.gameObject.layer = effectData._castShadow ? LayerMask.NameToLayer("Character") : LayerMask.NameToLayer("EffectEtc");
 
         _spriteRenderer.transform.position = effectData._position;
         _spriteRenderer.transform.localRotation = Quaternion.Euler(0f,0f,effectData._angle);

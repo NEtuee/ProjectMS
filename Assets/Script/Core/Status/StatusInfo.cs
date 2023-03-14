@@ -344,6 +344,18 @@ public class StatusInfo
         }
     }
 
+    public float getCurrentStatusPercentage(string targetName)
+    {
+        Status status = getStatus(targetName);
+        if(status == null)
+        {
+            DebugUtil.assert(false, "target status is not exists: {0}", targetName);
+            return 0f;
+        }
+            
+        return status._realValue / _statusInfoData._statusData[status._statusIndex].getMaxValue();
+    }
+
     private bool updateBuffXXX(BuffData buff, int buffIndex)
     {
         if(buff.isBuffValid() == false)
@@ -463,5 +475,10 @@ public class StatusInfo
     public bool isDead()
     {
         return _isDead;
+    }
+
+    public StatusInfoData getStatusInfoData()
+    {
+        return _statusInfoData;
     }
 }

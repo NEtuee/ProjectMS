@@ -7,12 +7,16 @@
         <Stat Type="Battle" Max="100" Min="0" Init="0"/>
 
         <Stat Type="Custom" Name="Charging" Max="100" Min="0" Init="0"/>
+
+        <DeclareGraphicInterface Target="HP" Color="255 0 0 255" HorizontalGap="0.5"/>
     </CommonPlayerStatus>
 
     <CommonEnemyStatus>
         <Stat Type="HP" Max="3" Min="0" Init="1"/>
         <Stat Type="Blood" Max="100" Min="0" Init="3"/>
         <Stat Type="Custom" Name="GuardPoint" Max="3" Min="0" Init="3"/>
+
+        <DeclareGraphicInterface Target="HP" Color="255 0 0 255" HorizontalGap="0.5"/>
     </CommonEnemyStatus>
 
     <TutorialBossStatus>
@@ -21,6 +25,8 @@
         <Stat Type="Battle" Max="100" Min="0" Init="0"/>
         <Stat Type="Custom" Name="HitPoint" Max="5" Min="0" Init="2"/>
         <Stat Type="Custom" Name="Posture" Max="100" Min="0" Init="100"/>
+
+        <DeclareGraphicInterface Target="HP" Color="255 0 0 255" HorizontalGap="0.5"/>
     </TutorialBossStatus>
 
     <TateChanStatus>
@@ -28,12 +34,16 @@
         <Stat Type="Blood" Max="100" Min="0" Init="3"/>
         <Stat Type="Custom" Name="GuardPoint" Max="3" Min="0" Init="3"/>
         <Stat Type="Custom" Name="AttackDelay" Max="1" Min="0" Init="1"/>
+
+        <DeclareGraphicInterface Target="HP" Color="255 0 0 255" HorizontalGap="0.5"/>
     </TateChanStatus>
 
     <TestEnemyStatus>
-        <Stat Type="HP" Max="100" Min="0" Init="100"/>
+        <Stat Type="HP" Max="3" Min="0" Init="3"/>
         <Stat Type="Blood" Max="100" Min="0" Init="3"/>
         <Stat Type="Custom" Name="GuardPoint" Max="3" Min="0" Init="3"/>
+
+        <DeclareGraphicInterface Target="HP" Color="255 0 0 255" HorizontalGap="0.5"/>
     </TestEnemyStatus>
 
 </StatusInfo>

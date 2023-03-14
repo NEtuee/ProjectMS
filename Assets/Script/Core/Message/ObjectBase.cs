@@ -43,11 +43,16 @@ public abstract class ObjectBase : MessageReceiver, IProgress
             initialize();
     }
 
+    public virtual void deactive()
+    {
+        gameObject.SetActive(false);
+    }
+
     public void updatePosition(Vector3 position)
     {
         if(hasParentObject())
             return;
-            
+
         transform.position = position;
         updateChildTransform();
     }

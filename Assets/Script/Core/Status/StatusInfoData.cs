@@ -3,11 +3,13 @@ public class StatusInfoData
 {
     public string _statusInfoName;
     public StatusDataFloat[] _statusData;
+    public StatusGraphicInterfaceData[] _graphicInterfaceData;
 
-    public StatusInfoData(string name, StatusDataFloat[] statusArray)
+    public StatusInfoData(string name, StatusDataFloat[] statusArray, StatusGraphicInterfaceData[] graphicInterfaceArray)
     {
         _statusInfoName = name;
         _statusData = statusArray;
+        _graphicInterfaceData = graphicInterfaceArray;
     }
 
 }
@@ -71,6 +73,14 @@ public class StatusDataFloat
     public float getMinValue() {return _minValue;}
 
 }
+
+public class StatusGraphicInterfaceData
+{
+    public UnityEngine.Color    _interfaceColor;
+    public string               _targetStatus;
+    public float                _horizontalGap;
+}
+
 
 public enum StatusVariType
 {

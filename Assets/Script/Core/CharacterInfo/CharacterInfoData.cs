@@ -8,4 +8,5 @@ public class CharacterInfoData
     public string       _statusName;
 
     public float        _characterRadius;
+    public float        _headUpOffset;
 }

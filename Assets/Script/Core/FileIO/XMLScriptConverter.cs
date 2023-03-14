@@ -90,4 +90,16 @@ public static class XMLScriptConverter
 
         return new Vector3(float.Parse(splitted[0]), float.Parse(splitted[1]), float.Parse(splitted[2]));
     }
+
+    public static Color valueToLinearColor(string valueString)
+    {
+        string[] splitted = valueString.Split(' ');
+        if(splitted.Length != 4)
+        {
+            DebugUtil.assert(false,"invalid color string: {0}", valueString);
+            return Color.white;
+        }
+
+        return new Color(float.Parse(splitted[0]), float.Parse(splitted[1]), float.Parse(splitted[2]), float.Parse(splitted[3]));
+    }
 }

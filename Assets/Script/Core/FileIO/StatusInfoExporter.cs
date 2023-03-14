@@ -49,8 +49,9 @@ public static class StatusInfoLoader
     private static StatusInfoData readStatusInfoData(XmlNode node)
     {
         List<StatusDataFloat> statusInfoDataList = new List<StatusDataFloat>();
-        HashSet<string> nameCheck = new HashSet<string>();
+        List<StatusGraphicInterfaceData> graphicInterfaceDataList = new List<StatusGraphicInterfaceData>();
 
+        HashSet<string> nameCheck = new HashSet<string>();
         XmlNodeList statusNodes = node.ChildNodes;
 
         for(int i = 0; i < statusNodes.Count; ++i)
@@ -94,9 +95,33 @@ public static class StatusInfoLoader
 
                 statusInfoDataList.Add(data);
             }
+            else if(statusNodes[i].Name == "DeclareGraphicInterface")
+            {
+                StatusGraphicInterfaceData data = new StatusGraphicInterfaceData();
+                XmlAttributeCollection attributes = statusNodes[i].Attributes;
+                for(int j = 0; j < attributes.Count; ++j)
+                {
+                    string attrName = attributes[j].Name;
+                    string attrValue = attributes[j].Value;
+
+                    if(attrName == "Target")
+                        data._targetStatus = attrValue;
+                    else if(attrName == "Color")
+                        data._interfaceColor = XMLScriptConverter.valueToLinearColor(attrValue);
+                    else if(attrName == "HorizontalGap")
+                        data._horizontalGap = float.Parse(attrValue);
+                    else
+                    {
+                        DebugUtil.assert(false, "invalid attribute name from DeclareGraphicInterface: {0}",attrName);
+                        continue;
+                    }
+                }
+
+                graphicInterfaceDataList.Add(data);
+            }
         }
 
-        StatusInfoData statusInfoData = new StatusInfoData(node.Name,statusInfoDataList.ToArray());
+        StatusInfoData statusInfoData = new StatusInfoData(node.Name,statusInfoDataList.ToArray(),graphicInterfaceDataList.ToArray());
 
         return statusInfoData;
     }
