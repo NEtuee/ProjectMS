@@ -118,7 +118,7 @@ public abstract class ManagerBase : MessageHub<ObjectBase>, IProgress
                 continue;
             }
 
-            receiver.gameObject.SetActive(false);
+            receiver.deactive();
             receiver.DeregisterRequest();
         }
     }

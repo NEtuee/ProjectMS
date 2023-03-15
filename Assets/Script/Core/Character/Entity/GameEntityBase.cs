@@ -23,6 +23,7 @@ public class GameEntityBase : SequencerObjectBase
     private AIGraph             _aiGraph;
     private DanmakuGraph        _danmakuGraph;
     private StatusInfo          _statusInfo;
+    private StatusGraphicInterface _graphicInterface;
 
     private CollisionInfo       _collisionInfo;
 
@@ -76,8 +77,8 @@ public class GameEntityBase : SequencerObjectBase
         _aiGraph.assign();
 
         _danmakuGraph = new DanmakuGraph();
-
         _statusInfo = new StatusInfo();
+        _graphicInterface = new StatusGraphicInterface();
 
         createSpriteRenderObject();
     }
@@ -96,6 +97,7 @@ public class GameEntityBase : SequencerObjectBase
         _danmakuGraph.initialize(this);
 
         _statusInfo.initialize(characterInfo._statusName);
+        _graphicInterface.initialize(this,_statusInfo,new Vector3(0f, characterInfo._headUpOffset, 0f));
 
         detachChildObject();
         setParentObject(null);
@@ -128,6 +130,8 @@ public class GameEntityBase : SequencerObjectBase
 
         CollisionInfoData data = new CollisionInfoData(0.2f,0f,0f, CollisionType.Character);
         _collisionInfo = new CollisionInfo(data);
+
+        _graphicInterface.initialize(this,_statusInfo,new Vector3(0f, _collisionInfo.getRadius(), 0f));
 
         CollisionManager.Instance().registerObject(_collisionInfo, this);
 
@@ -306,6 +310,11 @@ public class GameEntityBase : SequencerObjectBase
     public override void afterProgress(float deltaTime)
     {
         base.afterProgress(deltaTime);
+
+        //todo: observer
+        _graphicInterface.updatePosition();
+        _graphicInterface.updateGague();
+
         resetState();
 
         if(_statusDebug == true)
@@ -314,6 +323,12 @@ public class GameEntityBase : SequencerObjectBase
         }
         
         CollisionManager.Instance().collisionRequest(_collisionInfo,this,collisionTest,collisionEndEvent);
+    }
+
+    public override void deactive()
+    {
+        _graphicInterface.release();
+        base.deactive();
     }
 
     public override void dispose(bool disposeFromMaster)

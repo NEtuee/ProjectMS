@@ -65,6 +65,8 @@ public class CharacterInfoLoader
                 characterInfoData._statusName = attrValue;
             else if(attrName == "CollisionRadius")
                 characterInfoData._characterRadius = float.Parse(attrValue);
+            else if(attrName == "HeadUpOffset")
+                characterInfoData._headUpOffset = float.Parse(attrValue);
         }
 
         return characterInfoData;
