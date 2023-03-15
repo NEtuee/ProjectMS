@@ -89,6 +89,40 @@
 
 <!-- 1페이즈 -->
 <!-- 2페이즈 -->
+    <AC_SpawnPitchingMachine MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <Animation Path="Resources/Sprites/SampleBoss/Idle/" FramePerSecond="0.3" XFlip="true">
+        
+            <FrameEvent Type="SpawnCharacter" StartFrame="0.02" CharacterKey="PitchingMachine" Offset="1 0 0" SearchIdentifier="Enemy"/>
+            <FrameEvent Type="SpawnCharacter" StartFrame="0.04" CharacterKey="PitchingMachine" Offset="0.5 0.5 0" SearchIdentifier="Enemy"/>
+            <FrameEvent Type="SpawnCharacter" StartFrame="0.06" CharacterKey="PitchingMachine" Offset="0 1 0" SearchIdentifier="Enemy"/>
+            <FrameEvent Type="SpawnCharacter" StartFrame="0.08" CharacterKey="PitchingMachine" Offset="-0.5 0.5 0" SearchIdentifier="Enemy"/>
+            <FrameEvent Type="SpawnCharacter" StartFrame="0.1" CharacterKey="PitchingMachine" Offset="-1 0 0" SearchIdentifier="Enemy"/>
+            <FrameEvent Type="SpawnCharacter" StartFrame="0.12" CharacterKey="PitchingMachine" Offset="-0.5 -0.5 0" SearchIdentifier="Enemy"/>
+            <FrameEvent Type="SpawnCharacter" StartFrame="0.14" CharacterKey="PitchingMachine" Offset="0 -1 0" SearchIdentifier="Enemy"/>
+            <FrameEvent Type="SpawnCharacter" StartFrame="0.16" CharacterKey="PitchingMachine" Offset="0.5 -0.5 0" SearchIdentifier="Enemy"/>
+        
+        </Animation>
 
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_SpawnPitchingMachine>
+
+    <AC_PitcherReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <!-- 투구 준비 모션, 탄막 경로 활성화 -->
+        <Animation Path="Resources/Sprites/SampleBoss/Charge/" FramePerSecond="1.5" XFlip="true">
+            <FrameEvent Type="Movement" StartFrame="0" Friction="12" MaxVelocity="0" Speed="0"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_PitcherReady>
+
+    <AC_Pitch MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+        <!-- 투구 모션, 탄막 활성화 -->
+        <Animation Path="Resources/Sprites/SampleBoss/Attack/" FramePerSecond="0.5" XFlip="true">
+            <FrameEvent Type="Movement" StartFrame="0" Friction="12" MaxVelocity="0" Speed="0"/>
+            <FrameEvent Type="Danmaku" StartFrame="0.25" Path="Enemy/MagicalBuckshot.xml"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_Pitch>
 <!-- 2페이즈 -->
 </ActionGraph>

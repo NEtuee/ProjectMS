@@ -1,4 +1,4 @@
-<AIGraph Name="SisterChanAIGraph" DefaultState="Entry">
+<AIGraph Name="SisterChanAIGraph" DefaultState="SpawnPitchingMachine">
 
     <Include Path="Common\CommonDeadPackage.xml"/>
     <Include Path="Common\CommonHitPackage.xml"/>
@@ -8,6 +8,7 @@
     <Include Path="Common\CommonGuardBrokenPackage.xml"/>
 
     <Include Path="Enemy/OsananaNajimi/NajimiRushPackage.xml"/>
+    <Include Path="Enemy/OsananaNajimi/NajimiPitchingPackage.xml"/>
 
     <!-- 보스전 대기 시간 (나중에 보스전 시작 트리거를 받아야 함)-->
     <GlobalVariable Name="gv_najimiReadyTime" Value="3.0"/>
@@ -22,7 +23,6 @@
         <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
     </BranchSet>
 
-
     <Entry Package="CommonIdlePackage">
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="GraphExecutedTime > gv_najimiReadyTime" Execute="Chase"/>
@@ -34,11 +34,16 @@
                            (gv_najimiRushRange >= TargetDistance) && 
                            (GraphExecutedTime > gv_najimiTrasitionTime)" Execute="Rush"/>
     </Chase>
-
+    
     <Rush Package="NajimiRushPackage">
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </Rush>
+
+    <SpawnPitchingMachine Package="NajimiPitchingPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+    </SpawnPitchingMachine>
 
     <GuardBroken Package="CommonGuardBrokenPackage">
         <UseBranchSet Name="HitReactionSet"/>
@@ -49,6 +54,7 @@
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="Chase"/>
     </Hit>
+
     <Dead Package="CommonDeadPackage">
     </Dead>
 

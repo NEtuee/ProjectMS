@@ -1,0 +1,45 @@
+<AIGraph Name="PitchingMachineAI" DefaultState="Entry">
+
+    <Include Path="Common\CommonDeadPackage.xml"/>
+    <Include Path="Common\CommonHitPackage.xml"/>
+    <Include Path="Common\CommonIdlePackage.xml"/>
+    <Include Path="Common\CommonGuardBrokenPackage.xml"/>
+    <Include Path="Common\CommonShotPackage.xml"/>
+    
+    <!-- 피칭머신이 플레이어를 공격할 수 있는 거리-->
+    <GlobalVariable Name="gv_pitchingMachineShootRange" Value="5.0"/>
+
+    <BranchSet Name="HitReactionSet">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="Hit" Execute="Hit"/> 
+        <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
+    </BranchSet>
+
+    <Entry Package="CommonIdlePackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="TargetExists && (gv_pitchingMachineShootRange >= TargetDistance)" Execute="Shot"/>
+    </Entry>
+
+    <Hit Package="CommonHitPackage">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="Hit" Execute="Hit"/>
+        <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+    </Hit>
+
+    <GuardBroken Package="CommonGuardBrokenPackage">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="Hit" Execute="Hit"/>
+        <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+    </GuardBroken>
+
+    <Shot Package="CommonShotPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="TargetExists && (gv_pitchingMachineShootRange < TargetDistance)" Execute="Entry"/>
+    </Shot>
+
+    <Dead Package="CommonDeadPackage">
+    </Dead>
+
+</AIGraph>

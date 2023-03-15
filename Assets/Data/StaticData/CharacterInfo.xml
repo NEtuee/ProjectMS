@@ -152,4 +152,14 @@
         CollisionRadius="0.2"
         ProjectileCollisionRadius=""
     />
+
+    <PitchingMachine
+        DisplayName="피칭머신"
+        ActionGraph="Assets\Data\ActionGraph\Enemy\PitchingMachineAction.xml"
+        AIGraph="Assets\Data\AIGraph\Enemy\PitchingMachineAI.xml"
+        StatusInfoName="CommonEnemyStatus"
+        
+        CollisionRadius="0.2"
+        ProjectileCollisionRadius=""
+    />
 </CharacterInfo>
