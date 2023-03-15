@@ -1,0 +1,55 @@
+<AIGraph Name="SisterChanAIGraph" DefaultState="Entry">
+
+    <Include Path="Common\CommonDeadPackage.xml"/>
+    <Include Path="Common\CommonHitPackage.xml"/>
+    <Include Path="Common\CommonChasePackage.xml"/>
+    <Include Path="Common\CommonAttackPackage.xml"/>
+    <Include Path="Common\CommonIdlePackage.xml"/>
+    <Include Path="Common\CommonGuardBrokenPackage.xml"/>
+
+    <Include Path="Enemy/OsananaNajimi/NajimiRushPackage.xml"/>
+
+    <!-- 보스전 대기 시간 (나중에 보스전 시작 트리거를 받아야 함)-->
+    <GlobalVariable Name="gv_najimiReadyTime" Value="3.0"/>
+    <!-- 나지미 돌진 사거리 -->
+    <GlobalVariable Name="gv_najimiRushRange" Value="2.0"/>
+    <!-- 나지미 행동 전환 시간 -->
+    <GlobalVariable Name="gv_najimiTrasitionTime" Value="0.3"/>
+
+    <BranchSet Name="HitReactionSet">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="Hit" Execute="Hit"/>
+        <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
+    </BranchSet>
+
+
+    <Entry Package="CommonIdlePackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="GraphExecutedTime > gv_najimiReadyTime" Execute="Chase"/>
+    </Entry>
+
+    <Chase Package="CommonChasePackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="TargetExists && 
+                           (gv_najimiRushRange >= TargetDistance) && 
+                           (GraphExecutedTime > gv_najimiTrasitionTime)" Execute="Rush"/>
+    </Chase>
+
+    <Rush Package="NajimiRushPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+    </Rush>
+
+    <GuardBroken Package="CommonGuardBrokenPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Chase"/>
+    </GuardBroken>
+
+    <Hit Package="CommonHitPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Chase"/>
+    </Hit>
+    <Dead Package="CommonDeadPackage">
+    </Dead>
+
+</AIGraph>
