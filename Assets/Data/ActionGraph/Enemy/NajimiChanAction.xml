@@ -126,4 +126,51 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_Pitch>
 <!-- 2페이즈 -->
+
+<!-- 3페이즈 -->
+
+    <AC_BatonReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <!-- 바톤 공격 준비 모션 -->
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/batonReady" FramePerSecond="1" XFlip="true">
+            <FrameEvent Type="Movement" StartFrame="0" Friction="12" MaxVelocity="0" Speed="0"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_BatonReady"/>
+    </AC_BatonReady>
+
+    <AC_BatonSlash MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="MoveDirection">
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/batonSlash" FramePerSecond="1" XFlip="true">
+            <FrameEvent Type="Attack" StartFrame="0.1" AttackPreset="Najimi_BatonSlash">
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
+
+                    <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/Slash_Timeline" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
+                    <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/Blood_Timeline" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
+                    <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/Impact_Timeline" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true" AngleType="AttackPoint"/>
+                    
+                    <FrameEvent Type="TeleportToTargetBack" DistanceOffset="-0.3"/>
+
+                    <FrameEvent Type="StopUpdate" StartFrame="0" Time="0.07"/>
+                </OnHit>
+            </FrameEvent>
+
+            <FrameEvent Type="Movement" StartFrame="0.1" Friction="60" MaxVelocity="30" Speed="0" Velocity="30"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_BatonSlash>
+
+    
+    <AC_BatonSuccess MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/batonSlash/" FramePerSecond="24" XFlip="true" ScalePreset="YSpring">
+            <FrameEvent Type="Effect" StartFrame="0" Path="Resources/Sprites/Effect/Sheath" FramePerSecond="0.5" Offset="0.0 0.0 0.0" Angle="Random_0^360" UseFlip="True" CastShadow="True">
+                <Physics UseGravity="True" Velocity="-1.5 3.5" Friction="1.0" Torque="Random_25^30" AngularFriction="10.0"/>
+            </FrameEvent>
+
+            <FrameEvent Type="Movement" StartFrame="0" Friction="90" MaxVelocity="30" Speed="0" Velocity="30"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_BatonSuccess>
+<!-- 3페이즈 -->
 </ActionGraph>

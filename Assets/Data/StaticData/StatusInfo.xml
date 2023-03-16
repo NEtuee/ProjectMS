@@ -46,4 +46,11 @@
         <DeclareGraphicInterface Target="HP" Color="255 0 0 255" HorizontalGap="0.5"/>
     </TestEnemyStatus>
 
+    <OsananaNajimiStatus>
+        <Stat Type="HP" Max="20" Min="0" Init="20"/>
+        <Stat Type="Blood" Max="100" Min="0" Init="3"/>
+        <Stat Type="Custom" Name="Phase" Max="3" Min="0" Init="1"/>
+
+        <DeclareGraphicInterface Target="HP" Color="255 0 0 255" HorizontalGap="0.5"/>
+    </OsananaNajimiStatus>
 </StatusInfo>

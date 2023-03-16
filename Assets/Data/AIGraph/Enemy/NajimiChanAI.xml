@@ -1,4 +1,4 @@
-<AIGraph Name="SisterChanAIGraph" DefaultState="SpawnPitchingMachine">
+<AIGraph Name="SisterChanAIGraph" DefaultState="Entry">
 
     <Include Path="Common\CommonDeadPackage.xml"/>
     <Include Path="Common\CommonHitPackage.xml"/>
@@ -9,13 +9,19 @@
 
     <Include Path="Enemy/OsananaNajimi/NajimiRushPackage.xml"/>
     <Include Path="Enemy/OsananaNajimi/NajimiPitchingPackage.xml"/>
+    <Include Path="Enemy/OsananaNajimi/NajimiBatonPackage.xml"/>
 
     <!-- 보스전 대기 시간 (나중에 보스전 시작 트리거를 받아야 함)-->
     <GlobalVariable Name="gv_najimiReadyTime" Value="3.0"/>
     <!-- 나지미 돌진 사거리 -->
     <GlobalVariable Name="gv_najimiRushRange" Value="2.0"/>
+    <!-- 나지미 투구 사거리 -->
+    <GlobalVariable Name="gv_najimiPitchingRange" Value="5.0"/>
+    <!-- 나지미 바톤 사거리 -->
+    <GlobalVariable Name="gv_najimiBatonRange" Value="5.0"/>
     <!-- 나지미 행동 전환 시간 -->
-    <GlobalVariable Name="gv_najimiTrasitionTime" Value="0.3"/>
+    <GlobalVariable Name="gv_najimiTrasitionTime" Value="0.15"/>
+
 
     <BranchSet Name="HitReactionSet">
         <Branch Condition="Dead" Execute="Dead"/>
@@ -31,8 +37,8 @@
     <Chase Package="CommonChasePackage">
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="TargetExists && 
-                           (gv_najimiRushRange >= TargetDistance) && 
-                           (GraphExecutedTime > gv_najimiTrasitionTime)" Execute="Rush"/>
+                           (gv_najimiBatonRange >= TargetDistance) && 
+                           (GraphExecutedTime > gv_najimiTrasitionTime)" Execute="Baton"/>
     </Chase>
     
     <Rush Package="NajimiRushPackage">
@@ -44,6 +50,11 @@
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </SpawnPitchingMachine>
+
+    <Baton Package="NajimiBatonPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Chase"/>
+    </Baton>
 
     <GuardBroken Package="CommonGuardBrokenPackage">
         <UseBranchSet Name="HitReactionSet"/>
