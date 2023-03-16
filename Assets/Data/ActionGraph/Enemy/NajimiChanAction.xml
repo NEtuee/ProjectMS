@@ -91,7 +91,7 @@
 <!-- 2페이즈 -->
     <AC_SpawnPitchingMachine MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <Animation Path="Resources/Sprites/SampleBoss/Idle/" FramePerSecond="0.3" XFlip="true">
-        
+        <!--
             <FrameEvent Type="SpawnCharacter" StartFrame="0.02" CharacterKey="PitchingMachine" Offset="1 0 0" SearchIdentifier="Enemy"/>
             <FrameEvent Type="SpawnCharacter" StartFrame="0.04" CharacterKey="PitchingMachine" Offset="0.5 0.5 0" SearchIdentifier="Enemy"/>
             <FrameEvent Type="SpawnCharacter" StartFrame="0.06" CharacterKey="PitchingMachine" Offset="0 1 0" SearchIdentifier="Enemy"/>
@@ -100,7 +100,8 @@
             <FrameEvent Type="SpawnCharacter" StartFrame="0.12" CharacterKey="PitchingMachine" Offset="-0.5 -0.5 0" SearchIdentifier="Enemy"/>
             <FrameEvent Type="SpawnCharacter" StartFrame="0.14" CharacterKey="PitchingMachine" Offset="0 -1 0" SearchIdentifier="Enemy"/>
             <FrameEvent Type="SpawnCharacter" StartFrame="0.16" CharacterKey="PitchingMachine" Offset="0.5 -0.5 0" SearchIdentifier="Enemy"/>
-        
+        -->
+            <FrameEvent Type="Danmaku" StartFrame="0" Path="Enemy\NajimiPitchingMachine.xml"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>
