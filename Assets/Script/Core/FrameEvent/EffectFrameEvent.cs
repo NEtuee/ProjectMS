@@ -8,6 +8,186 @@ enum AngleDirectionType
     AttackPoint,
 }
 
+public class ActionFrameEvent_ProjectilePathEffect : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_ProjectilePathEffect;}
+
+    public Material                         _trailMaterial;
+    
+    public string                           _projectileGraphName = "";
+    private ProjectileGraphShotInfoData     _shotInfo;
+    private ActionFrameEvent_Projectile.ShotInfoUseType _useType = ActionFrameEvent_Projectile.ShotInfoUseType.UseDefault;
+    private DirectionType                   _directionType = DirectionType.Count;
+    private SetTargetType                   _setTargetType = SetTargetType.SetTargetType_Self;
+
+    private Vector3[]                       _pathPredictionArray = null;
+    private int                             _predictionAccuracy = 0;
+
+    private float                           _lifeTime = 0f;
+
+    private EffectUpdateType                _effectUpdateType = EffectUpdateType.ScaledDeltaTime;
+
+    public override void initialize()
+    {
+        base.initialize();
+    }
+
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        if(ProjectileManager._instance == null)
+        {
+            DebugUtil.assert(false, "projectile execute order error!!");
+            return true;
+        }
+
+        if(executeEntity is GameEntityBase == false)
+            return true;
+
+        float defaultAngle = ActionFrameEvent_Projectile.getDefaultAngle(executeEntity as GameEntityBase, _directionType);
+
+        ProjectileGraphShotInfoData shotInfo;
+        if(ActionFrameEvent_Projectile.getShotInfo(_projectileGraphName,_useType,defaultAngle,ref _shotInfo,out shotInfo) == false)
+            return true;
+
+        Vector3 spawnPosition = ActionFrameEvent_Projectile.getSpawnPosition(_setTargetType, executeEntity, targetEntity);
+        predictionPath(ref shotInfo, spawnPosition);
+
+        EffectRequestData requestData = MessageDataPooling.GetMessageData<EffectRequestData>();
+        requestData.clearRequestData();
+        requestData._updateType = _effectUpdateType;
+        requestData._effectType = EffectType.TrailEffect;
+        requestData._lifeTime = _lifeTime;
+        requestData._trailWidth = ProjectileManager._instance.getProjectileGraphData(_projectileGraphName)._collisionRadius * 2f;
+        requestData._trailMaterial = _trailMaterial;
+        requestData._trailPositionData = _pathPredictionArray;
+
+        executeEntity.SendMessageEx(MessageTitles.effect_spawnEffect,UniqueIDBase.QueryUniqueID("EffectManager"),requestData);
+
+        return true;
+    }
+
+    private void predictionPath(ref ProjectileGraphShotInfoData shotInfo, Vector3 position)
+    {
+        float currentVelocity = shotInfo._deafaultVelocity;
+        float currentAngle = shotInfo._defaultAngle;
+
+        float stepDeltaTime = shotInfo._lifeTime / (float)_predictionAccuracy;
+        Vector3 evaluatePosition = position;
+
+        int stepIndex = 0;
+        _pathPredictionArray[stepIndex] = evaluatePosition;
+
+        while(++stepIndex >= _predictionAccuracy)
+        {
+            currentVelocity += shotInfo._acceleration * stepDeltaTime;
+
+            if(shotInfo._friction != 0f)
+                currentVelocity = MathEx.convergence0(currentVelocity,shotInfo._friction * stepDeltaTime);
+            if(shotInfo._angularAcceleration != 0f)
+                currentAngle += shotInfo._angularAcceleration * stepDeltaTime;
+
+            evaluatePosition += (currentVelocity * stepDeltaTime) * (UnityEngine.Quaternion.Euler(0f,0f,currentAngle) * UnityEngine.Vector3.right);
+
+            _pathPredictionArray[stepIndex] = evaluatePosition;
+        }
+
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        _shotInfo.clear();
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+            if(attrName == "MaterialPath")
+            {
+                _trailMaterial = ResourceContainerEx.Instance().GetMaterial(attrValue);
+            }
+            else if(attrName == "Accuracy")
+            {
+                _predictionAccuracy = int.Parse(attrValue);
+                _pathPredictionArray = new Vector3[_predictionAccuracy];
+            }
+            else if(attrName == "LifeTime")
+            {
+                _lifeTime = float.Parse(attrValue);
+            }
+            else if(attributes[i].Name == "UpdateType")
+            {
+                _effectUpdateType = (EffectUpdateType)System.Enum.Parse(typeof(EffectUpdateType), attributes[i].Value);
+            }
+            else if(attrName == "GraphName")
+            {
+                _projectileGraphName = attrValue;
+            }
+            if(attrName == "Velocity")
+            {
+                _shotInfo._deafaultVelocity = float.Parse(attrValue);
+            }
+            else if(attrName == "Acceleration")
+            {
+                _shotInfo._acceleration = float.Parse(attrValue);
+            }
+            else if(attrName == "Friction")
+            {
+                _shotInfo._friction = float.Parse(attrValue);
+            }
+            else if(attrName == "Angle")
+            {
+                if(attrValue.Contains("Random"))
+                {
+                    string randomData = attrValue.Replace("Random_","");
+                    string[] randomValue = randomData.Split('^');
+                    if(randomValue == null || randomValue.Length != 2)
+                    {
+                        DebugUtil.assert(false, "invalid random angle attrubute: {0}", attrValue);
+                        continue;
+                    }
+                    _shotInfo._useRandomAngle = true;
+                    _shotInfo._randomAngle = new Vector2(float.Parse(randomValue[0]),float.Parse(randomValue[1]));
+                }
+                else
+                {
+                    _shotInfo._defaultAngle = float.Parse(attrValue);
+                }
+            }
+            else if(attrName == "AngularAcceleration")
+            {
+                _shotInfo._angularAcceleration = float.Parse(attrValue);
+            }
+            else if(attrName == "LifeTime")
+            {
+                _shotInfo._lifeTime = float.Parse(attrValue);
+            }
+            else if(attrName == "DirectionType")
+            {
+                _directionType = (DirectionType)System.Enum.Parse(typeof(DirectionType), attrValue);
+            }
+            else if(attrName == "ShotInfoUseType")
+            {
+                _useType = (ActionFrameEvent_Projectile.ShotInfoUseType)System.Enum.Parse(typeof(ActionFrameEvent_Projectile.ShotInfoUseType), attrValue);
+            }
+            else if(attrName == "SpawnTargetType")
+            {
+                if(attrValue == "Self")
+                    _setTargetType = SetTargetType.SetTargetType_Self;
+                else if(attrValue == "Target")
+                    _setTargetType = SetTargetType.SetTargetType_Target;
+                else if(attrValue == "AITarget")
+                    _setTargetType = SetTargetType.SetTargetType_AITarget;
+                else
+                {
+                    DebugUtil.assert(false,"invalid targetType: {0}", attrValue);
+                }
+            }
+        }
+        if(_projectileGraphName == "")
+            DebugUtil.assert(false, "projectile graph is essential");
+    }
+}
+
 public class ActionFrameEvent_TimelineEffect : ActionFrameEventBase
 {
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_TimelineEffect;}
@@ -115,8 +295,6 @@ public class ActionFrameEvent_TimelineEffect : ActionFrameEventBase
             DebugUtil.assert(false, "effect path is essential");
     }
 }
-
-
 
 public class ActionFrameEvent_Effect : ActionFrameEventBase
 {

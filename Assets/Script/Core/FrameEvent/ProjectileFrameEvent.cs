@@ -32,33 +32,31 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
         if(executeEntity is GameEntityBase == false)
             return true;
 
-        ProjectileGraphBaseData baseData = ProjectileManager._instance.getProjectileGraphData(_projectileGraphName);
-        if(baseData == null)
-            return true;
+        float defaultAngle = getDefaultAngle(executeEntity as GameEntityBase, _directionType);
 
+        ProjectileGraphShotInfoData shotInfo;
+        getShotInfo(_projectileGraphName,_useType,defaultAngle,ref _shotInfo,out shotInfo);
 
-        ProjectileGraphShotInfoData shotInfo = baseData._defaultProjectileShotInfoData;
+        Vector3 spawnPosition = getSpawnPosition(_setTargetType, executeEntity, targetEntity);
+        
+        ProjectileManager._instance.spawnProjectile(_projectileGraphName,ref shotInfo,spawnPosition,executeEntity._searchIdentifier);
 
-        switch(_useType)
-        {
-            case ShotInfoUseType.UseDefault:
-            break;
-            case ShotInfoUseType.Overlap:
-            shotInfo = _shotInfo;
-            break;
-            case ShotInfoUseType.Add:
-            shotInfo += _shotInfo;
-            break;
-        }
+        return true;
+    }
 
+    public static float getDefaultAngle(GameEntityBase executeEntity, DirectionType directionType)
+    {
         Vector3 direction = Vector3.zero;
-        if(_directionType != DirectionType.Count)
-            direction = ((GameEntityBase)executeEntity).getDirectionFromType(_directionType);
+        if(directionType != DirectionType.Count)
+            direction = ((GameEntityBase)executeEntity).getDirectionFromType(directionType);
 
-        shotInfo._defaultAngle += Quaternion.Euler(0f,0f,Mathf.Atan2(direction.y,direction.x) * Mathf.Rad2Deg).eulerAngles.z;
+        return Quaternion.Euler(0f,0f,Mathf.Atan2(direction.y,direction.x) * Mathf.Rad2Deg).eulerAngles.z;
+    }
 
+    public static Vector3 getSpawnPosition(SetTargetType targetType, ObjectBase executeEntity, ObjectBase targetEntity)
+    {
         Vector3 spawnPosition = Vector3.zero;
-        switch(_setTargetType)
+        switch(targetType)
         {
             case SetTargetType.SetTargetType_Self:
             spawnPosition = executeEntity.transform.position;
@@ -72,9 +70,34 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
             break;
         }
 
+        return spawnPosition;
+    }
 
-        ProjectileManager._instance.spawnProjectile(_projectileGraphName,ref shotInfo,spawnPosition,executeEntity._searchIdentifier);
+    public static bool getShotInfo(string projectileGraphName, ShotInfoUseType useType, float defaultAngle, ref ProjectileGraphShotInfoData defaultShotInfo, out ProjectileGraphShotInfoData outShotInfo)
+    {
+        ProjectileGraphBaseData baseData = ProjectileManager._instance.getProjectileGraphData(projectileGraphName);
 
+        if(baseData == null)
+        {
+            outShotInfo = new ProjectileGraphShotInfoData();
+            return false;
+        }
+
+        outShotInfo = baseData._defaultProjectileShotInfoData;
+
+        switch(useType)
+        {
+            case ShotInfoUseType.UseDefault:
+            break;
+            case ShotInfoUseType.Overlap:
+            outShotInfo = defaultShotInfo;
+            break;
+            case ShotInfoUseType.Add:
+            outShotInfo += defaultShotInfo;
+            break;
+        }
+
+        outShotInfo._defaultAngle += defaultAngle;
         return true;
     }
 

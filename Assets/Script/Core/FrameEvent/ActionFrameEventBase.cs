@@ -24,6 +24,7 @@ public enum FrameEventType
     FrameEvent_StopUpdate,
     FrameEvent_SpawnCharacter,
     FrameEvent_ReleaseCatch,
+    FrameEvent_ProjectilePathEffect,
 
     Count,
 }

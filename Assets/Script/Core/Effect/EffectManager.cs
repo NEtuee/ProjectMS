@@ -14,6 +14,7 @@ public enum EffectType
 {
     SpriteEffect,
     TimelineEffect,
+    TrailEffect,
 }
 
 public class EffectRequestData : MessageData
@@ -41,6 +42,11 @@ public class EffectRequestData : MessageData
 
     public PhysicsBodyDescription _physicsBodyDesc;
 
+    public float _lifeTime = 0f;
+    public float _trailWidth = 0f;
+    public Material _trailMaterial = null;
+    public Vector3[] _trailPositionData = null;
+
     public void clearRequestData()
     {
         _effectPath = "";
@@ -58,6 +64,10 @@ public class EffectRequestData : MessageData
         _parentTransform = null;
         _timelineAnimator = null;
         _physicsBodyDesc.clearPhysicsBody();
+        _lifeTime = 0f;
+        _trailWidth = 0f;
+        _trailMaterial = null;
+        _trailPositionData = null;
     }
 }  
 
@@ -72,6 +82,8 @@ public abstract class EffectItemBase
     public abstract void release();
 
     public abstract bool isValid();
+
+    public virtual bool isActivated() {return true;}
 
 }
 
@@ -148,6 +160,15 @@ public class EffectItem : EffectItemBase
         _spriteRenderer.transform.localRotation *= _animationPlayer.getAnimationRotationPerFrame();
         _spriteRenderer.transform.localScale = _animationPlayer.getCurrentAnimationScale();
 
+        switch(_effectUpdateType)
+        {
+            case EffectUpdateType.ScaledDeltaTime:
+            break;
+            case EffectUpdateType.NoneScaledDeltaTime:
+            deltaTime = Time.deltaTime;
+            break;
+        }
+
         if(_usePhysics)
         {
             _physicsBody.progress(deltaTime);
@@ -184,6 +205,8 @@ public class EffectItem : EffectItemBase
     {
         return _spriteRenderer != null;
     }
+
+    public override bool isActivated() {return _spriteRenderer.gameObject.activeInHierarchy;}
 }
 
 public class TimelineEffectItem : EffectItemBase
@@ -247,7 +270,16 @@ public class TimelineEffectItem : EffectItemBase
         if(isValid() == false || _playableDirector.playableGraph.IsValid() == false)
             return false;
 
-        _playableDirector.playableGraph.Evaluate(Time.deltaTime);
+        switch(_effectUpdateType)
+        {
+            case EffectUpdateType.ScaledDeltaTime:
+            break;
+            case EffectUpdateType.NoneScaledDeltaTime:
+            deltaTime = Time.deltaTime;
+            break;
+        }
+
+        _playableDirector.playableGraph.Evaluate(deltaTime);
         return _playableDirector.state != PlayState.Playing;
     }
 
@@ -262,7 +294,103 @@ public class TimelineEffectItem : EffectItemBase
     {
         return _effectObject != null && _playableDirector != null;
     }
+
+    public override bool isActivated() {return _effectObject.activeInHierarchy;}
 }
+
+public class TrailEffectItem : EffectItemBase
+{
+    private GameObject              _effectObject;
+    private TrailEffectControl      _trailEffectControl;
+
+    public Transform                _parentTransform = null;
+
+    private float _lifeTime = 0f;
+
+    public void createItem(string prefabPath)
+    {
+        GameObject effectPrefab = ResourceContainerEx.Instance().GetPrefab(prefabPath);
+        if(effectPrefab == null)
+        {
+            DebugUtil.assert(false, "invalid timeline effect prefab path : {0}", prefabPath);
+            return;
+        }
+
+        _effectObject = GameObject.Instantiate(effectPrefab);
+        _trailEffectControl = _effectObject.GetComponent<TrailEffectControl>();
+
+        if(_trailEffectControl == null)
+        {
+            DebugUtil.assert(false, "trail Effect Control is not exists in effect prefab : {0}", prefabPath);
+            return;
+        }
+
+        _effectType = EffectType.TrailEffect;
+        release();
+    }
+
+    public override void initialize(EffectRequestData effectData)
+    {
+        _effectPath = effectData._effectPath;
+        _effectUpdateType = effectData._updateType;
+
+        _effectObject.transform.position = effectData._position;
+        _effectObject.transform.rotation = effectData._rotation;
+
+        _parentTransform = effectData._parentTransform;
+
+        if(_parentTransform != null && _parentTransform.gameObject.activeInHierarchy == false)
+            _parentTransform = null;
+
+        if(_parentTransform != null)
+            _effectObject.transform.SetParent(_parentTransform);
+
+        TrailEffectDescription trailEffectDesc;
+        trailEffectDesc._sortingLayerName = "Effect";
+        trailEffectDesc._sortingOrder = 0;
+        trailEffectDesc._textureMode = LineTextureMode.Stretch;
+        trailEffectDesc._time = effectData._lifeTime;
+        trailEffectDesc._width = effectData._trailWidth;
+
+        _trailEffectControl.setPositions(effectData._trailPositionData);
+        _trailEffectControl.setMaterial(effectData._trailMaterial);
+        _trailEffectControl.setDescription(ref trailEffectDesc);
+
+        _lifeTime = effectData._lifeTime;
+        
+        _effectObject.SetActive(true);
+    }
+
+    public override bool progress(float deltaTime)
+    {
+        if(isValid() == false)
+            return false;
+
+        switch(_effectUpdateType)
+        {
+            case EffectUpdateType.ScaledDeltaTime:
+            break;
+            case EffectUpdateType.NoneScaledDeltaTime:
+            deltaTime = Time.deltaTime;
+            break;
+        }
+
+        _lifeTime -= deltaTime;
+        return _lifeTime <= 0f;
+    }
+
+    public override void release()
+    {
+        _effectObject.transform.SetParent(null);
+        _effectObject.SetActive(false);
+    }
+
+    public override bool isValid()
+    {
+        return _effectObject != null && _trailEffectControl != null;
+    }
+}
+
 
 public class EffectManager : ManagerBase
 {
@@ -270,6 +398,7 @@ public class EffectManager : ManagerBase
 
     private SimplePool<EffectItem> _effectItemPool = new SimplePool<EffectItem>();
     private Dictionary<string, SimplePool<TimelineEffectItem>> _timelineEffectPool = new Dictionary<string, SimplePool<TimelineEffectItem>>();
+    private Dictionary<string, SimplePool<TrailEffectItem>> _trailEffectPool = new Dictionary<string, SimplePool<TrailEffectItem>>();
 
     public override void assign()
     {
@@ -287,10 +416,9 @@ public class EffectManager : ManagerBase
         for(int i = 0; i < _processingItems.Count;)
         {
             float targetDeltaTime = _processingItems[i]._effectUpdateType == EffectUpdateType.ScaledDeltaTime ? deltaTime : Time.deltaTime;
-            if(_processingItems[i].progress(targetDeltaTime) == true)
+            if(_processingItems[i].isActivated() == false || _processingItems[i].progress(targetDeltaTime) == true)
             {
                 _processingItems[i].release();
-
                 returnEffectItemToQueue(_processingItems[i]);
                 _processingItems.RemoveAt(i);
 
@@ -310,6 +438,9 @@ public class EffectManager : ManagerBase
             break;
             case EffectType.TimelineEffect:
                 _timelineEffectPool[item._effectPath].enqueue(item as TimelineEffectItem);
+            break;
+            case EffectType.TrailEffect:
+                _trailEffectPool[item._effectPath].enqueue(item as TrailEffectItem);
             break;
         }
         
@@ -336,6 +467,18 @@ public class EffectManager : ManagerBase
             TimelineEffectItem item = _timelineEffectPool[requestData._effectPath].dequeue();
             if(item.isValid() == false)
                 item.createItem(requestData._effectPath);
+
+            item.initialize(requestData);
+            itemBase = item;
+        }
+        else if(requestData._effectType == EffectType.TrailEffect)
+        {
+            if(_trailEffectPool.ContainsKey("Trail") == false)
+                _trailEffectPool.Add("Trail", new SimplePool<TrailEffectItem>());
+
+            TrailEffectItem item = _trailEffectPool["Trail"].dequeue();
+            if(item.isValid() == false)
+                item.createItem("Prefab/Effect/TrailEffectBase");
 
             item.initialize(requestData);
             itemBase = item;
