@@ -1,7 +1,7 @@
 <ActionGraph Name="NajimiChanAction" DefaultAction="AC_Idle" DefaultFramePerSecond="12">
 
     <AC_Idle MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
-        <Animation Path="Resources/Sprites/SampleBoss/Idle/" XFlip="true">
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/idle" XFlip="true">
             <FrameEvent Type="Movement" StartFrame="0" Friction="12" Speed="0"/>
         </Animation>
 
@@ -9,7 +9,7 @@
     </AC_Idle>
 
     <AC_Move MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <Animation Path="Resources/Sprites/SampleBoss/MoveAll/" AngleBaseAnimation="True" AngleBaseAnimationCount="1">
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/moveFront" AngleBaseAnimation="True" AngleBaseAnimationCount="1">
             <FrameEvent Type="Movement" StartFrame="0" Friction="0" MaxVelocity="5" Speed="15"/>
         </Animation>
 
@@ -17,7 +17,7 @@
     </AC_Move>
 
     <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
-        <Animation Path="Resources/Sprites/SampleBoss/Hit/" FramePerSecond="1" XFlip="true">
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/hit" FramePerSecond="1" XFlip="true">
             <FrameEvent Type="Movement" StartFrame="0" Friction="0" Speed="0" Velocity="0"/>
         </Animation>
 
@@ -25,7 +25,7 @@
     </AC_Hit>
 
     <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
-        <Animation Path="Resources/Sprites/SampleBoss/GuardBroken/" FramePerSecond="1" XFlip="true">
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/guardBroken" FramePerSecond="1" XFlip="true">
             <FrameEvent Type="Movement" StartFrame="0" Friction="0" Speed="0" Velocity="0"/>
         </Animation>
 
@@ -48,7 +48,7 @@
     <!-- 아카네를 잡기위해 돌진하는 모션, 충돌 시 데미지 적용, 잡기 처리 -->
     <AC_Rush MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <!-- 나지미 돌진, 헛다리 애니메이션. 공격 성공 시 성공 액션으로 전이. -->
-        <Animation Path="Resources/Sprites/SampleBoss/Attack/" FramePerSecond="1" XFlip="true">
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/rush" FramePerSecond="1" XFlip="true">
             <FrameEvent Type="Movement" StartFrame="0" Friction="24" MaxVelocity="12" Velocity="12" Speed="0"/>
             <FrameEvent Type="Attack" StartFrame="0" EndFrame="0.4" AttackPreset="Najimi_Catch" AttackType="Catch" CatchOffset="0 0 0">
                 <OnHit>
@@ -66,7 +66,7 @@
 
     <!-- 아카네 잡기에 성공하여 꽉 끌어안는 모션 -->
     <AC_RushSuccess MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
-        <Animation Path="Resources/Sprites/SampleBoss/Attack/" FramePerSecond="0.5" XFlip="true">
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/grab/" FramePerSecond="0.5" XFlip="true">
             <FrameEvent Type="Movement" StartFrame="0" Friction="12"/>
 
             <FrameEvent Type="Attack" StartFrame="0.5" AttackPreset="Najimi_Catch">
@@ -90,7 +90,7 @@
 <!-- 1페이즈 -->
 <!-- 2페이즈 -->
     <AC_SpawnPitchingMachine MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <Animation Path="Resources/Sprites/SampleBoss/Idle/" FramePerSecond="0.3" XFlip="true">
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/idle/" FramePerSecond="3" XFlip="true">
         <!--
             <FrameEvent Type="SpawnCharacter" StartFrame="0.02" CharacterKey="PitchingMachine" Offset="1 0 0" SearchIdentifier="Enemy"/>
             <FrameEvent Type="SpawnCharacter" StartFrame="0.04" CharacterKey="PitchingMachine" Offset="0.5 0.5 0" SearchIdentifier="Enemy"/>
@@ -109,7 +109,7 @@
 
     <AC_PitcherReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <!-- 투구 준비 모션, 탄막 경로 활성화 -->
-        <Animation Path="Resources/Sprites/SampleBoss/Charge/" FramePerSecond="1.5" XFlip="true">
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/pitchCharge" FramePerSecond="1.5" XFlip="true">
             <FrameEvent Type="Movement" StartFrame="0" Friction="12" MaxVelocity="0" Speed="0"/>
         </Animation>
 
@@ -118,7 +118,7 @@
 
     <AC_Pitch MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <!-- 투구 모션, 탄막 활성화 -->
-        <Animation Path="Resources/Sprites/SampleBoss/Attack/" FramePerSecond="0.5" XFlip="true">
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/pitching" FramePerSecond="0.5" XFlip="true">
             <FrameEvent Type="Movement" StartFrame="0" Friction="12" MaxVelocity="0" Speed="0"/>
             <FrameEvent Type="Danmaku" StartFrame="0.25" Path="Enemy/MagicalBuckshot.xml"/>
         </Animation>
