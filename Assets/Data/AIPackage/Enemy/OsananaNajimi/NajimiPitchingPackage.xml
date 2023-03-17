@@ -8,8 +8,21 @@
                 <AIEvent Type="SetAction" Action="AC_SpawnPitchingMachine"/>
             </Event_OnExecute>        
             
-            <Branch Condition="End" Execute="AI_PitcherReady"/>
+            <Branch Condition="End" Execute="AI_SideStep"/>
         </AI_SpawnMachine>
+
+        <AI_SideStep UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget" Angle="90"/>
+                <AIEvent Type="SetAction" Action="AC_SideStep"/>
+            </Event_OnExecute>
+
+            <Event_OnFrame>
+                <AIEvent Type="SetDirectionToTarget" Angle="90"/>
+            </Event_OnFrame>
+        
+            <Branch Condition="End" Execute="AI_PitcherReady"/>
+        </AI_SideStep>
 
         <AI_PitcherReady UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
             <Event_OnExecute>
