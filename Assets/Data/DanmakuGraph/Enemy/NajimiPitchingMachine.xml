@@ -1,6 +1,9 @@
 <DanmakuGraph Name="NajimiPitchingMachine">
 
-    <Angle Set="0"/>
+    <Angle Set="-45"/>
+    <!-- 
+    나지미 주위로 피칭 머신 소환 
+
     <Loop Count="2" Term="0.05">
 
         <Projectile Name="PitchingMachine" ShotInfoUseType="Add"/>
@@ -16,5 +19,11 @@
         <Angle Add="90"/>
 
         <Angle Add="45"/>
+    </Loop>
+    -->
+    
+    <Loop Count="4" Term="0.05">
+        <Projectile Name="PitchingMachine" ShotInfoUseType="Add" DirectionType="Keep"/>
+        <Angle Add="22"/>
     </Loop>
 </DanmakuGraph>

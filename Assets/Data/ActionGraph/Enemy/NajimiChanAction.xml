@@ -105,7 +105,7 @@
 <!-- 1페이즈 -->
 <!-- 2페이즈 -->
     <AC_SpawnPitchingMachine MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/idle/" FramePerSecond="3" XFlip="true">
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/idle/" FramePerSecond="1.5" XFlip="true">
             <FrameEvent Type="Movement" StartFrame="0" Friction="12" MaxVelocity="0" Speed="0"/>
         <!--
             <FrameEvent Type="SpawnCharacter" StartFrame="0.02" CharacterKey="PitchingMachine" Offset="1 0 0" SearchIdentifier="Enemy"/>
@@ -122,6 +122,13 @@
 
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_SpawnPitchingMachine>
+
+    <AC_SideStep MovementType="GraphPreset" MovementGraphPreset="Najimi_SideStep" DirectionType="AI" FlipType="Direction" DefenceType="Evade">
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/evade/" FramePerSecond="1" XFlip="true">
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_SideStep"/>
+    </AC_SideStep>
 
     <AC_PitcherReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <!-- 투구 준비 모션, 탄막 경로 활성화 -->
