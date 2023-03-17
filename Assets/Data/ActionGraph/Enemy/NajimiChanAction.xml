@@ -43,6 +43,20 @@
         <Branch Condition="End == true" Execute="Dead"/>
     </Dead>
 
+<!-- 페이즈 전환 액션 -->
+
+    <AC_PhaseIncrease MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/phaseTransition/" FramePerSecond="1" XFlip="true">
+            <!-- 페이즈 전환 중 피격되더라도 무시되어야 함. -->
+            <FrameEvent Type="ApplyBuff" StartFrame="0" ApplyBuff="IncreasePhase"/>
+            
+        </Animation>
+        
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_PhaseIncrease>
+
+<!-- 페이즈 전환 액션 -->
+
 <!-- 1페이즈. 일정체력 이하, 또는 일정시간 초과 시 2페이즈로 전이 -->
 
     <!-- 아카네를 잡기위해 돌진하는 모션, 충돌 시 데미지 적용, 잡기 처리 -->
@@ -50,6 +64,7 @@
         <!-- 나지미 돌진, 헛다리 애니메이션. 공격 성공 시 성공 액션으로 전이. -->
         <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/rush" FramePerSecond="1" XFlip="true">
             <FrameEvent Type="Movement" StartFrame="0" Friction="24" MaxVelocity="12" Velocity="12" Speed="0"/>
+            <FrameEvent Type="ApplyBuff" StartFrame="0" ApplyBuff="NajimiAddRushCount"/>
             <FrameEvent Type="Attack" StartFrame="0" EndFrame="0.4" AttackPreset="Najimi_Catch" AttackType="Catch" CatchOffset="0 0 0">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
@@ -91,6 +106,7 @@
 <!-- 2페이즈 -->
     <AC_SpawnPitchingMachine MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/idle/" FramePerSecond="3" XFlip="true">
+            <FrameEvent Type="Movement" StartFrame="0" Friction="12" MaxVelocity="0" Speed="0"/>
         <!--
             <FrameEvent Type="SpawnCharacter" StartFrame="0.02" CharacterKey="PitchingMachine" Offset="1 0 0" SearchIdentifier="Enemy"/>
             <FrameEvent Type="SpawnCharacter" StartFrame="0.04" CharacterKey="PitchingMachine" Offset="0.5 0.5 0" SearchIdentifier="Enemy"/>
