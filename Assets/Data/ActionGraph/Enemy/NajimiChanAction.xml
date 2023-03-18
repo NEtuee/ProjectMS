@@ -1,7 +1,7 @@
 <ActionGraph Name="NajimiChanAction" DefaultAction="AC_Idle" DefaultFramePerSecond="12">
 
     <AC_Idle MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
-        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/idle" XFlip="true">
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/0_default/1_idle" XFlip="true">
             <FrameEvent Type="Movement" StartFrame="0" Friction="12" Speed="0"/>
         </Animation>
 
@@ -9,7 +9,7 @@
     </AC_Idle>
 
     <AC_Move MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/moveFront" AngleBaseAnimation="True" AngleBaseAnimationCount="1">
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/0_default/2_move" AngleBaseAnimation="True" AngleBaseAnimationCount="1">
             <FrameEvent Type="Movement" StartFrame="0" Friction="0" MaxVelocity="5" Speed="15"/>
         </Animation>
 
@@ -17,7 +17,7 @@
     </AC_Move>
 
     <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
-        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/hit" FramePerSecond="1" XFlip="true">
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/0_default/4_hit" FramePerSecond="1" XFlip="true">
             <FrameEvent Type="Movement" StartFrame="0" Friction="0" Speed="0" Velocity="0"/>
         </Animation>
 
@@ -25,7 +25,7 @@
     </AC_Hit>
 
     <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
-        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/guardBroken" FramePerSecond="1" XFlip="true">
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/0_default/4_hit" FramePerSecond="1" XFlip="true">
             <FrameEvent Type="Movement" StartFrame="0" Friction="0" Speed="0" Velocity="0"/>
         </Animation>
 
@@ -33,11 +33,7 @@
     </AC_GuardBroken>
     
     <Dead DirectionType="Keep" FlipType="Direction">
-        <Animation Path="Resources/Sprites/DummyPlayer/dash/" StartFrame="0" EndFrame="1" XFlip="true">
-            <FrameEvent Type="Effect" StartFrame="0" Path="Resources/Sprites/DummyPlayer/dead/" FramePerSecond="0.2" CastShadow="True">
-                <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
-            </FrameEvent>
-            <FrameEvent Type="KillEntity" StartFrame="0"/>
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/0_default/5_dead" XFlip="true">
         </Animation>
 
         <Branch Condition="End == true" Execute="Dead"/>
@@ -46,7 +42,7 @@
 <!-- 페이즈 전환 액션 -->
 
     <AC_PhaseIncrease MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/phaseTransition/" FramePerSecond="1" XFlip="true">
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/4_phaseTransition" FramePerSecond="1" XFlip="true">
             <!-- 페이즈 전환 중 피격되더라도 무시되어야 함. -->
             <FrameEvent Type="ApplyBuff" StartFrame="0" ApplyBuff="IncreasePhase"/>
             
@@ -62,7 +58,7 @@
     <!-- 아카네를 잡기위해 돌진하는 모션, 충돌 시 데미지 적용, 잡기 처리 -->
     <AC_Rush MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <!-- 나지미 돌진, 헛다리 애니메이션. 공격 성공 시 성공 액션으로 전이. -->
-        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/rush" FramePerSecond="1" XFlip="true">
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/1_rushPattern/1_rush" FramePerSecond="1" XFlip="true">
             <FrameEvent Type="Movement" StartFrame="0" Friction="24" MaxVelocity="12" Velocity="12" Speed="0"/>
             <FrameEvent Type="ApplyBuff" StartFrame="0" ApplyBuff="NajimiAddRushCount"/>
             <FrameEvent Type="Attack" StartFrame="0" EndFrame="0.4" AttackPreset="Najimi_Catch" AttackType="Catch" CatchOffset="0 0 0">
@@ -81,7 +77,7 @@
 
     <!-- 아카네 잡기에 성공하여 꽉 끌어안는 모션 -->
     <AC_RushSuccess MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
-        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/grab/" FramePerSecond="0.5" XFlip="true">
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/1_rushPattern/2_grab" FramePerSecond="0.5" XFlip="true">
             <FrameEvent Type="Movement" StartFrame="0" Friction="12"/>
 
             <FrameEvent Type="Attack" StartFrame="0.5" AttackPreset="Najimi_Catch">
@@ -102,10 +98,13 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_RushSuccess>
 
+    <!-- struggle 추가 필요 -->
+    <!-- away 추가 필요 -->
+
 <!-- 1페이즈 -->
 <!-- 2페이즈 -->
     <AC_SpawnPitchingMachine MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/idle/" FramePerSecond="1.5" XFlip="true">
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/2_pitchingPattern/1_spawnPitchingMachine" FramePerSecond="1.5" XFlip="true">
             <FrameEvent Type="Movement" StartFrame="0" Friction="12" MaxVelocity="0" Speed="0"/>
         <!--
             <FrameEvent Type="SpawnCharacter" StartFrame="0.02" CharacterKey="PitchingMachine" Offset="1 0 0" SearchIdentifier="Enemy"/>
@@ -124,7 +123,7 @@
     </AC_SpawnPitchingMachine>
 
     <AC_SideStep MovementType="GraphPreset" MovementGraphPreset="Najimi_SideStep" DirectionType="AI" FlipType="Direction" DefenceType="Evade">
-        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/evade/" FramePerSecond="1" XFlip="true">
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/0_default/3_dash" FramePerSecond="1" XFlip="true">
         </Animation>
 
         <Branch Condition="End" Execute="AC_SideStep"/>
@@ -132,7 +131,7 @@
 
     <AC_PitcherReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <!-- 투구 준비 모션, 탄막 경로 활성화 -->
-        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/pitchCharge" FramePerSecond="1.5" XFlip="true">
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/2_pitchingPattern/2_pitcherReady" FramePerSecond="1.5" XFlip="true">
             <FrameEvent Type="Movement" StartFrame="0" Friction="12" MaxVelocity="0" Speed="0"/>
         </Animation>
 
@@ -141,7 +140,7 @@
 
     <AC_Pitch MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <!-- 투구 모션, 탄막 활성화 -->
-        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/pitching" FramePerSecond="0.5" XFlip="true">
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/2_pitchingPattern/3_pitching" FramePerSecond="0.5" XFlip="true">
             <FrameEvent Type="Movement" StartFrame="0" Friction="12" MaxVelocity="0" Speed="0"/>
             <FrameEvent Type="Danmaku" StartFrame="0.25" Path="Enemy/MagicalBuckshot.xml"/>
         </Animation>
@@ -154,7 +153,7 @@
 
     <AC_BatonReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <!-- 바톤 공격 준비 모션 -->
-        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/batonReady" FramePerSecond="1" XFlip="true">
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/3_batonPattern/1_batonReady" FramePerSecond="1" XFlip="true">
             <FrameEvent Type="Movement" StartFrame="0" Friction="12" MaxVelocity="0" Speed="0"/>
         </Animation>
 
@@ -162,7 +161,7 @@
     </AC_BatonReady>
 
     <AC_BatonSlash MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="MoveDirection">
-        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/batonSlash" FramePerSecond="1" XFlip="true">
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/3_batonPattern/2_batonSlash" FramePerSecond="1" XFlip="true">
             <FrameEvent Type="Attack" StartFrame="0.1" AttackPreset="Najimi_BatonSlash">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
@@ -183,9 +182,9 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_BatonSlash>
 
-    
     <AC_BatonSuccess MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
-        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/batonSlash/" FramePerSecond="24" XFlip="true" ScalePreset="YSpring">
+        <!-- 성공의 경우 기존 애니메이션의 중간 프레임부터 재생하도록 -->
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/3_batonPattern/3_batonSlashSuccess" FramePerSecond="24" XFlip="true" ScalePreset="YSpring">
             <FrameEvent Type="Effect" StartFrame="0" Path="Resources/Sprites/Effect/Sheath" FramePerSecond="0.5" Offset="0.0 0.0 0.0" Angle="Random_0^360" UseFlip="True" CastShadow="True">
                 <Physics UseGravity="True" Velocity="-1.5 3.5" Friction="1.0" Torque="Random_25^30" AngularFriction="10.0"/>
             </FrameEvent>
