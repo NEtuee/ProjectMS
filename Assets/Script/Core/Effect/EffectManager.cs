@@ -331,7 +331,7 @@ public class TrailEffectItem : EffectItemBase
 
     public override void initialize(EffectRequestData effectData)
     {
-        _effectPath = effectData._effectPath;
+        _effectPath = "Trail";
         _effectUpdateType = effectData._updateType;
 
         _effectObject.transform.position = effectData._position;
@@ -351,20 +351,26 @@ public class TrailEffectItem : EffectItemBase
         trailEffectDesc._textureMode = LineTextureMode.Stretch;
         trailEffectDesc._time = effectData._lifeTime;
         trailEffectDesc._width = effectData._trailWidth;
+        trailEffectDesc._layerName = "EffectEtc";
 
-        _trailEffectControl.setPositions(effectData._trailPositionData);
         _trailEffectControl.setMaterial(effectData._trailMaterial);
         _trailEffectControl.setDescription(ref trailEffectDesc);
-
-        _lifeTime = effectData._lifeTime;
-        
+        _trailEffectControl.setPositions(effectData._trailPositionData, effectData._parentTransform);
         _effectObject.SetActive(true);
+        
+        _lifeTime = effectData._lifeTime;
     }
 
     public override bool progress(float deltaTime)
     {
         if(isValid() == false)
             return false;
+
+        if(_parentTransform != null && _parentTransform.gameObject.activeInHierarchy == false)
+            return true;
+
+        if(_parentTransform != null)
+            _trailEffectControl.updatePositions();
 
         switch(_effectUpdateType)
         {

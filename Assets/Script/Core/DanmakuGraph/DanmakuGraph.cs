@@ -241,7 +241,35 @@ public class DanmakuGraph
 
                 shotInfo._defaultAngle += Quaternion.Euler(0f,0f,Mathf.Atan2(direction.y,direction.x) * Mathf.Rad2Deg).eulerAngles.z;
 
-                ProjectileManager._instance.spawnProjectile(eventData._projectileName,ref shotInfo,_ownerEntity.transform.position,_ownerEntity._searchIdentifier);
+                if(eventData._startTerm != 0f)
+                {
+                    if(eventData._pathPredictionArray != null)
+                    {
+                        ActionFrameEvent_Projectile.predictionPath(eventData._predictionAccuracy,eventData._pathPredictionArray,ref shotInfo);
+
+                        EffectRequestData requestData = MessageDataPooling.GetMessageData<EffectRequestData>();
+                        requestData.clearRequestData();
+                        requestData._updateType = EffectUpdateType.NoneScaledDeltaTime;
+                        requestData._effectType = EffectType.TrailEffect;
+                        requestData._lifeTime = eventData._startTerm;
+                        requestData._parentTransform = _ownerEntity.transform;
+                        requestData._trailWidth = ProjectileManager._instance.getProjectileGraphData(eventData._projectileName)._collisionRadius * 2f;
+                        requestData._trailMaterial = ResourceContainerEx.Instance().GetMaterial("Material/Material_TrailBase");
+                        requestData._trailPositionData = eventData._pathPredictionArray;
+
+                        _ownerEntity.SendMessageEx(MessageTitles.effect_spawnEffect,UniqueIDBase.QueryUniqueID("EffectManager"),requestData);
+                    }
+
+                    ObjectBase targetEntity = null;
+                    if(_ownerEntity is GameEntityBase)
+                        targetEntity = (_ownerEntity as GameEntityBase).getCurrentTargetEntity();
+
+                    ProjectileManager._instance.spawnProjectileDelayed(eventData._projectileName, eventData._startTerm,_ownerEntity,targetEntity,eventData._setTargetType,ref shotInfo,_ownerEntity._searchIdentifier);
+                }
+                else
+                {
+                    ProjectileManager._instance.spawnProjectile(eventData._projectileName,ref shotInfo,_ownerEntity.transform.position,_ownerEntity._searchIdentifier);
+                }
             }
             break;
             case DanmakuEventType.LoopEvent:

@@ -56,6 +56,12 @@ public class DanmakuProjectileEventData : DanmakuEventBase
     public string _projectileName;
     public DirectionType _directionType;
     public ActionFrameEvent_Projectile.ShotInfoUseType _shotInfoUseType;
+
+    public UnityEngine.Vector3[]           _pathPredictionArray = null;
+    public SetTargetType                   _setTargetType = SetTargetType.SetTargetType_Self;
+    public int                             _predictionAccuracy = 0;
+    public float                           _startTerm = 0f;
+    
 };
 
 [System.Serializable]

@@ -21,6 +21,10 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
 
     private SetTargetType                   _setTargetType = SetTargetType.SetTargetType_Self;
 
+    private Vector3[]                       _pathPredictionArray = null;
+    private int                             _predictionAccuracy = 0;
+    private float                           _startTerm = 0f;
+
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
         if(ProjectileManager._instance == null)
@@ -39,9 +43,61 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
 
         Vector3 spawnPosition = getSpawnPosition(_setTargetType, executeEntity, targetEntity);
         
-        ProjectileManager._instance.spawnProjectile(_projectileGraphName,ref shotInfo,spawnPosition,executeEntity._searchIdentifier);
+        if(_startTerm != 0f)
+        {
+            if(_pathPredictionArray != null)
+            {
+                predictionPath(_predictionAccuracy, _pathPredictionArray, ref shotInfo);
 
+                EffectRequestData requestData = MessageDataPooling.GetMessageData<EffectRequestData>();
+                requestData.clearRequestData();
+                requestData._updateType = EffectUpdateType.NoneScaledDeltaTime;
+                requestData._effectType = EffectType.TrailEffect;
+                requestData._lifeTime = _startTerm;
+                requestData._parentTransform = executeEntity.transform;
+                requestData._trailWidth = ProjectileManager._instance.getProjectileGraphData(_projectileGraphName)._collisionRadius * 2f;
+                requestData._trailMaterial = ResourceContainerEx.Instance().GetMaterial("Material/Material_TrailBase");
+                requestData._trailPositionData = _pathPredictionArray;
+
+                executeEntity.SendMessageEx(MessageTitles.effect_spawnEffect,UniqueIDBase.QueryUniqueID("EffectManager"),requestData);
+
+            }
+            
+            ProjectileManager._instance.spawnProjectileDelayed(_projectileGraphName, _startTerm,executeEntity,targetEntity,_setTargetType,ref shotInfo,executeEntity._searchIdentifier);
+        }
+        else
+        {
+            ProjectileManager._instance.spawnProjectile(_projectileGraphName,ref shotInfo,spawnPosition,executeEntity._searchIdentifier);
+        }
+        
         return true;
+    }
+
+    public static void predictionPath(int accuracy, Vector3[] predictionArray, ref ProjectileGraphShotInfoData shotInfo)
+    {
+        float currentVelocity = shotInfo._deafaultVelocity;
+        float currentAngle = shotInfo._defaultAngle;
+
+        float stepDeltaTime = shotInfo._lifeTime / (float)(accuracy - 1);
+        Vector3 evaluatePosition = Vector3.zero;
+
+        int stepIndex = 0;
+        predictionArray[stepIndex] = evaluatePosition;
+
+        while(++stepIndex < accuracy)
+        {
+            currentVelocity += shotInfo._acceleration * stepDeltaTime;
+
+            if(shotInfo._friction != 0f)
+                currentVelocity = MathEx.convergence0(currentVelocity,shotInfo._friction * stepDeltaTime);
+            if(shotInfo._angularAcceleration != 0f)
+                currentAngle += shotInfo._angularAcceleration * stepDeltaTime;
+
+            evaluatePosition += (currentVelocity * stepDeltaTime) * (UnityEngine.Quaternion.Euler(0f,0f,currentAngle) * UnityEngine.Vector3.right);
+
+            predictionArray[stepIndex] = evaluatePosition;
+        }
+
     }
 
     public static float getDefaultAngle(GameEntityBase executeEntity, DirectionType directionType)
@@ -72,6 +128,8 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
 
         return spawnPosition;
     }
+
+    
 
     public static bool getShotInfo(string projectileGraphName, ShotInfoUseType useType, float defaultAngle, ref ProjectileGraphShotInfoData defaultShotInfo, out ProjectileGraphShotInfoData outShotInfo)
     {
@@ -115,7 +173,16 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
             {
                 _projectileGraphName = attrValue;
             }
-            if(attrName == "Velocity")
+            else if(attrName == "StartTerm")
+            {
+                _startTerm = float.Parse(attrValue);
+            }
+            else if(attrName == "PredictionAccuracy")
+            {
+                _predictionAccuracy = int.Parse(attrValue);
+                _pathPredictionArray = new Vector3[_predictionAccuracy];
+            }
+            else if(attrName == "Velocity")
             {
                 _shotInfo._deafaultVelocity = float.Parse(attrValue);
             }

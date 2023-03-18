@@ -91,6 +91,28 @@ public class DanmakuGraphLoader : LoaderBase<DanmakuGraphBaseData>
                 {
                     projectileEvent._directionType = (DirectionType)System.Enum.Parse(typeof(DirectionType), attributes[i].Value);
                 }
+                else if(attributes[i].Name == "StartTerm")
+                {
+                    projectileEvent._startTerm = float.Parse(attributes[i].Value);
+                }
+                else if(attributes[i].Name == "PredictionAccuracy")
+                {
+                    projectileEvent._predictionAccuracy = int.Parse(attributes[i].Value);
+                    projectileEvent._pathPredictionArray = new Vector3[projectileEvent._predictionAccuracy];
+                }
+                else if(attributes[i].Name == "SpawnTargetType")
+                {
+                    if(attributes[i].Value == "Self")
+                        projectileEvent._setTargetType = SetTargetType.SetTargetType_Self;
+                    else if(attributes[i].Value == "Target")
+                        projectileEvent._setTargetType = SetTargetType.SetTargetType_Target;
+                    else if(attributes[i].Value == "AITarget")
+                        projectileEvent._setTargetType = SetTargetType.SetTargetType_AITarget;
+                    else
+                    {
+                        DebugUtil.assert(false,"invalid targetType: {0}", attributes[i].Value);
+                    }
+                }
                 
             }
 

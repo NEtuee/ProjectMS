@@ -71,7 +71,7 @@ public class ActionFrameEvent_ProjectilePathEffect : ActionFrameEventBase
         float currentVelocity = shotInfo._deafaultVelocity;
         float currentAngle = shotInfo._defaultAngle;
 
-        float stepDeltaTime = shotInfo._lifeTime / (float)_predictionAccuracy;
+        float stepDeltaTime = shotInfo._lifeTime / (float)(_predictionAccuracy - 1);
         Vector3 evaluatePosition = position;
 
         int stepIndex = 0;
