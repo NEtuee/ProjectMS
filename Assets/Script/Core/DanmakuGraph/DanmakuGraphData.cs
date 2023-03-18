@@ -57,6 +57,7 @@ public class DanmakuProjectileEventData : DanmakuEventBase
     public DirectionType _directionType;
     public ActionFrameEvent_Projectile.ShotInfoUseType _shotInfoUseType;
 
+    public ActionFrameEvent_Projectile.PredictionType _predictionType = ActionFrameEvent_Projectile.PredictionType.Path;
     public UnityEngine.Vector3[]           _pathPredictionArray = null;
     public SetTargetType                   _setTargetType = SetTargetType.SetTargetType_Self;
     public int                             _predictionAccuracy = 0;

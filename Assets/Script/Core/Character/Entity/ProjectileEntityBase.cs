@@ -91,7 +91,10 @@ public class ProjectileEntityBase : ObjectBase
 
         _spriteRenderer.sprite = _projectileGraph.getCurrentSprite();
         _spriteRenderer.transform.localRotation = _projectileGraph.getCurrentAnimationRotation();
-        _spriteRenderer.transform.localScale = _projectileGraph.getCurrentAnimationScale();
+
+        Vector3 outScale = Vector3.one;
+        _projectileGraph.getCurrentAnimationScale(out outScale);
+        _spriteRenderer.transform.localScale = outScale;
 
         if(_spriteRotation && movementOfFrame.sqrMagnitude != 0f)
             _spriteObject.transform.localRotation *= Quaternion.Euler(0f,0f,Mathf.Atan2(movementOfFrame.y,movementOfFrame.x) * Mathf.Rad2Deg);

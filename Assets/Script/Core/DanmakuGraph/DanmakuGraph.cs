@@ -214,7 +214,6 @@ public class DanmakuGraph
             break;
             case DanmakuEventType.ProjectileEvent:
             {
-
                 DanmakuProjectileEventData eventData = (DanmakuProjectileEventData)eventTarget;
 
                 ProjectileGraphBaseData baseData = ProjectileManager._instance.getProjectileGraphData(eventData._projectileName);
@@ -238,37 +237,66 @@ public class DanmakuGraph
                 Vector3 direction = Vector3.zero;
                 if(eventData._directionType != DirectionType.Count)
                     direction = ((GameEntityBase)_ownerEntity).getDirectionFromType(eventData._directionType);
+                
+                ObjectBase targetEntity = null;
+                if(_ownerEntity is GameEntityBase)
+                    targetEntity = (_ownerEntity as GameEntityBase).getCurrentTargetEntity();
 
                 shotInfo._defaultAngle += Quaternion.Euler(0f,0f,Mathf.Atan2(direction.y,direction.x) * Mathf.Rad2Deg).eulerAngles.z;
+                Vector3 spawnPosition = ActionFrameEvent_Projectile.getSpawnPosition(eventData._setTargetType,_ownerEntity,targetEntity);
 
                 if(eventData._startTerm != 0f)
                 {
                     if(eventData._pathPredictionArray != null)
                     {
-                        ActionFrameEvent_Projectile.predictionPath(eventData._predictionAccuracy,eventData._pathPredictionArray,ref shotInfo);
+                        switch(eventData._predictionType)
+                        {
+                            case ActionFrameEvent_Projectile.PredictionType.Path:
+                            {
+                                ActionFrameEvent_Projectile.predictionPath(eventData._predictionAccuracy,eventData._pathPredictionArray,ref shotInfo);
 
-                        EffectRequestData requestData = MessageDataPooling.GetMessageData<EffectRequestData>();
-                        requestData.clearRequestData();
-                        requestData._updateType = EffectUpdateType.NoneScaledDeltaTime;
-                        requestData._effectType = EffectType.TrailEffect;
-                        requestData._lifeTime = eventData._startTerm;
-                        requestData._parentTransform = _ownerEntity.transform;
-                        requestData._trailWidth = ProjectileManager._instance.getProjectileGraphData(eventData._projectileName)._collisionRadius * 2f;
-                        requestData._trailMaterial = ResourceContainerEx.Instance().GetMaterial("Material/Material_TrailBase");
-                        requestData._trailPositionData = eventData._pathPredictionArray;
+                                EffectRequestData requestData = MessageDataPooling.GetMessageData<EffectRequestData>();
+                                requestData.clearRequestData();
+                                requestData._updateType = EffectUpdateType.NoneScaledDeltaTime;
+                                requestData._effectType = EffectType.TrailEffect;
+                                requestData._lifeTime = eventData._startTerm;
+                                requestData._parentTransform = _ownerEntity.transform;
+                                requestData._trailWidth = ProjectileManager._instance.getProjectileGraphData(eventData._projectileName)._collisionRadius * 2f;
+                                requestData._trailMaterial = ResourceContainerEx.Instance().GetMaterial("Material/Material_TrailBase");
+                                requestData._trailPositionData = eventData._pathPredictionArray;
 
-                        _ownerEntity.SendMessageEx(MessageTitles.effect_spawnEffect,UniqueIDBase.QueryUniqueID("EffectManager"),requestData);
+                                _ownerEntity.SendMessageEx(MessageTitles.effect_spawnEffect,UniqueIDBase.QueryUniqueID("EffectManager"),requestData);
+                            }
+                            break;
+                            case ActionFrameEvent_Projectile.PredictionType.StartPosition:
+                            {
+                                EffectRequestData requestData = MessageDataPooling.GetMessageData<EffectRequestData>();
+                                requestData.clearRequestData();
+                                requestData._effectPath = "Resources/Sprites/Effect/ProjectilePredictionPosition";
+                                requestData._startFrame = 0f;
+                                requestData._endFrame = -1f;
+                                requestData._framePerSecond = 1.0f / eventData._startTerm;
+                                requestData._position = spawnPosition;
+                                requestData._usePhysics = false;
+                                requestData._rotation = Quaternion.identity;
+                                requestData._effectType = EffectType.SpriteEffect;
+                                requestData._updateType = EffectUpdateType.NoneScaledDeltaTime;
+                                requestData._castShadow = false;
+
+                                float radius = ProjectileManager._instance.getProjectileGraphData(eventData._projectileName)._collisionRadius * 2f;
+                                requestData._scale = new Vector3(radius,radius,1f);
+
+                                _ownerEntity.SendMessageEx(MessageTitles.effect_spawnEffect,UniqueIDBase.QueryUniqueID("EffectManager"),requestData);
+                            }
+                            break;
+                        }
                     }
-
-                    ObjectBase targetEntity = null;
-                    if(_ownerEntity is GameEntityBase)
-                        targetEntity = (_ownerEntity as GameEntityBase).getCurrentTargetEntity();
 
                     ProjectileManager._instance.spawnProjectileDelayed(eventData._projectileName, eventData._startTerm,_ownerEntity,targetEntity,eventData._setTargetType,ref shotInfo,_ownerEntity._searchIdentifier);
                 }
                 else
                 {
-                    ProjectileManager._instance.spawnProjectile(eventData._projectileName,ref shotInfo,_ownerEntity.transform.position,_ownerEntity._searchIdentifier);
+                    ProjectileManager._instance.spawnProjectile(eventData._projectileName,ref shotInfo,spawnPosition,_ownerEntity._searchIdentifier);
                 }
             }
             break;

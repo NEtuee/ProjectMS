@@ -11,6 +11,12 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
         Add,
     };
 
+    public enum PredictionType
+    {
+        Path,
+        StartPosition,
+    }
+
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_Projectile;}
 
     public string                           _projectileGraphName = "";
@@ -21,6 +27,7 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
 
     private SetTargetType                   _setTargetType = SetTargetType.SetTargetType_Self;
 
+    private PredictionType                  _predictionType = PredictionType.Path;
     private Vector3[]                       _pathPredictionArray = null;
     private int                             _predictionAccuracy = 0;
     private float                           _startTerm = 0f;
@@ -47,20 +54,47 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
         {
             if(_pathPredictionArray != null)
             {
-                predictionPath(_predictionAccuracy, _pathPredictionArray, ref shotInfo);
+                switch(_predictionType)
+                {
+                    case PredictionType.Path:
+                    {
+                        predictionPath(_predictionAccuracy, _pathPredictionArray, ref shotInfo);
 
-                EffectRequestData requestData = MessageDataPooling.GetMessageData<EffectRequestData>();
-                requestData.clearRequestData();
-                requestData._updateType = EffectUpdateType.NoneScaledDeltaTime;
-                requestData._effectType = EffectType.TrailEffect;
-                requestData._lifeTime = _startTerm;
-                requestData._parentTransform = executeEntity.transform;
-                requestData._trailWidth = ProjectileManager._instance.getProjectileGraphData(_projectileGraphName)._collisionRadius * 2f;
-                requestData._trailMaterial = ResourceContainerEx.Instance().GetMaterial("Material/Material_TrailBase");
-                requestData._trailPositionData = _pathPredictionArray;
+                        EffectRequestData requestData = MessageDataPooling.GetMessageData<EffectRequestData>();
+                        requestData.clearRequestData();
+                        requestData._updateType = EffectUpdateType.NoneScaledDeltaTime;
+                        requestData._effectType = EffectType.TrailEffect;
+                        requestData._lifeTime = _startTerm;
+                        requestData._parentTransform = executeEntity.transform;
+                        requestData._trailWidth = ProjectileManager._instance.getProjectileGraphData(_projectileGraphName)._collisionRadius * 2f;
+                        requestData._trailMaterial = ResourceContainerEx.Instance().GetMaterial("Material/Material_TrailBase");
+                        requestData._trailPositionData = _pathPredictionArray;
 
-                executeEntity.SendMessageEx(MessageTitles.effect_spawnEffect,UniqueIDBase.QueryUniqueID("EffectManager"),requestData);
+                        executeEntity.SendMessageEx(MessageTitles.effect_spawnEffect,UniqueIDBase.QueryUniqueID("EffectManager"),requestData);
+                    }
+                    break;
+                    case PredictionType.StartPosition:
+                    {
+                        EffectRequestData requestData = MessageDataPooling.GetMessageData<EffectRequestData>();
+                        requestData.clearRequestData();
+                        requestData._effectPath = "Resources/Sprites/Effect/ProjectilePredictionPosition";
+                        requestData._startFrame = 0f;
+                        requestData._endFrame = -1f;
+                        requestData._framePerSecond = 1.0f / _startTerm;
+                        requestData._position = spawnPosition;
+                        requestData._usePhysics = false;
+                        requestData._rotation = Quaternion.identity;
+                        requestData._effectType = EffectType.SpriteEffect;
+                        requestData._updateType = EffectUpdateType.NoneScaledDeltaTime;
+                        requestData._castShadow = false;
+                        float radius = ProjectileManager._instance.getProjectileGraphData(_projectileGraphName)._collisionRadius * 2f;
+                        requestData._scale = new Vector3(radius,radius,1f);
 
+                        executeEntity.SendMessageEx(MessageTitles.effect_spawnEffect,UniqueIDBase.QueryUniqueID("EffectManager"),requestData);
+                    }
+                    break;
+                }
+                
             }
             
             ProjectileManager._instance.spawnProjectileDelayed(_projectileGraphName, _startTerm,executeEntity,targetEntity,_setTargetType,ref shotInfo,executeEntity._searchIdentifier);
@@ -229,6 +263,10 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
             else if(attrName == "ShotInfoUseType")
             {
                 _useType = (ShotInfoUseType)System.Enum.Parse(typeof(ShotInfoUseType), attrValue);
+            }
+            else if(attrName == "PredictionType")
+            {
+                _predictionType = (PredictionType)System.Enum.Parse(typeof(PredictionType), attrValue);
             }
             else if(attrName == "SpawnTargetType")
             {

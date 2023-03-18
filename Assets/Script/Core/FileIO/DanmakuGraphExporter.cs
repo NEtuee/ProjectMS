@@ -100,6 +100,10 @@ public class DanmakuGraphLoader : LoaderBase<DanmakuGraphBaseData>
                     projectileEvent._predictionAccuracy = int.Parse(attributes[i].Value);
                     projectileEvent._pathPredictionArray = new Vector3[projectileEvent._predictionAccuracy];
                 }
+                else if(attributes[i].Name == "PredictionType")
+                {
+                    projectileEvent._predictionType = (ActionFrameEvent_Projectile.PredictionType)System.Enum.Parse(typeof(ActionFrameEvent_Projectile.PredictionType), attributes[i].Value);
+                }
                 else if(attributes[i].Name == "SpawnTargetType")
                 {
                     if(attributes[i].Value == "Self")

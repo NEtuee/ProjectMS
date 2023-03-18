@@ -268,13 +268,17 @@ public class AnimationPlayer
     public MovementGraph getCurrentMovementGraph() {return _currentMovementGraph;}
 
 
-    public Vector3 getCurrentAnimationScale()
+    public bool getCurrentAnimationScale(out Vector3 outScale)
     {
         if(_currentAnimationPlayData._scalePresetData == null)
-            return Vector3.one;
+        {
+            outScale = Vector3.one;
+            return false;
+        }
         
         Vector2 currentScale = _currentAnimationPlayData._scalePresetData.evaulate(_animationTimeProcessor.getCurrentNormalizedTime());
-        return new Vector3(currentScale.x,currentScale.y,1f);
+        outScale = new Vector3(currentScale.x,currentScale.y,1f);
+        return true;
     }
 
     public Vector3 getAnimationScalePerFrame()

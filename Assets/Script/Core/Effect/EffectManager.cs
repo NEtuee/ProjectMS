@@ -35,6 +35,7 @@ public class EffectRequestData : MessageData
     public EffectUpdateType _updateType = EffectUpdateType.ScaledDeltaTime;
 
     public Vector3 _position;
+    public Vector3 _scale;
     public Quaternion _rotation;
 
     public Transform _parentTransform = null;
@@ -60,6 +61,7 @@ public class EffectRequestData : MessageData
         _effectType = EffectType.SpriteEffect;
         _updateType = EffectUpdateType.ScaledDeltaTime;
         _position = Vector3.zero;
+        _scale = Vector3.one;
         _rotation = Quaternion.identity;
         _parentTransform = null;
         _timelineAnimator = null;
@@ -139,7 +141,7 @@ public class EffectItem : EffectItemBase
 
         _spriteRenderer.transform.position = effectData._position;
         _spriteRenderer.transform.localRotation = Quaternion.Euler(0f,0f,effectData._angle);
-        _spriteRenderer.transform.localScale = Vector3.one;
+        _spriteRenderer.transform.localScale = effectData._scale;
         _spriteRenderer.gameObject.SetActive(true);
 
         _localPosition = _spriteRenderer.transform.position;
@@ -158,7 +160,10 @@ public class EffectItem : EffectItemBase
         bool isEnd = _animationPlayer.progress(deltaTime,null);
         _spriteRenderer.sprite = _animationPlayer.getCurrentSprite();
         _spriteRenderer.transform.localRotation *= _animationPlayer.getAnimationRotationPerFrame();
-        _spriteRenderer.transform.localScale = _animationPlayer.getCurrentAnimationScale();
+
+        Vector3 outScale = Vector3.one;
+        if(_animationPlayer.getCurrentAnimationScale(out outScale))
+            _spriteRenderer.transform.localScale = outScale;
 
         switch(_effectUpdateType)
         {

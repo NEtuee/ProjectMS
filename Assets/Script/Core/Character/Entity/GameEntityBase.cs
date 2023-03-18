@@ -222,7 +222,10 @@ public class GameEntityBase : SequencerObjectBase
             updatePhysics(deltaTime);
 
             _spriteRenderer.transform.localRotation = _actionGraph.getCurrentAnimationRotation();
-            _spriteRenderer.transform.localScale = _actionGraph.getCurrentAnimationScale();
+
+            Vector3 outScale = Vector3.one;
+            _actionGraph.getCurrentAnimationScale(out outScale);
+            _spriteRenderer.transform.localScale = outScale;
 
             updateRotation();
 
