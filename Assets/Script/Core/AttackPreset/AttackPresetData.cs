@@ -5,6 +5,7 @@ public class AttackPresetData
     public float                _attackRadius;
     public float                _attackAngle;
     public float                _attackStartDistance;
+    public float                _attackRayRadius = 0f;
 
     public UnityEngine.Vector3  _pushVector;
 }

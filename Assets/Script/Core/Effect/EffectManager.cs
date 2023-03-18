@@ -27,6 +27,7 @@ public class EffectRequestData : MessageData
 
     public float _angle;
 
+    public bool _followDirection;
     public bool _usePhysics;
     public bool _useFlip;
     public bool _castShadow;
@@ -38,6 +39,7 @@ public class EffectRequestData : MessageData
     public Vector3 _scale;
     public Quaternion _rotation;
 
+    public ObjectBase _executeEntity = null;
     public Transform _parentTransform = null;
     public Animator _timelineAnimator = null;
 
@@ -55,6 +57,7 @@ public class EffectRequestData : MessageData
         _endFrame = -1f;
         _framePerSecond = 0f;
         _angle = 0f;
+        _followDirection = false;
         _usePhysics = false;
         _useFlip = false;
         _castShadow = false;
@@ -70,6 +73,7 @@ public class EffectRequestData : MessageData
         _trailWidth = 0f;
         _trailMaterial = null;
         _trailPositionData = null;
+        _executeEntity = null;
     }
 }  
 
@@ -220,7 +224,12 @@ public class TimelineEffectItem : EffectItemBase
     private PlayableDirector        _playableDirector;
     private TimelineEffectControl   _timelineEffectControl;
 
+    public ObjectBase               _executeObject;
+    public bool                     _followDirection;
+
     public Transform                _parentTransform = null;
+
+    private float _playSpeed = 1f;
 
 
     public void createItem(string prefabPath)
@@ -248,13 +257,21 @@ public class TimelineEffectItem : EffectItemBase
 
     public override void initialize(EffectRequestData effectData)
     {
+        _executeObject = effectData._executeEntity;
+        _followDirection = effectData._followDirection;
+
         _effectPath = effectData._effectPath;
         _effectUpdateType = effectData._updateType;
 
         _effectObject.transform.position = effectData._position;
-        _effectObject.transform.rotation = effectData._rotation;
+        _effectObject.transform.rotation = _executeObject ? Quaternion.Euler(0f,0f,MathEx.directionToAngle(_executeObject.getDirection())) : effectData._rotation;
 
         _parentTransform = effectData._parentTransform;
+
+        if(effectData._lifeTime != 0f)
+            _playSpeed = 1.0f / effectData._lifeTime;
+        else
+            _playSpeed = 1f;
 
         if(_parentTransform != null && _parentTransform.gameObject.activeInHierarchy == false)
             _parentTransform = null;
@@ -284,7 +301,10 @@ public class TimelineEffectItem : EffectItemBase
             break;
         }
 
-        _playableDirector.playableGraph.Evaluate(deltaTime);
+        if(_followDirection)
+            _effectObject.transform.rotation = Quaternion.Euler(0f,0f,MathEx.directionToAngle(_executeObject.getDirection()));
+
+        _playableDirector.playableGraph.Evaluate(_playSpeed * deltaTime);
         return _playableDirector.state != PlayState.Playing;
     }
 

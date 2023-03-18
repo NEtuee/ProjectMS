@@ -20,7 +20,7 @@ public class ProjectileEntityBase : ObjectBase
     {
         base.assign();
         _projectileGraph = new ProjectileGraph();
-        CollisionInfoData data = new CollisionInfoData(0f,0f,0f,CollisionType.Projectile);
+        CollisionInfoData data = new CollisionInfoData(0f,0f,0f,0f,CollisionType.Projectile);
         _collisionInfo = new CollisionInfo(data);
         _collisionDelegate = onProjectileHit;
         

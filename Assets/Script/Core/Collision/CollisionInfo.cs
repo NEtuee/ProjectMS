@@ -35,6 +35,19 @@ public class CollisionInfo
             return false;
         }
 
+        if(_collisionInfoData.getRayRadius() != 0f)
+        {
+            if(target.getCollisionInfoData().getRayRadius() != 0f)
+                return false;
+            else if(target.getCollisionInfoData().getAngle() != 0f)
+                return false;
+
+            Vector3 nearPoisition = MathEx.getPerpendicularPointOnLineSegment(_centerPosition + _direction * _collisionInfoData.getStartDistance(), _centerPosition + _direction * _collisionInfoData.getRadius(), target.getCenterPosition());
+
+            float nearDistance = Vector3.Distance(nearPoisition, target.getCenterPosition());
+            return (nearDistance < target.getCollisionInfoData().getRadius() + _collisionInfoData.getRayRadius());
+        }
+
         if(_boundBox.intersection(target.getBoundBox()) == false)
             return false;
 
@@ -69,7 +82,9 @@ public class CollisionInfo
 
     public void drawCollosionArea(Color color, float time = 0f)
     {
-        if(_collisionInfoData.getAngle() == 0f)
+        if(_collisionInfoData.getRayRadius() != 0f)
+            drawCapsule(color,Color.red,time);
+        else if(_collisionInfoData.getAngle() == 0f)
             drawCircle(color,Color.red, time);
         else
             drawSection(color,Color.red, time);
@@ -89,6 +104,18 @@ public class CollisionInfo
 
         if(_collisionInfoData.getStartDistance() != 0f)
             GizmoHelper.instance.drawArc(_centerPosition,_collisionInfoData.getStartDistance(),_collisionInfoData.getAngle(),_direction,startDistanceColor,time);
+    }
+
+    public void drawCapsule(Color mainColor, Color startDistanceColor, float time = 0f)
+    {
+        Vector3 startPosition = _centerPosition + _direction * _collisionInfoData.getStartDistance();
+        Vector3 endPosition = _centerPosition + _direction * _collisionInfoData.getRadius();
+        GizmoHelper.instance.drawArc(startPosition,_collisionInfoData.getRayRadius(), 180f, -_direction,mainColor,time);
+        GizmoHelper.instance.drawArc(endPosition,_collisionInfoData.getRayRadius(), 180f, _direction,mainColor,time);
+
+        Vector3 right = Vector3.Cross(_direction,Vector3.back).normalized * _collisionInfoData.getRayRadius();
+        GizmoHelper.instance.drawLine(startPosition + right,endPosition + right,mainColor,time);
+        GizmoHelper.instance.drawLine(startPosition - right,endPosition - right,mainColor,time);
     }
 
     public void drawBoundBox(Color color)

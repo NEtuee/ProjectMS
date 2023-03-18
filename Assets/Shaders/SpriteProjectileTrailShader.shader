@@ -2,11 +2,10 @@ Shader "Custom/SpriteProjectileTrailShader"
 {
 	Properties
 	{
-		_MainTex ("Sprite Texture", 2D) = "white" {}
+		[PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
 		_Color ("Tint", Color) = (1,1,1,1)
+		_Gague ("Gague", Range(0.0, 1.0)) = 0
 		[MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
-        _BlurAmount ("Blur Amount", Range(0, 2)) = 0.1
-        _EndBlurStart ("End Blur Start", Range(0, 1)) = 1.0
 	}
 
 	SubShader
@@ -66,8 +65,7 @@ Shader "Custom/SpriteProjectileTrailShader"
 			sampler2D _AlphaTex;
 			float _AlphaSplitEnabled;
 
-            float _BlurAmount;
-            float _EndBlurStart;
+			float _Gague;
 
 			fixed4 SampleSpriteTexture (float2 uv)
 			{
@@ -83,13 +81,10 @@ Shader "Custom/SpriteProjectileTrailShader"
 
 			fixed4 frag(v2f IN) : SV_Target
 			{
-				fixed4 c = SampleSpriteTexture (IN.texcoord) * IN.color;
-                float endDistance = clamp(IN.texcoord.x - _EndBlurStart, 0.0, 0.1) * 10.0;
-                float dist = 1.0 - clamp(distance(IN.texcoord, float2(IN.texcoord.x, 0.5))- (1.0 - _BlurAmount), 0.0, 1.0);
-                dist = clamp(dist - endDistance, 0.0, 1.0);
-
-
-                c.a *= dist;
+				fixed4 c = SampleSpriteTexture(IN.texcoord) * IN.color;
+				float alphaCut = 1.0 - step(_Gague * 0.5,distance(IN.texcoord, float2(IN.texcoord.x, 0.5)));
+ 
+				c.a *= alphaCut;
 				return c;
 			}
 		ENDCG

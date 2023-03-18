@@ -104,7 +104,7 @@ public class GameEntityBase : SequencerObjectBase
 
         applyActionBuffList(_actionGraph.getDefaultBuffList());
 
-        CollisionInfoData data = new CollisionInfoData(characterInfo._characterRadius,0f,0f, CollisionType.Character);
+        CollisionInfoData data = new CollisionInfoData(characterInfo._characterRadius,0f,0f,0f, CollisionType.Character);
         _collisionInfo = new CollisionInfo(data);
 
         CollisionManager.Instance().registerObject(_collisionInfo, this);
@@ -128,7 +128,7 @@ public class GameEntityBase : SequencerObjectBase
 
         applyActionBuffList(_actionGraph.getDefaultBuffList());
 
-        CollisionInfoData data = new CollisionInfoData(0.2f,0f,0f, CollisionType.Character);
+        CollisionInfoData data = new CollisionInfoData(0.2f,0f,0f,0f, CollisionType.Character);
         _collisionInfo = new CollisionInfo(data);
 
         _graphicInterface.initialize(this,_statusInfo,new Vector3(0f, _collisionInfo.getRadius(), 0f));
