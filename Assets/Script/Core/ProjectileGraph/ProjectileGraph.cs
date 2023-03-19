@@ -107,7 +107,7 @@ public class ProjectileGraph
     }
     public UnityEngine.Sprite getCurrentSprite() {return _animationPlayer.getCurrentSprite();}
     public UnityEngine.Quaternion getCurrentAnimationRotation() {return _animationPlayer.getCurrentAnimationRotation();}
-    public UnityEngine.Vector3 getCurrentAnimationScale() {return _animationPlayer.getCurrentAnimationScale();}
+    public bool getCurrentAnimationScale(out UnityEngine.Vector3 outScale) {return _animationPlayer.getCurrentAnimationScale(out outScale);}
 
     public bool isOutOfBound()
     {

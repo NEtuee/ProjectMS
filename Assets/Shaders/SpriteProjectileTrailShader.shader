@@ -1,10 +1,10 @@
-Shader "Custom/SpriteGagueShader"
+Shader "Custom/SpriteProjectileTrailShader"
 {
 	Properties
 	{
 		[PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
 		_Color ("Tint", Color) = (1,1,1,1)
-        _Gague ("Gague", Range(0.0, 1.0)) = 0
+		_Gague ("Gague", Range(0.0, 1.0)) = 0
 		[MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
 	}
 
@@ -65,7 +65,7 @@ Shader "Custom/SpriteGagueShader"
 			sampler2D _AlphaTex;
 			float _AlphaSplitEnabled;
 
-            float _Gague;
+			float _Gague;
 
 			fixed4 SampleSpriteTexture (float2 uv)
 			{
@@ -81,11 +81,10 @@ Shader "Custom/SpriteGagueShader"
 
 			fixed4 frag(v2f IN) : SV_Target
 			{
-				fixed4 c = SampleSpriteTexture (IN.texcoord) * IN.color;
-                float alphaCut = 1.0 - step(_Gague,IN.texcoord.x);
-
-                c.a = alphaCut;
-				c.rgb *= c.a;
+				fixed4 c = SampleSpriteTexture(IN.texcoord) * IN.color;
+				float alphaCut = 1.0 - step(_Gague * 0.5,distance(IN.texcoord, float2(IN.texcoord.x, 0.5)));
+ 
+				c.a *= alphaCut;
 				return c;
 			}
 		ENDCG

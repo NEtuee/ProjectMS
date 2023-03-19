@@ -5,6 +5,7 @@ using UnityEngine;
 enum AngleDirectionType
 {
     Normal,
+    Direction,
     AttackPoint,
 }
 
@@ -15,6 +16,8 @@ public class ActionFrameEvent_TimelineEffect : ActionFrameEventBase
     public string               _effectPath = "";
     private bool                _toTarget = false;
     private bool                _attach = false;
+    private bool                _followDirection = false;
+    private float               _lifeTime = 0f;
 
     private Vector3             _spawnOffset = Vector3.zero;
     private Quaternion          _effectRotation = Quaternion.identity;
@@ -37,6 +40,9 @@ public class ActionFrameEvent_TimelineEffect : ActionFrameEventBase
         requestData._rotation = getAngleByType(executeEntity, requestData._position);
         requestData._updateType = _effectUpdateType;
         requestData._effectType = EffectType.TimelineEffect;
+        requestData._lifeTime = _lifeTime;
+        requestData._executeEntity = executeEntity;
+        requestData._followDirection = _followDirection;
 
         if(_attach)
         {
@@ -56,6 +62,8 @@ public class ActionFrameEvent_TimelineEffect : ActionFrameEventBase
         {
             case AngleDirectionType.Normal:
                 return Quaternion.identity;
+            case AngleDirectionType.Direction:
+                return Quaternion.Euler(0f,0f,MathEx.directionToAngle(executeEntity.getDirection()));
             case AngleDirectionType.AttackPoint:
             {
                 if(executeEntity is GameEntityBase == false)
@@ -109,14 +117,20 @@ public class ActionFrameEvent_TimelineEffect : ActionFrameEventBase
             {
                 _angleDirectionType = (AngleDirectionType)System.Enum.Parse(typeof(AngleDirectionType), attributes[i].Value);
             }
+            else if(attributes[i].Name == "LifeTime")
+            {
+                _lifeTime = float.Parse(attributes[i].Value);
+            }
+            else if(attributes[i].Name == "FollowDirection")
+            {
+                _followDirection = bool.Parse(attributes[i].Value);
+            }
         }
 
         if(_effectPath == "")
             DebugUtil.assert(false, "effect path is essential");
     }
 }
-
-
 
 public class ActionFrameEvent_Effect : ActionFrameEventBase
 {

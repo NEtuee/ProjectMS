@@ -914,6 +914,7 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
         float radius = 0f;
         float angle = 0f;
         float startDistance = 0f;
+        float rayRadius = 0f;
         _attackType = AttackType.Default;
 
 
@@ -948,6 +949,7 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
                 radius = presetData._attackRadius;
                 angle = presetData._attackAngle;
                 startDistance = presetData._attackStartDistance;
+                rayRadius = presetData._attackRayRadius;
                 _pushVector = presetData._pushVector;
             }
             else if(attributes[i].Name == "IgnoreDefenceType")
@@ -986,7 +988,7 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
 
         }
 
-        CollisionInfoData data = new CollisionInfoData(radius,angle,startDistance, CollisionType.Attack);
+        CollisionInfoData data = new CollisionInfoData(radius,angle,startDistance,rayRadius, CollisionType.Attack);
         _collisionInfo = new CollisionInfo(data);
 
         

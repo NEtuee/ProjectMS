@@ -45,6 +45,13 @@ public abstract class ObjectBase : MessageReceiver, IProgress
 
     public virtual void deactive()
     {
+        detachChildObject();
+
+        while(gameObject.transform.childCount == 0)
+        {
+            gameObject.transform.GetChild(0).SetParent(null);
+        }
+
         gameObject.SetActive(false);
     }
 

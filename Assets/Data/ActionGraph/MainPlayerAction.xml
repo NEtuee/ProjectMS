@@ -237,6 +237,29 @@
 
     <Guard MovementType="FrameEvent" DirectionType="MousePoint" DefenceDirectionType="MousePoint" FlipType="Keep" DefenceType="Guard" DefenceAngle="180.0">
         <Animation Path="Resources/Sprites/DummyPlayer/Guard/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
+            <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/LaserTest_Timeline" Offset="0.0 0.0 0.0" Attach="true" AngleType="Direction" LifeTime="0.3" FollowDirection="True"/>
+            <FrameEvent Type="Attack" StartFrame="0.3" AttackPreset="LaserTest" IgnoreDefenceType="Guard">
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
+                    <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
+
+                    <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/Slash_Timeline" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
+                    <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/Blood_Timeline" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
+                    <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/Impact_Timeline" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true" AngleType="AttackPoint"/>
+
+                    <FrameEvent Type="StopUpdate" StartFrame="0" Time="0.07"/>
+                </OnHit>
+                <OnGuard>
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" ToTarget="True"/>
+
+                    <FrameEvent Type="StopUpdate" StartFrame="0" Time="0.01"/>
+                </OnGuard>
+                <OnParry>
+                    <FrameEvent Type="TeleportToTarget"/>
+                </OnParry>
+
+            </FrameEvent>
+
             <FrameEvent Type="Movement" StartFrame="0" Friction="gv_IdleFriction" Speed="0"/>
         </Animation>
 
