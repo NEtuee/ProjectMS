@@ -273,7 +273,7 @@
             <FrameEvent Type="Movement" StartFrame="0" Friction="gv_IdleFriction" Speed="0"/>
         </Animation>
 
-        <Branch Condition="getStat_IsStun == 1.0" Execute="Stun"/>
+        <!-- <Branch Condition="getStat_IsStun == 1.0" Execute="Stun"/> -->
         <Branch Condition="IsCatchTarget" Execute="Catched"/>
         <Branch Condition="End" Execute="Idle"/>
         <Branch Key="(getKey_Guard == false) && ((getKey_AttackCharge == true) || (getKey_NormalMove == true))" Condition="End" Execute="MoveAll"/>
@@ -291,6 +291,7 @@
     <Catched MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <Animation Path="Resources/Sprites/DummyPlayer/Hit/" StartFrame="0" EndFrame="1" XFlip="true">
             <FrameEvent Type="Test" Log="Akane Catched"/>
+            <FrameEvent Type="ApplyBuff" StartFrame="1" ApplyBuff="StunClear"/>
         </Animation>
 
         <Branch Condition="IsCatchTarget == false" Execute="CatchReleased"/>
@@ -300,6 +301,7 @@
     <CatchReleased MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <Animation Path="Resources/Sprites/DummyPlayer/Hit/" StartFrame="0" EndFrame="1" FramePerSecond="0.75" XFlip="true">
             <FrameEvent Type="Test" Log="Akane Catch Released"/>
+            <FrameEvent Type="ApplyBuff" StartFrame="1" ApplyBuff="StunClear"/>
         </Animation>
 
         <Branch Condition="End" Execute="Idle"/>
