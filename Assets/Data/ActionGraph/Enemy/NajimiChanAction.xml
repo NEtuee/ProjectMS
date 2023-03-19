@@ -1,4 +1,4 @@
-<ActionGraph Name="NajimiChanAction" DefaultAction="AC_Idle" DefaultFramePerSecond="12">
+<ActionGraph Name="NajimiChanAction" DefaultAction="AC_Idle" DefaultFramePerSecond="12" DefaultBuff="NajimiBattleDecrementKeep">
 
     <AC_Idle MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/0_default/1_idle" XFlip="true">
@@ -77,10 +77,10 @@
 
     <!-- 아카네 잡기에 성공하여 꽉 끌어안는 모션 -->
     <AC_RushSuccess MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
-        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/1_rushPattern/2_grab" FramePerSecond="0.5" XFlip="true">
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/1_rushPattern/2_grab" FramePerSecond="0.25" XFlip="true">
             <FrameEvent Type="Movement" StartFrame="0" Friction="12"/>
 
-            <FrameEvent Type="Attack" StartFrame="0.5" AttackPreset="Najimi_Catch">
+            <FrameEvent Type="Attack" StartFrame="0.25" AttackPreset="Najimi_Catch">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
@@ -91,7 +91,7 @@
             </FrameEvent>
 
             <FrameEvent Type="Test" StartFrame="1" Log="ReleaseCatch"/>
-            <FrameEvent Type="ReleaseCatch" StartFrame="1" Push="4 0 0"/>
+            <FrameEvent Type="ReleaseCatch" StartFrame="0.5" Push="4 0 0"/>
             <FrameEvent Type="Movement" StartFrame="1" Friction="12" Velocity="-4" Speed="0"/>
         </Animation>
 

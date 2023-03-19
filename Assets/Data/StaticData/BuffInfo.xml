@@ -271,4 +271,26 @@
         ApplyType="Direct"
         Factor="1.0"
     />
+
+    <NajimiBattleDecrementKeep
+        Key="28"
+        StatusName="Battle"
+
+        UpdateType="Continuous"
+        ApplyType="DirectDelta"
+
+        Factor="-0.2"
+    />
+
+    <TargetBattleIncrement
+        Key="29"
+        StatusName="Battle"
+
+        UpdateType="OneShot"
+        ApplyType="Direct"
+
+        Factor="1.0"
+    />
+
+    
 </BuffInfo>

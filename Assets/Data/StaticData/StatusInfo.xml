@@ -49,9 +49,12 @@
     <OsananaNajimiStatus>
         <Stat Type="HP" Max="20" Min="0" Init="20"/>
         <Stat Type="Blood" Max="100" Min="0" Init="3"/>
+        <Stat Type="Battle" Max="4" Min="0" Init="0"/>
         <Stat Type="Custom" Name="Phase" Max="3" Min="0" Init="1"/>
         <Stat Type="Custom" Name="RushCount" Max="11" Min="0" Init="0"/>
 
-        <DeclareGraphicInterface Target="HP" Color="255 0 0 255" HorizontalGap="0.5"/>
+        <DeclareGraphicInterface Target="HP" Color="1 0 0 1" HorizontalGap="0.1"/>
+        <DeclareGraphicInterface Target="Battle" Color="1 0.749 0 1" HorizontalGap="0.1"/>
+        
     </OsananaNajimiStatus>
 </StatusInfo>
