@@ -302,5 +302,23 @@
         Factor="0.0"
     />
 
+    <StunSet
+        Key="31"
+        StatusName="IsStun"
+
+        UpdateType="OneShot"
+        ApplyType="DirectSet"
+
+        Factor="1.0"
+    />
+    <StunClear
+        Key="32"
+        StatusName="IsStun"
+
+        UpdateType="OneShot"
+        ApplyType="DirectSet"
+
+        Factor="0.0"
+    />
     
 </BuffInfo>

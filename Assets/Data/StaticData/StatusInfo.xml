@@ -7,6 +7,7 @@
         <Stat Type="Battle" Max="100" Min="0" Init="0"/>
 
         <Stat Type="Custom" Name="Charging" Max="100" Min="0" Init="0"/>
+        <Stat Type="Custom" Name="IsStun" Max="1" Min="0" Init="0"/>
 
         <DeclareGraphicInterface Target="HP" Color="255 0 0 255" HorizontalGap="0.5"/>
     </CommonPlayerStatus>
@@ -50,7 +51,7 @@
     </TestEnemyStatus>
 
     <OsananaNajimiStatus>
-        <Stat Type="HP" Max="20" Min="0" Init="20"/>
+        <Stat Type="HP" Max="40" Min="0" Init="40"/>
         <Stat Type="Blood" Max="100" Min="0" Init="3"/>
         <Stat Type="Battle" Max="4" Min="0" Init="0"/>
         <Stat Type="Custom" Name="Phase" Max="3" Min="0" Init="1"/>

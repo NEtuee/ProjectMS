@@ -17,18 +17,20 @@
     </AC_Move>
 
     <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
-        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/0_default/4_hit" FramePerSecond="2" XFlip="true">
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/0_default/4_hit" FramePerSecond="0.8" XFlip="true">
             <FrameEvent Type="Movement" StartFrame="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" StartFrame="0" ApplyBuff="BattleClear"/>
+            <FrameEvent Type="FrameTag" StartFrame="0" EndFrame="999" Tag="Hit"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_Hit>
 
     <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
-        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/0_default/4_hit" FramePerSecond="2" XFlip="true">
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/0_default/4_hit" FramePerSecond="0.8" XFlip="true">
             <FrameEvent Type="Movement" StartFrame="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" StartFrame="0" ApplyBuff="BattleClear"/>
+            <FrameEvent Type="FrameTag" StartFrame="0" EndFrame="999" Tag="Hit"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
@@ -142,9 +144,30 @@
 
     <AC_Pitch MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <!-- 투구 모션, 탄막 활성화 -->
-        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/2_pitchingPattern/3_pitching" FramePerSecond="0.5" XFlip="true">
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/2_pitchingPattern/3_pitching" FramePerSecond="1" XFlip="true">
             <FrameEvent Type="Movement" StartFrame="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <FrameEvent Type="Danmaku" StartFrame="0.25" Path="Enemy/MagicalBuckshot.xml"/>
+            <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/NajimiPitchingBeam_TimeLine" Offset="0.0 0.0 0.0" Attach="true" AngleType="Direction" LifeTime="0.7" FollowDirection="True"/>
+
+            <FrameEvent Type="Attack" StartFrame="0.7" EndFrame="1.0" AttackPreset="Najimi_Pitching">
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
+                    <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/Slash_Timeline" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
+                    <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/Blood_Timeline" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
+                    <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/Impact_Timeline" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true" AngleType="AttackPoint"/>
+
+                    <FrameEvent Type="StopUpdate" StartFrame="0" Time="0.07"/>
+                </OnHit>
+            
+                <OnGuard>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
+                    <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/Slash_Timeline" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
+                    <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/Blood_Timeline" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
+                    <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/Impact_Timeline" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true" AngleType="AttackPoint"/>
+
+                    <FrameEvent Type="StopUpdate" StartFrame="0" Time="0.07"/>
+                </OnGuard>
+            </FrameEvent>
+            <!-- 공격 성공 시 아카네에게 StunSet 버프를 적용한다. -->
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>
@@ -164,7 +187,7 @@
 
     <AC_BatonSlash MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="MoveDirection">
         <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/3_batonPattern/2_batonSlash" FramePerSecond="1" XFlip="true">
-            <FrameEvent Type="Attack" StartFrame="0.1" AttackPreset="Najimi_BatonSlash">
+            <FrameEvent Type="Attack" StartFrame="0.12" AttackPreset="Najimi_BatonSlash">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
 
@@ -178,7 +201,7 @@
                 </OnHit>
             </FrameEvent>
 
-            <FrameEvent Type="Movement" StartFrame="0.1" Friction="60" MaxVelocity="30" Speed="0" Velocity="30"/>
+            <FrameEvent Type="Movement" StartFrame="0.1" Friction="90" MaxVelocity="30" Speed="0" Velocity="30"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>

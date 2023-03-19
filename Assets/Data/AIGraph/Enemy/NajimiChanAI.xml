@@ -6,8 +6,10 @@
     <Include Path="Common\CommonAttackPackage.xml"/>
     <Include Path="Common\CommonIdlePackage.xml"/>
     <Include Path="Common\CommonGuardBrokenPackage.xml"/>
+    <Include Path="Common\CommonRunawayPackage.xml"/>
 
     <Include Path="Enemy/OsananaNajimi/NajimiRushPackage.xml"/>
+    <Include Path="Enemy/OsananaNajimi/NajimiSpawnPitchingMachinePackage.xml"/>
     <Include Path="Enemy/OsananaNajimi/NajimiPitchingPackage.xml"/>
     <Include Path="Enemy/OsananaNajimi/NajimiBatonPackage.xml"/>
 
@@ -21,17 +23,19 @@
     <GlobalVariable Name="gv_najimiRushTime" Value="1.5"/>
     <!-- 나지미 피칭머신 소환 사거리 (어느정도 접근해서 소환할 지) -->
     <GlobalVariable Name="gv_najimiPitchingRange" Value="3.0"/>
+    <!-- 나지미 투구 안전 사거리 (얼마나 도망갈 지) -->
+    <GlobalVariable Name="gv_najimiSafeRange" Value="4.0"/>
     <!-- 나지미 바톤 사거리 -->
-    <GlobalVariable Name="gv_najimiBatonRange" Value="5.0"/>
+    <GlobalVariable Name="gv_najimiBatonRange" Value="4.0"/>
     <!-- 나지미 행동 전환 시간 -->
     <GlobalVariable Name="gv_najimiTrasitionTime" Value="0.15"/>
 
     <!-- 나지미 2페이즈 전환 트리거 카운트 (러쉬 공격 10회) -->
     <GlobalVariable Name="gv_najimiRushCount" Value="10.0"/>
     <!-- 나지미 2페이즈 전환 기준 체력 -->
-    <GlobalVariable Name="gv_najimiStdHp_2Phase" Value="17.0"/>
+    <GlobalVariable Name="gv_najimiStdHp_2Phase" Value="34.0"/>
     <!-- 나지미 3페이즈 전환 기준 체력 -->
-    <GlobalVariable Name="gv_najimiStdHp_3Phase" Value="10.0"/>
+    <GlobalVariable Name="gv_najimiStdHp_3Phase" Value="17.0"/>
     <!-- 나지미 그로기 기준 배틀 포인트 -->
     <GlobalVariable Name="gv_najimiStdBattle" Value="4.0"/>
     
@@ -82,10 +86,26 @@
         <Branch Condition="CurrentPackageEnd" Execute="Chase"/>
     </Rush>
 
-    <SpawnPitchingMachine Package="NajimiPitchingPackage">
+    <SpawnPitchingMachine Package="NajimiSpawnPitchingMachinePackage">
         <UseBranchSet Name="HitReactionSet"/>
-        <Branch Condition="CurrentPackageEnd" Execute="Chase"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Runaway"/>
     </SpawnPitchingMachine>
+
+    <Runaway Package="CommonRunawayPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="TargetExists && (gv_najimiSafeRange < TargetDistance)" Execute="Pitching"/>
+        <Branch Condition="TargetExists && (1.0 < TargetDistance)" Execute="SpawnPitchingMachine"/>
+    </Runaway>
+
+    <Pitching Package="NajimiPitchingPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="CurrentPackageEnd && getTargetFrameTag_Stun" Execute="StunChase"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Runaway"/>
+    </Pitching>
+
+    <StunChase Package="CommonChasePackage">
+        
+    </StunChase>
 
     <Baton Package="NajimiBatonPackage">
         <UseBranchSet Name="HitReactionSet"/>
