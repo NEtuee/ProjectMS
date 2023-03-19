@@ -349,7 +349,7 @@ public class StatusInfo
         Status status = getStatus(targetName);
         if(status == null)
         {
-            DebugUtil.assert(false, "target status is not exists: {0}", targetName);
+            DebugUtil.assert(false, "target status is not exists: [targetName: {0}] [currentStatusInfo: {1}]", targetName,_statusInfoData._statusInfoName);
             return 0f;
         }
             
@@ -362,7 +362,7 @@ public class StatusInfo
             return false;
 
         if(getStatus(buff._targetStatusName) == null)
-            DebugUtil.assert(false, "target status is not exists: {0}", buff._targetStatusName);
+            DebugUtil.assert(false, "target status is not exists: [targetName: {0}] [currentStatusInfo: {1}]", buff._targetStatusName,_statusInfoData._statusInfoName);
 
         switch(buff._buffApplyType)
         {
@@ -395,7 +395,7 @@ public class StatusInfo
         Status status = getStatus(name);
         if(status == null)
         {
-            DebugUtil.assert(false, "target status is not exists: {0}", name);
+            DebugUtil.assert(false, "target status is not exists: [targetName: {0}] [currentStatusInfo: {1}]", name, _statusInfoData._statusInfoName);
             return false;
         }
 
@@ -408,7 +408,7 @@ public class StatusInfo
         Status status = getStatus(name);
         if(status == null)
         {
-            DebugUtil.assert(false, "target status is not exists: {0}", name);
+            DebugUtil.assert(false, "target status is not exists: [targetName: {0}] [currentStatusInfo: {1}]", name, _statusInfoData._statusInfoName);
             return false;
         }
             
@@ -421,7 +421,7 @@ public class StatusInfo
         Status status = getStatus(name);
         if(status == null)
         {
-            DebugUtil.assert(false, "target status is not exists: {0}", name);
+            DebugUtil.assert(false, "target status is not exists: [targetName: {0}] [currentStatusInfo: {1}]", name, _statusInfoData._statusInfoName);
             return false;
         }
             
@@ -434,7 +434,7 @@ public class StatusInfo
         Status status = getStatus(name);
         if(status == null)
         {
-            DebugUtil.assert(false, "target status is not exists: {0}", name);
+            DebugUtil.assert(false, "target status is not exists: [targetName: {0}] [currentStatusInfo: {1}]", name, _statusInfoData._statusInfoName);
             return false;
         }
             
@@ -449,7 +449,7 @@ public class StatusInfo
 
         return _statusValues[name];
         
-    }
+    } 
 
     public void updateDebugTextXXX(DebugTextManager debugTextManager)
     {
