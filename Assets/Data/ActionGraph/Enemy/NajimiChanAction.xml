@@ -151,6 +151,7 @@
             <FrameEvent Type="Attack" StartFrame="0.7" EndFrame="1.0" AttackPreset="Najimi_Pitching">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="StunSet"/>
                     <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/Slash_Timeline" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
                     <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/Blood_Timeline" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
                     <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/Impact_Timeline" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true" AngleType="AttackPoint"/>
@@ -160,6 +161,7 @@
             
                 <OnGuard>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="StunSet"/>
                     <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/Slash_Timeline" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
                     <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/Blood_Timeline" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
                     <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/Impact_Timeline" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true" AngleType="AttackPoint"/>

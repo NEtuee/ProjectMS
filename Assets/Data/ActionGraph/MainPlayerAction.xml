@@ -306,7 +306,7 @@
     </CatchReleased>
 
     <Stun MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
-        <Animation Path="Resources/Sprites/DummyPlayer/JustGuardBreak/" FramePerSecond="2" XFlip="true">
+        <Animation Path="Resources/Sprites/DummyPlayer/JustGuardBreak/" FramePerSecond="0.3" XFlip="true">
             <FrameEvent Type="FrameTag" StartFrame="0" EndFrame="999" Tag="Stun"/>
             <FrameEvent Type="ApplyBuff" StartFrame="1" ApplyBuff="StunClear"/>
         </Animation>

@@ -24,7 +24,7 @@
     <!-- 나지미 피칭머신 소환 사거리 (어느정도 접근해서 소환할 지) -->
     <GlobalVariable Name="gv_najimiPitchingRange" Value="3.0"/>
     <!-- 나지미 투구 안전 사거리 (얼마나 도망갈 지) -->
-    <GlobalVariable Name="gv_najimiSafeRange" Value="4.0"/>
+    <GlobalVariable Name="gv_najimiSafeRange" Value="3.5"/>
     <!-- 나지미 바톤 사거리 -->
     <GlobalVariable Name="gv_najimiBatonRange" Value="4.0"/>
     <!-- 나지미 행동 전환 시간 -->
@@ -88,13 +88,14 @@
 
     <SpawnPitchingMachine Package="NajimiSpawnPitchingMachinePackage">
         <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="CurrentPackageEnd && getTargetFrameTag_Stun" Execute="StunChase"/>
         <Branch Condition="CurrentPackageEnd" Execute="Runaway"/>
     </SpawnPitchingMachine>
 
     <Runaway Package="CommonRunawayPackage">
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="TargetExists && (gv_najimiSafeRange < TargetDistance)" Execute="Pitching"/>
-        <Branch Condition="TargetExists && (1.0 < TargetDistance)" Execute="SpawnPitchingMachine"/>
+        <Branch Condition="TargetExists && (1.0 > TargetDistance)" Execute="SpawnPitchingMachine"/>
     </Runaway>
 
     <Pitching Package="NajimiPitchingPackage">
@@ -104,7 +105,10 @@
     </Pitching>
 
     <StunChase Package="CommonChasePackage">
-        
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="TargetExists && 
+                           (gv_najimiRushRange >= TargetDistance) && 
+                           (GraphExecutedTime > gv_najimiTrasitionTime)" Execute="Rush"/>
     </StunChase>
 
     <Baton Package="NajimiBatonPackage">
