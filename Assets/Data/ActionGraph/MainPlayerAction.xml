@@ -117,7 +117,7 @@
         <Animation Path="Resources/Sprites/NewPlayer/DashRoll/" FramePerSecond="32" XFlip="true" ScalePreset="YSpring">
             <FrameEvent Type="Attack" StartFrame="0" AttackPreset="PlayerAttackTest">
                 <OnHit>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1 TargetBattleIncrement"/>
                     <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
 
                     <FrameEvent Type="TeleportToTargetBack" DistanceOffset="-0.3"/>
@@ -155,7 +155,7 @@
         <Animation Path="Resources/Sprites/NewPlayer/DashRoll/" FramePerSecond="32" XFlip="true">
             <FrameEvent Type="Attack" StartFrame="0" AttackType="GuardBreak" AttackPreset="Akane_Kick" IgnoreDefenceType="Guard">
                 <OnGuardBreak>
-                    <FrameEvent Type="ApplyBuffTarget" StartFrame="0" ApplyBuff="21"/>
+                    <FrameEvent Type="ApplyBuffTarget" StartFrame="0" ApplyBuff="21 TargetBattleIncrement"/>
 
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc" FramePerSecond="18.0" Offset="0.0 0.0 0.0" ToTarget="true"/>
                     <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/Impact_Timeline" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true" AngleType="AttackPoint"/>

@@ -17,6 +17,8 @@
     <GlobalVariable Name="gv_najimiReadyTime" Value="3.0"/>
     <!-- 나지미 돌진 사거리 -->
     <GlobalVariable Name="gv_najimiRushRange" Value="2.0"/>
+    <!-- 나지미 재돌진 텀 -->
+    <GlobalVariable Name="gv_najimiRushTime" Value="1.5"/>
     <!-- 나지미 피칭머신 소환 사거리 (어느정도 접근해서 소환할 지) -->
     <GlobalVariable Name="gv_najimiPitchingRange" Value="3.0"/>
     <!-- 나지미 바톤 사거리 -->
@@ -25,19 +27,24 @@
     <GlobalVariable Name="gv_najimiTrasitionTime" Value="0.15"/>
 
     <!-- 나지미 2페이즈 전환 트리거 카운트 (러쉬 공격 10회) -->
-    <GlobalVariable Name="gv_najimiRushCount" Value="2.0"/>
+    <GlobalVariable Name="gv_najimiRushCount" Value="10.0"/>
     <!-- 나지미 2페이즈 전환 기준 체력 -->
     <GlobalVariable Name="gv_najimiStdHp_2Phase" Value="17.0"/>
     <!-- 나지미 3페이즈 전환 기준 체력 -->
     <GlobalVariable Name="gv_najimiStdHp_3Phase" Value="10.0"/>
+    <!-- 나지미 그로기 기준 배틀 포인트 -->
+    <GlobalVariable Name="gv_najimiStdBattle" Value="4.0"/>
     
 
 
     <BranchSet Name="HitReactionSet">
         <Branch Condition="Dead" Execute="Dead"/>
-        <Branch Condition="Hit" Execute="Hit"/>
-        <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
+        <Branch Condition="(getStat_Phase == 1.0) && (getStat_HP == gv_najimiStdHp_2Phase)" Execute="PhaseIncrease"/>
+        <Branch Condition="(getStat_Phase == 2.0) && (getStat_HP == gv_najimiStdHp_3Phase)" Execute="PhaseIncrease"/>
+        <Branch Condition="Hit && (getStat_Battle >= gv_najimiStdBattle)" Execute="Hit"/>
+        <Branch Condition="(GuardBreakFail || GuardBroken) && (getStat_Battle >= gv_najimiStdBattle)" Execute="GuardBroken"/>
     </BranchSet>
+
 
     <Entry Package="CommonIdlePackage">
         <UseBranchSet Name="HitReactionSet"/>
@@ -72,12 +79,12 @@
     <Rush Package="NajimiRushPackage">
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="CurrentPackageEnd && (getStat_Phase == 1.0) && (getStat_RushCount == gv_najimiRushCount)" Execute="PhaseIncrease"/>
-        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Chase"/>
     </Rush>
 
     <SpawnPitchingMachine Package="NajimiPitchingPackage">
         <UseBranchSet Name="HitReactionSet"/>
-        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Chase"/>
     </SpawnPitchingMachine>
 
     <Baton Package="NajimiBatonPackage">
@@ -87,7 +94,7 @@
 
     <PhaseIncrease Package="CommonPhaseIncreasePackage">
         <!-- 페이즈 전환은 피격 리액션 무시 -->    
-        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Chase"/>
     </PhaseIncrease>
     
     <GuardBroken Package="CommonGuardBrokenPackage">
@@ -96,8 +103,6 @@
     </GuardBroken>
 
     <Hit Package="CommonHitPackage">
-        <Branch Condition="(getStat_Phase == 1.0) && (getStat_HP == gv_najimiStdHp_2Phase)" Execute="PhaseIncrease"/>
-        <Branch Condition="(getStat_Phase == 2.0) && (getStat_HP == gv_najimiStdHp_3Phase)" Execute="PhaseIncrease"/>
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="Chase"/>
     </Hit>
