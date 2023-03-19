@@ -17,16 +17,18 @@
     </AC_Move>
 
     <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
-        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/0_default/4_hit" FramePerSecond="1" XFlip="true">
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/0_default/4_hit" FramePerSecond="2" XFlip="true">
             <FrameEvent Type="Movement" StartFrame="0" Friction="0" Speed="0" Velocity="0"/>
+            <FrameEvent Type="ApplyBuff" StartFrame="0" ApplyBuff="BattleClear"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_Hit>
 
     <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
-        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/0_default/4_hit" FramePerSecond="1" XFlip="true">
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/0_default/4_hit" FramePerSecond="2" XFlip="true">
             <FrameEvent Type="Movement" StartFrame="0" Friction="0" Speed="0" Velocity="0"/>
+            <FrameEvent Type="ApplyBuff" StartFrame="0" ApplyBuff="BattleClear"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
