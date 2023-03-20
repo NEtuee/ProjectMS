@@ -24,6 +24,7 @@ public enum FrameEventType
     FrameEvent_StopUpdate,
     FrameEvent_SpawnCharacter,
     FrameEvent_ReleaseCatch,
+    FrameEvent_TalkBalloon,
 
     Count,
 }
@@ -95,6 +96,49 @@ public abstract class ActionFrameEventBase
     }
 }
 
+
+public class ActionFrameEvent_TalkBalloon : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_TalkBalloon;}
+
+    private string _text = "";
+    private float _time = 0f;
+
+    public override void initialize()
+    {
+    }
+
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        if(executeEntity is GameEntityBase == false)
+            return true;
+
+        TalkBalloonManager.Instance().activeTalkBalloon(executeEntity.transform,new UnityEngine.Vector3(0f, (executeEntity as GameEntityBase).getHeadUpOffset(),0f),_text,_time);
+        return true;
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attributes[i].Name == "Text")
+            {
+                _text = attributes[i].Value;
+            }
+            else if(attributes[i].Name == "Time")
+            {
+                _time = float.Parse(attributes[i].Value);
+            }
+
+        }
+    }
+}
+
 public class ActionFrameEvent_ReleaseCatch : ActionFrameEventBase
 {
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_ReleaseCatch;}
@@ -139,7 +183,6 @@ public class ActionFrameEvent_ReleaseCatch : ActionFrameEventBase
         }
     }
 }
-
 
 public class ActionFrameEvent_SpawnCharacter : ActionFrameEventBase
 {

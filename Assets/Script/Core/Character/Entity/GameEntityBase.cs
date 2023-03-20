@@ -47,6 +47,8 @@ public class GameEntityBase : SequencerObjectBase
 
     private GameEntityBase      _currentTarget;
 
+    private float               _headUpOffset = 0f;
+
     private bool                _updateDirection = true;
     private bool                _updateFlipState = true;
 
@@ -92,12 +94,14 @@ public class GameEntityBase : SequencerObjectBase
         aiGraphPath = characterInfo._aiGraphPath;
         statusInfoName = characterInfo._statusName;
 
+        _headUpOffset = characterInfo._headUpOffset;
+
         _actionGraph.initialize(ResourceContainerEx.Instance().GetActionGraph(characterInfo._actionGraphPath));
         _aiGraph.initialize(this, _actionGraph, ResourceContainerEx.Instance().GetAIGraph(characterInfo._aiGraphPath));
         _danmakuGraph.initialize(this);
 
         _statusInfo.initialize(characterInfo._statusName);
-        _graphicInterface.initialize(this,_statusInfo,new Vector3(0f, characterInfo._headUpOffset, 0f));
+        _graphicInterface.initialize(this,_statusInfo,new Vector3(0f, _headUpOffset, 0f));
 
         detachChildObject();
         setParentObject(null);
@@ -663,6 +667,8 @@ public class GameEntityBase : SequencerObjectBase
     }
     
     public bool isDead() {return _statusInfo.isDead();}
+
+    public float getHeadUpOffset() {return _headUpOffset;}
 
     public void executeAIEvent(AIChildEventType eventType) {_aiGraph.executeAIEvent(eventType);}
     public bool processActionCondition(ActionGraphConditionCompareData compareData) {return _actionGraph.processActionCondition(compareData);}

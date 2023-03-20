@@ -111,6 +111,7 @@ public class MasterManager : MessageHub<ManagerBase>
         ManagersReceiveMessageProcessing();
         ReceiveMessageProcessing();
 
+        TalkBalloonManager.Instance().updateTalkBalloonManager(deltaTime);
         CameraControlEx.Instance().progress(deltaTime);
         FMODAudioManager.Instance().updateAudio();
 

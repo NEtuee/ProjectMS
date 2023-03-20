@@ -57,13 +57,15 @@ public static class FrameEventLoader
             outFrameEvent = new ActionFrameEvent_SpawnCharacter();
         else if(type == "ReleaseCatch")
             outFrameEvent = new ActionFrameEvent_ReleaseCatch();
+        else if(type == "TalkBalloon")
+            outFrameEvent = new ActionFrameEvent_TalkBalloon();
         else
         {
             DebugUtil.assert(false, "invalid frameEvent type: {0}",type);
             return null;
         }
 
-        DebugUtil.assert((int)FrameEventType.Count == 21, "check here");
+        DebugUtil.assert((int)FrameEventType.Count == 22, "check here");
 
 
         if(outFrameEvent == null)
