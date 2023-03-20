@@ -96,6 +96,8 @@ public static class BuffDataLoader
                 buffData._buffCustomValue0 = float.Parse(attrValue);
             else if(attrName == "MaxValue")
                 buffData._buffCustomValue1 = float.Parse(attrValue);
+            else if(attrName == "ButtonList")
+                buffData._buffCustomValue2 = attrValue.Split(' ');
             else
             {
                 DebugUtil.assert(false, "invalid attribute name from buffInfo: {0} [Line: {1}] [FileName: {2}]",attrName, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);

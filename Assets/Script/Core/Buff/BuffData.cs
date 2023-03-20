@@ -11,6 +11,7 @@ public class BuffData
     public float               _buffVaryStatFactor;
     public float               _buffCustomValue0;
     public float               _buffCustomValue1;
+    public string[]            _buffCustomValue2 = null;
 
     public string              _buffCustomStatusName;
 
@@ -25,7 +26,7 @@ public class BuffData
         _buffVaryStatFactor = 0f;
         _buffCustomValue0 = 0f;
         _buffCustomValue1 = 0f;
-
+        _buffCustomValue2 = null;
     }
 
     public void copy(BuffData target)
@@ -37,6 +38,7 @@ public class BuffData
         _buffVaryStatFactor = target._buffVaryStatFactor;
         _buffCustomValue0 = target._buffCustomValue0;
         _buffCustomValue1 = target._buffCustomValue1;
+        _buffCustomValue2 = target._buffCustomValue2;
     }
 
 
@@ -67,5 +69,6 @@ public enum BuffUpdateType
     StatSection,
     Continuous,
     DelayedContinuous,
+    ButtonHit,
     Count,
 };

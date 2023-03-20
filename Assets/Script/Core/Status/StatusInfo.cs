@@ -326,6 +326,19 @@ public class StatusInfo
 
                     canApply = globalTime - buffItem._startedTime >= buffData._buffCustomValue0;
                     break;
+                case BuffUpdateType.ButtonHit:
+                {
+                    if(buffData._buffCustomValue2 != null)
+                    {
+                        for(int index = 0; index < buffData._buffCustomValue2.Length; ++index)
+                        {
+                            canApply = ActionKeyInputManager.Instance().keyCheck(buffData._buffCustomValue2[index]);
+                            if(canApply)
+                                break;
+                        }
+                    }
+                }
+                break;
             }
 
             if(canApply == true)

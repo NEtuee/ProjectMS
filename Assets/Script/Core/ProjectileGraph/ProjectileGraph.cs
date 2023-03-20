@@ -133,7 +133,7 @@ public class ProjectileGraph
 
     public bool isEnd()
     {
-        if(_isEnd == true || _currentPenetrateCount == 0)
+        if(_isEnd == true || (_currentPenetrateCount != -1 && _currentPenetrateCount == 0))
             return true;
 
         return _isEnd;
