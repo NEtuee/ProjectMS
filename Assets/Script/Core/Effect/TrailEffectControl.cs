@@ -15,6 +15,7 @@ public struct TrailEffectDescription
 public class TrailEffectControl : MonoBehaviour
 {
     public LineRenderer _lineRenderer;
+    public LineRenderer _placeholder;
 
     private Transform   _targetTransform;
     private List<Vector3>   _positionList = new List<Vector3>();
@@ -33,6 +34,9 @@ public class TrailEffectControl : MonoBehaviour
 
         _lineRenderer.positionCount = positionArray.Length;
         _lineRenderer.SetPositions(positionArray);
+
+        _placeholder.positionCount = positionArray.Length;
+        _placeholder.SetPositions(positionArray);
         updatePositions();
     }
 
@@ -67,16 +71,23 @@ public class TrailEffectControl : MonoBehaviour
                 GizmoHelper.instance.drawLine(_positionList[i - 1] + _targetTransform.position,_positionList[i] + _targetTransform.position, Color.red);
 
             _lineRenderer.SetPosition(i, _positionList[i] + _targetTransform.position);
+            _placeholder.SetPosition(i, _positionList[i] + _targetTransform.position);
         }
     }
 
     public void setDescription(ref TrailEffectDescription desc)
     {
-        _lineRenderer.startWidth = desc._width;
-        _lineRenderer.endWidth = desc._width;
-        _lineRenderer.textureMode = desc._textureMode;
-        _lineRenderer.sortingLayerName = desc._sortingLayerName;
-        _lineRenderer.sortingOrder = desc._sortingOrder;
-        _lineRenderer.gameObject.layer = LayerMask.NameToLayer(desc._layerName);
+        setDescription(ref desc, _lineRenderer);
+        setDescription(ref desc, _placeholder);
+    }
+
+    private void setDescription(ref TrailEffectDescription desc, LineRenderer lineRenderer)
+    {
+        lineRenderer.startWidth = desc._width;
+        lineRenderer.endWidth = desc._width;
+        lineRenderer.textureMode = desc._textureMode;
+        lineRenderer.sortingLayerName = desc._sortingLayerName;
+        lineRenderer.sortingOrder = desc._sortingOrder;
+        lineRenderer.gameObject.layer = LayerMask.NameToLayer(desc._layerName);
     }
 }
