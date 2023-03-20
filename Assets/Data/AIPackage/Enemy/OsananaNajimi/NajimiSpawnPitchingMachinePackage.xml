@@ -14,7 +14,7 @@
         <AI_SideStep UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget" Angle="45"/>
-                <AIEvent Type="SetAction" Action="AC_SideStep"/>
+                <AIEvent Type="SetAction" Action="AC_Dash"/>
             </Event_OnExecute>
         
             <Branch Condition="End" Execute="AI_PitcherReady"/>

@@ -1,6 +1,6 @@
 
 
-<ActionGraph Name="Test" DefaultAction="Idle" DefaultFramePerSecond="4" DefaultBuff="4 5 8">
+<ActionGraph Name="Test" DefaultAction="Idle" DefaultFramePerSecond="4" DefaultBuff="4 5 8 DashPointRegenDelayed">
 
     <GlobalVariable Name="gv_DashVelocity" Value="10"/>
     <GlobalVariable Name="gv_DashFriction" Value="24"/>
@@ -115,7 +115,7 @@
 
     <DashRoll MovementType="FrameEvent" DirectionType="MousePoint" RotationType="MoveDirection" FlipType="MousePoint" DirectionUpdateOnce="true">
         <Animation Path="Resources/Sprites/NewPlayer/DashRoll/" FramePerSecond="32" XFlip="true" ScalePreset="YSpring">
-            <FrameEvent Type="Attack" StartFrame="0" AttackPreset="PlayerAttackTest">
+            <FrameEvent Type="Attack" StartFrame="0" AttackPreset="PlayerAttackTest" Condition="(getStat_DashPoint >= 1.0)">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="TargetBattleIncrement" Condition="getTargetFrameTag_Hit == false"/>
@@ -142,7 +142,8 @@
             </FrameEvent>
             <FrameEvent Type="FrameTag" StartFrame="5" EndFrame="999" Tag="MoveCancel"/>
 
-            <FrameEvent Type="Movement" StartFrame="0" Friction="gv_DashFriction" MaxVelocity="gv_DashVelocity" Speed="0" Velocity="gv_DashVelocity"/>
+            <FrameEvent Type="Movement" StartFrame="0" Friction="gv_DashFriction" MaxVelocity="gv_DashVelocity" Speed="0" Velocity="gv_DashVelocity" Condition="(getStat_DashPoint >= 1.0)"/>
+            <FrameEvent Type="ApplyBuff" StartFrame="0" ApplyBuff="DashPointConsumption" Condition="(getStat_DashPoint >= 1.0)"/>
         </Animation>
 
         <Branch Condition="AttackSuccess" Execute="AttackSuccess"/>
@@ -174,9 +175,10 @@
                     <FrameEvent Type="StopUpdate" StartFrame="0" Time="0.15"/>
                 </OnGuardBreakFail>
             </FrameEvent>
-
-            <FrameEvent Type="Movement" StartFrame="0" Friction="gv_DashFriction" MaxVelocity="gv_DashVelocity" Speed="0" Velocity="gv_DashVelocity"/>
             <FrameEvent Type="FrameTag" StartFrame="5" EndFrame="999" Tag="MoveCancel"/>
+
+            <FrameEvent Type="Movement" StartFrame="0" Friction="gv_DashFriction" MaxVelocity="gv_DashVelocity" Speed="0" Velocity="gv_DashVelocity" Condition="(getStat_DashPoint >= 1.0)"/>
+            <FrameEvent Type="ApplyBuff" StartFrame="0" ApplyBuff="DashPointConsumption"/>
         </Animation>
         
         <Branch Condition="AttackSuccess || AttackGuarded || AttackGuardBreak || AttackGuardBreakFail" Execute="Kicked"/>
@@ -206,6 +208,8 @@
             <FrameEvent Type="Test" StartFrame="0" Log="Kicked Executed"/>
 
             <FrameEvent Type="FrameTag" StartFrame="3" EndFrame="999" Tag="MoveCancel"/>
+
+            <FrameEvent Type="ApplyBuff" StartFrame="0" ApplyBuff="DashPointIncrement"/>
         </Animation>
 
         <UseBranchSet Name="CancelBranch"/>
@@ -221,6 +225,7 @@
             </FrameEvent>
 
             <FrameEvent Type="Movement" StartFrame="0" Friction="gv_AttackFriction" MaxVelocity="gv_AttackVelocity" Speed="0" Velocity="gv_AttackVelocity"/>
+            <FrameEvent Type="ApplyBuff" StartFrame="0" ApplyBuff="DashPointReset"/>
         </Animation>
 
         <Branch Key="(getKey_AttackCharge == true) || (getKey_NormalMove == true)" Condition="End" Execute="MoveAll"/>
@@ -230,6 +235,8 @@
     <AttackGuarded MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Keep">
         <Animation Path="Resources/Sprites/NewPlayer/Attack/" FramePerSecond="16">
             <FrameEvent Type="Movement" StartFrame="0" Friction="12" MaxVelocity="6" Speed="0" Velocity="-4"/>
+
+            <!-- <FrameEvent Type="ApplyBuff" StartFrame="0" ApplyBuff="DashPointReset"/> -->
         </Animation>
 
         <Branch Key="(getKey_AttackCharge == true) || (getKey_NormalMove == true)" Condition="End" Execute="MoveAll"/>
