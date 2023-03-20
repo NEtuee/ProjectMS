@@ -110,14 +110,32 @@ MonoBehaviour:
     _attackRayRadius: 0
     _pushVector: {x: 0, y: 0, z: 0}
   - _name: Najimi_BatonSlash
-    _attackRadius: 5.5
+    _attackRadius: 3.5
     _attackAngle: 4
     _attackStartDistance: 0.1
     _attackRayRadius: 0
-    _pushVector: {x: 3, y: 0, z: 0}
+    _pushVector: {x: 1, y: 0, z: 0}
   - _name: LaserTest
     _attackRadius: 5.5
     _attackAngle: 0
     _attackStartDistance: 0.1
     _attackRayRadius: 0.5
     _pushVector: {x: 3, y: 0, z: 0}
+  - _name: Najimi_Pitching
+    _attackRadius: 10
+    _attackAngle: 0
+    _attackStartDistance: 0.1
+    _attackRayRadius: 0.4
+    _pushVector: {x: 3, y: 0, z: 0}
+  - _name: BaseBall
+    _attackRadius: 0.2
+    _attackAngle: 360
+    _attackStartDistance: 0
+    _attackRayRadius: 0
+    _pushVector: {x: 1, y: 0, z: 0}
+  - _name: Najimi_Beam
+    _attackRadius: 10
+    _attackAngle: 0
+    _attackStartDistance: 0.1
+    _attackRayRadius: 0.6
+    _pushVector: {x: 5, y: 0, z: 0}

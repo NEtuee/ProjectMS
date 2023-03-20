@@ -292,5 +292,96 @@
         Factor="1.0"
     />
 
+    <BattleClear
+        Key="30"
+        StatusName="Battle"
+
+        UpdateType="OneShot"
+        ApplyType="DirectSet"
+
+        Factor="0.0"
+    />
+
+    <StunSet
+        Key="31"
+        StatusName="IsStun"
+
+        UpdateType="OneShot"
+        ApplyType="DirectSet"
+
+        Factor="1.0"
+    />
+    <StunClear
+        Key="32"
+        StatusName="IsStun"
+
+        UpdateType="OneShot"
+        ApplyType="DirectSet"
+
+        Factor="0.0"
+    />
+
+    <DashPointConsumption
+        Key="33"
+        StatusName="DashPoint"
+
+        UpdateType="OneShot"
+        ApplyType="Direct"
+
+        Factor="-1.0"
+    />
+
+    <DashPointReset
+        Key="34"
+        StatusName="DashPoint"
+
+        UpdateType="OneShot"
+        ApplyType="DirectSet"
+
+        Factor="5.0"
+    />
+
+    <DashPointRegenDelayed
+        Key="35"
+        StatusName="DashPoint"
+
+        UpdateType="DelayedContinuous"
+        ApplyType="DirectDelta"
+
+        Factor="1.0"
+
+        Time="1.0"
+    />
     
+    <DashPointIncrement
+        Key="36"
+        StatusName="DashPoint"
+
+        UpdateType="OneShot"
+        ApplyType="Direct"
+
+        Factor="1.0"
+    />
+
+    <NajimiAddPistolCount
+        Key="37"
+        StatusName="PistolCount"
+
+        UpdateType="OneShot"
+        ApplyType="Direct"
+
+        Factor="1.0"
+    />
+    
+    <NajimiResetPistolCount
+        Key="38"
+        StatusName="PistolCount"
+
+        UpdateType="OneShot"
+        ApplyType="DirectSet"
+
+        Factor="0.0"
+    />
+
+
 </BuffInfo>

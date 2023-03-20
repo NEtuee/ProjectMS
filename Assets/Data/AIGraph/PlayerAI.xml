@@ -1,5 +1,12 @@
 <AIGraph Name="PlayerAI" DefaultState="Entry">
     <Include Path="PlayerTargetSearchPackage.xml"/>
+    <Include Path="PlayerStunPackage.xml"/>
+
     <Entry Package="PlayerTargetSearchPackage">
+        <Branch Condition="getStat_IsStun == 1.0" Execute="Stun"/>
     </Entry>
+
+    <Stun Package="PlayerStunPackage">
+        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+    </Stun>
 </AIGraph>

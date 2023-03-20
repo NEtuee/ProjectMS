@@ -1,6 +1,6 @@
 
 
-<ActionGraph Name="Test" DefaultAction="Idle" DefaultFramePerSecond="4" DefaultBuff="4 5 8">
+<ActionGraph Name="Test" DefaultAction="Idle" DefaultFramePerSecond="4" DefaultBuff="4 5 8 DashPointRegenDelayed">
 
     <GlobalVariable Name="gv_DashVelocity" Value="10"/>
     <GlobalVariable Name="gv_DashFriction" Value="24"/>
@@ -115,9 +115,10 @@
 
     <DashRoll MovementType="FrameEvent" DirectionType="MousePoint" RotationType="MoveDirection" FlipType="MousePoint" DirectionUpdateOnce="true">
         <Animation Path="Resources/Sprites/NewPlayer/DashRoll/" FramePerSecond="32" XFlip="true" ScalePreset="YSpring">
-            <FrameEvent Type="Attack" StartFrame="0" AttackPreset="PlayerAttackTest">
+            <FrameEvent Type="Attack" StartFrame="0" AttackPreset="PlayerAttackTest" Condition="(getStat_DashPoint >= 1.0)">
                 <OnHit>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1 TargetBattleIncrement"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="TargetBattleIncrement" Condition="getTargetFrameTag_Hit == false"/>
                     <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
 
                     <FrameEvent Type="TeleportToTargetBack" DistanceOffset="-0.3"/>
@@ -141,7 +142,8 @@
             </FrameEvent>
             <FrameEvent Type="FrameTag" StartFrame="5" EndFrame="999" Tag="MoveCancel"/>
 
-            <FrameEvent Type="Movement" StartFrame="0" Friction="gv_DashFriction" MaxVelocity="gv_DashVelocity" Speed="0" Velocity="gv_DashVelocity"/>
+            <FrameEvent Type="Movement" StartFrame="0" Friction="gv_DashFriction" MaxVelocity="gv_DashVelocity" Speed="0" Velocity="gv_DashVelocity" Condition="(getStat_DashPoint >= 1.0)"/>
+            <FrameEvent Type="ApplyBuff" StartFrame="0" ApplyBuff="DashPointConsumption" Condition="(getStat_DashPoint >= 1.0)"/>
         </Animation>
 
         <Branch Condition="AttackSuccess" Execute="AttackSuccess"/>
@@ -173,9 +175,10 @@
                     <FrameEvent Type="StopUpdate" StartFrame="0" Time="0.15"/>
                 </OnGuardBreakFail>
             </FrameEvent>
-
-            <FrameEvent Type="Movement" StartFrame="0" Friction="gv_DashFriction" MaxVelocity="gv_DashVelocity" Speed="0" Velocity="gv_DashVelocity"/>
             <FrameEvent Type="FrameTag" StartFrame="5" EndFrame="999" Tag="MoveCancel"/>
+
+            <FrameEvent Type="Movement" StartFrame="0" Friction="gv_DashFriction" MaxVelocity="gv_DashVelocity" Speed="0" Velocity="gv_DashVelocity" Condition="(getStat_DashPoint >= 1.0)"/>
+            <FrameEvent Type="ApplyBuff" StartFrame="0" ApplyBuff="DashPointConsumption"/>
         </Animation>
         
         <Branch Condition="AttackSuccess || AttackGuarded || AttackGuardBreak || AttackGuardBreakFail" Execute="Kicked"/>
@@ -205,6 +208,8 @@
             <FrameEvent Type="Test" StartFrame="0" Log="Kicked Executed"/>
 
             <FrameEvent Type="FrameTag" StartFrame="3" EndFrame="999" Tag="MoveCancel"/>
+
+            <FrameEvent Type="ApplyBuff" StartFrame="0" ApplyBuff="DashPointIncrement"/>
         </Animation>
 
         <UseBranchSet Name="CancelBranch"/>
@@ -220,6 +225,7 @@
             </FrameEvent>
 
             <FrameEvent Type="Movement" StartFrame="0" Friction="gv_AttackFriction" MaxVelocity="gv_AttackVelocity" Speed="0" Velocity="gv_AttackVelocity"/>
+            <FrameEvent Type="ApplyBuff" StartFrame="0" ApplyBuff="DashPointReset"/>
         </Animation>
 
         <Branch Key="(getKey_AttackCharge == true) || (getKey_NormalMove == true)" Condition="End" Execute="MoveAll"/>
@@ -229,6 +235,8 @@
     <AttackGuarded MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Keep">
         <Animation Path="Resources/Sprites/NewPlayer/Attack/" FramePerSecond="16">
             <FrameEvent Type="Movement" StartFrame="0" Friction="12" MaxVelocity="6" Speed="0" Velocity="-4"/>
+
+            <!-- <FrameEvent Type="ApplyBuff" StartFrame="0" ApplyBuff="DashPointReset"/> -->
         </Animation>
 
         <Branch Key="(getKey_AttackCharge == true) || (getKey_NormalMove == true)" Condition="End" Execute="MoveAll"/>
@@ -237,7 +245,7 @@
 
     <Guard MovementType="FrameEvent" DirectionType="MousePoint" DefenceDirectionType="MousePoint" FlipType="Keep" DefenceType="Guard" DefenceAngle="180.0">
         <Animation Path="Resources/Sprites/DummyPlayer/Guard/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
-            <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/LaserTest_Timeline" Offset="0.0 0.0 0.0" Attach="true" AngleType="Direction" LifeTime="0.3" FollowDirection="True"/>
+            <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/LaserTest_Timeline" Offset="0.0 0.0 0.0" Attach="true" AngleType="Direction" LifeTime="1.0" FollowDirection="True"/>
             <FrameEvent Type="Attack" StartFrame="0.3" AttackPreset="LaserTest" IgnoreDefenceType="Guard">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
@@ -268,10 +276,11 @@
     </Guard>
 
     <Hit MovementType="FrameEvent" DirectionType="MousePoint" DefenceDirectionType="MousePoint" FlipType="Keep" DefenceType="Guard" DefenceAngle="180.0">
-        <Animation Path="Resources/Sprites/NewPlayer/Hit/" FramePerSecond="1" XFlip="true">
+        <Animation Path="Resources/Sprites/NewPlayer/Hit/" FramePerSecond="2" XFlip="true">
             <FrameEvent Type="Movement" StartFrame="0" Friction="gv_IdleFriction" Speed="0"/>
         </Animation>
 
+        <!-- <Branch Condition="getStat_IsStun == 1.0" Execute="Stun"/> -->
         <Branch Condition="IsCatchTarget" Execute="Catched"/>
         <Branch Condition="End" Execute="Idle"/>
         <Branch Key="(getKey_Guard == false) && ((getKey_AttackCharge == true) || (getKey_NormalMove == true))" Condition="End" Execute="MoveAll"/>
@@ -289,6 +298,7 @@
     <Catched MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <Animation Path="Resources/Sprites/DummyPlayer/Hit/" StartFrame="0" EndFrame="1" XFlip="true">
             <FrameEvent Type="Test" Log="Akane Catched"/>
+            <FrameEvent Type="ApplyBuff" StartFrame="1" ApplyBuff="StunClear"/>
         </Animation>
 
         <Branch Condition="IsCatchTarget == false" Execute="CatchReleased"/>
@@ -298,9 +308,19 @@
     <CatchReleased MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <Animation Path="Resources/Sprites/DummyPlayer/Hit/" StartFrame="0" EndFrame="1" FramePerSecond="0.75" XFlip="true">
             <FrameEvent Type="Test" Log="Akane Catch Released"/>
+            <FrameEvent Type="ApplyBuff" StartFrame="1" ApplyBuff="StunClear"/>
         </Animation>
 
         <Branch Condition="End" Execute="Idle"/>
     </CatchReleased>
+
+    <Stun MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+        <Animation Path="Resources/Sprites/DummyPlayer/JustGuardBreak/" FramePerSecond="0.3" XFlip="true">
+            <FrameEvent Type="FrameTag" StartFrame="0" EndFrame="999" Tag="Stun"/>
+            <FrameEvent Type="ApplyBuff" StartFrame="1" ApplyBuff="StunClear"/>
+        </Animation>
+
+        <Branch Condition="getStat_IsStun == 0.0" Execute="Idle"/>
+    </Stun>
 
 </ActionGraph>
