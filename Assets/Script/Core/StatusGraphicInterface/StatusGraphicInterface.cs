@@ -98,16 +98,18 @@ public class StatusGraphicInterface
 
     private Vector3                         _interfaceOffset;
 
+    private float                           _reverseOffset = 1f;
 
     private Sprite _gagueSprite;
     private Sprite _placeHolderSprite;
 
-    public void initialize(ObjectBase targetObject, StatusInfo statusInfo, Vector3 offset)
+    public void initialize(ObjectBase targetObject, StatusInfo statusInfo, Vector3 offset, bool reverseOffset)
     {
         _targetObject = targetObject;
         _targetStatusInfo = statusInfo;
         _targetStatusInfoData = statusInfo.getStatusInfoData();
         _interfaceOffset = offset;
+        _reverseOffset = reverseOffset ? -1f : 1f;
 
         if(_gagueSprite == null)
         {
@@ -165,12 +167,12 @@ public class StatusGraphicInterface
         if(_targetStatusInfoData._graphicInterfaceData == null)
             return;
 
-        Vector3 targetPosition = _targetObject.transform.position + _interfaceOffset;
+        Vector3 targetPosition = _targetObject.transform.position + _interfaceOffset * _reverseOffset;
 
         for(int index = 0; index < _graphicInterface.Count; ++index)
         {
             _graphicInterface[index].updatePosition(targetPosition);
-            targetPosition.y += _graphicInterface[index].getStatusGraphicInterfaceData()._horizontalGap;
+            targetPosition.y += _graphicInterface[index].getStatusGraphicInterfaceData()._horizontalGap * _reverseOffset;
         }
     }
 }

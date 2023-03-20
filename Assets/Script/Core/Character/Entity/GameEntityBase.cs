@@ -101,7 +101,7 @@ public class GameEntityBase : SequencerObjectBase
         _danmakuGraph.initialize(this);
 
         _statusInfo.initialize(characterInfo._statusName);
-        _graphicInterface.initialize(this,_statusInfo,new Vector3(0f, _headUpOffset, 0f));
+        _graphicInterface.initialize(this,_statusInfo,new Vector3(0f, _headUpOffset, 0f), true);
 
         detachChildObject();
         setParentObject(null);
@@ -135,7 +135,7 @@ public class GameEntityBase : SequencerObjectBase
         CollisionInfoData data = new CollisionInfoData(0.2f,0f,0f,0f, CollisionType.Character);
         _collisionInfo = new CollisionInfo(data);
 
-        _graphicInterface.initialize(this,_statusInfo,new Vector3(0f, _collisionInfo.getRadius(), 0f));
+        _graphicInterface.initialize(this,_statusInfo,new Vector3(0f, _collisionInfo.getRadius(), 0f), true);
 
         CollisionManager.Instance().registerObject(_collisionInfo, this);
 

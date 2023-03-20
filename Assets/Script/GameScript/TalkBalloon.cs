@@ -5,8 +5,15 @@ using UnityEngine;
 public class TalkBalloon : MonoBehaviour
 {
     public TextMesh _textMesh;
+    public MeshRenderer _meshRenderer;
 
     private float _currentTime = 0f;
+
+    public void Start()
+    {
+        _meshRenderer.sortingLayerName = "UI";
+        _meshRenderer.sortingOrder = 3;
+    }
 
     public void setText(string text, float time)
     {

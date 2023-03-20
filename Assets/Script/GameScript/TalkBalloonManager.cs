@@ -39,6 +39,8 @@ public class TalkBalloonManager : Singleton<TalkBalloonManager>
 
         talkBalloon.setText(text, time);
         talkBalloon.setActive(true);
+
+        _currentlyActivateItem.Add(talkBalloon);
     }
 
     
