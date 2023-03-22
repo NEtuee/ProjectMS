@@ -29,7 +29,7 @@
     <!-- 나지미 투구 안전 사거리 (얼마나 도망갈 지) -->
     <GlobalVariable Name="gv_najimiSafePitchRange" Value="3.5"/>
     <!-- 나지미 바톤 사거리 -->
-    <GlobalVariable Name="gv_najimiBatonRange" Value="3.5"/>
+    <GlobalVariable Name="gv_najimiBatonRange" Value="4.0"/>
 
     <!-- 나지미 신호총 안전 사거리 (얼마나 도망갈 지) -->
     <GlobalVariable Name="gv_najimiSafePistolRange" Value="2.0"/>
@@ -42,9 +42,9 @@
     <!-- 나지미 2페이즈 전환 트리거 카운트 (러쉬 공격 10회) -->
     <GlobalVariable Name="gv_najimiRushCount" Value="10.0"/>
     <!-- 나지미 2페이즈 전환 기준 체력 -->
-    <GlobalVariable Name="gv_najimiStdHp_2Phase" Value="39.0"/> <!-- 34 -->
+    <GlobalVariable Name="gv_najimiStdHp_2Phase" Value="34.0"/> <!-- 34 -->
     <!-- 나지미 3페이즈 전환 기준 체력 -->
-    <GlobalVariable Name="gv_najimiStdHp_3Phase" Value="38.0"/> <!-- 17 -->
+    <GlobalVariable Name="gv_najimiStdHp_3Phase" Value="17.0"/> <!-- 17 -->
     <!-- 나지미 그로기 기준 배틀 포인트 -->
     <GlobalVariable Name="gv_najimiStdBattle" Value="4.0"/>
     
@@ -108,7 +108,7 @@
         <Branch Condition="(getStat_Phase == 2.0) &&
                             TargetExists && (gv_najimiSafePitchRange < TargetDistance)" Execute="Pitching"/>
         <Branch Condition="(getStat_Phase == 2.0) &&
-                            TargetExists && (1.0 > TargetDistance)" Execute="SpawnPitchingMachine"/>
+                            TargetExists && (2.0 > TargetDistance)" Execute="SpawnPitchingMachine"/>
         <!-- Phase 2 -->
 
         <!-- Phase 3 -->

@@ -5,9 +5,12 @@
     <Include Path="Common\CommonIdlePackage.xml"/>
     <Include Path="Common\CommonGuardBrokenPackage.xml"/>
     <Include Path="Common\CommonShotPackage.xml"/>
+    <Include Path="Common\CommonTimeoutPackage.xml"/>
     
     <!-- 피칭머신이 플레이어를 공격할 수 있는 거리-->
     <GlobalVariable Name="gv_pitchingMachineShootRange" Value="5.0"/>
+    <!-- 피칭머신 라이프 타임 -->
+    <GlobalVariable Name="gv_pitchingMachineLifetime" Value="15.0"/>
 
     <BranchSet Name="HitReactionSet">
         <Branch Condition="Dead" Execute="Dead"/>
@@ -41,5 +44,8 @@
 
     <Dead Package="CommonDeadPackage">
     </Dead>
+
+    <Timeout Package="CommonTimeoutPackage">
+    </Timeout>
 
 </AIGraph>

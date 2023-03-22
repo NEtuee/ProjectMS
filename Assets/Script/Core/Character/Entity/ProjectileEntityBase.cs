@@ -90,7 +90,7 @@ public class ProjectileEntityBase : ObjectBase
         transform.position += movementOfFrame;
 
         _spriteRenderer.sprite = _projectileGraph.getCurrentSprite();
-        //_spriteRenderer.transform.localRotation = _projectileGraph.getCurrentAnimationRotation();
+        _spriteRenderer.transform.localRotation = _projectileGraph.getCurrentAnimationRotation();
 
         Vector3 outScale = Vector3.one;
         _projectileGraph.getCurrentAnimationScale(out outScale);

@@ -395,5 +395,50 @@
         Factor="1.0"
     />
 
+    <StunEscape
+        Key="40"
+        StatusName="IsStun"
+
+        UpdateType="ButtonHit"
+        ApplyType="Direct"
+
+        ButtonList="Escape_1 Escape_2"
+
+        Factor="-0.05"
+    />
+
+    <CatchedSet
+        Key="41"
+        StatusName="IsCatched"
+
+        UpdateType="OneShot"
+        ApplyType="DirectSet"
+
+        Factor="1.0"
+    />
+
+    <CatchedClear
+        Key="42"
+        StatusName="IsCatched"
+
+        UpdateType="OneShot"
+        ApplyType="DirectSet"
+
+        Factor="0.0"
+    />
+
+    <CatchedEscape
+        Key="43"
+        StatusName="IsCatched"
+
+        UpdateType="ButtonHit"
+        ApplyType="Direct"
+
+        ButtonList="Escape_1 Escape_2"
+
+        Factor="-1.0"
+    />
+
+
 
 </BuffInfo>

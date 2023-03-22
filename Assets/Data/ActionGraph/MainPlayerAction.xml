@@ -17,7 +17,7 @@
 
 
     <BranchSet Name="IdleBranchSet">
-        <Branch Key="getKey_Guard" Condition="true" Execute="Guard"/>
+    <!-- <Branch Key="getKey_Guard" Condition="true" Execute="Guard"/> -->
         <Branch Key="getKey_GuardBreak2 && getKey_AttackCharge" Execute="DashRoll_Kick"/>
         <Branch Key="getKey_StunShot && getKey_AttackCharge" Execute="StunShot"/>
         <Branch Key="getKey_AttackCharge == true" Execute="DashRoll"/>
@@ -107,7 +107,7 @@
             <FrameEvent Type="Movement" StartFrame="0" Friction="0" MaxVelocity="gv_MoveVelocityMax" Speed="gv_MoveSpeed"/>
         </Animation>
 
-        <Branch Key="getKey_Guard && getKey_AttackCharge" Condition="true" Execute="Guard"/>
+        <!-- TODO: Delete <Branch Key="getKey_Guard && getKey_AttackCharge" Condition="true" Execute="Guard"/> -->
 
         <Branch Condition="End == true" Execute="MoveAll"/>
         <Branch Key="(getKey_AttackCharge == false) && (getKey_NormalMove == false)" Execute="MoveStop"/>
@@ -242,7 +242,7 @@
         <Branch Key="(getKey_AttackCharge == true) || (getKey_NormalMove == true)" Condition="End" Execute="MoveAll"/>
         <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="Idle"/>
     </AttackGuarded>
-
+<!-- Guard
     <Guard MovementType="FrameEvent" DirectionType="MousePoint" DefenceDirectionType="MousePoint" FlipType="Keep" DefenceType="Guard" DefenceAngle="180.0">
         <Animation Path="Resources/Sprites/DummyPlayer/Guard/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
             <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/LaserTest_Timeline" Offset="0.0 0.0 0.0" Attach="true" AngleType="Direction" LifeTime="1.0" FollowDirection="True"/>
@@ -274,7 +274,7 @@
         <Branch Condition="End" Execute="Guard"/>
         <Branch Key="(getKey_Guard == false)" Execute="Idle"/>
     </Guard>
-
+-->
     <Hit MovementType="FrameEvent" DirectionType="MousePoint" DefenceDirectionType="MousePoint" FlipType="Keep" DefenceType="Guard" DefenceAngle="180.0">
         <Animation Path="Resources/Sprites/NewPlayer/Hit/" FramePerSecond="2" XFlip="true">
             <FrameEvent Type="Movement" StartFrame="0" Friction="gv_IdleFriction" Speed="0"/>
@@ -295,10 +295,12 @@
         <Branch Condition="End == true" Execute="Kiiled"/>
     </Kiiled>
 
-    <Catched MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+    <Catched MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" ApplyBuff="CatchedEscape">
         <Animation Path="Resources/Sprites/DummyPlayer/Hit/" StartFrame="0" EndFrame="1" XFlip="true">
             <FrameEvent Type="Test" Log="Akane Catched"/>
-            <FrameEvent Type="ApplyBuff" StartFrame="1" ApplyBuff="StunClear"/>
+            <FrameEvent Type="ApplyBuff" StartFrame="0" ApplyBuff="StunClear"/>
+            <FrameEvent Type="FrameTag" StartFrame="0" EndFrame="999" Tag="Recatchable" Condition="getStat_IsCatched == 1.0"/>
+            <FrameEvent Type="ReleaseCatch" Push="4 0 0" Condition="getStat_IsCatched == 0.0"/>
         </Animation>
 
         <Branch Condition="IsCatchTarget == false" Execute="CatchReleased"/>
@@ -308,13 +310,14 @@
     <CatchReleased MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <Animation Path="Resources/Sprites/DummyPlayer/Hit/" StartFrame="0" EndFrame="1" FramePerSecond="0.75" XFlip="true">
             <FrameEvent Type="Test" Log="Akane Catch Released"/>
-            <FrameEvent Type="ApplyBuff" StartFrame="1" ApplyBuff="StunClear"/>
+            <FrameEvent Type="ApplyBuff" StartFrame="0" ApplyBuff="CatchedClear"/>
+            <FrameEvent Type="ApplyBuff" StartFrame="0" ApplyBuff="StunClear"/>
         </Animation>
 
         <Branch Condition="End" Execute="Idle"/>
     </CatchReleased>
 
-    <Stun MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+    <Stun MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" ApplyBuff="StunEscape">
         <Animation Path="Resources/Sprites/DummyPlayer/JustGuardBreak/" FramePerSecond="0.3" XFlip="true">
             <FrameEvent Type="FrameTag" StartFrame="0" EndFrame="999" Tag="Stun"/>
             <FrameEvent Type="ApplyBuff" StartFrame="1" ApplyBuff="StunClear"/>
