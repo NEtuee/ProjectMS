@@ -48,6 +48,7 @@ public class GameEntityBase : SequencerObjectBase
     private GameEntityBase      _currentTarget;
 
     private float               _headUpOffset = 0f;
+    private float               _characterLifeTime = 0f;
 
     private bool                _updateDirection = true;
     private bool                _updateFlipState = true;
@@ -88,7 +89,8 @@ public class GameEntityBase : SequencerObjectBase
     public virtual void initializeCharacter(CharacterInfoData characterInfo)
     {
         base.initialize();
-        
+        _characterLifeTime = 0f;
+
         gameObject.name = characterInfo._displayName;
         actionGraphPath = characterInfo._actionGraphPath;
         aiGraphPath = characterInfo._aiGraphPath;
@@ -122,6 +124,8 @@ public class GameEntityBase : SequencerObjectBase
     {
         if(_initializeFromCharacter)
             return;
+        _characterLifeTime = 0f;
+
         base.initialize();
         
         _actionGraph.initialize(ResourceContainerEx.Instance().GetActionGraph(actionGraphPath));
@@ -151,6 +155,8 @@ public class GameEntityBase : SequencerObjectBase
     public override void progress(float deltaTime)
     {
         base.progress(deltaTime);
+
+        _characterLifeTime += deltaTime;
 
         _statusInfo.updateStatus(deltaTime);
         _statusInfo.updateActionConditionData(this);
@@ -412,6 +418,7 @@ public class GameEntityBase : SequencerObjectBase
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Defence_Catched, _defenceState == DefenceState.Catched);
 
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Entity_Dead, _statusInfo.isDead());
+        _actionGraph.setActionConditionData_Float(ConditionNodeUpdateType.Entity_LifeTime, _characterLifeTime);
 
     }
 
