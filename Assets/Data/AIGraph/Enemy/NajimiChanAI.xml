@@ -38,6 +38,8 @@
     
     <!-- 나지미 행동 전환 시간 -->
     <GlobalVariable Name="gv_najimiTrasitionTime" Value="0.15"/>
+    <!-- 나지미 돌진 행동 전환 시간 -->
+    <GlobalVariable Name="gv_najimiRushTrasitionTime" Value="0.8"/>
 
     <!-- 나지미 2페이즈 전환 트리거 카운트 (러쉬 공격 10회) -->
     <GlobalVariable Name="gv_najimiRushCount" Value="10.0"/>
@@ -71,7 +73,7 @@
         <Branch Condition="(getStat_Phase == 1.0) &&
                            TargetExists && 
                            (gv_najimiRushRange >= TargetDistance) && 
-                           (GraphExecutedTime > gv_najimiTrasitionTime)" Execute="Rush"/>
+                           (GraphExecutedTime > gv_najimiRushTrasitionTime)" Execute="Rush"/>
     <!-- Phase 1 -->
 
     <!-- Phase 2 -->

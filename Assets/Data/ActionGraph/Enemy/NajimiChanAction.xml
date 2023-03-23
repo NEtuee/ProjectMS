@@ -1,4 +1,4 @@
-<ActionGraph Name="NajimiChanAction" DefaultAction="AC_Idle" DefaultFramePerSecond="10" DefaultBuff="NajimiBattleDecrementKeep">
+<ActionGraph Name="NajimiChanAction" DefaultAction="AC_Idle" DefaultFramePerSecond="12" DefaultBuff="NajimiBattleDecrementKeep">
 
     <AC_Idle MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/0_default/1_idle" XFlip="true">
@@ -86,18 +86,29 @@
 
 <!-- 1페이즈. 일정체력 이하, 또는 일정시간 초과 시 2페이즈로 전이 -->
 
+    <AC_RushReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/1_rushPattern/1_rush/rushReady" FramePerSecond="10" XFlip="true">
+            <!-- 0.3 sec -->
+            <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="0.3333"/> <!-- Pre Motion: 0.3 sec -->
+
+            <FrameEvent Type="Movement" StartFrame="0" Friction="0" MaxVelocity="5" Speed="15"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_RushReady"/>
+    </AC_RushReady>
+
     <!-- 아카네를 잡기위해 돌진하는 모션, 충돌 시 데미지 적용, 잡기 처리 -->
     <AC_Rush MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <!-- 나지미 돌진, 헛다리 애니메이션. 공격 성공 시 성공 액션으로 전이. -->
         
         <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/1_rushPattern/1_rush" FramePerSecond="10" XFlip="true">
             <!-- 2 sec -->
-            <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="0.25"/> <!-- Main Motion: 0.4 sec, 4배 느리게 = 1/4 -->
-            <FrameEvent Type="SetAnimationSpeed" StartFrame="1" Speed="0.0625"/> <!-- Recovery Motion: 1.6 sec, 16배 느리게 = 1/16 -->
+            <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="0.5"/> <!-- Main Motion: 0.2 sec -->
+            <FrameEvent Type="SetAnimationSpeed" StartFrame="1" Speed="0.0625"/> <!-- Recovery Motion: 1.8 sec -->
 
             <FrameEvent Type="Movement" StartFrame="0" Friction="24" MaxVelocity="12" Velocity="12" Speed="0"/>
             <FrameEvent Type="ApplyBuff" StartFrame="0" ApplyBuff="NajimiAddRushCount"/>
-            <FrameEvent Type="Attack" StartFrame="0" EndFrame="1" AttackPreset="Najimi_Catch" AttackType="Catch" CatchOffset="0 0 0">
+            <FrameEvent Type="Attack" StartFrame="0" EndFrame="1" AttackPreset="Najimi_Rush" AttackType="Catch" CatchOffset="0 0 0">
                 <OnCatch>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CatchedSet"/>
@@ -189,7 +200,8 @@
             <FrameEvent Type="SetAnimationSpeed" StartFrame="1" Speed="0.1"/> <!-- Recovery Motion: 1 sec -->
             
             <FrameEvent Type="Movement" StartFrame="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <FrameEvent Type="Attack" StartFrame="0" EndFrame="1" AttackPreset="Najimi_Pitching">
+            <!-- TODO: 투구 이펙트 추가해야함. 해당 이펙트 지속시간에 따라 Main 모션 시간과 Attack 지속 시간 조정 -->
+            <FrameEvent Type="Attack" StartFrame="0" AttackPreset="Najimi_Pitching">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="StunSet"/>
@@ -277,7 +289,7 @@
 
     <AC_PistolReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/3_batonPattern/4_pistolReady" FramePerSecond="10" XFlip="true">
-            <!-- 0.5 sec --> <!-- TODO: 공격별 준비액션 다르게 만들어야 함. (Pistol, Firework, Beam) -->
+            <!-- 0.5 sec -->
             <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="0.2"/> <!-- Pre Motion: 0.5 sec -->
             
             <FrameEvent Type="Movement" StartFrame="0" Friction="12" MaxVelocity="0" Speed="0"/>
@@ -298,10 +310,21 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_PistolShot>
 
+    <AC_FireworkReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/3_batonPattern/4_pistolReady" FramePerSecond="10" XFlip="true">
+            <!-- 0.7 sec -->
+            <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="0.1428"/> <!-- Pre Motion: 0.7 sec -->
+            
+            <FrameEvent Type="Movement" StartFrame="0" Friction="12" MaxVelocity="0" Speed="0"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_FireworkReady"/>
+    </AC_FireworkReady>
+
     <AC_FireworkShot MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/3_batonPattern/5_pistolShot" FramePerSecond="10" XFlip="true">
-            <!-- 1 sec -->
-            <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="0.1"/> <!-- Recovery Motion: 1 sec -->
+            <!-- 1.5 sec -->
+            <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="0.6666"/> <!-- Recovery Motion: 1.5 sec -->
 
             <!-- <FrameEvent Type="Projectile" StartFrame="0" GraphName="MagicalFireworkBullet" DirectionType="AI" SpawnTargetType="Self"/> -->
             <FrameEvent Type="Danmaku" StartFrame="0" Path="Enemy/MagicalFirework.xml"/> 
@@ -312,14 +335,27 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_FireworkShot>
 
+    <AC_BeamReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/3_batonPattern/4_pistolReady" FramePerSecond="10" XFlip="true">
+            <!-- 1.0 sec -->
+            <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="0.1"/> <!-- Pre Motion: 1 sec -->
+            
+            <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/NajimiPitchingBeam_TimeLine" Offset="0.0 0.0 0.0" Attach="true" AngleType="Direction" LifeTime="1.0" FollowDirection="True"/>
+            <FrameEvent Type="Movement" StartFrame="0" Friction="12" MaxVelocity="0" Speed="0"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_BeamReady"/>
+    </AC_BeamReady>
+
     <AC_BeamShot MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/3_batonPattern/5_pistolShot" FramePerSecond="10" XFlip="true">
-            <!-- 1 sec -->
-            <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="0.1"/> <!-- Recovery Motion: 1 sec -->
+            <!-- 2 sec -->
+            <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="0.05"/> <!-- Recovery Motion: 2 sec -->
 
-            <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/NajimiPitchingBeam_TimeLine" Offset="0.0 0.0 0.0" Attach="true" AngleType="Direction" LifeTime="0.7" FollowDirection="True"/>
+            
 
-            <FrameEvent Type="Attack" StartFrame="0.7" EndFrame="1.0" AttackPreset="Najimi_Beam">
+            <!-- TODO: 빔 이펙트 추가해야함. 해당 이펙트 지속시간에 따라 Main 모션 시간과 Attack 지속 시간 조정 -->
+            <FrameEvent Type="Attack" StartFrame="0.0" AttackPreset="Najimi_Beam">
                 <OnHit>
                     <!-- TODO: 빔 공격 데미지 설정 -->
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
