@@ -17,6 +17,12 @@ public class MasterManager : MessageHub<ManagerBase>
 
     private float                   _updateStopTimer = 0f;
 
+    private float                   _timeScaleTimer = 0f;
+    private float                   _targetTimeScale = 0f;
+
+    private float                   _timeScaleBlendTimer = 0f;
+    private float                   _timeScaleBlendFactor = 0f;
+
 
     protected override void Awake()
     {
@@ -49,6 +55,10 @@ public class MasterManager : MessageHub<ManagerBase>
         });
         AddAction(MessageTitles.entity_stopUpdate, (msg)=>{
             StopUpdateSecond(MessageDataPooling.CastData<FloatData>(msg.data).value);
+        });
+        AddAction(MessageTitles.entity_setTimeScale, (msg)=>{
+            Vector3 timeScaleData = MessageDataPooling.CastData<Vector3Data>(msg.data).value;
+            setTimeScaleSecond(timeScaleData.x,timeScaleData.y,timeScaleData.z);
         });
 
         foreach(var m in managers)
@@ -98,6 +108,17 @@ public class MasterManager : MessageHub<ManagerBase>
             return;
         }
 
+        if(_timeScaleTimer > 0f)
+        {
+            _timeScaleTimer -= deltaTime;
+            deltaTime *= _targetTimeScale;
+        }
+        else if(_timeScaleBlendTimer > 0f)
+        {
+            _timeScaleBlendTimer -= deltaTime;
+            deltaTime *= Mathf.Lerp(1f, _targetTimeScale, (_timeScaleBlendTimer / _timeScaleBlendFactor));
+        }
+
         GlobalTimer.Instance().updateGlobalTime(deltaTime);
         StageGraphManager.Instance().progress(deltaTime);
 
@@ -143,6 +164,13 @@ public class MasterManager : MessageHub<ManagerBase>
             _updateStopTimer = time;
     }
 
+    public void setTimeScaleSecond(float timeScale, float time, float blendTime)
+    {
+        _targetTimeScale = timeScale;
+        _timeScaleTimer = time;
+        _timeScaleBlendFactor = blendTime;
+        _timeScaleBlendTimer = blendTime;
+    }
 
     public void ManagersUpdate(float deltaTime)
     {

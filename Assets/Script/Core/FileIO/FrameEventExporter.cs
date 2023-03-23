@@ -53,6 +53,8 @@ public static class FrameEventLoader
             outFrameEvent = new ActionFrameEvent_ZoomEffect();
         else if(type == "StopUpdate")
             outFrameEvent = new ActionFrameEvent_StopUpdate();
+        else if(type == "SetTimeScale")
+            outFrameEvent = new ActionFrameEvent_SetTimeScale();
         else if(type == "SpawnCharacter")
             outFrameEvent = new ActionFrameEvent_SpawnCharacter();
         else if(type == "ReleaseCatch")
@@ -65,7 +67,7 @@ public static class FrameEventLoader
             return null;
         }
 
-        DebugUtil.assert((int)FrameEventType.Count == 22, "check here");
+        DebugUtil.assert((int)FrameEventType.Count == 23, "check here");
 
 
         if(outFrameEvent == null)
