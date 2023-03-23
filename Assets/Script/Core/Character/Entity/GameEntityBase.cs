@@ -195,7 +195,7 @@ public class GameEntityBase : SequencerObjectBase
             string prevActionName = _actionGraph.getCurrentActionName();
 
             //action,movementGraph 바뀌는 시점
-            if(_actionGraph.progress() == true)
+            if(_actionGraph.progress(deltaTime) == true)
             {
                 _currentDefenceType = _actionGraph.getCurrentDefenceType();
                 
@@ -395,6 +395,7 @@ public class GameEntityBase : SequencerObjectBase
         _actionGraph.setActionConditionData_Float(ConditionNodeUpdateType.Action_CurrentFrame, _actionGraph.getCurrentFrame());
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Action_IsCatcher, hasChildObject());
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Action_IsCatchTarget, hasParentObject());
+        _actionGraph.setActionConditionData_Float(ConditionNodeUpdateType.Action_ActionExecutedTime, _actionGraph.getActionExecutedTime());
 
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Input_AttackCharge, Input.GetMouseButton(0));
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Input_AttackBlood, Input.GetKey(KeyCode.R));
