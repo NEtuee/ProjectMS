@@ -169,6 +169,8 @@
                 </OnGuardBreak>
 
                 <OnGuardBreakFail>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="TargetBattleIncrement" Condition="getTargetFrameTag_Hit == false"/>
+                    
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc" FramePerSecond="18.0" Offset="0.0 0.0 0.0" ToTarget="true"/>
 
                     <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/Impact_Timeline" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true" AngleType="AttackPoint"/>
@@ -208,9 +210,8 @@
     <Kicked MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
         <Animation Path="Resources/Sprites/NewPlayer/kick/" FramePerSecond="9" XFlip="true" ScalePreset="YSpring">
             <FrameEvent Type="Movement" StartFrame="0" Friction="3" Speed="0" Velocity="-1.5 "/>
-            <FrameEvent Type="Test" StartFrame="0" Log="Kicked Executed"/>
 
-            <FrameEvent Type="FrameTag" StartFrame="3" EndFrame="999" Tag="MoveCancel"/>
+            <FrameEvent Type="FrameTag" StartFrame="1.8" EndFrame="999" Tag="MoveCancel"/>
 
             <FrameEvent Type="ApplyBuff" StartFrame="0" ApplyBuff="DashPointIncrement"/>
         </Animation>
@@ -281,7 +282,7 @@
 -->
     <Hit MovementType="FrameEvent" DirectionType="MousePoint" DefenceDirectionType="MousePoint" FlipType="Keep" DefenceType="Guard" DefenceAngle="180.0">
         <Animation Path="Resources/Sprites/NewPlayer/Hit/" FramePerSecond="2" XFlip="true">
-            <FrameEvent Type="Movement" StartFrame="0" Friction="gv_IdleFriction" Velocity="0" Speed="0"/>
+            <FrameEvent Type="Movement" StartFrame="0" Friction="gv_IdleFriction" MaxVelocity="0" Velocity="0" Speed="0"/>
         </Animation>
 
         <!-- <Branch Condition="getStat_IsStun == 1.0" Execute="Stun"/> -->
@@ -300,7 +301,7 @@
     </Kiiled>
 
     <Catched MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" ApplyBuff="CatchedEscape">
-        <Animation Path="Resources/Sprites/DummyPlayer/Hit/" StartFrame="0" EndFrame="1" XFlip="true">
+        <Animation Path="Resources/Sprites/NewPlayer/empty" StartFrame="0" EndFrame="1" XFlip="true">
             <FrameEvent Type="Test" Log="Akane Catched"/>
             <FrameEvent Type="ApplyBuff" StartFrame="0" ApplyBuff="StunClear"/>
             <FrameEvent Type="FrameTag" StartFrame="0" EndFrame="999" Tag="Recatchable" Condition="getStat_IsCatched == 1.0"/>

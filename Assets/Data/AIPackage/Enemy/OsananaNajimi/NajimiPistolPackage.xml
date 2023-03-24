@@ -23,6 +23,7 @@
             <Branch Condition="End" Execute="TerminatePackage"/>          
         </AI_PistolShot>
 
+        <!-- 사용 안함 -->
         <AI_BackStep UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget" Angle="15"/>

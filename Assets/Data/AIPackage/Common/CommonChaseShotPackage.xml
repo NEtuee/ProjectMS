@@ -3,6 +3,7 @@
     <AIState>
         <AI_Entry UpdateTime="0.0">
             <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_Idle"/>
             </Event_OnExecute>
             <Branch Condition="true" Execute="AI_MoveShot"/>
