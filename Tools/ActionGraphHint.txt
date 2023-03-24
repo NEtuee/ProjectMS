@@ -29,7 +29,7 @@ InQuote,IsActionSelection=,"true,false"
 InQuote,NormalizedSpeed=,"true,false"
 InQuote,Attach=,"true,false"
 InQuote,DirectionUpdateOnce=,"true,false"
-InQuote,Condition=,"ActionTest,ActionDash,End,AngleBetweenStick,AngleDirection,IsXFlip,IsYFlip,CurrentFrame,AttackSuccess,AttackGuarded,AttackParried,AttackGuardBreak,DefenceSuccess,ParrySuccess,Hit,EvadeSuccess,GuardBroken,CurrentFrame,TargetExists,TargetDistance,ArrivedTarget,CurrentPackageEnd,getStat_,getKey_,getFrameTag_,getTargetFrameTag_,getWeight_,true,false,PackageExecutedTime,GraphExecutedTime,AttackGuardBreakFail,GuardBreakFail,IsCatcher,IsCatchTarget,AttackCatchTarget,Catched"
+InQuote,Condition=,"ActionTest,ActionDash,End,AngleBetweenStick,AngleDirection,IsXFlip,IsYFlip,CurrentFrame,AttackSuccess,AttackGuarded,AttackParried,AttackGuardBreak,DefenceSuccess,ParrySuccess,Hit,EvadeSuccess,GuardBroken,CurrentFrame,TargetExists,TargetDistance,ArrivedTarget,CurrentPackageEnd,getStat_,getKey_,getFrameTag_,getTargetFrameTag_,getWeight_,true,false,PackageExecutedTime,GraphExecutedTime,AttackGuardBreakFail,GuardBreakFail,IsCatcher,IsCatchTarget,AttackCatchTarget,Catched,LifeTime,ActionExecutedTime"
 InQuote,UpdateType=,"ScaledDeltaTime,NoneScaledDeltaTime"
 InQuote,ToTarget=,"true,false"
 InQuote,AngleType=,"Normal,AttackPoint,Direction"
@@ -77,8 +77,8 @@ FrameEvent,ReleaseCatch,Push=~~
 InQuote,FollowDirection,"true,false"
 ShortCut,__FrameEvent_TalkBalloon,<FrameEvent Type=~TalkBalloon~ StartFrame=~0~ Text=~~ Time=~~/>
 FrameEvent,TalkBalloon,"Text=~~,Time=~~"
-,,
-,,
+ShortCut,__FrameEvent_SetTimeScale,<FrameEvent Type=~SetTimeScale~ Scale=~0~ Time=~~ BlendTime=~~/>
+FrameEvent,SetTimeScale,"Scale=~~,Time=~~,BlendTime=~~"
 ,,
 ,,
 ,,

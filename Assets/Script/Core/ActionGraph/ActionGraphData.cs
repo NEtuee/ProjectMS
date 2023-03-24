@@ -163,6 +163,7 @@ public enum ConditionNodeUpdateType
     Action_CurrentFrame,
     Action_IsCatcher,
     Action_IsCatchTarget,
+    Action_ActionExecutedTime,
 
     Input_AttackCharge,
     Input_AttackBlood,
@@ -187,6 +188,7 @@ public enum ConditionNodeUpdateType
     Defence_Hit,
 
     Entity_Dead,
+    Entity_LifeTime,
 
     AI_TargetDistance,
     AI_TargetExists,
@@ -252,6 +254,7 @@ public static class ConditionNodeInfoPreset
         {"CurrentFrame",new ConditionNodeInfo(ConditionNodeUpdateType.Action_CurrentFrame, ConditionNodeType.Float)},
         {"IsCatcher",new ConditionNodeInfo(ConditionNodeUpdateType.Action_IsCatcher, ConditionNodeType.Bool)},
         {"IsCatchTarget",new ConditionNodeInfo(ConditionNodeUpdateType.Action_IsCatchTarget, ConditionNodeType.Bool)},
+        {"ActionExecutedTime",new ConditionNodeInfo(ConditionNodeUpdateType.Action_ActionExecutedTime, ConditionNodeType.Float)},
 
         {"InputAttackCharge",new ConditionNodeInfo(ConditionNodeUpdateType.Input_AttackCharge, ConditionNodeType.Bool)},
         {"InputAttackBlood",new ConditionNodeInfo(ConditionNodeUpdateType.Input_AttackBlood, ConditionNodeType.Bool)},
@@ -275,6 +278,7 @@ public static class ConditionNodeInfoPreset
         {"Catched",new ConditionNodeInfo(ConditionNodeUpdateType.Defence_Catched, ConditionNodeType.Bool)},
 
         {"Dead",new ConditionNodeInfo(ConditionNodeUpdateType.Entity_Dead, ConditionNodeType.Bool)},
+        {"LifeTime",new ConditionNodeInfo(ConditionNodeUpdateType.Entity_LifeTime, ConditionNodeType.Float)},
 
         {"TargetExists",new ConditionNodeInfo(ConditionNodeUpdateType.AI_TargetExists, ConditionNodeType.Bool)},
         {"TargetDistance",new ConditionNodeInfo(ConditionNodeUpdateType.AI_TargetDistance, ConditionNodeType.Float)},

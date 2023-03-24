@@ -26,7 +26,7 @@ ShortCut,__GlobalVariable,<GlobalVariable Name=~~ Value=~~/>
 ShortCut,__State,<${1}>#n#t<Event_OnExecute>#n#t</Event_OnExecute>#n#n#t<Event_OnExit>#n#t</Event_OnExit>#n#n#t<Event_OnFrame>#n#t</Event_OnFrame>#n#n#t<Event_OnUpdate>#n#t</Event_OnUpdate>#n#n#t#n</${1}>
 ShortCut,__UseBranchSet,<UseBranchSet Name=~~/>
 LineStart,<AIPackage,"Name=~~,DefaultState=~~"
-InQuote,Condition=,"ActionTest,ActionDash,End,AngleBetweenStick,AngleDirection,IsXFlip,IsYFlip,CurrentFrame,AttackSuccess,AttackGuarded,AttackParried,AttackGuardBreak,DefenceSuccess,ParrySuccess,Hit,EvadeSuccess,GuardBroken,CurrentFrame,TargetExists,TargetDistance,ArrivedTarget,CurrentPackageEnd,getStat_,getKey_,getFrameTag_,getTargetFrameTag_,getWeight_,true,false,PackageExecutedTime,GraphExecutedTime,AttackGuardBreakFail,GuardBreakFail,IsCatcher,IsCatchTarget,AttackCatchTarget,Catched"
+InQuote,Condition=,"ActionTest,ActionDash,End,AngleBetweenStick,AngleDirection,IsXFlip,IsYFlip,CurrentFrame,AttackSuccess,AttackGuarded,AttackParried,AttackGuardBreak,DefenceSuccess,ParrySuccess,Hit,EvadeSuccess,GuardBroken,CurrentFrame,TargetExists,TargetDistance,ArrivedTarget,CurrentPackageEnd,getStat_,getKey_,getFrameTag_,getTargetFrameTag_,getWeight_,true,false,PackageExecutedTime,GraphExecutedTime,AttackGuardBreakFail,GuardBreakFail,IsCatcher,IsCatchTarget,AttackCatchTarget,Catched,LifeTime,ActionExecutedTime"
 AIEvent,ExecuteState,Execute=~~
 InQuote,SearchIdentifier,"Player,Enemy"
 AIEvent,SetAction,Action=~~

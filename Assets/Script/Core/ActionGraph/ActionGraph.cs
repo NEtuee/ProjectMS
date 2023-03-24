@@ -23,6 +23,8 @@ public class ActionGraph
 
     public bool _actionChangedByOther = false;
 
+    private float _actionExecutedTime = 0f;
+
     public void assign()
     {
         createCoditionNodeDataAll();
@@ -39,11 +41,13 @@ public class ActionGraph
     {
         initializeConditionData();
         _animationPlayer.initialize();
+        _actionExecutedTime = 0f;
+        
         if(_actionGraphBaseData._defaultActionIndex != -1)
             changeAction(_actionGraphBaseData._defaultActionIndex);
     }
 
-    public bool progress()
+    public bool progress(float deltaTime)
     {
         if(_actionChangedByOther == true)
         {
@@ -51,6 +55,7 @@ public class ActionGraph
             return true;
         }
 
+        _actionExecutedTime += deltaTime;
         return processAction(getCurrentAction());
     }
 
@@ -68,7 +73,7 @@ public class ActionGraph
 
     private void createCoditionNodeDataAll()
     {
-        DebugUtil.assert((int)ConditionNodeUpdateType.Count == 44, "check this");
+        DebugUtil.assert((int)ConditionNodeUpdateType.Count == 46, "check this");
 
         foreach(var item in ConditionNodeInfoPreset._nodePreset.Values)
         {
@@ -163,6 +168,8 @@ public class ActionGraph
             }
         }
 
+        _actionExecutedTime = 0f;
+        
         return true;
     }
 
@@ -574,6 +581,8 @@ public class ActionGraph
     }
 
     public HashSet<string> getCurrentFrameTagList() {return _currentFrameTag;}
+
+    public float getActionExecutedTime() {return _actionExecutedTime;}
 
     public void setAnimationSpeed(float speed) {_animationPlayer.setAnimationSpeed(speed);}
 

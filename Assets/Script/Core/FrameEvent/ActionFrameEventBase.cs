@@ -22,6 +22,7 @@ public enum FrameEventType
     FrameEvent_Movement,
     FrameEvent_ZoomEffect,
     FrameEvent_StopUpdate,
+    FrameEvent_SetTimeScale,
     FrameEvent_SpawnCharacter,
     FrameEvent_ReleaseCatch,
     FrameEvent_TalkBalloon,
@@ -151,17 +152,20 @@ public class ActionFrameEvent_ReleaseCatch : ActionFrameEventBase
 
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
-        if(executeEntity.hasChildObject() == false)
+        ObjectBase parentObject = executeEntity.hasChildObject() ? executeEntity : (executeEntity.hasParentObject() ? executeEntity.getParentObject() : null);
+        if(parentObject == null)
             return true;
 
-        if(_pushVector.sqrMagnitude > float.Epsilon && executeEntity.getChildObject() is GameEntityBase)
+        ObjectBase childObject = parentObject.getChildObject();
+
+        if(_pushVector.sqrMagnitude > float.Epsilon && childObject is GameEntityBase)
         {
-            GameEntityBase target = (executeEntity.getChildObject() as GameEntityBase);
-            UnityEngine.Vector3 attackPointDirection = executeEntity.getDirection();
+            GameEntityBase target = (childObject as GameEntityBase);
+            UnityEngine.Vector3 attackPointDirection = parentObject.getDirection();
             target.setVelocity(UnityEngine.Quaternion.Euler(0f,0f,UnityEngine.Mathf.Atan2(attackPointDirection.y,attackPointDirection.x) * UnityEngine.Mathf.Rad2Deg) * _pushVector);
         }
 
-        executeEntity.detachChildObject();
+        parentObject.detachChildObject();
 
         return true;
     }
@@ -261,6 +265,41 @@ public class ActionFrameEvent_StopUpdate : ActionFrameEventBase
         {
             if(attributes[i].Name == "Time")
                 _stopTime = float.Parse(attributes[i].Value);
+        }
+    }
+}
+
+public class ActionFrameEvent_SetTimeScale : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_SetTimeScale;}
+
+    public float _targetTimeScale = 0f;
+    public float _timeScalingTime = 0f;
+    public float _timeScaleBlendTime = 0f;
+
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        Vector3Data data = MessageDataPooling.GetMessageData<Vector3Data>();
+        data.value = new UnityEngine.Vector3(_targetTimeScale, _timeScalingTime, _timeScaleBlendTime);
+
+        Message msg = MessagePool.GetMessage();
+        msg.Set(MessageTitles.entity_setTimeScale,0,data,null);
+        MasterManager.instance.HandleMessage(msg);
+
+        return true;
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            if(attributes[i].Name == "Scale")
+                _targetTimeScale = float.Parse(attributes[i].Value);
+            else if(attributes[i].Name == "Time")
+                _timeScalingTime = float.Parse(attributes[i].Value);
+            else if(attributes[i].Name == "BlendTime")
+                _timeScaleBlendTime = float.Parse(attributes[i].Value);
         }
     }
 }
