@@ -91,7 +91,7 @@
 
     <!-- 사용 안함 -->
     <AC_RushReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/1_rushPattern/1_rush/rushReady" FramePerSecond="10" XFlip="true">
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/1_rushPattern/1_rush/rushReady" FramePerSecond="10" RotationPreset="SpinLinear" XFlip="true">
             <!-- 0.3 sec -->
             <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="0.3333"/> <!-- Pre Motion: 0.3 sec -->
 
@@ -157,11 +157,11 @@
     </AC_RushSuccess>
 
     <AC_Away MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
-        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/1_rushPattern/4_away" FramePerSecond="16" XFlip="true" Loop="true">
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/1_rushPattern/4_away" FramePerSecond="20" RotationPreset="SpinLinear" XFlip="true" Loop="true">
             <!-- 2 sec -->
             <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="1"/> <!-- Recovery Motion: 0.3333 sec --> <!-- Rush Package에서 시간 체크 -->
 
-            <FrameEvent Type="Movement" StartFrame="0" Friction="12" Velocity="-4" Speed="0"/>
+            <FrameEvent Type="Movement" StartFrame="0" Friction="12" Velocity="-8" Speed="0"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Away"/>
@@ -187,8 +187,8 @@
         <!-- 투구 준비 모션, 탄막 경로 활성화 -->
         <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/2_pitchingPattern/2_pitcherReady" FramePerSecond="12" XFlip="true">
             <!-- 0.85 sec -->
-            <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="0.1666"/> <!-- Pre Motion: 0.5 sec -->
-            <FrameEvent Type="SetAnimationSpeed" StartFrame="1" Speed="0.238"/> <!-- Pre Motion: 0.35 sec -->
+            <!-- <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="0.1666"/> Pre Motion: 0.5 sec -->
+            <!-- <FrameEvent Type="SetAnimationSpeed" StartFrame="1" Speed="0.238"/> Pre Motion: 0.35 sec -->
 
             <FrameEvent Type="Movement" StartFrame="0" Friction="12" MaxVelocity="0" Speed="0"/>
             <FrameEvent Type="TimelineEffect" StartFrame="0" Path="Prefab/Effect/NajimiPitchingBeam_TimeLine" Offset="0.0 0.0 0.0" Attach="true" AngleType="Direction" LifeTime="0.85" FollowDirection="True"/>
@@ -201,8 +201,8 @@
         <!-- 투구 모션, 장판 활성화 -->
         <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/2_pitchingPattern/3_pitching" FramePerSecond="16" XFlip="true">
             <!-- 1.3 sec -->
-            <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="1"/> <!-- Main Motion: 0.0625 sec -->
-            <FrameEvent Type="SetAnimationSpeed" StartFrame="1" Speed="0.0508"/> <!-- Main Motion: 0.8 sec -->
+            <!-- <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="1"/> Main Motion: 0.0625 sec -->
+            <!-- <FrameEvent Type="SetAnimationSpeed" StartFrame="1" Speed="0.0508"/> Main Motion: 0.8 sec -->
             <!-- [The Reset Recovery Time Is Maganged by Pitching Package] --> <!-- Recovery Motion: 0.33 sec --> 
             
             <FrameEvent Type="Movement" StartFrame="0" Friction="12" MaxVelocity="0" Speed="0"/>

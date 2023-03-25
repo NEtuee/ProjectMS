@@ -249,7 +249,7 @@
         <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="AttackStop"/>
     </AttackSuccess>
 
-    <AttackGuarded MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Keep">
+    <AttackGuarded MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Keep" >
         <Animation Path="Resources/Sprites/NewPlayer/Attack/" FramePerSecond="16">
             <FrameEvent Type="Movement" StartFrame="0" Friction="12" MaxVelocity="6" Speed="0" Velocity="-4"/>
 

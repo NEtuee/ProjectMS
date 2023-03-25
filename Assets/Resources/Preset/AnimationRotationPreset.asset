@@ -13,15 +13,15 @@ MonoBehaviour:
   m_Name: AnimationRotationPreset
   m_EditorClassIdentifier: 
   _presetData:
-  - _name: SpinOne
+  - _name: SpinLinear
     _rotationCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
-        inSlope: 360
-        outSlope: 360
+        value: 1
+        inSlope: 359
+        outSlope: 359
         tangentMode: 34
         weightedMode: 0
         inWeight: 0
@@ -29,11 +29,61 @@ MonoBehaviour:
       - serializedVersion: 3
         time: 1
         value: 360
-        inSlope: 360
-        outSlope: 360
+        inSlope: 359
+        outSlope: 359
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 0
+  - _name: SpinOut
+    _rotationCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 1095.536
+        outSlope: 1095.536
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.037037037
+      - serializedVersion: 3
+        time: 1
+        value: 360
+        inSlope: 8.715683
+        outSlope: 8.715683
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.11358023
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 0
+  - _name: SpinIn
+    _rotationCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 360
+        inSlope: 1034.0411
+        outSlope: 1034.0411
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.029629648
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
