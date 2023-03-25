@@ -91,7 +91,7 @@
 
     <!-- 사용 안함 -->
     <AC_RushReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/1_rushPattern/1_rush/rushReady" FramePerSecond="10" XFlip="true">
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/1_rushPattern/1_rush/rushReady" FramePerSecond="10" RotationPreset="SpinLinear" XFlip="true">
             <!-- 0.3 sec -->
             <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="0.3333"/> <!-- Pre Motion: 0.3 sec -->
 
@@ -157,11 +157,11 @@
     </AC_RushSuccess>
 
     <AC_Away MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
-        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/1_rushPattern/4_away" FramePerSecond="20" XFlip="true" Loop="true">
+        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/1_rushPattern/4_away" FramePerSecond="20" RotationPreset="SpinLinear" XFlip="true" Loop="true">
             <!-- 2 sec -->
             <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="1"/> <!-- Recovery Motion: 0.3333 sec --> <!-- Rush Package에서 시간 체크 -->
 
-            <FrameEvent Type="Movement" StartFrame="0" Friction="4" Velocity="-8" Speed="0"/>
+            <FrameEvent Type="Movement" StartFrame="0" Friction="12" Velocity="-8" Speed="0"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Away"/>
