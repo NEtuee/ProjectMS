@@ -618,6 +618,8 @@ public class GameEntityBase : SequencerObjectBase
         if(direction.sqrMagnitude == 0f)
             direction = Vector3.right;
 
+        direction = Quaternion.Euler(0f,0f,_actionGraph.getCurrentDirectionAngle()) * direction;
+
         return direction;
     }
 

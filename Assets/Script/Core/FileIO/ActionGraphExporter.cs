@@ -260,6 +260,10 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             {
                 nodeData._defenceAngle = float.Parse(targetValue);
             }
+            else if(targetName == "DirectionAngle")
+            {
+                nodeData._additionalDirectionAngle = float.Parse(targetValue);
+            }
             else if(targetName == "ApplyBuff")
             {
                 string[] buffList = targetValue.Split(' ');
