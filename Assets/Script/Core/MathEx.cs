@@ -211,4 +211,13 @@ public static class MathEx
 		getBarycentricWeight(result, a, b, c, out t, out s, out ots);
 		return true;
 	}
+
+	public static UnityEngine.Vector3 lemniscate(float time)
+	{
+		float scale = 2f / (3f - UnityEngine.Mathf.Cos(2f * time)); 
+		float x = scale * UnityEngine.Mathf.Cos(time); 
+		float y = scale * UnityEngine.Mathf.Sin(2f * time) / 2f;
+
+		return new UnityEngine.Vector3(x, y, 0f);
+	}
 }

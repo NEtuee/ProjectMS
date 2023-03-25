@@ -68,8 +68,8 @@ ShortCut,__FrameEvent_SetAnimationSpeed,<FrameEvent Type=~SetAnimationSpeed~ Sta
 ShortCut,__FrameEvent_KillEntity,<FrameEvent Type=~KillEntity~ StartFrame=~0~/>
 ShortCut,__FrameEvent_Movement,<FrameEvent Type=~Movement~ StartFrame=~0~ Friction=~~ MaxVelocity=~~ Speed=~~/>
 ShortCut,__MultiSelectAnimation,<MultiSelectAnimation Path=~~ Condition=~~/>
-ShortCut,__FrameEvent_ZoomEffect,<FrameEvent Type=~ZoomEffect~ Scale=~~/>
-ShortCut,__FrameEvent_StopUpdate,<FrameEvent Type=~StopUpdate~ Time=~~/>
+ShortCut,__FrameEvent_ZoomEffect,<FrameEvent Type=~ZoomEffect~ StartFrame=~0~ Scale=~~/>
+ShortCut,__FrameEvent_StopUpdate,<FrameEvent Type=~StopUpdate~ StartFrame=~0~ Time=~~/>
 ShortCut,__FrameEvent_SpawnCharacter,<FrameEvent Type=~SpawnCharacter~ StartFrame=~0~ CharacterKey=~~ Offset=~0 0 0~ SearchIdentifier=~~/>
 InQuote,AttackType=,"Default,GuardBreak,Catch"
 ShortCut,__FrameEvent_ReleaseCatch,<FrameEvent Type=~ReleaseCatch~ StartFrame=~0~ Push=~~/>
@@ -77,8 +77,16 @@ FrameEvent,ReleaseCatch,Push=~~
 InQuote,FollowDirection,"true,false"
 ShortCut,__FrameEvent_TalkBalloon,<FrameEvent Type=~TalkBalloon~ StartFrame=~0~ Text=~~ Time=~~/>
 FrameEvent,TalkBalloon,"Text=~~,Time=~~"
-ShortCut,__FrameEvent_SetTimeScale,<FrameEvent Type=~SetTimeScale~ Scale=~0~ Time=~~ BlendTime=~~/>
+ShortCut,__FrameEvent_SetTimeScale,<FrameEvent Type=~SetTimeScale~ StartFrame=~0~ Scale=~~ Time=~~ BlendTime=~~/>
 FrameEvent,SetTimeScale,"Scale=~~,Time=~~,BlendTime=~~"
+ShortCut,__FrameEvent_ShakeEffect,<FrameEvent Type=~ShakeEffect~ StartFrame=~0~ Scale=~~ Speed=~~ Time=~~/>
+FrameEvent,ShakeEffect,"Scale=~~,Time=~~,Speed=~~"
+,,
+,,
+,,
+,,
+,,
+,,
 ,,
 ,,
 ,,

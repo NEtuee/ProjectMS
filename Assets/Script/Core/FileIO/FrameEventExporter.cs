@@ -51,6 +51,8 @@ public static class FrameEventLoader
             outFrameEvent = new ActionFrameEvent_Movement();
         else if(type == "ZoomEffect")
             outFrameEvent = new ActionFrameEvent_ZoomEffect();
+        else if(type == "ShakeEffect")
+            outFrameEvent  = new ActionFrameEvent_ShakeEffect();
         else if(type == "StopUpdate")
             outFrameEvent = new ActionFrameEvent_StopUpdate();
         else if(type == "SetTimeScale")
@@ -67,7 +69,7 @@ public static class FrameEventLoader
             return null;
         }
 
-        DebugUtil.assert((int)FrameEventType.Count == 23, "check here");
+        DebugUtil.assert((int)FrameEventType.Count == 24, "check here");
 
 
         if(outFrameEvent == null)
@@ -141,6 +143,8 @@ public static class FrameEventLoader
                 eventType = ChildFrameEventType.ChildFrameEvent_OnGuardBreakFail;
             else if(targetName == "OnCatch")
                 eventType = ChildFrameEventType.ChildFrameEvent_OnCatch;
+            else if(targetName == "OnKill")
+                eventType = ChildFrameEventType.ChildFrameEvent_OnKill;
             else
                 DebugUtil.assert(false, "invalid child frame event type: {0}", targetName);
 

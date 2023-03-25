@@ -21,6 +21,7 @@ public enum FrameEventType
     FrameEvent_KillEntity,
     FrameEvent_Movement,
     FrameEvent_ZoomEffect,
+    FrameEvent_ShakeEffect,
     FrameEvent_StopUpdate,
     FrameEvent_SetTimeScale,
     FrameEvent_SpawnCharacter,
@@ -39,6 +40,7 @@ public enum ChildFrameEventType
     ChildFrameEvent_OnGuardBreak,
     ChildFrameEvent_OnGuardBreakFail,
     ChildFrameEvent_OnCatch,
+    ChildFrameEvent_OnKill,
 
     Count,
 }
@@ -323,6 +325,35 @@ public class ActionFrameEvent_ZoomEffect : ActionFrameEventBase
         {
             if(attributes[i].Name == "Scale")
                 _zoomScale = float.Parse(attributes[i].Value);
+        }
+    }
+}
+
+public class ActionFrameEvent_ShakeEffect : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_ShakeEffect;}
+
+    public float _shakeTime = 0f;
+    public float _shakeScale = 0f;
+    public float _shakeSpeed = 1f;
+
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        CameraControlEx.Instance().setShake(_shakeScale, _shakeSpeed, _shakeTime);
+        return true;
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            if(attributes[i].Name == "Scale")
+                _shakeScale = float.Parse(attributes[i].Value);
+            else if(attributes[i].Name == "Time")
+                _shakeTime = float.Parse(attributes[i].Value);
+            else if(attributes[i].Name == "Speed")
+                _shakeSpeed = float.Parse(attributes[i].Value);
         }
     }
 }
@@ -970,8 +1001,17 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
             eventType = ChildFrameEventType.ChildFrameEvent_OnEvade;
         }
         
-
         executeChildFrameEvent(eventType, requester, target);
+
+        if(target is GameEntityBase)
+        {
+            (target as GameEntityBase).addDeadEvent((item)=>{
+                if(item == null || requester == null || target == null)
+                    return;
+
+                executeChildFrameEvent(ChildFrameEventType.ChildFrameEvent_OnKill, requester, target);
+            });
+        }
 
         return attackSuccess;
     }

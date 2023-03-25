@@ -343,7 +343,7 @@ public class StatusInfo
 
             if(canApply == true)
             {
-                if(updateBuffXXX(buffData, i) == false)
+                if(updateBuffXXX(buffData) == false)
                     DebugUtil.assert(false,"failed to update buff: {0}",buffData._buffName);
                 
             }
@@ -369,7 +369,7 @@ public class StatusInfo
         return status._realValue / _statusInfoData._statusData[status._statusIndex].getMaxValue();
     }
 
-    private bool updateBuffXXX(BuffData buff, int buffIndex)
+    private bool updateBuffXXX(BuffData buff)
     {
         if(buff.isBuffValid() == false)
             return false;

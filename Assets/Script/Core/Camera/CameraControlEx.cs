@@ -124,6 +124,14 @@ public class CameraControlEx : Singleton<CameraControlEx>
 	private float _camWidth;
 	private float _camHeight;
 
+    private bool _enableShake = false;
+    private float _shakeScale = 0f;
+    private float _shakeTime = 0f;
+    private float _shakeTimer = 0f;
+    private float _shakeSpeed = 0f;
+
+    private Vector3 _shakePosition = Vector3.zero;
+
     private Vector2 _cameraBoundHalf = Vector2.zero;
 
     public void initialize()
@@ -149,7 +157,33 @@ public class CameraControlEx : Singleton<CameraControlEx>
 		else	
 			_currentCamera.orthographicSize = Mathf.Lerp(_currentCamera.orthographicSize,_mainCamSize,4f * deltaTime);
 
+        if(_enableShake)
+        {
+            _shakeTimer += deltaTime;
+            if(_shakeTimer >= _shakeTime)
+                _shakeTimer = _shakeTime;
+            
+            float factor = _shakeTimer * (1f / _shakeTime);
+            float shakeScale = Mathf.Lerp(_shakeScale, 0f, factor);
+            if(factor >= 1f)
+                _enableShake = false;
+
+            _shakePosition = MathEx.lemniscate(_shakeTimer * _shakeSpeed) * shakeScale;
+        }
+
         GizmoHelper.instance.drawRectangle(_currentCamera.transform.position,_cameraBoundHalf,Color.green);
+    }
+
+    public void setShake(float scale, float speed, float time)
+    {
+        _shakeScale = scale;
+        _shakeTime = time;
+        _shakeSpeed = speed;
+        _shakeTimer = 0f;
+
+        _enableShake = true;
+
+        _shakePosition = Vector3.zero;
     }
 
     public void Zoom(float scale)
@@ -213,7 +247,7 @@ public class CameraControlEx : Singleton<CameraControlEx>
 
         Vector3 currentPosition = _currentCameraMode.getCameraPosition();
         currentPosition.z = -10f;
-        _currentCamera.transform.position = currentPosition;
+        _currentCamera.transform.position = currentPosition + _shakePosition;
     }
 
     public bool IsInCameraBound(Vector3 pos)

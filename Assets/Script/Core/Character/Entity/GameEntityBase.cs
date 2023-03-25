@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public delegate void DeadEventDelegate(GameEntityBase collisionData);
+
 public class GameEntityBase : SequencerObjectBase
 {
 
@@ -26,6 +28,8 @@ public class GameEntityBase : SequencerObjectBase
     private StatusGraphicInterface _graphicInterface;
 
     private CollisionInfo       _collisionInfo;
+
+    private DeadEventDelegate   _deadEventDelegate = null;
 
 
     private MovementControl     _movementControl = new MovementControl();
@@ -105,6 +109,8 @@ public class GameEntityBase : SequencerObjectBase
         _statusInfo.initialize(characterInfo._statusName);
         _graphicInterface.initialize(this,_statusInfo,new Vector3(0f, _headUpOffset, 0f), true);
 
+        _deadEventDelegate = null;
+
         detachChildObject();
         setParentObject(null);
 
@@ -133,6 +139,8 @@ public class GameEntityBase : SequencerObjectBase
         _danmakuGraph.initialize(this);
 
         _statusInfo.initialize(statusInfoName);
+
+        _deadEventDelegate = null;
 
         applyActionBuffList(_actionGraph.getDefaultBuffList());
 
@@ -244,6 +252,11 @@ public class GameEntityBase : SequencerObjectBase
             _spriteRenderer.flipX = _flipState.xFlip;
             _spriteRenderer.flipY = _flipState.yFlip;
         }
+
+        if(_statusInfo.isDead())
+            _deadEventDelegate?.Invoke(this);
+
+        _deadEventDelegate = null;
 
         if(_actionDebug == true)
         {
@@ -674,6 +687,15 @@ public class GameEntityBase : SequencerObjectBase
         _danmakuGraph.addDanmakuGraph(path);
     }
     
+    public void addDeadEvent(DeadEventDelegate deadEvent) 
+    {
+        _deadEventDelegate += deadEvent;
+    } 
+    public void deleteDeadEvent(DeadEventDelegate deadEvent) 
+    {
+        _deadEventDelegate -= deadEvent;
+    }
+
     public bool isDead() {return _statusInfo.isDead();}
 
     public float getHeadUpOffset() {return _headUpOffset;}
