@@ -310,11 +310,30 @@ public class GizmoHelper : MonoBehaviour
         Type type = asm.GetType("UnityEditor.GameView");
         if (type != null)
         {
-            EditorWindow window = EditorWindow.GetWindow(type);
+            EditorWindow window = GetWindowPrivate(type, false, ""); //EditorWindow.GetWindow(type);
             FieldInfo gizmosField = type.GetField("m_Gizmos", BindingFlags.NonPublic | BindingFlags.Instance);
             if(gizmosField != null)
                 return (bool)gizmosField.GetValue(window);
         }
         return false;
+    }
+
+    EditorWindow GetWindowPrivate(System.Type t, bool utility, string title)
+    {
+        UnityEngine.Object[] wins = Resources.FindObjectsOfTypeAll(t);
+        EditorWindow win = wins.Length > 0 ? (EditorWindow)(wins[0]) : null;
+    
+        if (!win)
+        {
+            win = ScriptableObject.CreateInstance(t) as EditorWindow;
+            if (title != null)
+                win.titleContent = new GUIContent(title);
+            if (utility)
+                win.ShowUtility();
+            else
+                win.Show();
+        }
+    
+        return win;
     }
 }
