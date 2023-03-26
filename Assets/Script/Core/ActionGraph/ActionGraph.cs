@@ -7,6 +7,8 @@ public class ActionGraph
     private int _currentActionNodeIndex = -1;
     private int _prevActionNodeIndex = -1;
 
+    private int _currentAnimationIndex = 0;
+
     private Dictionary<ConditionNodeUpdateType, byte[]> _actionConditionNodeData = new Dictionary<ConditionNodeUpdateType, byte[]>();
 
     private Dictionary<string, byte[]>          _statusConditionData = new Dictionary<string, byte[]>();
@@ -63,6 +65,13 @@ public class ActionGraph
     {
         bool isEnd = _animationPlayer.progress(deltaTime, targetEntity);
         _animationPlayer.processMultiSelectAnimation(this);
+
+        if(isEnd && getCurrentAction()._animationInfoCount > ++_currentAnimationIndex)
+        {
+            isEnd = false;
+            changeAnimation(getCurrentAction()._animationInfoIndex, _currentAnimationIndex);
+        }
+
         setActionConditionData_Bool(ConditionNodeUpdateType.Action_AnimationEnd,isEnd);
     }
 
@@ -153,9 +162,11 @@ public class ActionGraph
         _prevActionNodeIndex = _currentActionNodeIndex;
         _currentActionNodeIndex = actionIndex;
 
+        _currentAnimationIndex = 0;
+
         int animationInfoIndex = getCurrentAction()._animationInfoIndex;
         if(animationInfoIndex != -1)
-            changeAnimation(animationInfoIndex);
+            changeAnimation(animationInfoIndex,_currentAnimationIndex);
 
         if(getCurrentAction()._isActionSelection == true)
         {
@@ -173,7 +184,7 @@ public class ActionGraph
         return true;
     }
 
-    private void changeAnimation(int animationIndex)
+    private void changeAnimation(int animationSetIndex, int animationIndex)
     {
         if(animationIndex < 0 || animationIndex >= _actionGraphBaseData._animationPlayDataCount)
         {
@@ -181,7 +192,7 @@ public class ActionGraph
             return;
         }
 
-        _animationPlayer.changeAnimation(_actionGraphBaseData._animationPlayData[animationIndex][0]);
+        _animationPlayer.changeAnimation(_actionGraphBaseData._animationPlayData[animationSetIndex][animationIndex]);
     }
 
     public bool processActionBranch(ActionGraphBranchData branchData)
