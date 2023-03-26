@@ -189,6 +189,7 @@ public enum ConditionNodeUpdateType
     Defence_Hit,
 
     Entity_Dead,
+    Entity_Kill,
     Entity_LifeTime,
 
     AI_TargetDistance,
@@ -279,6 +280,7 @@ public static class ConditionNodeInfoPreset
         {"Catched",new ConditionNodeInfo(ConditionNodeUpdateType.Defence_Catched, ConditionNodeType.Bool)},
 
         {"Dead",new ConditionNodeInfo(ConditionNodeUpdateType.Entity_Dead, ConditionNodeType.Bool)},
+        {"Kill",new ConditionNodeInfo(ConditionNodeUpdateType.Entity_Kill, ConditionNodeType.Bool)},
         {"LifeTime",new ConditionNodeInfo(ConditionNodeUpdateType.Entity_LifeTime, ConditionNodeType.Float)},
 
         {"TargetExists",new ConditionNodeInfo(ConditionNodeUpdateType.AI_TargetExists, ConditionNodeType.Bool)},

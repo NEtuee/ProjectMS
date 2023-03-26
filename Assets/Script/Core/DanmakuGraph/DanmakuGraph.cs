@@ -69,7 +69,7 @@ public class DanmakuGraph
                     variable = value;
                 break;
                 case DanmakuVariableEventType.Count:
-                    DebugUtil.assert(false,"invalid variable EventType: {0}", eventType);
+                    DebugUtil.assert(false,"잘못된 이벤트 타입입니다. 이게 말이 되나 : {0}", eventType);
                 break;
             }
         }

@@ -237,7 +237,7 @@ public class TimelineEffectItem : EffectItemBase
         GameObject effectPrefab = ResourceContainerEx.Instance().GetPrefab(prefabPath);
         if(effectPrefab == null)
         {
-            DebugUtil.assert(false, "invalid timeline effect prefab path : {0}", prefabPath);
+            DebugUtil.assert(false, "잘못된 타임라인 이펙트 경로 입니다. 오타가 있지는 않나요? : {0}", prefabPath);
             return;
         }
 
@@ -247,7 +247,7 @@ public class TimelineEffectItem : EffectItemBase
 
         if(_playableDirector == null)
         {
-            DebugUtil.assert(false, "playable director is not exists in effect prefab : {0}", prefabPath);
+            DebugUtil.assert(false, "playable director가 이펙트 프리팹에 존재하지 않습니다. 타임라인 이펙트가 맞나요? : {0}", prefabPath);
             return;
         }
 
@@ -337,7 +337,7 @@ public class TrailEffectItem : EffectItemBase
         GameObject effectPrefab = ResourceContainerEx.Instance().GetPrefab(prefabPath);
         if(effectPrefab == null)
         {
-            DebugUtil.assert(false, "invalid timeline effect prefab path : {0}", prefabPath);
+            DebugUtil.assert(false, "잘못된 타임라인 이펙트 경로 입니다. 오타가 있지는 않나요? : {0}", prefabPath);
             return;
         }
 
@@ -346,7 +346,7 @@ public class TrailEffectItem : EffectItemBase
 
         if(_trailEffectControl == null)
         {
-            DebugUtil.assert(false, "trail Effect Control is not exists in effect prefab : {0}", prefabPath);
+            DebugUtil.assert(false, "trail Effect Control이 프리펩에 존재하지 않습니다. 트레일 이펙트가 맞나요? : {0}", prefabPath);
             return;
         }
 
@@ -517,7 +517,7 @@ public class EffectManager : ManagerBase
         
         if(itemBase == null)
         {
-            DebugUtil.assert(false, "effect data error");
+            DebugUtil.assert(false, "이펙트 데이터가 없습니다. 통보 요망");
             return;
         }
 

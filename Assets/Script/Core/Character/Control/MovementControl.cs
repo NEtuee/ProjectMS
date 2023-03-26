@@ -64,7 +64,7 @@ public class MovementControl
         case MovementBase.MovementType.FrameEvent:
             return changeMovement<FrameEventMovement>(targetEntity);
         default:
-            DebugUtil.assert(false,"invalid movement type: {0}",movementType);
+            DebugUtil.assert(false,"잘못된 무브먼트 타입 입니다. 이게 머징 : {0}",movementType);
             break;
         }
 
@@ -88,7 +88,7 @@ public class MovementControl
 
         if(_currentMovement == null)
         {
-            DebugUtil.assert(false, "movement is null");
+            DebugUtil.assert(false, "현재 무브먼트가 존재하지 않습니다. 통보 요망");
             return null;
         }
 

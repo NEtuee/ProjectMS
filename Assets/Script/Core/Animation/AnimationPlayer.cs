@@ -94,7 +94,7 @@ public class AnimationPlayer
     {
         if(isValid() == false)
         {
-            DebugUtil.assert(false,"invalid playdata");
+            DebugUtil.assert(false,"잘못된 플레이 데이터 입니다. 통보 요망");
             return false;
         }
 
@@ -206,10 +206,10 @@ public class AnimationPlayer
         if(playData._hasMovementGraph == true)
         {
             _currentMovementGraph = ResourceContainerEx.Instance().getMovementgraph(playData._path);
-            DebugUtil.assert(_currentMovementGraph != null, "movementGraph Not Exists");        
+            DebugUtil.assert(_currentMovementGraph != null, "무브먼트 그래프가 존재하지 않는데 사용하려 합니다. : {0}", playData._path);        
         }
 
-        DebugUtil.assert(_currentAnimationSprites != null, "animation sprite array is null");
+        DebugUtil.assert(_currentAnimationSprites != null, "애니메이션 스프라이트 배열이 null입니다. 해당 경로에 스프라이트가 존재 하나요? : {0}",playData._path);
 
         float startFrame = playData._startFrame;
         startFrame = startFrame == -1f ? 0f : startFrame;
@@ -317,7 +317,7 @@ public class AnimationPlayer
     {
         if(_currentAnimationSprites.Length <= _animationTimeProcessor.getCurrentIndex())
         {
-            DebugUtil.assert(false, "sprite out of index, check end Frame of Action");
+            DebugUtil.assert(false, "스프라이트 Out Of Index 입니다. End Frame을 확인해 주세요.");
             return null;
         }
 
@@ -326,7 +326,7 @@ public class AnimationPlayer
             int index = angleToSectorNumberByAngleBaseSpriteCount(currentAngleDegree) + _animationTimeProcessor.getCurrentIndex();
             if(_currentAnimationSprites.Length <= index)
             {
-                DebugUtil.assert(false, "invalid index : [index : {0}] [angle : {1}] [timerProcessorIndex : {2}] [spriteCount : {3}]", index, currentAngleDegree,angleToSectorNumberByAngleBaseSpriteCount(currentAngleDegree), _animationTimeProcessor.getCurrentIndex() );
+                DebugUtil.assert(false, "잘못된 인덱스 입니다. 통보 요망 : [index : {0}] [angle : {1}] [timerProcessorIndex : {2}] [spriteCount : {3}]", index, currentAngleDegree,angleToSectorNumberByAngleBaseSpriteCount(currentAngleDegree), _animationTimeProcessor.getCurrentIndex() );
                 return null;
             }
 

@@ -24,7 +24,7 @@ public class GraphPresetMovement : MovementBase
     {
          if(preset == null || preset.isValid() == false)
         {
-            DebugUtil.assert(false, "movement graph preset data is not valid {0}", preset == null);
+            DebugUtil.assert(false, "무브먼트 그래프 프리셋 데이터가 존재하지 않습니다. 이게 머징 : {0}", preset == null);
             return;
         }
 
@@ -35,7 +35,7 @@ public class GraphPresetMovement : MovementBase
     {
         if(_presetData == null || _presetData.isValid() == false || _targetEntity == null)
         {
-            DebugUtil.assert(false, "movement graph data is not valid");
+            DebugUtil.assert(false, "무브먼트 그래프 프리셋 데이터가 존재하지 않습니다. 이게 머징");
             return false;
         }
 

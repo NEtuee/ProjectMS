@@ -179,7 +179,7 @@ public class AIGraph
     {
         if(aiPackageIndex < 0 || aiPackageIndex >= _aiGraphBaseData._aiNodeCount)
         {
-            DebugUtil.assert(false,"invalid ai package index");
+            DebugUtil.assert(false,"잘못된 AI Package Index 입니다");
             return false;
         }
 
@@ -202,7 +202,7 @@ public class AIGraph
     {
         if(aiPackageStateIndex == -1)
         {
-            DebugUtil.assert(false,"invalid package state index: {0}",aiPackageStateIndex);
+            DebugUtil.assert(false,"잘못된 AI Package State 인덱스 입니다: {0}",aiPackageStateIndex);
             return;
         }
         _changePackageStateIndex = aiPackageStateIndex;
@@ -213,7 +213,7 @@ public class AIGraph
     {
         if(aiPackageStateIndex < 0 || aiPackageStateIndex >= getCurrentAIPackage()._aiNodeCount)
         {
-            DebugUtil.assert(false,"invalid ai package index");
+            DebugUtil.assert(false,"잘못된 AI Package Index 입니다");
             return false;
         }
 

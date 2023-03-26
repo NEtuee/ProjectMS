@@ -73,7 +73,7 @@ public class ActionGraph
 
     private void createCoditionNodeDataAll()
     {
-        DebugUtil.assert((int)ConditionNodeUpdateType.Count == 46, "check this");
+        DebugUtil.assert((int)ConditionNodeUpdateType.Count == 47, "check this");
 
         foreach(var item in ConditionNodeInfoPreset._nodePreset.Values)
         {
@@ -96,12 +96,12 @@ public class ActionGraph
     {
         if(_actionConditionNodeData.ContainsKey(info._updateType) == true)
         {
-            DebugUtil.assert(false, "key already exists");
+            DebugUtil.assert(false, "해당 컨디션 심볼이 이미 존재합니다. 통보 요망");
             return;
         }
         else if(info._updateType == ConditionNodeUpdateType.Count || info._nodeType == ConditionNodeType.Count)
         {
-            DebugUtil.assert(false, "wrong type");
+            DebugUtil.assert(false, "잘못된 타입 입니다. 통보 요망");
             return;
         }
 
@@ -143,7 +143,7 @@ public class ActionGraph
     {
         if(actionIndex < 0 || actionIndex >= _actionGraphBaseData._actionNodeCount)
         {
-            DebugUtil.assert(false,"invalid action index");
+            DebugUtil.assert(false,"잘못된 액션 인덱스 입니다.");
             return false;
         }
 
@@ -177,7 +177,7 @@ public class ActionGraph
     {
         if(animationIndex < 0 || animationIndex >= _actionGraphBaseData._animationPlayDataCount)
         {
-            DebugUtil.assert(false,"invalid animation index");
+            DebugUtil.assert(false,"잘못된 애니메이션 인덱스 입니다. 통보 요망 [AnimationIndex: {0}]", animationIndex);
             return;
         }
 
@@ -218,7 +218,7 @@ public class ActionGraph
 
         if(compareData._conditionNodeDataCount == 1)
         {
-            DebugUtil.assert(isNodeType(compareData._conditionNodeDataArray[0],ConditionNodeType.Bool) == true, "invalid node data type!!! : {0}",compareData._conditionNodeDataArray[0]._symbolName);
+            DebugUtil.assert(isNodeType(compareData._conditionNodeDataArray[0],ConditionNodeType.Bool) == true, "잘못된 노드 타입 입니다. 통보 요망 : {0}",compareData._conditionNodeDataArray[0]._symbolName);
 
             return getDataFromConditionNode(compareData._conditionNodeDataArray[0])[0] == 1;
         }
@@ -251,7 +251,7 @@ public class ActionGraph
     {
         if((int)updateType <= (int)ConditionNodeUpdateType.ConditionResult )
         {
-            DebugUtil.assert(false,"invalud type : {0}",updateType);
+            DebugUtil.assert(false,"잘못된 타입 입니다. 통보 요망 : {0}",updateType);
             return false;
         }
 
@@ -262,7 +262,7 @@ public class ActionGraph
     {
         if((int)updateType <= (int)ConditionNodeUpdateType.ConditionResult )
         {
-            DebugUtil.assert(false,"invalud type : {0}",updateType);
+            DebugUtil.assert(false,"잘못된 타입 입니다. 통보 요망 : {0}",updateType);
             return false;
         }
 
@@ -273,7 +273,7 @@ public class ActionGraph
     {
         if((int)updateType <= (int)ConditionNodeUpdateType.ConditionResult )
         {
-            DebugUtil.assert(false,"invalud type : {0}",updateType);
+            DebugUtil.assert(false,"잘못된 타입 입니다. 통보 요망 : {0}",updateType);
             return false;
         }
 
@@ -284,7 +284,7 @@ public class ActionGraph
     {
         if((int)updateType <= (int)ConditionNodeUpdateType.ConditionResult )
         {
-            DebugUtil.assert(false,"invalud type : {0}",updateType);
+            DebugUtil.assert(false,"잘못된 타입 입니다. 통보 요망 : {0}",updateType);
             return false;
         }
 
@@ -363,7 +363,7 @@ public class ActionGraph
 
         if(lvalueNodeInfo._nodeType != rvalueNodeInfo._nodeType)
         {
-            DebugUtil.assert(false,"value type is not match : {0}[{1}] {2}[{3}]",lvalueNodeInfo._nodeType,lvalue._symbolName, rvalueNodeInfo._nodeType,rvalue._symbolName);
+            DebugUtil.assert(false,"컨디션 심볼 타입이 서로 비교할 수 없는 타입입니다. : {0}[{1}] {2}[{3}]",lvalueNodeInfo._nodeType,lvalue._symbolName, rvalueNodeInfo._nodeType,rvalue._symbolName);
             return false;
         }
 
@@ -393,14 +393,14 @@ public class ActionGraph
         case ConditionCompareType.And:
             if(lvalueNodeInfo._nodeType != ConditionNodeType.Bool)
             {
-                DebugUtil.assert(false,"this type is not supported : {0}",lvalueNodeInfo._nodeType);
+                DebugUtil.assert(false,"해당 타입은 And 연산을 지원하지 않습니다. : {0}",lvalueNodeInfo._nodeType);
                 return false;
             }
             return lvalueData[0] > 0 && rvalueData[0] > 0;
         case ConditionCompareType.Greater:
             if(lvalueNodeInfo._nodeType == ConditionNodeType.Bool)
             {
-                DebugUtil.assert(false,"this type is not supported : {0}",lvalueNodeInfo._nodeType);
+                DebugUtil.assert(false,"해당 타입은 크기 비교 연산을 지원하지 않습니다. : {0}",lvalueNodeInfo._nodeType);
                 return false;
             }
             else if(lvalueNodeInfo._nodeType == ConditionNodeType.Int)
@@ -419,7 +419,7 @@ public class ActionGraph
         case ConditionCompareType.GreaterEqual:
             if(lvalueNodeInfo._nodeType == ConditionNodeType.Bool)
             {
-                DebugUtil.assert(false,"this type is not supported : {0}",lvalueNodeInfo._nodeType);
+                DebugUtil.assert(false,"해당 타입은 크기 비교 연산을 지원하지 않습니다. : {0}",lvalueNodeInfo._nodeType);
                 return false;
             }
             else if(lvalueNodeInfo._nodeType == ConditionNodeType.Int)
@@ -439,14 +439,14 @@ public class ActionGraph
         case ConditionCompareType.Or:
             if(lvalueNodeInfo._nodeType != ConditionNodeType.Bool)
             {
-                DebugUtil.assert(false,"this type is not supported : {0}",lvalueNodeInfo._nodeType);
+                DebugUtil.assert(false,"해당 타입은 Or 연산을 지원하지 않습니다. : {0}",lvalueNodeInfo._nodeType);
                 return false;
             }
             return lvalueData[0] > 0 || rvalueData[0] > 0;
         case ConditionCompareType.Smaller:
             if(lvalueNodeInfo._nodeType == ConditionNodeType.Bool)
             {
-                DebugUtil.assert(false,"this type is not supported : {0}",lvalueNodeInfo._nodeType);
+                DebugUtil.assert(false,"해당 타입은 크기 비교 연산을 지원하지 않습니다. : {0}",lvalueNodeInfo._nodeType);
                 return false;
             }
             else if(lvalueNodeInfo._nodeType == ConditionNodeType.Int)
@@ -465,7 +465,7 @@ public class ActionGraph
         case ConditionCompareType.SmallerEqual:
             if(lvalueNodeInfo._nodeType == ConditionNodeType.Bool)
             {
-                DebugUtil.assert(false,"this type is not supported : {0}",lvalueNodeInfo._nodeType);
+                DebugUtil.assert(false,"해당 타입은 크기 비교 연산을 지원하지 않습니다. : {0}",lvalueNodeInfo._nodeType);
                 return false;
             }
             else if(lvalueNodeInfo._nodeType == ConditionNodeType.Int)
@@ -483,7 +483,7 @@ public class ActionGraph
             break;
         }
 
-            DebugUtil.assert(false,"invalid type : {0}",lvalueNodeInfo._nodeType);
+            DebugUtil.assert(false,"잘못된 타입 입니다. : {0}",lvalueNodeInfo._nodeType);
 
         return false;
     }
@@ -539,7 +539,7 @@ public class ActionGraph
 
         if(_actionConditionNodeData.ContainsKey(updateType) == false)
         {
-            DebugUtil.assert(false,"target update type does not exists : {0}",updateType);
+            DebugUtil.assert(false,"해당 업데이트 타입은 존재하지 않습니다. : {0}",updateType);
             return null;
         }
 
@@ -558,7 +558,7 @@ public class ActionGraph
     {
         if(_actionGraphBaseData._actionIndexMap.ContainsKey(nodeName) == false)
         {
-            DebugUtil.assert(false, "target action is not exists: {0}",nodeName);
+            DebugUtil.assert(false, "인덱스를 가져 오려는 액션이 존재하지 않습니다. 통보 요망 : {0}",nodeName);
             return -1;
         }
 

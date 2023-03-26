@@ -28,7 +28,7 @@ public class GraphMovement : MovementBase
     {
          if(graph == null || graph.isValid() == false)
         {
-            DebugUtil.assert(false, "movement graph data is not valid {0}", graph == null);
+            DebugUtil.assert(false, "해당 무브먼트 그래프가 유효하지 않습니다. 이건 뭐지 : {0}", graph == null);
             return;
         }
 
@@ -40,7 +40,7 @@ public class GraphMovement : MovementBase
     {
         if(_movementGraph == null || _movementGraph.isValid() == false || _targetEntity == null)
         {
-            DebugUtil.assert(false, "movement graph data is not valid");
+            DebugUtil.assert(false, "해당 무브먼트 그래프가 유효하지 않습니다. 이게 머징");
             return false;
         }
 

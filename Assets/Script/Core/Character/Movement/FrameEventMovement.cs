@@ -43,7 +43,7 @@ public class FrameEventMovement : MovementBase
     {
         if(_targetEntity == null)
         {
-            DebugUtil.assert(false, "invalid movement update call");
+            DebugUtil.assert(false, "타겟 엔티티가 없는데 무브먼트 업데이트가 돌고 있습니다. 통보 요망");
             return false;
         }
 

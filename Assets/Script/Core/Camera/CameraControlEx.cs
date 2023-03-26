@@ -215,7 +215,7 @@ public class CameraControlEx : Singleton<CameraControlEx>
                     _cameraModes[index] = new CameraTargetCenterMode();
                 break;
                 default:
-                    DebugUtil.assert(false, "invalid CameraMode. Please Check CameraMode");
+                    DebugUtil.assert(false, "잘못된 카메라 모드입니다. 이게 뭐징");
                 break;
             }
         }

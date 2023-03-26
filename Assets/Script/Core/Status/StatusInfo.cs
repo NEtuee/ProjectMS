@@ -284,8 +284,13 @@ public class StatusInfo
         }
 
         Status hpStatus = getStatus("HP");
-        if(hpStatus != null && hpStatus._value <= 0f)
-            _isDead = true;
+        if(_isDead == false && hpStatus != null && hpStatus._value <= 0f)
+            setDead(true);
+    }
+
+    public void setDead(bool value)
+    {
+        _isDead = value;
     }
 
     private void updateBuff()
@@ -369,6 +374,18 @@ public class StatusInfo
         return status._realValue / _statusInfoData._statusData[status._statusIndex].getMaxValue();
     }
 
+    public float getCurrentStatus(string targetName)
+    {
+        Status status = getStatus(targetName);
+        if(status == null)
+        {
+            DebugUtil.assert(false, "target status is not exists: [targetName: {0}] [currentStatusInfo: {1}]", targetName,_statusInfoData._statusInfoName);
+            return 0f;
+        }
+            
+        return status._realValue;
+    }
+
     private bool updateBuffXXX(BuffData buff)
     {
         if(buff.isBuffValid() == false)
@@ -400,6 +417,63 @@ public class StatusInfo
 
         DebugUtil.assert(false, "invalid buff apply type: {0}",buff._buffApplyType);
         return false;
+    }
+
+    public bool checkBuffApplyStatus(int buffKey, string status)
+    {
+        if(_buffDataDictionary.ContainsKey(buffKey) == false)
+        {
+            DebugUtil.assert(false, "target buff is not exists: [targetKey: {0}]", buffKey);
+            return false;
+        }
+
+        BuffData buff = _buffDataDictionary[buffKey];
+        if(buff.isBuffValid() == false)
+            return false;
+
+        return buff._targetStatusName == status;
+    }
+
+    public float buffValuePrediction(float deltaTime, int buffKey)
+    {
+        if(_buffDataDictionary.ContainsKey(buffKey) == false)
+        {
+            DebugUtil.assert(false, "target buff is not exists: [targetKey: {0}]", buffKey);
+            return 0f;
+        }
+
+        BuffData buff = _buffDataDictionary[buffKey];
+        if(buff.isBuffValid() == false)
+            return 0f;
+
+        if(getStatus(buff._targetStatusName) == null)
+            DebugUtil.assert(false, "target status is not exists: [targetName: {0}] [currentStatusInfo: {1}]", buff._targetStatusName,_statusInfoData._statusInfoName);
+
+        switch(buff._buffApplyType)
+        {
+            case BuffApplyType.Direct:
+            {
+                Status status = getStatus(buff._targetStatusName);
+                return buff._buffVaryStatFactor;
+            }
+            case BuffApplyType.Additional:
+            {
+                Status status = getStatus(buff._targetStatusName);
+                return status._realValue + buff._buffVaryStatFactor;
+            }
+            case BuffApplyType.DirectDelta:
+            {
+                Status status = getStatus(buff._targetStatusName);
+                return (status._regenFactor + buff._buffVaryStatFactor) * deltaTime;
+            }
+            case BuffApplyType.DirectSet:
+            {
+                return buff._buffVaryStatFactor;
+            }
+        }
+
+        DebugUtil.assert(false, "invalid buff apply type: {0}",buff._buffApplyType);
+        return 0f;
     }
 
 

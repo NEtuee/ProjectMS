@@ -34,7 +34,7 @@ public class AnimationRotationPreset : ScriptableObject
             }
         }
 
-        DebugUtil.assert(target != null,"target animation rotation presetData is not exists : {0}",targetName);
+        DebugUtil.assert(target != null,"해당 애니메이션 로테이션 프리셋 데이터가 존재하지 않습니다. 이름을 잘못 쓰지 않았나요? : {0}",targetName);
         return target;
     }
 

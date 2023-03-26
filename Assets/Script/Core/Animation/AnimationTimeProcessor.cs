@@ -54,7 +54,7 @@ public class AnimationTimeProcessor
 
     public bool updateTime(float deltaTime)
     {
-        DebugUtil.assert(isValid(),"frame count is zero");
+        DebugUtil.assert(isValid(),"프레임 카운트가 0입니다. 통보 요망");
         
         _totalLoopCountPerFrame = 0;
 
@@ -63,7 +63,7 @@ public class AnimationTimeProcessor
 
         if(_animationSpeed == 0f)
         {
-            DebugUtil.assert(false, "animation speed can not be zero");
+            DebugUtil.assert(false, "애니메이션 속도는 0이 될 수 없습니다.");
             _animationSpeed = 1f;
         }
 

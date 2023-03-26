@@ -119,6 +119,7 @@ public class MasterManager : MessageHub<ManagerBase>
             deltaTime *= Mathf.Lerp(1f, _targetTimeScale, (_timeScaleBlendTimer / _timeScaleBlendFactor));
         }
 
+        GlobalTimer.Instance().setScaledDeltaTime(deltaTime);
         GlobalTimer.Instance().updateGlobalTime(deltaTime);
         StageGraphManager.Instance().progress(deltaTime);
 

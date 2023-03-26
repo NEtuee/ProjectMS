@@ -54,6 +54,8 @@ public class GameEntityBase : SequencerObjectBase
     private float               _headUpOffset = 0f;
     private float               _characterLifeTime = 0f;
 
+    private float               _leftHP = 0f;
+
     private bool                _updateDirection = true;
     private bool                _updateFlipState = true;
 
@@ -94,6 +96,7 @@ public class GameEntityBase : SequencerObjectBase
     {
         base.initialize();
         _characterLifeTime = 0f;
+        _leftHP = 0f;
 
         gameObject.name = characterInfo._displayName;
         actionGraphPath = characterInfo._actionGraphPath;
@@ -131,6 +134,7 @@ public class GameEntityBase : SequencerObjectBase
         if(_initializeFromCharacter)
             return;
         _characterLifeTime = 0f;
+        _leftHP = 0f;
 
         base.initialize();
         
@@ -168,6 +172,8 @@ public class GameEntityBase : SequencerObjectBase
 
         _statusInfo.updateStatus(deltaTime);
         _statusInfo.updateActionConditionData(this);
+
+        _leftHP = _statusInfo.getCurrentStatus("HP");
 
         _danmakuGraph.process(deltaTime);
 
@@ -431,7 +437,11 @@ public class GameEntityBase : SequencerObjectBase
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Defence_GuardBreakFail, _defenceState == DefenceState.GuardBreakFail);
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Defence_Catched, _defenceState == DefenceState.Catched);
 
+        // if(_actionGraph.getActionConditionData_Bool(ConditionNodeUpdateType.Entity_Dead) && _statusInfo.isDead() == false)
+        //     DebugUtil.assert(false, "이미 죽었는데 다시 살아났습니다. 통보 요망");
+            
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Entity_Dead, _statusInfo.isDead());
+        _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Entity_Kill, false);
         _actionGraph.setActionConditionData_Float(ConditionNodeUpdateType.Entity_LifeTime, _characterLifeTime);
 
     }
@@ -517,7 +527,25 @@ public class GameEntityBase : SequencerObjectBase
         for(int i = 0; i < buffList.Length; ++i)
         {
             _statusInfo.applyBuff(buffList[i]);
+
+            if(_statusInfo.checkBuffApplyStatus(buffList[i],"HP"))
+            {
+                bool isDead = checkDeadBeforeApplyBuff(GlobalTimer.Instance().getSclaedDeltaTime(),buffList[i]);
+                _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Entity_Dead,isDead);
+            }
         }
+
+    }
+
+    public bool predictionDead()
+    {
+        return _leftHP <= 0f;
+    }
+
+    public bool checkDeadBeforeApplyBuff(float deltaTime, int targetBuff)
+    {
+        _leftHP += _statusInfo.buffValuePrediction(deltaTime, targetBuff);
+        return _leftHP <= 0f;
     }
 
     private void applyActionBuffList()
@@ -699,6 +727,11 @@ public class GameEntityBase : SequencerObjectBase
     }
 
     public bool isDead() {return _statusInfo.isDead();}
+
+    public void setActionCondition_Bool(ConditionNodeUpdateType updateType, bool value)
+    {
+        _actionGraph.setActionConditionData_Bool(updateType, value);
+    }
 
     public float getHeadUpOffset() {return _headUpOffset;}
 

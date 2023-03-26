@@ -31,7 +31,7 @@ public class CollisionInfo
     {
         if(isValid() == false || target.isValid() == false)
         {
-            DebugUtil.assert(false,"collision data is invalid : [{0}/{1}], [{2}/{3}]",getCollisionType(),isValid(),target.getCollisionType(), target.isValid());
+            DebugUtil.assert(false,"충돌 데이터가 유효하지 않습니다. 통보 요망 : [{0}/{1}], [{2}/{3}]",getCollisionType(),isValid(),target.getCollisionType(), target.isValid());
             return false;
         }
 

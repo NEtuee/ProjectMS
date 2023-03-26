@@ -160,6 +160,16 @@ public static class MathEx
 
 	}
 
+	public static UnityEngine.Vector3 getPerpendicularPointOnLine(UnityEngine.Vector3 lineA, UnityEngine.Vector3 lineB, UnityEngine.Vector3 point)
+	{
+		UnityEngine.Vector3 direction = lineB - lineA;
+		float distance = UnityEngine.Vector3.Dot(direction, point - lineA) / direction.magnitude;
+		float dot = UnityEngine.Vector3.Dot(direction, point - lineA);
+		float t = dot / direction.sqrMagnitude;
+
+		return lineA + t * direction;
+	}
+
 	public static bool findNearestPointOnTriangle(UnityEngine.Vector3 target, UnityEngine.Vector3 a, UnityEngine.Vector3 b, UnityEngine.Vector3 c, out UnityEngine.Vector3 result, out float nearDistance )
 	{
         float t = 0f;

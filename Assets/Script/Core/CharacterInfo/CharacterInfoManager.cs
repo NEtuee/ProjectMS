@@ -15,7 +15,7 @@ public class CharacterInfoManager : Singleton<CharacterInfoManager>
     {
         if(_characterInfoData == null)
         {
-            DebugUtil.assert(false,"character info container is null");
+            DebugUtil.assert(false,"캐릭터 인포 컨테이너가 null 입니다. 통보 요망");
             return null;
         }
 

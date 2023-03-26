@@ -42,7 +42,7 @@ public class AnimationRotationPresetData
     {
         if(isValid() == false)
         {
-            DebugUtil.assert(false,"start and end must exist");
+            DebugUtil.assert(false,"AnimationRotationPresetData의 Start와 End는 무조건 존재해야 합니다. : {0}",_name);
             return 0f;
         }
 
@@ -53,7 +53,7 @@ public class AnimationRotationPresetData
     {
         if(_rotationCurve.length <= 1)
         {
-            DebugUtil.assert(false,"start and end must exist");
+            DebugUtil.assert(false,"AnimationRotationPresetData의 Start와 End는 무조건 존재해야 합니다. : {0}",_name);
             return 0f;
         }
 

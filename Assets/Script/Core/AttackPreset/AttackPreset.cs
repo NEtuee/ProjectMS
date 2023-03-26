@@ -30,7 +30,7 @@ public class AttackPreset : ScriptableObject
             }
         }
 
-        DebugUtil.assert(target != null,"target presetData is not exists : {0}",targetName);
+        DebugUtil.assert(target != null,"해당 어택 프리셋 데이터가 존재하지 않습니다. 이름을 잘못 쓰지는 않았나요? : {0}",targetName);
         return target;
     }
 

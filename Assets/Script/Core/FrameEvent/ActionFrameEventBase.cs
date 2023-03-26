@@ -27,6 +27,7 @@ public enum FrameEventType
     FrameEvent_SpawnCharacter,
     FrameEvent_ReleaseCatch,
     FrameEvent_TalkBalloon,
+    FrameEvent_SetAction,
 
     Count,
 }
@@ -88,13 +89,55 @@ public abstract class ActionFrameEventBase
             return;
         
         ChildFrameEventItem childFrameEventItem = _childFrameEventItems[eventType];
+        GameEntityBase executeGameEntity = null;
+        if(executeEntity is GameEntityBase)
+            executeGameEntity = executeEntity as GameEntityBase;
+
         for(int i = 0; i < childFrameEventItem._childFrameEventCount; ++i)
         {
-            if(executeEntity is GameEntityBase && childFrameEventItem._childFrameEvents[i].checkCondition(executeEntity as GameEntityBase) == false)
+            if(executeGameEntity != null && childFrameEventItem._childFrameEvents[i].checkCondition(executeGameEntity) == false)
                 continue;
 
             childFrameEventItem._childFrameEvents[i].initialize();
             childFrameEventItem._childFrameEvents[i].onExecute(executeEntity, targetEntity);
+        }
+    }
+}
+
+public class ActionFrameEvent_SetAction : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_SetAction;}
+
+    private string _actionName = "";
+
+    public override void initialize()
+    {
+    }
+
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        if(executeEntity is GameEntityBase == false)
+            return true;
+
+        ((GameEntityBase)executeEntity).setAction(_actionName);
+
+        return true;
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attributes[i].Name == "Action")
+            {
+                _actionName = attributes[i].Value;
+            }
+
         }
     }
 }
@@ -638,9 +681,11 @@ public class ActionFrameEvent_TeleportToTargetBack : ActionFrameEventBase
         GameEntityBase requester = (GameEntityBase)executeEntity;
         GameEntityBase target = (GameEntityBase)targetEntity;
 
-        UnityEngine.Vector3 direction = (target.transform.position - requester.transform.position).normalized;
-
-        requester.updatePosition(target.transform.position + direction * (requester.getCollisionInfo().getRadius() + target.getCollisionInfo().getRadius() + _distanceOffset));
+        UnityEngine.Vector3 direction = requester.getDirection();
+        UnityEngine.Vector3 perpendicular = MathEx.getPerpendicularPointOnLine(executeEntity.transform.position,executeEntity.transform.position + direction * 9999f, target.transform.position);
+        
+        float length = (requester.getCollisionInfo().getRadius() + target.getCollisionInfo().getRadius() + _distanceOffset);
+        requester.updatePosition(perpendicular + direction * length);
 
         return true;
     }
@@ -762,6 +807,8 @@ public class ActionFrameEvent_ApplyBuffTarget : ActionFrameEventBase
         GameEntityBase target = (GameEntityBase)targetEntity;
 
         target.applyActionBuffList(buffKeyList);
+        if(executeEntity is GameEntityBase && target.predictionDead())
+            (executeEntity as GameEntityBase).setActionCondition_Bool(ConditionNodeUpdateType.Entity_Kill, true);
 
         return true;
     }
@@ -1005,7 +1052,8 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
 
         if(target is GameEntityBase)
         {
-            (target as GameEntityBase).addDeadEvent((item)=>{
+            GameEntityBase targetGameEntity = (target as GameEntityBase);
+            targetGameEntity.addDeadEvent((item)=>{
                 if(item == null || requester == null || target == null)
                     return;
 

@@ -9,6 +9,8 @@
     <GlobalVariable Name="gv_MoveVelocityMax" Value="3"/>
 
     <GlobalVariable Name="gv_AttackVelocity" Value="6.5"/>
+    <GlobalVariable Name="gv_AttackFarVelocity" Value="4.5"/>
+    
     <GlobalVariable Name="gv_AttackFriction" Value="15"/>
 
     <GlobalVariable Name="gv_IdleFriction" Value="8"/>
@@ -121,7 +123,6 @@
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="TargetBattleIncrement" Condition="getTargetFrameTag_Hit == false"/>
                     <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
 
-                    <FrameEvent Type="TeleportToTargetBack" DistanceOffset="-0.3"/>
 
                     <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/Slash_Timeline" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
                     <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/Blood_Timeline" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
@@ -132,6 +133,14 @@
 
                     <FrameEvent Type="StopUpdate" StartFrame="0" Time="0.07"/>
 
+                    <FrameEvent Type="TeleportToTargetBack" Condition="(getTargetFrameTag_Groggy == false) && (Kill == false)" DistanceOffset="-0.3"/>
+                    <FrameEvent Type="TeleportToTargetBack" Condition="getTargetFrameTag_Groggy || Kill" DistanceOffset="0.2"/>
+
+                    <FrameEvent Type="SetAction" Condition="Kill" Action="AttackSuccessFar"/>
+                    <FrameEvent Type="SetTimeScale" Condition="Kill" Scale="0.2" Time="0.2" BlendTime="0.2"/>
+                    <FrameEvent Type="ShakeEffect" Condition="Kill" Scale="0.2" Speed="35.0" Time="0.2"/>
+
+                    <FrameEvent Type="SetAction" Condition="getTargetFrameTag_Groggy" Action="AttackSuccessFar"/>
                     <FrameEvent Type="SetTimeScale" Condition="getTargetFrameTag_Groggy" Scale="0.1" Time="0.1" BlendTime="0.2"/>
                     <FrameEvent Type="ZoomEffect" Condition="getTargetFrameTag_Groggy" StartFrame="0" Scale="2.9"/>
                     <FrameEvent Type="ShakeEffect" Condition="getTargetFrameTag_Groggy" Scale="0.2" Speed="35.0" Time="0.2"/>
@@ -145,11 +154,6 @@
                 <OnParry>
                     <FrameEvent Type="TeleportToTarget"/>
                 </OnParry>
-
-                <OnKill>
-                    <FrameEvent Type="SetTimeScale" Scale="0.2" Time="0.2" BlendTime="0.2"/>
-                    <FrameEvent Type="ShakeEffect" Scale="0.2" Speed="35.0" Time="0.2"/>
-                </OnKill>
 
             </FrameEvent>
             <FrameEvent Type="Movement" StartFrame="0" Friction="gv_DashFriction" MaxVelocity="gv_DashVelocity" Speed="0" Velocity="gv_DashVelocity" Condition="(getStat_DashPoint >= 1.0)"/>
@@ -248,6 +252,21 @@
         <Branch Key="(getKey_AttackCharge == true) || (getKey_NormalMove == true)" Condition="End" Execute="MoveAll"/>
         <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="AttackStop"/>
     </AttackSuccess>
+
+    <AttackSuccessFar MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
+        <Animation Path="Resources/Sprites/NewPlayer/attack/" FramePerSecond="24" XFlip="true" ScalePreset="YSpring">
+            <FrameEvent Type="Effect" StartFrame="0" Path="Resources/Sprites/Effect/Sheath" FramePerSecond="0.5" Offset="0.0 0.0 0.0" Angle="Random_0^360" UseFlip="True" CastShadow="True">
+                <Physics UseGravity="True" Velocity="-1.5 3.5" Friction="1.0" Torque="Random_25^30" AngularFriction="10.0"/>
+            </FrameEvent>
+
+            <FrameEvent Type="Movement" StartFrame="0" Friction="gv_AttackFriction" MaxVelocity="gv_AttackFarVelocity" Speed="0" Velocity="gv_AttackFarVelocity"/>
+            <FrameEvent Type="ApplyBuff" StartFrame="0" ApplyBuff="DashPointReset"/>
+            <FrameEvent Type="FrameTag" StartFrame="0" EndFrame="999" Tag="AttackSuccess"/>
+        </Animation>
+
+        <Branch Key="(getKey_AttackCharge == true) || (getKey_NormalMove == true)" Condition="End" Execute="MoveAll"/>
+        <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="AttackStop"/>
+    </AttackSuccessFar>
 
     <AttackGuarded MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Keep" >
         <Animation Path="Resources/Sprites/NewPlayer/Attack/" FramePerSecond="16">
