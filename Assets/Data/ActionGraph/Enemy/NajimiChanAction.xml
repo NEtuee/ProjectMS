@@ -319,7 +319,7 @@
     <AC_FireworkReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/3_batonPattern/4_pistolReady" FramePerSecond="10" XFlip="true">
             <!-- 0.8 sec -->
-            <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="0.1428"/> <!-- Pre Motion: 0.7 sec -->
+            <!-- <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="0.1428"/> Pre Motion: 0.7 sec -->
             
             <FrameEvent Type="Movement" StartFrame="0" Friction="12" MaxVelocity="0" Speed="0"/>
         </Animation>
