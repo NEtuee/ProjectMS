@@ -55,7 +55,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         List<ActionGraphNodeData> nodeDataList = new List<ActionGraphNodeData>();
         List<ActionGraphBranchData> branchDataList = new List<ActionGraphBranchData>();
         List<ActionGraphConditionCompareData> compareDataList = new List<ActionGraphConditionCompareData>();
-        List<AnimationPlayDataInfo> animationDataList = new List<AnimationPlayDataInfo>();
+        List<AnimationPlayDataInfo[]> animationDataList = new List<AnimationPlayDataInfo[]>();
 
         _globalVariables.Clear();
         Dictionary<ActionGraphBranchData, string> actionCompareDic = new Dictionary<ActionGraphBranchData, string>();
@@ -201,7 +201,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         targetDic.Add(branchSetName,branchSetParent.ChildNodes);
     }
 
-    private static ActionGraphNodeData ReadAction(XmlNode node, float defaultFPS, ref List<AnimationPlayDataInfo> animationDataList,  ref Dictionary<ActionGraphBranchData, string> actionCompareDic,ref List<ActionGraphBranchData> branchDataList, ref List<ActionGraphConditionCompareData> compareDataList, in Dictionary<string, XmlNodeList> branchSetDic, string filePath)
+    private static ActionGraphNodeData ReadAction(XmlNode node, float defaultFPS, ref List<AnimationPlayDataInfo[]> animationDataList,  ref Dictionary<ActionGraphBranchData, string> actionCompareDic,ref List<ActionGraphBranchData> branchDataList, ref List<ActionGraphConditionCompareData> compareDataList, in Dictionary<string, XmlNodeList> branchSetDic, string filePath)
     {
         ActionGraphNodeData nodeData = new ActionGraphNodeData();
         nodeData._nodeName = node.Name;
@@ -213,6 +213,8 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             Debug.Log(node.Name);
             return null;
         }
+
+        float actionTime = -1f;
 
         for(int attrIndex = 0; attrIndex < actionAttributes.Count; ++attrIndex)
         {
@@ -312,6 +314,10 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             {
                 nodeData._angleSectorCount = int.Parse(targetValue);
             }
+            else if(targetName == "Time")
+            {
+                actionTime = float.Parse(targetValue);
+            }
             else
             {
                 DebugUtil.assert(false,"invalid attribute type !!! : {0} [Line: {1}] [FileName: {2}]", targetName, XMLScriptConverter.getLineFromXMLNode(node), filePath);
@@ -321,14 +327,16 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         XmlNodeList nodeList = node.ChildNodes;
         int branchStartIndex = branchDataList.Count;
 
+        List<AnimationPlayDataInfo> animationPlayDataInfoList = new List<AnimationPlayDataInfo>();
+
         for(int i = 0; i < nodeList.Count; ++i)
         {
             if(nodeList[i].Name == "Animation")
             {
-                AnimationPlayDataInfo animationData = ReadActionAnimation(nodeList[i],defaultFPS, filePath);
+                AnimationPlayDataInfo animationData = ReadActionAnimation(nodeList[i],defaultFPS, filePath, actionTime);
                 nodeData._animationInfoIndex = animationDataList.Count;
                 animationData._hasMovementGraph = nodeData._movementType == MovementBase.MovementType.RootMotion;
-                animationDataList.Add(animationData);
+                animationPlayDataInfoList.Add(animationData);
             }
             else if(nodeList[i].Name == "Branch")
             {
@@ -387,16 +395,20 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             return null;
         }
 
+        animationDataList.Add(animationPlayDataInfoList.ToArray());
+
+        nodeData._animationInfoCount = animationPlayDataInfoList.Count;
         nodeData._branchIndexStart = branchStartIndex;
         nodeData._branchCount = branchDataList.Count - branchStartIndex;
 
         return nodeData;
     }
 
-    public static AnimationPlayDataInfo ReadActionAnimation(XmlNode node, float defaultFPS, string filePath)
+    public static AnimationPlayDataInfo ReadActionAnimation(XmlNode node, float defaultFPS, string filePath, float actionTime = -1f)
     {
         AnimationPlayDataInfo playData = new AnimationPlayDataInfo();
-        playData._framePerSec = defaultFPS;
+        playData._framePerSec = actionTime == -1f ? defaultFPS : -1f;
+        playData._actionTime = actionTime;
 
         XmlAttributeCollection actionAttributes = node.Attributes;
         for(int attrIndex = 0; attrIndex < actionAttributes.Count; ++attrIndex)
@@ -410,6 +422,12 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             }
             else if(targetName == "FramePerSecond")
             {
+                if(actionTime != -1f)
+                {
+                    DebugUtil.assert(false, "ActionTime이 존재하면 FramePerSecond를 쓰면 안됩니다 [Line: {1}] [FileName: {2}]",XMLScriptConverter.getLineFromXMLNode(node), filePath);
+                    continue;
+                }
+
                 playData._framePerSec = float.Parse(targetValue);
             }
             else if(targetName == "StartFrame")
@@ -450,6 +468,10 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             {
                 playData._angleBaseAnimationSpriteCount = int.Parse(targetValue);
             }
+            else if(targetName == "LoopCount")
+            {
+                playData._animationLoopCount = int.Parse(targetValue);
+            }
             else
             {
                 DebugUtil.assert(false, "invalid animation attribute: {0} [Line: {1}] [FileName: {2}]",targetName, XMLScriptConverter.getLineFromXMLNode(node), filePath);
@@ -457,7 +479,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             }
         }
 
-        if(playData._startFrame > playData._endFrame)
+        if((playData._startFrame > playData._endFrame) && playData._endFrame != -1)
         {
             DebugUtil.assert(false, "start frame cannot be greater than the end frame: [Path: {0}] [Line: {1}] [FileName: {2}]",playData._path, XMLScriptConverter.getLineFromXMLNode(node), filePath);
             return null;
@@ -467,6 +489,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         {
             XmlNodeList nodeList = node.ChildNodes;
             List<ActionFrameEventBase> frameEventList = new List<ActionFrameEventBase>();
+            List<ActionFrameEventBase> timeEventList = new List<ActionFrameEventBase>();
             List<MultiSelectAnimationData> multiSelectAnimationList = new List<MultiSelectAnimationData>();
             for(int i = 0; i < nodeList.Count; ++i)
             {
@@ -476,7 +499,10 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
                     if(frameEvent == null)
                         continue;
                     
-                    frameEventList.Add(frameEvent);
+                    if(frameEvent._isTimeBase)
+                        timeEventList.Add(frameEvent);
+                    else
+                        frameEventList.Add(frameEvent);
                 }
                 else if(nodeList[i].Name == "MultiSelectAnimation")
                 {
@@ -499,6 +525,9 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
 
             playData._frameEventDataCount = frameEventList.Count;
             playData._frameEventData = frameEventList.ToArray();
+            playData._timeEventDataCount = timeEventList.Count;
+            playData._timeEventData = timeEventList.ToArray();
+
             playData._multiSelectAnimationDataCount = multiSelectAnimationList.Count;
             playData._multiSelectAnimationData = multiSelectAnimationList.ToArray();
         }

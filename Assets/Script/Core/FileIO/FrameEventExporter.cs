@@ -96,7 +96,24 @@ public static class FrameEventLoader
 
                 if(outFrameEvent._startFrame > outFrameEvent._endFrame)
                 {
-                    DebugUtil.assert(false,"start frame cant be greater than the end frame. {0}",node.Name);
+                    DebugUtil.assert(false,"스타트 프레임은 엔드 프레임보다 커질 수 없습니다. [node :{0}] [Line : {1}] [FilePath : {2}]",node.Name, XMLScriptConverter.getLineFromXMLNode(node),filePath);
+                    return null;
+                }
+            }
+            else if(targetName == "StartTime")
+            {
+                outFrameEvent._isTimeBase = true;
+                outFrameEvent._startFrame = float.Parse(attributes[i].Value);
+                outFrameEvent._endFrame = outFrameEvent._startFrame;
+            }
+            else if(targetName == "EndFrame")
+            {
+                outFrameEvent._isTimeBase = true;
+                outFrameEvent._endFrame = float.Parse(attributes[i].Value);
+
+                if(outFrameEvent._startFrame > outFrameEvent._endFrame)
+                {
+                    DebugUtil.assert(false,"스타트 타임은 엔드 타임보다 커질 수 없습니다. [node :{0}] [Line : {1}] [FilePath : {2}]",node.Name, XMLScriptConverter.getLineFromXMLNode(node),filePath);
                     return null;
                 }
             }

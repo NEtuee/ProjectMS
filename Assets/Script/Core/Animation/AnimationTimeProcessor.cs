@@ -6,10 +6,15 @@ public class AnimationTimeProcessor
 
     private float       _animationStartTime = 0f;
     private float       _animationEndTime = 0f;
+
+    private float       _currentTotalAnimationTime;
     
     private bool        _isLoop = false;
     private bool        _isEnd = false;
 
+    private bool        _isLoopedThisFrame = false;
+
+    private int         _animationLoopCount = 0;
     private int         _totalLoopCountPerFrame;
 
     private float       _currentAnimationTime = 0f;
@@ -31,6 +36,9 @@ public class AnimationTimeProcessor
     {
         _isEnd = false;
         _isLoop = false;
+        _isLoopedThisFrame = false;
+
+        _animationLoopCount = 0;
 
         _currentAnimationTime = 0f;
         _currentIndex = 0;
@@ -77,8 +85,12 @@ public class AnimationTimeProcessor
 
         _animationTotalPlayTime += deltaTime;
 
-        if(_isLoop == true && _isEnd == true)
+        _isLoopedThisFrame = false;
+
+        if((_isLoop == true || _animationLoopCount > 0) && _isEnd == true)
         {
+            _isEnd = false;
+
             while(_prevAnimationTime >= _animationEndTime)
             {
                 _prevAnimationTime -= _animationTime;
@@ -86,11 +98,20 @@ public class AnimationTimeProcessor
 
             while(_currentAnimationTime >= _animationEndTime)
             {
-                ++_totalLoopCountPerFrame;
-                _currentAnimationTime -= _animationTime;
+                if(_animationLoopCount > 0 && --_animationLoopCount <= 0)
+                {
+                    _isEnd = true;
+                    _isLoop = false;
+                    _currentAnimationTime = _animationTime;
+                }
+                else
+                {
+                    ++_totalLoopCountPerFrame;
+                    _currentAnimationTime -= _animationTime;
+                }
             }
-
-            _isEnd = false;
+            
+            _isLoopedThisFrame = true;
             setAnimationSpeed(1f);
         }
         else if(_isEnd == true)
@@ -176,6 +197,11 @@ public class AnimationTimeProcessor
         _isLoop = isLoop;
     }
 
+    public void setLoopCount(int loopCount)
+    {
+        _animationLoopCount = loopCount;
+    }
+
     public void setFrame(float startFrame, float endFrame, float fps)
     {
         _framePerSecond = fps;
@@ -189,6 +215,11 @@ public class AnimationTimeProcessor
     public float frameToTime(float frame)
     {
         return frame * _frameToTime;
+    }
+
+    public bool isLoopedThisFrame()
+    {
+        return _isLoopedThisFrame;
     }
 
     public bool isEnd()

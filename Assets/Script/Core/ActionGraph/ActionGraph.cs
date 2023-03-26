@@ -181,7 +181,7 @@ public class ActionGraph
             return;
         }
 
-        _animationPlayer.changeAnimation(_actionGraphBaseData._animationPlayData[animationIndex]);
+        _animationPlayer.changeAnimation(_actionGraphBaseData._animationPlayData[animationIndex][0]);
     }
 
     public bool processActionBranch(ActionGraphBranchData branchData)

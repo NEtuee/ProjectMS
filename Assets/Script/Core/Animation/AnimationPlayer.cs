@@ -8,6 +8,8 @@ public class AnimationPlayDataInfo
 
     //따로 때내어야 함
     public ActionFrameEventBase[]       _frameEventData = null;
+    public ActionFrameEventBase[]       _timeEventData = null;
+
     public MultiSelectAnimationData[]   _multiSelectAnimationData = null;
     
     public AnimationRotationPresetData  _rotationPresetData = null;
@@ -17,9 +19,13 @@ public class AnimationPlayDataInfo
 
     public string                       _path = "";
     public float                        _framePerSec = -1f;
+    public float                        _actionTime = -1f;
     public float                        _startFrame = -1f;
     public float                        _endFrame = -1f;
+
+    public int                          _animationLoopCount = 0;
     public int                          _frameEventDataCount = -1;
+    public int                          _timeEventDataCount = -1;
     public int                          _angleBaseAnimationSpriteCount = -1;
 
     public bool                         _isLoop = false;
@@ -47,6 +53,7 @@ public struct FrameEventProcessDescription
     public ActionFrameEventBase     _targetFrameEvent;
     public ObjectBase               _executeObject;
     public float                    _endTime;
+    public bool                     _isTimeBase;
 
     public void processFrameEvent()
     {
@@ -72,6 +79,7 @@ public class AnimationPlayer
     private MovementGraph _currentMovementGraph;
 
     private int _currentFrameEventIndex;
+    private int _currentTimeEventIndex;
 
     private List<FrameEventProcessDescription> _frameEventProcessList = new List<FrameEventProcessDescription>();
 
@@ -98,7 +106,9 @@ public class AnimationPlayer
             return false;
         }
 
-        _animationTimeProcessor.updateTime(deltaTime);
+        bool isEnd = _animationTimeProcessor.updateTime(deltaTime);
+        if(isEnd == false && _animationTimeProcessor.isLoopedThisFrame())
+            _currentFrameEventIndex = 0;
 
         if(targetEntity != null)
         {
@@ -171,6 +181,7 @@ public class AnimationPlayer
                     desc._executeObject = targetEntity;
                     desc._endTime = _animationTimeProcessor.frameToTime(frameEvent._endFrame);
                     desc._targetFrameEvent = frameEvent;
+                    desc._isTimeBase = false;
 
                     _frameEventProcessList.Add(desc);
                 }
@@ -183,7 +194,43 @@ public class AnimationPlayer
             }
             else
             {
-                return;
+                break;
+            }
+        }
+
+        float currentTotalTime = _animationTimeProcessor.getAnimationTotalPlayTime();
+        for(int i = _currentTimeEventIndex; i < playData._timeEventDataCount; ++i)
+        {
+            ActionFrameEventBase frameEvent = playData._timeEventData[i];
+            if(MathEx.equals(frameEvent._startFrame, currentTotalTime,float.Epsilon) == true || frameEvent._startFrame < currentTotalTime)
+            {
+                if(targetEntity is GameEntityBase && frameEvent.checkCondition(targetEntity as GameEntityBase) == false)
+                {
+                    _currentTimeEventIndex++;
+                    continue;
+                }
+                
+                frameEvent.initialize();
+                if(frameEvent.onExecute(targetEntity) == true && frameEvent._endFrame > frameEvent._startFrame)
+                {
+                    FrameEventProcessDescription desc;
+                    desc._executeObject = targetEntity;
+                    desc._endTime = frameEvent._endFrame;
+                    desc._targetFrameEvent = frameEvent;
+                    desc._isTimeBase = true;
+
+                    _frameEventProcessList.Add(desc);
+                }
+                else
+                {
+                    frameEvent.onExit(targetEntity);
+                }
+
+                _currentTimeEventIndex++;
+            }
+            else
+            {
+                break;
             }
         }
     }
@@ -195,6 +242,14 @@ public class AnimationPlayer
         {
             _currentFrameEventIndex = i;
             if(playData._frameEventData[i]._startFrame >= currentFrame)
+                return;
+        }
+
+        float currentTime = _animationTimeProcessor.getAnimationTotalPlayTime();
+        for(int i = 0; i < playData._timeEventDataCount; ++i)
+        {
+            _currentTimeEventIndex = i;
+            if(playData._timeEventData[i]._startFrame >= currentTime)
                 return;
         }
     }
@@ -217,14 +272,27 @@ public class AnimationPlayer
         float endFrame = playData._endFrame;
         endFrame = endFrame == -1f ? (float)_currentAnimationSprites.Length : endFrame;
 
+        float framePerSecond = playData._framePerSec;
+
+        if(framePerSecond == -1f && playData._actionTime != -1f)
+            framePerSecond = ((float)(endFrame - startFrame) / playData._actionTime) * (playData._animationLoopCount > 0 ? (float)playData._animationLoopCount : 1.0f);
+
         if(playData._isAngleBaseAnimation)
         {
             endFrame = playData._angleBaseAnimationSpriteCount;
             endFrame = endFrame == -1f ? 1f : endFrame;
         }
+        
+        if(framePerSecond == -1f)
+        {
+            DebugUtil.assert(false, "애니메이션 FPS가 -1 입니다. 코드버그인듯? 통보 요망");
+            framePerSecond = 1f;
+        }
+
         _animationTimeProcessor.initialize();
-        _animationTimeProcessor.setFrame(startFrame,endFrame, playData._framePerSec);
+        _animationTimeProcessor.setFrame(startFrame,endFrame, framePerSecond);
         _animationTimeProcessor.setLoop(playData._isLoop);
+        _animationTimeProcessor.setLoopCount(playData._animationLoopCount);
         _animationTimeProcessor.setFrameToTime(startFrame);
         _animationTimeProcessor.setAnimationSpeed(1f);
 

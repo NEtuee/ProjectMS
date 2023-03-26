@@ -7,7 +7,7 @@ public class ActionGraphBaseData
     public ActionGraphNodeData[]                _actionNodeData = null;
     public ActionGraphBranchData[]              _branchData = null;
     public ActionGraphConditionCompareData[]    _conditionCompareData = null;
-    public AnimationPlayDataInfo[]              _animationPlayData = null;
+    public AnimationPlayDataInfo[][]            _animationPlayData = null;
 
     public Dictionary<string, int>             _actionIndexMap = new Dictionary<string, int>();
 
@@ -35,6 +35,7 @@ public class ActionGraphNodeData
     public ActionGraphNodeData()
     {
         _animationInfoIndex = -1;
+        _animationInfoCount = 0;
         _movementType = MovementBase.MovementType.Empty;
         _directionType = DirectionType.AlwaysRight;
         _defenceDirectionType = DefenceDirectionType.Direction;
@@ -46,6 +47,8 @@ public class ActionGraphNodeData
 
     public string                       _nodeName;
     public int                          _animationInfoIndex;
+    public int                          _animationInfoCount;
+
     public MovementBase.MovementType    _movementType = MovementBase.MovementType.Empty;
     public MovementGraphPresetData      _movementGraphPresetData = null;
     public DirectionType                _directionType = DirectionType.AlwaysRight;
