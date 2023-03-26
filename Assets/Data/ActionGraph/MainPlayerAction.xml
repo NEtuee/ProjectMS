@@ -136,14 +136,16 @@
                     <FrameEvent Type="TeleportToTargetBack" Condition="(getTargetFrameTag_Groggy == false) && (Kill == false)" DistanceOffset="-0.3"/>
                     <FrameEvent Type="TeleportToTargetBack" Condition="getTargetFrameTag_Groggy || Kill" DistanceOffset="0.2"/>
 
+                    <!-- <FrameEvent Type="TimelineEffect" Condition="getTargetFrameTag_Groggy || Kill" StartFrame="0" Path="Prefab/Effect/Test_Timeline" Attach="true" UpdateType="NoneScaledDeltaTime"/> -->
+
                     <FrameEvent Type="SetAction" Condition="Kill" Action="AttackSuccessFar"/>
                     <FrameEvent Type="SetTimeScale" Condition="Kill" Scale="0.2" Time="0.2" BlendTime="0.2"/>
-                    <FrameEvent Type="ShakeEffect" Condition="Kill" Scale="0.2" Speed="35.0" Time="0.2"/>
+                    <FrameEvent Type="ShakeEffect" Condition="Kill" Scale="0.15" Speed="35.0" Time="0.2"/>
 
                     <FrameEvent Type="SetAction" Condition="getTargetFrameTag_Groggy" Action="AttackSuccessFar"/>
                     <FrameEvent Type="SetTimeScale" Condition="getTargetFrameTag_Groggy" Scale="0.1" Time="0.1" BlendTime="0.2"/>
                     <FrameEvent Type="ZoomEffect" Condition="getTargetFrameTag_Groggy" StartFrame="0" Scale="2.9"/>
-                    <FrameEvent Type="ShakeEffect" Condition="getTargetFrameTag_Groggy" Scale="0.2" Speed="35.0" Time="0.2"/>
+                    <FrameEvent Type="ShakeEffect" Condition="getTargetFrameTag_Groggy" Scale="0.15" Speed="35.0" Time="0.2"/>
                 </OnHit>
                 <OnGuard>
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" ToTarget="True"/>
