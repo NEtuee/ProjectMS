@@ -15,6 +15,7 @@
     <Include Path="Enemy/OsananaNajimi/NajimiPistolPackage.xml"/>
     <Include Path="Enemy/OsananaNajimi/NajimiFireworkPackage.xml"/>
     <Include Path="Enemy/OsananaNajimi/NajimiBeamPackage.xml"/>
+    <Include Path="Enemy/OsananaNajimi/NajimiStunChasePackage.xml"/>
 
     <Include Path="Common\CommonPhaseIncreasePackage.xml"/>
 
@@ -99,7 +100,7 @@
 
     <SpawnPitchingMachine Package="NajimiSpawnPitchingMachinePackage">
         <UseBranchSet Name="HitReactionSet"/>
-        <Branch Condition="CurrentPackageEnd && getTargetFrameTag_Stun" Execute="StunChase"/>
+        <Branch Condition="getTargetFrameTag_Stun" Execute="StunChase"/>
         <Branch Condition="CurrentPackageEnd" Execute="Runaway"/>
     </SpawnPitchingMachine>
 
@@ -121,14 +122,14 @@
 
     <Pitching Package="NajimiPitchingPackage">
         <UseBranchSet Name="HitReactionSet"/>
-        <Branch Condition="CurrentPackageEnd && getTargetFrameTag_Stun" Execute="StunChase"/>
+        <Branch Condition="getTargetFrameTag_Stun" Execute="StunChase"/>
         <Branch Condition="CurrentPackageEnd" Execute="Runaway"/>
     </Pitching>
 
-    <StunChase Package="CommonChasePackage">
+    <StunChase Package="NajimiStunChasePackage">
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="TargetExists && 
-                           (gv_najimiRushRange >= TargetDistance) && 
+                           (1.5 >= TargetDistance) && 
                            (GraphExecutedTime > gv_najimiTrasitionTime)" Execute="Rush"/>
     </StunChase>
 

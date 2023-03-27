@@ -265,11 +265,16 @@
         
         <Event>
             <OnHit>
-                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="PitchingMachine" Offset="0 0 0" SearchIdentifier="Enemy"/>
+                <FrameEvent Type="Attack" StartFrame="0" AttackPreset="BaseBall">
+                    <OnHit>
+                        <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="PitchingMachine" Offset="0 0 0" SearchIdentifier="Enemy"/>
+                        <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
+                    </OnHit>
+                </FrameEvent>
             </OnHit>
     
             <OnHitEnd>
-                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="PitchingMachine" Offset="0 0 0" SearchIdentifier="Enemy"/>
+                <!--<FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="PitchingMachine" Offset="0 0 0" SearchIdentifier="Enemy"/>-->
             </OnHitEnd>
     
             <OnEnd>
