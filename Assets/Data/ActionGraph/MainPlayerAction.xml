@@ -183,7 +183,11 @@
                     <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/Impact_Timeline" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true" AngleType="AttackPoint"/>
 
                     <FrameEvent Type="TeleportToTarget" DistanceOffset="0"/>
-                    <FrameEvent Type="StopUpdate" StartFrame="0" Time="0.15"/>
+                    <FrameEvent Type="StopUpdate" StartFrame="0" Time="0.07"/>
+
+                    <FrameEvent Type="SetTimeScale" Condition="getTargetFrameTag_Groggy" Scale="0.1" Time="0.1" BlendTime="0.2"/>
+                    <FrameEvent Type="ZoomEffect" Condition="getTargetFrameTag_Groggy" StartFrame="0" Scale="2.9"/>
+                    <FrameEvent Type="ShakeEffect" Condition="getTargetFrameTag_Groggy" Scale="0.15" Speed="35.0" Time="0.2"/>
                 </OnGuardBreak>
 
                 <OnGuardBreakFail>
@@ -194,7 +198,11 @@
                     <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/Impact_Timeline" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true" AngleType="AttackPoint"/>
 
                     <FrameEvent Type="TeleportToTarget" DistanceOffset="0"/>
-                    <FrameEvent Type="StopUpdate" StartFrame="0" Time="0.15"/>
+                    <FrameEvent Type="StopUpdate" StartFrame="0" Time="0.07"/>
+
+                    <FrameEvent Type="SetTimeScale" Condition="getTargetFrameTag_Groggy" Scale="0.1" Time="0.1" BlendTime="0.2"/>
+                    <FrameEvent Type="ZoomEffect" Condition="getTargetFrameTag_Groggy" StartFrame="0" Scale="2.9"/>
+                    <FrameEvent Type="ShakeEffect" Condition="getTargetFrameTag_Groggy" Scale="0.15" Speed="35.0" Time="0.2"/>
                 </OnGuardBreakFail>
             </FrameEvent>
             <FrameEvent Type="Movement" StartFrame="0" Friction="gv_DashFriction" MaxVelocity="gv_DashVelocity" Speed="0" Velocity="gv_DashVelocity" Condition="(getStat_DashPoint >= 1.0)"/>

@@ -23,7 +23,7 @@
                 <AIEvent Type="SetAction" Action="AC_Idle"/>
             </Event_OnExecute>
         
-            <Branch Condition="(PackageExecutedTime >= 0.33)" Execute="TerminatePackage"/>
+            <Branch Condition="(PackageExecutedTime >= 0.3)" Execute="TerminatePackage"/>
         </AI_PitchRecover>
 
         <TerminatePackage>

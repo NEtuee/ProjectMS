@@ -7,6 +7,14 @@
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_Idle>
+
+    <AC_Move MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <Animation Path="Resources/Sprites/Enemy/PitchingMachine/0_idle/" AngleBaseAnimation="True" AngleBaseAnimationCount="1">
+            <FrameEvent Type="Movement" StartFrame="0" Friction="0" MaxVelocity="4" Speed="10.0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Move"/>
+    </AC_Move>
     
     <AC_Hit MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <Animation Path="Resources/Sprites/Enemy/PitchingMachine/2_hit/" FramePerSecond="1" XFlip="true">
@@ -54,7 +62,7 @@
 
     <AC_Shot MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <!-- 투구 준비 모션, 탄막 경로 활성화 -->
-        <Animation Path="Resources/Sprites/Enemy/PitchingMachine/1_pitching" FramePerSecond="0.5" XFlip="true">
+        <Animation Path="Resources/Sprites/Enemy/PitchingMachine/1_pitching" FramePerSecond="1" XFlip="true">
             <FrameEvent Type="Test" StartFrame="0" Log="Shot Execute"/>
             <FrameEvent Type="Danmaku" StartFrame="1" Path="Enemy/BaseBall.xml"/>
         </Animation>
