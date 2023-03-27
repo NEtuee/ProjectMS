@@ -146,7 +146,7 @@ public class AnimationTimeProcessor
         for(int index = _currentIndex; index < _endIndex; ++index)
         {
             _currentIndex = index;
-            if(_currentAnimationTime < _customPresetData._duration[index])
+            if(_currentAnimationTime < _frameDurationStack + _customPresetData._duration[index])
                 break;
 
             _frameDurationStack += _customPresetData._duration[index];
