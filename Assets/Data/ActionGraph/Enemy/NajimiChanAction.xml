@@ -233,7 +233,7 @@
         <!-- 바톤 공격 준비 모션 -->
         <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/3_batonPattern/1_batonReady" FramePerSecond="10" XFlip="true">
             <!-- 0.5 sec -->
-            <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="0.25"/> <!-- Pre Motion: 0.5 sec -->
+            <!-- <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="0.25"/> Pre Motion: 0.5 sec -->
 
             <FrameEvent Type="Movement" StartFrame="0" Friction="12" MaxVelocity="0" Speed="0"/>
         </Animation>
@@ -244,9 +244,9 @@
     <AC_BatonSlash MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="MoveDirection">
         <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/3_batonPattern/2_batonSlash" FramePerSecond="10" XFlip="true">
             <!-- 0.93 sec -->
-            <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="0.7692"/> <!-- Pre Motion: 0.13 sec --> <!-- TODO: 해당 모션을 BatonReady로 뺄 것인지 고민  -->
-            <FrameEvent Type="SetAnimationSpeed" StartFrame="1" Speed="5.0"/> <!-- Main Motion: 0.02 sec -->
-            <FrameEvent Type="SetAnimationSpeed" StartFrame="2" Speed="0.1136"/> <!-- Recovery Motion: 0.88 sec -->
+            <!-- <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="0.7692"/> Pre Motion: 0.13 sec TODO: 해당 모션을 BatonReady로 뺄 것인지 고민  -->
+            <!-- <FrameEvent Type="SetAnimationSpeed" StartFrame="1" Speed="5.0"/> Main Motion: 0.02 sec -->
+            <!-- <FrameEvent Type="SetAnimationSpeed" StartFrame="2" Speed="0.1136"/> Recovery Motion: 0.88 sec -->
             
             <!-- TODO: 바톤 3연속 공격 카운트용 버프. 향후 이름 수정해야함. (Pistol->Baton)-->
             <FrameEvent Type="ApplyBuff" StartFrame="0" ApplyBuff="NajimiAddPistolCount"/>
@@ -274,7 +274,7 @@
         <!-- 성공의 경우 기존 애니메이션의 중간 프레임부터 재생하도록 -->
         <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/3_batonPattern/3_batonSlashSuccess" FramePerSecond="10" XFlip="true" ScalePreset="YSpring">
             <!-- 0.88 sec -->
-            <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="0.1136"/> <!-- Recovery Motion: 0.88 sec -->
+            <!-- <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="0.1136"/> Recovery Motion: 0.88 sec -->
             
             <FrameEvent Type="Effect" StartFrame="0" Path="Resources/Sprites/Effect/Sheath" FramePerSecond="0.5" Offset="0.0 0.0 0.0" Angle="Random_0^360" UseFlip="True" CastShadow="True">
                 <Physics UseGravity="True" Velocity="-1.5 3.5" Friction="1.0" Torque="Random_25^30" AngularFriction="10.0"/>
@@ -289,7 +289,7 @@
     <AC_PistolReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/3_batonPattern/4_pistolReady" FramePerSecond="10" XFlip="true">
             <!-- 0.5 sec -->
-            <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="0.2"/> <!-- Pre Motion: 0.5 sec -->
+            <!-- <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="0.2"/> Pre Motion: 0.5 sec -->
             
             <FrameEvent Type="Movement" StartFrame="0" Friction="12" MaxVelocity="0" Speed="0"/>
         </Animation>
@@ -311,8 +311,8 @@
 
     <AC_FireworkReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/3_batonPattern/4_pistolReady" FramePerSecond="10" XFlip="true">
-            <!-- 0.7 sec -->
-            <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="0.1428"/> <!-- Pre Motion: 0.7 sec -->
+            <!-- 0.8 sec -->
+            <!-- <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="0.1428"/> Pre Motion: 0.7 sec -->
             
             <FrameEvent Type="Movement" StartFrame="0" Friction="12" MaxVelocity="0" Speed="0"/>
         </Animation>
@@ -337,7 +337,7 @@
     <AC_BeamReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/3_batonPattern/4_pistolReady" FramePerSecond="10" XFlip="true">
             <!-- 1.0 sec -->
-            <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="0.1"/> <!-- Pre Motion: 1.0 sec -->
+            <!-- <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="0.1"/> Pre Motion: 1.0 sec -->
             
             <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/NajimiPitchingBeam_TimeLine" Offset="0.0 0.0 0.0" Attach="true" AngleType="Direction" LifeTime="1.0" FollowDirection="True"/>
             <FrameEvent Type="Movement" StartFrame="0" Friction="12" MaxVelocity="0" Speed="0"/>
