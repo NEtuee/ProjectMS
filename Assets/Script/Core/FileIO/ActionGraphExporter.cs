@@ -472,6 +472,10 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             {
                 playData._animationLoopCount = int.Parse(targetValue);
             }
+            else if(targetName == "Preset")
+            {
+                playData._customPresetData = (ResourceContainerEx.Instance().GetScriptableObject(targetValue) as AnimationCustomPreset)._animationCustomPresetData;
+            }
             else
             {
                 DebugUtil.assert(false, "invalid animation attribute: {0} [Line: {1}] [FileName: {2}]",targetName, XMLScriptConverter.getLineFromXMLNode(node), filePath);

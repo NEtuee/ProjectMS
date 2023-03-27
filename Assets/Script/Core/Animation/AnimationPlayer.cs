@@ -14,6 +14,7 @@ public class AnimationPlayDataInfo
     
     public AnimationRotationPresetData  _rotationPresetData = null;
     public AnimationScalePresetData     _scalePresetData = null;
+    public AnimationCustomPresetData    _customPresetData = null;
 
     public int                          _multiSelectAnimationDataCount = 0;
 
@@ -295,6 +296,9 @@ public class AnimationPlayer
         _animationTimeProcessor.setLoopCount(playData._animationLoopCount);
         _animationTimeProcessor.setFrameToTime(startFrame);
         _animationTimeProcessor.setAnimationSpeed(1f);
+
+        if(playData._customPresetData != null)
+            _animationTimeProcessor.setCustomPresetData(playData._customPresetData);
 
         for(int i = 0; i < _frameEventProcessList.Count; ++i)
         {
