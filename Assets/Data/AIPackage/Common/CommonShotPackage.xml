@@ -18,8 +18,14 @@
                 <AIEvent Type="SetDirectionToTarget"/>
             </Event_OnFrame>
             
-            <Branch Condition="End" Execute="AI_Shot"/>
+            <Branch Condition="End" Execute="TerminatePackage"/>
         </AI_Shot>
+
+        <TerminatePackage>
+            <Event_OnExecute>
+                <AIEvent Type="TerminatePackage"/>
+            </Event_OnExecute>
+        </TerminatePackage>
     </AIState>
 
 </AIPackage>
