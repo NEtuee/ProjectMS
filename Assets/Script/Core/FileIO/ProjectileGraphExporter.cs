@@ -71,7 +71,7 @@ public class ProjectileGraphLoader : LoaderBase<ProjectileGraphBaseData[]>
 
             if(targetName == "Animation")
             {
-                AnimationPlayDataInfo playData = ActionGraphLoader.ReadActionAnimation(nodes[nodeIndex],defaultFramePerSecond,_currentFileName);
+                AnimationPlayDataInfo playData = ActionGraphLoader.ReadActionAnimation(nodes[nodeIndex],"",defaultFramePerSecond,_currentFileName);
                 if(playData == null)
                 {
                     DebugUtil.assert(false,"invalid animation : {0} [Line: {1}] [FileName: {2}]",node.Name, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);

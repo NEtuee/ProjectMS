@@ -10,8 +10,6 @@ public class AnimationTimeProcessor
     private float       _animationStartTime = 0f;
     private float       _animationEndTime = 0f;
 
-    private float       _currentTotalAnimationTime;
-    
     private bool        _isLoop = false;
     private bool        _isEnd = false;
 
@@ -32,6 +30,7 @@ public class AnimationTimeProcessor
 
 
     private float       _frameDurationStack = 0f;
+    private float       _actionDuration = -1f;
 
 
 
@@ -46,7 +45,7 @@ public class AnimationTimeProcessor
     {
         _customPresetData = null;
         _frameDurationStack = 0f;
-
+        _actionDuration = -1f;
 
         _isEnd = false;
         _isLoop = false;
@@ -98,11 +97,12 @@ public class AnimationTimeProcessor
         _currentAnimationTime += deltaTime;
         _animationTotalPlayTime += deltaTime;
 
+        _isLoopedThisFrame = false;
+
         if(_customPresetData != null)
             return updateTime2(deltaTime);
 
         _isEnd = CurrentAnimationIsEndInner();
-        _isLoopedThisFrame = false;
 
         if((_isLoop == true || _animationLoopCount > 0) && _isEnd == true)
         {
@@ -143,6 +143,14 @@ public class AnimationTimeProcessor
 
     public bool updateTime2(float deltaTime)
     {
+        bool forceEnd = false;
+        if(_actionDuration != -1f && _animationTotalPlayTime >= _actionDuration)
+        {
+            _currentAnimationTime = _actionDuration - ((float)((int)(_animationTotalPlayTime * (1f / _currentAnimationTime))) * _animationEndTime);
+            _animationTotalPlayTime = _actionDuration;
+            forceEnd = true;
+        }
+
         for(int index = _currentIndex; index < _endIndex; ++index)
         {
             _currentIndex = index;
@@ -164,30 +172,34 @@ public class AnimationTimeProcessor
 
             while(_currentAnimationTime >= _animationEndTime)
             {
+                _currentAnimationTime -= _animationTime;
+                ++_totalLoopCountPerFrame;
                 if(_animationLoopCount > 0 && --_animationLoopCount <= 0)
                 {
                     _isEnd = true;
                     _isLoop = false;
+
                     _currentAnimationTime = _animationTime;
-                }
-                else
-                {
-                    ++_totalLoopCountPerFrame;
-                    _currentAnimationTime -= _animationTime;
+
+                    break;
                 }
             }
 
+            _isLoopedThisFrame = _isLoop || _animationLoopCount != 0;
             _frameDurationStack = 0f;
+
+            float stack = _customPresetData._duration[0];
             for(int index = 0; index < _endIndex; ++index)
             {
                 _currentIndex = index;
-                if(_currentAnimationTime < _customPresetData._duration[index])
+
+                if(_currentAnimationTime < stack)
                     break;
                 
                 _frameDurationStack += _customPresetData._duration[index];
+                stack += _customPresetData._duration[index];
             }
 
-            _isLoopedThisFrame = true;
             setAnimationSpeed(1f);
         }
         else if(_isEnd)
@@ -195,6 +207,14 @@ public class AnimationTimeProcessor
             _currentIndex = _endIndex - 1;
             _currentAnimationTime = _animationEndTime;
         }
+
+        if(forceEnd)
+        {
+            _isEnd = true;
+            return true;
+        }
+
+        _isEnd &= _actionDuration == -1f;
 
         return _isEnd;
     }
@@ -308,6 +328,11 @@ public class AnimationTimeProcessor
 
         _framePerSecond = 0f;
         _frameToTime = 0f;
+    }
+
+    public void setActionDuration(float duration)
+    {
+        _actionDuration = duration;
     }
 
     public float frameToTime(float frame)

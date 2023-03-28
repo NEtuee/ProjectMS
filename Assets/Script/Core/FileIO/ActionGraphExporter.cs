@@ -329,11 +329,29 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
 
         List<AnimationPlayDataInfo> animationPlayDataInfoList = new List<AnimationPlayDataInfo>();
 
+        string masterPath = "";
+
         for(int i = 0; i < nodeList.Count; ++i)
         {
-            if(nodeList[i].Name == "Animation")
+            if(nodeList[i].Name == "AnimationHeader")
             {
-                AnimationPlayDataInfo animationData = ReadActionAnimation(nodeList[i],defaultFPS, filePath, actionTime);
+                XmlAttributeCollection xmlAttributes = nodeList[i].Attributes;
+                for(int index = 0; index < xmlAttributes.Count; ++index)
+                {
+                    string attrName = xmlAttributes[index].Name;
+                    string attrValue = xmlAttributes[index].Value;
+
+                    if(attrName == "MasterPath")
+                    {
+                        masterPath = attrValue;
+                    }
+                }
+                
+
+            }
+            else if(nodeList[i].Name == "Animation")
+            {
+                AnimationPlayDataInfo animationData = ReadActionAnimation(nodeList[i],masterPath,defaultFPS, filePath, actionTime);
                 nodeData._animationInfoIndex = animationDataList.Count;
                 animationData._hasMovementGraph = nodeData._movementType == MovementBase.MovementType.RootMotion;
                 animationPlayDataInfoList.Add(animationData);
@@ -404,7 +422,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         return nodeData;
     }
 
-    public static AnimationPlayDataInfo ReadActionAnimation(XmlNode node, float defaultFPS, string filePath, float actionTime = -1f)
+    public static AnimationPlayDataInfo ReadActionAnimation(XmlNode node, string masterPath, float defaultFPS, string filePath, float actionTime = -1f)
     {
         AnimationPlayDataInfo playData = new AnimationPlayDataInfo();
         playData._framePerSec = actionTime == -1f ? defaultFPS : -1f;
@@ -418,7 +436,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
 
             if(targetName == "Path")
             {
-                playData._path = targetValue;
+                playData._path = masterPath + targetValue;
             }
             else if(targetName == "FramePerSecond")
             {
@@ -474,7 +492,21 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             }
             else if(targetName == "Preset")
             {
-                playData._customPresetData = (ResourceContainerEx.Instance().GetScriptableObject(targetValue) as AnimationCustomPreset)._animationCustomPresetData;
+                string path = masterPath + targetValue;
+                playData._path = "Resources/" + path;
+
+                ScriptableObject[] scriptableObjects = ResourceContainerEx.Instance().GetScriptableObjects(path);
+                if(scriptableObjects == null || (scriptableObjects[0] is AnimationCustomPreset) == false)
+                {
+                    DebugUtil.assert(false, "애니메이션 프리셋이 존재하지 않습니다. [Path: {0}] [Line: {1}] [FileName: {2}]",path, XMLScriptConverter.getLineFromXMLNode(node), filePath);
+                    return null;
+                }
+
+                playData._customPresetData = (scriptableObjects[0] as AnimationCustomPreset)._animationCustomPresetData;
+            }
+            else if(targetName == "Duration")
+            {
+                playData._duration = float.Parse(targetValue);
             }
             else
             {

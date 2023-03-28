@@ -24,6 +24,8 @@ public class AnimationPlayDataInfo
     public float                        _startFrame = -1f;
     public float                        _endFrame = -1f;
 
+    public float                        _duration = -1f;
+
     public int                          _animationLoopCount = 0;
     public int                          _frameEventDataCount = -1;
     public int                          _timeEventDataCount = -1;
@@ -110,7 +112,7 @@ public class AnimationPlayer
         bool isEnd = _animationTimeProcessor.updateTime(deltaTime);
         if(isEnd == false && _animationTimeProcessor.isLoopedThisFrame())
             _currentFrameEventIndex = 0;
-
+            
         if(targetEntity != null)
         {
             processFrameEventContinue();
@@ -294,6 +296,7 @@ public class AnimationPlayer
         _animationTimeProcessor.setFrame(startFrame,endFrame, framePerSecond);
         _animationTimeProcessor.setLoop(playData._isLoop);
         _animationTimeProcessor.setLoopCount(playData._animationLoopCount);
+        _animationTimeProcessor.setActionDuration(playData._duration);
         _animationTimeProcessor.setFrameToTime(startFrame);
         _animationTimeProcessor.setAnimationSpeed(1f);
 

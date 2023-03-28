@@ -761,7 +761,6 @@ public class ActionFrameEvent_ApplyBuff : ActionFrameEventBase
             return false;
         
         ((GameEntityBase)executeEntity).applyActionBuffList(buffKeyList);
-        
         return true;
     }
 

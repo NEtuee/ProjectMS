@@ -150,6 +150,11 @@ public class ResourceContainerEx : Singleton<ResourceContainerEx>
 		return _scriptableResource.GetOrLoadResource(fileName);
 	}
 
+	public ScriptableObject[] GetScriptableObjects(string fileName)
+	{
+		return _scriptableResource.GetOrLoadResources(fileName);
+	}
+
 	public Sprite GetSprite(string fileName)
 	{
 		return _spriteResource.GetOrLoadResource(fileName);
