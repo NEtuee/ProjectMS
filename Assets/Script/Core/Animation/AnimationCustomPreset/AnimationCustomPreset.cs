@@ -17,6 +17,8 @@ public class AnimationCustomPresetEditor : Editor
 {
     AnimationCustomPreset controll;
 
+    private float _fps = 0f;
+
 	void OnEnable()
     {
         controll = (AnimationCustomPreset)target;
@@ -39,6 +41,24 @@ public class AnimationCustomPresetEditor : Editor
 
             EditorUtility.SetDirty(controll);
         }
+
+        EditorGUILayout.BeginHorizontal();
+
+        _fps = EditorGUILayout.FloatField(_fps);
+        if(GUILayout.Button("Set Duration From FPS"))
+        {
+            float perFrame = 1f / _fps;
+            for(int index = 0; index < controll._animationCustomPresetData._duration.Length; ++index)
+            {
+                controll._animationCustomPresetData._duration[index] = perFrame;
+            }
+
+            controll._animationCustomPresetData._totalDuration = (float)controll._animationCustomPresetData._duration.Length * perFrame;
+        }
+
+        EditorGUILayout.EndHorizontal();
+
+        
     }
 }
 
