@@ -70,11 +70,11 @@
 <!-- 페이즈 전환 액션 -->
 
     <AC_PhaseIncrease MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <!-- 1 sec, 애니 내용에 따라 시간 변동 가능 -->
-        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/4_phaseTransition" FramePerSecond="1" XFlip="true">
+        <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/"/>
+        <Animation Preset="4_phaseTransition" XFlip="true" Duration="1.0">
             <!-- 페이즈 전환 중 피격되더라도 무시되어야 함. -->
-            <FrameEvent Type="ApplyBuff" StartFrame="0" ApplyBuff="IncreasePhase"/>
             <!-- TODO: 페이즈 전환 밀치기 패턴 (노 데미지 군중기) -->
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="IncreasePhase"/>
         </Animation>
         
         <Branch Condition="End" Execute="AC_Idle"/>
@@ -87,77 +87,73 @@
 
     <!-- 사용 안함 -->
     <AC_RushReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/1_rushPattern/1_rush/rushReady" FramePerSecond="10" RotationPreset="SpinLinear" XFlip="true">
-            <!-- 0.3 sec -->
-            <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="0.3333"/> <!-- Pre Motion: 0.3 sec -->
-
+        <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/1_rushPattern/1_rush/"/>
+        <Animation Preset="1_rushMain" RotationPreset="SpinLinear" XFlip="true" Duration="0.3">
             <FrameEvent Type="Movement" StartFrame="0" Friction="0" MaxVelocity="5" Speed="15"/>
         </Animation>
-
+    
         <Branch Condition="End" Execute="AC_RushReady"/>
     </AC_RushReady>
 
     <!-- 아카네를 잡기위해 돌진하는 모션, 충돌 시 데미지 적용, 잡기 처리 -->
     <AC_Rush MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <!-- 나지미 돌진, 헛다리 애니메이션. 공격 성공 시 성공 액션으로 전이. -->
-        
-        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/1_rushPattern/1_rush" FramePerSecond="12" XFlip="true">
-            <!-- 2 sec -->
-            <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="1.6666"/>    <!-- [Main] Tring to Catch Motion: 0.2 sec -->
-            <FrameEvent Type="SetAnimationSpeed" StartFrame="4" Speed="1"/>         <!-- [Recovery] Rolling Motion: 0.3333 sec -->
-            <!-- [The Reset Recovery Time Is Maganged by Rush Package] -->          <!-- [Recovery] Idle Motion: 1.47 sec -->
-
-            <FrameEvent Type="Movement" StartFrame="0" Friction="24" MaxVelocity="12" Velocity="12" Speed="0"/>
-            <FrameEvent Type="ApplyBuff" StartFrame="0" ApplyBuff="NajimiAddRushCount"/>
-            <FrameEvent Type="Attack" StartFrame="0" EndFrame="4" AttackPreset="Najimi_Rush" AttackType="Catch" CatchOffset="0 0 0">
+        <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/1_rushPattern/1_rush/"/>
+        <Animation Preset="1_rushMain" XFlip="true" Duration="0.2">
+            <FrameEvent Type="Movement" StartTime="0" Friction="24" MaxVelocity="12" Velocity="12" Speed="0"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="NajimiAddRushCount"/>
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.2" AttackPreset="Najimi_Rush" AttackType="Catch" CatchOffset="0 0 0">
                 <OnCatch>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CatchedSet"/>
-                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
-
+                    
                     <FrameEvent Type="ZoomEffect" Scale="2.8"/>
                     <FrameEvent Type="StopUpdate" Time="0.15"/>
+                    
+                    <!-- visual -->
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
                 </OnCatch>
-
             </FrameEvent>
         </Animation>
+        <Animation Preset="2_rushRoll" XFlip="true" Duration="0.25"/>
+        <Animation Preset="3_rushRecover" XFlip="true" Duration="1.47"/>
 
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_Rush>
 
     <!-- 아카네 잡기에 성공하여 꽉 끌어안는 모션 -->
     <AC_RushSuccess MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
-        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/1_rushPattern/2_grab" FramePerSecond="12" XFlip="true">
-            <!-- 2 sec -->
-            <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="0.0833"/> <!-- Pre Motion: 1 sec --> <!-- Struggle, 아카네 저항 -->
+        <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/1_rushPattern/2_grab/"/>
+        <Animation Preset="1_grabPre" XFlip="true" Duration="1.0">
             <!-- TODO: struggle 추가 필요 -->
-            <FrameEvent Type="SetAnimationSpeed" StartFrame="1" Speed="0.0833"/> <!-- Main Motion: 1 sec --> <!-- Grab, 나지미 부러뜨리기 -->
-            
-            <FrameEvent Type="Movement" StartFrame="0" Friction="12"/>
-            
-            <FrameEvent Type="Attack" StartFrame="1" AttackPreset="Najimi_Catch">
+            <!--
+            <MultiSelectAnimation Path="Sprites/Enemy/OsananaNajimi/1_rushPattern/2_grab/3_struggle" Condition="getKey_Escape_1"/>
+            <MultiSelectAnimation Path="Sprites/Enemy/OsananaNajimi/1_rushPattern/2_grab/1_grabPre" Condition="getKey_Escape_2"/>
+            -->
+            <FrameEvent Type="Movement" StartTime="0" Friction="12"/>
+        </Animation>
+        <Animation Preset="2_grabMain" XFlip="true" Duration="1.0">
+            <FrameEvent Type="Attack" StartTime="0" AttackPreset="Najimi_Catch">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
-                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
-
                     <FrameEvent Type="ZoomEffect" Scale="2.8"/>
                     <FrameEvent Type="StopUpdate" Time="0.15"/>
+
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
                 </OnHit>
             </FrameEvent>
 
-            <FrameEvent Type="Test" StartFrame="2" Log="ReleaseCatch"/>
-            <FrameEvent Type="ReleaseCatch" StartFrame="2" Push="1 0 0" Condition="getTargetFrameTag_Recatchable == false"/>
+            <FrameEvent Type="ReleaseCatch" StartTime="1" Push="1 0 0" Condition="getTargetFrameTag_Recatchable == false"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_RushSuccess>
 
     <AC_Away MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
-        <Animation Path="Resources/Sprites/Enemy/OsananaNajimi/1_rushPattern/4_away" FramePerSecond="16" RotationPreset="NajimiAway" Loop="false">
-            <!-- 2 sec -->
-            <FrameEvent Type="SetAnimationSpeed" StartFrame="0" Speed="1"/> <!-- Recovery Motion: 0.3333 sec --> <!-- Rush Package에서 시간 체크 -->
-
-            <FrameEvent Type="Movement" StartFrame="0" Friction="12" Velocity="-6" Speed="0"/>
+        <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/1_rushPattern/4_away/"/>
+        <Animation Preset="1_awaySpin" XFlip="true" RotationPreset="NajimiAway" Duration="1.0">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" Velocity="-6" Speed="0"/>
+        </Animation>
+        <Animation Preset="2_awayStand" XFlip="true" Duration="1.0">
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>

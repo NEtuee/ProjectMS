@@ -8,10 +8,11 @@
             </Event_OnExecute>
             <!-- 추후 발차기 종류 추가 (일반 발차기, 후공 발차기, 3연속 발차기)-->
             <Branch Condition="AttackCatchTarget" Execute="AI_RushSuccess"/>
-            <Branch Condition="End" Execute="AI_RushFailed"/>
+            <Branch Condition="End" Execute="TerminatePackage"/>
         </AI_Rush>
 
         <!-- Rush 공격 실패 후 대기 상태, 1.47 sec (0.53 sec 은 Rush에서 사용)-->
+        <!--
         <AI_RushFailed UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_Idle"/>
@@ -19,7 +20,7 @@
 
             <Branch Condition="(PackageExecutedTime >= 1.47)" Execute="TerminatePackage"/>
         </AI_RushFailed>
-
+        -->
         <AI_RushSuccess UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
             <Event_OnExecute>
                 <AIEvent Type="Test" Log="AI Rush Success"/>
@@ -36,9 +37,10 @@
                 <AIEvent Type="SetAction" Action="AC_Away"/>
             </Event_OnExecute>
         
-            <Branch Condition="(PackageExecutedTime >= 1.0)" Execute="AI_AwayStand"/>
+            <Branch Condition="End" Execute="TerminatePackage"/>
         </AI_Away>
 
+        <!--
         <AI_AwayStand UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_Idle"/>
@@ -46,6 +48,7 @@
 
             <Branch Condition="(PackageExecutedTime >= 1.0)" Execute="TerminatePackage"/>
         </AI_AwayStand>
+        -->
 
         <TerminatePackage>
             <Event_OnExecute>
