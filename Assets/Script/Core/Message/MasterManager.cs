@@ -89,9 +89,11 @@ public class MasterManager : MessageHub<ManagerBase>
     {
         float deltaTime = Time.deltaTime;
         ActionKeyInputManager.Instance().progress(deltaTime);
+        GlobalTimer.Instance().setUpdateProcessing(true);
 
         if(_update == false && _frameUpdate == false)
         {
+            GlobalTimer.Instance().setUpdateProcessing(false);
             ReceiveMessageProcessing();
             return;
         }

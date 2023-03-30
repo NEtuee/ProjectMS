@@ -167,6 +167,8 @@ public class ActionGraph
         int animationInfoIndex = getCurrentAction()._animationInfoIndex;
         if(animationInfoIndex != -1)
             changeAnimation(animationInfoIndex,_currentAnimationIndex);
+        else
+            DebugUtil.assert(false, "something is wrong : {0}",getCurrentActionName());
 
         if(getCurrentAction()._isActionSelection == true)
         {

@@ -222,6 +222,7 @@ public class AnimationPlayer
                     desc._targetFrameEvent = frameEvent;
                     desc._isTimeBase = true;
 
+                    Debug.Log(frameEvent.getFrameEventType() + ", " + desc._endTime);
                     _frameEventProcessList.Add(desc);
                 }
                 else
@@ -245,7 +246,7 @@ public class AnimationPlayer
         {
             _currentFrameEventIndex = i;
             if(playData._frameEventData[i]._startFrame >= currentFrame)
-                return;
+                break;
         }
 
         float currentTime = _animationTimeProcessor.getAnimationTotalPlayTime();
@@ -253,8 +254,9 @@ public class AnimationPlayer
         {
             _currentTimeEventIndex = i;
             if(playData._timeEventData[i]._startFrame >= currentTime)
-                return;
+                break;
         }
+
     }
 
     public void changeAnimation(AnimationPlayDataInfo playData)
@@ -395,7 +397,7 @@ public class AnimationPlayer
     {
         if(_currentAnimationSprites.Length <= _animationTimeProcessor.getCurrentIndex())
         {
-            DebugUtil.assert(false, "스프라이트 Out Of Index 입니다. End Frame을 확인해 주세요.");
+            DebugUtil.assert(false, "스프라이트 Out Of Index 입니다. AnimationPreset이 잘못되어 있지는 않나요? End Frame을 확인해 주세요. [Path: {0}]",_currentAnimationPlayData._path);
             return null;
         }
 

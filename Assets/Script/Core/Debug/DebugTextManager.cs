@@ -25,9 +25,11 @@ public class DebugTextManager : MonoBehaviour
 
     public void Update()
     {
+        float deltaTime = GlobalTimer.Instance().isUpdateProcessing() ? GlobalTimer.Instance().getSclaedDeltaTime() : 0f;
+
         foreach(var item in _debugTextList.Values)
         {
-            item._timer -= Time.deltaTime;
+            item._timer -= deltaTime;
             if(item._timer <= 0f)
                 _deleteTarget.Push(item._itemKey);
         }

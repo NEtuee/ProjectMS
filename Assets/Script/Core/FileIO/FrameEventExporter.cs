@@ -106,7 +106,7 @@ public static class FrameEventLoader
                 outFrameEvent._startFrame = float.Parse(attributes[i].Value);
                 outFrameEvent._endFrame = outFrameEvent._startFrame;
             }
-            else if(targetName == "EndFrame")
+            else if(targetName == "EndTime")
             {
                 outFrameEvent._isTimeBase = true;
                 outFrameEvent._endFrame = float.Parse(attributes[i].Value);

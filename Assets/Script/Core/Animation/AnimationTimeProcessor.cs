@@ -259,11 +259,17 @@ public class AnimationTimeProcessor
 
     public float getCurrentNormalizedTime()
     {
+        if(_isEnd)
+            return 1f;
+            
         return (_currentAnimationTime - _animationStartTime) / _animationTime;
     }
 
     public float getPrevNormalizedTime()
     {
+        if(_prevAnimationTime == _currentAnimationTime && _isEnd)
+            return 1f;
+            
         return (_prevAnimationTime - _animationStartTime) / _animationTime;
     }
 
