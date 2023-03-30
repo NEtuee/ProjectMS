@@ -324,6 +324,7 @@
 -->
     <Hit MovementType="FrameEvent" DirectionType="MousePoint" DefenceDirectionType="MousePoint" FlipType="Keep" DefenceType="Guard" DefenceAngle="180.0">
         <Animation Path="Resources/Sprites/NewPlayer/Hit/" FramePerSecond="2" XFlip="true">
+            <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/empty" Condition="IsCatchTarget"/>
             <FrameEvent Type="Movement" StartFrame="0" Friction="gv_IdleFriction" MaxVelocity="0" Velocity="0" Speed="0"/>
         </Animation>
 
