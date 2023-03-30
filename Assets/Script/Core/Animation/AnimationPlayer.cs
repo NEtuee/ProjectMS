@@ -301,7 +301,10 @@ public class AnimationPlayer
         _animationTimeProcessor.setAnimationSpeed(1f);
 
         if(playData._customPresetData != null)
+        {
+            DebugUtil.assert(playData._customPresetData._totalDuration > 0,"CustomPreset의 TotalDuration이 0이거나 음수 입니다. 데이터를 잘못 만든듯? : [Path : {0}]",playData._path);
             _animationTimeProcessor.setCustomPresetData(playData._customPresetData);
+        }
 
         for(int i = 0; i < _frameEventProcessList.Count; ++i)
         {

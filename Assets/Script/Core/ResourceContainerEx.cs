@@ -26,7 +26,7 @@ public class ManagedResourceItem<Value> where Value : class
 		return obj;
 	}
 
-	public Value[] GetOrLoadResources(string path)
+	public Value[] GetOrLoadResources(string path, string additionalMessage)
 	{
 		if(_multiResourceContainer.ContainsKey(path))
 			return _multiResourceContainer[path];
@@ -34,7 +34,7 @@ public class ManagedResourceItem<Value> where Value : class
 		UnityEngine.Object[] obj = LoadAll(path, GetResourceType());
 		if(obj.Length == 0)
 		{
-			DebugUtil.assert(false, "file does not exist : {0}",path);
+			DebugUtil.assert(false, additionalMessage + "file does not exist : {0}",path);
 			return null;
 		}
 
@@ -152,7 +152,7 @@ public class ResourceContainerEx : Singleton<ResourceContainerEx>
 
 	public ScriptableObject[] GetScriptableObjects(string fileName)
 	{
-		return _scriptableResource.GetOrLoadResources(fileName);
+		return _scriptableResource.GetOrLoadResources(fileName, "ScriptableObject가 없습니다. ");
 	}
 
 	public Sprite GetSprite(string fileName)
@@ -164,7 +164,7 @@ public class ResourceContainerEx : Singleton<ResourceContainerEx>
 	{
 		string cut = folderName.Substring(folderName.IndexOf("Resources") + 10);
 		
-		return _spriteResource.GetOrLoadResources(cut);
+		return _spriteResource.GetOrLoadResources(cut, "Sprite가 없습니다. ");
 	}
 
 	public GameObject GetPrefab(string fileName)
