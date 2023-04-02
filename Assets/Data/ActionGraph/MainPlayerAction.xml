@@ -343,7 +343,7 @@
         <Branch Condition="End == true" Execute="Kiiled"/>
     </Kiiled>
 
-    <Catched MovementType="FrameEvent" DirectionType="AITarget" FlipType="Direction" ApplyBuff="CatchedEscape">
+    <Catched MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction" ApplyBuff="CatchedEscape">
         <Animation Path="Resources/Sprites/NewPlayer/empty" StartFrame="0" EndFrame="1" XFlip="true">
             <FrameEvent Type="Test" Log="Akane Catched"/>
             <FrameEvent Type="Movement" StartFrame="0" Friction="12" MaxVelocity="0" Velocity="0" Speed="0"/>
@@ -357,7 +357,7 @@
         <Branch Condition="End == true" Execute="Catched"/>
     </Catched>
 
-    <CatchReleased MovementType="FrameEvent" DirectionType="AITarget" FlipType="Direction" RotationType="Direction">
+    <CatchReleased MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction" RotationType="Direction">
         <Animation Preset="Sprites/NewPlayer/catchRealese/" XFlip="true" Duration="1.3">
             <FrameEvent Type="ApplyBuff" StartFrame="0" ApplyBuff="CatchedClear"/>
             <FrameEvent Type="ApplyBuff" StartFrame="0" ApplyBuff="StunClear"/>
