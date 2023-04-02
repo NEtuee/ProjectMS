@@ -121,16 +121,25 @@
     </AC_Rush>
 
     <!-- 아카네 잡기에 성공하여 꽉 끌어안는 모션 -->
-    <AC_RushSuccess MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/1_rushPattern/2_grab/"/>
-        <Animation Preset="1_grabPre" XFlip="true" Duration="1.0">
-            <!--
-            <MultiSelectAnimation Path="Sprites/Enemy/OsananaNajimi/1_rushPattern/3_struggle" Condition="getKey_Escape_1"/>
-            <MultiSelectAnimation Path="Sprites/Enemy/OsananaNajimi/1_rushPattern/2_grab/1_grabPre" Condition="getKey_Escape_2"/>
-            -->
+    <AC_RushSuccess_Entry MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+        <Animation Preset="Sprites/Enemy/OsananaNajimi/1_rushPattern/2_grab/1_grabPre" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12"/>
         </Animation>
-        <Animation Preset="2_grabMain" XFlip="true" Duration="1.0">
+
+        <Branch Condition="getKey_Escape_1 || getKey_Escape_2" Execute="AC_RushSuccess_Struggle"/>
+    </AC_RushSuccess_Entry>
+    <AC_RushSuccess_Struggle MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+        <Animation Preset="Sprites/Enemy/OsananaNajimi/1_rushPattern/3_struggle" XFlip="true" Duration="1.0">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12"/>
+        </Animation>
+
+        <Branch Condition="getKey_Escape_1 || getKey_Escape_2" Execute="AC_RushSuccess_Entry"/>
+    </AC_RushSuccess_Struggle>
+
+    <AC_RushSuccess_Attack MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+        <Animation Preset="Sprites/Enemy/OsananaNajimi/1_rushPattern/2_grab/2_grabMain" XFlip="true" Duration="1.0">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12"/>
+            
             <FrameEvent Type="Attack" StartTime="0" AttackPreset="Najimi_Catch">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
@@ -145,7 +154,7 @@
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>
-    </AC_RushSuccess>
+    </AC_RushSuccess_Attack>
 
     <AC_Away MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/1_rushPattern/4_away/"/>

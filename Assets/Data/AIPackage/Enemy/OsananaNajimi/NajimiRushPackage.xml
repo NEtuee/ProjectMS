@@ -24,13 +24,24 @@
         <AI_RushSuccess UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
             <Event_OnExecute>
                 <AIEvent Type="Test" Log="AI Rush Success"/>
-                <AIEvent Type="SetAction" Action="AC_RushSuccess"/>
+                <AIEvent Type="SetAction" Action="AC_RushSuccess_Entry"/>
             </Event_OnExecute>
 
+            <Branch Condition="PackageExecutedTime >= 1.0" Execute="AI_RushSuccess_Attack"/>
             <Branch Condition="End && getTargetFrameTag_Recatchable" Execute="AI_RushSuccess"/>
             <Branch Condition="IsCatcher == false" Execute="AI_Away"/>
             <Branch Condition="End" Execute="AI_Away"/>            
         </AI_RushSuccess>
+
+        <AI_RushSuccess_Attack UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <Event_OnExecute>
+                <AIEvent Type="SetAction" Action="AC_RushSuccess_Attack"/>
+            </Event_OnExecute>
+            
+            <Branch Condition="End && getTargetFrameTag_Recatchable" Execute="AI_RushSuccess"/>
+            <Branch Condition="IsCatcher == false" Execute="AI_Away"/>
+            <Branch Condition="End" Execute="AI_Away"/>
+        </AI_RushSuccess_Attack>
 
         <AI_Away UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
             <Event_OnExecute>
