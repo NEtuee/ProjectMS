@@ -27,15 +27,11 @@
         <Branch Condition="End" Execute="AC_Dash"/>
     </AC_Dash>
 
-    <!-- 그로기 -->
     <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/0_default/"/>
         <Animation Preset="4_hit" XFlip="true" Duration="1.25">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
-            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BattleClear"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="Hit"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="Groggy"/>
-
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountIncrease"/>
             <FrameEvent Type="ZoomEffect" Scale="2.8"/>
             <FrameEvent Type="StopUpdate" Time="0.15"/>
         </Animation>
@@ -43,13 +39,23 @@
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_Hit>
 
-    <!-- 그로기 -->
     <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/0_default/"/>
         <Animation Preset="4_hit" XFlip="true" Duration="1.25">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountIncrease"/>
+            <FrameEvent Type="ZoomEffect" Scale="2.8"/>
+            <FrameEvent Type="StopUpdate" Time="0.15"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_GuardBroken>
+
+    <AC_Groggy MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/0_default/"/>
+        <Animation Preset="4_hit" XFlip="true" Duration="1.25">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BattleClear"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="Hit"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="Groggy"/>
 
             <FrameEvent Type="ZoomEffect" Scale="2.8"/>
@@ -57,7 +63,7 @@
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
-    </AC_GuardBroken>
+    </AC_Groggy>
     
     <Dead DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/0_default/"/>

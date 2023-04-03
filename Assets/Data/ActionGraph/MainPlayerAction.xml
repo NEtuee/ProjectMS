@@ -120,7 +120,7 @@
             <FrameEvent Type="Attack" StartFrame="0" AttackPreset="PlayerAttackTest" Condition="(getStat_DashPoint >= 1.0)">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="TargetBattleIncrement" Condition="getTargetFrameTag_Hit == false"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="TargetBattleIncrement" Condition="getTargetFrameTag_Groggy == false"/>
                     <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
 
 
@@ -178,7 +178,7 @@
             <FrameEvent Type="Attack" StartFrame="0" AttackType="GuardBreak" AttackPreset="Akane_Kick" IgnoreDefenceType="Guard">
                 <OnGuardBreak>
                     <FrameEvent Type="ApplyBuffTarget" StartFrame="0" ApplyBuff="21"/>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="TargetBattleIncrement" Condition="getTargetFrameTag_Hit == false"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="TargetBattleIncrement" Condition="getTargetFrameTag_Groggy == false"/>
 
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc" FramePerSecond="18.0" Offset="0.0 0.0 0.0" ToTarget="true"/>
                     <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/Impact_Timeline" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true" AngleType="AttackPoint"/>
@@ -192,7 +192,7 @@
                 </OnGuardBreak>
 
                 <OnGuardBreakFail>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="TargetBattleIncrement" Condition="getTargetFrameTag_Hit == false"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="TargetBattleIncrement" Condition="getTargetFrameTag_Groggy == false"/>
                     
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc" FramePerSecond="18.0" Offset="0.0 0.0 0.0" ToTarget="true"/>
 

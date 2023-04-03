@@ -1,9 +1,7 @@
 <AIGraph Name="NajimiChanAI" DefaultState="Entry">
 
     <Include Path="Common\CommonTestPackage.xml"/>
-    <Test Package="CommonTestPackage">
-        
-    </Test>
+    <Test Package="CommonTestPackage"/>
 
     <Include Path="Common\CommonDeadPackage.xml"/>
     <Include Path="Common\CommonHitPackage.xml"/>
@@ -12,6 +10,7 @@
     <Include Path="Common\CommonIdlePackage.xml"/>
     <Include Path="Common\CommonGuardBrokenPackage.xml"/>
     <Include Path="Common\CommonRunawayPackage.xml"/>
+    <Include Path="Common\CommonGroggyPackage.xml"/>
 
     <Include Path="Enemy/OsananaNajimi/NajimiRushPackage.xml"/>
     <Include Path="Enemy/OsananaNajimi/NajimiSpawnPitchingMachinePackage.xml"/>
@@ -24,37 +23,21 @@
 
     <Include Path="Common\CommonPhaseIncreasePackage.xml"/>
 
-    <!-- 보스전 대기 시간 (나중에 보스전 시작 트리거를 받아야 함)-->
-    <GlobalVariable Name="gv_najimiReadyTime" Value="1.5"/>
-    <!-- 나지미 돌진 사거리 -->
-    <GlobalVariable Name="gv_najimiRushRange" Value="2.0"/>
-    <!-- 나지미 재돌진 텀 -->
-    <GlobalVariable Name="gv_najimiRushTime" Value="1.5"/>
-    <!-- 나지미 피칭머신 소환 사거리 (어느정도 접근해서 소환할 지) -->
-    <GlobalVariable Name="gv_najimiPitchingRange" Value="3.0"/>
-    <!-- 나지미 투구 안전 사거리 (얼마나 도망갈 지) -->
-    <GlobalVariable Name="gv_najimiSafePitchRange" Value="3.5"/>
-    <!-- 나지미 바톤 사거리 -->
-    <GlobalVariable Name="gv_najimiBatonRange" Value="4.0"/>
-
-    <!-- 나지미 신호총 안전 사거리 (얼마나 도망갈 지) -->
-    <GlobalVariable Name="gv_najimiSafePistolRange" Value="2.0"/>
-    <!-- 나지미 폭죽 안전 사거리  -->
-    <GlobalVariable Name="gv_najimiSafeFireworkRange" Value="2.5"/>
     
-    <!-- 나지미 행동 전환 시간 -->
-    <GlobalVariable Name="gv_najimiTrasitionTime" Value="0.15"/>
-    <!-- 나지미 돌진 행동 전환 시간 -->
-    <GlobalVariable Name="gv_najimiRushTrasitionTime" Value="0.8"/>
+    <GlobalVariable Name="gv_najimiReadyTime" Value="1.5"/>     <!-- 보스전 대기 시간 (나중에 보스전 시작 트리거를 받아야 함)-->
+    
+    <!-- Dodge Pattern -->
+    <GlobalVariable Name="gv_najimiHitCountMin" Value="2.0"/>     <!-- 나지미 피격 최소 허용 횟수 -->
+    <GlobalVariable Name="gv_najimiHitCountMax" Value="4.0"/>     <!-- 나지미 피격 최대 허용 횟수 -->
 
-    <!-- 나지미 2페이즈 전환 트리거 카운트 (러쉬 공격 10회) -->
-    <GlobalVariable Name="gv_najimiRushCount" Value="10.0"/>
-    <!-- 나지미 2페이즈 전환 기준 체력 -->
-    <GlobalVariable Name="gv_najimiStdHp_2Phase" Value="38.0"/> <!-- 34 -->
-    <!-- 나지미 3페이즈 전환 기준 체력 -->
-    <GlobalVariable Name="gv_najimiStdHp_3Phase" Value="36.0"/> <!-- 17 -->
-    <!-- 나지미 그로기 기준 배틀 포인트 -->
-    <GlobalVariable Name="gv_najimiStdBattle" Value="4.0"/>
+    <!-- Rush Pattern -->
+    <GlobalVariable Name="gv_najimiRushRange" Value="2.0"/>     <!-- 나지미 돌진 사거리 -->
+    <GlobalVariable Name="gv_najimiRushTime" Value="1.5"/>      <!-- 나지미 재돌진 텀 -->
+
+    <GlobalVariable Name="gv_najimiStdHp_2Phase" Value="38.0"/> <!-- 나지미 2페이즈 전환 기준 체력 --> <!-- 34 -->
+    <GlobalVariable Name="gv_najimiStdHp_3Phase" Value="36.0"/> <!-- 나지미 3페이즈 전환 기준 체력 --> <!-- 17 -->
+
+    <GlobalVariable Name="gv_najimiStdBattle" Value="4.0"/>     <!-- 나지미 그로기 기준 배틀 포인트 -->
     
 
 
@@ -74,102 +57,18 @@
     <Chase Package="CommonChasePackage">
         <UseBranchSet Name="HitReactionSet"/>
 
-    <!-- Phase 1 -->
+        <!-- 추격 러시 -->
         <Branch Condition="(getStat_Phase == 1.0) &&
                            TargetExists && 
                            (gv_najimiRushRange >= TargetDistance) && 
                            (GraphExecutedTime > gv_najimiRushTrasitionTime)" Execute="Rush"/>
-    <!-- Phase 1 -->
-
-    <!-- Phase 2 -->
-        <Branch Condition="(getStat_Phase == 2.0) &&
-                           TargetExists && 
-                           (gv_najimiPitchingRange >= TargetDistance) && 
-                           (GraphExecutedTime > gv_najimiTrasitionTime)" Execute="SpawnPitchingMachine"/>
-    <!-- Phase 2 -->
-
-    <!-- Phase 3 -->
-        <Branch Condition="(getStat_Phase == 3.0) &&
-                           TargetExists && 
-                           (gv_najimiBatonRange >= TargetDistance) && 
-                           (GraphExecutedTime > gv_najimiTrasitionTime)" Execute="Baton"/>
-    <!-- Phase 3 -->
-    </Chase>
     
+    </Chase>
+
     <Rush Package="NajimiRushPackage">
         <UseBranchSet Name="HitReactionSet"/>
-        <Branch Condition="CurrentPackageEnd && (getStat_Phase == 1.0) && (getStat_RushCount == gv_najimiRushCount)" Execute="PhaseIncrease"/>
         <Branch Condition="CurrentPackageEnd" Execute="Chase"/>
     </Rush>
-
-    <SpawnPitchingMachine Package="NajimiSpawnPitchingMachinePackage">
-        <UseBranchSet Name="HitReactionSet"/>
-        <Branch Condition="getTargetFrameTag_Stun" Execute="StunChase"/>
-        <Branch Condition="CurrentPackageEnd" Execute="Runaway"/>
-    </SpawnPitchingMachine>
-
-    <Runaway Package="CommonRunawayPackage">
-        <UseBranchSet Name="HitReactionSet"/>
-
-        <!-- Phase 2 -->
-        <Branch Condition="(getStat_Phase == 2.0) &&
-                            TargetExists && (gv_najimiSafePitchRange < TargetDistance)" Execute="Pitching"/>
-        <Branch Condition="(getStat_Phase == 2.0) &&
-                            TargetExists && (2.0 > TargetDistance)" Execute="SpawnPitchingMachine"/>
-        <!-- Phase 2 -->
-
-        <!-- Phase 3 -->
-        <Branch Condition="(getStat_Phase == 3.0) &&
-                            TargetExists && (gv_najimiSafePistolRange < TargetDistance)" Execute="Pistol"/>
-        <!-- Phase 3 -->
-    </Runaway>
-
-    <Pitching Package="NajimiPitchingPackage">
-        <UseBranchSet Name="HitReactionSet"/>
-        <Branch Condition="getTargetFrameTag_Stun" Execute="StunChase"/>
-        <Branch Condition="CurrentPackageEnd" Execute="Runaway"/>
-    </Pitching>
-
-    <StunChase Package="NajimiStunChasePackage">
-        <UseBranchSet Name="HitReactionSet"/>
-        <Branch Condition="TargetExists && 
-                           (1.5 >= TargetDistance) && 
-                           (GraphExecutedTime > gv_najimiTrasitionTime)" Execute="Rush"/>
-    </StunChase>
-
-
-    <Baton Package="NajimiBatonPackage">
-        <UseBranchSet Name="HitReactionSet"/>
-        <Branch Condition="CurrentPackageEnd &&
-                           TargetExists && 
-                           (gv_najimiSafeFireworkRange >= TargetDistance)" Execute="Pistol"/>
-        <Branch Condition="CurrentPackageEnd && 
-                            TargetExists &&
-                            (gv_najimiBatonRange >= TargetDistance) &&
-                            (getStat_PistolCount < 3.0)" Execute="Baton"/>
-        <Branch Condition="CurrentPackageEnd" Execute="Firework"/>
-    </Baton>
-    
-    <Pistol Package="NajimiPistolPackage">
-        <UseBranchSet Name="HitReactionSet"/>
-        <Branch Condition="CurrentPackageEnd && (getStat_PistolCount < 3.0)" Execute="Chase"/>
-        <Branch Condition="CurrentPackageEnd" Execute="Firework"/>
-    </Pistol>
-
-    <Firework Package="NajimiFireworkPackage">
-        <UseBranchSet Name="HitReactionSet"/>
-        <Branch Condition="CurrentPackageEnd && 
-                            TargetExists &&
-                            (gv_najimiBatonRange < TargetDistance)" Execute="Beam"/>
-        <Branch Condition="CurrentPackageEnd" Execute="Chase"/>
-    </Firework>
-
-
-    <Beam Package="NajimiBeamPackage">
-        <!-- 거리가 있는 경우 빔을 쏜다. 바톤슬래시와 같은 방식으로 동작한다. 가중치로 행동 분배. -->
-        <UseBranchSet Name="HitReactionSet"/>
-        <Branch Condition="CurrentPackageEnd" Execute="Chase"/>
-    </Beam>
 
     <PhaseIncrease Package="CommonPhaseIncreasePackage">
         <!-- 페이즈 전환은 피격 리액션 무시 -->    
@@ -185,6 +84,11 @@
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="Chase"/>
     </Hit>
+
+    <Groggy Package="CommonGroggyPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Chase"/>
+    </Groggy>
 
     <Dead Package="CommonDeadPackage">
     </Dead>
