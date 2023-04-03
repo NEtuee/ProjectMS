@@ -1,5 +1,10 @@
 <AIGraph Name="NajimiChanAI" DefaultState="Entry">
 
+    <Include Path="Common\CommonTestPackage.xml"/>
+    <Test Package="CommonTestPackage">
+        
+    </Test>
+
     <Include Path="Common\CommonDeadPackage.xml"/>
     <Include Path="Common\CommonHitPackage.xml"/>
     <Include Path="Common\CommonChasePackage.xml"/>
@@ -45,9 +50,9 @@
     <!-- 나지미 2페이즈 전환 트리거 카운트 (러쉬 공격 10회) -->
     <GlobalVariable Name="gv_najimiRushCount" Value="10.0"/>
     <!-- 나지미 2페이즈 전환 기준 체력 -->
-    <GlobalVariable Name="gv_najimiStdHp_2Phase" Value="34.0"/> <!-- 34 -->
+    <GlobalVariable Name="gv_najimiStdHp_2Phase" Value="38.0"/> <!-- 34 -->
     <!-- 나지미 3페이즈 전환 기준 체력 -->
-    <GlobalVariable Name="gv_najimiStdHp_3Phase" Value="17.0"/> <!-- 17 -->
+    <GlobalVariable Name="gv_najimiStdHp_3Phase" Value="36.0"/> <!-- 17 -->
     <!-- 나지미 그로기 기준 배틀 포인트 -->
     <GlobalVariable Name="gv_najimiStdBattle" Value="4.0"/>
     
@@ -60,7 +65,6 @@
         <Branch Condition="Hit && (getStat_Battle >= gv_najimiStdBattle)" Execute="Hit"/>
         <Branch Condition="(GuardBreakFail || GuardBroken) && (getStat_Battle >= gv_najimiStdBattle)" Execute="GuardBroken"/>
     </BranchSet>
-
 
     <Entry Package="CommonIdlePackage">
         <UseBranchSet Name="HitReactionSet"/>
