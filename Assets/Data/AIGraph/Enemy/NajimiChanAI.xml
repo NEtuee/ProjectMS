@@ -20,6 +20,8 @@
     <Include Path="Enemy/OsananaNajimi/NajimiFireworkPackage.xml"/>
     <Include Path="Enemy/OsananaNajimi/NajimiBeamPackage.xml"/>
     <Include Path="Enemy/OsananaNajimi/NajimiStunChasePackage.xml"/>
+    <Include Path="Enemy/OsananaNajimi/NajimiDodgePackage.xml"/>
+    <Include Path="Enemy/OsananaNajimi/NajimiDashPackage.xml"/>
 
     <Include Path="Common\CommonPhaseIncreasePackage.xml"/>
 
@@ -27,17 +29,18 @@
     <GlobalVariable Name="gv_najimiReadyTime" Value="1.5"/>     <!-- 보스전 대기 시간 (나중에 보스전 시작 트리거를 받아야 함)-->
     
     <!-- Dodge Pattern -->
-    <GlobalVariable Name="gv_najimiHitCountMin" Value="2.0"/>     <!-- 나지미 피격 최소 허용 횟수 -->
-    <GlobalVariable Name="gv_najimiHitCountMax" Value="4.0"/>     <!-- 나지미 피격 최대 허용 횟수 -->
+    <GlobalVariable Name="gv_najimiHitCountFast" Value="2.0"/>      <!-- 나지미 피격 허용 횟수 (빠름)-->
+    <GlobalVariable Name="gv_najimiHitCountNormal" Value="3.0"/>    <!-- 나지미 피격 허용 횟수 (보통)-->
+    <GlobalVariable Name="gv_najimiHitCountSlow" Value="4.0"/>      <!-- 나지미 피격 허용 횟수 (느림)-->
 
     <!-- Rush Pattern -->
-    <GlobalVariable Name="gv_najimiRushRange" Value="2.0"/>     <!-- 나지미 돌진 사거리 -->
-    <GlobalVariable Name="gv_najimiRushTime" Value="1.5"/>      <!-- 나지미 재돌진 텀 -->
+    <GlobalVariable Name="gv_najimiRushRange" Value="2.0"/>             <!-- 나지미 돌진 사거리 -->
+    <GlobalVariable Name="gv_najimiRushTrasitionTime" Value="0.8"/>     <!-- 나지미 돌진 최소 텀 -->
 
-    <GlobalVariable Name="gv_najimiStdHp_2Phase" Value="38.0"/> <!-- 나지미 2페이즈 전환 기준 체력 --> <!-- 34 -->
-    <GlobalVariable Name="gv_najimiStdHp_3Phase" Value="36.0"/> <!-- 나지미 3페이즈 전환 기준 체력 --> <!-- 17 -->
+    <GlobalVariable Name="gv_najimiStdHp_2Phase" Value="10.0"/> <!-- 나지미 2페이즈 전환 기준 체력 --> <!-- 34 -->
+    <GlobalVariable Name="gv_najimiStdHp_3Phase" Value="9.0"/> <!-- 나지미 3페이즈 전환 기준 체력 --> <!-- 17 -->
 
-    <GlobalVariable Name="gv_najimiStdBattle" Value="4.0"/>     <!-- 나지미 그로기 기준 배틀 포인트 -->
+    <GlobalVariable Name="gv_najimiStdBattle" Value="30.0"/>     <!-- 나지미 그로기 기준 배틀 포인트 -->
     
 
 
@@ -45,8 +48,12 @@
         <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="(getStat_Phase == 1.0) && (getStat_HP == gv_najimiStdHp_2Phase)" Execute="PhaseIncrease"/>
         <Branch Condition="(getStat_Phase == 2.0) && (getStat_HP == gv_najimiStdHp_3Phase)" Execute="PhaseIncrease"/>
-        <Branch Condition="Hit && (getStat_Battle >= gv_najimiStdBattle)" Execute="Hit"/>
-        <Branch Condition="(GuardBreakFail || GuardBroken) && (getStat_Battle >= gv_najimiStdBattle)" Execute="GuardBroken"/>
+        <Branch Condition="(getStat_Battle >= gv_najimiStdBattle)" Execute="Groggy"/>
+        <Branch Weight="NajimiJudgeDodge^Fast" Condition="(Hit || GuardBreakFail || GuardBroken) && (getStat_HitCount >= gv_najimiHitCountFast)" Execute="Dodge"/> <!-- Attack 프레임 태그로 바꿀까.-->
+        <Branch Weight="NajimiJudgeDodge^Normal" Condition="(Hit || GuardBreakFail || GuardBroken) && (getStat_HitCount >= gv_najimiHitCountNormal)" Execute="Dodge"/>
+        <Branch Weight="NajimiJudgeDodge^Slow" Condition="(Hit || GuardBreakFail || GuardBroken) && (getStat_HitCount >= gv_najimiHitCountSlow)" Execute="Dodge"/>
+        <Branch Condition="Hit && getFrameTag_HitAvail" Execute="Hit"/>
+        <Branch Condition="(GuardBreakFail || GuardBroken) && getFrameTag_GbAvail" Execute="GuardBroken"/>
     </BranchSet>
 
     <Entry Package="CommonIdlePackage">
@@ -69,6 +76,25 @@
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="Chase"/>
     </Rush>
+
+    <Dodge Package="NajimiDodgePackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Weight="RandBoolean^True" Condition="CurrentPackageEnd && (getStat_Phase == 1.0)" Execute="DashAttack"/>
+        <Branch Weight="RandBoolean^False" Condition="CurrentPackageEnd && (getStat_Phase == 1.0)" Execute="Chase"/>
+        <!-- 분기 대시공격 or 원거리공격들 중 택1 -->
+
+        <Branch Condition="CurrentPackageEnd" Execute="Chase"/>
+    </Dodge>
+
+    <DashAttack Package="NajimiDashPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <!-- 1, 2페이즈 분기 없음 -->
+        <Branch Condition="(getStat_Phase <= 2.0) && (gv_najimiRushRange >= TargetDistance)" Execute="Rush"/>
+        <Branch Condition="(getStat_Phase <= 2.0) && CurrentPackageEnd" Execute="Rush"/>
+        <!-- 3페이즈 분기 (러시, 피스톨) -->
+
+        <Branch Condition="CurrentPackageEnd" Execute="Chase"/>
+    </DashAttack>
 
     <PhaseIncrease Package="CommonPhaseIncreasePackage">
         <!-- 페이즈 전환은 피격 리액션 무시 -->    
