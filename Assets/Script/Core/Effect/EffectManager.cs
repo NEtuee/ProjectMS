@@ -14,6 +14,7 @@ public enum EffectType
 {
     SpriteEffect,
     TimelineEffect,
+    ParticleEffect,
     TrailEffect,
 }
 
@@ -325,6 +326,121 @@ public class TimelineEffectItem : EffectItemBase
     public override bool isActivated() {return _effectObject.activeInHierarchy;}
 }
 
+public class ParticleEffectItem : EffectItemBase
+{
+    private GameObject              _effectObject;
+    private ParticleSystem[]        _allParticleSystems;
+
+    public ObjectBase               _executeObject;
+    public bool                     _followDirection;
+    public Transform                _parentTransform = null;
+
+
+
+    public void createItem(string prefabPath)
+    {
+        GameObject effectPrefab = ResourceContainerEx.Instance().GetPrefab(prefabPath);
+        if(effectPrefab == null)
+        {
+            DebugUtil.assert(false, "잘못된 타임라인 이펙트 경로 입니다. 오타가 있지는 않나요? : {0}", prefabPath);
+            return;
+        }
+
+        _effectObject = GameObject.Instantiate(effectPrefab);
+        ParticleSystem[] myParticles = _effectObject.GetComponents<ParticleSystem>();
+        ParticleSystem[] chidrensParticles = _effectObject.GetComponentsInChildren<ParticleSystem>();
+
+        _allParticleSystems = new ParticleSystem[myParticles.Length + chidrensParticles.Length];
+        myParticles.CopyTo(_allParticleSystems,0);
+        chidrensParticles.CopyTo(_allParticleSystems, myParticles.Length);
+
+        if(_allParticleSystems == null || _allParticleSystems.Length == 0)
+        {
+            DebugUtil.assert(false, "ParticleSystem이 이펙트 프리팹에 존재하지 않습니다. 파티클 이펙트가 맞나요? : {0}", prefabPath);
+            return;
+        }
+
+        _effectType = EffectType.ParticleEffect;
+        release();
+    }
+
+    public override void initialize(EffectRequestData effectData)
+    {
+        _executeObject = effectData._executeEntity;
+        _followDirection = effectData._followDirection;
+
+        _effectPath = effectData._effectPath;
+        _effectUpdateType = effectData._updateType;
+
+        _effectObject.transform.position = effectData._position;
+        _effectObject.transform.rotation = _executeObject ? Quaternion.Euler(0f,0f,MathEx.directionToAngle(_executeObject.getDirection())) : effectData._rotation;
+
+        _parentTransform = effectData._parentTransform;
+
+        if(_parentTransform != null && _parentTransform.gameObject.activeInHierarchy == false)
+            _parentTransform = null;
+
+        if(_parentTransform != null)
+            _effectObject.transform.SetParent(_parentTransform);
+
+        _effectObject.SetActive(true);
+        foreach(var item in _allParticleSystems)
+        {
+            item.Stop();
+            item.Play();
+        }
+    }
+
+    public bool isAllParticleEnd()
+    {
+        for(int index = 0; index < _allParticleSystems.Length; ++index)
+        {
+            if(_allParticleSystems[index].IsAlive())
+                return false;
+        }
+
+        return true;
+    }
+
+    public override bool progress(float deltaTime)
+    {
+        if(isValid() == false)
+            return false;
+
+        switch(_effectUpdateType)
+        {
+            case EffectUpdateType.ScaledDeltaTime:
+            break;
+            case EffectUpdateType.NoneScaledDeltaTime:
+            deltaTime = Time.deltaTime;
+            break;
+        }
+
+        if(_followDirection)
+            _effectObject.transform.rotation = Quaternion.Euler(0f,0f,MathEx.directionToAngle(_executeObject.getDirection()));
+
+        return isAllParticleEnd();
+    }
+
+    public override void release()
+    {
+        foreach(var item in _allParticleSystems)
+        {
+            item.Stop();
+        }
+
+        _effectObject.transform.SetParent(null);
+        _effectObject.SetActive(false);
+    }
+
+    public override bool isValid()
+    {
+        return _effectObject != null && _allParticleSystems != null && _allParticleSystems.Length > 0;
+    }
+
+    public override bool isActivated() {return _effectObject.activeInHierarchy;}
+}
+
 public class TrailEffectItem : EffectItemBase
 {
     private GameObject              _effectObject;
@@ -432,6 +548,7 @@ public class EffectManager : ManagerBase
     private SimplePool<EffectItem> _effectItemPool = new SimplePool<EffectItem>();
     private Dictionary<string, SimplePool<TimelineEffectItem>> _timelineEffectPool = new Dictionary<string, SimplePool<TimelineEffectItem>>();
     private Dictionary<string, SimplePool<TrailEffectItem>> _trailEffectPool = new Dictionary<string, SimplePool<TrailEffectItem>>();
+    private Dictionary<string, SimplePool<ParticleEffectItem>> _particleEffectPool = new Dictionary<string, SimplePool<ParticleEffectItem>>();
 
     public override void assign()
     {
@@ -475,6 +592,9 @@ public class EffectManager : ManagerBase
             case EffectType.TrailEffect:
                 _trailEffectPool[item._effectPath].enqueue(item as TrailEffectItem);
             break;
+            case EffectType.ParticleEffect:
+                _particleEffectPool[item._effectPath].enqueue(item as ParticleEffectItem);
+            break;
         }
         
     }
@@ -512,6 +632,18 @@ public class EffectManager : ManagerBase
             TrailEffectItem item = _trailEffectPool["Trail"].dequeue();
             if(item.isValid() == false)
                 item.createItem("Prefab/Effect/TrailEffectBase");
+
+            item.initialize(requestData);
+            itemBase = item;
+        }
+        else if(requestData._effectType == EffectType.ParticleEffect)
+        {
+            if(_particleEffectPool.ContainsKey(requestData._effectPath) == false)
+                _particleEffectPool.Add(requestData._effectPath, new SimplePool<ParticleEffectItem>());
+
+            ParticleEffectItem item = _particleEffectPool[requestData._effectPath].dequeue();
+            if(item.isValid() == false)
+                item.createItem(requestData._effectPath);
 
             item.initialize(requestData);
             itemBase = item;
