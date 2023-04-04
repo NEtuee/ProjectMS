@@ -1,4 +1,5 @@
 #if UNITY_EDITOR
+using UnityEngine;
 using UnityEditor;
 using System.Diagnostics;
 #endif
@@ -23,10 +24,11 @@ public static class DebugUtil
         {
             StackFrame stackFrame = new System.Diagnostics.StackTrace(true).GetFrame(1);
             string resultString = string.Format("{0}\n\n{1} ({2})",string.Format(errorLog,errorArgs),stackFrame.GetFileName(), stackFrame.GetFileLineNumber());
-                
-            bool result = EditorUtility.DisplayDialog("Assert",resultString,"Throw Exception","Ignore");
+            
+            CustomDialog.ShowCustomDialog("Assert",resultString, "OK");
+           // bool result = EditorUtility.DisplayDialog("Assert",resultString,"Throw Exception","Ignore");
     
-            if(result == true)
+            //if(result == true)
             {
                 UnityEngine.Debug.Break();
                 throw new System.Exception(resultString);
@@ -39,6 +41,68 @@ public static class DebugUtil
 #endif       
         return false;     
     }
-
+#if UNITY_EDITOR
+#endif
 }
 
+
+public class CustomDialog : EditorWindow
+{
+    public Texture2D customImage;
+    public string titleText = "Custom Dialog Title";
+    public string messageText = "Custom Dialog Message";
+    public string buttonText = "OK";
+
+    public static void ShowCustomDialog(string title, string message, string buttonLabel)
+    {
+        CustomDialog window = (CustomDialog)EditorWindow.GetWindow(typeof(CustomDialog));
+        window.titleContent = new GUIContent(title);
+        window.minSize = new Vector2(750, 150);
+        window.maxSize = new Vector2(750, 200);
+        window.customImage = AssetDatabase.LoadAssetAtPath("Assets/Editor/DialogTitle.png",typeof(Texture2D)) as Texture2D;
+        window.messageText = message;
+        window.buttonText = buttonLabel;
+
+        window.Show();
+    }
+
+    private void OnGUI()
+    {
+        GUILayout.Space(10);
+        GUILayout.BeginHorizontal();
+            GUILayout.Label(customImage, GUILayout.Width(100), GUILayout.Height(100));
+
+            GUILayout.Space(10);
+            GUIStyle labelStyle = new GUIStyle(EditorStyles.wordWrappedLabel);
+            labelStyle.fontSize = 12;
+
+            EditorGUILayout.LabelField(messageText, labelStyle);
+
+            GUILayout.Space(10);
+        GUILayout.EndHorizontal();
+
+        GUILayout.FlexibleSpace();
+
+        bool buttonTriggered = false;
+        if (focusedWindow == this && Event.current.type == EventType.KeyDown && ( Event.current.keyCode == KeyCode.Return || Event.current.keyCode == KeyCode.Escape))
+        {
+            buttonTriggered = true;
+
+            GUIUtility.keyboardControl = 0;
+            GUI.FocusControl(null);
+            GUILayoutUtility.GetLastRect();
+            GUIUtility.hotControl = GUIUtility.GetControlID(FocusType.Passive);
+            Event.current.Use();
+        }
+
+        GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            if (buttonTriggered || GUILayout.Button(buttonText,GUILayout.Width(100f), GUILayout.Height(30f)))
+                this.Close();
+
+            GUILayout.Space(10f);
+        GUILayout.EndHorizontal();
+
+        GUILayout.Space(10);
+    }
+}
