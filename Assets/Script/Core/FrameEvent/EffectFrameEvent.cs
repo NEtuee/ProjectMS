@@ -9,6 +9,129 @@ enum AngleDirectionType
     AttackPoint,
 }
 
+public class ActionFrameEvent_ParticleEffect : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_ParticleEffect;}
+
+    public string               _effectPath = "";
+    private bool                _toTarget = false;
+    private bool                _attach = false;
+    private bool                _followDirection = false;
+    private float               _lifeTime = 0f;
+
+    private Vector3             _spawnOffset = Vector3.zero;
+    private Quaternion          _effectRotation = Quaternion.identity;
+    private EffectUpdateType    _effectUpdateType = EffectUpdateType.ScaledDeltaTime;
+
+    private AngleDirectionType  _angleDirectionType = AngleDirectionType.Normal;
+
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        Vector3 centerPosition;
+        if(_toTarget)
+            centerPosition = targetEntity.transform.position;
+        else
+            centerPosition = executeEntity.transform.position;
+
+        EffectRequestData requestData = MessageDataPooling.GetMessageData<EffectRequestData>();
+        requestData.clearRequestData();
+        requestData._effectPath = _effectPath;
+        requestData._position = centerPosition + _spawnOffset;
+        requestData._rotation = getAngleByType(executeEntity, requestData._position);
+        requestData._updateType = _effectUpdateType;
+        requestData._effectType = EffectType.ParticleEffect;
+        requestData._lifeTime = _lifeTime;
+        requestData._executeEntity = executeEntity;
+        requestData._followDirection = _followDirection;
+
+        if(_attach)
+        {
+            requestData._parentTransform = _toTarget ? targetEntity.transform : executeEntity.transform;
+            requestData._timelineAnimator = _toTarget ? targetEntity.getAnimator() : executeEntity.getAnimator();
+        }
+
+
+        executeEntity.SendMessageEx(MessageTitles.effect_spawnEffect,UniqueIDBase.QueryUniqueID("EffectManager"),requestData);
+
+        return true;
+    }
+
+    public Quaternion getAngleByType(ObjectBase executeEntity, Vector3 effectPosition)
+    {
+        switch(_angleDirectionType)
+        {
+            case AngleDirectionType.Normal:
+                return Quaternion.identity;
+            case AngleDirectionType.Direction:
+                return Quaternion.Euler(0f,0f,MathEx.directionToAngle(executeEntity.getDirection()));
+            case AngleDirectionType.AttackPoint:
+            {
+                if(executeEntity is GameEntityBase == false)
+                    return Quaternion.identity;
+
+                Vector3 direction = effectPosition - (executeEntity as GameEntityBase).getAttackPoint();
+                direction.Normalize();
+
+                return Quaternion.Euler(0f,0f,MathEx.directionToAngle(direction));
+            }
+        }
+
+        return Quaternion.identity;
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            if(attributes[i].Name == "Path")
+            {
+                _effectPath = attributes[i].Value;
+            }
+            else if(attributes[i].Name == "Offset")
+            {
+                string[] vector = attributes[i].Value.Split(' ');
+                if(vector == null || vector.Length != 3)
+                {
+                    DebugUtil.assert(false, "invalid vector3 data: {0}",attributes[i].Value);
+                    return;
+                }
+
+                _spawnOffset.x = float.Parse(vector[0]);
+                _spawnOffset.y = float.Parse(vector[1]);
+                _spawnOffset.z = float.Parse(vector[2]);
+            }
+            else if(attributes[i].Name == "ToTarget")
+            {
+                _toTarget = bool.Parse(attributes[i].Value);
+            }
+            else if(attributes[i].Name == "UpdateType")
+            {
+                _effectUpdateType = (EffectUpdateType)System.Enum.Parse(typeof(EffectUpdateType), attributes[i].Value);
+            }
+            else if(attributes[i].Name == "Attach")
+            {
+                _attach = bool.Parse(attributes[i].Value);
+            }
+            else if(attributes[i].Name == "AngleType")
+            {
+                _angleDirectionType = (AngleDirectionType)System.Enum.Parse(typeof(AngleDirectionType), attributes[i].Value);
+            }
+            else if(attributes[i].Name == "LifeTime")
+            {
+                _lifeTime = float.Parse(attributes[i].Value);
+            }
+            else if(attributes[i].Name == "FollowDirection")
+            {
+                _followDirection = bool.Parse(attributes[i].Value);
+            }
+        }
+
+        if(_effectPath == "")
+            DebugUtil.assert(false, "effect path is essential");
+    }
+}
+
 public class ActionFrameEvent_TimelineEffect : ActionFrameEventBase
 {
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_TimelineEffect;}

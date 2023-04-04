@@ -6,7 +6,7 @@ FrameEvent,ApplyBuffTarget,ApplyBuff=~~
 FrameEvent,DeleteBuff,BuffList=~~
 FrameEvent,SetDefenceType,DefenceType=~/${1|Empty Guard Parry Evade}~
 FrameEvent,Effect,"Path=~~,FramePerSecond=~~,Offset=~~,Angle=~~,ToTarget=~~,UseFlip=~~,Attach=~~,UpdateType=~~"
-FrameEvent,SetFrameTag,"EndFrame=~~,Tag=~~,Tag=~~"
+FrameEvent,SetFrameTag,"EndTime=~~,Tag=~~,Tag=~~"
 FrameEvent,Projectile,"GraphName=~~,DirectionType=~~,ShotInfoUseType=~~,SpawnTargetType=~~,StartTerm=~~,PredictionAccuracy=~~"
 FrameEvent,Danmaku,Path=~~
 FrameEvent,SetAnimationSpeed,Speed=~~
@@ -14,6 +14,7 @@ FrameEvent,Movement,"Friction=~~,MaxVelocity=~~,Speed=~~,Velocity=~~"
 FrameEvent,ZoomEffect,Scale=~~
 FrameEvent,StopUpdate,Time=~~
 FrameEvent,TimelineEffect,"Path=~~,Offset=~~,ToTarget=~~,Attach=~~,UpdateType=~~,AngleType=~~"
+FrameEvent,ParticleEffect,"Path=~~,Offset=~~,ToTarget=~~,Attach=~~,UpdateType=~~,AngleType=~~"
 FrameEvent,SpawnCharacter,"CharacterKey=~~,Offset=~0 0 0~,SearchIdentifier=~~"
 FrameEventAndInQuote,Attack IgnoreDefenceType=,"Guard,Parry,Evade"
 FrameEventAndInQuote,SetDefenceType DefenceType=,"Empty,Guard,Parry,Evade"
@@ -36,7 +37,7 @@ InQuote,AngleType=,"Normal,AttackPoint,Direction"
 InQuote,SearchIdentifier=,"Player,Enemy,Projectile"
 InScope,,"MovementType=~~,MovementGraphPreset=~~,DirectionType=~~,DefenceDirectionType=~~,FlipType=~~,RotationType=~~,MoveScale=~~,IsActionSelection=~~,ApplyBuff=~~,NormalizedSpeed=~~,DefenceType=~~,DefenceAngle=~~,DirectionUpdateOnce=~~,IsActionSelection=~~,FlipTypeUpdateOnce=~~,RotateBySpeed=~~,RotateSpeed=~~,DirectionAngle=~~"
 LineStart,<Branch,"Key=~~,Condition=~~,Execute=~~,Weight=~~"
-LineStart,<Animation,"Preset=~~,Duration=~~,Path=~~,StartFrame=~~,EndFrame=~~,FramePerSecond=~~,Loop=~~,XFlip=~~,YFlip=~~,RotationPreset=~~,ScalePreset=~~,AngleBaseAnimation=~~"
+LineStart,<Animation,"Preset=~~,Duration=~~,Path=~~,StartTime=~~,EndTime=~~,FramePerSecond=~~,Loop=~~,XFlip=~~,YFlip=~~,RotationPreset=~~,ScalePreset=~~,AngleBaseAnimation=~~"
 LineStart,<MultiSelectAnimation,"Path=~~,Condition=~~"
 LineStart,<Physics,"UseGravity=~~,Velocity=~~,Friction=~~,Torque=~~,AngularFriction=~~"
 LineStart,<BranchSet,Name=~~
@@ -48,43 +49,43 @@ LineStartAndInQuote,<Animation Loop=,"true,false"
 LineStartAndInQuote,<FrameEvent Type=,"Test,Attack,ApplyBuff,ApplyBuffTarget,DeleteBuff,TeleportToTarget,TeleportToTargetBack,SetDefenceType,Effect,SetFrameTag,Projectile,Danmaku,SetAnimationSpeed,KillEntity,Movement,ZoomEffect,StopUpdate"
 ShortCut,__Action,<${1}>#n#t<Animation Path=~~>#n#t</Animation>#n</${1}>
 ShortCut,__UseBranchSet,<UseBranchSet Name=~~/>
-ShortCut,__FrameEvent,<FrameEvent Type=~~ StartFrame=~0~/>
+ShortCut,__FrameEvent,<FrameEvent Type=~~ StartTime=~0~/>
 ShortCut,__Branch,<Branch Condition=~~ Execute=~~/>
 ShortCut,__BranchSet,<BranchSet Name=~~>#n#t#n</BranchSet>
 ShortCut,__GlobalVariable,<GlobalVariable Name=~~ Value=~~/>
-ShortCut,__FrameEvent_Attack,<FrameEvent Type=~Attack~ StartFrame=~0~ AttackPreset=~~>#n#t<OnHit>#n#t</OnHit>#n#n#t<OnGuard>#n#t</OnGuard>#n#n#t<OnParry>#n#t</OnParry>#n#n#t<OnGuardBreakFail>#n#t</OnGuardBreakFail>#n#n#t<OnCatch>#n#t</OnCatch>#n</FrameEvent>
-ShortCut,__FrameEvent_ApplyBuff,<FrameEvent Type=~ApplyBuff~ StartFrame=~0~ ApplyBuff=~~/>
-ShortCut,__FrameEvent_ApplyBuffTarget,<FrameEvent Type=~ApplyBuffTarget~ StartFrame=~0~ ApplyBuff=~~/>
-ShortCut,__FrameEvent_DeleteBuff,<FrameEvent Type=~DeleteBuff~ StartFrame=~0~ BuffList=~~/>
-ShortCut,__FrameEvent_TeleportToTarget,<FrameEvent Type=~TeleportToTarget~ StartFrame=~0~/>
-ShortCut,__FrameEvent_TeleportToTargetBack,<FrameEvent Type=~TeleportToTargetBack~ StartFrame=~0~/>
-ShortCut,__FrameEvent_SetDefenceType,<FrameEvent Type=~SetDefenceType~ StartFrame=~0~ DefenceType=~~/>
+ShortCut,__FrameEvent_Attack,<FrameEvent Type=~Attack~ StartTime=~0~ AttackPreset=~~>#n#t<OnHit>#n#t</OnHit>#n#n#t<OnGuard>#n#t</OnGuard>#n#n#t<OnParry>#n#t</OnParry>#n#n#t<OnGuardBreakFail>#n#t</OnGuardBreakFail>#n#n#t<OnCatch>#n#t</OnCatch>#n</FrameEvent>
+ShortCut,__FrameEvent_ApplyBuff,<FrameEvent Type=~ApplyBuff~ StartTime=~0~ ApplyBuff=~~/>
+ShortCut,__FrameEvent_ApplyBuffTarget,<FrameEvent Type=~ApplyBuffTarget~ StartTime=~0~ ApplyBuff=~~/>
+ShortCut,__FrameEvent_DeleteBuff,<FrameEvent Type=~DeleteBuff~ StartTime=~0~ BuffList=~~/>
+ShortCut,__FrameEvent_TeleportToTarget,<FrameEvent Type=~TeleportToTarget~ StartTime=~0~/>
+ShortCut,__FrameEvent_TeleportToTargetBack,<FrameEvent Type=~TeleportToTargetBack~ StartTime=~0~/>
+ShortCut,__FrameEvent_SetDefenceType,<FrameEvent Type=~SetDefenceType~ StartTime=~0~ DefenceType=~~/>
 ShortCut,__EffectPhysics,<Physics UseGravity=~True~ Velocity=~0.0^10.0~ Friction=~1~ Torque=~360~ AngularFriction=~360~/>
-ShortCut,__FrameEvent_Effect,<FrameEvent Type=~Effect~ StartFrame=~0~ Path=~~ FramePerSecond=~~/>
-ShortCut,__FrameEvent_SetFrameTag,<FrameEvent Type=~FrameTag~ StartFrame=~0~ EndFrame=~999~ Tag=~~/>
-ShortCut,__FrameEvent_Projectile,<FrameEvent Type=~Projectile~ StartFrame=~0~ GraphName=~~ DirectionType=~~ SpawnTargetType=~~/>
-ShortCut,__FrameEvent_Danmaku,<FrameEvent Type=~Danmaku~ StartFrame=~0~ Path=~~/>
-ShortCut,__FrameEvent_SetAnimationSpeed,<FrameEvent Type=~SetAnimationSpeed~ StartFrame=~0~ Speed=~~/>
-ShortCut,__FrameEvent_KillEntity,<FrameEvent Type=~KillEntity~ StartFrame=~0~/>
-ShortCut,__FrameEvent_Movement,<FrameEvent Type=~Movement~ StartFrame=~0~ Friction=~~ MaxVelocity=~~ Speed=~~/>
+ShortCut,__FrameEvent_Effect,<FrameEvent Type=~Effect~ StartTime=~0~ Path=~~ FramePerSecond=~~/>
+ShortCut,__FrameEvent_SetFrameTag,<FrameEvent Type=~FrameTag~ StartTime=~0~ EndTime=~999~ Tag=~~/>
+ShortCut,__FrameEvent_Projectile,<FrameEvent Type=~Projectile~ StartTime=~0~ GraphName=~~ DirectionType=~~ SpawnTargetType=~~/>
+ShortCut,__FrameEvent_Danmaku,<FrameEvent Type=~Danmaku~ StartTime=~0~ Path=~~/>
+ShortCut,__FrameEvent_SetAnimationSpeed,<FrameEvent Type=~SetAnimationSpeed~ StartTime=~0~ Speed=~~/>
+ShortCut,__FrameEvent_KillEntity,<FrameEvent Type=~KillEntity~ StartTime=~0~/>
+ShortCut,__FrameEvent_Movement,<FrameEvent Type=~Movement~ StartTime=~0~ Friction=~~ MaxVelocity=~~ Speed=~~/>
 ShortCut,__MultiSelectAnimation,<MultiSelectAnimation Path=~~ Condition=~~/>
-ShortCut,__FrameEvent_ZoomEffect,<FrameEvent Type=~ZoomEffect~ StartFrame=~0~ Scale=~~/>
-ShortCut,__FrameEvent_StopUpdate,<FrameEvent Type=~StopUpdate~ StartFrame=~0~ Time=~~/>
-ShortCut,__FrameEvent_SpawnCharacter,<FrameEvent Type=~SpawnCharacter~ StartFrame=~0~ CharacterKey=~~ Offset=~0 0 0~ SearchIdentifier=~~/>
+ShortCut,__FrameEvent_ZoomEffect,<FrameEvent Type=~ZoomEffect~ StartTime=~0~ Scale=~~/>
+ShortCut,__FrameEvent_StopUpdate,<FrameEvent Type=~StopUpdate~ StartTime=~0~ Time=~~/>
+ShortCut,__FrameEvent_SpawnCharacter,<FrameEvent Type=~SpawnCharacter~ StartTime=~0~ CharacterKey=~~ Offset=~0 0 0~ SearchIdentifier=~~/>
 InQuote,AttackType=,"Default,GuardBreak,Catch"
-ShortCut,__FrameEvent_ReleaseCatch,<FrameEvent Type=~ReleaseCatch~ StartFrame=~0~ Push=~~/>
+ShortCut,__FrameEvent_ReleaseCatch,<FrameEvent Type=~ReleaseCatch~ StartTime=~0~ Push=~~/>
 FrameEvent,ReleaseCatch,Push=~~
 InQuote,FollowDirection,"true,false"
-ShortCut,__FrameEvent_TalkBalloon,<FrameEvent Type=~TalkBalloon~ StartFrame=~0~ Text=~~ Time=~~/>
+ShortCut,__FrameEvent_TalkBalloon,<FrameEvent Type=~TalkBalloon~ StartTime=~0~ Text=~~ Time=~~/>
 FrameEvent,TalkBalloon,"Text=~~,Time=~~"
-ShortCut,__FrameEvent_SetTimeScale,<FrameEvent Type=~SetTimeScale~ StartFrame=~0~ Scale=~~ Time=~~ BlendTime=~~/>
+ShortCut,__FrameEvent_SetTimeScale,<FrameEvent Type=~SetTimeScale~ StartTime=~0~ Scale=~~ Time=~~ BlendTime=~~/>
 FrameEvent,SetTimeScale,"Scale=~~,Time=~~,BlendTime=~~"
-ShortCut,__FrameEvent_ShakeEffect,<FrameEvent Type=~ShakeEffect~ StartFrame=~0~ Scale=~~ Speed=~~ Time=~~/>
+ShortCut,__FrameEvent_ShakeEffect,<FrameEvent Type=~ShakeEffect~ StartTime=~0~ Scale=~~ Speed=~~ Time=~~/>
 FrameEvent,ShakeEffect,"Scale=~~,Time=~~,Speed=~~"
 ShortCut,__AnimationPreset,<Animation Preset=~~ Duration=~~>#n</Animation>
 ShortCut,__AnimationHeader,<AnimationHeader MasterPath=~~/>
 LineStart,<AnimationHeader,MasterPath=~~
-,,
+ShortCut,__FrameEvent_ParticleEffect,<FrameEvent Type=~ParticleEffect~ StartTime=~0~ Path=~~/>
 ,,
 ,,
 ,,
