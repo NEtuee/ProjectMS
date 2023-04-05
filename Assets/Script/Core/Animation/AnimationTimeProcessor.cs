@@ -328,8 +328,8 @@ public class AnimationTimeProcessor
 
         _endIndex = customPresetData._duration.Length;
 
-        setLoop(customPresetData._isLoop);
-        setLoopCount(customPresetData._loopCount);
+        setLoop(customPresetData._playCount == 0);
+        setLoopCount(customPresetData._playCount);
         setAnimationSpeed(1f);
         setFrameToTime(0f);
 
