@@ -1,0 +1,18 @@
+<ActionGraph Name="FireworkBulletAction" DefaultAction="Explosion" DefaultFramePerSecond="12">
+
+    <Explosion MovementType="Empty" DirectionType="AlwaysRight" DefenceType="Evade">
+        <Animation Preset="Sprites/Projectile/empty" Duration="1.0">
+            <FrameEvent Type="Danmaku" StartTime="0" Path="Enemy/MagicalFirework.xml"/>
+        </Animation>
+        <Branch Condition="End" Execute="Destroy"/>
+    </Explosion>
+
+    <Destroy MovementType="Empty" DirectionType="AlwaysRight">
+        <Animation Preset="Sprites/Projectile/empty" Duration="0.016">
+            <FrameEvent Type="KillEntity" StartFrame="0"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="Destroy"/>
+    </Destroy>
+
+</ActionGraph>

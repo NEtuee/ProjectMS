@@ -439,6 +439,25 @@
         Factor="-0.1"
     />
 
+    <BossHitCountIncrease
+        Key="44"
+        StatusName="HitCount"
+
+        UpdateType="OneShot"
+        ApplyType="Direct"
+
+        Factor="1.0"
+    />
+
+    <BossHitCountClear
+        Key="45"
+        StatusName="HitCount"
+
+        UpdateType="OneShot"
+        ApplyType="DirectSet"
+
+        Factor="0.0"
+    />
 
 
 </BuffInfo>
