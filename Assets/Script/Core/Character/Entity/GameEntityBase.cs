@@ -756,6 +756,8 @@ public class GameEntityBase : SequencerObjectBase
 
     public Vector3 getCurrentDefenceDirection() {return _defenceDirection;}
 
+    public void setAIDirectionRotateProcess(float time, float angle) {_aiGraph.setRotateProcess(time,angle);}
+
     public void terminateAIPackage() {_aiGraph.terminatePackage();}
     public void setAIState(int index) {_aiGraph.changeAIPackageStateOther(index);}
 
