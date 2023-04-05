@@ -816,6 +816,10 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
                 {
                     aiEvent = new AIEvent_KillEntity();
                 }
+                else if(attrValue == "RotateDirection")
+                {
+                    aiEvent = new AIEvent_RotateDirection();
+                }
                 else
                 {
                     DebugUtil.assert(false,"유효하지 않은 AI 이벤트 타입 입니다. 오타는 아닌가요?: [{0}] [Line: {1}] [FileName: {2}]",attrValue, XMLScriptConverter.getLineFromXMLNode(node), _currentPackageFileName);

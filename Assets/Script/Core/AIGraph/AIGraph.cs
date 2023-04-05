@@ -20,6 +20,12 @@ public class AIGraph
     private bool _packageEnd = false;
     private bool _arrived = false;
 
+    private bool _rotateProcess = false;
+    private float _rotateProcessTime = 0f;
+    private float _rotateProcessTimer = 0f;
+    private float _rotateAngle = 0f;
+    private Vector3 _rotateStartDirection = Vector3.right;
+
     private Vector3 _recentlyAiDirection = Vector3.zero;
 
     private Vector3 _recentlyAiTargetPosition = Vector3.zero;
@@ -70,6 +76,8 @@ public class AIGraph
         
         processAINode(deltaTime, getCurrentAINode(), targetEntity);
         processAIPackage(deltaTime, getCurrentAIPackageNode(), targetEntity);
+
+        processRotate(deltaTime);
         return true;
     }
 
@@ -81,6 +89,32 @@ public class AIGraph
     public void release()
     {
 
+    }
+
+    public void processRotate(float deltaTime)
+    {
+        if(_rotateProcess == false)
+            return;
+
+        _rotateProcessTimer += deltaTime;
+        _rotateProcessTimer = _rotateProcessTimer > _rotateProcessTime ? _rotateProcessTime : _rotateProcessTimer;
+
+        _recentlyAiDirection = Quaternion.Euler(0f,0f,Mathf.Lerp(0f,_rotateAngle,_rotateProcessTimer * (1f / _rotateProcessTime))) * _rotateStartDirection;
+
+        if(_rotateProcessTimer == _rotateProcessTime)
+            _rotateProcess = false;
+    }
+
+    public void setRotateProcess(float time, float angle)
+    {
+        _rotateStartDirection = _recentlyAiDirection;
+        if(_rotateStartDirection.sqrMagnitude <= 0f)
+            _rotateStartDirection = Vector3.right;
+        
+        _rotateProcess = true;
+        _rotateProcessTime = time;
+        _rotateProcessTimer = 0f;
+        _rotateAngle = angle;
     }
 
     public void executeAIEvent(AIChildEventType eventType)
@@ -105,6 +139,8 @@ public class AIGraph
 
         if(nodeChanged == true)
         {
+            _rotateProcess = false;
+
             _packageEnd = false;
             _changePackageStateIndex = -1;
 
@@ -166,6 +202,8 @@ public class AIGraph
 
         if(stateChanged == true)
         {
+            _rotateProcess = false;
+
             processAIEvent(AIChildEventType.AIChildEvent_OnExit, targetEntity, ref getPrevAIPackageNode()._aiEvents);
             processAIEvent(AIChildEventType.AIChildEvent_OnExecute, targetEntity, ref getCurrentAIPackageNode()._aiEvents);
 
@@ -298,9 +336,16 @@ public class AIGraph
     }
 
     public Vector3 getRecentlyAIDirection() {return _recentlyAiDirection;}
-    public void setAIDirection(Vector3 direction){_recentlyAiDirection = direction;}
+    public void setAIDirection(Vector3 direction)
+    {
+        _rotateProcess = false;
+
+        _recentlyAiDirection = direction;
+    }
     public void setAIDirection(float angle)
     {
+        _rotateProcess = false;
+
         angle = angle * Mathf.Deg2Rad;
         _recentlyAiDirection.x = Mathf.Cos(angle);
         _recentlyAiDirection.y = Mathf.Sin(angle);

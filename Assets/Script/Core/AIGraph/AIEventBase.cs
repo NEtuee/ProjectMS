@@ -12,6 +12,7 @@ public enum AIEventType
     AIEvent_ExecuteState,
     AIEvent_TerminatePackage,
     AIEvent_KillEntity,
+    AIEvent_RotateDirection,
     Count,
 }
 
@@ -55,6 +56,40 @@ public abstract class AIEventBase
 
 }
 
+public class AIEvent_RotateDirection : AIEventBase
+{
+    private float _time;
+    private float _rotateAngle;
+
+    public override AIEventType getFrameEventType() {return AIEventType.AIEvent_RotateDirection;}
+    public override void onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        if(executeEntity is GameEntityBase == false)
+            return;
+
+        (executeEntity as GameEntityBase).setAIDirectionRotateProcess(_time,_rotateAngle);
+    }
+
+    public override void loadFromXML(XmlNode node) 
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "Time")
+            {
+                _time = float.Parse(attrValue);
+            }
+            else if(attrName == "RotateAngle")
+            {
+                _rotateAngle = float.Parse(attrValue);
+            }
+        }
+    }
+}
+
 public class AIEvent_KillEntity : AIEventBase
 {
     public override AIEventType getFrameEventType() {return AIEventType.AIEvent_KillEntity;}
@@ -66,7 +101,7 @@ public class AIEvent_KillEntity : AIEventBase
 
     public override void loadFromXML(XmlNode node) 
     {
-
+        
     }
 }
 
