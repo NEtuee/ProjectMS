@@ -7,6 +7,10 @@
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_BeamReady"/>
             </Event_OnExecute>
+
+            <Event_OnFrame>
+                <AIEvent Type="SetDirectionToTarget"/>
+            </Event_OnFrame>
             
             <Branch Condition="End" Execute="AI_BeamShot"/>
         </AI_PistolReady>
