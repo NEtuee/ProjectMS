@@ -27,6 +27,8 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
 
     private SetTargetType                   _setTargetType = SetTargetType.SetTargetType_Self;
 
+    private Vector3                         _positionOffset = Vector3.zero;
+
     private PredictionType                  _predictionType = PredictionType.Path;
     private Vector3[]                       _pathPredictionArray = null;
     private int                             _predictionAccuracy = 0;
@@ -48,7 +50,10 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
         ProjectileGraphShotInfoData shotInfo;
         getShotInfo(_projectileGraphName,_useType,defaultAngle,ref _shotInfo,out shotInfo);
 
-        Vector3 spawnPosition = getSpawnPosition(_setTargetType, executeEntity, targetEntity);
+        Vector3 offsetPosition = _positionOffset;
+        offsetPosition = Quaternion.Euler(0f,0f,MathEx.directionToAngle(executeEntity.getDirection())) * offsetPosition;
+
+        Vector3 spawnPosition = getSpawnPosition(_setTargetType, executeEntity, targetEntity) + offsetPosition;
         
         if(_startTerm != 0f)
         {
@@ -280,6 +285,10 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
                 {
                     DebugUtil.assert(false,"invalid targetType: {0}", attrValue);
                 }
+            }
+            else if(attrName == "Offset")
+            {
+                _positionOffset = XMLScriptConverter.valueToVector3(attrValue);
             }
         }
 
