@@ -377,9 +377,9 @@
     </CatchReleased>
 
     <Stun MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" ApplyBuff="StunEscape">
-        <Animation Path="Resources/Sprites/DummyPlayer/JustGuardBreak/" FramePerSecond="0.3" XFlip="true">
-            <FrameEvent Type="FrameTag" StartFrame="0" EndFrame="999" Tag="Stun"/>
-            <FrameEvent Type="ApplyBuff" StartFrame="1" ApplyBuff="StunClear"/>
+        <Animation Preset="Sprites/NewPlayer/stun" XFlip="true" Duration="3.0">
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="Stun"/>
+            <FrameEvent Type="ApplyBuff" StartTime="3.0" ApplyBuff="StunClear"/>
         </Animation>
 
         <Branch Condition="getStat_IsStun == 0.0" Execute="Idle"/>
