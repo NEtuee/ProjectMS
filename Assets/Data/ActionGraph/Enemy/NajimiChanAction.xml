@@ -1,9 +1,20 @@
 <ActionGraph Name="NajimiChanAction" DefaultAction="AC_Idle" DefaultFramePerSecond="12" DefaultBuff="NajimiBattleDecrementKeep">
 
+    <AC_Entry MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/0_default/"/>
+        <Animation Preset="1_idle" XFlip="true" Duration="1">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Entry"/>
+    </AC_Entry>
+
     <AC_Idle MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/0_default/"/>
         <Animation Preset="1_idle" XFlip="true" Duration="1">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+            <!-- 바톤 슬래시 카운트 리셋 (pistol 이름 바꿔야함.)-->
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="NajimiResetPistolCount"/>
             <!-- <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountClear"/> -->
         </Animation>
 
@@ -32,7 +43,6 @@
         <Branch Condition="End == true" Execute="AC_SystemChase"/>
     </AC_SystemChase>
     
-    <!-- Pitch용 대시 -->
     <AC_Dash MovementType="GraphPreset" MovementGraphPreset="Najimi_Dash" DirectionType="AI" FlipType="Direction" DefenceType="Evade">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/0_default/"/>
         <Animation Preset="3_dash" XFlip="true" Duration="1">
@@ -290,6 +300,7 @@
         <Animation Preset="1_batonPre" XFlip="true" Duration="0.13">
             <!-- TODO: 바톤 3연속 공격 카운트용 버프. 향후 이름 수정해야함. (Pistol->Baton)-->
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="NajimiAddPistolCount"/>
+
         </Animation>
         <Animation Preset="2_batonMain" XFlip="true" Duration="0.8">
             <FrameEvent Type="Attack" StartTime="0" AttackPreset="Najimi_BatonSlash">
@@ -309,7 +320,7 @@
             <FrameEvent Type="Movement" StartTime="0" Friction="90" MaxVelocity="30" Speed="0" Velocity="30"/>
         </Animation>
 
-        <Branch Condition="End" Execute="AC_Idle"/>
+        <Branch Condition="End" Execute="AC_Entry"/>
     </AC_BatonSlash>
 
     <AC_BatonSuccess MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
@@ -322,7 +333,7 @@
             </FrameEvent>
         </Animation>
 
-        <Branch Condition="End" Execute="AC_Idle"/>
+        <Branch Condition="End" Execute="AC_Entry"/>
     </AC_BatonSuccess>
 
     <AC_PistolReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
@@ -356,11 +367,9 @@
     <AC_FireworkShot MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/3_batonPattern/"/>
         <Animation Preset="6_fireworkShot" XFlip="true" Duration="1.5">
-            <!-- TODO: 바톤 3연속 공격 리셋용 버프. 패턴 변경되면 함께 수정되어야 함. -->
-            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="NajimiResetPistolCount"/>
-
-            <!-- <FrameEvent Type="Projectile" StartTime="0" GraphName="MagicalFireworkBullet" DirectionType="AI" SpawnTargetType="Self"/> -->
-            <FrameEvent Type="Danmaku" StartTime="0" Path="Enemy/MagicalFirework.xml"/> 
+            
+            <FrameEvent Type="Projectile" StartTime="0" GraphName="MagicalFireworkBullet" DirectionType="AI" SpawnTargetType="Self"/>
+            <!-- <FrameEvent Type="Danmaku" StartTime="0" Path="Enemy/MagicalFirework.xml"/> -->
         </Animation>
     
         <Branch Condition="End" Execute="AC_Idle"/>

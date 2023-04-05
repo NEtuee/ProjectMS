@@ -31,7 +31,7 @@
     <GlobalVariable Name="gv_najimiReadyTime" Value="1.5"/>     <!-- 보스전 대기 시간 (나중에 보스전 시작 트리거를 받아야 함)-->
     <GlobalVariable Name="gv_najimiSystemChaseRange" Value="9.75"/>     <!-- 카메라 범위 값. 카메라 바깥으로 사라지지 않게 추격 -->
     <GlobalVariable Name="gv_StdDistance" Value="2.0"/>     <!-- 원거리 공격 기준 값 -->
-    <GlobalVariable Name="gv_StdPassiveAttitude" Value="3.0"/>     <!-- 수동적 플레이 기준 값 -->
+    <GlobalVariable Name="gv_StdPassiveAttitude" Value="3.5"/>     <!-- 수동적 플레이 기준 값 -->
     
 
     <!-- Dodge Pattern -->
@@ -43,8 +43,8 @@
     <GlobalVariable Name="gv_najimiRushRange" Value="2.0"/>             <!-- 나지미 돌진 사거리 -->
     <GlobalVariable Name="gv_najimiRushTrasitionTime" Value="0.8"/>     <!-- 나지미 돌진 최소 텀 -->
 
-    <GlobalVariable Name="gv_najimiStdHp_2Phase" Value="80.0"/> <!-- 나지미 2페이즈 전환 기준 체력 --> <!-- 34 -->
-    <GlobalVariable Name="gv_najimiStdHp_3Phase" Value="1.0"/> <!-- 나지미 3페이즈 전환 기준 체력 --> <!-- 17 -->
+    <GlobalVariable Name="gv_najimiStdHp_2Phase" Value="95.0"/> <!-- 나지미 2페이즈 전환 기준 체력 --> <!-- 34 -->
+    <GlobalVariable Name="gv_najimiStdHp_3Phase" Value="90.0"/> <!-- 나지미 3페이즈 전환 기준 체력 --> <!-- 17 -->
 
     <GlobalVariable Name="gv_najimiStdBattle" Value="30.0"/>     <!-- 나지미 그로기 기준 배틀 포인트 -->
     
@@ -52,8 +52,8 @@
 
     <BranchSet Name="HitReactionSet">
         <Branch Condition="Dead" Execute="Dead"/>
-        <Branch Condition="(getStat_Phase == 1.0) && (getStat_HP == gv_najimiStdHp_2Phase)" Execute="PhaseIncrease"/>
-        <Branch Condition="(getStat_Phase == 2.0) && (getStat_HP == gv_najimiStdHp_3Phase)" Execute="PhaseIncrease"/>
+        <Branch Condition="(getStat_Phase == 1.0) && (getStat_HP <= gv_najimiStdHp_2Phase)" Execute="PhaseIncrease"/>
+        <Branch Condition="(getStat_Phase == 2.0) && (getStat_HP <= gv_najimiStdHp_3Phase)" Execute="PhaseIncrease"/>
         <Branch Condition="(getStat_Battle >= gv_najimiStdBattle)" Execute="Groggy"/>
         <Branch Weight="NajimiJudgeDodge^Fast" Condition="(Hit || GuardBreakFail || GuardBroken) && (getStat_HitCount >= gv_najimiHitCountFast)" Execute="JudgeHitReaction"/> <!-- Attack 프레임 태그로 바꿀까.-->
         <Branch Weight="NajimiJudgeDodge^Normal" Condition="(Hit || GuardBreakFail || GuardBroken) && (getStat_HitCount >= gv_najimiHitCountNormal)" Execute="JudgeHitReaction"/>
@@ -77,15 +77,24 @@
         <Branch Weight="RandBoolean^True" Condition="(TargetDistance < gv_StdDistance) && (getStat_Phase <= 2.0)" Execute="DistRush"/>
         <Branch Weight="RandBoolean^False" Condition="(TargetDistance < gv_StdDistance) && (getStat_Phase <= 2.0)" Execute="SpawnPitchingMachine"/>
 
+        <Branch Weight="Najimi3PhaseNearAtk^Rush" Condition="(TargetDistance < gv_StdDistance) && (getStat_Phase == 3.0)" Execute="DistRush"/>
+        <Branch Weight="Najimi3PhaseNearAtk^SpawnPitchingMachine" Condition="(TargetDistance < gv_StdDistance) && (getStat_Phase == 3.0)" Execute="SpawnPitchingMachine"/>
+        <Branch Weight="Najimi3PhaseNearAtk^Pistol" Condition="(TargetDistance < gv_StdDistance) && (getStat_Phase == 3.0)" Execute="Pistol"/>
         <!-- 원거리 -->
         <!-- 수동적 플레이 분기 -->
         <Branch Weight="RandBoolean^True" Condition="(TargetDistance >= gv_StdPassiveAttitude)" Execute="SpawnPitchingMachine"/>
-        <Branch Weight="RandBoolean^False" Condition="(TargetDistance >= gv_StdPassiveAttitude)" Execute="Pitching"/>
+        <Branch Weight="RandBoolean^False" Condition="(TargetDistance >= gv_StdPassiveAttitude) && (getStat_Phase == 2.0)" Execute="Pitching"/>
+        <Branch Weight="RandBoolean^False" Condition="(TargetDistance >= gv_StdPassiveAttitude) && (getStat_Phase == 3.0)" Execute="Beam"/>
         
         <!-- 통상 분기 -->
         <Branch Weight="Najimi2PhaseDistAtk^ChaseRush" Condition="(TargetDistance >= gv_StdDistance) && (getStat_Phase == 2.0)" Execute="Chase"/>
         <Branch Weight="Najimi2PhaseDistAtk^PitchingMachine" Condition="(TargetDistance >= gv_StdDistance) && (getStat_Phase == 2.0)" Execute="SpawnPitchingMachine"/> <!-- 조건체크를 통한 스폰 필요 -->
-        <Branch Weight="Najimi2PhaseDistAtk^Pitching" Condition="(TargetDistance >= gv_StdDistance) && (getStat_Phase == 2.0)" Execute="Pitching"/> <!-- 조건체크를 통한 스폰 필요 -->
+        <Branch Weight="Najimi2PhaseDistAtk^Pitching" Condition="(TargetDistance >= gv_StdDistance) && (getStat_Phase == 2.0)" Execute="Pitching"/>
+
+        <Branch Weight="Najimi3PhaseDistAtk^PitchingMachine" Condition="(TargetDistance >= gv_StdDistance) && (getStat_Phase == 3.0)" Execute="SpawnPitchingMachine"/>
+        <Branch Weight="Najimi3PhaseDistAtk^BatonSlash" Condition="(TargetDistance >= gv_StdDistance) && (getStat_Phase == 3.0)" Execute="Baton"/>
+        <Branch Weight="Najimi3PhaseDistAtk^Firework" Condition="(TargetDistance >= gv_StdDistance) && (getStat_Phase == 3.0)" Execute="Firework"/> 
+        <Branch Weight="Najimi3PhaseDistAtk^Beam" Condition="(TargetDistance >= gv_StdDistance) && (getStat_Phase == 3.0)" Execute="Beam"/> 
         
     </JudgeDistance>
 
@@ -96,6 +105,10 @@
         <Branch Condition="(getStat_Phase <= 2.0) && (gv_najimiRushRange >= TargetDistance)" Execute="Rush"/>
         <Branch Condition="(getStat_Phase <= 2.0) && CurrentPackageEnd" Execute="Rush"/>
         <!-- 3페이즈 분기 (러시, 피스톨) -->
+        <Branch Weight="RandBoolean^True" Condition="(getStat_Phase == 3.0) && (gv_najimiRushRange >= TargetDistance)" Execute="Rush"/>
+        <Branch Weight="RandBoolean^True" Condition="(getStat_Phase == 3.0) && CurrentPackageEnd" Execute="Rush"/>
+        <Branch Weight="RandBoolean^False" Condition="(getStat_Phase == 3.0) && (gv_najimiRushRange >= TargetDistance)" Execute="Pistol"/>
+        <Branch Weight="RandBoolean^False" Condition="(getStat_Phase == 3.0) && CurrentPackageEnd" Execute="Pistol"/>
 
         <Branch Condition="CurrentPackageEnd" Execute="Chase"/>
     </DashAttack>
@@ -112,7 +125,7 @@
     <Dodge Package="NajimiDodgePackage">
         <UseBranchSet Name="HitReactionSet"/>
         <!-- 분기 대시공격 or 원거리공격 -->
-        <Branch Weight="NajimiDodgeAtk^DashAttack" Condition="CurrentPackageEnd && (getStat_Phase <= 2.0)" Execute="DashAttack"/>
+        <Branch Weight="NajimiDodgeAtk^DashAttack" Condition="CurrentPackageEnd" Execute="DashAttack"/>
         <Branch Weight="NajimiDodgeAtk^DistAttack" Condition="CurrentPackageEnd" Execute="JudgeDistance"/>
 
         <Branch Condition="CurrentPackageEnd" Execute="Chase"/>
@@ -123,7 +136,7 @@
         <Branch Condition="TargetDistance >= gv_najimiSystemChaseRange" Execute="SystemChase"/>
 
         <!-- 추격 러시 -->
-        <Branch Condition="(getStat_Phase <= 2.0) &&
+        <Branch Condition="(getStat_Phase <= 3.0) &&
                            TargetExists && 
                            (gv_najimiRushRange >= TargetDistance) && 
                            (GraphExecutedTime > gv_najimiRushTrasitionTime)" Execute="Rush"/>
@@ -133,7 +146,7 @@
     <SystemChase Package="CommonSystemChasePackage">
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </SystemChase>
-
+    
     <DistRush Package="NajimiAttackReadyPackage">
         <Branch Condition="CurrentPackageEnd" Execute="Rush"/>
     </DistRush>
@@ -162,6 +175,28 @@
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="TargetExists && (1.5 >= TargetDistance)" Execute="Rush"/>
     </StunChase>
+
+    <Baton Package="NajimiBatonPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="CurrentPackageEnd && (getStat_PistolCount < 3.0)" Execute="Baton"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+    </Baton>
+
+    <Pistol Package="NajimiPistolPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+    </Pistol>
+
+    <Firework Package="NajimiFireworkPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Weight="RandBoolean^True" Condition="CurrentPackageEnd" Execute="Beam"/>
+        <Branch Weight="RandBoolean^False" Condition="CurrentPackageEnd" Execute="Entry"/>
+    </Firework>
+
+    <Beam Package="NajimiBeamPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+    </Beam>
 
     <PhaseIncrease Package="CommonPhaseIncreasePackage">
         <!-- 페이즈 전환은 피격 리액션 무시 -->    

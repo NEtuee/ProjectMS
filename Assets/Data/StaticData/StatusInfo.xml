@@ -68,4 +68,10 @@
         <DeclareGraphicInterface Target="Battle" Color="1 0.749 0 1" HorizontalGap="0.1"/>
         
     </OsananaNajimiStatus>
+
+    <ActionProjectileStatus>
+        <Stat Type="HP" Max="3" Min="0" Init="3"/>
+        <Stat Type="Blood" Max="100" Min="0" Init="3"/>
+        <Stat Type="Battle" Max="0" Min="0" Init="0"/>
+    </ActionProjectileStatus>
 </StatusInfo>
