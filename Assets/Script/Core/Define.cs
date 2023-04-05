@@ -72,7 +72,7 @@ public struct Triangle
     public Vector3[] getVertices() {return _vertices;}
 }
 
-public struct BoundBox
+public class BoundBox
 {
     private Vector3[] _vertices;
     private float _width;
@@ -194,6 +194,9 @@ public struct BoundBox
         return true;
     }
 
+
+    public float getWidth() {return _width;}
+    public float getHeight() {return _height;}
     public float getBottom() {return _b;}
 
 }
