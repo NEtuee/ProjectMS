@@ -29,18 +29,8 @@ public class AnimationCustomPresetEditor : Editor
 		base.OnInspectorGUI();
 
         GUILayout.Space(10f);
-        if(GUILayout.Button("Calculate Total Duration"))
-        {
-            float totalDuration = 0f;
-            for(int index = 0; index < controll._animationCustomPresetData._duration.Length; ++index)
-            {
-                totalDuration += controll._animationCustomPresetData._duration[index];
-            }
 
-            controll._animationCustomPresetData._totalDuration = totalDuration;
-
-            EditorUtility.SetDirty(controll);
-        }
+        GUILayout.Label("Total Duration : " + controll._animationCustomPresetData.getTotalDuration());
 
         EditorGUILayout.BeginHorizontal();
 
@@ -52,8 +42,6 @@ public class AnimationCustomPresetEditor : Editor
             {
                 controll._animationCustomPresetData._duration[index] = perFrame;
             }
-
-            controll._animationCustomPresetData._totalDuration = (float)controll._animationCustomPresetData._duration.Length * perFrame;
         }
 
         EditorGUILayout.EndHorizontal();

@@ -25,6 +25,7 @@ public class AnimationTimeProcessor
     private float       _prevAnimationTime = 0f;
     private int         _prevIndex = 0;
 
+    private float       _prevAnimationTotalPlayTime = 0f;
     private float       _animationTotalPlayTime = 0f;
     private float       _animationSpeed = 1f;
 
@@ -60,6 +61,7 @@ public class AnimationTimeProcessor
         _prevAnimationTime = 0f;
         _prevIndex = 0;
 
+        _prevAnimationTotalPlayTime = 0f;
         _animationTotalPlayTime = 0f;
 
         _framePerSecond = 0f;
@@ -93,6 +95,8 @@ public class AnimationTimeProcessor
 
         _prevAnimationTime = _currentAnimationTime;
         _prevIndex = _currentIndex;
+
+        _prevAnimationTotalPlayTime = _animationTotalPlayTime;
 
         _currentAnimationTime += deltaTime;
         _animationTotalPlayTime += deltaTime;
@@ -147,6 +151,7 @@ public class AnimationTimeProcessor
         if(_actionDuration != -1f && _animationTotalPlayTime >= _actionDuration)
         {
             _currentAnimationTime = _actionDuration - ((float)((int)(_animationTotalPlayTime * (1f / _currentAnimationTime))) * _animationEndTime);
+            _prevAnimationTotalPlayTime = _actionDuration;
             _animationTotalPlayTime = _actionDuration;
             forceEnd = true;
         }
@@ -224,7 +229,7 @@ public class AnimationTimeProcessor
         MoveValuePerFrameFromTimeDesc desc;
         desc.currentNormalizedTime = getCurrentNormalizedTime();
         desc.prevNormalizedTime = getPrevNormalizedTime();
-        desc.loopCount = getTotalLoopCount();
+        desc.loopCount = _customPresetData != null ? 0 : getTotalLoopCount();
 
         return desc;
     }
@@ -261,16 +266,22 @@ public class AnimationTimeProcessor
     {
         if(_isEnd)
             return 1f;
-            
-        return (_currentAnimationTime - _animationStartTime) / _animationTime;
+        
+        if(_customPresetData != null)
+            return _animationTotalPlayTime * (1f / _actionDuration);
+
+        return (_currentAnimationTime - _animationStartTime) * (1f /_animationTime);
     }
 
     public float getPrevNormalizedTime()
     {
         if(_prevAnimationTime == _currentAnimationTime && _isEnd)
             return 1f;
-            
-        return (_prevAnimationTime - _animationStartTime) / _animationTime;
+        
+        if(_customPresetData != null)
+            return _prevAnimationTotalPlayTime * (1f / _actionDuration);
+
+        return (_prevAnimationTime - _animationStartTime) * (1f / _animationTime);
     }
 
     public float getCurrentFrame()
@@ -323,8 +334,8 @@ public class AnimationTimeProcessor
 
         _customPresetData = customPresetData;
         _animationStartTime = 0f;
-        _animationEndTime = customPresetData._totalDuration;
-        _animationTime = customPresetData._totalDuration;
+        _animationEndTime = customPresetData.getTotalDuration();
+        _animationTime = _animationEndTime;
 
         _endIndex = customPresetData._duration.Length;
 
