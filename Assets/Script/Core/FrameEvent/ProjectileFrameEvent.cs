@@ -34,6 +34,8 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
     private int                             _predictionAccuracy = 0;
     private float                           _startTerm = 0f;
 
+    bool                                    _useFlip = false;
+
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
         if(ProjectileManager._instance == null)
@@ -45,13 +47,22 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
         if(executeEntity is GameEntityBase == false)
             return true;
 
-        float defaultAngle = getDefaultAngle(executeEntity as GameEntityBase, _directionType);
+        GameEntityBase gameEntityBase = executeEntity as GameEntityBase;
+
+        float defaultAngle = getDefaultAngle(gameEntityBase, _directionType);
 
         ProjectileGraphShotInfoData shotInfo;
         getShotInfo(_projectileGraphName,_useType,defaultAngle,ref _shotInfo,out shotInfo);
+        
+        float angle = MathEx.directionToAngle(executeEntity.getDirection());
+        if(_useFlip && gameEntityBase.getFlipState().xFlip)
+        {
+            angle -= 180f;
+            angle *= -1f;
+        }
 
         Vector3 offsetPosition = _positionOffset;
-        offsetPosition = Quaternion.Euler(0f,0f,MathEx.directionToAngle(executeEntity.getDirection())) * offsetPosition;
+        offsetPosition = Quaternion.Euler(0f,0f,angle) * offsetPosition;
 
         Vector3 spawnPosition = getSpawnPosition(_setTargetType, executeEntity, targetEntity) + offsetPosition;
         
@@ -289,6 +300,10 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
             else if(attrName == "Offset")
             {
                 _positionOffset = XMLScriptConverter.valueToVector3(attrValue);
+            }
+            else if(attrName == "UseFlip")
+            {
+                _useFlip = bool.Parse(attrValue);
             }
         }
 
