@@ -238,7 +238,7 @@
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/2_pitchingPattern/"/>
         <Animation Preset="2_pitcherReady" XFlip="true" Duration="0.85">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/NajimiPitchingBeam_TimeLine" Offset="0.0 0.0 0.0" Attach="true" AngleType="Direction" LifeTime="1.05" FollowDirection="True"/>
+            <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/NajimiPitchingBeam_TimeLine" Offset="0.4 0.1 0" Attach="true" AngleType="Direction" LifeTime="1.05" FollowDirection="True"/>
 
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
@@ -295,13 +295,18 @@
         <Branch Condition="End" Execute="AC_BatonReady"/>
     </AC_BatonReady>
 
-    <AC_BatonSlash MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+    <AC_BatonPre MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/3_batonPattern/2_batonSlash/"/>
         <Animation Preset="1_batonPre" XFlip="true" Duration="0.13">
             <!-- TODO: 바톤 3연속 공격 카운트용 버프. 향후 이름 수정해야함. (Pistol->Baton)-->
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="NajimiAddPistolCount"/>
-
         </Animation>
+
+        <Branch Condition="End" Execute="AC_BatonPre"/>
+    </AC_BatonPre>
+
+    <AC_BatonSlash MovementType="GraphPreset" MovementGraphPreset="Najimi_BatonSlash" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/3_batonPattern/2_batonSlash/"/>
         <Animation Preset="2_batonMain" XFlip="true" Duration="0.8">
             <FrameEvent Type="Attack" StartTime="0" AttackPreset="Najimi_BatonSlash">
                 <OnHit>
@@ -316,8 +321,6 @@
                     <FrameEvent Type="StopUpdate" Time="0.07"/>
                 </OnHit>
             </FrameEvent>
-
-            <FrameEvent Type="Movement" StartTime="0" Friction="90" MaxVelocity="30" Speed="0" Velocity="30"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Entry"/>
@@ -348,7 +351,7 @@
     <AC_PistolShot MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/3_batonPattern/"/>
         <Animation Preset="5_pistolShot" XFlip="true" Duration="1.0">
-            <FrameEvent Type="Danmaku" StartTime="0" Path="Enemy/MagicalFirecrack.xml"/>
+            <FrameEvent Type="Danmaku" StartTime="0" Path="Enemy/MagicalFirecrack.xml" Offset="0.4 0.1 0"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>
@@ -368,7 +371,7 @@
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/3_batonPattern/"/>
         <Animation Preset="6_fireworkShot" XFlip="true" Duration="1.5">
             
-            <FrameEvent Type="Projectile" StartTime="0" GraphName="MagicalFireworkBullet" DirectionType="AI" SpawnTargetType="Self"/>
+            <FrameEvent Type="Projectile" StartTime="0" GraphName="MagicalFireworkBullet" DirectionType="AI" SpawnTargetType="Self" Offset="0.4 0.1 0"/>
             <!-- <FrameEvent Type="Danmaku" StartTime="0" Path="Enemy/MagicalFirework.xml"/> -->
         </Animation>
     
@@ -379,7 +382,7 @@
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/3_batonPattern/4_pistolReady/"/>
         <Animation Preset="3_beam" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/NajimiPitchingBeam_TimeLine" Offset="0.0 0.0 0.0" Attach="true" AngleType="Direction" LifeTime="1.0" FollowDirection="True"/>
+            <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/NajimiPitchingBeam_TimeLine" Offset="0.4 0.1 0" Attach="true" AngleType="Direction" LifeTime="1.0" FollowDirection="True"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_BeamReady"/>

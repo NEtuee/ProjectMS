@@ -1,7 +1,7 @@
 <AIGraph Name="NajimiChanAI" DefaultState="Entry">
 
     <Include Path="Common\CommonTestPackage.xml"/>
-    <Test Package="CommonTestPackage"/>
+   
 
     <Include Path="Common\CommonDeadPackage.xml"/>
     <Include Path="Common\CommonHitPackage.xml"/>
@@ -27,7 +27,10 @@
 
     <Include Path="Common\CommonPhaseIncreasePackage.xml"/>
 
-    
+    <Test Package="NajimiBatonPackage">
+        <Branch Condition="CurrentPackageEnd" Execute="Test"/>
+    </Test>
+
     <GlobalVariable Name="gv_najimiReadyTime" Value="1.5"/>     <!-- 보스전 대기 시간 (나중에 보스전 시작 트리거를 받아야 함)-->
     <GlobalVariable Name="gv_najimiSystemChaseRange" Value="9.75"/>     <!-- 카메라 범위 값. 카메라 바깥으로 사라지지 않게 추격 -->
     <GlobalVariable Name="gv_StdDistance" Value="2.0"/>     <!-- 원거리 공격 기준 값 -->
@@ -80,6 +83,8 @@
         <Branch Weight="Najimi3PhaseNearAtk^Rush" Condition="(TargetDistance < gv_StdDistance) && (getStat_Phase == 3.0)" Execute="DistRush"/>
         <Branch Weight="Najimi3PhaseNearAtk^SpawnPitchingMachine" Condition="(TargetDistance < gv_StdDistance) && (getStat_Phase == 3.0)" Execute="SpawnPitchingMachine"/>
         <Branch Weight="Najimi3PhaseNearAtk^Pistol" Condition="(TargetDistance < gv_StdDistance) && (getStat_Phase == 3.0)" Execute="Pistol"/>
+        <Branch Weight="Najimi3PhaseNearAtk^BatonSlash" Condition="(TargetDistance < gv_StdDistance) && (getStat_Phase == 3.0)" Execute="Baton"/>
+
         <!-- 원거리 -->
         <!-- 수동적 플레이 분기 -->
         <Branch Weight="RandBoolean^True" Condition="(TargetDistance >= gv_StdPassiveAttitude)" Execute="SpawnPitchingMachine"/>

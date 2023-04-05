@@ -137,8 +137,8 @@
         <Animation Path="Resources/Sprites/Projectile/MagicalFirework/" StartFrame="0" EndFrame="1" XFlip="true">
         </Animation>
 
-        <CollisionInfo Radius="2.0" Angle="360"/>
-        <DefaultShotInfo Velocity="5" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="1.0"/>
+        <CollisionInfo Radius="1.5" Angle="360"/>
+        <DefaultShotInfo Velocity="12" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="1.0"/>
         <Event>
             <OnHit>
                 <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="FireworkBullet" Offset="0 0 0" SearchIdentifier="Enemy"/>

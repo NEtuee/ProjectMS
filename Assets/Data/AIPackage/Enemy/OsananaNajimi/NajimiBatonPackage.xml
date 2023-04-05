@@ -12,8 +12,17 @@
                 <AIEvent Type="SetDirectionToTarget"/>
             </Event_OnUpdate>
             
-            <Branch Condition="End" Execute="AI_BatonSlash"/>
+            <Branch Condition="End" Execute="AI_BatonPre"/>
         </AI_BatonReady>
+
+        <AI_BatonPre UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="AC_BatonPre"/>
+            </Event_OnExecute>        
+            
+            <Branch Condition="End" Execute="AI_BatonSlash"/>
+        </AI_BatonPre>
 
         <AI_BatonSlash UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
             <Event_OnExecute>
