@@ -493,7 +493,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             else if(targetName == "Preset")
             {
                 string path = masterPath + targetValue;
-                playData._path = "Resources/" + path;
+                playData._path = path;
 
                 ScriptableObject[] scriptableObjects = ResourceContainerEx.Instance().GetScriptableObjects(path);
                 if(scriptableObjects == null || (scriptableObjects[0] is AnimationCustomPreset) == false)

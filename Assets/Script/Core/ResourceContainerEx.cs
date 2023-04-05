@@ -162,7 +162,9 @@ public class ResourceContainerEx : Singleton<ResourceContainerEx>
 
 	public Sprite[] GetSpriteAll(string folderName)
 	{
-		string cut = folderName.Substring(folderName.IndexOf("Resources") + 10);
+		string cut = folderName;
+		if(cut.Contains("Resources"))
+			cut = cut.Substring(folderName.IndexOf("Resources") + 10);
 		
 		return _spriteResource.GetOrLoadResources(cut, "Sprite가 없습니다. ");
 	}
