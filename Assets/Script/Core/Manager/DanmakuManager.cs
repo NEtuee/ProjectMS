@@ -4,5 +4,27 @@ using UnityEngine;
 
 public class DanmakuManager : Singleton<DanmakuManager>
 {
-    //private Dictionary<>
+    private DanmakuGraph        _danmakuGraph;
+
+    public void initialize()
+    {
+        _danmakuGraph = new DanmakuGraph();
+        _danmakuGraph.initialize(null);
+    }
+
+    public void process(float deltaTime)
+    {
+        _danmakuGraph.process(deltaTime);
+
+    }
+
+    public void release()
+    {
+        _danmakuGraph.release();
+    }
+
+    public void addDanmaku(string path, Vector3 position, SearchIdentifier searchIdentifier)
+    {
+        _danmakuGraph.addDanmakuGraph(path, position, searchIdentifier);
+    }
 }

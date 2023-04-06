@@ -495,12 +495,16 @@ public class ActionFrameEvent_Danmaku : ActionFrameEventBase
 
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
-        if(executeEntity is GameEntityBase == false)
-            return false;
+        if(executeEntity is GameEntityBase )
+        {
+            GameEntityBase requester = (GameEntityBase)executeEntity;
+            requester.addDanmaku(_path);
+        }
+        else if(executeEntity is ProjectileEntityBase)
+        {
+            DanmakuManager.Instance().addDanmaku(_path,executeEntity.transform.position,executeEntity._searchIdentifier);
+        }
         
-        GameEntityBase requester = (GameEntityBase)executeEntity;
-        
-        requester.addDanmaku(_path);
 
         return true;
     }
