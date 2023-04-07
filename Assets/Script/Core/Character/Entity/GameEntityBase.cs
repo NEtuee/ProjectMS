@@ -714,7 +714,7 @@ public class GameEntityBase : SequencerObjectBase
 
     public void addDanmaku(string path)
     {
-        _danmakuGraph.addDanmakuGraph(path);
+        _danmakuGraph.addDanmakuGraph(path, transform.position, _searchIdentifier);
     }
     
     public void addDeadEvent(DeadEventDelegate deadEvent) 

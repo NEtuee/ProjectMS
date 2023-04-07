@@ -80,6 +80,7 @@ public class MasterManager : MessageHub<ManagerBase>
         FMODAudioManager.Instance().initialize();
         CameraControlEx.Instance().initialize();
         StageGraphManager.Instance().initialize();
+        DanmakuManager.Instance().initialize();
     }
     public void Start()
     {
@@ -126,6 +127,8 @@ public class MasterManager : MessageHub<ManagerBase>
         StageGraphManager.Instance().progress(deltaTime);
 
         CameraControlEx.Instance().SyncPosition();
+
+        DanmakuManager.Instance().process(deltaTime);
 
         ManagersUpdate(deltaTime);
         ManagersAfterUpdate(deltaTime);

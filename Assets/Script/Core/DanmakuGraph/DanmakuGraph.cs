@@ -12,6 +12,9 @@ public class DanmakuGraph
         public List<DanmakuLoopPlayItem> _currentLoopProcess = new List<DanmakuLoopPlayItem>();
         public SimplePool<DanmakuLoopPlayItem> _loopEventPool = new SimplePool<DanmakuLoopPlayItem>();
 
+        public SearchIdentifier _forceSearchIdentifier = SearchIdentifier.Count;
+        public Vector3 _forcePosition = Vector3.zero;
+
         public bool _isEnd = false;
         public bool _eventEnd = false;
         public int _currentWaitIndex = -1;
@@ -234,8 +237,8 @@ public class DanmakuGraph
                     break;
                 }
                 
-                Vector3 direction = Vector3.zero;
-                if(eventData._directionType != DirectionType.Count)
+                Vector3 direction = Vector3.right;
+                if(eventData._directionType != DirectionType.Count && _ownerEntity != null && _ownerEntity is GameEntityBase)
                     direction = ((GameEntityBase)_ownerEntity).getDirectionFromType(eventData._directionType);
                 
                 ObjectBase targetEntity = null;
@@ -243,7 +246,7 @@ public class DanmakuGraph
                     targetEntity = (_ownerEntity as GameEntityBase).getCurrentTargetEntity();
 
                 shotInfo._defaultAngle += Quaternion.Euler(0f,0f,Mathf.Atan2(direction.y,direction.x) * Mathf.Rad2Deg).eulerAngles.z;
-                Vector3 spawnPosition = ActionFrameEvent_Projectile.getSpawnPosition(eventData._setTargetType,_ownerEntity,targetEntity);
+                Vector3 spawnPosition = _ownerEntity == null ? playItem._forcePosition : ActionFrameEvent_Projectile.getSpawnPosition(eventData._setTargetType,_ownerEntity,targetEntity);
 
                 if(eventData._startTerm != 0f)
                 {
@@ -292,11 +295,11 @@ public class DanmakuGraph
                         }
                     }
 
-                    ProjectileManager._instance.spawnProjectileDelayed(eventData._projectileName, eventData._startTerm,_ownerEntity,targetEntity,eventData._setTargetType,ref shotInfo,_ownerEntity._searchIdentifier);
+                    ProjectileManager._instance.spawnProjectileDelayed(eventData._projectileName, eventData._startTerm,_ownerEntity,targetEntity,eventData._setTargetType,ref shotInfo,_ownerEntity == null ? playItem._forceSearchIdentifier : _ownerEntity._searchIdentifier);
                 }
                 else
                 {
-                    ProjectileManager._instance.spawnProjectile(eventData._projectileName,ref shotInfo,spawnPosition,_ownerEntity._searchIdentifier);
+                    ProjectileManager._instance.spawnProjectile(eventData._projectileName,ref shotInfo,spawnPosition,_ownerEntity == null ? playItem._forceSearchIdentifier : _ownerEntity._searchIdentifier);
                 }
             }
             break;
@@ -315,15 +318,16 @@ public class DanmakuGraph
         }
     }
 
-    public void addDanmakuGraph(string graphPath)
+    public void addDanmakuGraph(string graphPath, Vector3 forcePosition, SearchIdentifier searchIdentifier)
     {
-        
         DanmakuGraphBaseData graphData = ResourceContainerEx.Instance().GetDanmakuGraph(graphPath);
         if(graphData == null)
             return;
 
         DanmakuPlayItem playItem = _danmakuPlayItemPool.dequeue();
         playItem.initialize(graphData);
+        playItem._forcePosition = forcePosition;
+        playItem._forceSearchIdentifier = searchIdentifier;
 
         _currentPlayList.Add(playItem);
     }
