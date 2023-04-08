@@ -74,7 +74,7 @@ public class ProjectileEntityBase : ObjectBase
         if(_projectileGraph.isEnd() == true)
         {
             if(_projectileGraph.isPenetrateEnd() == false)
-                _projectileGraph.executeChildFrameEvent(ProjectileChildFrameEventType.ChildFrameEvent_OnEnd,this,null);
+                _projectileGraph.executeChildFrameEvent(ProjectileChildFrameEventType.ChildFrameEvent_OnEnd,getSummonObject() == null ? this : getSummonObject(),null);
 
             DeregisterRequest();
             CollisionManager.Instance().deregisterObject(_collisionInfo.getCollisionInfoData(),this);

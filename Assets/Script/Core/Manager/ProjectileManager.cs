@@ -11,6 +11,8 @@ public class DelayedProjectileItem
     public ObjectBase _executeEntity;
     public ObjectBase _targetEntity;
 
+    public ObjectBase _summoner;
+
     public SetTargetType _sethTargetType;
 
     public bool updateTimer(float deltaTime)
@@ -64,7 +66,7 @@ public class ProjectileManager : PoolingManagerBase<ProjectileEntityBase>
             if(_currentUpdateList[index].updateTimer(deltaTime))
             {
                 Vector3 spawnPosition = ActionFrameEvent_Projectile.getSpawnPosition(_currentUpdateList[index]._sethTargetType,_currentUpdateList[index]._executeEntity,_currentUpdateList[index]._targetEntity);
-                spawnProjectile(_currentUpdateList[index]._graphName,ref _currentUpdateList[index]._shotInfo,spawnPosition,_currentUpdateList[index]._searchIdentifier);
+                spawnProjectile(_currentUpdateList[index]._graphName,ref _currentUpdateList[index]._shotInfo,spawnPosition,_currentUpdateList[index]._summoner,_currentUpdateList[index]._searchIdentifier);
 
                 _delayedProjectileItemPool.enqueue(_currentUpdateList[index]);
                 _currentUpdateList.RemoveAt(index);
@@ -74,11 +76,12 @@ public class ProjectileManager : PoolingManagerBase<ProjectileEntityBase>
         }
     }
 
-    public void spawnProjectileDelayed(string name, float time, ObjectBase executeEntity, ObjectBase targetEntity, SetTargetType setTargetType, ref ProjectileGraphShotInfoData shotInfo, SearchIdentifier searchIdentifier)
+    public void spawnProjectileDelayed(string name, float time, ObjectBase executeEntity, ObjectBase targetEntity, SetTargetType setTargetType, ref ProjectileGraphShotInfoData shotInfo, ObjectBase summoner, SearchIdentifier searchIdentifier)
     {
         DelayedProjectileItem delayedProjectileItem = _delayedProjectileItemPool.dequeue();
         delayedProjectileItem._executeEntity = executeEntity;
         delayedProjectileItem._targetEntity = targetEntity;
+        delayedProjectileItem._summoner = summoner;
         delayedProjectileItem._graphName = name;
         delayedProjectileItem._shotInfo = shotInfo;
         delayedProjectileItem._timer = time;
@@ -87,21 +90,23 @@ public class ProjectileManager : PoolingManagerBase<ProjectileEntityBase>
         _currentUpdateList.Add(delayedProjectileItem);
     }
 
-    public void spawnProjectile(string name, ref ProjectileGraphShotInfoData shotInfo, Vector3 startPosition, SearchIdentifier searchIdentifier)
+    public void spawnProjectile(string name, ref ProjectileGraphShotInfoData shotInfo, Vector3 startPosition, ObjectBase summoner, SearchIdentifier searchIdentifier)
     {
         ProjectileEntityBase entity = dequeuePoolEntity();
 
         entity._searchIdentifier = searchIdentifier;
+        entity.setSummonObject(summoner);
         entity.setData(getProjectileGraphData(name));
         entity.initialize();
         entity.shot(shotInfo,startPosition);
     }
 
-    public void spawnProjectile(string name, Vector3 startPosition, SearchIdentifier searchIdentifier)
+    public void spawnProjectile(string name, Vector3 startPosition, ObjectBase summoner, SearchIdentifier searchIdentifier)
     {
         ProjectileEntityBase entity = dequeuePoolEntity();
 
         entity._searchIdentifier = searchIdentifier;
+        entity.setSummonObject(summoner);
         entity.setData(getProjectileGraphData(name));
         entity.initialize();
         entity.shot(startPosition);

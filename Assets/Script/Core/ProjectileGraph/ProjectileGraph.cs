@@ -95,7 +95,7 @@ public class ProjectileGraph
                 continue;
                 
             childFrameEventItem._childFrameEvents[i].initialize();
-            childFrameEventItem._childFrameEvents[i].onExecute(executeEntity, targetEntity);
+            childFrameEventItem._childFrameEvents[i].onExecute(executeEntity == null ? null : (executeEntity.getSummonObject() == null ? executeEntity : executeEntity.getSummonObject()), targetEntity);
         }
     }
 

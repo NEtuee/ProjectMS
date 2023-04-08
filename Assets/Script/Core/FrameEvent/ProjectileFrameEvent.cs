@@ -113,11 +113,11 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
                 
             }
             
-            ProjectileManager._instance.spawnProjectileDelayed(_projectileGraphName, _startTerm,executeEntity,targetEntity,_setTargetType,ref shotInfo,executeEntity._searchIdentifier);
+            ProjectileManager._instance.spawnProjectileDelayed(_projectileGraphName, _startTerm,executeEntity,targetEntity,_setTargetType,ref shotInfo,executeEntity,executeEntity._searchIdentifier);
         }
         else
         {
-            ProjectileManager._instance.spawnProjectile(_projectileGraphName,ref shotInfo,spawnPosition,executeEntity._searchIdentifier);
+            ProjectileManager._instance.spawnProjectile(_projectileGraphName,ref shotInfo,spawnPosition,executeEntity,executeEntity._searchIdentifier);
         }
         
         return true;

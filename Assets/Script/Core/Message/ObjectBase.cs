@@ -27,6 +27,8 @@ public abstract class ObjectBase : MessageReceiver, IProgress
     protected ObjectBase            _childObject = null;
     private Vector3                 _childPivot = Vector3.zero;
 
+    protected ObjectBase            _summonObject = null;
+
     public void setAttackState(AttackState state) {_attackState = state;}
     public void setDefenceState(DefenceState state) {_defenceState = state;}
 
@@ -46,6 +48,7 @@ public abstract class ObjectBase : MessageReceiver, IProgress
     public virtual void deactive()
     {
         detachChildObject();
+        setSummonObject(null);
 
         while(gameObject.transform.childCount == 0)
         {
@@ -103,6 +106,16 @@ public abstract class ObjectBase : MessageReceiver, IProgress
 
         _childObject.setParentObject(null);
         _childObject = null;
+    }
+
+    public void setSummonObject(ObjectBase summonObject)
+    {
+        _summonObject = summonObject;
+    }
+
+    public ObjectBase getSummonObject()
+    {
+        return _summonObject;
     }
 
     public void setParentObject(ObjectBase parentObject)
