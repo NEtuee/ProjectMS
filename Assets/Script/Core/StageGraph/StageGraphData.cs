@@ -102,6 +102,43 @@ public class StageGraphEvent_WaitSecond : StageGraphEventBase
     }
 }
 
+public class StageGraphEvent_SetCrossHair : StageGraphEventBase
+{
+    private string _uniqueKey = "";
+
+    public override StageGraphEventType getStageGraphEventType() => StageGraphEventType.SetCrossHair;
+    
+    public override void Initialize()
+    {
+        
+    }
+
+    public override bool Execute(StageGraphManager graphManager,float deltaTime)
+    {
+        GameEntityBase unqueEntity = graphManager.getUniqueEntity(_uniqueKey);
+        if(unqueEntity == null)
+            return true;
+
+        CrossHairUI._instance.setTarget(unqueEntity.transform);
+        CrossHairUI._instance.setActive(true);
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "UniqueKey")
+                _uniqueKey = attrValue;
+        }
+    }
+}
+
 public class StageGraphEvent_SetAudioListner : StageGraphEventBase
 {
     private string _uniqueKey = "";
@@ -181,6 +218,7 @@ public enum StageGraphEventType
     WaitSecond,
     SetCameraTarget,
     SetAudioListner,
+    SetCrossHair,
     Count,
 }
 

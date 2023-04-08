@@ -99,6 +99,11 @@ public class StageGraphLoader : LoaderBase<StageGraphBaseData>
         {
             spawnEvent = new StageGraphEvent_SetAudioListner();
         }
+        else if(node.Name == "SetCrossHair")
+        {
+            spawnEvent = new StageGraphEvent_SetCrossHair();
+        }
+
 
         if(spawnEvent == null)
         {
