@@ -3,8 +3,8 @@ using UnityEngine;
 [System.Serializable]
 public class AnimationRotationPresetData
 {
-    [SerializeField]private string _name;
-    [SerializeField]private AnimationCurve _rotationCurve;
+    [SerializeField]public string _name;
+    [SerializeField]public AnimationCurve _rotationCurve;
 
     public float evaulate(float normalizedTime)
     {

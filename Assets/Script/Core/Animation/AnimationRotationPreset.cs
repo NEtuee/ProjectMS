@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 
 [CreateAssetMenu(fileName = "AnimationRotationPreset", menuName = "Scriptable Object/Animation Rotation Preset", order = int.MaxValue)]
 public class AnimationRotationPreset : ScriptableObject
@@ -14,6 +18,11 @@ public class AnimationRotationPreset : ScriptableObject
     // {
     //     constructPresetCache();
     // }
+
+    public void addPresetData(AnimationRotationPresetData data)
+    {
+        _presetData.Add(data);
+    }
 
     public AnimationRotationPresetData getPresetData(string targetName)
     {
@@ -53,3 +62,39 @@ public class AnimationRotationPreset : ScriptableObject
     }
 
 }
+
+
+#if UNITY_EDITOR
+
+[CustomEditor(typeof(AnimationRotationPreset))]
+public class AnimationRotationPresetEditor : Editor
+{
+    AnimationRotationPreset controll;
+
+	void OnEnable()
+    {
+        controll = (AnimationRotationPreset)target;
+    }
+
+    public override void OnInspectorGUI()
+    {
+		base.OnInspectorGUI();
+
+        GUILayout.Space(10f);
+        if(GUILayout.Button("Add 0 ~ 360 Linear"))
+        {
+            AnimationRotationPresetData presetData = new AnimationRotationPresetData();
+            presetData._name = "NewPreset";
+            presetData._rotationCurve = new AnimationCurve();
+            presetData._rotationCurve.AddKey(0f,0f);
+            presetData._rotationCurve.AddKey(1f,360f);
+
+            controll.addPresetData(presetData);
+            EditorUtility.SetDirty(controll);
+        }
+    }
+
+}
+
+
+#endif
