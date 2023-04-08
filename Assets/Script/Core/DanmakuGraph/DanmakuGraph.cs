@@ -295,11 +295,11 @@ public class DanmakuGraph
                         }
                     }
 
-                    ProjectileManager._instance.spawnProjectileDelayed(eventData._projectileName, eventData._startTerm,_ownerEntity,targetEntity,eventData._setTargetType,ref shotInfo,_ownerEntity == null ? playItem._forceSearchIdentifier : _ownerEntity._searchIdentifier);
+                    ProjectileManager._instance.spawnProjectileDelayed(eventData._projectileName, eventData._startTerm,_ownerEntity,targetEntity,eventData._setTargetType,ref shotInfo,_ownerEntity,_ownerEntity == null ? playItem._forceSearchIdentifier : _ownerEntity._searchIdentifier);
                 }
                 else
                 {
-                    ProjectileManager._instance.spawnProjectile(eventData._projectileName,ref shotInfo,spawnPosition,_ownerEntity == null ? playItem._forceSearchIdentifier : _ownerEntity._searchIdentifier);
+                    ProjectileManager._instance.spawnProjectile(eventData._projectileName,ref shotInfo,spawnPosition,_ownerEntity,_ownerEntity == null ? playItem._forceSearchIdentifier : _ownerEntity._searchIdentifier);
                 }
             }
             break;

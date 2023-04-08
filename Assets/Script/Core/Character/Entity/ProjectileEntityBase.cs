@@ -74,7 +74,13 @@ public class ProjectileEntityBase : ObjectBase
         if(_projectileGraph.isEnd() == true)
         {
             if(_projectileGraph.isPenetrateEnd() == false)
-                _projectileGraph.executeChildFrameEvent(ProjectileChildFrameEventType.ChildFrameEvent_OnEnd,this,null);
+            {
+                ObjectBase executeTargetEntity = this;
+                if(_projectileGraph.isEventExecuteBySummoner())
+                    executeTargetEntity = getSummonObject() == null ? this : getSummonObject();
+
+                _projectileGraph.executeChildFrameEvent(ProjectileChildFrameEventType.ChildFrameEvent_OnEnd,executeTargetEntity,null);
+            }
 
             DeregisterRequest();
             CollisionManager.Instance().deregisterObject(_collisionInfo.getCollisionInfoData(),this);
@@ -124,11 +130,15 @@ public class ProjectileEntityBase : ObjectBase
         
         _collisionUniqueIDList.Add(target.GetUniqueID());
 
-        _projectileGraph.executeChildFrameEvent(ProjectileChildFrameEventType.ChildFrameEvent_OnHit,requester,target);
+        ObjectBase executeTargetEntity = requester;
+        if(_projectileGraph.isEventExecuteBySummoner())
+            executeTargetEntity = requester.getSummonObject() == null ? requester : requester.getSummonObject();
+
+        _projectileGraph.executeChildFrameEvent(ProjectileChildFrameEventType.ChildFrameEvent_OnHit,executeTargetEntity,target);
 
         _projectileGraph.decreasePenetrateCount();
         if(_projectileGraph.isPenetrateEnd() == true)
-            _projectileGraph.executeChildFrameEvent(ProjectileChildFrameEventType.ChildFrameEvent_OnHitEnd,requester,target);    
+            _projectileGraph.executeChildFrameEvent(ProjectileChildFrameEventType.ChildFrameEvent_OnHitEnd,executeTargetEntity,target);    
     }
 
     

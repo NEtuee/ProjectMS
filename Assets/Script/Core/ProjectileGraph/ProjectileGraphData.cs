@@ -25,6 +25,8 @@ public class ProjectileGraphBaseData
     public bool                         _useSpriteRotation = false;
     public bool                         _castShadow = false;
 
+    public bool                         _executeBySummoner = false;
+
     public int                          _penetrateCount = 1;
 }
 

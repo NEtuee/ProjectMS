@@ -37,7 +37,7 @@
     </TestProjectile>
 
 
-    <StunShot DefaultFramePerSecond="4" PenetrateCount="1" CastShadow="True">
+    <StunShot DefaultFramePerSecond="4" PenetrateCount="1" CastShadow="True" ExecuteBySummoner="True">
         <Animation Path="Resources/Sprites/Effect/Sheath" FramePerSecond="5" XFlip="true" RotationPreset="SpinLinear" Loop="True">
         </Animation>
         <CollisionInfo Radius="0.2" Angle="0"/>
@@ -51,12 +51,15 @@
     
                         <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
                         <FrameEvent Type="ZoomEffect" StartFrame="0" Scale="3.0"/>
+
                     </OnHit>
                 </FrameEvent>
             </OnHit>
     
             <OnHitEnd>
                 <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0"/>
+                <FrameEvent Type="TeleportToTarget"/>
+
             </OnHitEnd>
     
             <OnEnd>
