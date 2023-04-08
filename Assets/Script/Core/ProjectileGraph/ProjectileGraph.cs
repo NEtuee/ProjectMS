@@ -93,9 +93,9 @@ public class ProjectileGraph
         {
             if(executeEntity is GameEntityBase && childFrameEventItem._childFrameEvents[i].checkCondition(executeEntity as GameEntityBase) == false)
                 continue;
-                
+            
             childFrameEventItem._childFrameEvents[i].initialize();
-            childFrameEventItem._childFrameEvents[i].onExecute(executeEntity == null ? null : (executeEntity.getSummonObject() == null ? executeEntity : executeEntity.getSummonObject()), targetEntity);
+            childFrameEventItem._childFrameEvents[i].onExecute(executeEntity, targetEntity);
         }
     }
 
@@ -119,6 +119,8 @@ public class ProjectileGraph
         _projectileGraphBaseData = baesData;
         initialize();
     }
+
+    public bool isEventExecuteBySummoner() {return _projectileGraphBaseData._executeBySummoner;}
 
     public void decreasePenetrateCount() {--_currentPenetrateCount;}
     public int getPenetrateCount() {return _currentPenetrateCount;}
