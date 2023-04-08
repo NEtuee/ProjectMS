@@ -135,6 +135,7 @@ public class AnimationCustomPresetEditor : Editor
         if(_isLoaded)
         {
             GUILayout.Label("Animation Time : (" + _animationPlayer.getCurrentAnimationTime() + " : " + _animationPlayer.getCurrentAnimationDuration() + ")");
+            GUILayout.Label("Index : (" + (_animationPlayer.getCurrentIndex() + 1) + " : " + _animationPlayer.getEndIndex() + ")");
         }
 
         if(currentTexture != null)

@@ -239,6 +239,11 @@ public class AnimationTimeProcessor
         return _currentIndex;
     }
 
+    public int getEndIndex()
+    {
+        return _endIndex;
+    }
+
     private int getIndexInner()
     {
         int currentIndex = (int)(_currentAnimationTime / _frameToTime);

@@ -344,6 +344,8 @@ public class AnimationPlayer
     public float getCurrentAnimationDuration() {return _animationTimeProcessor.getAnimationDuration();}
 
     public int getCurrentIndex() {return _animationTimeProcessor.getCurrentIndex();}
+    public int getEndIndex() {return _animationTimeProcessor.getEndIndex();}
+    
     public MoveValuePerFrameFromTimeDesc getMoveValuePerFrameFromTimeDesc() {return _animationTimeProcessor.getMoveValuePerFrameFromTimeDesc();}
     public AnimationTimeProcessor getTimeProcessor(){return _animationTimeProcessor;}
     public MovementGraph getCurrentMovementGraph() {return _currentMovementGraph;}
