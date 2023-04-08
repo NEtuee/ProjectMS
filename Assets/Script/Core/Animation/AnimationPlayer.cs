@@ -340,6 +340,7 @@ public class AnimationPlayer
     public void setAnimationSpeed(float speed) {_animationTimeProcessor.setAnimationSpeed(speed);}
 
     public float getCurrentFrame() {return _animationTimeProcessor.getCurrentFrame();}
+    public float getCurrentAnimationTime() {return _animationTimeProcessor.getCurrentAnimationTime();}
     public float getCurrentAnimationDuration() {return _animationTimeProcessor.getAnimationDuration();}
 
     public int getCurrentIndex() {return _animationTimeProcessor.getCurrentIndex();}
@@ -356,7 +357,7 @@ public class AnimationPlayer
             return false;
         }
         
-        Vector2 currentScale = _currentAnimationPlayData._scalePresetData.evaulate(_animationTimeProcessor.getCurrentNormalizedTime());
+        Vector2 currentScale = _currentAnimationPlayData._scalePresetData.evaulate(_animationTimeProcessor.getCurrentAnimationNormalizedTime());
         outScale = new Vector3(currentScale.x,currentScale.y,1f);
         return true;
     }
@@ -377,7 +378,7 @@ public class AnimationPlayer
         if(_currentAnimationPlayData._rotationPresetData == null)
             return Quaternion.identity;
 
-        return Quaternion.Euler(0f,0f,_currentAnimationPlayData._rotationPresetData.evaulate(_animationTimeProcessor.getCurrentNormalizedTime()));
+        return Quaternion.Euler(0f,0f,_currentAnimationPlayData._rotationPresetData.evaulate(_animationTimeProcessor.getCurrentAnimationNormalizedTime()));
     }
 
     public Quaternion getAnimationRotationPerFrame()

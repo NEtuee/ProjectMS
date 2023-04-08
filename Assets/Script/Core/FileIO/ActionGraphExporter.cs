@@ -502,7 +502,21 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
                     return null;
                 }
 
-                playData._customPresetData = (scriptableObjects[0] as AnimationCustomPreset)._animationCustomPresetData;
+                AnimationCustomPreset animationCustomPreset = (scriptableObjects[0] as AnimationCustomPreset);
+                playData._customPresetData = animationCustomPreset._animationCustomPresetData;
+
+                if(animationCustomPreset._rotationPresetName != "")
+                {
+                    AnimationRotationPreset rotationPreset = ResourceContainerEx.Instance().GetScriptableObject("Preset\\AnimationRotationPreset") as AnimationRotationPreset;
+                    playData._rotationPresetData = rotationPreset.getPresetData(animationCustomPreset._rotationPresetName);
+                }
+                
+                if(animationCustomPreset._scalePresetName != "")
+                {
+                    AnimationScalePreset scalePreset = ResourceContainerEx.Instance().GetScriptableObject("Preset\\AnimationScalePreset") as AnimationScalePreset;
+                    playData._scalePresetData = scalePreset.getPresetData(animationCustomPreset._scalePresetName);
+                }
+                
             }
             else if(targetName == "Duration")
             {

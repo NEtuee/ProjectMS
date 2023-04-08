@@ -269,7 +269,15 @@ public class AnimationTimeProcessor
         
         if(_customPresetData != null)
             return _animationTotalPlayTime * (1f / _actionDuration);
+            
+        return (_currentAnimationTime - _animationStartTime) * (1f /_animationTime);
+    }
 
+    public float getCurrentAnimationNormalizedTime()
+    {
+        if(_isEnd)
+            return 1f;
+            
         return (_currentAnimationTime - _animationStartTime) * (1f /_animationTime);
     }
 
