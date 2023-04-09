@@ -15,6 +15,7 @@ public class CrossHairUI : MonoBehaviour
     public int _guidLineCount = 1;
 
     public float _lineObjectRatio = 0.7f;
+    public float _maxDistance = .25f;
 
     public string _gagueTargetStatusName = "DashPoint";
     public int _gagueStackCount = 4;
@@ -56,37 +57,50 @@ public class CrossHairUI : MonoBehaviour
         }
     }
 
-    public void updateGague()
-    {
-        float percentage = _targetEntity.getStatusPercentage(_gagueTargetStatusName) * (float)_gagueStackCount;
-        for(int index = 0; index < _gagueStackCount; ++index)
-        {
-            float gague = MathEx.clamp01f(percentage - (float)index);
-            _gagueObjects[index].material.SetFloat("_Gague",gague);
-        }
-    }
+    // public void updateGague()
+    // {
+    //     float percentage = _targetEntity.getStatusPercentage(_gagueTargetStatusName) * (float)_gagueStackCount;
+    //     for(int index = 0; index < _gagueStackCount; ++index)
+    //     {
+    //         float gague = MathEx.clamp01f(percentage - (float)index);
+    //         _gagueObjects[index].material.SetFloat("_Gague",gague);
+    //     }
+    // }
 
     public void Update()
     {
-        if(_targetPosition == null)
+        if (_targetPosition == null)
             return;
 
         Vector3 worldMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         worldMousePosition.z = 0f;
 
-        Vector3 toMouseVector = worldMousePosition - _targetPosition.position;
-        Quaternion rotation = Quaternion.Euler(0f,0f,MathEx.directionToAngle(toMouseVector.normalized));
+        Vector3 toMouseVector =  worldMousePosition - _targetPosition.position;
+        Quaternion rotation = Quaternion.Euler(0f, 0f, MathEx.directionToAngle(toMouseVector.normalized));
 
-        for(int index = 0; index < _guidLineObjects.Count; ++index)
+
+        for (int index = 0; index < _guidLineObjects.Count; ++index)
         {
-            _guidLineObjects[index].transform.position = _targetPosition.position + (toMouseVector) * (_lineObjectRatio / (float)(index + 1));
+            float ratio = (_lineObjectRatio) * (float)(index + 1);
+            Vector3 newPosition = Vector3.Lerp(worldMousePosition, _targetPosition.position, ratio);
+
+            // 새로 추가된 코드: 거리 제한 로직
+            _guidLineObjects[index].transform.position = worldMousePosition - Vector3.ClampMagnitude(worldMousePosition - newPosition, _maxDistance * (float)(index + 1));
             _guidLineObjects[index].transform.rotation = rotation;
         }
 
         transform.position = worldMousePosition;
         transform.rotation = rotation;
+
+        Cursor.visible = false;
         
-        updateGague();
+        float percentage = _targetEntity.getStatusPercentage(_gagueTargetStatusName) * (float)_gagueStackCount;
+        for(int index = 0; index < _gagueStackCount; ++index)
+        {
+            float gague = MathEx.clamp01f(percentage - (float)index);
+            _gagueObjects[index].material.SetFloat("_Gague",gague);
+            _gagueObjects[index].transform.position = _targetPosition.position + toMouseVector*_gagueStartOffset + Vector3.ClampMagnitude(toMouseVector*_gagueStartOffset, _maxDistance * (float)(index + 1) * _gagueStackGap);
+        }
     }
 
     public void setActive(bool value)
