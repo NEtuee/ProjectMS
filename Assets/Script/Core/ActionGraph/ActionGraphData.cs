@@ -208,6 +208,7 @@ public enum ConditionNodeUpdateType
     TargetFrameTag,
     Weight,
     AngleSector,
+    AICustomValue,
 
     Count,
 }
@@ -299,6 +300,7 @@ public static class ConditionNodeInfoPreset
         {"TargetFrameTag",new ConditionNodeInfo(ConditionNodeUpdateType.TargetFrameTag, ConditionNodeType.Bool)},
         {"Weight",new ConditionNodeInfo(ConditionNodeUpdateType.Weight, ConditionNodeType.Bool)},
         {"AngleSector",new ConditionNodeInfo(ConditionNodeUpdateType.AngleSector, ConditionNodeType.Int)},
+        {"CustomValue",new ConditionNodeInfo(ConditionNodeUpdateType.AICustomValue, ConditionNodeType.Float)},
         
     };
 
@@ -315,6 +317,22 @@ public class ActionGraphConditionNodeData
     public string _symbolName;
 }
 
+[System.Serializable]
+public class ActionGraphConditionNodeData_AICustomValue : ActionGraphConditionNodeData_Literal
+{
+    public string _customValueName = "";
+
+    public ActionGraphConditionNodeData_AICustomValue()
+    {
+        setLiteral(System.BitConverter.GetBytes(0f));
+    }
+    
+    public string getCustomValueName() 
+    {
+        return _customValueName;
+    }
+    
+}
 [System.Serializable]
 public class ActionGraphConditionNodeData_FrameTag : ActionGraphConditionNodeData
 {

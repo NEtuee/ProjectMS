@@ -108,6 +108,9 @@ public class GameEntityBase : SequencerObjectBase
 
         _actionGraph.initialize(ResourceContainerEx.Instance().GetActionGraph(characterInfo._actionGraphPath));
         _aiGraph.initialize(this, _actionGraph, ResourceContainerEx.Instance().GetAIGraph(characterInfo._aiGraphPath));
+
+        _actionGraph.initializeCustomValue(_aiGraph.getCustomValueData());
+
         _danmakuGraph.initialize(this);
 
         _statusInfo.initialize(this,characterInfo._statusName);
@@ -143,8 +146,10 @@ public class GameEntityBase : SequencerObjectBase
         
         _actionGraph.initialize(ResourceContainerEx.Instance().GetActionGraph(actionGraphPath));
         _aiGraph.initialize(this, _actionGraph, ResourceContainerEx.Instance().GetAIGraph(aiGraphPath));
-        _danmakuGraph.initialize(this);
 
+        _actionGraph.initializeCustomValue(_aiGraph.getCustomValueData());
+
+        _danmakuGraph.initialize(this);
         _statusInfo.initialize(this,statusInfoName);
 
         _deadEventDelegate = null;
@@ -330,6 +335,12 @@ public class GameEntityBase : SequencerObjectBase
                     GizmoHelper.instance.drawCircle(transform.position + direction * _aiGraph.getCurrentTargetSearchRange(),_aiGraph.getCurrentTargetSearchSphereRadius(),18,hasTarget ? Color.green : Color.red);
                 }
                 break;
+            }
+
+            Dictionary<string, float> customValueDictionary = _actionGraph.getCustomValueDictionary();
+            foreach(var item in customValueDictionary)
+            {
+                debugTextManager.updateDebugText(item.Key,"   " + item.Key + ": " + item.Value);
             }
 
             if(_currentTarget != null)
@@ -740,7 +751,16 @@ public class GameEntityBase : SequencerObjectBase
         _actionGraph.setActionConditionData_Bool(updateType, value);
     }
 
+    public void executeCustomAIEvent(string eventName)
+    {
+        _aiGraph.executeCustomAIEvent(eventName);
+    }
+
     public float getHeadUpOffset() {return _headUpOffset;}
+
+    public float getCustomValue(string customValueName) {return _actionGraph.getCustomValue(customValueName);}
+    public void setCustomValue(string customValueName, float value) {_actionGraph.setCustomValue(customValueName, value);}
+    public void addCustomValue(string customValueName, float value) {_actionGraph.addCustomValue(customValueName, value);}
 
     public float getStatusPercentage(string targetName) {return _statusInfo.getCurrentStatusPercentage(targetName);}
 

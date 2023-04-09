@@ -10,6 +10,8 @@ public class ActionGraph
     private int _currentAnimationIndex = 0;
 
     private Dictionary<ConditionNodeUpdateType, byte[]> _actionConditionNodeData = new Dictionary<ConditionNodeUpdateType, byte[]>();
+    private Dictionary<string, float>           _customValueDictionary = new Dictionary<string, float>();
+
 
     private Dictionary<string, byte[]>          _statusConditionData = new Dictionary<string, byte[]>();
     private HashSet<string>                     _targetFrameTagData = new HashSet<string>();
@@ -82,7 +84,7 @@ public class ActionGraph
 
     private void createCoditionNodeDataAll()
     {
-        DebugUtil.assert((int)ConditionNodeUpdateType.Count == 47, "check this");
+        DebugUtil.assert((int)ConditionNodeUpdateType.Count == 48, "check this");
 
         foreach(var item in ConditionNodeInfoPreset._nodePreset.Values)
         {
@@ -93,7 +95,8 @@ public class ActionGraph
                 item._updateType == ConditionNodeUpdateType.FrameTag || 
                 item._updateType == ConditionNodeUpdateType.TargetFrameTag ||
                 item._updateType == ConditionNodeUpdateType.Weight ||
-                item._updateType == ConditionNodeUpdateType.AngleSector)
+                item._updateType == ConditionNodeUpdateType.AngleSector || 
+                item._updateType == ConditionNodeUpdateType.AICustomValue)
                 continue;
 
             createConditionNodeData(item);
@@ -124,6 +127,16 @@ public class ActionGraph
         {
             for(int i = 0; i < item.Value.Length; ++i)
                 item.Value[i] = 0;
+        }
+    }
+
+    public void initializeCustomValue(AIGraphCustomValue[] customValueData)
+    {
+        _customValueDictionary.Clear();
+
+        for(int index = 0; index < customValueData.Length; ++index)
+        {
+            _customValueDictionary.Add(customValueData[index]._name,customValueData[index]._customValue);
         }
     }
 
@@ -548,6 +561,14 @@ public class ActionGraph
         {
             return ActionKeyInputManager.Instance().actionKeyCheck(((ActionGraphConditionNodeData_Key)nodeData)._targetKeyName);
         }
+        else if(updateType == ConditionNodeUpdateType.AICustomValue)
+        {
+            ActionGraphConditionNodeData_AICustomValue data = (ActionGraphConditionNodeData_AICustomValue)nodeData;
+            float customValue = getCustomValue(data._customValueName);
+            copyBytes_Float(customValue,data.getLiteral());
+
+            return data.getLiteral();
+        }
 
 
         if(_actionConditionNodeData.ContainsKey(updateType) == false)
@@ -592,6 +613,41 @@ public class ActionGraph
         if(_currentFrameTag.Contains(tag))
             _currentFrameTag.Remove(tag);
     }
+
+    public void setCustomValue(string customValueName, float value)
+    {
+        if(_customValueDictionary.ContainsKey(customValueName) == false)
+        {
+            DebugUtil.assert(false, "대상 CustomValue가 존재하지 않습니다. [Name: {0}]", customValueName);
+            return;
+        }
+
+        _customValueDictionary[customValueName] = value;
+    }
+
+    public void addCustomValue(string customValueName, float value)
+    {
+        if(_customValueDictionary.ContainsKey(customValueName) == false)
+        {
+            DebugUtil.assert(false, "대상 CustomValue가 존재하지 않습니다. [Name: {0}]", customValueName);
+            return;
+        }
+
+        _customValueDictionary[customValueName] += value;
+    }
+
+    public float getCustomValue(string customValueName)
+    {
+        if(_customValueDictionary.ContainsKey(customValueName) == false)
+        {
+            DebugUtil.assert(false, "대상 CustomValue가 존재하지 않습니다. [Name: {0}]", customValueName);
+            return 0f;
+        }
+
+        return _customValueDictionary[customValueName];
+    }
+
+    public Dictionary<string,float> getCustomValueDictionary() {return _customValueDictionary;}
 
     public HashSet<string> getCurrentFrameTagList() {return _currentFrameTag;}
 

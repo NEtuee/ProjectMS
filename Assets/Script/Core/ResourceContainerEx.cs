@@ -152,7 +152,7 @@ public class ResourceContainerEx : Singleton<ResourceContainerEx>
 
 	public ScriptableObject[] GetScriptableObjects(string fileName)
 	{
-		return _scriptableResource.GetOrLoadResources(fileName, "ScriptableObject가 없습니다. ");
+		return _scriptableResource.GetOrLoadResources(fileName, "해당 폴더가 없거나, 폴더 안에 ScriptableObject가 없습니다. 경로를 잘못 쓰지는 않았나요? ");
 	}
 
 	public Sprite GetSprite(string fileName)
@@ -166,7 +166,7 @@ public class ResourceContainerEx : Singleton<ResourceContainerEx>
 		if(cut.Contains("Resources"))
 			cut = cut.Substring(folderName.IndexOf("Resources") + 10);
 		
-		return _spriteResource.GetOrLoadResources(cut, "Sprite가 없습니다. ");
+		return _spriteResource.GetOrLoadResources(cut, "해당 폴더가 없거나, 폴더 안에 Sprite가 없습니다. 경로를 잘못 쓰지는 않았나요? ");
 	}
 
 	public GameObject GetPrefab(string fileName)

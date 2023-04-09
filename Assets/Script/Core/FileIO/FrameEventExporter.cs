@@ -67,13 +67,15 @@ public static class FrameEventLoader
             outFrameEvent = new ActionFrameEvent_TalkBalloon();
         else if(type == "SetAction")
             outFrameEvent = new ActionFrameEvent_SetAction();
+        else if(type == "CallAIEvent")
+            outFrameEvent = new ActionFrameEvent_CallAIEvent();
         else
         {
             DebugUtil.assert(false, "invalid frameEvent type: {0}",type);
             return null;
         }
 
-        DebugUtil.assert((int)FrameEventType.Count == 26, "check here");
+        DebugUtil.assert((int)FrameEventType.Count == 27, "check here");
 
 
         if(outFrameEvent == null)

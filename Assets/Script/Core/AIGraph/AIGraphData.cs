@@ -8,8 +8,10 @@ public class AIGraphBaseData
     public AIPackageBaseData[]                  _aiPackageData = null;
     public ActionGraphBranchData[]              _branchData = null;
     public ActionGraphConditionCompareData[]    _conditionCompareData = null;
+    public AIGraphCustomValue[]                 _customValueData = null;
 
     public Dictionary<AIChildEventType, AIChildFrameEventItem> _aiEvents = new Dictionary<AIChildEventType, AIChildFrameEventItem>();
+    public Dictionary<string, AIChildFrameEventItem> _customAIEvents = new Dictionary<string, AIChildFrameEventItem>();
 
     public int                                  _defaultAIIndex = -1;
 
@@ -17,6 +19,7 @@ public class AIGraphBaseData
     public int                                  _aiPackageCount = -1;
     public int                                  _branchCount = -1;
     public int                                  _conditionCompareDataCount = -1;
+    public int                                  _customValueDataCount = -1;
 }
 
 [System.Serializable]
@@ -32,6 +35,7 @@ public class AIGraphNodeData
     public string                       _nodeName;
 
     public Dictionary<AIChildEventType, AIChildFrameEventItem> _aiEvents = new Dictionary<AIChildEventType, AIChildFrameEventItem>();
+    public Dictionary<string,AIChildFrameEventItem> _customAIEvents = new Dictionary<string, AIChildFrameEventItem>();
 
     public int                          _packageIndex;
     public int                          _branchIndexStart;
@@ -51,6 +55,8 @@ public class AIPackageBaseData
     public ActionGraphConditionCompareData[]    _conditionCompareData = null;
 
     public Dictionary<AIChildEventType, AIChildFrameEventItem> _aiEvents = new Dictionary<AIChildEventType, AIChildFrameEventItem>();
+    public Dictionary<string,AIChildFrameEventItem> _customAIEvents = new Dictionary<string, AIChildFrameEventItem>();
+
     public Dictionary<AIPackageEventType, AIChildFrameEventItem> _aiPackageEvents = new Dictionary<AIPackageEventType, AIChildFrameEventItem>();
 
     public int                                  _defaultAIIndex = -1;
@@ -83,7 +89,15 @@ public class AIPackageNodeData
     public bool                         _hasTargetPosition = false;
 
     public Dictionary<AIChildEventType, AIChildFrameEventItem> _aiEvents = new Dictionary<AIChildEventType, AIChildFrameEventItem>();
+    public Dictionary<string,AIChildFrameEventItem> _customAIEvents = new Dictionary<string, AIChildFrameEventItem>();
 
     public int                          _branchIndexStart;
     public int                          _branchCount;
+}
+
+[System.Serializable]
+public class AIGraphCustomValue
+{
+    public string _name = "";
+    public float _customValue = 0f;
 }

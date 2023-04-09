@@ -69,6 +69,8 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
 
         Dictionary<string, int> aiPackageIndexDic = new Dictionary<string, int>();
 
+        List<AIGraphCustomValue> customValueList = new List<AIGraphCustomValue>();
+
         XmlNodeList nodeList = node.ChildNodes;
 
         int actionIndex = 0;
@@ -117,9 +119,38 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
 
                 continue;
             }
+            else if(nodeList[i].Name == "CustomValue")
+            {
+                if(nodeList[i].Attributes.Count == 0)
+                {
+                    DebugUtil.assert(false,"생성할 CustomValue가 없습니다. 왜씀?? [Line: {0}] [FileName: {1}]", XMLScriptConverter.getLineFromXMLNode(nodeList[i]), _currentFileName);
+                    return null;
+                }
+                
+                XmlAttributeCollection attributes = nodeList[i].Attributes;
+                AIGraphCustomValue customValue = new AIGraphCustomValue();
+                for(int index = 0; index < attributes.Count; ++index)
+                {
+                    string attrName = attributes[index].Name;
+                    string attrValue = attributes[index].Value;
+
+                    if(attrName == "Name")
+                    {
+                        customValue._name = attrValue;
+                    }
+                    else if(attrName == "Value")
+                    {
+                        customValue._customValue = float.Parse(attrValue);
+                    }
+                }
+
+                customValueList.Add(customValue);
+                continue;
+            }
             else if(nodeList[i].Name.Contains("Event_"))
             {
-                readAIChildEvent(nodeList[i], ref aiBaseData._aiEvents, ref aiExecuteStateDic);
+                readAIChildEvent(nodeList[i], ref aiBaseData._aiEvents, ref aiBaseData._customAIEvents, ref aiExecuteStateDic);
+                continue;
             }
             
             AIGraphNodeData nodeData = readAIGraphNode(nodeList[i], ref aiPackageIndexDic, ref actionCompareDic, ref branchDataList,ref compareDataList, in branchSetDic);
@@ -163,11 +194,13 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
         aiBaseData._aiPackageCount = aiPackageList.Count;
         aiBaseData._branchCount = branchDataList.Count;
         aiBaseData._conditionCompareDataCount = compareDataList.Count;
+        aiBaseData._customValueDataCount = customValueList.Count;
 
         aiBaseData._aiGraphNodeData = nodeDataList.ToArray();
         aiBaseData._aiPackageData = aiPackageList.ToArray();
         aiBaseData._branchData = branchDataList.ToArray();
         aiBaseData._conditionCompareData = compareDataList.ToArray();
+        aiBaseData._customValueData = customValueList.ToArray();
 
         return aiBaseData;
     }
@@ -264,7 +297,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
             }
             else if(nodeList[i].Name.Contains("Event_"))
             {
-                readAIChildEvent(nodeList[i], ref nodeData._aiEvents, ref aiExecuteStateDic);
+                readAIChildEvent(nodeList[i], ref nodeData._aiEvents, ref nodeData._customAIEvents, ref aiExecuteStateDic);
             }
             else
             {
@@ -427,7 +460,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
             }
             else if(nodeList[i].Name.Contains("Event_"))
             {
-                readAIChildEvent(nodeList[i], ref aiPackageBaseData._aiEvents, ref aiExecuteEventDic);
+                readAIChildEvent(nodeList[i], ref aiPackageBaseData._aiEvents, ref aiPackageBaseData._customAIEvents, ref aiExecuteEventDic);
             }
             else
             {
@@ -625,7 +658,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
             }
             else if(nodeList[i].Name.Contains("Event_"))
             {
-                readAIChildEvent(nodeList[i], ref nodeData._aiEvents, ref aiExecuteEventDic);
+                readAIChildEvent(nodeList[i], ref nodeData._aiEvents, ref nodeData._customAIEvents, ref aiExecuteEventDic);
             }
             
         }
@@ -688,51 +721,66 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
         childEventDic.Add(currentEventType, item);
     }
 
-    private static void readAIChildEvent(XmlNode node, ref Dictionary<AIChildEventType,AIChildFrameEventItem> childEventDic, ref Dictionary<string, List<AIEvent_ExecuteState>> aiExecuteEventDic)
+    private static void readAIChildEvent(XmlNode node, ref Dictionary<AIChildEventType,AIChildFrameEventItem> childEventDic, ref Dictionary<string,AIChildFrameEventItem> customEventDic, ref Dictionary<string, List<AIEvent_ExecuteState>> aiExecuteEventDic)
     {
-        string eventType = node.Name.Replace("Event_","");
-
+        AIChildFrameEventItem item = null;
         AIChildEventType currentEventType = AIChildEventType.Count;
-        AIChildFrameEventItem item = new AIChildFrameEventItem();
+        item = new AIChildFrameEventItem();
 
-        if(eventType == "OnExecute")
-            currentEventType = AIChildEventType.AIChildEvent_OnExecute;
-        else if(eventType == "OnAttack")
-            currentEventType = AIChildEventType.AIChildEvent_OnAttack;
-        else if(eventType == "OnAttacked")
-            currentEventType = AIChildEventType.AIChildEvent_OnAttacked;
-        else if(eventType == "OnExit")
-            currentEventType = AIChildEventType.AIChildEvent_OnExit;
-        else if(eventType == "OnFrame")
-            currentEventType = AIChildEventType.AIChildEvent_OnFrame;
-        else if(eventType == "OnUpdate")
-            currentEventType = AIChildEventType.AIChildEvent_OnUpdate;
-        else if(eventType == "OnGuard")
-            currentEventType = AIChildEventType.AIChildEvent_OnGuard;
-        else if(eventType == "OnGuarded")
-            currentEventType = AIChildEventType.AIChildEvent_OnGuarded;
-        else if(eventType == "OnParry")
-            currentEventType = AIChildEventType.AIChildEvent_OnParry;
-        else if(eventType == "OnParried")
-            currentEventType = AIChildEventType.AIChildEvent_OnParried;
-        else if(eventType == "OnEvade")
-            currentEventType = AIChildEventType.AIChildEvent_OnEvade;
-        else if(eventType == "OnEvaded")
-            currentEventType = AIChildEventType.AIChildEvent_OnEvaded;
-        else if(eventType == "OnGuardBreak")
-            currentEventType = AIChildEventType.AIChildEvent_OnGuardBreak;
-        else if(eventType == "OnGuardBroken")
-            currentEventType = AIChildEventType.AIChildEvent_OnGuardBroken;
-        else if(eventType == "OnGuardBreakFail")
-            currentEventType = AIChildEventType.AIChildEvent_OnGuardBreakFail;
-        else if(eventType == "OnAttackGuardBreakFail")
-            currentEventType = AIChildEventType.AIChildEvent_OnAttackGuardBreakFail;
-        else if(eventType == "OnCatchTarget")
-            currentEventType = AIChildEventType.AIChildEvent_OnCatchTarget;
-        else if(eventType == "OnCatched")
-            currentEventType = AIChildEventType.AIChildEvent_OnCatched;
+        string eventType = "";
 
-        DebugUtil.assert((int)AIChildEventType.Count == 18, "check this");
+        if(node.Name.Contains("CustomEvent_"))  
+        {
+            eventType = node.Name.Replace("CustomEvent_","");
+            currentEventType = AIChildEventType.AIChildEvent_Custom;
+
+            customEventDic.Add(eventType,item);
+        }
+        else
+        {
+            eventType = node.Name.Replace("Event_","");
+
+            item = new AIChildFrameEventItem();
+
+            if(eventType == "OnExecute")
+                currentEventType = AIChildEventType.AIChildEvent_OnExecute;
+            else if(eventType == "OnAttack")
+                currentEventType = AIChildEventType.AIChildEvent_OnAttack;
+            else if(eventType == "OnAttacked")
+                currentEventType = AIChildEventType.AIChildEvent_OnAttacked;
+            else if(eventType == "OnExit")
+                currentEventType = AIChildEventType.AIChildEvent_OnExit;
+            else if(eventType == "OnFrame")
+                currentEventType = AIChildEventType.AIChildEvent_OnFrame;
+            else if(eventType == "OnUpdate")
+                currentEventType = AIChildEventType.AIChildEvent_OnUpdate;
+            else if(eventType == "OnGuard")
+                currentEventType = AIChildEventType.AIChildEvent_OnGuard;
+            else if(eventType == "OnGuarded")
+                currentEventType = AIChildEventType.AIChildEvent_OnGuarded;
+            else if(eventType == "OnParry")
+                currentEventType = AIChildEventType.AIChildEvent_OnParry;
+            else if(eventType == "OnParried")
+                currentEventType = AIChildEventType.AIChildEvent_OnParried;
+            else if(eventType == "OnEvade")
+                currentEventType = AIChildEventType.AIChildEvent_OnEvade;
+            else if(eventType == "OnEvaded")
+                currentEventType = AIChildEventType.AIChildEvent_OnEvaded;
+            else if(eventType == "OnGuardBreak")
+                currentEventType = AIChildEventType.AIChildEvent_OnGuardBreak;
+            else if(eventType == "OnGuardBroken")
+                currentEventType = AIChildEventType.AIChildEvent_OnGuardBroken;
+            else if(eventType == "OnGuardBreakFail")
+                currentEventType = AIChildEventType.AIChildEvent_OnGuardBreakFail;
+            else if(eventType == "OnAttackGuardBreakFail")
+                currentEventType = AIChildEventType.AIChildEvent_OnAttackGuardBreakFail;
+            else if(eventType == "OnCatchTarget")
+                currentEventType = AIChildEventType.AIChildEvent_OnCatchTarget;
+            else if(eventType == "OnCatched")
+                currentEventType = AIChildEventType.AIChildEvent_OnCatched;
+
+            DebugUtil.assert((int)AIChildEventType.Count == 19, "check this");
+        }
 
         if(childEventDic.ContainsKey(currentEventType))
         {
@@ -763,8 +811,9 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
         item._childFrameEventCount = aiEventList.Count;
         item._childFrameEvents = aiEventList.ToArray();
 
-        
-        childEventDic.Add(currentEventType, item);
+        if(currentEventType != AIChildEventType.AIChildEvent_Custom)
+            childEventDic.Add(currentEventType, item);
+
     }
 
     public static AIEventBase readAiEvent(XmlNode node, ref Dictionary<string, List<AIEvent_ExecuteState>> aiExecuteEventDic)
@@ -819,6 +868,18 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
                 else if(attrValue == "RotateDirection")
                 {
                     aiEvent = new AIEvent_RotateDirection();
+                }
+                else if(attrValue == "CallAIEvent")
+                {
+                    aiEvent = new AIEvent_CallAIEvent();
+                }
+                else if(attrValue == "SetCustomValue")
+                {
+                    aiEvent = new AIEvent_SetCustomValue();
+                }
+                else if(attrValue == "AddCustomValue")
+                {
+                    aiEvent = new AIEvent_AddCustomValue();
                 }
                 else
                 {

@@ -35,6 +35,8 @@ public class AIGraph
     private AIGraphBaseData _aiGraphBaseData;
     private List<byte[]> _conditionResultList = new List<byte[]>();
     private List<AIChildEventType> _reservedEvents = new List<AIChildEventType>();
+    private List<string> _reservedCustomEvents = new List<string>();
+
 
     public AIGraph(){}
     public AIGraph(ActionGraph actionGraph, AIGraphBaseData baseData){_actionGraph = actionGraph; _aiGraphBaseData = baseData;}
@@ -60,6 +62,7 @@ public class AIGraph
     {
         if(_aiGraphBaseData._defaultAIIndex != -1)
             changeAINode(_aiGraphBaseData._defaultAIIndex, targetEntity);
+
     }
 
     public bool progress(float deltaTime, GameEntityBase targetEntity)
@@ -72,7 +75,13 @@ public class AIGraph
             processAIEvent(_reservedEvents[i],targetEntity);
         }
 
+        for(int i =0; i < _reservedCustomEvents.Count; ++i)
+        {
+            processCustomAIEvent(_reservedCustomEvents[i],targetEntity);
+        }
+
         _reservedEvents.Clear();
+        _reservedCustomEvents.Clear();
         
         processAINode(deltaTime, getCurrentAINode(), targetEntity);
         processAIPackage(deltaTime, getCurrentAIPackageNode(), targetEntity);
@@ -120,6 +129,11 @@ public class AIGraph
     public void executeAIEvent(AIChildEventType eventType)
     {
         _reservedEvents.Add(eventType);
+    }
+
+    public void executeCustomAIEvent(string eventName)
+    {
+        _reservedCustomEvents.Add(eventName);
     }
 
     private bool processAINode(float deltaTime, AIGraphNodeData aiGraphNode, GameEntityBase targetEntity)
@@ -282,11 +296,41 @@ public class AIGraph
             return;
     }
 
+    private void processCustomAIEvent(string eventName, GameEntityBase targetEntity)
+    {
+        if(processCustomAIEvent(eventName,targetEntity, ref getCurrentAIPackageNode()._customAIEvents))
+            return;
+        else if(processCustomAIEvent(eventName,targetEntity, ref getCurrentAIPackage()._customAIEvents))
+            return;
+        else if(processCustomAIEvent(eventName,targetEntity, ref getCurrentAINode()._customAIEvents))
+            return;
+        else if(processCustomAIEvent(eventName,targetEntity, ref _aiGraphBaseData._customAIEvents))
+            return;
+    }
+
     private bool processAIEvent(AIChildEventType aiEventType, GameEntityBase targetEntity, ref Dictionary<AIChildEventType,AIChildFrameEventItem> aiEventDic)
     {
         if(aiEventDic.ContainsKey(aiEventType) == true)
         {
             AIChildFrameEventItem item = aiEventDic[aiEventType];
+            for(int i = 0; i < item._childFrameEventCount; ++i)
+            {
+                item._childFrameEvents[i].initialize();
+                item._childFrameEvents[i].onExecute(targetEntity);
+            }
+
+            if(item._consume)
+                return true;
+        }
+
+        return false;
+    }
+
+    private bool processCustomAIEvent(string customEvent, GameEntityBase targetEntity, ref Dictionary<string,AIChildFrameEventItem> aiEventDic)
+    {
+        if(aiEventDic.ContainsKey(customEvent) == true)
+        {
+            AIChildFrameEventItem item = aiEventDic[customEvent];
             for(int i = 0; i < item._childFrameEventCount; ++i)
             {
                 item._childFrameEvents[i].initialize();
@@ -351,6 +395,8 @@ public class AIGraph
         _recentlyAiDirection.y = Mathf.Sin(angle);
         _recentlyAiDirection.z = 0f;
     }
+
+    public AIGraphCustomValue[] getCustomValueData() {return _aiGraphBaseData._customValueData;}
 
     public TargetSearchType getCurrentTargetSearchType() {return getCurrentAIPackageNode()._targetSearchType;}
     public SearchIdentifier getCurrentSearchIdentifier() {return getCurrentAIPackageNode()._searchIdentifier;}

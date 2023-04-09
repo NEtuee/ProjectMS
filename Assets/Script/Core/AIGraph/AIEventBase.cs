@@ -13,6 +13,9 @@ public enum AIEventType
     AIEvent_TerminatePackage,
     AIEvent_KillEntity,
     AIEvent_RotateDirection,
+    AIEvent_CallAIEvent,
+    AIEvent_SetCustomValue,
+    AIEvent_AddCustomValue,
     Count,
 }
 
@@ -44,6 +47,9 @@ public enum AIChildEventType
     AIChildEvent_OnCatchTarget,
     AIChildEvent_OnCatched,
 
+    AIChildEvent_Custom,
+    
+
     Count,
 }
 
@@ -54,6 +60,138 @@ public abstract class AIEventBase
     public abstract void onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null);
     public abstract void loadFromXML(XmlNode node);
 
+}
+
+public class AIEvent_AddCustomValue : AIEventBase
+{
+    private string _customValueName = "";
+    private float _value;
+
+    public override AIEventType getFrameEventType() {return AIEventType.AIEvent_AddCustomValue;}
+    public override void onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        if(executeEntity is GameEntityBase == false)
+            return;
+
+        (executeEntity as GameEntityBase).addCustomValue(_customValueName, _value);
+    }
+
+    public override void loadFromXML(XmlNode node) 
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "Name")
+            {
+                _customValueName = attrValue;
+            }
+            else if(attrName == "Value")
+            {
+                _value = float.Parse(attrValue);
+            }
+        }
+    }
+}
+
+public class AIEvent_SetCustomValue : AIEventBase
+{
+    private string _customValueName = "";
+    private float _value;
+
+    public override AIEventType getFrameEventType() {return AIEventType.AIEvent_SetCustomValue;}
+    public override void onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        if(executeEntity is GameEntityBase == false)
+            return;
+
+        (executeEntity as GameEntityBase).setCustomValue(_customValueName,_value);
+    }
+
+    public override void loadFromXML(XmlNode node) 
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "Name")
+            {
+                _customValueName = attrValue;
+            }
+            else if(attrName == "Value")
+            {
+                _value = float.Parse(attrValue);
+            }
+        }
+    }
+}
+
+public class AIEvent_CallAIEvent : AIEventBase
+{
+    public override AIEventType getFrameEventType() {return AIEventType.AIEvent_CallAIEvent;}
+
+    
+    public string _customAiEventName = "";
+    
+    public CallAIEventTargetType _targetType = CallAIEventTargetType.Self;
+    public float _range = 0f;
+
+    public override void initialize()
+    {
+    }
+
+    public override void onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        ObjectBase executeTargetEntity = null;
+        switch(_targetType)
+        {
+            case CallAIEventTargetType.Self:
+            {
+                executeTargetEntity = executeEntity;
+            }
+            break;
+            case CallAIEventTargetType.FrameEventTarget:
+            {
+                executeTargetEntity = targetEntity;
+            }
+            break;
+            case CallAIEventTargetType.Summoner:
+            {
+                executeTargetEntity = executeEntity.getSummonObject();
+            }
+            break;
+        }
+
+        if(executeTargetEntity == null || executeTargetEntity is GameEntityBase == false)
+            return;
+
+        (executeTargetEntity as GameEntityBase).executeCustomAIEvent(_customAiEventName);
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attributes[i].Name == "EventName")
+            {
+                _customAiEventName = attributes[i].Value;
+            }
+            else if(attrName == "TargetType")
+            {
+                _targetType = (CallAIEventTargetType)System.Enum.Parse(typeof(CallAIEventTargetType), attrValue);
+            }
+
+        }
+    }
 }
 
 public class AIEvent_RotateDirection : AIEventBase
@@ -284,4 +422,9 @@ public class AIChildFrameEventItem
     public AIEventBase[] _childFrameEvents;
     public int _childFrameEventCount;
 
+}
+
+public class CustomAIChildFrameEventItem : AIChildFrameEventItem
+{
+    public string _eventName = "";
 }

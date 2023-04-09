@@ -813,6 +813,10 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         if(nodeData != null)
             return nodeData;
 
+        nodeData = isCustomValue(symbol);
+        if(nodeData != null)
+            return nodeData;
+
         nodeData = isTargetFrameTag(symbol);
         if(nodeData != null)
             return nodeData;
@@ -829,12 +833,23 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
     
         if(ConditionNodeInfoPreset._nodePreset.ContainsKey(symbol) == false)
         {
-            DebugUtil.assert(false,"Target Symbol does not exists : {0} [Line: {1}] [FileName: {2}]",symbol, XMLScriptConverter.getLineFromXMLNode(node), filePath);
+            DebugUtil.assert(false,"대상 Condition Symbol이 존재하지 않습니다. 오타는 아닌가요? : {0} [Line: {1}] [FileName: {2}]",symbol, XMLScriptConverter.getLineFromXMLNode(node), filePath);
             return null;
         }
 
         nodeData._symbolName = symbol;
         return nodeData;
+    }
+
+    private static ActionGraphConditionNodeData_AICustomValue isCustomValue(string symbol)
+    {
+        if(symbol.Contains("customValue_") == false)
+            return null;
+        
+        ActionGraphConditionNodeData_AICustomValue item = new ActionGraphConditionNodeData_AICustomValue();
+        item._symbolName = "CustomValue";
+        item._customValueName = symbol.Replace("customValue_","");
+        return item;
     }
 
     private static ActionGraphConditionNodeData_FrameTag isTargetFrameTag(string symbol)

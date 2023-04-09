@@ -29,6 +29,7 @@ public enum FrameEventType
     FrameEvent_ReleaseCatch,
     FrameEvent_TalkBalloon,
     FrameEvent_SetAction,
+    FrameEvent_CallAIEvent,
 
     Count,
 }
@@ -103,6 +104,70 @@ public abstract class ActionFrameEventBase
 
             childFrameEventItem._childFrameEvents[i].initialize();
             childFrameEventItem._childFrameEvents[i].onExecute(executeEntity, targetEntity);
+        }
+    }
+}
+
+public class ActionFrameEvent_CallAIEvent : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_CallAIEvent;}
+
+    public string _customAiEventName = "";
+    public CallAIEventTargetType _targetType = CallAIEventTargetType.Self;
+
+    public float _range = 0f;
+
+    public override void initialize()
+    {
+    }
+
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        ObjectBase executeTargetEntity = null;
+        switch(_targetType)
+        {
+            case CallAIEventTargetType.Self:
+            {
+                executeTargetEntity = executeEntity;
+            }
+            break;
+            case CallAIEventTargetType.FrameEventTarget:
+            {
+                executeTargetEntity = targetEntity;
+            }
+            break;
+            case CallAIEventTargetType.Summoner:
+            {
+                executeTargetEntity = executeEntity.getSummonObject();
+            }
+            break;
+        }
+
+        if(executeTargetEntity == null || executeTargetEntity is GameEntityBase == false)
+            return true;
+
+        (executeTargetEntity as GameEntityBase).executeCustomAIEvent(_customAiEventName);
+        return true;
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attributes[i].Name == "EventName")
+            {
+                _customAiEventName = attributes[i].Value;
+            }
+            else if(attrName == "TargetType")
+            {
+                _targetType = (CallAIEventTargetType)System.Enum.Parse(typeof(CallAIEventTargetType), attrValue);
+            }
+
         }
     }
 }
@@ -247,6 +312,8 @@ public class ActionFrameEvent_SpawnCharacter : ActionFrameEventBase
 
     private UnityEngine.Vector3         _spawnOffset;
 
+    private bool                        _inherit = false;
+
     public override void initialize()
     {
         _characterInfoData = CharacterInfoManager.Instance().GetCharacterInfoData(_characterKey);
@@ -258,6 +325,8 @@ public class ActionFrameEvent_SpawnCharacter : ActionFrameEventBase
 
         _spawnDesc._position = executeEntity.transform.position + _spawnOffset;
         CharacterEntityBase createdCharacter = sceneCharacterManager.createCharacterFromPool(_characterInfoData,_spawnDesc);
+
+        createdCharacter.setSummonObject(_inherit ? executeEntity.getSummonObject() : executeEntity);
 
         return true;
     }
@@ -282,6 +351,10 @@ public class ActionFrameEvent_SpawnCharacter : ActionFrameEventBase
             else if(attrName == "SearchIdentifier")
             {
                 _spawnDesc._searchIdentifier = (SearchIdentifier)System.Enum.Parse(typeof(SearchIdentifier), attrValue);
+            }
+            else if(attrName == "Inherit")
+            {
+                _inherit = bool.Parse(attrValue);
             }
 
         }

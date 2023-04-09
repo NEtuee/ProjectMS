@@ -19,6 +19,15 @@ public enum TargetSearchType
     Count,
 }
 
+public enum CallAIEventTargetType
+{
+    Range,
+    Self,
+    FrameEventTarget,
+    Summoner,
+}
+
+
 public enum AttackType
 {
     Default,
