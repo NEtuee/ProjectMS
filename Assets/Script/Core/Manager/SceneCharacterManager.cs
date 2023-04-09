@@ -31,6 +31,9 @@ public class SpawnCharacterOptionDescData : MessageData
 
 public class SceneCharacterManager : ManagerBase
 {
+    public delegate void OnCharacterEnabled(CharacterEntityBase character);
+    public delegate void OnCharacterDisabled(CharacterEntityBase character);
+
     [System.Serializable]
     private struct CharacterKeyValue
     {
@@ -46,6 +49,8 @@ public class SceneCharacterManager : ManagerBase
 
     private List<TargetSearchDescription> _targetSearchRequestList = new List<TargetSearchDescription>();
 
+    private OnCharacterEnabled _onCharacterEnabled = (character)=>{};
+    private OnCharacterDisabled _onCharacterDisabled = (character)=>{};
 
     public override void RegisterReceiver(ObjectBase receiver)
     {
@@ -59,6 +64,7 @@ public class SceneCharacterManager : ManagerBase
         if(targetReciver != null && targetReciver is CharacterEntityBase)
         {
             CharacterEntityBase characterEntity = targetReciver as CharacterEntityBase;
+            
             CollisionManager.Instance().deregisterObject(characterEntity.getCollisionInfo().getCollisionInfoData(),characterEntity);
 
             if(_enableCharacterPoolCacheMap.ContainsKey(target))
@@ -66,6 +72,7 @@ public class SceneCharacterManager : ManagerBase
                 _disableCharacterPoolCacheMap.Enqueue(_enableCharacterPoolCacheMap[target]);
                 _enableCharacterPoolCacheMap.Remove(target);
 
+                _onCharacterDisabled(characterEntity);
             }
         }
 
@@ -98,6 +105,7 @@ public class SceneCharacterManager : ManagerBase
     public override void initialize()
     {
         base.initialize();
+
     }
 
     public override void progress(float deltaTime)
@@ -268,7 +276,13 @@ public class SceneCharacterManager : ManagerBase
 
         characterEntity.initializeCharacter(characterData);
         
+        _onCharacterEnabled(characterEntity);
         return characterEntity;
+    }
+
+    public Dictionary<int,CharacterEntityBase> getCurrentlyEnabledCharacters()
+    {
+        return _enableCharacterPoolCacheMap;
     }
 
     public GameEntityBase GetCharacter(string targetName)
@@ -293,5 +307,25 @@ public class SceneCharacterManager : ManagerBase
         }
         DebugUtil.assert(false,"attempt to find an invalid target: {0}",targetName);
         return -1;
+    }
+
+    public void addCharacterEnableDelegate(OnCharacterEnabled enabled)
+    {
+        _onCharacterEnabled += enabled;
+    }
+
+    public void deleteCharacterEnableDelegate(OnCharacterEnabled enabled)
+    {
+        _onCharacterEnabled -= enabled;
+    }
+
+    public void addCharacterDisableDelegate(OnCharacterDisabled disabled)
+    {
+        _onCharacterDisabled += disabled;
+    }
+
+    public void deleteCharacterDisableDelegate(OnCharacterDisabled disabled)
+    {
+        _onCharacterDisabled -= disabled;
     }
 }

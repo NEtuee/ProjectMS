@@ -126,6 +126,8 @@ public class GameEntityBase : SequencerObjectBase
 
         _initializeFromCharacter = true;
 
+        _currentVelocity = Vector3.zero;
+
         initializeActionValue();
     }
 

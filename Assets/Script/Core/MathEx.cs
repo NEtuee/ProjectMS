@@ -230,4 +230,37 @@ public static class MathEx
 
 		return new UnityEngine.Vector3(x, y, 0f);
 	}
+
+	public static bool findLineIntersection(UnityEngine.Vector2 p1, UnityEngine.Vector2 p2, UnityEngine.Vector2 p3, UnityEngine.Vector2 p4, out UnityEngine.Vector2 intersection)
+	{
+	    intersection = UnityEngine.Vector2.zero;
+
+	    UnityEngine.Vector2 dirA = p2 - p1;
+	    float lenA = dirA.magnitude;
+		if(equals(lenA,0f,float.Epsilon))
+			return false;
+			
+	    dirA *= 1f / lenA;
+
+	    UnityEngine.Vector2 dirB = p4 - p3;
+	    float lenB = dirB.magnitude;
+		if(equals(lenB,0f,float.Epsilon))
+			return false;
+
+	    dirB *= 1f / lenB;
+
+	    float det = dirA.x * dirB.y - dirA.y * dirB.x;
+	    if(equals(det,0f,float.Epsilon))
+	        return false;
+
+	    UnityEngine.Vector2 delta = p3 - p1;
+	    float t = (delta.x * dirB.y - delta.y * dirB.x) / det;
+	    float u = (delta.x * dirA.y - delta.y * dirA.x) / det;
+
+	    if(t < 0f || t > lenA || u < 0f || u > lenB)
+	        return false;
+
+	    intersection = p1 + dirA * t;
+		return true;
+	}
 }
