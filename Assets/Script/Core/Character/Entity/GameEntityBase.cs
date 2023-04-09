@@ -109,7 +109,7 @@ public class GameEntityBase : SequencerObjectBase
         _aiGraph.initialize(this, _actionGraph, ResourceContainerEx.Instance().GetAIGraph(characterInfo._aiGraphPath));
         _danmakuGraph.initialize(this);
 
-        _statusInfo.initialize(characterInfo._statusName);
+        _statusInfo.initialize(this,characterInfo._statusName);
         _graphicInterface.initialize(this,_statusInfo,new Vector3(0f, _headUpOffset, 0f), true);
 
         _deadEventDelegate = null;
@@ -142,7 +142,7 @@ public class GameEntityBase : SequencerObjectBase
         _aiGraph.initialize(this, _actionGraph, ResourceContainerEx.Instance().GetAIGraph(aiGraphPath));
         _danmakuGraph.initialize(this);
 
-        _statusInfo.initialize(statusInfoName);
+        _statusInfo.initialize(this,statusInfoName);
 
         _deadEventDelegate = null;
 

@@ -70,7 +70,7 @@ public static class BuffDataLoader
                 int targetKey = int.Parse(attrValue);
                 if(buffDataList.ContainsKey(targetKey) == false)
                 {
-                    DebugUtil.assert(false, "target Buff is not exists: Key {0} [Line: {1}] [FileName: {2}]", targetKey, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
+                    DebugUtil.assert(false, "대상 부모 버프가 존재하지 않습니다. : [Key: {0}] [Line: {1}] [FileName: {2}]", targetKey, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
                     return null;
                 }
 
@@ -98,9 +98,17 @@ public static class BuffDataLoader
                 buffData._buffCustomValue1 = float.Parse(attrValue);
             else if(attrName == "ButtonList")
                 buffData._buffCustomValue2 = attrValue.Split(' ');
+            else if(attrName == "ParticleEffect")
+            {
+                GameObject prefab = ResourceContainerEx.Instance().GetPrefab(attrValue);
+                if(prefab == null)
+                    DebugUtil.assert(false,"대상 ParticleEffect가 존재하지 않습니다. [BuffInfo: {0}] [ParticleEffect: {1}] [Line: {2}] [FileName: {3}]",node.Name,attrValue, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
+
+                buffData._particleEffect = attrValue;
+            }
             else
             {
-                DebugUtil.assert(false, "invalid attribute name from buffInfo: {0} [Line: {1}] [FileName: {2}]",attrName, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
+                DebugUtil.assert(false, "invalid attribute name from buffInfo: {0} [Line: {1}] [FileName: {2}]",node.Name, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
                 continue;
             }
 

@@ -21,10 +21,7 @@ public class StatusInfo
             {
                 if(_updateListWhenValueChange.Contains(buffItems[i]._buffData._buffKey))
                 {
-                    BuffItem itemCopy = buffItems[i];
-                    itemCopy._startedTime = GlobalTimer.Instance().getScaledGlobalTime();
-
-                    buffItems[i] = itemCopy;
+                    buffItems[i]._startedTime = GlobalTimer.Instance().getScaledGlobalTime();
                 }
             }
         }
@@ -46,11 +43,12 @@ public class StatusInfo
         }
     }
 
-    public struct BuffItem
+    public class BuffItem
     {
         public BuffData _buffData;
         //public BuffUpdateState _updateState;
 
+        public ParticleEffectItem _particleEffect;
         public float _startedTime;
 
         public void updateStartTime(float startedTime)
@@ -71,9 +69,12 @@ public class StatusInfo
     private static Dictionary<string, int> _buffKeyDictinary = new Dictionary<string, int>();
 
     private StatusInfoData _statusInfoData;
+    private ObjectBase _ownerObject;
 
     private Dictionary<string, Status> _statusValues = new Dictionary<string, Status>();
     private List<BuffItem> _currentlyAppliedBuffList = new List<BuffItem>();
+
+    private SimplePool<BuffItem> _buffItemPool = new SimplePool<BuffItem>();
 
     private bool _isDead = false;
 
@@ -91,9 +92,11 @@ public class StatusInfo
         createStatusValueDictionary(_statusInfoData);
     }
 
-    public void initialize(string dataName)
+    public void initialize(ObjectBase owner, string dataName)
     {
         clearBuff();
+
+        _ownerObject = owner;
         
         _isDead = false;
         _statusInfoData = getStatusInfoData(dataName);
@@ -218,9 +221,10 @@ public class StatusInfo
 
     private void applyBuff(BuffData buff, float startedTime)
     {
-        BuffItem buffItem = new BuffItem();
+        BuffItem buffItem = _buffItemPool.dequeue();
         buffItem._buffData = buff;
         buffItem._startedTime = startedTime;
+        buffItem._particleEffect = null;
         
         _currentlyAppliedBuffList.Add(buffItem);
 
@@ -242,6 +246,11 @@ public class StatusInfo
         {
             if(_currentlyAppliedBuffList[i]._buffData._buffUpdateType == BuffUpdateType.DelayedContinuous)
                 getStatus((_currentlyAppliedBuffList[i]._buffData._targetStatusName)).deleteToUpdateList(_currentlyAppliedBuffList[i]._buffData._buffKey);        
+            
+            if(_currentlyAppliedBuffList[i]._particleEffect != null)
+                _currentlyAppliedBuffList[i]._particleEffect.disableEffect();
+            
+            _buffItemPool.enqueue(_currentlyAppliedBuffList[i]);
         }
 
         _currentlyAppliedBuffList.Clear();
@@ -253,13 +262,20 @@ public class StatusInfo
         {
             if(_currentlyAppliedBuffList[i]._buffData._buffKey == buffKey)
             {
-                if(_currentlyAppliedBuffList[i]._buffData._buffUpdateType == BuffUpdateType.DelayedContinuous)
-                    getStatus((_currentlyAppliedBuffList[i]._buffData._targetStatusName)).deleteToUpdateList(buffKey);
-
-                _currentlyAppliedBuffList.RemoveAt(i);
+                deleteBuffIndex(i);
                 return;
             }
         }
+    }
+
+    public void deleteBuffIndex(int index)
+    {
+        BuffItem buffItem = _currentlyAppliedBuffList[index];
+        if(buffItem._buffData._buffUpdateType == BuffUpdateType.DelayedContinuous)
+            getStatus((buffItem._buffData._targetStatusName)).deleteToUpdateList(buffItem._buffData._buffKey);
+        
+        _buffItemPool.enqueue(buffItem);
+        _currentlyAppliedBuffList.RemoveAt(index);
     }
 
     public void updateStatus(float deltaTime)
@@ -349,15 +365,38 @@ public class StatusInfo
             if(canApply == true)
             {
                 if(updateBuffXXX(buffData) == false)
+                {
                     DebugUtil.assert(false,"failed to update buff: {0}",buffData._buffName);
+                }
+                else if(buffData._particleEffect != "" && buffItem._particleEffect == null && _ownerObject != null)
+                {
+                    EffectRequestData requestData = MessageDataPooling.GetMessageData<EffectRequestData>();
+                    requestData._parentTransform = _ownerObject.transform;
+                    requestData._position = _ownerObject.transform.position;
+                    requestData._effectPath = buffData._particleEffect;
+                    requestData._effectType = EffectType.ParticleEffect;
+                    buffItem._particleEffect = EffectManager._instance.createEffect(requestData) as ParticleEffectItem;
+                }
                 
+            }
+            else
+            {
+                if(buffItem._particleEffect != null)
+                {
+                    buffItem._particleEffect.disableEffect();
+                    buffItem._particleEffect = null;
+                }
             }
                 
 
             if(deleteBuff == true)
-                _currentlyAppliedBuffList.RemoveAt(i);
+            {
+                deleteBuffIndex(i);
+            }
             else
+            {
                 ++i;
+            }
 
         }
     }
@@ -391,7 +430,7 @@ public class StatusInfo
         if(buff.isBuffValid() == false)
             return false;
 
-        if(getStatus(buff._targetStatusName) == null)
+        if(buff._targetStatusName != null && getStatus(buff._targetStatusName) == null)
             DebugUtil.assert(false, "target status is not exists: [targetName: {0}] [currentStatusInfo: {1}]", buff._targetStatusName,_statusInfoData._statusInfoName);
 
         switch(buff._buffApplyType)
@@ -405,13 +444,21 @@ public class StatusInfo
                 return variStat(buff._targetStatusName, buff._buffVaryStatFactor);
             }
             case BuffApplyType.Additional:
+            {
                 return variAddtionalStat(buff._targetStatusName, buff._buffVaryStatFactor);
+            }
             case BuffApplyType.DirectDelta:
+            {
                 return variRegenStat(buff._targetStatusName, buff._buffVaryStatFactor);
+            }
             case BuffApplyType.DirectSet:
             {
                 getStatus(buff._targetStatusName).updateBuffList(_currentlyAppliedBuffList);
                 return setStat(buff._targetStatusName, buff._buffVaryStatFactor);
+            }
+            case BuffApplyType.Empty:
+            {
+                return true;
             }
         }
 

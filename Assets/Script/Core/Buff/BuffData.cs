@@ -15,6 +15,8 @@ public class BuffData
 
     public string              _buffCustomStatusName;
 
+    public string              _particleEffect = "";
+
     public BuffData()
     {
         _buffName = null;
@@ -27,6 +29,8 @@ public class BuffData
         _buffCustomValue0 = 0f;
         _buffCustomValue1 = 0f;
         _buffCustomValue2 = null;
+
+        _particleEffect = "";
     }
 
     public void copy(BuffData target)
@@ -39,6 +43,7 @@ public class BuffData
         _buffCustomValue0 = target._buffCustomValue0;
         _buffCustomValue1 = target._buffCustomValue1;
         _buffCustomValue2 = target._buffCustomValue2;
+        _particleEffect = target._particleEffect;
     }
 
 
@@ -59,6 +64,7 @@ public enum BuffApplyType
     DirectDelta,
     Additional,
     DirectSet,
+    Empty,
     Count
 }
 

@@ -222,7 +222,6 @@ public class AnimationPlayer
                     desc._targetFrameEvent = frameEvent;
                     desc._isTimeBase = true;
 
-                    Debug.Log(frameEvent.getFrameEventType() + ", " + desc._endTime);
                     _frameEventProcessList.Add(desc);
                 }
                 else
@@ -345,7 +344,7 @@ public class AnimationPlayer
 
     public int getCurrentIndex() {return _animationTimeProcessor.getCurrentIndex();}
     public int getEndIndex() {return _animationTimeProcessor.getEndIndex();}
-    
+
     public MoveValuePerFrameFromTimeDesc getMoveValuePerFrameFromTimeDesc() {return _animationTimeProcessor.getMoveValuePerFrameFromTimeDesc();}
     public AnimationTimeProcessor getTimeProcessor(){return _animationTimeProcessor;}
     public MovementGraph getCurrentMovementGraph() {return _currentMovementGraph;}

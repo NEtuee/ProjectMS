@@ -433,6 +433,11 @@ public class ParticleEffectItem : EffectItemBase
         _effectObject.SetActive(false);
     }
 
+    public void disableEffect()
+    {
+        _effectObject?.SetActive(false);
+    }
+
     public override bool isValid()
     {
         return _effectObject != null && _allParticleSystems != null && _allParticleSystems.Length > 0;
@@ -543,6 +548,8 @@ public class TrailEffectItem : EffectItemBase
 
 public class EffectManager : ManagerBase
 {
+    public static EffectManager _instance;
+
     private List<EffectItemBase> _processingItems = new List<EffectItemBase>();
 
     private SimplePool<EffectItem> _effectItemPool = new SimplePool<EffectItem>();
@@ -552,6 +559,8 @@ public class EffectManager : ManagerBase
 
     public override void assign()
     {
+        _instance = this;
+        
         base.assign();
         CacheUniqueID("EffectManager");
         RegisterRequest();
@@ -599,7 +608,7 @@ public class EffectManager : ManagerBase
         
     }
 
-    private void createEffect(EffectRequestData requestData)
+    public EffectItemBase createEffect(EffectRequestData requestData)
     {
         EffectItemBase itemBase = null;
 
@@ -652,11 +661,12 @@ public class EffectManager : ManagerBase
         if(itemBase == null)
         {
             DebugUtil.assert(false, "이펙트 데이터가 없습니다. 통보 요망");
-            return;
+            return null;
         }
 
         _processingItems.Add(itemBase);
 
+        return itemBase;
     }
 
     public void receiveEffectRequest(Message msg)
