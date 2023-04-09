@@ -270,6 +270,8 @@ public class AnimationPlayer
 
         DebugUtil.assert(_currentAnimationSprites != null, "애니메이션 스프라이트 배열이 null입니다. 해당 경로에 스프라이트가 존재 하나요? : {0}",playData._path);
 
+        _currentAnimationName = playData._path;
+
         float startFrame = playData._startFrame;
         startFrame = startFrame == -1f ? 0f : startFrame;
 
@@ -335,6 +337,8 @@ public class AnimationPlayer
 
         return (int)((angleDegree + baseAngle * 0.5f) / baseAngle);
     }
+
+    public string getCurrentAnimationName() {return _currentAnimationName;}
 
     public void setAnimationSpeed(float speed) {_animationTimeProcessor.setAnimationSpeed(speed);}
 
