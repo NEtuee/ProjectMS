@@ -46,8 +46,7 @@
 
 
     <Idle MovementType="FrameEvent" DirectionType="Keep" FlipType="Keep">
-        <Animation Path="Resources/Sprites/NewPlayer/idle/" FramePerSecond="12" XFlip="true" Loop="false">
-            <MultiSelectAnimation Path="Sprites/NewPlayer/idle/" Condition="true"/>
+        <Animation Path="Sprites/NewPlayer/idle/" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartFrame="0" Friction="gv_IdleFriction" Speed="0"/>
         </Animation>
 
@@ -58,7 +57,7 @@
     </Idle>
 
     <Idle_Transition MovementType="FrameEvent" DirectionType="Keep" FlipType="Keep">
-        <Animation Path="Resources/Sprites/NewPlayer/idle_ing/" FramePerSecond="12" XFlip="true" Loop="false">
+        <Animation Preset="Sprites/NewPlayer/idle_ing/" XFlip="true" Duration="0.0833">
             <FrameEvent Type="Movement" StartFrame="0" Friction="gv_IdleFriction" Speed="0"/>
         </Animation>
 
@@ -70,7 +69,7 @@
     </Idle_Transition>
 
     <Idle_LookBack MovementType="FrameEvent" DirectionType="Keep" FlipType="Keep">
-        <Animation Path="Resources/Sprites/NewPlayer/idle_back/" FramePerSecond="2" XFlip="true" Loop="false">
+        <Animation Preset="Sprites/NewPlayer/idle_back/" XFlip="true" Duration="0.0833">
             <FrameEvent Type="Movement" StartFrame="0" Friction="gv_IdleFriction" Speed="0"/>
         </Animation>
 
@@ -81,7 +80,7 @@
     </Idle_LookBack>
     
     <MoveStop MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
-        <Animation Path="Resources/Sprites/NewPlayer/MoveStop/" FramePerSecond="16" XFlip="true" Loop="false" >
+        <Animation Preset="Sprites/NewPlayer/MoveStop/" XFlip="true" Duration="0.5">
             <FrameEvent Type="Movement" StartFrame="0" Friction="gv_IdleFriction" Speed="0" Velocity="gv_MoveVelocityMax"/>
         </Animation>
         
@@ -90,7 +89,7 @@
     </MoveStop>
 
     <AttackStop MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
-        <Animation Path="Resources/Sprites/NewPlayer/attackStop/" FramePerSecond="10" XFlip="true" Loop="false" >
+        <Animation Preset="Sprites/NewPlayer/attackStop/" XFlip="true" Duration="0.625">
             <FrameEvent Type="Movement" StartFrame="0" Friction="gv_IdleFriction" Speed="0" Velocity="0"/>
         </Animation>
 
@@ -98,7 +97,7 @@
     </AttackStop>
 
     <KickStop MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
-        <Animation Path="Resources/Sprites/NewPlayer/kick_stop/" FramePerSecond="16" XFlip="true" Loop="false" >
+        <Animation Preset="Sprites/NewPlayer/kick_stop/" XFlip="true" Duration="0.5">
             <FrameEvent Type="Movement" StartFrame="0" Friction="gv_IdleFriction" Speed="0" Velocity="0"/>
         </Animation>
         
@@ -117,7 +116,7 @@
     </MoveAll>
 
     <DashRoll MovementType="FrameEvent" DirectionType="MousePoint" RotationType="MoveDirection" FlipType="MousePoint" DirectionUpdateOnce="true">
-        <Animation Path="Resources/Sprites/NewPlayer/DashRoll/" FramePerSecond="32" XFlip="true" ScalePreset="YSpring">
+        <Animation Preset="Sprites/NewPlayer/DashRoll/" XFlip="true" ScalePreset="YSpring" Duration="0.25">
             <FrameEvent Type="Attack" StartFrame="0" AttackPreset="PlayerAttackTest" Condition="(getStat_DashPoint >= 1.0)">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
@@ -175,7 +174,7 @@
     </DashRoll>
 
     <DashRoll_Kick MovementType="FrameEvent" DirectionType="MousePoint" RotationType="MoveDirection" FlipType="MousePoint" DirectionUpdateOnce="true">
-        <Animation Path="Resources/Sprites/NewPlayer/DashRoll/" FramePerSecond="32" XFlip="true">
+        <Animation Preset="Sprites/NewPlayer/DashRoll/" XFlip="true" Duration="0.25">
             <FrameEvent Type="Attack" StartFrame="0" AttackType="GuardBreak" AttackPreset="Akane_Kick" IgnoreDefenceType="Guard">
                 <OnGuardBreak>
                     <FrameEvent Type="ApplyBuffTarget" StartFrame="0" ApplyBuff="21"/>
@@ -221,10 +220,10 @@
     </DashRoll_Kick>
 
     <StunShot MovementType="FrameEvent" DirectionType="MousePoint" FlipType="Direction" DirectionUpdateOnce="true">
-        <Animation Path="Resources/Sprites/DummyPlayer/Guard/" FramePerSecond="3" AngleBaseAnimation="True" XFlip="true" ScalePreset="XSpring">
+        <Animation Preset="Sprites/NewPlayer/Guard/" AngleBaseAnimation="True" XFlip="true" ScalePreset="XSpring" Duration="0.3">
             <FrameEvent Type="Movement" StartFrame="0" Friction="22" MaxVelocity="18" Speed="0" Velocity="-6"/>
 
-            <FrameEvent Type="Projectile" StartFrame="0" GraphName="StunShot" DirectionType="MousePoint"/>
+            <FrameEvent Type="Danmaku" StartTime="0" Path="Enemy/MagicalFirecrack.xml" Offset="1 1 0" UseFlip="true"/>
 
             <FrameEvent Type="ZoomEffect" StartFrame="0" Scale="3.1"/>
         </Animation>
@@ -236,12 +235,10 @@
     </StunShot>
 
     <Kicked MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
-        <Animation Path="Resources/Sprites/NewPlayer/kick/" FramePerSecond="9" XFlip="true" ScalePreset="YSpring">
-            <FrameEvent Type="Movement" StartFrame="0" Friction="3" Speed="0" Velocity="-1.5 "/>
-
-            <FrameEvent Type="FrameTag" StartFrame="1.8" EndFrame="999" Tag="MoveCancel"/>
-
-            <FrameEvent Type="ApplyBuff" StartFrame="0" ApplyBuff="DashPointIncrement"/>
+        <Animation Preset="Sprites/NewPlayer/kick/" XFlip="true" ScalePreset="YSpring" Duration="0.44">
+            <FrameEvent Type="Movement" StartTime="0" Friction="3" Speed="0" Velocity="-1.5 "/>
+            <FrameEvent Type="FrameTag" StartTime="0.198" EndFrame="999" Tag="MoveCancel"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="DashPointIncrement"/>
         </Animation>
 
         <UseBranchSet Name="CancelBranch"/>
@@ -251,14 +248,14 @@
     </Kicked>
 
     <AttackSuccess MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
-        <Animation Path="Resources/Sprites/NewPlayer/attack/" FramePerSecond="24" XFlip="true" ScalePreset="YSpring">
-            <FrameEvent Type="Effect" StartFrame="0" Path="Resources/Sprites/Effect/Sheath" FramePerSecond="0.5" Offset="0.0 0.0 0.0" Angle="Random_0^360" UseFlip="True" CastShadow="True">
+        <Animation Preset="Sprites/NewPlayer/attack/" XFlip="true" ScalePreset="YSpring" Duration="0.166">
+            <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Effect/Sheath" FramePerSecond="0.5" Offset="0.0 0.0 0.0" Angle="Random_0^360" UseFlip="True" CastShadow="True">
                 <Physics UseGravity="True" Velocity="-2.5 8" Friction="2.0" Torque="Random_25^30" AngularFriction="15.0"/>
             </FrameEvent>
 
-            <FrameEvent Type="Movement" StartFrame="0" Friction="gv_AttackFriction" MaxVelocity="gv_AttackVelocity" Speed="0" Velocity="gv_AttackVelocity"/>
-            <FrameEvent Type="ApplyBuff" StartFrame="0" ApplyBuff="DashPointReset"/>
-            <FrameEvent Type="FrameTag" StartFrame="0" EndFrame="999" Tag="AttackSuccess"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="gv_AttackFriction" MaxVelocity="gv_AttackVelocity" Speed="0" Velocity="gv_AttackVelocity"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="DashPointReset"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="AttackSuccess"/>
         </Animation>
 
         <Branch Key="(getKey_AttackCharge == true) || (getKey_NormalMove == true)" Condition="End" Execute="MoveAll"/>
@@ -266,14 +263,14 @@
     </AttackSuccess>
 
     <AttackSuccessFar MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
-        <Animation Path="Resources/Sprites/NewPlayer/attack/" FramePerSecond="24" XFlip="true" ScalePreset="YSpring">
-            <FrameEvent Type="Effect" StartFrame="0" Path="Resources/Sprites/Effect/Sheath" FramePerSecond="0.5" Offset="0.0 0.0 0.0" Angle="Random_0^360" UseFlip="True" CastShadow="True">
+        <Animation Preset="Sprites/NewPlayer/attack/" XFlip="true" ScalePreset="YSpring" Duration="0.166">
+            <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Effect/Sheath" FramePerSecond="0.5" Offset="0.0 0.0 0.0" Angle="Random_0^360" UseFlip="True" CastShadow="True">
                 <Physics UseGravity="True" Velocity="-2.5 8" Friction="2.0" Torque="Random_25^30" AngularFriction="15.0"/>
             </FrameEvent>
 
-            <FrameEvent Type="Movement" StartFrame="0" Friction="gv_AttackFriction" MaxVelocity="gv_AttackFarVelocity" Speed="0" Velocity="gv_AttackFarVelocity"/>
-            <FrameEvent Type="ApplyBuff" StartFrame="0" ApplyBuff="DashPointReset"/>
-            <FrameEvent Type="FrameTag" StartFrame="0" EndFrame="999" Tag="AttackSuccess"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="gv_AttackFriction" MaxVelocity="gv_AttackFarVelocity" Speed="0" Velocity="gv_AttackFarVelocity"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="DashPointReset"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="AttackSuccess"/>
         </Animation>
 
         <Branch Key="(getKey_AttackCharge == true) || (getKey_NormalMove == true)" Condition="End" Execute="MoveAll"/>
@@ -281,52 +278,19 @@
     </AttackSuccessFar>
 
     <AttackGuarded MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Keep" >
-        <Animation Path="Resources/Sprites/NewPlayer/Attack/" FramePerSecond="16">
-            <FrameEvent Type="Movement" StartFrame="0" Friction="12" MaxVelocity="6" Speed="0" Velocity="-4"/>
+        <Animation Preset="Sprites/NewPlayer/Attack/" Duration="0.25">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="6" Speed="0" Velocity="-4"/>
 
-            <!-- <FrameEvent Type="ApplyBuff" StartFrame="0" ApplyBuff="DashPointReset"/> -->
         </Animation>
 
         <Branch Key="(getKey_AttackCharge == true) || (getKey_NormalMove == true)" Condition="End" Execute="MoveAll"/>
         <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="Idle"/>
     </AttackGuarded>
-<!-- Guard
-    <Guard MovementType="FrameEvent" DirectionType="MousePoint" DefenceDirectionType="MousePoint" FlipType="Keep" DefenceType="Guard" DefenceAngle="180.0">
-        <Animation Path="Resources/Sprites/DummyPlayer/Guard/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
-            <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/LaserTest_Timeline" Offset="0.0 0.0 0.0" Attach="true" AngleType="Direction" LifeTime="1.0" FollowDirection="True"/>
-            <FrameEvent Type="Attack" StartFrame="0.3" AttackPreset="LaserTest" IgnoreDefenceType="Guard">
-                <OnHit>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
-                    <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
 
-                    <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/Slash_Timeline" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
-                    <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/Blood_Timeline" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
-                    <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/Impact_Timeline" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true" AngleType="AttackPoint"/>
-
-                    <FrameEvent Type="StopUpdate" StartFrame="0" Time="0.07"/>
-                </OnHit>
-                <OnGuard>
-                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" ToTarget="True"/>
-
-                    <FrameEvent Type="StopUpdate" StartFrame="0" Time="0.01"/>
-                </OnGuard>
-                <OnParry>
-                    <FrameEvent Type="TeleportToTarget"/>
-                </OnParry>
-
-            </FrameEvent>
-
-            <FrameEvent Type="Movement" StartFrame="0" Friction="gv_IdleFriction" Speed="0"/>
-        </Animation>
-
-        <Branch Condition="End" Execute="Guard"/>
-        <Branch Key="(getKey_Guard == false)" Execute="Idle"/>
-    </Guard>
--->
     <Hit MovementType="FrameEvent" DirectionType="MousePoint" DefenceDirectionType="MousePoint" FlipType="Keep" DefenceType="Guard" DefenceAngle="180.0">
-        <Animation Path="Resources/Sprites/NewPlayer/Hit/" FramePerSecond="2" XFlip="true">
-            <MultiSelectAnimation Path="Resources/Sprites/NewPlayer/empty" Condition="IsCatchTarget"/>
-            <FrameEvent Type="Movement" StartFrame="0" Friction="gv_IdleFriction" MaxVelocity="0" Velocity="0" Speed="0"/>
+        <Animation Preset="Sprites/NewPlayer/Hit/" XFlip="true" Duration="0.5">
+            <MultiSelectAnimation Path="Sprites/NewPlayer/empty" Condition="IsCatchTarget"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="gv_IdleFriction" MaxVelocity="0" Velocity="0" Speed="0"/>
         </Animation>
 
         <!-- <Branch Condition="getStat_IsStun == 1.0" Execute="Stun"/> -->
@@ -337,20 +301,20 @@
     </Hit>
 
     <Kiiled DirectionType="Keep" FlipType="Direction">
-        <Animation Path="Resources/Sprites/DummyPlayer/Hit/" StartFrame="0" EndFrame="1" FramePerSecond="99" XFlip="true">
-            <FrameEvent Type="KillEntity" StartFrame="0"/>
+        <Animation Preset="Sprites/NewPlayer/Hit/" XFlip="true" Duration="10.0">
+            <FrameEvent Type="KillEntity" StartTime="0"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="Kiiled"/>
     </Kiiled>
 
     <Catched MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction" ApplyBuff="CatchedEscape">
-        <Animation Path="Resources/Sprites/NewPlayer/empty" StartFrame="0" EndFrame="1" XFlip="true">
+        <Animation Preset="Sprites/NewPlayer/empty" XFlip="true" Duration="1.0">
             <FrameEvent Type="Test" Log="Akane Catched"/>
-            <FrameEvent Type="Movement" StartFrame="0" Friction="12" MaxVelocity="0" Velocity="0" Speed="0"/>
-            <FrameEvent Type="ApplyBuff" StartFrame="0" ApplyBuff="StunClear"/>
-            <FrameEvent Type="FrameTag" StartFrame="0" EndFrame="999" Tag="Recatchable" Condition="getStat_IsCatched == 1.0"/>
-            <FrameEvent Type="FrameTag" StartFrame="0" EndFrame="999" Tag="Catched"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Velocity="0" Speed="0"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="StunClear"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="Recatchable" Condition="getStat_IsCatched == 1.0"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="Catched"/>
             <FrameEvent Type="ReleaseCatch" Push="4 0 0" Condition="getStat_IsCatched == 0.0"/>
         </Animation>
 
@@ -360,8 +324,8 @@
 
     <CatchReleased MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction" RotationType="Direction">
         <Animation Preset="Sprites/NewPlayer/catchRealese/" XFlip="true" Duration="1.3">
-            <FrameEvent Type="ApplyBuff" StartFrame="0" ApplyBuff="CatchedClear"/>
-            <FrameEvent Type="ApplyBuff" StartFrame="0" ApplyBuff="StunClear"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="CatchedClear"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="StunClear"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="1.3" Tag="CatchReleased"/>
             <FrameEvent Type="FrameTag" StartTime="0.7" EndFrame="1.3" Tag="MoveCancel"/>
         </Animation>
@@ -379,6 +343,7 @@
 
     <Stun MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" ApplyBuff="StunEscape">
         <Animation Preset="Sprites/NewPlayer/stun" XFlip="true" Duration="3.0">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="3" Speed="0"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="Stun"/>
             <FrameEvent Type="ApplyBuff" StartTime="3.0" ApplyBuff="StunClear"/>
         </Animation>
