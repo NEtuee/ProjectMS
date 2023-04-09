@@ -3,7 +3,7 @@
     <CommonPlayerStatus>
         <Stat Type="HP" Max="10" Min="0" Init="10"/>
         <Stat Type="Stamina" Max="1000" Min="0" Init="1000"/>
-        <Stat Type="Blood" Max="100" Min="0" Init="0"/>
+        <Stat Type="Blood" Max="10" Min="0" Init="0"/>
         <Stat Type="Battle" Max="100" Min="0" Init="0"/>
         
         <Stat Type="Custom" Name="DashPoint" Max="5" Min="0" Init="5"/>
@@ -12,7 +12,8 @@
         <Stat Type="Custom" Name="IsCatched" Max="1" Min="0" Init="0"/>
 
         <DeclareGraphicInterface Target="HP" Color="0.5 0 0 1" HorizontalGap="0.1"/>
-        <DeclareGraphicInterface Target="DashPoint" Color="0.274 0.509 0.705 255" HorizontalGap="0.1"/>
+        <DeclareGraphicInterface Target="DashPoint" Color="0.274 0.509 0.705 1" HorizontalGap="0.1"/>
+        <DeclareGraphicInterface Target="Blood" Color="1 0 0 1" HorizontalGap="0.1"/>
     </CommonPlayerStatus>
 
     <CommonEnemyStatus>
@@ -21,7 +22,7 @@
         <Stat Type="Battle" Max="0" Min="0" Init="0"/>
         <Stat Type="Custom" Name="GuardPoint" Max="3" Min="0" Init="3"/>
 
-        <DeclareGraphicInterface Target="HP" Color="255 0 0 255" HorizontalGap="0.5"/>
+        <DeclareGraphicInterface Target="HP" Color="1 0 0 1" HorizontalGap="0.5"/>
     </CommonEnemyStatus>
 
     <TutorialBossStatus>
@@ -31,7 +32,7 @@
         <Stat Type="Custom" Name="HitPoint" Max="5" Min="0" Init="2"/>
         <Stat Type="Custom" Name="Posture" Max="100" Min="0" Init="100"/>
 
-        <DeclareGraphicInterface Target="HP" Color="255 0 0 255" HorizontalGap="0.5"/>
+        <DeclareGraphicInterface Target="HP" Color="1 0 0 1" HorizontalGap="0.5"/>
     </TutorialBossStatus>
 
     <TateChanStatus>
@@ -41,7 +42,7 @@
         <Stat Type="Custom" Name="GuardPoint" Max="3" Min="0" Init="3"/>
         <Stat Type="Custom" Name="AttackDelay" Max="1" Min="0" Init="1"/>
 
-        <DeclareGraphicInterface Target="HP" Color="255 0 0 255" HorizontalGap="0.5"/>
+        <DeclareGraphicInterface Target="HP" Color="1 0 0 1" HorizontalGap="0.5"/>
     </TateChanStatus>
 
     <TestEnemyStatus>
@@ -50,7 +51,7 @@
         <Stat Type="Battle" Max="0" Min="0" Init="0"/>
         <Stat Type="Custom" Name="GuardPoint" Max="3" Min="0" Init="3"/>
 
-        <DeclareGraphicInterface Target="HP" Color="255 0 0 255" HorizontalGap="0.5"/>
+        <DeclareGraphicInterface Target="HP" Color="1 0 0 1" HorizontalGap="0.5"/>
     </TestEnemyStatus>
 
     <OsananaNajimiStatus>

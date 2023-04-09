@@ -343,10 +343,12 @@ public class StatusInfo
                 case BuffUpdateType.Continuous:
                     break;
                 case BuffUpdateType.DelayedContinuous:
+                {
                     Status targetStatus = getStatus(buffData._targetStatusName);
 
                     canApply = globalTime - buffItem._startedTime >= buffData._buffCustomValue0;
-                    break;
+                }
+                break;
                 case BuffUpdateType.ButtonHit:
                 {
                     if(buffData._buffCustomValue2 != null)
@@ -358,6 +360,14 @@ public class StatusInfo
                                 break;
                         }
                     }
+                }
+                break;
+                case BuffUpdateType.GreaterThenSet:
+                {
+                    Status customTargetStatus = getStatus(buffData._buffCustomStatusName);
+                    Status targetStatus = getStatus(buffData._targetStatusName);
+
+                    canApply = customTargetStatus._realValue > targetStatus._realValue;
                 }
                 break;
             }
@@ -433,6 +443,9 @@ public class StatusInfo
         if(buff._targetStatusName != null && getStatus(buff._targetStatusName) == null)
             DebugUtil.assert(false, "target status is not exists: [targetName: {0}] [currentStatusInfo: {1}]", buff._targetStatusName,_statusInfoData._statusInfoName);
 
+        if(buff._buffUpdateType == BuffUpdateType.GreaterThenSet)
+            return setStat(buff._targetStatusName,getStatus(buff._buffCustomStatusName)._realValue);
+
         switch(buff._buffApplyType)
         {
             case BuffApplyType.Direct:
@@ -496,11 +509,18 @@ public class StatusInfo
         if(getStatus(buff._targetStatusName) == null)
             DebugUtil.assert(false, "target status is not exists: [targetName: {0}] [currentStatusInfo: {1}]", buff._targetStatusName,_statusInfoData._statusInfoName);
 
+        if(buff._buffUpdateType == BuffUpdateType.GreaterThenSet)
+        {
+            Status customTargetStatus = getStatus(buff._buffCustomStatusName);
+            Status targetStatus = getStatus(buff._targetStatusName);
+
+            return customTargetStatus._realValue > targetStatus._realValue ? customTargetStatus._realValue - targetStatus._realValue : 0f;
+        }
+
         switch(buff._buffApplyType)
         {
             case BuffApplyType.Direct:
             {
-                Status status = getStatus(buff._targetStatusName);
                 return buff._buffVaryStatFactor;
             }
             case BuffApplyType.Additional:
@@ -516,6 +536,10 @@ public class StatusInfo
             case BuffApplyType.DirectSet:
             {
                 return buff._buffVaryStatFactor;
+            }
+            case BuffApplyType.Empty:
+            {
+                return 0f;
             }
         }
 

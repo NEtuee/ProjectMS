@@ -37,7 +37,7 @@
         UpdateType="StatSection"
         ApplyType="DirectDelta"
 
-        Factor="-10.0"
+        Factor="-1.0"
 
         TargetStatusName="Battle"
         MinValue="0"
@@ -51,7 +51,7 @@
         UpdateType="Continuous"
         ApplyType="DirectDelta"
 
-        Factor="-10.0"
+        Factor="-1.0"
 
     />
 
@@ -73,7 +73,7 @@
         UpdateType="OneShot"
         ApplyType="Direct"
 
-        Factor="30.0"
+        Factor="3.0"
 
     />
 
@@ -106,7 +106,7 @@
         UpdateType="OneShot"
         ApplyType="Direct"
 
-        Factor="-20.0"
+        Factor="-2.0"
     />
 
     <BloodSpreadHit
@@ -116,7 +116,7 @@
         UpdateType="OneShot"
         ApplyType="Direct"
 
-        Factor="20.0"
+        Factor="2.0"
     />
 
     <CommonAttackStamina
@@ -459,7 +459,7 @@
         Factor="0.0"
     />
 
-    <BloodEffect
+    <BloodAlertEffect
         Key="46"
 
         UpdateType="StatSection"
@@ -470,6 +470,16 @@
         MaxValue="0"
 
         ParticleEffect="Prefab/Effect/LowHealthAlert"
+    />
+
+    <BloodPointToHP
+        Key="47"
+        StatusName="HP"
+
+        UpdateType="GreaterThenSet"
+        ApplyType="Empty"
+
+        TargetStatusName="Blood"
     />
 
 

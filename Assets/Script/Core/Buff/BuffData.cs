@@ -76,5 +76,6 @@ public enum BuffUpdateType
     Continuous,
     DelayedContinuous,
     ButtonHit,
+    GreaterThenSet,
     Count,
 };
