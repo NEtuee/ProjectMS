@@ -249,10 +249,11 @@
     </MagicalMissile>
 
     <PitchingMachine DefaultFramePerSecond="4" UseSpriteRotation="false" PenetrateCount="1">
-        <Animation Path="Resources/Sprites/Enemy/PitchingMachine/4_spawn" StartFrame="0" EndFrame="1" XFlip="true">
+        <Animation Preset="Sprites/Enemy/PitchingMachine/4_spawn" XFlip="true" Duration="0.8">        
         </Animation>
+
         <CollisionInfo Radius="0.1" Angle="0"/>
-        <DefaultShotInfo Velocity="7" Acceleration="0" Friction="14" Angle="0" AngularAcceleration="0" LifeTime="1.2"/>
+        <DefaultShotInfo Velocity="7" Acceleration="0" Friction="14" Angle="0" AngularAcceleration="0" LifeTime="0.8"/>
         
         <Event>
             <OnHit>

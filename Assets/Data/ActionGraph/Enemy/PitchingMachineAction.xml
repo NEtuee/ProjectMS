@@ -1,12 +1,4 @@
 <ActionGraph Name="PitchingMachineAction" DefaultAction="AC_Idle" DefaultFramePerSecond="12">
-
-    <AC_Spawn MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <Animation Path="Sprites/Enemy/PitchingMachine/4_spawn" XFlip="true" Duration="1.0">
-            <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
-        </Animation>
-        
-        <Branch Condition="End == true" Execute="AC_Idle"/>
-    </AC_Spawn>
     
     <AC_Idle MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <Animation Preset="Sprites/Enemy/PitchingMachine/0_idle" XFlip="true" Duration="0.3333">
