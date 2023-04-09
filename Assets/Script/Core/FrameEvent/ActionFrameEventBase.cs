@@ -113,7 +113,7 @@ public class ActionFrameEvent_CallAIEvent : ActionFrameEventBase
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_CallAIEvent;}
 
     public string _customAiEventName = "";
-    public CallAIEventTargetType _targetType = CallAIEventTargetType.Self;
+    public CallAIEventTargetType _eventTargetType = CallAIEventTargetType.Self;
 
     public float _range = 0f;
 
@@ -124,7 +124,7 @@ public class ActionFrameEvent_CallAIEvent : ActionFrameEventBase
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
         ObjectBase executeTargetEntity = null;
-        switch(_targetType)
+        switch(_eventTargetType)
         {
             case CallAIEventTargetType.Self:
             {
@@ -163,9 +163,9 @@ public class ActionFrameEvent_CallAIEvent : ActionFrameEventBase
             {
                 _customAiEventName = attributes[i].Value;
             }
-            else if(attrName == "TargetType")
+            else if(attrName == "EventTargetType")
             {
-                _targetType = (CallAIEventTargetType)System.Enum.Parse(typeof(CallAIEventTargetType), attrValue);
+                _eventTargetType = (CallAIEventTargetType)System.Enum.Parse(typeof(CallAIEventTargetType), attrValue);
             }
 
         }

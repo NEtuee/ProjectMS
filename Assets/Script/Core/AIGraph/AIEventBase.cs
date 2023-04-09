@@ -185,7 +185,7 @@ public class AIEvent_CallAIEvent : AIEventBase
             {
                 _customAiEventName = attributes[i].Value;
             }
-            else if(attrName == "TargetType")
+            else if(attrName == "EventTargetType")
             {
                 _targetType = (CallAIEventTargetType)System.Enum.Parse(typeof(CallAIEventTargetType), attrValue);
             }

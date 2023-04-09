@@ -15,7 +15,7 @@ FrameEvent,ZoomEffect,Scale=~~
 FrameEvent,StopUpdate,Time=~~
 FrameEvent,TimelineEffect,"Path=~~,Offset=~~,ToTarget=~~,Attach=~~,UpdateType=~~,AngleType=~~"
 FrameEvent,ParticleEffect,"Path=~~,Offset=~~,ToTarget=~~,Attach=~~,UpdateType=~~,AngleType=~~"
-FrameEvent,SpawnCharacter,"CharacterKey=~~,Offset=~0 0 0~,SearchIdentifier=~~"
+FrameEvent,SpawnCharacter,"CharacterKey=~~,Offset=~0 0 0~,SearchIdentifier=~~,Inherit=~~"
 FrameEventAndInQuote,Attack IgnoreDefenceType=,"Guard,Parry,Evade"
 FrameEventAndInQuote,SetDefenceType DefenceType=,"Empty,Guard,Parry,Evade"
 FrameEventAndInQuote,Projectile ShotInfoUseType=,"UseDefault,Overlap,Add"
@@ -30,7 +30,7 @@ InQuote,IsActionSelection=,"true,false"
 InQuote,NormalizedSpeed=,"true,false"
 InQuote,Attach=,"true,false"
 InQuote,DirectionUpdateOnce=,"true,false"
-InQuote,Condition=,"ActionTest,ActionDash,End,AngleBetweenStick,AngleDirection,IsXFlip,IsYFlip,CurrentFrame,AttackSuccess,AttackGuarded,AttackParried,AttackGuardBreak,DefenceSuccess,ParrySuccess,Hit,EvadeSuccess,GuardBroken,CurrentFrame,TargetExists,TargetDistance,ArrivedTarget,CurrentPackageEnd,getStat_,getKey_,getFrameTag_,getTargetFrameTag_,getWeight_,true,false,PackageExecutedTime,GraphExecutedTime,AttackGuardBreakFail,GuardBreakFail,IsCatcher,IsCatchTarget,AttackCatchTarget,Catched,LifeTime,ActionExecutedTime"
+InQuote,Condition=,"ActionTest,ActionDash,End,AngleBetweenStick,AngleDirection,IsXFlip,IsYFlip,CurrentFrame,AttackSuccess,AttackGuarded,AttackParried,AttackGuardBreak,DefenceSuccess,ParrySuccess,Hit,EvadeSuccess,GuardBroken,CurrentFrame,TargetExists,TargetDistance,ArrivedTarget,CurrentPackageEnd,getStat_,getKey_,getFrameTag_,getTargetFrameTag_,getWeight_,true,false,PackageExecutedTime,GraphExecutedTime,AttackGuardBreakFail,GuardBreakFail,IsCatcher,IsCatchTarget,AttackCatchTarget,Catched,LifeTime,ActionExecutedTime,customValue_"
 InQuote,UpdateType=,"ScaledDeltaTime,NoneScaledDeltaTime"
 InQuote,ToTarget=,"true,false"
 InQuote,AngleType=,"Normal,AttackPoint,Direction"
@@ -87,6 +87,19 @@ ShortCut,__AnimationHeader,<AnimationHeader MasterPath=~~/>
 LineStart,<AnimationHeader,MasterPath=~~
 ShortCut,__FrameEvent_ParticleEffect,<FrameEvent Type=~ParticleEffect~ StartTime=~0~ Path=~~/>
 InQuote,UseFlip=,"true,false"
+ShortCut,__FrameEvent_CallAIEvent,<FrameEvent Type=~CallAIEvent~ StartTime=~0~ EventName=~~ EventTargetType=~~/>
+FrameEvent,CallAIEvent,"EventName=~~,EventTargetType=~~"
+InQuote,EventTargetType=,"Range,Self,FrameEventTarget,Summoner"
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
 ,,
 ,,
 ,,
