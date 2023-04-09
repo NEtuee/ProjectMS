@@ -249,7 +249,7 @@
     </MagicalMissile>
 
     <PitchingMachine DefaultFramePerSecond="4" UseSpriteRotation="false" PenetrateCount="1">
-        <Animation Path="Resources/Sprites/SampleBoss/Idle/" StartFrame="0" EndFrame="1" XFlip="true">
+        <Animation Path="Resources/Sprites/Enemy/PitchingMachine/4_spawn" StartFrame="0" EndFrame="1" XFlip="true">
         </Animation>
         <CollisionInfo Radius="0.1" Angle="0"/>
         <DefaultShotInfo Velocity="7" Acceleration="0" Friction="14" Angle="0" AngularAcceleration="0" LifeTime="1.2"/>
@@ -258,7 +258,7 @@
             <OnHit>
                 <FrameEvent Type="Attack" StartFrame="0" AttackPreset="BaseBall">
                     <OnHit>
-                        <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="PitchingMachine" Offset="0 0 0" SearchIdentifier="Enemy"/>
+                        <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="PitchingMachine" Offset="0 0 0" SearchIdentifier="Enemy" Inherit="true"/>
                         <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
                     </OnHit>
                 </FrameEvent>
@@ -269,7 +269,7 @@
             </OnHitEnd>
     
             <OnEnd>
-                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="PitchingMachine" Offset="0 0 0" SearchIdentifier="Enemy"/>
+                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="PitchingMachine" Offset="0 0 0" SearchIdentifier="Enemy" Inherit="true"/>
             </OnEnd>
         </Event>
     </PitchingMachine>

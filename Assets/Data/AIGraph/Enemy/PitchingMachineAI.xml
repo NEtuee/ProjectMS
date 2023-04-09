@@ -26,7 +26,7 @@
 
     <Entry Package="CommonIdlePackage">
         <UseBranchSet Name="HitReactionSet"/>
-        <Branch Condition="GraphExecutedTime >= 0.5" Execute="Chase"/>
+        <Branch Condition="GraphExecutedTime >= 0.3" Execute="Chase"/>
     </Entry>
 
     <Chase Package="PitchingMachineAlertMovePackage">
