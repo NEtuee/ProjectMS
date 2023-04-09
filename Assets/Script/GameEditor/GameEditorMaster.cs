@@ -5,6 +5,12 @@ using UnityEngine;
 
 public class GameEditorMaster : MonoBehaviour
 {
+    public static GameEditorMaster _instance;
+    public bool _actionDebugAll = false;
+    public bool _aiDebugAll = false;
+    public bool _statusDebugAll = false;
+    public bool _animationDebugAll = false;
+
     private static string _hotKey_EditorOnOff = "EditorHotKey_EditorOnOff";
     private static string _hotKey_UpdateFrame = "EditorHotKey_UpdateFrame";
 
@@ -12,6 +18,11 @@ public class GameEditorMaster : MonoBehaviour
     private GameObject _editorParent;
     private EditorWindowBase _currentFocusWindow;
     private bool _activeEditor = false;
+
+    private void Awake()
+    {
+        _instance = this;
+    }
 
     private void Start()
     {
@@ -80,6 +91,16 @@ public class GameEditorMaster : MonoBehaviour
         msg.Set(MessageTitles.system_updateFrame,0,null,null);
         MasterManager.instance.SendMessageDirectInMaster(msg);
     }
+
+    public void setActionDebug() {_actionDebugAll = !_actionDebugAll;}
+    public void setAiDebug() {_aiDebugAll = !_aiDebugAll;}
+    public void setStatusDebug() {_statusDebugAll = !_statusDebugAll;}
+    public void setAnimationDebug() {_animationDebugAll = !_animationDebugAll;}
+
+    public bool isActionDebug() {return _actionDebugAll;}
+    public bool isAiDebug() {return _aiDebugAll;}
+    public bool isStatusDebug() {return _statusDebugAll;}
+    public bool isAnimationDebug() {return _animationDebugAll;}
 
     private void editorOn()
     {

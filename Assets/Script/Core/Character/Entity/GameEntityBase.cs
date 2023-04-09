@@ -19,6 +19,7 @@ public class GameEntityBase : SequencerObjectBase
     public bool                 _actionDebug = false;
     public bool                 _statusDebug = false;
     public bool                 _aiDebug = false;
+    public bool                 _animationDebug = false;
 
     
     private ActionGraph         _actionGraph;
@@ -266,7 +267,7 @@ public class GameEntityBase : SequencerObjectBase
 
         _deadEventDelegate = null;
 
-        if(_actionDebug == true)
+        if(_actionDebug == true || GameEditorMaster._instance._actionDebugAll)
         {
             debugTextManager.updateDebugText("Action","Action: " + getCurrentActionName());
             debugTextManager.updateDebugText("Defence","Defence: " + getDefenceType());
@@ -288,18 +289,17 @@ public class GameEntityBase : SequencerObjectBase
             GizmoHelper.instance.drawArc(transform.position,0.8f,getDefenceAngle(),_defenceDirection,Color.cyan,0f);
 
         _collisionInfo.updateCollisionInfo(transform.position,getDirection());
+        debugTextManager.updatePosition(new Vector3(0f, _collisionInfo.getBoundBox().getBottom() - transform.position.y, 0f));
 
-        if(_actionDebug == true)
+        if(_actionDebug == true || GameEditorMaster._instance._actionDebugAll)
         {
             GizmoHelper.instance.drawLine(transform.position, transform.position + _direction * 0.5f,Color.magenta);
             GizmoHelper.instance.drawLine(transform.position, transform.position + ControllerEx.Instance().getJoystickAxisR(transform.position) * 0.5f,Color.cyan);
 
             _collisionInfo.drawCollosionArea(_debugColor);
-
-            debugTextManager.updatePosition(new Vector3(0f, _collisionInfo.getBoundBox().getBottom() - transform.position.y, 0f));
         }
 
-        if(_aiDebug == true)
+        if(_aiDebug == true || GameEditorMaster._instance._aiDebugAll)
         {
             if(_aiGraph.hasTargetPosition() == true)
             {
@@ -338,6 +338,11 @@ public class GameEntityBase : SequencerObjectBase
             }
         }
 
+        if(_animationDebug || GameEditorMaster._instance._animationDebugAll)
+        {
+            debugTextManager.updateDebugText("Animation","Animation: " + _actionGraph.getCurrentAnimationName());
+        }
+
         _debugColor = Color.red;
     }
 
@@ -351,7 +356,7 @@ public class GameEntityBase : SequencerObjectBase
 
         resetState();
 
-        if(_statusDebug == true)
+        if(_statusDebug == true || GameEditorMaster._instance._statusDebugAll)
         {
             _statusInfo.updateDebugTextXXX(debugTextManager);
         }

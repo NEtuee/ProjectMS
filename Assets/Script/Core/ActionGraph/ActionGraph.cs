@@ -612,6 +612,8 @@ public class ActionGraph
             return getCurrentAction()._moveScale * _animationPlayer.getCurrentAnimationDuration();
     }
 
+    public string getCurrentAnimationName() {return _animationPlayer.getCurrentAnimationName();}
+
     public bool isRotateBySpeed() {return getCurrentAction()._rotateBySpeed;}
     public float getCurrentRotateSpeed() {return getCurrentAction()._rotateSpeed;}
     public float getCurrentFrame() {return _animationPlayer.getCurrentFrame();}

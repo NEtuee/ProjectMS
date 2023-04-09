@@ -11,6 +11,8 @@ public class CrossHairUI : MonoBehaviour
 
     public Transform _targetPosition;
 
+    public int _guidLineCount = 1;
+
     public float _lineObjectRatio = 0.7f;
     public float _gagueStack;
 
@@ -20,7 +22,7 @@ public class CrossHairUI : MonoBehaviour
     public void Awake()
     {
         _instance = this;
-        createGuidLineObjects(2);
+        createGuidLineObjects(_guidLineCount);
     }
 
     public void createGuidLineObjects(int count)
