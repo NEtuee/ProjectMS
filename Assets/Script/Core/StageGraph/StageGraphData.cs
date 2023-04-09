@@ -119,7 +119,7 @@ public class StageGraphEvent_SetCrossHair : StageGraphEventBase
         if(unqueEntity == null)
             return true;
 
-        CrossHairUI._instance.setTarget(unqueEntity.transform);
+        CrossHairUI._instance.setTarget(unqueEntity);
         CrossHairUI._instance.setActive(true);
         return true;
     }

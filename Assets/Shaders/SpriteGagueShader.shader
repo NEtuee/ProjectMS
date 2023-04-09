@@ -84,7 +84,7 @@ Shader "Custom/SpriteGagueShader"
 				fixed4 c = SampleSpriteTexture (IN.texcoord) * IN.color;
                 float alphaCut = 1.0 - step(_Gague,IN.texcoord.x);
 
-                c.a = alphaCut;
+                c.a = alphaCut * c.a;
 				c.rgb *= c.a;
 				return c;
 			}

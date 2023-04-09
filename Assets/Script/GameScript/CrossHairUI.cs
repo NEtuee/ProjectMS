@@ -10,19 +10,26 @@ public class CrossHairUI : MonoBehaviour
     public GameObject _gagueObject;
 
     public Transform _targetPosition;
+    public GameEntityBase _targetEntity;
 
     public int _guidLineCount = 1;
 
     public float _lineObjectRatio = 0.7f;
-    public float _gagueStack;
 
+    public string _gagueTargetStatusName = "DashPoint";
+    public int _gagueStackCount = 4;
+    public float _gagueStackGague;
+    public float _gagueStartOffset = 0.05f;
+    public float _gagueStackGap = 0.5f;
 
     private List<GameObject> _guidLineObjects = new List<GameObject>();
+    private List<SpriteRenderer> _gagueObjects = new List<SpriteRenderer>();
 
     public void Awake()
     {
         _instance = this;
         createGuidLineObjects(_guidLineCount);
+        createGagueObjects();
     }
 
     public void createGuidLineObjects(int count)
@@ -33,6 +40,29 @@ public class CrossHairUI : MonoBehaviour
             guidLineObject.AddComponent<SpriteRenderer>().sprite = _guidLineSprite;
 
             _guidLineObjects.Add(guidLineObject);
+        }
+    }
+
+    public void createGagueObjects()
+    {
+        for(int index = 0; index < _gagueStackCount; ++index)
+        {
+            GameObject guidLineObject = Instantiate(_gagueObject);
+            guidLineObject.transform.SetParent(this.transform);
+            guidLineObject.transform.localPosition = Vector3.right * (_gagueStackGap * (float)(index + 1)) + Vector3.right * _gagueStartOffset;
+            SpriteRenderer spriteRenderer = guidLineObject.GetComponent<SpriteRenderer>();
+
+            _gagueObjects.Add(spriteRenderer);
+        }
+    }
+
+    public void updateGague()
+    {
+        float percentage = _targetEntity.getStatusPercentage(_gagueTargetStatusName) * (float)_gagueStackCount;
+        for(int index = 0; index < _gagueStackCount; ++index)
+        {
+            float gague = MathEx.clamp01f(percentage - (float)index);
+            _gagueObjects[index].material.SetFloat("_Gague",gague);
         }
     }
 
@@ -56,6 +86,7 @@ public class CrossHairUI : MonoBehaviour
         transform.position = worldMousePosition;
         transform.rotation = rotation;
         
+        updateGague();
     }
 
     public void setActive(bool value)
@@ -70,9 +101,10 @@ public class CrossHairUI : MonoBehaviour
         Update();
     }
 
-    public void setTarget(Transform target)
+    public void setTarget(GameEntityBase target)
     {
-        _targetPosition = target;
+        _targetPosition = target.transform;
+        _targetEntity = target;
 
         Update();
     }

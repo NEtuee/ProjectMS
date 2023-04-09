@@ -742,6 +742,8 @@ public class GameEntityBase : SequencerObjectBase
 
     public float getHeadUpOffset() {return _headUpOffset;}
 
+    public float getStatusPercentage(string targetName) {return _statusInfo.getCurrentStatusPercentage(targetName);}
+
     public void executeAIEvent(AIChildEventType eventType) {_aiGraph.executeAIEvent(eventType);}
     public bool processActionCondition(ActionGraphConditionCompareData compareData) {return _actionGraph.processActionCondition(compareData);}
 
