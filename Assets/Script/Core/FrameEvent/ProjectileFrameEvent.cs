@@ -54,14 +54,11 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
         ProjectileGraphShotInfoData shotInfo;
         getShotInfo(_projectileGraphName,_useType,defaultAngle,ref _shotInfo,out shotInfo);
         
+        Vector3 offsetPosition = _positionOffset;
         float angle = MathEx.directionToAngle(executeEntity.getDirection());
         if(_useFlip && gameEntityBase.getFlipState().xFlip)
-        {
-            angle -= 180f;
-            angle *= -1f;
-        }
+            offsetPosition.y *= -1f;
 
-        Vector3 offsetPosition = _positionOffset;
         offsetPosition = Quaternion.Euler(0f,0f,angle) * offsetPosition;
 
         Vector3 spawnPosition = getSpawnPosition(_setTargetType, executeEntity, targetEntity) + offsetPosition;

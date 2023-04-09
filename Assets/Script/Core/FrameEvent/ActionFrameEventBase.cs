@@ -492,17 +492,19 @@ public class ActionFrameEvent_Danmaku : ActionFrameEventBase
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_Danmaku;}
 
     private string _path;
+    private UnityEngine.Vector3 _offsetPosition = UnityEngine.Vector3.zero;
+    private bool _useFlip = false;
 
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
         if(executeEntity is GameEntityBase )
         {
             GameEntityBase requester = (GameEntityBase)executeEntity;
-            requester.addDanmaku(_path);
+            requester.addDanmaku(_path,_offsetPosition,_useFlip);
         }
         else if(executeEntity is ProjectileEntityBase)
         {
-            DanmakuManager.Instance().addDanmaku(_path,executeEntity.transform.position,executeEntity._searchIdentifier);
+            DanmakuManager.Instance().addDanmaku(_path,executeEntity.transform.position,_offsetPosition,_useFlip,executeEntity._searchIdentifier);
         }
         
 
@@ -516,6 +518,10 @@ public class ActionFrameEvent_Danmaku : ActionFrameEventBase
         {
             if(attributes[i].Name == "Path")
                 _path = attributes[i].Value;
+            else if(attributes[i].Name == "Offset")
+                _offsetPosition = XMLScriptConverter.valueToVector3(attributes[i].Value);
+            else if(attributes[i].Name == "UseFlip")
+                _useFlip = bool.Parse(attributes[i].Value);
         }
     }
 }
