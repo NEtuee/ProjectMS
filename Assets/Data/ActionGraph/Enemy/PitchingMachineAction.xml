@@ -58,7 +58,7 @@
 
     <AC_Shot MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <Animation Preset="Sprites/Enemy/PitchingMachine/1_pitching" XFlip="true" Duration="1">
-            <FrameEvent Type="Danmaku" StartTime="1" Path="Enemy/BaseBall.xml"/>
+            <FrameEvent Type="Danmaku" StartTime="0" Path="Enemy/BaseBall.xml"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>

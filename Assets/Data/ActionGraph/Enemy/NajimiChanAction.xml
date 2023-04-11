@@ -352,7 +352,7 @@
     <AC_PistolShot MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/3_batonPattern/"/>
         <Animation Preset="5_pistolShot" XFlip="true" Duration="1.0">
-            <FrameEvent Type="Danmaku" StartTime="0" Path="Enemy/MagicalFirecrack.xml" Offset="0.4 0.1 0" UseFlip="True"/>
+            <FrameEvent Type="Danmaku" StartTime="0" Path="Enemy/MuzzleFlash.xml" Offset="0.4 0.1 0" UseFlip="True"/>
 
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
@@ -374,7 +374,7 @@
     <AC_FireworkShot MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/3_batonPattern/"/>
         <Animation Preset="6_fireworkShot" XFlip="true" Duration="1.0">
-            <FrameEvent Type="Projectile" StartTime="0" GraphName="MagicalFireworkBullet" DirectionType="AI" SpawnTargetType="Self" Offset="0.4 0.1 0" UseFlip="True"/>
+            <FrameEvent Type="Projectile" StartTime="0" GraphName="FireworkBullet" DirectionType="AI" SpawnTargetType="Self" Offset="0.4 0.1 0" UseFlip="True"/>
             <!-- <FrameEvent Type="Danmaku" StartTime="0" Path="Enemy/MagicalFirework.xml"/> -->
 
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
