@@ -16,13 +16,18 @@ Shader "Custom/SpriteShadowScreenShader"
 
 		_ShadowColor ("ShadowColor", Color) = (0,0,0,1)
 
-		[Space]
+		[Space][Space][Space]
 		_Brightness ("Brightness", Range(0.0, 5.0)) = 1.0
 		_Saturation ("Saturation", Range(0.0, 1.0)) = 1.0
 		_ColorTint ("Color Tint", Color) = (1,1,1,1)
-		_BlurSize ("Blur Size", Range(0.0, 2.0)) = 0.0
 
-		[Space]
+		[Space][Space][Space]
+		_BlurSize ("Blur Size", Range(0.0, 2.0)) = 0.0
+		_MultiSampleDistance ("Multi Sample Distance", Range(0.0, 5.0)) = 0.0
+		_MultiSampleColorTintRight ("Multi Sample Color Tint Right", Color) = (1,1,1,1)
+		_MultiSampleColorTintLeft ("Multi Sample Color Tint Left", Color) = (1,1,1,1)
+
+		[Space][Space][Space]
 		_FogRate ("Fog Rate", Range(0.0, 1.0)) = 0.0
 		_FogStrength ("Fog Strength", Range(0.0, 1.0)) = 1.0
 		_FogColor ("Fog Color", Color) = (1,1,1,1)
@@ -99,8 +104,13 @@ Shader "Custom/SpriteShadowScreenShader"
 
 			float _Brightness;
 			float _Saturation;
-			float _BlurSize;
 			fixed4 _ColorTint;
+
+			float _BlurSize;
+			float _MultiSampleDistance;
+			fixed4 _MultiSampleColorTintRight;
+			fixed4 _MultiSampleColorTintLeft;
+
 
 			float _FogRate;
 			float _FogStrength;
@@ -143,7 +153,7 @@ Shader "Custom/SpriteShadowScreenShader"
 				return backgroundSample;
 			}
 
-			fixed4 allTogether(v2f IN)
+			fixed4 bluredBackgroundSample(float2 texcoord)
 			{
 				fixed4 backgroundSample = fixed4(0, 0, 0, 0);
                 float2 offset = _MainTex_TexelSize.xy * _BlurSize;
@@ -163,10 +173,25 @@ Shader "Custom/SpriteShadowScreenShader"
 				for (int k = 0; k < 9; k++) 
 				{
     			    float2 uvOffset = float2((k - 4) * offset.x, (k - 4) * offset.y);
-    			    backgroundSample += sampleBackground(IN.texcoord + uvOffset) * _preComputeKernel[k];
+    			    backgroundSample += sampleBackground(texcoord + uvOffset) * _preComputeKernel[k];
     			}
 
-				fixed4 characterColor = SampleSpriteTexture (_CharacterTexture, IN.texcoord);
+				return backgroundSample;
+			}
+
+			fixed4 allTogether(float2 texcoord)
+			{
+				float2 offset = _MainTex_TexelSize.xy * _MultiSampleDistance;
+				offset.y = 0.0;
+
+				fixed4 backgroundSample = bluredBackgroundSample(texcoord);
+
+				backgroundSample += (bluredBackgroundSample(texcoord - offset) * _MultiSampleColorTintLeft) * _MultiSampleColorTintLeft.a;
+				backgroundSample += (bluredBackgroundSample(texcoord + offset) * _MultiSampleColorTintRight) * _MultiSampleColorTintRight.a;
+
+				backgroundSample /= 3.0;
+
+				fixed4 characterColor = SampleSpriteTexture (_CharacterTexture, texcoord);
 				if(characterColor.a != 0.0)
 				{
 					characterColor.rgb *= characterColor.a;
@@ -203,7 +228,7 @@ Shader "Custom/SpriteShadowScreenShader"
 
 			fixed4 frag(v2f IN) : SV_Target
 			{
-				fixed4 resultColor = allTogether(IN);
+				fixed4 resultColor = allTogether(IN.texcoord);
 
 				//brigtness
 				resultColor.rgb *= _Brightness;
