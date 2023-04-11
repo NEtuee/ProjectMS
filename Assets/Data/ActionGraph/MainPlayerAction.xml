@@ -223,7 +223,7 @@
         <Animation Preset="Sprites/NewPlayer/Guard/" AngleBaseAnimation="True" XFlip="true" ScalePreset="XSpring" Duration="0.3">
             <FrameEvent Type="Movement" StartFrame="0" Friction="22" MaxVelocity="18" Speed="0" Velocity="-6"/>
 
-            <FrameEvent Type="Danmaku" StartTime="0" Path="Enemy/MagicalFirecrack.xml" Offset="1 1 0" UseFlip="true"/>
+            <!-- <FrameEvent Type="Danmaku" StartTime="0" Path="Enemy/MagicalFirecrack.xml" Offset="1 1 0" UseFlip="true"/>-->
 
             <FrameEvent Type="ZoomEffect" StartFrame="0" Scale="3.1"/>
         </Animation>
