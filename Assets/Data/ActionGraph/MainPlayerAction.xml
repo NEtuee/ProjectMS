@@ -248,7 +248,7 @@
     </Kicked>
 
     <AttackSuccess MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
-        <Animation Preset="Sprites/NewPlayer/attack/" XFlip="true" ScalePreset="YSpring" Duration="0.166">
+        <Animation Preset="Sprites/NewPlayer/attack/" XFlip="true" ScalePreset="YSpring" Duration="0.315">
             <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Effect/Sheath" FramePerSecond="0.5" Offset="0.0 0.0 0.0" Angle="Random_0^360" UseFlip="True" CastShadow="True">
                 <Physics UseGravity="True" Velocity="-2.5 8" Friction="2.0" Torque="Random_25^30" AngularFriction="15.0"/>
             </FrameEvent>
@@ -263,7 +263,7 @@
     </AttackSuccess>
 
     <AttackSuccessFar MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
-        <Animation Preset="Sprites/NewPlayer/attack/" XFlip="true" ScalePreset="YSpring" Duration="0.166">
+        <Animation Preset="Sprites/NewPlayer/attack/" XFlip="true" ScalePreset="YSpring" Duration="0.315">
             <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Effect/Sheath" FramePerSecond="0.5" Offset="0.0 0.0 0.0" Angle="Random_0^360" UseFlip="True" CastShadow="True">
                 <Physics UseGravity="True" Velocity="-2.5 8" Friction="2.0" Torque="Random_25^30" AngularFriction="15.0"/>
             </FrameEvent>
