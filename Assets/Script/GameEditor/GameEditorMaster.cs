@@ -110,6 +110,8 @@ public class GameEditorMaster : MonoBehaviour
 
         _activeEditor = true;
         _editorParent?.SetActive(true);
+
+        Cursor.visible = true;
     }
 
     private void editorOff()
@@ -120,5 +122,7 @@ public class GameEditorMaster : MonoBehaviour
 
         _activeEditor = false;
         _editorParent?.SetActive(false);
+
+        Cursor.visible = false;
     }
 }
