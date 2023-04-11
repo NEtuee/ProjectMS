@@ -238,7 +238,7 @@
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/2_pitchingPattern/"/>
         <Animation Preset="2_pitcherReady" XFlip="true" Duration="0.85">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/NajimiPitchingBeam_TimeLine" Offset="0.4 0.1 0" Attach="true" AngleType="Direction" LifeTime="1.05" FollowDirection="True"/>
+            <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/NajimiPitchingBeam_TimeLine" Attach="true" AngleType="Direction" LifeTime="1.05" FollowDirection="True"/>
 
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
@@ -352,7 +352,7 @@
     <AC_PistolShot MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/3_batonPattern/"/>
         <Animation Preset="5_pistolShot" XFlip="true" Duration="1.0">
-            <FrameEvent Type="Danmaku" StartTime="0" Path="Enemy/MagicalFirecrack.xml" Offset="0.4 0.1 0"/>
+            <FrameEvent Type="Danmaku" StartTime="0" Path="Enemy/MagicalFirecrack.xml" Offset="0.4 0.1 0" UseFlip="True"/>
 
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
@@ -374,7 +374,7 @@
     <AC_FireworkShot MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/3_batonPattern/"/>
         <Animation Preset="6_fireworkShot" XFlip="true" Duration="1.0">
-            <FrameEvent Type="Projectile" StartTime="0" GraphName="MagicalFireworkBullet" DirectionType="AI" SpawnTargetType="Self" Offset="0.4 0.1 0"/>
+            <FrameEvent Type="Projectile" StartTime="0" GraphName="MagicalFireworkBullet" DirectionType="AI" SpawnTargetType="Self" Offset="0.4 0.1 0" UseFlip="True"/>
             <!-- <FrameEvent Type="Danmaku" StartTime="0" Path="Enemy/MagicalFirework.xml"/> -->
 
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
@@ -388,7 +388,7 @@
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/3_batonPattern/4_pistolReady/"/>
         <Animation Preset="3_beam" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/NajimiPitchingBeam_TimeLine" Offset="0.4 0.1 0" Attach="true" AngleType="Direction" LifeTime="1.2" FollowDirection="True"/>
+            <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/NajimiPitchingBeam_TimeLine" Attach="true" AngleType="Direction" LifeTime="1.2" FollowDirection="True"/>
 
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
