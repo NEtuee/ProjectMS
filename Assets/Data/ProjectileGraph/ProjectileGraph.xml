@@ -106,8 +106,9 @@
     </tutorial_spear>
 
     <MagicalBullet DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">
-        <Animation Path="Resources/Sprites/Projectile/MagicalBullet/" StartFrame="0" EndFrame="1" XFlip="true">
+        <Animation Preset="Sprites/Projectile/MagicalBullet" XFlip="true" Duration="5.0">        
         </Animation>
+
         <CollisionInfo Radius="0.1" Angle="0"/>
         <DefaultShotInfo Velocity="7" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="5"/>
         <Event>
@@ -137,7 +138,7 @@
 
     <!-- 폭죽탄 -->
     <MagicalFireworkBullet DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">
-        <Animation Path="Resources/Sprites/Projectile/MagicalFirework/" StartFrame="0" EndFrame="1" XFlip="true">
+        <Animation Preset="Sprites/Projectile/MagicalFirework" XFlip="true" Duration="1.0">        
         </Animation>
 
         <CollisionInfo Radius="1.5" Angle="360"/>
@@ -160,8 +161,9 @@
 
     <!-- 폭죽 파티클 탄막 -->
     <MagicalFirework DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">
-        <Animation Path="Resources/Sprites/Projectile/MagicalFirework/" StartFrame="0" EndFrame="1" XFlip="true">
+        <Animation Preset="Sprites/Projectile/MagicalFirework" XFlip="true" Duration="5.0">        
         </Animation>
+
         <CollisionInfo Radius="0.05" Angle="0"/>
         <DefaultShotInfo Velocity="3" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="1.2"/>
         <Event>
@@ -192,8 +194,9 @@
 
     <!-- 신호총 탄환 (화염에 가까움.) -->
     <MagicalFirecrack DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">
-        <Animation Path="Resources/Sprites/Projectile/MagicalFirecrack/" StartFrame="0" EndFrame="1" XFlip="true">
+        <Animation Preset="Sprites/Projectile/MagicalFirecrack" XFlip="true" Duration="5.0">        
         </Animation>
+
         <CollisionInfo Radius="0.1" Angle="0"/>
         <DefaultShotInfo Velocity="7" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="5"/>
         <Event>
@@ -222,8 +225,9 @@
     </MagicalFirecrack>
 
     <MagicalMissile DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">
-        <Animation Path="Resources/Sprites/Projectile/MagicalBullet/" StartFrame="0" EndFrame="1" XFlip="true">
+        <Animation Preset="Sprites/Projectile/MagicalBullet" XFlip="true" Duration="5.0">        
         </Animation>
+
         <CollisionInfo Radius="0.1" Angle="0"/>
         <DefaultShotInfo Velocity="7" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="5"/>
         
@@ -278,8 +282,9 @@
     </PitchingMachine>
 
     <BaseBall DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">
-        <Animation Path="Resources/Sprites/Projectile/BaseBall/" StartFrame="0" EndFrame="1" XFlip="true">
+        <Animation Preset="Sprites/Projectile/BaseBall" XFlip="true" Duration="5.0">        
         </Animation>
+
         <CollisionInfo Radius="0.1" Angle="0"/>
         <DefaultShotInfo Velocity="7" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="5"/>
         <Event>
