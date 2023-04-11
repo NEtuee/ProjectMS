@@ -106,8 +106,9 @@
     </tutorial_spear>
 
     <MagicalBullet DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">
-        <Animation Path="Resources/Sprites/Projectile/MagicalBullet/" StartFrame="0" EndFrame="1" XFlip="true">
+        <Animation Preset="Sprites/Projectile/MagicalBullet" XFlip="true" Duration="5.0">        
         </Animation>
+
         <CollisionInfo Radius="0.1" Angle="0"/>
         <DefaultShotInfo Velocity="7" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="5"/>
         <Event>
@@ -136,15 +137,16 @@
     </MagicalBullet>
 
     <!-- 폭죽탄 -->
-    <MagicalFireworkBullet DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">
-        <Animation Path="Resources/Sprites/Projectile/MagicalFirework/" StartFrame="0" EndFrame="1" XFlip="true">
+    <FireworkBullet DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">
+        <Animation Preset="Sprites/Projectile/FireworkBullet" XFlip="true" Duration="1.0">        
         </Animation>
 
         <CollisionInfo Radius="1.5" Angle="360"/>
         <DefaultShotInfo Velocity="12" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="1.0"/>
         <Event>
             <OnHit>
-                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="FireworkBullet" Offset="0 0 0" SearchIdentifier="Enemy"/>
+                <!-- <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="FireworkBullet" Offset="0 0 0" SearchIdentifier="Enemy"/> -->
+                <FrameEvent Type="Danmaku" Path="Enemy/Firecracker.xml"/>
                 <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0"/>
             </OnHit>
     
@@ -152,24 +154,25 @@
             </OnHitEnd>
     
             <OnEnd>
-                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="FireworkBullet" Offset="0 0 0" SearchIdentifier="Enemy"/>
+                <!-- <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="FireworkBullet" Offset="0 0 0" SearchIdentifier="Enemy"/> -->
+                <FrameEvent Type="Danmaku" Path="Enemy/Firecracker.xml"/>
                 <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc" FramePerSecond="18.0" Offset="0.0 0.0 0.0"/>
             </OnEnd>
         </Event>
-    </MagicalFireworkBullet>
+    </FireworkBullet>
 
     <!-- 폭죽 파티클 탄막 -->
-    <MagicalFirework DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">
-        <Animation Path="Resources/Sprites/Projectile/MagicalFirework/" StartFrame="0" EndFrame="1" XFlip="true">
+    <Firecracker DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">
+        <Animation Preset="Sprites/Projectile/Firecracker" XFlip="true" Duration="1.2">        
         </Animation>
+
         <CollisionInfo Radius="0.05" Angle="0"/>
         <DefaultShotInfo Velocity="3" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="1.2"/>
         <Event>
             <OnHit>
                 <FrameEvent Type="Attack" StartFrame="0" AttackPreset="MagicalBullet">
                     <OnHit>
-                        <FrameEvent Type="Test" Log="MagicalFirework OnHit"/>
-                        <!-- TODO: 폭죽 데미지 버프 설정 -->
+                        <FrameEvent Type="Test" Log="Firecracker OnHit"/>
                         <FrameEvent Type="ApplyBuffTarget" ApplyBuff="TestProjectileAttack"/>
                         <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
                     </OnHit>
@@ -188,19 +191,20 @@
                 <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc" FramePerSecond="18.0" Offset="0.0 0.0 0.0"/>
             </OnEnd>
         </Event>
-    </MagicalFirework>
+    </Firecracker>
 
-    <!-- 신호총 탄환 (화염에 가까움.) -->
-    <MagicalFirecrack DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">
-        <Animation Path="Resources/Sprites/Projectile/MagicalFirecrack/" StartFrame="0" EndFrame="1" XFlip="true">
+    <!-- 신호총 화염탄 -->
+    <MuzzleFlash DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">
+        <Animation Preset="Sprites/Projectile/MuzzleFlash" XFlip="true" Duration="5.0">        
         </Animation>
+
         <CollisionInfo Radius="0.1" Angle="0"/>
         <DefaultShotInfo Velocity="7" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="5"/>
         <Event>
             <OnHit>
                 <FrameEvent Type="Attack" StartFrame="0" AttackPreset="MagicalBullet">
                     <OnHit>
-                        <FrameEvent Type="Test" Log="MagicalFirecrack OnHit"/>
+                        <FrameEvent Type="Test" Log="MuzzleFlash OnHit"/>
                         <FrameEvent Type="ApplyBuffTarget" ApplyBuff="TestProjectileAttack"/>
                         <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
                     </OnHit>
@@ -219,11 +223,12 @@
                 <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc" FramePerSecond="18.0" Offset="0.0 0.0 0.0"/>
             </OnEnd>
         </Event>
-    </MagicalFirecrack>
+    </MuzzleFlash>
 
     <MagicalMissile DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">
-        <Animation Path="Resources/Sprites/Projectile/MagicalBullet/" StartFrame="0" EndFrame="1" XFlip="true">
+        <Animation Preset="Sprites/Projectile/MagicalBullet" XFlip="true" Duration="5.0">        
         </Animation>
+
         <CollisionInfo Radius="0.1" Angle="0"/>
         <DefaultShotInfo Velocity="7" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="5"/>
         
@@ -278,8 +283,9 @@
     </PitchingMachine>
 
     <BaseBall DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">
-        <Animation Path="Resources/Sprites/Projectile/BaseBall/" StartFrame="0" EndFrame="1" XFlip="true">
+        <Animation Preset="Sprites/Projectile/BaseBall" XFlip="true" Duration="5.0">        
         </Animation>
+
         <CollisionInfo Radius="0.1" Angle="0"/>
         <DefaultShotInfo Velocity="7" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="5"/>
         <Event>

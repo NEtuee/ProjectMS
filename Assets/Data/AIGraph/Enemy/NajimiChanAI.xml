@@ -45,7 +45,6 @@
     <GlobalVariable Name="gv_najimiSystemChaseRange" Value="9.75"/>     <!-- 카메라 범위 값. 카메라 바깥으로 사라지지 않게 추격 -->
     <GlobalVariable Name="gv_StdDistance" Value="2.0"/>     <!-- 원거리 공격 기준 값 -->
     <GlobalVariable Name="gv_StdPassiveAttitude" Value="3.5"/>     <!-- 수동적 플레이 기준 값 -->
-    
 
     <!-- Dodge Pattern -->
     <GlobalVariable Name="gv_najimiHitCountFast" Value="1.0"/>      <!-- 나지미 피격 허용 횟수 (빠름)-->
@@ -55,9 +54,12 @@
     <!-- Rush Pattern -->
     <GlobalVariable Name="gv_najimiRushRange" Value="2.0"/>             <!-- 나지미 돌진 사거리 -->
     <GlobalVariable Name="gv_najimiRushTrasitionTime" Value="0.8"/>     <!-- 나지미 돌진 최소 텀 -->
+    
+    <!-- Pitching Machine -->
+    <GlobalVariable Name="gv_najimiPitchingMachineLimit" Value="2.0"/>
 
-    <GlobalVariable Name="gv_najimiStdHp_2Phase" Value="95.0"/> <!-- 나지미 2페이즈 전환 기준 체력 --> <!-- 34 -->
-    <GlobalVariable Name="gv_najimiStdHp_3Phase" Value="90.0"/> <!-- 나지미 3페이즈 전환 기준 체력 --> <!-- 17 -->
+    <GlobalVariable Name="gv_najimiStdHp_2Phase" Value="55.0"/> <!-- 나지미 2페이즈 전환 기준 체력 --> <!-- 34 -->
+    <GlobalVariable Name="gv_najimiStdHp_3Phase" Value="30.0"/> <!-- 나지미 3페이즈 전환 기준 체력 --> <!-- 17 -->
 
     <GlobalVariable Name="gv_najimiStdBattle" Value="30.0"/>     <!-- 나지미 그로기 기준 배틀 포인트 -->
     
@@ -88,28 +90,28 @@
 
         <!-- 근거리-->
         <Branch Weight="RandBoolean^True" Condition="(TargetDistance < gv_StdDistance) && (getStat_Phase <= 2.0)" Execute="DistRush"/>
-        <Branch Weight="RandBoolean^False" Condition="(TargetDistance < gv_StdDistance) && (getStat_Phase <= 2.0) && (customValue_CurrentPitchingMachineCount <= 4.0)" Execute="SpawnPitchingMachine"/>
+        <Branch Weight="RandBoolean^False" Condition="(TargetDistance < gv_StdDistance) && (getStat_Phase <= 2.0) && (customValue_CurrentPitchingMachineCount <= gv_najimiPitchingMachineLimit)" Execute="SpawnPitchingMachine"/>
         <Branch Weight="RandBoolean^False" Condition="(TargetDistance < gv_StdDistance) && (getStat_Phase <= 2.0)" Execute="DistRush"/>
 
         <Branch Weight="Najimi3PhaseNearAtk^Rush" Condition="(TargetDistance < gv_StdDistance) && (getStat_Phase == 3.0)" Execute="DistRush"/>
-        <Branch Weight="Najimi3PhaseNearAtk^SpawnPitchingMachine" Condition="(TargetDistance < gv_StdDistance) && (getStat_Phase == 3.0) && (customValue_CurrentPitchingMachineCount <= 4.0)" Execute="SpawnPitchingMachine"/>
+        <Branch Weight="Najimi3PhaseNearAtk^SpawnPitchingMachine" Condition="(TargetDistance < gv_StdDistance) && (getStat_Phase == 3.0) && (customValue_CurrentPitchingMachineCount <= gv_najimiPitchingMachineLimit)" Execute="SpawnPitchingMachine"/>
         <Branch Weight="Najimi3PhaseNearAtk^SpawnPitchingMachine" Condition="(TargetDistance < gv_StdDistance) && (getStat_Phase == 3.0)" Execute="DistRush"/>
         <Branch Weight="Najimi3PhaseNearAtk^Pistol" Condition="(TargetDistance < gv_StdDistance) && (getStat_Phase == 3.0)" Execute="Pistol"/>
         <Branch Weight="Najimi3PhaseNearAtk^BatonSlash" Condition="(TargetDistance < gv_StdDistance) && (getStat_Phase == 3.0)" Execute="Baton"/>
 
         <!-- 원거리 -->
         <!-- 수동적 플레이 분기 -->
-        <Branch Weight="RandBoolean^True" Condition="(TargetDistance >= gv_StdPassiveAttitude) && (customValue_CurrentPitchingMachineCount <= 4.0)" Execute="SpawnPitchingMachine"/>
+        <Branch Weight="RandBoolean^True" Condition="(TargetDistance >= gv_StdPassiveAttitude) && (customValue_CurrentPitchingMachineCount <= gv_najimiPitchingMachineLimit)" Execute="SpawnPitchingMachine"/>
         <Branch Weight="RandBoolean^True" Condition="(TargetDistance >= gv_StdPassiveAttitude)" Execute="DashAttack"/>
         <Branch Weight="RandBoolean^False" Condition="(TargetDistance >= gv_StdPassiveAttitude)" Execute="DashAttack"/>
         
         <!-- 통상 분기 -->
         <Branch Weight="Najimi2PhaseDistAtk^ChaseRush" Condition="(TargetDistance >= gv_StdDistance) && (getStat_Phase == 2.0)" Execute="Chase"/>
-        <Branch Weight="Najimi2PhaseDistAtk^PitchingMachine" Condition="(TargetDistance >= gv_StdDistance) && (getStat_Phase == 2.0) && (customValue_CurrentPitchingMachineCount <= 4.0)" Execute="SpawnPitchingMachine"/>
+        <Branch Weight="Najimi2PhaseDistAtk^PitchingMachine" Condition="(TargetDistance >= gv_StdDistance) && (getStat_Phase == 2.0) && (customValue_CurrentPitchingMachineCount <= gv_najimiPitchingMachineLimit)" Execute="SpawnPitchingMachine"/>
         <Branch Weight="Najimi2PhaseDistAtk^PitchingMachine" Condition="(TargetDistance >= gv_StdDistance) && (getStat_Phase == 2.0)" Execute="Pitching"/>
         <Branch Weight="Najimi2PhaseDistAtk^Pitching" Condition="(TargetDistance >= gv_StdDistance) && (getStat_Phase == 2.0)" Execute="Pitching"/>
 
-        <Branch Weight="Najimi3PhaseDistAtk^PitchingMachine" Condition="(TargetDistance >= gv_StdDistance) && (getStat_Phase == 3.0) && (customValue_CurrentPitchingMachineCount <= 4.0)" Execute="SpawnPitchingMachine"/>
+        <Branch Weight="Najimi3PhaseDistAtk^PitchingMachine" Condition="(TargetDistance >= gv_StdDistance) && (getStat_Phase == 3.0) && (customValue_CurrentPitchingMachineCount <= gv_najimiPitchingMachineLimit)" Execute="SpawnPitchingMachine"/>
         <Branch Weight="Najimi3PhaseDistAtk^PitchingMachine" Condition="(TargetDistance >= gv_StdDistance) && (getStat_Phase == 3.0)" Execute="Baton"/>
         <Branch Weight="Najimi3PhaseDistAtk^BatonSlash" Condition="(TargetDistance >= gv_StdDistance) && (getStat_Phase == 3.0)" Execute="Baton"/>
         <Branch Weight="Najimi3PhaseDistAtk^Firework" Condition="(TargetDistance >= gv_StdDistance) && (getStat_Phase == 3.0)" Execute="Firework"/> 
