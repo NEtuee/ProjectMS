@@ -83,8 +83,9 @@ Shader "Custom/SpriteProjectileTrailShader"
 			{
 				fixed4 c = SampleSpriteTexture(IN.texcoord) * IN.color;
 				float alphaCut = 1.0 - step(_Gague * 0.5,distance(IN.texcoord, float2(IN.texcoord.x, 0.5)));
- 
-				c.a *= alphaCut;
+				
+				c.a = alphaCut * c.a;
+				c.rgb *= c.a;
 				return c;
 			}
 		ENDCG

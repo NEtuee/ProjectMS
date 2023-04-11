@@ -91,8 +91,6 @@ public class CrossHairUI : MonoBehaviour
 
         transform.position = worldMousePosition;
         transform.rotation = rotation;
-
-        Cursor.visible = false;
         
         float percentage = _targetEntity.getStatusPercentage(_gagueTargetStatusName) * (float)_gagueStackCount;
         for(int index = 0; index < _gagueStackCount; ++index)

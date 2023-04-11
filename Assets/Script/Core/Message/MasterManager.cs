@@ -85,6 +85,8 @@ public class MasterManager : MessageHub<ManagerBase>
     public void Start()
     {
         ReceiveMessageProcessing();
+
+        Cursor.visible = false;
     }
     public void Update()
     {
