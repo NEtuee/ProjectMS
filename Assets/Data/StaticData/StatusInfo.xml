@@ -1,9 +1,9 @@
 
 <StatusInfo>
     <CommonPlayerStatus>
-        <Stat Type="HP" Max="10" Min="0" Init="10"/>
+        <Stat Type="HP" Max="5" Min="0" Init="5"/>
         <Stat Type="Stamina" Max="1000" Min="0" Init="1000"/>
-        <Stat Type="Blood" Max="10" Min="0" Init="0"/>
+        <Stat Type="Blood" Max="5" Min="0" Init="0"/>
         <Stat Type="Battle" Max="100" Min="0" Init="0"/>
         
         <Stat Type="Custom" Name="DashPoint" Max="5" Min="0" Init="5"/>
@@ -11,9 +11,9 @@
         <Stat Type="Custom" Name="IsStun" Max="1" Min="0" Init="0"/>
         <Stat Type="Custom" Name="IsCatched" Max="1" Min="0" Init="0"/>
 
-        <DeclareGraphicInterface Target="HP" Color="0.5 0 0 1" HorizontalGap="0.1"/>
+        <DeclareGraphicInterface Target="Blood" Color="1 1 1 1" HorizontalGap="0.1"/>
         <DeclareGraphicInterface Target="DashPoint" Color="0.274 0.509 0.705 1" HorizontalGap="0.1"/>
-        <DeclareGraphicInterface Target="Blood" Color="1 0 0 1" HorizontalGap="0.1"/>
+        <DeclareGraphicInterface Target="HP" Color="0.5 0 0 1" HorizontalGap="0.1"/>
     </CommonPlayerStatus>
 
     <CommonEnemyStatus>

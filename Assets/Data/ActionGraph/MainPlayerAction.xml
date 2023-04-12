@@ -1,6 +1,6 @@
 
 
-<ActionGraph Name="Test" DefaultAction="Idle" DefaultFramePerSecond="4" DefaultBuff="4 5 8 DashPointRegenDelayed BloodAlertEffect">
+<ActionGraph Name="Test" DefaultAction="Idle" DefaultFramePerSecond="4" DefaultBuff="BattleDecrementKeep DashPointRegenDelayed BloodAlertEffect DecreaseBloodPointDelayed BloodPointToHP">
 
     <GlobalVariable Name="gv_DashVelocity" Value="10"/>
     <GlobalVariable Name="gv_DashFriction" Value="24"/>
@@ -119,9 +119,10 @@
         <Animation Preset="Sprites/NewPlayer/DashRoll/" XFlip="true" ScalePreset="YSpring" Duration="0.25">
             <FrameEvent Type="Attack" StartTime="0" AttackPreset="PlayerAttackTest" Condition="(getStat_DashPoint >= 1.0)">
                 <OnHit>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="TargetBattleIncrement" Condition="getTargetFrameTag_Groggy == false"/>
-                    <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
+                    <FrameEvent Type="ApplyBuff" ApplyBuff="BattleIncrement"/>
+                    <FrameEvent Type="ApplyBuff" ApplyBuff="IncreaseBloodPoint"/>
 
 
                     <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Slash_Timeline" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
@@ -175,7 +176,7 @@
         <Animation Preset="Sprites/NewPlayer/DashRoll/" XFlip="true" Duration="0.25">
             <FrameEvent Type="Attack" StartTime="0" AttackType="GuardBreak" AttackPreset="Akane_Kick" IgnoreDefenceType="Guard">
                 <OnGuardBreak>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="21"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="GuardPointDecrease"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="TargetBattleIncrement" Condition="getTargetFrameTag_Groggy == false"/>
 
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc" FramePerSecond="18.0" Offset="0.0 0.0 0.0" ToTarget="true"/>
@@ -289,6 +290,7 @@
         <Animation Preset="Sprites/NewPlayer/Hit/" XFlip="true" Duration="0.5">
             <MultiSelectAnimation Path="Sprites/NewPlayer/empty" Condition="IsCatchTarget"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_IdleFriction" MaxVelocity="0" Velocity="0" Speed="0"/>
+            <FrameEvent Type="ApplyBuff" ApplyBuff="ClearBloodPoint"/>
         </Animation>
 
         <!-- <Branch Condition="getStat_IsStun == 1.0" Execute="Stun"/> -->
@@ -311,6 +313,7 @@
             <FrameEvent Type="Test" StartTime="0" Log="Akane Catched"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Velocity="0" Speed="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="StunClear"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="ClearBloodPoint"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="Recatchable" Condition="getStat_IsCatched == 1.0"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="Catched"/>
             <FrameEvent Type="ReleaseCatch" StartTime="0" Push="4 0 0" Condition="getStat_IsCatched == 0.0"/>
@@ -336,7 +339,8 @@
     <Stun MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" ApplyBuff="StunEscape">
         <Animation Preset="Sprites/NewPlayer/stun" XFlip="true" Duration="3.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="3" Speed="0"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="Stun"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="Stun"/
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="ClearBloodPoint"/>>
             <FrameEvent Type="ApplyBuff" StartTime="3.0" ApplyBuff="StunClear"/>
         </Animation>
 

@@ -482,5 +482,37 @@
         TargetStatusName="Blood"
     />
 
+    <DecreaseBloodPointDelayed
+        Key="48"
+        StatusName="Blood"
+
+        UpdateType="DelayedContinuous"
+        ApplyType="DirectDelta"
+
+        Factor="-1.5"
+
+        Time="1.0"
+    />
+
+    <IncreaseBloodPoint
+        Key="49"
+        StatusName="Blood"
+
+        UpdateType="OneShot"
+        ApplyType="Direct"
+
+        Factor="1.0"
+    />
+
+    <ClearBloodPoint
+        Key="50"
+        StatusName="Blood"
+
+        UpdateType="OneShot"
+        ApplyType="DirectSet"
+
+        Factor="0.0"
+    />
+
 
 </BuffInfo>
