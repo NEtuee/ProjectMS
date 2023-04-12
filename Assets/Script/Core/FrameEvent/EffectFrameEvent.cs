@@ -2,28 +2,30 @@ using System.Xml;
 using System.Collections.Generic;
 using UnityEngine;
 
-enum AngleDirectionType
+public enum AngleDirectionType
 {
-    Normal,
+    identity,
     Direction,
     AttackPoint,
 }
 
+[System.Serializable]
 public class ActionFrameEvent_ParticleEffect : ActionFrameEventBase
 {
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_ParticleEffect;}
 
     public string               _effectPath = "";
-    private bool                _toTarget = false;
-    private bool                _attach = false;
-    private bool                _followDirection = false;
-    private float               _lifeTime = 0f;
+    public bool                _toTarget = false;
+    public bool                _attach = false;
+    public bool                _followDirection = false;
+    public bool                _castShadow = false;
+    public float               _lifeTime = 0f;
 
-    private Vector3             _spawnOffset = Vector3.zero;
-    private Quaternion          _effectRotation = Quaternion.identity;
-    private EffectUpdateType    _effectUpdateType = EffectUpdateType.ScaledDeltaTime;
+    public Vector3             _spawnOffset = Vector3.zero;
+    public Quaternion          _effectRotation = Quaternion.identity;
+    public EffectUpdateType    _effectUpdateType = EffectUpdateType.ScaledDeltaTime;
 
-    private AngleDirectionType  _angleDirectionType = AngleDirectionType.Normal;
+    public AngleDirectionType  _angleDirectionType = AngleDirectionType.identity;
 
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
@@ -43,6 +45,7 @@ public class ActionFrameEvent_ParticleEffect : ActionFrameEventBase
         requestData._lifeTime = _lifeTime;
         requestData._executeEntity = executeEntity;
         requestData._followDirection = _followDirection;
+        requestData._castShadow = _castShadow;
 
         if(_attach)
         {
@@ -60,7 +63,7 @@ public class ActionFrameEvent_ParticleEffect : ActionFrameEventBase
     {
         switch(_angleDirectionType)
         {
-            case AngleDirectionType.Normal:
+            case AngleDirectionType.identity:
                 return Quaternion.identity;
             case AngleDirectionType.Direction:
                 return Quaternion.Euler(0f,0f,MathEx.directionToAngle(executeEntity.getDirection()));
@@ -125,6 +128,10 @@ public class ActionFrameEvent_ParticleEffect : ActionFrameEventBase
             {
                 _followDirection = bool.Parse(attributes[i].Value);
             }
+            else if(attributes[i].Name == "CastShadow")
+            {
+                _castShadow = bool.Parse(attributes[i].Value);
+            }
         }
 
         if(_effectPath == "")
@@ -132,21 +139,22 @@ public class ActionFrameEvent_ParticleEffect : ActionFrameEventBase
     }
 }
 
+[System.Serializable]
 public class ActionFrameEvent_TimelineEffect : ActionFrameEventBase
 {
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_TimelineEffect;}
 
     public string               _effectPath = "";
-    private bool                _toTarget = false;
-    private bool                _attach = false;
-    private bool                _followDirection = false;
-    private float               _lifeTime = 0f;
+    public bool                _toTarget = false;
+    public bool                _attach = false;
+    public bool                _followDirection = false;
+    public bool                _castShadow = false;
+    public float               _lifeTime = 0f;
 
-    private Vector3             _spawnOffset = Vector3.zero;
-    private Quaternion          _effectRotation = Quaternion.identity;
-    private EffectUpdateType    _effectUpdateType = EffectUpdateType.ScaledDeltaTime;
+    public Vector3             _spawnOffset = Vector3.zero;
+    public EffectUpdateType    _effectUpdateType = EffectUpdateType.ScaledDeltaTime;
 
-    private AngleDirectionType  _angleDirectionType = AngleDirectionType.Normal;
+    public AngleDirectionType  _angleDirectionType = AngleDirectionType.identity;
 
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
@@ -166,6 +174,7 @@ public class ActionFrameEvent_TimelineEffect : ActionFrameEventBase
         requestData._lifeTime = _lifeTime;
         requestData._executeEntity = executeEntity;
         requestData._followDirection = _followDirection;
+        requestData._castShadow = _castShadow;
 
         if(_attach)
         {
@@ -183,7 +192,7 @@ public class ActionFrameEvent_TimelineEffect : ActionFrameEventBase
     {
         switch(_angleDirectionType)
         {
-            case AngleDirectionType.Normal:
+            case AngleDirectionType.identity:
                 return Quaternion.identity;
             case AngleDirectionType.Direction:
                 return Quaternion.Euler(0f,0f,MathEx.directionToAngle(executeEntity.getDirection()));
@@ -248,6 +257,10 @@ public class ActionFrameEvent_TimelineEffect : ActionFrameEventBase
             {
                 _followDirection = bool.Parse(attributes[i].Value);
             }
+            else if(attributes[i].Name == "CastShadow")
+            {
+                _castShadow = bool.Parse(attributes[i].Value);
+            }
         }
 
         if(_effectPath == "")
@@ -255,31 +268,32 @@ public class ActionFrameEvent_TimelineEffect : ActionFrameEventBase
     }
 }
 
+[System.Serializable]
 public class ActionFrameEvent_Effect : ActionFrameEventBase
 {
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_Effect;}
 
     public string _effectPath = "";
 
-    private float _framePerSecond = 1f;
+    public float _framePerSecond = 1f;
 
-    private float _spawnAngle = 0f;
+    public float _spawnAngle = 0f;
 
-    private bool _random = false;
-    private Vector2 _randomValue = Vector2.zero;
+    public bool _random = false;
+    public Vector2 _randomValue = Vector2.zero;
 
-    private bool _followEntity = false;
-    private bool _toTarget = false;
+    public bool _followEntity = false;
+    public bool _toTarget = false;
 
-    private bool _attach = false;
+    public bool _attach = false;
 
-    private Vector3 _spawnOffset = Vector3.zero;
+    public Vector3 _spawnOffset = Vector3.zero;
 
-    private bool _usePhysics = false;
-    private bool _useFlip = false;
-    private bool _castShadow = false;
-    private PhysicsBodyDescription _physicsBodyDesc = PhysicsBodyDescription._empty;
-    private EffectUpdateType _effectUpdateType = EffectUpdateType.ScaledDeltaTime;
+    public bool _usePhysics = false;
+    public bool _useFlip = false;
+    public bool _castShadow = false;
+    public PhysicsBodyDescription _physicsBodyDesc = PhysicsBodyDescription._empty;
+    public EffectUpdateType _effectUpdateType = EffectUpdateType.ScaledDeltaTime;
 
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {

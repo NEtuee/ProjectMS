@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[System.Serializable]
 public struct PhysicsBodyDescription
 {
     public Vector3 _velocity;

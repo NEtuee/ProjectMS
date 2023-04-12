@@ -517,6 +517,8 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
                     playData._scalePresetData = scalePreset.getPresetData(animationCustomPreset._scalePresetName);
                 }
                 
+                playData._frameEventData = readFrameEventFromAnimationPreset(animationCustomPreset);
+                playData._frameEventDataCount = playData._frameEventData == null ? 0 : playData._frameEventData.Length;
             }
             else if(targetName == "Duration")
             {
@@ -531,7 +533,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
 
         if((playData._startFrame > playData._endFrame) && playData._endFrame != -1)
         {
-            DebugUtil.assert(false, "start frame cannot be greater than the end frame: [Path: {0}] [Line: {1}] [FileName: {2}]",playData._path, XMLScriptConverter.getLineFromXMLNode(node), filePath);
+            DebugUtil.assert(false, "시작 프레임은 끝 프레임보다 커질 수 없습니다.: [Path: {0}] [Line: {1}] [FileName: {2}]",playData._path, XMLScriptConverter.getLineFromXMLNode(node), filePath);
             return null;
         }
 
@@ -550,9 +552,25 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
                         continue;
                     
                     if(frameEvent._isTimeBase)
+                    {
                         timeEventList.Add(frameEvent);
+                    }
                     else
+                    {
+                        if(playData._customPresetData != null)
+                        {
+                            DebugUtil.assert(false, "프리셋 애니메이션에 Frame 단위의 이벤트를 추가하려 합니다. 실수인가요? [Line: {0}] [FileName: {1}]", XMLScriptConverter.getLineFromXMLNode(nodeList[i]), filePath);
+                            return null;
+                        }
+
+                        if(playData._frameEventData != null)
+                        {
+                            DebugUtil.assert(false, "어딘가에서 이상한 FrameEvent 데이터가 들어왔습니다. 통보 요망 [Line: {0}] [FileName: {1}]", XMLScriptConverter.getLineFromXMLNode(nodeList[i]), filePath);
+                            return null;
+                        }
+
                         frameEventList.Add(frameEvent);
+                    }
                 }
                 else if(nodeList[i].Name == "MultiSelectAnimation")
                 {
@@ -564,21 +582,27 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
                 }
                 else
                 {
-                    DebugUtil.assert(false,"invalid animation child: {0} [Line: {1}] [FileName: {2}]",nodeList[i].Name, XMLScriptConverter.getLineFromXMLNode(node), filePath);
+                    DebugUtil.assert(false,"애니메이션 차일드로 들어올 수 없는 타입입니다. 오타인가요? : {0} [Line: {1}] [FileName: {2}]",nodeList[i].Name, XMLScriptConverter.getLineFromXMLNode(node), filePath);
                     return null;
                 }
             }
 
-            frameEventList.Sort((x,y)=>{
-                return x._startFrame.CompareTo(y._startFrame);
-            });
+            
 
             timeEventList.Sort((x,y)=>{
                 return x._startFrame.CompareTo(y._startFrame);
             });
 
-            playData._frameEventDataCount = frameEventList.Count;
-            playData._frameEventData = frameEventList.ToArray();
+            if(playData._frameEventData == null)
+            {
+                frameEventList.Sort((x,y)=>{
+                    return x._startFrame.CompareTo(y._startFrame);
+                });
+
+                playData._frameEventDataCount = frameEventList.Count;
+                playData._frameEventData = frameEventList.ToArray();
+            }
+            
             playData._timeEventDataCount = timeEventList.Count;
             playData._timeEventData = timeEventList.ToArray();
 
@@ -587,6 +611,77 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         }
 
         return playData;
+    }
+
+    private static ActionFrameEventBase[] readFrameEventFromAnimationPreset(AnimationCustomPreset preset)
+    {
+        List<ActionFrameEventBase> frameEventList = new List<ActionFrameEventBase>();
+
+        if(preset._spriteEffects != null)
+        {
+            foreach(var item in preset._spriteEffects)
+            {
+                ActionFrameEvent_Effect effectFrameEvent = new ActionFrameEvent_Effect();
+                effectFrameEvent._startFrame = item._startFrame;
+                effectFrameEvent._attach = item._attach;
+                effectFrameEvent._castShadow = item._castShadow;
+                effectFrameEvent._effectPath = item._effectPresetPath;
+                effectFrameEvent._effectUpdateType = item._effectUpdateType;
+                effectFrameEvent._followEntity = item._followEntityAngle;
+                effectFrameEvent._physicsBodyDesc = item._physicsBodyDesc;
+                effectFrameEvent._randomValue = item._randomAngle;
+                effectFrameEvent._random = item._randomAngleEnable;
+                effectFrameEvent._spawnAngle = item._spawnAngle;
+                effectFrameEvent._spawnOffset = item._spawnOffset;
+                effectFrameEvent._toTarget = item._toTarget;
+                effectFrameEvent._useFlip = item._useFlipForPhysics;
+                effectFrameEvent._usePhysics = item._usePhysics;
+
+                frameEventList.Add(effectFrameEvent);
+            }
+        }
+        
+        if(preset._particleEffects != null)
+        {
+            foreach(var item in preset._particleEffects)
+            {
+                ActionFrameEvent_ParticleEffect particleFrameEvent = new ActionFrameEvent_ParticleEffect();
+                particleFrameEvent._startFrame = item._startFrame;
+                particleFrameEvent._angleDirectionType = item._angleDirectionType;
+                particleFrameEvent._attach = item._attach;
+                particleFrameEvent._effectPath = item._effectPrefabPath;
+                particleFrameEvent._spawnOffset = item._spawnOffset;
+                particleFrameEvent._toTarget = item._toTarget;
+                particleFrameEvent._followDirection = item._followDirection;
+
+                frameEventList.Add(particleFrameEvent);
+            }
+        }
+
+        if(preset._timelineEffects != null)
+        {
+            foreach(var item in preset._timelineEffects)
+            {
+                ActionFrameEvent_TimelineEffect timelineFrameEvent = new ActionFrameEvent_TimelineEffect();
+                timelineFrameEvent._startFrame = item._startFrame;
+                timelineFrameEvent._angleDirectionType = item._angleDirectionType;
+                timelineFrameEvent._attach = item._attach;
+                timelineFrameEvent._effectPath = item._effectPrefabPath;
+                timelineFrameEvent._spawnOffset = item._spawnOffset;
+                timelineFrameEvent._toTarget = item._toTarget;
+                timelineFrameEvent._followDirection = item._followDirection;
+                timelineFrameEvent._effectUpdateType = item._effectUpdateType;
+                timelineFrameEvent._lifeTime = item._lifeTime;
+
+                frameEventList.Add(timelineFrameEvent);
+            }
+        }
+
+        frameEventList.Sort((x,y)=>{
+            return x._startFrame.CompareTo(y._startFrame);
+        });
+
+        return frameEventList.Count == 0 ? null : frameEventList.ToArray();
     }
 
     private static MultiSelectAnimationData readMultiSelectAnimationData(XmlNode node, string filePath)
@@ -613,19 +708,19 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             }
             else
             {
-                DebugUtil.assert(false,"invalid multiSelect Animation Data: {0} [Line: {1}] [FileName: {2}]", targetName, XMLScriptConverter.getLineFromXMLNode(node), filePath);
+                DebugUtil.assert(false,"유효하지 않은 MultiSelectAnimation 어트리뷰트 입니다.: {0} [Line: {1}] [FileName: {2}]", targetName, XMLScriptConverter.getLineFromXMLNode(node), filePath);
                 return null;
             }
         }
 
         if(animationData._path == "")
         {
-            DebugUtil.assert(false,"animation path not exists [Line: {0}] [FileName: {1}]", XMLScriptConverter.getLineFromXMLNode(node), filePath);
+            DebugUtil.assert(false,"애니메이션 경로가 데이터에 존재하지 않습니다. [Line: {0}] [FileName: {1}]", XMLScriptConverter.getLineFromXMLNode(node), filePath);
             return null;
         }
         else if(animationData._actionConditionData == null)
         {
-            DebugUtil.assert(false,"multi select animation must have condition data [Line: {0}] [FileName: {1}]", XMLScriptConverter.getLineFromXMLNode(node), filePath);
+            DebugUtil.assert(false,"MultiSelectAnimation은 반드시 Condition 데이터가 있어야 합니다. [Line: {0}] [FileName: {1}]", XMLScriptConverter.getLineFromXMLNode(node), filePath);
             return null;
         }
 

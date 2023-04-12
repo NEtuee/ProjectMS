@@ -21,6 +21,7 @@ public enum EffectType
 public class EffectRequestData : MessageData
 {
     public string _effectPath;
+    public AnimationCustomPreset _animationCustomPreset;
 
     public float _startFrame;
     public float _endFrame;
@@ -39,6 +40,7 @@ public class EffectRequestData : MessageData
     public Vector3 _position;
     public Vector3 _scale;
     public Quaternion _rotation;
+
 
     public ObjectBase _executeEntity = null;
     public Transform _parentTransform = null;
@@ -135,6 +137,29 @@ public class EffectItem : EffectItemBase
         _animationPlayData._hasMovementGraph = false;
         _animationPlayData._isLoop = false;
         _animationPlayData._flipState = new FlipState{xFlip = false, yFlip = false};
+
+        if(effectData._animationCustomPreset != null)
+        {
+            _animationPlayData._customPresetData = effectData._animationCustomPreset._animationCustomPresetData;
+            if(_animationPlayData._customPresetData._playCount == 0)
+            {
+                DebugUtil.assert(false, "이펙트를 무한 루프 시키려고 합니다. 심각한 문제. [Path: {0}]",_effectPath);
+                return;
+            }
+    
+            if(effectData._animationCustomPreset._rotationPresetName != "")
+            {
+                AnimationRotationPreset rotationPreset = ResourceContainerEx.Instance().GetScriptableObject("Preset\\AnimationRotationPreset") as AnimationRotationPreset;
+                _animationPlayData._rotationPresetData = rotationPreset.getPresetData(effectData._animationCustomPreset._rotationPresetName);
+            }
+            
+            if(effectData._animationCustomPreset._scalePresetName != "")
+            {
+                AnimationScalePreset scalePreset = ResourceContainerEx.Instance().GetScriptableObject("Preset\\AnimationScalePreset") as AnimationScalePreset;
+                _animationPlayData._scalePresetData = scalePreset.getPresetData(effectData._animationCustomPreset._scalePresetName);
+            }
+        }
+        
 
         _animationPlayer.initialize();
         _animationPlayer.changeAnimation(_animationPlayData);
@@ -284,7 +309,7 @@ public class TimelineEffectItem : EffectItemBase
 
         if(_timelineEffectControl != null && _timelineEffectControl._isCharacterMaterialEffect)
             _timelineEffectControl.setCharacterAnimator(effectData._timelineAnimator);
-
+            
         _effectObject.SetActive(true);
         _playableDirector.Stop();
         _playableDirector.Play();
