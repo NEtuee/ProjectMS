@@ -61,7 +61,7 @@
     <GlobalVariable Name="gv_najimiStdHp_2Phase" Value="55.0"/> <!-- 나지미 2페이즈 전환 기준 체력 --> <!-- 34 -->
     <GlobalVariable Name="gv_najimiStdHp_3Phase" Value="30.0"/> <!-- 나지미 3페이즈 전환 기준 체력 --> <!-- 17 -->
 
-    <GlobalVariable Name="gv_najimiStdBattle" Value="30.0"/>     <!-- 나지미 그로기 기준 배틀 포인트 -->
+    <GlobalVariable Name="gv_najimiStdBattle" Value="20.0"/>     <!-- 나지미 그로기 기준 배틀 포인트 -->
     
 
 
@@ -235,7 +235,7 @@
     </Hit>
 
     <Groggy Package="CommonGroggyPackage">
-        <UseBranchSet Name="HitReactionSet"/>
+        <!-- <UseBranchSet Name="HitReactionSet"/> -->
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </Groggy>
 
