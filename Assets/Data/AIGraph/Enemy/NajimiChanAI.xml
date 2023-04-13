@@ -62,8 +62,11 @@
     <GlobalVariable Name="gv_najimiStdHp_3Phase" Value="30.0"/> <!-- 나지미 3페이즈 전환 기준 체력 --> <!-- 30 -->
 
     <GlobalVariable Name="gv_najimiStdBattle" Value="20.0"/>     <!-- 나지미 그로기 기준 배틀 포인트 -->
-    
 
+
+    <BranchSet Name="IsPlayerDead">
+        <Branch Condition="getTargetFrameTag_Dead" Execute="NajimiWin"/>
+    </BranchSet>
 
     <BranchSet Name="HitReactionSet">
         <Branch Condition="Dead" Execute="Dead"/>
@@ -78,6 +81,7 @@
     </BranchSet>
 
     <Entry Package="CommonIdlePackage">
+        <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="TargetDistance >= gv_najimiSystemChaseRange" Execute="SystemChase"/>
         <Branch Condition="true" Execute="JudgeDistance"/>
@@ -85,6 +89,7 @@
 
     <!-- 거리 판단 -->
     <JudgeDistance Package="CommonIdlePackage">
+        <UseBranchSet Name="IsPlayerDead"/>
         <Branch Condition="TargetDistance >= gv_najimiSystemChaseRange" Execute="SystemChase"/>
         
         <!-- 장외 거리 분기 -->
@@ -125,6 +130,7 @@
 
     <!-- 피격 리액션 판단 -->
     <JudgeHitReaction Package="CommonIdlePackage">
+        <UseBranchSet Name="IsPlayerDead"/>
         <!-- 회피 -->
         <Branch Weight="NajimiHitReaction^Dodge" Condition="true" Execute="Dodge"/>
 
@@ -133,7 +139,8 @@
         <Branch Weight="NajimiHitReaction^Attack" Condition="(getStat_Phase == 3.0)" Execute="Pistol"/>
     </JudgeHitReaction>
 
-    <Dodge Package="NajimiDodgePackage">        
+    <Dodge Package="NajimiDodgePackage">      
+        <UseBranchSet Name="IsPlayerDead"/>  
         <!-- 대시 공격 -->
         <Branch Weight="NajimiDodgeAtk^DashAttack" Condition="CurrentPackageEnd" Execute="JudgeDashAtk"/>
         <!-- 거리 기반 공격 -->
@@ -142,6 +149,7 @@
 
     <!-- 대시 공격 판단 -->
     <JudgeDashAtk Package="CommonIdlePackage">
+        <UseBranchSet Name="IsPlayerDead"/>
         <!-- 1,2 페이즈 대시 공격 -->
         <Branch Condition="(getStat_Phase <= 2.0)" Execute="DashRushReady"/>
         <!-- 3페이즈 대시 공격 -->
@@ -151,6 +159,7 @@
 
 
     <Chase Package="CommonChasePackage">
+        <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="TargetDistance >= gv_najimiSystemChaseRange" Execute="SystemChase"/>
 
@@ -162,90 +171,110 @@
     </Chase>
 
     <SystemChase Package="CommonSystemChasePackage">
+        <UseBranchSet Name="IsPlayerDead"/>
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </SystemChase>
     
     <DashRushReady Package="NajimiAttackReadyPackage">
+        <UseBranchSet Name="IsPlayerDead"/>
         <Branch Condition="CurrentPackageEnd" Execute="DashRush"/>
     </DashRushReady>
     
     <DashRush Package="NajimiDashPackage">
+        <UseBranchSet Name="IsPlayerDead"/>
         <Branch Condition="(gv_najimiRushRange >= TargetDistance)" Execute="Rush"/>
         <Branch Condition="CurrentPackageEnd" Execute="Rush"/>
     </DashRush>
 
     <RushReady Package="NajimiAttackReadyPackage">
+        <UseBranchSet Name="IsPlayerDead"/>
         <Branch Condition="CurrentPackageEnd" Execute="Rush"/>
     </RushReady>
 
     <Rush Package="NajimiRushPackage">
+        <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </Rush>
 
     <SpawnPitchingMachine Package="NajimiSpawnPitchingMachinePackage">
+        <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </SpawnPitchingMachine>
 
     <Pitching Package="NajimiPitchingPackage">
+        <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
         <Branch Condition="getTargetFrameTag_Stun" Execute="StunChase"/>
     </Pitching>
 
     <StunChase Package="NajimiStunChasePackage">
+        <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="TargetExists && (1.5 >= TargetDistance)" Execute="Rush"/>
     </StunChase>
 
     <Baton Package="NajimiBatonPackage">
+        <UseBranchSet Name="IsPlayerDead"/>
         <Branch Condition="CurrentPackageEnd && (getStat_PistolCount < 3.0)" Execute="Baton"/>
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </Baton>
 
     <DashPistol Package="NajimiDashPackage">
+        <UseBranchSet Name="IsPlayerDead"/>
         <Branch Condition="(gv_najimiRushRange >= TargetDistance)" Execute="Pistol"/>
         <Branch Condition="CurrentPackageEnd" Execute="Pistol"/>
     </DashPistol>
 
     <Pistol Package="NajimiPistolPackage">
+        <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </Pistol>
 
     <Firework Package="NajimiFireworkPackage">
+        <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Weight="RandBoolean^True" Condition="CurrentPackageEnd" Execute="Beam"/>
         <Branch Weight="RandBoolean^False" Condition="CurrentPackageEnd" Execute="Entry"/>
     </Firework>
 
     <Beam Package="NajimiBeamPackage">
+        <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </Beam>
 
     <PhaseIncrease Package="CommonPhaseIncreasePackage">
+        <UseBranchSet Name="IsPlayerDead"/>
         <!-- 페이즈 전환은 피격 리액션 무시 -->    
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </PhaseIncrease>
     
     <GuardBroken Package="CommonGuardBrokenPackage">
+        <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </GuardBroken>
 
     <Hit Package="CommonHitPackage">
+        <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </Hit>
 
     <Groggy Package="CommonGroggyPackage">
+        <UseBranchSet Name="IsPlayerDead"/>
         <!-- <UseBranchSet Name="HitReactionSet"/> -->
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </Groggy>
 
     <Dead Package="CommonDeadPackage">
     </Dead>
+
+    <NajimiWin Package="CommonIdlePackage">
+    </NajimiWin>
 
 </AIGraph>

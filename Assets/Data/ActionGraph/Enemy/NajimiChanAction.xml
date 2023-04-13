@@ -16,6 +16,7 @@
             <!-- 바톤 슬래시 카운트 리셋 (pistol 이름 바꿔야함.)-->
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="NajimiResetPistolCount"/>
             <!-- <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountClear"/> -->
+            <FrameEvent Type="ReleaseCatch" StartTime="0" Push="0 0 0" Condition="getTargetFrameTag_Dead"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
@@ -172,6 +173,7 @@
     <AC_RushSuccess_Entry MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <Animation Preset="Sprites/Enemy/OsananaNajimi/1_rushPattern/2_grab/1_grabPre" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12"/>
+            <FrameEvent Type="ReleaseCatch" StartTime="1" Push="1 0 0" Condition="getTargetFrameTag_Recatchable == false"/>
         </Animation>
 
         <Branch Condition="getKey_Escape_1 || getKey_Escape_2" Execute="AC_RushSuccess_Struggle"/>
@@ -179,6 +181,7 @@
     <AC_RushSuccess_Struggle MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <Animation Preset="Sprites/Enemy/OsananaNajimi/1_rushPattern/3_struggle" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12"/>
+            <FrameEvent Type="ReleaseCatch" StartTime="1" Push="1 0 0" Condition="getTargetFrameTag_Recatchable == false"/>
         </Animation>
 
         <Branch Condition="getKey_Escape_1 || getKey_Escape_2" Execute="AC_RushSuccess_Entry"/>
@@ -201,7 +204,7 @@
             <FrameEvent Type="ReleaseCatch" StartTime="1" Push="1 0 0" Condition="getTargetFrameTag_Recatchable == false"/>
         </Animation>
 
-        <Branch Condition="End" Execute="AC_Idle"/>
+        <Branch Condition="getKey_Escape_1 || getKey_Escape_2" Execute="AC_RushSuccess_Struggle"/>
     </AC_RushSuccess_Attack>
 
     <AC_Away MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
