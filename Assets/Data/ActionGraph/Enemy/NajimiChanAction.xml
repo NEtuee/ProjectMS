@@ -115,6 +115,7 @@
             <!-- 페이즈 전환 중 피격되더라도 무시되어야 함. -->
             <!-- TODO: 페이즈 전환 밀치기 패턴 (노 데미지 군중기) -->
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="IncreasePhase"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="1" Speed="0"/>
         </Animation>
         
         <Branch Condition="End" Execute="AC_Idle"/>
