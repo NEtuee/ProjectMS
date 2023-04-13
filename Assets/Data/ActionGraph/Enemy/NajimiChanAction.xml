@@ -45,7 +45,7 @@
     
     <AC_Dash MovementType="GraphPreset" MovementGraphPreset="Najimi_Dash" DirectionType="AI" FlipType="Direction" DefenceType="Evade">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/0_default/"/>
-        <Animation Preset="3_dash" XFlip="true" Duration="1">
+        <Animation Preset="3_dash" XFlip="true" Duration="0.7">
             <FrameEvent Type="Test" Log="HitCount 2" Condition="getStat_HitCount == 2.0"/>
             <FrameEvent Type="Test" Log="HitCount 3" Condition="getStat_HitCount == 3.0"/>
             <FrameEvent Type="Test" Log="HitCount 4" Condition="getStat_HitCount == 4.0"/>

@@ -254,7 +254,8 @@
     </MagicalMissile>
 
     <PitchingMachine DefaultFramePerSecond="4" UseSpriteRotation="false" PenetrateCount="1">
-        <Animation Preset="Sprites/Enemy/PitchingMachine/4_spawn" XFlip="true" Duration="0.8">        
+        <Animation Preset="Sprites/Enemy/PitchingMachine/4_spawn" XFlip="true" Duration="0.8">
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="CountPitchingMachine" EventTargetType="Summoner"/>        
         </Animation>
 
         <CollisionInfo Radius="0.1" Angle="0"/>
@@ -265,7 +266,6 @@
                 <FrameEvent Type="Attack" StartFrame="0" AttackPreset="BaseBall">
                     <OnHit>
                         <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="PitchingMachine" Offset="0 0 0" SearchIdentifier="Enemy" Inherit="true"/>
-                        <FrameEvent Type="CallAIEvent" StartTime="0" EventName="CountPitchingMachine" EventTargetType="Summoner"/>
                         <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
                     </OnHit>
                 </FrameEvent>
@@ -277,7 +277,6 @@
     
             <OnEnd>
                 <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="PitchingMachine" Offset="0 0 0" SearchIdentifier="Enemy" Inherit="true"/>
-                <FrameEvent Type="CallAIEvent" StartTime="0" EventName="CountPitchingMachine" EventTargetType="Summoner"/>
             </OnEnd>
         </Event>
     </PitchingMachine>
