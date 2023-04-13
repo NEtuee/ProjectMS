@@ -254,9 +254,11 @@
 
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_AttackFriction" MaxVelocity="gv_AttackVelocity" Speed="0" Velocity="gv_AttackVelocity"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="DashPointReset"/>
+            <FrameEvent Type="FrameTag" StartTime="0.26" EndFrame="999" Tag="MoveCancel"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="AttackSuccess"/>
         </Animation>
 
+        <UseBranchSet Name="CancelBranch"/>
         <Branch Key="(getKey_AttackCharge == true) || (getKey_NormalMove == true)" Condition="End" Execute="MoveAll"/>
         <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="AttackStop"/>
     </AttackSuccess>
@@ -269,9 +271,11 @@
 
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_AttackFriction" MaxVelocity="gv_AttackFarVelocity" Speed="0" Velocity="gv_AttackFarVelocity"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="DashPointReset"/>
+            <FrameEvent Type="FrameTag" StartTime="0.26" EndFrame="999" Tag="MoveCancel"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="AttackSuccess"/>
         </Animation>
 
+        <UseBranchSet Name="CancelBranch"/>
         <Branch Key="(getKey_AttackCharge == true) || (getKey_NormalMove == true)" Condition="End" Execute="MoveAll"/>
         <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="AttackStop"/>
     </AttackSuccessFar>
