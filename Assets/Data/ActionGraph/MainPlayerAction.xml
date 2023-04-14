@@ -159,8 +159,12 @@
                 <OnParry>
                     <FrameEvent Type="TeleportToTarget"/>
                 </OnParry>
+                <OnEvade>
+                    <FrameEvent Type="TeleportToTarget"/>
+                </OnEvade>
 
             </FrameEvent>
+
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_DashFriction" MaxVelocity="gv_DashVelocity" Speed="0" Velocity="gv_DashVelocity" Condition="(getStat_DashPoint >= 1.0)"/>
             <FrameEvent Type="ApplyBuff" StartTime="0.031" ApplyBuff="DashPointConsumption" Condition="(getStat_DashPoint >= 1.0)"/>
 
@@ -216,6 +220,9 @@
                 <OnParry>
                     <FrameEvent Type="TeleportToTarget"/>
                 </OnParry>
+                <OnEvade>
+                    <FrameEvent Type="TeleportToTarget"/>
+                </OnEvade>
 
             </FrameEvent>
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_DashFriction" MaxVelocity="gv_LongDashVelocity" Speed="0" Velocity="gv_LongDashVelocity" Condition="(getStat_DashPoint >= 1.0) && (getStat_HP > 1.0)"/>
@@ -267,6 +274,10 @@
                     <FrameEvent Type="ZoomEffect" Condition="getTargetFrameTag_Groggy" Scale="2.9"/>
                     <FrameEvent Type="ShakeEffect" Condition="getTargetFrameTag_Groggy" Scale="0.15" Speed="35.0" Time="0.2"/>
                 </OnGuardBreakFail>
+                
+                <OnEvade>
+                    <FrameEvent Type="TeleportToTarget"/>
+                </OnEvade>
             </FrameEvent>
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_DashFriction" MaxVelocity="gv_DashVelocity" Speed="0" Velocity="gv_DashVelocity" Condition="(getStat_DashPoint >= 1.0)"/>
             <FrameEvent Type="ApplyBuff" StartTime="0.031" ApplyBuff="DashPointConsumption"/>
