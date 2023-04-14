@@ -60,7 +60,7 @@ public class ActionGraphNodeData
     public int[]                        _applyBuffList = null;
 
     public float                        _additionalDirectionAngle = 0f;
-    public float                        _defenceAngle = 0f;
+    public float                        _defenceAngle = 360f;
     public float                        _moveScale = 1f;
     public float                        _rotateSpeed = -1f;
     public bool                         _normalizedSpeed = false;
