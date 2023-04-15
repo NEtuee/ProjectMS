@@ -44,7 +44,7 @@
         <Branch Condition="End == true" Execute="AC_SystemChase"/>
     </AC_SystemChase>
     
-    <AC_Dash MovementType="GraphPreset" MovementGraphPreset="Najimi_Dash" DirectionType="AI" FlipType="Direction" DefenceType="Evade">
+    <AC_Dash MovementType="GraphPreset" MovementGraphPreset="Najimi_Dash" DirectionType="AI" FlipType="Direction" DefenceType="Evade" DefenceAngle="360">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/0_default/"/>
         <Animation Preset="3_dash" XFlip="true" Duration="0.7">
             <FrameEvent Type="Test" Log="HitCount 2" Condition="getStat_HitCount == 2.0"/>
