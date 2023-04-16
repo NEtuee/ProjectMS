@@ -127,7 +127,6 @@
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="TargetBattleIncrement" Condition="getTargetFrameTag_Groggy == false"/>
                     <FrameEvent Type="ApplyBuff" ApplyBuff="BattleIncrement"/>
                     <FrameEvent Type="ApplyBuff" ApplyBuff="IncreaseBloodPoint"/>
-                    <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/MaterialAttackPre_Timeline" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true"/>
 
 
                     <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Slash" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
