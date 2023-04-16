@@ -385,7 +385,7 @@
     </Kiiled>
 
     <Catched MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction" ApplyBuff="CatchedEscape">
-        <Animation Preset="Sprites/NewPlayer/empty" XFlip="true" Duration="1.0">
+        <Animation Preset="Sprites/NewPlayer/empty" XFlip="true" Duration="0.01">
             <FrameEvent Type="Test" StartTime="0" Log="Akane Catched"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Velocity="0" Speed="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="StunClear"/>
