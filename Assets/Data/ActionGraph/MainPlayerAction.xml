@@ -129,9 +129,8 @@
                     <FrameEvent Type="ApplyBuff" ApplyBuff="IncreaseBloodPoint"/>
 
 
-                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Slash_Timeline" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
-                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Blood_Timeline" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
-                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Impact_Timeline" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true" AngleType="AttackPoint"/>
+                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Slash" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
+                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Blood" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
 
                     <!-- 마테리얼 히트 이펙트 -->
                     <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/MaterialHit_Timeline" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true"/>
@@ -190,9 +189,8 @@
                     <FrameEvent Type="ApplyBuff" ApplyBuff="IncreaseBloodPoint"/>
 
 
-                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Slash_Timeline" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
-                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Blood_Timeline" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
-                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Impact_Timeline" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true" AngleType="AttackPoint"/>
+                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Slash" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
+                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Blood" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
 
                     <!-- 마테리얼 히트 이펙트 -->
                     <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/MaterialHit_Timeline" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true"/>
@@ -250,7 +248,7 @@
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="TargetBattleIncrement" Condition="getTargetFrameTag_Groggy == false"/>
 
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc" FramePerSecond="18.0" Offset="0.0 0.0 0.0" ToTarget="true"/>
-                    <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/Impact_Timeline" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true" AngleType="AttackPoint"/>
+                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Impact" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true" AngleType="AttackPoint"/>
 
                     <FrameEvent Type="TeleportToTarget" DistanceOffset="0"/>
                     <FrameEvent Type="StopUpdate" Time="0.07"/>
@@ -265,7 +263,7 @@
                     
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc" FramePerSecond="18.0" Offset="0.0 0.0 0.0" ToTarget="true"/>
 
-                    <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/Impact_Timeline" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true" AngleType="AttackPoint"/>
+                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Impact" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true" AngleType="AttackPoint"/>
 
                     <FrameEvent Type="TeleportToTarget" DistanceOffset="0"/>
                     <FrameEvent Type="StopUpdate" Time="0.07"/>
@@ -322,9 +320,6 @@
 
     <AttackSuccess MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
         <Animation Preset="Sprites/NewPlayer/attack/" XFlip="true" ScalePreset="YSpring" Duration="0.315">
-            <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Effect/Sheath" FramePerSecond="0.5" Offset="0.0 0.0 0.0" Angle="Random_0^360" UseFlip="True" CastShadow="True">
-                <Physics UseGravity="True" Velocity="-2.5 8" Friction="2.0" Torque="Random_25^30" AngularFriction="15.0"/>
-            </FrameEvent>
 
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_AttackFriction" MaxVelocity="gv_AttackVelocity" Speed="0" Velocity="gv_AttackVelocity"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="DashPointReset"/>
@@ -339,9 +334,6 @@
 
     <AttackSuccessFar MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
         <Animation Preset="Sprites/NewPlayer/attack/" XFlip="true" ScalePreset="YSpring" Duration="0.315">
-            <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Effect/Sheath" FramePerSecond="0.5" Offset="0.0 0.0 0.0" Angle="Random_0^360" UseFlip="True" CastShadow="True">
-                <Physics UseGravity="True" Velocity="-2.5 8" Friction="2.0" Torque="Random_25^30" AngularFriction="15.0"/>
-            </FrameEvent>
 
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_AttackFriction" MaxVelocity="gv_AttackFarVelocity" Speed="0" Velocity="gv_AttackFarVelocity"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="DashPointReset"/>
