@@ -41,10 +41,6 @@ Preset:
     value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: emitterVelocityMode
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
     propertyPath: looping
     value: 0
     objectReference: {fileID: 0}
@@ -62,6 +58,10 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: autoRandomSeed
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: useRigidbodyForVelocity
     value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
@@ -258,7 +258,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: InitialModule.startLifetime.minMaxState
-    value: 3
+    value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: InitialModule.startLifetime.scalar
@@ -434,7 +434,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: InitialModule.startSpeed.scalar
-    value: 150
+    value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: InitialModule.startSpeed.minScalar
@@ -602,7 +602,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: InitialModule.startColor.minMaxState
-    value: 2
+    value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: InitialModule.startColor.minColor.r
@@ -626,11 +626,11 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: InitialModule.startColor.maxColor.g
-    value: 0.5706806
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: InitialModule.startColor.maxColor.b
-    value: 0
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: InitialModule.startColor.maxColor.a
@@ -1046,15 +1046,15 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: InitialModule.startSize.minMaxState
-    value: 3
+    value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: InitialModule.startSize.scalar
-    value: 13
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: InitialModule.startSize.minScalar
-    value: 7
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: InitialModule.startSize.maxCurve.m_Curve.Array.size
@@ -1218,7 +1218,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: InitialModule.startSizeY.minMaxState
-    value: 3
+    value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: InitialModule.startSizeY.scalar
@@ -1390,7 +1390,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: InitialModule.startSizeZ.minMaxState
-    value: 3
+    value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: InitialModule.startSizeZ.scalar
@@ -2085,18 +2085,6 @@ Preset:
     value: 1000
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: InitialModule.customEmitterVelocity.x
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: InitialModule.customEmitterVelocity.y
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: InitialModule.customEmitterVelocity.z
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
     propertyPath: InitialModule.size3D
     value: 0
     objectReference: {fileID: 0}
@@ -2278,7 +2266,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: ShapeModule.enabled
-    value: 1
+    value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: ShapeModule.type
@@ -2614,7 +2602,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: ShapeModule.radius.value
-    value: 180
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: ShapeModule.radius.mode
@@ -3330,11 +3318,11 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: EmissionModule.m_BurstCount
-    value: 3
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: EmissionModule.m_Bursts.Array.size
-    value: 3
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: EmissionModule.m_Bursts.Array.data[0].time
@@ -3346,7 +3334,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.scalar
-    value: 6
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
@@ -3525,384 +3513,8 @@ Preset:
     value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].time
-    value: 0.03
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.minMaxState
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.scalar
-    value: 3
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.minScalar
-    value: 30
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.maxCurve.m_Curve.Array.size
-    value: 2
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.maxCurve.m_Curve.Array.data[0].time
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.maxCurve.m_Curve.Array.data[0].value
-    value: 1
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.maxCurve.m_Curve.Array.data[0].inSlope
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.maxCurve.m_Curve.Array.data[0].outSlope
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.maxCurve.m_Curve.Array.data[0].tangentMode
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.maxCurve.m_Curve.Array.data[0].weightedMode
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.maxCurve.m_Curve.Array.data[0].inWeight
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.maxCurve.m_Curve.Array.data[0].outWeight
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.maxCurve.m_Curve.Array.data[1].time
-    value: 1
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.maxCurve.m_Curve.Array.data[1].value
-    value: 1
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.maxCurve.m_Curve.Array.data[1].inSlope
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.maxCurve.m_Curve.Array.data[1].outSlope
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.maxCurve.m_Curve.Array.data[1].tangentMode
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.maxCurve.m_Curve.Array.data[1].weightedMode
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.maxCurve.m_Curve.Array.data[1].inWeight
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.maxCurve.m_Curve.Array.data[1].outWeight
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.maxCurve.m_PreInfinity
-    value: 2
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.maxCurve.m_PostInfinity
-    value: 2
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.maxCurve.m_RotationOrder
-    value: 4
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.minCurve.m_Curve.Array.size
-    value: 2
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.minCurve.m_Curve.Array.data[0].time
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.minCurve.m_Curve.Array.data[0].value
-    value: 1
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.minCurve.m_Curve.Array.data[0].inSlope
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.minCurve.m_Curve.Array.data[0].outSlope
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.minCurve.m_Curve.Array.data[0].tangentMode
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.minCurve.m_Curve.Array.data[0].weightedMode
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.minCurve.m_Curve.Array.data[0].inWeight
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.minCurve.m_Curve.Array.data[0].outWeight
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.minCurve.m_Curve.Array.data[1].time
-    value: 1
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.minCurve.m_Curve.Array.data[1].value
-    value: 1
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.minCurve.m_Curve.Array.data[1].inSlope
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.minCurve.m_Curve.Array.data[1].outSlope
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.minCurve.m_Curve.Array.data[1].tangentMode
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.minCurve.m_Curve.Array.data[1].weightedMode
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.minCurve.m_Curve.Array.data[1].inWeight
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.minCurve.m_Curve.Array.data[1].outWeight
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.minCurve.m_PreInfinity
-    value: 2
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.minCurve.m_PostInfinity
-    value: 2
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.minCurve.m_RotationOrder
-    value: 4
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].cycleCount
-    value: 1
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].repeatInterval
-    value: 0.01
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[1].probability
-    value: 1
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].time
-    value: 0.06
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.minMaxState
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.scalar
-    value: 2
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.minScalar
-    value: 30
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.maxCurve.m_Curve.Array.size
-    value: 2
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.maxCurve.m_Curve.Array.data[0].time
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.maxCurve.m_Curve.Array.data[0].value
-    value: 1
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.maxCurve.m_Curve.Array.data[0].inSlope
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.maxCurve.m_Curve.Array.data[0].outSlope
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.maxCurve.m_Curve.Array.data[0].tangentMode
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.maxCurve.m_Curve.Array.data[0].weightedMode
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.maxCurve.m_Curve.Array.data[0].inWeight
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.maxCurve.m_Curve.Array.data[0].outWeight
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.maxCurve.m_Curve.Array.data[1].time
-    value: 1
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.maxCurve.m_Curve.Array.data[1].value
-    value: 1
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.maxCurve.m_Curve.Array.data[1].inSlope
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.maxCurve.m_Curve.Array.data[1].outSlope
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.maxCurve.m_Curve.Array.data[1].tangentMode
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.maxCurve.m_Curve.Array.data[1].weightedMode
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.maxCurve.m_Curve.Array.data[1].inWeight
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.maxCurve.m_Curve.Array.data[1].outWeight
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.maxCurve.m_PreInfinity
-    value: 2
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.maxCurve.m_PostInfinity
-    value: 2
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.maxCurve.m_RotationOrder
-    value: 4
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.minCurve.m_Curve.Array.size
-    value: 2
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.minCurve.m_Curve.Array.data[0].time
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.minCurve.m_Curve.Array.data[0].value
-    value: 1
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.minCurve.m_Curve.Array.data[0].inSlope
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.minCurve.m_Curve.Array.data[0].outSlope
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.minCurve.m_Curve.Array.data[0].tangentMode
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.minCurve.m_Curve.Array.data[0].weightedMode
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.minCurve.m_Curve.Array.data[0].inWeight
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.minCurve.m_Curve.Array.data[0].outWeight
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.minCurve.m_Curve.Array.data[1].time
-    value: 1
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.minCurve.m_Curve.Array.data[1].value
-    value: 1
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.minCurve.m_Curve.Array.data[1].inSlope
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.minCurve.m_Curve.Array.data[1].outSlope
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.minCurve.m_Curve.Array.data[1].tangentMode
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.minCurve.m_Curve.Array.data[1].weightedMode
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.minCurve.m_Curve.Array.data[1].inWeight
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.minCurve.m_Curve.Array.data[1].outWeight
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.minCurve.m_PreInfinity
-    value: 2
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.minCurve.m_PostInfinity
-    value: 2
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.minCurve.m_RotationOrder
-    value: 4
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].cycleCount
-    value: 1
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].repeatInterval
-    value: 0.01
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EmissionModule.m_Bursts.Array.data[2].probability
-    value: 1
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
     propertyPath: SizeModule.enabled
-    value: 0
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: SizeModule.curve.minMaxState
@@ -3918,7 +3530,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: SizeModule.curve.maxCurve.m_Curve.Array.size
-    value: 2
+    value: 4
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: SizeModule.curve.maxCurve.m_Curve.Array.data[0].time
@@ -3926,15 +3538,15 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: SizeModule.curve.maxCurve.m_Curve.Array.data[0].value
-    value: 1
+    value: 0.54166585
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: SizeModule.curve.maxCurve.m_Curve.Array.data[0].inSlope
-    value: -2
+    value: 3.7169876
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: SizeModule.curve.maxCurve.m_Curve.Array.data[0].outSlope
-    value: -2
+    value: 3.7169876
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: SizeModule.curve.maxCurve.m_Curve.Array.data[0].tangentMode
@@ -3950,19 +3562,19 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: SizeModule.curve.maxCurve.m_Curve.Array.data[0].outWeight
-    value: 0
+    value: 0.81538093
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: SizeModule.curve.maxCurve.m_Curve.Array.data[1].time
-    value: 1
+    value: 0.25380707
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: SizeModule.curve.maxCurve.m_Curve.Array.data[1].value
-    value: 0
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: SizeModule.curve.maxCurve.m_Curve.Array.data[1].inSlope
-    value: 0
+    value: 0.7680255
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: SizeModule.curve.maxCurve.m_Curve.Array.data[1].outSlope
@@ -3970,18 +3582,82 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: SizeModule.curve.maxCurve.m_Curve.Array.data[1].tangentMode
-    value: 0
+    value: 65
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: SizeModule.curve.maxCurve.m_Curve.Array.data[1].weightedMode
-    value: 0
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: SizeModule.curve.maxCurve.m_Curve.Array.data[1].inWeight
-    value: 0
+    value: 0.59999996
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: SizeModule.curve.maxCurve.m_Curve.Array.data[1].outWeight
+    value: 0.33333334
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SizeModule.curve.maxCurve.m_Curve.Array.data[2].time
+    value: 0.4238518
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SizeModule.curve.maxCurve.m_Curve.Array.data[2].value
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SizeModule.curve.maxCurve.m_Curve.Array.data[2].inSlope
+    value: -0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SizeModule.curve.maxCurve.m_Curve.Array.data[2].outSlope
+    value: -0.3133868
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SizeModule.curve.maxCurve.m_Curve.Array.data[2].tangentMode
+    value: 69
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SizeModule.curve.maxCurve.m_Curve.Array.data[2].weightedMode
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SizeModule.curve.maxCurve.m_Curve.Array.data[2].inWeight
+    value: 0.33333334
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SizeModule.curve.maxCurve.m_Curve.Array.data[2].outWeight
+    value: 0.33333334
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SizeModule.curve.maxCurve.m_Curve.Array.data[3].time
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SizeModule.curve.maxCurve.m_Curve.Array.data[3].value
+    value: 0.81944275
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SizeModule.curve.maxCurve.m_Curve.Array.data[3].inSlope
+    value: -0.3133868
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SizeModule.curve.maxCurve.m_Curve.Array.data[3].outSlope
+    value: -0.3133868
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SizeModule.curve.maxCurve.m_Curve.Array.data[3].tangentMode
+    value: 34
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SizeModule.curve.maxCurve.m_Curve.Array.data[3].weightedMode
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SizeModule.curve.maxCurve.m_Curve.Array.data[3].inWeight
+    value: 0.33333334
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: SizeModule.curve.maxCurve.m_Curve.Array.data[3].outWeight
     value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
@@ -4426,7 +4102,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: RotationModule.enabled
-    value: 0
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: RotationModule.x.minMaxState
@@ -4790,7 +4466,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: RotationModule.curve.maxCurve.m_Curve.Array.data[0].time
-    value: 0
+    value: 0.35533065
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: RotationModule.curve.maxCurve.m_Curve.Array.data[0].value
@@ -4798,11 +4474,11 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: RotationModule.curve.maxCurve.m_Curve.Array.data[0].inSlope
-    value: 0
+    value: -4.4082155
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: RotationModule.curve.maxCurve.m_Curve.Array.data[0].outSlope
-    value: 0
+    value: -4.4082155
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: RotationModule.curve.maxCurve.m_Curve.Array.data[0].tangentMode
@@ -4818,7 +4494,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: RotationModule.curve.maxCurve.m_Curve.Array.data[0].outWeight
-    value: 0
+    value: 0.15789363
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: RotationModule.curve.maxCurve.m_Curve.Array.data[1].time
@@ -4830,11 +4506,11 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: RotationModule.curve.maxCurve.m_Curve.Array.data[1].inSlope
-    value: -2
+    value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: RotationModule.curve.maxCurve.m_Curve.Array.data[1].outSlope
-    value: -2
+    value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: RotationModule.curve.maxCurve.m_Curve.Array.data[1].tangentMode
@@ -5022,47 +4698,47 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: ColorModule.gradient.maxGradient.key2.r
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: ColorModule.gradient.maxGradient.key2.g
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: ColorModule.gradient.maxGradient.key2.b
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: ColorModule.gradient.maxGradient.key2.a
     value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: ColorModule.gradient.maxGradient.key3.r
+    propertyPath: ColorModule.gradient.maxGradient.key2.g
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: ColorModule.gradient.maxGradient.key2.b
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: ColorModule.gradient.maxGradient.key2.a
     value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: ColorModule.gradient.maxGradient.key3.r
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: ColorModule.gradient.maxGradient.key3.g
-    value: 0
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: ColorModule.gradient.maxGradient.key3.b
-    value: 0
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: ColorModule.gradient.maxGradient.key3.a
-    value: 0
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: ColorModule.gradient.maxGradient.key4.r
-    value: 0
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: ColorModule.gradient.maxGradient.key4.g
-    value: 0
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: ColorModule.gradient.maxGradient.key4.b
-    value: 0
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: ColorModule.gradient.maxGradient.key4.a
@@ -5082,7 +4758,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: ColorModule.gradient.maxGradient.key5.a
-    value: 0
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: ColorModule.gradient.maxGradient.key6.r
@@ -5098,7 +4774,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: ColorModule.gradient.maxGradient.key6.a
-    value: 0
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: ColorModule.gradient.maxGradient.key7.r
@@ -5126,15 +4802,15 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: ColorModule.gradient.maxGradient.ctime2
-    value: 0
+    value: 65535
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: ColorModule.gradient.maxGradient.ctime3
-    value: 0
+    value: 65535
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: ColorModule.gradient.maxGradient.ctime4
-    value: 0
+    value: 65535
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: ColorModule.gradient.maxGradient.ctime5
@@ -5150,35 +4826,35 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: ColorModule.gradient.maxGradient.atime0
-    value: 47609
+    value: 5975
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: ColorModule.gradient.maxGradient.atime1
-    value: 65535
+    value: 6939
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: ColorModule.gradient.maxGradient.atime2
-    value: 65535
+    value: 11180
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: ColorModule.gradient.maxGradient.atime3
-    value: 0
+    value: 11951
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: ColorModule.gradient.maxGradient.atime4
-    value: 0
+    value: 26021
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: ColorModule.gradient.maxGradient.atime5
-    value: 0
+    value: 27178
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: ColorModule.gradient.maxGradient.atime6
-    value: 0
+    value: 50886
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: ColorModule.gradient.maxGradient.atime7
-    value: 0
+    value: 65535
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: ColorModule.gradient.maxGradient.m_Mode
@@ -5190,7 +4866,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: ColorModule.gradient.maxGradient.m_NumAlphaKeys
-    value: 2
+    value: 8
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: ColorModule.gradient.minGradient.key0.r
@@ -5810,7 +5486,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: VelocityModule.enabled
-    value: 1
+    value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: VelocityModule.x.minMaxState
@@ -7366,7 +7042,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: VelocityModule.radial.scalar
-    value: 60
+    value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: VelocityModule.radial.minScalar
