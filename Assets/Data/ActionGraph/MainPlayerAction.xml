@@ -189,7 +189,7 @@
                     <FrameEvent Type="ApplyBuff" ApplyBuff="IncreaseBloodPoint"/>
 
 
-                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Slash" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
+                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/SlashSuper" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
                     <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Blood" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
 
                     <!-- 마테리얼 히트 이펙트 -->
@@ -197,8 +197,8 @@
 
                     <FrameEvent Type="StopUpdate" Time="0.07"/>
 
-                    <FrameEvent Type="TeleportToTargetBack" Condition="(getTargetFrameTag_Groggy == false) && (Kill == false)" DistanceOffset="-0.3"/>
-                    <FrameEvent Type="TeleportToTargetBack" Condition="getTargetFrameTag_Groggy || Kill" DistanceOffset="0.2"/>
+                    <FrameEvent Type="TeleportToTargetBack" Condition="(getTargetFrameTag_Groggy == false) && (Kill == false)" DistanceOffset="-0.0"/>
+                    <FrameEvent Type="TeleportToTargetBack" Condition="getTargetFrameTag_Groggy || Kill" DistanceOffset="0.4"/>
 
                     <FrameEvent Type="SetAction" Condition="Kill" Action="AttackSuccessFar"/>
                     <FrameEvent Type="SetTimeScale" Condition="Kill" Scale="0.2" Time="0.2" BlendTime="0.2"/>

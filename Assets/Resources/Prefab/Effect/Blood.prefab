@@ -375,16 +375,16 @@ ParticleSystem:
         m_Curve:
         - serializedVersion: 3
           time: 0
-          value: 0.22978625
-          inSlope: 0
-          outSlope: 0
+          value: 0.40339398
+          inSlope: -8.22452
+          outSlope: -8.22452
           tangentMode: 0
           weightedMode: 0
           inWeight: 0.33333334
-          outWeight: 0.33333334
+          outWeight: 0.49553257
         - serializedVersion: 3
-          time: 0.08952145
-          value: 0.10544255
+          time: 0.07682858
+          value: 0.12627587
           inSlope: -0.11236278
           outSlope: -0.11236278
           tangentMode: 0
@@ -408,21 +408,21 @@ ParticleSystem:
         m_Curve:
         - serializedVersion: 3
           time: 0
-          value: 0.60000765
-          inSlope: -13.698857
-          outSlope: -13.698857
+          value: 0.6208393
+          inSlope: -14.337459
+          outSlope: -14.337459
           tangentMode: 0
           weightedMode: 0
           inWeight: 0.33333334
-          outWeight: 0.3313219
+          outWeight: 0.33542538
         - serializedVersion: 3
-          time: 0.09597179
-          value: 0.16302523
-          inSlope: -0.06136417
-          outSlope: -0.06136417
+          time: 0.075667225
+          value: 0.19079453
+          inSlope: -0.25895056
+          outSlope: -0.25895056
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0.9273136
+          inWeight: 1
           outWeight: 0.09946396
         - serializedVersion: 3
           time: 1
@@ -1077,7 +1077,7 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 0
-        scalar: 4
+        scalar: 5
         minScalar: 30
         maxCurve:
           serializedVersion: 2
@@ -1127,8 +1127,8 @@ ParticleSystem:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
-      cycleCount: 3
-      repeatInterval: 0.013
+      cycleCount: 4
+      repeatInterval: 0.021
       probability: 1
   SizeModule:
     enabled: 1
