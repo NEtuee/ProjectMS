@@ -7,9 +7,9 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Glow
+  m_Name: LightUnlimited
   m_Shader: {fileID: 4800000, guid: a36b7719ff0465b42ab1407d67672c5f, type: 3}
-  m_ShaderKeywords: GLOWTEX_ON ONLYINNEROUTLINE_ON PREMULTIPLYALPHA_ON _ONLYOUTLINE_ON
+  m_ShaderKeywords: GLOWTEX_ON GLOW_ON ONLYINNEROUTLINE_ON PREMULTIPLYALPHA_ON _ONLYOUTLINE_ON
     _POSTERIZEOUTLINE_ON
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
@@ -73,7 +73,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 2d894551ed7cd204e84447c219623196, type: 3}
+        m_Texture: {fileID: 2800000, guid: 1d4c7463ab341254da075c5b91e442fd, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -212,7 +212,7 @@ Material:
     - _MotionBlurAngle: 0.013
     - _MotionBlurDist: 1.25
     - _MyDstMode: 1
-    - _MySrcMode: 1
+    - _MySrcMode: 4
     - _NegativeAmount: 1
     - _OcclusionStrength: 1
     - _OffsetUvX: 0

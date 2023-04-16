@@ -292,6 +292,7 @@
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/3_batonPattern/"/>
         <Animation Preset="1_batonReady" XFlip="true" Duration="0.5">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
+            <FrameEvent Type="TimelineEffect" StartTime="0.35" Path="Prefab/Effect/MaterialAttackPre_Timeline" Offset="0.0 0.0 0.0" Attach="true"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_BatonReady"/>
@@ -299,7 +300,7 @@
 
     <AC_BatonPre MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/3_batonPattern/2_batonSlash/"/>
-        <Animation Preset="1_batonPre" XFlip="true" Duration="0.10">
+        <Animation Preset="1_batonPre" XFlip="true" Duration="0.1">
             <!-- TODO: 바톤 3연속 공격 카운트용 버프. 향후 이름 수정해야함. (Pistol->Baton)-->
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="NajimiAddPistolCount"/>
         </Animation>

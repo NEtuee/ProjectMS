@@ -9,8 +9,8 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Crosslight
   m_Shader: {fileID: 4800000, guid: a36b7719ff0465b42ab1407d67672c5f, type: 3}
-  m_ShaderKeywords: COLORRAMPOUTLINE_ON GLOWTEX_ON ONLYINNEROUTLINE_ON PREMULTIPLYALPHA_ON
-    _ONLYOUTLINE_ON _POSTERIZEOUTLINE_ON
+  m_ShaderKeywords: COLORRAMPOUTLINE_ON GLOWTEX_ON GLOW_ON ONLYINNEROUTLINE_ON PINCH_ON
+    PREMULTIPLYALPHA_ON _ONLYOUTLINE_ON _POSTERIZEOUTLINE_ON
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -73,7 +73,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: e09e3b9c10a9b024dac951ffd52ccf15, type: 3}
+        m_Texture: {fileID: 2800000, guid: 8c4cbefb0407f964c971bf084adf9de1, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
