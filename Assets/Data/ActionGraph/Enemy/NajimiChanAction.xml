@@ -355,6 +355,7 @@
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/3_batonPattern/"/>
         <Animation Preset="5_pistolShot" XFlip="true" Duration="1.0">
             <FrameEvent Type="Danmaku" StartTime="0" Path="Enemy/MuzzleFlash.xml" Offset="0.4 0.1 0" UseFlip="True"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="3" Velocity="-8" Speed="0"/>
 
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
@@ -376,7 +377,9 @@
     <AC_FireworkShot MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/3_batonPattern/"/>
         <Animation Preset="6_fireworkShot" XFlip="true" Duration="1.0">
-            <FrameEvent Type="Projectile" StartTime="0" GraphName="FireworkBullet" DirectionType="AI" SpawnTargetType="Self" Offset="0.4 0.1 0" UseFlip="True"/>
+            <!-- <FrameEvent Type="Projectile" StartTime="0" GraphName="FireworkBullet" DirectionType="AI" SpawnTargetType="Self" Offset="0.4 0.1 0" UseFlip="True"/> -->
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="FireworkBullet" Offset="0.4 0.1 0" SearchIdentifier="Enemy"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="3" Velocity="-10" Speed="0"/>
             <!-- <FrameEvent Type="Danmaku" StartTime="0" Path="Enemy/MagicalFirework.xml"/> -->
 
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
@@ -402,6 +405,7 @@
     <AC_BeamShot MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/3_batonPattern/"/>
         <Animation Preset="7_beamShot" XFlip="true" Duration="1.0">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="3" Velocity="-12" Speed="0"/>   
             <!-- TODO: 빔 이펙트 추가해야함. 해당 이펙트 지속시간에 따라 Main 모션 시간과 Attack 지속 시간 조정 -->
             <FrameEvent Type="Attack" StartTime="0.2" AttackPreset="Najimi_Beam">
                 <OnHit>

@@ -1,8 +1,25 @@
-<ActionGraph Name="FireworkBulletAction" DefaultAction="Explosion" DefaultFramePerSecond="12">
+<ActionGraph Name="FireworkBulletAction" DefaultAction="Entry" DefaultFramePerSecond="12">
 
-    <Explosion MovementType="Empty" DirectionType="AlwaysRight" DefenceType="Evade">
+    <Entry MovementType="Empty" DirectionType="AlwaysRight">
+        <Animation Preset="Sprites/Projectile/empty" Duration="0.0">
+        </Animation>
+
+        <Branch Condition="true" Execute="Move"/>
+    </Entry>
+
+    <Move MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
+        <Animation Preset="Sprites/Projectile/FireworkBullet" XFlip="true" Duration="1.0">
+            <FrameEvent Type="Test" StartTime="0" Log="Fuck"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="12" Velocity="10" Speed="0"/>
+        </Animation>
+        
+        <Branch Condition="Hit" Execute="Destroy"/>
+        <Branch Condition="End" Execute="Explosion"/>
+    </Move>
+
+    <Explosion MovementType="Empty" DirectionType="AlwaysRight" DefenceType="Evade" DefenceAngle="360">
         <Animation Preset="Sprites/Projectile/empty" Duration="1.0">
-            <FrameEvent Type="Danmaku" StartTime="0" Path="Enemy/MagicalFirework.xml"/>
+            <FrameEvent Type="Danmaku" StartTime="0" Path="Enemy/Firecracker.xml"/>
         </Animation>
         <Branch Condition="End" Execute="Destroy"/>
     </Explosion>

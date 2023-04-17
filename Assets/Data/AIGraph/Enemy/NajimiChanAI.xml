@@ -27,7 +27,7 @@
 
     <Include Path="Common\CommonPhaseIncreasePackage.xml"/>
 
-    <Test Package="NajimiBatonPackage">
+    <Test Package="CommonTestPackage">
         <Branch Condition="CurrentPackageEnd" Execute="Test"/>
     </Test>
 
