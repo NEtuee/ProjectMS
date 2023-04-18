@@ -3,7 +3,6 @@
     <AIState>
         <Entry UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
             <Event_OnExecute>
-                <!-- <AIEvent Type="SetAction" Action="Explosion"/> -->
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="Entry"/>
             </Event_OnExecute>
