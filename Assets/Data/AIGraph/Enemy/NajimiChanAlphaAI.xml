@@ -66,10 +66,10 @@
         <Branch Condition="TargetDistance >= gv_najimiSystemChaseRange" Execute="SystemChase"/>
         
         <!-- 장외 거리 분기 -->
-        <Branch Condition="(TargetDistance >= gv_StdPassiveAttitude) && (getStat_Phase == 1.0)" Execute="Chase"/>
+        <Branch Condition="(TargetDistance >= gv_StdPassiveAttitude)" Execute="Chase"/>
         
         <!-- 1페이즈 근거리/원거리 -->
-        <Branch Condition="(getStat_Phase == 1.0)" Execute="Chase"/> 
+        <Branch Condition="true" Execute="Chase"/> 
         
     </JudgeDistance>
 
