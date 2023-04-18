@@ -154,6 +154,17 @@
         ProjectileCollisionRadius=""
     />
 
+    <OsananaNajimiAlpha
+        DisplayName="오사나나 나지미 알파"
+        ActionGraph="Assets\Data\ActionGraph\Enemy\NajimiChanAction.xml"
+        AIGraph="Assets\Data\AIGraph\Enemy\NajimiChanAlphaAI.xml"
+        StatusInfoName="OsananaNajimiStatus"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+    />
+
     <PitchingMachine
         DisplayName="피칭머신"
         ActionGraph="Assets\Data\ActionGraph\Enemy\PitchingMachineAction.xml"
