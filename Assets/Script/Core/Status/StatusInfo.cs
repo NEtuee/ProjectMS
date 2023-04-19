@@ -393,7 +393,7 @@ public class StatusInfo
             {
                 if(buffItem._particleEffect != null)
                 {
-                    buffItem._particleEffect.disableEffect();
+                    buffItem._particleEffect.stopEffect();
                     buffItem._particleEffect = null;
                 }
             }

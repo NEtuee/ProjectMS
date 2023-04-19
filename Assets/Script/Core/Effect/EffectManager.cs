@@ -86,13 +86,17 @@ public abstract class EffectItemBase
     public EffectType              _effectType = EffectType.SpriteEffect;
     public string                  _effectPath = "";
 
-    public abstract void initialize(EffectRequestData effectData);
-    public abstract bool progress(float deltaTime);
-    public abstract void release();
+    protected bool                 _stopEffect = false;
 
-    public abstract bool isValid();
+    public abstract void    initialize(EffectRequestData effectData);
+    public abstract bool    progress(float deltaTime);
+    public abstract void    release();
 
-    public virtual bool isActivated() {return true;}
+    public abstract bool    isValid();
+
+    public virtual bool     isActivated() {return true;}
+
+    public virtual void     stopEffect() {_stopEffect = true;}
 
 }
 
@@ -137,6 +141,8 @@ public class EffectItem : EffectItemBase
         _animationPlayData._hasMovementGraph = false;
         _animationPlayData._isLoop = false;
         _animationPlayData._flipState = new FlipState{xFlip = false, yFlip = false};
+
+        _stopEffect = false;
 
         if(effectData._animationCustomPreset != null)
         {
@@ -189,6 +195,9 @@ public class EffectItem : EffectItemBase
 
     public override bool progress(float deltaTime)
     {
+        if(_stopEffect)
+            return true;
+
         bool isEnd = _animationPlayer.progress(deltaTime,null);
         _spriteRenderer.sprite = _animationPlayer.getCurrentSprite();
         _spriteRenderer.transform.localRotation *= _animationPlayer.getAnimationRotationPerFrame();
@@ -296,6 +305,8 @@ public class TimelineEffectItem : EffectItemBase
 
         _parentTransform = effectData._parentTransform;
 
+        _stopEffect = false;
+
         if(effectData._lifeTime != 0f)
             _playSpeed = 1.0f / effectData._lifeTime;
         else
@@ -319,6 +330,9 @@ public class TimelineEffectItem : EffectItemBase
     {
         if(isValid() == false || _playableDirector.playableGraph.IsValid() == false)
             return false;
+
+        if(_stopEffect)
+            return true;
 
         switch(_effectUpdateType)
         {
@@ -402,6 +416,8 @@ public class ParticleEffectItem : EffectItemBase
 
         _parentTransform = effectData._parentTransform;
 
+        _stopEffect = false;
+
         if(_parentTransform != null && _parentTransform.gameObject.activeInHierarchy == false)
             _parentTransform = null;
 
@@ -469,6 +485,16 @@ public class ParticleEffectItem : EffectItemBase
     }
 
     public override bool isActivated() {return _effectObject.activeInHierarchy;}
+
+    public override void stopEffect()
+    {
+        base.stopEffect();
+
+        foreach(var item in _allParticleSystems)
+        {
+            item.Stop();
+        }
+    }
 }
 
 public class TrailEffectItem : EffectItemBase
