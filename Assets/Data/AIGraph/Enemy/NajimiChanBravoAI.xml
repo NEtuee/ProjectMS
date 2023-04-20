@@ -1,25 +1,25 @@
 <AIGraph Name="NajimiChanBravoAI" DefaultState="Entry">
 
-    <Include Path="Common\CommonTestPackage.xml"/>
+    <Include Path="Common/CommonTestPackage.xml"/>
    
 
-    <Include Path="Common\CommonDeadPackage.xml"/>
-    <Include Path="Common\CommonHitPackage.xml"/>
-    <Include Path="Common\CommonChasePackage.xml"/>
-    <Include Path="Common\CommonSystemChasePackage.xml"/>
-    <Include Path="Common\CommonAttackPackage.xml"/>
-    <Include Path="Common\CommonIdlePackage.xml"/>
-    <Include Path="Common\CommonGuardBrokenPackage.xml"/>
-    <Include Path="Common\CommonRunawayPackage.xml"/>
-    <Include Path="Common\CommonGroggyPackage.xml"/>
+    <Include Path="Common/CommonDeadPackage.xml"/>
+    <Include Path="Common/CommonHitPackage.xml"/>
+    <Include Path="Common/CommonChasePackage.xml"/>
+    <Include Path="Common/CommonSystemChasePackage.xml"/>
+    <Include Path="Common/CommonAttackPackage.xml"/>
+    <Include Path="Common/CommonIdlePackage.xml"/>
+    <Include Path="Common/CommonGuardBrokenPackage.xml"/>
+    <Include Path="Common/CommonRunawayPackage.xml"/>
+    <Include Path="Common/CommonGroggyPackage.xml"/>
 
-    <Include Path="Enemy/OsananaNajimi/NajimiRushPackage.xml"/>
+    <Include Path="Enemy/KantoReito/ReitoPunchPackage.xml"/>
     <Include Path="Enemy/OsananaNajimi/NajimiSpawnPitchingMachinePackage.xml"/>
     <Include Path="Enemy/OsananaNajimi/NajimiPitchingPackage.xml"/>
     <Include Path="Enemy/OsananaNajimi/NajimiStunChasePackage.xml"/>
     <Include Path="Enemy/OsananaNajimi/NajimiDodgePackage.xml"/>
     <Include Path="Enemy/OsananaNajimi/NajimiDashPackage.xml"/>
-    <Include Path="Enemy/OsananaNajimi/NajimiAttackReadyPackage.xml"/>
+    <Include Path="Enemy/KantoReito/ReitoAttackReadyPackage.xml"/>
 
     <Test Package="CommonTestPackage">
         <Branch Condition="CurrentPackageEnd" Execute="Test"/>
@@ -134,7 +134,7 @@
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </SystemChase>
     
-    <DashRushReady Package="NajimiAttackReadyPackage">
+    <DashRushReady Package="ReitoAttackReadyPackage">
         <UseBranchSet Name="IsPlayerDead"/>
         <Branch Condition="CurrentPackageEnd" Execute="DashRush"/>
     </DashRushReady>
@@ -145,12 +145,12 @@
         <Branch Condition="CurrentPackageEnd" Execute="Rush"/>
     </DashRush>
 
-    <RushReady Package="NajimiAttackReadyPackage">
+    <RushReady Package="ReitoAttackReadyPackage">
         <UseBranchSet Name="IsPlayerDead"/>
         <Branch Condition="CurrentPackageEnd" Execute="Rush"/>
     </RushReady>
 
-    <Rush Package="NajimiRushPackage">
+    <Rush Package="ReitoPunchPackage">
         <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
