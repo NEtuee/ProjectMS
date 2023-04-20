@@ -15,10 +15,12 @@ public class TargetSearchDescription : MessageData
 public struct SpawnCharacterOptionDesc
 {
     public Vector3          _position;
+
+    public Vector3          _direction;
     public Quaternion       _rotation;
     public SearchIdentifier _searchIdentifier;
 
-    public static SpawnCharacterOptionDesc defaultValue = new SpawnCharacterOptionDesc{ _position = Vector3.zero, _rotation = Quaternion.identity, _searchIdentifier = SearchIdentifier.Count};
+    public static SpawnCharacterOptionDesc defaultValue = new SpawnCharacterOptionDesc{ _position = Vector3.zero, _direction = Vector3.right, _rotation = Quaternion.identity, _searchIdentifier = SearchIdentifier.Count};
 }
 
 public class SpawnCharacterOptionDescData : MessageData
@@ -298,7 +300,7 @@ public class SceneCharacterManager : ManagerBase
         characterEntity.transform.position = spawnDesc._position;
         characterEntity.transform.rotation = spawnDesc._rotation;
 
-        characterEntity.initializeCharacter(characterData);
+        characterEntity.initializeCharacter(characterData,spawnDesc._direction);
         
         _onCharacterEnabled(characterEntity);
         return characterEntity;

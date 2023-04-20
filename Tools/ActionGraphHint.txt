@@ -15,7 +15,7 @@ FrameEvent,ZoomEffect,Scale=~~
 FrameEvent,StopUpdate,Time=~~
 FrameEvent,TimelineEffect,"Path=~~,Offset=~~,ToTarget=~~,Attach=~~,UpdateType=~~,AngleType=~~"
 FrameEvent,ParticleEffect,"Path=~~,Offset=~~,ToTarget=~~,Attach=~~,UpdateType=~~,AngleType=~~"
-FrameEvent,SpawnCharacter,"CharacterKey=~~,Offset=~0 0 0~,SearchIdentifier=~~,Inherit=~~"
+FrameEvent,SpawnCharacter,"CharacterKey=~~,Offset=~0 0 0~,SearchIdentifier=~~,Inherit=~~,InheritDirection=~~"
 FrameEventAndInQuote,Attack IgnoreDefenceType=,"Guard,Parry,Evade"
 FrameEventAndInQuote,SetDefenceType DefenceType=,"Empty,Guard,Parry,Evade"
 FrameEventAndInQuote,Projectile ShotInfoUseType=,"UseDefault,Overlap,Add"
@@ -71,7 +71,7 @@ ShortCut,__FrameEvent_Movement,<FrameEvent Type=~Movement~ StartTime=~0~ Frictio
 ShortCut,__MultiSelectAnimation,<MultiSelectAnimation Path=~~ Condition=~~/>
 ShortCut,__FrameEvent_ZoomEffect,<FrameEvent Type=~ZoomEffect~ StartTime=~0~ Scale=~~/>
 ShortCut,__FrameEvent_StopUpdate,<FrameEvent Type=~StopUpdate~ StartTime=~0~ Time=~~/>
-ShortCut,__FrameEvent_SpawnCharacter,<FrameEvent Type=~SpawnCharacter~ StartTime=~0~ CharacterKey=~~ Offset=~0 0 0~ SearchIdentifier=~~/>
+ShortCut,__FrameEvent_SpawnCharacter,<FrameEvent Type=~SpawnCharacter~ StartTime=~0~ CharacterKey=~~ Offset=~0 0 0~ SearchIdentifier=~~ InheritDirection=~~/>
 InQuote,AttackType=,"Default,GuardBreak,Catch"
 ShortCut,__FrameEvent_ReleaseCatch,<FrameEvent Type=~ReleaseCatch~ StartTime=~0~ Push=~~/>
 FrameEvent,ReleaseCatch,Push=~~

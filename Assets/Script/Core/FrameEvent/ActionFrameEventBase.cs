@@ -313,6 +313,7 @@ public class ActionFrameEvent_SpawnCharacter : ActionFrameEventBase
     private UnityEngine.Vector3         _spawnOffset;
 
     private bool                        _inherit = false;
+    private bool                        _inheritDirection = false;
 
     public override void initialize()
     {
@@ -324,8 +325,10 @@ public class ActionFrameEvent_SpawnCharacter : ActionFrameEventBase
         SceneCharacterManager sceneCharacterManager = SceneCharacterManager._managerInstance as SceneCharacterManager;
 
         _spawnDesc._position = executeEntity.transform.position + _spawnOffset;
+        if(_inheritDirection)
+            _spawnDesc._direction = executeEntity.getDirection();
+            
         CharacterEntityBase createdCharacter = sceneCharacterManager.createCharacterFromPool(_characterInfoData,_spawnDesc);
-
         createdCharacter.setSummonObject(_inherit ? executeEntity.getSummonObject() : executeEntity);
 
         return true;
@@ -356,7 +359,10 @@ public class ActionFrameEvent_SpawnCharacter : ActionFrameEventBase
             {
                 _inherit = bool.Parse(attrValue);
             }
-
+            else if(attrName == "InheritDirection")
+            {
+                _inheritDirection = bool.Parse(attrValue);
+            }
         }
     }
 }

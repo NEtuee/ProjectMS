@@ -93,13 +93,13 @@ public class GameEntityBase : SequencerObjectBase
         createSpriteRenderObject();
     }
 
-    public virtual void initializeCharacter(CharacterInfoData characterInfo)
+    public virtual void initializeCharacter(CharacterInfoData characterInfo, Vector3 direction)
     {
         base.initialize();
         _characterLifeTime = 0f;
         _leftHP = 0f;
         
-        _direction = Vector3.right;
+        setDirection(direction);
         
         gameObject.name = characterInfo._displayName;
         actionGraphPath = characterInfo._actionGraphPath;

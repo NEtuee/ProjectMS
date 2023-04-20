@@ -25,9 +25,9 @@ public class CharacterEntityBase : GameEntityBase
 #endif
     }
 
-    public override void initializeCharacter(CharacterInfoData characterInfo)
+    public override void initializeCharacter(CharacterInfoData characterInfo, Vector3 direction)
     {
-        base.initializeCharacter(characterInfo);
+        base.initializeCharacter(characterInfo,direction);
 
         RegisterRequest(QueryUniqueID("SceneCharacterManager"));
         targetSearchQuick();

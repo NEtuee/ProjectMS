@@ -249,5 +249,6 @@ public abstract class ObjectBase : MessageReceiver, IProgress
         return _spriteRenderer.transform;
     }
     public Vector3 getDirection() {return _direction;}
+    public void setDirection(Vector3 direction) {_direction = direction;}
 
 }
