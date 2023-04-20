@@ -3,6 +3,12 @@ using UnityEngine;
 
 public class AIGraph
 {
+    struct ReservedAIEventItem
+    {
+        public AIChildEventType _eventType;
+        public Dictionary<AIChildEventType,AIChildFrameEventItem> _eventDic;
+    }
+
     private int _currentAINodeIndex = -1;
     private int _prevAINodeIndex = -1;
 
@@ -35,6 +41,8 @@ public class AIGraph
     private AIGraphBaseData _aiGraphBaseData;
     private List<byte[]> _conditionResultList = new List<byte[]>();
     private List<AIChildEventType> _reservedEvents = new List<AIChildEventType>();
+    private List<ReservedAIEventItem> _reservedTargetEvents = new List<ReservedAIEventItem>();
+
     private List<string> _reservedCustomEvents = new List<string>();
 
 
@@ -61,7 +69,7 @@ public class AIGraph
     public void initialize(GameEntityBase targetEntity)
     {
         if(_aiGraphBaseData._defaultAIIndex != -1)
-            changeAINode(_aiGraphBaseData._defaultAIIndex, targetEntity);
+            changeAINode(_aiGraphBaseData._defaultAIIndex, targetEntity, true);
 
     }
 
@@ -69,6 +77,11 @@ public class AIGraph
     {
         if(isValid() == false)
             return false;
+
+        for(int i =0; i < _reservedTargetEvents.Count; ++i)
+        {
+            processAIEvent(_reservedTargetEvents[i]._eventType,targetEntity, _reservedTargetEvents[i]._eventDic);
+        }
 
         for(int i =0; i < _reservedEvents.Count; ++i)
         {
@@ -80,6 +93,7 @@ public class AIGraph
             processCustomAIEvent(_reservedCustomEvents[i],targetEntity);
         }
 
+        _reservedTargetEvents.Clear();
         _reservedEvents.Clear();
         _reservedCustomEvents.Clear();
         
@@ -136,6 +150,15 @@ public class AIGraph
         _reservedCustomEvents.Add(eventName);
     }
 
+    public void executeAIEventTargetReserved(AIChildEventType eventType, Dictionary<AIChildEventType,AIChildFrameEventItem> aiEventDic)
+    {
+        ReservedAIEventItem item;
+        item._eventType = eventType;
+        item._eventDic = aiEventDic;
+
+        _reservedTargetEvents.Add(item);
+    }
+
     private bool processAINode(float deltaTime, AIGraphNodeData aiGraphNode, GameEntityBase targetEntity)
     {
         bool nodeChanged = false;
@@ -144,7 +167,7 @@ public class AIGraph
         {
             if(processActionBranch(_aiGraphBaseData._branchData[i],_aiGraphBaseData._conditionCompareData) == true)
             {
-                nodeChanged = changeAINode(_aiGraphBaseData._branchData[i]._branchActionIndex, targetEntity);
+                nodeChanged = changeAINode(_aiGraphBaseData._branchData[i]._branchActionIndex, targetEntity, false);
                 break;
             }
         }
@@ -160,8 +183,8 @@ public class AIGraph
 
             _aiGraphExecutedTimer = 0f;
 
-            processAIEvent(AIChildEventType.AIChildEvent_OnExit, targetEntity, ref getPrevAINode()._aiEvents);
-            processAIEvent(AIChildEventType.AIChildEvent_OnExecute, targetEntity, ref getCurrentAINode()._aiEvents);
+            processAIEvent(AIChildEventType.AIChildEvent_OnExit, targetEntity, getPrevAINode()._aiEvents);
+            processAIEvent(AIChildEventType.AIChildEvent_OnExecute, targetEntity, getCurrentAINode()._aiEvents);
         }
 
         return nodeChanged;
@@ -181,7 +204,7 @@ public class AIGraph
             AIPackageNodeData currentPackageNode = getCurrentAIPackageNode();
             _updateTimer -= deltaTime;
 
-            processAIEvent(AIChildEventType.AIChildEvent_OnFrame, targetEntity, ref currentPackageNode._aiEvents);
+            processAIEvent(AIChildEventType.AIChildEvent_OnFrame, targetEntity, currentPackageNode._aiEvents);
 
             if(currentPackageNode._hasTargetPosition)
             {
@@ -195,7 +218,7 @@ public class AIGraph
             else
                 return false;
 
-            processAIEvent(AIChildEventType.AIChildEvent_OnUpdate, targetEntity, ref currentPackageNode._aiEvents);
+            processAIEvent(AIChildEventType.AIChildEvent_OnUpdate, targetEntity, currentPackageNode._aiEvents);
 
             int startIndex = aiPackageNode._branchIndexStart;
             for(int i = startIndex; i < startIndex + aiPackageNode._branchCount; ++i)
@@ -218,8 +241,8 @@ public class AIGraph
         {
             _rotateProcess = false;
 
-            processAIEvent(AIChildEventType.AIChildEvent_OnExit, targetEntity, ref getPrevAIPackageNode()._aiEvents);
-            processAIEvent(AIChildEventType.AIChildEvent_OnExecute, targetEntity, ref getCurrentAIPackageNode()._aiEvents);
+            processAIEvent(AIChildEventType.AIChildEvent_OnExit, targetEntity, getPrevAIPackageNode()._aiEvents);
+            processAIEvent(AIChildEventType.AIChildEvent_OnExecute, targetEntity, getCurrentAIPackageNode()._aiEvents);
 
             _updateTimer = getCurrentAIPackageNode()._updateTime;
         }
@@ -227,7 +250,7 @@ public class AIGraph
         return stateChanged;
     }
 
-    private bool changeAINode(int aiPackageIndex, GameEntityBase targetEntity)
+    private bool changeAINode(int aiPackageIndex, GameEntityBase targetEntity, bool reserveEvent)
     {
         if(aiPackageIndex < 0 || aiPackageIndex >= _aiGraphBaseData._aiNodeCount)
         {
@@ -244,7 +267,10 @@ public class AIGraph
         changeAIPackageState(getCurrentAIPackage()._defaultAIIndex);
         _prevPackageStateIndex = -1;
 
-        processAIEvent(AIChildEventType.AIChildEvent_OnExecute, targetEntity, ref getCurrentAIPackageNode()._aiEvents);
+        if(reserveEvent)
+            executeAIEventTargetReserved(AIChildEventType.AIChildEvent_OnExecute, getCurrentAIPackageNode()._aiEvents);
+        else
+            processAIEvent(AIChildEventType.AIChildEvent_OnExecute, targetEntity, getCurrentAIPackageNode()._aiEvents);
         _updateTimer = getCurrentAIPackageNode()._updateTime;
 
         return true;
@@ -286,29 +312,29 @@ public class AIGraph
 
     private void processAIEvent(AIChildEventType aiEventType, GameEntityBase targetEntity)
     {
-        if(processAIEvent(aiEventType,targetEntity, ref getCurrentAIPackageNode()._aiEvents))
+        if(processAIEvent(aiEventType,targetEntity, getCurrentAIPackageNode()._aiEvents))
             return;
-        else if(processAIEvent(aiEventType,targetEntity, ref getCurrentAIPackage()._aiEvents))
+        else if(processAIEvent(aiEventType,targetEntity, getCurrentAIPackage()._aiEvents))
             return;
-        else if(processAIEvent(aiEventType,targetEntity, ref getCurrentAINode()._aiEvents))
+        else if(processAIEvent(aiEventType,targetEntity, getCurrentAINode()._aiEvents))
             return;
-        else if(processAIEvent(aiEventType,targetEntity, ref _aiGraphBaseData._aiEvents))
+        else if(processAIEvent(aiEventType,targetEntity, _aiGraphBaseData._aiEvents))
             return;
     }
 
     private void processCustomAIEvent(string eventName, GameEntityBase targetEntity)
     {
-        if(processCustomAIEvent(eventName,targetEntity, ref getCurrentAIPackageNode()._customAIEvents))
+        if(processCustomAIEvent(eventName,targetEntity, getCurrentAIPackageNode()._customAIEvents))
             return;
-        else if(processCustomAIEvent(eventName,targetEntity, ref getCurrentAIPackage()._customAIEvents))
+        else if(processCustomAIEvent(eventName,targetEntity, getCurrentAIPackage()._customAIEvents))
             return;
-        else if(processCustomAIEvent(eventName,targetEntity, ref getCurrentAINode()._customAIEvents))
+        else if(processCustomAIEvent(eventName,targetEntity, getCurrentAINode()._customAIEvents))
             return;
-        else if(processCustomAIEvent(eventName,targetEntity, ref _aiGraphBaseData._customAIEvents))
+        else if(processCustomAIEvent(eventName,targetEntity, _aiGraphBaseData._customAIEvents))
             return;
     }
 
-    private bool processAIEvent(AIChildEventType aiEventType, GameEntityBase targetEntity, ref Dictionary<AIChildEventType,AIChildFrameEventItem> aiEventDic)
+    private bool processAIEvent(AIChildEventType aiEventType, GameEntityBase targetEntity, Dictionary<AIChildEventType,AIChildFrameEventItem> aiEventDic)
     {
         if(aiEventDic.ContainsKey(aiEventType) == true)
         {
@@ -326,7 +352,7 @@ public class AIGraph
         return false;
     }
 
-    private bool processCustomAIEvent(string customEvent, GameEntityBase targetEntity, ref Dictionary<string,AIChildFrameEventItem> aiEventDic)
+    private bool processCustomAIEvent(string customEvent, GameEntityBase targetEntity, Dictionary<string,AIChildFrameEventItem> aiEventDic)
     {
         if(aiEventDic.ContainsKey(customEvent) == true)
         {

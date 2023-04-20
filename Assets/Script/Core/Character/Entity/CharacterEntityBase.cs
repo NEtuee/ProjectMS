@@ -30,6 +30,7 @@ public class CharacterEntityBase : GameEntityBase
         base.initializeCharacter(characterInfo);
 
         RegisterRequest(QueryUniqueID("SceneCharacterManager"));
+        targetSearchQuick();
     }
 
     public override void progress(float deltaTime)
@@ -58,5 +59,19 @@ public class CharacterEntityBase : GameEntityBase
     }
 
 
-    
+    private void targetSearchQuick()
+    {
+        if(isAIGraphValid() && getCurrentTargetSearchType() != TargetSearchType.None)
+        {
+            TargetSearchDescription desc = MessageDataPooling.GetMessageData<TargetSearchDescription>();
+            desc._requester = this;
+            desc._searchIdentifier = getCurrentSearchIdentifier();
+            desc._searchRange = getCurrentTargetSearchRange();
+            desc._searchStartRange = getCurrentTargetSearchStartRange();
+            desc._searchSphereRadius = getCurrentTargetSearchSphereRadius();
+            desc._searchType = getCurrentTargetSearchType();
+
+            SendMessageQuick(MessageTitles.entity_searchNearestQuick,QueryUniqueID("SceneCharacterManager"),desc);
+        }
+    }
 }

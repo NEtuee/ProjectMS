@@ -92,6 +92,11 @@ public class SceneCharacterManager : ManagerBase
             _targetSearchRequestList.Add(desc);
         });
 
+        AddAction(MessageTitles.entity_searchNearestQuick,(msg)=>{
+            TargetSearchDescription desc = msg.data as TargetSearchDescription;
+            processTargetSearchQuick(desc);
+        });
+
         AddAction(MessageTitles.entity_spawnCharacter, (msg)=>{
             SpawnCharacterOptionDescData desc = MessageDataPooling.CastData<SpawnCharacterOptionDescData>(msg.data);
             createCharacterFromPool(desc._characterInfoData, desc._spawnCharacterOptionDesc);
@@ -127,86 +132,7 @@ public class SceneCharacterManager : ManagerBase
             {
                 TargetSearchDescription desc = _targetSearchRequestList[i];
 
-                float range = desc._searchRange * desc._searchRange;
-
-                if(desc._requester is CharacterEntityBase == false || receiver is CharacterEntityBase == false)
-                {
-                    DebugUtil.assert(false,"must be character entity, code error");
-                    return;
-                }
-                else if(desc._searchIdentifier == SearchIdentifier.Count)
-                {
-                    DebugUtil.assert(false,"invalid search identifier: Count");
-                    return;
-                }
-
-                CharacterEntityBase requester = desc._requester as CharacterEntityBase;
-                CharacterEntityBase receiverCharacter = receiver as CharacterEntityBase;
-
-                GameEntityBase currentTarget = requester.getCurrentTargetEntity();
-                float toNewDistanceSq = receiverCharacter.getDistanceSq(requester);
-
-                if(targetIsValid(requester,currentTarget,desc) == false)
-                    requester.setTargetEntity(null);
-
-                switch(desc._searchType)
-                {
-                    case TargetSearchType.Near:
-                    {
-                        if(requester == receiverCharacter || desc._searchIdentifier != receiverCharacter._searchIdentifier || receiverCharacter.isDead())
-                            continue;
-
-                        if(currentTarget == null)
-                        {
-                            if(toNewDistanceSq < range)
-                                requester.setTargetEntity(receiverCharacter);
-                            continue;
-                        }
-
-                        float toCurrent = currentTarget.getDistanceSq(requester);
-                        if(toNewDistanceSq < range && toCurrent > toNewDistanceSq)
-                            requester.setTargetEntity(receiverCharacter);
-                    }
-                    break;
-                    case TargetSearchType.NearDirection:
-                    case TargetSearchType.NearMousePointDirection:
-                    {
-                        if(requester == receiverCharacter || desc._searchIdentifier != receiverCharacter._searchIdentifier || receiverCharacter.isDead())
-                            continue;
-
-                        Vector3 direction = Vector3.right;
-                        if(desc._searchType == TargetSearchType.NearDirection)
-                            direction = requester.getDirection();
-                        else if(desc._searchType == TargetSearchType.NearMousePointDirection)
-                            direction = requester.getDirectionFromType(DirectionType.MousePoint);
-
-                        if(MathEx.pointSphereRayCast(requester.transform.position + direction * requester.getCurrentTargetSearchStartRange()
-                                    , receiverCharacter.transform.position,direction * desc._searchRange
-                                    , desc._searchSphereRadius) == false)
-                        {
-                            continue;
-                        }
-
-                        if(currentTarget == null)
-                        {
-                            if(toNewDistanceSq < range)
-                                requester.setTargetEntity(receiverCharacter);
-                            continue;
-                        }
-
-                        bool currentTargetValid = MathEx.pointSphereRayCast(requester.transform.position + direction * requester.getCurrentTargetSearchStartRange()
-                                    , currentTarget.transform.position,direction * desc._searchRange
-                                    , desc._searchSphereRadius);
-
-                        float toCurrent = currentTarget.getDistanceSq(requester);
-                        if(toNewDistanceSq < range && (toCurrent > toNewDistanceSq || currentTargetValid == false))
-                            requester.setTargetEntity(receiverCharacter);
-                    }
-                    break;
-
-                }
-                
-                    
+                updateTargetSearch(receiver, desc);
             }
         }
 
@@ -215,6 +141,104 @@ public class SceneCharacterManager : ManagerBase
             MessageDataPooling.ReturnData(_targetSearchRequestList[i]);
         }
         _targetSearchRequestList.Clear();
+    }
+
+    public void processTargetSearchQuick(TargetSearchDescription desc)
+    {
+        foreach(var receiver in _receivers.Values)
+        {
+            if(receiver == null || !receiver.gameObject.activeInHierarchy || !receiver.enabled)
+                continue;
+
+            updateTargetSearch(receiver, desc);
+        }
+
+        MessageDataPooling.ReturnData(desc);
+    }
+
+
+    private bool updateTargetSearch(ObjectBase receiver, TargetSearchDescription desc)
+    {
+        float range = desc._searchRange * desc._searchRange;
+
+        if(desc._requester is CharacterEntityBase == false || receiver is CharacterEntityBase == false)
+        {
+            DebugUtil.assert(false,"must be character entity, code error");
+            return false;
+        }
+        else if(desc._searchIdentifier == SearchIdentifier.Count)
+        {
+            DebugUtil.assert(false,"invalid search identifier: Count");
+            return false;
+        }
+
+        CharacterEntityBase requester = desc._requester as CharacterEntityBase;
+        CharacterEntityBase receiverCharacter = receiver as CharacterEntityBase;
+
+        GameEntityBase currentTarget = requester.getCurrentTargetEntity();
+        float toNewDistanceSq = receiverCharacter.getDistanceSq(requester);
+
+        if(targetIsValid(requester,currentTarget,desc) == false)
+            requester.setTargetEntity(null);
+
+        switch(desc._searchType)
+        {
+            case TargetSearchType.Near:
+            {
+                if(requester == receiverCharacter || desc._searchIdentifier != receiverCharacter._searchIdentifier || receiverCharacter.isDead())
+                    return true;
+
+                if(currentTarget == null)
+                {
+                    if(toNewDistanceSq < range)
+                        requester.setTargetEntity(receiverCharacter);
+                    return true;
+                }
+
+                float toCurrent = currentTarget.getDistanceSq(requester);
+                if(toNewDistanceSq < range && toCurrent > toNewDistanceSq)
+                    requester.setTargetEntity(receiverCharacter);
+            }
+            break;
+            case TargetSearchType.NearDirection:
+            case TargetSearchType.NearMousePointDirection:
+            {
+                if(requester == receiverCharacter || desc._searchIdentifier != receiverCharacter._searchIdentifier || receiverCharacter.isDead())
+                    return true;
+
+                Vector3 direction = Vector3.right;
+                if(desc._searchType == TargetSearchType.NearDirection)
+                    direction = requester.getDirection();
+                else if(desc._searchType == TargetSearchType.NearMousePointDirection)
+                    direction = requester.getDirectionFromType(DirectionType.MousePoint);
+
+                if(MathEx.pointSphereRayCast(requester.transform.position + direction * requester.getCurrentTargetSearchStartRange()
+                            , receiverCharacter.transform.position,direction * desc._searchRange
+                            , desc._searchSphereRadius) == false)
+                {
+                    return true;
+                }
+
+                if(currentTarget == null)
+                {
+                    if(toNewDistanceSq < range)
+                        requester.setTargetEntity(receiverCharacter);
+                    return true;
+                }
+
+                bool currentTargetValid = MathEx.pointSphereRayCast(requester.transform.position + direction * requester.getCurrentTargetSearchStartRange()
+                            , currentTarget.transform.position,direction * desc._searchRange
+                            , desc._searchSphereRadius);
+
+                float toCurrent = currentTarget.getDistanceSq(requester);
+                if(toNewDistanceSq < range && (toCurrent > toNewDistanceSq || currentTargetValid == false))
+                    requester.setTargetEntity(receiverCharacter);
+            }
+            break;
+
+        }
+
+        return true;
     }
 
     public bool targetIsValid(GameEntityBase currentCharacter, GameEntityBase targetCharacter, TargetSearchDescription searchDesc)

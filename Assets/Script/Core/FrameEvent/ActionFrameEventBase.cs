@@ -497,7 +497,7 @@ public class ActionFrameEvent_Movement : ActionFrameEventBase
         MovementBase currentMovement = ((GameEntityBase)executeEntity).getCurrentMovement();
         if(currentMovement == null)
             return false;
-            
+        
         if(currentMovement.getMovementType() != MovementBase.MovementType.FrameEvent)
         {
             DebugUtil.assert(false,"movement frame event is only can use, when movement type is frameEvent movement : currentType[{0}]", currentMovement.getMovementType().ToString());

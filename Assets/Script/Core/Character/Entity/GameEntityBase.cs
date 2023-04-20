@@ -98,7 +98,9 @@ public class GameEntityBase : SequencerObjectBase
         base.initialize();
         _characterLifeTime = 0f;
         _leftHP = 0f;
-
+        
+        _direction = Vector3.right;
+        
         gameObject.name = characterInfo._displayName;
         actionGraphPath = characterInfo._actionGraphPath;
         aiGraphPath = characterInfo._aiGraphPath;
@@ -106,10 +108,14 @@ public class GameEntityBase : SequencerObjectBase
 
         _headUpOffset = characterInfo._headUpOffset;
 
+        _movementControl.initialize();
         _actionGraph.initialize(ResourceContainerEx.Instance().GetActionGraph(characterInfo._actionGraphPath));
         _aiGraph.initialize(this, _actionGraph, ResourceContainerEx.Instance().GetAIGraph(characterInfo._aiGraphPath));
 
         _actionGraph.initializeCustomValue(_aiGraph.getCustomValueData());
+
+        _movementControl.changeMovement(this,_actionGraph.getCurrentMovement());
+        _movementControl.setMoveScale(_actionGraph.getCurrentMoveScale());
 
         _danmakuGraph.initialize(this);
 
@@ -131,6 +137,7 @@ public class GameEntityBase : SequencerObjectBase
         _initializeFromCharacter = true;
 
         _currentVelocity = Vector3.zero;
+        _currentTarget = null;
 
         initializeActionValue();
     }
@@ -144,10 +151,14 @@ public class GameEntityBase : SequencerObjectBase
 
         base.initialize();
         
+        _movementControl.initialize();
         _actionGraph.initialize(ResourceContainerEx.Instance().GetActionGraph(actionGraphPath));
         _aiGraph.initialize(this, _actionGraph, ResourceContainerEx.Instance().GetAIGraph(aiGraphPath));
 
         _actionGraph.initializeCustomValue(_aiGraph.getCustomValueData());
+
+        _movementControl.changeMovement(this,_actionGraph.getCurrentMovement());
+        _movementControl.setMoveScale(_actionGraph.getCurrentMoveScale());
 
         _danmakuGraph.initialize(this);
         _statusInfo.initialize(this,statusInfoName);

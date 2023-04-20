@@ -48,10 +48,9 @@ public class FrameEventMovement : MovementBase
         }
 
         float resultSpeed = _movementValues[0] + (_movementValues[0] >= 0 ? -_movementValues[3] : _movementValues[3]);
-        
         _currentVelocity += (direction * _movementValues[0]) * deltaTime;
-        Vector3 velocityDirection = _currentVelocity.normalized;
 
+        Vector3 velocityDirection = _currentVelocity.normalized;
         _currentVelocity -= _currentVelocity.normalized * _movementValues[3] * deltaTime;
 
         if(Vector3.Angle(_currentVelocity.normalized, velocityDirection) > 100f)
