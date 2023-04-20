@@ -23,8 +23,6 @@ public static class XMLScriptConverter
             return null;
         }
 
-        xmlFile = xmlFile.Replace("~","\"");
-
         int startOffset = 0;
         int endOffset = 0;
         while(true)
