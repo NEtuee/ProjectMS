@@ -1,17 +1,18 @@
 <AIGraph Name="NajimiChanAI" DefaultState="Entry">
 
-    <Include Path="Common\CommonTestPackage.xml"/>
+    <Include Path="Common/CommonTestPackage.xml"/>
    
 
-    <Include Path="Common\CommonDeadPackage.xml"/>
-    <Include Path="Common\CommonHitPackage.xml"/>
-    <Include Path="Common\CommonChasePackage.xml"/>
-    <Include Path="Common\CommonSystemChasePackage.xml"/>
-    <Include Path="Common\CommonAttackPackage.xml"/>
-    <Include Path="Common\CommonIdlePackage.xml"/>
-    <Include Path="Common\CommonGuardBrokenPackage.xml"/>
-    <Include Path="Common\CommonRunawayPackage.xml"/>
-    <Include Path="Common\CommonGroggyPackage.xml"/>
+    <Include Path="Common/CommonDeadPackage.xml"/>
+    <Include Path="Common/CommonHitPackage.xml"/>
+    <Include Path="Common/CommonChasePackage.xml"/>
+    <Include Path="Common/CommonSystemChasePackage.xml"/>
+    <Include Path="Common/CommonAttackPackage.xml"/>
+    <Include Path="Common/CommonIdlePackage.xml"/>
+    <Include Path="Common/CommonGuardBrokenPackage.xml"/>
+    <Include Path="Common/CommonRunawayPackage.xml"/>
+    <Include Path="Common/CommonGroggyPackage.xml"/>
+    <Include Path="Common/CommonDashPackage.xml"/>
 
     <Include Path="Enemy/OsananaNajimi/NajimiRushPackage.xml"/>
     <Include Path="Enemy/OsananaNajimi/NajimiSpawnPitchingMachinePackage.xml"/>
@@ -22,7 +23,6 @@
     <Include Path="Enemy/OsananaNajimi/NajimiBeamPackage.xml"/>
     <Include Path="Enemy/OsananaNajimi/NajimiStunChasePackage.xml"/>
     <Include Path="Enemy/OsananaNajimi/NajimiDodgePackage.xml"/>
-    <Include Path="Enemy/OsananaNajimi/NajimiDashPackage.xml"/>
     <Include Path="Enemy/OsananaNajimi/NajimiAttackReadyPackage.xml"/>
 
     <Include Path="Common\CommonPhaseIncreasePackage.xml"/>
@@ -180,7 +180,7 @@
         <Branch Condition="CurrentPackageEnd" Execute="DashRush"/>
     </DashRushReady>
     
-    <DashRush Package="NajimiDashPackage">
+    <DashRush Package="CommonDashPackage">
         <UseBranchSet Name="IsPlayerDead"/>
         <Branch Condition="(gv_najimiRushRange >= TargetDistance)" Execute="Rush"/>
         <Branch Condition="CurrentPackageEnd" Execute="Rush"/>
@@ -222,7 +222,7 @@
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </Baton>
 
-    <DashPistol Package="NajimiDashPackage">
+    <DashPistol Package="CommonDashPackage">
         <UseBranchSet Name="IsPlayerDead"/>
         <Branch Condition="(gv_najimiRushRange >= TargetDistance)" Execute="Pistol"/>
         <Branch Condition="CurrentPackageEnd" Execute="Pistol"/>

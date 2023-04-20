@@ -13,10 +13,6 @@
         <AnimationHeader MasterPath="Sprites/Enemy/KantoReito/0_default/"/>
         <Animation Preset="1_idle" XFlip="true" Duration="1">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
-            <!-- 바톤 슬래시 카운트 리셋 (pistol 이름 바꿔야함.)-->
-            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="NajimiResetPistolCount"/>
-            <!-- <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountClear"/> -->
-            <FrameEvent Type="ReleaseCatch" StartTime="0" Push="0 0 0" Condition="getTargetFrameTag_Dead"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
@@ -38,7 +34,6 @@
         <AnimationHeader MasterPath="Sprites/Enemy/KantoReito/0_default/"/>
         <Animation Preset="2_move" XFlip="true" Duration="0.1">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="20" Speed="40"/>
-
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_SystemChase"/>
@@ -120,7 +115,6 @@
     </AC_PunchReady>
 
     <!-- 아카네에게 이동하며 주먹 휘두르기 ~ 헛스윙 후 회복 애니메이션 -->
-    <!-- TODO: 펀치 -->
     <AC_Punch MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/KantoReito/1_punch/"/>
         <Animation Preset="2_punchMain" XFlip="true" Duration="0.35">
@@ -137,7 +131,7 @@
                 </OnHit>
             </FrameEvent>
         </Animation>
-        <Animation Preset="4_punchRecover" XFlip="true" Duration="1.47">
+        <Animation Preset="4_punchRecovery" XFlip="true" Duration="1.47">
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
         </Animation>
@@ -146,18 +140,16 @@
     </AC_Punch>
 
     <!-- 아카네 펀치 성공 후 회복 애니메이션 -->
-    <!-- TODO: 펀치 성공 -->
     <AC_PunchSuccess MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/KantoReito/1_punch/"/>
         <Animation Preset="3_punchSuccess" XFlip="true" Duration="1.0">
-            <FrameEvent Type="Movement" StartTime="0" Friction="24"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="24" Velocity="0" Speed="0"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_PunchSuccess>
 
-    <!-- TODO: 건틀렛 소환 -->
-    <AC_SpawnPitchingMachine MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+    <AC_SpawnGauntlet MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <Animation Preset="Sprites/Enemy/KantoReito/3_spawnGauntlet" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
             <FrameEvent Type="Danmaku" StartTime="0.5" Path="Enemy\NajimiPitchingMachine.xml"/>
@@ -167,34 +159,30 @@
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>
-    </AC_SpawnPitchingMachine>
+    </AC_SpawnGauntlet>
 
-    <!-- TODO: 화장포 준비 -->
-    <AC_PitcherReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <!-- 투구 준비 모션, 탄막 경로 활성화 -->
+    <AC_CremationBeamReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/KantoReito/2_cremationBeam/"/>
         <Animation Preset="1_cremationBeamReady" XFlip="true" Duration="0.85">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/NajimiPitchingBeam_TimeLine" Attach="true" AngleType="Direction" LifeTime="1.05" FollowDirection="True"/>
+            <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/ReitoCremationBeam_TimeLine" Attach="true" AngleType="Direction" LifeTime="1.05" FollowDirection="True"/>
 
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>
-    </AC_PitcherReady>
+    </AC_CremationBeamReady>
 
-    <!-- TODO: 화장포 발사 -->
-    <AC_Pitch MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
-        <!-- 투구 모션, 장판 활성화 -->
+    <AC_CremationBeamShot MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/KantoReito/2_cremationBeam/"/>
         <Animation Preset="2_cremationBeamShot" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <!-- TODO: 투구 이펙트 추가해야함. 해당 이펙트 지속시간에 따라 Main 모션 시간과 Attack 지속 시간 조정 -->
-            <FrameEvent Type="Attack" StartTime="0.2" AttackPreset="Najimi_Pitching">
+            <!-- TODO: 화장포 이펙트 추가해야함. 해당 이펙트 지속시간에 따라 Main 모션 시간과 Attack 지속 시간 조정 -->
+            <FrameEvent Type="Attack" StartTime="0.2" AttackPreset="Reito_Beam">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="StunSet"/>
+                    <!-- <FrameEvent Type="ApplyBuffTarget" ApplyBuff="StunSet"/> -->
 
                     <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Slash" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
                     <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Blood" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
@@ -203,7 +191,7 @@
             
                 <OnGuard>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="StunSet"/>
+                    <!-- <FrameEvent Type="ApplyBuffTarget" ApplyBuff="StunSet"/> -->
 
                     <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Slash" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
                     <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Blood" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
@@ -217,6 +205,6 @@
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>
-    </AC_Pitch>
+    </AC_CremationBeamShot>
 
 </ActionGraph>
