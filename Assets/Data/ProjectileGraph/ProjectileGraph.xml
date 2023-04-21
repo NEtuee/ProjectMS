@@ -202,17 +202,7 @@
         <DefaultShotInfo Velocity="7" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="5"/>
         <Event>
             <OnHit>
-                <FrameEvent Type="Attack" StartFrame="0" AttackPreset="MagicalBullet">
-                    <OnHit>
-                        <FrameEvent Type="Test" Log="MuzzleFlash OnHit"/>
-                        <FrameEvent Type="ApplyBuffTarget" ApplyBuff="TestProjectileAttack"/>
-                        <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
-                    </OnHit>
-
-                    <OnGuard>
-                        <FrameEvent Type="TimelineEffect" StartFrame="0" Path="Prefab/Effect/Test_Timeline" Attach="true" ToTarget="true"/>
-                    </OnGuard>
-                </FrameEvent>
+                <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
             </OnHit>
     
             <OnHitEnd>
@@ -281,6 +271,33 @@
         </Event>
     </PitchingMachine>
 
+    <Gauntlet DefaultFramePerSecond="4" UseSpriteRotation="false" PenetrateCount="1">
+        <Animation Preset="Sprites/Enemy/Gauntlet/0_default/4_spawn" XFlip="true" Duration="0.8">
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="CountGauntlet" EventTargetType="Summoner"/>        
+        </Animation>
+
+        <CollisionInfo Radius="0.1" Angle="0"/>
+        <DefaultShotInfo Velocity="7" Acceleration="0" Friction="14" Angle="0" AngularAcceleration="0" LifeTime="0.8"/>
+        
+        <Event>
+            <OnHit>
+                <FrameEvent Type="Attack" StartFrame="0" AttackPreset="BaseBall">
+                    <OnHit>
+                        <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="Gauntlet" Offset="0 0 0" SearchIdentifier="Enemy" Inherit="true"/>
+                        <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
+                    </OnHit>
+                </FrameEvent>
+            </OnHit>
+    
+            <OnHitEnd>
+
+            </OnHitEnd>
+    
+            <OnEnd>
+                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="Gauntlet" Offset="0 0 0" SearchIdentifier="Enemy" Inherit="true"/>
+            </OnEnd>
+        </Event>
+    </Gauntlet>
     <BaseBall DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">
         <Animation Preset="Sprites/Projectile/BaseBall" XFlip="true" Duration="5.0">        
         </Animation>

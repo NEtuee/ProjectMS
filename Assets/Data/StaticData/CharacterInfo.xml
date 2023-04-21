@@ -176,11 +176,11 @@
         ProjectileCollisionRadius=""
     />
 
-    <OsananaNajimiCharlie
-        DisplayName="오사나나 나지미 찰리"
-        ActionGraph="Assets\Data\ActionGraph\Enemy\NajimiChanAction.xml"
-        AIGraph="Assets\Data\AIGraph\Enemy\NajimiChanCharlieAI.xml"
-        StatusInfoName="OsananaNajimiStatus"
+    <NozawaAoba
+        DisplayName="노자와 아오바"
+        ActionGraph="Assets\Data\ActionGraph\Enemy\AobaChanAction.xml"
+        AIGraph="Assets\Data\AIGraph\Enemy\AobaChanAI.xml"
+        StatusInfoName="NozawaAobaStatus"
         
         CollisionRadius="0.2"
         HeadUpOffset="0.5"
@@ -192,6 +192,17 @@
         ActionGraph="Assets\Data\ActionGraph\Enemy\PitchingMachineAction.xml"
         AIGraph="Assets\Data\AIGraph\Enemy\PitchingMachineAI.xml"
         StatusInfoName="CommonEnemyStatus"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+    />
+
+    <Gauntlet
+        DisplayName="건틀렛"
+        ActionGraph="Assets\Data\ActionGraph\Enemy\GauntletAction.xml"
+        AIGraph="Assets\Data\AIGraph\Enemy\GauntletAI.xml"
+        StatusInfoName="GauntletStatus"
         
         CollisionRadius="0.2"
         HeadUpOffset="0.5"

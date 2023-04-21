@@ -1,0 +1,43 @@
+<AIPackage Name="AobaChoraisenPackage" DefaultState="AI_PistolReady">
+
+    <AIState>
+        <AI_PistolReady UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <Event_OnExecute>
+                <AIEvent Type="Test" Log="AI Beam Ready Entry"/>
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="AC_BeamReady"/>
+            </Event_OnExecute>
+
+            <Event_OnFrame>
+                <AIEvent Type="SetDirectionToTarget"/>
+            </Event_OnFrame>
+            
+            <Branch Condition="End" Execute="AI_BeamShot"/>
+        </AI_PistolReady>
+
+        <AI_BeamShot UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <Event_OnExecute>
+                <AIEvent Type="SetAction" Action="AC_BeamShot"/>
+            </Event_OnExecute>
+
+            <Branch Condition="AttackSuccess" Execute="AI_ChoraisenSuccess"/>
+            <Branch Condition="End" Execute="TerminatePackage"/>          
+        </AI_BeamShot>
+
+        <AI_ChoraisenSuccess UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <Event_OnExecute>
+                <AIEvent Type="SetAction" Action="AC_ChoraisenSuccess"/>
+            </Event_OnExecute>
+
+            <Branch Condition="End" Execute="TerminatePackage"/>    
+        </AI_ChoraisenSuccess>
+
+        <TerminatePackage>
+            <Event_OnExecute>
+                <AIEvent Type="TerminatePackage"/>
+            </Event_OnExecute>
+        </TerminatePackage>
+
+    </AIState>
+
+</AIPackage>
