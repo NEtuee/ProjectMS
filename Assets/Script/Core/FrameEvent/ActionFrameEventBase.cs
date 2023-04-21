@@ -314,6 +314,7 @@ public class ActionFrameEvent_SpawnCharacter : ActionFrameEventBase
 
     private bool                        _inherit = false;
     private bool                        _inheritDirection = false;
+    private bool                        _useFlip = false;
 
     public override void initialize()
     {
@@ -324,7 +325,11 @@ public class ActionFrameEvent_SpawnCharacter : ActionFrameEventBase
     {
         SceneCharacterManager sceneCharacterManager = SceneCharacterManager._managerInstance as SceneCharacterManager;
 
-        _spawnDesc._position = executeEntity.transform.position + _spawnOffset;
+        UnityEngine.Vector3 offset = _spawnOffset;
+        if(_useFlip && executeEntity is CharacterEntityBase && (executeEntity as CharacterEntityBase).getFlipState().xFlip)
+            offset.y *= -1f;
+
+        _spawnDesc._position = executeEntity.transform.position + offset;
         if(_inheritDirection)
             _spawnDesc._direction = executeEntity.getDirection();
             
@@ -362,6 +367,10 @@ public class ActionFrameEvent_SpawnCharacter : ActionFrameEventBase
             else if(attrName == "InheritDirection")
             {
                 _inheritDirection = bool.Parse(attrValue);
+            }
+            else if(attrName == "UseFlip")
+            {
+                _useFlip = bool.Parse(attrValue);
             }
         }
     }
