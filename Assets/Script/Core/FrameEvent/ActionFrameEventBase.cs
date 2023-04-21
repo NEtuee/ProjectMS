@@ -326,9 +326,14 @@ public class ActionFrameEvent_SpawnCharacter : ActionFrameEventBase
         SceneCharacterManager sceneCharacterManager = SceneCharacterManager._managerInstance as SceneCharacterManager;
 
         UnityEngine.Vector3 offset = _spawnOffset;
-        if(_useFlip && executeEntity is CharacterEntityBase && (executeEntity as CharacterEntityBase).getFlipState().xFlip)
-            offset.y *= -1f;
-
+        if(_useFlip && executeEntity is CharacterEntityBase)
+        {
+            UnityEngine.Quaternion directionAngle = UnityEngine.Quaternion.Euler(0f,0f,UnityEngine.Vector3.SignedAngle(UnityEngine.Vector3.right, executeEntity.getDirection(), UnityEngine.Vector3.forward));
+            offset = directionAngle * offset;
+            if((executeEntity as CharacterEntityBase).getFlipState().xFlip)
+                offset.y *= -1f;
+        }
+        
         _spawnDesc._position = executeEntity.transform.position + offset;
         if(_inheritDirection)
             _spawnDesc._direction = executeEntity.getDirection();

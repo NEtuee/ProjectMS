@@ -139,6 +139,8 @@ public class GameEntityBase : SequencerObjectBase
         _currentVelocity = Vector3.zero;
         _currentTarget = null;
 
+        _spriteRenderer.sprite = _actionGraph.getCurrentSprite(_actionGraph.getCurrentRotationType() != RotationType.AlwaysRight ? (_spriteRotation * _actionStartRotation).eulerAngles.z : MathEx.directionToAngle(_direction));
+
         initializeActionValue();
     }
 
