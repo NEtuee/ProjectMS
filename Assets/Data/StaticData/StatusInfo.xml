@@ -81,6 +81,18 @@
         
     </KantoReitoStatus>
 
+    <NozawaAoneStatus>
+        <Stat Type="HP" Max="70" Min="0" Init="70"/>
+        <Stat Type="Blood" Max="100" Min="0" Init="3"/>
+        <Stat Type="Battle" Max="20" Min="0" Init="0"/>
+        <Stat Type="Custom" Name="HitCount" Max="999" Min="0" Init="0" />
+        <Stat Type="Custom" Name="PistolCount" Max="3" Min="0" Init="0"/>
+
+        <DeclareGraphicInterface Target="HP" Color="1 0 0 1" HorizontalGap="0.1"/>
+        <DeclareGraphicInterface Target="Battle" Color="1 0.749 0 1" HorizontalGap="0.1"/>
+        
+    </NozawaAoneStatus>
+
     <ActionProjectileStatus>
         <Stat Type="HP" Max="1" Min="0" Init="1"/>
         <Stat Type="Blood" Max="100" Min="0" Init="3"/>

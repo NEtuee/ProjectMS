@@ -1,4 +1,4 @@
-<AIGraph Name="NajimiChanCharlieAI" DefaultState="Entry">
+<AIGraph Name="AoneChanAI" DefaultState="Entry">
 
     <Include Path="Common/CommonTestPackage.xml"/>
    
@@ -14,20 +14,16 @@
     <Include Path="Common/CommonGroggyPackage.xml"/>
     <Include Path="Common/CommonDashPackage.xml"/>
 
-    <Include Path="Enemy/OsananaNajimi/NajimiRushPackage.xml"/>
-    <Include Path="Enemy/OsananaNajimi/NajimiSpawnPitchingMachinePackage.xml"/>
-    <Include Path="Enemy/OsananaNajimi/NajimiPitchingPackage.xml"/>
-    <Include Path="Enemy/OsananaNajimi/NajimiBatonPackage.xml"/>
+    <Include Path="Enemy/NozawaAone/AoneRaisenPackage.xml"/>
+    
     <Include Path="Enemy/OsananaNajimi/NajimiPistolPackage.xml"/>
     <Include Path="Enemy/OsananaNajimi/NajimiFireworkPackage.xml"/>
     <Include Path="Enemy/OsananaNajimi/NajimiBeamPackage.xml"/>
-    <Include Path="Enemy/OsananaNajimi/NajimiStunChasePackage.xml"/>
     <Include Path="Enemy/OsananaNajimi/NajimiDodgePackage.xml"/>
     <Include Path="Enemy/OsananaNajimi/NajimiAttackReadyPackage.xml"/>
 
-    <Include Path="Common\CommonPhaseIncreasePackage.xml"/>
 
-    <Test Package="CommonTestPackage">
+    <Test Package="NajimiFireworkPackage">
         <Branch Condition="CurrentPackageEnd" Execute="Test"/>
     </Test>
 
@@ -57,7 +53,7 @@
     <GlobalVariable Name="gv_najimiRushTrasitionTime" Value="0.8"/>     <!-- 나지미 돌진 최소 텀 -->
     
     <!-- Pitching Machine -->
-    <GlobalVariable Name="gv_najimiPitchingMachineLimit" Value="2.0"/>
+    <GlobalVariable Name="gv_najimiPitchingMachineLimit" Value="-1.0"/>
 
     <!-- Groggy Pattern -->
     <GlobalVariable Name="gv_najimiStdBattle" Value="20.0"/>     <!-- 나지미 그로기 기준 배틀 포인트 -->
@@ -90,18 +86,15 @@
         <Branch Condition="TargetDistance >= gv_najimiSystemChaseRange" Execute="SystemChase"/>
         
         <!-- 장외 거리 분기 -->
-        <Branch Condition="(TargetDistance >= gv_StdPassiveAttitude) && (customValue_CurrentPitchingMachineCount <= gv_najimiPitchingMachineLimit)" Execute="SpawnPitchingMachine"/>
         <Branch Condition="(TargetDistance >= gv_StdPassiveAttitude)" Execute="DashRush"/>
         
         <!-- 3페이즈 근거리 -->
         <Branch Weight="Najimi3PhaseNearAtk^Rush" Condition="(TargetDistance < gv_StdDistance)" Execute="RushReady"/>
-        <Branch Weight="Najimi3PhaseNearAtk^SpawnPitchingMachine" Condition="(TargetDistance < gv_StdDistance) && (customValue_CurrentPitchingMachineCount <= gv_najimiPitchingMachineLimit)" Execute="SpawnPitchingMachine"/>
         <Branch Weight="Najimi3PhaseNearAtk^SpawnPitchingMachine" Condition="(TargetDistance < gv_StdDistance)" Execute="Pistol"/>
         <Branch Weight="Najimi3PhaseNearAtk^Pistol" Condition="(TargetDistance < gv_StdDistance)" Execute="Pistol"/>
         <Branch Weight="Najimi3PhaseNearAtk^BatonSlash" Condition="(TargetDistance < gv_StdDistance)" Execute="Baton"/>
 
         <!-- 3페이즈 원거리 -->
-        <Branch Weight="Najimi3PhaseDistAtk^PitchingMachine" Condition="(TargetDistance >= gv_StdDistance) && (customValue_CurrentPitchingMachineCount <= gv_najimiPitchingMachineLimit)" Execute="SpawnPitchingMachine"/>
         <Branch Weight="Najimi3PhaseDistAtk^PitchingMachine" Condition="(TargetDistance >= gv_StdDistance)" Execute="Baton"/>
         <Branch Weight="Najimi3PhaseDistAtk^BatonSlash" Condition="(TargetDistance >= gv_StdDistance)" Execute="Baton"/>
         <Branch Weight="Najimi3PhaseDistAtk^Firework" Condition="(TargetDistance >= gv_StdDistance)" Execute="Firework"/> 
@@ -168,19 +161,13 @@
         <Branch Condition="CurrentPackageEnd" Execute="Rush"/>
     </RushReady>
 
-    <Rush Package="NajimiRushPackage">
+    <Rush Package="AoneRaisenPackage">
         <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </Rush>
 
-    <SpawnPitchingMachine Package="NajimiSpawnPitchingMachinePackage">
-        <UseBranchSet Name="IsPlayerDead"/>
-        <UseBranchSet Name="HitReactionSet"/>
-        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
-    </SpawnPitchingMachine>
-
-    <Baton Package="NajimiBatonPackage">
+    <Baton Package="AoneRaisenPackage">
         <UseBranchSet Name="IsPlayerDead"/>
         <Branch Condition="CurrentPackageEnd && (getStat_PistolCount < 3.0)" Execute="Baton"/>
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
