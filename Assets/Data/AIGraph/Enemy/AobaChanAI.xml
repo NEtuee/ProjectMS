@@ -1,4 +1,4 @@
-<AIGraph Name="AoneChanAI" DefaultState="Entry">
+<AIGraph Name="AobaChanAI" DefaultState="Entry">
 
     <Include Path="Common/CommonTestPackage.xml"/>
    
@@ -14,11 +14,11 @@
     <Include Path="Common/CommonGroggyPackage.xml"/>
     <Include Path="Common/CommonDashPackage.xml"/>
 
-    <Include Path="Enemy/NozawaAone/AoneRaisenPackage.xml"/>
+    <Include Path="Enemy/NozawaAoba/AobaRaisenPackage.xml"/>
+    <Include Path="Enemy/NozawaAoba/AobaChoraisenPackage.xml"/>
     
     <Include Path="Enemy/OsananaNajimi/NajimiPistolPackage.xml"/>
     <Include Path="Enemy/OsananaNajimi/NajimiFireworkPackage.xml"/>
-    <Include Path="Enemy/OsananaNajimi/NajimiBeamPackage.xml"/>
     <Include Path="Enemy/OsananaNajimi/NajimiDodgePackage.xml"/>
     <Include Path="Enemy/OsananaNajimi/NajimiAttackReadyPackage.xml"/>
 
@@ -161,13 +161,13 @@
         <Branch Condition="CurrentPackageEnd" Execute="Rush"/>
     </RushReady>
 
-    <Rush Package="AoneRaisenPackage">
+    <Rush Package="AobaRaisenPackage">
         <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </Rush>
 
-    <Baton Package="AoneRaisenPackage">
+    <Baton Package="AobaRaisenPackage">
         <UseBranchSet Name="IsPlayerDead"/>
         <Branch Condition="CurrentPackageEnd && (getStat_PistolCount < 3.0)" Execute="Baton"/>
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
@@ -192,7 +192,7 @@
         <Branch Weight="RandBoolean^False" Condition="CurrentPackageEnd" Execute="Entry"/>
     </Firework>
 
-    <Beam Package="NajimiBeamPackage">
+    <Beam Package="AobaChoraisenPackage">
         <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>

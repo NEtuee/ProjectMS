@@ -1,4 +1,4 @@
-<AIPackage Name="AoneChoraisenPackage" DefaultState="AI_PistolReady">
+<AIPackage Name="AobaChoraisenPackage" DefaultState="AI_PistolReady">
 
     <AIState>
         <AI_PistolReady UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
@@ -24,7 +24,7 @@
             <Branch Condition="End" Execute="TerminatePackage"/>          
         </AI_BeamShot>
 
-        <AI_ChoraisenSuccessUpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_ChoraisenSuccess UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_ChoraisenSuccess"/>
             </Event_OnExecute>

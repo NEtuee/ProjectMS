@@ -1,7 +1,7 @@
-<ActionGraph Name="AoneChanAction" DefaultAction="AC_Idle" DefaultFramePerSecond="12" DefaultBuff="NajimiBattleDecrementKeep">
+<ActionGraph Name="AobaChanAction" DefaultAction="AC_Idle" DefaultFramePerSecond="12" DefaultBuff="NajimiBattleDecrementKeep">
 
     <AC_Entry MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAone/0_default/"/>
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/0_default/"/>
         <Animation Preset="1_idle" XFlip="true" Duration="1">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
         </Animation>
@@ -10,7 +10,7 @@
     </AC_Entry>
 
     <AC_Idle MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAone/0_default/"/>
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/0_default/"/>
         <Animation Preset="1_idle" XFlip="true" Duration="1">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
             <!-- 바톤 슬래시 카운트 리셋 (pistol 이름 바꿔야함.)-->
@@ -23,7 +23,7 @@
     </AC_Idle>
 
     <AC_Move MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAone/0_default/"/>
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/0_default/"/>
         <Animation Preset="2_move" XFlip="true" Duration="0.5">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="5" Speed="15"/>
 
@@ -35,7 +35,7 @@
     </AC_Move>
 
     <AC_SystemChase MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAone/0_default/"/>
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/0_default/"/>
         <Animation Preset="2_move" XFlip="true" Duration="0.1">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="20" Speed="40"/>
 
@@ -45,7 +45,7 @@
     </AC_SystemChase>
     
     <AC_Dash MovementType="GraphPreset" MovementGraphPreset="Najimi_Dash" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAone/0_default/"/>
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/0_default/"/>
         <Animation Preset="3_dash" XFlip="true" Duration="0.7">
             <FrameEvent Type="Test" Log="HitCount 2" Condition="getStat_HitCount == 2.0"/>
             <FrameEvent Type="Test" Log="HitCount 3" Condition="getStat_HitCount == 3.0"/>
@@ -57,7 +57,7 @@
     </AC_Dash>
 
     <AC_Dodge MovementType="GraphPreset" MovementGraphPreset="Reito_Dodge" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAone/0_default/"/>
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/0_default/"/>
         <Animation Preset="6_dodge" XFlip="true" Duration="0.7">
             <FrameEvent Type="Test" Log="HitCount 2" Condition="getStat_HitCount == 2.0"/>
             <FrameEvent Type="Test" Log="HitCount 3" Condition="getStat_HitCount == 3.0"/>
@@ -69,7 +69,7 @@
     </AC_Dodge>
 
     <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAone/0_default/"/>
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/0_default/"/>
         <Animation Preset="4_hit" XFlip="true" Duration="1.25">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountIncrease"/>
@@ -84,7 +84,7 @@
     </AC_Hit>
 
     <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAone/0_default/"/>
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/0_default/"/>
         <Animation Preset="4_hit" XFlip="true" Duration="1.25">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountIncrease"/>
@@ -99,7 +99,7 @@
     </AC_GuardBroken>
 
     <AC_Groggy MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAone/0_default/"/>
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/0_default/"/>
         <Animation Preset="4_hit" XFlip="true" Duration="1.25">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BattleClear"/>
@@ -113,7 +113,7 @@
     </AC_Groggy>
     
     <Dead DirectionType="Keep" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAone/0_default/"/>
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/0_default/"/>
         <Animation Preset="5_dead" XFlip="true" Duration="1">
         </Animation>
 
@@ -132,7 +132,7 @@
     
     <!-- TODO: Raisen Ready -->
     <AC_BatonReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAone/1_raisen/"/>
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/1_raisen/"/>
         <Animation Preset="1_raisenReady" XFlip="true" Duration="0.5">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
             <FrameEvent Type="TimelineEffect" StartTime="0.35" Path="Prefab/Effect/MaterialAttackPre_Timeline" Offset="0.0 0.0 0.0" Attach="true"/>
@@ -142,7 +142,7 @@
     </AC_BatonReady>
 
     <AC_BatonPre MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAone/1_raisen/2_raisen/"/>
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/1_raisen/2_raisen/"/>
         <Animation Preset="1_raisenPre" XFlip="true" Duration="0.1">
             <!-- TODO: 바톤 3연속 공격 카운트용 버프. 향후 이름 수정해야함. (Pistol->Baton)-->
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="NajimiAddPistolCount"/>
@@ -152,7 +152,7 @@
     </AC_BatonPre>
 
     <AC_BatonSlash MovementType="GraphPreset" MovementGraphPreset="Najimi_BatonSlash" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAone/1_raisen/2_raisen/"/>
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/1_raisen/2_raisen/"/>
         <Animation Preset="2_raisenMain" XFlip="true" Duration="0.8">
             <FrameEvent Type="Attack" StartTime="0" AttackPreset="Najimi_BatonSlash">
                 <OnHit>
@@ -174,7 +174,7 @@
     </AC_BatonSlash>
 
     <AC_BatonSuccess MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAone/1_raisen/"/>
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/1_raisen/"/>
         <Animation Preset="3_raisenSuccess" XFlip="true" ScalePreset="YSpring" Duration="0.88">
             <FrameEvent Type="Movement" StartTime="0" Friction="90" MaxVelocity="20" Speed="0"/>
             
@@ -187,7 +187,7 @@
 
     <!-- TODO: MuzzleFlash-->
     <AC_PistolReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAone/2_muzzleFlash/"/>
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/2_muzzleFlash/"/>
         <Animation Preset="1_pistolReady" XFlip="true" Duration="0.5">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
         </Animation>
@@ -196,7 +196,7 @@
     </AC_PistolReady>
 
     <AC_PistolShot MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAone/2_muzzleFlash/"/>
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/2_muzzleFlash/"/>
         <Animation Preset="2_pistolShot" XFlip="true" Duration="1.0">
             <FrameEvent Type="Danmaku" StartTime="0" Path="Enemy/MuzzleFlash.xml" Offset="0.4 0.1 0" UseFlip="True"/>
             <FrameEvent Type="Attack" StartTime="0" AttackPreset="Aone_MuzzleFlash">
@@ -215,7 +215,7 @@
 
     <!-- TODO: Choraisen -->
     <AC_BeamReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAone/3_choraisen/"/>
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/3_choraisen/"/>
         <Animation Preset="1_raisenReady" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
             <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/NajimiPistolBeam_TimeLine" Attach="true" AngleType="Direction" LifeTime="1.2" FollowDirection="True"/>
@@ -228,7 +228,7 @@
     </AC_BeamReady>
 
     <AC_BeamShot MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAone/3_choraisen/2_raisen/"/>
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/3_choraisen/2_raisen/"/>
 
         <Animation Preset="1_raisenPre" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="3" Velocity="-12" Speed="0"/>   
@@ -266,7 +266,7 @@
 
     <!-- TODO: ChoraisenSuccess -->
     <AC_ChoraisenSuccess MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAone/3_choraisen/"/>
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/3_choraisen/"/>
         <Animation Preset="3_raisenSuccess" XFlip="true" ScalePreset="YSpring" Duration="0.88">
             <FrameEvent Type="Movement" StartTime="0" Friction="90" MaxVelocity="20" Speed="0"/>
             
@@ -279,7 +279,7 @@
 
     <!-- TODO: EMP Grenade -->
     <AC_FireworkReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAone/4_emp/"/>
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/4_emp/"/>
         <Animation Preset="1_empReady" XFlip="true" Duration="0.5">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
         </Animation>
@@ -289,7 +289,7 @@
     </AC_FireworkReady>
 
     <AC_FireworkShot MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAone/4_emp/"/>
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/4_emp/"/>
         <Animation Preset="2_empThrow" XFlip="true" Duration="1.0">
             <!-- <FrameEvent Type="Projectile" StartTime="0" GraphName="FireworkBullet" DirectionType="AI" SpawnTargetType="Self" Offset="0.4 0.1 0" UseFlip="True"/> -->
             <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="FireworkBullet" Offset="0.4 0.1 0" SearchIdentifier="Enemy" InheritDirection="True"/>
