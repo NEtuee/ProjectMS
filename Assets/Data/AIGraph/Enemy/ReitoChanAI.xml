@@ -24,15 +24,15 @@
         <Branch Condition="CurrentPackageEnd" Execute="Test"/>
     </Test>
 
-    <CustomValue Name="CurrentPitchingMachineCount" Value="0.0"/>
+    <CustomValue Name="CurrentGauntletCount" Value="0.0"/>
 
-    <CustomEvent_CountPitchingMachine>
-        <AIEvent Type="AddCustomValue" Name="CurrentPitchingMachineCount" Value="1.0"/>
-    </CustomEvent_CountPitchingMachine>
+    <CustomEvent_CountGauntlet>
+        <AIEvent Type="AddCustomValue" Name="CurrentGauntletCount" Value="1.0"/>
+    </CustomEvent_CountGauntlet>
 
-    <CustomEvent_DiscountPitchingMachine>
-        <AIEvent Type="AddCustomValue" Name="CurrentPitchingMachineCount" Value="-1.0"/>
-    </CustomEvent_DiscountPitchingMachine>
+    <CustomEvent_DiscountGauntlet>
+        <AIEvent Type="AddCustomValue" Name="CurrentGauntletCount" Value="-1.0"/>
+    </CustomEvent_DiscountGauntlet>
 
     <!-- Std Values -->
     <GlobalVariable Name="gv_najimiReadyTime" Value="1.5"/>     <!-- 보스전 대기 시간 (나중에 보스전 시작 트리거를 받아야 함)-->
@@ -49,8 +49,8 @@
     <GlobalVariable Name="gv_najimiRushRange" Value="2.0"/>             <!-- 나지미 돌진 사거리 -->
     <GlobalVariable Name="gv_najimiRushTrasitionTime" Value="0.8"/>     <!-- 나지미 돌진 최소 텀 -->
     
-    <!-- Pitching Machine -->
-    <GlobalVariable Name="gv_najimiPitchingMachineLimit" Value="0.0"/>
+    <!-- Gauntlet -->
+    <GlobalVariable Name="gv_GuntletLimit" Value="0.0"/>
 
     <!-- Groggy Pattern -->
     <GlobalVariable Name="gv_najimiStdBattle" Value="20.0"/>     <!-- 나지미 그로기 기준 배틀 포인트 -->
@@ -83,17 +83,17 @@
         <Branch Condition="TargetDistance >= gv_najimiSystemChaseRange" Execute="SystemChase"/>
         
         <!-- 장외 거리 분기 -->
-        <Branch Condition="(TargetDistance >= gv_StdPassiveAttitude) && (customValue_CurrentPitchingMachineCount <= gv_najimiPitchingMachineLimit)" Execute="SpawnPitchingMachine"/>
+        <Branch Condition="(TargetDistance >= gv_StdPassiveAttitude) && (customValue_CurrentGauntletCount <= gv_GuntletLimit)" Execute="SpawnPitchingMachine"/>
         <Branch Condition="(TargetDistance >= gv_StdPassiveAttitude)" Execute="DashRush"/>
 
         <!-- 2페이즈 근거리 -->
         <Branch Weight="RandBoolean^True" Condition="(TargetDistance < gv_StdDistance)" Execute="RushReady"/>
-        <Branch Weight="RandBoolean^False" Condition="(TargetDistance < gv_StdDistance) && (customValue_CurrentPitchingMachineCount <= gv_najimiPitchingMachineLimit)" Execute="SpawnPitchingMachine"/>
+        <Branch Weight="RandBoolean^False" Condition="(TargetDistance < gv_StdDistance) && (customValue_CurrentGauntletCount <= gv_GuntletLimit)" Execute="SpawnPitchingMachine"/>
         <Branch Weight="RandBoolean^False" Condition="(TargetDistance < gv_StdDistance)" Execute="RushReady"/>
 
         <!-- 2페이즈 원거리 -->
         <Branch Weight="Najimi2PhaseDistAtk^ChaseRush" Condition="(TargetDistance >= gv_StdDistance)" Execute="Chase"/>
-        <Branch Weight="Najimi2PhaseDistAtk^PitchingMachine" Condition="(TargetDistance >= gv_StdDistance) && (customValue_CurrentPitchingMachineCount <= gv_najimiPitchingMachineLimit)" Execute="SpawnPitchingMachine"/>
+        <Branch Weight="Najimi2PhaseDistAtk^PitchingMachine" Condition="(TargetDistance >= gv_StdDistance) && (customValue_CurrentGauntletCount <= gv_GuntletLimit)" Execute="SpawnPitchingMachine"/>
         <Branch Weight="Najimi2PhaseDistAtk^PitchingMachine" Condition="(TargetDistance >= gv_StdDistance)" Execute="DashRushReady"/>
         <Branch Weight="Najimi2PhaseDistAtk^Pitching" Condition="(TargetDistance >= gv_StdDistance)" Execute="Pitching"/>
         <Branch Weight="Najimi2PhaseDistAtk^DashRush" Condition="(TargetDistance >= gv_StdDistance)" Execute="DashRushReady"/>

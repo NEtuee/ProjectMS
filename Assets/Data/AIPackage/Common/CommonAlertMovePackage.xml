@@ -1,4 +1,4 @@
-<AIPackage Name="PitchingMachineAlertMovePackage" DefaultState="AI_Entry">
+<AIPackage Name="CommonAlertMovePackage" DefaultState="AI_Entry">
 
     <BranchSet Name="AlertMoveBranchSet">
         <Branch Condition="TargetDistance > 3.0" Execute="AI_Chase"/>
