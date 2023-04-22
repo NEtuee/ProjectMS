@@ -1,4 +1,4 @@
-<AIGraph Name="AobaChanAI" DefaultState="Test">
+<AIGraph Name="AobaChanAI" DefaultState="Entry">
 
     <Include Path="Common/CommonTestPackage.xml"/>
    
@@ -16,26 +16,25 @@
 
     <Include Path="Enemy/NozawaAoba/AobaRaisenPackage.xml"/>
     <Include Path="Enemy/NozawaAoba/AobaChoraisenPackage.xml"/>
-    
-    <Include Path="Enemy/OsananaNajimi/NajimiPistolPackage.xml"/>
-    <Include Path="Enemy/OsananaNajimi/NajimiFireworkPackage.xml"/>
-    <Include Path="Enemy/OsananaNajimi/NajimiDodgePackage.xml"/>
-    <Include Path="Enemy/OsananaNajimi/NajimiAttackReadyPackage.xml"/>
+    <Include Path="Enemy/NozawaAoba/AobaHandgunPackage.xml"/>
+    <Include Path="Enemy/NozawaAoba/AobaEmpPackage.xml"/>
+    <Include Path="Enemy/NozawaAoba/AobaDodgePackage.xml"/>
+    <Include Path="Enemy/NozawaAoba/AobaAttackReadyPackage.xml"/>
 
 
-    <Test Package="NajimiFireworkPackage">
+    <Test Package="AobaEmpPackage">
         <Branch Condition="CurrentPackageEnd" Execute="Test"/>
     </Test>
 
-    <CustomValue Name="CurrentPitchingMachineCount" Value="0.0"/>
+    <CustomValue Name="CurrentRaisenCount" Value="0.0"/>
 
-    <CustomEvent_CountPitchingMachine>
-        <AIEvent Type="AddCustomValue" Name="CurrentPitchingMachineCount" Value="1.0"/>
-    </CustomEvent_CountPitchingMachine>
+    <CustomEvent_CountRaisen>
+        <AIEvent Type="AddCustomValue" Name="CurrentRaisenCount" Value="1.0"/>
+    </CustomEvent_CountRaisen>
 
-    <CustomEvent_DiscountPitchingMachine>
-        <AIEvent Type="AddCustomValue" Name="CurrentPitchingMachineCount" Value="-1.0"/>
-    </CustomEvent_DiscountPitchingMachine>
+    <CustomEvent_ResetRaisen>
+        <AIEvent Type="SetCustomValue" Name="CurrentRaisenCount" Value="0.0"/>
+    </CustomEvent_ResetRaisen>
 
     <!-- Std Values -->
     <GlobalVariable Name="gv_najimiReadyTime" Value="1.5"/>     <!-- 보스전 대기 시간 (나중에 보스전 시작 트리거를 받아야 함)-->
@@ -52,8 +51,8 @@
     <GlobalVariable Name="gv_najimiRushRange" Value="2.0"/>             <!-- 나지미 돌진 사거리 -->
     <GlobalVariable Name="gv_najimiRushTrasitionTime" Value="0.8"/>     <!-- 나지미 돌진 최소 텀 -->
     
-    <!-- Pitching Machine -->
-    <GlobalVariable Name="gv_najimiPitchingMachineLimit" Value="-1.0"/>
+    <!-- Raisen -->
+    <GlobalVariable Name="gv_RaisenLimit" Value="3.0"/>
 
     <!-- Groggy Pattern -->
     <GlobalVariable Name="gv_najimiStdBattle" Value="20.0"/>     <!-- 나지미 그로기 기준 배틀 포인트 -->
@@ -86,19 +85,17 @@
         <Branch Condition="TargetDistance >= gv_najimiSystemChaseRange" Execute="SystemChase"/>
         
         <!-- 장외 거리 분기 -->
-        <Branch Condition="(TargetDistance >= gv_StdPassiveAttitude)" Execute="DashRush"/>
+        <Branch Condition="(TargetDistance >= gv_StdPassiveAttitude)" Execute="Chase"/>
         
         <!-- 3페이즈 근거리 -->
-        <Branch Weight="Najimi3PhaseNearAtk^Rush" Condition="(TargetDistance < gv_StdDistance)" Execute="RushReady"/>
-        <Branch Weight="Najimi3PhaseNearAtk^SpawnPitchingMachine" Condition="(TargetDistance < gv_StdDistance)" Execute="Pistol"/>
-        <Branch Weight="Najimi3PhaseNearAtk^Pistol" Condition="(TargetDistance < gv_StdDistance)" Execute="Pistol"/>
-        <Branch Weight="Najimi3PhaseNearAtk^BatonSlash" Condition="(TargetDistance < gv_StdDistance)" Execute="Baton"/>
+        <Branch Weight="AobaNearAtk^Handgun" Condition="(TargetDistance < gv_StdDistance)" Execute="Pistol"/>
+        <Branch Weight="AobaNearAtk^Raisen" Condition="(TargetDistance < gv_StdDistance)" Execute="Baton"/>
 
         <!-- 3페이즈 원거리 -->
-        <Branch Weight="Najimi3PhaseDistAtk^PitchingMachine" Condition="(TargetDistance >= gv_StdDistance)" Execute="Baton"/>
-        <Branch Weight="Najimi3PhaseDistAtk^BatonSlash" Condition="(TargetDistance >= gv_StdDistance)" Execute="Baton"/>
-        <Branch Weight="Najimi3PhaseDistAtk^Firework" Condition="(TargetDistance >= gv_StdDistance)" Execute="Firework"/> 
-        <Branch Weight="Najimi3PhaseDistAtk^Beam" Condition="(TargetDistance >= gv_StdDistance)" Execute="Beam"/> 
+        <Branch Weight="AobaDistAtk^Raisen" Condition="(TargetDistance >= gv_StdDistance)" Execute="Baton"/>
+        <Branch Weight="AobaDistAtk^Choraisen" Condition="(TargetDistance >= gv_StdDistance)" Execute="Beam"/> 
+        <Branch Weight="AobaDistAtk^Emp" Condition="(TargetDistance >= gv_StdDistance)" Execute="Firework"/> 
+        <Branch Weight="AobaDistAtk^Chase" Condition="(TargetDistance >= gv_StdDistance)" Execute="Chase"/> 
         
     </JudgeDistance>
 
@@ -109,11 +106,10 @@
         <Branch Weight="NajimiHitReaction^Dodge" Condition="true" Execute="Dodge"/>
 
         <!-- 제자리 반격 -->
-        <Branch Weight="RandBoolean^True" Condition="true" Execute="RushReady"/>
-        <Branch Weight="RandBoolean^False" Condition="true" Execute="Pistol"/>
+        <Branch Condition="true" Execute="Pistol"/>
     </JudgeHitReaction>
 
-    <Dodge Package="NajimiDodgePackage">      
+    <Dodge Package="AobaDodgePackage">      
         <UseBranchSet Name="IsPlayerDead"/>  
         <!-- 대시 공격 -->
         <Branch Weight="NajimiDodgeAtk^DashAttack" Condition="CurrentPackageEnd" Execute="JudgeDashAtk"/>
@@ -124,7 +120,7 @@
     <!-- 대시 공격 판단 -->
     <JudgeDashAtk Package="CommonIdlePackage">
         <UseBranchSet Name="IsPlayerDead"/>
-        <Branch Weight="RandBoolean^True" Condition="true" Execute="DashRushReady"/>
+        <Branch Weight="RandBoolean^True" Condition="true" Execute="Chase"/>
         <Branch Weight="RandBoolean^False" Condition="true" Execute="DashPistol"/>
     </JudgeDashAtk>
 
@@ -145,18 +141,14 @@
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </SystemChase>
     
-    <DashRushReady Package="NajimiAttackReadyPackage">
-        <UseBranchSet Name="IsPlayerDead"/>
-        <Branch Condition="CurrentPackageEnd" Execute="DashRush"/>
-    </DashRushReady>
     
     <DashRush Package="CommonDashPackage">
         <UseBranchSet Name="IsPlayerDead"/>
-        <Branch Condition="(gv_najimiRushRange >= TargetDistance)" Execute="Rush"/>
-        <Branch Condition="CurrentPackageEnd" Execute="Rush"/>
+        <Branch Condition="(gv_najimiRushRange >= TargetDistance)" Execute="Pistol"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Pistol"/>
     </DashRush>
 
-    <RushReady Package="NajimiAttackReadyPackage">
+    <RushReady Package="AobaAttackReadyPackage">
         <UseBranchSet Name="IsPlayerDead"/>
         <Branch Condition="CurrentPackageEnd" Execute="Rush"/>
     </RushReady>
@@ -169,7 +161,7 @@
 
     <Baton Package="AobaRaisenPackage">
         <UseBranchSet Name="IsPlayerDead"/>
-        <Branch Condition="CurrentPackageEnd && (getStat_PistolCount < 3.0)" Execute="Baton"/>
+        <Branch Condition="CurrentPackageEnd && (customValue_CurrentRaisenCount < gv_RaisenLimit)" Execute="Baton"/>
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </Baton>
 
@@ -179,13 +171,13 @@
         <Branch Condition="CurrentPackageEnd" Execute="Pistol"/>
     </DashPistol>
 
-    <Pistol Package="NajimiPistolPackage">
+    <Pistol Package="AobaHandgunPackage">
         <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </Pistol>
 
-    <Firework Package="NajimiFireworkPackage">
+    <Firework Package="AobaEmpPackage">
         <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Weight="RandBoolean^True" Condition="CurrentPackageEnd" Execute="Beam"/>
