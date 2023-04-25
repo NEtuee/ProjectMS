@@ -16,6 +16,6 @@ public class StaticDataLoader : MonoBehaviour
         StatusInfo.setBuffDataDictionary(BuffDataLoader.readFromXML(buffInfoPath));
         ActionKeyInputManager.Instance().setPresetData(ActionKeyPresetDataLoader.readFromXML(keyPresetPath));
         WeightRandomManager.Instance().setWeightGroupData(WeightRandomExporter.readFromXML(weightRandomPath));
-        CharacterInfoManager.Instance().SetCharacterInfo(CharacterInfoLoader.readFromXML(characterInfoPath));
+        CharacterInfoManager.Instance().SetCharacterInfo(ResourceContainerEx.Instance().getCharacterInfo(characterInfoPath));
     }
 }

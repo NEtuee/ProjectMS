@@ -5,9 +5,9 @@ using System.Text;
 using UnityEngine;
 using ICSharpCode.WpfDesign.XamlDom;
 
-public class CharacterInfoLoader
+public class CharacterInfoLoader : LoaderBase<Dictionary<string,CharacterInfoData>>
 {
-    public static Dictionary<string,CharacterInfoData> readFromXML(string path)
+    public override Dictionary<string,CharacterInfoData> readFromXML(string path)
     {
         PositionXmlDocument xmlDoc = new PositionXmlDocument();
         try

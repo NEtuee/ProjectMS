@@ -137,6 +137,8 @@ public class ResourceContainerEx : Singleton<ResourceContainerEx>
 	private DataResourceItem<ProjectileGraphBaseData[],ProjectileGraphLoader>	_projectileGraphResource = new DataResourceItem<ProjectileGraphBaseData[],ProjectileGraphLoader>();
 	private DataResourceItem<DanmakuGraphBaseData,DanmakuGraphLoader>			_danmakuGraphResource = new DataResourceItem<DanmakuGraphBaseData,DanmakuGraphLoader>();
 	private DataResourceItem<StageGraphBaseData,StageGraphLoader>				_stageGraphResource = new DataResourceItem<StageGraphBaseData,StageGraphLoader>();
+	private DataResourceItem<Dictionary<string, CharacterInfoData>,CharacterInfoLoader>	_characterInfoResource = new DataResourceItem<Dictionary<string, CharacterInfoData>,CharacterInfoLoader>();
+
 
 
 	public MovementGraph getMovementgraph(string folderName, bool ignorePreload = false)
@@ -202,6 +204,11 @@ public class ResourceContainerEx : Singleton<ResourceContainerEx>
 	public ProjectileGraphBaseData[] GetProjectileGraphBaseData(string path)
 	{
 		return _projectileGraphResource.GetOrLoadResource(path);
+	}
+
+	public Dictionary<string, CharacterInfoData> getCharacterInfo(string path)
+	{
+		return _characterInfoResource.GetOrLoadResource(path);
 	}
 
 	public void UnLoadUnused()
