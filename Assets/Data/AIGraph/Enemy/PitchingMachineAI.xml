@@ -17,6 +17,11 @@
     <!-- 피칭머신 라이프 타임 -->
     <GlobalVariable Name="gv_pitchingMachineLifetime" Value="12.0"/>
 
+    <BranchSet Name="IsPlayerDead">
+        <Branch Condition="Dead" Execute="Dead"/>   
+        <Branch Condition="getTargetFrameTag_Dead" Execute="EnemyWin"/>
+    </BranchSet>
+
     <BranchSet Name="HitReactionSet">
         <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="(LifeTime >= gv_pitchingMachineLifetime)" Execute="Timeout"/>
@@ -25,11 +30,13 @@
     </BranchSet>
 
     <Entry Package="CommonIdlePackage">
+        <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="GraphExecutedTime >= 0.3" Execute="Chase"/>
     </Entry>
 
     <Chase Package="PitchingMachineAlertMovePackage">
+        <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="TargetExists && 
                             (gv_pitchingMachineShootRange >= TargetDistance) &&
@@ -37,6 +44,7 @@
     </Chase>
 
     <Hit Package="CommonHitPackage">
+        <UseBranchSet Name="IsPlayerDead"/>
         <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="Hit" Execute="Hit"/>
         <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
@@ -44,6 +52,7 @@
     </Hit>
 
     <GuardBroken Package="CommonGuardBrokenPackage">
+        <UseBranchSet Name="IsPlayerDead"/>
         <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="Hit" Execute="Hit"/>
         <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
@@ -51,6 +60,7 @@
     </GuardBroken>
 
     <Shot Package="CommonShotPackage">
+        <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="Chase"/>
     </Shot>
@@ -60,5 +70,8 @@
 
     <Timeout Package="CommonTimeoutPackage">
     </Timeout>
+
+    <EnemyWin Package="CommonIdlePackage">
+    </EnemyWin>
 
 </AIGraph>

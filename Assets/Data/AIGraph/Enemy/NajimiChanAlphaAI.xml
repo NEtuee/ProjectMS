@@ -40,6 +40,7 @@
 
 
     <BranchSet Name="IsPlayerDead">
+        <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="getTargetFrameTag_Dead" Execute="NajimiWin"/>
     </BranchSet>
 
