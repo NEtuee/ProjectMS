@@ -1,0 +1,19 @@
+
+<AIPackage Name="H_MIX_C_RushNCaseShot" DefaultState="Entry">
+
+
+    <AIState>
+        <Entry UpdateTime="0.5" TargetSearchType="Near" TargetSearchRange="1.0" SearchIdentifier="Player">
+            <Event_OnExecute>
+                <AIEvent Type="SetAction" Action="MOV_Idle"/>
+                <AIEvent Type="Test" Log="H_MIX_C_RushNCaseShot"/>
+            </Event_OnExecute>
+
+            <Event_OnUpdate>
+                <AIEvent Type="TerminatePackage"/>
+            </Event_OnUpdate>
+        </Entry>
+
+       
+    </AIState>
+</AIPackage>

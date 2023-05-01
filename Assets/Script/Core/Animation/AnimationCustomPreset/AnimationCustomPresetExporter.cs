@@ -1,3 +1,5 @@
+#if UNITY_EDITOR
+
 using System.IO;
 using YamlDotNet.Core;
 using YamlDotNet.Serialization;
@@ -61,3 +63,5 @@ public class AnimationCustomPresetExporter : AssetPostprocessor
         AssetDatabase.DeleteAsset(filePath);
     }
 }
+
+#endif

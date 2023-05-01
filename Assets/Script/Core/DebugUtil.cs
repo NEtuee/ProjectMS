@@ -41,11 +41,10 @@ public static class DebugUtil
 #endif       
         return false;     
     }
-#if UNITY_EDITOR
-#endif
+
 }
 
-
+#if UNITY_EDITOR
 public class CustomDialog : EditorWindow
 {
     public Texture2D customImage;
@@ -106,3 +105,4 @@ public class CustomDialog : EditorWindow
         GUILayout.Space(10);
     }
 }
+#endif

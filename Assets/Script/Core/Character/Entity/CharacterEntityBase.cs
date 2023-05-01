@@ -14,7 +14,6 @@ public class CharacterEntityBase : GameEntityBase
 
         _spriteRenderer.gameObject.layer = LayerMask.NameToLayer("Character");
 
-#if UNITY_EDITOR
         GameObject debugText = Instantiate(ResourceContainerEx.Instance().GetPrefab("Prefab/DebugTextManager"),Vector3.zero,Quaternion.identity);
         debugTextManager = debugText.GetComponent<DebugTextManager>();
         debugTextManager.padding = -0.1f;
@@ -22,7 +21,6 @@ public class CharacterEntityBase : GameEntityBase
 
         debugText.transform.SetParent(this.gameObject.transform);
         debugText.transform.localPosition = Vector3.zero;
-#endif
     }
 
     public override void initializeCharacter(CharacterInfoData characterInfo, Vector3 direction)

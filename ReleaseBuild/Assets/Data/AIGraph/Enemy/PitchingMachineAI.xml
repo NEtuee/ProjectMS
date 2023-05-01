@@ -1,0 +1,77 @@
+<AIGraph Name="PitchingMachineAI" DefaultState="Entry">
+
+    <Include Path="Common\CommonDeadPackage.xml"/>
+    <Include Path="Common\CommonHitPackage.xml"/>
+    <Include Path="Common\CommonIdlePackage.xml"/>
+    <Include Path="Common\CommonGuardBrokenPackage.xml"/>
+    <Include Path="Common\CommonShotPackage.xml"/>
+    <Include Path="Common\CommonTimeoutPackage.xml"/>
+
+    <Include Path="Common\CommonAlertMovePackage.xml"/>
+    
+    <!-- 피칭머신이 플레이어를 공격할 수 있는 거리-->
+    <GlobalVariable Name="gv_pitchingMachineShootRange" Value="5.0"/>
+    <!-- 피칭머신 공격 주기 -->
+    <GlobalVariable Name="gv_pitchingMachineShootCycle" Value="3.0"/>
+
+    <!-- 피칭머신 라이프 타임 -->
+    <GlobalVariable Name="gv_pitchingMachineLifetime" Value="12.0"/>
+
+    <BranchSet Name="IsPlayerDead">
+        <Branch Condition="Dead" Execute="Dead"/>   
+        <Branch Condition="getTargetFrameTag_Dead" Execute="EnemyWin"/>
+    </BranchSet>
+
+    <BranchSet Name="HitReactionSet">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="(LifeTime >= gv_pitchingMachineLifetime)" Execute="Timeout"/>
+        <Branch Condition="Hit" Execute="Hit"/> 
+        <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
+    </BranchSet>
+
+    <Entry Package="CommonIdlePackage">
+        <UseBranchSet Name="IsPlayerDead"/>
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="GraphExecutedTime >= 0.3" Execute="Chase"/>
+    </Entry>
+
+    <Chase Package="PitchingMachineAlertMovePackage">
+        <UseBranchSet Name="IsPlayerDead"/>
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="TargetExists && 
+                            (gv_pitchingMachineShootRange >= TargetDistance) &&
+                            (GraphExecutedTime >=  gv_pitchingMachineShootCycle)" Execute="Shot"/>
+    </Chase>
+
+    <Hit Package="CommonHitPackage">
+        <UseBranchSet Name="IsPlayerDead"/>
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="Hit" Execute="Hit"/>
+        <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+    </Hit>
+
+    <GuardBroken Package="CommonGuardBrokenPackage">
+        <UseBranchSet Name="IsPlayerDead"/>
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="Hit" Execute="Hit"/>
+        <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+    </GuardBroken>
+
+    <Shot Package="CommonShotPackage">
+        <UseBranchSet Name="IsPlayerDead"/>
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Chase"/>
+    </Shot>
+
+    <Dead Package="CommonDeadPackage">
+    </Dead>
+
+    <Timeout Package="CommonTimeoutPackage">
+    </Timeout>
+
+    <EnemyWin Package="CommonIdlePackage">
+    </EnemyWin>
+
+</AIGraph>

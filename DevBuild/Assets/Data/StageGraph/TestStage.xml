@@ -1,0 +1,34 @@
+
+<StageGraph Name="Test">
+
+    <InitializePhase>
+        <SpawnCharacter CharacterKey="Akane" Position="0 0 0" SearchIdentifier="Player" UniqueKey="Player"/>
+        <SetCameraTarget UniqueKey="Player" CameraMode="ArenaMode"/>
+        <SetAudioListner UniqueKey="Player"/>
+        <SetCrossHair UniqueKey="Player"/>
+        
+    </InitializePhase>
+
+    <UpdatePhase>
+        <WaitSecond Time="1.0"/>
+        
+        <SpawnCharacter CharacterKey="NozawaAoba" Position="4 0 0" SearchIdentifier="Enemy"/>
+
+        <!--
+        <SpawnCharacter CharacterKey="KantoReito" Position="4 0 0" SearchIdentifier="Enemy"/>
+        <SpawnCharacter CharacterKey="Gauntlet" Position="4 0 0" SearchIdentifier="Enemy"/>
+        <SpawnCharacter CharacterKey="OsananaNajimiAlpha" Position="4 0 0" SearchIdentifier="Enemy"/>
+        <SpawnCharacter CharacterKey="OsananaNajimi" Position="4 0 0" SearchIdentifier="Enemy"/>
+        <SpawnCharacter CharacterKey="TestEnemy" Position="4 0 0" SearchIdentifier="Enemy"/>
+
+        <SpawnCharacter CharacterKey="TestEnemy" Position="2 0 0" SearchIdentifier="Enemy"/>
+
+        <SpawnCharacter CharacterKey="TestZako3" Position="2 0 0" SearchIdentifier="Enemy"/>
+        <SpawnCharacter CharacterKey="TestZako2" Position="4 0 0" SearchIdentifier="Enemy"/>
+        <SpawnCharacter CharacterKey="TestZako3" Position="6 0 0" SearchIdentifier="Enemy"/>
+        <SpawnCharacter CharacterKey="TestZako2" Position="8 0 0" SearchIdentifier="Enemy"/>
+        -->
+
+    </UpdatePhase>
+
+</StageGraph>

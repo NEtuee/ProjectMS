@@ -1,0 +1,61 @@
+<AIGraph Name="KoiChanAI" DefaultState="Entry">
+
+    <Include Path="Common\CommonRandMovePackage.xml"/>
+    <Include Path="Common\CommonDeadPackage.xml"/>
+    <Include Path="Common\CommonHitPackage.xml"/>
+    <Include Path="Common\CommonChasePackage.xml"/>
+    <Include Path="Common\CommonChaseShotPackage.xml"/>
+    <Include Path="Common\CommonGuardBrokenPackage.xml"/>
+
+    <!-- 코이가 플레이어를 인지하는 거리 -->
+    <GlobalVariable Name="gv_koiChanSightRange" Value="3.5"/>
+    <!-- 코이가 플레이어를 공격할 수 있는 거리-->
+    <GlobalVariable Name="gv_koiChanShootRange" Value="3.0"/>
+    <!-- 코이가 행동을 전환하는데 걸리는 시간-->
+    <GlobalVariable Name="gv_koiChanTransitionTime" Value="0.4"/>
+
+    <!-- 코이는 가드를 하지 않는다. 가드가 아닌 상태에서 가드 브레이크를 당할 수 있다.-->
+    <Entry Package="CommonRandMovePackage">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="Hit" Execute="Hit"/> 
+        <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
+        <Branch Condition="TargetExists && (gv_koiChanSightRange >= TargetDistance)" Execute="Chase"/>
+        
+    </Entry>
+    
+    <Chase Package="CommonChasePackage">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="Hit" Execute="Hit"/> 
+        <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
+        <Branch Condition="TargetExists && 
+                           (gv_koiChanShootRange >= TargetDistance) && 
+                           (GraphExecutedTime > gv_koiChanTransitionTime)" Execute="ChaseShot"/>
+    </Chase>
+
+    <ChaseShot Package="CommonChaseShotPackage">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="Hit" Execute="Hit"/> 
+        <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
+        <Branch Condition="TargetExists &&
+                           (gv_koiChanShootRange < TargetDistance) && 
+                           (GraphExecutedTime > gv_koiChanTransitionTime)" Execute="Chase"/>
+    </ChaseShot>
+
+    <Hit Package="CommonHitPackage">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="Hit" Execute="Hit"/>
+        <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+    </Hit>
+    
+    <GuardBroken Package="CommonGuardBrokenPackage">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="Hit" Execute="Hit"/>
+        <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+    </GuardBroken>
+
+    <Dead Package="CommonDeadPackage">
+    </Dead>
+
+</AIGraph>

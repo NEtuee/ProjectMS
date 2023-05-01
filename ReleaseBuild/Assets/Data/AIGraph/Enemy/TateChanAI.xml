@@ -1,0 +1,13 @@
+<AIGraph Name="EmptyAIGraph" DefaultState="Entry">
+
+    <Include Path="Enemy\TateChanPackage.xml"/>
+    <Include Path="Common\CommonDeadPackage.xml"/>
+    
+    <Entry Package="TateChanPackage">
+        <Branch Condition="Dead" Execute="Dead"/>
+    </Entry>
+
+    <Dead Package="CommonDeadPackage">
+    </Dead>
+
+</AIGraph>
