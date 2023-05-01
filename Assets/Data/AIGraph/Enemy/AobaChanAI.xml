@@ -20,6 +20,7 @@
     <Include Path="Enemy/NozawaAoba/AobaDischargePackage.xml"/>
     <Include Path="Enemy/NozawaAoba/AobaWarpChasePackage.xml"/>
     <Include Path="Enemy/NozawaAoba/AobaElectronicShockPackage.xml"/>
+    <Include Path="Enemy/NozawaAoba/AobaAlertMovePackage.xml"/>
 
     <Include Path="Enemy/NozawaAoba/AobaDodgePackage.xml"/>
     <Include Path="Enemy/NozawaAoba/AobaAttackReadyPackage.xml"/>
@@ -65,7 +66,7 @@
     <GlobalVariable Name="gv_najimiStdBattle" Value="20.0"/>     <!-- 나지미 그로기 기준 배틀 포인트 -->
 
     <!-- Test -->
-    <Test Package="AobaElectronicShockPackage">
+    <Test Package="AobaEmpPackage">
         <Branch Condition="Hit && getFrameTag_HitAvail" Execute="TestHit"/>
         <Branch Condition="(GuardBreakFail || GuardBroken) && getFrameTag_GbAvail" Execute="TestGuardBroken"/>
         <Branch Condition="CurrentPackageEnd" Execute="Test"/>
@@ -96,7 +97,7 @@
     </BranchSet>
 
     <BranchSet Name="AobaAlertReactionSet">
-        <Branch Weight="AobaDodge^True" Condition="(getTargetFrameTag_Attack) && (TargetDistance <= gv_AkaneAttackDist)" Execute="Dodge"/>
+        <Branch Weight="AobaDodge^True" Condition="getTargetFrameTag_Attack && (TargetDistance <= gv_AkaneAttackDist)" Execute="Dodge"/>
         <Branch Condition="(TargetDistance <= gv_AobaReactAlertMoveDist)" Execute="JudgeShortAttack"/> <!-- 근거리 공격 실행 --> <!-- 플레이 해보고 확률적 실행 여부 고민 -->
     </BranchSet>
 
@@ -122,7 +123,7 @@
         <Branch Weight="RandVector^z" Condition="true" Execute="AlertExitSlow"/>
     </Entry>
 
-    <AlertExitFast Package="CommonAlertMovePackage">
+    <AlertExitFast Package="AobaAlertMovePackage">
         <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="AobaAlertReactionSet"/>
         <UseBranchSet Name="HitReactionSet"/>
@@ -187,12 +188,11 @@
     <JudgeHitReaction Package="CommonIdlePackage">
         <UseBranchSet Name="IsPlayerDead"/>
         <!-- 회피 -->
-        <Branch Weight="AobaDodge^True" Condition="true" Execute="Dodge"/>
+        <Branch Weight="AobaHitReaction^Dodge" Condition="true" Execute="Dodge"/>
         <!-- 전격방출 -->
-        <Branch Weight="RandBoolean^True" Condition="true" Execute="Discharge"/>
+        <Branch Weight="AobaHitReaction^ElectronicShock" Condition="true" Execute="Discharge"/>
         <!-- 감전 잡기 -->
-        <!-- TODO: 플레이해보고 Attack Ready 쓸건지 결정 -->
-        <Branch Weight="RandBoolean^False" Condition="true" Execute="ElectronicShock"/>
+        <Branch Weight="AobaHitReaction^Discharge" Condition="true" Execute="RushReady"/>
 
     </JudgeHitReaction>
 
@@ -271,6 +271,12 @@
 
         <Branch Condition="TargetExists && (TargetDistance <= 2.0)" Execute="ElectronicShock"/>
     </StunChase>
+
+    <RushReady Package="AobaAttackReadyPackage">
+        <UseBranchSet Name="IsPlayerDead"/>
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="CurrentPackageEnd" Execute="ElectronicShock"/>
+    </RushReady>
 
     <ElectronicShock Package="AobaElectronicShockPackage">
         <UseBranchSet Name="IsPlayerDead"/>

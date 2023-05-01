@@ -404,17 +404,16 @@
 
     <!-- 부동 뢰섬 -->
     <AC_UnwaverRaisen MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <!-- TODO -->
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/1_raisen/"/>
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/6_unwaverRaisen/"/>
         <!-- 준비 자세 -->
-        <Animation Preset="1_raisenReady" XFlip="true" Duration="0.5">
+        <Animation Preset="1_unwaverReady" XFlip="true" Duration="0.7">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
             <!-- 약진 뢰섬 연속 공격 완료 체크 -->
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="ChargeRaisenClear" EventTargetType="Self"/>
             <FrameEvent Type="TimelineEffect" StartTime="0.35" Path="Prefab/Effect/MaterialAttackPre_Timeline" Offset="0.0 0.0 0.0" Attach="true"/>
         </Animation>
         <!-- 영역 전개 -->
-        <Animation Preset="2_raisen/1_raisenPre" XFlip="true" Duration="1.0">
+        <Animation Preset="2_unwaverActivate" XFlip="true" Duration="1.0">
             <FrameEvent Type="Attack" StartTime="0" EndTime="0.4" AttackPreset="Aoba_UnwaverRaisen">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
@@ -433,9 +432,8 @@
     </AC_UnwaverRaisen>
 
     <AC_UnwaverRaisenSuccess MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
-        <!-- TODO -->
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/1_raisen/"/>
-        <Animation Preset="3_raisenSuccess" XFlip="true" ScalePreset="YSpring" Duration="0.88">
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/6_unwaverRaisen/"/>
+        <Animation Preset="3_unwaverSuccess" XFlip="true" ScalePreset="YSpring" Duration="0.88">
             <FrameEvent Type="Movement" StartTime="0" Friction="90" MaxVelocity="20" Speed="0"/>
             
             <FrameEvent Type="FrameTag" StartTime="0.4" EndFrame="999" Tag="HitAvail"/>
@@ -497,7 +495,7 @@
     <!-- 전격 방출 -->
     <AC_Discharge MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/9_discharge/"/>
-        <Animation Preset="1_dischargeReady" XFlip="true" Duration="0.5">
+        <Animation Preset="1_dischargeReady" XFlip="true" Duration="0.7">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountClear"/>
         </Animation>
