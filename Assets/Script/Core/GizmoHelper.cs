@@ -304,8 +304,11 @@ public class GizmoHelper : MonoBehaviour
         drawArc();
     }
 
+
+
     bool AreGizmosVisible()
     {
+#if UNITY_EDITOR
         Assembly asm = Assembly.GetAssembly(typeof(UnityEditor.Editor));
         Type type = asm.GetType("UnityEditor.GameView");
         if (type != null)
@@ -315,9 +318,10 @@ public class GizmoHelper : MonoBehaviour
             if(gizmosField != null)
                 return (bool)gizmosField.GetValue(window);
         }
+#endif
         return false;
     }
-
+#if UNITY_EDITOR
     EditorWindow GetWindowPrivate(System.Type t, bool utility, string title)
     {
         UnityEngine.Object[] wins = Resources.FindObjectsOfTypeAll(t);
@@ -336,4 +340,5 @@ public class GizmoHelper : MonoBehaviour
     
         return win;
     }
+#endif
 }

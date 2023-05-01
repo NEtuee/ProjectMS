@@ -1,0 +1,104 @@
+<ActionGraph Name="SisterChanAction" DefaultAction="AC_Idle" DefaultFramePerSecond="12">
+
+    <AC_Idle MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+        <Animation Path="Resources/Sprites/SampleBoss/Idle/" XFlip="true">
+            <FrameEvent Type="Movement" StartFrame="0" Friction="12" Speed="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_Idle>
+
+    <AC_Move MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <Animation Path="Resources/Sprites/SampleBoss/MoveAll/" AngleBaseAnimation="True" AngleBaseAnimationCount="1">
+            <FrameEvent Type="Movement" StartFrame="0" Friction="0" MaxVelocity="5" Speed="15"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Move"/>
+    </AC_Move>
+
+    <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
+        <Animation Path="Resources/Sprites/SampleBoss/Hit/" FramePerSecond="1" XFlip="true">
+            <FrameEvent Type="Movement" StartFrame="0" Friction="0" Speed="0" Velocity="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_Hit>
+
+    <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
+        <Animation Path="Resources/Sprites/SampleBoss/GuardBroken/" FramePerSecond="1" XFlip="true">
+            <FrameEvent Type="Movement" StartFrame="0" Friction="0" Speed="0" Velocity="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_GuardBroken>
+    
+    <Dead DirectionType="Keep" FlipType="Direction">
+        <Animation Path="Resources/Sprites/DummyPlayer/dash/" StartFrame="0" EndFrame="1" XFlip="true">
+            <FrameEvent Type="Effect" StartFrame="0" Path="Resources/Sprites/DummyPlayer/dead/" FramePerSecond="0.2" CastShadow="True">
+                <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
+            </FrameEvent>
+            <FrameEvent Type="KillEntity" StartFrame="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Dead"/>
+    </Dead>
+
+    <AC_Kick MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <Animation Path="Resources/Sprites/SampleBoss/Attack/" FramePerSecond="2" XFlip="true"> 
+            <FrameEvent Type="Attack" StartFrame="0.2" AttackPreset="Sister_Kick">
+                <OnHit>
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc" FramePerSecond="18.0" Offset="0.0 0.0 0.0" ToTarget="true"/>
+                    
+                    <FrameEvent Type="TeleportToTarget" DistanceOffset="-0.3"/>
+                    <FrameEvent Type="ZoomEffect" StartFrame="0" Scale="2.8"/>
+                    <FrameEvent Type="StopUpdate" StartFrame="0" Time="0.15"/>
+                </OnHit>
+
+            </FrameEvent>
+            <FrameEvent Type="Movement" StartFrame="0.2" Friction="24" MaxVelocity="10" Speed="0" Velocity="10"/>
+            <FrameEvent Type="FrameTag" StartFrame="5" EndFrame="999" Tag="MoveCancel"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_Kick>
+
+    <AC_Kicked MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
+        <Animation Path="Resources/Sprites/SampleBoss/Attack/" FramePerSecond="18" XFlip="true" ScalePreset="YSpring">
+            <FrameEvent Type="Movement" StartFrame="0" Friction="3" Speed="0" Velocity="-2 "/>
+            <FrameEvent Type="Test" StartFrame="0" Log="Kicked Executed"/>
+        </Animation>
+
+        <!-- <Branch Condition="AttackSuccess" Execute="AttackSuccess"/> -->
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_Kicked>
+
+    <AC_Chainsaw MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <Animation Path="Resources/Sprites/SampleBoss/Attack/" FramePerSecond="12" XFlip="true">           
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Chainsaw"/>
+    </AC_Chainsaw>
+
+    <AC_SelfHeal MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <Animation Path="Resources/Sprites/SampleBoss/Attack/" FramePerSecond="12" XFlip="true">           
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_SelfHeal"/>
+    </AC_SelfHeal>
+
+    <AC_SwordMissile MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <Animation Path="Resources/Sprites/SampleBoss/Attack/" FramePerSecond="12" XFlip="true">           
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_SwordMissile"/>
+    </AC_SwordMissile>
+
+    <AC_Chat DirectionType="AI" FlipType="Direction">
+        <Animation Path="Resources/Sprites/DummyPlayer/idle" FramePerSecond="12" XFlip="true">           
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Chat"/>
+    </AC_Chat>
+
+</ActionGraph>

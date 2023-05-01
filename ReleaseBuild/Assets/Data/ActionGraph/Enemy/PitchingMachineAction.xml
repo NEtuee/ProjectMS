@@ -1,0 +1,67 @@
+<ActionGraph Name="PitchingMachineAction" DefaultAction="AC_Idle" DefaultFramePerSecond="12">
+    
+    <AC_Idle MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <Animation Preset="Sprites/Enemy/PitchingMachine/0_idle" XFlip="true" Duration="0.3333">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_Idle>
+
+    <AC_Move MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <Animation Preset="Sprites/Enemy/PitchingMachine/0_idle" XFlip="true" Duration="0.3333">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="4" Speed="10.0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Move"/>
+    </AC_Move>
+    
+    <AC_Hit MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+        <Animation Preset="Sprites/Enemy/PitchingMachine/2_hit" XFlip="true" Duration="1.0">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_Hit>
+
+    <AC_GuardBroken MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+        <Animation Preset="Sprites/Enemy/PitchingMachine/2_hit" XFlip="true" Duration="1.0">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_GuardBroken>
+    
+    <Dead DirectionType="Keep" FlipType="Direction">
+        <Animation Preset="Sprites/Enemy/PitchingMachine/3_dead" XFlip="true" Duration="1">
+            <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Enemy/PitchingMachine/3_dead" FramePerSecond="0.2" CastShadow="True">
+                <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
+            </FrameEvent>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="DiscountPitchingMachine" EventTargetType="Summoner"/>
+            <FrameEvent Type="KillEntity" StartTime="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Dead"/>
+    </Dead>
+
+    <Timeout DirectionType="Keep" FlipType="Direction">
+        <Animation Preset="Sprites/Enemy/PitchingMachine/3_dead" XFlip="true" Duration="1">
+            <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Enemy/PitchingMachine/3_dead" FramePerSecond="0.2" CastShadow="True">
+                <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
+            </FrameEvent>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="DiscountPitchingMachine" EventTargetType="Summoner"/>
+            <FrameEvent Type="KillEntity" StartTime="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Timeout"/>
+    </Timeout>
+
+    <AC_Shot MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <Animation Preset="Sprites/Enemy/PitchingMachine/1_pitching" XFlip="true" Duration="1">
+            <FrameEvent Type="Danmaku" StartTime="0" Path="Enemy/BaseBall.xml"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_Shot>
+
+</ActionGraph>

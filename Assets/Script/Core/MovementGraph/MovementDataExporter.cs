@@ -1,3 +1,5 @@
+
+#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
 
@@ -156,3 +158,4 @@ public class MovementDataExporter
         ti.SaveAndReimport();
     }
 }
+#endif
