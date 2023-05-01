@@ -1,4 +1,4 @@
-<AIPackage Name="AobaHandgunPackage" DefaultState="AI_HandgunReady">
+<AIPackage Name="AobaStungunPackage" DefaultState="AI_HandgunReady">
 
     <AIState>        
         <AI_HandgunReady UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
@@ -21,16 +21,6 @@
 
             <Branch Condition="End" Execute="TerminatePackage"/>          
         </AI_HandgunShot>
-
-        <!-- 사용 안함 -->
-        <AI_BackStep UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
-            <Event_OnExecute>
-                <AIEvent Type="SetDirectionToTarget" Angle="15"/>
-                <AIEvent Type="SetAction" Action="AC_Dash"/>
-            </Event_OnExecute>
-            
-            <Branch Condition="End" Execute="TerminatePackage"/>
-        </AI_BackStep>
 
         <TerminatePackage>
             <Event_OnExecute>

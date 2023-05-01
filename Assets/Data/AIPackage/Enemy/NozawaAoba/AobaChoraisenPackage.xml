@@ -1,4 +1,6 @@
 <AIPackage Name="AobaChoraisenPackage" DefaultState="AI_ChoraisenReady">
+    <!-- Raisen -->
+    <GlobalVariable Name="gv_RaisenLimit" Value="2.0"/>
 
     <AIState>
         <AI_ChoraisenReady UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
@@ -14,8 +16,22 @@
             <Branch Condition="End" Execute="AI_ChoraisenPre"/>
         </AI_ChoraisenReady>
 
+        <AI_ChoraisenReadyUp UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="AC_ChoraisenReadyUp"/>
+            </Event_OnExecute>
+
+            <Event_OnFrame>
+                <AIEvent Type="SetDirectionToTarget"/>
+            </Event_OnFrame>
+            
+            <Branch Condition="End" Execute="AI_ChoraisenPre"/>
+        </AI_ChoraisenReadyUp>
+
         <AI_ChoraisenPre UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
             <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_ChoraisenPre"/>
             </Event_OnExecute>
 
@@ -28,6 +44,8 @@
             </Event_OnExecute>
 
             <Branch Condition="AttackSuccess" Execute="AI_ChoraisenSuccess"/>
+            <Branch Condition="End && (customValue_CurrentRaisenCount < gv_RaisenLimit)" Execute="AI_ChoraisenReady"/>          
+            <Branch Condition="End && (customValue_CurrentRaisenCount == gv_RaisenLimit)" Execute="AI_ChoraisenReadyUp"/>          
             <Branch Condition="End" Execute="TerminatePackage"/>          
         </AI_ChoraisenSlash>
 
@@ -36,6 +54,7 @@
                 <AIEvent Type="SetAction" Action="AC_ChoraisenSuccess"/>
             </Event_OnExecute>
 
+            <!-- TODO: 공격 성공 후에도 연속 공격을 할 것인지 고민 -->
             <Branch Condition="End" Execute="TerminatePackage"/>    
         </AI_ChoraisenSuccess>
 

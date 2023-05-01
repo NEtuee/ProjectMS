@@ -168,7 +168,7 @@
             <FrameEvent Type="ApplyBuff" StartTime="0.031" ApplyBuff="DashPointConsumption" Condition="(getStat_DashPoint >= 1.0)"/>
 
             <FrameEvent Type="FrameTag" StartTime="0.156" EndFrame="999" Tag="MoveCancel"/>
-            
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="0.016" Tag="Attack"/>
         </Animation>
 
         <Branch Condition="AttackSuccess" Execute="AttackSuccess"/>
@@ -229,7 +229,7 @@
             <FrameEvent Type="ApplyBuff" StartTime="0.031" ApplyBuff="DashPointConsumption" Condition="(getStat_DashPoint >= 1.0)"/>
 
             <FrameEvent Type="FrameTag" StartTime="0.156" EndFrame="999" Tag="MoveCancel"/>
-            
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="0.016" Tag="Attack"/>
         </Animation>
 
         <Branch Condition="AttackSuccess" Execute="AttackSuccess"/>
@@ -281,6 +281,7 @@
             <FrameEvent Type="ApplyBuff" StartTime="0.031" ApplyBuff="DashPointConsumption"/>
 
             <FrameEvent Type="FrameTag" StartTime="0.156" EndFrame="999" Tag="MoveCancel"/>
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="0.016" Tag="Attack"/>
         </Animation>
         
         <Branch Condition="AttackSuccess || AttackGuarded || AttackGuardBreak || AttackGuardBreakFail" Execute="Kicked"/>
@@ -364,14 +365,14 @@
         </Animation>
 
         <!-- <Branch Condition="getStat_IsStun == 1.0" Execute="Stun"/> -->
-        <Branch Condition="(getStat_HP <= 0.0)" Execute="Kiiled"/>
+        <Branch Condition="(getStat_HP <= 0.0)" Execute="Killed"/>
         <Branch Condition="IsCatchTarget" Execute="Catched"/>
         <Branch Condition="End" Execute="Idle"/>
         <Branch Key="(getKey_Guard == false) && ((getKey_AttackCharge == true) || (getKey_NormalMove == true))" Condition="End" Execute="MoveAll"/>
         <Branch Key="(getKey_Guard == false) && (getKey_AttackCharge == false)" Condition="End" Execute="Idle"/>
     </Hit>
 
-    <Kiiled DirectionType="Keep" FlipType="Direction">
+    <Killed DirectionType="Keep" FlipType="Direction">
         <Animation Preset="Sprites/NewPlayer/Hit/" XFlip="true" Duration="10.0">
             <FrameEvent Type="Effect" StartTime="0" Path="Sprites/NewPlayer/Hit" FramePerSecond="0.5" Offset="0.0 0.0 0.0" Angle="Random_0^360" UseFlip="True" CastShadow="True">
                 <Physics UseGravity="True" Velocity="2 2" Friction="2.0" Torque="Random_25^30" AngularFriction="15.0"/>
@@ -380,8 +381,8 @@
             <FrameEvent Type="KillEntity" StartTime="0"/>
         </Animation>
 
-        <Branch Condition="End == true" Execute="Kiiled"/>
-    </Kiiled>
+        <Branch Condition="End == true" Execute="Killed"/>
+    </Killed>
 
     <Catched MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction" ApplyBuff="CatchedEscape">
         <Animation Preset="Sprites/NewPlayer/empty" XFlip="true" Duration="0.01">
@@ -391,10 +392,10 @@
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="ClearBloodPoint"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="Recatchable" Condition="getStat_IsCatched == 1.0"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="Catched"/>
-            <FrameEvent Type="ReleaseCatch" StartTime="0" Push="4 0 0" Condition="getStat_IsCatched == 0.0"/>
+            <FrameEvent Type="ReleaseCatch" StartTime="0" Push="4 0 0" Condition="(getStat_IsCatched == 0.0) && (getTargetFrameTag_Hold == false)"/>
         </Animation>
 
-        <Branch Condition="(getStat_HP <= 0.0)" Execute="Kiiled"/>
+        <Branch Condition="(getStat_HP <= 0.0)" Execute="Killed"/>
         <Branch Condition="IsCatchTarget == false" Execute="CatchReleased"/>
         <Branch Condition="End == true" Execute="Catched"/>
     </Catched>
@@ -420,7 +421,7 @@
             <FrameEvent Type="ApplyBuff" StartTime="3.0" ApplyBuff="StunClear"/>
         </Animation>
 
-        <Branch Condition="(getStat_HP <= 0.0)" Execute="Kiiled"/>
+        <Branch Condition="(getStat_HP <= 0.0)" Execute="Killed"/>
         <Branch Condition="getStat_IsStun == 0.0" Execute="Idle"/>
     </Stun>
 
