@@ -15,6 +15,11 @@
     <GlobalVariable Name="gv_najimiRushRange" Value="2.0"/>             <!-- 나지미 돌진 사거리 -->
     <GlobalVariable Name="gv_najimiRushTrasitionTime" Value="0.8"/>     <!-- 나지미 돌진 최소 텀 -->    
 
+    <BranchSet Name="IsPlayerDead">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="getTargetFrameTag_Dead" Execute="EnemyWin"/>
+    </BranchSet>
+
     <BranchSet Name="HitReactionSet">
         <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="Hit" Execute="Hit"/> 
@@ -26,6 +31,7 @@
     </BranchSet>
 
     <Entry Package="CommonIdlePackage">
+        <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="TargetDistance >= gv_najimiSystemChaseRange" Execute="SystemChase"/>
         <UseBranchSet Name="WaitForRush"/>
@@ -33,6 +39,7 @@
     </Entry>
 
     <Chase Package="CommonChasePackage">
+        <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="WaitForRush"/>
         
@@ -45,25 +52,30 @@
     </Chase>
 
     <Alert Package="CommonAlertMovePackage">
+        <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="WaitForRush"/>
         <Branch Condition="getTargetFrameTag_Catched == false" Execute="Entry"/>
     </Alert>
 
     <SystemChase Package="CommonSystemChasePackage">
+        <UseBranchSet Name="IsPlayerDead"/>
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </SystemChase>
 
     <Hit Package="CommonHitPackage">
+        <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </Hit>
 
     <GuardBroken Package="CommonGuardBrokenPackage">
+        <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </GuardBroken>
 
     <Rush Package="GauntletRushPackage">
+        <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="WaitForRush"/>
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
@@ -72,4 +84,7 @@
     <Dead Package="CommonDeadPackage">
     </Dead>
 
+    <EnemyWin Package="CommonIdlePackage">
+        
+    </EnemyWin>
 </AIGraph>

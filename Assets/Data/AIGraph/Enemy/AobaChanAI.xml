@@ -59,7 +59,8 @@
 
 
     <BranchSet Name="IsPlayerDead">
-        <Branch Condition="getTargetFrameTag_Dead" Execute="NajimiWin"/>
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="getTargetFrameTag_Dead" Execute="EnemyWin"/>
     </BranchSet>
 
     <BranchSet Name="HitReactionSet">
@@ -211,7 +212,7 @@
     <Dead Package="CommonDeadPackage">
     </Dead>
 
-    <NajimiWin Package="CommonIdlePackage">
-    </NajimiWin>
+    <EnemyWin Package="CommonIdlePackage">
+    </EnemyWin>
 
 </AIGraph>
