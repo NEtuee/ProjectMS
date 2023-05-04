@@ -169,6 +169,8 @@
 
             <FrameEvent Type="FrameTag" StartTime="0.156" EndFrame="999" Tag="MoveCancel"/>
             <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="0.016" Tag="Attack"/>
+
+            <FrameEvent Type="AudioPlay" Condition="AttackSuccess == false" StartTime="0.05" ID="1002"/>
         </Animation>
 
         <Branch Condition="AttackSuccess" Execute="AttackSuccess"/>
@@ -230,6 +232,8 @@
 
             <FrameEvent Type="FrameTag" StartTime="0.156" EndFrame="999" Tag="MoveCancel"/>
             <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="0.016" Tag="Attack"/>
+
+            <FrameEvent Type="AudioPlay" Condition="AttackSuccess == false" StartTime="0.05" ID="1002"/>
         </Animation>
 
         <Branch Condition="AttackSuccess" Execute="AttackSuccess"/>
@@ -252,6 +256,7 @@
 
                     <FrameEvent Type="TeleportToTarget" DistanceOffset="0"/>
                     <FrameEvent Type="StopUpdate" Time="0.07"/>
+
 
                     <FrameEvent Type="SetTimeScale" Condition="getTargetFrameTag_Groggy" Scale="0.1" Time="0.1" BlendTime="0.2"/>
                     <FrameEvent Type="ZoomEffect" Condition="getTargetFrameTag_Groggy" Scale="2.9"/>
@@ -298,6 +303,7 @@
             <!-- <FrameEvent Type="Danmaku" StartTime="0" Path="Enemy/MagicalFirecrack.xml" Offset="1 1 0" UseFlip="true"/>-->
 
             <FrameEvent Type="ZoomEffect" StartTime="0" Scale="3.1"/>
+            
         </Animation>
 
         <Branch Condition="AttackSuccess" Execute="AttackSuccess"/>
@@ -308,6 +314,8 @@
 
     <Kicked MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
         <Animation Preset="Sprites/NewPlayer/kick/" XFlip="true" ScalePreset="YSpring" Duration="0.44">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="1001"/>
+        
             <FrameEvent Type="Movement" StartTime="0" Friction="3" Speed="0" Velocity="-1.5 "/>
             <FrameEvent Type="FrameTag" StartTime="0.198" EndFrame="999" Tag="MoveCancel"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="DashPointIncrement"/>
@@ -321,6 +329,7 @@
 
     <AttackSuccess MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
         <Animation Preset="Sprites/NewPlayer/attack/" XFlip="true" ScalePreset="YSpring" Duration="0.315">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="1000"/>
 
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_AttackFriction" MaxVelocity="gv_AttackVelocity" Speed="0" Velocity="gv_AttackVelocity"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="DashPointReset"/>
@@ -335,6 +344,7 @@
 
     <AttackSuccessFar MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
         <Animation Preset="Sprites/NewPlayer/attack/" XFlip="true" ScalePreset="YSpring" Duration="0.315">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="1000"/>
 
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_AttackFriction" MaxVelocity="gv_AttackFarVelocity" Speed="0" Velocity="gv_AttackFarVelocity"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="DashPointReset"/>
