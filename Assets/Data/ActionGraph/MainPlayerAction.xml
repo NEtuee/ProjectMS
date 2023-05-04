@@ -50,7 +50,7 @@
 
 
     <Idle MovementType="FrameEvent" DirectionType="Keep" FlipType="Keep">
-        <Animation Path="Sprites/NewPlayer/idle/" XFlip="true" Duration="1.0">
+        <Animation Preset="Sprites/NewPlayer/idle/" XFlip="true" Duration="1.2">
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_IdleFriction" Speed="0"/>
         </Animation>
 
@@ -73,7 +73,7 @@
     </Idle_Transition>
 
     <Idle_LookBack MovementType="FrameEvent" DirectionType="Keep" FlipType="Keep">
-        <Animation Preset="Sprites/NewPlayer/idle_back/" XFlip="true" Duration="0.0833">
+        <Animation Preset="Sprites/NewPlayer/idle_back/" XFlip="true" Duration="1.2">
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_IdleFriction" Speed="0"/>
         </Animation>
 
