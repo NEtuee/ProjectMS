@@ -228,8 +228,9 @@ public class StatusInfo
         
         _currentlyAppliedBuffList.Add(buffItem);
 
-        if(buff._buffUpdateType == BuffUpdateType.DelayedContinuous)
+        if(buff._buffUpdateType == BuffUpdateType.DelayedContinuous || buff._buffUpdateType == BuffUpdateType.GreaterThenSet)
         {
+            buffItem._startedTime -= buff._buffCustomValue0;
             getStatus(buff._targetStatusName).addToUpdateList(buff._buffKey);
         }
     }
@@ -244,7 +245,7 @@ public class StatusInfo
     {
         for(int i = 0; i < _currentlyAppliedBuffList.Count; ++i)
         {
-            if(_currentlyAppliedBuffList[i]._buffData._buffUpdateType == BuffUpdateType.DelayedContinuous)
+            if(_currentlyAppliedBuffList[i]._buffData._buffUpdateType == BuffUpdateType.DelayedContinuous || _currentlyAppliedBuffList[i]._buffData._buffUpdateType == BuffUpdateType.GreaterThenSet )
                 getStatus((_currentlyAppliedBuffList[i]._buffData._targetStatusName)).deleteToUpdateList(_currentlyAppliedBuffList[i]._buffData._buffKey);        
             
             if(_currentlyAppliedBuffList[i]._particleEffect != null)
@@ -271,7 +272,7 @@ public class StatusInfo
     public void deleteBuffIndex(int index)
     {
         BuffItem buffItem = _currentlyAppliedBuffList[index];
-        if(buffItem._buffData._buffUpdateType == BuffUpdateType.DelayedContinuous)
+        if(buffItem._buffData._buffUpdateType == BuffUpdateType.DelayedContinuous || buffItem._buffData._buffUpdateType == BuffUpdateType.GreaterThenSet)
             getStatus((buffItem._buffData._targetStatusName)).deleteToUpdateList(buffItem._buffData._buffKey);
         
         _buffItemPool.enqueue(buffItem);
@@ -367,7 +368,9 @@ public class StatusInfo
                     Status customTargetStatus = getStatus(buffData._buffCustomStatusName);
                     Status targetStatus = getStatus(buffData._targetStatusName);
 
-                    canApply = customTargetStatus._realValue > targetStatus._realValue;
+                    canApply = globalTime - buffItem._startedTime >= 1f && customTargetStatus._realValue > targetStatus._realValue;
+                    if(canApply == false)
+                        buffItem._startedTime = globalTime - 1f;
                 }
                 break;
             }
