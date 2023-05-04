@@ -119,7 +119,7 @@
         <Branch Key="(getKey_AttackCharge == false) && (getKey_NormalMove == false)" Execute="MoveStop"/>
     </MoveAll>
 
-    <DashRoll MovementType="FrameEvent" DirectionType="MousePoint" RotationType="MoveDirection" FlipType="MousePoint" DirectionUpdateOnce="true">
+    <DashRoll MovementType="FrameEvent" DirectionType="MousePoint" RotationType="MoveDirection" FlipType="MousePoint" DirectionUpdateOnce="true" Flags="ClearPush">
         <Animation Preset="Sprites/NewPlayer/DashRoll/" XFlip="true" ScalePreset="YSpring" Duration="0.25">
             <FrameEvent Type="Attack" StartTime="0" AttackPreset="PlayerAttackTest" Condition="(getStat_DashPoint >= 1.0)">
                 <OnHit>
@@ -181,7 +181,7 @@
         <Branch Key="getKey_AttackCharge == false" Condition="getFrameTag_MoveCancel" Execute="MoveStop"/>
     </DashRoll>
 
-    <DashRoll_Long MovementType="FrameEvent" DirectionType="MousePoint" RotationType="MoveDirection" FlipType="MousePoint" DirectionUpdateOnce="true">
+    <DashRoll_Long MovementType="FrameEvent" DirectionType="MousePoint" RotationType="MoveDirection" FlipType="MousePoint" DirectionUpdateOnce="true" Flags="ClearPush">
         <Animation Preset="Sprites/NewPlayer/DashRoll/" XFlip="true" ScalePreset="YSpring" Duration="0.25">
             <FrameEvent Type="Attack" StartTime="0" AttackPreset="PlayerAttackLong" Condition="(getStat_DashPoint >= 1.0) && (getStat_HP > 1.0)">
                 <OnHit>
@@ -244,7 +244,7 @@
         <Branch Key="getKey_AttackCharge == false" Condition="getFrameTag_MoveCancel" Execute="MoveStop"/>
     </DashRoll_Long>
 
-    <DashRoll_Kick MovementType="FrameEvent" DirectionType="MousePoint" RotationType="MoveDirection" FlipType="MousePoint" DirectionUpdateOnce="true">
+    <DashRoll_Kick MovementType="FrameEvent" DirectionType="MousePoint" RotationType="MoveDirection" FlipType="MousePoint" DirectionUpdateOnce="true" Flags="ClearPush">
         <Animation Preset="Sprites/NewPlayer/DashRoll/" XFlip="true" Duration="0.25">
             <FrameEvent Type="Attack" StartTime="0" AttackType="GuardBreak" AttackPreset="Akane_Kick" IgnoreDefenceType="Guard">
                 <OnGuardBreak>

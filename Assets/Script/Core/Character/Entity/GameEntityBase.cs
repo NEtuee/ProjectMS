@@ -250,6 +250,9 @@ public class GameEntityBase : SequencerObjectBase
                     _actionStartRotation = _spriteRotation;
                     _actionStartRotation = Quaternion.Inverse(_actionStartRotation);
                 }
+
+                if(_actionGraph.checkCurrentActionFlag(ActionFlags.ClearPush))
+                    _currentVelocity = Vector3.zero;
             }
 
             updateDirection();
@@ -290,9 +293,6 @@ public class GameEntityBase : SequencerObjectBase
             debugTextManager.updateDebugText("Action","Action: " + getCurrentActionName());
             debugTextManager.updateDebugText("Defence","Defence: " + getDefenceType());
 
-            if(_aiGraph != null && _aiGraph.isValid())
-                debugTextManager.updateDebugText("AI","AIState: " + getCurrentAIName());
-
             string frameTag = "";
             HashSet<string> frameTagList = _actionGraph.getCurrentFrameTagList();
             foreach(var item in frameTagList)
@@ -319,6 +319,13 @@ public class GameEntityBase : SequencerObjectBase
 
         if(_aiDebug == true || GameEditorMaster._instance._aiDebugAll)
         {
+            if(_aiGraph != null && _aiGraph.isValid())
+            {
+                debugTextManager.updateDebugText("AIState","AIState: " + _aiGraph.getCurrentAIStateName());
+                debugTextManager.updateDebugText("AIPackage","   AIPackage: " + _aiGraph.getCurrentPackageName());
+                debugTextManager.updateDebugText("AI","   AIPackageState: " + getCurrentAIPackageStateName());
+            }
+
             if(_aiGraph.hasTargetPosition() == true)
             {
                 Color targetColor = _aiGraph.isAIArrivedTarget() ? Color.green : Color.red;
@@ -823,7 +830,7 @@ public class GameEntityBase : SequencerObjectBase
     public FlipState getFlipState() {return _flipState;}
 
     public CollisionInfo getCollisionInfo() {return _collisionInfo;}
-    public string getCurrentAIName() {return _aiGraph.getCurrentAIStateName();}
+    public string getCurrentAIPackageStateName() {return _aiGraph.getCurrentAIPackageStateName();}
     public string getCurrentActionName() {return _actionGraph == null ? "" : _actionGraph.getCurrentActionName();}
     public float getDefenceAngle() {return _actionGraph.getCurrentDefenceAngle();}
     public DefenceType getDefenceType() {return _currentDefenceType;}

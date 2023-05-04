@@ -73,6 +73,8 @@ public class ActionGraphNodeData
     public bool                         _hasAngleSector = false;
     public int                          _angleSectorCount = -1;
 
+    public ulong                        _actionFlag = 0;
+
     public int                          _index;
     public int                          _branchIndexStart;
     public int                          _branchCount;
@@ -107,6 +109,11 @@ public class ActionGraphBranchData
     public int      _keyConditionCompareDataIndex = -1;
     public int      _weightConditionCompareDataIndex = -1;
 }
+
+public enum ActionFlags : ulong
+{
+    ClearPush = 1,
+};
 
 public enum ConditionCompareType
 {

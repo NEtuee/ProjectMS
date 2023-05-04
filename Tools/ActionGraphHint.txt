@@ -35,7 +35,7 @@ InQuote,UpdateType=,"ScaledDeltaTime,NoneScaledDeltaTime"
 InQuote,ToTarget=,"true,false"
 InQuote,AngleType=,"Normal,AttackPoint,Direction"
 InQuote,SearchIdentifier=,"Player,Enemy,Projectile"
-InScope,,"MovementType=~~,MovementGraphPreset=~~,DirectionType=~~,DefenceDirectionType=~~,FlipType=~~,RotationType=~~,MoveScale=~~,IsActionSelection=~~,ApplyBuff=~~,NormalizedSpeed=~~,DefenceType=~~,DefenceAngle=~~,DirectionUpdateOnce=~~,IsActionSelection=~~,FlipTypeUpdateOnce=~~,RotateBySpeed=~~,RotateSpeed=~~,DirectionAngle=~~"
+InScope,,"MovementType=~~,MovementGraphPreset=~~,DirectionType=~~,DefenceDirectionType=~~,FlipType=~~,RotationType=~~,MoveScale=~~,IsActionSelection=~~,ApplyBuff=~~,NormalizedSpeed=~~,DefenceType=~~,DefenceAngle=~~,DirectionUpdateOnce=~~,IsActionSelection=~~,FlipTypeUpdateOnce=~~,RotateBySpeed=~~,RotateSpeed=~~,DirectionAngle=~~,Flags=~~"
 LineStart,<Branch,"Key=~~,Condition=~~,Execute=~~,Weight=~~"
 LineStart,<Animation,"Preset=~~,Duration=~~,Path=~~,StartTime=~~,EndTime=~~,FramePerSecond=~~,Loop=~~,XFlip=~~,YFlip=~~,RotationPreset=~~,ScalePreset=~~,AngleBaseAnimation=~~"
 LineStart,<MultiSelectAnimation,"Path=~~,Condition=~~"
@@ -92,7 +92,7 @@ FrameEvent,CallAIEvent,"EventName=~~,EventTargetType=~~"
 InQuote,EventTargetType=,"Range,Self,FrameEventTarget,Summoner"
 ShortCut,__FrameEvent_AudioPlay,<FrameEvent Type=~AudioPlay~ StartTime=~0~ ID=~~/>
 FrameEvent,AudioPlay,"ID=~~,ToTarget=~~,Attach=~~,UseFlip=~~"
-,,
+InQuote,Flags=,ClearPush
 ,,
 ,,
 ,,

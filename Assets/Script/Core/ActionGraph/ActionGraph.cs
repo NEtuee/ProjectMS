@@ -668,6 +668,11 @@ public class ActionGraph
             return getCurrentAction()._moveScale * _animationPlayer.getCurrentAnimationDuration();
     }
 
+    public bool checkCurrentActionFlag(ActionFlags flag)
+    {
+        return (getCurrentAction()._actionFlag & (ulong)flag) != 0;
+    }
+
     public string getCurrentAnimationName() {return _animationPlayer.getCurrentAnimationName();}
 
     public bool isRotateBySpeed() {return getCurrentAction()._rotateBySpeed;}

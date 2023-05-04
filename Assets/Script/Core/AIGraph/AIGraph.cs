@@ -437,7 +437,9 @@ public class AIGraph
     public float getCurrentTargetSearchRange() {return getCurrentAIPackageNode()._targetSearchRange;}
     public float getCurrentTargetSearchStartRange() {return getCurrentAIPackageNode()._targetSearchStartRange;}
     public float getCurrentTargetSearchSphereRadius() {return getCurrentAIPackageNode()._targetSearchSphereRadius;}
-    public string getCurrentAIStateName() {return _packageEnd ? "Package End" : getCurrentAIPackageNode()._nodeName;}
+    public string getCurrentAIPackageStateName() {return _packageEnd ? "Package End" : getCurrentAIPackageNode()._nodeName;}
+    public string getCurrentPackageName() {return getCurrentAIPackage()._name;}
+    public string getCurrentAIStateName() {return getCurrentAINode()._nodeName;}
     public Vector3 getCurrentTargetPosition() {return _recentlyAiTargetPosition;}
 
     private AIPackageNodeData getCurrentAIPackageNode() {return getCurrentAIPackage()._aiPackageNodeData[_currentPackageStateIndex];}
