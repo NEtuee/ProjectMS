@@ -95,17 +95,26 @@ public class GameEntityBase : SequencerObjectBase
 
     public virtual void initializeCharacter(CharacterInfoData characterInfo, Vector3 direction)
     {
+        _initializeFromCharacter = true;
+
         base.initialize();
+        initializeObject();
+
+        detachChildObject();
+        setParentObject(null);
+
+        _currentVelocity = Vector3.zero;
+        _currentTarget = null;
+
         _characterLifeTime = 0f;
         _leftHP = 0f;
-        
+        _deadEventDelegate = null;
         setDirection(direction);
         
         gameObject.name = characterInfo._displayName;
         actionGraphPath = characterInfo._actionGraphPath;
         aiGraphPath = characterInfo._aiGraphPath;
         statusInfoName = characterInfo._statusName;
-
         _headUpOffset = characterInfo._headUpOffset;
 
         _movementControl.initialize();
@@ -122,23 +131,12 @@ public class GameEntityBase : SequencerObjectBase
         _statusInfo.initialize(this,characterInfo._statusName);
         _graphicInterface.initialize(this,_statusInfo,new Vector3(0f, _headUpOffset, 0f), true);
 
-        _deadEventDelegate = null;
-
-        detachChildObject();
-        setParentObject(null);
-
         applyActionBuffList(_actionGraph.getDefaultBuffList());
 
         CollisionInfoData data = new CollisionInfoData(characterInfo._characterRadius,0f,0f,0f, CollisionType.Character);
         _collisionInfo = new CollisionInfo(data);
-
         CollisionManager.Instance().registerObject(_collisionInfo, this);
-
-        _initializeFromCharacter = true;
-
-        _currentVelocity = Vector3.zero;
-        _currentTarget = null;
-
+        
         _spriteRenderer.sprite = _actionGraph.getCurrentSprite(_actionGraph.getCurrentRotationType() != RotationType.AlwaysRight ? (_spriteRotation * _actionStartRotation).eulerAngles.z : MathEx.directionToAngle(_direction));
 
         initializeActionValue();

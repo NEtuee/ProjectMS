@@ -46,6 +46,10 @@ public class ActionGraph
         initializeConditionData();
         _animationPlayer.initialize();
         _actionExecutedTime = 0f;
+
+        _currentActionNodeIndex = -1;
+        _prevActionNodeIndex = -1;
+        _currentAnimationIndex = 0;
         
         if(_actionGraphBaseData._defaultActionIndex != -1)
             changeAction(_actionGraphBaseData._defaultActionIndex);

@@ -39,7 +39,6 @@ public class AIGraph
     private ActionGraph _actionGraph;
 
     private AIGraphBaseData _aiGraphBaseData;
-    private List<byte[]> _conditionResultList = new List<byte[]>();
     private List<AIChildEventType> _reservedEvents = new List<AIChildEventType>();
     private List<ReservedAIEventItem> _reservedTargetEvents = new List<ReservedAIEventItem>();
 
@@ -62,6 +61,32 @@ public class AIGraph
     {
         _actionGraph = actionGraph;
         _aiGraphBaseData = baseData;
+        
+        _currentAINodeIndex = -1;
+        _prevAINodeIndex = -1;
+
+        _currentPackageStateIndex = -1;
+        _prevPackageStateIndex = -1;
+
+        _changePackageStateIndex = -1;
+
+        _updateTimer = 0f;
+        _arriveThreshold = 0f;
+
+        _aiPackageExecutedTimer = 0f;
+        _aiGraphExecutedTimer = 0f;
+
+        _packageEnd = false;
+        _arrived = false;
+
+         _rotateProcess = false;
+        _rotateProcessTime = 0f;
+        _rotateProcessTimer = 0f;
+        _rotateAngle = 0f;
+
+        _reservedEvents.Clear();
+        _reservedTargetEvents.Clear();
+        _reservedCustomEvents.Clear();
 
         initialize(targetEntity);
     }
@@ -395,14 +420,6 @@ public class AIGraph
 
         return weightCondition && keyCondition && condition;
 
-    }
-
-    public void addResultData(bool value, int index)
-    {
-        if(_conditionResultList.Count <= index)
-            _conditionResultList.Add(System.BitConverter.GetBytes(value));
-        else
-            _conditionResultList[index][0] = value == true ? (byte)1 : (byte)0;
     }
 
     public Vector3 getRecentlyAIDirection() {return _recentlyAiDirection;}

@@ -32,6 +32,11 @@ public abstract class ObjectBase : MessageReceiver, IProgress
     public void setAttackState(AttackState state) {_attackState = state;}
     public void setDefenceState(DefenceState state) {_defenceState = state;}
 
+    protected void initializeObject()
+    {
+        _attackState = AttackState.Default;
+        _defenceState = DefenceState.Default;
+    }
 
     protected override void Awake()
     {
