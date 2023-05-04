@@ -12,8 +12,6 @@ public static class FrameEventLoader
 
         XmlAttributeCollection attributes = node.Attributes;
 
-
-
         string type = attributes[0].Value;
         if(type == "Test")
             outFrameEvent = new ActionFrameEvent_Test();
@@ -69,13 +67,15 @@ public static class FrameEventLoader
             outFrameEvent = new ActionFrameEvent_SetAction();
         else if(type == "CallAIEvent")
             outFrameEvent = new ActionFrameEvent_CallAIEvent();
+        else if(type == "AudioPlay")
+            outFrameEvent = new ActionFrameEvent_AudioPlay();
         else
         {
             DebugUtil.assert(false, "invalid frameEvent type: {0}",type);
             return null;
         }
 
-        DebugUtil.assert((int)FrameEventType.Count == 27, "check here");
+        DebugUtil.assert((int)FrameEventType.Count == 28, "check here");
 
 
         if(outFrameEvent == null)

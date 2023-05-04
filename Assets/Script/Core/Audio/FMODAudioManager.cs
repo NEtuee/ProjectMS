@@ -197,7 +197,8 @@ public class FMODAudioManager : Singleton<FMODAudioManager>
         for(int i = 0; i < count; ++i)
         {
             var comp = new GameObject("Audio").AddComponent<FMODUnity.StudioEventEmitter>();
-            //comp.EventReference = FMODUnity.EventReference.Find(audio.path);
+            
+            comp.EventReference = audio.eventReference;
             comp.Preload = true;
             comp.gameObject.SetActive(active);
             comp.transform.SetParent(_audioObject.transform);

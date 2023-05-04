@@ -30,6 +30,7 @@ public enum FrameEventType
     FrameEvent_TalkBalloon,
     FrameEvent_SetAction,
     FrameEvent_CallAIEvent,
+    FrameEvent_AudioPlay,
 
     Count,
 }
@@ -168,6 +169,89 @@ public class ActionFrameEvent_CallAIEvent : ActionFrameEventBase
                 _eventTargetType = (CallAIEventTargetType)System.Enum.Parse(typeof(CallAIEventTargetType), attrValue);
             }
 
+        }
+    }
+}
+
+public class ActionFrameEvent_AudioPlay : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_AudioPlay;}
+
+    public int _audioID = 0;
+    public bool _toTarget = false;
+    public bool _attach = false;
+    public bool _useFlip = false;
+
+    public UnityEngine.Vector3 _spawnOffset = UnityEngine.Vector3.zero;
+
+    public override void initialize()
+    {
+    }
+
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        UnityEngine.Vector3 centerPosition;
+        if(_toTarget)
+            centerPosition = targetEntity.transform.position;
+        else
+            centerPosition = executeEntity.transform.position;
+
+        UnityEngine.Vector3 offset = _spawnOffset;
+        if(_useFlip && executeEntity is CharacterEntityBase)
+        {
+            float angle = MathEx.directionToAngle(executeEntity.getDirection());
+            if(_useFlip && (executeEntity as CharacterEntityBase).getFlipState().xFlip)
+                offset.y *= -1f;
+
+            offset = UnityEngine.Quaternion.Euler(0f,0f,angle) * offset;
+        }
+
+        if(_attach)
+            FMODAudioManager.Instance().Play(_audioID,offset,_toTarget ? targetEntity.transform : executeEntity.transform);
+        else
+            FMODAudioManager.Instance().Play(_audioID, centerPosition + offset);
+
+        return true;
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attributes[i].Name == "ID")
+            {
+                _audioID = int.Parse(attributes[i].Value);
+            }
+            else if(attributes[i].Name == "ToTarget")
+            {
+                _toTarget = bool.Parse(attributes[i].Value);
+            }
+            else if(attributes[i].Name == "UseFlip")
+            {
+                _useFlip = bool.Parse(attributes[i].Value);
+            }
+            else if(attributes[i].Name == "Attach")
+            {
+                _attach = bool.Parse(attributes[i].Value);
+            }
+            else if(attributes[i].Name == "Offset")
+            {
+                string[] vector = attributes[i].Value.Split(' ');
+                if(vector == null || vector.Length != 3)
+                {
+                    DebugUtil.assert(false, "invalid vector3 data: {0}",attributes[i].Value);
+                    return;
+                }
+
+                _spawnOffset.x = float.Parse(vector[0]);
+                _spawnOffset.y = float.Parse(vector[1]);
+                _spawnOffset.z = float.Parse(vector[2]);
+            }
         }
     }
 }

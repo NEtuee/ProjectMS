@@ -20,13 +20,13 @@ public class AudioInfoItem : ScriptableObject
     [System.Serializable]
     public class AudioInfo
     {
-        public string path;
         public string name;
         public int id;
         public float defaultVolume = 1f;
         public bool overrideAttenuation = false;
         public Vector3 overrideDistance;
         public string type;
+        public FMODUnity.EventReference eventReference;
         public List<AudioParameter> parameters;
 
         public AudioParameter FindParameter(int id)
@@ -67,7 +67,7 @@ public class AudioInfoItem : ScriptableObject
 
         var globalData = new AudioInfo();
         globalData.id = 0;
-        globalData.path = "global data";
+        globalData.name = "global data";
         globalData.type = "Global";
 
         saveData.Add(globalData);
@@ -81,11 +81,13 @@ public class AudioInfoItem : ScriptableObject
 
                 var item = new AudioInfo();
                 item.id = int.Parse(d[0]);
-                item.path = d[1];
-                var split = item.path.Split('/');
+                string path = d[1];
+                var split = path.Split('/');
                 item.name = split[split.Length - 1];
                 item.type = d[2];
-
+                item.eventReference = FMODUnity.EventReference.Find(path);
+                if(item.eventReference.IsNull)
+                    DebugUtil.assert(false, "FMOD 이벤트 레퍼런스를 찾을 수 없습니다. Path가 잘못되었거나 뱅크 업데이트가 안되어 있는듯 합니다. [Name: {0}] [ID: {1}] [Path: {2}]",item.name,item.id,path);
 
                 if(audioData != null)
                 {

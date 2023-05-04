@@ -90,8 +90,8 @@ InQuote,UseFlip=,"true,false"
 ShortCut,__FrameEvent_CallAIEvent,<FrameEvent Type=~CallAIEvent~ StartTime=~0~ EventName=~~ EventTargetType=~~/>
 FrameEvent,CallAIEvent,"EventName=~~,EventTargetType=~~"
 InQuote,EventTargetType=,"Range,Self,FrameEventTarget,Summoner"
-,,
-,,
+ShortCut,__FrameEvent_AudioPlay,<FrameEvent Type=~AudioPlay~ StartTime=~0~ ID=~~/>
+FrameEvent,AudioPlay,"ID=~~,ToTarget=~~,Attach=~~,UseFlip=~~"
 ,,
 ,,
 ,,

@@ -12,33 +12,129 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c858e63344676f34a93a8306d92a1f7d, type: 3}
   m_Name: AudioInfo
   m_EditorClassIdentifier: 
-  csvData: {fileID: 4900000, guid: 11493c609ea78564cb30b42619fd780a, type: 3}
+  csvData: {fileID: 4900000, guid: e1201114f30ca724ba628569b8957375, type: 3}
   audioData:
-  - path: global data
-    name: 
+  - name: global data
     id: 0
     defaultVolume: 1
     overrideAttenuation: 0
     overrideDistance: {x: 0, y: 0, z: 0}
     type: Global
-    parameters: []
-  - path: event:/TestAmbient
-    name: TestAmbient
+    eventReference:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+    parameters:
+    - name: SfxVolumeController
+      id: 1
+      min: 0
+      max: 1
+    - name: AmbVoulmeController
+      id: 2
+      min: 0
+      max: 1
+    - name: BgmVolumeController
+      id: 3
+      min: 0
+      max: 1
+  - name: Ketsusen
     id: 1000
     defaultVolume: 1
     overrideAttenuation: 0
     overrideDistance: {x: 0, y: 0, z: 0}
-    type: AMB
-    parameters:
-    - name: AmbVolumeControl
-      id: 10001
-      min: 0
-      max: 1
-  - path: event:/TestSFX
-    name: TestSFX
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: -337436453
+        Data2: 1185423394
+        Data3: -2141084230
+        Data4: 726711066
+      Path: event:/SFX/Akane/Ketsusen
+    parameters: []
+  - name: Kick
     id: 1001
     defaultVolume: 1
     overrideAttenuation: 0
     overrideDistance: {x: 0, y: 0, z: 0}
     type: SFX
+    eventReference:
+      Guid:
+        Data1: 1968589056
+        Data2: 1129519354
+        Data3: 537305016
+        Data4: 1490884371
+      Path: event:/SFX/Akane/Kick
+    parameters: []
+  - name: Dash
+    id: 1002
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: 425920331
+        Data2: 1310884790
+        Data3: -634594643
+        Data4: 177468552
+      Path: event:/SFX/Akane/Dash
+    parameters: []
+  - name: Zone
+    id: 8001
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: Amb
+    eventReference:
+      Guid:
+        Data1: -14370433
+        Data2: 1148210598
+        Data3: 1048290744
+        Data4: 2145408676
+      Path: event:/Amb/Zone
+    parameters: []
+  - name: Sky
+    id: 8002
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: Amb
+    eventReference:
+      Guid:
+        Data1: 1363018255
+        Data2: 1128091578
+        Data3: -1141818701
+        Data4: 1984800823
+      Path: event:/Amb/Sky
+    parameters: []
+  - name: Rain
+    id: 8003
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: Amb
+    eventReference:
+      Guid:
+        Data1: 2005404236
+        Data2: 1091530641
+        Data3: 1895284406
+        Data4: -962318787
+      Path: event:/Amb/Rain
+    parameters: []
+  - name: Battle_EZ
+    id: 9001
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: BGM
+    eventReference:
+      Guid:
+        Data1: -2133952083
+        Data2: 1217236183
+        Data3: -2108081268
+        Data4: 122038239
+      Path: event:/BGM/Battle_EZ
     parameters: []

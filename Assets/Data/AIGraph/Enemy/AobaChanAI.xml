@@ -1,32 +1,33 @@
 <AIGraph Name="AobaChanAI" DefaultState="Entry">
 
     <Include Path="Common/CommonTestPackage.xml"/>
-   
 
     <Include Path="Common/CommonDeadPackage.xml"/>
     <Include Path="Common/CommonHitPackage.xml"/>
+    <Include Path="Common/CommonAlertMovePackage.xml"/>
     <Include Path="Common/CommonChasePackage.xml"/>
-    <Include Path="Common/CommonSystemChasePackage.xml"/>
-    <Include Path="Common/CommonAttackPackage.xml"/>
     <Include Path="Common/CommonIdlePackage.xml"/>
     <Include Path="Common/CommonGuardBrokenPackage.xml"/>
-    <Include Path="Common/CommonRunawayPackage.xml"/>
     <Include Path="Common/CommonGroggyPackage.xml"/>
     <Include Path="Common/CommonDashPackage.xml"/>
 
     <Include Path="Enemy/NozawaAoba/AobaRaisenPackage.xml"/>
     <Include Path="Enemy/NozawaAoba/AobaChoraisenPackage.xml"/>
-    <Include Path="Enemy/NozawaAoba/AobaHandgunPackage.xml"/>
+    <Include Path="Enemy/NozawaAoba/AobaChargeRaisenPackage.xml"/>
+    <Include Path="Enemy/NozawaAoba/AobaUnwaverRaisenPackage.xml"/>
+    <Include Path="Enemy/NozawaAoba/AobaStungunPackage.xml"/>
     <Include Path="Enemy/NozawaAoba/AobaEmpPackage.xml"/>
+    <Include Path="Enemy/NozawaAoba/AobaDischargePackage.xml"/>
+    <Include Path="Enemy/NozawaAoba/AobaWarpChasePackage.xml"/>
+    <Include Path="Enemy/NozawaAoba/AobaElectronicShockPackage.xml"/>
+    <Include Path="Enemy/NozawaAoba/AobaAlertMovePackage.xml"/>
+
     <Include Path="Enemy/NozawaAoba/AobaDodgePackage.xml"/>
     <Include Path="Enemy/NozawaAoba/AobaAttackReadyPackage.xml"/>
 
 
-    <Test Package="AobaEmpPackage">
-        <Branch Condition="CurrentPackageEnd" Execute="Test"/>
-    </Test>
-
     <CustomValue Name="CurrentRaisenCount" Value="0.0"/>
+    <CustomValue Name="ChargeRaisenSuccess" Value="0.0"/>
 
     <CustomEvent_CountRaisen>
         <AIEvent Type="AddCustomValue" Name="CurrentRaisenCount" Value="1.0"/>
@@ -36,31 +37,68 @@
         <AIEvent Type="SetCustomValue" Name="CurrentRaisenCount" Value="0.0"/>
     </CustomEvent_ResetRaisen>
 
+    <CustomEvent_ChargeRaisenSuccess>
+        <AIEvent Type="AddCustomValue" Name="ChargeRaisenSuccess" Value="1.0"/>
+    </CustomEvent_ChargeRaisenSuccess>
+
+    <CustomEvent_ChargeRaisenClear>
+        <AIEvent Type="SetCustomValue" Name="ChargeRaisenSuccess" Value="0.0"/>
+    </CustomEvent_ChargeRaisenClear>
+
+    <!-- Alert Movement Fuzz Time Value -->
+    <GlobalVariable Name="gv_AobaExitAlertMoveFast" Value="1.0"/>
+    <GlobalVariable Name="gv_AobaExitAlertMoveNormal" Value="3.0"/>
+    <GlobalVariable Name="gv_AobaExitAlertMoveSlow" Value="5.0"/>
+
+    <!-- Alert Movement Reaction Distance Value -->
+    <GlobalVariable Name="gv_AobaReactAlertMoveDist" Value="1.8"/>
+    <GlobalVariable Name="gv_AkaneAttackDist" Value="1.5"/> 
+
     <!-- Std Values -->
-    <GlobalVariable Name="gv_najimiReadyTime" Value="1.5"/>     <!-- 보스전 대기 시간 (나중에 보스전 시작 트리거를 받아야 함)-->
-    <GlobalVariable Name="gv_najimiSystemChaseRange" Value="9.75"/>     <!-- 카메라 범위 값. 카메라 바깥으로 사라지지 않게 추격 -->
-    <GlobalVariable Name="gv_StdDistance" Value="2.0"/>     <!-- 원거리 공격 기준 값 -->
-    <GlobalVariable Name="gv_StdPassiveAttitude" Value="4.0"/>     <!-- 장외 기준 값 -->
+    <GlobalVariable Name="gv_SystemChaseRange" Value="9.75"/>     <!-- 카메라 범위 값. 카메라 바깥으로 사라지지 않게 추격 -->
 
     <!-- Dodge Pattern -->
-    <GlobalVariable Name="gv_najimiHitCountFast" Value="1.0"/>      <!-- 나지미 피격 허용 횟수 (빠름)-->
-    <GlobalVariable Name="gv_najimiHitCountNormal" Value="2.0"/>    <!-- 나지미 피격 허용 횟수 (보통)-->
-    <GlobalVariable Name="gv_najimiHitCountSlow" Value="3.0"/>      <!-- 나지미 피격 허용 횟수 (느림)-->
-
-    <!-- Rush Pattern -->
-    <GlobalVariable Name="gv_najimiRushRange" Value="2.0"/>             <!-- 나지미 돌진 사거리 -->
-    <GlobalVariable Name="gv_najimiRushTrasitionTime" Value="0.8"/>     <!-- 나지미 돌진 최소 텀 -->
+    <GlobalVariable Name="gv_najimiHitCountFast" Value="1.0"/>      <!-- 피격 허용 횟수 (빠름)-->
+    <GlobalVariable Name="gv_najimiHitCountNormal" Value="2.0"/>    <!-- 피격 허용 횟수 (보통)-->
+    <GlobalVariable Name="gv_najimiHitCountSlow" Value="3.0"/>      <!-- 피격 허용 횟수 (느림)-->
     
-    <!-- Raisen -->
-    <GlobalVariable Name="gv_RaisenLimit" Value="3.0"/>
-
     <!-- Groggy Pattern -->
     <GlobalVariable Name="gv_najimiStdBattle" Value="20.0"/>     <!-- 나지미 그로기 기준 배틀 포인트 -->
 
+    <!-- Test -->
+    <Test Package="AobaEmpPackage">
+        <Branch Condition="Hit && getFrameTag_HitAvail" Execute="TestHit"/>
+        <Branch Condition="(GuardBreakFail || GuardBroken) && getFrameTag_GbAvail" Execute="TestGuardBroken"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Test"/>
+    </Test>
 
+    <Test2 Package="AobaElectronicShockPackage">
+        <Branch Condition="Hit && getFrameTag_HitAvail" Execute="TestHit"/>
+        <Branch Condition="(GuardBreakFail || GuardBroken) && getFrameTag_GbAvail" Execute="TestGuardBroken"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Test"/>
+    </Test2>
+
+    <TestHit Package="CommonHitPackage">
+        <Branch Condition="CurrentPackageEnd" Execute="Test"/>
+    </TestHit>
+
+    <TestGuardBroken Package="CommonGuardBrokenPackage">
+        <Branch Condition="CurrentPackageEnd" Execute="Test"/>
+    </TestGuardBroken>
+
+    <!-- BranchSet -->
     <BranchSet Name="IsPlayerDead">
         <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="getTargetFrameTag_Dead" Execute="EnemyWin"/>
+    </BranchSet>
+
+    <BranchSet Name="WarpChaseSet">
+        <Branch Condition="TargetDistance >= gv_SystemChaseRange" Execute="WarpChase"/>
+    </BranchSet>
+
+    <BranchSet Name="AobaAlertReactionSet">
+        <Branch Weight="AobaDodge^True" Condition="getTargetFrameTag_Attack && (TargetDistance <= gv_AkaneAttackDist)" Execute="Dodge"/>
+        <Branch Condition="(TargetDistance <= gv_AobaReactAlertMoveDist)" Execute="JudgeShortAttack"/> <!-- 근거리 공격 실행 --> <!-- 플레이 해보고 확률적 실행 여부 고민 -->
     </BranchSet>
 
     <BranchSet Name="HitReactionSet">
@@ -73,123 +111,178 @@
         <Branch Condition="(GuardBreakFail || GuardBroken) && getFrameTag_GbAvail" Execute="GuardBroken"/>
     </BranchSet>
 
+
+    <!-- State -->
     <Entry Package="CommonIdlePackage">
         <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
-        <Branch Condition="TargetDistance >= gv_najimiSystemChaseRange" Execute="SystemChase"/>
-        <Branch Condition="true" Execute="JudgeDistance"/>
+        <UseBranchSet Name="WarpChaseSet"/>
+
+        <Branch Weight="RandVector^x" Condition="true" Execute="AlertExitFast"/>
+        <Branch Weight="RandVector^y" Condition="true" Execute="AlertExitNormal"/>
+        <Branch Weight="RandVector^z" Condition="true" Execute="AlertExitSlow"/>
     </Entry>
 
-    <!-- 거리 판단 -->
-    <JudgeDistance Package="CommonIdlePackage">
+    <AlertExitFast Package="AobaAlertMovePackage">
         <UseBranchSet Name="IsPlayerDead"/>
-        <Branch Condition="TargetDistance >= gv_najimiSystemChaseRange" Execute="SystemChase"/>
-        
-        <!-- 장외 거리 분기 -->
-        <Branch Condition="(TargetDistance >= gv_StdPassiveAttitude)" Execute="Chase"/>
-        
-        <!-- 3페이즈 근거리 -->
-        <Branch Weight="AobaNearAtk^Handgun" Condition="(TargetDistance < gv_StdDistance)" Execute="Pistol"/>
-        <Branch Weight="AobaNearAtk^Raisen" Condition="(TargetDistance < gv_StdDistance)" Execute="Baton"/>
+        <UseBranchSet Name="AobaAlertReactionSet"/>
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="WarpChaseSet"/>
 
-        <!-- 3페이즈 원거리 -->
-        <Branch Weight="AobaDistAtk^Raisen" Condition="(TargetDistance >= gv_StdDistance)" Execute="Baton"/>
-        <Branch Weight="AobaDistAtk^Choraisen" Condition="(TargetDistance >= gv_StdDistance)" Execute="Beam"/> 
-        <Branch Weight="AobaDistAtk^Emp" Condition="(TargetDistance >= gv_StdDistance)" Execute="Firework"/> 
-        <Branch Weight="AobaDistAtk^Chase" Condition="(TargetDistance >= gv_StdDistance)" Execute="Chase"/> 
-        
-    </JudgeDistance>
+        <Branch Condition="(GraphExecutedTime >= gv_AobaExitAlertMoveFast)" Execute="JudgeApproachAttack"/> <!-- 접근형 공격 실행 -->
+    </AlertExitFast>
+
+    <AlertExitNormal Package="CommonAlertMovePackage">
+        <UseBranchSet Name="IsPlayerDead"/>
+        <UseBranchSet Name="AobaAlertReactionSet"/>
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="WarpChaseSet"/>
+
+        <Branch Condition="(GraphExecutedTime >= gv_AobaExitAlertMoveNormal)" Execute="JudgeApproachAttack"/> <!-- 접근형 공격 실행 -->
+    </AlertExitNormal>
+
+    <AlertExitSlow Package="CommonAlertMovePackage">
+        <UseBranchSet Name="IsPlayerDead"/>
+        <UseBranchSet Name="AobaAlertReactionSet"/>
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="WarpChaseSet"/>
+
+        <Branch Condition="(GraphExecutedTime >= gv_AobaExitAlertMoveSlow)" Execute="JudgeApproachAttack"/> <!-- 접근형 공격 실행 -->
+    </AlertExitSlow>
+
+    <!-- 접근 공격 판단 -->
+    <JudgeApproachAttack Package="CommonIdlePackage">
+        <UseBranchSet Name="IsPlayerDead"/>
+        <!-- 약진 뢰섬 -->
+        <Branch Weight="AobaApproachAtk^ChargeRaisen" Condition="true" Execute="ChargeRaisen"/>
+        <!-- 뢰섬 -->
+        <Branch Weight="AobaApproachAtk^Raisen" Condition="true" Execute="Raisen"/>
+        <!-- 초뢰섬 3연격 -->
+        <Branch Weight="AobaApproachAtk^Choraisen" Condition="true" Execute="Choraisen"/>
+
+    </JudgeApproachAttack>
+
+    <!-- 근거리 공격 판단-->
+    <JudgeShortAttack Package="CommonIdlePackage">
+        <UseBranchSet Name="IsPlayerDead"/>
+        <!-- 부동 뢰섬 -->
+        <Branch Weight="AobaShortAtk^UnwaverRaisen" Condition="true" Execute="UnwaverRaisen"/>
+        <!-- 스턴건 -->
+        <Branch Weight="AobaShortAtk^Stungun" Condition="true" Execute="Stungun"/>
+
+    </JudgeShortAttack>
+    
+    <!-- 회피 공격 판단 -->
+    <JudgeDodgeAttack Package="CommonIdlePackage">
+        <UseBranchSet Name="IsPlayerDead"/>
+        <!-- 약진 뢰섬 -->
+        <Branch Weight="AobaDodgeAtk^ChargeRaisen" Condition="true" Execute="ChargeRaisen"/>
+        <!-- 부동 뢰섬 -->
+        <Branch Weight="AobaDodgeAtk^UnwaverRaisen" Condition="true" Execute="UnwaverRaisen"/>
+        <!-- EMP -->
+        <Branch Weight="AobaDodgeAtk^Emp" Condition="true" Execute="EmpGrenade"/>
+
+    </JudgeDodgeAttack>
 
     <!-- 피격 리액션 판단 -->
     <JudgeHitReaction Package="CommonIdlePackage">
         <UseBranchSet Name="IsPlayerDead"/>
         <!-- 회피 -->
-        <Branch Weight="NajimiHitReaction^Dodge" Condition="true" Execute="Dodge"/>
+        <Branch Weight="AobaHitReaction^Dodge" Condition="true" Execute="Dodge"/>
+        <!-- 전격방출 -->
+        <Branch Weight="AobaHitReaction^ElectronicShock" Condition="true" Execute="Discharge"/>
+        <!-- 감전 잡기 -->
+        <Branch Weight="AobaHitReaction^Discharge" Condition="true" Execute="RushReady"/>
 
-        <!-- 제자리 반격 -->
-        <Branch Condition="true" Execute="Pistol"/>
     </JudgeHitReaction>
 
     <Dodge Package="AobaDodgePackage">      
-        <UseBranchSet Name="IsPlayerDead"/>  
-        <!-- 대시 공격 -->
-        <Branch Weight="NajimiDodgeAtk^DashAttack" Condition="CurrentPackageEnd" Execute="JudgeDashAtk"/>
-        <!-- 거리 기반 공격 -->
-        <Branch Weight="NajimiDodgeAtk^DistAttack" Condition="CurrentPackageEnd" Execute="JudgeDistance"/>
-    </Dodge>
-
-    <!-- 대시 공격 판단 -->
-    <JudgeDashAtk Package="CommonIdlePackage">
-        <UseBranchSet Name="IsPlayerDead"/>
-        <Branch Weight="RandBoolean^True" Condition="true" Execute="Chase"/>
-        <Branch Weight="RandBoolean^False" Condition="true" Execute="DashPistol"/>
-    </JudgeDashAtk>
-
-
-    <Chase Package="CommonChasePackage">
         <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
-        <Branch Condition="TargetDistance >= gv_najimiSystemChaseRange" Execute="SystemChase"/>
+        <UseBranchSet Name="WarpChaseSet"/>
 
-        <!-- 추격 러시 -->
-        <Branch Condition="TargetExists && 
-                           (gv_najimiRushRange >= TargetDistance) && 
-                           (GraphExecutedTime > gv_najimiRushTrasitionTime)" Execute="Rush"/>
-    </Chase>
+        <Branch Condition="CurrentPackageEnd" Execute="JudgeDodgeAttack"/>
+    </Dodge>
 
-    <SystemChase Package="CommonSystemChasePackage">
+    <JustDodge Package="AobaDodgePackage">      
         <UseBranchSet Name="IsPlayerDead"/>
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="WarpChaseSet"/>
+
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
-    </SystemChase>
-    
-    
-    <DashRush Package="CommonDashPackage">
+    </JustDodge>
+
+    <Raisen Package="AobaRaisenPackage">
         <UseBranchSet Name="IsPlayerDead"/>
-        <Branch Condition="(gv_najimiRushRange >= TargetDistance)" Execute="Pistol"/>
-        <Branch Condition="CurrentPackageEnd" Execute="Pistol"/>
-    </DashRush>
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+    </Raisen>
+
+    <Choraisen Package="AobaChoraisenPackage">
+        <UseBranchSet Name="IsPlayerDead"/>
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+    </Choraisen>
+    
+    <ChargeRaisen Package="AobaChargeRaisenPackage">
+        <UseBranchSet Name="IsPlayerDead"/>
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="CurrentPackageEnd && (customValue_ChargeRaisenSuccess == 1.0)" Execute="UnwaverRaisen"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+    </ChargeRaisen>
+
+    <UnwaverRaisen Package="AobaUnwaverRaisenPackage">
+        <UseBranchSet Name="IsPlayerDead"/>
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+    </UnwaverRaisen>
+
+    <Stungun Package="AobaStungunPackage">
+        <UseBranchSet Name="IsPlayerDead"/>
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="CurrentPackageEnd && getTargetFrameTag_Stun" Execute="StunChase"/>
+        <Branch Condition="CurrentPackageEnd" Execute="JustDodge"/>
+    </Stungun>
+
+    <EmpGrenade Package="AobaEmpPackage">
+        <UseBranchSet Name="IsPlayerDead"/>
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Choraisen"/>
+    </EmpGrenade>
+
+    <Discharge Package="AobaDischargePackage">
+        <UseBranchSet Name="IsPlayerDead"/>
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="CurrentPackageEnd && getTargetFrameTag_Stun" Execute="StunChase"/>
+        <Branch Weight="RandBoolean^True" Condition="CurrentPackageEnd" Execute="ChargeRaisen"/>
+        <Branch Weight="RandBoolean^False" Condition="CurrentPackageEnd" Execute="Choraisen"/>
+    </Discharge>
+
+    <WarpChase Package="AobaWarpChasePackage">
+        <UseBranchSet Name="IsPlayerDead"/>
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Raisen"/>
+    </WarpChase>
+
+    <StunChase Package="CommonChasePackage">
+        <UseBranchSet Name="IsPlayerDead"/>
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="WarpChaseSet"/>
+
+        <Branch Condition="TargetExists && (TargetDistance <= 2.0)" Execute="ElectronicShock"/>
+    </StunChase>
 
     <RushReady Package="AobaAttackReadyPackage">
         <UseBranchSet Name="IsPlayerDead"/>
-        <Branch Condition="CurrentPackageEnd" Execute="Rush"/>
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="CurrentPackageEnd" Execute="ElectronicShock"/>
     </RushReady>
 
-    <Rush Package="AobaRaisenPackage">
+    <ElectronicShock Package="AobaElectronicShockPackage">
         <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
-        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
-    </Rush>
-
-    <Baton Package="AobaRaisenPackage">
-        <UseBranchSet Name="IsPlayerDead"/>
-        <Branch Condition="CurrentPackageEnd && (customValue_CurrentRaisenCount < gv_RaisenLimit)" Execute="Baton"/>
-        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
-    </Baton>
-
-    <DashPistol Package="CommonDashPackage">
-        <UseBranchSet Name="IsPlayerDead"/>
-        <Branch Condition="(gv_najimiRushRange >= TargetDistance)" Execute="Pistol"/>
-        <Branch Condition="CurrentPackageEnd" Execute="Pistol"/>
-    </DashPistol>
-
-    <Pistol Package="AobaHandgunPackage">
-        <UseBranchSet Name="IsPlayerDead"/>
-        <UseBranchSet Name="HitReactionSet"/>
-        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
-    </Pistol>
-
-    <Firework Package="AobaEmpPackage">
-        <UseBranchSet Name="IsPlayerDead"/>
-        <UseBranchSet Name="HitReactionSet"/>
-        <Branch Weight="RandBoolean^True" Condition="CurrentPackageEnd" Execute="Beam"/>
-        <Branch Weight="RandBoolean^False" Condition="CurrentPackageEnd" Execute="Entry"/>
-    </Firework>
-
-    <Beam Package="AobaChoraisenPackage">
-        <UseBranchSet Name="IsPlayerDead"/>
-        <UseBranchSet Name="HitReactionSet"/>
-        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
-    </Beam>
+        <Branch Condition="CurrentPackageEnd" Execute="Entry"/> 
+    </ElectronicShock>
 
     <GuardBroken Package="CommonGuardBrokenPackage">
         <UseBranchSet Name="IsPlayerDead"/>
@@ -205,7 +298,6 @@
 
     <Groggy Package="CommonGroggyPackage">
         <UseBranchSet Name="IsPlayerDead"/>
-        <!-- <UseBranchSet Name="HitReactionSet"/> -->
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </Groggy>
 
