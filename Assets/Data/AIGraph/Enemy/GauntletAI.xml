@@ -27,7 +27,7 @@
     </BranchSet>
 
     <BranchSet Name="WaitForRush">
-        <Branch Condition="getTargetFrameTag_Catched && (IsCatcher == false)" Execute="Alert"/>
+        <Branch Condition="getTargetFrameTag_Catched && (IsCatcher == false) && (getFrameTag_CatchProcess == false)" Execute="Alert"/>
     </BranchSet>
 
     <Entry Package="CommonIdlePackage">

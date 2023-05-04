@@ -113,7 +113,7 @@
         <Animation Preset="Sprites/Enemy/Gauntlet/1_rush/3_grabPre" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12"/>
             <FrameEvent Type="ReleaseCatch" StartTime="1" Push="1 0 0" Condition="getTargetFrameTag_Recatchable == false"/>
-
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="CatchProcess"/>
         </Animation>
 
         <Branch Condition="getKey_Escape_1 || getKey_Escape_2" Execute="AC_RushSuccess_Struggle"/>
@@ -122,6 +122,7 @@
         <Animation Preset="Sprites/Enemy/Gauntlet/1_rush/5_struggle" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12"/>
             <FrameEvent Type="ReleaseCatch" StartTime="1" Push="1 0 0" Condition="getTargetFrameTag_Recatchable == false"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="CatchProcess"/>
         </Animation>
 
         <Branch Condition="getKey_Escape_1 || getKey_Escape_2" Execute="AC_RushSuccess_Entry"/>
@@ -142,6 +143,8 @@
             </FrameEvent>
 
             <FrameEvent Type="ReleaseCatch" StartTime="1" Push="1 0 0" Condition="getTargetFrameTag_Recatchable == false"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="CatchProcess"/>
         </Animation>
 
         <Branch Condition="getKey_Escape_1 || getKey_Escape_2" Execute="AC_RushSuccess_Struggle"/>
@@ -153,10 +156,14 @@
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Velocity="-6" Speed="0"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="CatchProcess"/>
         </Animation>
         <Animation Preset="7_awayStand" XFlip="true" Duration="1.0">
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="CatchProcess"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>
