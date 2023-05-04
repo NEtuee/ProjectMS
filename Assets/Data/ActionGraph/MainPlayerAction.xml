@@ -237,7 +237,7 @@
         </Animation>
 
         <Branch Condition="AttackSuccess" Execute="AttackSuccess"/>
-        <Branch Condition="AttackGuarded" Execute="AttackGuarded"/>
+        <Branch Condition="AttackGuarded" Execute="AttackGuarded"/> 
         <Branch Key="getKey_AttackCharge == true" Condition="(getStat_DashPoint < 1.0) || (getStat_HP <= 1.0)" Execute="MoveAll"/>
         <Branch Key="getKey_AttackCharge == true" Condition="End" Execute="MoveAll"/>
         <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="MoveStop"/>
