@@ -293,9 +293,6 @@ public class GameEntityBase : SequencerObjectBase
             debugTextManager.updateDebugText("Action","Action: " + getCurrentActionName());
             debugTextManager.updateDebugText("Defence","Defence: " + getDefenceType());
 
-            if(_aiGraph != null && _aiGraph.isValid())
-                debugTextManager.updateDebugText("AI","AIState: " + getCurrentAIName());
-
             string frameTag = "";
             HashSet<string> frameTagList = _actionGraph.getCurrentFrameTagList();
             foreach(var item in frameTagList)
@@ -322,6 +319,12 @@ public class GameEntityBase : SequencerObjectBase
 
         if(_aiDebug == true || GameEditorMaster._instance._aiDebugAll)
         {
+            if(_aiGraph != null && _aiGraph.isValid())
+            {
+                debugTextManager.updateDebugText("AIPackage","AIPackage: " + _aiGraph.getCurrentPackageName());
+                debugTextManager.updateDebugText("AI","AIState: " + getCurrentAIName());
+            }
+
             if(_aiGraph.hasTargetPosition() == true)
             {
                 Color targetColor = _aiGraph.isAIArrivedTarget() ? Color.green : Color.red;
