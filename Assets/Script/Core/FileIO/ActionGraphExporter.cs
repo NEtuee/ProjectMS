@@ -318,6 +318,19 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             {
                 actionTime = float.Parse(targetValue);
             }
+            else if(targetName =="Flags")
+            {
+                string[] flags = targetValue.Split(' ');
+                
+                for(int i = 0; i < flags.Length; ++i)
+                {
+                    string targetFlag = flags[i];
+                    if(targetFlag == "ClearPush")
+                    {
+                        nodeData._actionFlag |= (ulong)ActionFlags.ClearPush;
+                    }
+                }
+            }
             else
             {
                 DebugUtil.assert(false,"invalid attribute type !!! : {0} [Line: {1}] [FileName: {2}]", targetName, XMLScriptConverter.getLineFromXMLNode(node), filePath);

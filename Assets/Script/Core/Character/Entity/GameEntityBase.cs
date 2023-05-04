@@ -250,6 +250,9 @@ public class GameEntityBase : SequencerObjectBase
                     _actionStartRotation = _spriteRotation;
                     _actionStartRotation = Quaternion.Inverse(_actionStartRotation);
                 }
+
+                if(_actionGraph.checkCurrentActionFlag(ActionFlags.ClearPush))
+                    _currentVelocity = Vector3.zero;
             }
 
             updateDirection();
