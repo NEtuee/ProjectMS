@@ -84,6 +84,12 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             }
 
             nodeDataList.Add(nodeData);
+
+            if(actionIndexDic.ContainsKey(nodeData._nodeName))
+            {
+                DebugUtil.assert(false,"중복된 액션이 존재합니다. 확인해 주세요 : [NodeName: {0}] [Line: {1}] [FileName: {2}]",nodeList[i].Name, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
+                return null;
+            }
             actionIndexDic.Add(nodeData._nodeName,actionIndex++);
         }
 

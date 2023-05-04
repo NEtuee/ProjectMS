@@ -51,6 +51,18 @@
         <Branch Condition="End" Execute="AC_Dash"/>
     </AC_Dash>
 
+    <AC_LinearDash MovementType="GraphPreset" MovementGraphPreset="Reito_LinearDash" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/KantoReito/0_default/"/>
+        <Animation Preset="3_dash" XFlip="true" Duration="0.7">
+            <FrameEvent Type="Test" Log="HitCount 2" Condition="getStat_HitCount == 2.0"/>
+            <FrameEvent Type="Test" Log="HitCount 3" Condition="getStat_HitCount == 3.0"/>
+            <FrameEvent Type="Test" Log="HitCount 4" Condition="getStat_HitCount == 4.0"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountClear"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Dash"/>
+    </AC_LinearDash>
+
     <AC_Dodge MovementType="GraphPreset" MovementGraphPreset="Reito_Dodge" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/KantoReito/0_default/"/>
         <Animation Preset="6_dodge" XFlip="true" Duration="0.7">
