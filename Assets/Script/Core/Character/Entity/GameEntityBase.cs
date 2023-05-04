@@ -321,8 +321,9 @@ public class GameEntityBase : SequencerObjectBase
         {
             if(_aiGraph != null && _aiGraph.isValid())
             {
-                debugTextManager.updateDebugText("AIPackage","AIPackage: " + _aiGraph.getCurrentPackageName());
-                debugTextManager.updateDebugText("AI","AIState: " + getCurrentAIName());
+                debugTextManager.updateDebugText("AIState","AIState: " + _aiGraph.getCurrentAIStateName());
+                debugTextManager.updateDebugText("AIPackage","   AIPackage: " + _aiGraph.getCurrentPackageName());
+                debugTextManager.updateDebugText("AI","   AIPackageState: " + getCurrentAIPackageStateName());
             }
 
             if(_aiGraph.hasTargetPosition() == true)
@@ -829,7 +830,7 @@ public class GameEntityBase : SequencerObjectBase
     public FlipState getFlipState() {return _flipState;}
 
     public CollisionInfo getCollisionInfo() {return _collisionInfo;}
-    public string getCurrentAIName() {return _aiGraph.getCurrentAIStateName();}
+    public string getCurrentAIPackageStateName() {return _aiGraph.getCurrentAIPackageStateName();}
     public string getCurrentActionName() {return _actionGraph == null ? "" : _actionGraph.getCurrentActionName();}
     public float getDefenceAngle() {return _actionGraph.getCurrentDefenceAngle();}
     public DefenceType getDefenceType() {return _currentDefenceType;}
