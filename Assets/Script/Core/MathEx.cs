@@ -222,6 +222,16 @@ public static class MathEx
 		return true;
 	}
 
+	public static UnityEngine.Vector3 round(UnityEngine.Vector3 value, int digits)
+	{
+		return new UnityEngine.Vector3(round(value.x, digits), round(value.y, digits), round(value.z, digits));
+	}
+
+	public static float round(float value, int digits)
+	{
+		return (float)System.Math.Round(value,digits);
+	}
+
 	public static UnityEngine.Vector3 lemniscate(float time)
 	{
 		float scale = 2f / (3f - UnityEngine.Mathf.Cos(2f * time)); 

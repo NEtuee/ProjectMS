@@ -218,7 +218,7 @@ GameObject:
   - component: {fileID: 88726926}
   m_Layer: 9
   m_Name: SpriteShadowScreen
-  m_TagString: Untagged
+  m_TagString: ScreenResultMesh
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -256,7 +256,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f40bf6900e393ce46b36e05c54d0ecec, type: 2}
+  - {fileID: 967015869}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1904,6 +1904,119 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 931314175}
   m_CullTransparentMesh: 1
+--- !u!21 &967015869
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: SpriteShadowScreenMaterial (Instance)
+  m_Shader: {fileID: 4800000, guid: a8ee89a7c300dea4c9772f350dcea9f3, type: 3}
+  m_ShaderKeywords: PIXELSNAP_ON
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BackgroundTexture:
+        m_Texture: {fileID: 8400000, guid: 5b2079d43b223324e9d8361d1b9652d5, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _CharacterTexture:
+        m_Texture: {fileID: 8400000, guid: 0d31f80d37d69864cae173ba14739177, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DepthTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailAlbedoMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailNormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 8400000, guid: 5b2079d43b223324e9d8361d1b9652d5, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetallicGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _OcclusionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ShadowMapTexture:
+        m_Texture: {fileID: 8400000, guid: f832c323054e3584b9f3c45dade460be, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - PixelSnap: 1
+    - _ApplyCharacterRate: 0
+    - _BackgroundFogRate: 0.353
+    - _BlurSize: 0
+    - _Brightness: 1
+    - _BumpScale: 1
+    - _Cutoff: 0.5
+    - _DetailNormalMapScale: 1
+    - _DstBlend: 0
+    - _FogRate: 1
+    - _FogStrength: 0.128
+    - _GlossMapScale: 1
+    - _Glossiness: 0.5
+    - _GlossyReflections: 1
+    - _Metallic: 0
+    - _Mode: 0
+    - _MultiSampleDistance: 1.35
+    - _OcclusionStrength: 1
+    - _Parallax: 0.02
+    - _Saturation: 1
+    - _ShadowDistance: 0.57
+    - _ShadowDistanceOffset: 0
+    - _ShadowDistanceRatio: 8.72
+    - _SmoothnessTextureChannel: 0
+    - _SpecularHighlights: 1
+    - _SrcBlend: 1
+    - _SunAngle: 241
+    - _UVSec: 0
+    - _ZWrite: 1
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _ColorTint: {r: 1, g: 1, b: 1, a: 1}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _FogColor: {r: 0.44313726, g: 0, b: 0, a: 0.1764706}
+    - _MultiSampleColorTint: {r: 1, g: 1, b: 1, a: 1}
+    - _MultiSampleColorTintLeft: {r: 0, g: 0.78431374, b: 1, a: 1}
+    - _MultiSampleColorTintRight: {r: 1, g: 0.28627452, b: 0.76862746, a: 1}
+    - _ScreenSize: {r: 100, g: 100, b: 0, a: 0}
+    - _ShadowColor: {r: 0.05882353, g: 0.08235294, b: 0.16862746, a: 0}
+    - _ShadowOffset: {r: 5.65, g: -3.52, b: 0, a: 0}
+  m_BuildTextureStacks: []
 --- !u!1 &1000986958
 GameObject:
   m_ObjectHideFlags: 0
@@ -4827,7 +4940,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1955140946
 Transform:
   m_ObjectHideFlags: 0
