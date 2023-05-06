@@ -54,7 +54,8 @@
                 <AIEvent Type="SetAction" Action="AC_ChoraisenSuccess"/>
             </Event_OnExecute>
 
-            <!-- TODO: 공격 성공 후에도 연속 공격을 할 것인지 고민 -->
+            <Branch Condition="End && (customValue_CurrentRaisenCount < gv_RaisenLimit)" Execute="AI_ChoraisenReady"/>          
+            <Branch Condition="End && (customValue_CurrentRaisenCount == gv_RaisenLimit)" Execute="AI_ChoraisenReadyUp"/>
             <Branch Condition="End" Execute="TerminatePackage"/>    
         </AI_ChoraisenSuccess>
 
@@ -62,6 +63,7 @@
             <Event_OnExecute>
                 <AIEvent Type="TerminatePackage"/>
             </Event_OnExecute>
+            <AIEvent Type="CallAIEvent" EventName="ResetRaisen" TargetType="Self"/>
         </TerminatePackage>
 
     </AIState>

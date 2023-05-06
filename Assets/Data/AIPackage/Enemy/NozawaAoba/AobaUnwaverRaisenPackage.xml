@@ -1,6 +1,24 @@
-<AIPackage Name="AobaUnwaverRaisenPackage" DefaultState="AI_UnwaverRaisen">
+<AIPackage Name="AobaUnwaverRaisenPackage" DefaultState="AI_HitToDodge">
 
     <AIState>
+        <AI_HitToDodge UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <Event_OnExecute>
+                <AIEvent Type="SetAction" Action="AC_HitToDodge"/>
+            </Event_OnExecute>
+        
+            <Branch Condition="getTargetFrameTag_Attack && (TargetDistance <= 1.5)" Execute="AI_HorizontalDodge"/>
+            <Branch Condition="End" Execute="TerminatePackage"/>
+        </AI_HitToDodge>
+
+        <AI_HorizontalDodge UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget" Angle="0"/>
+                <AIEvent Type="SetAction" Action="AC_ShortDodge"/>
+            </Event_OnExecute>
+        
+            <Branch Condition="End" Execute="AI_UnwaverRaisen"/>
+        </AI_HorizontalDodge>
+
         <AI_UnwaverRaisen UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
@@ -8,8 +26,7 @@
             </Event_OnExecute>
 
             <Branch Condition="AttackSuccess" Execute="AI_UnwaverRaisenSuccess"/>
-            <!-- TODO: 사거리 판단할 것인지 플레이해보고 결정 -->
-            <Branch Condition="End" Execute="AI_RaisenPre"/>
+            <Branch Condition="End" Execute="AI_UnwaverRaisenPre"/>
         </AI_UnwaverRaisen>
 
         <AI_UnwaverRaisenSuccess UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
@@ -22,14 +39,14 @@
         </AI_UnwaverRaisenSuccess>
 
         <!-- 뢰섬 -->
-        <AI_RaisenPre UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_UnwaverRaisenPre UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
-                <AIEvent Type="SetAction" Action="AC_RaisenPre"/>
+                <AIEvent Type="SetAction" Action="AC_UnwaverRaisenPre"/>
             </Event_OnExecute>        
             
             <Branch Condition="End" Execute="AI_RaisenSlash"/>
-        </AI_RaisenPre>
+        </AI_UnwaverRaisenPre>
 
         <AI_RaisenSlash UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
             <Event_OnExecute>
