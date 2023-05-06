@@ -50,7 +50,7 @@
 
 
     <Idle MovementType="FrameEvent" DirectionType="Keep" FlipType="Keep">
-        <Animation Path="Sprites/NewPlayer/idle/" XFlip="true" Duration="1.0">
+        <Animation Preset="Sprites/NewPlayer/idle/" XFlip="true" Duration="1.2">
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_IdleFriction" Speed="0"/>
         </Animation>
 
@@ -73,7 +73,7 @@
     </Idle_Transition>
 
     <Idle_LookBack MovementType="FrameEvent" DirectionType="Keep" FlipType="Keep">
-        <Animation Preset="Sprites/NewPlayer/idle_back/" XFlip="true" Duration="0.0833">
+        <Animation Preset="Sprites/NewPlayer/idle_back/" XFlip="true" Duration="1.2">
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_IdleFriction" Speed="0"/>
         </Animation>
 
@@ -119,7 +119,7 @@
         <Branch Key="(getKey_AttackCharge == false) && (getKey_NormalMove == false)" Execute="MoveStop"/>
     </MoveAll>
 
-    <DashRoll MovementType="FrameEvent" DirectionType="MousePoint" RotationType="MoveDirection" FlipType="MousePoint" DirectionUpdateOnce="true">
+    <DashRoll MovementType="FrameEvent" DirectionType="MousePoint" RotationType="MoveDirection" FlipType="MousePoint" DirectionUpdateOnce="true" Flags="ClearPush">
         <Animation Preset="Sprites/NewPlayer/DashRoll/" XFlip="true" ScalePreset="YSpring" Duration="0.25">
             <FrameEvent Type="Attack" StartTime="0" AttackPreset="PlayerAttackTest" Condition="(getStat_DashPoint >= 1.0)">
                 <OnHit>
@@ -168,10 +168,13 @@
             <FrameEvent Type="ApplyBuff" StartTime="0.031" ApplyBuff="DashPointConsumption" Condition="(getStat_DashPoint >= 1.0)"/>
 
             <FrameEvent Type="FrameTag" StartTime="0.156" EndFrame="999" Tag="MoveCancel"/>
-            
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="0.016" Tag="Attack"/>
+
+            <FrameEvent Type="AudioPlay" Condition="AttackSuccess == false" StartTime="0.05" ID="1002" Attach="true"/>
         </Animation>
 
         <Branch Condition="AttackSuccess" Execute="AttackSuccess"/>
+        <Branch Condition="EvadeSuccess" Execute="EvadeSuccess"/>
         <Branch Condition="AttackGuarded" Execute="AttackGuarded"/>
         <Branch Key="getKey_AttackCharge == true" Condition="(getStat_DashPoint < 1.0)" Execute="MoveAll"/>
         <Branch Key="getKey_AttackCharge == true" Condition="End" Execute="MoveAll"/>
@@ -179,7 +182,7 @@
         <Branch Key="getKey_AttackCharge == false" Condition="getFrameTag_MoveCancel" Execute="MoveStop"/>
     </DashRoll>
 
-    <DashRoll_Long MovementType="FrameEvent" DirectionType="MousePoint" RotationType="MoveDirection" FlipType="MousePoint" DirectionUpdateOnce="true">
+    <DashRoll_Long MovementType="FrameEvent" DirectionType="MousePoint" RotationType="MoveDirection" FlipType="MousePoint" DirectionUpdateOnce="true" Flags="ClearPush">
         <Animation Preset="Sprites/NewPlayer/DashRoll/" XFlip="true" ScalePreset="YSpring" Duration="0.25">
             <FrameEvent Type="Attack" StartTime="0" AttackPreset="PlayerAttackLong" Condition="(getStat_DashPoint >= 1.0) && (getStat_HP > 1.0)">
                 <OnHit>
@@ -229,18 +232,20 @@
             <FrameEvent Type="ApplyBuff" StartTime="0.031" ApplyBuff="DashPointConsumption" Condition="(getStat_DashPoint >= 1.0)"/>
 
             <FrameEvent Type="FrameTag" StartTime="0.156" EndFrame="999" Tag="MoveCancel"/>
-            
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="0.016" Tag="Attack"/>
+
+            <FrameEvent Type="AudioPlay" Condition="AttackSuccess == false" StartTime="0.05" ID="1002" Attach="true"/>
         </Animation>
 
         <Branch Condition="AttackSuccess" Execute="AttackSuccess"/>
-        <Branch Condition="AttackGuarded" Execute="AttackGuarded"/>
+        <Branch Condition="AttackGuarded" Execute="AttackGuarded"/> 
         <Branch Key="getKey_AttackCharge == true" Condition="(getStat_DashPoint < 1.0) || (getStat_HP <= 1.0)" Execute="MoveAll"/>
         <Branch Key="getKey_AttackCharge == true" Condition="End" Execute="MoveAll"/>
         <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="MoveStop"/>
         <Branch Key="getKey_AttackCharge == false" Condition="getFrameTag_MoveCancel" Execute="MoveStop"/>
     </DashRoll_Long>
 
-    <DashRoll_Kick MovementType="FrameEvent" DirectionType="MousePoint" RotationType="MoveDirection" FlipType="MousePoint" DirectionUpdateOnce="true">
+    <DashRoll_Kick MovementType="FrameEvent" DirectionType="MousePoint" RotationType="MoveDirection" FlipType="MousePoint" DirectionUpdateOnce="true" Flags="ClearPush">
         <Animation Preset="Sprites/NewPlayer/DashRoll/" XFlip="true" Duration="0.25">
             <FrameEvent Type="Attack" StartTime="0" AttackType="GuardBreak" AttackPreset="Akane_Kick" IgnoreDefenceType="Guard">
                 <OnGuardBreak>
@@ -252,6 +257,7 @@
 
                     <FrameEvent Type="TeleportToTarget" DistanceOffset="0"/>
                     <FrameEvent Type="StopUpdate" Time="0.07"/>
+
 
                     <FrameEvent Type="SetTimeScale" Condition="getTargetFrameTag_Groggy" Scale="0.1" Time="0.1" BlendTime="0.2"/>
                     <FrameEvent Type="ZoomEffect" Condition="getTargetFrameTag_Groggy" Scale="2.9"/>
@@ -281,6 +287,7 @@
             <FrameEvent Type="ApplyBuff" StartTime="0.031" ApplyBuff="DashPointConsumption"/>
 
             <FrameEvent Type="FrameTag" StartTime="0.156" EndFrame="999" Tag="MoveCancel"/>
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="0.016" Tag="Attack"/>
         </Animation>
         
         <Branch Condition="AttackSuccess || AttackGuarded || AttackGuardBreak || AttackGuardBreakFail" Execute="Kicked"/>
@@ -297,6 +304,7 @@
             <!-- <FrameEvent Type="Danmaku" StartTime="0" Path="Enemy/MagicalFirecrack.xml" Offset="1 1 0" UseFlip="true"/>-->
 
             <FrameEvent Type="ZoomEffect" StartTime="0" Scale="3.1"/>
+            
         </Animation>
 
         <Branch Condition="AttackSuccess" Execute="AttackSuccess"/>
@@ -307,6 +315,8 @@
 
     <Kicked MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
         <Animation Preset="Sprites/NewPlayer/kick/" XFlip="true" ScalePreset="YSpring" Duration="0.44">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="1001" Attach="true"/>
+        
             <FrameEvent Type="Movement" StartTime="0" Friction="3" Speed="0" Velocity="-1.5 "/>
             <FrameEvent Type="FrameTag" StartTime="0.198" EndFrame="999" Tag="MoveCancel"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="DashPointIncrement"/>
@@ -320,6 +330,7 @@
 
     <AttackSuccess MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
         <Animation Preset="Sprites/NewPlayer/attack/" XFlip="true" ScalePreset="YSpring" Duration="0.315">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="1000" Attach="true"/>
 
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_AttackFriction" MaxVelocity="gv_AttackVelocity" Speed="0" Velocity="gv_AttackVelocity"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="DashPointReset"/>
@@ -331,9 +342,24 @@
         <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="AttackStop"/>
         <UseBranchSet Name="CancelBranch"/>
     </AttackSuccess>
+    <EvadeSuccess MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
+        <Animation Preset="Sprites/NewPlayer/attack/" XFlip="true" ScalePreset="YSpring" Duration="0.315">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="1000" Attach="true"/>
+
+            <FrameEvent Type="Movement" StartTime="0" Friction="gv_AttackFriction" MaxVelocity="gv_AttackVelocity" Speed="0" Velocity="gv_AttackVelocity"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="DashPointReset"/>
+            <FrameEvent Type="FrameTag" StartTime="0.26" EndFrame="999" Tag="MoveCancel"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="Evaded"/>
+        </Animation>
+
+        <Branch Key="(getKey_AttackCharge == true) || (getKey_NormalMove == true)" Condition="End" Execute="MoveAll"/>
+        <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="AttackStop"/>
+        <UseBranchSet Name="CancelBranch"/>
+    </EvadeSuccess>
 
     <AttackSuccessFar MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
         <Animation Preset="Sprites/NewPlayer/attack/" XFlip="true" ScalePreset="YSpring" Duration="0.315">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="1000" Attach="true"/>
 
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_AttackFriction" MaxVelocity="gv_AttackFarVelocity" Speed="0" Velocity="gv_AttackFarVelocity"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="DashPointReset"/>
@@ -364,14 +390,14 @@
         </Animation>
 
         <!-- <Branch Condition="getStat_IsStun == 1.0" Execute="Stun"/> -->
-        <Branch Condition="(getStat_HP <= 0.0)" Execute="Kiiled"/>
+        <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="IsCatchTarget" Execute="Catched"/>
         <Branch Condition="End" Execute="Idle"/>
         <Branch Key="(getKey_Guard == false) && ((getKey_AttackCharge == true) || (getKey_NormalMove == true))" Condition="End" Execute="MoveAll"/>
         <Branch Key="(getKey_Guard == false) && (getKey_AttackCharge == false)" Condition="End" Execute="Idle"/>
     </Hit>
 
-    <Kiiled DirectionType="Keep" FlipType="Direction">
+    <Dead DirectionType="Keep" FlipType="Direction">
         <Animation Preset="Sprites/NewPlayer/Hit/" XFlip="true" Duration="10.0">
             <FrameEvent Type="Effect" StartTime="0" Path="Sprites/NewPlayer/Hit" FramePerSecond="0.5" Offset="0.0 0.0 0.0" Angle="Random_0^360" UseFlip="True" CastShadow="True">
                 <Physics UseGravity="True" Velocity="2 2" Friction="2.0" Torque="Random_25^30" AngularFriction="15.0"/>
@@ -380,8 +406,8 @@
             <FrameEvent Type="KillEntity" StartTime="0"/>
         </Animation>
 
-        <Branch Condition="End == true" Execute="Kiiled"/>
-    </Kiiled>
+        <Branch Condition="End == true" Execute="Dead"/>
+    </Dead>
 
     <Catched MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction" ApplyBuff="CatchedEscape">
         <Animation Preset="Sprites/NewPlayer/empty" XFlip="true" Duration="0.01">
@@ -391,10 +417,10 @@
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="ClearBloodPoint"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="Recatchable" Condition="getStat_IsCatched == 1.0"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="Catched"/>
-            <FrameEvent Type="ReleaseCatch" StartTime="0" Push="4 0 0" Condition="getStat_IsCatched == 0.0"/>
+            <FrameEvent Type="ReleaseCatch" StartTime="0" Push="4 0 0" Condition="(getStat_IsCatched == 0.0) && (getTargetFrameTag_Hold == false)"/>
         </Animation>
 
-        <Branch Condition="(getStat_HP <= 0.0)" Execute="Kiiled"/>
+        <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="IsCatchTarget == false" Execute="CatchReleased"/>
         <Branch Condition="End == true" Execute="Catched"/>
     </Catched>
@@ -420,7 +446,7 @@
             <FrameEvent Type="ApplyBuff" StartTime="3.0" ApplyBuff="StunClear"/>
         </Animation>
 
-        <Branch Condition="(getStat_HP <= 0.0)" Execute="Kiiled"/>
+        <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="getStat_IsStun == 0.0" Execute="Idle"/>
     </Stun>
 

@@ -218,4 +218,14 @@
         CollisionRadius="0.2"
         ProjectileCollisionRadius=""
     />
+
+    <EmpGrenade
+        DisplayName="EMP그레네이드"
+        ActionGraph="Assets\Data\ActionGraph\Object\EmpGrenadeAction.xml"
+        AIGraph="Assets\Data\AIGraph\Projectile\EmpGrenadeAI.xml"
+        StatusInfoName="ActionProjectileStatus"
+        
+        CollisionRadius="0.2"
+        ProjectileCollisionRadius=""
+    />
 </CharacterInfo>

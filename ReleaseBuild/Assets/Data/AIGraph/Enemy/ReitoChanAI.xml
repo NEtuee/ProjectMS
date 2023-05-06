@@ -19,6 +19,7 @@
     <Include Path="Enemy/KantoReito/ReitoCremationBeamPackage.xml"/>
     <Include Path="Enemy/KantoReito/ReitoDodgePackage.xml"/>
     <Include Path="Enemy/KantoReito/ReitoAttackReadyPackage.xml"/>
+    <Include Path="Enemy/KantoReito/ReitoLinearDashPackage.xml"/>
 
     <Test Package="CommonTestPackage">
         <Branch Condition="CurrentPackageEnd" Execute="Test"/>
@@ -139,7 +140,7 @@
         <Branch Condition="CurrentPackageEnd" Execute="DashRush"/>
     </DashRushReady>
     
-    <DashRush Package="CommonDashPackage">
+    <DashRush Package="ReitoLinearDashPackage">
         <UseBranchSet Name="IsPlayerDead"/>
         <Branch Condition="(gv_najimiRushRange >= TargetDistance)" Execute="Rush"/>
         <Branch Condition="CurrentPackageEnd" Execute="Rush"/>

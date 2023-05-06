@@ -7,7 +7,7 @@
                 <AIEvent Type="SetAction" Action="AC_Punch"/>
             </Event_OnExecute>
             
-            <Branch Condition="AttackCatchTarget" Execute="AI_PunchSuccess"/>
+            <Branch Condition="AttackSuccess" Execute="AI_PunchSuccess"/>
             <Branch Condition="End" Execute="TerminatePackage"/>
         </AI_Punch>
 

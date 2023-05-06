@@ -44,7 +44,7 @@
 
     <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction" RotationType="Keep">
         <AnimationHeader MasterPath="Sprites/Enemy/Gauntlet/0_default/"/>
-        <Animation Preset="3_hit" XFlip="true" Duration="1.25">
+        <Animation Preset="4_hit" XFlip="true" Duration="1.25">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ZoomEffect" Scale="2.8"/>
             <FrameEvent Type="StopUpdate" Time="0.15"/>
@@ -58,7 +58,7 @@
 
     <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction" RotationType="Keep">
         <AnimationHeader MasterPath="Sprites/Enemy/Gauntlet/0_default/"/>
-        <Animation Preset="3_hit" XFlip="true" Duration="1.25">
+        <Animation Preset="4_hit" XFlip="true" Duration="1.25">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ZoomEffect" Scale="2.8"/>
             <FrameEvent Type="StopUpdate" Time="0.15"/>
@@ -72,7 +72,7 @@
 
     <Dead DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/Gauntlet/0_default/"/>
-        <Animation Preset="4_dead" XFlip="true" Duration="1">
+        <Animation Preset="3_dead" XFlip="true" Duration="1">
             <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Enemy/Gauntlet/0_default/3_dead" FramePerSecond="0.2" CastShadow="True">
                 <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
             </FrameEvent>
@@ -85,7 +85,7 @@
 
     <!-- 아카네를 잡기위해 돌진하는 모션, 충돌 시 잡기 처리 -->
     <AC_Rush MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/Gauntlet/1_rush/1_rush/"/>
+        <AnimationHeader MasterPath="Sprites/Enemy/Gauntlet/1_rush/"/>
         <Animation Preset="1_rushMain" XFlip="true" Duration="0.6">
             <FrameEvent Type="Movement" StartTime="0" Friction="24" MaxVelocity="12" Velocity="12" Speed="0"/>
             <FrameEvent Type="Attack" StartTime="0" EndTime="0.2" AttackPreset="Najimi_Rush" AttackType="Catch" CatchOffset="0.1 0 0">
@@ -110,25 +110,26 @@
 
     <!-- 아카네 잡기에 성공하여 꽉 쥐는 모션 -->
     <AC_RushSuccess_Entry MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction">
-        <Animation Preset="Sprites/Enemy/Gauntlet/1_rush/2_grab/1_grabPre" XFlip="true" Duration="1.0">
+        <Animation Preset="Sprites/Enemy/Gauntlet/1_rush/3_grabPre" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12"/>
             <FrameEvent Type="ReleaseCatch" StartTime="1" Push="1 0 0" Condition="getTargetFrameTag_Recatchable == false"/>
-
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="CatchProcess"/>
         </Animation>
 
         <Branch Condition="getKey_Escape_1 || getKey_Escape_2" Execute="AC_RushSuccess_Struggle"/>
     </AC_RushSuccess_Entry>
     <AC_RushSuccess_Struggle MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction">
-        <Animation Preset="Sprites/Enemy/Gauntlet/1_rush/3_struggle" XFlip="true" Duration="1.0">
+        <Animation Preset="Sprites/Enemy/Gauntlet/1_rush/5_struggle" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12"/>
             <FrameEvent Type="ReleaseCatch" StartTime="1" Push="1 0 0" Condition="getTargetFrameTag_Recatchable == false"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="CatchProcess"/>
         </Animation>
 
         <Branch Condition="getKey_Escape_1 || getKey_Escape_2" Execute="AC_RushSuccess_Entry"/>
     </AC_RushSuccess_Struggle>
 
     <AC_RushSuccess_Attack MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction">
-        <Animation Preset="Sprites/Enemy/Gauntlet/1_rush/2_grab/2_grabMain" XFlip="true" Duration="1.0">
+        <Animation Preset="Sprites/Enemy/Gauntlet/1_rush/4_grabMain" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12"/>
             
             <FrameEvent Type="Attack" StartTime="0" AttackPreset="Najimi_Catch">
@@ -142,21 +143,27 @@
             </FrameEvent>
 
             <FrameEvent Type="ReleaseCatch" StartTime="1" Push="1 0 0" Condition="getTargetFrameTag_Recatchable == false"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="CatchProcess"/>
         </Animation>
 
         <Branch Condition="getKey_Escape_1 || getKey_Escape_2" Execute="AC_RushSuccess_Struggle"/>
     </AC_RushSuccess_Attack>
 
     <AC_Away MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/Gauntlet/1_rush/4_away/"/>
-        <Animation Preset="1_awaySpin" XFlip="true" RotationPreset="NajimiAway" Duration="1.0">
+        <AnimationHeader MasterPath="Sprites/Enemy/Gauntlet/1_rush/"/>
+        <Animation Preset="6_awaySpin" XFlip="true" RotationPreset="NajimiAway" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Velocity="-6" Speed="0"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="CatchProcess"/>
         </Animation>
-        <Animation Preset="2_awayStand" XFlip="true" Duration="1.0">
+        <Animation Preset="7_awayStand" XFlip="true" Duration="1.0">
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="CatchProcess"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>
