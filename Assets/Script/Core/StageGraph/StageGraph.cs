@@ -9,16 +9,30 @@ public class StageGraphManager : Singleton<StageGraphManager>
     private int                                 _currentIndex = 0;
     private bool                                _isStageEventEnd = false;
 
+    private List<string>                        _deleteUniqueTargetList = new List<string>();
+
     public void initialize()
     {
         _currentIndex = 0;
         _isStageEventEnd = false;
 
         _uniqueEntityDictionary.Clear();
+        _deleteUniqueTargetList.Clear();
     }
 
     public void progress(float deltaTime)
     {
+        foreach(var item in _uniqueEntityDictionary)
+        {
+            if(item.Value.isDead())
+                _deleteUniqueTargetList.Add(item.Key);
+        }
+
+        foreach(var item in _deleteUniqueTargetList)
+            _uniqueEntityDictionary.Remove(item);
+
+        _deleteUniqueTargetList.Clear();
+
         if(_currentStage == null || _isStageEventEnd)
             return;
 
@@ -50,10 +64,7 @@ public class StageGraphManager : Singleton<StageGraphManager>
     public GameEntityBase getUniqueEntity(string uniqueKey)
     {
         if(_uniqueEntityDictionary.ContainsKey(uniqueKey) == false)
-        {
-            DebugUtil.assert(false,"unique entity key is not Exists : {0}",uniqueKey);
             return null;
-        }
 
         return _uniqueEntityDictionary[uniqueKey];
     }
@@ -75,6 +86,8 @@ public class StageGraphManager : Singleton<StageGraphManager>
         if(_currentStage == null)
             return;
 
+        initialize();
+
         for(int index = _currentIndex; index < _currentStage._stageGraphPhase[0]._stageGraphEventCount; ++index)
         {
             _currentStage._stageGraphPhase[0]._stageGraphEventList[index].Initialize();
@@ -85,8 +98,6 @@ public class StageGraphManager : Singleton<StageGraphManager>
         {
             _currentStage._stageGraphPhase[1]._stageGraphEventList[index].Initialize();
         }
-
-        initialize();
     }
 
 }

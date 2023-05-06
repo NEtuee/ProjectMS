@@ -222,6 +222,16 @@ public static class MathEx
 		return true;
 	}
 
+	public static float damp(float a, float b, float lambda, float dt)
+	{
+	    return UnityEngine.Mathf.Lerp(a, b, 1.0f - UnityEngine.Mathf.Exp(-lambda * dt));
+	}
+
+	public static UnityEngine.Vector3 damp(UnityEngine.Vector3 a, UnityEngine.Vector3 b, float lambda, float deltaTime)
+	{
+	    return UnityEngine.Vector3.Lerp(a, b, 1.0f - UnityEngine.Mathf.Exp(-lambda * deltaTime));
+	}
+
 	public static UnityEngine.Vector3 round(UnityEngine.Vector3 value, int digits)
 	{
 		return new UnityEngine.Vector3(round(value.x, digits), round(value.y, digits), round(value.z, digits));

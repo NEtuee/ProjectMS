@@ -103,6 +103,18 @@ public class StageGraphLoader : LoaderBase<StageGraphBaseData>
         {
             spawnEvent = new StageGraphEvent_SetCrossHair();
         }
+        else if(node.Name == "SetHPSphere")
+        {
+            spawnEvent = new StageGraphEvent_SetHPSphere();
+        }
+        else if(node.Name == "WaitTargetDead")
+        {
+            spawnEvent = new StageGraphEvent_WaitTargetDead();
+        }
+        else if(node.Name == "TeleportTargetTo")
+        {
+            spawnEvent = new StageGraphEvent_TeleportTargetTo();
+        }
 
 
         if(spawnEvent == null)

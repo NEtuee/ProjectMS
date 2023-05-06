@@ -102,6 +102,46 @@ public class StageGraphEvent_WaitSecond : StageGraphEventBase
     }
 }
 
+public class StageGraphEvent_SetHPSphere : StageGraphEventBase
+{
+    private string _uniqueKey = "";
+
+    public override StageGraphEventType getStageGraphEventType() => StageGraphEventType.SetHPSphere;
+    
+    public override void Initialize()
+    {
+        
+    }
+
+    public override bool Execute(StageGraphManager graphManager,float deltaTime)
+    {
+        GameEntityBase uniqueEntity = graphManager.getUniqueEntity(_uniqueKey);
+        if(uniqueEntity == null)
+        {
+            DebugUtil.assert(false,"unique entity key is not Exists : {0}",_uniqueKey);
+            return true;
+        }
+
+        HPSphereUIManager.Instance().release();
+        HPSphereUIManager.Instance().initialize(uniqueEntity);
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "UniqueKey")
+                _uniqueKey = attrValue;
+        }
+    }
+}
+
 public class StageGraphEvent_SetCrossHair : StageGraphEventBase
 {
     private string _uniqueKey = "";
@@ -117,7 +157,10 @@ public class StageGraphEvent_SetCrossHair : StageGraphEventBase
     {
         GameEntityBase unqueEntity = graphManager.getUniqueEntity(_uniqueKey);
         if(unqueEntity == null)
+        {
+            DebugUtil.assert(false,"unique entity key is not Exists : {0}",_uniqueKey);
             return true;
+        }
 
         CrossHairUI._instance.setTarget(unqueEntity);
         CrossHairUI._instance.setActive(true);
@@ -139,6 +182,83 @@ public class StageGraphEvent_SetCrossHair : StageGraphEventBase
     }
 }
 
+public class StageGraphEvent_WaitTargetDead : StageGraphEventBase
+{
+    private string _uniqueKey = "";
+
+    public override StageGraphEventType getStageGraphEventType() => StageGraphEventType.WaitTargetDead;
+    
+    public override void Initialize()
+    {
+        
+    }
+
+    public override bool Execute(StageGraphManager graphManager,float deltaTime)
+    {
+        GameEntityBase unqueEntity = graphManager.getUniqueEntity(_uniqueKey);
+        if(unqueEntity == null)
+            return true;
+        
+        return unqueEntity.isDead();
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "UniqueKey")
+                _uniqueKey = attrValue;
+        }
+    }
+}
+
+public class StageGraphEvent_TeleportTargetTo : StageGraphEventBase
+{
+    private string _uniqueKey = "";
+    private Vector3 _targetPosition;
+
+    public override StageGraphEventType getStageGraphEventType() => StageGraphEventType.TeleportTargetTo;
+    
+    public override void Initialize()
+    {
+        
+    }
+
+    public override bool Execute(StageGraphManager graphManager,float deltaTime)
+    {
+        GameEntityBase unqueEntity = graphManager.getUniqueEntity(_uniqueKey);
+        if(unqueEntity == null)
+        {
+            DebugUtil.assert(false,"unique entity key is not Exists : {0}",_uniqueKey);
+            return true;
+        }
+        
+        unqueEntity.updatePosition(_targetPosition);
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "UniqueKey")
+                _uniqueKey = attrValue;
+            else if(attrName == "Position")
+                _targetPosition = XMLScriptConverter.valueToVector3(attrValue);
+        }
+    }
+}
+
 public class StageGraphEvent_SetAudioListner : StageGraphEventBase
 {
     private string _uniqueKey = "";
@@ -154,7 +274,10 @@ public class StageGraphEvent_SetAudioListner : StageGraphEventBase
     {
         GameEntityBase unqueEntity = graphManager.getUniqueEntity(_uniqueKey);
         if(unqueEntity == null)
+        {
+            DebugUtil.assert(false,"unique entity key is not Exists : {0}",_uniqueKey);
             return true;
+        }
 
         FMODAudioManager.Instance().setListener(unqueEntity.transform);
         return true;
@@ -219,6 +342,9 @@ public enum StageGraphEventType
     SetCameraTarget,
     SetAudioListner,
     SetCrossHair,
+    SetHPSphere,
+    WaitTargetDead,
+    TeleportTargetTo,
     Count,
 }
 

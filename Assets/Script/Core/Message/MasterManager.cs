@@ -140,6 +140,7 @@ public class MasterManager : MessageHub<ManagerBase>
         ManagersReceiveMessageProcessing();
         ReceiveMessageProcessing();
 
+        HPSphereUIManager.Instance().progress(deltaTime);
         TalkBalloonManager.Instance().updateTalkBalloonManager(deltaTime);
         CameraControlEx.Instance().progress(deltaTime);
         FMODAudioManager.Instance().updateAudio();
