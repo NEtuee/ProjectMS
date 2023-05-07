@@ -11,8 +11,6 @@
     <Include Path="Common/CommonGroggyPackage.xml"/>
     <Include Path="Common/CommonDashPackage.xml"/>
 
-    <Include Path="Enemy/NozawaAoba/AobaRaisenPackage.xml"/>
-    <Include Path="Enemy/NozawaAoba/AobaChoraisenPackage.xml"/>
     <Include Path="Enemy/NozawaAoba/AobaStormRaisenPackage.xml"/>
     <Include Path="Enemy/NozawaAoba/AobaChargeRaisenPackage.xml"/>
     <Include Path="Enemy/NozawaAoba/AobaUnwaverRaisenPackage.xml"/>
@@ -20,7 +18,6 @@
     <Include Path="Enemy/NozawaAoba/AobaWarpChasePackage.xml"/>
     <Include Path="Enemy/NozawaAoba/AobaTsubaPackage.xml"/>
     <Include Path="Enemy/NozawaAoba/AobaTsubaReadyPackage.xml"/>
-
     <Include Path="Enemy/NozawaAoba/AobaDodgePackage.xml"/>
 
     <CustomValue Name="CurrentRaisenCount" Value="0.0"/>
@@ -159,42 +156,6 @@
         <Branch Condition="CurrentPackageEnd" Execute="JudgeApproachAttack"/>
     </DodgeJudge>
 
-    <!-- 사용 안함 -->
-    <!-- TODO: 화면에서 잘 안사라지는 방법 강구해볼 것 -->
-    <DodgeToEmp Package="AobaDodgePackage">      
-        <UseBranchSet Name="IsPlayerDead"/>
-        <UseBranchSet Name="HitReactionSet"/>
-        <UseBranchSet Name="WarpChaseSet"/>
-
-        <Branch Condition="true" Execute="EmpGrenadeToStorm"/>
-        <Branch Weight="RandBoolean^True" Condition="CurrentPackageEnd" Execute="EmpGrenadeToCharge"/>
-        <Branch Weight="RandBoolean^False" Condition="CurrentPackageEnd" Execute="EmpGrenadeToStorm"/>
-    </DodgeToEmp>
-
-    <!-- 사용 안함 -->
-    <!-- TODO: 화면에서 잘 안사라지는 방법 강구해볼 것 -->
-    <DodgeToChoraisen Package="AobaDodgePackage">      
-        <UseBranchSet Name="IsPlayerDead"/>
-        <UseBranchSet Name="HitReactionSet"/>
-        <UseBranchSet Name="WarpChaseSet"/>
-
-        <Branch Condition="CurrentPackageEnd" Execute="Choraisen"/>
-    </DodgeToChoraisen>
-
-    <!-- 사용 안함 -->
-    <Choraisen Package="AobaChoraisenPackage">
-        <UseBranchSet Name="IsPlayerDead"/>
-        <UseBranchSet Name="HitReactionSet"/>
-        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
-    </Choraisen>
-
-    <!-- 사용 안함 -->
-    <EmpGrenadeToStorm Package="AobaEmpPackage">
-        <UseBranchSet Name="IsPlayerDead"/>
-        <UseBranchSet Name="HitReactionSet"/>
-        <Branch Condition="CurrentPackageEnd" Execute="StormRaisen"/>
-    </EmpGrenadeToStorm>
-
     <StormRaisen Package="AobaStormRaisenPackage">
         <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
@@ -230,13 +191,6 @@
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </Tsuba>
-
-    <!-- 사용 안함 -->
-    <Raisen Package="AobaRaisenPackage">
-        <UseBranchSet Name="IsPlayerDead"/>
-        <UseBranchSet Name="HitReactionSet"/>
-        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
-    </Raisen>
 
     <WarpChase Package="AobaWarpChasePackage">
         <UseBranchSet Name="IsPlayerDead"/>

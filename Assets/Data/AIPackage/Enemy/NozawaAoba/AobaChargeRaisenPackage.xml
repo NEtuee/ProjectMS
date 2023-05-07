@@ -1,7 +1,6 @@
 <AIPackage Name="AobaChargeRaisenPackage" DefaultState="AI_Charge">
 
     <AIState>
-        <!-- ChargeRaisen Charge -->
         <AI_Charge UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
@@ -15,7 +14,6 @@
             <Branch Condition="End" Execute="AI_ChargeRaisenPre"/>
         </AI_Charge>
 
-        <!-- ChargeRaisen Pre -->
         <AI_ChargeRaisenPre UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
@@ -25,7 +23,6 @@
             <Branch Condition="End" Execute="AI_ChargeRaisenSlash"/>          
         </AI_ChargeRaisenPre>
 
-        <!-- ChargeRaisen Slash -->
         <AI_ChargeRaisenSlash UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_ChargeRaisenSlash"/>
@@ -35,7 +32,6 @@
             <Branch Condition="End" Execute="TerminatePackage"/>          
         </AI_ChargeRaisenSlash>
 
-        <!-- ChargeRaisen Success -->
         <AI_ChargeRaisenSuccess UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_ChargeRaisenSuccess"/>
