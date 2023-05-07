@@ -27,7 +27,7 @@
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountClear"/>
         </Animation>
 
-        <Branch Condition="End" Execute="AC_Dodge"/>
+        <Branch Condition="End" Execute="AC_Idle"/>
     </AC_Dodge>
 
     <AC_ShortDodge MovementType="GraphPreset" MovementGraphPreset="Aoba_ShortDodge" DirectionType="AI" FlipType="Direction" DefenceType="Evade" DefenceAngle="360">
@@ -36,7 +36,7 @@
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountClear"/>
         </Animation>
 
-        <Branch Condition="End" Execute="AC_ShortDodge"/>
+        <Branch Condition="End" Execute="AC_Idle"/>
     </AC_ShortDodge>
 
     <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
@@ -125,7 +125,7 @@
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="CountStorm" EventTargetType="Self"/>
         </Animation>
 
-        <Branch Condition="End" Execute="AC_Storm"/>
+        <Branch Condition="End" Execute="AC_StormPre"/>
     </AC_Storm>
 
     <AC_StormPost MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
@@ -213,7 +213,7 @@
             <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
-        <Branch Condition="End" Execute="AC_ChargeRaisenReady"/>
+        <Branch Condition="End" Execute="AC_ChargeRaisenPre"/>
     </AC_ChargeRaisenReady>
 
     <AC_ChargeRaisenPre MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
