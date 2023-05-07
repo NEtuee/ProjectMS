@@ -93,7 +93,7 @@ public class AnimationPlayer
 
     public bool isValid()
     {
-        return _currentAnimationPlayData != null;
+        return true;//_currentAnimationPlayData != null;
     }
 
     public void initialize()
@@ -165,6 +165,9 @@ public class AnimationPlayer
     
     public void processFrameEvent(AnimationPlayDataInfo playData, ObjectBase targetEntity)
     {
+        if(playData == null)
+            return;
+
         float currentFrame = _animationTimeProcessor.getCurrentFrame();
         for(int i = _currentFrameEventIndex; i < playData._frameEventDataCount; ++i)
         {
@@ -318,6 +321,42 @@ public class AnimationPlayer
         setCurrentFrameEventIndex(playData);
     }
 
+    public void changeAnimationByCustomPreset(string path)
+    {
+        ScriptableObject[] scriptableObjects = ResourceContainerEx.Instance().GetScriptableObjects(path);
+        if(scriptableObjects == null)
+            return;
+
+        if(scriptableObjects == null || (scriptableObjects[0] is AnimationCustomPreset) == false)
+            return;
+
+        AnimationCustomPreset animationCustomPreset = (scriptableObjects[0] as AnimationCustomPreset);
+
+        changeAnimationByCustomPreset(path, animationCustomPreset);
+    }
+
+    public void changeAnimationByCustomPreset(string path, AnimationCustomPreset customPreset)
+    {
+        _currentAnimationPlayData = null;
+        _currentAnimationSprites = ResourceContainerEx.Instance().GetSpriteAll(path);
+        DebugUtil.assert(_currentAnimationSprites != null, "애니메이션 스프라이트 배열이 null입니다. 해당 경로에 스프라이트가 존재 하나요? : {0}",path);
+
+        _currentAnimationName = path;
+
+        _animationTimeProcessor.initialize();
+        _animationTimeProcessor.setActionDuration(customPreset._animationCustomPresetData.getTotalDuration());
+        _animationTimeProcessor.setAnimationSpeed(1f);
+
+        _animationTimeProcessor.setCustomPresetData(customPreset._animationCustomPresetData);
+
+        for(int i = 0; i < _frameEventProcessList.Count; ++i)
+        {
+            _frameEventProcessList[i].exitFrameEvent();
+        }
+        _frameEventProcessList.Clear();
+        _currentFrameEventIndex = -1;
+    }
+
     public int angleToSectorNumberByAngleBaseSpriteCount(float angleDegree)
     {
         angleDegree = MathEx.clamp360Degree(angleDegree);
@@ -337,6 +376,8 @@ public class AnimationPlayer
 
         return (int)((angleDegree + baseAngle * 0.5f) / baseAngle);
     }
+
+    public bool isEnd() {return _animationTimeProcessor.isEnd();}
 
     public string getCurrentAnimationName() {return _currentAnimationName;}
 
@@ -407,7 +448,7 @@ public class AnimationPlayer
             return null;
         }
 
-        if(_currentAnimationPlayData._isAngleBaseAnimation)
+        if(_currentAnimationPlayData != null && _currentAnimationPlayData._isAngleBaseAnimation)
         {
             int index = angleToSectorNumberByAngleBaseSpriteCount(currentAngleDegree) + _animationTimeProcessor.getCurrentIndex();
             if(_currentAnimationSprites.Length <= index)

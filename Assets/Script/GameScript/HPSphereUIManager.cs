@@ -81,6 +81,41 @@ public class HPSphereUIManager : Singleton<HPSphereUIManager>
             ++currentIndex;
         }
 
+        // for(int index = _gaugeStackCount - 1; index >= 0; --index)
+        // {
+        //     Vector3 nextPosition = Vector3.zero;
+        //     if(index == _gaugeStackCount - 1)
+        //     {
+        //         nextPosition = _targetEntityTransform.position + _sphereXOffset * (_targetEntityTransform.position - _enabledSpheres[index].getPosition()).normalized;
+        //     }
+        //     else
+        //     {
+        //         nextPosition = _enabledSpheres[index + 1].getPosition() - _sphereXGap * (_targetEntityTransform.position - _enabledSpheres[index].getPosition()).normalized;
+        //     }
+
+        //     nextPosition += new Vector3(Random.Range(-0.07f,0.07f),Random.Range(-0.07f,0.07f),0f);
+        //     _enabledSpheres[index].progress(nextPosition, deltaTime);
+        // }
+
         _beforeStackCount = currentGagueStackCount;
+
+        updateBPGauge();
+    }
+
+    private void updateBPGauge()
+    {
+        float percentage = _targetEntity.getStatusPercentage("Blood");
+        float currentGaugeStackRate = (((float)_gaugeStackCount) * percentage);
+        int currentGagueStackCount = (int)Mathf.Ceil(currentGaugeStackRate);
+
+        _xFlip = _targetEntity.getDirection().x < 0f;
+
+        for(int index = 0; index < _gaugeStackCount; ++index)
+        {
+            float gauge = currentGaugeStackRate - (float)(_gaugeStackCount - index - 1);
+            gauge = gauge >= 0f ? gauge : 0f;
+            _enabledSpheres[index].updateBPGauge(gauge);
+        }
+
     }
 }
