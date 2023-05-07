@@ -27,7 +27,7 @@
                 <AIEvent Type="SetAction" Action="AC_RushSuccess_Entry"/>
             </Event_OnExecute>
 
-            <Branch Condition="(PackageExecutedTime >= 1.0)" Execute="AI_RushSuccess_Attack"/>
+            <Branch Condition="(PackageExecutedTime >= 0.8)" Execute="AI_RushSuccess_Attack"/>
             <Branch Condition="End && getTargetFrameTag_Recatchable && (PackageExecutedTime >= 1.0)" Execute="AI_RushSuccess"/>
             <Branch Condition="IsCatcher == false" Execute="AI_Away"/>
         </AI_RushSuccess>

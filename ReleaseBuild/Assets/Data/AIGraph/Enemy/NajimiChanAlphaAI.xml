@@ -1,4 +1,4 @@
-<AIGraph Name="NajimiChanAlphaAI" DefaultState="Entry">
+<AIGraph Name="NajimiChanAlphaAI" DefaultState="DashRushReady">
 
     <Include Path="Common/CommonDeadPackage.xml"/>
     <Include Path="Common/CommonHitPackage.xml"/>
@@ -14,6 +14,8 @@
     <Include Path="Enemy/OsananaNajimi/NajimiRushPackage.xml"/>
     <Include Path="Enemy/OsananaNajimi/NajimiDodgePackage.xml"/>
     <Include Path="Enemy/OsananaNajimi/NajimiAttackReadyPackage.xml"/>
+    <Include Path="Enemy/OsananaNajimi/NajimiPitchingPackage.xml"/>
+    <Include Path="Enemy/OsananaNajimi/NajimiStunChasePackage.xml"/>
     
     <Include Path="Common\CommonTestPackage.xml"/>
     <Test Package="CommonTestPackage">
@@ -70,7 +72,8 @@
         <Branch Condition="(TargetDistance >= gv_StdPassiveAttitude)" Execute="Chase"/>
         
         <!-- 1페이즈 근거리/원거리 -->
-        <Branch Condition="true" Execute="Chase"/> 
+        <Branch Condition="(TargetDistance >= gv_StdDistance)" Execute="Pitching"/>
+        <Branch Condition="true" Execute="Chase"/>
         
     </JudgeDistance>
 
@@ -91,7 +94,6 @@
         <!-- 거리 기반 공격 -->
         <Branch Weight="NajimiDodgeAtk^DistAttack" Condition="CurrentPackageEnd" Execute="JudgeDistance"/>
     </Dodge>
-
 
     <Chase Package="CommonChasePackage">
         <UseBranchSet Name="IsPlayerDead"/>
@@ -130,6 +132,19 @@
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </Rush>
+
+    <Pitching Package="NajimiPitchingPackage">
+        <UseBranchSet Name="IsPlayerDead"/>
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="getTargetFrameTag_Stun" Execute="StunChase"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+    </Pitching>
+
+    <StunChase Package="NajimiStunChasePackage">
+        <UseBranchSet Name="IsPlayerDead"/>
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="TargetExists && (1.5 >= TargetDistance)" Execute="Rush"/>
+    </StunChase>
     
     <GuardBroken Package="CommonGuardBrokenPackage">
         <UseBranchSet Name="IsPlayerDead"/>

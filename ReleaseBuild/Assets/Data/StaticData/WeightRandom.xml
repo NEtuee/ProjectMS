@@ -68,11 +68,18 @@
         <DashRush Value ="10"/>
     </Najimi2PhaseDistAtk>
     
-    <RandVector>
+    <RandVector3>
         <x Value ="1"/>
         <y Value ="1"/>
         <z Value ="1"/>
-    </RandVector>
+    </RandVector3>
+
+    <RandVector4>
+        <x Value ="1"/>
+        <y Value ="1"/>
+        <z Value ="1"/>
+        <r Value ="1"/>
+    </RandVector4>
 
     <AobaDodge>
         <True Value ="3"/>
@@ -81,27 +88,18 @@
     
     <AobaApproachAtk>
         <StormRaisen Value ="1"/>
-        <Choraisen Value ="1"/>
         <ChargeRaisen Value ="1"/>
+        <Tsuba Value ="1"/>
     </AobaApproachAtk>
 
     <AobaShortAtk>
-        <Choraisen Value ="1"/>
-        <Emp Value ="1"/>
-        <Tsuba Value ="1"/>
-    </AobaShortAtk>
-
-    <AobaDodgeAtk>
         <ChargeRaisen Value ="1"/>
-        <UnwaverRaisen Value ="1"/>
-        <Emp Value ="1"/>
-    </AobaDodgeAtk>
+        <Dodge Value ="1"/>
+    </AobaShortAtk>
     
     <AobaHitReaction>
-        <Choraisen Value ="4"/>
+        <Dodge Value ="1"/>
         <Tsuba Value ="1"/>
-        <Emp Value ="4"/>
     </AobaHitReaction>
-
 
 </WeightRandom>

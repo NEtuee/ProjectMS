@@ -1,14 +1,14 @@
-<AIPackage Name="AobaAttackReadyPackage" DefaultState="AI_RushReady">
+<AIPackage Name="AobaTsubaReadyPackage" DefaultState="AI_TsubaReady">
 
     <AIState>
-        <AI_RushReady UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_TsubaReady UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
             <Event_OnExecute>    
                 <AIEvent Type="SetDirectionToTarget"/>
-                <AIEvent Type="SetAction" Action="AC_RushReady"/>
+                <AIEvent Type="SetAction" Action="AC_TsubaReady"/>
             </Event_OnExecute>
-            
+
             <Branch Condition="End" Execute="TerminatePackage"/>
-        </AI_RushReady>
+        </AI_TsubaReady>
 
         <TerminatePackage>
             <Event_OnExecute>

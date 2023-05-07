@@ -128,8 +128,8 @@
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="NajimiAddRushCount"/>
             <FrameEvent Type="Attack" StartTime="0" EndTime="0.2" AttackPreset="Najimi_Rush" AttackType="Catch" CatchOffset="0.1 0 0">
                 <OnCatch>
+                    <FrameEvent Type="ApplyBuffTarget" StartTime="0" ApplyBuff="CommonHalfAttack"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CatchedSet"/>
-                    
                     <FrameEvent Type="ZoomEffect" Scale="2.8"/>
                     <FrameEvent Type="StopUpdate" Time="0.15"/>
                     
@@ -202,4 +202,52 @@
 
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_Away>
+
+    <AC_PitcherReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <!-- 투구 준비 모션, 탄막 경로 활성화 -->
+        <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/2_pitchingPattern/"/>
+        <Animation Preset="2_pitcherReady" XFlip="true" Duration="0.65">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
+            <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/NajimiPitchingBeam_TimeLine" Attach="true" AngleType="Direction" LifeTime="0.82" FollowDirection="True"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_PitcherReady>
+
+    <AC_Pitch MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+        <!-- 투구 모션, 장판 활성화 -->
+        <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/2_pitchingPattern/3_pitching/"/>
+        <Animation Preset="1_pitchingMain" XFlip="true" Duration="1.0">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
+            <!-- TODO: 투구 이펙트 추가해야함. 해당 이펙트 지속시간에 따라 Main 모션 시간과 Attack 지속 시간 조정 -->
+            <FrameEvent Type="Attack" StartTime="0.17" AttackPreset="Najimi_Pitching">
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonDoubleAttack"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="StunSet"/>
+
+                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Slash" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
+                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Blood" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
+                    <FrameEvent Type="StopUpdate" Time="0.07"/>
+                </OnHit>
+            
+                <OnGuard>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="StunSet"/>
+
+                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Slash" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
+                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Blood" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
+                    <FrameEvent Type="StopUpdate" Time="0.07"/>
+                </OnGuard>
+            </FrameEvent>
+        </Animation>
+        <Animation Preset="2_pitchingRecovery" XFlip="true" Duration="0.3">
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_Pitch>
 </ActionGraph>

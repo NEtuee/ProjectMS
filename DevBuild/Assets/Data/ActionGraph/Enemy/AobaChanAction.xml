@@ -21,58 +21,22 @@
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_Idle>
 
-    <AC_Move MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/0_default/"/>
-        <Animation Preset="2_move" XFlip="true" Duration="0.5">
-            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="5" Speed="15"/>
-
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="DodgeAvail"/>
-
-        </Animation>
-
-        <Branch Condition="End == true" Execute="AC_Move"/>
-    </AC_Move>
-
-    <AC_SystemChase MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/0_default/"/>
-        <Animation Preset="2_move" XFlip="true" Duration="0.1">
-            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="20" Speed="40"/>
-
-        </Animation>
-
-        <Branch Condition="End == true" Execute="AC_SystemChase"/>
-    </AC_SystemChase>
-    
-    <AC_Dash MovementType="GraphPreset" MovementGraphPreset="Aoba_Dash" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/0_default/"/>
-        <Animation Preset="3_dash" XFlip="true" Duration="0.7">
-            <FrameEvent Type="Test" Log="HitCount 2" Condition="getStat_HitCount == 2.0"/>
-            <FrameEvent Type="Test" Log="HitCount 3" Condition="getStat_HitCount == 3.0"/>
-            <FrameEvent Type="Test" Log="HitCount 4" Condition="getStat_HitCount == 4.0"/>
-            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountClear"/>
-        </Animation>
-
-        <Branch Condition="End" Execute="AC_Dash"/>
-    </AC_Dash>
-
     <AC_Dodge MovementType="GraphPreset" MovementGraphPreset="Aoba_Dodge" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/0_default/"/>
-        <Animation Preset="6_dodge" XFlip="true" Duration="0.7">
+        <Animation Preset="2_dodge" XFlip="true" Duration="0.7">
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountClear"/>
         </Animation>
 
-        <Branch Condition="End" Execute="AC_Dodge"/>
+        <Branch Condition="End" Execute="AC_Idle"/>
     </AC_Dodge>
 
     <AC_ShortDodge MovementType="GraphPreset" MovementGraphPreset="Aoba_ShortDodge" DirectionType="AI" FlipType="Direction" DefenceType="Evade" DefenceAngle="360">
         <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/0_default/"/>
-        <Animation Preset="6_dodge" XFlip="true" Duration="0.3">
+        <Animation Preset="3_shortDodge" XFlip="true" Duration="0.3">
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountClear"/>
         </Animation>
 
-        <Branch Condition="End" Execute="AC_ShortDodge"/>
+        <Branch Condition="End" Execute="AC_Idle"/>
     </AC_ShortDodge>
 
     <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
@@ -135,9 +99,181 @@
         <Branch Condition="End == true" Execute="Dead"/>
     </Dead>
 
+    <!-- 폭풍뢰섬 -->
+    <AC_StormPre MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/1_stormRaisen/"/>
+        <Animation Preset="1_stormPre" XFlip="true" Duration="0.1">
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_StormPre"/>
+    </AC_StormPre>
+
+    <AC_Storm MovementType="GraphPreset" MovementGraphPreset="Aoba_Storm" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/1_stormRaisen/"/>
+        <Animation Preset="2_stormMain" XFlip="true" Duration="0.27">
+            <FrameEvent Type="Attack" StartTime="0" AttackPreset="Aoba_Storm">
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" StartTime="0" ApplyBuff="CommonHalfAttack"/>
+                </OnHit>
+            </FrameEvent>
+
+            <FrameEvent Type="FrameTag" StartTime="0.2" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.2" EndTime="999" Tag="GbAvail"/>
+
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="CountStorm" EventTargetType="Self"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_StormPre"/>
+    </AC_Storm>
+
+    <AC_StormPost MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/1_stormRaisen/"/>
+        <Animation Preset="3_stormPost" XFlip="true" Duration="0.05">
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_StormPost"/>
+    </AC_StormPost>
+
+    <AC_StormRaisenPre MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/1_stormRaisen/"/>
+        <Animation Preset="4_stormRaisenPre" XFlip="true" Duration="0.15">
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_StormRaisenPre"/>
+    </AC_StormRaisenPre>
+
+    <AC_StormRaisenSlash MovementType="GraphPreset" MovementGraphPreset="Aoba_Choraisen" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/1_stormRaisen/"/>
+        <Animation Preset="5_stormRaisenMain" XFlip="true" Duration="0.8">
+            <FrameEvent Type="Attack" StartTime="0" AttackPreset="Aoba_Choraisen">
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonDoubleAttack"/>
+                    <FrameEvent Type="TeleportToTargetBack" DistanceOffset="3.0"/>
+
+                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Blood" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
+                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Impact" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true" AngleType="AttackPoint"/>
+
+                    <FrameEvent Type="StopUpdate" Time="0.07"/>
+                    <FrameEvent Type="SetTimeScale" Scale="0.2" Time="0.2" BlendTime="0.2"/>
+                    <FrameEvent Type="ShakeEffect" Scale="0.15" Speed="35.0" Time="0.2"/>
+                </OnHit>
+            
+            </FrameEvent>
+
+            <FrameEvent Type="FrameTag" StartTime="0.2" EndFrame="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.2" EndFrame="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Entry"/>
+    </AC_StormRaisenSlash>
+
+    <AC_StormRaisenSuccess MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/1_stormRaisen/"/>
+        <Animation Preset="6_stormRaisenSuccess" XFlip="true" ScalePreset="YSpring" Duration="0.44">
+            <FrameEvent Type="Movement" StartTime="0" Friction="90" MaxVelocity="20" Speed="0"/>
+            
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="DodgeAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Entry"/>
+    </AC_StormRaisenSuccess>
+
+    <!-- EMP -->
+    <AC_EmpThrow MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/2_emp/"/>
+        <Animation Preset="1_empReady" XFlip="true" Duration="0.2">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
+        </Animation>
+        <Animation Preset="2_empThrow" XFlip="true" Duration="0.5">
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="EmpGrenade" Offset="0 0 0" SearchIdentifier="Enemy" UseFlip="True"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+        </Animation>
+    
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_EmpThrow>
+
+    <!-- 약진 뢰섬 -->
+    <AC_ChargeRaisenReady MovementType="GraphPreset" MovementGraphPreset="Aoba_Charge" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/3_chargeRaisen/"/>
+        <Animation Preset="1_chargeReady" XFlip="true" Duration="0.2">
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="0.2" Tag="DodgeAvail"/>
+        </Animation>
+        <Animation Preset="2_charge" XFlip="true" Duration="0.5">
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_ChargeRaisenPre"/>
+    </AC_ChargeRaisenReady>
+
+    <AC_ChargeRaisenPre MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/3_chargeRaisen/"/>
+        <Animation Preset="3_chargeRaisenPre" XFlip="true" Duration="0.12">
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_ChargeRaisenPre"/>
+    </AC_ChargeRaisenPre>
+
+    <AC_ChargeRaisenSlash MovementType="GraphPreset" MovementGraphPreset="Aoba_Raisen" DirectionType="AI" FlipType="Direction" RotationType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/3_chargeRaisen/"/>
+        <Animation Preset="4_chargeRaisenMain" XFlip="true" Duration="0.8">
+            <FrameEvent Type="Attack" StartTime="0" AttackPreset="Aoba_Choraisen">
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
+
+                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Slash" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
+                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Blood" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
+                    
+                    <FrameEvent Type="TeleportToTargetBack" DistanceOffset="2.0"/>
+
+                    <FrameEvent Type="StopUpdate" Time="0.07"/>
+                </OnHit>
+            </FrameEvent>
+            <FrameEvent Type="FrameTag" StartTime="0.2" EndFrame="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.2" EndFrame="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Entry"/>
+    </AC_ChargeRaisenSlash>
+
+    <AC_ChargeRaisenSuccess MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/3_chargeRaisen/"/>
+        <Animation Preset="5_chargeRaisenSuccess" XFlip="true" ScalePreset="YSpring" Duration="0.44">
+            <FrameEvent Type="Movement" StartTime="0" Friction="90" MaxVelocity="20" Speed="0"/>
+            
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="DodgeAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Entry"/>
+    </AC_ChargeRaisenSuccess>
+
     <!-- 츠바 -->
+    <AC_TsubaReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/4_Tsuba/"/>
+        <Animation Preset="1_kamae" XFlip="true" Duration="0.65">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountClear"/>
+        </Animation>
+    
+        <Branch Condition="End" Execute="AC_TsubaReady"/>
+    </AC_TsubaReady>
+
     <AC_Tsuba MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/7_Tsuba/"/>
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/4_Tsuba/"/>
         <Animation Preset="1_kamae" XFlip="true" Duration="0.35">
             <FrameEvent Type="Attack" StartTime="0" EndTime="0.2" AttackPreset="Aoba_Tsuba" AttackType="Catch" CatchOffset="0.1 0 0">
                 <OnCatch>
@@ -154,7 +290,7 @@
     </AC_Tsuba>
 
     <AC_Tsuba_Entry MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/7_Tsuba/"/>
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/4_Tsuba/"/>
         <Animation Preset="2_tsubaEntry" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12"/>
         </Animation>
@@ -163,7 +299,7 @@
     </AC_Tsuba_Entry>
 
     <AC_Tsuba_Struggle MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/7_Tsuba/"/>
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/4_Tsuba/"/>
         <Animation Preset="3_tsubaStruggle" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12"/>
         </Animation>
@@ -172,7 +308,7 @@
     </AC_Tsuba_Struggle>
  
     <AC_Tsuba_Attack MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/7_Tsuba/"/>
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/4_Tsuba/"/>
         <!-- 밀치기, 아카네 딜레이 0.7s-->
         <Animation Preset="4_tsubaAttack" XFlip="true" Duration="0.5">
             <FrameEvent Type="Movement" StartTime="0" Friction="12"/>
@@ -188,7 +324,7 @@
     </AC_Tsuba_Attack>
 
     <AC_Away MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/7_Tsuba/"/>
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/4_Tsuba/"/>
         <!-- 밀리기 -->
         <Animation Preset="5_away" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Velocity="-9" Speed="0"/>
@@ -204,28 +340,16 @@
     </AC_Away>
 
     <!-- 뢰섬 -->
-    <AC_RaisenReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/1_raisen/"/>
-        <Animation Preset="1_raisenReady" XFlip="true" Duration="0.5">
-            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <FrameEvent Type="TimelineEffect" StartTime="0.35" Path="Prefab/Effect/MaterialAttackPre_Timeline" Offset="0.0 0.0 0.0" Attach="true"/>
-        </Animation>
-
-        <Branch Condition="End" Execute="AC_RaisenReady"/>
-    </AC_RaisenReady>
-
     <AC_RaisenPre MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/1_raisen/2_raisen/"/>
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/4_Tsuba/7_raisen/"/>
         <Animation Preset="1_raisenPre" XFlip="true" Duration="0.1">
-
-            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="CountRaisen" EventTargetType="Self"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_RaisenPre"/>
     </AC_RaisenPre>
 
     <AC_RaisenSlash MovementType="GraphPreset" MovementGraphPreset="Aoba_Raisen" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/1_raisen/2_raisen/"/>
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/4_Tsuba/7_raisen/"/>
         <Animation Preset="2_raisenMain" XFlip="true" Duration="0.8">
             <FrameEvent Type="Attack" StartTime="0" AttackPreset="Aoba_Raisen">
                 <OnHit>
@@ -252,236 +376,17 @@
     </AC_RaisenSlash>
 
     <AC_RaisenSuccess MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/1_raisen/"/>
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/4_Tsuba/7_raisen/"/>
         <Animation Preset="3_raisenSuccess" XFlip="true" ScalePreset="YSpring" Duration="0.44">
             <FrameEvent Type="Movement" StartTime="0" Friction="15" MaxVelocity="6.5" Velocity="6.5" Speed="0"/>
 
             <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="GbAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="DodgeAvail"/>
-            
         </Animation>
 
         <Branch Condition="End" Execute="AC_Entry"/>
     </AC_RaisenSuccess>
-
-    <!-- 초뢰섬 -->
-    <AC_ChoraisenReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/3_choraisen/"/>
-        <Animation Preset="1_raisenReady" XFlip="true" Duration="0.5">
-            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="CountRaisen" EventTargetType="Self"/>
-            <!-- TODO -->
-            <!-- <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/AobaChoraisen_TimeLine" Attach="true" AngleType="Direction" LifeTime="0.9" FollowDirection="True"/>-->
-        </Animation>
-
-        <Branch Condition="End" Execute="AC_ChoraisenReady"/>
-    </AC_ChoraisenReady>
-
-    <AC_ChoraisenReadyUp MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/3_choraisen/"/>
-        <Animation Preset="1_raisenReady" XFlip="true" Duration="0.7">
-            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="CountRaisen" EventTargetType="Self"/>
-
-            <!-- TODO -->
-            <!-- <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/AobaChoraisen_TimeLine" Attach="true" AngleType="Direction" LifeTime="1.2" FollowDirection="True"/> -->
-        </Animation>
-
-        <Branch Condition="End" Execute="AC_ChoraisenReadyUp"/>
-    </AC_ChoraisenReadyUp>
-
-    <AC_ChoraisenPre MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/1_raisen/2_raisen/"/>
-        <Animation Preset="1_raisenPre" XFlip="true" Duration="0.1">
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
-        </Animation>
-
-        <Branch Condition="End" Execute="AC_RaisenPre"/>
-    </AC_ChoraisenPre>
-
-    <AC_ChoraisenSlash MovementType="GraphPreset" MovementGraphPreset="Aoba_Choraisen" DirectionType="AI" FlipType="Direction" RotationType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/3_choraisen/2_raisen/"/>
-
-        <Animation Preset="2_raisenMain" XFlip="true" Duration="0.8">
-            <FrameEvent Type="Attack" StartTime="0" AttackPreset="Aoba_Choraisen">
-                <OnHit>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
-                    <FrameEvent Type="TeleportToTargetBack" DistanceOffset="3.0"/>
-
-                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Blood" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
-                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Impact" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true" AngleType="AttackPoint"/>
-                    
-
-                    <FrameEvent Type="StopUpdate" Time="0.07"/>
-                    <FrameEvent Type="SetTimeScale" Scale="0.2" Time="0.2" BlendTime="0.2"/>
-                    <FrameEvent Type="ShakeEffect" Scale="0.15" Speed="35.0" Time="0.2"/>
-                </OnHit>
-            </FrameEvent>
-
-            <FrameEvent Type="FrameTag" StartTime="0.2" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0.2" EndFrame="999" Tag="GbAvail"/>
-        </Animation>
-
-        <Branch Condition="End" Execute="AC_Idle"/>
-    </AC_ChoraisenSlash>
-
-    <AC_ChoraisenSuccess MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/3_choraisen/"/>
-        <Animation Preset="3_raisenSuccess" XFlip="true" ScalePreset="YSpring" Duration="0.44">
-            <FrameEvent Type="Movement" StartTime="0" Friction="90" MaxVelocity="20" Speed="0"/>
-            
-            <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="GbAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="DodgeAvail"/>
-
-        </Animation>
-
-        <Branch Condition="End" Execute="AC_Entry"/>
-    </AC_ChoraisenSuccess>
-
-    <!-- 약진 뢰섬 -->
-    <AC_ChargeRaisenReady MovementType="GraphPreset" MovementGraphPreset="Aoba_Charge" DirectionType="AI" FlipType="Direction">
-        <!-- TODO -->
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/3_choraisen/"/>
-        <Animation Preset="1_raisenReady" XFlip="true" Duration="0.7">
-            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="999" Tag="GbAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="0.2" Tag="DodgeAvail"/>
-        </Animation>
-
-        <Branch Condition="End" Execute="AC_ChargeRaisenReady"/>
-    </AC_ChargeRaisenReady>
-
-    <AC_ChargeRaisenPre MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <!-- TODO -->
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/1_raisen/2_raisen/"/>
-        <Animation Preset="1_raisenPre" XFlip="true" Duration="0.12">
-            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="999" Tag="GbAvail"/>
-        </Animation>
-
-        <Branch Condition="End" Execute="AC_ChargeRaisenPre"/>
-    </AC_ChargeRaisenPre>
-
-    <AC_ChargeRaisenSlash MovementType="GraphPreset" MovementGraphPreset="Aoba_Raisen" DirectionType="AI" FlipType="Direction">
-        <!-- TODO -->
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/1_raisen/2_raisen/"/>
-        <Animation Preset="2_raisenMain" XFlip="true" Duration="0.8">
-            <FrameEvent Type="Attack" StartTime="0" AttackPreset="Aoba_Raisen">
-                <OnHit>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
-
-                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Slash" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
-                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Blood" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
-                    
-                    <FrameEvent Type="TeleportToTargetBack" DistanceOffset="2.0"/>
-
-                    <FrameEvent Type="StopUpdate" Time="0.07"/>
-                </OnHit>
-            </FrameEvent>
-            <FrameEvent Type="FrameTag" StartTime="0.2" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0.2" EndFrame="999" Tag="GbAvail"/>
-        </Animation>
-
-        <Branch Condition="End" Execute="AC_Entry"/>
-    </AC_ChargeRaisenSlash>
-
-    <AC_ChargeRaisenSuccess MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
-        <!-- TODO -->
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/1_raisen/"/>
-        <Animation Preset="3_raisenSuccess" XFlip="true" ScalePreset="YSpring" Duration="0.44">
-            <FrameEvent Type="Movement" StartTime="0" Friction="90" MaxVelocity="20" Speed="0"/>
-            
-            <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="GbAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="DodgeAvail"/>
-        </Animation>
-
-        <Branch Condition="End" Execute="AC_Entry"/>
-    </AC_ChargeRaisenSuccess>
-
-    <!-- 폭풍뢰섬 -->
-    <AC_StormPre MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <!-- TODO -->
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/1_raisen/2_raisen/"/>
-        <Animation Preset="1_raisenPre" XFlip="true" Duration="0.1">
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
-        </Animation>
-
-        <Branch Condition="End" Execute="AC_StormPre"/>
-    </AC_StormPre>
-
-    <AC_Storm MovementType="GraphPreset" MovementGraphPreset="Aoba_Storm" DirectionType="AI" FlipType="Direction">
-        <!-- TODO -->
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/3_choraisen/2_raisen/"/>
-        <Animation Preset="2_raisenMain" XFlip="true" Duration="0.27">
-            <FrameEvent Type="Attack" StartTime="0" AttackPreset="Aoba_Storm">
-                <OnHit>
-                    <FrameEvent Type="ApplyBuffTarget" StartTime="0" ApplyBuff="CommonAttack"/>
-                </OnHit>
-            </FrameEvent>
-
-            <FrameEvent Type="FrameTag" StartTime="0.2" EndTime="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0.2" EndTime="999" Tag="GbAvail"/>
-
-            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="CountStorm" EventTargetType="Self"/>
-        </Animation>
-
-        <Branch Condition="End" Execute="AC_Storm"/>
-    </AC_Storm>
-
-    <AC_StormRaisenPre MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/1_raisen/2_raisen/"/>
-        <Animation Preset="2_raisenMain" XFlip="true" Duration="0.17">
-            
-        </Animation>
-
-        <Branch Condition="End" Execute="AC_StormRaisenPre"/>
-    </AC_StormRaisenPre>
-
-    <AC_StormRaisenSlash MovementType="GraphPreset" MovementGraphPreset="Aoba_Choraisen" DirectionType="AI" FlipType="Direction">
-        <!-- TODO -->
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/1_raisen/2_raisen/"/>
-        <Animation Preset="1_raisenPre" XFlip="true" Duration="0.8">
-            <FrameEvent Type="Attack" StartTime="0" AttackPreset="Aoba_Choraisen">
-                <OnHit>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
-                    <FrameEvent Type="TeleportToTargetBack" DistanceOffset="3.0"/>
-
-                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Blood" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
-                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Impact" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true" AngleType="AttackPoint"/>
-
-                    <FrameEvent Type="StopUpdate" Time="0.07"/>
-                    <FrameEvent Type="SetTimeScale" Scale="0.2" Time="0.2" BlendTime="0.2"/>
-                    <FrameEvent Type="ShakeEffect" Scale="0.15" Speed="35.0" Time="0.2"/>
-                </OnHit>
-            
-            </FrameEvent>
-
-            <FrameEvent Type="FrameTag" StartTime="0.2" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0.2" EndFrame="999" Tag="GbAvail"/>
-        </Animation>
-
-        <Branch Condition="End" Execute="AC_StormRaisenSlash"/>
-    </AC_StormRaisenSlash>
-
-    <AC_StormRaisenSuccess MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
-        <!-- TODO -->
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/3_choraisen/"/>
-        <Animation Preset="3_raisenSuccess" XFlip="true" ScalePreset="YSpring" Duration="0.44">
-            <FrameEvent Type="Movement" StartTime="0" Friction="90" MaxVelocity="20" Speed="0"/>
-            
-            <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="GbAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="DodgeAvail"/>
-
-        </Animation>
-
-        <Branch Condition="End" Execute="AC_Entry"/>
-    </AC_StormRaisenSuccess>
 
     <!-- 수평회피 부동뢰섬 -->
     <AC_HitToDodge MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction" DefenceType="Evade" DefenceAngle="360">
@@ -497,7 +402,7 @@
     </AC_HitToDodge>
 
     <AC_UnwaverRaisen MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/6_unwaverRaisen/"/>
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/5_unwaverRaisen/"/>
         <!-- 준비 자세 -->
         <Animation Preset="1_unwaverReady" XFlip="true" Duration="0.7">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
@@ -515,6 +420,10 @@
                     <FrameEvent Type="TeleportToTargetBack" DistanceOffset="2.0"/>
 
                     <FrameEvent Type="StopUpdate" Time="0.07"/>
+                    <FrameEvent Type="SetTimeScale" Scale="0.2" Time="0.2" BlendTime="0.2"/>
+                    <FrameEvent Type="ShakeEffect" Scale="0.15" Speed="35.0" Time="0.2"/>
+
+                    <FrameEvent Type="StopUpdate" Time="0.07"/>
                 </OnHit>
             </FrameEvent>
             
@@ -523,7 +432,7 @@
     </AC_UnwaverRaisen>
 
     <AC_UnwaverRaisenSuccess MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/6_unwaverRaisen/"/>
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/5_unwaverRaisen/"/>
         <Animation Preset="3_unwaverSuccess" XFlip="true" ScalePreset="YSpring" Duration="0.44">
             <FrameEvent Type="Movement" StartTime="0" Friction="90" MaxVelocity="20" Speed="0"/>
             
@@ -535,37 +444,57 @@
         <Branch Condition="End" Execute="AC_Entry"/>
     </AC_UnwaverRaisenSuccess>
 
-    <AC_UnwaverRaisenPre MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/1_raisen/2_raisen/"/>
-        <Animation Preset="1_raisenPre" XFlip="true" Duration="0.2">
-
-            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="CountRaisen" EventTargetType="Self"/>
+    <!-- 초뢰섬 -->
+    <AC_ChoraisenPre MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/5_unwaverRaisen/4_choraisen/"/>
+        <Animation Preset="1_choraisenPre" XFlip="true" Duration="0.15">
         </Animation>
 
-        <Branch Condition="End" Execute="AC_UnwaverRaisenPre"/>
-    </AC_UnwaverRaisenPre>
+        <Branch Condition="End" Execute="AC_RaisenPre"/>
+    </AC_ChoraisenPre>
 
-    <!-- EMP -->
-    <AC_EmpThrow MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/4_emp/"/>
-        <Animation Preset="1_empReady" XFlip="true" Duration="0.2">
-            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-        </Animation>
-        <Animation Preset="2_empThrow" XFlip="true" Duration="0.5">
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="EmpGrenade" Offset="0 0 0" SearchIdentifier="Enemy" UseFlip="True"/>
+    <AC_ChoraisenSlash MovementType="GraphPreset" MovementGraphPreset="Aoba_Choraisen" DirectionType="AI" FlipType="Direction" RotationType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/5_unwaverRaisen/4_choraisen/"/>
 
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+        <Animation Preset="2_choraisenMain" XFlip="true" Duration="0.8">
+            <FrameEvent Type="Attack" StartTime="0" AttackPreset="Aoba_Choraisen">
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
+                    <FrameEvent Type="TeleportToTargetBack" DistanceOffset="3.0"/>
+
+                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Blood" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
+                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Impact" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true" AngleType="AttackPoint"/>
+                    
+                    <FrameEvent Type="StopUpdate" Time="0.07"/>
+                    <FrameEvent Type="SetTimeScale" Scale="0.2" Time="0.2" BlendTime="0.2"/>
+                    <FrameEvent Type="ShakeEffect" Scale="0.15" Speed="35.0" Time="0.2"/>
+                </OnHit>
+            </FrameEvent>
+
+            <FrameEvent Type="FrameTag" StartTime="0.2" EndFrame="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.2" EndFrame="999" Tag="GbAvail"/>
         </Animation>
-    
+
         <Branch Condition="End" Execute="AC_Idle"/>
-    </AC_EmpThrow>
+    </AC_ChoraisenSlash>
+
+    <AC_ChoraisenSuccess MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/5_unwaverRaisen/4_choraisen/"/>
+        <Animation Preset="3_choraisenSuccess" XFlip="true" ScalePreset="YSpring" Duration="0.44">
+            <FrameEvent Type="Movement" StartTime="0" Friction="90" MaxVelocity="20" Speed="0"/>
+            
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="DodgeAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Entry"/>
+    </AC_ChoraisenSuccess>
 
     <!-- 신속 이동 -->
     <AC_Warp MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
-        <!-- TODO -->
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/3_choraisen/2_raisen/"/>
-        <Animation Preset="2_raisenMain" XFlip="true" Duration="0.1">
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/6_warpChase/"/>
+        <Animation Preset="1_warpPre" XFlip="true" Duration="0.1">
             <FrameEvent Type="Attack" StartTime="0" AttackPreset="Aoba_Choraisen">
                 <OnHit>
                     <FrameEvent Type="TeleportToTargetBack" DistanceOffset="2.0"/>
@@ -577,9 +506,8 @@
     </AC_Warp>
 
     <AC_Warpped MovementType="FrameEvent" DirectionType="AI" RotationType="Direction" FlipType="Direction">
-        <!-- TODO -->
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/1_raisen/"/>
-        <Animation Preset="3_raisenSuccess" XFlip="true" ScalePreset="YSpring" Duration="0.2">
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/6_warpChase/"/>
+        <Animation Preset="2_warpSuccess" XFlip="true" ScalePreset="YSpring" Duration="0.2">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Velocity="-3" Speed="0"/>
             
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
@@ -589,65 +517,5 @@
 
         <Branch Condition="End" Execute="AC_Entry"/>
     </AC_Warpped>
-
-    <!-- 스턴건 -->
-    <!-- 사용 안함 -->
-    <AC_HandgunReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/2_handgun/"/>
-        <Animation Preset="1_handgunReady" XFlip="true" Duration="0.4">
-            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
-        </Animation>
-
-        <Branch Condition="End" Execute="AC_HandgunReady"/>
-    </AC_HandgunReady>
-    <!-- 사용 안함 -->
-    <AC_HandgunShot MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/2_handgun/"/>
-        <Animation Preset="2_handgunPre" XFlip="true" Duration="0.15">
-        </Animation>
-        <Animation Preset="3_handgunShot" XFlip="true" Duration="1.0">
-            <FrameEvent Type="Danmaku" StartTime="0" Path="Enemy/MuzzleFlash.xml" Offset="0.4 0.1 0" UseFlip="True"/>
-            <FrameEvent Type="Attack" StartTime="0" AttackPreset="Aoba_Stungun">
-                <OnHit>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
-                </OnHit>
-            </FrameEvent>
-            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="3" Velocity="-8" Speed="0"/>
-
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
-        </Animation>
-
-        <Branch Condition="End" Execute="AC_Idle"/>
-    </AC_HandgunShot>
-
-    <!-- 전격 방출 -->
-    <!-- 사용 안함 -->
-    <AC_Discharge MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/9_discharge/"/>
-        <Animation Preset="1_dischargeReady" XFlip="true" Duration="0.7">
-            <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
-            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountClear"/>
-        </Animation>
-        <Animation Preset="2_dischargeMain" XFlip="true" Duration="0.3">
-            <FrameEvent Type="Attack" StartTime="0" EndTime="0.3" AttackPreset="Aoba_Discharge">
-                <OnHit>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="StunSet"/>
-                </OnHit>
-            </FrameEvent>
-        </Animation>
-        <Animation Preset="3_dischargeRecovery" XFlip="true" Duration="0.2">
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
-        </Animation>
-    
-        <Branch Condition="End" Execute="AC_Discharge"/>
-    </AC_Discharge>
-    
-
 
 </ActionGraph>
