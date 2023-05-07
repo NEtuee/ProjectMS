@@ -24,26 +24,29 @@ public class HPSphereUI
     {
         _hpSpriteObject = new GameObject("SpriteObject");
         _hpSpriteObject.transform.position = Vector3.zero;
+        _hpSpriteObject.layer = LayerMask.NameToLayer("Character");
 
         _hpSpriteRenderer = _hpSpriteObject.AddComponent<SpriteRenderer>();
         _hpSpriteRenderer.material = Material.Instantiate(ResourceContainerEx.Instance().GetMaterial("Material/Material_SpriteDefaultWithPixelSnap"));
-
+        _hpSpriteRenderer.sortingOrder = 8;
 
         _bpGaugeSpriteObject = new GameObject("BPGauge");
         _bpGaugeSpriteObject.transform.position = Vector3.zero;
         _bpGaugeSpriteObject.transform.SetParent(_hpSpriteObject.transform);
+        _bpGaugeSpriteObject.layer = LayerMask.NameToLayer("Character");
 
         _bpGaugeSpriteRenderer = _bpGaugeSpriteObject.AddComponent<SpriteRenderer>();
         _bpGaugeSpriteRenderer.material = Material.Instantiate(ResourceContainerEx.Instance().GetMaterial("Material/Material_SpriteDefaultWithPixelSnap"));
-        _bpGaugeSpriteRenderer.sortingOrder = 2;
+        _bpGaugeSpriteRenderer.sortingOrder = 10;
 
         _bpAnimationSpriteObject = new GameObject("BPAnimation");
         _bpAnimationSpriteObject.transform.position = Vector3.zero;
         _bpAnimationSpriteObject.transform.SetParent(_hpSpriteObject.transform);
+        _bpAnimationSpriteObject.layer = LayerMask.NameToLayer("Character");
 
         _bpAnimationSpriteRenderer = _bpAnimationSpriteObject.AddComponent<SpriteRenderer>();
         _bpAnimationSpriteRenderer.material = Material.Instantiate(ResourceContainerEx.Instance().GetMaterial("Material/Material_SpriteDefaultWithPixelSnap"));
-        _bpAnimationSpriteRenderer.sortingOrder = 1;
+        _bpAnimationSpriteRenderer.sortingOrder = 9;
 
         _bpAnimation.initialize();
         _bpFullAnimation = ResourceContainerEx.Instance().GetScriptableObjects("Sprites/UI/HPSphere/HPBPFull")[0] as AnimationCustomPreset;
