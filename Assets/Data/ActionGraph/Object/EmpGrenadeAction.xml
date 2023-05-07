@@ -14,7 +14,7 @@
             <!-- TODO: 폭발 이펙트  -->
             <FrameEvent Type="Attack" StartTime="0" EndTime="0.3" AttackPreset="Aoba_EmpGrenade">
                 <OnHit>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="StunSet"/>
                 </OnHit>
             </FrameEvent>

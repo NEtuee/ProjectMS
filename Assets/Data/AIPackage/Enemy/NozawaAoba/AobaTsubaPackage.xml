@@ -17,7 +17,7 @@
                 <AIEvent Type="SetAction" Action="AC_Tsuba_Entry"/>
             </Event_OnExecute>
 
-            <Branch Condition="(PackageExecutedTime >= 0.7)" Execute="AI_Tsuba_Attack"/>
+            <Branch Condition="(PackageExecutedTime >= 0.85)" Execute="AI_Tsuba_Attack"/>
             <Branch Condition="IsCatcher == false" Execute="AI_Away"/>
         </AI_Tsuba_Entry>
 

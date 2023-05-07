@@ -19,6 +19,7 @@
     <Include Path="Enemy/NozawaAoba/AobaEmpPackage.xml"/>
     <Include Path="Enemy/NozawaAoba/AobaWarpChasePackage.xml"/>
     <Include Path="Enemy/NozawaAoba/AobaTsubaPackage.xml"/>
+    <Include Path="Enemy/NozawaAoba/AobaTsubaReadyPackage.xml"/>
 
     <Include Path="Enemy/NozawaAoba/AobaDodgePackage.xml"/>
 
@@ -121,40 +122,44 @@
     <!-- 원거리 판단 -->
     <JudgeApproachAttack Package="CommonIdlePackage">
         <UseBranchSet Name="IsPlayerDead"/>
-        <!-- 초뢰섬 3연격 -->
-        <Branch Weight="AobaApproachAtk^Choraisen" Condition="true" Execute="Choraisen"/>
         <!-- 폭풍 뢰섬 -->
-        <Branch Weight="AobaApproachAtk^StormRaisen" Condition="true" Execute="EmpGrenadeToStorm"/>
-        <!-- 약진 뢰섬 -->
+        <Branch Weight="AobaApproachAtk^StormRaisen" Condition="true" Execute="StormRaisen"/>
+        <!-- EMP 약진 뢰섬 -->
         <Branch Weight="AobaApproachAtk^ChargeRaisen" Condition="true" Execute="EmpGrenadeToCharge"/>
+        <!-- 츠바(공격) -->
+        <Branch Weight="AobaApproachAtk^Tsuba" Condition="true" Execute="TsubaReady"/>
 
     </JudgeApproachAttack>
 
     <!-- 근거리 판단-->
     <JudgeShortAttack Package="CommonIdlePackage">
         <UseBranchSet Name="IsPlayerDead"/>
-        <!-- 수직회피 EMP 패턴 -->
-        <Branch Weight="AobaShortAtk^Emp" Condition="true" Execute="DodgeToEmp"/>
-        <!-- 수직회피 초뢰섬 패턴 -->
-        <Branch Weight="AobaShortAtk^Choraisen" Condition="true" Execute="DodgeToChoraisen"/>
-        <!-- 코등이 패턴 -->
-        <Branch Weight="AobaShortAtk^Tsuba" Condition="true" Execute="Tsuba"/>
+        <!-- 약진 뢰섬 -->
+        <Branch Weight="AobaShortAtk^ChargeRaisen" Condition="true" Execute="ChargeRaisen"/>
+        <!-- 수직회피 패턴 -->
+        <Branch Weight="AobaShortAtk^Dodge" Condition="true" Execute="DodgeJudge"/>
 
     </JudgeShortAttack>
     
     <!-- 피격 리액션 판단 -->
     <JudgeHitReaction Package="CommonIdlePackage">
         <UseBranchSet Name="IsPlayerDead"/>
-        <!-- 주류 패턴-->
-        <!-- 수직회피 EMP 패턴 -->
-        <Branch Weight="AobaHitReaction^EMP" Condition="true" Execute="DodgeToEmp"/>
-        <!-- 수직회피 초뢰섬 패턴 -->
-        <Branch Weight="AobaHitReaction^Choraisen" Condition="true" Execute="DodgeToChoraisen"/>
-        
-        <!-- 변칙 패턴 -->
+        <!-- 수직회피 패턴 -->
+        <Branch Weight="AobaHitReaction^Dodge" Condition="true" Execute="DodgeJudge"/>
+        <!-- 츠바 패턴 -->
         <Branch Weight="AobaHitReaction^Tusba" Condition="true" Execute="Tsuba"/>
+
     </JudgeHitReaction>
 
+    <!-- TODO: 화면에서 잘 안사라지는 방법 강구해볼 것 -->
+    <DodgeJudge Package="AobaDodgePackage">      
+        <UseBranchSet Name="IsPlayerDead"/>
+        <UseBranchSet Name="HitReactionSet"/>
+
+        <Branch Condition="CurrentPackageEnd" Execute="JudgeApproachAttack"/>
+    </DodgeJudge>
+
+    <!-- 사용 안함 -->
     <!-- TODO: 화면에서 잘 안사라지는 방법 강구해볼 것 -->
     <DodgeToEmp Package="AobaDodgePackage">      
         <UseBranchSet Name="IsPlayerDead"/>
@@ -166,6 +171,7 @@
         <Branch Weight="RandBoolean^False" Condition="CurrentPackageEnd" Execute="EmpGrenadeToStorm"/>
     </DodgeToEmp>
 
+    <!-- 사용 안함 -->
     <!-- TODO: 화면에서 잘 안사라지는 방법 강구해볼 것 -->
     <DodgeToChoraisen Package="AobaDodgePackage">      
         <UseBranchSet Name="IsPlayerDead"/>
@@ -175,19 +181,21 @@
         <Branch Condition="CurrentPackageEnd" Execute="Choraisen"/>
     </DodgeToChoraisen>
 
+    <!-- 사용 안함 -->
     <Choraisen Package="AobaChoraisenPackage">
         <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </Choraisen>
 
+    <!-- 사용 안함 -->
     <EmpGrenadeToStorm Package="AobaEmpPackage">
         <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="StormRaisen"/>
     </EmpGrenadeToStorm>
 
-    <StormRaisen Package="AobaChoraisenPackage">
+    <StormRaisen Package="AobaStormRaisenPackage">
         <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
@@ -210,13 +218,20 @@
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </UnwaverRaisen>
 
-    <!-- TODO: 전기충격 패턴으로 동작중 -->
+    <TsubaReady Package="AobaTsubaReadyPackage">
+        <UseBranchSet Name="IsPlayerDead"/>
+        <Branch Condition="Hit" Execute="Tsuba"/>
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Tsuba"/>
+    </TsubaReady>
+    
     <Tsuba Package="AobaTsubaPackage">
         <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </Tsuba>
 
+    <!-- 사용 안함 -->
     <Raisen Package="AobaRaisenPackage">
         <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
