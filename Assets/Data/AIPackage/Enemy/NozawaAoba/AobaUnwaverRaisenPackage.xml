@@ -26,27 +26,26 @@
             </Event_OnExecute>
 
             <Branch Condition="AttackSuccess" Execute="AI_UnwaverRaisenSuccess"/>
-            <Branch Condition="End" Execute="AI_UnwaverRaisenPre"/>
+            <Branch Condition="End" Execute="AI_ChoraisenPre"/>
         </AI_UnwaverRaisen>
 
         <AI_UnwaverRaisenSuccess UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
             <Event_OnExecute>
-                <!-- TODO -->
                 <AIEvent Type="SetAction" Action="AC_UnwaverRaisenSuccess"/>
             </Event_OnExecute>
 
             <Branch Condition="End" Execute="TerminatePackage"/>    
         </AI_UnwaverRaisenSuccess>
 
-        <!-- 뢰섬 -->
-        <AI_UnwaverRaisenPre UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <!-- 초뢰섬 -->
+        <AI_ChoraisenPre UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
-                <AIEvent Type="SetAction" Action="AC_UnwaverRaisenPre"/>
+                <AIEvent Type="SetAction" Action="AC_ChoraisenPre"/>
             </Event_OnExecute>        
             
             <Branch Condition="End" Execute="AI_RaisenSlash"/>
-        </AI_UnwaverRaisenPre>
+        </AI_ChoraisenPre>
 
         <AI_RaisenSlash UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
             <Event_OnExecute>
@@ -56,7 +55,7 @@
             <Branch Condition="AttackSuccess" Execute="AI_RaisenSuccess"/>
             <Branch Condition="End" Execute="TerminatePackage"/>
         </AI_RaisenSlash>
-        
+
         <AI_RaisenSuccess UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_ChoraisenSuccess"/>
