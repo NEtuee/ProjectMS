@@ -145,7 +145,7 @@
             <FrameEvent Type="Movement" StartTime="0" Friction="24" MaxVelocity="12" Velocity="12" Speed="0"/>
             <FrameEvent Type="Attack" StartTime="0" EndTime="0.2" AttackPreset="Reito_Punch">
                 <OnHit>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonDoubleAttack"/>
                     
                     <FrameEvent Type="ZoomEffect" Scale="2.8"/>
                     <FrameEvent Type="StopUpdate" Time="0.15"/>
