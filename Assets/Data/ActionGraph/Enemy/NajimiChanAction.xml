@@ -237,7 +237,7 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_SpawnPitchingMachine>
 
-    <AC_PitcherReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+    <AC_PitcherReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="LaserEffect">
         <!-- 투구 준비 모션, 탄막 경로 활성화 -->
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/2_pitchingPattern/"/>
         <Animation Preset="2_pitcherReady" XFlip="true" Duration="0.85">
@@ -251,7 +251,7 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_PitcherReady>
 
-    <AC_Pitch MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+    <AC_Pitch MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" Flags="LaserEffect">
         <!-- 투구 모션, 장판 활성화 -->
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/2_pitchingPattern/3_pitching/"/>
         <Animation Preset="1_pitchingMain" XFlip="true" Duration="1.0">
@@ -389,7 +389,7 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_FireworkShot>
 
-    <AC_BeamReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
+    <AC_BeamReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction" Flags="LaserEffect">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/3_batonPattern/4_pistolReady/"/>
         <Animation Preset="3_beam" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
@@ -402,7 +402,7 @@
         <Branch Condition="End" Execute="AC_BeamReady"/>
     </AC_BeamReady>
 
-    <AC_BeamShot MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
+    <AC_BeamShot MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction" Flags="LaserEffect">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/3_batonPattern/"/>
         <Animation Preset="7_beamShot" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="3" Velocity="-12" Speed="0"/>   

@@ -203,7 +203,7 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_Away>
 
-    <AC_PitcherReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+    <AC_PitcherReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="LaserEffect">
         <!-- 투구 준비 모션, 탄막 경로 활성화 -->
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/2_pitchingPattern/"/>
         <Animation Preset="2_pitcherReady" XFlip="true" Duration="0.65">
@@ -217,7 +217,7 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_PitcherReady>
 
-    <AC_Pitch MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+    <AC_Pitch MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" Flags="LaserEffect">
         <!-- 투구 모션, 장판 활성화 -->
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/2_pitchingPattern/3_pitching/"/>
         <Animation Preset="1_pitchingMain" XFlip="true" Duration="1.0">

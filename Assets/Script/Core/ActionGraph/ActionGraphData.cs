@@ -113,6 +113,7 @@ public class ActionGraphBranchData
 public enum ActionFlags : ulong
 {
     ClearPush = 1,
+    LaserEffect = 1 << 1,
 };
 
 public enum ConditionCompareType
