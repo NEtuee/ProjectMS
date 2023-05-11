@@ -20,6 +20,7 @@ Shader "Custom/SpriteShadowScreenShader"
 		_Brightness ("Brightness", Range(0.0, 5.0)) = 1.0
 		_Saturation ("Saturation", Range(0.0, 1.0)) = 1.0
 		_ColorTint ("Color Tint", Color) = (1,1,1,1)
+		_BackgroundColorTint ("BackgroundColor", Color) = (1,1,1,1)
 
 		[Space][Space][Space]
 		_BlurSize ("Blur Size", Range(0.0, 2.0)) = 0.0
@@ -105,6 +106,7 @@ Shader "Custom/SpriteShadowScreenShader"
 			float _Brightness;
 			float _Saturation;
 			fixed4 _ColorTint;
+			fixed4 _BackgroundColorTint;
 
 			float _BlurSize;
 			float _MultiSampleDistance;
@@ -132,8 +134,11 @@ Shader "Custom/SpriteShadowScreenShader"
 
 			fixed4 sampleBackground(float2 texcoord)
 			{
-				fixed4 backgroundSample = SampleSpriteTexture(_MainTex, texcoord);
+				fixed4 backgroundSample = SampleSpriteTexture(_MainTex, texcoord) * _BackgroundColorTint;
 				fixed4 shadowMap = SampleSpriteTexture(_ShadowMapTexture, texcoord);
+
+				if(shadowMap.r == 0.0)
+					return backgroundSample;
 
 				//sun angle to radian
 				float sunAngle = _SunAngle * 0.0174532925 + 3.141592;
@@ -148,7 +153,7 @@ Shader "Custom/SpriteShadowScreenShader"
 				fixed4 characterShadowSample = _ShadowColor * SampleSpriteTexture(_CharacterTexture, texcoord + shadowOffset + shadowSampleTarget).a;
 
 				backgroundSample.rgb *= backgroundSample.a;
-				backgroundSample = (backgroundSample * (1.0 - characterShadowSample.a)) + characterShadowSample;
+				backgroundSample = (backgroundSample * (1.0 - (characterShadowSample.a))) + characterShadowSample;
 
 				return backgroundSample;
 			}

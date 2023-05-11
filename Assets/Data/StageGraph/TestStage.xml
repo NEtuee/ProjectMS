@@ -2,6 +2,8 @@
 <StageGraph Name="Test">
 
     <InitializePhase>
+        <ApplyPostProcessProfile Path="PostProcessProfile/PostProcessProfile_Default"/>
+
         <SpawnCharacter CharacterKey="Akane" Position="0 0 0" SearchIdentifier="Player" UniqueKey="Player"/>
         <SetCameraTarget UniqueKey="Player" CameraMode="ArenaMode"/>
         <SetAudioListner UniqueKey="Player"/>

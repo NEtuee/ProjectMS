@@ -115,6 +115,10 @@ public class StageGraphLoader : LoaderBase<StageGraphBaseData>
         {
             spawnEvent = new StageGraphEvent_TeleportTargetTo();
         }
+        else if(node.Name == "ApplyPostProcessProfile")
+        {
+            spawnEvent = new StageGraphEvent_ApplyPostProcessProfile();
+        }
 
 
         if(spawnEvent == null)
