@@ -344,7 +344,7 @@ public class AnimationPlayer
         _currentAnimationName = path;
 
         _animationTimeProcessor.initialize();
-        _animationTimeProcessor.setActionDuration(customPreset._animationCustomPresetData.getTotalDuration());
+        //_animationTimeProcessor.setActionDuration(customPreset._animationCustomPresetData.getTotalDuration());
         _animationTimeProcessor.setAnimationSpeed(1f);
 
         _animationTimeProcessor.setCustomPresetData(customPreset._animationCustomPresetData);
@@ -397,7 +397,7 @@ public class AnimationPlayer
 
     public bool getCurrentAnimationScale(out Vector3 outScale)
     {
-        if(_currentAnimationPlayData._scalePresetData == null)
+        if(_currentAnimationPlayData == null || _currentAnimationPlayData._scalePresetData == null)
         {
             outScale = Vector3.one;
             return false;
@@ -410,7 +410,7 @@ public class AnimationPlayer
 
     public Vector3 getAnimationScalePerFrame()
     {
-        if(_currentAnimationPlayData._scalePresetData == null)
+        if(_currentAnimationPlayData == null || _currentAnimationPlayData._scalePresetData == null)
             return Vector3.one;
         
 
@@ -421,7 +421,7 @@ public class AnimationPlayer
 
     public Quaternion getCurrentAnimationRotation()
     {
-        if(_currentAnimationPlayData._rotationPresetData == null)
+        if(_currentAnimationPlayData == null || _currentAnimationPlayData._rotationPresetData == null)
             return Quaternion.identity;
 
         return Quaternion.Euler(0f,0f,_currentAnimationPlayData._rotationPresetData.evaulate(_animationTimeProcessor.getCurrentAnimationNormalizedTime()));
@@ -429,7 +429,7 @@ public class AnimationPlayer
 
     public Quaternion getAnimationRotationPerFrame()
     {
-        if(_currentAnimationPlayData._rotationPresetData == null)
+        if(_currentAnimationPlayData == null || _currentAnimationPlayData._rotationPresetData == null)
             return Quaternion.identity;
         
         return Quaternion.Euler(0f,0f,_currentAnimationPlayData._rotationPresetData.getRotateValuePerFrameFromTime(getMoveValuePerFrameFromTimeDesc()));
@@ -444,7 +444,7 @@ public class AnimationPlayer
     {
         if(_currentAnimationSprites.Length <= _animationTimeProcessor.getCurrentIndex())
         {
-            DebugUtil.assert(false, "스프라이트 Out Of Index 입니다. AnimationPreset이 잘못되어 있지는 않나요? End Frame을 확인해 주세요. [Path: {0}]",_currentAnimationPlayData._path);
+            DebugUtil.assert(false, "스프라이트 Out Of Index 입니다. AnimationPreset이 잘못되어 있지는 않나요? End Frame을 확인해 주세요. [Length: {0}] [Index: {1}] [Loop: {2}] [Path: {3}]",_currentAnimationSprites.Length, _animationTimeProcessor.getCurrentIndex(), _animationTimeProcessor.isLoop(), _currentAnimationPlayData._path);
             return null;
         }
 

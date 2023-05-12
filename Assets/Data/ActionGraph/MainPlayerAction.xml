@@ -409,7 +409,7 @@
         <Branch Condition="End == true" Execute="Dead"/>
     </Dead>
 
-    <Catched MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction" ApplyBuff="CatchedEscape">
+    <Catched MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction" ApplyBuff="CatchedEscape" Flags="Catched">
         <Animation Preset="Sprites/NewPlayer/empty" XFlip="true" Duration="0.01">
             <FrameEvent Type="Test" StartTime="0" Log="Akane Catched"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Velocity="0" Speed="0"/>

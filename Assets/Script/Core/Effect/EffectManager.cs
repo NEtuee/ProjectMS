@@ -53,6 +53,16 @@ public class EffectRequestData : MessageData
     public Material _trailMaterial = null;
     public Vector3[] _trailPositionData = null;
 
+    public void createPresetAnimationRequestData(string path)
+    {
+        _effectPath = path;
+        _animationCustomPreset = ResourceContainerEx.Instance().GetAnimationCustomPreset(path);
+        if(_animationCustomPreset == null)
+            return;
+        
+        _effectType = EffectType.SpriteEffect;
+    }
+
     public void clearRequestData()
     {
         _effectPath = "";
@@ -77,6 +87,7 @@ public class EffectRequestData : MessageData
         _trailMaterial = null;
         _trailPositionData = null;
         _executeEntity = null;
+        _animationCustomPreset = null;
     }
 }  
 
@@ -135,12 +146,15 @@ public class EffectItem : EffectItemBase
         _animationPlayData._endFrame = effectData._endFrame;
         _animationPlayData._framePerSec = effectData._framePerSecond;
 
+        _animationPlayData._customPresetData = null;
         _animationPlayData._frameEventData = null;
         _animationPlayData._timeEventData = null;
+        _animationPlayData._actionTime = -1f;
         _animationPlayData._frameEventDataCount = 0;
         _animationPlayData._timeEventDataCount = 0;
         _animationPlayData._hasMovementGraph = false;
         _animationPlayData._isLoop = false;
+        _animationPlayData._animationLoopCount = 0;
         _animationPlayData._flipState = new FlipState{xFlip = false, yFlip = false};
 
         _stopEffect = false;
@@ -148,12 +162,6 @@ public class EffectItem : EffectItemBase
         if(effectData._animationCustomPreset != null)
         {
             _animationPlayData._customPresetData = effectData._animationCustomPreset._animationCustomPresetData;
-            if(_animationPlayData._customPresetData._playCount == 0)
-            {
-                DebugUtil.assert(false, "이펙트를 무한 루프 시키려고 합니다. 심각한 문제. [Path: {0}]",_effectPath);
-                return;
-            }
-    
             if(effectData._animationCustomPreset._rotationPresetName != "")
             {
                 AnimationRotationPreset rotationPreset = ResourceContainerEx.Instance().GetScriptableObject("Preset\\AnimationRotationPreset") as AnimationRotationPreset;
@@ -166,10 +174,12 @@ public class EffectItem : EffectItemBase
                 _animationPlayData._scalePresetData = scalePreset.getPresetData(effectData._animationCustomPreset._scalePresetName);
             }
         }
-        
 
         _animationPlayer.initialize();
-        _animationPlayer.changeAnimation(_animationPlayData);
+        if(effectData._animationCustomPreset != null)
+            _animationPlayer.changeAnimationByCustomPreset(_animationPlayData._path,effectData._animationCustomPreset);
+        else
+            _animationPlayer.changeAnimation(_animationPlayData);
 
         _parentTransform = effectData._parentTransform;
 
@@ -181,11 +191,12 @@ public class EffectItem : EffectItemBase
         _spriteRenderer.transform.position = effectData._position;
         _spriteRenderer.transform.localRotation = Quaternion.Euler(0f,0f,effectData._angle);
         _spriteRenderer.transform.localScale = effectData._scale;
+        _spriteRenderer.sprite = _animationPlayer.getCurrentSprite();
         _spriteRenderer.gameObject.SetActive(true);
 
         _localPosition = _spriteRenderer.transform.position;
         if(_parentTransform != null)
-            _localPosition = _parentTransform.position - _spriteRenderer.transform.position;
+            _localPosition = _spriteRenderer.transform.position - _parentTransform.position;
 
         _physicsBody.initialize(effectData._physicsBodyDesc);
         _usePhysics = effectData._usePhysics;
@@ -200,6 +211,7 @@ public class EffectItem : EffectItemBase
             return true;
 
         bool isEnd = _animationPlayer.progress(deltaTime,null);
+
         _spriteRenderer.sprite = _animationPlayer.getCurrentSprite();
         _spriteRenderer.transform.localRotation *= _animationPlayer.getAnimationRotationPerFrame();
 

@@ -384,11 +384,13 @@ public class StatusInfo
                 else if(buffData._particleEffect != "" && buffItem._particleEffect == null && _ownerObject != null)
                 {
                     EffectRequestData requestData = MessageDataPooling.GetMessageData<EffectRequestData>();
+                    requestData.clearRequestData();
                     requestData._parentTransform = _ownerObject.transform;
                     requestData._position = _ownerObject.transform.position;
                     requestData._effectPath = buffData._particleEffect;
                     requestData._effectType = EffectType.ParticleEffect;
                     buffItem._particleEffect = EffectManager._instance.createEffect(requestData) as ParticleEffectItem;
+                    requestData.isUsing = true;
                 }
                 
             }

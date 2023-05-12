@@ -828,6 +828,8 @@ public class GameEntityBase : SequencerObjectBase
     public void addVelocity(Vector3 velocity) {_currentVelocity += velocity;}
     public void setVelocity(Vector3 velocity) {_currentVelocity = velocity;}
 
+    public bool checkCurrentActionFlag(ActionFlags flag) {return _actionGraph.checkCurrentActionFlag(flag);}
+
     public bool applyFrameTag(string tag) {return _actionGraph.applyFrameTag(tag);}
     public void deleteFrameTag(string tag) {_actionGraph.deleteFrameTag(tag);}
     public bool checkFrameTag(string tag) {return _actionGraph.checkFrameTag(tag);}

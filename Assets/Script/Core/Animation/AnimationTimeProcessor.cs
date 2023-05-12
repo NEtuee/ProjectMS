@@ -325,6 +325,8 @@ public class AnimationTimeProcessor
         _isLoop = isLoop;
     }
 
+    public bool isLoop() {return _isLoop;}
+
     public void setLoopCount(int loopCount)
     {
         _animationLoopCount = loopCount;

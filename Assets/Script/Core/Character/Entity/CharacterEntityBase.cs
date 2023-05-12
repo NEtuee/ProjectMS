@@ -8,6 +8,9 @@ using UnityEditor;
 
 public class CharacterEntityBase : GameEntityBase
 {
+    private string _qteEffectPath = "Sprites/UI/QTEHit/";
+    private EffectItem _qteEffectItem = null;
+
     public override void assign()
     {
         base.assign();
@@ -47,6 +50,28 @@ public class CharacterEntityBase : GameEntityBase
             desc._searchType = getCurrentTargetSearchType();
 
             SendMessageEx(MessageTitles.entity_searchNearest,QueryUniqueID("SceneCharacterManager"),desc);
+        }
+
+        updateByActionFlag();
+    }
+
+    public void updateByActionFlag()
+    {
+        if(checkCurrentActionFlag(ActionFlags.Catched) && _qteEffectItem == null)
+        {
+            EffectRequestData requestData = MessageDataPooling.GetMessageData<EffectRequestData>();
+            requestData.clearRequestData();
+            requestData.createPresetAnimationRequestData(_qteEffectPath);
+            requestData._parentTransform = this.transform;
+            requestData._position = this.transform.position + Vector3.down;
+
+            _qteEffectItem = EffectManager._instance.createEffect(requestData) as EffectItem;
+            requestData.isUsing = true;
+        }
+        else if(checkCurrentActionFlag(ActionFlags.Catched) == false && _qteEffectItem != null)
+        {
+            _qteEffectItem.stopEffect();
+            _qteEffectItem = null;
         }
     }
 

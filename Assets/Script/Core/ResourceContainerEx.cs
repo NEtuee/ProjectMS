@@ -129,6 +129,7 @@ public class ResourceContainerEx : Singleton<ResourceContainerEx>
 {
     private ManagedResourceItem<Sprite> 				_spriteResource = new ManagedResourceItem<Sprite>();
 	private ManagedResourceItem<ScriptableObject> 		_scriptableResource = new ManagedResourceItem<ScriptableObject>();
+	private ManagedResourceItem<AnimationCustomPreset> 	_animationCustomPresetResource = new ManagedResourceItem<AnimationCustomPreset>();
 	private ManagedResourceItem<GameObject>		 		_prefabResource = new ManagedResourceItem<GameObject>();
 	private ManagedResourceItem<Material>		 		_materialResource = new ManagedResourceItem<Material>();
 
@@ -145,6 +146,12 @@ public class ResourceContainerEx : Singleton<ResourceContainerEx>
 	{
 		DebugUtil.assert(false,"movement graph is unavailable");
 		return null;
+	}
+
+	public AnimationCustomPreset GetAnimationCustomPreset(string filePath)
+	{
+		AnimationCustomPreset[] customPresets = _animationCustomPresetResource.GetOrLoadResources(filePath,"해당 폴더가 없거나, 폴더 안에 Custom Preset이 없습니다. 경로를 잘못 쓰지는 않았나요? ");
+		return customPresets == null ? null : customPresets[0];
 	}
 
 	public ScriptableObject GetScriptableObject(string fileName)

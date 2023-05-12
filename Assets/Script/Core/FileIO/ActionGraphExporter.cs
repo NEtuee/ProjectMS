@@ -330,15 +330,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
                 
                 for(int i = 0; i < flags.Length; ++i)
                 {
-                    string targetFlag = flags[i];
-                    if(targetFlag == "ClearPush")
-                    {
-                        nodeData._actionFlag |= (ulong)ActionFlags.ClearPush;
-                    }
-                    else if(targetFlag == "LaserEffect")
-                    {
-                        nodeData._actionFlag |= (ulong)ActionFlags.LaserEffect;
-                    }
+                    nodeData._actionFlag |= (ulong)((ActionFlags)System.Enum.Parse(typeof(ActionFlags), flags[i]));
                 }
             }
             else
