@@ -95,6 +95,7 @@
     <AttackStop MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <Animation Preset="Sprites/NewPlayer/attackStop/" XFlip="true" Duration="0.625">
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_IdleFriction" Speed="0" Velocity="0"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="1003" Attach="true"/>
         </Animation>
 
         <UseBranchSet Name="StopToIdle"/>
@@ -135,10 +136,13 @@
                     <!-- 마테리얼 히트 이펙트 -->
                     <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/MaterialHit_Timeline" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true"/>
 
-                    <FrameEvent Type="StopUpdate" Time="0.07"/>
-
                     <FrameEvent Type="TeleportToTargetBack" Condition="(getTargetFrameTag_Groggy == false) && (Kill == false)" DistanceOffset="-0.3"/>
                     <FrameEvent Type="TeleportToTargetBack" Condition="getTargetFrameTag_Groggy || Kill" DistanceOffset="0.2"/>
+                    
+                    <FrameEvent Type="StopUpdate" Time="0.07"/>
+                    
+                    <FrameEvent Type="SetTimeScale" Scale="0.7" Time="0.07" BlendTime="0.07"/>
+                    <FrameEvent Type="ShakeEffect" Scale="0.07" Speed="35.0" Time="0.07"/>
 
                     <FrameEvent Type="SetAction" Condition="Kill" Action="AttackSuccessFar"/>
                     <FrameEvent Type="SetTimeScale" Condition="Kill" Scale="0.2" Time="0.2" BlendTime="0.2"/>
@@ -198,10 +202,14 @@
                     <!-- 마테리얼 히트 이펙트 -->
                     <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/MaterialHit_Timeline" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true"/>
 
-                    <FrameEvent Type="StopUpdate" Time="0.07"/>
 
                     <FrameEvent Type="TeleportToTargetBack" Condition="(getTargetFrameTag_Groggy == false) && (Kill == false)" DistanceOffset="-0.0"/>
                     <FrameEvent Type="TeleportToTargetBack" Condition="getTargetFrameTag_Groggy || Kill" DistanceOffset="0.4"/>
+
+                    <FrameEvent Type="StopUpdate" Time="0.07"/>
+                    
+                    <FrameEvent Type="SetTimeScale" Scale="0.2" Time="0.2" BlendTime="0.2"/>
+                    <FrameEvent Type="ShakeEffect" Scale="0.15" Speed="35.0" Time="0.2"/>
 
                     <FrameEvent Type="SetAction" Condition="Kill" Action="AttackSuccessFar"/>
                     <FrameEvent Type="SetTimeScale" Condition="Kill" Scale="0.2" Time="0.2" BlendTime="0.2"/>
@@ -385,6 +393,8 @@
     <Hit MovementType="FrameEvent" DirectionType="MousePoint" DefenceDirectionType="MousePoint" FlipType="Keep" DefenceType="Guard" DefenceAngle="180.0">
         <Animation Preset="Sprites/NewPlayer/Hit/" XFlip="true" Duration="0.5">
             <MultiSelectAnimation Path="Sprites/NewPlayer/empty" Condition="IsCatchTarget"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="1003" Attach="true"/>
+
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_IdleFriction" MaxVelocity="0" Velocity="0" Speed="0"/>
             <FrameEvent Type="ApplyBuff" ApplyBuff="ClearBloodPoint"/>
         </Animation>
@@ -440,6 +450,7 @@
 
     <Stun MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" ApplyBuff="StunEscape">
         <Animation Preset="Sprites/NewPlayer/stun" XFlip="true" Duration="3.0">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="1004" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="3" Speed="0"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="Stun"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="ClearBloodPoint"/>
