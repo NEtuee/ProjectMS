@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c858e63344676f34a93a8306d92a1f7d, type: 3}
   m_Name: AudioInfo
   m_EditorClassIdentifier: 
-  csvData: {fileID: 4900000, guid: e1201114f30ca724ba628569b8957375, type: 3}
+  csvData: {fileID: 4900000, guid: 8783bed0fe563d74884adcc965285795, type: 3}
   audioData:
   - name: global data
     id: 0
@@ -81,6 +81,174 @@ MonoBehaviour:
         Data3: -634594643
         Data4: 177468552
       Path: event:/SFX/Akane/Dash
+    parameters: []
+  - name: KatanaGrip
+    id: 1003
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: 1653660931
+        Data2: 1153474570
+        Data3: 440125072
+        Data4: -804008841
+      Path: event:/SFX/Akane/KatanaGrip
+    parameters: []
+  - name: HitStrong
+    id: 1004
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: -872165181
+        Data2: 1144679771
+        Data3: 1106610342
+        Data4: 1533589674
+      Path: event:/SFX/Akane/HitStrong
+    parameters: []
+  - name: HitWeak
+    id: 1005
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: -1247655030
+        Data2: 1223763456
+        Data3: 1528716478
+        Data4: -1817575777
+      Path: event:/SFX/Akane/HitWeak
+    parameters: []
+  - name: Dash
+    id: 2100
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: -1465676337
+        Data2: 1324075272
+        Data3: 577758881
+        Data4: 1655562969
+      Path: event:/SFX/Enemy/Najimi/Dash
+    parameters: []
+  - name: RushReady
+    id: 2101
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: 1141802351
+        Data2: 1245463794
+        Data3: -1706767481
+        Data4: -21553582
+      Path: event:/SFX/Enemy/Najimi/RushReady
+    parameters: []
+  - name: Grab
+    id: 2102
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: 1157257007
+        Data2: 1149451546
+        Data3: 428293039
+        Data4: 1873230014
+      Path: event:/SFX/Enemy/Najimi/Grab
+    parameters: []
+  - name: Struggle
+    id: 2103
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: 379031134
+        Data2: 1229303917
+        Data3: 890138753
+        Data4: -172853534
+      Path: event:/SFX/Enemy/Najimi/Struggle
+    parameters: []
+  - name: BreakAkane
+    id: 2104
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: -172205928
+        Data2: 1217072290
+        Data3: -553044046
+        Data4: 1070260220
+      Path: event:/SFX/Enemy/Najimi/BreakAkane
+    parameters: []
+  - name: PitchVoice
+    id: 2105
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: -469854026
+        Data2: 1206878624
+        Data3: 1422814141
+        Data4: 466641282
+      Path: event:/SFX/Enemy/Najimi/PitchVoice
+    parameters: []
+  - name: Pitch
+    id: 2106
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: -1202445080
+        Data2: 1255833647
+        Data3: 21816253
+        Data4: -888799303
+      Path: event:/SFX/Enemy/Najimi/Pitch
+    parameters: []
+  - name: HitBaseBall
+    id: 2107
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: -677844476
+        Data2: 1324269250
+        Data3: 1476812957
+        Data4: -1639988720
+      Path: event:/SFX/Enemy/Najimi/HitBaseBall
+    parameters: []
+  - name: Hit
+    id: 2108
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: -1701198770
+        Data2: 1074507345
+        Data3: -1815273832
+        Data4: -1326897453
+      Path: event:/SFX/Enemy/Najimi/Hit
     parameters: []
   - name: Zone
     id: 8001
