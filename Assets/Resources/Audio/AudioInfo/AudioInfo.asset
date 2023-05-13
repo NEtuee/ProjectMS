@@ -250,6 +250,48 @@ MonoBehaviour:
         Data4: -1326897453
       Path: event:/SFX/Enemy/Najimi/Hit
     parameters: []
+  - name: AmbVolumeControl
+    id: 5001
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: Snapshot
+    eventReference:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: snapshot:/AmbVolumeControl
+    parameters: []
+  - name: BgmVolumeControl
+    id: 5002
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: Snapshot
+    eventReference:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: snapshot:/BgmVolumeControl
+    parameters: []
+  - name: SfxVolumeControl
+    id: 5003
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: Snapshot
+    eventReference:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: snapshot:/SfxVolumeControl
+    parameters: []
   - name: Zone
     id: 8001
     defaultVolume: 1
