@@ -47,6 +47,8 @@
     <AC_Dash MovementType="GraphPreset" MovementGraphPreset="Najimi_Dash" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/0_default/"/>
         <Animation Preset="3_dash" XFlip="true" Duration="0.7">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2100" Attach="true"/>
+
             <FrameEvent Type="Test" Log="HitCount 2" Condition="getStat_HitCount == 2.0"/>
             <FrameEvent Type="Test" Log="HitCount 3" Condition="getStat_HitCount == 3.0"/>
             <FrameEvent Type="Test" Log="HitCount 4" Condition="getStat_HitCount == 4.0"/>
@@ -59,6 +61,8 @@
     <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/0_default/"/>
         <Animation Preset="4_hit" XFlip="true" Duration="1.25">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2108" Attach="true"/>
+
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountIncrease"/>
             <FrameEvent Type="ZoomEffect" Scale="2.8"/>
@@ -74,6 +78,8 @@
     <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/0_default/"/>
         <Animation Preset="4_hit" XFlip="true" Duration="1.25">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2108" Attach="true"/>
+
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountIncrease"/>
             <FrameEvent Type="ZoomEffect" Scale="2.8"/>
@@ -112,11 +118,13 @@
     <AC_RushReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/1_rushPattern/1_rush/"/>
         <Animation Preset="4_rushReady" XFlip="true" Duration="0.7">  <!-- TODO: 임시 모션이므로 바꿔줘야함. -->
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2101" Attach="true"/>
+
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountClear"/>
         </Animation>
     
-        <Branch Condition="End" Execute="AC_RushReady"/>
+        <Branch Condition="End" Execute="AC_Idle"/>
     </AC_RushReady>
 
     <!-- 아카네를 잡기위해 돌진하는 모션, 충돌 시 데미지 적용, 잡기 처리 -->
@@ -124,17 +132,19 @@
         <!-- 나지미 돌진, 헛다리 애니메이션. 공격 성공 시 성공 액션으로 전이. -->
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/1_rushPattern/1_rush/"/>
         <Animation Preset="1_rushMain" XFlip="true" Duration="0.35">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2100" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="24" MaxVelocity="12" Velocity="12" Speed="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="NajimiAddRushCount"/>
             <FrameEvent Type="Attack" StartTime="0" EndTime="0.2" AttackPreset="Najimi_Rush" AttackType="Catch" CatchOffset="0.1 0 0">
                 <OnCatch>
+                    <FrameEvent Type="AudioPlay" StartTime="0" ID="2102" Attach="true"/>
                     <FrameEvent Type="ApplyBuffTarget" StartTime="0" ApplyBuff="CommonHalfAttack"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CatchedSet"/>
                     <FrameEvent Type="ZoomEffect" Scale="2.8"/>
                     <FrameEvent Type="StopUpdate" Time="0.15"/>
                     
                     <!-- visual -->
-                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
+                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Impact" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true" AngleType="AttackPoint"/>
                 </OnCatch>
             </FrameEvent>
         </Animation>
@@ -161,6 +171,7 @@
     </AC_RushSuccess_Entry>
     <AC_RushSuccess_Struggle MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <Animation Preset="Sprites/Enemy/OsananaNajimi/1_rushPattern/3_struggle" XFlip="true" Duration="1.0">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2103" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12"/>
             <FrameEvent Type="ReleaseCatch" StartTime="1" Push="1 0 0" Condition="getTargetFrameTag_Recatchable == false"/>
         </Animation>
@@ -174,11 +185,13 @@
             
             <FrameEvent Type="Attack" StartTime="0" AttackPreset="Najimi_Catch">
                 <OnHit>
+                    <FrameEvent Type="AudioPlay" StartTime="0" ID="2104" Attach="true"/>
+
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
                     <FrameEvent Type="ZoomEffect" Scale="2.8"/>
                     <FrameEvent Type="StopUpdate" Time="0.15"/>
 
-                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
+                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Impact" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true" AngleType="AttackPoint"/>
                 </OnHit>
             </FrameEvent>
 
@@ -191,6 +204,8 @@
     <AC_Away MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/1_rushPattern/4_away/"/>
         <Animation Preset="1_awaySpin" XFlip="true" RotationPreset="NajimiAway" Duration="1.0">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2108" Attach="true"/>
+
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Velocity="-6" Speed="0"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
@@ -203,10 +218,11 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_Away>
 
-    <AC_PitcherReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+    <AC_PitcherReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="LaserEffect">
         <!-- 투구 준비 모션, 탄막 경로 활성화 -->
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/2_pitchingPattern/"/>
         <Animation Preset="2_pitcherReady" XFlip="true" Duration="0.65">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2105" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
             <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/NajimiPitchingBeam_TimeLine" Attach="true" AngleType="Direction" LifeTime="0.82" FollowDirection="True"/>
 
@@ -217,14 +233,17 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_PitcherReady>
 
-    <AC_Pitch MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+    <AC_Pitch MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" Flags="LaserEffect">
         <!-- 투구 모션, 장판 활성화 -->
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/2_pitchingPattern/3_pitching/"/>
         <Animation Preset="1_pitchingMain" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
             <!-- TODO: 투구 이펙트 추가해야함. 해당 이펙트 지속시간에 따라 Main 모션 시간과 Attack 지속 시간 조정 -->
+            
+            <FrameEvent Type="AudioPlay" StartTime="0.17" ID="2106" Attach="true"/>
             <FrameEvent Type="Attack" StartTime="0.17" AttackPreset="Najimi_Pitching">
                 <OnHit>
+                    <FrameEvent Type="AudioPlay" StartTime="0.1" ID="2107"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonDoubleAttack"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="StunSet"/>
 

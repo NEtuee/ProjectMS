@@ -2,6 +2,8 @@
 <StageGraph Name="Test">
 
     <InitializePhase>
+        <ApplyPostProcessProfile Path="PostProcessProfile/PostProcessProfile_Default"/>
+
         <SpawnCharacter CharacterKey="Akane" Position="0 0 0" SearchIdentifier="Player" UniqueKey="Player"/>
         <SetCameraTarget UniqueKey="Player" CameraMode="ArenaMode"/>
         <SetAudioListner UniqueKey="Player"/>
@@ -11,9 +13,6 @@
     </InitializePhase>
 
     <UpdatePhase>
-        <SpawnCharacter CharacterKey="NozawaAoba" Position="4 0 0" SearchIdentifier="Enemy" UniqueKey="Aoba"/>
-        
-        <!--
         <WaitSecond Time="1.0"/>
         
         <SpawnCharacter CharacterKey="OsananaNajimiAlpha" Position="4 0 0" SearchIdentifier="Enemy" UniqueKey="Najimi"/>
@@ -23,6 +22,8 @@
         <TeleportTargetTo UniqueKey="Player" Position="0 0 0"/>
         <WaitSecond Time="1.0"/>
 
+        <SaveEventExecuteIndex/>
+
         <SpawnCharacter CharacterKey="KantoReito" Position="4 0 0" SearchIdentifier="Enemy" UniqueKey="Reito"/>
         <WaitTargetDead UniqueKey="Reito"/>
 
@@ -30,9 +31,10 @@
         <TeleportTargetTo UniqueKey="Player" Position="0 0 0"/>
         <WaitSecond Time="1.0"/>
 
+        <SaveEventExecuteIndex/>
+
         <SpawnCharacter CharacterKey="NozawaAoba" Position="4 0 0" SearchIdentifier="Enemy" UniqueKey="Aoba"/>
         <WaitTargetDead UniqueKey="Aoba"/>
-        -->
         <!--
         <SpawnCharacter CharacterKey="KantoReito" Position="4 0 0" SearchIdentifier="Enemy"/>
         <SpawnCharacter CharacterKey="Gauntlet" Position="4 0 0" SearchIdentifier="Enemy"/>

@@ -13,11 +13,6 @@
     </InitializePhase>
 
     <UpdatePhase>
-        
-        <SpawnCharacter CharacterKey="OsananaNajimiAlpha" Position="4 0 0" SearchIdentifier="Enemy" UniqueKey="Najimi"/>
-        <!--
-        <SpawnCharacter CharacterKey="KantoReito" Position="4 0 0" SearchIdentifier="Enemy" UniqueKey="Reito"/>
-        <SpawnCharacter CharacterKey="NozawaAoba" Position="4 0 0" SearchIdentifier="Enemy" UniqueKey="Aoba"/>
         <WaitSecond Time="1.0"/>
         
         <SpawnCharacter CharacterKey="OsananaNajimiAlpha" Position="4 0 0" SearchIdentifier="Enemy" UniqueKey="Najimi"/>
@@ -40,6 +35,7 @@
 
         <SpawnCharacter CharacterKey="NozawaAoba" Position="4 0 0" SearchIdentifier="Enemy" UniqueKey="Aoba"/>
         <WaitTargetDead UniqueKey="Aoba"/>
+        <!--
         <SpawnCharacter CharacterKey="KantoReito" Position="4 0 0" SearchIdentifier="Enemy"/>
         <SpawnCharacter CharacterKey="Gauntlet" Position="4 0 0" SearchIdentifier="Enemy"/>
         <SpawnCharacter CharacterKey="OsananaNajimiAlpha" Position="4 0 0" SearchIdentifier="Enemy"/>
