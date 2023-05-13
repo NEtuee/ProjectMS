@@ -22,12 +22,16 @@
         <TeleportTargetTo UniqueKey="Player" Position="0 0 0"/>
         <WaitSecond Time="1.0"/>
 
+        <SaveEventExecuteIndex/>
+
         <SpawnCharacter CharacterKey="KantoReito" Position="4 0 0" SearchIdentifier="Enemy" UniqueKey="Reito"/>
         <WaitTargetDead UniqueKey="Reito"/>
 
         <WaitSecond Time="1.0"/>
         <TeleportTargetTo UniqueKey="Player" Position="0 0 0"/>
         <WaitSecond Time="1.0"/>
+
+        <SaveEventExecuteIndex/>
 
         <SpawnCharacter CharacterKey="NozawaAoba" Position="4 0 0" SearchIdentifier="Enemy" UniqueKey="Aoba"/>
         <WaitTargetDead UniqueKey="Aoba"/>

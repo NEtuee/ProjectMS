@@ -4,10 +4,18 @@ using UnityEngine;
 
 public class StageGraphManager : Singleton<StageGraphManager>
 {
+    private struct eventIndexItem
+    {
+        public StageGraphBaseData _targetStageGraph;
+        public int _savedIndex;
+    }
+
     private StageGraphBaseData                  _currentStage = null;
     private Dictionary<string, GameEntityBase>  _uniqueEntityDictionary = new Dictionary<string, GameEntityBase>();
     private int                                 _currentIndex = 0;
     private bool                                _isStageEventEnd = false;
+
+    private eventIndexItem                      _savedEventItem = new eventIndexItem{_savedIndex = 0, _targetStageGraph = null};
 
     private List<string>                        _deleteUniqueTargetList = new List<string>();
 
@@ -46,6 +54,12 @@ public class StageGraphManager : Singleton<StageGraphManager>
                 break;
             }
 
+            if(_currentStage._stageGraphPhase[1]._stageGraphEventList[index].getStageGraphEventType() == StageGraphEventType.SaveEventExecuteIndex)
+            {
+                _savedEventItem._savedIndex = index + 1;
+                _savedEventItem._targetStageGraph = _currentStage;
+            }
+
             ++index;
         }
 
@@ -67,6 +81,11 @@ public class StageGraphManager : Singleton<StageGraphManager>
             return null;
 
         return _uniqueEntityDictionary[uniqueKey];
+    }
+
+    public bool isValid()
+    {
+        return _currentStage != null;
     }
 
     public void stopStage()
@@ -97,6 +116,11 @@ public class StageGraphManager : Singleton<StageGraphManager>
         for(int index = _currentIndex; index < _currentStage._stageGraphPhase[1]._stageGraphEventCount; ++index)
         {
             _currentStage._stageGraphPhase[1]._stageGraphEventList[index].Initialize();
+        }
+
+        if(_currentStage == _savedEventItem._targetStageGraph)
+        {
+            _currentIndex = _savedEventItem._savedIndex;
         }
     }
 

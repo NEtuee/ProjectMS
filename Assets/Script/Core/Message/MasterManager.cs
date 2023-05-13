@@ -145,7 +145,7 @@ public class MasterManager : MessageHub<ManagerBase>
         CameraControlEx.Instance().progress(deltaTime);
         FMODAudioManager.Instance().updateAudio();
 
-        if(Input.GetKeyDown(KeyCode.Return))
+        if(Input.GetKeyDown(KeyCode.Return) && StageGraphManager.Instance().isValid() == false)
         {
             StageGraphManager.Instance().startStage("Assets\\Data\\StageGraph\\TestStage.xml");
         }

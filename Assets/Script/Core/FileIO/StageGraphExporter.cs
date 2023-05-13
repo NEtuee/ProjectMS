@@ -119,6 +119,10 @@ public class StageGraphLoader : LoaderBase<StageGraphBaseData>
         {
             spawnEvent = new StageGraphEvent_ApplyPostProcessProfile();
         }
+        else if(node.Name == "SaveEventExecuteIndex")
+        {
+            spawnEvent = new StageGraphEvent_SaveEventExecuteIndex();
+        }
 
 
         if(spawnEvent == null)

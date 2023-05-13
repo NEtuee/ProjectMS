@@ -217,6 +217,25 @@ public class StageGraphEvent_WaitTargetDead : StageGraphEventBase
     }
 }
 
+public class StageGraphEvent_SaveEventExecuteIndex : StageGraphEventBase
+{
+    public override StageGraphEventType getStageGraphEventType() => StageGraphEventType.SaveEventExecuteIndex;
+    
+    public override void Initialize()
+    {
+        
+    }
+
+    public override bool Execute(StageGraphManager graphManager,float deltaTime)
+    {
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+    }
+}
+
 public class StageGraphEvent_ApplyPostProcessProfile : StageGraphEventBase
 {
     private string _path = "";
@@ -382,6 +401,7 @@ public enum StageGraphEventType
     WaitTargetDead,
     TeleportTargetTo,
     ApplyPostProcessProfile,
+    SaveEventExecuteIndex,
     Count,
 }
 
