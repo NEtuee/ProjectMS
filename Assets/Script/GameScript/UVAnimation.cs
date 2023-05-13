@@ -12,7 +12,7 @@ public class UVAnimation : MonoBehaviour
         public float _speed;
         public SpriteRenderer _targetRenderer;
 
-        private Vector2 _currentUV = Vector2.zero;
+        public Vector2 _currentUV = Vector2.zero;
 
         public void updateUVAnimation(float deltaTime)
         {
@@ -22,10 +22,10 @@ public class UVAnimation : MonoBehaviour
             _currentUV += _direction * _speed * deltaTime;
 
             if(MathEx.abs(_currentUV.x) >= 1f)
-                _currentUV.x += _currentUV.x > 0f ? 1f : -1f;
+                _currentUV.x += _currentUV.x > 0f ? -1f : 1f;
             
             if(MathEx.abs(_currentUV.y) >= 1f)
-                _currentUV.x += _currentUV.x > 0f ? 1f : -1f;
+                _currentUV.x += _currentUV.x > 0f ? -1f : 1f;
 
             _targetRenderer.material.SetFloat("_UVX",_currentUV.x);
             _targetRenderer.material.SetFloat("_UVY",_currentUV.y);
