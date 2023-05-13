@@ -82,6 +82,7 @@ public class EffectRequestData : MessageData
 
 public abstract class EffectItemBase
 {
+    public  ObjectBase             _spawnOwner = null;
     public EffectUpdateType        _effectUpdateType = EffectUpdateType.NoneScaledDeltaTime;
     public EffectType              _effectType = EffectType.SpriteEffect;
     public string                  _effectPath = "";
@@ -320,7 +321,10 @@ public class TimelineEffectItem : EffectItemBase
 
         if(_timelineEffectControl != null && _timelineEffectControl._isCharacterMaterialEffect)
             _timelineEffectControl.setCharacterAnimator(effectData._timelineAnimator);
-            
+        
+        if(_timelineEffectControl != null && _timelineEffectControl._isLaserEffect && _executeObject is GameEntityBase)
+            (_executeObject as GameEntityBase).addLaserEffect(this);
+
         _effectObject.SetActive(true);
         _playableDirector.Stop();
         _playableDirector.Play();
@@ -715,6 +719,7 @@ public class EffectManager : ManagerBase
             return null;
         }
 
+        itemBase._spawnOwner = requestData._executeEntity;
         _processingItems.Add(itemBase);
 
         return itemBase;

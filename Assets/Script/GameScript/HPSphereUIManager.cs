@@ -72,12 +72,12 @@ public class HPSphereUIManager : Singleton<HPSphereUIManager>
 
             Vector3 gaugePosition = Vector3.down * (((float)currentIndex * _sphereYGap) - _sphereYOffset);
             gaugePosition.x = _sphereXOffset + xOffset;// * (_targetEntity.getFlipState().xFlip ? 1f : -1f);
-            gaugePosition += new Vector3(Random.Range(-0.07f,0.07f),Random.Range(-0.07f,0.07f),0f);
 
-            if(currentGagueStackCount > _beforeStackCount && _gaugeStackCount - _beforeStackCount > index)
-                _enabledSpheres[index].setPosition(_targetEntityTransform.position + gaugePosition);
-
-            _enabledSpheres[index].progress(_targetEntityTransform.position + gaugePosition,deltaTime);
+            //if(currentGagueStackCount > _beforeStackCount && _gaugeStackCount - _beforeStackCount > index)
+            _enabledSpheres[index].setPosition(_targetEntityTransform.position + gaugePosition);
+             
+            gaugePosition = new Vector3(Random.Range(-0.07f,0.07f),Random.Range(-0.07f,0.07f),0f);
+            _enabledSpheres[index].progress(gaugePosition,deltaTime);
             ++currentIndex;
         }
 

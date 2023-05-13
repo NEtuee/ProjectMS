@@ -66,6 +66,9 @@ public class GameEntityBase : SequencerObjectBase
     private Quaternion          _actionStartRotation = Quaternion.identity;
     private Quaternion          _angleBaseRotation = Quaternion.identity;
 
+
+    private List<TimelineEffectItem> _enabledLaserEffectItems = new List<TimelineEffectItem>();
+
     public override void assign()
     {
         base.assign();
@@ -117,6 +120,10 @@ public class GameEntityBase : SequencerObjectBase
         statusInfoName = characterInfo._statusName;
         _headUpOffset = characterInfo._headUpOffset;
 
+        _enabledLaserEffectItems.Clear();
+
+
+
         _movementControl.initialize();
         _actionGraph.initialize(ResourceContainerEx.Instance().GetActionGraph(characterInfo._actionGraphPath));
         _aiGraph.initialize(this, _actionGraph, ResourceContainerEx.Instance().GetAIGraph(characterInfo._aiGraphPath));
@@ -150,6 +157,8 @@ public class GameEntityBase : SequencerObjectBase
         _leftHP = 0f;
 
         base.initialize();
+
+        _enabledLaserEffectItems.Clear();
         
         _movementControl.initialize();
         _actionGraph.initialize(ResourceContainerEx.Instance().GetActionGraph(actionGraphPath));
@@ -300,6 +309,8 @@ public class GameEntityBase : SequencerObjectBase
 
             debugTextManager.updateDebugText("FrameTag","FrameTag: " + frameTag);
         }
+
+        laserEffectCheck();
     
         if(getDefenceAngle() != 0f)
             GizmoHelper.instance.drawArc(transform.position,0.8f,getDefenceAngle(),_defenceDirection,Color.cyan,0f);
@@ -423,6 +434,28 @@ public class GameEntityBase : SequencerObjectBase
     {
         _attackState = AttackState.Default;
         _defenceState = DefenceState.Default;
+    }
+
+    public void laserEffectCheck()
+    {
+        for(int index = 0; index < _enabledLaserEffectItems.Count; ++index)
+        {
+            if(_enabledLaserEffectItems[index].isActivated() && _enabledLaserEffectItems[index]._spawnOwner == this)
+                continue;
+            
+            _enabledLaserEffectItems.RemoveAt(index);
+            --index;
+        }
+
+        if(_actionGraph.checkCurrentActionFlag(ActionFlags.LaserEffect) == false)
+        {
+            for(int index = 0; index < _enabledLaserEffectItems.Count; ++index)
+            {
+                _enabledLaserEffectItems[index].release();
+            }
+            _enabledLaserEffectItems.Clear();
+        }
+
     }
 
     public void updateStatusConditionData(string targetName, float value)
@@ -772,6 +805,11 @@ public class GameEntityBase : SequencerObjectBase
     public void executeCustomAIEvent(string eventName)
     {
         _aiGraph.executeCustomAIEvent(eventName);
+    }
+
+    public void addLaserEffect(TimelineEffectItem laserEffect)
+    {
+        _enabledLaserEffectItems.Add(laserEffect);
     }
 
     public float getHeadUpOffset() {return _headUpOffset;}

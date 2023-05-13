@@ -217,6 +217,42 @@ public class StageGraphEvent_WaitTargetDead : StageGraphEventBase
     }
 }
 
+public class StageGraphEvent_ApplyPostProcessProfile : StageGraphEventBase
+{
+    private string _path = "";
+
+    public override StageGraphEventType getStageGraphEventType() => StageGraphEventType.ApplyPostProcessProfile;
+    
+    public override void Initialize()
+    {
+        
+    }
+
+    public override bool Execute(StageGraphManager graphManager,float deltaTime)
+    {
+        ScriptableObject profile = ResourceContainerEx.Instance().GetScriptableObject(_path);
+        if(profile == null || (profile is PostProcessProfile) == false)
+            return true;
+
+        (profile as PostProcessProfile).syncValueToMaterial(false);
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "Path")
+                _path = attrValue;
+        }
+    }
+}
+
 public class StageGraphEvent_TeleportTargetTo : StageGraphEventBase
 {
     private string _uniqueKey = "";
@@ -345,6 +381,7 @@ public enum StageGraphEventType
     SetHPSphere,
     WaitTargetDead,
     TeleportTargetTo,
+    ApplyPostProcessProfile,
     Count,
 }
 

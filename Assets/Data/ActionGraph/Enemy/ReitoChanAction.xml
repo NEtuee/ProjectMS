@@ -185,7 +185,7 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_SpawnGauntlet>
 
-    <AC_CremationBeamReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+    <AC_CremationBeamReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="LaserEffect">
         <AnimationHeader MasterPath="Sprites/Enemy/KantoReito/2_cremationBeam/"/>
         <Animation Preset="1_cremationBeamReady" XFlip="true" Duration="0.85">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
@@ -198,7 +198,7 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_CremationBeamReady>
 
-    <AC_CremationBeamShot MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+    <AC_CremationBeamShot MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" Flags="LaserEffect">
         <AnimationHeader MasterPath="Sprites/Enemy/KantoReito/2_cremationBeam/"/>
         <Animation Preset="2_cremationBeamShot" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>

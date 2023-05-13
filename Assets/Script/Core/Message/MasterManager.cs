@@ -173,6 +173,8 @@ public class MasterManager : MessageHub<ManagerBase>
             _updateStopTimer = time;
     }
 
+    public bool isGameUpdate() {return _update;}
+
     public void setTimeScaleSecond(float timeScale, float time, float blendTime)
     {
         _targetTimeScale = timeScale;

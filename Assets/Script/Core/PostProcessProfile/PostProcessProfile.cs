@@ -20,6 +20,7 @@ public class PostProcessProfile : ScriptableObject
     public float _brightness = 0f;
     public float _saturation = 0f;
     public Color _colorTint = Color.white;
+    public Color _backgroundColorTint = Color.white;
 
     public float _blurSize = 0f;
     public float _multiSampleDistance = 0f;
@@ -71,6 +72,7 @@ public class PostProcessProfile : ScriptableObject
         targetMaterial.SetFloat("_Brightness",_brightness);
         targetMaterial.SetFloat("_Saturation",_saturation);
         targetMaterial.SetColor("_ColorTint",_colorTint);
+        targetMaterial.SetColor("_BackgroundColorTint",_backgroundColorTint);
         
         targetMaterial.SetFloat("_BlurSize",_blurSize);
         targetMaterial.SetFloat("_MultiSampleDistance",_multiSampleDistance);
@@ -116,6 +118,7 @@ public class PostProcessProfileEditor : Editor
         isChange |= floatSlider("Brightness",ref controll._brightness, 0f, 10f);
         isChange |= floatSlider("Saturation",ref controll._saturation, 0f, 10f);
         isChange |= colorPicker("Color Tint",ref controll._colorTint);
+        isChange |= colorPicker("Background Color Tint",ref controll._backgroundColorTint);
 
         GUILayout.Space(20f);
         isChange |= floatSlider("Blur Size",ref controll._blurSize, 0f, 10f);

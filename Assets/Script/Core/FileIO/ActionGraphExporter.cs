@@ -335,6 +335,10 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
                     {
                         nodeData._actionFlag |= (ulong)ActionFlags.ClearPush;
                     }
+                    else if(targetFlag == "LaserEffect")
+                    {
+                        nodeData._actionFlag |= (ulong)ActionFlags.LaserEffect;
+                    }
                 }
             }
             else

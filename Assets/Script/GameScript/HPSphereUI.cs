@@ -20,6 +20,8 @@ public class HPSphereUI
 
     private float _prevBattlePoint = 0f;
 
+    private Vector3 _shakeOffset = Vector3.zero;
+
     public void createSpriteRenderObject()
     {
         _hpSpriteObject = new GameObject("SpriteObject");
@@ -82,7 +84,8 @@ public class HPSphereUI
 
     public void progress(Vector3 followPosition, float deltaTime)
     {
-        _hpSpriteObject.transform.position = MathEx.damp(_hpSpriteObject.transform.position,followPosition,18f,deltaTime);
+        _shakeOffset = MathEx.damp(_shakeOffset,followPosition,7f,deltaTime);
+        _hpSpriteObject.transform.position += _shakeOffset;
 
         if(_bpAnimationSpriteObject.activeInHierarchy)
         {
