@@ -222,6 +222,7 @@
         <!-- 투구 준비 모션, 탄막 경로 활성화 -->
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/2_pitchingPattern/"/>
         <Animation Preset="2_pitcherReady" XFlip="true" Duration="0.65">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2105" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
             <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/NajimiPitchingBeam_TimeLine" Attach="true" AngleType="Direction" LifeTime="0.82" FollowDirection="True"/>
 
@@ -238,11 +239,11 @@
         <Animation Preset="1_pitchingMain" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
             <!-- TODO: 투구 이펙트 추가해야함. 해당 이펙트 지속시간에 따라 Main 모션 시간과 Attack 지속 시간 조정 -->
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2105" Attach="true"/>
+            
             <FrameEvent Type="AudioPlay" StartTime="0.17" ID="2106" Attach="true"/>
             <FrameEvent Type="Attack" StartTime="0.17" AttackPreset="Najimi_Pitching">
                 <OnHit>
-                    <FrameEvent Type="AudioPlay" StartTime="0" ID="2107" Attach="true"/>
+                    <FrameEvent Type="AudioPlay" StartTime="0.1" ID="2107"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonDoubleAttack"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="StunSet"/>
 
