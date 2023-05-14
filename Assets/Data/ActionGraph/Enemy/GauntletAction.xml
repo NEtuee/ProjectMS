@@ -45,6 +45,7 @@
     <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction" RotationType="Keep">
         <AnimationHeader MasterPath="Sprites/Enemy/Gauntlet/0_default/"/>
         <Animation Preset="4_hit" XFlip="true" Duration="1.25">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2301" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ZoomEffect" Scale="2.8"/>
             <FrameEvent Type="StopUpdate" Time="0.15"/>
@@ -87,9 +88,11 @@
     <AC_Rush MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/Gauntlet/1_rush/"/>
         <Animation Preset="1_rushMain" XFlip="true" Duration="0.6">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2302" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="24" MaxVelocity="12" Velocity="12" Speed="0"/>
             <FrameEvent Type="Attack" StartTime="0" EndTime="0.2" AttackPreset="Najimi_Rush" AttackType="Catch" CatchOffset="0.1 0 0">
                 <OnCatch>
+                    <FrameEvent Type="AudioPlay" StartTime="0" ID="2303" Attach="true"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CatchedSet"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
                     
@@ -112,6 +115,7 @@
     <!-- 아카네 잡기에 성공하여 꽉 쥐는 모션 -->
     <AC_RushSuccess_Entry MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction">
         <Animation Preset="Sprites/Enemy/Gauntlet/1_rush/3_grabPre" XFlip="true" Duration="1.0">
+            
             <FrameEvent Type="Movement" StartTime="0" Friction="12"/>
             <FrameEvent Type="ReleaseCatch" StartTime="1" Push="1 0 0" Condition="getTargetFrameTag_Recatchable == false"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="CatchProcess"/>
@@ -121,6 +125,7 @@
     </AC_RushSuccess_Entry>
     <AC_RushSuccess_Struggle MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction">
         <Animation Preset="Sprites/Enemy/Gauntlet/1_rush/5_struggle" XFlip="true" Duration="1.0">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2304" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12"/>
             <FrameEvent Type="ReleaseCatch" StartTime="1" Push="1 0 0" Condition="getTargetFrameTag_Recatchable == false"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="CatchProcess"/>
@@ -135,6 +140,7 @@
             
             <FrameEvent Type="Attack" StartTime="0" AttackPreset="Najimi_Catch">
                 <OnHit>
+                    <FrameEvent Type="AudioPlay" StartTime="0" ID="2305" Attach="true"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
                     <FrameEvent Type="ZoomEffect" Scale="2.8"/>
                     <FrameEvent Type="StopUpdate" Time="0.15"/>

@@ -437,6 +437,7 @@
 
     <CatchReleased MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction" RotationType="Direction">
         <Animation Preset="Sprites/NewPlayer/catchRealese/" XFlip="true" Duration="1.3">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="1001" Attach="true"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="CatchedClear"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="StunClear"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="1.3" Tag="CatchReleased"/>
