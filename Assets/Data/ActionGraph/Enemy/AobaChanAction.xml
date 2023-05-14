@@ -125,7 +125,7 @@
         <Branch Condition="End" Execute="AC_StormPre"/>
     </AC_StormPre>
 
-    <AC_Storm MovementType="GraphPreset" MovementGraphPreset="Aoba_Storm" DirectionType="AI" FlipType="Direction">
+    <AC_Storm MovementType="GraphPreset" MovementGraphPreset="Aoba_Storm" DirectionType="AI" FlipType="Direction" RotationType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/1_stormRaisen/"/>
         <Animation Preset="2_stormMain" XFlip="true" Duration="0.27">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2403" Attach="true"/>
@@ -144,7 +144,7 @@
         <Branch Condition="End" Execute="AC_StormPre"/>
     </AC_Storm>
 
-    <AC_StormPost MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+    <AC_StormPost MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/1_stormRaisen/"/>
         <Animation Preset="3_stormPost" XFlip="true" Duration="0.05">
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
@@ -154,7 +154,7 @@
         <Branch Condition="End" Execute="AC_StormPost"/>
     </AC_StormPost>
 
-    <AC_StormRaisenPre MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+    <AC_StormRaisenPre MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/1_stormRaisen/"/>
         <Animation Preset="4_stormRaisenPre" XFlip="true" Duration="0.15">
         </Animation>
@@ -162,7 +162,7 @@
         <Branch Condition="End" Execute="AC_StormRaisenPre"/>
     </AC_StormRaisenPre>
 
-    <AC_StormRaisenSlash MovementType="GraphPreset" MovementGraphPreset="Aoba_Choraisen" DirectionType="AI" FlipType="Direction">
+    <AC_StormRaisenSlash MovementType="GraphPreset" MovementGraphPreset="Aoba_Choraisen" DirectionType="AI" FlipType="Direction" RotationType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/1_stormRaisen/"/>
         <Animation Preset="5_stormRaisenMain" XFlip="true" Duration="0.8">
             <FrameEvent Type="Attack" StartTime="0" AttackPreset="Aoba_Choraisen">
@@ -190,7 +190,7 @@
 
     <AC_StormRaisenSuccess MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
         <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/1_stormRaisen/"/>
-        <Animation Preset="6_stormRaisenSuccess" XFlip="true" ScalePreset="YSpring" Duration="0.44">
+        <Animation Preset="6_stormRaisenSuccess" XFlip="true" Duration="0.44">
             <FrameEvent Type="Movement" StartTime="0" Friction="90" MaxVelocity="20" Speed="0"/>
             
             <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="HitAvail"/>
@@ -219,7 +219,7 @@
     </AC_EmpThrow>
 
     <!-- 약진 뢰섬 -->
-    <AC_ChargeRaisenReady MovementType="GraphPreset" MovementGraphPreset="Aoba_Charge" DirectionType="AI" FlipType="Direction">
+    <AC_ChargeRaisenReady MovementType="GraphPreset" MovementGraphPreset="Aoba_Charge" DirectionType="AI" FlipType="Direction" RotationType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/3_chargeRaisen/"/>
         <Animation Preset="1_chargeReady" XFlip="true" Duration="0.2">
             <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="999" Tag="HitAvail"/>
@@ -235,7 +235,7 @@
         <Branch Condition="End" Execute="AC_ChargeRaisenPre"/>
     </AC_ChargeRaisenReady>
 
-    <AC_ChargeRaisenPre MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+    <AC_ChargeRaisenPre MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/3_chargeRaisen/"/>
         <Animation Preset="3_chargeRaisenPre" XFlip="true" Duration="0.12">
             <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="999" Tag="HitAvail"/>
@@ -271,7 +271,7 @@
 
     <AC_ChargeRaisenSuccess MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
         <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/3_chargeRaisen/"/>
-        <Animation Preset="5_chargeRaisenSuccess" XFlip="true" ScalePreset="YSpring" Duration="0.44">
+        <Animation Preset="5_chargeRaisenSuccess" XFlip="true" Duration="0.44">
             <FrameEvent Type="Movement" StartTime="0" Friction="90" MaxVelocity="20" Speed="0"/>
             
             <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="HitAvail"/>
@@ -404,7 +404,7 @@
 
     <AC_RaisenSuccess MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
         <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/4_Tsuba/7_raisen/"/>
-        <Animation Preset="3_raisenSuccess" XFlip="true" ScalePreset="YSpring" Duration="0.44">
+        <Animation Preset="3_raisenSuccess" XFlip="true" Duration="0.44">
             <FrameEvent Type="Movement" StartTime="0" Friction="15" MaxVelocity="6.5" Velocity="6.5" Speed="0"/>
 
             <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="HitAvail"/>
@@ -464,7 +464,7 @@
 
     <AC_UnwaverRaisenSuccess MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
         <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/5_unwaverRaisen/"/>
-        <Animation Preset="3_unwaverSuccess" XFlip="true" ScalePreset="YSpring" Duration="0.44">
+        <Animation Preset="3_unwaverSuccess" XFlip="true" Duration="0.44">
             <FrameEvent Type="Movement" StartTime="0" Friction="90" MaxVelocity="20" Speed="0"/>
             
             <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="HitAvail"/>
@@ -512,7 +512,7 @@
 
     <AC_ChoraisenSuccess MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
         <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/5_unwaverRaisen/4_choraisen/"/>
-        <Animation Preset="3_choraisenSuccess" XFlip="true" ScalePreset="YSpring" Duration="0.44">
+        <Animation Preset="3_choraisenSuccess" XFlip="true" Duration="0.44">
             <FrameEvent Type="Movement" StartTime="0" Friction="90" MaxVelocity="20" Speed="0"/>
             
             <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="HitAvail"/>
@@ -540,7 +540,7 @@
 
     <AC_Warpped MovementType="FrameEvent" DirectionType="AI" RotationType="Direction" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/6_warpChase/"/>
-        <Animation Preset="2_warpSuccess" XFlip="true" ScalePreset="YSpring" Duration="0.2">
+        <Animation Preset="2_warpSuccess" XFlip="true" Duration="0.2">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Velocity="-3" Speed="0"/>
             
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
