@@ -37,7 +37,7 @@
                 <AIEvent Type="SetAction" Action="AC_RushSuccess_Attack"/>
             </Event_OnExecute>
             
-            <Branch Condition="getTargetFrameTag_Dead" Execute="TerminatePackage"/>
+            <Branch Condition="getTargetFrameTag_Dead" Execute="AI_Idle"/>
             <Branch Condition="End && getTargetFrameTag_Recatchable" Execute="AI_RushSuccess"/>
             <Branch Condition="IsCatcher == false" Execute="AI_Away"/>
             <Branch Condition="End" Execute="AI_Away"/>
@@ -50,6 +50,14 @@
         
             <Branch Condition="End" Execute="TerminatePackage"/>
         </AI_Away>
+
+        <AI_Idle UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <Event_OnExecute>
+                <AIEvent Type="SetAction" Action="AC_Idle"/>
+            </Event_OnExecute>
+        
+            <Branch Condition="End" Execute="TerminatePackage"/>
+        </AI_Idle>
 
         <!--
         <AI_AwayStand UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">

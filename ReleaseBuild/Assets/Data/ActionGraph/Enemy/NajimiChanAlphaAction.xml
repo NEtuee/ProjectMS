@@ -106,12 +106,22 @@
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_Groggy>
     
-    <Dead DirectionType="Keep" FlipType="Direction">
+    <Dead_Loop DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/0_default/"/>
         <Animation Preset="5_dead" XFlip="true" Duration="1">
         </Animation>
 
-        <Branch Condition="End == true" Execute="Dead"/>
+        <Branch Condition="End == true" Execute="Dead_Loop"/>
+    </Dead_Loop>
+
+    <Dead DirectionType="Keep" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/0_default/"/>
+        <Animation Preset="5_dead" XFlip="true" Duration="1">
+            <FrameEvent Type="SetTimeScale" Scale="0.1" Time="1.0" BlendTime="1.0"/>
+            <FrameEvent Type="ZoomEffect" Scale="2.3"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Dead_Loop"/>
     </Dead>
 
     <!-- 피격 리액션으로 러시 공격 시 준비 모션 -->
@@ -249,6 +259,10 @@
 
                     <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Slash" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
                     <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Blood" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
+                    <FrameEvent Type="Effect" Path="Sprites/Projectile/BaseBall" FramePerSecond="0.2" CastShadow="True" Offset="0.0 0.1 0.0" Attach="true" ToTarget="true" AngleType="AttackPoint">
+                        <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
+                    </FrameEvent>
+                
                     <FrameEvent Type="StopUpdate" Time="0.07"/>
                 </OnHit>
             
