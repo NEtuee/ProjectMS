@@ -98,3 +98,14 @@ public class CharacterEntityBase : GameEntityBase
         }
     }
 }
+
+#if UNITY_EDITOR
+[CustomEditor(typeof(CharacterEntityBase))]
+public class CharacterEntityBaseEditor : GameEntityBaseEditor
+{
+    public override void OnInspectorGUI()
+    {
+        base.OnInspectorGUI();
+    }
+}
+#endif

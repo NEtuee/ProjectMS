@@ -704,4 +704,9 @@ public class ActionGraph
     public MovementBase.MovementType getCurrentMovement() {return getCurrentAction()._movementType;}
     public MovementGraphPresetData getCurrentMovementGraphPreset() {return getCurrentAction()._movementGraphPresetData;}
     private ActionGraphNodeData getCurrentAction() {return _actionGraphBaseData._actionNodeData[_currentActionNodeIndex];}
+
+#if UNITY_EDITOR
+    public ActionGraphNodeData getCurrentAction_Debug() {return _actionGraphBaseData._actionNodeData[_currentActionNodeIndex];}
+    public ActionGraphBaseData getActionGraphBaseData_Debug() {return _actionGraphBaseData;}
+#endif
 }

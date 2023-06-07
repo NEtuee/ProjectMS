@@ -26,6 +26,9 @@ public class AIGraph
     private bool _packageEnd = false;
     private bool _arrived = false;
 
+    private bool _aiStateChanged = false;
+    private bool _aiPackageStateChanged = false;
+
     private bool _rotateProcess = false;
     private float _rotateProcessTime = 0f;
     private float _rotateProcessTimer = 0f;
@@ -121,9 +124,9 @@ public class AIGraph
         _reservedTargetEvents.Clear();
         _reservedEvents.Clear();
         _reservedCustomEvents.Clear();
-        
-        processAINode(deltaTime, getCurrentAINode(), targetEntity);
-        processAIPackage(deltaTime, getCurrentAIPackageNode(), targetEntity);
+
+        _aiStateChanged = processAINode(deltaTime, getCurrentAINode(), targetEntity);
+        _aiPackageStateChanged = processAIPackage(deltaTime, getCurrentAIPackageNode(), targetEntity);
 
         processRotate(deltaTime);
         return true;
@@ -138,6 +141,9 @@ public class AIGraph
     {
 
     }
+
+    public bool isAIStateChanged() {return _aiStateChanged;}
+    public bool isAIPackageStateChanged() {return _aiPackageStateChanged;}
 
     public void processRotate(float deltaTime)
     {
@@ -465,4 +471,12 @@ public class AIGraph
     private AIPackageBaseData getPrevAIPackage() {return _aiGraphBaseData._aiPackageData[getPrevAINode()._packageIndex];}
     private AIGraphNodeData getCurrentAINode() {return _aiGraphBaseData._aiGraphNodeData[_currentAINodeIndex];}
     private AIGraphNodeData getPrevAINode() {return _aiGraphBaseData._aiGraphNodeData[_prevAINodeIndex];}
+
+#if UNITY_EDITOR
+    public AIGraphNodeData getCurrentAINode_Debug() {return getCurrentAINode();}
+    public AIPackageNodeData getCurrentAIPackageNode_Debug() {return getCurrentAIPackageNode();}
+
+    public AIGraphBaseData getAIGraphBaseData_Debug() {return _aiGraphBaseData;}
+    public AIPackageBaseData getCurrentPackageBaseData_Debug() {return getCurrentAIPackage();}
+#endif
 }

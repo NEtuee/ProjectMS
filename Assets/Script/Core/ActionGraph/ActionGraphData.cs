@@ -20,6 +20,10 @@ public class ActionGraphBaseData
     public int                                  _conditionCompareDataCount = -1;
     public int                                  _animationPlayDataCount = -1;
 
+#if UNITY_EDITOR
+    public string _fullPath;
+#endif
+
     public void buildActionIndexMap()
     {
         for(int i = 0; i < _actionNodeCount; ++i)
@@ -78,6 +82,10 @@ public class ActionGraphNodeData
     public int                          _index;
     public int                          _branchIndexStart;
     public int                          _branchCount;
+
+#if UNITY_EDITOR
+    public int _lineNumber;
+#endif
 }
 
 public enum DirectionType
@@ -108,6 +116,10 @@ public class ActionGraphBranchData
     public int      _conditionCompareDataIndex = -1;
     public int      _keyConditionCompareDataIndex = -1;
     public int      _weightConditionCompareDataIndex = -1;
+
+#if UNITY_EDITOR
+    public int _lineNumber;
+#endif
 }
 
 public enum ActionFlags : ulong

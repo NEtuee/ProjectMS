@@ -42,7 +42,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         
         if(node.Name.Equals("ActionGraph") == false)
         {
-            DebugUtil.assert(false,"wrong xml type. name : {0} [FileName {1}]",node.Name, _currentFileName);
+            DebugUtil.assert_fileOpen(false,"wrong xml type. name : {0} [FileName {1}]", _currentFileName,0,node.Name);
             return null;
         }
         
@@ -50,6 +50,11 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         string defaultActionName = "";
 
         ActionGraphBaseData actionBaseData = new ActionGraphBaseData();
+
+#if UNITY_EDITOR
+        actionBaseData._fullPath = path;
+#endif
+
         ReadTitle(node,actionBaseData,out defaultFramePerSecond, out defaultActionName, path);
 
         List<ActionGraphNodeData> nodeDataList = new List<ActionGraphNodeData>();
@@ -79,7 +84,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             ActionGraphNodeData nodeData = ReadAction(nodeList[i],defaultFramePerSecond, ref animationDataList, ref actionCompareDic, ref branchDataList,ref compareDataList, in branchSetDic, path);
             if(nodeData == null)
             {
-                DebugUtil.assert(false,"node data is null : [NodeName: {0}] [Line: {1}] [FileName: {2}]",nodeList[i].Name, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
+                DebugUtil.assert_fileOpen(false,"node data is null : [NodeName: {0}] [Line: {1}] [FileName: {2}]", _currentFileName, XMLScriptConverter.getLineNumberFromXMLNode(node),nodeList[i].Name, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
                 return null;
             }
 
@@ -87,7 +92,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
 
             if(actionIndexDic.ContainsKey(nodeData._nodeName))
             {
-                DebugUtil.assert(false,"중복된 액션이 존재합니다. 확인해 주세요 : [NodeName: {0}] [Line: {1}] [FileName: {2}]",nodeList[i].Name, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
+                DebugUtil.assert_fileOpen(false,"중복된 액션이 존재합니다. 확인해 주세요 : [NodeName: {0}] [Line: {1}] [FileName: {2}]", _currentFileName, XMLScriptConverter.getLineNumberFromXMLNode(node),nodeList[i].Name, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
                 return null;
             }
             actionIndexDic.Add(nodeData._nodeName,actionIndex++);
@@ -97,7 +102,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         {
             if(actionIndexDic.ContainsKey(item.Value) == false)
             {
-                DebugUtil.assert(false,"target action is not exists : {0} [FileName: {1}]",item.Value, _currentFileName);
+                DebugUtil.assert_fileOpen(false,"target action is not exists : {0} [FileName: {1}]", _currentFileName, XMLScriptConverter.getLineNumberFromXMLNode(node),item.Value, _currentFileName);
                 return null;
             }
             else if(item.Value == defaultActionName)
@@ -112,7 +117,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         {
             if(actionIndexDic.ContainsKey(defaultActionName) == false)
             {
-                DebugUtil.assert(false, "invalid default action name: {0} [FileName: {1}]",defaultActionName, _currentFileName);
+                DebugUtil.assert_fileOpen(false, "invalid default action name: {0} [FileName: {1}]", _currentFileName, XMLScriptConverter.getLineNumberFromXMLNode(node),defaultActionName, _currentFileName);
                 return null;
             }
 
@@ -148,7 +153,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
 
         if(name == "" || value == "" || name.Contains("gv_") == false )
         {
-            DebugUtil.assert(false, "invalid globalVariable, [name: {0}] [value: {1}] [Line: {2}] [FileName: {3}]",name,value, XMLScriptConverter.getLineFromXMLNode(node), filePath);
+            DebugUtil.assert_fileOpen(false, "invalid globalVariable, [name: {0}] [value: {1}] [Line: {2}] [FileName: {3}]", _currentFileName, XMLScriptConverter.getLineNumberFromXMLNode(node),name,value, XMLScriptConverter.getLineFromXMLNode(node), filePath);
             return;
         }
 
@@ -194,13 +199,13 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
 
         if(branchSetName == "")
         {
-            DebugUtil.assert(false, "branchSet name can not be Empty");
+            DebugUtil.assert_fileOpen(false, "branchSet name can not be Empty", _currentFileName, XMLScriptConverter.getLineNumberFromXMLNode(branchSetParent));
             return;
         }
 
         if(branchSetParent.ChildNodes.Count == 0)
         {
-            DebugUtil.assert(false, "branchSet is empty : [Name: {0}] [Line: {1}] [FileName: {2}]",branchSetName, XMLScriptConverter.getLineFromXMLNode(branchSetParent), filePath);
+            DebugUtil.assert_fileOpen(false, "branchSet is empty : [Name: {0}] [Line: {1}] [FileName: {2}]", _currentFileName, XMLScriptConverter.getLineNumberFromXMLNode(branchSetParent),branchSetName, XMLScriptConverter.getLineFromXMLNode(branchSetParent), filePath);
             return;
         }
 
@@ -211,7 +216,9 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
     {
         ActionGraphNodeData nodeData = new ActionGraphNodeData();
         nodeData._nodeName = node.Name;
-
+#if UNITY_EDITOR
+        nodeData._lineNumber = XMLScriptConverter.getLineNumberFromXMLNode(node);
+#endif
         //action attribute
         XmlAttributeCollection actionAttributes = node.Attributes;
         if(actionAttributes == null)
@@ -285,7 +292,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
 
                     if(buffKey == -1)
                     {
-                        DebugUtil.assert(false, "invalidBuff : {0} [Line: {1}] [FileName: {2}]", buffList[i], XMLScriptConverter.getLineFromXMLNode(node), filePath);
+                        DebugUtil.assert_fileOpen(false, "invalidBuff : {0} [Line: {1}] [FileName: {2}]", _currentFileName, XMLScriptConverter.getLineNumberFromXMLNode(node), buffList[i], XMLScriptConverter.getLineFromXMLNode(node), filePath);
                         continue;
                     }
 
@@ -335,7 +342,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             }
             else
             {
-                DebugUtil.assert(false,"invalid attribute type !!! : {0} [Line: {1}] [FileName: {2}]", targetName, XMLScriptConverter.getLineFromXMLNode(node), filePath);
+                DebugUtil.assert_fileOpen(false,"invalid attribute type !!! : {0} [Line: {1}] [FileName: {2}]", _currentFileName, XMLScriptConverter.getLineNumberFromXMLNode(node), targetName, XMLScriptConverter.getLineFromXMLNode(node), filePath);
             }
         }
 
@@ -370,17 +377,23 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
                 nodeData._animationInfoIndex = animationDataList.Count;
                 animationData._hasMovementGraph = nodeData._movementType == MovementBase.MovementType.RootMotion;
                 animationPlayDataInfoList.Add(animationData);
+
+#if UNITY_EDITOR
+                animationData._lineNumber = XMLScriptConverter.getLineNumberFromXMLNode(nodeList[i]);
+#endif
             }
             else if(nodeList[i].Name == "Branch")
             {
                 ActionGraphBranchData branchData = ReadActionBranch(nodeList[i],ref actionCompareDic,ref compareDataList, ref _globalVariables, filePath);
                 if(branchData == null)
                 {
-                    DebugUtil.assert(false,"invalid branch data [Line: {0}] [FileName: {1}]", XMLScriptConverter.getLineFromXMLNode(node), filePath);
+                    DebugUtil.assert_fileOpen(false,"invalid branch data [Line: {0}] [FileName: {1}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node), XMLScriptConverter.getLineFromXMLNode(node), filePath);
                     return null;
                 }
                     
-                    
+#if UNITY_EDITOR
+                branchData._lineNumber = XMLScriptConverter.getLineNumberFromXMLNode(nodeList[i]);
+#endif
                 branchDataList.Add(branchData);
             }
             else if(nodeList[i].Name == "UseBranchSet")
@@ -397,7 +410,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
 
                 if(branchSetDic.ContainsKey(branchSetName) == false)
                 {
-                    DebugUtil.assert(false, "branch set not exists : {0} [Line: {1}] [FileName: {2}]",branchSetName, XMLScriptConverter.getLineFromXMLNode(node), filePath);
+                    DebugUtil.assert_fileOpen(false, "branch set not exists : {0} [Line: {1}] [FileName: {2}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node),branchSetName, XMLScriptConverter.getLineFromXMLNode(node), filePath);
                     return null;
                 }
 
@@ -406,16 +419,20 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
                 {
                     if(branchSetNodeList[branchSetNodeListIndex].Name != "Branch")
                     {
-                        DebugUtil.assert(false, "wrong branch type : {0} [Line: {1}] [FileName: {2}]",branchSetNodeList[branchSetNodeListIndex].Name, XMLScriptConverter.getLineFromXMLNode(node), filePath);
+                        DebugUtil.assert_fileOpen(false, "wrong branch type : {0} [Line: {1}] [FileName: {2}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node),branchSetNodeList[branchSetNodeListIndex].Name, XMLScriptConverter.getLineFromXMLNode(node), filePath);
                         return null;
                     }
 
                     ActionGraphBranchData branchData = ReadActionBranch(branchSetNodeList[branchSetNodeListIndex],ref actionCompareDic,ref compareDataList, ref _globalVariables, filePath);
                     if(branchData == null)
                     {
-                        DebugUtil.assert(false,"invalid branch data [Line: {0}] [FileName: {1}]", XMLScriptConverter.getLineFromXMLNode(node), filePath);
+                        DebugUtil.assert_fileOpen(false,"invalid branch data [Line: {0}] [FileName: {1}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node), XMLScriptConverter.getLineFromXMLNode(node), filePath);
                         return null;
                     }
+
+#if UNITY_EDITOR
+                    branchData._lineNumber = XMLScriptConverter.getLineNumberFromXMLNode(nodeList[i]);
+#endif
 
                     branchDataList.Add(branchData);
                 }
@@ -424,7 +441,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
 
         if(branchStartIndex == branchDataList.Count)
         {
-            DebugUtil.assert(false,"branch data not exists [Line: {0}] [FileName: {1}]", XMLScriptConverter.getLineFromXMLNode(node), filePath);
+            DebugUtil.assert_fileOpen(false,"branch data not exists [Line: {0}] [FileName: {1}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node), XMLScriptConverter.getLineFromXMLNode(node), filePath);
             return null;
         }
 
@@ -457,7 +474,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             {
                 if(actionTime != -1f)
                 {
-                    DebugUtil.assert(false, "ActionTime이 존재하면 FramePerSecond를 쓰면 안됩니다 [Line: {1}] [FileName: {2}]",XMLScriptConverter.getLineFromXMLNode(node), filePath);
+                    DebugUtil.assert_fileOpen(false, "ActionTime이 존재하면 FramePerSecond를 쓰면 안됩니다 [Line: {1}] [FileName: {2}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node),XMLScriptConverter.getLineFromXMLNode(node), filePath);
                     continue;
                 }
 
@@ -513,7 +530,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
                 ScriptableObject[] scriptableObjects = ResourceContainerEx.Instance().GetScriptableObjects(path);
                 if(scriptableObjects == null || (scriptableObjects[0] is AnimationCustomPreset) == false)
                 {
-                    DebugUtil.assert(false, "애니메이션 프리셋이 존재하지 않습니다. [Path: {0}] [Line: {1}] [FileName: {2}]",path, XMLScriptConverter.getLineFromXMLNode(node), filePath);
+                    DebugUtil.assert_fileOpen(false, "애니메이션 프리셋이 존재하지 않습니다. [Path: {0}] [Line: {1}] [FileName: {2}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node),path, XMLScriptConverter.getLineFromXMLNode(node), filePath);
                     return null;
                 }
 
@@ -541,14 +558,14 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             }
             else
             {
-                DebugUtil.assert(false, "invalid animation attribute: {0} [Line: {1}] [FileName: {2}]",targetName, XMLScriptConverter.getLineFromXMLNode(node), filePath);
+                DebugUtil.assert_fileOpen(false, "invalid animation attribute: {0} [Line: {1}] [FileName: {2}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node),targetName, XMLScriptConverter.getLineFromXMLNode(node), filePath);
                 return null;
             }
         }
 
         if((playData._startFrame > playData._endFrame) && playData._endFrame != -1)
         {
-            DebugUtil.assert(false, "시작 프레임은 끝 프레임보다 커질 수 없습니다.: [Path: {0}] [Line: {1}] [FileName: {2}]",playData._path, XMLScriptConverter.getLineFromXMLNode(node), filePath);
+            DebugUtil.assert_fileOpen(false, "시작 프레임은 끝 프레임보다 커질 수 없습니다.: [Path: {0}] [Line: {1}] [FileName: {2}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node),playData._path, XMLScriptConverter.getLineFromXMLNode(node), filePath);
             return null;
         }
 
@@ -574,13 +591,13 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
                     {
                         if(playData._customPresetData != null)
                         {
-                            DebugUtil.assert(false, "프리셋 애니메이션에 Frame 단위의 이벤트를 추가하려 합니다. 실수인가요? [Line: {0}] [FileName: {1}]", XMLScriptConverter.getLineFromXMLNode(nodeList[i]), filePath);
+                            DebugUtil.assert_fileOpen(false, "프리셋 애니메이션에 Frame 단위의 이벤트를 추가하려 합니다. 실수인가요? [Line: {0}] [FileName: {1}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(nodeList[i]), XMLScriptConverter.getLineFromXMLNode(nodeList[i]), filePath);
                             return null;
                         }
 
                         if(playData._frameEventData != null)
                         {
-                            DebugUtil.assert(false, "어딘가에서 이상한 FrameEvent 데이터가 들어왔습니다. 통보 요망 [Line: {0}] [FileName: {1}]", XMLScriptConverter.getLineFromXMLNode(nodeList[i]), filePath);
+                            DebugUtil.assert_fileOpen(false, "어딘가에서 이상한 FrameEvent 데이터가 들어왔습니다. 통보 요망 [Line: {0}] [FileName: {1}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(nodeList[i]), XMLScriptConverter.getLineFromXMLNode(nodeList[i]), filePath);
                             return null;
                         }
 
@@ -597,7 +614,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
                 }
                 else
                 {
-                    DebugUtil.assert(false,"애니메이션 차일드로 들어올 수 없는 타입입니다. 오타인가요? : {0} [Line: {1}] [FileName: {2}]",nodeList[i].Name, XMLScriptConverter.getLineFromXMLNode(node), filePath);
+                    DebugUtil.assert_fileOpen(false,"애니메이션 차일드로 들어올 수 없는 타입입니다. 오타인가요? : {0} [Line: {1}] [FileName: {2}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node),nodeList[i].Name, XMLScriptConverter.getLineFromXMLNode(node), filePath);
                     return null;
                 }
             }
@@ -723,19 +740,19 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             }
             else
             {
-                DebugUtil.assert(false,"유효하지 않은 MultiSelectAnimation 어트리뷰트 입니다.: {0} [Line: {1}] [FileName: {2}]", targetName, XMLScriptConverter.getLineFromXMLNode(node), filePath);
+                DebugUtil.assert_fileOpen(false,"유효하지 않은 MultiSelectAnimation 어트리뷰트 입니다.: {0} [Line: {1}] [FileName: {2}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node), targetName, XMLScriptConverter.getLineFromXMLNode(node), filePath);
                 return null;
             }
         }
 
         if(animationData._path == "")
         {
-            DebugUtil.assert(false,"애니메이션 경로가 데이터에 존재하지 않습니다. [Line: {0}] [FileName: {1}]", XMLScriptConverter.getLineFromXMLNode(node), filePath);
+            DebugUtil.assert_fileOpen(false,"애니메이션 경로가 데이터에 존재하지 않습니다. [Line: {0}] [FileName: {1}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node), XMLScriptConverter.getLineFromXMLNode(node), filePath);
             return null;
         }
         else if(animationData._actionConditionData == null)
         {
-            DebugUtil.assert(false,"MultiSelectAnimation은 반드시 Condition 데이터가 있어야 합니다. [Line: {0}] [FileName: {1}]", XMLScriptConverter.getLineFromXMLNode(node), filePath);
+            DebugUtil.assert_fileOpen(false,"MultiSelectAnimation은 반드시 Condition 데이터가 있어야 합니다. [Line: {0}] [FileName: {1}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node), XMLScriptConverter.getLineFromXMLNode(node), filePath);
             return null;
         }
 
@@ -794,7 +811,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             }
             else
             {
-                DebugUtil.assert(false, "invalid branch attribute: {0} [Line: {1}] [FileName: {2}]",targetName, XMLScriptConverter.getLineFromXMLNode(node), filePath);
+                DebugUtil.assert_fileOpen(false, "invalid branch attribute: {0} [Line: {1}] [FileName: {2}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node),targetName, XMLScriptConverter.getLineFromXMLNode(node), filePath);
                 return null;
             }
         }
@@ -812,7 +829,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         //int end;
         //int resultIndex = 0;
         //DebugUtil.assert(ReadConditionFormula(formula,0, ref resultIndex, out end,symbolList,compareTypeList) == true,"Tlqkfsusdk");
-        DebugUtil.assert(readConditionFormula(formula,ref symbolList,ref compareTypeList, globalVariableContainer, node, filePath) == true,"[Line: {0}] [FileName: {1}]", XMLScriptConverter.getLineFromXMLNode(node), filePath);
+        DebugUtil.assert_fileOpen(readConditionFormula(formula,ref symbolList,ref compareTypeList, globalVariableContainer, node, filePath) == true,"[Line: {0}] [FileName: {1}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node), XMLScriptConverter.getLineFromXMLNode(node), filePath);
 
         ActionGraphConditionCompareData compareData = new ActionGraphConditionCompareData();
         compareData._compareTypeArray = compareTypeList.ToArray();
@@ -839,7 +856,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
     {
         if(formula.Length <= startOffset || formula[startOffset] == ')')
         {
-            DebugUtil.assert(false, "condition formular is invalid {0} [Line: {1}] [FileName: {2}]", formula, XMLScriptConverter.getLineFromXMLNode(node), filePath);
+            DebugUtil.assert_fileOpen(false, "condition formular is invalid {0} [Line: {1}] [FileName: {2}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node), formula, XMLScriptConverter.getLineFromXMLNode(node), filePath);
             return -1;
         }
 
@@ -866,7 +883,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
 
         if(endOffset == -1)
         {
-            DebugUtil.assert(false, "condition formular is invalid {0} [Line: {1}] [FileName: {2}]", formula, XMLScriptConverter.getLineFromXMLNode(node), filePath);
+            DebugUtil.assert_fileOpen(false, "condition formular is invalid {0} [Line: {1}] [FileName: {2}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node), formula, XMLScriptConverter.getLineFromXMLNode(node), filePath);
             return -1;
         }
 
@@ -943,7 +960,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
     
         if(ConditionNodeInfoPreset._nodePreset.ContainsKey(symbol) == false)
         {
-            DebugUtil.assert(false,"대상 Condition Symbol이 존재하지 않습니다. 오타는 아닌가요? : {0} [Line: {1}] [FileName: {2}]",symbol, XMLScriptConverter.getLineFromXMLNode(node), filePath);
+            DebugUtil.assert_fileOpen(false,"대상 Condition Symbol이 존재하지 않습니다. 오타는 아닌가요? : {0} [Line: {1}] [FileName: {2}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node),symbol, XMLScriptConverter.getLineFromXMLNode(node), filePath);
             return null;
         }
 
@@ -1036,7 +1053,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         int indexInt = 0;
         if(int.TryParse(index,out indexInt) == false)
         {
-            DebugUtil.assert(false,"result index invalid: {0} [Line: {1}] [FileName: {2}]",symbol, XMLScriptConverter.getLineFromXMLNode(node), filePath);
+            DebugUtil.assert_fileOpen(false,"result index invalid: {0} [Line: {1}] [FileName: {2}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node),symbol, XMLScriptConverter.getLineFromXMLNode(node), filePath);
             return null;
         }
 
@@ -1175,7 +1192,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
 
                     if(buffKey == -1)
                     {
-                        DebugUtil.assert(false, "invalidBuff : {0} [Line: {1}] [FileName: {2}]", buffList[j], XMLScriptConverter.getLineFromXMLNode(node), filePath);
+                        DebugUtil.assert_fileOpen(false, "invalidBuff : {0} [Line: {1}] [FileName: {2}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node), buffList[j], XMLScriptConverter.getLineFromXMLNode(node), filePath);
                         continue;
                     }
 

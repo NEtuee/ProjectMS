@@ -37,6 +37,10 @@ public class AnimationPlayDataInfo
 
 
     public FlipState                    _flipState;
+
+#if UNITY_EDITOR
+    public int                          _lineNumber;
+#endif
 }
 
 public class MultiSelectAnimationData

@@ -48,13 +48,14 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
         
         if(node.Name.Equals("AIGraph") == false)
         {
-            DebugUtil.assert(false,"잘못된 xml 타입. name : [FileName: {0}] [NodeName: {0}]",_currentFileName, node.Name);
+            DebugUtil.assert_fileOpen(false,"잘못된 xml 타입. name : [FileName: {0}] [NodeName: {0}]",_currentFileName,0,_currentFileName, node.Name);
             return null;
         }
         
         string defaultAiNodeName = "";
 
         AIGraphBaseData aiBaseData = new AIGraphBaseData();
+        aiBaseData._fullPath = _currentFileName;
         readAIGraphTitle(node,aiBaseData,out defaultAiNodeName);
 
         List<AIGraphNodeData> nodeDataList = new List<AIGraphNodeData>();
@@ -90,12 +91,12 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
             {
                 if(nodeList[i].Attributes.Count == 0)
                 {
-                    DebugUtil.assert(false,"Include할 Path가 없습니다. 왜씀?? [Line: {0}] [FileName: {1}]", XMLScriptConverter.getLineFromXMLNode(nodeList[i]), _currentFileName);
+                    DebugUtil.assert_fileOpen(false,"Include할 Path가 없습니다. 왜씀?? [Line: {0}] [FileName: {1}]",_currentFileName,XMLScriptConverter.getLineNumberFromXMLNode(nodeList[i]), XMLScriptConverter.getLineFromXMLNode(nodeList[i]), _currentFileName);
                     return null;
                 }
                 else if(nodeList[i].Attributes[0].Name != "Path")
                 {
-                    DebugUtil.assert(false,"첫번쨰 어트리뷰트는 무조건 Path여야 합니다. [Line: {0}] [FileName: {1}]", XMLScriptConverter.getLineFromXMLNode(nodeList[i]), _currentFileName);
+                    DebugUtil.assert_fileOpen(false,"첫번쨰 어트리뷰트는 무조건 Path여야 합니다. [Line: {0}] [FileName: {1}]",_currentFileName,XMLScriptConverter.getLineNumberFromXMLNode(nodeList[i]), XMLScriptConverter.getLineFromXMLNode(nodeList[i]), _currentFileName);
                     return null;
                 }
 
@@ -123,7 +124,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
             {
                 if(nodeList[i].Attributes.Count == 0)
                 {
-                    DebugUtil.assert(false,"생성할 CustomValue가 없습니다. 왜씀?? [Line: {0}] [FileName: {1}]", XMLScriptConverter.getLineFromXMLNode(nodeList[i]), _currentFileName);
+                    DebugUtil.assert_fileOpen(false,"생성할 CustomValue가 없습니다. 왜씀?? [Line: {0}] [FileName: {1}]",_currentFileName,XMLScriptConverter.getLineNumberFromXMLNode(nodeList[i]), XMLScriptConverter.getLineFromXMLNode(nodeList[i]), _currentFileName);
                     return null;
                 }
                 
@@ -156,9 +157,11 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
             AIGraphNodeData nodeData = readAIGraphNode(nodeList[i], ref aiPackageIndexDic, ref actionCompareDic, ref branchDataList,ref compareDataList, in branchSetDic);
             if(nodeData == null)
             {
-                DebugUtil.assert(false,"NodeData가 null입니다. 로드 실패! : [NodeName: {0}] [Line: {1}] [FileName: {2}]", nodeList[i].Name, XMLScriptConverter.getLineFromXMLNode(nodeList[i]), _currentFileName);
+                DebugUtil.assert_fileOpen(false,"NodeData가 null입니다. 로드 실패! : [NodeName: {0}] [Line: {1}] [FileName: {2}]",_currentFileName,XMLScriptConverter.getLineNumberFromXMLNode(nodeList[i]), nodeList[i].Name, XMLScriptConverter.getLineFromXMLNode(nodeList[i]), _currentFileName);
                 return null;
             }
+
+            nodeData._lineNumber = XMLScriptConverter.getLineNumberFromXMLNode(nodeList[i]);
 
             nodeDataList.Add(nodeData);
             actionIndexDic.Add(nodeData._nodeName,actionIndex++);
@@ -168,7 +171,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
         {
             if(actionIndexDic.ContainsKey(item.Value) == false)
             {
-                DebugUtil.assert(false,"대상 액션이 존재하지 않습니다. : [Action: {0}] [FileName: {1}]",item.Value, _currentFileName);
+                DebugUtil.assert_fileOpen(false,"대상 액션이 존재하지 않습니다. : [Action: {0}] [FileName: {1}]",_currentFileName,XMLScriptConverter.getLineNumberFromXMLNode(node),item.Value, _currentFileName);
                 return null;
             }
             else if(item.Value == defaultAiNodeName)
@@ -183,7 +186,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
         {
             if(actionIndexDic.ContainsKey(defaultAiNodeName) == false)
             {
-                DebugUtil.assert(false, "디폴트 스테이트가 존재하지 않습니다. 이름에 오타는 없나요? : [StateName: {0}] [FileName: {1}]",defaultAiNodeName, _currentFileName);
+                DebugUtil.assert_fileOpen(false, "디폴트 스테이트가 존재하지 않습니다. 이름에 오타는 없나요? : [StateName: {0}] [FileName: {1}]",_currentFileName,XMLScriptConverter.getLineNumberFromXMLNode(node),defaultAiNodeName, _currentFileName);
                 return null;
             }
 
@@ -227,7 +230,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
             {
                 if(aiPackageIndexDic.ContainsKey(targetValue) == false)
                 {
-                    DebugUtil.assert(false, "해당 AI Package가 존재하지 않습니다. 오타는 없나요? : [Package: {0}] [Line: {1}] [FileName: {2}]",targetValue, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
+                    DebugUtil.assert_fileOpen(false, "해당 AI Package가 존재하지 않습니다. 오타는 없나요? : [Package: {0}] [Line: {1}] [FileName: {2}]",_currentFileName,XMLScriptConverter.getLineNumberFromXMLNode(node),targetValue, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
                     return null;
                 }
 
@@ -235,7 +238,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
             }
             else
             {
-                DebugUtil.assert(false,"유효하지 않은 어트리뷰트입니다. !!! : [Type: {0}] [Line: {1}] [FileName: {2}]", targetName, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
+                DebugUtil.assert_fileOpen(false,"유효하지 않은 어트리뷰트입니다. !!! : [Type: {0}] [Line: {1}] [FileName: {2}]",_currentFileName,XMLScriptConverter.getLineNumberFromXMLNode(node), targetName, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
             }
         }
 
@@ -252,7 +255,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
                 ActionGraphBranchData branchData = ActionGraphLoader.ReadActionBranch(nodeList[i],ref actionCompareDic,ref compareDataList, ref _aiGraphGlobalVariables, _currentFileName);
                 if(branchData == null)
                 {
-                    DebugUtil.assert(false,"유효하지 않은 브랜치 데이터입니다. [Line: {0}] [FileName: {1}]", XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
+                    DebugUtil.assert_fileOpen(false,"유효하지 않은 브랜치 데이터입니다. [Line: {0}] [FileName: {1}]",_currentFileName,XMLScriptConverter.getLineNumberFromXMLNode(node), XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
                     return null;
                 }
                     
@@ -272,7 +275,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
 
                 if(branchSetDic.ContainsKey(branchSetName) == false)
                 {
-                    DebugUtil.assert(false, "해당 브랜치 셋이 존재하지 않습니다. 오타가 있지는 않나요? : [BranchSetName: {0}] [Line: {1}] [FileName: {2}]",branchSetName, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
+                    DebugUtil.assert_fileOpen(false, "해당 브랜치 셋이 존재하지 않습니다. 오타가 있지는 않나요? : [BranchSetName: {0}] [Line: {1}] [FileName: {2}]",_currentFileName,XMLScriptConverter.getLineNumberFromXMLNode(node),branchSetName, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
                     return null;
                 }
 
@@ -281,14 +284,14 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
                 {
                     if(branchSetNodeList[branchSetNodeListIndex].Name != "Branch")
                     {
-                        DebugUtil.assert(false, "잘못된 브랜치 타입입니다. 오타가 있지는 않나요? : [BranchType: {0}] [Line: {1}] [FileName: {2}]",branchSetNodeList[branchSetNodeListIndex].Name, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
+                        DebugUtil.assert_fileOpen(false, "잘못된 브랜치 타입입니다. 오타가 있지는 않나요? : [BranchType: {0}] [Line: {1}] [FileName: {2}]",_currentFileName,XMLScriptConverter.getLineNumberFromXMLNode(node),branchSetNodeList[branchSetNodeListIndex].Name, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
                         return null;
                     }
 
                     ActionGraphBranchData branchData = ActionGraphLoader.ReadActionBranch(branchSetNodeList[branchSetNodeListIndex],ref actionCompareDic,ref compareDataList, ref _aiGraphGlobalVariables,_currentFileName);
                     if(branchData == null)
                     {
-                        DebugUtil.assert(false,"유효하지 않은 브랜치 데이터 입니다. [Line: {0}] [FileName: {1}]", XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
+                        DebugUtil.assert_fileOpen(false,"유효하지 않은 브랜치 데이터 입니다. [Line: {0}] [FileName: {1}]",_currentFileName,XMLScriptConverter.getLineNumberFromXMLNode(node), XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
                         return null;
                     }
 
@@ -301,7 +304,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
             }
             else
             {
-                DebugUtil.assert(false, "유효하지 않은 어트리뷰트 입니다. 오타는 아닌가요? : [Name: {0}] [Line: {1}] [FileName: {2}]",nodeList[i].Name, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
+                DebugUtil.assert_fileOpen(false, "유효하지 않은 어트리뷰트 입니다. 오타는 아닌가요? : [Name: {0}] [Line: {1}] [FileName: {2}]",_currentPackageFileName,XMLScriptConverter.getLineNumberFromXMLNode(nodeList[i]),nodeList[i].Name, XMLScriptConverter.getLineFromXMLNode(nodeList[i]), _currentFileName);
             }
         }
         
@@ -331,7 +334,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
             }
             else
             {
-                DebugUtil.assert(false, "유효하지 않은 어트리뷰트 입니다. 오타는 아닌가요? : [Attribute: {0}] [Line: {1}] [FileName: {2}]",targetName, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
+                DebugUtil.assert_fileOpen(false, "유효하지 않은 어트리뷰트 입니다. 오타는 아닌가요? : [Attribute: {0}] [Line: {1}] [FileName: {2}]",_currentFileName,XMLScriptConverter.getLineNumberFromXMLNode(node),targetName, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
             }
 
         }
@@ -355,7 +358,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
 
         if(name == "" || value == "" || name.Contains("gv_") == false )
         {
-            DebugUtil.assert(false, "잘못된 글로벌 변수명 입니다. 오타는 아닌가요?, name:[{0}] value:[{1}] [Line: {2}] [FileName: {3}]",name,value,XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
+            DebugUtil.assert_fileOpen(false, "잘못된 글로벌 변수명 입니다. 오타는 아닌가요?, name:[{0}] value:[{1}] [Line: {2}] [FileName: {3}]",_currentFileName,XMLScriptConverter.getLineNumberFromXMLNode(node),name,value,XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
             return;
         }
 
@@ -404,7 +407,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
         
         if(node.Name.Equals("AIPackage") == false)
         {
-            DebugUtil.assert(false,"잘못된 xml 타입. name : {0}",node.Name);
+            DebugUtil.assert_fileOpen(false,"잘못된 xml 타입. name : {0}",path,XMLScriptConverter.getLineNumberFromXMLNode(node),node.Name);
             return null;
         }
         
@@ -412,6 +415,8 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
 
         AIPackageBaseData aiPackageBaseData = new AIPackageBaseData();
         readAIPackageTitle(node,aiPackageBaseData, out defaultAIName);
+
+        aiPackageBaseData._fullPath = _currentPackageFileName;
 
         List<AIPackageNodeData> nodeDataList = new List<AIPackageNodeData>();
         List<ActionGraphBranchData> branchDataList = new List<ActionGraphBranchData>();
@@ -445,9 +450,11 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
 
                     if(nodeData == null)
                     {
-                        DebugUtil.assert(false,"AIPackage 스테이트가 비정상입니다. : [Name: {0}] [Line: {1}] [FileName: {2}]",aiStateNodeList[index].Name,XMLScriptConverter.getLineFromXMLNode(node), _currentPackageFileName);
+                        DebugUtil.assert_fileOpen(false,"AIPackage 스테이트가 비정상입니다. : [Name: {0}] [Line: {1}] [FileName: {2}]",_currentPackageFileName,XMLScriptConverter.getLineNumberFromXMLNode(nodeList[i]),aiStateNodeList[index].Name,XMLScriptConverter.getLineFromXMLNode(node), _currentPackageFileName);
                         return null;
                     }
+
+                    nodeData._lineNumber = XMLScriptConverter.getLineNumberFromXMLNode(nodeList[i]);
 
                     nodeDataList.Add(nodeData);
                     aiIndexDic.Add(nodeData._nodeName,actionIndex++);
@@ -464,7 +471,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
             }
             else
             {
-                DebugUtil.assert(false, "유효하지 않은 어트리뷰트 입니다. 오타는 아닌가요?: [Attribute: {0}] [Line: {1}] [FileName: {2}]",nodeList[i].Name,XMLScriptConverter.getLineFromXMLNode(node), _currentPackageFileName);
+                DebugUtil.assert_fileOpen(false, "유효하지 않은 어트리뷰트 입니다. 오타는 아닌가요?: [Attribute: {0}] [Line: {1}] [FileName: {2}]",_currentPackageFileName,XMLScriptConverter.getLineNumberFromXMLNode(nodeList[i]),nodeList[i].Name,XMLScriptConverter.getLineFromXMLNode(node), _currentPackageFileName);
                 return null;
             }
             
@@ -474,7 +481,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
         {
             if(aiIndexDic.ContainsKey(item.Value) == false)
             {
-                DebugUtil.assert(false,"대상 스테이트가 존재하지 않습니다. 오타는 아닌가요? : {0} [FileName: {1}]",item.Value, _currentPackageFileName);
+                DebugUtil.assert_fileOpen(false,"대상 스테이트가 존재하지 않습니다. 오타는 아닌가요? : {0} [FileName: {1}]",_currentPackageFileName,XMLScriptConverter.getLineNumberFromXMLNode(node),item.Value, _currentPackageFileName);
                 return null;
             }
             else if(item.Value == defaultAIName)
@@ -489,7 +496,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
         {
             if(aiIndexDic.ContainsKey(item.Key) == false)
             {
-                DebugUtil.assert(false,"aiExecuteEvent의 대상이 존재하지 않습니다. 오타는 아닌가요? : {0} [FileName: {1}]",item.Key, _currentPackageFileName);
+                DebugUtil.assert_fileOpen(false,"aiExecuteEvent의 대상이 존재하지 않습니다. 오타는 아닌가요? : {0} [FileName: {1}]",_currentPackageFileName,XMLScriptConverter.getLineNumberFromXMLNode(node),item.Key, _currentPackageFileName);
                 return null;
             }
 
@@ -504,7 +511,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
         {
             if(aiIndexDic.ContainsKey(defaultAIName) == false)
             {
-                DebugUtil.assert(false, "디폴트 스테이트가 존재하지 않습니다. 오타는 아닌가요? : {0} [FileName: {1}]",defaultAIName, _currentPackageFileName);
+                DebugUtil.assert_fileOpen(false, "디폴트 스테이트가 존재하지 않습니다. 오타는 아닌가요? : {0} [FileName: {1}]",_currentPackageFileName,XMLScriptConverter.getLineNumberFromXMLNode(node),defaultAIName, _currentPackageFileName);
                 return null;
             }
 
@@ -599,7 +606,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
             }
             else
             {
-                DebugUtil.assert(false,"유효하지 않은 어트리뷰트 입니다. 오타는 아닌가요? : [Attribute: {0}] [Line: {1}] [FileName: {2}]", targetName, XMLScriptConverter.getLineFromXMLNode(node), _currentPackageFileName);
+                DebugUtil.assert_fileOpen(false,"유효하지 않은 어트리뷰트 입니다. 오타는 아닌가요? : [Attribute: {0}] [Line: {1}] [FileName: {2}]",_currentPackageFileName,XMLScriptConverter.getLineNumberFromXMLNode(node), targetName, XMLScriptConverter.getLineFromXMLNode(node), _currentPackageFileName);
             }
         }
 
@@ -613,7 +620,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
                 ActionGraphBranchData branchData = ActionGraphLoader.ReadActionBranch(nodeList[i],ref actionCompareDic,ref compareDataList, ref _aiPackageGlobalVariables,_currentPackageFileName);
                 if(branchData == null)
                 {
-                    DebugUtil.assert(false,"유효하지 않은 브랜치 데이터 입니다. [Line: {0}] [FileName: {1}]", XMLScriptConverter.getLineFromXMLNode(node), _currentPackageFileName);
+                    DebugUtil.assert_fileOpen(false,"유효하지 않은 브랜치 데이터 입니다. [Line: {0}] [FileName: {1}]",_currentPackageFileName,XMLScriptConverter.getLineNumberFromXMLNode(nodeList[i]), XMLScriptConverter.getLineFromXMLNode(nodeList[i]), _currentPackageFileName);
                     return null;
                 }
                     
@@ -633,7 +640,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
 
                 if(branchSetDic.ContainsKey(branchSetName) == false)
                 {
-                    DebugUtil.assert(false, "해당 브랜치 셋은 존재하지 않습니다. : [BranchSetName: {0}] [Line: {1}] [FileName: {2}]",branchSetName, XMLScriptConverter.getLineFromXMLNode(node), _currentPackageFileName);
+                    DebugUtil.assert_fileOpen(false, "해당 브랜치 셋은 존재하지 않습니다. : [BranchSetName: {0}] [Line: {1}] [FileName: {2}]",_currentPackageFileName,XMLScriptConverter.getLineNumberFromXMLNode(nodeList[i]),branchSetName, XMLScriptConverter.getLineFromXMLNode(nodeList[i]), _currentPackageFileName);
                     return null;
                 }
 
@@ -642,14 +649,14 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
                 {
                     if(branchSetNodeList[branchSetNodeListIndex].Name != "Branch")
                     {
-                        DebugUtil.assert(false, "잘못된 브랜치 타입입니다. 오타는 아닌가요? : [Type: {0}] [Line: {1}] [FileName: {2}]",branchSetNodeList[branchSetNodeListIndex].Name, XMLScriptConverter.getLineFromXMLNode(node), _currentPackageFileName);
+                        DebugUtil.assert_fileOpen(false, "잘못된 브랜치 타입입니다. 오타는 아닌가요? : [Type: {0}] [Line: {1}] [FileName: {2}]",_currentPackageFileName,XMLScriptConverter.getLineNumberFromXMLNode(nodeList[i]),branchSetNodeList[branchSetNodeListIndex].Name, XMLScriptConverter.getLineFromXMLNode(nodeList[i]), _currentPackageFileName);
                         return null;
                     }
 
                     ActionGraphBranchData branchData = ActionGraphLoader.ReadActionBranch(branchSetNodeList[branchSetNodeListIndex],ref actionCompareDic,ref compareDataList, ref _aiPackageGlobalVariables,_currentPackageFileName);
                     if(branchData == null)
                     {
-                        DebugUtil.assert(false,"유효하지 않은 브랜치 데이터 입니다. [Line: {0}] [FileName: {1}]", XMLScriptConverter.getLineFromXMLNode(node), _currentPackageFileName);
+                        DebugUtil.assert_fileOpen(false,"유효하지 않은 브랜치 데이터 입니다. [Line: {0}] [FileName: {1}]",_currentPackageFileName,XMLScriptConverter.getLineNumberFromXMLNode(nodeList[i]), XMLScriptConverter.getLineFromXMLNode(nodeList[i]), _currentPackageFileName);
                         return null;
                     }
 
@@ -691,7 +698,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
 
         if(childEventDic.ContainsKey(currentEventType))
         {
-            DebugUtil.assert(false,"중복된 이벤트 타입 입니다. 하나만 남겨 주세요 : {0} [Line: {1}] [FileName: {2}]",currentEventType.ToString(), XMLScriptConverter.getLineFromXMLNode(node), _currentPackageFileName);
+            DebugUtil.assert_fileOpen(false,"중복된 이벤트 타입 입니다. 하나만 남겨 주세요 : {0} [Line: {1}] [FileName: {2}]",_currentPackageFileName,XMLScriptConverter.getLineNumberFromXMLNode(node),currentEventType.ToString(), XMLScriptConverter.getLineFromXMLNode(node), _currentPackageFileName);
             return;
         }
 
@@ -784,7 +791,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
 
         if(childEventDic.ContainsKey(currentEventType))
         {
-            DebugUtil.assert(false,"중복된 이벤트 타입 입니다. 하나만 남겨 주세요: {0}, {1} [Line: {2}] [FileName: {3}]",currentEventType.ToString(), eventType, XMLScriptConverter.getLineFromXMLNode(node), _currentPackageFileName);
+            DebugUtil.assert_fileOpen(false,"중복된 이벤트 타입 입니다. 하나만 남겨 주세요: {0}, {1} [Line: {2}] [FileName: {3}]",_currentPackageFileName,XMLScriptConverter.getLineNumberFromXMLNode(node),currentEventType.ToString(), eventType, XMLScriptConverter.getLineFromXMLNode(node), _currentPackageFileName);
             return;
         }
 
@@ -820,7 +827,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
     {
         if(node.Name != "AIEvent")
         {
-            DebugUtil.assert(false,"target node is not aiEvent: {0} [Line: {1}] [FileName: {2}]",node.Name, XMLScriptConverter.getLineFromXMLNode(node), _currentPackageFileName);
+            DebugUtil.assert_fileOpen(false,"target node is not aiEvent: {0} [Line: {1}] [FileName: {2}]",_currentPackageFileName,XMLScriptConverter.getLineNumberFromXMLNode(node),node.Name, XMLScriptConverter.getLineFromXMLNode(node), _currentPackageFileName);
             return null;
         }
 
@@ -883,7 +890,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
                 }
                 else
                 {
-                    DebugUtil.assert(false,"유효하지 않은 AI 이벤트 타입 입니다. 오타는 아닌가요?: [{0}] [Line: {1}] [FileName: {2}]",attrValue, XMLScriptConverter.getLineFromXMLNode(node), _currentPackageFileName);
+                    DebugUtil.assert_fileOpen(false,"유효하지 않은 AI 이벤트 타입 입니다. 오타는 아닌가요?: [{0}] [Line: {1}] [FileName: {2}]",_currentPackageFileName,XMLScriptConverter.getLineNumberFromXMLNode(node),attrValue, XMLScriptConverter.getLineFromXMLNode(node), _currentPackageFileName);
                     return null;
                 }
             }
@@ -920,7 +927,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
 
             if(find == false)
             {
-                DebugUtil.assert(false, "Execute할 State가 존재하지 않습니다. 오타는 아닌가요? : [{0}] [Line: {1}] [FileName: {2}]",targetAction, XMLScriptConverter.getLineFromXMLNode(node), _currentPackageFileName);
+                DebugUtil.assert_fileOpen(false, "Execute할 State가 존재하지 않습니다. 오타는 아닌가요? : [{0}] [Line: {1}] [FileName: {2}]",_currentPackageFileName,XMLScriptConverter.getLineNumberFromXMLNode(node),targetAction, XMLScriptConverter.getLineFromXMLNode(node), _currentPackageFileName);
                 return null;
             }
         }

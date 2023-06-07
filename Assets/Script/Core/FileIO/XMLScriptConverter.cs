@@ -76,6 +76,11 @@ public static class XMLScriptConverter
     {
         return ((PositionXmlElement) xmlNode).LineNumber.ToString();
     }
+
+    public static int getLineNumberFromXMLNode(XmlNode xmlNode)
+    {
+        return ((PositionXmlElement) xmlNode).LineNumber;
+    }
         
     public static Vector3 valueToVector3(string valueString)
     {

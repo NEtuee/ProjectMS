@@ -90,6 +90,26 @@ public class MasterManager : MessageHub<ManagerBase>
     }
     public void Update()
     {
+        if(Input.GetKey(KeyCode.F1))
+        {
+            Screen.SetResolution(960,640,FullScreenMode.Windowed);
+        }
+        else if(Input.GetKey(KeyCode.F2))
+        {
+            Screen.SetResolution(1440,960,FullScreenMode.Windowed);
+        }
+        else if(Input.GetKey(KeyCode.F3))
+        {
+            Screen.SetResolution(2160,1440,FullScreenMode.Windowed);
+        }
+        else if(Input.GetKey(KeyCode.F4))
+        {
+            Resolution currentResolution = Screen.currentResolution;
+            Screen.SetResolution(currentResolution.width, currentResolution.height,FullScreenMode.FullScreenWindow);
+        }
+
+
+
         float deltaTime = Time.deltaTime;
         ActionKeyInputManager.Instance().progress(deltaTime);
         GlobalTimer.Instance().setUpdateProcessing(true);

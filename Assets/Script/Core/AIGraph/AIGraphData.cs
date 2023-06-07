@@ -20,6 +20,10 @@ public class AIGraphBaseData
     public int                                  _branchCount = -1;
     public int                                  _conditionCompareDataCount = -1;
     public int                                  _customValueDataCount = -1;
+
+#if UNITY_EDITOR
+    public string _fullPath = "";
+#endif
 }
 
 [System.Serializable]
@@ -40,6 +44,10 @@ public class AIGraphNodeData
     public int                          _packageIndex;
     public int                          _branchIndexStart;
     public int                          _branchCount;
+
+#if UNITY_EDITOR
+    public int _lineNumber = 0;
+#endif
 }
 
 
@@ -64,6 +72,10 @@ public class AIPackageBaseData
     public int                                  _aiNodeCount = -1;
     public int                                  _branchCount = -1;
     public int                                  _conditionCompareDataCount = -1;
+
+#if UNITY_EDITOR
+    public string _fullPath = "";
+#endif
 }
 
 [System.Serializable]
@@ -93,6 +105,10 @@ public class AIPackageNodeData
 
     public int                          _branchIndexStart;
     public int                          _branchCount;
+
+#if UNITY_EDITOR
+    public int _lineNumber = 0;
+#endif
 }
 
 [System.Serializable]
