@@ -964,6 +964,10 @@ public class GameEntityBaseEditor : Editor
     protected GameEntityBase control;
     private GUIStyle buttonStyle;
 
+    private Vector2 _actionListScroll = Vector2.zero;
+    private string _actionListSearchString = "";
+    private string[] _actionListSearchStringArray = null;
+
     public void OnEnable()
     {
         control = (GameEntityBase)target;
@@ -971,7 +975,10 @@ public class GameEntityBaseEditor : Editor
 
     public override void OnInspectorGUI()
     {
-        base.OnInspectorGUI();
+        //base.OnInspectorGUI();
+
+        if(Event.current.type == EventType.MouseDown && Event.current.button == 0)
+            GUI.FocusControl("");
 
         if (buttonStyle == null)
         {
@@ -979,8 +986,47 @@ public class GameEntityBaseEditor : Editor
             buttonStyle.alignment = TextAnchor.MiddleLeft;
         }
 
-        EditorGUILayout.Space(10f);
         
+        ActionGraphBaseData actionBaseData = control.getActionGraph_Debug().getActionGraphBaseData_Debug();
+        if(actionBaseData == null)
+            return;
+        
+        GUILayout.Label("Action List");
+        string searchString = _actionListSearchString;
+        _actionListSearchString = EditorGUILayout.TextField("Search",_actionListSearchString);
+
+        if(_actionListSearchString != searchString)
+            _actionListSearchStringArray = _actionListSearchString.ToLower().Split(' ');
+
+        _actionListScroll = EditorGUILayout.BeginScrollView(_actionListScroll,"box",GUILayout.Height(200f));
+            for(int index = 0; index < actionBaseData._actionNodeCount; ++index)
+            {
+                if(_actionListSearchString != "")
+                {
+                    string lowerString = actionBaseData._actionNodeData[index]._nodeName.ToLower();
+                    bool contains = false;
+                    foreach(var targetString in _actionListSearchStringArray)
+                    {
+                        contains = lowerString.Contains(targetString);
+                        if(contains)
+                            break;
+                    }
+
+                    if(contains == false)
+                        continue;
+                }
+
+                if(GUILayout.Button(actionBaseData._actionNodeData[index]._nodeName, buttonStyle))
+                    control.setAction(index);
+            }
+
+        EditorGUILayout.EndScrollView();
+
+
+        EditorGUILayout.Space(10f);
+
+        GUILayout.Label("State Execution Log");
+
         EditorGUILayout.BeginVertical("box");
             GUILayout.Label("Action");
             for(int index = control._actionGraphChangeLog.Count - 1; index >= 0; --index)
