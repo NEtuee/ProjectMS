@@ -25,7 +25,6 @@ public class GameEntityBase : SequencerObjectBase
     public bool                 _statusDebug = false;
     public bool                 _aiDebug = false;
     public bool                 _animationDebug = false;
-
     
     private ActionGraph         _actionGraph;
     private AIGraph             _aiGraph;
@@ -34,6 +33,7 @@ public class GameEntityBase : SequencerObjectBase
     private StatusGraphicInterface _graphicInterface;
 
     private CollisionInfo       _collisionInfo;
+    private CharacterInfoData   _characterInfo;
 
     private DeadEventDelegate   _deadEventDelegate = null;
 
@@ -75,6 +75,7 @@ public class GameEntityBase : SequencerObjectBase
     private List<TimelineEffectItem> _enabledLaserEffectItems = new List<TimelineEffectItem>();
 
 #if UNITY_EDITOR
+    [HideInInspector] public bool _blockAI = false;
     [HideInInspector] public List<ActionGraphNodeData> _actionGraphChangeLog = new List<ActionGraphNodeData>();
     [HideInInspector] public List<AIGraphNodeData> _aiGraphChangeLog = new List<AIGraphNodeData>();
 
@@ -117,6 +118,7 @@ public class GameEntityBase : SequencerObjectBase
     public virtual void initializeCharacter(CharacterInfoData characterInfo, Vector3 direction)
     {
         _initializeFromCharacter = true;
+        _characterInfo = characterInfo;
 
         base.initialize();
         initializeObject();
@@ -124,13 +126,14 @@ public class GameEntityBase : SequencerObjectBase
         detachChildObject();
         setParentObject(null);
 
+        setDirection(direction);
+
         _currentVelocity = Vector3.zero;
         _currentTarget = null;
 
         _characterLifeTime = 0f;
         _leftHP = 0f;
         _deadEventDelegate = null;
-        setDirection(direction);
         
         gameObject.name = characterInfo._displayName;
         actionGraphPath = characterInfo._actionGraphPath;
@@ -267,7 +270,11 @@ public class GameEntityBase : SequencerObjectBase
         if(_actionGraph != null)
             updateConditionData();
 
+#if UNITY_EDITOR
+        if(_blockAI == false && _aiGraph != null)
+#else
         if(_aiGraph != null)
+#endif
         {
             _aiGraph.updateConditionData();
             
@@ -508,6 +515,16 @@ public class GameEntityBase : SequencerObjectBase
         _attackState = AttackState.Default;
         _defenceState = DefenceState.Default;
     }
+
+#if UNITY_EDITOR
+    public void blockAI_Debug(bool value)
+    {
+        _blockAI = value;
+        setAction(_actionGraph.getActionGraphBaseData_Debug()._defaultActionIndex);
+        _aiGraph.claerAIGraph();
+        _aiGraph.setDefaultAINode(this);
+    }
+#endif
 
     public void laserEffectCheck()
     {
@@ -991,6 +1008,13 @@ public class GameEntityBaseEditor : Editor
         if(actionBaseData == null)
             return;
         
+        Color guiColor = GUI.color;
+        GUI.color = control._blockAI ? Color.red : guiColor;
+        if( control._blockAI ? GUILayout.Button("Enable AI") : GUILayout.Button("Block AI"))
+            control.blockAI_Debug(!control._blockAI);
+
+        GUI.color = guiColor;
+
         GUILayout.Label("Action List");
         string searchString = _actionListSearchString;
         _actionListSearchString = EditorGUILayout.TextField("Search",_actionListSearchString);

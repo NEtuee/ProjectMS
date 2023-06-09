@@ -51,7 +51,12 @@ public class ActionGraph
         _prevActionNodeIndex = -1;
         _currentAnimationIndex = 0;
         
-        if(_actionGraphBaseData._defaultActionIndex != -1)
+        setDefaultAction();
+    }
+
+    public void setDefaultAction()
+    {
+        if(_actionGraphBaseData != null && _actionGraphBaseData._defaultActionIndex != -1)
             changeAction(_actionGraphBaseData._defaultActionIndex);
     }
 

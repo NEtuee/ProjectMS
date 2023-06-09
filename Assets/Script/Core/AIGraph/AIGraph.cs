@@ -65,6 +65,12 @@ public class AIGraph
         _actionGraph = actionGraph;
         _aiGraphBaseData = baseData;
         
+        claerAIGraph();
+        setDefaultAINode(targetEntity);
+    }
+
+    public void claerAIGraph()
+    {
         _currentAINodeIndex = -1;
         _prevAINodeIndex = -1;
 
@@ -90,15 +96,12 @@ public class AIGraph
         _reservedEvents.Clear();
         _reservedTargetEvents.Clear();
         _reservedCustomEvents.Clear();
-
-        initialize(targetEntity);
     }
 
-    public void initialize(GameEntityBase targetEntity)
+    public void setDefaultAINode(GameEntityBase targetEntity)
     {
         if(_aiGraphBaseData._defaultAIIndex != -1)
             changeAINode(_aiGraphBaseData._defaultAIIndex, targetEntity, true);
-
     }
 
     public bool progress(float deltaTime, GameEntityBase targetEntity)
@@ -322,7 +325,7 @@ public class AIGraph
     {
         if(aiPackageStateIndex < 0 || aiPackageStateIndex >= getCurrentAIPackage()._aiNodeCount)
         {
-            DebugUtil.assert(false,"잘못된 AI Package Index 입니다");
+            DebugUtil.assert(false,"잘못된 AI Package Index 입니다 [Index: {0}]",aiPackageStateIndex);
             return false;
         }
 
