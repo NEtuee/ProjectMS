@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StageGraphManager : Singleton<StageGraphManager>
+public class SequencerGraphProcessor
 {
     private struct eventIndexItem
     {
@@ -92,14 +92,22 @@ public class StageGraphManager : Singleton<StageGraphManager>
     {
         initialize();
         _currentStage = null;
-
-        Message msg = MessagePool.GetMessage();
-        msg.Set(MessageTitles.game_stageEnd,MessageReceiver._boradcastNumber,null,null);
-
-        MasterManager.instance.HandleBroadcastMessage(msg);
     }
 
-    public void startStage(string stageGraphPath)
+    public bool isSequencerEnd()
+    {
+        return _isStageEventEnd;
+    }
+
+    public void clearSequencerGraphProcessor()
+    {
+        initialize();
+        _currentStage = null;
+        _savedEventItem._savedIndex = -1;
+        _savedEventItem._targetStageGraph = null;
+    }
+
+    public void startStage(string stageGraphPath, GameEntityBase ownerEntity, GameEntityBase targetEntity)
     {
         _currentStage = ResourceContainerEx.Instance().GetStageGraph(stageGraphPath);
         if(_currentStage == null)
@@ -107,6 +115,11 @@ public class StageGraphManager : Singleton<StageGraphManager>
 
         initialize();
 
+        if(ownerEntity != null)
+            addUniqueEntity("Owner",ownerEntity);
+        if(targetEntity != null)
+            addUniqueEntity("Target",targetEntity);
+            
         for(int index = _currentIndex; index < _currentStage._stageGraphPhase[0]._stageGraphEventCount; ++index)
         {
             _currentStage._stageGraphPhase[0]._stageGraphEventList[index].Initialize();

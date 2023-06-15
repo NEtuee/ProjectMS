@@ -5,7 +5,7 @@ public abstract class StageGraphEventBase
 {
     public abstract StageGraphEventType getStageGraphEventType();
     public abstract void Initialize();
-    public abstract bool Execute(StageGraphManager graphManager, float deltaTime);
+    public abstract bool Execute(SequencerGraphProcessor processor, float deltaTime);
     public abstract void loadXml(XmlNode node);
 }
 
@@ -25,7 +25,7 @@ public class StageGraphEvent_SpawnCharacter : StageGraphEventBase
         _characterInfoData = CharacterInfoManager.Instance().GetCharacterInfoData(_characterKey);
     }
 
-    public override bool Execute(StageGraphManager graphManager,float deltaTime)
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
     {
         SceneCharacterManager sceneCharacterManager = SceneCharacterManager._managerInstance as SceneCharacterManager;
         CharacterEntityBase createdCharacter = sceneCharacterManager.createCharacterFromPool(_characterInfoData,_spawnDesc);
@@ -34,7 +34,7 @@ public class StageGraphEvent_SpawnCharacter : StageGraphEventBase
             return true;
 
         if(_uniqueEntityKey != "")
-            graphManager.addUniqueEntity(_uniqueEntityKey, createdCharacter);
+            processor.addUniqueEntity(_uniqueEntityKey, createdCharacter);
         
         return true;
     }
@@ -81,7 +81,7 @@ public class StageGraphEvent_WaitSecond : StageGraphEventBase
         _timer = 0f;
     }
 
-    public override bool Execute(StageGraphManager graphManager,float deltaTime)
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
     {
         _timer += deltaTime;
         return _waitTime <= _timer;
@@ -113,9 +113,9 @@ public class StageGraphEvent_SetHPSphere : StageGraphEventBase
         
     }
 
-    public override bool Execute(StageGraphManager graphManager,float deltaTime)
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
     {
-        GameEntityBase uniqueEntity = graphManager.getUniqueEntity(_uniqueKey);
+        GameEntityBase uniqueEntity = processor.getUniqueEntity(_uniqueKey);
         if(uniqueEntity == null)
         {
             DebugUtil.assert(false,"unique entity key is not Exists : {0}",_uniqueKey);
@@ -153,9 +153,9 @@ public class StageGraphEvent_SetCrossHair : StageGraphEventBase
         
     }
 
-    public override bool Execute(StageGraphManager graphManager,float deltaTime)
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
     {
-        GameEntityBase unqueEntity = graphManager.getUniqueEntity(_uniqueKey);
+        GameEntityBase unqueEntity = processor.getUniqueEntity(_uniqueKey);
         if(unqueEntity == null)
         {
             DebugUtil.assert(false,"unique entity key is not Exists : {0}",_uniqueKey);
@@ -193,9 +193,9 @@ public class StageGraphEvent_WaitTargetDead : StageGraphEventBase
         
     }
 
-    public override bool Execute(StageGraphManager graphManager,float deltaTime)
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
     {
-        GameEntityBase unqueEntity = graphManager.getUniqueEntity(_uniqueKey);
+        GameEntityBase unqueEntity = processor.getUniqueEntity(_uniqueKey);
         if(unqueEntity == null)
             return true;
         
@@ -226,7 +226,7 @@ public class StageGraphEvent_SaveEventExecuteIndex : StageGraphEventBase
         
     }
 
-    public override bool Execute(StageGraphManager graphManager,float deltaTime)
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
     {
         return true;
     }
@@ -247,7 +247,7 @@ public class StageGraphEvent_ApplyPostProcessProfile : StageGraphEventBase
         
     }
 
-    public override bool Execute(StageGraphManager graphManager,float deltaTime)
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
     {
         ScriptableObject profile = ResourceContainerEx.Instance().GetScriptableObject(_path);
         if(profile == null || (profile is PostProcessProfile) == false)
@@ -284,9 +284,9 @@ public class StageGraphEvent_TeleportTargetTo : StageGraphEventBase
         
     }
 
-    public override bool Execute(StageGraphManager graphManager,float deltaTime)
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
     {
-        GameEntityBase unqueEntity = graphManager.getUniqueEntity(_uniqueKey);
+        GameEntityBase unqueEntity = processor.getUniqueEntity(_uniqueKey);
         if(unqueEntity == null)
         {
             DebugUtil.assert(false,"unique entity key is not Exists : {0}",_uniqueKey);
@@ -325,9 +325,9 @@ public class StageGraphEvent_SetAudioListner : StageGraphEventBase
         
     }
 
-    public override bool Execute(StageGraphManager graphManager,float deltaTime)
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
     {
-        GameEntityBase unqueEntity = graphManager.getUniqueEntity(_uniqueKey);
+        GameEntityBase unqueEntity = processor.getUniqueEntity(_uniqueKey);
         if(unqueEntity == null)
         {
             DebugUtil.assert(false,"unique entity key is not Exists : {0}",_uniqueKey);
@@ -365,10 +365,12 @@ public class StageGraphEvent_SetCameraTarget : StageGraphEventBase
         
     }
 
-    public override bool Execute(StageGraphManager graphManager,float deltaTime)
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
     {
-        CameraControlEx.Instance().setCameraTarget(graphManager.getUniqueEntity(_uniqueKey));
+        CameraControlEx.Instance().setCameraTarget(processor.getUniqueEntity(_uniqueKey));
         CameraControlEx.Instance().initialize();
+        if(_cameraMode != CameraModeType.Count)
+            CameraControlEx.Instance().setCameraMode(_cameraMode);
 
         return true;
     }

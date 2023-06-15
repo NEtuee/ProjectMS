@@ -43,6 +43,8 @@ public static class FrameEventLoader
             outFrameEvent = new ActionFrameEvent_Danmaku();
         else if(type == "SetAnimationSpeed")
             outFrameEvent = new ActionFrameEvent_SetAnimationSpeed();
+        else if(type == "SetCameraZoom")
+            outFrameEvent = new ActionFrameEvent_SetCameraZoom();
         else if(type == "SetCameraDelay")
             outFrameEvent = new ActionFrameEvent_SetCameraDelay();
         else if(type == "KillEntity")
@@ -75,7 +77,7 @@ public static class FrameEventLoader
             return null;
         }
 
-        DebugUtil.assert((int)FrameEventType.Count == 28, "check here");
+        DebugUtil.assert((int)FrameEventType.Count == 29, "check here");
 
 
         if(outFrameEvent == null)

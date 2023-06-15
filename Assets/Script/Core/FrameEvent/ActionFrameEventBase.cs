@@ -18,6 +18,7 @@ public enum FrameEventType
     FrameEvent_Projectile,
     FrameEvent_Danmaku,
     FrameEvent_SetAnimationSpeed,
+    FrameEvent_SetCameraZoom,
     FrameEvent_SetCameraDelay,
     FrameEvent_KillEntity,
     FrameEvent_Movement,
@@ -743,6 +744,37 @@ public class ActionFrameEvent_SetFrameTag : ActionFrameEventBase
     }
 }
 
+public class ActionFrameEvent_SetCameraZoom : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_SetCameraZoom;}
+
+    private float _zoom = -1f;
+
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        if(_zoom <= 0f)
+            CameraControlEx.Instance().setDefaultZoomSize();
+        else
+            CameraControlEx.Instance().setZoomSize(_zoom);
+        return true;
+    }
+
+    public override void onExit(ObjectBase executeEntity)
+    {
+        CameraControl.Instance().setDelay(false);
+
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            if(attributes[i].Name == "Size")
+                _zoom = float.Parse(attributes[i].Value);
+        }
+    }
+}
 
 public class ActionFrameEvent_SetCameraDelay : ActionFrameEventBase
 {

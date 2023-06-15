@@ -23,6 +23,7 @@ public class MasterManager : MessageHub<ManagerBase>
     private float                   _timeScaleBlendTimer = 0f;
     private float                   _timeScaleBlendFactor = 0f;
 
+    private SequencerGraphProcessor _mainStageProcessor = null;
 
     protected override void Awake()
     {
@@ -79,8 +80,10 @@ public class MasterManager : MessageHub<ManagerBase>
 
         FMODAudioManager.Instance().initialize();
         CameraControlEx.Instance().initialize();
-        StageGraphManager.Instance().initialize();
         DanmakuManager.Instance().initialize();
+
+        _mainStageProcessor = new SequencerGraphProcessor();
+        _mainStageProcessor.initialize();
     }
     public void Start()
     {
@@ -146,7 +149,7 @@ public class MasterManager : MessageHub<ManagerBase>
 
         GlobalTimer.Instance().setScaledDeltaTime(deltaTime);
         GlobalTimer.Instance().updateGlobalTime(deltaTime);
-        StageGraphManager.Instance().progress(deltaTime);
+        _mainStageProcessor.progress(deltaTime);
 
         CameraControlEx.Instance().SyncPosition();
 
@@ -165,14 +168,16 @@ public class MasterManager : MessageHub<ManagerBase>
         CameraControlEx.Instance().progress(deltaTime);
         FMODAudioManager.Instance().updateAudio();
 
-        if(Input.GetKeyDown(KeyCode.Return) && StageGraphManager.Instance().isValid() == false)
-        {
-            StageGraphManager.Instance().startStage("Assets\\Data\\StageGraph\\TestStage.xml");
-        }
+        if(Input.GetKeyDown(KeyCode.Return) && _mainStageProcessor.isValid() == false)
+            _mainStageProcessor.startStage("Assets\\Data\\StageGraph\\TestStage.xml",null,null);
 
         if(Input.GetKeyDown(KeyCode.Escape))
         {
-            StageGraphManager.Instance().stopStage();
+            _mainStageProcessor.stopStage();
+            Message msg = MessagePool.GetMessage();
+            msg.Set(MessageTitles.game_stageEnd,MessageReceiver._boradcastNumber,null,null);
+
+            HandleBroadcastMessage(msg);
         }
     }
 

@@ -31,6 +31,7 @@ public class GameEntityBase : SequencerObjectBase
     private DanmakuGraph        _danmakuGraph;
     private StatusInfo          _statusInfo;
     private StatusGraphicInterface _graphicInterface;
+    private SequencerGraphProcessManager _sequencerProcessManager;
 
     private CollisionInfo       _collisionInfo;
     private CharacterInfoData   _characterInfo;
@@ -111,6 +112,7 @@ public class GameEntityBase : SequencerObjectBase
         _danmakuGraph = new DanmakuGraph();
         _statusInfo = new StatusInfo();
         _graphicInterface = new StatusGraphicInterface();
+        _sequencerProcessManager = new SequencerGraphProcessManager(this);
 
         createSpriteRenderObject();
     }
@@ -230,6 +232,8 @@ public class GameEntityBase : SequencerObjectBase
         _aiGraph.initialize(this, _actionGraph, ResourceContainerEx.Instance().GetAIGraph(aiGraphPath));
 
         _actionGraph.initializeCustomValue(_aiGraph.getCustomValueData());
+
+        _sequencerProcessManager.clearSequencerGraphProcessManager();
 
         _movementControl.changeMovement(this,_actionGraph.getCurrentMovement());
         _movementControl.setMoveScale(_actionGraph.getCurrentMoveScale());
@@ -377,7 +381,49 @@ public class GameEntityBase : SequencerObjectBase
             _deadEventDelegate?.Invoke(this);
 
         _deadEventDelegate = null;
+        laserEffectCheck();
 
+        _collisionInfo.updateCollisionInfo(transform.position,getDirection());
+
+        updateDebug();
+    }
+
+    public override void afterProgress(float deltaTime)
+    {
+        base.afterProgress(deltaTime);
+
+        //todo: observer
+        _graphicInterface.updatePosition();
+        _graphicInterface.updateGague();
+
+        resetState();
+
+        if(_statusDebug == true || GameEditorMaster._instance._statusDebugAll)
+        {
+            _statusInfo.updateDebugTextXXX(debugTextManager);
+        }
+        
+        CollisionManager.Instance().collisionRequest(_collisionInfo,this,collisionTest,collisionEndEvent);
+    }
+
+    public override void deactive()
+    {
+        _graphicInterface.release();
+        base.deactive();
+    }
+
+    public override void dispose(bool disposeFromMaster)
+    {
+        CollisionManager.Instance().deregisterObject(_collisionInfo.getCollisionInfoData(),this);
+        _aiGraph.release();
+        _actionGraph.release();
+        _danmakuGraph.release();
+
+        base.dispose(disposeFromMaster);
+    }
+
+    private void updateDebug()
+    {
         if(_actionDebug == true || GameEditorMaster._instance._actionDebugAll)
         {
             debugTextManager.updateDebugText("Action","Action: " + getCurrentActionName());
@@ -392,13 +438,10 @@ public class GameEntityBase : SequencerObjectBase
 
             debugTextManager.updateDebugText("FrameTag","FrameTag: " + frameTag);
         }
-
-        laserEffectCheck();
     
         if(getDefenceAngle() != 0f)
             GizmoHelper.instance.drawArc(transform.position,0.8f,getDefenceAngle(),_defenceDirection,Color.cyan,0f);
 
-        _collisionInfo.updateCollisionInfo(transform.position,getDirection());
         debugTextManager.updatePosition(new Vector3(0f, _collisionInfo.getBoundBox().getBottom() - transform.position.y, 0f));
 
         if(_actionDebug == true || GameEditorMaster._instance._actionDebugAll)
@@ -469,40 +512,6 @@ public class GameEntityBase : SequencerObjectBase
         _debugColor = Color.red;
     }
 
-    public override void afterProgress(float deltaTime)
-    {
-        base.afterProgress(deltaTime);
-
-        //todo: observer
-        _graphicInterface.updatePosition();
-        _graphicInterface.updateGague();
-
-        resetState();
-
-        if(_statusDebug == true || GameEditorMaster._instance._statusDebugAll)
-        {
-            _statusInfo.updateDebugTextXXX(debugTextManager);
-        }
-        
-        CollisionManager.Instance().collisionRequest(_collisionInfo,this,collisionTest,collisionEndEvent);
-    }
-
-    public override void deactive()
-    {
-        _graphicInterface.release();
-        base.deactive();
-    }
-
-    public override void dispose(bool disposeFromMaster)
-    {
-        CollisionManager.Instance().deregisterObject(_collisionInfo.getCollisionInfoData(),this);
-        _aiGraph.release();
-        _actionGraph.release();
-        _danmakuGraph.release();
-
-        base.dispose(disposeFromMaster);
-    }
-
     private void collisionTest(CollisionSuccessData data)
     {
         _debugColor = Color.green;
@@ -548,6 +557,8 @@ public class GameEntityBase : SequencerObjectBase
         _deadEventDelegate = null;
 
         _enabledLaserEffectItems.Clear();
+
+        _sequencerProcessManager.clearSequencerGraphProcessManager();
 
         _movementControl.initialize();
         _actionGraph.initialize(ResourceContainerEx.Instance().GetActionGraph(actionGraphPath));
@@ -953,6 +964,11 @@ public class GameEntityBase : SequencerObjectBase
     public void addLaserEffect(TimelineEffectItem laserEffect)
     {
         _enabledLaserEffectItems.Add(laserEffect);
+    }
+
+    public void startSequencer(string sequencerKey, GameEntityBase targetEntity)
+    {
+        _sequencerProcessManager.startSequencerClean(sequencerKey,targetEntity);
     }
 
     public float getHeadUpOffset() {return _headUpOffset;}
