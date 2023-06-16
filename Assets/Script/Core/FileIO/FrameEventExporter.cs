@@ -71,13 +71,15 @@ public static class FrameEventLoader
             outFrameEvent = new ActionFrameEvent_CallAIEvent();
         else if(type == "AudioPlay")
             outFrameEvent = new ActionFrameEvent_AudioPlay();
+        else if(type == "PlaySequencer")
+            outFrameEvent = new ActionFrameEvent_PlaySequencer();
         else
         {
             DebugUtil.assert(false, "invalid frameEvent type: {0}",type);
             return null;
         }
 
-        DebugUtil.assert((int)FrameEventType.Count == 29, "check here");
+        DebugUtil.assert((int)FrameEventType.Count == 30, "check here");
 
 
         if(outFrameEvent == null)

@@ -966,9 +966,9 @@ public class GameEntityBase : SequencerObjectBase
         _enabledLaserEffectItems.Add(laserEffect);
     }
 
-    public void startSequencer(string sequencerKey, GameEntityBase targetEntity)
+    public SequencerGraphProcessor startSequencer(string sequencerKey, GameEntityBase targetEntity, bool includePlayer)
     {
-        _sequencerProcessManager.startSequencerClean(sequencerKey,targetEntity);
+        return _sequencerProcessManager.startSequencerClean(sequencerKey,targetEntity,includePlayer);
     }
 
     public float getHeadUpOffset() {return _headUpOffset;}

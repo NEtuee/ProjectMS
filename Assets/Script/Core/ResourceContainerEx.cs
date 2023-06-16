@@ -137,7 +137,7 @@ public class ResourceContainerEx : Singleton<ResourceContainerEx>
 	private DataResourceItem<AIGraphBaseData,AIGraphLoader>						_aiGraphResource = new DataResourceItem<AIGraphBaseData,AIGraphLoader>();
 	private DataResourceItem<ProjectileGraphBaseData[],ProjectileGraphLoader>	_projectileGraphResource = new DataResourceItem<ProjectileGraphBaseData[],ProjectileGraphLoader>();
 	private DataResourceItem<DanmakuGraphBaseData,DanmakuGraphLoader>			_danmakuGraphResource = new DataResourceItem<DanmakuGraphBaseData,DanmakuGraphLoader>();
-	private DataResourceItem<StageGraphBaseData,StageGraphLoader>				_stageGraphResource = new DataResourceItem<StageGraphBaseData,StageGraphLoader>();
+	private DataResourceItem<SequencerGraphBaseData,SequencrGraphLoader>		_sequencerGraphResource = new DataResourceItem<SequencerGraphBaseData,SequencrGraphLoader>();
 	private DataResourceItem<Dictionary<string, CharacterInfoData>,CharacterInfoLoader>	_characterInfoResource = new DataResourceItem<Dictionary<string, CharacterInfoData>,CharacterInfoLoader>();
 
 
@@ -198,9 +198,9 @@ public class ResourceContainerEx : Singleton<ResourceContainerEx>
 		return _aiGraphResource.GetOrLoadResource(path);
 	}
 
-	public StageGraphBaseData GetStageGraph(string path)
+	public SequencerGraphBaseData GetSequencerGraph(string path)
 	{
-		return _stageGraphResource.GetOrLoadResource(path);
+		return _sequencerGraphResource.GetOrLoadResource(path);
 	}
 
 	public DanmakuGraphBaseData GetDanmakuGraph(string path)

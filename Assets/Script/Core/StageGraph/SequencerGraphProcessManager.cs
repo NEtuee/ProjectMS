@@ -44,20 +44,22 @@ public class SequencerGraphProcessManager
         }
     }
 
-    public void startSequencerClean(string sequencerKey, GameEntityBase targetEntity)
+    public SequencerGraphProcessor startSequencerClean(string sequencerKey, GameEntityBase targetEntity,bool includePlayer)
     {
         SequencerGraphProcessor processor = _sequencerGrpahProcessorPool.dequeue();
         processor.clearSequencerGraphProcessor();
-        processor.startStage(sequencerKey,_ownerEntity,targetEntity);
+        processor.startSequencer(sequencerKey,_ownerEntity,targetEntity,includePlayer);
 
         _activeProcessorList.Add(processor);
+
+        return processor;
     }
 
     public void clearSequencerGraphProcessManager()
     {
         foreach(var processor in _activeProcessorList)
         {
-            processor.stopStage();
+            processor.stopSequencer();
             processor.clearSequencerGraphProcessor();
             _sequencerGrpahProcessorPool.enqueue(processor);
         }

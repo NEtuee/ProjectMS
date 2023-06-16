@@ -163,6 +163,8 @@ public class CameraControlEx : Singleton<CameraControlEx>
     private CameraModeBase[] _cameraModes;
     private GameEntityBase _cameraTargetEntity;
 
+    private PostProcessProfileControl _postProcessProfileControl;
+
     private float _mainCamSize;
     private float _currentMainCamSize;
 	private float _camWidth;
@@ -191,12 +193,17 @@ public class CameraControlEx : Singleton<CameraControlEx>
 
         _cameraModes = new CameraModeBase[(int)CameraModeType.Count];
 
+        _postProcessProfileControl = new PostProcessProfileControl();
+        _postProcessProfileControl.updateMaterial(false);
+
         setCameraMode(CameraModeType.TargetCenterMode);
     }
 
     public void progress(float deltaTime)
     {
         updateCameraMode(deltaTime);
+        
+        _postProcessProfileControl.processBlend(deltaTime);
 
         if(MathEx.equals(_currentCamera.orthographicSize,_currentMainCamSize,float.Epsilon) == true)
 			_currentCamera.orthographicSize = _currentMainCamSize;
@@ -326,4 +333,9 @@ public class CameraControlEx : Singleton<CameraControlEx>
 		return new Vector4(position.x - _cameraBoundHalf.x, position.x + _cameraBoundHalf.x,
 							position.y - _cameraBoundHalf.y, position.y + _cameraBoundHalf.y);
 	}
+
+    public PostProcessProfileControl getPostProcessProfileControl()
+    {
+        return _postProcessProfileControl;
+    }
 }

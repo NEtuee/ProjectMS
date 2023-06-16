@@ -5,10 +5,10 @@ using System.Text;
 using UnityEngine;
 using ICSharpCode.WpfDesign.XamlDom;
 
-public class StageGraphLoader : LoaderBase<StageGraphBaseData>
+public class SequencrGraphLoader : LoaderBase<SequencerGraphBaseData>
 {
     static string _currentFileName = "";
-    public override StageGraphBaseData readFromXML(string path)
+    public override SequencerGraphBaseData readFromXML(string path)
     {
         _currentFileName = path;
         PositionXmlDocument xmlDoc = new PositionXmlDocument();
@@ -34,7 +34,7 @@ public class StageGraphLoader : LoaderBase<StageGraphBaseData>
         }
 
 
-        StageGraphBaseData baseData = new StageGraphBaseData();
+        SequencerGraphBaseData baseData = new SequencerGraphBaseData();
 
         XmlAttributeCollection firstNodeAttribute = xmlDoc.FirstChild.Attributes;
         for(int i = 0; i < firstNodeAttribute.Count; ++i)
@@ -44,7 +44,7 @@ public class StageGraphLoader : LoaderBase<StageGraphBaseData>
 
             if(attrName == "Name")
             {
-                baseData._stageName = attrValue;
+                baseData._sequencerName = attrValue;
             }
         }
 
@@ -52,82 +52,82 @@ public class StageGraphLoader : LoaderBase<StageGraphBaseData>
         for(int nodeIndex = 0; nodeIndex < nodes.Count; ++nodeIndex)
         {
             XmlNode phaseNode = nodes[nodeIndex];
-            StageGraphPhaseData phaseData = readPhaseData(phaseNode);
+            SequencerGraphPhaseData phaseData = readPhaseData(phaseNode);
 
             if(phaseNode.Name == "InitializePhase")
-                baseData._stageGraphPhase[(int)StageGraphPhaseType.Initialize] = phaseData;
+                baseData._sequencerGraphPhase[(int)SequencerGraphPhaseType.Initialize] = phaseData;
             else if(phaseNode.Name == "UpdatePhase")
-                baseData._stageGraphPhase[(int)StageGraphPhaseType.Update] = phaseData;
+                baseData._sequencerGraphPhase[(int)SequencerGraphPhaseType.Update] = phaseData;
         }
 
         return baseData;
     }
 
-    private static StageGraphPhaseData readPhaseData(XmlNode node)
+    private static SequencerGraphPhaseData readPhaseData(XmlNode node)
     {
-        StageGraphPhaseData phaseData = new StageGraphPhaseData();
+        SequencerGraphPhaseData phaseData = new SequencerGraphPhaseData();
 
-        List<StageGraphEventBase> eventList = new List<StageGraphEventBase>();
+        List<SequencerGraphEventBase> eventList = new List<SequencerGraphEventBase>();
         XmlNodeList eventNodes = node.ChildNodes;
         for(int i = 0; i < eventNodes.Count; ++i)
         {
-            StageGraphEventBase eventData = readEventData(eventNodes[i]);
+            SequencerGraphEventBase eventData = readEventData(eventNodes[i]);
             eventList.Add(eventData);
         }
 
-        phaseData._stageGraphEventList = eventList.ToArray();
-        phaseData._stageGraphEventCount = eventList.Count;
+        phaseData._sequencerGraphEventList = eventList.ToArray();
+        phaseData._sequencerGraphEventCount = eventList.Count;
         return phaseData;
     }
 
-    private static StageGraphEventBase readEventData(XmlNode node)
+    private static SequencerGraphEventBase readEventData(XmlNode node)
     {
-        StageGraphEventBase spawnEvent = null;
+        SequencerGraphEventBase spawnEvent = null;
         if(node.Name == "SpawnCharacter")
         {
-            spawnEvent = new StageGraphEvent_SpawnCharacter();
+            spawnEvent = new SequencerGraphEvent_SpawnCharacter();
         }
         else if(node.Name == "WaitSecond")
         {
-            spawnEvent = new StageGraphEvent_WaitSecond(); 
+            spawnEvent = new SequencerGraphEvent_WaitSecond(); 
         }
         else if(node.Name == "SetCameraTarget")
         {
-            spawnEvent = new StageGraphEvent_SetCameraTarget();
+            spawnEvent = new SequencerGraphEvent_SetCameraTarget();
         }
         else if(node.Name == "SetAudioListner")
         {
-            spawnEvent = new StageGraphEvent_SetAudioListner();
+            spawnEvent = new SequencerGraphEvent_SetAudioListner();
         }
         else if(node.Name == "SetCrossHair")
         {
-            spawnEvent = new StageGraphEvent_SetCrossHair();
+            spawnEvent = new SequencerGraphEvent_SetCrossHair();
         }
         else if(node.Name == "SetHPSphere")
         {
-            spawnEvent = new StageGraphEvent_SetHPSphere();
+            spawnEvent = new SequencerGraphEvent_SetHPSphere();
         }
         else if(node.Name == "WaitTargetDead")
         {
-            spawnEvent = new StageGraphEvent_WaitTargetDead();
+            spawnEvent = new SequencerGraphEvent_WaitTargetDead();
         }
         else if(node.Name == "TeleportTargetTo")
         {
-            spawnEvent = new StageGraphEvent_TeleportTargetTo();
+            spawnEvent = new SequencerGraphEvent_TeleportTargetTo();
         }
         else if(node.Name == "ApplyPostProcessProfile")
         {
-            spawnEvent = new StageGraphEvent_ApplyPostProcessProfile();
+            spawnEvent = new SequencerGraphEvent_ApplyPostProcessProfile();
         }
         else if(node.Name == "SaveEventExecuteIndex")
         {
-            spawnEvent = new StageGraphEvent_SaveEventExecuteIndex();
+            spawnEvent = new SequencerGraphEvent_SaveEventExecuteIndex();
         }
 
 
         if(spawnEvent == null)
         {
-            DebugUtil.assert(false,"invalid stage graph event type: {0} [Line: {1}] [FileName: {2}]", node.Name, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
+            DebugUtil.assert(false,"invalid sequencer graph event type: {0} [Line: {1}] [FileName: {2}]", node.Name, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
             return null;
         }
 

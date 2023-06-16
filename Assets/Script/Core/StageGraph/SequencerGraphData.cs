@@ -1,15 +1,15 @@
 using UnityEngine;
 using System.Xml;
 
-public abstract class StageGraphEventBase
+public abstract class SequencerGraphEventBase
 {
-    public abstract StageGraphEventType getStageGraphEventType();
+    public abstract SequencerGraphEventType getSequencerGraphEventType();
     public abstract void Initialize();
     public abstract bool Execute(SequencerGraphProcessor processor, float deltaTime);
     public abstract void loadXml(XmlNode node);
 }
 
-public class StageGraphEvent_SpawnCharacter : StageGraphEventBase
+public class SequencerGraphEvent_SpawnCharacter : SequencerGraphEventBase
 {
     private string                      _characterKey;
 
@@ -18,7 +18,7 @@ public class StageGraphEvent_SpawnCharacter : StageGraphEventBase
 
     private string                      _uniqueEntityKey = "";
 
-    public override StageGraphEventType getStageGraphEventType() => StageGraphEventType.SpawnCharacter;
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SpawnCharacter;
     
     public override void Initialize()
     {
@@ -69,12 +69,12 @@ public class StageGraphEvent_SpawnCharacter : StageGraphEventBase
     }
 }
 
-public class StageGraphEvent_WaitSecond : StageGraphEventBase
+public class SequencerGraphEvent_WaitSecond : SequencerGraphEventBase
 {
     private float   _waitTime = 0f;
     private float   _timer = 0f;
 
-    public override StageGraphEventType getStageGraphEventType() => StageGraphEventType.WaitSecond;
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.WaitSecond;
     
     public override void Initialize()
     {
@@ -102,11 +102,11 @@ public class StageGraphEvent_WaitSecond : StageGraphEventBase
     }
 }
 
-public class StageGraphEvent_SetHPSphere : StageGraphEventBase
+public class SequencerGraphEvent_SetHPSphere : SequencerGraphEventBase
 {
     private string _uniqueKey = "";
 
-    public override StageGraphEventType getStageGraphEventType() => StageGraphEventType.SetHPSphere;
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SetHPSphere;
     
     public override void Initialize()
     {
@@ -142,11 +142,11 @@ public class StageGraphEvent_SetHPSphere : StageGraphEventBase
     }
 }
 
-public class StageGraphEvent_SetCrossHair : StageGraphEventBase
+public class SequencerGraphEvent_SetCrossHair : SequencerGraphEventBase
 {
     private string _uniqueKey = "";
 
-    public override StageGraphEventType getStageGraphEventType() => StageGraphEventType.SetCrossHair;
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SetCrossHair;
     
     public override void Initialize()
     {
@@ -182,11 +182,11 @@ public class StageGraphEvent_SetCrossHair : StageGraphEventBase
     }
 }
 
-public class StageGraphEvent_WaitTargetDead : StageGraphEventBase
+public class SequencerGraphEvent_WaitTargetDead : SequencerGraphEventBase
 {
     private string _uniqueKey = "";
 
-    public override StageGraphEventType getStageGraphEventType() => StageGraphEventType.WaitTargetDead;
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.WaitTargetDead;
     
     public override void Initialize()
     {
@@ -217,9 +217,9 @@ public class StageGraphEvent_WaitTargetDead : StageGraphEventBase
     }
 }
 
-public class StageGraphEvent_SaveEventExecuteIndex : StageGraphEventBase
+public class SequencerGraphEvent_SaveEventExecuteIndex : SequencerGraphEventBase
 {
-    public override StageGraphEventType getStageGraphEventType() => StageGraphEventType.SaveEventExecuteIndex;
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SaveEventExecuteIndex;
     
     public override void Initialize()
     {
@@ -236,11 +236,12 @@ public class StageGraphEvent_SaveEventExecuteIndex : StageGraphEventBase
     }
 }
 
-public class StageGraphEvent_ApplyPostProcessProfile : StageGraphEventBase
+public class SequencerGraphEvent_ApplyPostProcessProfile : SequencerGraphEventBase
 {
     private string _path = "";
+    private float _blendTime = 0f;
 
-    public override StageGraphEventType getStageGraphEventType() => StageGraphEventType.ApplyPostProcessProfile;
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.ApplyPostProcessProfile;
     
     public override void Initialize()
     {
@@ -253,7 +254,7 @@ public class StageGraphEvent_ApplyPostProcessProfile : StageGraphEventBase
         if(profile == null || (profile is PostProcessProfile) == false)
             return true;
 
-        (profile as PostProcessProfile).syncValueToMaterial(false);
+        CameraControlEx.Instance().getPostProcessProfileControl().addBaseBlendProfile(profile as PostProcessProfile,3f);
         return true;
     }
 
@@ -268,16 +269,18 @@ public class StageGraphEvent_ApplyPostProcessProfile : StageGraphEventBase
 
             if(attrName == "Path")
                 _path = attrValue;
+            else if(attrName == "BlendTime")
+                _blendTime = float.Parse(attrValue);
         }
     }
 }
 
-public class StageGraphEvent_TeleportTargetTo : StageGraphEventBase
+public class SequencerGraphEvent_TeleportTargetTo : SequencerGraphEventBase
 {
     private string _uniqueKey = "";
     private Vector3 _targetPosition;
 
-    public override StageGraphEventType getStageGraphEventType() => StageGraphEventType.TeleportTargetTo;
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.TeleportTargetTo;
     
     public override void Initialize()
     {
@@ -314,11 +317,11 @@ public class StageGraphEvent_TeleportTargetTo : StageGraphEventBase
     }
 }
 
-public class StageGraphEvent_SetAudioListner : StageGraphEventBase
+public class SequencerGraphEvent_SetAudioListner : SequencerGraphEventBase
 {
     private string _uniqueKey = "";
 
-    public override StageGraphEventType getStageGraphEventType() => StageGraphEventType.SetAudioListner;
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SetAudioListner;
     
     public override void Initialize()
     {
@@ -353,12 +356,12 @@ public class StageGraphEvent_SetAudioListner : StageGraphEventBase
     }
 }
 
-public class StageGraphEvent_SetCameraTarget : StageGraphEventBase
+public class SequencerGraphEvent_SetCameraTarget : SequencerGraphEventBase
 {
     private string _uniqueKey = "";
     private CameraModeType _cameraMode = CameraModeType.Count;
 
-    public override StageGraphEventType getStageGraphEventType() => StageGraphEventType.SetCameraTarget;
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SetCameraTarget;
     
     public override void Initialize()
     {
@@ -392,7 +395,7 @@ public class StageGraphEvent_SetCameraTarget : StageGraphEventBase
     }
 }
 
-public enum StageGraphEventType
+public enum SequencerGraphEventType
 {
     SpawnCharacter,
     WaitSecond,
@@ -407,23 +410,23 @@ public enum StageGraphEventType
     Count,
 }
 
-public enum StageGraphPhaseType
+public enum SequencerGraphPhaseType
 {
     Initialize = 0,
     Update,
     Count,
 }
 
-public class StageGraphPhaseData
+public class SequencerGraphPhaseData
 {
-    public StageGraphEventBase[]    _stageGraphEventList;
-    public int                      _stageGraphEventCount;
+    public SequencerGraphEventBase[]    _sequencerGraphEventList;
+    public int                          _sequencerGraphEventCount;
 }
 
-public class StageGraphBaseData
+public class SequencerGraphBaseData
 {
-    public string                   _stageName;
+    public string                       _sequencerName;
 
-    public StageGraphPhaseData[]    _stageGraphPhase = new StageGraphPhaseData[(int)StageGraphPhaseType.Count];
+    public SequencerGraphPhaseData[]    _sequencerGraphPhase = new SequencerGraphPhaseData[(int)SequencerGraphPhaseType.Count];
     
 }

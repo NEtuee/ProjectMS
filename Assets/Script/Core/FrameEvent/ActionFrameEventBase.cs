@@ -32,6 +32,7 @@ public enum FrameEventType
     FrameEvent_SetAction,
     FrameEvent_CallAIEvent,
     FrameEvent_AudioPlay,
+    FrameEvent_PlaySequencer,
 
     Count,
 }
@@ -170,6 +171,40 @@ public class ActionFrameEvent_CallAIEvent : ActionFrameEventBase
                 _eventTargetType = (CallAIEventTargetType)System.Enum.Parse(typeof(CallAIEventTargetType), attrValue);
             }
 
+        }
+    }
+}
+
+public class ActionFrameEvent_PlaySequencer : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_PlaySequencer;}
+
+    public string _sequencerPath = "";
+    public override void initialize()
+    {
+    }
+
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        if(executeEntity is GameEntityBase == false)
+            return true;
+
+        GameEntityBase targetGameEntity = targetEntity as GameEntityBase;
+        (executeEntity as GameEntityBase).startSequencer(_sequencerPath, targetGameEntity,true);
+        return true;
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attributes[i].Name == "Path")
+                _sequencerPath = attributes[i].Value;
         }
     }
 }

@@ -169,11 +169,11 @@ public class MasterManager : MessageHub<ManagerBase>
         FMODAudioManager.Instance().updateAudio();
 
         if(Input.GetKeyDown(KeyCode.Return) && _mainStageProcessor.isValid() == false)
-            _mainStageProcessor.startStage("Assets\\Data\\StageGraph\\TestStage.xml",null,null);
+            _mainStageProcessor.startSequencer("Assets\\Data\\StageGraph\\TestStage.xml",null,null);
 
         if(Input.GetKeyDown(KeyCode.Escape))
         {
-            _mainStageProcessor.stopStage();
+            _mainStageProcessor.stopSequencer();
             Message msg = MessagePool.GetMessage();
             msg.Set(MessageTitles.game_stageEnd,MessageReceiver._boradcastNumber,null,null);
 
@@ -190,6 +190,14 @@ public class MasterManager : MessageHub<ManagerBase>
     public void FixedUpdate()
     {
         ManagersFixedUpdate(Time.fixedDeltaTime);
+    }
+
+    public GameEntityBase getPlayerEntity()
+    {
+        if(_mainStageProcessor.isSequencerEnd())
+            return null;
+
+        return _mainStageProcessor.getUniqueEntity("Player");
     }
 
     public void StopUpdateSecond(float time)
