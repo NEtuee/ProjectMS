@@ -369,6 +369,11 @@ public class TimelineEffectItem : EffectItemBase
     public override void release()
     {
         _playableDirector.Stop();
+        disableEffect();
+    }
+
+    public void disableEffect()
+    {
         _effectObject.transform.SetParent(null);
         _effectObject.SetActive(false);
     }
@@ -486,12 +491,12 @@ public class ParticleEffectItem : EffectItemBase
             item.Stop();
         }
 
-        _effectObject.transform.SetParent(null);
-        _effectObject.SetActive(false);
+        disableEffect();
     }
 
     public void disableEffect()
     {
+        _effectObject?.transform.SetParent(null);
         _effectObject?.SetActive(false);
     }
 

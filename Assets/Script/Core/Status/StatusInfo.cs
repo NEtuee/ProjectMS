@@ -49,6 +49,8 @@ public class StatusInfo
         //public BuffUpdateState _updateState;
 
         public ParticleEffectItem _particleEffect;
+        public TimelineEffectItem _timelineEffect;
+
         public float _startedTime;
 
         public void updateStartTime(float startedTime)
@@ -225,6 +227,7 @@ public class StatusInfo
         buffItem._buffData = buff;
         buffItem._startedTime = startedTime;
         buffItem._particleEffect = null;
+        buffItem._timelineEffect = null;
         
         _currentlyAppliedBuffList.Add(buffItem);
 
@@ -250,7 +253,9 @@ public class StatusInfo
             
             if(_currentlyAppliedBuffList[i]._particleEffect != null)
                 _currentlyAppliedBuffList[i]._particleEffect.disableEffect();
-            
+            if(_currentlyAppliedBuffList[i]._timelineEffect != null)
+                _currentlyAppliedBuffList[i]._timelineEffect.disableEffect();
+
             _buffItemPool.enqueue(_currentlyAppliedBuffList[i]);
         }
 
@@ -381,17 +386,33 @@ public class StatusInfo
                 {
                     DebugUtil.assert(false,"failed to update buff: {0}",buffData._buffName);
                 }
-                else if(buffData._particleEffect != "" && buffItem._particleEffect == null && _ownerObject != null)
+                else
                 {
-                    EffectRequestData requestData = MessageDataPooling.GetMessageData<EffectRequestData>();
-                    requestData.clearRequestData();
-                    requestData._parentTransform = _ownerObject.transform;
-                    requestData._position = _ownerObject.transform.position;
-                    requestData._effectPath = buffData._particleEffect;
-                    requestData._effectType = EffectType.ParticleEffect;
-                    buffItem._particleEffect = EffectManager._instance.createEffect(requestData) as ParticleEffectItem;
-                    requestData.isUsing = true;
+                    if(buffData._particleEffect != "" && buffItem._particleEffect == null && _ownerObject != null)
+                    {
+                        EffectRequestData requestData = MessageDataPooling.GetMessageData<EffectRequestData>();
+                        requestData.clearRequestData();
+                        requestData._parentTransform = _ownerObject.transform;
+                        requestData._position = _ownerObject.transform.position;
+                        requestData._effectPath = buffData._particleEffect;
+                        requestData._effectType = EffectType.ParticleEffect;
+                        buffItem._particleEffect = EffectManager._instance.createEffect(requestData) as ParticleEffectItem;
+                        requestData.isUsing = true;
+                    }
+                    
+                    if(buffData._timelineEffect != "" && buffItem._timelineEffect == null && _ownerObject != null)
+                    {
+                        EffectRequestData requestData = MessageDataPooling.GetMessageData<EffectRequestData>();
+                        requestData.clearRequestData();
+                        requestData._parentTransform = _ownerObject.transform;
+                        requestData._position = _ownerObject.transform.position;
+                        requestData._effectPath = buffData._timelineEffect;
+                        requestData._effectType = EffectType.TimelineEffect;
+                        buffItem._timelineEffect = EffectManager._instance.createEffect(requestData) as TimelineEffectItem;
+                        requestData.isUsing = true;
+                    }
                 }
+
                 
             }
             else
@@ -400,6 +421,11 @@ public class StatusInfo
                 {
                     buffItem._particleEffect.stopEffect();
                     buffItem._particleEffect = null;
+                }
+                if(buffItem._timelineEffect != null)
+                {
+                    buffItem._timelineEffect.stopEffect();
+                    buffItem._timelineEffect = null;
                 }
             }
                 

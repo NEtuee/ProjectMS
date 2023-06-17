@@ -16,6 +16,7 @@ public class BuffData
     public string              _buffCustomStatusName;
 
     public string              _particleEffect = "";
+    public string              _timelineEffect = "";
 
     public BuffData()
     {
@@ -31,6 +32,7 @@ public class BuffData
         _buffCustomValue2 = null;
 
         _particleEffect = "";
+        _timelineEffect = "";
     }
 
     public void copy(BuffData target)
@@ -44,6 +46,7 @@ public class BuffData
         _buffCustomValue1 = target._buffCustomValue1;
         _buffCustomValue2 = target._buffCustomValue2;
         _particleEffect = target._particleEffect;
+        _timelineEffect = target._timelineEffect;
     }
 
 
