@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class GameEditorMaster : MonoBehaviour
 {
@@ -57,6 +59,10 @@ public class GameEditorMaster : MonoBehaviour
 
             window.mainUpdate(Time.deltaTime);
         }
+
+#if UNITY_EDITOR
+        updateCharacterPick();
+#endif
     }
 
     void updateHotkeysAlways()
@@ -78,7 +84,31 @@ public class GameEditorMaster : MonoBehaviour
     {
 
     }
+#if UNITY_EDITOR
+    public void updateCharacterPick()
+    {
+        if(Input.GetKeyDown(KeyCode.Mouse0) == false)
+            return;
 
+        Vector3 mousePosition = Input.mousePosition;
+        mousePosition = MathEx.deleteZ(mousePosition);
+        mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
+
+        SceneCharacterManager sceneCharacterManager = SceneCharacterManager._managerInstance as SceneCharacterManager;
+        var characters = sceneCharacterManager.getCurrentlyEnabledCharacters();
+
+        foreach(var character in characters.Values)
+        {
+            BoundBox boundBox = character.getCollisionInfo().getBoundBox();
+            if(boundBox.intersection(mousePosition))
+            {
+                Selection.activeGameObject = character.gameObject;
+                EditorGUIUtility.PingObject(character.gameObject);
+                break;
+            }
+        }
+    }
+#endif
     public void setMainWindow(EditorWindowBase window)
     {
         _currentFocusWindow = window;
