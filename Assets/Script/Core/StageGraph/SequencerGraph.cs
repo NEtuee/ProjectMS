@@ -19,6 +19,8 @@ public class SequencerGraphProcessor
 
     private List<string>                        _deleteUniqueTargetList = new List<string>();
 
+    private List<string>                        _signalList = new List<string>();
+
     public void initialize()
     {
         _currentIndex = 0;
@@ -26,6 +28,7 @@ public class SequencerGraphProcessor
 
         _uniqueEntityDictionary.Clear();
         _deleteUniqueTargetList.Clear();
+        _signalList.Clear();
     }
 
     public void progress(float deltaTime)
@@ -54,6 +57,8 @@ public class SequencerGraphProcessor
                 break;
             }
 
+            _currentSequencer._sequencerGraphPhase[1]._sequencerGraphEventList[index].Exit(this);
+
             if(_currentSequencer._sequencerGraphPhase[1]._sequencerGraphEventList[index].getSequencerGraphEventType() == SequencerGraphEventType.SaveEventExecuteIndex)
             {
                 _savedEventItem._savedIndex = index + 1;
@@ -63,6 +68,17 @@ public class SequencerGraphProcessor
             ++index;
         }
 
+        _signalList.Clear();
+    }
+
+    public void addSignal(string signal)
+    {
+        _signalList.Add(signal);
+    }
+
+    public bool checkSignal(string signal)
+    {
+        return _signalList.Contains(signal);
     }
 
     public void addUniqueEntity(string uniqueKey, GameEntityBase uniqueEntity)

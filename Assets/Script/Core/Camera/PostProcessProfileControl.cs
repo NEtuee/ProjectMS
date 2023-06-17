@@ -2,6 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum PostProcessProfileApplyType
+{
+    BaseBlend,
+    Additional,
+}
+
 public class PostProcessProfileControl
 {   
     private class ProfileBlender
@@ -46,31 +52,37 @@ public class PostProcessProfileControl
 
     private bool                        _isBlending = false;
 
-    public void updateMaterial(bool editMode)
+    static public Material getPostProcessMaterial(bool editMode)
     {
         GameObject targetGameObject = GameObject.FindGameObjectWithTag("ScreenResultMesh");
         if(targetGameObject == null)
-            return;
+            return null;
 
         MeshRenderer targetMeshRenderer = targetGameObject.GetComponent<MeshRenderer>();
         if(targetMeshRenderer == null)
-            return;
+            return null;
 
         if(editMode)
         {
             List<Material> sharedMaterial = new List<Material>();
             targetMeshRenderer.GetSharedMaterials(sharedMaterial);
-            _targetMaterial = sharedMaterial[0];
+            return sharedMaterial[0];
         }
         else
         {
-            _targetMaterial = targetMeshRenderer.material;
+            return targetMeshRenderer.material;
         }
+    }
+
+
+    public void updateMaterial(bool editMode)
+    {
+        _targetMaterial = getPostProcessMaterial(editMode);
     }
 
     public void processBlend(float deltaTime)
     {
-        if(_baseBlendingProfileList.Count == 0)
+        if(_baseBlendingProfileList.Count == 0 && _additionalEffectProfile.isEnd())
             return;
 
         _resultData.copy(_baseBlendingProfileList[0]._sourceLayer);
@@ -91,12 +103,14 @@ public class PostProcessProfileControl
 
         if(_isBlending)
             _resultData.syncValueToMaterial(_targetMaterial);
-        _isBlending = _baseBlendingProfileList.Count > 1;
+
+        _isBlending = _baseBlendingProfileList.Count > 1 || _additionalEffectProfile.isEnd() == false;
     }
 
     public void setAdditionalEffectProfile(PostProcessProfile profile, float blendTime)
     {
         _additionalEffectProfile.setProfileData(profile,blendTime);
+        _isBlending = true;
     }
 
     public void addBaseBlendProfile(PostProcessProfile profile, float blendTime)

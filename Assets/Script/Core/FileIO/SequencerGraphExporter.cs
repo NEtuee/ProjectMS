@@ -10,13 +10,13 @@ public class SequencrGraphLoader : LoaderBase<SequencerGraphBaseData>
     static string _currentFileName = "";
     public override SequencerGraphBaseData readFromXML(string path)
     {
-        _currentFileName = path;
+        _currentFileName = "Assets\\Data\\SequencerGraph\\" + path;
         PositionXmlDocument xmlDoc = new PositionXmlDocument();
         try
         {
             XmlReaderSettings readerSettings = new XmlReaderSettings();
             readerSettings.IgnoreComments = true;
-            using (XmlReader reader = XmlReader.Create(XMLScriptConverter.convertXMLScriptSymbol(path),readerSettings))
+            using (XmlReader reader = XmlReader.Create(XMLScriptConverter.convertXMLScriptSymbol(_currentFileName),readerSettings))
             {
                 xmlDoc.Load(reader);
             }
@@ -84,47 +84,32 @@ public class SequencrGraphLoader : LoaderBase<SequencerGraphBaseData>
     {
         SequencerGraphEventBase spawnEvent = null;
         if(node.Name == "SpawnCharacter")
-        {
             spawnEvent = new SequencerGraphEvent_SpawnCharacter();
-        }
         else if(node.Name == "WaitSecond")
-        {
             spawnEvent = new SequencerGraphEvent_WaitSecond(); 
-        }
         else if(node.Name == "SetCameraTarget")
-        {
             spawnEvent = new SequencerGraphEvent_SetCameraTarget();
-        }
         else if(node.Name == "SetAudioListner")
-        {
             spawnEvent = new SequencerGraphEvent_SetAudioListner();
-        }
         else if(node.Name == "SetCrossHair")
-        {
             spawnEvent = new SequencerGraphEvent_SetCrossHair();
-        }
         else if(node.Name == "SetHPSphere")
-        {
             spawnEvent = new SequencerGraphEvent_SetHPSphere();
-        }
         else if(node.Name == "WaitTargetDead")
-        {
             spawnEvent = new SequencerGraphEvent_WaitTargetDead();
-        }
         else if(node.Name == "TeleportTargetTo")
-        {
             spawnEvent = new SequencerGraphEvent_TeleportTargetTo();
-        }
         else if(node.Name == "ApplyPostProcessProfile")
-        {
             spawnEvent = new SequencerGraphEvent_ApplyPostProcessProfile();
-        }
         else if(node.Name == "SaveEventExecuteIndex")
-        {
             spawnEvent = new SequencerGraphEvent_SaveEventExecuteIndex();
-        }
-
-
+        else if(node.Name == "CallAIEvent")
+            spawnEvent = new SequencerGraphEvent_CallAIEvent();
+        else if(node.Name == "WaitSignal")
+            spawnEvent = new SequencerGraphEvent_WaitSignal();
+        else if(node.Name == "SetCameraZoom")
+            spawnEvent = new SequencerGraphEvent_SetCameraZoom();
+            
         if(spawnEvent == null)
         {
             DebugUtil.assert(false,"invalid sequencer graph event type: {0} [Line: {1}] [FileName: {2}]", node.Name, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);

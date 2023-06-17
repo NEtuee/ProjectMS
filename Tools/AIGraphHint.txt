@@ -57,8 +57,8 @@ AIEvent,SetCustomValue,"Name=~~,Value=~~"
 AIEvent,AddCustomValue,"Name=~~,Value=~~"
 AIEvent,CallAIEvent,"EventName=~~,TargetType=~~"
 ShortCut,__CustomValue,<CustomValue Name=~~ Value=~~/>
-,,
-,,
+AIEvent,SequencerSignal,Signal=~~
+ShortCut,__AIEvent_SequencerSignal,<AIEvent Type=~SequencerSignal~ Signal=~~/>
 ,,
 ,,
 ,,

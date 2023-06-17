@@ -16,6 +16,7 @@ public enum AIEventType
     AIEvent_CallAIEvent,
     AIEvent_SetCustomValue,
     AIEvent_AddCustomValue,
+    AIEvent_SequencerSignal,
     Count,
 }
 
@@ -60,6 +61,35 @@ public abstract class AIEventBase
     public abstract void onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null);
     public abstract void loadFromXML(XmlNode node);
 
+}
+
+
+public class AIEvent_SequencerSignal : AIEventBase
+{
+    private string _signal = "";
+    private float _value;
+
+    public override AIEventType getFrameEventType() {return AIEventType.AIEvent_SequencerSignal;}
+    public override void onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        if(executeEntity is GameEntityBase == false)
+            return;
+
+        (executeEntity as GameEntityBase).addSequencerSignal(_signal);
+    }
+
+    public override void loadFromXML(XmlNode node) 
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "Signal")
+                _signal = attrValue;
+        }
+    }
 }
 
 public class AIEvent_AddCustomValue : AIEventBase

@@ -73,13 +73,17 @@ public static class FrameEventLoader
             outFrameEvent = new ActionFrameEvent_AudioPlay();
         else if(type == "PlaySequencer")
             outFrameEvent = new ActionFrameEvent_PlaySequencer();
+        else if(type == "SequencerSignal")
+            outFrameEvent = new ActionFrameEvent_SequencerSignal();
+        else if(type == "ApplyPostProcessProfile")
+            outFrameEvent = new ActionFrameEvent_ApplyPostProcessProfile();
         else
         {
             DebugUtil.assert(false, "invalid frameEvent type: {0}",type);
             return null;
         }
 
-        DebugUtil.assert((int)FrameEventType.Count == 30, "check here");
+        DebugUtil.assert((int)FrameEventType.Count == 32, "check here");
 
 
         if(outFrameEvent == null)

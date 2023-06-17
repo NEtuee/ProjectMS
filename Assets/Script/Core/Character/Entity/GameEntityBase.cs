@@ -267,6 +267,9 @@ public class GameEntityBase : SequencerObjectBase
 
         _characterLifeTime += deltaTime;
 
+        if(_sequencerProcessManager != null)
+            _sequencerProcessManager.progress(deltaTime);
+
         _statusInfo.updateStatus(deltaTime);
         _statusInfo.updateActionConditionData(this);
 
@@ -969,6 +972,11 @@ public class GameEntityBase : SequencerObjectBase
     public SequencerGraphProcessor startSequencer(string sequencerKey, GameEntityBase targetEntity, bool includePlayer)
     {
         return _sequencerProcessManager.startSequencerClean(sequencerKey,targetEntity,includePlayer);
+    }
+
+    public void addSequencerSignal(string signal)
+    {
+        _sequencerProcessManager.addSequencerSignal(signal);
     }
 
     public float getHeadUpOffset() {return _headUpOffset;}

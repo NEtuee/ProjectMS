@@ -55,6 +55,14 @@ public class SequencerGraphProcessManager
         return processor;
     }
 
+    public void addSequencerSignal(string signal)
+    {
+        foreach(var processor in _activeProcessorList)
+        {
+            processor.addSignal(signal);
+        }
+    }
+
     public void clearSequencerGraphProcessManager()
     {
         foreach(var processor in _activeProcessorList)

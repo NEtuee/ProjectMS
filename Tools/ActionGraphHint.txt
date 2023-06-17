@@ -94,6 +94,24 @@ ShortCut,__FrameEvent_AudioPlay,<FrameEvent Type=~AudioPlay~ StartTime=~0~ ID=~~
 FrameEvent,AudioPlay,"ID=~~,ToTarget=~~,Attach=~~,UseFlip=~~"
 InQuote,Flags=,"ClearPush,LaserEffect"
 ShortCut,__FrameEvent_Test,<FrameEvent Type=~Test~ StartTime=~0~ Log=~~/>
+FrameEvent,SetCameraZoom,Size=~~
+ShortCut,__FrameEvent_SetCameraZoom,<FrameEvent Type=~SetCameraZoom~ StartTime=~0~ Size=~~/>
+ShortCut,__FrameEvent_PlaySequencer,<FrameEvent Type=~PlaySequencer~ StartTime=~0~ Path=~~/>
+FrameEvent,PlaySequencer,Path=~~
+ShortCut,__FrameEvent_SequencerSignal,<FrameEvent Type=~SequencerSignal~ StartTime=~0~ Signal=~~/>
+FrameEvent,SequencerSignal,Signal=~~
+ShortCut,__FrameEvent_ApplyPostProcessProfile,<FrameEvent Type=~ApplyPostProcessProfile~ StartTime=~0~ Path=~~ BlendTime=~~/>
+FrameEvent,ApplyPostProcessProfile,"Path=~~,BlendTime=~~,ApplyType=~~"
+InQuote,ApplyType=,"BaseBlend,Additional"
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
 ,,
 ,,
 ,,

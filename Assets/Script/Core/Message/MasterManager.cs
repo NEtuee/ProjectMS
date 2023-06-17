@@ -169,7 +169,7 @@ public class MasterManager : MessageHub<ManagerBase>
         FMODAudioManager.Instance().updateAudio();
 
         if(Input.GetKeyDown(KeyCode.Return) && _mainStageProcessor.isValid() == false)
-            _mainStageProcessor.startSequencer("Assets\\Data\\StageGraph\\TestStage.xml",null,null);
+            _mainStageProcessor.startSequencer("TestStage.xml",null,null);
 
         if(Input.GetKeyDown(KeyCode.Escape))
         {

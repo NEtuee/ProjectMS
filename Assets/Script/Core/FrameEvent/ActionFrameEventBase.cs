@@ -33,6 +33,8 @@ public enum FrameEventType
     FrameEvent_CallAIEvent,
     FrameEvent_AudioPlay,
     FrameEvent_PlaySequencer,
+    FrameEvent_SequencerSignal,
+    FrameEvent_ApplyPostProcessProfile,
 
     Count,
 }
@@ -171,6 +173,90 @@ public class ActionFrameEvent_CallAIEvent : ActionFrameEventBase
                 _eventTargetType = (CallAIEventTargetType)System.Enum.Parse(typeof(CallAIEventTargetType), attrValue);
             }
 
+        }
+    }
+}
+
+public class ActionFrameEvent_ApplyPostProcessProfile : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_ApplyPostProcessProfile;}
+
+    private string _path = "";
+    private float _blendTime = 0f;
+    private PostProcessProfileApplyType _applyType = PostProcessProfileApplyType.BaseBlend;
+
+    public override void initialize()
+    {
+    }
+
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        UnityEngine.ScriptableObject profile = ResourceContainerEx.Instance().GetScriptableObject(_path);
+        if(profile == null || (profile is PostProcessProfile) == false)
+            return true;
+
+        switch(_applyType)
+        {
+            case PostProcessProfileApplyType.BaseBlend:
+                CameraControlEx.Instance().getPostProcessProfileControl().addBaseBlendProfile(profile as PostProcessProfile,_blendTime);
+            break;
+            case PostProcessProfileApplyType.Additional:
+                CameraControlEx.Instance().getPostProcessProfileControl().setAdditionalEffectProfile(profile as PostProcessProfile,_blendTime);
+            break;
+        }
+        
+        return true;
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "Path")
+                _path = attrValue;
+            else if(attrName == "BlendTime")
+                _blendTime = float.Parse(attrValue);
+            else if(attrName == "ApplyType")
+                _applyType = (PostProcessProfileApplyType)System.Enum.Parse(typeof(PostProcessProfileApplyType), attrValue);
+        }
+    }
+}
+
+public class ActionFrameEvent_SequencerSignal : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_SequencerSignal;}
+
+    public string _signal = "";
+    public override void initialize()
+    {
+    }
+
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        if(executeEntity is GameEntityBase == false)
+            return true;
+
+        GameEntityBase targetGameEntity = targetEntity as GameEntityBase;
+        (executeEntity as GameEntityBase).addSequencerSignal(_signal);
+        return true;
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attributes[i].Name == "Signal")
+                _signal = attrValue;
         }
     }
 }

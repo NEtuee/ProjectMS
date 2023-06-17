@@ -1,12 +1,132 @@
 using UnityEngine;
 using System.Xml;
 
+public enum SequencerGraphEventType
+{
+    SpawnCharacter,
+    WaitSecond,
+    SetCameraTarget,
+    SetAudioListner,
+    SetCrossHair,
+    SetHPSphere,
+    WaitTargetDead,
+    TeleportTargetTo,
+    ApplyPostProcessProfile,
+    SaveEventExecuteIndex,
+    CallAIEvent,
+    WaitSignal,
+    SetCameraZoom,
+
+    Count,
+}
+
 public abstract class SequencerGraphEventBase
 {
     public abstract SequencerGraphEventType getSequencerGraphEventType();
     public abstract void Initialize();
     public abstract bool Execute(SequencerGraphProcessor processor, float deltaTime);
+    public virtual void Exit(SequencerGraphProcessor processor) {}
     public abstract void loadXml(XmlNode node);
+}
+
+public class SequencerGraphEvent_WaitSignal : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.WaitSignal;
+
+    public string _targetSignal = "";
+
+    public override void Initialize()
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        return processor.checkSignal(_targetSignal);
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "Signal")
+                _targetSignal = attrValue;
+        }
+    }
+}
+
+
+public class SequencerGraphEvent_CallAIEvent : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.CallAIEvent;
+
+    public string _customAiEventName = "";
+    public string _uniqueKey = "";
+
+    public override void Initialize()
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        ObjectBase executeTargetEntity = processor.getUniqueEntity(_uniqueKey);
+        if(executeTargetEntity == null || executeTargetEntity is GameEntityBase == false)
+            return true;
+
+        (executeTargetEntity as GameEntityBase).executeCustomAIEvent(_customAiEventName);
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attributes[i].Name == "EventName")
+                _customAiEventName = attributes[i].Value;
+            else if(attrName == "UniqueKey")
+                _uniqueKey = attributes[i].Value;
+
+        }
+    }
+}
+
+public class SequencerGraphEvent_SetCameraZoom : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SetCameraZoom;
+
+    private float _zoom = -1f;
+
+    public override void Initialize()
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        if(_zoom <= 0f)
+            CameraControlEx.Instance().setDefaultZoomSize();
+        else
+            CameraControlEx.Instance().setZoomSize(_zoom);
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            if(attributes[i].Name == "Size")
+                _zoom = float.Parse(attributes[i].Value);
+        }
+    }
 }
 
 public class SequencerGraphEvent_SpawnCharacter : SequencerGraphEventBase
@@ -240,6 +360,7 @@ public class SequencerGraphEvent_ApplyPostProcessProfile : SequencerGraphEventBa
 {
     private string _path = "";
     private float _blendTime = 0f;
+    private PostProcessProfileApplyType _applyType = PostProcessProfileApplyType.BaseBlend;
 
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.ApplyPostProcessProfile;
     
@@ -254,7 +375,16 @@ public class SequencerGraphEvent_ApplyPostProcessProfile : SequencerGraphEventBa
         if(profile == null || (profile is PostProcessProfile) == false)
             return true;
 
-        CameraControlEx.Instance().getPostProcessProfileControl().addBaseBlendProfile(profile as PostProcessProfile,3f);
+        switch(_applyType)
+        {
+            case PostProcessProfileApplyType.BaseBlend:
+                CameraControlEx.Instance().getPostProcessProfileControl().addBaseBlendProfile(profile as PostProcessProfile,_blendTime);
+            break;
+            case PostProcessProfileApplyType.Additional:
+                CameraControlEx.Instance().getPostProcessProfileControl().setAdditionalEffectProfile(profile as PostProcessProfile,_blendTime);
+            break;
+        }
+        
         return true;
     }
 
@@ -271,6 +401,8 @@ public class SequencerGraphEvent_ApplyPostProcessProfile : SequencerGraphEventBa
                 _path = attrValue;
             else if(attrName == "BlendTime")
                 _blendTime = float.Parse(attrValue);
+            else if(attrName == "ApplyType")
+                _applyType = (PostProcessProfileApplyType)System.Enum.Parse(typeof(PostProcessProfileApplyType), attrValue);
         }
     }
 }
@@ -393,21 +525,6 @@ public class SequencerGraphEvent_SetCameraTarget : SequencerGraphEventBase
                 _cameraMode = (CameraModeType)System.Enum.Parse(typeof(CameraModeType), attrValue);
         }
     }
-}
-
-public enum SequencerGraphEventType
-{
-    SpawnCharacter,
-    WaitSecond,
-    SetCameraTarget,
-    SetAudioListner,
-    SetCrossHair,
-    SetHPSphere,
-    WaitTargetDead,
-    TeleportTargetTo,
-    ApplyPostProcessProfile,
-    SaveEventExecuteIndex,
-    Count,
 }
 
 public enum SequencerGraphPhaseType

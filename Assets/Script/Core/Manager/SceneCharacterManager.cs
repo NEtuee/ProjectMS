@@ -20,7 +20,13 @@ public struct SpawnCharacterOptionDesc
     public Quaternion       _rotation;
     public SearchIdentifier _searchIdentifier;
 
-    public static SpawnCharacterOptionDesc defaultValue = new SpawnCharacterOptionDesc{ _position = Vector3.zero, _direction = Vector3.right, _rotation = Quaternion.identity, _searchIdentifier = SearchIdentifier.Count};
+    public static SpawnCharacterOptionDesc defaultValue = new SpawnCharacterOptionDesc
+    { 
+        _position = Vector3.zero, 
+        _direction = Vector3.right, 
+        _rotation = Quaternion.identity, 
+        _searchIdentifier = SearchIdentifier.Count
+    };
 }
 
 public class SpawnCharacterOptionDescData : MessageData
