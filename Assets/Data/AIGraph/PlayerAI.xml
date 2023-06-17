@@ -15,4 +15,12 @@
 
     <Dead Package="CommonDeadPackage">
     </Dead>
+
+    <CustomEvent_MeleeFightStart>
+        <AIEvent Type="Test" Log="Start"/>
+    </CustomEvent_MeleeFightStart>
+
+    <CustomEvent_MeleeFightEnd>
+        <AIEvent Type="Test" Log="End"/>
+    </CustomEvent_MeleeFightEnd>
 </AIGraph>

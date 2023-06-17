@@ -25,7 +25,7 @@ public class SequencerGraphProcessManager
         {
             SequencerGraphProcessor processor = _activeProcessorList[index];            
 #if UNITY_EDITOR
-            if(processor.isValid())
+            if(processor.isValid() == false)
             {
                 DebugUtil.assert(false,"프로세서가 있는데 데이터가 없다. 통보 요망");
                 continue;

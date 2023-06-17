@@ -1,16 +1,16 @@
 HintType,Symbol,TextList
-LineStart,SpawnCharacter,"CharacterKey=~~,Position=~~,SearchIdentifier=~~,UniqueKey=~~"
-LineStart,WaitSecond,Time=~~
-LineStart,SetCameraTarget,"UniqueKey=~~,CameraMode=~~"
-LineStart,SetAudioListner,UniqueKey=~~
-LineStart,SetCrossHair,UniqueKey=~~
-LineStart,SetHPSphere,UniqueKey=~~
-LineStart,WaitTargetDead,UniqueKey=~~
-LineStart,TeleportTargetTo,"UniqueKey=~~,Position=~~"
-LineStart,ApplyPostProcessProfile,"Path=~~,BlendTime=~~,ApplyType=~~"
-LineStart,CallAIEvent,"EventName=~~,UniqueKey=~~"
-LineStart,WaitSignal,Signal=~~
-LineStart,SetCameraZoom,Size=~~
+LineStart,<SpawnCharacter,"CharacterKey=~~,Position=~~,SearchIdentifier=~~,UniqueKey=~~"
+LineStart,<WaitSecond,Time=~~
+LineStart,<SetCameraTarget,"UniqueKey=~~,CameraMode=~~"
+LineStart,<SetAudioListner,UniqueKey=~~
+LineStart,<SetCrossHair,UniqueKey=~~
+LineStart,<SetHPSphere,UniqueKey=~~
+LineStart,<WaitTargetDead,UniqueKey=~~
+LineStart,<TeleportTargetTo,"UniqueKey=~~,Position=~~"
+LineStart,<ApplyPostProcessProfile,"Path=~~,BlendTime=~~,ApplyType=~~"
+LineStart,<CallAIEvent,"EventName=~~,UniqueKey=~~"
+LineStart,<WaitSignal,Signal=~~
+LineStart,<SetCameraZoom,Size=~~
 InQuote,SearchIdentifier=,"Player,Enemy,Projectile"
 InQuote,ApplyType=,"BaseBlend,Additional"
 InQuote,CameraMode=,"TargetCenterMode,TwoTargetMode"
@@ -24,11 +24,11 @@ ShortCut,__WaitTargetDead,<WaitTargetDead UniqueKey=~~/>
 ShortCut,__TeleportTargetTo,<TeleportTargetTo UniqueKey=~~ Position=~0 0 0~/>
 ShortCut,__ApplyPostProcessProfile,<ApplyPostProcessProfile Path=~PostProcessProfile/~/>
 ShortCut,__CallAIEvent,<CallAIEvent EventName=~~ UniqueKey=~~/>
-ShortCut,__WaitSignal,<WaitSignal Signal=~~>
+ShortCut,__WaitSignal,<WaitSignal Signal=~~/>
 ShortCut,__SetCameraZoom,<SetCameraZoom Size=~~/>
 ShortCut,__InitializePhase,<InitializePhase>#n#n</InitializePhase>
 ShortCut,__UpdatePhase,<UpdatePhase>#n#n</UpdatePhase>
-,,
+ShortCut,__EndPhase,<EndPhase>#n#n</EndPhase>
 ,,
 ,,
 ,,

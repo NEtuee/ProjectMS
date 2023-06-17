@@ -82,15 +82,18 @@ public class PostProcessProfileControl
 
     public void processBlend(float deltaTime)
     {
-        if(_baseBlendingProfileList.Count == 0 && _additionalEffectProfile.isEnd())
+        if(_baseBlendingProfileList.Count == 0)
+            return;
+
+        if(_isBlending == false && _additionalEffectProfile.isEnd())
             return;
 
         _resultData.copy(_baseBlendingProfileList[0]._sourceLayer);
         int resultIndex = 0;
-        for(int index = 1; index < _baseBlendingProfileList.Count; ++ index)
+        for(int baseBlendIndex = 1; baseBlendIndex < _baseBlendingProfileList.Count; ++ baseBlendIndex)
         {
-            if(_baseBlendingProfileList[index].blend(ref _resultData, deltaTime, false))
-                resultIndex = index;
+            if(_baseBlendingProfileList[baseBlendIndex].blend(ref _resultData, deltaTime, false))
+                resultIndex = baseBlendIndex;
         }
 
         for(int index = 0; index < resultIndex; ++index)
@@ -120,5 +123,7 @@ public class PostProcessProfileControl
 
         _baseBlendingProfileList.Add(blender);
         _isBlending = true;
+
+        Debug.Log("TETET");
     }
 }

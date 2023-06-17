@@ -174,6 +174,7 @@ public class MasterManager : MessageHub<ManagerBase>
         if(Input.GetKeyDown(KeyCode.Escape))
         {
             _mainStageProcessor.stopSequencer();
+            _mainStageProcessor.clearSequencerGraphProcessor();
             Message msg = MessagePool.GetMessage();
             msg.Set(MessageTitles.game_stageEnd,MessageReceiver._boradcastNumber,null,null);
 

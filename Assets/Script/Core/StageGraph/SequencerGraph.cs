@@ -67,7 +67,10 @@ public class SequencerGraphProcessor
 
             ++index;
         }
-
+        
+        if(_isSequencerEventEnd)
+            stopSequencer();
+        
         _signalList.Clear();
     }
 
@@ -106,8 +109,11 @@ public class SequencerGraphProcessor
 
     public void stopSequencer()
     {
-        initialize();
-        _currentSequencer = null;
+        for(int index = 0; index < _currentSequencer._sequencerGraphPhase[2]._sequencerGraphEventCount; ++index)
+        {
+            _currentSequencer._sequencerGraphPhase[2]._sequencerGraphEventList[index].Initialize();
+            _currentSequencer._sequencerGraphPhase[2]._sequencerGraphEventList[index].Execute(this, 0f);
+        }
     }
 
     public bool isSequencerEnd()

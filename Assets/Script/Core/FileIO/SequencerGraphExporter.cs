@@ -58,6 +58,14 @@ public class SequencrGraphLoader : LoaderBase<SequencerGraphBaseData>
                 baseData._sequencerGraphPhase[(int)SequencerGraphPhaseType.Initialize] = phaseData;
             else if(phaseNode.Name == "UpdatePhase")
                 baseData._sequencerGraphPhase[(int)SequencerGraphPhaseType.Update] = phaseData;
+            else if(phaseNode.Name == "EndPhase")
+                baseData._sequencerGraphPhase[(int)SequencerGraphPhaseType.End] = phaseData;
+        }
+
+        for(int index = 0; index < (int)SequencerGraphPhaseType.Count; ++index)
+        {
+            if(baseData._sequencerGraphPhase[index] == null)
+                baseData._sequencerGraphPhase[index] = new SequencerGraphPhaseData();
         }
 
         return baseData;

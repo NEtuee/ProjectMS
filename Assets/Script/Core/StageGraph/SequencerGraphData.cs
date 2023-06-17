@@ -503,7 +503,6 @@ public class SequencerGraphEvent_SetCameraTarget : SequencerGraphEventBase
     public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
     {
         CameraControlEx.Instance().setCameraTarget(processor.getUniqueEntity(_uniqueKey));
-        CameraControlEx.Instance().initialize();
         if(_cameraMode != CameraModeType.Count)
             CameraControlEx.Instance().setCameraMode(_cameraMode);
 
@@ -531,6 +530,7 @@ public enum SequencerGraphPhaseType
 {
     Initialize = 0,
     Update,
+    End,
     Count,
 }
 
