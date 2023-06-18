@@ -6,6 +6,9 @@ public class AnimationCustomPresetData
 
     public float getTotalDuration()
     {
+        if(_duration == null)
+            return 0f;
+            
         float total = 0f;
         for(int index = 0; index < _duration.Length; ++index)
             total += _duration[index];

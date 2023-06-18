@@ -123,7 +123,5 @@ public class PostProcessProfileControl
 
         _baseBlendingProfileList.Add(blender);
         _isBlending = true;
-
-        Debug.Log("TETET");
     }
 }
