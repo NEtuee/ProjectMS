@@ -462,4 +462,84 @@
         <Branch Condition="getStat_IsStun == 0.0" Execute="Idle"/>
     </Stun>
 
+
+
+
+    <BranchSet Name="MeleeHit">
+        <Branch Condition="Hit" Execute="AC_Melee_Hit"/>
+    </BranchSet>
+
+    <BranchSet Name="MeleeAttack">
+        <Branch Key="getKey_GuardBreak2 && getKey_DashMove" Execute="AC_Melee_GuardBreak"/>
+        <Branch Key="getKey_DashMove" Execute="AC_Melee_Attack"/>
+    </BranchSet>
+
+    <BranchSet Name="MeleeGuard">
+        <Branch Key="getKey_NormalMove" Execute="AC_Melee_Guard"/>
+    </BranchSet>
+
+    <AC_Melee_Start DirectionType="AttackedPoint" FlipType="Direction">
+        <Animation Preset="Sprites/NewPlayer/Melee/Start" XFlip="true" Duration="1.0">
+        </Animation>
+
+        <UseBranchSet Name="MeleeHit"/>
+        <Branch Condition="End" Execute="AC_Melee_Idle"/>
+    </AC_Melee_Start>
+
+    <AC_Melee_Idle DirectionType="Keep" FlipType="Direction">
+        <Animation Preset="Sprites/NewPlayer/Melee/Idle" XFlip="true" Duration="1.0">
+        </Animation>
+
+        <UseBranchSet Name="MeleeHit"/>
+        <UseBranchSet Name="MeleeAttack"/>
+        <UseBranchSet Name="MeleeGuard"/>
+        <Branch Condition="End" Execute="AC_Melee_Idle"/>
+    </AC_Melee_Idle>
+
+    <AC_Melee_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
+        <Animation Preset="Sprites/NewPlayer/Melee/Hit" XFlip="true" Duration="0.5">
+        </Animation>
+
+        <UseBranchSet Name="MeleeHit"/>
+        <Branch Condition="End" Execute="AC_Melee_Idle"/>
+    </AC_Melee_Hit>
+
+    <AC_Melee_Attack MovementType="FrameEvent" DirectionType="MousePoint" RotationType="Direction" FlipType="MousePoint" DirectionUpdateOnce="true" FlipTypeUpdateOnce="true" Flags="ClearPush">
+        <Animation Preset="Sprites/NewPlayer/Melee/Attack" XFlip="true" Duration="0.3">
+        </Animation>
+
+        <UseBranchSet Name="MeleeHit"/>
+        <Branch Condition="End" Execute="AC_Melee_AttackEnd"/>
+    </AC_Melee_Attack>
+
+    <AC_Melee_AttackEnd MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+        <Animation Preset="Sprites/NewPlayer/Melee/AttackEnd/" XFlip="true" Duration="0.625">
+            <FrameEvent Type="Movement" StartTime="0" Friction="gv_IdleFriction" Speed="0" Velocity="0"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="1003" Attach="true"/>
+        </Animation>
+
+        <UseBranchSet Name="MeleeHit"/>
+        <UseBranchSet Name="MeleeAttack"/>
+        <UseBranchSet Name="MeleeGuard"/>
+        <Branch Condition="End" Execute="AC_Melee_Idle"/>
+    </AC_Melee_AttackEnd>
+
+    <AC_Melee_Guard MovementType="FrameEvent" DirectionType="MousePoint" FlipType="MousePoint">
+        <Animation Preset="Sprites/NewPlayer/Melee/Guard" XFlip="true" Duration="1.0">
+        </Animation>
+
+        <UseBranchSet Name="MeleeAttack"/>
+        <Branch Key="getKey_NormalMove == false" Execute="AC_Melee_Idle"/>
+        <Branch Condition="End" Execute="AC_Melee_Guard"/>
+    </AC_Melee_Guard>
+
+    <AC_Melee_GuardBreak MovementType="FrameEvent" DirectionType="MousePoint" RotationType="Direction" FlipType="MousePoint" DirectionUpdateOnce="true" FlipTypeUpdateOnce="true" Flags="ClearPush">
+        <Animation Preset="Sprites/NewPlayer/Melee/GuardBreak" XFlip="true" Duration="1.0">
+        </Animation>
+
+        <UseBranchSet Name="MeleeHit"/>
+        <Branch Condition="End" Execute="AC_Melee_Idle"/>
+    </AC_Melee_GuardBreak>
+
+
 </ActionGraph>
