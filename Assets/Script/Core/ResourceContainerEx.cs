@@ -132,6 +132,7 @@ public class ResourceContainerEx : Singleton<ResourceContainerEx>
 	private ManagedResourceItem<AnimationCustomPreset> 	_animationCustomPresetResource = new ManagedResourceItem<AnimationCustomPreset>();
 	private ManagedResourceItem<GameObject>		 		_prefabResource = new ManagedResourceItem<GameObject>();
 	private ManagedResourceItem<Material>		 		_materialResource = new ManagedResourceItem<Material>();
+	private ManagedResourceItem<StageData>		 		_stageDataResource = new ManagedResourceItem<StageData>();
 
 	private DataResourceItem<ActionGraphBaseData,ActionGraphLoader>				_actionGraphResource = new DataResourceItem<ActionGraphBaseData,ActionGraphLoader>();
 	private DataResourceItem<AIGraphBaseData,AIGraphLoader>						_aiGraphResource = new DataResourceItem<AIGraphBaseData,AIGraphLoader>();
@@ -186,6 +187,11 @@ public class ResourceContainerEx : Singleton<ResourceContainerEx>
 	public Material GetMaterial(string fileName)
 	{
 		return _materialResource.GetOrLoadResource(fileName);
+	}
+
+	public StageData GetStageData(string fileName)
+	{
+		return _stageDataResource.GetOrLoadResource(fileName);
 	}
 
 	public ActionGraphBaseData GetActionGraph(string path)

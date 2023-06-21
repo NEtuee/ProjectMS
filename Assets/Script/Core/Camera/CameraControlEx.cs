@@ -338,4 +338,9 @@ public class CameraControlEx : Singleton<CameraControlEx>
     {
         return _postProcessProfileControl;
     }
+    
+    public Camera getCurrentCamera()
+    {
+        return _currentCamera;
+    }
 }

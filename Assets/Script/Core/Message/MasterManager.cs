@@ -84,6 +84,8 @@ public class MasterManager : MessageHub<ManagerBase>
 
         _mainStageProcessor = new SequencerGraphProcessor();
         _mainStageProcessor.initialize();
+        
+        StageProcessor.Instance().setTargetTransform(CameraControlEx.Instance().getCurrentCamera().transform);
     }
     public void Start()
     {
@@ -152,6 +154,7 @@ public class MasterManager : MessageHub<ManagerBase>
         _mainStageProcessor.progress(deltaTime);
 
         CameraControlEx.Instance().SyncPosition();
+        StageProcessor.Instance().processStage(deltaTime);
 
         DanmakuManager.Instance().process(deltaTime);
 
@@ -166,10 +169,14 @@ public class MasterManager : MessageHub<ManagerBase>
         HPSphereUIManager.Instance().progress(deltaTime);
         TalkBalloonManager.Instance().updateTalkBalloonManager(deltaTime);
         CameraControlEx.Instance().progress(deltaTime);
+
         FMODAudioManager.Instance().updateAudio();
 
         if(Input.GetKeyDown(KeyCode.Return) && _mainStageProcessor.isValid() == false)
+        {
+            StageProcessor.Instance().initializeStage(ResourceContainerEx.Instance().GetStageData("StageData\\TestStage"));
             _mainStageProcessor.startSequencer("TestStage.xml",null,null);
+        }
 
         if(Input.GetKeyDown(KeyCode.Escape))
         {
