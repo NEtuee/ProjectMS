@@ -2,15 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StaticDataLoader : MonoBehaviour
+public static class StaticDataLoader
 {
-    public string statusInfoPath = "Assets\\Data\\Example\\StatusInfo.xml";
-    public string buffInfoPath = "Assets\\Data\\Example\\BuffInfo.xml";
-    public string keyPresetPath = "Assets\\Data\\Example\\ActionKeyPreset.xml";
-    public string weightRandomPath = "Assets\\Data\\Example\\ActionKeyPreset.xml";
-    public string characterInfoPath = "Assets\\Data\\StaticData\\CharacterInfo.xml";
+    public static string statusInfoPath = "Assets/Data/StaticData/StatusInfo.xml";
+    public static string buffInfoPath = "Assets/Data/StaticData/BuffInfo.xml";
+    public static string keyPresetPath = "Assets/Data/StaticData/ActionKeyPreset.xml";
+    public static string weightRandomPath = "Assets/Data/StaticData/WeightRandom.xml";
+    public static string characterInfoPath = "Assets/Data/StaticData/CharacterInfo.xml";
 
-    void Awake()
+    public static void loadStaticData()
     {
         StatusInfo.setStatusInfoDataDictionary(StatusInfoLoader.readFromXML(statusInfoPath));
         StatusInfo.setBuffDataDictionary(BuffDataLoader.readFromXML(buffInfoPath));

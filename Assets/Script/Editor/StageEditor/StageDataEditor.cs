@@ -13,6 +13,8 @@ public class StageDataEditor : EditorWindow
         public SerializedProperty _onExitSequencerPathProperty = null;
 
         public GameObject _gizmoItem;
+        public List<SpriteRenderer> _characterObjectList = new List<SpriteRenderer>();
+        public List<StagePointCharacterSpawnData> _characterSpawnDataList = new List<StagePointCharacterSpawnData>();
 
         public bool syncPosition()
         {
@@ -22,6 +24,13 @@ public class StageDataEditor : EditorWindow
             bool syncSuccess = _stagePointData._stagePoint != _gizmoItem.transform.position;
             _stagePointData._stagePoint = _gizmoItem.transform.position;
 
+            for(int index = 0; index < _characterObjectList.Count; ++index)
+            {
+                syncSuccess |= _stagePointData._characterSpawnData[index]._localPosition == _characterObjectList[index].transform.position - _stagePointData._stagePoint;
+
+                _stagePointData._characterSpawnData[index]._localPosition = _characterObjectList[index].transform.position - _stagePointData._stagePoint;
+            }
+
             return syncSuccess;
         }
     }
@@ -30,14 +39,17 @@ public class StageDataEditor : EditorWindow
     private static StageDataEditor _window;
     private GameObject _editItemParent = null;
     private GameObject _editItemGizmoParent = null;
+    private GameObject _editItemCharacterParent = null;
 
     private Queue<GameObject> _gizmoItemPool = new Queue<GameObject>();
+    private Queue<SpriteRenderer> _characterItemPool = new Queue<SpriteRenderer>();
 
     private List<StagePointDataEditObject> _editingStagePointList = new List<StagePointDataEditObject>();
 
     private GameObject _backgroundPrefabObject = null;
     
     private Vector2 _pointItemScroll = Vector2.zero;
+    private Vector2 _characterSpawnScroll = Vector2.zero;
 
     private CharacterInfoView _characterInfoView = new CharacterInfoView();
     public SerializedObject _stageDataSerializedObject;
@@ -52,12 +64,13 @@ public class StageDataEditor : EditorWindow
 
     private string[] _editMenuStrings = 
     {
-        "Point Inspector",
+        "Inspector",
         "Character Palette",
         "Sequencer Palette",
     };
 
     private int _pointSelectedIndex = -1;
+    private int _characterSelectedIndex = -1;
     private int _editItemMenuSelectedIndex = 0;
     private int _editMenuSelectedIndex = 0;
 
@@ -131,9 +144,21 @@ public class StageDataEditor : EditorWindow
             _editMenuSelectedIndex = GUILayout.SelectionGrid(_editMenuSelectedIndex,_editMenuStrings,_editMenuStrings.Length);
             GUILayout.Space(5f);
             if(_editMenuSelectedIndex == 0)
-                onPointInspectorGUI();
+            {
+                if(_editItemMenuSelectedIndex == 0)
+                    onPointInspectorGUI();
+                else if(_editItemMenuSelectedIndex == 1)
+                    onCharacterInspectorGUI();
+            }
             if(_editMenuSelectedIndex == 1)
+            {
                 _characterInfoView.OnGUI();
+                string addedCharacter = _characterInfoView.getAddedCharacter();
+                if(addedCharacter != "")
+                {
+                    addCharacterToPoint(_pointSelectedIndex,addedCharacter);
+                }
+            }
         GUILayout.EndVertical();
     }
 
@@ -146,7 +171,47 @@ public class StageDataEditor : EditorWindow
         if(_editStageData._stagePointData.Count <= _pointSelectedIndex || _pointSelectedIndex < 0)
             return;
         
-        
+        StagePointData stagePointData = _editStageData._stagePointData[_pointSelectedIndex];
+
+        _characterSpawnScroll = GUILayout.BeginScrollView(_characterSpawnScroll,"box");
+            for(int i = 0; i < stagePointData._characterSpawnData.Length; ++i)
+            {
+                GUILayout.BeginHorizontal();
+
+                Color currentColor = GUI.color;
+                GUI.color = i == _characterSelectedIndex ? Color.green : currentColor;
+
+                GUILayout.Label(stagePointData._characterSpawnData[i]._characterKey,GUILayout.Width(150f));
+
+                if(GUILayout.Button("Pick"))
+                    selectCharacter(_pointSelectedIndex, i);
+
+                if(GUILayout.Button("Delete Character"))
+                {
+                    deleteCharacter(_pointSelectedIndex, i);
+                    if(i == _characterSelectedIndex)
+                        _characterSelectedIndex = -1;
+                }
+
+                GUI.color = currentColor;
+
+                GUILayout.EndHorizontal();
+            }
+        GUILayout.EndScrollView();
+    }
+
+    private void onCharacterInspectorGUI()
+    {
+        if(_editStageData._stagePointData.Count <= _pointSelectedIndex || _pointSelectedIndex < 0 || 
+            _editStageData._stagePointData[_pointSelectedIndex]._characterSpawnData.Length <= _characterSelectedIndex || _characterSelectedIndex < 0)
+            return;
+
+        StagePointData stagePointData = _editStageData._stagePointData[_pointSelectedIndex];
+        StagePointCharacterSpawnData characterSpawnData = _editStageData._stagePointData[_pointSelectedIndex]._characterSpawnData[_characterSelectedIndex];
+        StagePointDataEditObject stagePointDataEditObject = _editingStagePointList[_pointSelectedIndex];
+
+        GUILayout.Label("Local Position: " + characterSpawnData._localPosition.ToString());
+        characterSpawnData._flip = EditorGUILayout.Toggle("Flip",characterSpawnData._flip);
     }
 
     private void onPointInspectorGUI()
@@ -211,6 +276,36 @@ public class StageDataEditor : EditorWindow
                 GUILayout.EndHorizontal();
             }
         GUILayout.EndScrollView();
+    }
+
+    private void addCharacterToPoint(int index, string characterKey)
+    {
+        if(_editStageData._stagePointData.Count <= index || index < 0)
+            return;
+
+        var characterInfo = ResourceContainerEx.Instance().getCharacterInfo("Assets\\Data\\StaticData\\CharacterInfo.xml");
+        if(characterInfo.ContainsKey(characterKey) == false)
+        {
+            DebugUtil.assert(false,"말이 안되는 상황");
+            return;
+        }
+
+        StagePointData stagePointData = _editStageData._stagePointData[index];
+        StagePointDataEditObject stagePointDataEdit = _editingStagePointList[index];
+        
+        StagePointCharacterSpawnData spawnData = new StagePointCharacterSpawnData();
+        spawnData._characterKey = characterKey;
+        spawnData._flip = false;
+        spawnData._localPosition = Vector3.zero;
+
+        SpriteRenderer characterEditItem = getCharacterItem();
+        characterEditItem.sprite = getFirstActionSpriteFromCharacter(characterInfo[characterKey]);
+        characterEditItem.sortingOrder = 10;
+        characterEditItem.transform.position = stagePointData._stagePoint;
+
+        stagePointDataEdit._characterSpawnDataList.Add(spawnData);
+        stagePointDataEdit._characterObjectList.Add(characterEditItem);
+        stagePointData._characterSpawnData = stagePointDataEdit._characterSpawnDataList.ToArray();
     }
 
     void Update() 
@@ -331,6 +426,15 @@ public class StageDataEditor : EditorWindow
         _pointSelectedIndex = index;
     }
 
+    private void selectCharacter(int pointIndex, int characterIndex)
+    {
+        Debug.Log(_editingStagePointList[pointIndex]._characterObjectList.Count + "," + characterIndex);
+        PingTarget(_editingStagePointList[pointIndex]._characterObjectList[characterIndex].gameObject);
+        Repaint();
+
+        _characterSelectedIndex = characterIndex;
+    }
+
     private void PingTarget(GameObject obj)
     {
         EditorGUIUtility.PingObject(obj);
@@ -361,10 +465,32 @@ public class StageDataEditor : EditorWindow
 
         returnGizmoItem(_editingStagePointList[index]._gizmoItem);
         _editingStagePointList.RemoveAt(index);
+
+        for(int characterIndex = 0; characterIndex < _editingStagePointList[index]._characterObjectList.Count; ++characterIndex)
+        {
+            SpriteRenderer characterItem = _editingStagePointList[index]._characterObjectList[characterIndex];
+            returnCharacterItem(characterItem);
+        }
+    }
+
+    private void deleteCharacter(int pointIndex, int characterIndex)
+    {
+        if(_editStageData._stagePointData.Count <= pointIndex || pointIndex < 0 ||
+            _editStageData._stagePointData[pointIndex]._characterSpawnData.Length <= characterIndex || characterIndex < 0)
+            return;
+
+        _editingStagePointList[pointIndex]._characterSpawnDataList.RemoveAt(characterIndex);
+        _editStageData._stagePointData[pointIndex]._characterSpawnData = _editingStagePointList[pointIndex]._characterSpawnDataList.ToArray();
+
+        returnCharacterItem(_editingStagePointList[pointIndex]._characterObjectList[characterIndex]);
+        _editingStagePointList[pointIndex]._characterObjectList.RemoveAt(characterIndex);
     }
 
     private void loadStageData()
     {
+        _pointSelectedIndex = 0;
+        _characterSelectedIndex = 0;
+
         if(_editStageData == null)
             return;
 
@@ -395,6 +521,8 @@ public class StageDataEditor : EditorWindow
 
         if(_editStageData == null)
             return;
+
+        var characterInfo = ResourceContainerEx.Instance().getCharacterInfo("Assets\\Data\\StaticData\\CharacterInfo.xml");
         
         foreach(var item in _editStageData._stagePointData)
         {
@@ -402,6 +530,18 @@ public class StageDataEditor : EditorWindow
             editObject._stagePointData = item;
             editObject._gizmoItem = getGizmoItem();
             editObject._gizmoItem.transform.position = item._stagePoint;
+
+            editObject._characterSpawnDataList = new List<StagePointCharacterSpawnData>(item._characterSpawnData);
+            for(int index = 0; index < editObject._characterSpawnDataList.Count; ++index)
+            {
+                SpriteRenderer characterEditItem = getCharacterItem();
+                characterEditItem.sprite = getFirstActionSpriteFromCharacter(characterInfo[editObject._characterSpawnDataList[index]._characterKey]);
+                characterEditItem.sortingOrder = 10;
+                characterEditItem.transform.position = item._stagePoint + editObject._characterSpawnDataList[index]._localPosition;
+                characterEditItem.flipX = editObject._characterSpawnDataList[index]._flip;
+
+                editObject._characterObjectList.Add(characterEditItem);
+            }
 
             _editingStagePointList.Add(editObject);
         }
@@ -431,11 +571,25 @@ public class StageDataEditor : EditorWindow
             return;
         }
 
+        Transform characterParent = _editItemParent.transform.Find("Characters");
+        if(characterParent == null)
+        {
+            Debug.LogError("뭔가 잘못됐습니다. 에디터를 다시 켜 주세요");
+            _window?.Close();
+            return;
+        }
+
         _editItemGizmoParent = gizmoParent.gameObject;
+        _editItemCharacterParent = characterParent.gameObject;
 
         for(int index = 0; index < _editItemGizmoParent.transform.childCount; ++index)
         {
             _gizmoItemPool.Enqueue(_editItemGizmoParent.transform.GetChild(index).gameObject);
+        }
+
+        for(int index = 0; index < _editItemCharacterParent.transform.childCount; ++index)
+        {
+            _characterItemPool.Enqueue(_editItemCharacterParent.transform.GetChild(index).GetComponent<SpriteRenderer>());
         }
     }
 
@@ -445,10 +599,36 @@ public class StageDataEditor : EditorWindow
         if(_editItemParent != null)
         {
             _gizmoItemPool.Clear();
-            for(int index = 0; index < _editItemParent.transform.childCount; ++index)
+            Transform gizmoParent = _editItemParent.transform.Find("Gizmos");
+            if(gizmoParent == null)
             {
-                _gizmoItemPool.Enqueue(_editItemParent.transform.GetChild(index).gameObject);
+                gizmoParent = new GameObject("Gizmos").transform;
+                gizmoParent.transform.SetParent(_editItemParent.transform);
             }
+            else
+            {
+                for(int index = 0; index < gizmoParent.childCount; ++index)
+                {
+                    _gizmoItemPool.Enqueue(gizmoParent.GetChild(index).gameObject);
+                }
+            }
+            _editItemGizmoParent = gizmoParent.gameObject;
+
+            _characterItemPool.Clear();
+            Transform characterParent = _editItemParent.transform.Find("Characters");
+            if(characterParent == null)
+            {
+                characterParent = new GameObject("Characters").transform;
+                characterParent.transform.SetParent(_editItemParent.transform);
+            }
+            else
+            {
+                for(int index = 0; index < characterParent.childCount; ++index)
+                {
+                    _characterItemPool.Enqueue(characterParent.GetChild(index).GetComponent<SpriteRenderer>());
+                }
+            }
+            _editItemCharacterParent = characterParent.gameObject;
 
             return;
         }
@@ -458,6 +638,9 @@ public class StageDataEditor : EditorWindow
 
         _editItemGizmoParent = new GameObject("Gizmos");
         _editItemGizmoParent.transform.SetParent(_editItemParent.transform);
+
+        _editItemCharacterParent = new GameObject("Characters");
+        _editItemCharacterParent.transform.SetParent(_editItemParent.transform);
     }
 
     private GameObject getGizmoItem()
@@ -477,10 +660,35 @@ public class StageDataEditor : EditorWindow
         return gizmoItem;
     }
 
+    private SpriteRenderer getCharacterItem()
+    {
+        if(_editItemParent == null || _editItemCharacterParent == null)
+            return null;
+        
+        SpriteRenderer characterItem = null;
+        if(_characterItemPool.Count == 0)
+            characterItem = new GameObject("CharacterItem").AddComponent<SpriteRenderer>();
+        else
+            characterItem = _characterItemPool.Dequeue();
+        
+        characterItem.gameObject.SetActive(true);
+        characterItem.transform.SetParent(_editItemCharacterParent.transform);
+        characterItem.sprite = null;
+        characterItem.flipX = false;
+
+        return characterItem;
+    }
+
     private void returnGizmoItem(GameObject gizmoItem)
     {
         gizmoItem.SetActive(false);
         _gizmoItemPool.Enqueue(gizmoItem);
+    }
+
+    private void returnCharacterItem(SpriteRenderer spriteRenderer)
+    {
+        spriteRenderer.gameObject.SetActive(false);
+        _characterItemPool.Enqueue(spriteRenderer);
     }
 
     private void drawCircleWithHandle(Vector3 position, float radius)
@@ -496,6 +704,19 @@ public class StageDataEditor : EditorWindow
             Handles.DrawLine(new Vector3(x,y) * radius + position,new Vector3(x2,y2) * radius + position);
         }
     }
+
+    private Sprite getFirstActionSpriteFromCharacter(CharacterInfoData characterInfoData)
+    {
+        StaticDataLoader.loadStaticData();
+        ActionGraphBaseData baseData = ResourceContainerEx.Instance().GetActionGraph(characterInfoData._actionGraphPath);
+        AnimationPlayDataInfo playDataInfo = baseData._animationPlayData[baseData._actionNodeData[baseData._defaultActionIndex]._animationInfoIndex][0];
+
+        Sprite[] sprites = ResourceContainerEx.Instance().GetSpriteAll(playDataInfo._path);
+        if(sprites == null)
+            return null;
+        
+        return sprites[0];
+    }
 }
 
 
@@ -510,6 +731,7 @@ public class CharacterInfoView
     private string _searchStringCompare = "";
 
     private Vector2 _scrollPosition;
+    private string _addedCharacterKey = "";
 
     public void OnGUI()
     {
@@ -541,6 +763,11 @@ public class CharacterInfoView
                 _selectedData = item.Value;
             }
 
+            if(GUILayout.Button("Add",GUILayout.Width(50f)))
+            {
+                _addedCharacterKey = item.Key;
+            }
+
             GUILayout.Label(item.Key + ": " + item.Value._displayName);
             GUILayout.EndHorizontal();
         }
@@ -561,6 +788,14 @@ public class CharacterInfoView
 
             GUILayout.EndVertical();
         }
+    }
+
+    public string getAddedCharacter()
+    {
+        string characterKey = _addedCharacterKey;
+        _addedCharacterKey = "";
+
+        return characterKey;
     }
 
     private bool searchStringCompare(string target)

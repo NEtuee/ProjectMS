@@ -62,6 +62,8 @@ public class MasterManager : MessageHub<ManagerBase>
             setTimeScaleSecond(timeScaleData.x,timeScaleData.y,timeScaleData.z);
         });
 
+        StaticDataLoader.loadStaticData();
+
         foreach(var m in managers)
         {
             if(m == null)
