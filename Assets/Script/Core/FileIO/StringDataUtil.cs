@@ -18,4 +18,9 @@ public static class StringDataUtil
 
         return float.Parse(value);
     }
+
+    public static string cutFileNameFromFullPath(string fullPath)
+    {
+        return fullPath.Substring(0,fullPath.LastIndexOf('/'));
+    }
 }
