@@ -24,12 +24,22 @@ public class StageDataEditor : EditorWindow
             bool syncSuccess = _stagePointData._stagePoint != _gizmoItem.transform.position;
             _stagePointData._stagePoint = _gizmoItem.transform.position;
 
-            for(int index = 0; index < _characterObjectList.Count; ++index)
+            if(syncSuccess == false)
             {
-                syncSuccess |= _stagePointData._characterSpawnData[index]._localPosition == _characterObjectList[index].transform.position - _stagePointData._stagePoint;
-
-                _stagePointData._characterSpawnData[index]._localPosition = _characterObjectList[index].transform.position - _stagePointData._stagePoint;
+                for(int index = 0; index < _characterObjectList.Count; ++index)
+                {
+                    syncSuccess |= _stagePointData._characterSpawnData[index]._localPosition == _characterObjectList[index].transform.position - _stagePointData._stagePoint;
+                    _stagePointData._characterSpawnData[index]._localPosition = _characterObjectList[index].transform.position - _stagePointData._stagePoint;
+                }
             }
+            else
+            {
+                for(int index = 0; index < _characterObjectList.Count; ++index)
+                {
+                    _characterObjectList[index].transform.position = _stagePointData._stagePoint + _stagePointData._characterSpawnData[index]._localPosition;
+                }
+            }
+            
 
             return syncSuccess;
         }
@@ -74,6 +84,13 @@ public class StageDataEditor : EditorWindow
     private int _editItemMenuSelectedIndex = 0;
     private int _editMenuSelectedIndex = 0;
 
+
+    private string _pointCharacterSearchString = "";
+    private string[] _pointCharacterSearchStringList;
+    private string _pointCharacterSearchStringCompare = "";
+
+    private bool _drawScreenToMousePoint = false;
+
     [MenuItem("Tools/StageDataEditor", priority = 0)]
     public static void ShowWindow()
     {
@@ -106,6 +123,22 @@ public class StageDataEditor : EditorWindow
         GUILayout.EndHorizontal();
 
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+
+        if(Application.isPlaying)
+        {
+            if(_editItemParent != null && _editItemParent.activeSelf)
+            {
+                _editItemParent.SetActive(false);
+            }
+            return;
+        }
+        else
+        {
+            if(_editItemParent != null && _editItemParent.activeSelf == false)
+            {
+                _editItemParent.SetActive(true);
+            }
+        }
         
         if(reloadData || editStageData != _editStageData)
         {
@@ -121,8 +154,18 @@ public class StageDataEditor : EditorWindow
             _editStageData._stageName = EditorGUILayout.TextField("Stage Name",_editStageData._stageName);
             _editStageData._backgroundPrefabPath = EditorGUILayout.TextField("Prefab Path",_editStageData._backgroundPrefabPath);
 
-            if(GUILayout.Button("Save Data"))
-                saveCurrentData();
+            Color currentColor = GUI.color;
+            GUI.color = _drawScreenToMousePoint ? Color.green : Color.red;
+
+            GUILayout.BeginHorizontal();
+                if(GUILayout.Button("Draw Camera Bound"))
+                    _drawScreenToMousePoint = !_drawScreenToMousePoint;
+
+                GUI.color = currentColor;
+
+                if(GUILayout.Button("Save Data"))
+                    saveCurrentData();
+            GUILayout.EndHorizontal();
         GUILayout.EndVertical();
 
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
@@ -173,15 +216,33 @@ public class StageDataEditor : EditorWindow
         
         StagePointData stagePointData = _editStageData._stagePointData[_pointSelectedIndex];
 
+        _pointCharacterSearchString = EditorGUILayout.TextField("Search",_pointCharacterSearchString);
+        if(_pointCharacterSearchStringCompare != _pointCharacterSearchString)
+        {
+            if(_pointCharacterSearchString == "")
+                _pointCharacterSearchStringList = null;
+            else
+                _pointCharacterSearchStringList = _pointCharacterSearchString.Split(' ');
+            _pointCharacterSearchStringCompare = _pointCharacterSearchString;
+        }
+
         _characterSpawnScroll = GUILayout.BeginScrollView(_characterSpawnScroll,"box");
+            
             for(int i = 0; i < stagePointData._characterSpawnData.Length; ++i)
             {
+                if(_pointCharacterSearchString != "" && (searchStringCompare(stagePointData._characterSpawnData[i]._characterKey,_pointCharacterSearchStringList) == false 
+                        && searchStringCompare(stagePointData._characterSpawnData[i]._uniqueKey,_pointCharacterSearchStringList) == false))
+                    continue;
+
                 GUILayout.BeginHorizontal();
 
                 Color currentColor = GUI.color;
                 GUI.color = i == _characterSelectedIndex ? Color.green : currentColor;
 
-                GUILayout.Label(stagePointData._characterSpawnData[i]._characterKey,GUILayout.Width(150f));
+                string targetName = stagePointData._characterSpawnData[i]._characterKey;
+                if(stagePointData._characterSpawnData[i]._uniqueKey != "")
+                    targetName += ": " + stagePointData._characterSpawnData[i]._uniqueKey;
+                GUILayout.Label(targetName,GUILayout.Width(150f));
 
                 if(GUILayout.Button("Pick"))
                     selectCharacter(_pointSelectedIndex, i);
@@ -200,6 +261,18 @@ public class StageDataEditor : EditorWindow
         GUILayout.EndScrollView();
     }
 
+    private bool searchStringCompare(string target, string[] searchStringList)
+    {
+        string lowerTarget = target.ToLower();
+        foreach(var stringItem in searchStringList)
+        {
+            if(lowerTarget.Contains(stringItem))
+                return true;
+        }
+
+        return false;
+    }
+
     private void onCharacterInspectorGUI()
     {
         if(_editStageData._stagePointData.Count <= _pointSelectedIndex || _pointSelectedIndex < 0 || 
@@ -212,22 +285,30 @@ public class StageDataEditor : EditorWindow
 
         GUILayout.Label("Local Position: " + characterSpawnData._localPosition.ToString());
         characterSpawnData._flip = EditorGUILayout.Toggle("Flip",characterSpawnData._flip);
+        characterSpawnData._searchIdentifier = (SearchIdentifier)EditorGUILayout.EnumPopup("Search Identifier", characterSpawnData._searchIdentifier);
+        characterSpawnData._activeType = (StageSpawnCharacterActiveType)EditorGUILayout.EnumPopup("Active Type", characterSpawnData._activeType);
+
+        characterSpawnData._uniqueKey = EditorGUILayout.TextField("Unique Key",characterSpawnData._uniqueKey);
+
+
+
+        stagePointDataEditObject._characterObjectList[_characterSelectedIndex].flipX = characterSpawnData._flip;
     }
 
     private void onPointInspectorGUI()
     {
-        if(_editStageData._stagePointData.Count <= _pointSelectedIndex || _pointSelectedIndex < 0)
+        if(_editingStagePointList == null || _editStageData._stagePointData.Count <= _pointSelectedIndex || _pointSelectedIndex < 0)
             return;
 
         StagePointData stagePointData = _editStageData._stagePointData[_pointSelectedIndex];
         StagePointDataEditObject stagePointDataEditObject = _editingStagePointList[_pointSelectedIndex];
 
-        GUILayout.Label("Position: " + stagePointData._stagePoint.ToString());
+        GUILayout.Label("Position: " + stagePointData._stagePoint.ToString()); 
         stagePointData._maxLimitedDistance = EditorGUILayout.FloatField("Radius", stagePointData._maxLimitedDistance);
 
         if(stagePointDataEditObject._onEnterSequencerPathProperty == null || stagePointDataEditObject._onExitSequencerPathProperty == null)
         {
-            if(_stageDataListProperty != null)
+            if(_stageDataListProperty != null && _stageDataListProperty.hasChildren && _stageDataListProperty.arraySize > _pointSelectedIndex)
             {
                 SerializedProperty stagePointDataProperty = _stageDataListProperty.GetArrayElementAtIndex(_pointSelectedIndex);
                 stagePointDataEditObject._onEnterSequencerPathProperty = stagePointDataProperty.FindPropertyRelative("_onEnterSequencerPath");
@@ -313,6 +394,9 @@ public class StageDataEditor : EditorWindow
         if(_editStageData == null)
             return;
 
+        if(Application.isPlaying)
+            return;
+
         if(_editStageData._stagePointData.Count != 0 && _editingStagePointList.Count == 0)
             constructGizmoPoints();
 
@@ -364,15 +448,57 @@ public class StageDataEditor : EditorWindow
         if(_editStageData == null)
             return;
 
+        if(Application.isPlaying)
+            return;
+
+        if(_drawScreenToMousePoint)
+        {
+            Vector3 mousePosition = Event.current.mousePosition;
+            mousePosition.y = SceneView.currentDrawingSceneView.camera.pixelHeight - mousePosition.y;
+            mousePosition = SceneView.currentDrawingSceneView.camera.ScreenToWorldPoint(mousePosition);
+            mousePosition.z = 0f;
+
+            float mainCamSize = Camera.main.orthographicSize;
+            float camHeight = mainCamSize * 2f;
+		    float camWidth = camHeight * ((float)800f / (float)600f);
+
+            Rect rectangle = new Rect();
+            rectangle.Set(mousePosition.x - (camWidth * 0.5f),mousePosition.y - (camHeight * 0.5f),camWidth,camHeight);
+            Handles.DrawSolidRectangleWithOutline(rectangle,new Color(0f,0f,0f,0f),Color.blue);
+        }
+
         for(int i = 0; i < _editStageData._stagePointData.Count; ++i)
         {
             StagePointData stagePointData = _editStageData._stagePointData[i];
+            if(stagePointData == null)
+                continue;
+
             Vector3 itemPosition = stagePointData._stagePoint;
             Handles.CapFunction capFunction = (controlID, position, rotation, size, eventType)=>{
                 Handles.RectangleHandleCap(controlID, position, rotation, size, eventType);
             };
 
             Color currentColor = Handles.color;
+            
+            if(stagePointData._characterSpawnData != null)
+            {
+                for(int index = 0; index < stagePointData._characterSpawnData.Length; ++index)
+                {
+                    Vector3 characterWorld = stagePointData._stagePoint + stagePointData._characterSpawnData[index]._localPosition;
+                    if(i == _pointSelectedIndex)
+                    {
+                        Handles.color = Color.green;
+                        Handles.DrawLine(stagePointData._stagePoint,characterWorld);
+                    }
+
+                    if(stagePointData._characterSpawnData[index]._uniqueKey != "")
+                        Handles.Label(characterWorld,stagePointData._characterSpawnData[index]._uniqueKey);
+
+                    Handles.color = currentColor;
+                    Handles.Label(characterWorld + Vector3.down * 0.2f,stagePointData._characterSpawnData[index]._activeType.ToString());
+                }
+            }
+            
             Handles.color = i == _pointSelectedIndex ? Color.green : currentColor;
 
             if(stagePointData._maxLimitedDistance > 0f)
@@ -383,7 +509,6 @@ public class StageDataEditor : EditorWindow
                 selectPoint(i);
 
             Handles.color = currentColor;
-
             if(i < _editStageData._stagePointData.Count - 1 )
             {
                 Vector3 direction = _editStageData._stagePointData[i + 1]._stagePoint - stagePointData._stagePoint;
@@ -424,11 +549,11 @@ public class StageDataEditor : EditorWindow
         Repaint();
 
         _pointSelectedIndex = index;
+        _characterSelectedIndex = -1;
     }
 
     private void selectCharacter(int pointIndex, int characterIndex)
     {
-        Debug.Log(_editingStagePointList[pointIndex]._characterObjectList.Count + "," + characterIndex);
         PingTarget(_editingStagePointList[pointIndex]._characterObjectList[characterIndex].gameObject);
         Repaint();
 
@@ -453,6 +578,8 @@ public class StageDataEditor : EditorWindow
 
         _editingStagePointList.Add(editObject);
 
+        selectPoint(_editStageData._stagePointData.Count - 1);
+
         EditorUtility.SetDirty(_editStageData);
     }
 
@@ -463,14 +590,14 @@ public class StageDataEditor : EditorWindow
 
         _editStageData._stagePointData.RemoveAt(index);
 
-        returnGizmoItem(_editingStagePointList[index]._gizmoItem);
-        _editingStagePointList.RemoveAt(index);
-
         for(int characterIndex = 0; characterIndex < _editingStagePointList[index]._characterObjectList.Count; ++characterIndex)
         {
             SpriteRenderer characterItem = _editingStagePointList[index]._characterObjectList[characterIndex];
             returnCharacterItem(characterItem);
         }
+
+        returnGizmoItem(_editingStagePointList[index]._gizmoItem);
+        _editingStagePointList.RemoveAt(index);
     }
 
     private void deleteCharacter(int pointIndex, int characterIndex)
@@ -520,7 +647,11 @@ public class StageDataEditor : EditorWindow
         clearStagePointList();
 
         if(_editStageData == null)
+        {
+            if(_backgroundPrefabObject != null)
+                DestroyImmediate(_backgroundPrefabObject);
             return;
+        }
 
         var characterInfo = ResourceContainerEx.Instance().getCharacterInfo("Assets\\Data\\StaticData\\CharacterInfo.xml");
         
@@ -531,7 +662,14 @@ public class StageDataEditor : EditorWindow
             editObject._gizmoItem = getGizmoItem();
             editObject._gizmoItem.transform.position = item._stagePoint;
 
-            editObject._characterSpawnDataList = new List<StagePointCharacterSpawnData>(item._characterSpawnData);
+            editObject._characterSpawnDataList = new List<StagePointCharacterSpawnData>();
+            if(item._characterSpawnData != null)
+            {
+                foreach(var spawnData in item._characterSpawnData)
+                {
+                    editObject._characterSpawnDataList.Add(spawnData);
+                }
+            }
             for(int index = 0; index < editObject._characterSpawnDataList.Count; ++index)
             {
                 SpriteRenderer characterEditItem = getCharacterItem();
@@ -549,8 +687,18 @@ public class StageDataEditor : EditorWindow
 
     private void clearStagePointList()
     {
-        _gizmoItemPool.Clear();
+        for(int index = 0; index < _editingStagePointList.Count; ++index)
+        {
+            for(int characterIndex = 0; characterIndex < _editingStagePointList[index]._characterObjectList.Count; ++characterIndex)
+            {
+                SpriteRenderer characterItem = _editingStagePointList[index]._characterObjectList[characterIndex];
+                returnCharacterItem(characterItem);
+            }
 
+            returnGizmoItem(_editingStagePointList[index]._gizmoItem);
+        }
+
+        _gizmoItemPool.Clear();
         _editingStagePointList.Clear();
 
         if(_editItemParent == null)
@@ -731,7 +879,10 @@ public class CharacterInfoView
     private string _searchStringCompare = "";
 
     private Vector2 _scrollPosition;
+    private Vector2 _characterInfoScrollPosition;
     private string _addedCharacterKey = "";
+
+    private Texture _characterTexture = null;
 
     public void OnGUI()
     {
@@ -761,6 +912,9 @@ public class CharacterInfoView
             if(GUILayout.Button("Show",GUILayout.Width(50f)))
             {
                 _selectedData = item.Value;
+
+                Sprite characterSprite = getFirstActionSpriteFromCharacter(item.Value);
+                _characterTexture = characterSprite?.texture;
             }
 
             if(GUILayout.Button("Add",GUILayout.Width(50f)))
@@ -776,7 +930,21 @@ public class CharacterInfoView
 
         if(_selectedData != null)
         {
-            GUILayout.BeginVertical("box");
+            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+
+            GUILayout.BeginHorizontal("box");
+
+            if(_characterTexture != null)
+            {
+                Rect rect = GUILayoutUtility.GetRect(_characterTexture.width, _characterTexture.height);
+
+                EditorGUIUtility.ScaleAroundPivot(Vector3.one,rect.center);
+                GUI.DrawTexture(rect, _characterTexture,ScaleMode.ScaleToFit);
+            }
+
+            GUILayout.BeginVertical();
+
+            _characterInfoScrollPosition = GUILayout.BeginScrollView(_characterInfoScrollPosition);
 
             EditorGUILayout.LabelField(_selectedData._displayName);
             EditorGUILayout.LabelField("ActionGraph: " + _selectedData._actionGraphPath);
@@ -786,8 +954,25 @@ public class CharacterInfoView
             EditorGUILayout.LabelField("Radius: " + _selectedData._characterRadius);
             EditorGUILayout.LabelField("HeadUpOffset: " + _selectedData._headUpOffset);
 
+            GUILayout.EndScrollView();
+
             GUILayout.EndVertical();
+
+            GUILayout.EndHorizontal();
         }
+    }
+
+    private Sprite getFirstActionSpriteFromCharacter(CharacterInfoData characterInfoData)
+    {
+        StaticDataLoader.loadStaticData();
+        ActionGraphBaseData baseData = ResourceContainerEx.Instance().GetActionGraph(characterInfoData._actionGraphPath);
+        AnimationPlayDataInfo playDataInfo = baseData._animationPlayData[baseData._actionNodeData[baseData._defaultActionIndex]._animationInfoIndex][0];
+
+        Sprite[] sprites = ResourceContainerEx.Instance().GetSpriteAll(playDataInfo._path);
+        if(sprites == null)
+            return null;
+        
+        return sprites[0];
     }
 
     public string getAddedCharacter()

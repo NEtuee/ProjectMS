@@ -25,6 +25,7 @@ public class GameEntityBase : SequencerObjectBase
     public bool                 _statusDebug = false;
     public bool                 _aiDebug = false;
     public bool                 _animationDebug = false;
+
     
     private ActionGraph         _actionGraph;
     private AIGraph             _aiGraph;
@@ -67,6 +68,7 @@ public class GameEntityBase : SequencerObjectBase
     private bool                _updateFlipState = true;
 
     private bool                _initializeFromCharacter = false;
+    private bool                _activeSelf = true;
 
 
     private Quaternion          _actionStartRotation = Quaternion.identity;
@@ -120,6 +122,7 @@ public class GameEntityBase : SequencerObjectBase
     public virtual void initializeCharacter(CharacterInfoData characterInfo, Vector3 direction)
     {
         _initializeFromCharacter = true;
+        _activeSelf = true;
         _characterInfo = characterInfo;
 
         base.initialize();
@@ -264,7 +267,6 @@ public class GameEntityBase : SequencerObjectBase
     public override void progress(float deltaTime)
     {
         base.progress(deltaTime);
-
         _characterLifeTime += deltaTime;
 
         if(_sequencerProcessManager != null)
@@ -281,9 +283,9 @@ public class GameEntityBase : SequencerObjectBase
             updateConditionData();
 
 #if UNITY_EDITOR
-        if(_blockAI == false && _aiGraph != null)
+        if(_activeSelf && _blockAI == false && _aiGraph != null)
 #else
-        if(_aiGraph != null)
+        if(_activeSelf && _aiGraph != null)
 #endif
         {
             _aiGraph.updateConditionData();
@@ -977,6 +979,11 @@ public class GameEntityBase : SequencerObjectBase
     public void addSequencerSignal(string signal)
     {
         _sequencerProcessManager.addSequencerSignal(signal);
+    }
+
+    public void setActiveSelf(bool active)
+    {
+        _activeSelf = active;
     }
 
     public float getHeadUpOffset() {return _headUpOffset;}

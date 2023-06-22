@@ -165,7 +165,6 @@
                 <OnEvade>
                     <FrameEvent Type="TeleportToTarget"/>
                 </OnEvade>
-
             </FrameEvent>
 
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_DashFriction" MaxVelocity="gv_DashVelocity" Speed="0" Velocity="gv_DashVelocity" Condition="(getStat_DashPoint >= 1.0)"/>
@@ -478,7 +477,7 @@
         <Branch Key="getKey_NormalMove" Execute="AC_Melee_Guard"/>
     </BranchSet>
 
-    <AC_Melee_Start DirectionType="AttackedPoint" FlipType="Direction">
+    <AC_Melee_Start DirectionType="Keep" FlipType="Direction">
         <Animation Preset="Sprites/NewPlayer/Melee/Start" XFlip="true" Duration="1.0">
         </Animation>
 

@@ -7,8 +7,6 @@ public class MasterManager : MessageHub<ManagerBase>
 {
     public static MasterManager     instance;
 
-    public ObjectBase               player;
-
     public List<ManagerBase>        managers;
 
     private bool                    _update = true;
@@ -22,8 +20,6 @@ public class MasterManager : MessageHub<ManagerBase>
 
     private float                   _timeScaleBlendTimer = 0f;
     private float                   _timeScaleBlendFactor = 0f;
-
-    private SequencerGraphProcessor _mainStageProcessor = null;
 
     protected override void Awake()
     {
@@ -84,9 +80,6 @@ public class MasterManager : MessageHub<ManagerBase>
         CameraControlEx.Instance().initialize();
         DanmakuManager.Instance().initialize();
 
-        _mainStageProcessor = new SequencerGraphProcessor();
-        _mainStageProcessor.initialize();
-        
         StageProcessor.Instance().setTargetTransform(CameraControlEx.Instance().getCurrentCamera().transform);
     }
     public void Start()
@@ -153,7 +146,6 @@ public class MasterManager : MessageHub<ManagerBase>
 
         GlobalTimer.Instance().setScaledDeltaTime(deltaTime);
         GlobalTimer.Instance().updateGlobalTime(deltaTime);
-        _mainStageProcessor.progress(deltaTime);
 
         CameraControlEx.Instance().SyncPosition();
         StageProcessor.Instance().processStage(deltaTime);
@@ -174,18 +166,17 @@ public class MasterManager : MessageHub<ManagerBase>
 
         FMODAudioManager.Instance().updateAudio();
 
-        if(Input.GetKeyDown(KeyCode.Return) && _mainStageProcessor.isValid() == false)
+        if(Input.GetKeyDown(KeyCode.Return))
         {
-            StageProcessor.Instance().initializeStage(ResourceContainerEx.Instance().GetStageData("StageData\\TestStage"));
-            _mainStageProcessor.startSequencer("TestStage.xml",null,null);
+            StageProcessor.Instance().startStage(ResourceContainerEx.Instance().GetStageData("StageData/StageData"),Vector3.zero);
         }
 
         if(Input.GetKeyDown(KeyCode.Escape))
         {
-            _mainStageProcessor.stopSequencer();
-            _mainStageProcessor.clearSequencerGraphProcessor();
             Message msg = MessagePool.GetMessage();
             msg.Set(MessageTitles.game_stageEnd,MessageReceiver._boradcastNumber,null,null);
+
+            StageProcessor.Instance().stopStage();
 
             HandleBroadcastMessage(msg);
         }
@@ -200,14 +191,6 @@ public class MasterManager : MessageHub<ManagerBase>
     public void FixedUpdate()
     {
         ManagersFixedUpdate(Time.fixedDeltaTime);
-    }
-
-    public GameEntityBase getPlayerEntity()
-    {
-        if(_mainStageProcessor.isSequencerEnd())
-            return null;
-
-        return _mainStageProcessor.getUniqueEntity("Player");
     }
 
     public void StopUpdateSecond(float time)

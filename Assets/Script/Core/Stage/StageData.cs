@@ -2,11 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum StageSpawnCharacterActiveType
+{
+    Spawn = 0,
+    PointActivated,
+} 
+
 [System.Serializable]
 public class StagePointCharacterSpawnData
 {
     public string   _characterKey = "";
+    public string   _uniqueKey = "";
     public bool     _flip = false;
+    public SearchIdentifier _searchIdentifier = SearchIdentifier.Enemy;
+    public StageSpawnCharacterActiveType _activeType = StageSpawnCharacterActiveType.Spawn;
     public Vector3  _localPosition = Vector3.zero;
 }
 

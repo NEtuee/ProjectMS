@@ -86,6 +86,9 @@ public class SequencerGraphProcessor
 
     public void addUniqueEntity(string uniqueKey, GameEntityBase uniqueEntity)
     {
+        if(uniqueEntity == null)
+            return;
+
         if(_uniqueEntityDictionary.ContainsKey(uniqueKey))
         {
             DebugUtil.assert(false,"unique entity key is already use : {0}",uniqueKey);
@@ -142,7 +145,7 @@ public class SequencerGraphProcessor
         if(targetEntity != null)
             addUniqueEntity("Target",targetEntity);
         if(includePlayer)
-            addUniqueEntity("Player",MasterManager.instance.getPlayerEntity());
+            addUniqueEntity("Player",StageProcessor.Instance().getPlayerEntity());
 
         for(int index = _currentIndex; index < _currentSequencer._sequencerGraphPhase[0]._sequencerGraphEventCount; ++index)
         {

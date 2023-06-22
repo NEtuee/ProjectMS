@@ -9,12 +9,15 @@
         <SetAudioListner UniqueKey="Player"/>
         <SetCrossHair UniqueKey="Player"/>
         <SetHPSphere UniqueKey="Player"/>
+
+        <SetCameraZoom Size="0.0"/>
         
     </InitializePhase>
 
     <UpdatePhase>
         <WaitSecond Time="1.0"/>
-        
+
+        <!-- 스테이지 시퀀서는 스테이지 진행중에 절대 꺼지면 안된다 -->
         <WaitSignal Signal="NeverEnd"/>
     </UpdatePhase>
 
