@@ -35,6 +35,7 @@ public enum FrameEventType
     FrameEvent_PlaySequencer,
     FrameEvent_SequencerSignal,
     FrameEvent_ApplyPostProcessProfile,
+    FrameEvent_SetDirectionType,
 
     Count,
 }
@@ -173,6 +174,39 @@ public class ActionFrameEvent_CallAIEvent : ActionFrameEventBase
                 _eventTargetType = (CallAIEventTargetType)System.Enum.Parse(typeof(CallAIEventTargetType), attrValue);
             }
 
+        }
+    }
+}
+
+public class ActionFrameEvent_SetDirectionType : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_SetDirectionType;}
+    public DirectionType _directionType = DirectionType.Count;
+
+    public override void initialize()
+    {
+    }
+
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        if(executeEntity is GameEntityBase == false)
+            return true;
+        
+        (executeEntity as GameEntityBase).setDirectionType(_directionType);
+        return true;
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "DirectionType")
+                _directionType = (DirectionType)System.Enum.Parse(typeof(DirectionType), attrValue);
         }
     }
 }

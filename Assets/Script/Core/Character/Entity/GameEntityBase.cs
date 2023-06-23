@@ -70,6 +70,8 @@ public class GameEntityBase : SequencerObjectBase
     private bool                _initializeFromCharacter = false;
     private bool                _activeSelf = true;
 
+    private DirectionType       _currentDirectionType = DirectionType.AlwaysRight;
+
 
     private Quaternion          _actionStartRotation = Quaternion.identity;
     private Quaternion          _angleBaseRotation = Quaternion.identity;
@@ -166,6 +168,7 @@ public class GameEntityBase : SequencerObjectBase
         _graphicInterface.initialize(this,_statusInfo,new Vector3(0f, _headUpOffset, 0f), true);
 
         applyActionBuffList(_actionGraph.getDefaultBuffList());
+        _currentDirectionType = _actionGraph.getDirectionType();
 
         CollisionInfoData data = new CollisionInfoData(characterInfo._characterRadius,0f,0f,0f, CollisionType.Character);
         _collisionInfo = new CollisionInfo(data);
@@ -330,6 +333,7 @@ public class GameEntityBase : SequencerObjectBase
             if(_actionGraph.progress(deltaTime) == true)
             {
                 _currentDefenceType = _actionGraph.getCurrentDefenceType();
+                _currentDirectionType = _actionGraph.getDirectionType();
 #if UNITY_EDITOR
                 addActionChangeLog(_actionGraph.getCurrentAction_Debug());
 #endif
@@ -808,7 +812,7 @@ public class GameEntityBase : SequencerObjectBase
 
         if(_actionGraph != null)
         {
-            directionType = _actionGraph.getDirectionType();
+            directionType = _currentDirectionType;
             defenceDirectionType = _actionGraph.getDefenceDirectionType();
         }
 
@@ -867,7 +871,7 @@ public class GameEntityBase : SequencerObjectBase
                 direction = getMovementControl().getMoveDirection();
                 break;
             case DirectionType.Count:
-                DebugUtil.assert(false, "invalid direction type : {0}",_actionGraph.getDirectionType());
+                DebugUtil.assert(false, "invalid direction type : {0}",_currentDirectionType);
                 break;
         }
 
@@ -924,6 +928,12 @@ public class GameEntityBase : SequencerObjectBase
             zRotation -= (getFlipState().xFlip ? -180f : 0f);
 
         _spriteObject.transform.localRotation *= Quaternion.Euler(0f,0f,zRotation);
+    }
+
+    public void setDirectionType(DirectionType directionType)
+    {
+        _currentDirectionType = directionType;
+        updateDirection();
     }
 
     public bool isMoving()

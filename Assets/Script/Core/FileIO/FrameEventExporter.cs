@@ -77,13 +77,15 @@ public static class FrameEventLoader
             outFrameEvent = new ActionFrameEvent_SequencerSignal();
         else if(type == "ApplyPostProcessProfile")
             outFrameEvent = new ActionFrameEvent_ApplyPostProcessProfile();
+        else if(type == "SetDirectionType")
+            outFrameEvent = new ActionFrameEvent_SetDirectionType();
         else
         {
             DebugUtil.assert(false, "invalid frameEvent type: {0}",type);
             return null;
         }
 
-        DebugUtil.assert((int)FrameEventType.Count == 32, "check here");
+        DebugUtil.assert((int)FrameEventType.Count == 33, "check here");
 
 
         if(outFrameEvent == null)
