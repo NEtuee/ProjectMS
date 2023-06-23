@@ -151,6 +151,7 @@
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2203" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountClear"/>
+            <FrameEvent Type="SetDirectionType" StartTime="0.55" DirectionType="Keep"/>
         </Animation>
     
         <Branch Condition="End" Execute="AC_Idle"/>
@@ -165,6 +166,7 @@
 
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+            <FrameEvent Type="SetDirectionType" StartTime="0.05" DirectionType="Keep"/>
         </Animation>
     
         <Branch Condition="End" Execute="AC_Idle"/>

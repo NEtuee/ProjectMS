@@ -97,9 +97,9 @@
         <!-- 원거리 -->
         <Branch Weight="Najimi2PhaseDistAtk^ChaseRush" Condition="(TargetDistance >= gv_StdDistance)" Execute="Chase"/>
         <Branch Weight="Najimi2PhaseDistAtk^PitchingMachine" Condition="(TargetDistance >= gv_StdDistance) && (customValue_CurrentGauntletCount <= gv_GuntletLimit)" Execute="SpawnPitchingMachine"/>
-        <Branch Weight="Najimi2PhaseDistAtk^PitchingMachine" Condition="(TargetDistance >= gv_StdDistance)" Execute="DashRushReady"/>
+        <Branch Weight="Najimi2PhaseDistAtk^PitchingMachine" Condition="(TargetDistance >= gv_StdDistance)" Execute="DashRush"/>
         <Branch Weight="Najimi2PhaseDistAtk^Pitching" Condition="(TargetDistance >= gv_StdDistance)" Execute="Pitching"/>
-        <Branch Weight="Najimi2PhaseDistAtk^DashRush" Condition="(TargetDistance >= gv_StdDistance)" Execute="DashRushReady"/>
+        <Branch Weight="Najimi2PhaseDistAtk^DashRush" Condition="(TargetDistance >= gv_StdDistance)" Execute="DashRush"/>
     </JudgeDistance>
 
     <!-- 피격 리액션 판단 -->
@@ -115,7 +115,7 @@
     <Dodge Package="ReitoDodgePackage">      
         <UseBranchSet Name="IsPlayerDead"/>  
         <!-- 대시 공격 -->
-        <Branch Weight="NajimiDodgeAtk^DashAttack" Condition="CurrentPackageEnd" Execute="DashRushReady"/>
+        <Branch Weight="NajimiDodgeAtk^DashAttack" Condition="CurrentPackageEnd" Execute="DashRush"/>
         <!-- 거리 기반 공격 -->
         <Branch Weight="NajimiDodgeAtk^DistAttack" Condition="CurrentPackageEnd" Execute="JudgeDistance"/>
     </Dodge>
