@@ -5,22 +5,19 @@ using UnityEditor;
 
 public class CharacterInfoViewer : EditorWindow
 {
-    private static CharacterInfoViewer _window;
     private CharacterInfoData _selectedData = null;
-
-    [MenuItem("Tools/CharacterInfoViewer", priority = 0)]
-    private static void ShowWindow()
-    {
-        _window = (CharacterInfoViewer)EditorWindow.GetWindow(typeof(CharacterInfoViewer));
-    }
 
     private string _searchString = "";
     private string[] _searchStringList;
     private string _searchStringCompare = "";
 
     private Vector2 _scrollPosition;
+    private Vector2 _characterInfoScrollPosition;
+    private string _addedCharacterKey = "";
 
-    private void OnGUI()
+    private Texture _characterTexture = null;
+
+    public void OnGUI()
     {
         _searchString = EditorGUILayout.TextField("Search",_searchString);
         if(_searchStringCompare != _searchString)
@@ -37,7 +34,7 @@ public class CharacterInfoViewer : EditorWindow
         Dictionary<string,CharacterInfoData> characterInfo = ResourceContainerEx.Instance().getCharacterInfo(kCharacterInfoPath);
 
         _scrollPosition = GUILayout.BeginScrollView(_scrollPosition);
-
+        bool gamePlaying = Application.isPlaying && SceneCharacterManager._managerInstance != null && StageProcessor.Instance() != null && StageProcessor.Instance().getPlayerEntity() != null;
         foreach(var item in characterInfo)
         {
             if(_searchString != "" && (searchStringCompare(item.Key) == false && searchStringCompare(item.Value._displayName) == false))
@@ -48,7 +45,24 @@ public class CharacterInfoViewer : EditorWindow
             if(GUILayout.Button("Show",GUILayout.Width(50f)))
             {
                 _selectedData = item.Value;
+
+                Sprite characterSprite = getFirstActionSpriteFromCharacter(item.Value);
+                _characterTexture = characterSprite?.texture;
             }
+
+            GUI.enabled = gamePlaying;
+            if(GUILayout.Button("Add",GUILayout.Width(50f)))
+            {
+                SceneCharacterManager sceneCharacterManager = SceneCharacterManager._managerInstance as SceneCharacterManager;
+                SpawnCharacterOptionDesc spawnDesc = new SpawnCharacterOptionDesc();
+                spawnDesc._direction = Vector3.right;
+                spawnDesc._position = StageProcessor.Instance().getPlayerEntity().transform.position;
+                spawnDesc._rotation = Quaternion.identity;
+                spawnDesc._searchIdentifier = SearchIdentifier.Enemy;
+                
+                CharacterEntityBase createdCharacter = sceneCharacterManager.createCharacterFromPool(item.Value,spawnDesc);
+            }
+            GUI.enabled = true;
 
             GUILayout.Label(item.Key + ": " + item.Value._displayName);
             GUILayout.EndHorizontal();
@@ -58,7 +72,21 @@ public class CharacterInfoViewer : EditorWindow
 
         if(_selectedData != null)
         {
-            GUILayout.BeginVertical("box");
+            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+
+            GUILayout.BeginHorizontal("box");
+
+            if(_characterTexture != null)
+            {
+                Rect rect = GUILayoutUtility.GetRect(_characterTexture.width, _characterTexture.height);
+
+                EditorGUIUtility.ScaleAroundPivot(Vector3.one,rect.center);
+                GUI.DrawTexture(rect, _characterTexture,ScaleMode.ScaleToFit);
+            }
+
+            GUILayout.BeginVertical();
+
+            _characterInfoScrollPosition = GUILayout.BeginScrollView(_characterInfoScrollPosition);
 
             EditorGUILayout.LabelField(_selectedData._displayName);
             EditorGUILayout.LabelField("ActionGraph: " + _selectedData._actionGraphPath);
@@ -68,8 +96,33 @@ public class CharacterInfoViewer : EditorWindow
             EditorGUILayout.LabelField("Radius: " + _selectedData._characterRadius);
             EditorGUILayout.LabelField("HeadUpOffset: " + _selectedData._headUpOffset);
 
+            GUILayout.EndScrollView();
+
             GUILayout.EndVertical();
+
+            GUILayout.EndHorizontal();
         }
+    }
+
+    private Sprite getFirstActionSpriteFromCharacter(CharacterInfoData characterInfoData)
+    {
+        StaticDataLoader.loadStaticData();
+        ActionGraphBaseData baseData = ResourceContainerEx.Instance().GetActionGraph(characterInfoData._actionGraphPath);
+        AnimationPlayDataInfo playDataInfo = baseData._animationPlayData[baseData._actionNodeData[baseData._defaultActionIndex]._animationInfoIndex][0];
+
+        Sprite[] sprites = ResourceContainerEx.Instance().GetSpriteAll(playDataInfo._path);
+        if(sprites == null)
+            return null;
+        
+        return sprites[0];
+    }
+
+    public string getAddedCharacter()
+    {
+        string characterKey = _addedCharacterKey;
+        _addedCharacterKey = "";
+
+        return characterKey;
     }
 
     private bool searchStringCompare(string target)
