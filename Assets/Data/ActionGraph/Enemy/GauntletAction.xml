@@ -23,7 +23,7 @@
     <AC_Move MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/Gauntlet/0_default/"/>
         <Animation Preset="2_move" XFlip="true" Duration="0.5">
-            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="5" Speed="15"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="5" Speed="13"/>
 
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
@@ -89,7 +89,7 @@
         <AnimationHeader MasterPath="Sprites/Enemy/Gauntlet/1_rush/"/>
         <Animation Preset="1_rushMain" XFlip="true" Duration="0.6">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2302" Attach="true"/>
-            <FrameEvent Type="Movement" StartTime="0" Friction="24" MaxVelocity="12" Velocity="12" Speed="0"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="30" MaxVelocity="12" Velocity="11" Speed="0"/>
             <FrameEvent Type="Attack" StartTime="0" EndTime="0.2" AttackPreset="Najimi_Rush" AttackType="Catch" CatchOffset="0.1 0 0">
                 <OnCatch>
                     <FrameEvent Type="AudioPlay" StartTime="0" ID="2303" Attach="true"/>
