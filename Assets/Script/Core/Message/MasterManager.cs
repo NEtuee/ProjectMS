@@ -147,6 +147,8 @@ public class MasterManager : MessageHub<ManagerBase>
         GlobalTimer.Instance().setScaledDeltaTime(deltaTime);
         GlobalTimer.Instance().updateGlobalTime(deltaTime);
 
+        deltaTime = GlobalTimer.Instance().getSclaedDeltaTime();
+
         CameraControlEx.Instance().SyncPosition();
         StageProcessor.Instance().processStage(deltaTime);
 

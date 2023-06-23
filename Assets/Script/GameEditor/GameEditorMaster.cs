@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -12,6 +13,9 @@ public class GameEditorMaster : MonoBehaviour
     public bool _aiDebugAll = false;
     public bool _statusDebugAll = false;
     public bool _animationDebugAll = false;
+
+    public Slider   _timeMagnitudeSlider;
+    public Text     _timeMagnitudeText;
 
     private static string _hotKey_EditorOnOff = "EditorHotKey_EditorOnOff";
     private static string _hotKey_UpdateFrame = "EditorHotKey_UpdateFrame";
@@ -120,6 +124,12 @@ public class GameEditorMaster : MonoBehaviour
         var msg = MessagePool.GetMessage();
         msg.Set(MessageTitles.system_updateFrame,0,null,null);
         MasterManager.instance.SendMessageDirectInMaster(msg);
+    }
+
+    public void updateTimeMagnitude()
+    {
+        GlobalTimer.Instance().setDebugTimeRatio(_timeMagnitudeSlider.value);
+        _timeMagnitudeText.text = "Magnitude: " + _timeMagnitudeSlider.value.ToString();
     }
 
     public void setActionDebug() {_actionDebugAll = !_actionDebugAll;}
