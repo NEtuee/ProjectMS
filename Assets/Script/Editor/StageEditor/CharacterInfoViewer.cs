@@ -5,7 +5,14 @@ using UnityEditor;
 
 public class CharacterInfoViewer : EditorWindow
 {
+    private static CharacterInfoViewer _window;
     private CharacterInfoData _selectedData = null;
+
+    [MenuItem("Tools/CharacterInfoViewer", priority = 0)]
+    private static void ShowWindow()
+    {
+        _window = (CharacterInfoViewer)EditorWindow.GetWindow(typeof(CharacterInfoViewer));
+    }
 
     private string _searchString = "";
     private string[] _searchStringList;
@@ -19,6 +26,12 @@ public class CharacterInfoViewer : EditorWindow
 
     public void OnGUI()
     {
+        if(Event.current.type == EventType.MouseDown && Event.current.button == 0)
+        {
+            GUI.FocusControl("");
+            Repaint();
+        }
+
         _searchString = EditorGUILayout.TextField("Search",_searchString);
         if(_searchStringCompare != _searchString)
         {
@@ -56,7 +69,7 @@ public class CharacterInfoViewer : EditorWindow
                 SceneCharacterManager sceneCharacterManager = SceneCharacterManager._managerInstance as SceneCharacterManager;
                 SpawnCharacterOptionDesc spawnDesc = new SpawnCharacterOptionDesc();
                 spawnDesc._direction = Vector3.right;
-                spawnDesc._position = StageProcessor.Instance().getPlayerEntity().transform.position;
+                spawnDesc._position = StageProcessor.Instance().getPlayerEntity().transform.position + Vector3.right * 0.5f;
                 spawnDesc._rotation = Quaternion.identity;
                 spawnDesc._searchIdentifier = SearchIdentifier.Enemy;
                 
