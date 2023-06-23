@@ -177,7 +177,7 @@
         <AnimationHeader MasterPath="Sprites/Enemy/KantoReito/1_punch/"/>
         <Animation Preset="2_punchMain" XFlip="true" Duration="0.35">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2204" Attach="true"/>
-            <FrameEvent Type="Movement" StartTime="0" Friction="60" MaxVelocity="24" Velocity="24" Speed="0"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="48" MaxVelocity="18" Velocity="18" Speed="0"/>
             <FrameEvent Type="Attack" StartTime="0" EndTime="0.2" AttackPreset="Reito_Punch">
                 <OnHit>
                     <FrameEvent Type="AudioPlay" StartTime="0" ID="2205" Attach="true"/>
