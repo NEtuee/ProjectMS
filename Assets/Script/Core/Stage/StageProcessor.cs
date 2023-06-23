@@ -164,7 +164,7 @@ public class StageProcessor : Singleton<StageProcessor>
             }
         }
 
-        resultPoint.z = -20f;
+        resultPoint.z = -10f;
         _targetTransform.position = resultPoint;
         for(int index = 0; index < _stageData._stagePointData.Count; ++index)
         {
