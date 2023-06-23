@@ -1,7 +1,7 @@
-<AIPackage Name="ReitoLinearDashPackage" DefaultState="AI_Dash">
+<AIPackage Name="ReitoLinearDashPackage" DefaultState="AI_LinearDash">
 
     <AIState>
-        <AI_Dash UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+        <AI_LinearDash UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_LinearDash"/>
@@ -12,7 +12,7 @@
             </Event_OnFrame>
 
             <Branch Condition="End" Execute="TerminatePackage"/>
-        </AI_Dash>
+        </AI_LinearDash>
 
         <TerminatePackage>
             <Event_OnExecute>
