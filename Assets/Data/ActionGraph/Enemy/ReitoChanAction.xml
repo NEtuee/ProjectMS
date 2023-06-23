@@ -52,6 +52,7 @@
         <Branch Condition="End" Execute="AC_Dash"/>
     </AC_Dash>
 
+    <!-- Dash Rush Chase -->
     <AC_LinearDash MovementType="GraphPreset" MovementGraphPreset="Reito_LinearDash" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/KantoReito/0_default/"/>
         <Animation Preset="3_dash" XFlip="true" Duration="0.7">
@@ -62,7 +63,7 @@
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountClear"/>
         </Animation>
 
-        <Branch Condition="End" Execute="AC_Dash"/>
+        <Branch Condition="End" Execute="AC_LinearDash"/>
     </AC_LinearDash>
 
     <AC_Dodge MovementType="GraphPreset" MovementGraphPreset="Reito_Dodge" DirectionType="AI" FlipType="Direction">
@@ -146,7 +147,7 @@
     <!-- 피격 리액션으로 공격 시 준비 모션 -->
     <AC_PunchReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/KantoReito/1_punch/"/>
-        <Animation Preset="1_punchReady" XFlip="true" Duration="0.7">  <!-- TODO: 임시 모션이므로 바꿔줘야함. -->
+        <Animation Preset="1_punchReady" XFlip="true" Duration="0.7">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2203" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountClear"/>
@@ -155,16 +156,32 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_PunchReady>
 
+    <AC_ChasePunchReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/KantoReito/1_punch/"/>
+        <Animation Preset="1_punchReady" XFlip="true" Duration="0.2">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2203" Attach="true"/>
+            
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="5" Speed="15"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+        </Animation>
+    
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_ChasePunchReady>
+
     <!-- 아카네에게 이동하며 주먹 휘두르기 ~ 헛스윙 후 회복 애니메이션 -->
     <AC_Punch MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/KantoReito/1_punch/"/>
         <Animation Preset="2_punchMain" XFlip="true" Duration="0.35">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2204" Attach="true"/>
-            <FrameEvent Type="Movement" StartTime="0" Friction="24" MaxVelocity="12" Velocity="12" Speed="0"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="60" MaxVelocity="24" Velocity="24" Speed="0"/>
             <FrameEvent Type="Attack" StartTime="0" EndTime="0.2" AttackPreset="Reito_Punch">
                 <OnHit>
                     <FrameEvent Type="AudioPlay" StartTime="0" ID="2205" Attach="true"/>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonDoubleAttack"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonTenthsAttack"/>
                     
                     <FrameEvent Type="ZoomEffect" Scale="2.8"/>
                     <FrameEvent Type="StopUpdate" Time="0.15"/>

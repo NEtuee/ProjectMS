@@ -19,6 +19,7 @@
     <Include Path="Enemy/KantoReito/ReitoCremationBeamPackage.xml"/>
     <Include Path="Enemy/KantoReito/ReitoDodgePackage.xml"/>
     <Include Path="Enemy/KantoReito/ReitoAttackReadyPackage.xml"/>
+    <Include Path="Enemy/KantoReito/ReitoChaseAttackReadyPackage.xml"/>
     <Include Path="Enemy/KantoReito/ReitoLinearDashPackage.xml"/>
 
     <Test Package="CommonTestPackage">
@@ -88,12 +89,12 @@
         <Branch Condition="(TargetDistance >= gv_StdPassiveAttitude) && (customValue_CurrentGauntletCount <= gv_GuntletLimit)" Execute="SpawnPitchingMachine"/>
         <Branch Condition="(TargetDistance >= gv_StdPassiveAttitude)" Execute="DashRush"/>
 
-        <!-- 2페이즈 근거리 -->
+        <!-- 근거리 -->
         <Branch Weight="RandBoolean^True" Condition="(TargetDistance < gv_StdDistance)" Execute="RushReady"/>
         <Branch Weight="RandBoolean^False" Condition="(TargetDistance < gv_StdDistance) && (customValue_CurrentGauntletCount <= gv_GuntletLimit)" Execute="SpawnPitchingMachine"/>
         <Branch Weight="RandBoolean^False" Condition="(TargetDistance < gv_StdDistance)" Execute="RushReady"/>
 
-        <!-- 2페이즈 원거리 -->
+        <!-- 원거리 -->
         <Branch Weight="Najimi2PhaseDistAtk^ChaseRush" Condition="(TargetDistance >= gv_StdDistance)" Execute="Chase"/>
         <Branch Weight="Najimi2PhaseDistAtk^PitchingMachine" Condition="(TargetDistance >= gv_StdDistance) && (customValue_CurrentGauntletCount <= gv_GuntletLimit)" Execute="SpawnPitchingMachine"/>
         <Branch Weight="Najimi2PhaseDistAtk^PitchingMachine" Condition="(TargetDistance >= gv_StdDistance)" Execute="DashRushReady"/>
@@ -127,7 +128,7 @@
         <!-- 추격 러시 -->
         <Branch Condition="TargetExists && 
                            (gv_najimiRushRange >= TargetDistance) && 
-                           (GraphExecutedTime > gv_najimiRushTrasitionTime)" Execute="Rush"/>
+                           (GraphExecutedTime > gv_najimiRushTrasitionTime)" Execute="ChaseRushReady"/>
     </Chase>
 
     <SystemChase Package="CommonSystemChasePackage">
@@ -142,14 +143,19 @@
     
     <DashRush Package="ReitoLinearDashPackage">
         <UseBranchSet Name="IsPlayerDead"/>
-        <Branch Condition="(gv_najimiRushRange >= TargetDistance)" Execute="Rush"/>
-        <Branch Condition="CurrentPackageEnd" Execute="Rush"/>
+        <Branch Condition="(gv_najimiRushRange >= TargetDistance)" Execute="ChaseRushReady"/>
+        <Branch Condition="CurrentPackageEnd" Execute="ChaseRushReady"/>
     </DashRush>
 
     <RushReady Package="ReitoAttackReadyPackage">
         <UseBranchSet Name="IsPlayerDead"/>
         <Branch Condition="CurrentPackageEnd" Execute="Rush"/>
     </RushReady>
+    
+    <ChaseRushReady Package="ReitoChaseAttackReadyPackage">
+        <UseBranchSet Name="IsPlayerDead"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Rush"/>
+    </ChaseRushReady>
 
     <Rush Package="ReitoPunchPackage">
         <UseBranchSet Name="IsPlayerDead"/>
