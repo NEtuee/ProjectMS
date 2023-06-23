@@ -159,14 +159,14 @@
 
     <AC_ChasePunchReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/KantoReito/1_punch/"/>
-        <Animation Preset="1_punchReady" XFlip="true" Duration="0.2">
+        <Animation Preset="1_punchReady" XFlip="true" Duration="0.3">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2203" Attach="true"/>
             
             <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="5" Speed="15"/>
 
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
-            <FrameEvent Type="SetDirectionType" StartTime="0.05" DirectionType="Keep"/>
+            <FrameEvent Type="SetDirectionType" StartTime="0.15" DirectionType="Keep"/>
         </Animation>
     
         <Branch Condition="End" Execute="AC_Idle"/>

@@ -7,6 +7,10 @@
                 <AIEvent Type="SetAction" Action="AC_ChasePunchReady"/>
             </Event_OnExecute>
             
+            <Event_OnUpdate>
+                <AIEvent Type="SetDirectionToTarget"/>
+            </Event_OnUpdate>
+
             <Branch Condition="End" Execute="TerminatePackage"/>
         </AI_ChasePunchReady>
 
