@@ -28,6 +28,16 @@ public class StageDataEditor : EditorWindow
             {
                 for(int index = 0; index < _characterObjectList.Count; ++index)
                 {
+                    if(_characterObjectList[index] == null)
+                    {
+                        _characterObjectList.RemoveAt(index);
+                        _characterSpawnDataList.RemoveAt(index);
+
+                        _stagePointData._characterSpawnData = _characterSpawnDataList.ToArray();
+                        --index;
+                        continue;
+                    }
+
                     syncSuccess |= _stagePointData._characterSpawnData[index]._localPosition == _characterObjectList[index].transform.position - _stagePointData._stagePoint;
                     _stagePointData._characterSpawnData[index]._localPosition = _characterObjectList[index].transform.position - _stagePointData._stagePoint;
                 }
@@ -211,10 +221,12 @@ public class StageDataEditor : EditorWindow
 
     private void onCharacterGUI()
     {
-        if(_editStageData._stagePointData.Count <= _pointSelectedIndex || _pointSelectedIndex < 0)
+        if(_editStageData._stagePointData.Count <= _pointSelectedIndex || _pointSelectedIndex < 0 )
             return;
         
         StagePointData stagePointData = _editStageData._stagePointData[_pointSelectedIndex];
+        if(stagePointData == null || stagePointData._characterSpawnData == null)
+            return;
 
         _pointCharacterSearchString = EditorGUILayout.TextField("Search",_pointCharacterSearchString);
         if(_pointCharacterSearchStringCompare != _pointCharacterSearchString)
@@ -275,8 +287,13 @@ public class StageDataEditor : EditorWindow
 
     private void onCharacterInspectorGUI()
     {
-        if(_editStageData._stagePointData.Count <= _pointSelectedIndex || _pointSelectedIndex < 0 || 
-            _editStageData._stagePointData[_pointSelectedIndex]._characterSpawnData.Length <= _characterSelectedIndex || _characterSelectedIndex < 0)
+        if(_editStageData == null || _editStageData._stagePointData == null 
+            || _editStageData._stagePointData.Count <= _pointSelectedIndex 
+            || _pointSelectedIndex < 0 
+            || _editStageData._stagePointData[_pointSelectedIndex] == null
+            || _editStageData._stagePointData[_pointSelectedIndex]._characterSpawnData == null 
+            || _editStageData._stagePointData[_pointSelectedIndex]._characterSpawnData.Length <= _characterSelectedIndex 
+            || _characterSelectedIndex < 0)
             return;
 
         StagePointData stagePointData = _editStageData._stagePointData[_pointSelectedIndex];
@@ -403,6 +420,13 @@ public class StageDataEditor : EditorWindow
         bool repaint = false;
         for(int i = 0; i < _editingStagePointList.Count; ++i)
         {
+            if(_editingStagePointList[i]._gizmoItem == null)
+            {
+                deleteStagePoint(i);
+                --i;
+                continue;
+            }
+
             repaint |= _editingStagePointList[i].syncPosition();
 
             if(i == 0 && _backgroundPrefabObject != null)
@@ -699,6 +723,7 @@ public class StageDataEditor : EditorWindow
         }
 
         _gizmoItemPool.Clear();
+        _characterItemPool.Clear();
         _editingStagePointList.Clear();
 
         if(_editItemParent == null)
@@ -829,6 +854,9 @@ public class StageDataEditor : EditorWindow
 
     private void returnGizmoItem(GameObject gizmoItem)
     {
+        if(gizmoItem == null)
+            return;
+
         gizmoItem.SetActive(false);
         _gizmoItemPool.Enqueue(gizmoItem);
     }
