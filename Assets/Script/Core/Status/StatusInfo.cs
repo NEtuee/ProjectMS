@@ -254,7 +254,7 @@ public class StatusInfo
             if(_currentlyAppliedBuffList[i]._particleEffect != null)
                 _currentlyAppliedBuffList[i]._particleEffect.disableEffect();
             if(_currentlyAppliedBuffList[i]._timelineEffect != null)
-                _currentlyAppliedBuffList[i]._timelineEffect.disableEffect();
+                _currentlyAppliedBuffList[i]._timelineEffect.release();
 
             _buffItemPool.enqueue(_currentlyAppliedBuffList[i]);
         }
@@ -280,6 +280,11 @@ public class StatusInfo
         if(buffItem._buffData._buffUpdateType == BuffUpdateType.DelayedContinuous || buffItem._buffData._buffUpdateType == BuffUpdateType.GreaterThenSet)
             getStatus((buffItem._buffData._targetStatusName)).deleteToUpdateList(buffItem._buffData._buffKey);
         
+        if(buffItem._particleEffect != null)
+            buffItem._particleEffect.disableEffect();
+        if(buffItem._timelineEffect != null)
+            buffItem._timelineEffect.release();
+
         _buffItemPool.enqueue(buffItem);
         _currentlyAppliedBuffList.RemoveAt(index);
     }
@@ -404,6 +409,8 @@ public class StatusInfo
                     {
                         EffectRequestData requestData = MessageDataPooling.GetMessageData<EffectRequestData>();
                         requestData.clearRequestData();
+                        requestData._executeEntity = _ownerObject;
+                        requestData._timelineAnimator = _ownerObject.getAnimator();
                         requestData._parentTransform = _ownerObject.transform;
                         requestData._position = _ownerObject.transform.position;
                         requestData._effectPath = buffData._timelineEffect;

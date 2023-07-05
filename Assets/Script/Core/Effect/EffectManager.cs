@@ -376,6 +376,17 @@ public class TimelineEffectItem : EffectItemBase
     {
         _effectObject.transform.SetParent(null);
         _effectObject.SetActive(false);
+
+        if(_timelineEffectControl != null && _timelineEffectControl._isCharacterMaterialEffect)
+            _timelineEffectControl.setCharacterAnimator(null);
+        
+        if(_timelineEffectControl != null && _timelineEffectControl._isOutlineEffect)
+        {
+            Material currentMaterial = _executeObject?.getCurrentMaterial();
+            if(currentMaterial != null)
+            {
+            }
+        }
     }
 
     public override bool isValid()

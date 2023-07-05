@@ -117,7 +117,11 @@ public class SequencrGraphLoader : LoaderBase<SequencerGraphBaseData>
             spawnEvent = new SequencerGraphEvent_WaitSignal();
         else if(node.Name == "SetCameraZoom")
             spawnEvent = new SequencerGraphEvent_SetCameraZoom();
-            
+        else if(node.Name == "FadeIn")
+            spawnEvent = new SequencerGraphEvent_FadeIn();
+        else if(node.Name == "FadeOut")
+            spawnEvent = new SequencerGraphEvent_FadeOut();
+
         if(spawnEvent == null)
         {
             DebugUtil.assert(false,"invalid sequencer graph event type: {0} [Line: {1}] [FileName: {2}]", node.Name, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);

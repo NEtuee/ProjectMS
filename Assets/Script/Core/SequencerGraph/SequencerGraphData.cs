@@ -16,6 +16,8 @@ public enum SequencerGraphEventType
     CallAIEvent,
     WaitSignal,
     SetCameraZoom,
+    FadeIn,
+    FadeOut,
 
     Count,
 }
@@ -95,6 +97,60 @@ public class SequencerGraphEvent_CallAIEvent : SequencerGraphEventBase
             else if(attrName == "UniqueKey")
                 _uniqueKey = attributes[i].Value;
 
+        }
+    }
+}
+
+public class SequencerGraphEvent_FadeIn : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.FadeIn;
+
+    private float _lambda = -1f;
+
+    public override void Initialize()
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        ScreenDirector._instance.ScreenFadeIn(_lambda);
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            if(attributes[i].Name == "Lambda")
+                _lambda = float.Parse(attributes[i].Value);
+        }
+    }
+}
+
+public class SequencerGraphEvent_FadeOut : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.FadeOut;
+
+    private float _lambda = -1f;
+
+    public override void Initialize()
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        ScreenDirector._instance.ScreenFadeOut(_lambda);
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            if(attributes[i].Name == "Lambda")
+                _lambda = float.Parse(attributes[i].Value);
         }
     }
 }

@@ -246,6 +246,11 @@ public abstract class ObjectBase : MessageReceiver, IProgress
     }
     public float getDistanceSq(ObjectBase obj) {return (transform.position - obj.transform.position).sqrMagnitude;}
 
+    public Material getCurrentMaterial()
+    {
+        return _spriteRenderer?.material;
+    }
+
     public Transform getSpriteRendererTransform()
     {
         if(_spriteRenderer == null)

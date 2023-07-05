@@ -9,6 +9,7 @@ public class TimelineEffectControl : MonoBehaviour//, INotificationReceiver
     public PlayableDirector         _playableDirector;
     public bool                     _isCharacterMaterialEffect = false;
     public bool                     _isLaserEffect = false;
+    public bool                     _isOutlineEffect = false;
 
     public void setCharacterAnimator(Animator characterAnimator)
     {
