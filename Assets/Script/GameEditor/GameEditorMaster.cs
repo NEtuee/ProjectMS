@@ -17,6 +17,12 @@ public class GameEditorMaster : MonoBehaviour
     public Slider   _timeMagnitudeSlider;
     public Text     _timeMagnitudeText;
 
+    public Text     _debugCharacterNameText;
+    public Toggle   _actionDebugToggle;
+    public Toggle   _aiDebugToggle;
+    public Toggle   _statusDebugToggle;
+    public Toggle   _animationDebugToggle;
+
     private static string _hotKey_EditorOnOff = "EditorHotKey_EditorOnOff";
     private static string _hotKey_UpdateFrame = "EditorHotKey_UpdateFrame";
 
@@ -24,6 +30,8 @@ public class GameEditorMaster : MonoBehaviour
     private GameObject _editorParent;
     private EditorWindowBase _currentFocusWindow;
     private bool _activeEditor = false;
+
+    private GameEntityBase _currentlySelectedEntity;
 
     private void Awake()
     {
@@ -101,6 +109,8 @@ public class GameEditorMaster : MonoBehaviour
         SceneCharacterManager sceneCharacterManager = SceneCharacterManager._managerInstance as SceneCharacterManager;
         var characters = sceneCharacterManager.getCurrentlyEnabledCharacters();
 
+        bool targetFinded = false;
+
         foreach(var character in characters.Values)
         {
             BoundBox boundBox = character.getCollisionInfo().getBoundBox();
@@ -108,6 +118,15 @@ public class GameEditorMaster : MonoBehaviour
             {
                 Selection.activeGameObject = character.gameObject;
                 EditorGUIUtility.PingObject(character.gameObject);
+
+                _debugCharacterNameText.text = character.gameObject.name;
+                _currentlySelectedEntity = null;
+                setTargetDebugSwitch();
+
+                _currentlySelectedEntity = character;
+                setTargetDebugSwitch();
+
+                targetFinded = true;
                 break;
             }
         }
@@ -136,6 +155,20 @@ public class GameEditorMaster : MonoBehaviour
     public void setAiDebug() {_aiDebugAll = !_aiDebugAll;}
     public void setStatusDebug() {_statusDebugAll = !_statusDebugAll;}
     public void setAnimationDebug() {_animationDebugAll = !_animationDebugAll;}
+
+    public void setTargetDebugSwitch(bool clear = false)
+    {
+        _actionDebugToggle.isOn = clear ? false : (_currentlySelectedEntity != null ? _currentlySelectedEntity._actionDebug : false);
+        _aiDebugToggle.isOn = clear ? false : (_currentlySelectedEntity != null ? _currentlySelectedEntity._aiDebug : false);
+        _statusDebugToggle.isOn = clear ? false : (_currentlySelectedEntity != null ? _currentlySelectedEntity._statusDebug : false);
+        _animationDebugToggle.isOn = clear ? false : (_currentlySelectedEntity != null ? _currentlySelectedEntity._animationDebug : false);
+    }
+
+
+    public void setTargetActionDebug() {if(_currentlySelectedEntity==null) return; _currentlySelectedEntity._actionDebug = _actionDebugToggle.isOn;}
+    public void setTargetAiDebug() {if(_currentlySelectedEntity==null) return; _currentlySelectedEntity._aiDebug = _aiDebugToggle.isOn;}
+    public void setTargetStatusDebug() {if(_currentlySelectedEntity==null) return; _currentlySelectedEntity._statusDebug =  _statusDebugToggle.isOn;}
+    public void setTargetAnimationDebug() {if(_currentlySelectedEntity==null) return; _currentlySelectedEntity._animationDebug = _animationDebugToggle.isOn;}
 
     public bool isActionDebug() {return _actionDebugAll;}
     public bool isAiDebug() {return _aiDebugAll;}

@@ -191,6 +191,11 @@ public class GameEntityBase : SequencerObjectBase
         packageChangeLogItem._nodeData = _aiGraph.getCurrentAIPackageNode_Debug();
         packageChangeLogItem._packageName = _aiGraph.getCurrentPackageName();
         addAIPackageChangeLog(packageChangeLogItem);
+
+        _actionDebug = false;
+        _aiDebug = false;
+        _statusDebug = false;
+        _animationDebug = false;
 #endif
     }
 
@@ -596,6 +601,11 @@ public class GameEntityBase : SequencerObjectBase
         packageChangeLogItem._nodeData = _aiGraph.getCurrentAIPackageNode_Debug();
         packageChangeLogItem._packageName = _aiGraph.getCurrentPackageName();
         addAIPackageChangeLog(packageChangeLogItem);
+
+        _actionDebug = false;
+        _aiDebug = false;
+        _statusDebug = false;
+        _animationDebug = false;
     }
 #endif
 
