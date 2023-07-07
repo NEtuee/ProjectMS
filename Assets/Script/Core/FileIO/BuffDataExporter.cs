@@ -114,6 +114,14 @@ public static class BuffDataLoader
 
                 buffData._timelineEffect = attrValue;
             }
+            else if(attrName == "AnimationEffect")
+            {
+                GameObject prefab = ResourceContainerEx.Instance().GetPrefab(attrValue);
+                if(prefab == null)
+                    DebugUtil.assert(false,"대상 AnimationEffect가 존재하지 않습니다. [BuffInfo: {0}] [AnimationEffect: {1}] [Line: {2}] [FileName: {3}]",node.Name,attrValue, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
+
+                buffData._animationEffect = attrValue;
+            }
             else
             {
                 DebugUtil.assert(false, "invalid attribute name from buffInfo: {0} [Line: {1}] [FileName: {2}]",node.Name, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);

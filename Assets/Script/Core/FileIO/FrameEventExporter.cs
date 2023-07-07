@@ -35,6 +35,8 @@ public static class FrameEventLoader
             outFrameEvent = new ActionFrameEvent_TimelineEffect();
         else if(type == "ParticleEffect")
             outFrameEvent = new ActionFrameEvent_ParticleEffect();
+        else if(type == "AnimationEffect")
+            outFrameEvent = new ActionFrameEvent_AnimationEffect();
         else if(type == "FrameTag")
             outFrameEvent = new ActionFrameEvent_SetFrameTag();
         else if(type == "Projectile")

@@ -17,6 +17,7 @@ public class BuffData
 
     public string              _particleEffect = "";
     public string              _timelineEffect = "";
+    public string              _animationEffect = "";
 
     public BuffData()
     {
@@ -33,6 +34,7 @@ public class BuffData
 
         _particleEffect = "";
         _timelineEffect = "";
+        _animationEffect = "";
     }
 
     public void copy(BuffData target)
@@ -47,6 +49,7 @@ public class BuffData
         _buffCustomValue2 = target._buffCustomValue2;
         _particleEffect = target._particleEffect;
         _timelineEffect = target._timelineEffect;
+        _animationEffect = target._animationEffect;
     }
 
 

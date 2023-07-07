@@ -16,6 +16,7 @@ public enum EffectType
     TimelineEffect,
     ParticleEffect,
     TrailEffect,
+    AnimationEffect,
 }
 
 public class EffectRequestData : MessageData
@@ -268,18 +269,16 @@ public class EffectItem : EffectItemBase
     public override bool isActivated() {return _spriteRenderer.gameObject.activeInHierarchy;}
 }
 
-public class TimelineEffectItem : EffectItemBase
+public class AnimationEffectItem : EffectItemBase
 {
     private GameObject              _effectObject;
-    private PlayableDirector        _playableDirector;
-    private TimelineEffectControl   _timelineEffectControl;
+    private Animation               _animationComponent;
 
     public ObjectBase               _executeObject;
     public bool                     _followDirection;
-
     public Transform                _parentTransform = null;
 
-    private float _playSpeed = 1f;
+    private float                   _playSpeed = 1f;
 
 
     public void createItem(string prefabPath)
@@ -292,16 +291,15 @@ public class TimelineEffectItem : EffectItemBase
         }
 
         _effectObject = GameObject.Instantiate(effectPrefab);
-        _playableDirector = _effectObject.GetComponent<PlayableDirector>();
-        _timelineEffectControl = _effectObject.GetComponent<TimelineEffectControl>();
+        _animationComponent = _effectObject.GetComponent<Animation>();
 
-        if(_playableDirector == null)
+        if(_animationComponent == null)
         {
-            DebugUtil.assert(false, "playable director가 이펙트 프리팹에 존재하지 않습니다. 타임라인 이펙트가 맞나요? : {0}", prefabPath);
+            DebugUtil.assert(false, "Animation이 이펙트 프리팹에 존재하지 않습니다. 애니메이션 이펙트가 맞나요? : {0}", prefabPath);
             return;
         }
 
-        _effectType = EffectType.TimelineEffect;
+        _effectType = EffectType.AnimationEffect;
         release();
     }
 
@@ -331,20 +329,17 @@ public class TimelineEffectItem : EffectItemBase
         if(_parentTransform != null)
             _effectObject.transform.SetParent(_parentTransform);
 
-        if(_timelineEffectControl != null && _timelineEffectControl._isCharacterMaterialEffect)
-            _timelineEffectControl.setCharacterAnimator(effectData._timelineAnimator);
-        
-        if(_timelineEffectControl != null && _timelineEffectControl._isLaserEffect && _executeObject is GameEntityBase)
-            (_executeObject as GameEntityBase).addLaserEffect(this);
+        // if(_timelineEffectControl != null && _timelineEffectControl._isLaserEffect && _executeObject is GameEntityBase)
+        //     (_executeObject as GameEntityBase).addLaserEffect(this);
 
         _effectObject.SetActive(true);
-        _playableDirector.Stop();
-        _playableDirector.Play();
+        _animationComponent.Stop();
+        _animationComponent.Play(PlayMode.StopAll);
     }
 
     public override bool progress(float deltaTime)
     {
-        if(isValid() == false || _playableDirector.playableGraph.IsValid() == false)
+        if(isValid() == false )
             return false;
 
         if(_stopEffect)
@@ -362,13 +357,12 @@ public class TimelineEffectItem : EffectItemBase
         if(_followDirection)
             _effectObject.transform.rotation = Quaternion.Euler(0f,0f,MathEx.directionToAngle(_executeObject.getDirection()));
 
-        _playableDirector.playableGraph.Evaluate(_playSpeed * deltaTime);
-        return _playableDirector.state != PlayState.Playing;
+        return _animationComponent.isPlaying == false;
     }
 
     public override void release()
     {
-        _playableDirector.Stop();
+        _animationComponent.Stop();
         disableEffect();
     }
 
@@ -376,22 +370,11 @@ public class TimelineEffectItem : EffectItemBase
     {
         _effectObject.transform.SetParent(null);
         _effectObject.SetActive(false);
-
-        if(_timelineEffectControl != null && _timelineEffectControl._isCharacterMaterialEffect)
-            _timelineEffectControl.setCharacterAnimator(null);
-        
-        if(_timelineEffectControl != null && _timelineEffectControl._isOutlineEffect)
-        {
-            Material currentMaterial = _executeObject?.getCurrentMaterial();
-            if(currentMaterial != null)
-            {
-            }
-        }
     }
 
     public override bool isValid()
     {
-        return _effectObject != null && _playableDirector != null;
+        return _effectObject != null && _animationComponent != null;
     }
 
     public override bool isActivated() {return _effectObject.activeInHierarchy;}
@@ -628,6 +611,139 @@ public class TrailEffectItem : EffectItemBase
     }
 }
 
+public class TimelineEffectItem : EffectItemBase
+{
+    private GameObject              _effectObject;
+    private PlayableDirector        _playableDirector;
+    private TimelineEffectControl   _timelineEffectControl;
+
+    public ObjectBase               _executeObject;
+    public bool                     _followDirection;
+
+    public Transform                _parentTransform = null;
+
+    private float _playSpeed = 1f;
+
+
+    public void createItem(string prefabPath)
+    {
+        GameObject effectPrefab = ResourceContainerEx.Instance().GetPrefab(prefabPath);
+        if(effectPrefab == null)
+        {
+            DebugUtil.assert(false, "잘못된 타임라인 이펙트 경로 입니다. 오타가 있지는 않나요? : {0}", prefabPath);
+            return;
+        }
+
+        _effectObject = GameObject.Instantiate(effectPrefab);
+        _playableDirector = _effectObject.GetComponent<PlayableDirector>();
+        _timelineEffectControl = _effectObject.GetComponent<TimelineEffectControl>();
+
+        if(_playableDirector == null)
+        {
+            DebugUtil.assert(false, "playable director가 이펙트 프리팹에 존재하지 않습니다. 타임라인 이펙트가 맞나요? : {0}", prefabPath);
+            return;
+        }
+
+        _effectType = EffectType.TimelineEffect;
+        release();
+    }
+
+    public override void initialize(EffectRequestData effectData)
+    {
+        _executeObject = effectData._executeEntity;
+        _followDirection = effectData._followDirection;
+
+        _effectPath = effectData._effectPath;
+        _effectUpdateType = effectData._updateType;
+
+        _effectObject.transform.position = effectData._position;
+        _effectObject.transform.rotation = _executeObject ? Quaternion.Euler(0f,0f,MathEx.directionToAngle(_executeObject.getDirection())) : effectData._rotation;
+
+        _parentTransform = effectData._parentTransform;
+
+        _stopEffect = false;
+
+        if(effectData._lifeTime != 0f)
+            _playSpeed = 1.0f / effectData._lifeTime;
+        else
+            _playSpeed = 1f;
+
+        if(_parentTransform != null && _parentTransform.gameObject.activeInHierarchy == false)
+            _parentTransform = null;
+
+        if(_parentTransform != null)
+            _effectObject.transform.SetParent(_parentTransform);
+
+        if(_timelineEffectControl != null && _timelineEffectControl._isCharacterMaterialEffect)
+            _timelineEffectControl.setCharacterAnimator(effectData._timelineAnimator);
+        
+        if(_timelineEffectControl != null && _timelineEffectControl._isLaserEffect && _executeObject is GameEntityBase)
+            (_executeObject as GameEntityBase).addLaserEffect(this);
+
+        _effectObject.SetActive(true);
+        _playableDirector.Stop();
+        _playableDirector.Play();
+    }
+
+    public override bool progress(float deltaTime)
+    {
+        if(isValid() == false || _playableDirector.playableGraph.IsValid() == false)
+            return false;
+
+        if(_stopEffect)
+            return true;
+
+        switch(_effectUpdateType)
+        {
+            case EffectUpdateType.ScaledDeltaTime:
+            break;
+            case EffectUpdateType.NoneScaledDeltaTime:
+            deltaTime = Time.deltaTime;
+            break;
+        }
+
+        if(_followDirection)
+            _effectObject.transform.rotation = Quaternion.Euler(0f,0f,MathEx.directionToAngle(_executeObject.getDirection()));
+
+        _playableDirector.playableGraph.Evaluate(_playSpeed * deltaTime);
+
+        return _playableDirector.state != PlayState.Playing;
+    }
+
+    public override void release()
+    {
+        _playableDirector.Stop();
+        disableEffect();
+    }
+
+    public void disableEffect()
+    {
+        _effectObject.transform.SetParent(null);
+        _effectObject.SetActive(false);
+
+        _timelineEffectControl?.deleteCharacterAnimatorBinding();
+
+        if(_timelineEffectControl != null && _timelineEffectControl._isCharacterMaterialEffect)
+            _timelineEffectControl.setCharacterAnimator(null);
+        
+        if(_timelineEffectControl != null && _timelineEffectControl._isOutlineEffect)
+        {
+            Material currentMaterial = _executeObject?.getCurrentMaterial();
+            if(currentMaterial != null)
+            {
+                currentMaterial.SetFloat("_OutlineAlpha",0f);
+            }
+        }
+    }
+
+    public override bool isValid()
+    {
+        return _effectObject != null && _playableDirector != null;
+    }
+
+    public override bool isActivated() {return _effectObject.activeInHierarchy;}
+}
+
 
 public class EffectManager : ManagerBase
 {
@@ -637,6 +753,7 @@ public class EffectManager : ManagerBase
 
     private SimplePool<EffectItem> _effectItemPool = new SimplePool<EffectItem>();
     private Dictionary<string, SimplePool<TimelineEffectItem>> _timelineEffectPool = new Dictionary<string, SimplePool<TimelineEffectItem>>();
+    private Dictionary<string, SimplePool<AnimationEffectItem>> _animationEffectPool = new Dictionary<string, SimplePool<AnimationEffectItem>>();
     private Dictionary<string, SimplePool<TrailEffectItem>> _trailEffectPool = new Dictionary<string, SimplePool<TrailEffectItem>>();
     private Dictionary<string, SimplePool<ParticleEffectItem>> _particleEffectPool = new Dictionary<string, SimplePool<ParticleEffectItem>>();
 
@@ -687,6 +804,9 @@ public class EffectManager : ManagerBase
             case EffectType.ParticleEffect:
                 _particleEffectPool[item._effectPath].enqueue(item as ParticleEffectItem);
             break;
+            case EffectType.AnimationEffect:
+                _animationEffectPool[item._effectPath].enqueue(item as AnimationEffectItem);
+            break;
         }
         
     }
@@ -734,6 +854,18 @@ public class EffectManager : ManagerBase
                 _particleEffectPool.Add(requestData._effectPath, new SimplePool<ParticleEffectItem>());
 
             ParticleEffectItem item = _particleEffectPool[requestData._effectPath].dequeue();
+            if(item.isValid() == false)
+                item.createItem(requestData._effectPath);
+
+            item.initialize(requestData);
+            itemBase = item;
+        }
+        else if(requestData._effectType == EffectType.AnimationEffect)
+        {
+            if(_animationEffectPool.ContainsKey(requestData._effectPath) == false)
+                _animationEffectPool.Add(requestData._effectPath, new SimplePool<AnimationEffectItem>());
+
+            AnimationEffectItem item = _animationEffectPool[requestData._effectPath].dequeue();
             if(item.isValid() == false)
                 item.createItem(requestData._effectPath);
 

@@ -15,6 +15,13 @@ public class TimelineEffectControl : MonoBehaviour//, INotificationReceiver
     {
         TimelineAsset timelineAsset = (TimelineAsset)_playableDirector.playableAsset;
         TrackAsset track = timelineAsset.GetOutputTrack(1) ;
-        _playableDirector.SetGenericBinding (track, characterAnimator);
+        _playableDirector.SetGenericBinding(track, characterAnimator);
+    }
+
+    public void deleteCharacterAnimatorBinding()
+    {
+        TimelineAsset timelineAsset = (TimelineAsset)_playableDirector.playableAsset;
+        TrackAsset track = timelineAsset.GetOutputTrack(1) ;
+        _playableDirector.ClearGenericBinding(track);
     }
 }

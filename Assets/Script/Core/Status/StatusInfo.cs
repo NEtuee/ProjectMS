@@ -50,6 +50,7 @@ public class StatusInfo
 
         public ParticleEffectItem _particleEffect;
         public TimelineEffectItem _timelineEffect;
+        public AnimationEffectItem _animationEffect;
 
         public float _startedTime;
 
@@ -228,6 +229,7 @@ public class StatusInfo
         buffItem._startedTime = startedTime;
         buffItem._particleEffect = null;
         buffItem._timelineEffect = null;
+        buffItem._animationEffect = null;
         
         _currentlyAppliedBuffList.Add(buffItem);
 
@@ -255,6 +257,8 @@ public class StatusInfo
                 _currentlyAppliedBuffList[i]._particleEffect.disableEffect();
             if(_currentlyAppliedBuffList[i]._timelineEffect != null)
                 _currentlyAppliedBuffList[i]._timelineEffect.release();
+            if(_currentlyAppliedBuffList[i]._animationEffect != null)
+                _currentlyAppliedBuffList[i]._animationEffect.release();
 
             _buffItemPool.enqueue(_currentlyAppliedBuffList[i]);
         }
@@ -284,6 +288,8 @@ public class StatusInfo
             buffItem._particleEffect.disableEffect();
         if(buffItem._timelineEffect != null)
             buffItem._timelineEffect.release();
+        if(buffItem._animationEffect != null)
+            buffItem._animationEffect.release();
 
         _buffItemPool.enqueue(buffItem);
         _currentlyAppliedBuffList.RemoveAt(index);
@@ -416,6 +422,22 @@ public class StatusInfo
                         requestData._effectPath = buffData._timelineEffect;
                         requestData._effectType = EffectType.TimelineEffect;
                         buffItem._timelineEffect = EffectManager._instance.createEffect(requestData) as TimelineEffectItem;
+
+                        requestData.isUsing = true;
+                    }
+
+                    if(buffData._animationEffect != "" && buffItem._animationEffect == null && _ownerObject != null)
+                    {
+                        EffectRequestData requestData = MessageDataPooling.GetMessageData<EffectRequestData>();
+                        requestData.clearRequestData();
+                        requestData._executeEntity = _ownerObject;
+                        requestData._timelineAnimator = _ownerObject.getAnimator();
+                        requestData._parentTransform = _ownerObject.transform;
+                        requestData._position = _ownerObject.transform.position;
+                        requestData._effectPath = buffData._animationEffect;
+                        requestData._effectType = EffectType.AnimationEffect;
+                        buffItem._animationEffect = EffectManager._instance.createEffect(requestData) as AnimationEffectItem;
+
                         requestData.isUsing = true;
                     }
                 }
@@ -433,6 +455,11 @@ public class StatusInfo
                 {
                     buffItem._timelineEffect.stopEffect();
                     buffItem._timelineEffect = null;
+                }
+                if(buffItem._animationEffect != null)
+                {
+                    buffItem._animationEffect.stopEffect();
+                    buffItem._animationEffect = null;
                 }
             }
                 

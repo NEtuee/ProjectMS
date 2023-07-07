@@ -14,6 +14,7 @@ public enum FrameEventType
     FrameEvent_Effect,
     FrameEvent_TimelineEffect,
     FrameEvent_ParticleEffect,
+    FrameEvent_AnimationEffect,
     FrameEvent_SetFrameTag,
     FrameEvent_Projectile,
     FrameEvent_Danmaku,
