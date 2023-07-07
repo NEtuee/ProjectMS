@@ -19,27 +19,27 @@ public class StatusInfo
         {
             for(int i = 0; i < buffItems.Count; ++i)
             {
-                if(_updateListWhenValueChange.Contains(buffItems[i]._buffData._buffKey))
+                if(_updateListWhenValueChange.Contains(buffItems[i]._uniqueKey))
                 {
                     buffItems[i]._startedTime = GlobalTimer.Instance().getScaledGlobalTime();
                 }
             }
         }
 
-        public void addToUpdateList(int buffKey)
+        public void addToUpdateList(int buffUniqueKey)
         {
-            _updateListWhenValueChange.Add(buffKey);
+            _updateListWhenValueChange.Add(buffUniqueKey);
         }
 
-        public void deleteToUpdateList(int buffKey)
+        public void deleteToUpdateList(int buffUniqueKey)
         {
-            if(_updateListWhenValueChange.Contains(buffKey) == false)
+            if(_updateListWhenValueChange.Contains(buffUniqueKey) == false)
             {
-                DebugUtil.assert(false,"target buff key is not exists, must fix: {0}",buffKey);
+                DebugUtil.assert(false,"target buff unique key is not exists, must fix: {0}",buffUniqueKey);
                 return;
             }
 
-            _updateListWhenValueChange.Remove(buffKey);
+            _updateListWhenValueChange.Remove(buffUniqueKey);
         }
     }
 
@@ -53,7 +53,7 @@ public class StatusInfo
         public AnimationEffectItem _animationEffect;
 
         public float _startedTime;
-
+        public int _uniqueKey = 0;
         public void updateStartTime(float startedTime)
         {
             _startedTime = startedTime;
@@ -80,6 +80,7 @@ public class StatusInfo
     private SimplePool<BuffItem> _buffItemPool = new SimplePool<BuffItem>();
 
     private bool _isDead = false;
+    private int _uniqueKeyIndex = 0;
 
     public StatusInfo(){}
 
@@ -216,7 +217,10 @@ public class StatusInfo
         for(int i = 0; i < _currentlyAppliedBuffList.Count; ++i)
         {
             if(_currentlyAppliedBuffList[i]._buffData._buffKey == buffKey)
-                return;
+            {
+                if(_currentlyAppliedBuffList[i]._buffData._allowOverlap == false)
+                    return;
+            }
         }
 
         applyBuff(_buffDataDictionary[buffKey], GlobalTimer.Instance().getScaledGlobalTime());
@@ -226,6 +230,7 @@ public class StatusInfo
     {
         BuffItem buffItem = _buffItemPool.dequeue();
         buffItem._buffData = buff;
+        buffItem._uniqueKey = _uniqueKeyIndex++;
         buffItem._startedTime = startedTime;
         buffItem._particleEffect = null;
         buffItem._timelineEffect = null;
@@ -236,7 +241,7 @@ public class StatusInfo
         if(buff._buffUpdateType == BuffUpdateType.DelayedContinuous || buff._buffUpdateType == BuffUpdateType.GreaterThenSet)
         {
             buffItem._startedTime -= buff._buffCustomValue0;
-            getStatus(buff._targetStatusName).addToUpdateList(buff._buffKey);
+            getStatus(buff._targetStatusName).addToUpdateList(buffItem._uniqueKey);
         }
     }
 
@@ -251,7 +256,7 @@ public class StatusInfo
         for(int i = 0; i < _currentlyAppliedBuffList.Count; ++i)
         {
             if(_currentlyAppliedBuffList[i]._buffData._buffUpdateType == BuffUpdateType.DelayedContinuous || _currentlyAppliedBuffList[i]._buffData._buffUpdateType == BuffUpdateType.GreaterThenSet )
-                getStatus((_currentlyAppliedBuffList[i]._buffData._targetStatusName)).deleteToUpdateList(_currentlyAppliedBuffList[i]._buffData._buffKey);        
+                getStatus((_currentlyAppliedBuffList[i]._buffData._targetStatusName)).deleteToUpdateList(_currentlyAppliedBuffList[i]._uniqueKey);        
             
             if(_currentlyAppliedBuffList[i]._particleEffect != null)
                 _currentlyAppliedBuffList[i]._particleEffect.disableEffect();
@@ -282,7 +287,7 @@ public class StatusInfo
     {
         BuffItem buffItem = _currentlyAppliedBuffList[index];
         if(buffItem._buffData._buffUpdateType == BuffUpdateType.DelayedContinuous || buffItem._buffData._buffUpdateType == BuffUpdateType.GreaterThenSet)
-            getStatus((buffItem._buffData._targetStatusName)).deleteToUpdateList(buffItem._buffData._buffKey);
+            getStatus((buffItem._buffData._targetStatusName)).deleteToUpdateList(buffItem._uniqueKey);
         
         if(buffItem._particleEffect != null)
             buffItem._particleEffect.disableEffect();

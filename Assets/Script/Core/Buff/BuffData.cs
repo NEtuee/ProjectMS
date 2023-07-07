@@ -8,6 +8,8 @@ public class BuffData
     public BuffUpdateType      _buffUpdateType;
     public BuffApplyType       _buffApplyType;
 
+    public bool                _allowOverlap = false;
+
     public float               _buffVaryStatFactor;
     public float               _buffCustomValue0;
     public float               _buffCustomValue1;
@@ -26,6 +28,7 @@ public class BuffData
         _targetStatusName = null;
         _buffUpdateType = BuffUpdateType.Count;
         _buffApplyType = BuffApplyType.Count;
+        _allowOverlap = false;
 
         _buffVaryStatFactor = 0f;
         _buffCustomValue0 = 0f;
@@ -43,6 +46,7 @@ public class BuffData
         _targetStatusName = target._targetStatusName;
         _buffUpdateType = target._buffUpdateType;
         _buffApplyType = target._buffApplyType;
+        _allowOverlap = target._allowOverlap;
         _buffVaryStatFactor = target._buffVaryStatFactor;
         _buffCustomValue0 = target._buffCustomValue0;
         _buffCustomValue1 = target._buffCustomValue1;

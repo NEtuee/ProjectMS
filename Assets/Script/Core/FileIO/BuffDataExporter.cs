@@ -98,6 +98,8 @@ public static class BuffDataLoader
                 buffData._buffCustomValue1 = float.Parse(attrValue);
             else if(attrName == "ButtonList")
                 buffData._buffCustomValue2 = attrValue.Split(' ');
+            else if(attrName == "AllowOverlap")
+                buffData._allowOverlap = bool.Parse(attrValue);
             else if(attrName == "ParticleEffect")
             {
                 GameObject prefab = ResourceContainerEx.Instance().GetPrefab(attrValue);
