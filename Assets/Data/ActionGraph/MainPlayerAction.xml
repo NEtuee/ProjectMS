@@ -411,12 +411,12 @@
     </Hit>
 
     <Dead DirectionType="Keep" FlipType="Direction">
-        <Animation Preset="Sprites/NewPlayer/Hit/" XFlip="true" Duration="10.0">
+        <Animation Preset="Sprites/NewPlayer/empty/" XFlip="true" Duration="10.0">
             <FrameEvent Type="Effect" StartTime="0" Path="Sprites/NewPlayer/Hit" FramePerSecond="0.5" Offset="0.0 0.0 0.0" Angle="Random_0^360" UseFlip="True" CastShadow="True">
                 <Physics UseGravity="True" Velocity="2 2" Friction="2.0" Torque="Random_25^30" AngularFriction="15.0"/>
             </FrameEvent>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="Dead"/>
-            <FrameEvent Type="KillEntity" StartTime="0"/>
+            <FrameEvent Type="KillEntity" StartTime="10.0"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="Dead"/>
