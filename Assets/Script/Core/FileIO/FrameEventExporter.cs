@@ -87,7 +87,7 @@ public static class FrameEventLoader
             return null;
         }
 
-        DebugUtil.assert((int)FrameEventType.Count == 33, "check here");
+        DebugUtil.assert((int)FrameEventType.Count == 34, "check here");
 
 
         if(outFrameEvent == null)
