@@ -46,7 +46,7 @@ public class CharacterInfoViewer : EditorWindow
         const string kCharacterInfoPath = "Assets\\Data\\StaticData\\CharacterInfo.xml";
         Dictionary<string,CharacterInfoData> characterInfo = ResourceContainerEx.Instance().getCharacterInfo(kCharacterInfoPath);
 
-        _scrollPosition = GUILayout.BeginScrollView(_scrollPosition);
+        _scrollPosition = GUILayout.BeginScrollView(_scrollPosition,"box");
         bool gamePlaying = Application.isPlaying && SceneCharacterManager._managerInstance != null && StageProcessor.Instance() != null && StageProcessor.Instance().getPlayerEntity() != null;
         foreach(var item in characterInfo)
         {
@@ -55,7 +55,7 @@ public class CharacterInfoViewer : EditorWindow
 
             GUILayout.BeginHorizontal("box");
             
-            if(GUILayout.Button("Show",GUILayout.Width(50f)))
+            if(GUILayout.Button("Show",GUILayout.Width(45f)))
             {
                 _selectedData = item.Value;
 
@@ -64,7 +64,7 @@ public class CharacterInfoViewer : EditorWindow
             }
 
             GUI.enabled = gamePlaying;
-            if(GUILayout.Button("Add",GUILayout.Width(50f)))
+            if(GUILayout.Button("Add",GUILayout.Width(40f)))
             {
                 SceneCharacterManager sceneCharacterManager = SceneCharacterManager._managerInstance as SceneCharacterManager;
                 SpawnCharacterOptionDesc spawnDesc = new SpawnCharacterOptionDesc();
@@ -75,6 +75,20 @@ public class CharacterInfoViewer : EditorWindow
                 
                 CharacterEntityBase createdCharacter = sceneCharacterManager.createCharacterFromPool(item.Value,spawnDesc);
             }
+
+            if(GUILayout.Button("Random",GUILayout.Width(60f)))
+            {
+                SceneCharacterManager sceneCharacterManager = SceneCharacterManager._managerInstance as SceneCharacterManager;
+                SpawnCharacterOptionDesc spawnDesc = new SpawnCharacterOptionDesc();
+                spawnDesc._direction = Vector3.right;
+                spawnDesc._position = StageProcessor.Instance().getPlayerEntity().transform.position + CameraControlEx.Instance().getRandomPositionInCamera();
+                spawnDesc._rotation = Quaternion.identity;
+                spawnDesc._searchIdentifier = SearchIdentifier.Enemy;
+                
+                CharacterEntityBase createdCharacter = sceneCharacterManager.createCharacterFromPool(item.Value,spawnDesc);
+            }
+
+
             GUI.enabled = true;
 
             GUILayout.Label(item.Key + ": " + item.Value._displayName);

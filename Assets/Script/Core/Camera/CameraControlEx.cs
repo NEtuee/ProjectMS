@@ -327,6 +327,11 @@ public class CameraControlEx : Singleton<CameraControlEx>
 		return (pos.x >= bound.x && pos.x <= bound.y && pos.y >= bound.z && pos.y <= bound.w);
 	}
 
+    public Vector3 getRandomPositionInCamera()
+    {
+        return new Vector3(Random.Range(-_camWidth * 0.5f,_camWidth * 0.5f),Random.Range(-_camHeight * 0.5f,_camHeight * 0.5f));
+    }
+
     public Vector4 GetCamBounds() //x min x max y min y max
 	{
         Vector3 position = _currentCamera.transform.position;
