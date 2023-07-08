@@ -17,6 +17,7 @@ public class StageProcessor : Singleton<StageProcessor>
     private Vector3 _offsetPosition = Vector3.zero;
 
     private GameEntityBase _playerEntity = null;
+    private GameObject _stageBackgroundOjbect = null;
 
     Dictionary<int,List<CharacterEntityBase>> _spawnedCharacterEntityDictionary = new Dictionary<int, List<CharacterEntityBase>>();
 
@@ -114,6 +115,18 @@ public class StageProcessor : Singleton<StageProcessor>
                 _spawnedCharacterEntityDictionary[index].Add(createdCharacter);
             }
         }
+
+        if(_stageData._backgroundPrefabPath != "")
+        {
+            GameObject prefabObject = ResourceContainerEx.Instance().GetPrefab(_stageData._backgroundPrefabPath);
+            if(prefabObject == null)
+                return;
+
+            _stageBackgroundOjbect = GameObject.Instantiate(prefabObject);
+
+            _stageBackgroundOjbect.SetActive(true);
+            _stageBackgroundOjbect.transform.position = startPosition;
+        }
     }
 
     public void stopStage()
@@ -125,6 +138,8 @@ public class StageProcessor : Singleton<StageProcessor>
         _isEnd = false;
         _offsetPosition = Vector3.zero;
         _clampTargetPosition = Vector3.zero;
+        if(_stageBackgroundOjbect != null)
+            GameObject.Destroy(_stageBackgroundOjbect);
 
         foreach(var item in _spawnedCharacterEntityDictionary.Values)
         {

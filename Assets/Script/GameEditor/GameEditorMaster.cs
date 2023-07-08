@@ -23,11 +23,16 @@ public class GameEditorMaster : MonoBehaviour
     public Toggle   _statusDebugToggle;
     public Toggle   _animationDebugToggle;
 
+    public RectTransform _stageSelectorContent;
+    public GameObject _stageSelectorButtonItemPrefab;
+
     private static string _hotKey_EditorOnOff = "EditorHotKey_EditorOnOff";
     private static string _hotKey_UpdateFrame = "EditorHotKey_UpdateFrame";
+    private static string _hotKey_StageSelectorOnOff = "EditorHotKey_StageSelectorOnOff";
 
     private List<EditorWindowBase> _currentWindows = new List<EditorWindowBase>();
     private GameObject _editorParent;
+    private GameObject _stageSelectorParent;
     private EditorWindowBase _currentFocusWindow;
     private bool _activeEditor = false;
 
@@ -36,11 +41,14 @@ public class GameEditorMaster : MonoBehaviour
     private void Awake()
     {
         _instance = this;
+
+        fillStageSelectorItem();
     }
 
     private void Start()
     {
         _editorParent = transform.Find("Editors").gameObject;
+        _stageSelectorParent = transform.Find("StageSelector").gameObject;
     }
 
     private void Update()
@@ -90,11 +98,55 @@ public class GameEditorMaster : MonoBehaviour
         {
             updateFrame();
         }
+        else if(ActionKeyInputManager.Instance().keyCheck(_hotKey_StageSelectorOnOff))
+        {
+            stageSelectorOnOff();
+        }
     }
 
     void updateHotkeysEditor()
     {
 
+    }
+
+    void stageSelectorOnOff()
+    {
+        bool active = !_stageSelectorParent.activeInHierarchy;
+        _stageSelectorParent?.SetActive(active);
+        Cursor.visible = active;
+    }
+
+    void fillStageSelectorItem()
+    {
+        StageData[] stageData = ResourceContainerEx.Instance().GetStageDataAll("StageData/");
+
+        Vector2 sizeDelta = _stageSelectorContent.sizeDelta;
+        sizeDelta.y = 50f + 45f * (float)stageData.Length;
+        _stageSelectorContent.sizeDelta = sizeDelta;
+
+        for(int index = 0; index < stageData.Length; ++index)
+        {
+            GameObject stageButton = Instantiate(_stageSelectorButtonItemPrefab);
+            RectTransform rectTransform = stageButton.GetComponent<RectTransform>();
+            rectTransform.SetParent(_stageSelectorContent,false);
+            rectTransform.anchoredPosition = new Vector3(0f,-(40f + 45f * (float)index));
+
+            int indexPointer = index;
+            stageButton.GetComponentInChildren<Text>().text = stageData[index]._stageName;
+            stageButton.GetComponent<Button>().onClick.AddListener(()=>{
+                if(_activeEditor)
+                    editorOff();
+                Message msg = MessagePool.GetMessage();
+                msg.Set(MessageTitles.game_stageEnd,MessageReceiver._boradcastNumber,null,null);
+                StageProcessor.Instance().stopStage();
+        
+                MasterManager.instance.HandleBroadcastMessage(msg);
+                
+                StageProcessor.Instance().startStage(stageData[indexPointer],Vector3.zero);
+                stageSelectorOnOff();
+                
+            });
+        }
     }
 #if UNITY_EDITOR
     public void updateCharacterPick()
@@ -109,7 +161,7 @@ public class GameEditorMaster : MonoBehaviour
         SceneCharacterManager sceneCharacterManager = SceneCharacterManager._managerInstance as SceneCharacterManager;
         var characters = sceneCharacterManager.getCurrentlyEnabledCharacters();
 
-        bool targetFinded = false;
+        //bool targetFinded = false;
 
         foreach(var character in characters.Values)
         {
@@ -126,7 +178,7 @@ public class GameEditorMaster : MonoBehaviour
                 _currentlySelectedEntity = character;
                 setTargetDebugSwitch();
 
-                targetFinded = true;
+                //targetFinded = true;
                 break;
             }
         }

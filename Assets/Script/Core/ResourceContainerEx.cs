@@ -194,6 +194,11 @@ public class ResourceContainerEx : Singleton<ResourceContainerEx>
 		return _stageDataResource.GetOrLoadResource(fileName);
 	}
 
+	public StageData[] GetStageDataAll(string filePath)
+	{
+		return _stageDataResource.GetOrLoadResources(filePath,"StageData not found");
+	}
+
 	public ActionGraphBaseData GetActionGraph(string path)
 	{
 		return _actionGraphResource.GetOrLoadResource(path);

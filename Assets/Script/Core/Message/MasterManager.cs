@@ -168,11 +168,6 @@ public class MasterManager : MessageHub<ManagerBase>
 
         FMODAudioManager.Instance().updateAudio();
 
-        if(Input.GetKeyDown(KeyCode.Return))
-        {
-            StageProcessor.Instance().startStage(ResourceContainerEx.Instance().GetStageData("StageData/StageData"),Vector3.zero);
-        }
-
         if(Input.GetKeyDown(KeyCode.Escape))
         {
             Message msg = MessagePool.GetMessage();
