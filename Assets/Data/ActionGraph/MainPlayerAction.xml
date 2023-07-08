@@ -20,22 +20,22 @@
 
 
     <BranchSet Name="IdleBranchSet">
-    <!-- <Branch Key="getKey_Guard" Condition="true" Execute="Guard"/> -->
-        <Branch Key="getKey_GuardBreak2 && getKey_DashMove" Execute="DashRoll_Kick"/>
+        <!-- <Branch Key="getKey_Guard" Condition="true" Execute="Guard"/> -->
         <!-- <Branch Key="getKey_StunShot && getKey_AttackCharge" Execute="StunShot"/> -->
-        <Branch Key="getKey_StunShot && getKey_DashMove" Execute="DashRoll_Long"/>
-        <Branch Key="getKey_DashMove && (getStat_DashPoint >= 1.0)" Execute="DashRoll"/>
+        <Branch Key="getKey_GuardBreak2 && getKey_DashMove" Condition="getStat_DashPoint >= 1.0" Execute="DashRoll_Kick"/>
+        <Branch Key="getKey_StunShot && getKey_DashMove" Condition="(getStat_DashPoint >= 1.0) && (getStat_HP > 1.0)" Execute="DashRoll_Long"/>
+        <Branch Key="getKey_DashMove" Condition="getStat_DashPoint >= 1.0" Execute="DashRoll"/>
         <Branch Key="getKey_DashMove" Execute="MoveAll"/>
 
         <Branch Key="getKey_NormalMove == true" Execute="MoveAll"/>
     </BranchSet>
 
     <BranchSet Name="StopToIdle">
-    <!-- <Branch Key="getKey_Guard && getKey_AttackCharge" Condition="true" Execute="Guard"/> -->
-        <Branch Key="getKey_GuardBreak2 && getKey_DashMove" Execute="DashRoll_Kick"/>
+        <!-- <Branch Key="getKey_Guard && getKey_AttackCharge" Condition="true" Execute="Guard"/> -->
         <!-- <Branch Key="getKey_StunShot && getKey_AttackCharge" Execute="StunShot"/> -->
-        <Branch Key="getKey_StunShot && getKey_DashMove" Execute="DashRoll_Long"/>
-        <Branch Key="getKey_DashMove && (getStat_DashPoint >= 1.0)" Execute="DashRoll"/>
+        <Branch Key="getKey_GuardBreak2 && getKey_DashMove" Condition="getStat_DashPoint >= 1.0" Execute="DashRoll_Kick"/>
+        <Branch Key="getKey_StunShot && getKey_DashMove" Condition="(getStat_DashPoint >= 1.0) && (getStat_HP > 1.0)" Execute="DashRoll_Long"/>
+        <Branch Key="getKey_DashMove" Condition="getStat_DashPoint >= 1.0" Execute="DashRoll"/>
         <Branch Key="getKey_DashMove" Execute="MoveAll"/>
         <Branch Key="getKey_NormalMove == true" Execute="MoveAll"/>
 
@@ -43,11 +43,11 @@
     </BranchSet>
 
     <BranchSet Name="CancelBranch">
-    <!-- <Branch Key="getKey_Guard && getKey_AttackCharge" Condition="true" Execute="Guard"/> -->
-        <Branch Key="getKey_GuardBreak2 && getKey_DashMove" Condition="getFrameTag_MoveCancel" Execute="DashRoll_Kick"/>
+        <!-- <Branch Key="getKey_Guard && getKey_AttackCharge" Condition="true" Execute="Guard"/> -->
         <!-- <Branch Key="getKey_StunShot && getKey_AttackCharge" Condition="getFrameTag_MoveCancel" Execute="StunShot"/> -->
-        <Branch Key="getKey_StunShot && getKey_DashMove" Condition="getFrameTag_MoveCancel" Execute="DashRoll_Long"/>
-        <Branch Key="getKey_DashMove && (getStat_DashPoint >= 1.0)" Condition="getFrameTag_MoveCancel" Execute="DashRoll"/>
+        <Branch Key="getKey_GuardBreak2 && getKey_DashMove" Condition="getFrameTag_MoveCancel && (getStat_DashPoint >= 1.0)" Execute="DashRoll_Kick"/>
+        <Branch Key="getKey_StunShot && getKey_DashMove" Condition="getFrameTag_MoveCancel && (getStat_DashPoint >= 1.0) && (getStat_HP > 1.0)" Execute="DashRoll_Long"/>
+        <Branch Key="getKey_DashMove" Condition="getFrameTag_MoveCancel && (getStat_DashPoint >= 1.0)" Execute="DashRoll"/>
         <Branch Key="getKey_DashMove" Condition="getFrameTag_MoveCancel" Execute="MoveAll"/>
         <Branch Key="getKey_NormalMove == true" Condition="getFrameTag_MoveCancel" Execute="MoveAll"/>
     </BranchSet>
@@ -249,8 +249,7 @@
         </Animation>
 
         <Branch Condition="AttackSuccess" Execute="AttackSuccess"/>
-        <Branch Condition="AttackGuarded" Execute="AttackGuarded"/> 
-        <Branch Key="getKey_AttackCharge == true" Condition="(getStat_DashPoint < 1.0) || (getStat_HP <= 1.0)" Execute="MoveAll"/>
+        <Branch Condition="AttackGuarded" Execute="AttackGuarded"/>
         <Branch Key="getKey_AttackCharge == true" Condition="End" Execute="MoveAll"/>
         <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="MoveStop"/>
         <Branch Key="getKey_AttackCharge == false" Condition="getFrameTag_MoveCancel" Execute="MoveStop"/>
@@ -302,7 +301,6 @@
         </Animation>
         
         <Branch Condition="AttackSuccess || AttackGuarded || AttackGuardBreak || AttackGuardBreakFail" Execute="Kicked"/>
-        <Branch Key="getKey_AttackCharge == true" Condition="(getStat_DashPoint < 1.0)" Execute="MoveAll"/>
         <Branch Key="getKey_AttackCharge == true" Condition="End" Execute="MoveAll"/>
         <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="MoveStop"/>
         <Branch Key="getKey_AttackCharge == false" Condition="getFrameTag_MoveCancel" Execute="MoveStop"/>
