@@ -35,7 +35,6 @@
         <Animation Preset="3_hit" XFlip="true" Duration="1.25">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
-            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountIncrease"/>
             <FrameEvent Type="ZoomEffect" Scale="2.8"/>
             <FrameEvent Type="StopUpdate" Time="0.15"/>
 
@@ -51,7 +50,6 @@
         <Animation Preset="3_hit" XFlip="true" Duration="1.25">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
-            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountIncrease"/>
             <FrameEvent Type="ZoomEffect" Scale="2.8"/>
             <FrameEvent Type="StopUpdate" Time="0.15"/>
             
@@ -107,8 +105,8 @@
         <AnimationHeader MasterPath="Sprites/Enemy/RapierChan/1_attack/"/>
         <Animation Preset="2_attackMain" XFlip="true" Duration="0.35">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2204" Attach="true"/>
-            <FrameEvent Type="Movement" StartTime="0" Friction="24" MaxVelocity="12" Velocity="12" Speed="0"/>
-            <FrameEvent Type="Attack" StartTime="0" EndTime="0.2" AttackPreset="Reito_Punch"> <!-- TODO -->
+            <FrameEvent Type="Movement" StartTime="0" Friction="24" MaxVelocity="10" Velocity="10" Speed="0"/>
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.1" AttackPreset="Rapier_Normal"> <!-- TODO -->
                 <OnHit>
                     <FrameEvent Type="AudioPlay" StartTime="0" ID="2205" Attach="true"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
