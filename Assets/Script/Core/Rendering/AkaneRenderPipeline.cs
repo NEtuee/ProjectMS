@@ -2,15 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SULWRenderTexture2D
+public class AkaneRenderTexture2D
 {
-    public SULWRenderTexture2D(string layer, int width, int height, RenderTextureFormat format = RenderTextureFormat.ARGBHalf)
+    public AkaneRenderTexture2D(string layer, int width, int height, RenderTextureFormat format = RenderTextureFormat.ARGBHalf)
     {
         Texture = new RenderTexture(width, height, 1, format);
         Layer = layer;
     }
 
-    public SULWRenderTexture2D(string layer, RenderTexture renderTexture)
+    public AkaneRenderTexture2D(string layer, RenderTexture renderTexture)
     {
         Texture = renderTexture;
         Layer = layer;
@@ -20,18 +20,18 @@ public class SULWRenderTexture2D
     public string Layer;
 }
 
-public class SULWRenderPipeline : MonoBehaviour
+public class AkaneRenderPipeline : MonoBehaviour
 {
-
     // 인덱스가 레이어 번호, 내용물이 레이어 이름
     // 기본 RGBA16 포맷
     // 특정 레이어만 다른 포맷 지정하려면 layerFormatSpecifier에 레이어 이름 추가하고 포맷 설정해주면 됨
+    // 위에 주석은 무시하면 됨
     private List<string> layerOrders = new List<string>();
     
-    [SerializeField] private List<SULWRenderTexture2D> renderTextures = new List<SULWRenderTexture2D>();
-    private Dictionary<string, SULWRenderTexture2D> layerToRenderTexture = new Dictionary<string, SULWRenderTexture2D>();
+    [SerializeField] private List<AkaneRenderTexture2D> renderTextures = new List<AkaneRenderTexture2D>();
+    private Dictionary<string, AkaneRenderTexture2D> layerToRenderTexture = new Dictionary<string, AkaneRenderTexture2D>();
     [SerializeField] private Camera internalCamera;
-
+    private List<AkaneRenderPass> renderPasses = new List<AkaneRenderPass>();
     #region Debug
     [SerializeField] private List<RenderTexture> _debugRenderTextures;
     #endregion
@@ -41,6 +41,8 @@ public class SULWRenderPipeline : MonoBehaviour
 
     private void Awake()
     {
+        renderPasses.Add(new EffectRenderPass());
+
         int debugCount = 0;
         for (int i = RENDERING_LAYER_FROM; i < RENDERING_LAYER_TO; ++i)
         {
@@ -53,7 +55,7 @@ public class SULWRenderPipeline : MonoBehaviour
 
             if (_debugRenderTextures.Count > debugCount)
             {
-                var renderTexture = new SULWRenderTexture2D(engineLayer, _debugRenderTextures[debugCount]);
+                var renderTexture = new AkaneRenderTexture2D(engineLayer, _debugRenderTextures[debugCount]);
                 layerOrders.Add(engineLayer);
                 renderTextures.Add(renderTexture);
                 layerToRenderTexture.Add(engineLayer, renderTexture);
@@ -65,13 +67,14 @@ public class SULWRenderPipeline : MonoBehaviour
                 {
                     return;
                 }
-                var renderTexture = new SULWRenderTexture2D(engineLayer, Screen.width, Screen.height);
+                var renderTexture = new AkaneRenderTexture2D(engineLayer, Screen.width, Screen.height);
                 layerOrders.Add(engineLayer);
                 renderTextures.Add(renderTexture);
                 layerToRenderTexture.Add(engineLayer, renderTexture);
             }
 
         }
+
     }
     private void LateUpdate()
     {
@@ -93,5 +96,9 @@ public class SULWRenderPipeline : MonoBehaviour
 
             internalCamera.cullingMask = 0;
         }
+
+        string effectLayer = layerOrders[3];
+        RenderTexture effectRenderTexture = layerToRenderTexture[effectLayer].Texture;
+        renderPasses[0].Draw(internalCamera, effectRenderTexture);
     }
 }
