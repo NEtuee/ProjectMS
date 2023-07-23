@@ -50,6 +50,13 @@ public class SequencerGraphProcessor
         _isSequencerEventEnd = true;
         for(int index = _currentIndex; index < _currentSequencer._sequencerGraphPhase[1]._sequencerGraphEventCount;)
         {
+            SequencerGraphEventType eventType = _currentSequencer._sequencerGraphPhase[1]._sequencerGraphEventList[index].getSequencerGraphEventType();
+            if(eventType == SequencerGraphEventType.ForceQuit)
+            {
+                _isSequencerEventEnd = true;
+                break;
+            }
+
             _currentIndex = index;
             if(_currentSequencer._sequencerGraphPhase[1]._sequencerGraphEventList[index].Execute(this, deltaTime) == false)
             {
@@ -59,7 +66,7 @@ public class SequencerGraphProcessor
 
             _currentSequencer._sequencerGraphPhase[1]._sequencerGraphEventList[index].Exit(this);
 
-            if(_currentSequencer._sequencerGraphPhase[1]._sequencerGraphEventList[index].getSequencerGraphEventType() == SequencerGraphEventType.SaveEventExecuteIndex)
+            if(eventType == SequencerGraphEventType.SaveEventExecuteIndex)
             {
                 _savedEventItem._savedIndex = index + 1;
                 _savedEventItem._targetSequencerGraph = _currentSequencer;
@@ -108,6 +115,11 @@ public class SequencerGraphProcessor
     public bool isValid()
     {
         return _currentSequencer != null;
+    }
+
+    public void stop()
+    {
+        clearSequencerGraphProcessor();
     }
 
     public void stopSequencer()

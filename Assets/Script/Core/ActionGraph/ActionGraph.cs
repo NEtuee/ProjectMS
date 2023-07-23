@@ -25,7 +25,8 @@ public class ActionGraph
     public ActionGraph(){}
     public ActionGraph(ActionGraphBaseData baseData){_actionGraphBaseData = baseData;}
 
-    public bool _actionChangedByOther = false;
+    private bool _actionChangedByOther = false;
+    private bool _blockInput = false;
 
     private float _actionExecutedTime = 0f;
 
@@ -564,6 +565,9 @@ public class ActionGraph
         }
         else if(updateType == ConditionNodeUpdateType.Key)
         {
+            if(_blockInput)
+                return CommonConditionNodeData.falseByte;
+
             return ActionKeyInputManager.Instance().actionKeyCheck(((ActionGraphConditionNodeData_Key)nodeData)._targetKeyName);
         }
         else if(updateType == ConditionNodeUpdateType.AngleSector)
@@ -654,6 +658,11 @@ public class ActionGraph
         }
 
         return _customValueDictionary[customValueName];
+    }
+    
+    public void blockInput(bool value)
+    {
+        _blockInput = value;
     }
 
     public Dictionary<string,float> getCustomValueDictionary() {return _customValueDictionary;}

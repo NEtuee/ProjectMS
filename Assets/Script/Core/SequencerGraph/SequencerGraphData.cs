@@ -18,6 +18,8 @@ public enum SequencerGraphEventType
     SetCameraZoom,
     FadeIn,
     FadeOut,
+    ForceQuit,
+    BlockInput,
 
     Count,
 }
@@ -125,6 +127,59 @@ public class SequencerGraphEvent_FadeIn : SequencerGraphEventBase
             if(attributes[i].Name == "Lambda")
                 _lambda = float.Parse(attributes[i].Value);
         }
+    }
+}
+
+public class SequencerGraphEvent_BlockInput : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.BlockInput;
+
+    private bool _value = false;
+
+    public override void Initialize()
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        GameEntityBase playerEntity = StageProcessor.Instance().getPlayerEntity();
+        if(playerEntity == null)
+        {
+            DebugUtil.assert(false,"플레이어가 존재하지 않습니다.");
+            return true;
+        }
+
+        playerEntity.blockInput(_value);
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            if(attributes[i].Name == "Value")
+                _value = bool.Parse(attributes[i].Value);
+        }
+    }
+}
+
+public class SequencerGraphEvent_ForceQuit : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.ForceQuit;
+
+    public override void Initialize()
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+
     }
 }
 

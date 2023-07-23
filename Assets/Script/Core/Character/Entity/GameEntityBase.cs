@@ -1006,6 +1006,8 @@ public class GameEntityBase : SequencerObjectBase
         _activeSelf = active;
     }
 
+    public void blockInput(bool value) {_actionGraph.blockInput(value);}
+
     public float getHeadUpOffset() {return _headUpOffset;}
 
     public float getCustomValue(string customValueName) {return _actionGraph.getCustomValue(customValueName);}
