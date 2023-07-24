@@ -4,7 +4,7 @@
     <Include Path="Common\CommonDeadPackage.xml"/>
     <Include Path="Common\CommonHitPackage.xml"/>
     <Include Path="Common\CommonChasePackage.xml"/>
-    <Include Path="Common\CommonAttackPackage.xml"/>
+    <Include Path="Common\CommonLockOnAttackPackage.xml"/>
     <Include Path="Common\CommonIdlePackage.xml"/>
     <Include Path="Common\CommonGuardBrokenPackage.xml"/>
 
@@ -32,7 +32,7 @@
                            (GraphExecutedTime > gv_atariChanTransitionTime)" Execute="Attack"/>
     </Chase>
 
-    <Attack Package="CommonAttackPackage">
+    <Attack Package="CommonLockOnAttackPackage">
         <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="Hit" Execute="Hit"/> 
         <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
