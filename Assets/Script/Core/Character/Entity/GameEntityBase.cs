@@ -1177,8 +1177,35 @@ public class GameEntityBaseEditor : Editor
             GUILayout.Label("Action");
             for(int index = control._actionGraphChangeLog.Count - 1; index >= 0; --index)
             {
-                if(GUILayout.Button(control._actionGraphChangeLog[index]._nodeName,buttonStyle))
-                    FileDebugger.OpenFileWithCursor(control.getActionGraph_Debug().getActionGraphBaseData_Debug()._fullPath,control._actionGraphChangeLog[index]._lineNumber);
+                EditorGUILayout.BeginHorizontal();
+
+                ActionGraph actionGraph = control.getActionGraph_Debug();
+
+                if(GUILayout.Button(control._actionGraphChangeLog[index]._nodeName,buttonStyle,GUILayout.Width(EditorGUIUtility.currentViewWidth * 0.5f)))
+                    FileDebugger.OpenFileWithCursor(actionGraph.getActionGraphBaseData_Debug()._fullPath,control._actionGraphChangeLog[index]._lineNumber);
+
+                int targetAnimationIndex = control._actionGraphChangeLog[index]._animationInfoIndex;
+                AnimationPlayDataInfo[] playDataInfoArray = control.getActionGraph_Debug().getActionGraphBaseData_Debug()._animationPlayData[targetAnimationIndex];
+
+
+                if(playDataInfoArray != null)
+                {
+                    // float widthInterval = (EditorGUIUtility.currentViewWidth * 0.5f) * (1f / playDataInfoArray.Length);
+                    // float width = widthInterval;
+                    for(int i = 0; i < playDataInfoArray.Length; ++i)
+                    {
+                        AnimationPlayDataInfo animationPlayDataInfo = playDataInfoArray[i];
+                        
+                        if(GUILayout.Button(animationPlayDataInfo._path,buttonStyle))
+                            PingTarget(animationPlayDataInfo._customPreset);
+                    }
+                    
+                }
+
+                
+
+
+                EditorGUILayout.EndHorizontal();
             }
         }
         EditorGUILayout.EndVertical();
@@ -1209,6 +1236,12 @@ public class GameEntityBaseEditor : Editor
         }
         EditorGUILayout.EndVertical();
 
+    }
+
+    private void PingTarget(ScriptableObject obj)
+    {
+        EditorGUIUtility.PingObject(obj);
+        EditorUtility.FocusProjectWindow();
     }
 }
 #endif

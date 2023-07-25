@@ -284,6 +284,7 @@ public class AnimationCustomPresetEditor : Editor
         AnimationPlayDataInfo playData = new AnimationPlayDataInfo();
         playData._actionTime = controll._animationCustomPresetData.getTotalDuration();
         playData._customPresetData = animationCustomPreset._animationCustomPresetData;
+        playData._customPreset = animationCustomPreset;
         playData._path = Path.GetDirectoryName(AssetDatabase.GetAssetPath(controll));
 
         if(animationCustomPreset._rotationPresetName != "")

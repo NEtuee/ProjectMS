@@ -15,6 +15,7 @@ public class AnimationPlayDataInfo
     public AnimationRotationPresetData  _rotationPresetData = null;
     public AnimationScalePresetData     _scalePresetData = null;
     public AnimationCustomPresetData    _customPresetData = null;
+    public AnimationCustomPreset        _customPreset = null;
 
     public int                          _multiSelectAnimationDataCount = 0;
 

@@ -536,6 +536,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
 
                 AnimationCustomPreset animationCustomPreset = (scriptableObjects[0] as AnimationCustomPreset);
                 playData._customPresetData = animationCustomPreset._animationCustomPresetData;
+                playData._customPreset = animationCustomPreset;
 
                 if(animationCustomPreset._rotationPresetName != "")
                 {
