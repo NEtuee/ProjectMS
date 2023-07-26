@@ -20,6 +20,8 @@ public enum SequencerGraphEventType
     FadeOut,
     ForceQuit,
     BlockInput,
+    SetAction,
+    PlayAnimation,
 
     Count,
 }
@@ -126,6 +128,92 @@ public class SequencerGraphEvent_FadeIn : SequencerGraphEventBase
         {
             if(attributes[i].Name == "Lambda")
                 _lambda = float.Parse(attributes[i].Value);
+        }
+    }
+}
+
+public class SequencerGraphEvent_PlayAnimation : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.PlayAnimation;
+
+    private string _animationPath;
+    private string _uniqueKey;
+
+    public override void Initialize()
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        GameEntityBase uniqueEntity = processor.getUniqueEntity(_uniqueKey);
+        if(uniqueEntity == null)
+        {
+            DebugUtil.assert(false,"unique entity key is not Exists : {0}",_uniqueKey);
+            return true;
+        }
+
+        uniqueEntity.setDummyAction();
+        uniqueEntity.changeAnimationByPath(_animationPath);
+
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "UniqueKey")
+                _uniqueKey = attrValue;
+            else if(attrName == "Path")
+                _animationPath = attrValue;
+        }
+    }
+}
+
+
+public class SequencerGraphEvent_SetAction : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SetAction;
+
+    private string _actionName;
+    private string _uniqueKey;
+
+    public override void Initialize()
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        GameEntityBase uniqueEntity = processor.getUniqueEntity(_uniqueKey);
+        if(uniqueEntity == null)
+        {
+            DebugUtil.assert(false,"unique entity key is not Exists : {0}",_uniqueKey);
+            return true;
+        }
+
+        uniqueEntity.setAction(_actionName);
+
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "UniqueKey")
+                _uniqueKey = attrValue;
+            else if(attrName == "Action")
+                _actionName = attrValue;
         }
     }
 }

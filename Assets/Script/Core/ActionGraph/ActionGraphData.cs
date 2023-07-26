@@ -20,6 +20,8 @@ public class ActionGraphBaseData
     public int                                  _conditionCompareDataCount = -1;
     public int                                  _animationPlayDataCount = -1;
 
+    public int                                  _dummyActionIndex = -1;
+
 #if UNITY_EDITOR
     public string _fullPath;
 #endif
@@ -73,6 +75,8 @@ public class ActionGraphNodeData
     public bool                         _isActionSelection = false;
     public bool                         _directionUpdateOnce = false;
     public bool                         _flipTypeUpdateOnce = false;
+
+    public bool                         _isDummyAction = false;
 
     public bool                         _hasAngleSector = false;
     public int                          _angleSectorCount = -1;

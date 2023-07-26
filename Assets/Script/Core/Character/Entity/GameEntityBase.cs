@@ -76,7 +76,6 @@ public class GameEntityBase : SequencerObjectBase
     private Quaternion          _actionStartRotation = Quaternion.identity;
     private Quaternion          _angleBaseRotation = Quaternion.identity;
 
-
     private List<TimelineEffectItem> _enabledLaserEffectItems = new List<TimelineEffectItem>();
 
 #if UNITY_EDITOR
@@ -862,7 +861,6 @@ public class GameEntityBase : SequencerObjectBase
                 {
                     direction = Vector3.zero;
                 }
-
                 break;
             case DirectionType.MousePoint:
                 direction = ControllerEx.Instance().getJoystickAxisR(transform.position);
@@ -1053,6 +1051,9 @@ public class GameEntityBase : SequencerObjectBase
 
     public void setDefenceType(DefenceType defenceType) {_currentDefenceType = defenceType;}
 
+    public void changeAnimationByPath(string path) {_actionGraph.changeAnimationByCustomPreset(path);}
+
+    public void setDummyAction() {_actionGraph.changeActionOther(_actionGraph.getDummyActionIndex());}
     public void setAction(int index) {_actionGraph.changeActionOther(index);}
     public void setAction(string nodeName) {_actionGraph.changeActionOther(_actionGraph.getActionIndex(nodeName));}
 

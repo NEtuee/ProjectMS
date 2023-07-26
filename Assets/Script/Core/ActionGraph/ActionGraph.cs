@@ -51,7 +51,7 @@ public class ActionGraph
         _currentActionNodeIndex = -1;
         _prevActionNodeIndex = -1;
         _currentAnimationIndex = 0;
-        
+
         setDefaultAction();
     }
 
@@ -171,6 +171,16 @@ public class ActionGraph
         _actionChangedByOther = changeAction(actionIndex);
     }
 
+    public void changeAnimationByPlayInfo(AnimationPlayDataInfo animationPLayDataInfo)
+    {
+        _animationPlayer.changeAnimation(animationPLayDataInfo);
+    }
+
+    public void changeAnimationByCustomPreset(string path)
+    {
+        _animationPlayer.changeAnimationByCustomPreset(path);
+    }
+
     private bool changeAction(int actionIndex)
     {
         if(actionIndex < 0 || actionIndex >= _actionGraphBaseData._actionNodeCount)
@@ -190,8 +200,8 @@ public class ActionGraph
         int animationInfoIndex = getCurrentAction()._animationInfoIndex;
         if(animationInfoIndex != -1)
             changeAnimation(animationInfoIndex,_currentAnimationIndex);
-        else
-            DebugUtil.assert(false, "something is wrong : {0}",getCurrentActionName());
+        // else
+        //     DebugUtil.assert(false, "something is wrong : {0}",getCurrentActionName());
 
         if(getCurrentAction()._isActionSelection == true)
         {
@@ -693,6 +703,7 @@ public class ActionGraph
 
     public string getCurrentAnimationName() {return _animationPlayer.getCurrentAnimationName();}
 
+    public int getDummyActionIndex() {return _actionGraphBaseData._dummyActionIndex;}
     public bool isRotateBySpeed() {return getCurrentAction()._rotateBySpeed;}
     public float getCurrentRotateSpeed() {return getCurrentAction()._rotateSpeed;}
     public float getCurrentFrame() {return _animationPlayer.getCurrentFrame();}

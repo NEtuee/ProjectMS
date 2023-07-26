@@ -67,7 +67,12 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         Dictionary<string, int> actionIndexDic = new Dictionary<string, int>();
         XmlNodeList nodeList = node.ChildNodes;
 
-        int actionIndex = 0;
+        nodeDataList.Add( createDummyActionNode() );
+        actionBaseData._dummyActionIndex = 0;
+
+        actionIndexDic.Add("SequencerDummyAction",0);
+
+        int actionIndex = 1;
         for(int i = 0; i < nodeList.Count; ++i)
         {
             if(nodeList[i].Name == "BranchSet")
@@ -105,7 +110,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
                 DebugUtil.assert_fileOpen(false,"target action is not exists : {0} [FileName: {1}]", _currentFileName, XMLScriptConverter.getLineNumberFromXMLNode(node),item.Value, _currentFileName);
                 return null;
             }
-            else if(item.Value == defaultActionName)
+            else if(actionBaseData._defaultActionIndex == -1 && item.Value == defaultActionName)
             {
                 actionBaseData._defaultActionIndex = actionIndexDic[item.Value];
             }
@@ -758,6 +763,26 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         }
 
         return animationData;
+    }
+
+    public static ActionGraphNodeData createDummyActionNode()
+    {
+        ActionGraphNodeData nodeData = new ActionGraphNodeData();
+        AnimationPlayDataInfo animationPlayDataInfo = new AnimationPlayDataInfo();
+
+        nodeData._nodeName = "SequencerDummyAction";
+
+        nodeData._animationInfoCount = 1;
+        nodeData._animationInfoIndex = -1;
+
+        nodeData._branchCount = 0;
+        nodeData._branchIndexStart = -1;
+
+        nodeData._isDummyAction = true;
+
+        animationPlayDataInfo._hasMovementGraph = false;
+
+        return nodeData;
     }
 
     public static ActionGraphBranchData ReadActionBranch(XmlNode node, ref Dictionary<ActionGraphBranchData, string> actionCompareDic,  ref List<ActionGraphConditionCompareData> compareDataList, ref Dictionary<string, string> globalVariableContainer, string filePath)

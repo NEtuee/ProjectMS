@@ -125,6 +125,10 @@ public class SequencrGraphLoader : LoaderBase<SequencerGraphBaseData>
             spawnEvent = new SequencerGraphEvent_ForceQuit();
         else if(node.Name == "BlockInput")
             spawnEvent = new SequencerGraphEvent_BlockInput();
+        else if(node.Name == "SetAction")
+            spawnEvent = new SequencerGraphEvent_SetAction();
+        else if(node.Name == "PlayAnimation")
+            spawnEvent = new SequencerGraphEvent_PlayAnimation();
 
         if(spawnEvent == null)
         {
