@@ -68,9 +68,8 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         XmlNodeList nodeList = node.ChildNodes;
 
         nodeDataList.Add( createDummyActionNode() );
-        actionBaseData._dummyActionIndex = 0;
-
         actionIndexDic.Add("SequencerDummyAction",0);
+        actionBaseData._dummyActionIndex = 0;
 
         int actionIndex = 1;
         for(int i = 0; i < nodeList.Count; ++i)

@@ -151,7 +151,9 @@ public class StageProcessor : Singleton<StageProcessor>
     {
         if(isValid() == false)
             return;
-        
+
+        _sequencerProcessManager?.progress(deltaTime);
+
         Vector3 resultPoint;
         float resultDistance;
         float fraction = getLimitedFractionOnLine(_targetTransform.position, out resultPoint, out resultDistance);
