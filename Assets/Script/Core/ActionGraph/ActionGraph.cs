@@ -696,6 +696,12 @@ public class ActionGraph
             return getCurrentAction()._moveScale * _animationPlayer.getCurrentAnimationDuration();
     }
 
+    public float getAnimationPlayTimeByIndex(int actionIndex)
+    {
+        int animationInfoIndex = _actionGraphBaseData._actionNodeData[actionIndex]._animationInfoIndex;
+        return _actionGraphBaseData._animationPlayData[animationInfoIndex][0]._duration;
+    }
+
     public bool checkCurrentActionFlag(ActionFlags flag)
     {
         return (getCurrentAction()._actionFlag & (ulong)flag) != 0;
@@ -727,6 +733,8 @@ public class ActionGraph
     public FlipType getCurrentFlipType() {return getCurrentAction()._flipType;}
     public MovementGraph getCurrentMovementGraph() {return _animationPlayer.getCurrentMovementGraph();}
     public MovementBase.MovementType getCurrentMovement() {return getCurrentAction()._movementType;}
+
+    public MovementGraphPresetData getMovementGraphPresetByIndex(int index) {return _actionGraphBaseData._actionNodeData[index]._movementGraphPresetData;}
     public MovementGraphPresetData getCurrentMovementGraphPreset() {return getCurrentAction()._movementGraphPresetData;}
     private ActionGraphNodeData getCurrentAction() {return _actionGraphBaseData._actionNodeData[_currentActionNodeIndex];}
 

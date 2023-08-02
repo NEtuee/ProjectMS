@@ -126,7 +126,7 @@ public class SequencerGraphProcessor
     {
         for(int index = 0; index < _currentSequencer._sequencerGraphPhase[2]._sequencerGraphEventCount; ++index)
         {
-            _currentSequencer._sequencerGraphPhase[2]._sequencerGraphEventList[index].Initialize();
+            _currentSequencer._sequencerGraphPhase[2]._sequencerGraphEventList[index].Initialize(this);
             _currentSequencer._sequencerGraphPhase[2]._sequencerGraphEventList[index].Execute(this, 0f);
         }
     }
@@ -161,13 +161,13 @@ public class SequencerGraphProcessor
 
         for(int index = _currentIndex; index < _currentSequencer._sequencerGraphPhase[0]._sequencerGraphEventCount; ++index)
         {
-            _currentSequencer._sequencerGraphPhase[0]._sequencerGraphEventList[index].Initialize();
+            _currentSequencer._sequencerGraphPhase[0]._sequencerGraphEventList[index].Initialize(this);
             _currentSequencer._sequencerGraphPhase[0]._sequencerGraphEventList[index].Execute(this, 0f);
         }
 
         for(int index = _currentIndex; index < _currentSequencer._sequencerGraphPhase[1]._sequencerGraphEventCount; ++index)
         {
-            _currentSequencer._sequencerGraphPhase[1]._sequencerGraphEventList[index].Initialize();
+            _currentSequencer._sequencerGraphPhase[1]._sequencerGraphEventList[index].Initialize(this);
         }
 
         if(_currentSequencer == _savedEventItem._targetSequencerGraph)

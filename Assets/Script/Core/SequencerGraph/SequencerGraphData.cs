@@ -20,6 +20,7 @@ public enum SequencerGraphEventType
     FadeOut,
     ForceQuit,
     BlockInput,
+    BlockAI,
     SetAction,
     PlayAnimation,
     AIMove,
@@ -30,7 +31,7 @@ public enum SequencerGraphEventType
 public abstract class SequencerGraphEventBase
 {
     public abstract SequencerGraphEventType getSequencerGraphEventType();
-    public abstract void Initialize();
+    public abstract void Initialize(SequencerGraphProcessor processor);
     public abstract bool Execute(SequencerGraphProcessor processor, float deltaTime);
     public virtual void Exit(SequencerGraphProcessor processor) {}
     public abstract void loadXml(XmlNode node);
@@ -42,7 +43,7 @@ public class SequencerGraphEvent_WaitSignal : SequencerGraphEventBase
 
     public string _targetSignal = "";
 
-    public override void Initialize()
+    public override void Initialize(SequencerGraphProcessor processor)
     {
     }
 
@@ -74,7 +75,7 @@ public class SequencerGraphEvent_CallAIEvent : SequencerGraphEventBase
     public string _customAiEventName = "";
     public string _uniqueKey = "";
 
-    public override void Initialize()
+    public override void Initialize(SequencerGraphProcessor processor)
     {
     }
 
@@ -112,7 +113,7 @@ public class SequencerGraphEvent_FadeIn : SequencerGraphEventBase
 
     private float _lambda = -1f;
 
-    public override void Initialize()
+    public override void Initialize(SequencerGraphProcessor processor)
     {
     }
 
@@ -139,17 +140,100 @@ public class SequencerGraphEvent_AIMove : SequencerGraphEventBase
 
     private string _uniqueKey;
 
+    private Vector3 _startPosition;
+    private Vector3 _endPosition;
+
     private string _startAction = "";
     private string _loopAction = "";
     private string _endAction = "";
 
-    public override void Initialize()
+    private int _startActionIndex = -1;
+    private int _loopActionIndex = -1;
+    private int _endActionIndex = -1;
+
+    private float _totalAnimationPlayTime = 0f;
+    private float _totalLoopAnimationRate = 0f;
+
+    private float _processTimer = 0f;
+    private bool _loopActionOnly = false;
+
+
+    public override void Initialize(SequencerGraphProcessor processor)
     {
+        GameEntityBase uniqueEntity = processor.getUniqueEntity(_uniqueKey);
+        if(uniqueEntity == null)
+        {
+            DebugUtil.assert(false,"대상 Unique Entity가 존재하지 않습니다 : {0}",_uniqueKey);
+            return;
+        }
+
+        _totalAnimationPlayTime = 0f;
+        _totalLoopAnimationRate = 0f;
+
+        float startDistance = 0f;
+        float loopDistance = 0f;
+        float endDistance = 0f;
+
+        if(_startAction != "")
+        {
+            _startActionIndex = uniqueEntity.getActionIndex(_startAction);
+            MovementGraphPresetData presetData = uniqueEntity.getMovementGraphPresetDataFromActionIndex(_startActionIndex);
+            if(presetData == null)
+            {
+                DebugUtil.assert(false,"해당 액션에 MovementGraphPreset 설정이 안되어 있습니다. 확인 필요 [Action: {0}]", _startAction);
+                return;
+            }
+
+            startDistance = presetData.getTotalMovement();
+            _totalAnimationPlayTime += uniqueEntity.getAnimationPlayTimeFromActionIndex(_startActionIndex);
+        }
+        if(_endAction != "")
+        {
+            _endActionIndex = uniqueEntity.getActionIndex(_endAction);
+            MovementGraphPresetData presetData = uniqueEntity.getMovementGraphPresetDataFromActionIndex(_endActionIndex);
+            if(presetData == null)
+            {
+                DebugUtil.assert(false,"해당 액션에 MovementGraphPreset 설정이 안되어 있습니다. 확인 필요 [Action: {0}]", _endAction);
+                return;
+            }
+
+            endDistance = presetData.getTotalMovement();
+            _totalAnimationPlayTime += uniqueEntity.getAnimationPlayTimeFromActionIndex(_endActionIndex);
+        }
+        
+        {
+            _loopActionIndex = uniqueEntity.getActionIndex(_loopAction);
+            MovementGraphPresetData presetData = uniqueEntity.getMovementGraphPresetDataFromActionIndex(_endActionIndex);
+            if(presetData == null)
+            {
+                DebugUtil.assert(false,"해당 액션에 MovementGraphPreset 설정이 안되어 있습니다. 확인 필요 [Action: {0}]", _endAction);
+                return;
+            }
+
+            loopDistance = presetData.getTotalMovement();
+            _totalAnimationPlayTime += uniqueEntity.getAnimationPlayTimeFromActionIndex(_endActionIndex);
+        }
+
+        float startEndDistance = startDistance + endDistance;
+
+        float moveDistance = Vector3.Distance(_startPosition, _endPosition);
+        if(moveDistance < startEndDistance + loopDistance)
+        {
+            _totalLoopAnimationRate = moveDistance * (1f / loopDistance);
+            _loopActionOnly = true;
+        }
+        else
+        {
+            _totalLoopAnimationRate = (moveDistance - startEndDistance) * (1f / loopDistance);
+        }
     }
 
     public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
     {
         if(_loopAction == "")
+            return true;
+        
+        if(MathEx.equals(_startPosition,_endPosition, float.Epsilon))
             return true;
 
         GameEntityBase uniqueEntity = processor.getUniqueEntity(_uniqueKey);
@@ -194,7 +278,7 @@ public class SequencerGraphEvent_PlayAnimation : SequencerGraphEventBase
     private string _animationPath;
     private string _uniqueKey;
 
-    public override void Initialize()
+    public override void Initialize(SequencerGraphProcessor processor)
     {
     }
 
@@ -207,6 +291,7 @@ public class SequencerGraphEvent_PlayAnimation : SequencerGraphEventBase
             return true;
         }
 
+        uniqueEntity.blockAI(true);
         uniqueEntity.setDummyAction();
         uniqueEntity.changeAnimationByPath(_animationPath);
 
@@ -238,7 +323,7 @@ public class SequencerGraphEvent_SetAction : SequencerGraphEventBase
     private string _actionName;
     private string _uniqueKey;
 
-    public override void Initialize()
+    public override void Initialize(SequencerGraphProcessor processor)
     {
     }
 
@@ -273,13 +358,53 @@ public class SequencerGraphEvent_SetAction : SequencerGraphEventBase
     }
 }
 
+public class SequencerGraphEvent_BlockAI : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.BlockAI;
+
+    public string _uniqueKey = "";
+    public bool _value = false;
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        ObjectBase executeTargetEntity = processor.getUniqueEntity(_uniqueKey);
+        if(executeTargetEntity == null || executeTargetEntity is GameEntityBase == false)
+            return true;
+
+        (executeTargetEntity as GameEntityBase).blockAI(_value);
+
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attributes[i].Name == "Value")
+                _value = bool.Parse(attrValue);
+            else if(attrName == "UniqueKey")
+                _uniqueKey = attributes[i].Value;
+
+        }
+    }
+}
+
 public class SequencerGraphEvent_BlockInput : SequencerGraphEventBase
 {
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.BlockInput;
 
     private bool _value = false;
 
-    public override void Initialize()
+    public override void Initialize(SequencerGraphProcessor processor)
     {
     }
 
@@ -311,7 +436,7 @@ public class SequencerGraphEvent_ForceQuit : SequencerGraphEventBase
 {
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.ForceQuit;
 
-    public override void Initialize()
+    public override void Initialize(SequencerGraphProcessor processor)
     {
     }
 
@@ -332,7 +457,7 @@ public class SequencerGraphEvent_FadeOut : SequencerGraphEventBase
 
     private float _lambda = -1f;
 
-    public override void Initialize()
+    public override void Initialize(SequencerGraphProcessor processor)
     {
     }
 
@@ -359,7 +484,7 @@ public class SequencerGraphEvent_SetCameraZoom : SequencerGraphEventBase
 
     private float _zoom = -1f;
 
-    public override void Initialize()
+    public override void Initialize(SequencerGraphProcessor processor)
     {
     }
 
@@ -394,7 +519,7 @@ public class SequencerGraphEvent_SpawnCharacter : SequencerGraphEventBase
 
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SpawnCharacter;
     
-    public override void Initialize()
+    public override void Initialize(SequencerGraphProcessor processor)
     {
         _characterInfoData = CharacterInfoManager.Instance().GetCharacterInfoData(_characterKey);
     }
@@ -450,7 +575,7 @@ public class SequencerGraphEvent_WaitSecond : SequencerGraphEventBase
 
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.WaitSecond;
     
-    public override void Initialize()
+    public override void Initialize(SequencerGraphProcessor processor)
     {
         _timer = 0f;
     }
@@ -482,7 +607,7 @@ public class SequencerGraphEvent_SetHPSphere : SequencerGraphEventBase
 
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SetHPSphere;
     
-    public override void Initialize()
+    public override void Initialize(SequencerGraphProcessor processor)
     {
         
     }
@@ -522,7 +647,7 @@ public class SequencerGraphEvent_SetCrossHair : SequencerGraphEventBase
 
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SetCrossHair;
     
-    public override void Initialize()
+    public override void Initialize(SequencerGraphProcessor processor)
     {
         
     }
@@ -562,7 +687,7 @@ public class SequencerGraphEvent_WaitTargetDead : SequencerGraphEventBase
 
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.WaitTargetDead;
     
-    public override void Initialize()
+    public override void Initialize(SequencerGraphProcessor processor)
     {
         
     }
@@ -595,7 +720,7 @@ public class SequencerGraphEvent_SaveEventExecuteIndex : SequencerGraphEventBase
 {
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SaveEventExecuteIndex;
     
-    public override void Initialize()
+    public override void Initialize(SequencerGraphProcessor processor)
     {
         
     }
@@ -618,7 +743,7 @@ public class SequencerGraphEvent_ApplyPostProcessProfile : SequencerGraphEventBa
 
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.ApplyPostProcessProfile;
     
-    public override void Initialize()
+    public override void Initialize(SequencerGraphProcessor processor)
     {
         
     }
@@ -668,7 +793,7 @@ public class SequencerGraphEvent_TeleportTargetTo : SequencerGraphEventBase
 
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.TeleportTargetTo;
     
-    public override void Initialize()
+    public override void Initialize(SequencerGraphProcessor processor)
     {
         
     }
@@ -709,7 +834,7 @@ public class SequencerGraphEvent_SetAudioListner : SequencerGraphEventBase
 
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SetAudioListner;
     
-    public override void Initialize()
+    public override void Initialize(SequencerGraphProcessor processor)
     {
         
     }
@@ -749,7 +874,7 @@ public class SequencerGraphEvent_SetCameraTarget : SequencerGraphEventBase
 
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SetCameraTarget;
     
-    public override void Initialize()
+    public override void Initialize(SequencerGraphProcessor processor)
     {
         
     }

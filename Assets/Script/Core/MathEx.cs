@@ -83,6 +83,16 @@ public static class MathEx
         return equals(a.r,b.r,epsilon) && equals(a.g,b.g,epsilon) && equals(a.b,b.b,epsilon) && equals(a.a,b.a,epsilon);
     }
 
+	public static bool equals(UnityEngine.Vector3 a, UnityEngine.Vector3 b, float epsilon)
+    {
+        return equals(a.x,b.x,epsilon) && equals(a.y,b.y,epsilon) && equals(a.z,b.z,epsilon);
+    }
+
+	public static bool equals(UnityEngine.Vector2 a, UnityEngine.Vector2 b, float epsilon)
+    {
+        return equals(a.x,b.x,epsilon) && equals(a.y,b.y,epsilon);
+    }
+
 
 	public static float directionToAngle(UnityEngine.Vector2 dir) 
 	{
