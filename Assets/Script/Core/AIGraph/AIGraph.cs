@@ -88,7 +88,7 @@ public class AIGraph
         _packageEnd = false;
         _arrived = false;
 
-         _rotateProcess = false;
+        _rotateProcess = false;
         _rotateProcessTime = 0f;
         _rotateProcessTimer = 0f;
         _rotateAngle = 0f;

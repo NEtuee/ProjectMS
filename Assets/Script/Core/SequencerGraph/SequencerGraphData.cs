@@ -22,6 +22,7 @@ public enum SequencerGraphEventType
     BlockInput,
     SetAction,
     PlayAnimation,
+    AIMove,
 
     Count,
 }
@@ -132,6 +133,60 @@ public class SequencerGraphEvent_FadeIn : SequencerGraphEventBase
     }
 }
 
+public class SequencerGraphEvent_AIMove : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.AIMove;
+
+    private string _uniqueKey;
+
+    private string _startAction = "";
+    private string _loopAction = "";
+    private string _endAction = "";
+
+    public override void Initialize()
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        if(_loopAction == "")
+            return true;
+
+        GameEntityBase uniqueEntity = processor.getUniqueEntity(_uniqueKey);
+        if(uniqueEntity == null)
+        {
+            DebugUtil.assert(false,"대상 Unique Entity가 존재하지 않습니다 : {0}",_uniqueKey);
+            return true;
+        }
+
+        
+
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "UniqueKey")
+                _uniqueKey = attrValue;
+            else if(attrName == "StartAction")
+                _startAction = attrValue;
+            else if(attrName == "LoopAction")
+                _loopAction = attrValue;
+            else if(attrName == "EndAction")
+                _endAction = attrValue;
+        }
+
+        DebugUtil.assert(_loopAction != "", "Loop Action은 필수입니다. [Line: {0}]", XMLScriptConverter.getLineNumberFromXMLNode(node));
+    }
+}
+
 public class SequencerGraphEvent_PlayAnimation : SequencerGraphEventBase
 {
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.PlayAnimation;
@@ -148,7 +203,7 @@ public class SequencerGraphEvent_PlayAnimation : SequencerGraphEventBase
         GameEntityBase uniqueEntity = processor.getUniqueEntity(_uniqueKey);
         if(uniqueEntity == null)
         {
-            DebugUtil.assert(false,"unique entity key is not Exists : {0}",_uniqueKey);
+            DebugUtil.assert(false,"대상 Unique Entity가 존재하지 않습니다 : {0}",_uniqueKey);
             return true;
         }
 
@@ -192,7 +247,7 @@ public class SequencerGraphEvent_SetAction : SequencerGraphEventBase
         GameEntityBase uniqueEntity = processor.getUniqueEntity(_uniqueKey);
         if(uniqueEntity == null)
         {
-            DebugUtil.assert(false,"unique entity key is not Exists : {0}",_uniqueKey);
+            DebugUtil.assert(false,"대상 Unique Entity가 존재하지 않습니다 : {0}",_uniqueKey);
             return true;
         }
 
@@ -437,7 +492,7 @@ public class SequencerGraphEvent_SetHPSphere : SequencerGraphEventBase
         GameEntityBase uniqueEntity = processor.getUniqueEntity(_uniqueKey);
         if(uniqueEntity == null)
         {
-            DebugUtil.assert(false,"unique entity key is not Exists : {0}",_uniqueKey);
+            DebugUtil.assert(false,"대상 Unique Entity가 존재하지 않습니다 : {0}",_uniqueKey);
             return true;
         }
 
@@ -477,7 +532,7 @@ public class SequencerGraphEvent_SetCrossHair : SequencerGraphEventBase
         GameEntityBase unqueEntity = processor.getUniqueEntity(_uniqueKey);
         if(unqueEntity == null)
         {
-            DebugUtil.assert(false,"unique entity key is not Exists : {0}",_uniqueKey);
+            DebugUtil.assert(false,"대상 Unique Entity가 존재하지 않습니다 : {0}",_uniqueKey);
             return true;
         }
 
@@ -623,7 +678,7 @@ public class SequencerGraphEvent_TeleportTargetTo : SequencerGraphEventBase
         GameEntityBase unqueEntity = processor.getUniqueEntity(_uniqueKey);
         if(unqueEntity == null)
         {
-            DebugUtil.assert(false,"unique entity key is not Exists : {0}",_uniqueKey);
+            DebugUtil.assert(false,"대상 Unique Entity가 존재하지 않습니다 : {0}",_uniqueKey);
             return true;
         }
         
@@ -664,7 +719,7 @@ public class SequencerGraphEvent_SetAudioListner : SequencerGraphEventBase
         GameEntityBase unqueEntity = processor.getUniqueEntity(_uniqueKey);
         if(unqueEntity == null)
         {
-            DebugUtil.assert(false,"unique entity key is not Exists : {0}",_uniqueKey);
+            DebugUtil.assert(false,"대상 Unique Entity가 존재하지 않습니다 : {0}",_uniqueKey);
             return true;
         }
 
