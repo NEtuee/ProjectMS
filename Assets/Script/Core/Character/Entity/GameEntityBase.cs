@@ -1051,6 +1051,12 @@ public class GameEntityBase : SequencerObjectBase
     public void setDummyAction() {_actionGraph.changeActionOther(_actionGraph.getDummyActionIndex());}
     public void setAction(int index) {_actionGraph.changeActionOther(index);}
     public void setAction(string nodeName) {_actionGraph.changeActionOther(_actionGraph.getActionIndex(nodeName));}
+    
+    public void setDefaultAction()
+    {
+        _actionGraph.setDefaultActionOther();
+    }
+
 
     public void setTargetEntity(GameEntityBase target) {_currentTarget = target;}
     public GameEntityBase getCurrentTargetEntity() {return _currentTarget;}

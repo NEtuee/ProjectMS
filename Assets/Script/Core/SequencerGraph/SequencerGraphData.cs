@@ -136,12 +136,23 @@ public class SequencerGraphEvent_FadeIn : SequencerGraphEventBase
 
 public class SequencerGraphEvent_AIMove : SequencerGraphEventBase
 {
+    private enum AnimationState
+    {
+        Start,
+        Loop,
+        End
+    };
+
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.AIMove;
 
     private string _uniqueKey;
 
     private Vector3 _startPosition;
     private Vector3 _endPosition;
+
+    private Vector3 _endAnimationStartPosition;
+
+    private AnimationState _currentAnimationState = AnimationState.Start;
 
     private string _startAction = "";
     private string _loopAction = "";
@@ -152,11 +163,25 @@ public class SequencerGraphEvent_AIMove : SequencerGraphEventBase
     private int _endActionIndex = -1;
 
     private float _totalAnimationPlayTime = 0f;
-    private float _totalLoopAnimationRate = 0f;
+
+    private float _totalLoopAnimationPlayTime = 0f;
+
+    private float _startAnimationPlayTime = 0f;
+    private float _endAnimationPlayTime = 0f;
+    private float _loopAnimationPlayTime = 0f;
+
 
     private float _processTimer = 0f;
     private bool _loopActionOnly = false;
 
+
+    private float _startActionDistance = 0f;
+    private float _loopActionDistance = 0f;
+    private float _endActionDistance = 0f;
+
+    private float _totalLoopActionDistance = 0f;
+
+    private bool _firstUpdate = false;
 
     public override void Initialize(SequencerGraphProcessor processor)
     {
@@ -168,11 +193,11 @@ public class SequencerGraphEvent_AIMove : SequencerGraphEventBase
         }
 
         _totalAnimationPlayTime = 0f;
-        _totalLoopAnimationRate = 0f;
+        _totalLoopAnimationPlayTime = 0f;
 
-        float startDistance = 0f;
-        float loopDistance = 0f;
-        float endDistance = 0f;
+        _startActionDistance = 0f;
+        _endActionDistance = 0f;
+        _loopActionDistance = 0f;
 
         if(_startAction != "")
         {
@@ -184,8 +209,9 @@ public class SequencerGraphEvent_AIMove : SequencerGraphEventBase
                 return;
             }
 
-            startDistance = presetData.getTotalMovement();
-            _totalAnimationPlayTime += uniqueEntity.getAnimationPlayTimeFromActionIndex(_startActionIndex);
+            _startActionDistance = presetData.getTotalMovement();
+            _startAnimationPlayTime = uniqueEntity.getAnimationPlayTimeFromActionIndex(_startActionIndex);
+            _totalAnimationPlayTime += _startAnimationPlayTime;
         }
         if(_endAction != "")
         {
@@ -197,43 +223,34 @@ public class SequencerGraphEvent_AIMove : SequencerGraphEventBase
                 return;
             }
 
-            endDistance = presetData.getTotalMovement();
-            _totalAnimationPlayTime += uniqueEntity.getAnimationPlayTimeFromActionIndex(_endActionIndex);
+            _endActionDistance = presetData.getTotalMovement();
+            _endAnimationPlayTime = uniqueEntity.getAnimationPlayTimeFromActionIndex(_endActionIndex);
+            _totalAnimationPlayTime += _endAnimationPlayTime;
         }
         
+        if(_startAction == "" && _endAction == "")
+            _loopActionOnly = true;
+
         {
             _loopActionIndex = uniqueEntity.getActionIndex(_loopAction);
-            MovementGraphPresetData presetData = uniqueEntity.getMovementGraphPresetDataFromActionIndex(_endActionIndex);
+            MovementGraphPresetData presetData = uniqueEntity.getMovementGraphPresetDataFromActionIndex(_loopActionIndex);
             if(presetData == null)
             {
-                DebugUtil.assert(false,"해당 액션에 MovementGraphPreset 설정이 안되어 있습니다. 확인 필요 [Action: {0}]", _endAction);
+                DebugUtil.assert(false,"해당 액션에 MovementGraphPreset 설정이 안되어 있습니다. 확인 필요 [Action: {0}]", _loopAction);
                 return;
             }
 
-            loopDistance = presetData.getTotalMovement();
-            _totalAnimationPlayTime += uniqueEntity.getAnimationPlayTimeFromActionIndex(_endActionIndex);
+            _loopActionDistance = presetData.getTotalMovement();
+            _loopAnimationPlayTime = uniqueEntity.getAnimationPlayTimeFromActionIndex(_loopActionIndex);
         }
 
-        float startEndDistance = startDistance + endDistance;
-
-        float moveDistance = Vector3.Distance(_startPosition, _endPosition);
-        if(moveDistance < startEndDistance + loopDistance)
-        {
-            _totalLoopAnimationRate = moveDistance * (1f / loopDistance);
-            _loopActionOnly = true;
-        }
-        else
-        {
-            _totalLoopAnimationRate = (moveDistance - startEndDistance) * (1f / loopDistance);
-        }
+        _firstUpdate = true;
+        _processTimer = 0f;
     }
 
     public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
     {
         if(_loopAction == "")
-            return true;
-        
-        if(MathEx.equals(_startPosition,_endPosition, float.Epsilon))
             return true;
 
         GameEntityBase uniqueEntity = processor.getUniqueEntity(_uniqueKey);
@@ -243,9 +260,91 @@ public class SequencerGraphEvent_AIMove : SequencerGraphEventBase
             return true;
         }
 
-        
+        if(_firstUpdate)
+        {
+            float startEndDistance = _startActionDistance + _endActionDistance;
+            _startPosition = uniqueEntity.transform.position;
 
-        return true;
+            float moveDistance = Vector3.Distance(_startPosition, _endPosition);
+            if(_loopActionOnly || moveDistance < startEndDistance)
+            {
+                _currentAnimationState = AnimationState.Loop;
+
+                float rate = moveDistance * (1f / _loopActionDistance);
+                _totalLoopActionDistance = _loopActionDistance * rate;
+                _totalLoopAnimationPlayTime = _loopAnimationPlayTime * rate;
+
+                _totalAnimationPlayTime = 0f;
+
+                _loopActionOnly = true;
+            }
+            else
+            {
+                _currentAnimationState = AnimationState.Start;
+                float rate = (moveDistance - startEndDistance) * (1f / _loopActionDistance);
+                _totalLoopActionDistance = _loopActionDistance * rate;
+                _totalLoopAnimationPlayTime = _loopAnimationPlayTime * rate;
+            }
+
+            _totalAnimationPlayTime += _totalLoopAnimationPlayTime;
+
+            Vector3 direction = (_endPosition - _startPosition).normalized;
+            uniqueEntity.blockAI(true);
+            uniqueEntity.setDirection(direction);
+            uniqueEntity.setAiDirection(direction);
+            uniqueEntity.setDirectionType(DirectionType.AI);
+
+            if(_loopActionOnly)
+                uniqueEntity.setAction(_loopActionIndex);
+            else
+                uniqueEntity.setAction(_startActionIndex);
+            
+            _endAnimationStartPosition = _startPosition + direction * (_startActionDistance + _totalLoopActionDistance);
+
+            _firstUpdate = false;
+            return false;
+        }
+
+        _processTimer += deltaTime;
+        
+        switch(_currentAnimationState)
+        {
+            case AnimationState.Start:
+            {
+                if(_processTimer >= _startAnimationPlayTime)
+                {
+                    _processTimer = _startAnimationPlayTime;
+                    uniqueEntity.setAction(_loopActionIndex);
+                    _currentAnimationState = AnimationState.Loop;
+                }
+            }
+            break;
+            case AnimationState.Loop:
+            {
+                if(_loopActionOnly == false && _processTimer >= _startAnimationPlayTime + _totalLoopAnimationPlayTime)
+                {
+                    _processTimer = _startAnimationPlayTime + _totalLoopAnimationPlayTime;
+                    uniqueEntity.setAction(_endActionIndex);
+                    uniqueEntity.transform.position = _endAnimationStartPosition;
+                    _currentAnimationState = AnimationState.End;
+                }
+            }
+            break;
+        }
+
+        GizmoHelper.instance.drawCircle(_startPosition,0.2f,16,Color.green);
+        GizmoHelper.instance.drawCircle(_endPosition,0.2f,16,Color.green);
+        GizmoHelper.instance.drawLine(_startPosition,_endPosition,Color.green);
+        
+        if(_processTimer >= _totalAnimationPlayTime)
+        {
+            uniqueEntity.transform.position = _endPosition;
+            uniqueEntity.blockAI(false);
+            uniqueEntity.setDefaultAction();
+            return true;
+        }
+
+        return false;
     }
 
     public override void loadXml(XmlNode node)
@@ -265,6 +364,8 @@ public class SequencerGraphEvent_AIMove : SequencerGraphEventBase
                 _loopAction = attrValue;
             else if(attrName == "EndAction")
                 _endAction = attrValue;
+            else if(attrName == "EndPosition")
+                _endPosition = XMLScriptConverter.valueToVector3(attrValue);
         }
 
         DebugUtil.assert(_loopAction != "", "Loop Action은 필수입니다. [Line: {0}]", XMLScriptConverter.getLineNumberFromXMLNode(node));

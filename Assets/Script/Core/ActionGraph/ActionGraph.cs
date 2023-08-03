@@ -55,10 +55,16 @@ public class ActionGraph
         setDefaultAction();
     }
 
-    public void setDefaultAction()
+    private void setDefaultAction()
     {
         if(_actionGraphBaseData != null && _actionGraphBaseData._defaultActionIndex != -1)
             changeAction(_actionGraphBaseData._defaultActionIndex);
+    }
+
+    public void setDefaultActionOther()
+    {
+        if(_actionGraphBaseData != null && _actionGraphBaseData._defaultActionIndex != -1)
+            changeActionOther(_actionGraphBaseData._defaultActionIndex);
     }
 
     public bool progress(float deltaTime)
@@ -185,7 +191,7 @@ public class ActionGraph
     {
         if(actionIndex < 0 || actionIndex >= _actionGraphBaseData._actionNodeCount)
         {
-            DebugUtil.assert(false,"잘못된 액션 인덱스 입니다.");
+            DebugUtil.assert(false,"잘못된 액션 인덱스 입니다. [{0}]", actionIndex);
             return false;
         }
 
