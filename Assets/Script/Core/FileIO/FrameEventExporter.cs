@@ -103,12 +103,12 @@ public static class FrameEventLoader
             
             if(targetName == "StartFrame")
             {
-                outFrameEvent._startFrame = float.Parse(attributes[i].Value);
+                outFrameEvent._startFrame = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
                 outFrameEvent._endFrame = outFrameEvent._startFrame;
             }
             else if(targetName == "EndFrame")
             {
-                outFrameEvent._endFrame = float.Parse(attributes[i].Value);
+                outFrameEvent._endFrame = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
 
                 if(outFrameEvent._startFrame > outFrameEvent._endFrame)
                 {
@@ -119,13 +119,13 @@ public static class FrameEventLoader
             else if(targetName == "StartTime")
             {
                 outFrameEvent._isTimeBase = true;
-                outFrameEvent._startFrame = float.Parse(attributes[i].Value);
+                outFrameEvent._startFrame = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
                 outFrameEvent._endFrame = outFrameEvent._startFrame;
             }
             else if(targetName == "EndTime")
             {
                 outFrameEvent._isTimeBase = true;
-                outFrameEvent._endFrame = float.Parse(attributes[i].Value);
+                outFrameEvent._endFrame = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
 
                 if(outFrameEvent._startFrame > outFrameEvent._endFrame)
                 {

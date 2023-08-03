@@ -82,6 +82,40 @@ public static class XMLScriptConverter
         return ((PositionXmlElement) xmlNode).LineNumber;
     }
         
+    public static float valueToFloatExtend(string valueString)
+    {
+        if(float.TryParse(valueString,out float result))
+            return result;
+
+        if(valueString.Contains("Random_") == false)
+        {
+            DebugUtil.assert(false,"잘못된 Float Type Value : {0}", valueString);
+            return 0f;
+        }
+
+        string[] randomRangeString = valueString.Replace("Random_",string.Empty).Split('^');
+        if(randomRangeString.Length != 2)
+        {
+            DebugUtil.assert(false,"잘못된 Float Type Value : {0}", valueString);
+            return 0f;
+        }
+
+        float min, max;
+        if(float.TryParse(randomRangeString[0],out min) == false)
+        {
+            DebugUtil.assert(false,"잘못된 Float Type Value : {0}", valueString);
+            return 0f;
+        }
+
+        if(float.TryParse(randomRangeString[1],out max) == false)
+        {
+            DebugUtil.assert(false,"잘못된 Float Type Value : {0}", valueString);
+            return 0f;
+        }
+
+        return UnityEngine.Random.Range(min,max);
+    }
+
     public static Vector3 valueToVector3(string valueString)
     {
         string[] splitted = valueString.Split(' ');
@@ -91,7 +125,7 @@ public static class XMLScriptConverter
             return Vector3.zero;
         }
 
-        return new Vector3(float.Parse(splitted[0]), float.Parse(splitted[1]), float.Parse(splitted[2]));
+        return new Vector3(valueToFloatExtend(splitted[0]), valueToFloatExtend(splitted[1]), valueToFloatExtend(splitted[2]));
     }
 
     public static Color valueToLinearColor(string valueString)
@@ -103,6 +137,6 @@ public static class XMLScriptConverter
             return Color.white;
         }
 
-        return new Color(float.Parse(splitted[0]), float.Parse(splitted[1]), float.Parse(splitted[2]), float.Parse(splitted[3]));
+        return new Color(valueToFloatExtend(splitted[0]), valueToFloatExtend(splitted[1]), valueToFloatExtend(splitted[2]), valueToFloatExtend(splitted[3]));
     }
 }

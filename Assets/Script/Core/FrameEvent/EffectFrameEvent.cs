@@ -100,9 +100,9 @@ public class ActionFrameEvent_ParticleEffect : ActionFrameEventBase
                     return;
                 }
 
-                _spawnOffset.x = float.Parse(vector[0]);
-                _spawnOffset.y = float.Parse(vector[1]);
-                _spawnOffset.z = float.Parse(vector[2]);
+                _spawnOffset.x = XMLScriptConverter.valueToFloatExtend(vector[0]);
+                _spawnOffset.y = XMLScriptConverter.valueToFloatExtend(vector[1]);
+                _spawnOffset.z = XMLScriptConverter.valueToFloatExtend(vector[2]);
             }
             else if(attributes[i].Name == "ToTarget")
             {
@@ -122,7 +122,7 @@ public class ActionFrameEvent_ParticleEffect : ActionFrameEventBase
             }
             else if(attributes[i].Name == "LifeTime")
             {
-                _lifeTime = float.Parse(attributes[i].Value);
+                _lifeTime = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
             }
             else if(attributes[i].Name == "FollowDirection")
             {
@@ -229,9 +229,9 @@ public class ActionFrameEvent_TimelineEffect : ActionFrameEventBase
                     return;
                 }
 
-                _spawnOffset.x = float.Parse(vector[0]);
-                _spawnOffset.y = float.Parse(vector[1]);
-                _spawnOffset.z = float.Parse(vector[2]);
+                _spawnOffset.x = XMLScriptConverter.valueToFloatExtend(vector[0]);
+                _spawnOffset.y = XMLScriptConverter.valueToFloatExtend(vector[1]);
+                _spawnOffset.z = XMLScriptConverter.valueToFloatExtend(vector[2]);
             }
             else if(attributes[i].Name == "ToTarget")
             {
@@ -251,7 +251,7 @@ public class ActionFrameEvent_TimelineEffect : ActionFrameEventBase
             }
             else if(attributes[i].Name == "LifeTime")
             {
-                _lifeTime = float.Parse(attributes[i].Value);
+                _lifeTime = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
             }
             else if(attributes[i].Name == "FollowDirection")
             {
@@ -358,9 +358,9 @@ public class ActionFrameEvent_AnimationEffect : ActionFrameEventBase
                     return;
                 }
 
-                _spawnOffset.x = float.Parse(vector[0]);
-                _spawnOffset.y = float.Parse(vector[1]);
-                _spawnOffset.z = float.Parse(vector[2]);
+                _spawnOffset.x = XMLScriptConverter.valueToFloatExtend(vector[0]);
+                _spawnOffset.y = XMLScriptConverter.valueToFloatExtend(vector[1]);
+                _spawnOffset.z = XMLScriptConverter.valueToFloatExtend(vector[2]);
             }
             else if(attributes[i].Name == "ToTarget")
             {
@@ -380,7 +380,7 @@ public class ActionFrameEvent_AnimationEffect : ActionFrameEventBase
             }
             else if(attributes[i].Name == "LifeTime")
             {
-                _lifeTime = float.Parse(attributes[i].Value);
+                _lifeTime = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
             }
             else if(attributes[i].Name == "FollowDirection")
             {
@@ -503,11 +503,11 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
             if(attributes[i].Name == "Path")
                 _effectPath = attributes[i].Value;
             // else if(attributes[i].Name == "StartFrame")
-            //     _aniStartFrame = float.Parse(attributes[i].Value);
+            //     _aniStartFrame = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
             // else if(attributes[i].Name == "EndFrame")
-            //     _aniEndFrame = float.Parse(attributes[i].Value);
+            //     _aniEndFrame = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
             else if(attributes[i].Name == "FramePerSecond")
-                _framePerSecond = float.Parse(attributes[i].Value);
+                _framePerSecond = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
             else if(attributes[i].Name == "Offset")
             {
                 string[] vector = attributes[i].Value.Split(' ');
@@ -517,9 +517,9 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
                     return;
                 }
 
-                _spawnOffset.x = float.Parse(vector[0]);
-                _spawnOffset.y = float.Parse(vector[1]);
-                _spawnOffset.z = float.Parse(vector[2]);
+                _spawnOffset.x = XMLScriptConverter.valueToFloatExtend(vector[0]);
+                _spawnOffset.y = XMLScriptConverter.valueToFloatExtend(vector[1]);
+                _spawnOffset.z = XMLScriptConverter.valueToFloatExtend(vector[2]);
             }
             else if(attributes[i].Name == "Angle")
             {
@@ -533,7 +533,7 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
                         return;
                     }
                     
-                    _randomValue = new Vector2(float.Parse(randomData[0]),float.Parse(randomData[1]));
+                    _randomValue = new Vector2(XMLScriptConverter.valueToFloatExtend(randomData[0]),XMLScriptConverter.valueToFloatExtend(randomData[1]));
                     _random = true;
                 }
                 else if(attributes[i].Value == "FollowEntity")
@@ -606,7 +606,7 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
                         }
                         else if(physicsAttributes[j].Name == "Friction")
                         {
-                            _physicsBodyDesc._friction = float.Parse(physicsAttributes[j].Value);
+                            _physicsBodyDesc._friction = XMLScriptConverter.valueToFloatExtend(physicsAttributes[j].Value);
                         }
                         else if(physicsAttributes[j].Name == "Torque")
                         {

@@ -261,7 +261,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             }
             else if(targetName == "MoveScale")
             {
-                nodeData._moveScale = float.Parse(targetValue);
+                nodeData._moveScale = XMLScriptConverter.valueToFloatExtend(targetValue);
             }
             else if(targetName == "IsActionSelection")
             {
@@ -277,11 +277,11 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             }
             else if(targetName == "DefenceAngle")
             {
-                nodeData._defenceAngle = float.Parse(targetValue);
+                nodeData._defenceAngle = XMLScriptConverter.valueToFloatExtend(targetValue);
             }
             else if(targetName == "DirectionAngle")
             {
-                nodeData._additionalDirectionAngle = float.Parse(targetValue);
+                nodeData._additionalDirectionAngle = XMLScriptConverter.valueToFloatExtend(targetValue);
             }
             else if(targetName == "ApplyBuff")
             {
@@ -313,7 +313,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             }
             else if(targetName == "RotateSpeed")
             {
-                nodeData._rotateSpeed = float.Parse(targetValue);
+                nodeData._rotateSpeed = XMLScriptConverter.valueToFloatExtend(targetValue);
             }
             else if(targetName == "DirectionUpdateOnce")
             {
@@ -333,7 +333,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             }
             else if(targetName == "Time")
             {
-                actionTime = float.Parse(targetValue);
+                actionTime = XMLScriptConverter.valueToFloatExtend(targetValue);
             }
             else if(targetName =="Flags")
             {
@@ -482,15 +482,15 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
                     continue;
                 }
 
-                playData._framePerSec = float.Parse(targetValue);
+                playData._framePerSec = XMLScriptConverter.valueToFloatExtend(targetValue);
             }
             else if(targetName == "StartFrame")
             {
-                playData._startFrame = float.Parse(targetValue);
+                playData._startFrame = XMLScriptConverter.valueToFloatExtend(targetValue);
             }
             else if(targetName == "EndFrame")
             {
-                playData._endFrame = float.Parse(targetValue);
+                playData._endFrame = XMLScriptConverter.valueToFloatExtend(targetValue);
             }
             else if(targetName == "XFlip")
             {
@@ -559,7 +559,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             }
             else if(targetName == "Duration")
             {
-                playData._duration = float.Parse(targetValue);
+                playData._duration = XMLScriptConverter.valueToFloatExtend(targetValue);
             }
             else
             {
@@ -1198,7 +1198,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             }
             else if(targetName == "DefaultFramePerSecond")
             {
-                defaultFPS = float.Parse(targetValue);
+                defaultFPS = XMLScriptConverter.valueToFloatExtend(targetValue);
             }
             else if(targetName == "DefaultAction")
             {

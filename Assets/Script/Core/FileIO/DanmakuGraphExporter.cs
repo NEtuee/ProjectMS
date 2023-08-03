@@ -93,7 +93,7 @@ public class DanmakuGraphLoader : LoaderBase<DanmakuGraphBaseData>
                 }
                 else if(attributes[i].Name == "StartTerm")
                 {
-                    projectileEvent._startTerm = float.Parse(attributes[i].Value);
+                    projectileEvent._startTerm = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
                 }
                 else if(attributes[i].Name == "PredictionAccuracy")
                 {
@@ -125,7 +125,7 @@ public class DanmakuGraphLoader : LoaderBase<DanmakuGraphBaseData>
         else if(node.Name == "Wait")
         {
             DanmakuWaitEventData waitEvent = new DanmakuWaitEventData();
-            waitEvent._waitTime = float.Parse(node.Attributes[0].Value);
+            waitEvent._waitTime = XMLScriptConverter.valueToFloatExtend(node.Attributes[0].Value);
 
             return waitEvent;
         }
@@ -160,11 +160,11 @@ public class DanmakuGraphLoader : LoaderBase<DanmakuGraphBaseData>
                             return null;
                         }
                         
-                        eventValueList.Add(Random.Range(float.Parse(randomValue[0]),float.Parse(randomValue[1])));
+                        eventValueList.Add(Random.Range(XMLScriptConverter.valueToFloatExtend(randomValue[0]),XMLScriptConverter.valueToFloatExtend(randomValue[1])));
                     }
                     else
                     {
-                        eventValueList.Add(float.Parse(attributes[i].Value));
+                        eventValueList.Add(XMLScriptConverter.valueToFloatExtend(attributes[i].Value));
                     }
                 }
 
@@ -197,7 +197,7 @@ public class DanmakuGraphLoader : LoaderBase<DanmakuGraphBaseData>
             }
             else if(attributes[i].Name == "Term")
             {
-                loopEvent._term = float.Parse(attributes[i].Value);
+                loopEvent._term = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
             }
         }
 

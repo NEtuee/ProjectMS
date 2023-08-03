@@ -120,7 +120,7 @@ public class AIEvent_AddCustomValue : AIEventBase
             }
             else if(attrName == "Value")
             {
-                _value = float.Parse(attrValue);
+                _value = XMLScriptConverter.valueToFloatExtend(attrValue);
             }
         }
     }
@@ -154,7 +154,7 @@ public class AIEvent_SetCustomValue : AIEventBase
             }
             else if(attrName == "Value")
             {
-                _value = float.Parse(attrValue);
+                _value = XMLScriptConverter.valueToFloatExtend(attrValue);
             }
         }
     }
@@ -248,11 +248,11 @@ public class AIEvent_RotateDirection : AIEventBase
 
             if(attrName == "Time")
             {
-                _time = float.Parse(attrValue);
+                _time = XMLScriptConverter.valueToFloatExtend(attrValue);
             }
             else if(attrName == "RotateAngle")
             {
-                _rotateAngle = float.Parse(attrValue);
+                _rotateAngle = XMLScriptConverter.valueToFloatExtend(attrValue);
             }
         }
     }
@@ -385,7 +385,7 @@ public class AIEvent_SetDirectionToTarget : AIEventBase
 
             if(attrName == "Angle")
             {
-                _directionAngle = float.Parse(attrValue);
+                _directionAngle = XMLScriptConverter.valueToFloatExtend(attrValue);
             }
         }
     }
@@ -414,7 +414,7 @@ public class AIEvent_SetAngleDirection : AIEventBase
 
             if(attrName == "Angle")
             {
-                angleDirection = float.Parse(attrValue);
+                angleDirection = XMLScriptConverter.valueToFloatExtend(attrValue);
             }
         }
     }   

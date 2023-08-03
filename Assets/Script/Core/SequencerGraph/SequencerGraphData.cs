@@ -129,7 +129,7 @@ public class SequencerGraphEvent_FadeIn : SequencerGraphEventBase
         for(int i = 0; i < attributes.Count; ++i)
         {
             if(attributes[i].Name == "Lambda")
-                _lambda = float.Parse(attributes[i].Value);
+                _lambda = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
         }
     }
 }
@@ -574,7 +574,7 @@ public class SequencerGraphEvent_FadeOut : SequencerGraphEventBase
         for(int i = 0; i < attributes.Count; ++i)
         {
             if(attributes[i].Name == "Lambda")
-                _lambda = float.Parse(attributes[i].Value);
+                _lambda = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
         }
     }
 }
@@ -604,7 +604,7 @@ public class SequencerGraphEvent_SetCameraZoom : SequencerGraphEventBase
         for(int i = 0; i < attributes.Count; ++i)
         {
             if(attributes[i].Name == "Size")
-                _zoom = float.Parse(attributes[i].Value);
+                _zoom = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
         }
     }
 }
@@ -697,7 +697,7 @@ public class SequencerGraphEvent_WaitSecond : SequencerGraphEventBase
             string attrValue = attributes[i].Value;
 
             if(attrName == "Time")
-                _waitTime = float.Parse(attrValue);
+                _waitTime = XMLScriptConverter.valueToFloatExtend(attrValue);
         }
     }
 }
@@ -880,7 +880,7 @@ public class SequencerGraphEvent_ApplyPostProcessProfile : SequencerGraphEventBa
             if(attrName == "Path")
                 _path = attrValue;
             else if(attrName == "BlendTime")
-                _blendTime = float.Parse(attrValue);
+                _blendTime = XMLScriptConverter.valueToFloatExtend(attrValue);
             else if(attrName == "ApplyType")
                 _applyType = (PostProcessProfileApplyType)System.Enum.Parse(typeof(PostProcessProfileApplyType), attrValue);
         }

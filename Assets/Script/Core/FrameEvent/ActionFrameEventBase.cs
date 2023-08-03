@@ -255,7 +255,7 @@ public class ActionFrameEvent_ApplyPostProcessProfile : ActionFrameEventBase
             if(attrName == "Path")
                 _path = attrValue;
             else if(attrName == "BlendTime")
-                _blendTime = float.Parse(attrValue);
+                _blendTime = XMLScriptConverter.valueToFloatExtend(attrValue);
             else if(attrName == "ApplyType")
                 _applyType = (PostProcessProfileApplyType)System.Enum.Parse(typeof(PostProcessProfileApplyType), attrValue);
         }
@@ -405,9 +405,9 @@ public class ActionFrameEvent_AudioPlay : ActionFrameEventBase
                     return;
                 }
 
-                _spawnOffset.x = float.Parse(vector[0]);
-                _spawnOffset.y = float.Parse(vector[1]);
-                _spawnOffset.z = float.Parse(vector[2]);
+                _spawnOffset.x = XMLScriptConverter.valueToFloatExtend(vector[0]);
+                _spawnOffset.y = XMLScriptConverter.valueToFloatExtend(vector[1]);
+                _spawnOffset.z = XMLScriptConverter.valueToFloatExtend(vector[2]);
             }
         }
     }
@@ -487,7 +487,7 @@ public class ActionFrameEvent_TalkBalloon : ActionFrameEventBase
             }
             else if(attributes[i].Name == "Time")
             {
-                _time = float.Parse(attributes[i].Value);
+                _time = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
             }
 
         }
@@ -647,7 +647,7 @@ public class ActionFrameEvent_StopUpdate : ActionFrameEventBase
         for(int i = 0; i < attributes.Count; ++i)
         {
             if(attributes[i].Name == "Time")
-                _stopTime = float.Parse(attributes[i].Value);
+                _stopTime = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
         }
     }
 }
@@ -678,11 +678,11 @@ public class ActionFrameEvent_SetTimeScale : ActionFrameEventBase
         for(int i = 0; i < attributes.Count; ++i)
         {
             if(attributes[i].Name == "Scale")
-                _targetTimeScale = float.Parse(attributes[i].Value);
+                _targetTimeScale = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
             else if(attributes[i].Name == "Time")
-                _timeScalingTime = float.Parse(attributes[i].Value);
+                _timeScalingTime = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
             else if(attributes[i].Name == "BlendTime")
-                _timeScaleBlendTime = float.Parse(attributes[i].Value);
+                _timeScaleBlendTime = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
         }
     }
 }
@@ -705,7 +705,7 @@ public class ActionFrameEvent_ZoomEffect : ActionFrameEventBase
         for(int i = 0; i < attributes.Count; ++i)
         {
             if(attributes[i].Name == "Scale")
-                _zoomScale = float.Parse(attributes[i].Value);
+                _zoomScale = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
         }
     }
 }
@@ -730,11 +730,11 @@ public class ActionFrameEvent_ShakeEffect : ActionFrameEventBase
         for(int i = 0; i < attributes.Count; ++i)
         {
             if(attributes[i].Name == "Scale")
-                _shakeScale = float.Parse(attributes[i].Value);
+                _shakeScale = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
             else if(attributes[i].Name == "Time")
-                _shakeTime = float.Parse(attributes[i].Value);
+                _shakeTime = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
             else if(attributes[i].Name == "Speed")
-                _shakeSpeed = float.Parse(attributes[i].Value);
+                _shakeSpeed = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
         }
     }
 }
@@ -927,7 +927,7 @@ public class ActionFrameEvent_SetCameraZoom : ActionFrameEventBase
         for(int i = 0; i < attributes.Count; ++i)
         {
             if(attributes[i].Name == "Size")
-                _zoom = float.Parse(attributes[i].Value);
+                _zoom = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
         }
     }
 }
@@ -1010,7 +1010,7 @@ public class ActionFrameEvent_SetAnimationSpeed : ActionFrameEventBase
         for(int i = 0; i < attributes.Count; ++i)
         {
             if(attributes[i].Name == "Speed")
-                _speed = float.Parse(attributes[i].Value);
+                _speed = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
         }
     }
 }
@@ -1041,7 +1041,7 @@ public class ActionFrameEvent_TeleportToTarget : ActionFrameEventBase
         for(int i = 0; i < attributes.Count; ++i)
         {
             if(attributes[i].Name == "DistanceOffset")
-                _distanceOffset = float.Parse(attributes[i].Value);
+                _distanceOffset = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
         }
     }
 }
@@ -1075,7 +1075,7 @@ public class ActionFrameEvent_TeleportToTargetBack : ActionFrameEventBase
         for(int i = 0; i < attributes.Count; ++i)
         {
             if(attributes[i].Name == "DistanceOffset")
-                _distanceOffset = float.Parse(attributes[i].Value);
+                _distanceOffset = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
         }
     }
 }
@@ -1470,15 +1470,15 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
         {
             if(attributes[i].Name == "Radius")
             {
-                radius = float.Parse(attributes[i].Value);
+                radius = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
             }
             else if(attributes[i].Name == "Angle")
             {
-                angle = float.Parse(attributes[i].Value);
+                angle = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
             }
             else if(attributes[i].Name == "StartDistance")
             {
-                startDistance = float.Parse(attributes[i].Value);
+                startDistance = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
             }
             else if(attributes[i].Name == "AttackType")
             {
@@ -1527,7 +1527,7 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
                     return;
                 }
 
-                _pushVector = new UnityEngine.Vector3(float.Parse(value[0]),float.Parse(value[1]),float.Parse(value[2]));
+                _pushVector = new UnityEngine.Vector3(XMLScriptConverter.valueToFloatExtend(value[0]),XMLScriptConverter.valueToFloatExtend(value[1]),XMLScriptConverter.valueToFloatExtend(value[2]));
             }
             else if(attributes[i].Name == "CatchOffset")
             {

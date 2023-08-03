@@ -87,15 +87,15 @@ public static class BuffDataLoader
             else if(attrName == "ApplyType")
                 buffData._buffApplyType = (BuffApplyType)System.Enum.Parse(typeof(BuffApplyType), attrValue);
             else if(attrName == "Factor")
-                buffData._buffVaryStatFactor = float.Parse(attrValue);
+                buffData._buffVaryStatFactor = XMLScriptConverter.valueToFloatExtend(attrValue);
             else if(attrName == "Time")
-                buffData._buffCustomValue0 = float.Parse(attrValue);
+                buffData._buffCustomValue0 = XMLScriptConverter.valueToFloatExtend(attrValue);
             else if(attrName == "TargetStatusName")
                 buffData._buffCustomStatusName = attrValue;
             else if(attrName == "MinValue")
-                buffData._buffCustomValue0 = float.Parse(attrValue);
+                buffData._buffCustomValue0 = XMLScriptConverter.valueToFloatExtend(attrValue);
             else if(attrName == "MaxValue")
-                buffData._buffCustomValue1 = float.Parse(attrValue);
+                buffData._buffCustomValue1 = XMLScriptConverter.valueToFloatExtend(attrValue);
             else if(attrName == "ButtonList")
                 buffData._buffCustomValue2 = attrValue.Split(' ');
             else if(attrName == "AllowOverlap")
