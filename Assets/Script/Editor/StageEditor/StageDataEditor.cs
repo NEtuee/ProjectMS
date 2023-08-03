@@ -314,7 +314,7 @@ public class StageDataEditor : EditorWindow
 
     private void onPointInspectorGUI()
     {
-        if(_editingStagePointList == null || _editStageData._stagePointData.Count <= _pointSelectedIndex || _pointSelectedIndex < 0)
+        if(_editingStagePointList == null || _editingStagePointList.Count == 0 || _editStageData._stagePointData.Count <= _pointSelectedIndex || _pointSelectedIndex < 0)
             return;
 
         StagePointData stagePointData = _editStageData._stagePointData[_pointSelectedIndex];
