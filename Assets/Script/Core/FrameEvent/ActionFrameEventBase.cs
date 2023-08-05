@@ -122,6 +122,9 @@ public class ActionFrameEvent_CallAIEvent : ActionFrameEventBase
     public string _customAiEventName = "";
     public CallAIEventTargetType _eventTargetType = CallAIEventTargetType.Self;
 
+    public List<CharacterEntityBase> _rangeSearchEntityList = new List<CharacterEntityBase>();
+    public SearchIdentifier _searchIdentifier = SearchIdentifier.Count;
+
     public float _range = 0f;
 
     public override void initialize()
@@ -148,6 +151,22 @@ public class ActionFrameEvent_CallAIEvent : ActionFrameEventBase
                 executeTargetEntity = executeEntity.getSummonObject();
             }
             break;
+            case CallAIEventTargetType.Range:
+            {
+                SceneCharacterManager sceneCharacterManager = SceneCharacterManager._managerInstance as SceneCharacterManager;
+                _rangeSearchEntityList.Clear();
+                sceneCharacterManager.targetSearchRange(executeEntity.transform.position,_range,_searchIdentifier,ref _rangeSearchEntityList);
+
+                foreach(var item in _rangeSearchEntityList)
+                {
+                    if(item == null || item is GameEntityBase == false)
+                        continue;
+                        
+                    (item as GameEntityBase).executeCustomAIEvent(_customAiEventName);
+                }
+
+                return true;
+            }
         }
 
         if(executeTargetEntity == null || executeTargetEntity is GameEntityBase == false)
@@ -174,7 +193,14 @@ public class ActionFrameEvent_CallAIEvent : ActionFrameEventBase
             {
                 _eventTargetType = (CallAIEventTargetType)System.Enum.Parse(typeof(CallAIEventTargetType), attrValue);
             }
-
+            else if(attrName == "Range")
+            {
+                _range = float.Parse(attrValue);
+            }
+            else if(attrName == "SearchIdentifier")
+            {
+                _searchIdentifier = (SearchIdentifier)System.Enum.Parse(typeof(SearchIdentifier), attrValue);
+            }
         }
     }
 }

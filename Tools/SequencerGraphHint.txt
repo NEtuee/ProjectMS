@@ -8,7 +8,7 @@ LineStart,<SetHPSphere,UniqueKey=~~
 LineStart,<WaitTargetDead,UniqueKey=~~
 LineStart,<TeleportTargetTo,"UniqueKey=~~,Position=~~"
 LineStart,<ApplyPostProcessProfile,"Path=~~,BlendTime=~~,ApplyType=~~"
-LineStart,<CallAIEvent,"EventName=~~,UniqueKey=~~"
+LineStart,<CallAIEvent,"EventName=~~,UniqueKey=~~,Range=~~,SearchIdentifier=~~,EventTargetType=~~"
 LineStart,<WaitSignal,Signal=~~
 LineStart,<SetCameraZoom,Size=~~
 InQuote,SearchIdentifier=,"Player,Enemy,Projectile"
@@ -33,19 +33,19 @@ LineStart,<FadeIn,Lambda=~~
 ShortCut,__FadeIn,<FadeIn Lambda=~0.0~/>
 LineStart,<FadeOut,Lambda=~~
 ShortCut,__FadeOut,<FadeOut Lambda=~0.0~/>
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
+InQuote,EventTargetType=,"UniqueTarget,Range"
+ShortCut,__ForceQuit,<ForceQuit/>
+LineStart,<BlockInput,Enable=~~
+ShortCut,__BlockInput,<BlockInput Enable=~~/>
+InQuote,Enable=,"true,false"
+LineStart,<BlockAI,"Enable=~~,UniqueKey=~~"
+ShortCut,__BlockAI,<BlockAI UniqueKey=~~ Enable=~~/>
+LineStart,<SetAction,"UniqueKey=~~,Action=~~"
+ShortCut,__SetAction,<SetAction UniqueKey=~~ Action=~~/>
+LineStart,<PlayAnimation,"UniqueKey=~~,PlayAnimation=~~"
+ShortCut,__PlayAnimation,<PlayAnimation UniqueKey=~~ Path=~~/>
+LineStart,<AIMove,"UniqueKey=~~,StartAction=~~,LoopAction=~~,EndAction=~~,EndPosition=~~"
+ShortCut,__AIMove,<AIMove UniqueKey=~~ StartAction=~~ LoopAction=~~ EndAction=~~ EndPosition=~~/>
 ,,
 ,,
 ,,

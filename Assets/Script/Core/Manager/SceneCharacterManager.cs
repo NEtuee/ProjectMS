@@ -164,6 +164,28 @@ public class SceneCharacterManager : ManagerBase
         MessageDataPooling.ReturnData(desc);
     }
 
+    public bool targetSearchRange(Vector3 centerPosition, float searchRange, SearchIdentifier searchIdentifier, ref List<CharacterEntityBase> outCharacterList)
+    {
+        if(searchIdentifier == SearchIdentifier.Count)
+        {
+            DebugUtil.assert(false,"invalid search identifier: Count");
+            return false;
+        }
+
+        foreach(var character in _enableCharacterPoolCacheMap.Values)
+        {
+            if(character._searchIdentifier != searchIdentifier || character.gameObject.activeInHierarchy == false || character.enabled == false || character.isDead())
+                continue;
+            
+            if(Vector3.Distance(centerPosition, character.transform.position) > searchRange)
+                continue;
+
+            outCharacterList.Add(character);
+        }
+
+        return true;
+    }
+
 
     private bool updateTargetSearch(ObjectBase receiver, TargetSearchDescription desc)
     {

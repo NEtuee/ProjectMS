@@ -4,7 +4,15 @@ using UnityEngine;
 
 public class EffectRenderPass : AkaneRenderPass
 {
-    protected override int layerMasks { get; set; } = (1 << LayerMask.NameToLayer("EffectEtc")) | (1 << LayerMask.NameToLayer("ShadowScreen"));
+    private static int effectLayer;
+    private static int shadowScreenLayer;
+    protected override int layerMasks { get; set; } = effectLayer | shadowScreenLayer;
+
+    public void OnEnable()
+    {
+        effectLayer = (1 << LayerMask.NameToLayer("EffectEtc"));
+        shadowScreenLayer = (1 << LayerMask.NameToLayer("EffectEtc"));
+    }
     public override void Draw(Camera renderCamera, RenderTexture buffer)
     {
         renderCamera.targetTexture = buffer;
