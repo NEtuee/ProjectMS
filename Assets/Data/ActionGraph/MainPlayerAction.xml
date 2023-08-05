@@ -465,6 +465,29 @@
 
 
 
+    <AIMove_Start MovementType="GraphPreset" MovementGraphPreset="TEST" DirectionType="AI" RotationType="Direction" FlipType="Direction" RotateBySpeed="True" RotateSpeed="gv_rotateSpeed">
+        <Animation Preset="Sprites/NewPlayer/DashRoll/" XFlip="true" Duration="0.25">
+        </Animation>
+
+        <Branch Condition="End" Execute="AIMove_Start"/>
+    </AIMove_Start>
+
+    <AIMove_Loop MovementType="GraphPreset" MovementGraphPreset="TEST" DirectionType="AI" RotationType="Direction" FlipType="Direction" RotateBySpeed="True" RotateSpeed="gv_rotateSpeed">
+         <Animation Preset="Sprites/NewPlayer/stun" XFlip="true" Duration="0.1">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AIMove_Loop"/>
+    </AIMove_Loop>
+
+    <AIMove_End MovementType="GraphPreset" MovementGraphPreset="TEST" DirectionType="AI" RotationType="Direction" FlipType="Direction" RotateBySpeed="True" RotateSpeed="gv_rotateSpeed">
+        <Animation Preset="Sprites/NewPlayer/MoveStop/" XFlip="true" Duration="0.5">
+        </Animation>
+
+        <Branch Condition="End" Execute="AIMove_End"/>
+    </AIMove_End>
+
+
+
 
     <BranchSet Name="MeleeHit">
         <Branch Condition="Hit" Execute="AC_Melee_Hit"/>

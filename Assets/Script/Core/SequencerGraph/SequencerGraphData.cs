@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Xml;
+using System.Collections.Generic;
 
 public enum SequencerGraphEventType
 {
@@ -67,13 +68,25 @@ public class SequencerGraphEvent_WaitSignal : SequencerGraphEventBase
     }
 }
 
-
 public class SequencerGraphEvent_CallAIEvent : SequencerGraphEventBase
 {
+    enum SequencerCallAIEventTargetType
+    {
+        UniqueTarget,
+        Range,
+    };
+
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.CallAIEvent;
 
-    public string _customAiEventName = "";
-    public string _uniqueKey = "";
+    private string _customAiEventName = "";
+    private string _uniqueKey = "";
+
+    private SequencerCallAIEventTargetType _eventTargetType = SequencerCallAIEventTargetType.UniqueTarget;
+
+    private List<CharacterEntityBase> _rangeSearchEntityList = new List<CharacterEntityBase>();
+    private SearchIdentifier _searchIdentifier = SearchIdentifier.Count;
+
+    private float _range = 0f;
 
     public override void Initialize(SequencerGraphProcessor processor)
     {
@@ -85,7 +98,30 @@ public class SequencerGraphEvent_CallAIEvent : SequencerGraphEventBase
         if(executeTargetEntity == null || executeTargetEntity is GameEntityBase == false)
             return true;
 
-        (executeTargetEntity as GameEntityBase).executeCustomAIEvent(_customAiEventName);
+        switch(_eventTargetType)
+        {
+            case SequencerCallAIEventTargetType.UniqueTarget:
+            {
+                (executeTargetEntity as GameEntityBase).executeCustomAIEvent(_customAiEventName);
+            }
+            break;
+            case SequencerCallAIEventTargetType.Range:
+            {
+                SceneCharacterManager sceneCharacterManager = SceneCharacterManager._managerInstance as SceneCharacterManager;
+                _rangeSearchEntityList.Clear();
+                sceneCharacterManager.targetSearchRange(executeTargetEntity.transform.position,_range,_searchIdentifier,ref _rangeSearchEntityList);
+
+                foreach(var item in _rangeSearchEntityList)
+                {
+                    if(item == null || item is GameEntityBase == false)
+                        continue;
+                        
+                    (item as GameEntityBase).executeCustomAIEvent(_customAiEventName);
+                }
+            }
+            break;
+        }
+
         return true;
     }
 
@@ -99,10 +135,25 @@ public class SequencerGraphEvent_CallAIEvent : SequencerGraphEventBase
             string attrValue = attributes[i].Value;
 
             if(attributes[i].Name == "EventName")
+            {
                 _customAiEventName = attributes[i].Value;
+            }
             else if(attrName == "UniqueKey")
+            {
                 _uniqueKey = attributes[i].Value;
-
+            }
+            else if(attrName == "EventTargetType")
+            {
+                _eventTargetType = (SequencerCallAIEventTargetType)System.Enum.Parse(typeof(SequencerCallAIEventTargetType), attrValue);
+            }
+            else if(attrName == "Range")
+            {
+                _range = float.Parse(attrValue);
+            }
+            else if(attrName == "SearchIdentifier")
+            {
+                _searchIdentifier = (SearchIdentifier)System.Enum.Parse(typeof(SearchIdentifier), attrValue);
+            }
         }
     }
 }
@@ -490,7 +541,7 @@ public class SequencerGraphEvent_BlockAI : SequencerGraphEventBase
             string attrName = attributes[i].Name;
             string attrValue = attributes[i].Value;
 
-            if(attributes[i].Name == "Value")
+            if(attributes[i].Name == "Enable")
                 _value = bool.Parse(attrValue);
             else if(attrName == "UniqueKey")
                 _uniqueKey = attributes[i].Value;
@@ -527,7 +578,7 @@ public class SequencerGraphEvent_BlockInput : SequencerGraphEventBase
         XmlAttributeCollection attributes = node.Attributes;
         for(int i = 0; i < attributes.Count; ++i)
         {
-            if(attributes[i].Name == "Value")
+            if(attributes[i].Name == "Enable")
                 _value = bool.Parse(attributes[i].Value);
         }
     }

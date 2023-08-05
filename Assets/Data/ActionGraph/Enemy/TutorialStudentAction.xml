@@ -1,0 +1,33 @@
+<ActionGraph Name="TutorialStudentAction" DefaultAction="Idle" DefaultFramePerSecond="12">
+
+    <Idle MovementType="FrameEvent" DirectionType="AlwaysRight">
+        <Animation Preset="Sprites/Enemy/TutorialStudent/0_idle" XFlip="true" Duration="1">
+            <FrameEvent Type="Movement" StartTime="0" Friction="5" MaxVelocity="10" Velocity="Random_2^5" Speed="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="IdleLoop"/>
+    </Idle>
+
+    <IdleLoop MovementType="FrameEvent" DirectionType="AlwaysRight">
+        <Animation Preset="Sprites/Enemy/TutorialStudent/0_idle" XFlip="true" Duration="1">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="IdleLoop"/>
+    </IdleLoop>
+
+    <Dead MovementType="Empty" DirectionType="MoveInput">
+        <AnimationHeader MasterPath="Sprites/Enemy/TutorialStudent/"/>
+        <Animation Preset="0_idle" XFlip="true" Duration="1">
+
+            <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Enemy/TutorialStudent/0_idle" FramePerSecond="0.2" CastShadow="True">
+                <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
+            </FrameEvent>
+            <FrameEvent Type="ZoomEffect" Scale="2.3"/>
+            <FrameEvent Type="KillEntity" StartTime="0"/>
+
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Dead"/>
+    </Dead>
+
+</ActionGraph>
