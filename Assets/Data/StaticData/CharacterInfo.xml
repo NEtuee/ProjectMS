@@ -32,7 +32,7 @@
         CollisionRadius="0.2"
         ProjectileCollisionRadius=""
     />
-
+<!-- 
     <TestZako2
         DisplayName="자코2"
         ActionGraph="Assets\Data\ActionGraph\TestZako2.xml"
@@ -144,7 +144,7 @@
     />
 
     <OsananaNajimi
-        DisplayName="오사나나 나지미"
+        DisplayName="(구)오사나나 나지미"
         ActionGraph="Assets\Data\ActionGraph\Enemy\NajimiChanAction.xml"
         AIGraph="Assets\Data\AIGraph\Enemy\NajimiChanAI.xml"
         StatusInfoName="OsananaNajimiStatus"
@@ -153,9 +153,9 @@
         HeadUpOffset="0.5"
         ProjectileCollisionRadius=""
     />
-
+-->
     <OsananaNajimiAlpha
-        DisplayName="오사나나 나지미 알파"
+        DisplayName="오사나나 나지미"
         ActionGraph="Assets\Data\ActionGraph\Enemy\NajimiChanAlphaAction.xml"
         AIGraph="Assets\Data\AIGraph\Enemy\NajimiChanAlphaAI.xml"
         StatusInfoName="OsananaNajimiStatus"
@@ -236,6 +236,18 @@
         StatusInfoName="CommonHpOneEnemyStatus"
         
         CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+    />
+
+    <LugerChan
+        DisplayName="선도부 마법부대 루거쨩"
+        ActionGraph="Assets\Data\ActionGraph\Enemy\LugerChanAction.xml"
+        AIGraph="Assets\Data\AIGraph\Enemy\LugerChanAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatus"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
         ProjectileCollisionRadius=""
     />
 </CharacterInfo>

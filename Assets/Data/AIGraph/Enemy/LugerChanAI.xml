@@ -1,4 +1,4 @@
-<AIGraph Name="RapierChanAI" DefaultState="Entry">
+<AIGraph Name="LugerChanAI" DefaultState="Entry">
 
     <Include Path="Common\CommonRandMovePackage.xml"/>
     <Include Path="Common\CommonDeadPackage.xml"/>
@@ -9,9 +9,9 @@
     <Include Path="Common\CommonGuardBrokenPackage.xml"/>
 
     <!-- 플레이어를 인지하는 거리 -->
-    <GlobalVariable Name="gv_SightRange" Value="3.5"/>
+    <GlobalVariable Name="gv_SightRange" Value="7.5"/>
     <!-- 플레이어를 공격할 수 있는 거리-->
-    <GlobalVariable Name="gv_AttackRange" Value="3.5"/>
+    <GlobalVariable Name="gv_AttackRange" Value="7.5"/>
     <!-- 아타리가 행동을 전환하는데 걸리는 시간-->
     <GlobalVariable Name="gv_atariChanTransitionTime" Value="0.4"/>
     

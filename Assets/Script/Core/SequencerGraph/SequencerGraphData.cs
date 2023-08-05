@@ -18,6 +18,12 @@ public enum SequencerGraphEventType
     SetCameraZoom,
     FadeIn,
     FadeOut,
+    ForceQuit,
+    BlockInput,
+    BlockAI,
+    SetAction,
+    PlayAnimation,
+    AIMove,
 
     Count,
 }
@@ -25,7 +31,7 @@ public enum SequencerGraphEventType
 public abstract class SequencerGraphEventBase
 {
     public abstract SequencerGraphEventType getSequencerGraphEventType();
-    public abstract void Initialize();
+    public abstract void Initialize(SequencerGraphProcessor processor);
     public abstract bool Execute(SequencerGraphProcessor processor, float deltaTime);
     public virtual void Exit(SequencerGraphProcessor processor) {}
     public abstract void loadXml(XmlNode node);
@@ -37,7 +43,7 @@ public class SequencerGraphEvent_WaitSignal : SequencerGraphEventBase
 
     public string _targetSignal = "";
 
-    public override void Initialize()
+    public override void Initialize(SequencerGraphProcessor processor)
     {
     }
 
@@ -69,7 +75,7 @@ public class SequencerGraphEvent_CallAIEvent : SequencerGraphEventBase
     public string _customAiEventName = "";
     public string _uniqueKey = "";
 
-    public override void Initialize()
+    public override void Initialize(SequencerGraphProcessor processor)
     {
     }
 
@@ -107,7 +113,7 @@ public class SequencerGraphEvent_FadeIn : SequencerGraphEventBase
 
     private float _lambda = -1f;
 
-    public override void Initialize()
+    public override void Initialize(SequencerGraphProcessor processor)
     {
     }
 
@@ -123,8 +129,426 @@ public class SequencerGraphEvent_FadeIn : SequencerGraphEventBase
         for(int i = 0; i < attributes.Count; ++i)
         {
             if(attributes[i].Name == "Lambda")
-                _lambda = float.Parse(attributes[i].Value);
+                _lambda = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
         }
+    }
+}
+
+public class SequencerGraphEvent_AIMove : SequencerGraphEventBase
+{
+    private enum AnimationState
+    {
+        Start,
+        Loop,
+        End
+    };
+
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.AIMove;
+
+    private string _uniqueKey;
+
+    private Vector3 _startPosition;
+    private Vector3 _endPosition;
+
+    private Vector3 _endAnimationStartPosition;
+
+    private AnimationState _currentAnimationState = AnimationState.Start;
+
+    private string _startAction = "";
+    private string _loopAction = "";
+    private string _endAction = "";
+
+    private int _startActionIndex = -1;
+    private int _loopActionIndex = -1;
+    private int _endActionIndex = -1;
+
+    private float _totalAnimationPlayTime = 0f;
+
+    private float _totalLoopAnimationPlayTime = 0f;
+
+    private float _startAnimationPlayTime = 0f;
+    private float _endAnimationPlayTime = 0f;
+    private float _loopAnimationPlayTime = 0f;
+
+
+    private float _processTimer = 0f;
+    private bool _loopActionOnly = false;
+
+
+    private float _startActionDistance = 0f;
+    private float _loopActionDistance = 0f;
+    private float _endActionDistance = 0f;
+
+    private float _totalLoopActionDistance = 0f;
+
+    private bool _firstUpdate = false;
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+        GameEntityBase uniqueEntity = processor.getUniqueEntity(_uniqueKey);
+        if(uniqueEntity == null)
+        {
+            DebugUtil.assert(false,"대상 Unique Entity가 존재하지 않습니다 : {0}",_uniqueKey);
+            return;
+        }
+
+        _totalAnimationPlayTime = 0f;
+        _totalLoopAnimationPlayTime = 0f;
+
+        _startActionDistance = 0f;
+        _endActionDistance = 0f;
+        _loopActionDistance = 0f;
+
+        if(_startAction != "")
+        {
+            _startActionIndex = uniqueEntity.getActionIndex(_startAction);
+            MovementGraphPresetData presetData = uniqueEntity.getMovementGraphPresetDataFromActionIndex(_startActionIndex);
+            if(presetData == null)
+            {
+                DebugUtil.assert(false,"해당 액션에 MovementGraphPreset 설정이 안되어 있습니다. 확인 필요 [Action: {0}]", _startAction);
+                return;
+            }
+
+            _startActionDistance = presetData.getTotalMovement();
+            _startAnimationPlayTime = uniqueEntity.getAnimationPlayTimeFromActionIndex(_startActionIndex);
+            _totalAnimationPlayTime += _startAnimationPlayTime;
+        }
+        if(_endAction != "")
+        {
+            _endActionIndex = uniqueEntity.getActionIndex(_endAction);
+            MovementGraphPresetData presetData = uniqueEntity.getMovementGraphPresetDataFromActionIndex(_endActionIndex);
+            if(presetData == null)
+            {
+                DebugUtil.assert(false,"해당 액션에 MovementGraphPreset 설정이 안되어 있습니다. 확인 필요 [Action: {0}]", _endAction);
+                return;
+            }
+
+            _endActionDistance = presetData.getTotalMovement();
+            _endAnimationPlayTime = uniqueEntity.getAnimationPlayTimeFromActionIndex(_endActionIndex);
+            _totalAnimationPlayTime += _endAnimationPlayTime;
+        }
+        
+        if(_startAction == "" && _endAction == "")
+            _loopActionOnly = true;
+
+        {
+            _loopActionIndex = uniqueEntity.getActionIndex(_loopAction);
+            MovementGraphPresetData presetData = uniqueEntity.getMovementGraphPresetDataFromActionIndex(_loopActionIndex);
+            if(presetData == null)
+            {
+                DebugUtil.assert(false,"해당 액션에 MovementGraphPreset 설정이 안되어 있습니다. 확인 필요 [Action: {0}]", _loopAction);
+                return;
+            }
+
+            _loopActionDistance = presetData.getTotalMovement();
+            _loopAnimationPlayTime = uniqueEntity.getAnimationPlayTimeFromActionIndex(_loopActionIndex);
+        }
+
+        _firstUpdate = true;
+        _processTimer = 0f;
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        if(_loopAction == "")
+            return true;
+
+        GameEntityBase uniqueEntity = processor.getUniqueEntity(_uniqueKey);
+        if(uniqueEntity == null)
+        {
+            DebugUtil.assert(false,"대상 Unique Entity가 존재하지 않습니다 : {0}",_uniqueKey);
+            return true;
+        }
+
+        if(_firstUpdate)
+        {
+            float startEndDistance = _startActionDistance + _endActionDistance;
+            _startPosition = uniqueEntity.transform.position;
+
+            float moveDistance = Vector3.Distance(_startPosition, _endPosition);
+            if(_loopActionOnly || moveDistance < startEndDistance)
+            {
+                _currentAnimationState = AnimationState.Loop;
+
+                float rate = moveDistance * (1f / _loopActionDistance);
+                _totalLoopActionDistance = _loopActionDistance * rate;
+                _totalLoopAnimationPlayTime = _loopAnimationPlayTime * rate;
+
+                _totalAnimationPlayTime = 0f;
+
+                _loopActionOnly = true;
+            }
+            else
+            {
+                _currentAnimationState = AnimationState.Start;
+                float rate = (moveDistance - startEndDistance) * (1f / _loopActionDistance);
+                _totalLoopActionDistance = _loopActionDistance * rate;
+                _totalLoopAnimationPlayTime = _loopAnimationPlayTime * rate;
+            }
+
+            _totalAnimationPlayTime += _totalLoopAnimationPlayTime;
+
+            Vector3 direction = (_endPosition - _startPosition).normalized;
+            uniqueEntity.blockAI(true);
+            uniqueEntity.setDirection(direction);
+            uniqueEntity.setAiDirection(direction);
+            uniqueEntity.setDirectionType(DirectionType.AI);
+
+            if(_loopActionOnly)
+                uniqueEntity.setAction(_loopActionIndex);
+            else
+                uniqueEntity.setAction(_startActionIndex);
+            
+            _endAnimationStartPosition = _startPosition + direction * (_startActionDistance + _totalLoopActionDistance);
+
+            _firstUpdate = false;
+            return false;
+        }
+
+        _processTimer += deltaTime;
+        
+        switch(_currentAnimationState)
+        {
+            case AnimationState.Start:
+            {
+                if(_processTimer >= _startAnimationPlayTime)
+                {
+                    _processTimer = _startAnimationPlayTime;
+                    uniqueEntity.setAction(_loopActionIndex);
+                    _currentAnimationState = AnimationState.Loop;
+                }
+            }
+            break;
+            case AnimationState.Loop:
+            {
+                if(_loopActionOnly == false && _processTimer >= _startAnimationPlayTime + _totalLoopAnimationPlayTime)
+                {
+                    _processTimer = _startAnimationPlayTime + _totalLoopAnimationPlayTime;
+                    uniqueEntity.setAction(_endActionIndex);
+                    uniqueEntity.transform.position = _endAnimationStartPosition;
+                    _currentAnimationState = AnimationState.End;
+                }
+            }
+            break;
+        }
+
+        GizmoHelper.instance.drawCircle(_startPosition,0.2f,16,Color.green);
+        GizmoHelper.instance.drawCircle(_endPosition,0.2f,16,Color.green);
+        GizmoHelper.instance.drawLine(_startPosition,_endPosition,Color.green);
+        
+        if(_processTimer >= _totalAnimationPlayTime)
+        {
+            uniqueEntity.transform.position = _endPosition;
+            uniqueEntity.blockAI(false);
+            uniqueEntity.setDefaultAction();
+            return true;
+        }
+
+        return false;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "UniqueKey")
+                _uniqueKey = attrValue;
+            else if(attrName == "StartAction")
+                _startAction = attrValue;
+            else if(attrName == "LoopAction")
+                _loopAction = attrValue;
+            else if(attrName == "EndAction")
+                _endAction = attrValue;
+            else if(attrName == "EndPosition")
+                _endPosition = XMLScriptConverter.valueToVector3(attrValue);
+        }
+
+        DebugUtil.assert(_loopAction != "", "Loop Action은 필수입니다. [Line: {0}]", XMLScriptConverter.getLineNumberFromXMLNode(node));
+    }
+}
+
+public class SequencerGraphEvent_PlayAnimation : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.PlayAnimation;
+
+    private string _animationPath;
+    private string _uniqueKey;
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        GameEntityBase uniqueEntity = processor.getUniqueEntity(_uniqueKey);
+        if(uniqueEntity == null)
+        {
+            DebugUtil.assert(false,"대상 Unique Entity가 존재하지 않습니다 : {0}",_uniqueKey);
+            return true;
+        }
+
+        uniqueEntity.blockAI(true);
+        uniqueEntity.setDummyAction();
+        uniqueEntity.changeAnimationByPath(_animationPath);
+
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "UniqueKey")
+                _uniqueKey = attrValue;
+            else if(attrName == "Path")
+                _animationPath = attrValue;
+        }
+    }
+}
+
+
+public class SequencerGraphEvent_SetAction : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SetAction;
+
+    private string _actionName;
+    private string _uniqueKey;
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        GameEntityBase uniqueEntity = processor.getUniqueEntity(_uniqueKey);
+        if(uniqueEntity == null)
+        {
+            DebugUtil.assert(false,"대상 Unique Entity가 존재하지 않습니다 : {0}",_uniqueKey);
+            return true;
+        }
+
+        uniqueEntity.setAction(_actionName);
+
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "UniqueKey")
+                _uniqueKey = attrValue;
+            else if(attrName == "Action")
+                _actionName = attrValue;
+        }
+    }
+}
+
+public class SequencerGraphEvent_BlockAI : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.BlockAI;
+
+    public string _uniqueKey = "";
+    public bool _value = false;
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        ObjectBase executeTargetEntity = processor.getUniqueEntity(_uniqueKey);
+        if(executeTargetEntity == null || executeTargetEntity is GameEntityBase == false)
+            return true;
+
+        (executeTargetEntity as GameEntityBase).blockAI(_value);
+
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attributes[i].Name == "Value")
+                _value = bool.Parse(attrValue);
+            else if(attrName == "UniqueKey")
+                _uniqueKey = attributes[i].Value;
+
+        }
+    }
+}
+
+public class SequencerGraphEvent_BlockInput : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.BlockInput;
+
+    private bool _value = false;
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        GameEntityBase playerEntity = StageProcessor.Instance().getPlayerEntity();
+        if(playerEntity == null)
+        {
+            DebugUtil.assert(false,"플레이어가 존재하지 않습니다.");
+            return true;
+        }
+
+        playerEntity.blockInput(_value);
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            if(attributes[i].Name == "Value")
+                _value = bool.Parse(attributes[i].Value);
+        }
+    }
+}
+
+public class SequencerGraphEvent_ForceQuit : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.ForceQuit;
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+
     }
 }
 
@@ -134,7 +558,7 @@ public class SequencerGraphEvent_FadeOut : SequencerGraphEventBase
 
     private float _lambda = -1f;
 
-    public override void Initialize()
+    public override void Initialize(SequencerGraphProcessor processor)
     {
     }
 
@@ -150,7 +574,7 @@ public class SequencerGraphEvent_FadeOut : SequencerGraphEventBase
         for(int i = 0; i < attributes.Count; ++i)
         {
             if(attributes[i].Name == "Lambda")
-                _lambda = float.Parse(attributes[i].Value);
+                _lambda = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
         }
     }
 }
@@ -161,7 +585,7 @@ public class SequencerGraphEvent_SetCameraZoom : SequencerGraphEventBase
 
     private float _zoom = -1f;
 
-    public override void Initialize()
+    public override void Initialize(SequencerGraphProcessor processor)
     {
     }
 
@@ -180,7 +604,7 @@ public class SequencerGraphEvent_SetCameraZoom : SequencerGraphEventBase
         for(int i = 0; i < attributes.Count; ++i)
         {
             if(attributes[i].Name == "Size")
-                _zoom = float.Parse(attributes[i].Value);
+                _zoom = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
         }
     }
 }
@@ -196,7 +620,7 @@ public class SequencerGraphEvent_SpawnCharacter : SequencerGraphEventBase
 
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SpawnCharacter;
     
-    public override void Initialize()
+    public override void Initialize(SequencerGraphProcessor processor)
     {
         _characterInfoData = CharacterInfoManager.Instance().GetCharacterInfoData(_characterKey);
     }
@@ -252,7 +676,7 @@ public class SequencerGraphEvent_WaitSecond : SequencerGraphEventBase
 
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.WaitSecond;
     
-    public override void Initialize()
+    public override void Initialize(SequencerGraphProcessor processor)
     {
         _timer = 0f;
     }
@@ -273,7 +697,7 @@ public class SequencerGraphEvent_WaitSecond : SequencerGraphEventBase
             string attrValue = attributes[i].Value;
 
             if(attrName == "Time")
-                _waitTime = float.Parse(attrValue);
+                _waitTime = XMLScriptConverter.valueToFloatExtend(attrValue);
         }
     }
 }
@@ -284,7 +708,7 @@ public class SequencerGraphEvent_SetHPSphere : SequencerGraphEventBase
 
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SetHPSphere;
     
-    public override void Initialize()
+    public override void Initialize(SequencerGraphProcessor processor)
     {
         
     }
@@ -294,7 +718,7 @@ public class SequencerGraphEvent_SetHPSphere : SequencerGraphEventBase
         GameEntityBase uniqueEntity = processor.getUniqueEntity(_uniqueKey);
         if(uniqueEntity == null)
         {
-            DebugUtil.assert(false,"unique entity key is not Exists : {0}",_uniqueKey);
+            DebugUtil.assert(false,"대상 Unique Entity가 존재하지 않습니다 : {0}",_uniqueKey);
             return true;
         }
 
@@ -324,7 +748,7 @@ public class SequencerGraphEvent_SetCrossHair : SequencerGraphEventBase
 
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SetCrossHair;
     
-    public override void Initialize()
+    public override void Initialize(SequencerGraphProcessor processor)
     {
         
     }
@@ -334,7 +758,7 @@ public class SequencerGraphEvent_SetCrossHair : SequencerGraphEventBase
         GameEntityBase unqueEntity = processor.getUniqueEntity(_uniqueKey);
         if(unqueEntity == null)
         {
-            DebugUtil.assert(false,"unique entity key is not Exists : {0}",_uniqueKey);
+            DebugUtil.assert(false,"대상 Unique Entity가 존재하지 않습니다 : {0}",_uniqueKey);
             return true;
         }
 
@@ -364,7 +788,7 @@ public class SequencerGraphEvent_WaitTargetDead : SequencerGraphEventBase
 
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.WaitTargetDead;
     
-    public override void Initialize()
+    public override void Initialize(SequencerGraphProcessor processor)
     {
         
     }
@@ -397,7 +821,7 @@ public class SequencerGraphEvent_SaveEventExecuteIndex : SequencerGraphEventBase
 {
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SaveEventExecuteIndex;
     
-    public override void Initialize()
+    public override void Initialize(SequencerGraphProcessor processor)
     {
         
     }
@@ -420,7 +844,7 @@ public class SequencerGraphEvent_ApplyPostProcessProfile : SequencerGraphEventBa
 
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.ApplyPostProcessProfile;
     
-    public override void Initialize()
+    public override void Initialize(SequencerGraphProcessor processor)
     {
         
     }
@@ -456,7 +880,7 @@ public class SequencerGraphEvent_ApplyPostProcessProfile : SequencerGraphEventBa
             if(attrName == "Path")
                 _path = attrValue;
             else if(attrName == "BlendTime")
-                _blendTime = float.Parse(attrValue);
+                _blendTime = XMLScriptConverter.valueToFloatExtend(attrValue);
             else if(attrName == "ApplyType")
                 _applyType = (PostProcessProfileApplyType)System.Enum.Parse(typeof(PostProcessProfileApplyType), attrValue);
         }
@@ -470,7 +894,7 @@ public class SequencerGraphEvent_TeleportTargetTo : SequencerGraphEventBase
 
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.TeleportTargetTo;
     
-    public override void Initialize()
+    public override void Initialize(SequencerGraphProcessor processor)
     {
         
     }
@@ -480,7 +904,7 @@ public class SequencerGraphEvent_TeleportTargetTo : SequencerGraphEventBase
         GameEntityBase unqueEntity = processor.getUniqueEntity(_uniqueKey);
         if(unqueEntity == null)
         {
-            DebugUtil.assert(false,"unique entity key is not Exists : {0}",_uniqueKey);
+            DebugUtil.assert(false,"대상 Unique Entity가 존재하지 않습니다 : {0}",_uniqueKey);
             return true;
         }
         
@@ -511,7 +935,7 @@ public class SequencerGraphEvent_SetAudioListner : SequencerGraphEventBase
 
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SetAudioListner;
     
-    public override void Initialize()
+    public override void Initialize(SequencerGraphProcessor processor)
     {
         
     }
@@ -521,7 +945,7 @@ public class SequencerGraphEvent_SetAudioListner : SequencerGraphEventBase
         GameEntityBase unqueEntity = processor.getUniqueEntity(_uniqueKey);
         if(unqueEntity == null)
         {
-            DebugUtil.assert(false,"unique entity key is not Exists : {0}",_uniqueKey);
+            DebugUtil.assert(false,"대상 Unique Entity가 존재하지 않습니다 : {0}",_uniqueKey);
             return true;
         }
 
@@ -551,7 +975,7 @@ public class SequencerGraphEvent_SetCameraTarget : SequencerGraphEventBase
 
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SetCameraTarget;
     
-    public override void Initialize()
+    public override void Initialize(SequencerGraphProcessor processor)
     {
         
     }

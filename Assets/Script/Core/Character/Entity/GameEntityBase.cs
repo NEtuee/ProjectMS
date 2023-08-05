@@ -69,6 +69,7 @@ public class GameEntityBase : SequencerObjectBase
 
     private bool                _initializeFromCharacter = false;
     private bool                _activeSelf = true;
+    private bool                _blockAI = false;
 
     private DirectionType       _currentDirectionType = DirectionType.AlwaysRight;
 
@@ -76,11 +77,10 @@ public class GameEntityBase : SequencerObjectBase
     private Quaternion          _actionStartRotation = Quaternion.identity;
     private Quaternion          _angleBaseRotation = Quaternion.identity;
 
-
     private List<TimelineEffectItem> _enabledLaserEffectItems = new List<TimelineEffectItem>();
 
 #if UNITY_EDITOR
-    [HideInInspector] public bool _blockAI = false;
+    [HideInInspector] public bool _blockAIByEditor = false;
     [HideInInspector] public List<ActionGraphNodeData> _actionGraphChangeLog = new List<ActionGraphNodeData>();
     [HideInInspector] public List<AIGraphNodeData> _aiGraphChangeLog = new List<AIGraphNodeData>();
 
@@ -136,8 +136,10 @@ public class GameEntityBase : SequencerObjectBase
         setDirection(direction);
 
 #if UNITY_EDITOR
-        _blockAI = false;
+        _blockAIByEditor = false;
 #endif
+        _blockAI = false;
+
         _currentVelocity = Vector3.zero;
         _currentTarget = null;
 
@@ -291,9 +293,9 @@ public class GameEntityBase : SequencerObjectBase
             updateConditionData();
 
 #if UNITY_EDITOR
-        if(_activeSelf && _blockAI == false && _aiGraph != null)
+        if(_activeSelf && (_blockAI == false && _blockAIByEditor == false) && _aiGraph != null)
 #else
-        if(_activeSelf && _aiGraph != null)
+        if(_activeSelf && _blockAI == false && _aiGraph != null)
 #endif
         {
             _aiGraph.updateConditionData();
@@ -542,10 +544,21 @@ public class GameEntityBase : SequencerObjectBase
         _defenceState = DefenceState.Default;
     }
 
+    public void blockAI(bool value)
+    {
+        _blockAI = value;
+
+        if(_blockAI)
+        {
+            _aiGraph.claerAIGraph();
+            _aiGraph.setDefaultAINode(this);
+        }
+    }
+
 #if UNITY_EDITOR
     public void blockAI_Debug(bool value)
     {
-        _blockAI = value;
+        _blockAIByEditor = value;
         setAction(_actionGraph.getActionGraphBaseData_Debug()._defaultActionIndex);
         _aiGraph.claerAIGraph();
         _aiGraph.setDefaultAINode(this);
@@ -561,6 +574,7 @@ public class GameEntityBase : SequencerObjectBase
 
         setDirection(Vector3.right);
 
+        _blockAIByEditor = false;
         _blockAI = false;
 
         _currentVelocity = Vector3.zero;
@@ -862,7 +876,6 @@ public class GameEntityBase : SequencerObjectBase
                 {
                     direction = Vector3.zero;
                 }
-
                 break;
             case DirectionType.MousePoint:
                 direction = ControllerEx.Instance().getJoystickAxisR(transform.position);
@@ -946,66 +959,48 @@ public class GameEntityBase : SequencerObjectBase
         updateDirection();
     }
 
-    public bool isMoving()
+    public MovementGraphPresetData getMovementGraphPresetDataFromActionIndex(int actionIndex)
     {
-        return _movementControl.isMoving();
-    }
-    public bool isValid() 
-    {
-        return _movementControl != null && _actionGraph != null && _spriteRenderer != null && gameObject.activeInHierarchy;
-    }
-
-    public void setSpriteRotation(Quaternion rotation)
-    {
-        _spriteObject.transform.rotation = rotation;
+        if(actionIndex == -1)
+            return null;
+            
+        return _actionGraph.getMovementGraphPresetByIndex(actionIndex);
     }
 
-    public void addDanmaku(string path, Vector3 offset, bool useFlip)
+    public float getAnimationPlayTimeFromActionIndex(int actionIndex)
     {
-        _danmakuGraph.addDanmakuGraph(path, transform.position, offset, useFlip, _searchIdentifier);
+        if(actionIndex == -1)
+            return 0f;
+            
+        return _actionGraph.getAnimationPlayTimeByIndex(actionIndex);
     }
+
+    public bool isMoving() {return _movementControl.isMoving();}
+    public bool isValid() {return _movementControl != null && _actionGraph != null && _spriteRenderer != null && gameObject.activeInHierarchy;}
+
+    public void setSpriteRotation(Quaternion rotation) {_spriteObject.transform.rotation = rotation;}
+
+    public void addDanmaku(string path, Vector3 offset, bool useFlip) {_danmakuGraph.addDanmakuGraph(path, transform.position, offset, useFlip, _searchIdentifier);}
     
-    public void addDeadEvent(DeadEventDelegate deadEvent) 
-    {
-        _deadEventDelegate += deadEvent;
-    } 
-    public void deleteDeadEvent(DeadEventDelegate deadEvent) 
-    {
-        _deadEventDelegate -= deadEvent;
-    }
+    public void addDeadEvent(DeadEventDelegate deadEvent) {_deadEventDelegate += deadEvent;} 
+    public void deleteDeadEvent(DeadEventDelegate deadEvent) {_deadEventDelegate -= deadEvent;}
 
     public bool isDead() {return _statusInfo.isDead();}
 
-    public void setActionCondition_Bool(ConditionNodeUpdateType updateType, bool value)
-    {
-        _actionGraph.setActionConditionData_Bool(updateType, value);
-    }
+    public void setActionCondition_Bool(ConditionNodeUpdateType updateType, bool value) {_actionGraph.setActionConditionData_Bool(updateType, value);}
 
-    public void executeCustomAIEvent(string eventName)
-    {
-        _aiGraph.executeCustomAIEvent(eventName);
-    }
+    public void executeCustomAIEvent(string eventName) {_aiGraph.executeCustomAIEvent(eventName);}
 
-    public void addLaserEffect(TimelineEffectItem laserEffect)
-    {
-        _enabledLaserEffectItems.Add(laserEffect);
-    }
+    public void addLaserEffect(TimelineEffectItem laserEffect) {_enabledLaserEffectItems.Add(laserEffect);}
 
-    public SequencerGraphProcessor startSequencer(string sequencerKey, GameEntityBase targetEntity, bool includePlayer)
-    {
-        return _sequencerProcessManager.startSequencerClean(sequencerKey,targetEntity,includePlayer);
-    }
+    public SequencerGraphProcessor startSequencer(string sequencerKey, GameEntityBase targetEntity, bool includePlayer) {return _sequencerProcessManager.startSequencerClean(sequencerKey,targetEntity,includePlayer);}
 
-    public void addSequencerSignal(string signal)
-    {
-        _sequencerProcessManager.addSequencerSignal(signal);
-    }
+    public void addSequencerSignal(string signal) {_sequencerProcessManager.addSequencerSignal(signal);}
 
-    public void setActiveSelf(bool active)
-    {
-        _activeSelf = active;
-    }
+    public void setActiveSelf(bool active) {_activeSelf = active;}
+    public int getActionIndex(string actionName) {return _actionGraph.getActionIndex(actionName);}
 
+    public void blockInput(bool value) {_actionGraph.blockInput(value);}
     public float getHeadUpOffset() {return _headUpOffset;}
 
     public float getCustomValue(string customValueName) {return _actionGraph.getCustomValue(customValueName);}
@@ -1051,8 +1046,17 @@ public class GameEntityBase : SequencerObjectBase
 
     public void setDefenceType(DefenceType defenceType) {_currentDefenceType = defenceType;}
 
+    public void changeAnimationByPath(string path) {_actionGraph.changeAnimationByCustomPreset(path);}
+
+    public void setDummyAction() {_actionGraph.changeActionOther(_actionGraph.getDummyActionIndex());}
     public void setAction(int index) {_actionGraph.changeActionOther(index);}
     public void setAction(string nodeName) {_actionGraph.changeActionOther(_actionGraph.getActionIndex(nodeName));}
+    
+    public void setDefaultAction()
+    {
+        _actionGraph.setDefaultActionOther();
+    }
+
 
     public void setTargetEntity(GameEntityBase target) {_currentTarget = target;}
     public GameEntityBase getCurrentTargetEntity() {return _currentTarget;}
@@ -1115,9 +1119,9 @@ public class GameEntityBaseEditor : Editor
         EditorGUILayout.BeginHorizontal();
         {
             Color guiColor = GUI.color;
-            GUI.color = control._blockAI ? Color.red : guiColor;
-            if( control._blockAI ? GUILayout.Button("Enable AI") : GUILayout.Button("Block AI"))
-                control.blockAI_Debug(!control._blockAI);
+            GUI.color = control._blockAIByEditor ? Color.red : guiColor;
+            if( control._blockAIByEditor ? GUILayout.Button("Enable AI") : GUILayout.Button("Block AI"))
+                control.blockAI_Debug(!control._blockAIByEditor);
             GUI.color = guiColor;
 
             if(GUILayout.Button("Refresh"))
@@ -1175,8 +1179,35 @@ public class GameEntityBaseEditor : Editor
             GUILayout.Label("Action");
             for(int index = control._actionGraphChangeLog.Count - 1; index >= 0; --index)
             {
-                if(GUILayout.Button(control._actionGraphChangeLog[index]._nodeName,buttonStyle))
-                    FileDebugger.OpenFileWithCursor(control.getActionGraph_Debug().getActionGraphBaseData_Debug()._fullPath,control._actionGraphChangeLog[index]._lineNumber);
+                EditorGUILayout.BeginHorizontal();
+
+                ActionGraph actionGraph = control.getActionGraph_Debug();
+
+                if(GUILayout.Button(control._actionGraphChangeLog[index]._nodeName,buttonStyle,GUILayout.Width(EditorGUIUtility.currentViewWidth * 0.5f)))
+                    FileDebugger.OpenFileWithCursor(actionGraph.getActionGraphBaseData_Debug()._fullPath,control._actionGraphChangeLog[index]._lineNumber);
+
+
+                if (control._actionGraphChangeLog[index]._isDummyAction == false)
+                {
+                    int targetAnimationIndex = control._actionGraphChangeLog[index]._animationInfoIndex;
+                    AnimationPlayDataInfo[] playDataInfoArray = control.getActionGraph_Debug().getActionGraphBaseData_Debug()._animationPlayData[targetAnimationIndex];
+
+                    if (playDataInfoArray != null)
+                    {
+                        // float widthInterval = (EditorGUIUtility.currentViewWidth * 0.5f) * (1f / playDataInfoArray.Length);
+                        // float width = widthInterval;
+                        for (int i = 0; i < playDataInfoArray.Length; ++i)
+                        {
+                            AnimationPlayDataInfo animationPlayDataInfo = playDataInfoArray[i];
+
+                            if (GUILayout.Button(animationPlayDataInfo._path, buttonStyle))
+                                PingTarget(animationPlayDataInfo._customPreset);
+                        }
+
+                    }
+                }
+
+                EditorGUILayout.EndHorizontal();
             }
         }
         EditorGUILayout.EndVertical();
@@ -1207,6 +1238,12 @@ public class GameEntityBaseEditor : Editor
         }
         EditorGUILayout.EndVertical();
 
+    }
+
+    private void PingTarget(ScriptableObject obj)
+    {
+        EditorGUIUtility.PingObject(obj);
+        EditorUtility.FocusProjectWindow();
     }
 }
 #endif

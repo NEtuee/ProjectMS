@@ -121,6 +121,18 @@ public class SequencrGraphLoader : LoaderBase<SequencerGraphBaseData>
             spawnEvent = new SequencerGraphEvent_FadeIn();
         else if(node.Name == "FadeOut")
             spawnEvent = new SequencerGraphEvent_FadeOut();
+        else if(node.Name == "ForceQuit")
+            spawnEvent = new SequencerGraphEvent_ForceQuit();
+        else if(node.Name == "BlockInput")
+            spawnEvent = new SequencerGraphEvent_BlockInput();
+        else if(node.Name == "BlockAI")
+            spawnEvent = new SequencerGraphEvent_BlockAI();
+        else if(node.Name == "SetAction")
+            spawnEvent = new SequencerGraphEvent_SetAction();
+        else if(node.Name == "PlayAnimation")
+            spawnEvent = new SequencerGraphEvent_PlayAnimation();
+        else if(node.Name == "AIMove")
+            spawnEvent = new SequencerGraphEvent_AIMove();
 
         if(spawnEvent == null)
         {

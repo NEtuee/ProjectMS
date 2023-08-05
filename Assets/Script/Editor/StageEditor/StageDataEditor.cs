@@ -314,7 +314,7 @@ public class StageDataEditor : EditorWindow
 
     private void onPointInspectorGUI()
     {
-        if(_editingStagePointList == null || _editStageData._stagePointData.Count <= _pointSelectedIndex || _pointSelectedIndex < 0)
+        if(_editingStagePointList == null || _editingStagePointList.Count == 0 || _editStageData._stagePointData.Count <= _pointSelectedIndex || _pointSelectedIndex < 0)
             return;
 
         StagePointData stagePointData = _editStageData._stagePointData[_pointSelectedIndex];
@@ -475,21 +475,21 @@ public class StageDataEditor : EditorWindow
         if(Application.isPlaying)
             return;
 
-        if(_drawScreenToMousePoint)
-        {
-            Vector3 mousePosition = Event.current.mousePosition;
-            mousePosition.y = SceneView.currentDrawingSceneView.camera.pixelHeight - mousePosition.y;
-            mousePosition = SceneView.currentDrawingSceneView.camera.ScreenToWorldPoint(mousePosition);
-            mousePosition.z = 0f;
+        // if(_drawScreenToMousePoint)
+        // {
+        //     Vector3 mousePosition = Event.current.mousePosition;
+        //     mousePosition.y = SceneView.currentDrawingSceneView.camera.pixelHeight - mousePosition.y;
+        //     mousePosition = SceneView.currentDrawingSceneView.camera.ScreenToWorldPoint(mousePosition);
+        //     mousePosition.z = 0f;
 
-            float mainCamSize = Camera.main.orthographicSize;
-            float camHeight = mainCamSize * 2f;
-		    float camWidth = camHeight * ((float)800f / (float)600f);
+        //     float mainCamSize = Camera.main.orthographicSize;
+        //     float camHeight = mainCamSize * 2f;
+		//     float camWidth = camHeight * ((float)800f / (float)600f);
 
-            Rect rectangle = new Rect();
-            rectangle.Set(mousePosition.x - (camWidth * 0.5f),mousePosition.y - (camHeight * 0.5f),camWidth,camHeight);
-            Handles.DrawSolidRectangleWithOutline(rectangle,new Color(0f,0f,0f,0f),Color.blue);
-        }
+        //     Rect rectangle = new Rect();
+        //     rectangle.Set(mousePosition.x - (camWidth * 0.5f),mousePosition.y - (camHeight * 0.5f),camWidth,camHeight);
+        //     Handles.DrawSolidRectangleWithOutline(rectangle,new Color(0f,0f,0f,0f),Color.blue);
+        // }
 
         for(int i = 0; i < _editStageData._stagePointData.Count; ++i)
         {
@@ -533,6 +533,12 @@ public class StageDataEditor : EditorWindow
                 selectPoint(i);
 
             Handles.color = currentColor;
+            if(_drawScreenToMousePoint || i == _pointSelectedIndex)
+                drawInGameScreenSection(stagePointData._stagePoint,stagePointData._maxLimitedDistance);
+
+            if(_drawScreenToMousePoint && i > 0)
+                drawScreenSectionConnectLine(_editStageData._stagePointData[i - 1]._stagePoint,_editStageData._stagePointData[i - 1]._maxLimitedDistance,stagePointData._stagePoint,stagePointData._maxLimitedDistance);
+
             if(i < _editStageData._stagePointData.Count - 1 )
             {
                 Vector3 direction = _editStageData._stagePointData[i + 1]._stagePoint - stagePointData._stagePoint;
@@ -865,6 +871,81 @@ public class StageDataEditor : EditorWindow
     {
         spriteRenderer.gameObject.SetActive(false);
         _characterItemPool.Enqueue(spriteRenderer);
+    }
+
+    private Rect getInGameScreenSection(Vector3 position, float radius)
+    {
+        float mainCamSize = Camera.main.orthographicSize;
+        float camHeight = mainCamSize * 2f + radius * 2f;
+		float camWidth = camHeight * ((float)800f / (float)600f) + radius * 2f;
+
+        Rect rectangle = new Rect();
+        rectangle.Set(position.x - (camWidth * 0.5f),position.y - (camHeight * 0.5f),camWidth,camHeight);
+
+        return rectangle;
+    }
+
+    private enum Side
+    {
+        LeftTop,
+        LeftBottom,
+        RightTop,
+        RightBottom,
+        Count,
+    };
+
+    private void drawScreenSectionConnectLine(Vector3 one, float oneRadius, Vector3 two, float twoRadius)
+    {
+        Side side = Side.Count;
+        if(one.x > two.x && one.y > two.y)
+            side = Side.RightTop;
+        else if(one.x > two.x && one.y < two.y)
+            side = Side.RightBottom;
+        else if(one.x < two.x && one.y > two.y)
+            side = Side.LeftTop;
+        else// if(one.x < two.x && one.y < two.y)
+            side = Side.LeftBottom;
+        
+        Rect oneRect = getInGameScreenSection(one,oneRadius);
+        Rect twoRect = getInGameScreenSection(two,twoRadius);
+
+        Color currentColor = Handles.color;
+        Handles.color = Color.blue;
+        switch(side)
+        {
+            case Side.LeftTop:
+            {
+                Handles.DrawLine(new Vector3(oneRect.xMin,oneRect.yMin),new Vector3(twoRect.xMin,twoRect.yMin));
+                Handles.DrawLine(new Vector3(oneRect.xMax,oneRect.yMax),new Vector3(twoRect.xMax,twoRect.yMax));
+            }
+            break;
+            case Side.LeftBottom:
+            {
+                Handles.DrawLine(new Vector3(oneRect.xMin,oneRect.yMax),new Vector3(twoRect.xMin,twoRect.yMax));
+                Handles.DrawLine(new Vector3(oneRect.xMax,oneRect.yMin),new Vector3(twoRect.xMax,twoRect.yMin));
+            }
+            break;
+            case Side.RightTop:
+            {
+                Handles.DrawLine(new Vector3(oneRect.xMin,oneRect.yMax),new Vector3(twoRect.xMin,twoRect.yMax));
+                Handles.DrawLine(new Vector3(oneRect.xMax,oneRect.yMin),new Vector3(twoRect.xMax,twoRect.yMin));
+            }
+            break;
+            case Side.RightBottom:
+            {
+                Handles.DrawLine(new Vector3(oneRect.xMin,oneRect.yMin),new Vector3(twoRect.xMin,twoRect.yMin));
+                Handles.DrawLine(new Vector3(oneRect.xMax,oneRect.yMax),new Vector3(twoRect.xMax,twoRect.yMax));
+            }
+            break;
+        }
+
+        Handles.color = currentColor;
+    }
+
+    private void drawInGameScreenSection(Vector3 position, float radius)
+    {
+        Rect rectangle = getInGameScreenSection(position, radius);
+        Handles.DrawSolidRectangleWithOutline(rectangle,new Color(0f,0f,0f,0f),Color.blue);
     }
 
     private void drawCircleWithHandle(Vector3 position, float radius)

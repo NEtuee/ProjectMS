@@ -222,7 +222,7 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
             }
             else if(attrName == "StartTerm")
             {
-                _startTerm = float.Parse(attrValue);
+                _startTerm = XMLScriptConverter.valueToFloatExtend(attrValue);
             }
             else if(attrName == "PredictionAccuracy")
             {
@@ -231,15 +231,15 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
             }
             else if(attrName == "Velocity")
             {
-                _shotInfo._deafaultVelocity = float.Parse(attrValue);
+                _shotInfo._deafaultVelocity = XMLScriptConverter.valueToFloatExtend(attrValue);
             }
             else if(attrName == "Acceleration")
             {
-                _shotInfo._acceleration = float.Parse(attrValue);
+                _shotInfo._acceleration = XMLScriptConverter.valueToFloatExtend(attrValue);
             }
             else if(attrName == "Friction")
             {
-                _shotInfo._friction = float.Parse(attrValue);
+                _shotInfo._friction = XMLScriptConverter.valueToFloatExtend(attrValue);
             }
             else if(attrName == "Angle")
             {
@@ -254,20 +254,20 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
                     }
 
                     _shotInfo._useRandomAngle = true;
-                    _shotInfo._randomAngle = new Vector2(float.Parse(randomValue[0]),float.Parse(randomValue[1]));
+                    _shotInfo._randomAngle = new Vector2(XMLScriptConverter.valueToFloatExtend(randomValue[0]),XMLScriptConverter.valueToFloatExtend(randomValue[1]));
                 }
                 else
                 {
-                    _shotInfo._defaultAngle = float.Parse(attrValue);
+                    _shotInfo._defaultAngle = XMLScriptConverter.valueToFloatExtend(attrValue);
                 }
             }
             else if(attrName == "AngularAcceleration")
             {
-                _shotInfo._angularAcceleration = float.Parse(attrValue);
+                _shotInfo._angularAcceleration = XMLScriptConverter.valueToFloatExtend(attrValue);
             }
             else if(attrName == "LifeTime")
             {
-                _shotInfo._lifeTime = float.Parse(attrValue);
+                _shotInfo._lifeTime = XMLScriptConverter.valueToFloatExtend(attrValue);
             }
             else if(attrName == "DirectionType")
             {

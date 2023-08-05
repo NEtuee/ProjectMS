@@ -141,7 +141,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
                     }
                     else if(attrName == "Value")
                     {
-                        customValue._customValue = float.Parse(attrValue);
+                        customValue._customValue = XMLScriptConverter.valueToFloatExtend(attrValue);
                     }
                 }
 
@@ -571,7 +571,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
 
             if(targetName == "UpdateTime")
             {
-                nodeData._updateTime = float.Parse(targetValue);
+                nodeData._updateTime = XMLScriptConverter.valueToFloatExtend(targetValue);
             }
             else if(targetName == "TargetSearchType")
             {
@@ -579,15 +579,15 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
             }
             else if(targetName == "TargetSearchRange")
             {
-                nodeData._targetSearchRange = float.Parse(targetValue);
+                nodeData._targetSearchRange = XMLScriptConverter.valueToFloatExtend(targetValue);
             }
             else if(targetName == "TargetSearchStartRange")
             {
-                nodeData._targetSearchStartRange = float.Parse(targetValue);
+                nodeData._targetSearchStartRange = XMLScriptConverter.valueToFloatExtend(targetValue);
             }
             else if(targetName == "TargetSearchSphereRadius")
             {
-                nodeData._targetSearchSphereRadius = float.Parse(targetValue);
+                nodeData._targetSearchSphereRadius = XMLScriptConverter.valueToFloatExtend(targetValue);
             }
             else if(targetName == "SearchIdentifier")
             {
@@ -598,11 +598,11 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
                 nodeData._hasTargetPosition = true;
 
                 string[] xy = targetValue.Split(' ');
-                nodeData._targetPosition = new Vector3(float.Parse(xy[0]), float.Parse(xy[1]),0f);
+                nodeData._targetPosition = new Vector3(XMLScriptConverter.valueToFloatExtend(xy[0]), XMLScriptConverter.valueToFloatExtend(xy[1]),0f);
             }
             else if(targetName == "ArriveThreshold")
             {
-                nodeData._arriveThreshold = float.Parse(targetValue);
+                nodeData._arriveThreshold = XMLScriptConverter.valueToFloatExtend(targetValue);
             }
             else
             {

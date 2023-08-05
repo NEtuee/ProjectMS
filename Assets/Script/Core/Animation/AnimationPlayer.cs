@@ -15,6 +15,7 @@ public class AnimationPlayDataInfo
     public AnimationRotationPresetData  _rotationPresetData = null;
     public AnimationScalePresetData     _scalePresetData = null;
     public AnimationCustomPresetData    _customPresetData = null;
+    public AnimationCustomPreset        _customPreset = null;
 
     public int                          _multiSelectAnimationDataCount = 0;
 
@@ -134,7 +135,7 @@ public class AnimationPlayer
 
     public void processMultiSelectAnimation(ActionGraph actionGraph)
     {
-        if(_currentAnimationPlayData._multiSelectAnimationDataCount == 0)
+        if(_currentAnimationPlayData == null || _currentAnimationPlayData._multiSelectAnimationDataCount == 0)
             return;
 
         for(int i = 0; i < _currentAnimationPlayData._multiSelectAnimationDataCount; ++i)
@@ -175,6 +176,9 @@ public class AnimationPlayer
         float currentFrame = _animationTimeProcessor.getCurrentFrame();
         for(int i = _currentFrameEventIndex; i < playData._frameEventDataCount; ++i)
         {
+            if (playData._frameEventData == null || playData._frameEventData.Length == 0)
+                break;
+
             ActionFrameEventBase frameEvent = playData._frameEventData[i];
             if(MathEx.equals(frameEvent._startFrame, currentFrame,float.Epsilon) == true || frameEvent._startFrame < currentFrame)
             {
@@ -441,6 +445,8 @@ public class AnimationPlayer
 
     public FlipState getCurrentFlipState() 
     {
+        if (_currentAnimationPlayData == null)
+            return new FlipState { xFlip = false, yFlip = false };
         return _currentAnimationPlayData._flipState;
     }
 

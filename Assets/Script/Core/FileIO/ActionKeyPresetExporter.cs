@@ -127,7 +127,7 @@ public static class ActionKeyPresetDataLoader
             else if(attrName == "MultiInputType")
                 presetData._multiInputType = (ActionKeyMultiInputType)System.Enum.Parse(typeof(ActionKeyMultiInputType), attrValue);
             else if(attrName == "Threshold")
-                presetData._multiInputThreshold = float.Parse(attrValue);
+                presetData._multiInputThreshold = XMLScriptConverter.valueToFloatExtend(attrValue);
             else if(attrName == "Key_KM")
             {
                 string[] keyList = attrValue.Split(' ');

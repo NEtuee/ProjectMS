@@ -25,7 +25,8 @@ public class ActionGraph
     public ActionGraph(){}
     public ActionGraph(ActionGraphBaseData baseData){_actionGraphBaseData = baseData;}
 
-    public bool _actionChangedByOther = false;
+    private bool _actionChangedByOther = false;
+    private bool _blockInput = false;
 
     private float _actionExecutedTime = 0f;
 
@@ -50,14 +51,20 @@ public class ActionGraph
         _currentActionNodeIndex = -1;
         _prevActionNodeIndex = -1;
         _currentAnimationIndex = 0;
-        
+
         setDefaultAction();
     }
 
-    public void setDefaultAction()
+    private void setDefaultAction()
     {
         if(_actionGraphBaseData != null && _actionGraphBaseData._defaultActionIndex != -1)
             changeAction(_actionGraphBaseData._defaultActionIndex);
+    }
+
+    public void setDefaultActionOther()
+    {
+        if(_actionGraphBaseData != null && _actionGraphBaseData._defaultActionIndex != -1)
+            changeActionOther(_actionGraphBaseData._defaultActionIndex);
     }
 
     public bool progress(float deltaTime)
@@ -170,11 +177,21 @@ public class ActionGraph
         _actionChangedByOther = changeAction(actionIndex);
     }
 
+    public void changeAnimationByPlayInfo(AnimationPlayDataInfo animationPLayDataInfo)
+    {
+        _animationPlayer.changeAnimation(animationPLayDataInfo);
+    }
+
+    public void changeAnimationByCustomPreset(string path)
+    {
+        _animationPlayer.changeAnimationByCustomPreset(path);
+    }
+
     private bool changeAction(int actionIndex)
     {
         if(actionIndex < 0 || actionIndex >= _actionGraphBaseData._actionNodeCount)
         {
-            DebugUtil.assert(false,"잘못된 액션 인덱스 입니다.");
+            DebugUtil.assert(false,"잘못된 액션 인덱스 입니다. [{0}]", actionIndex);
             return false;
         }
 
@@ -189,8 +206,8 @@ public class ActionGraph
         int animationInfoIndex = getCurrentAction()._animationInfoIndex;
         if(animationInfoIndex != -1)
             changeAnimation(animationInfoIndex,_currentAnimationIndex);
-        else
-            DebugUtil.assert(false, "something is wrong : {0}",getCurrentActionName());
+        // else
+        //     DebugUtil.assert(false, "something is wrong : {0}",getCurrentActionName());
 
         if(getCurrentAction()._isActionSelection == true)
         {
@@ -564,6 +581,9 @@ public class ActionGraph
         }
         else if(updateType == ConditionNodeUpdateType.Key)
         {
+            if(_blockInput)
+                return CommonConditionNodeData.falseByte;
+
             return ActionKeyInputManager.Instance().actionKeyCheck(((ActionGraphConditionNodeData_Key)nodeData)._targetKeyName);
         }
         else if(updateType == ConditionNodeUpdateType.AngleSector)
@@ -655,6 +675,11 @@ public class ActionGraph
 
         return _customValueDictionary[customValueName];
     }
+    
+    public void blockInput(bool value)
+    {
+        _blockInput = value;
+    }
 
     public Dictionary<string,float> getCustomValueDictionary() {return _customValueDictionary;}
 
@@ -677,6 +702,12 @@ public class ActionGraph
             return getCurrentAction()._moveScale * _animationPlayer.getCurrentAnimationDuration();
     }
 
+    public float getAnimationPlayTimeByIndex(int actionIndex)
+    {
+        int animationInfoIndex = _actionGraphBaseData._actionNodeData[actionIndex]._animationInfoIndex;
+        return _actionGraphBaseData._animationPlayData[animationInfoIndex][0]._duration;
+    }
+
     public bool checkCurrentActionFlag(ActionFlags flag)
     {
         return (getCurrentAction()._actionFlag & (ulong)flag) != 0;
@@ -684,6 +715,7 @@ public class ActionGraph
 
     public string getCurrentAnimationName() {return _animationPlayer.getCurrentAnimationName();}
 
+    public int getDummyActionIndex() {return _actionGraphBaseData._dummyActionIndex;}
     public bool isRotateBySpeed() {return getCurrentAction()._rotateBySpeed;}
     public float getCurrentRotateSpeed() {return getCurrentAction()._rotateSpeed;}
     public float getCurrentFrame() {return _animationPlayer.getCurrentFrame();}
@@ -707,6 +739,8 @@ public class ActionGraph
     public FlipType getCurrentFlipType() {return getCurrentAction()._flipType;}
     public MovementGraph getCurrentMovementGraph() {return _animationPlayer.getCurrentMovementGraph();}
     public MovementBase.MovementType getCurrentMovement() {return getCurrentAction()._movementType;}
+
+    public MovementGraphPresetData getMovementGraphPresetByIndex(int index) {return _actionGraphBaseData._actionNodeData[index]._movementGraphPresetData;}
     public MovementGraphPresetData getCurrentMovementGraphPreset() {return getCurrentAction()._movementGraphPresetData;}
     private ActionGraphNodeData getCurrentAction() {return _actionGraphBaseData._actionNodeData[_currentActionNodeIndex];}
 
