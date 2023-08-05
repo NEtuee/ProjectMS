@@ -250,4 +250,15 @@
         HeadUpOffset="0.5"
         ProjectileCollisionRadius=""
     />
+
+    <BarricadeChan
+        DisplayName="선도부 마법부대 바리케이드쨩"
+        ActionGraph="Assets\Data\ActionGraph\Enemy\BarricadeChanAction.xml"
+        AIGraph="Assets\Data\AIGraph\Enemy\BarricadeChanAI.xml"
+        StatusInfoName="CommonHpThreeEnemyStatus"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+    />
 </CharacterInfo>
