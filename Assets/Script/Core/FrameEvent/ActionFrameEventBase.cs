@@ -743,8 +743,24 @@ public class ActionFrameEvent_Movement : ActionFrameEventBase
 {
     struct MovementSetValueType
     {
-        public float _value;
+        public FloatEx _value;
         public int _targetValue;
+
+        public MovementSetValueType(string valueString, int targetValue)
+        {
+            _value = new FloatEx();
+            _value.loadFromXML(valueString);
+
+            _targetValue = targetValue;
+        }
+
+        public MovementSetValueType(float value, int targetValue)
+        {
+            _value = new FloatEx();
+            _value.setValue(value);
+
+            _targetValue = targetValue;
+        }
     };
 
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_Movement;}
@@ -786,15 +802,9 @@ public class ActionFrameEvent_Movement : ActionFrameEventBase
             if(attrName != "Speed" && attrName != "Velocity" && attrName != "MaxVelocity" && attrName != "Friction")
                 continue;
 
-            float value;
-            if(float.TryParse(attrValue, out value) == false)
-            {
-                DebugUtil.assert(false,"invalid movement frameeevent value string: {0}",attrValue);
-                continue;
-            }
-
             int targetValue = (int)((FrameEventMovement.FrameEventMovementValueType)System.Enum.Parse(typeof(FrameEventMovement.FrameEventMovementValueType), attrName));
-            movementSetValueList.Add(new MovementSetValueType{_value = value, _targetValue = targetValue});
+            MovementSetValueType movementSetValueType = new MovementSetValueType(attrValue, targetValue);
+            movementSetValueList.Add(movementSetValueType);
         }
 
         _setValueList = movementSetValueList.ToArray();

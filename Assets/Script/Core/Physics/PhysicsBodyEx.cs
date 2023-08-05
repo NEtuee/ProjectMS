@@ -3,8 +3,8 @@ using UnityEngine;
 [System.Serializable]
 public struct PhysicsBodyDescription
 {
-    public Vector3 _velocity;
-    public float _torque;
+    public Vector3Ex _velocity;
+    public FloatEx _torque;
 
     public float _friction;
     public float _angularFriction;
@@ -13,8 +13,8 @@ public struct PhysicsBodyDescription
 
     public static PhysicsBodyDescription _empty = new PhysicsBodyDescription
     {
-        _velocity = Vector3.zero, 
-        _torque = 0f,
+        _velocity = new Vector3Ex(), 
+        _torque = new FloatEx(),
         _friction = 0f, 
         _angularFriction = 0f,
         _useGravity = false
@@ -22,8 +22,8 @@ public struct PhysicsBodyDescription
 
     public void clearPhysicsBody()
     {
-        _velocity = Vector3.zero;
-        _torque = 0f;
+        _velocity = new Vector3Ex();
+        _torque = new FloatEx();
         _friction = 0f;
         _angularFriction = 0f;
         _useGravity = false;
@@ -52,7 +52,7 @@ public class PhysicsBodyEx
 
     public void initialize(PhysicsBodyDescription desc)
     {
-        _currentVelocity = desc._velocity;
+        _currentVelocity = desc._velocity.getValue();
         _currentTorque = desc._torque;
         _useGravity = desc._useGravity;
         _friction = desc._friction;

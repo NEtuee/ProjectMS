@@ -472,7 +472,7 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
                 angle *= -1f;
             }
 
-            physicsBody._velocity = Quaternion.Euler(0f,0f, angle) * physicsBody._velocity;
+            physicsBody._velocity.setValue(Quaternion.Euler(0f,0f, angle) * physicsBody._velocity.getValue());
         }
 
         requestData._physicsBodyDesc = physicsBody;
@@ -595,14 +595,7 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
                         }
                         else if(physicsAttributes[j].Name == "Velocity")
                         {
-                            string[] floatList = physicsAttributes[j].Value.Split(' ');
-                            if(floatList == null || floatList.Length != 2)
-                            {
-                                DebugUtil.assert(false, "invalid float3 data: {0}, {1}",physicsAttributes[j].Name, physicsAttributes[j].Value);
-                                return;
-                            }
-                            
-                            _physicsBodyDesc._velocity = new Vector3(StringDataUtil.readFloat(floatList[0]),StringDataUtil.readFloat(floatList[1]),0f);
+                            _physicsBodyDesc._velocity.loadFromXML(physicsAttributes[j].Value);// =  new Vector3(StringDataUtil.readFloat(floatList[0]),StringDataUtil.readFloat(floatList[1]),0f);
                         }
                         else if(physicsAttributes[j].Name == "Friction")
                         {
@@ -610,7 +603,7 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
                         }
                         else if(physicsAttributes[j].Name == "Torque")
                         {
-                            _physicsBodyDesc._torque = StringDataUtil.readFloat(physicsAttributes[j].Value);
+                            _physicsBodyDesc._torque.loadFromXML(physicsAttributes[j].Value);
                         }
                         else if(physicsAttributes[j].Name == "AngularFriction")
                         {
