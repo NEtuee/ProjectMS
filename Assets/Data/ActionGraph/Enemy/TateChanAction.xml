@@ -3,7 +3,7 @@
 
     <AC_Idle MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/TateChan/0_default/"/>
-        <Animation Preset="1_idle" XFlip="true" Duration="1">
+        <Animation Preset="1_idle" XFlip="true" Duration="0.5">
             <FrameEvent Type="Movement" StartTime="0" Friction="12"/>
         </Animation>
 
@@ -18,6 +18,14 @@
 
         <Branch Condition="End == true" Execute="AC_Move"/>
     </AC_Move>
+
+    <AC_Dodge MovementType="GraphPreset" MovementGraphPreset="Tate_Dodge" DirectionType="AI" FlipType="Direction" DefenceType="Evade" DefenceAngle="360">
+        <AnimationHeader MasterPath="Sprites/Enemy/TateChan/0_default/"/>
+        <Animation Preset="7_dodge" XFlip="true" Duration="0.7">
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_Dodge>
 
     <AC_GuardForward MovementType="FrameEvent" DirectionType="AI" DefenceType="Guard" DefenceAngle="270.0" DefenceDirectionType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/TateChan/0_default/5_guard/"/>
@@ -97,7 +105,7 @@
                 </OnGuard>
             </FrameEvent>
 
-            <FrameEvent Type="Movement" StartTime="0" Friction="24" MaxVelocity="12" Velocity="12" Speed="0"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="24" MaxVelocity="13" Velocity="13" Speed="0"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_AttackMain"/>
