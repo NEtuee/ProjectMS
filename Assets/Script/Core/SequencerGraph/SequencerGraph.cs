@@ -11,7 +11,7 @@ public class SequencerGraphProcessor
     }
 
     private SequencerGraphBaseData              _currentSequencer = null;
-    private Dictionary<string, GameEntityBase>  _uniqueEntityDictionary = new Dictionary<string, GameEntityBase>();
+    public Dictionary<string, GameEntityBase>  _uniqueEntityDictionary = new Dictionary<string, GameEntityBase>();
     private int                                 _currentIndex = 0;
     private bool                                _isSequencerEventEnd = false;
 
@@ -143,6 +143,53 @@ public class SequencerGraphProcessor
         _savedEventItem._savedIndex = -1;
         _savedEventItem._targetSequencerGraph = null;
     }
+
+    public void startSequencerFromStage(string sequencerGraphPath, StagePointData currentPoint, List<CharacterEntityBase> pointCharacters, GameEntityBase ownerEntity, GameEntityBase targetEntity, bool includePlayer = false)
+    {
+        _currentSequencer = ResourceContainerEx.Instance().GetSequencerGraph(sequencerGraphPath);
+        if(_currentSequencer == null)
+            return;
+
+        initialize();
+
+        if(currentPoint._characterSpawnData.Length != pointCharacters.Count)
+        {
+            DebugUtil.assert(false, "발생시 통보 요망");
+            return;
+        }
+
+        for(int index = 0; index < pointCharacters.Count; ++index)
+        {
+            if(currentPoint._characterSpawnData[index]._uniqueKey == "")
+                continue;
+
+            addUniqueEntity(currentPoint._characterSpawnData[index]._uniqueKey, pointCharacters[index]);
+        }
+
+        if(ownerEntity != null)
+            addUniqueEntity("Owner",ownerEntity);
+        if(targetEntity != null)
+            addUniqueEntity("Target",targetEntity);
+        if(includePlayer)
+            addUniqueEntity("Player",StageProcessor.Instance().getPlayerEntity());
+
+        for(int index = _currentIndex; index < _currentSequencer._sequencerGraphPhase[0]._sequencerGraphEventCount; ++index)
+        {
+            _currentSequencer._sequencerGraphPhase[0]._sequencerGraphEventList[index].Initialize(this);
+            _currentSequencer._sequencerGraphPhase[0]._sequencerGraphEventList[index].Execute(this, 0f);
+        }
+
+        for(int index = _currentIndex; index < _currentSequencer._sequencerGraphPhase[1]._sequencerGraphEventCount; ++index)
+        {
+            _currentSequencer._sequencerGraphPhase[1]._sequencerGraphEventList[index].Initialize(this);
+        }
+
+        if(_currentSequencer == _savedEventItem._targetSequencerGraph)
+        {
+            _currentIndex = _savedEventItem._savedIndex;
+        }
+    }
+
 
     public void startSequencer(string sequencerGraphPath, GameEntityBase ownerEntity, GameEntityBase targetEntity, bool includePlayer = false)
     {
