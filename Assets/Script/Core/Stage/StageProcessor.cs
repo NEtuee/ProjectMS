@@ -50,24 +50,6 @@ public class StageProcessor : Singleton<StageProcessor>
         if(_stageData._stagePointData[0]._onEnterSequencerPath == null)
             return;
 
-        foreach(var path in _stageData._stagePointData[0]._onEnterSequencerPath)
-        {
-            SequencerGraphProcessor processor = _sequencerProcessManager.startSequencerClean(path,null,false);
-            GameEntityBase playerEntity = processor?.getUniqueEntity("Player");
-
-            if(_playerEntity != null && playerEntity != null)
-            {
-                DebugUtil.assert(false,"Stage에 Player가 2명 이상 존재합니다. 데이터를 확인해 주세요. [StageName: {0}]",data._stageName);
-                stopStage();
-                return;
-            }
-            else if(playerEntity != null)
-            {
-                _playerEntity = playerEntity;
-            }
-        }
-
-
         for(int index = 0; index < _stageData._stagePointData.Count; ++index)
         {
             StagePointData stagePointData = _stageData._stagePointData[index];
@@ -116,6 +98,23 @@ public class StageProcessor : Singleton<StageProcessor>
             }
         }
 
+        foreach(var path in _stageData._stagePointData[0]._onEnterSequencerPath)
+        {
+            SequencerGraphProcessor processor = _sequencerProcessManager.startSequencerFromStage(path,_stageData._stagePointData[0],_spawnedCharacterEntityDictionary[0],null,false);
+            GameEntityBase playerEntity = processor?.getUniqueEntity("Player");
+
+            if(_playerEntity != null && playerEntity != null)
+            {
+                DebugUtil.assert(false,"Stage에 Player가 2명 이상 존재합니다. 데이터를 확인해 주세요. [StageName: {0}]",data._stageName);
+                stopStage();
+                return;
+            }
+            else if(playerEntity != null)
+            {
+                _playerEntity = playerEntity;
+            }
+        }
+
         if(_stageData._backgroundPrefabPath != "")
         {
             GameObject prefabObject = ResourceContainerEx.Instance().GetPrefab(_stageData._backgroundPrefabPath);
@@ -159,7 +158,7 @@ public class StageProcessor : Singleton<StageProcessor>
         float fraction = getLimitedFractionOnLine(_targetTransform.position, out resultPoint, out resultDistance);
         if(_isEnd == false && fraction >= 1f)
         {
-            startExitSequencers(_stageData._stagePointData[_currentPoint],true);
+            startExitSequencers(_stageData._stagePointData[_currentPoint],_currentPoint,true);
 
             ++_currentPoint;
             if(_currentPoint >= _stageData._stagePointData.Count)
@@ -169,7 +168,7 @@ public class StageProcessor : Singleton<StageProcessor>
             }
             else
             {
-                startEnterSequencers(_stageData._stagePointData[_currentPoint],true);
+                startEnterSequencers(_stageData._stagePointData[_currentPoint],_currentPoint,true);
                 if(_spawnedCharacterEntityDictionary.ContainsKey(_currentPoint))
                 {
                     for(int index = 0; index < _spawnedCharacterEntityDictionary[_currentPoint].Count; ++index)
@@ -190,25 +189,25 @@ public class StageProcessor : Singleton<StageProcessor>
         }
     }
 
-    public void startEnterSequencers(StagePointData pointData, bool includePlayer)
+    public void startEnterSequencers(StagePointData pointData, int pointIndex, bool includePlayer)
     {
         if(pointData == null || pointData._onEnterSequencerPath == null)
             return;
 
         foreach(var path in pointData._onEnterSequencerPath)
         {
-            _sequencerProcessManager.startSequencerClean(path,null,includePlayer);
+            _sequencerProcessManager.startSequencerFromStage(path,pointData,_spawnedCharacterEntityDictionary[pointIndex],null,includePlayer);
         }
     }
 
-    public void startExitSequencers(StagePointData pointData,bool includePlayer)
+    public void startExitSequencers(StagePointData pointData,int pointIndex,bool includePlayer)
     {
         if(pointData == null || pointData._onExitSequencerPath == null)
             return;
 
         foreach(var path in pointData._onExitSequencerPath)
         {
-            _sequencerProcessManager.startSequencerClean(path,null,includePlayer);
+            _sequencerProcessManager.startSequencerFromStage(path,pointData,_spawnedCharacterEntityDictionary[pointIndex],null,includePlayer);
         }
     }
 

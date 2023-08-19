@@ -23,7 +23,7 @@
 
         <AI_MoveAll UpdateTime="0.2" TargetSearchType="Near" TargetSearchRange="gv_TargetSearchRange" SearchIdentifier="Player">
             <Event_OnExecute>
-                <AIEvent Type="SetAction" Action="AC_MoveAll"/>
+                <AIEvent Type="SetAction" Action="AC_Move"/>
                 <AIEvent Type="SetDirectionToTarget"/>
             </Event_OnExecute>
         
@@ -101,7 +101,7 @@
 
         <AI_GuardBreakAttackSuccess UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="gv_TargetSearchRange" SearchIdentifier="Player">
             <Event_OnExecute>
-                <AIEvent Type="SetAction" Action="AC_GuardBreakSuccess"/>
+                <AIEvent Type="SetAction" Action="AC_GuardBreakHit"/>
             </Event_OnExecute>
 
             <Branch Condition="TargetExists == false" Execute="AI_Entry"/>
@@ -115,7 +115,7 @@
 
         <AI_GuardAttackCharge UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="gv_TargetSearchRange" SearchIdentifier="Player">
             <Event_OnExecute>
-                <AIEvent Type="SetAction" Action="AC_GuardAttackCharge"/>
+                <AIEvent Type="SetAction" Action="AC_AttackReady"/>
             </Event_OnExecute>
 
             <Event_OnExit>
@@ -133,7 +133,7 @@
 
         <AI_GuardAttack UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="gv_TargetSearchRange" SearchIdentifier="Player">
             <Event_OnExecute>
-                <AIEvent Type="SetAction" Action="AC_GuardAttack"/>
+                <AIEvent Type="SetAction" Action="AC_AttackMain"/>
             </Event_OnExecute>
 
             <Branch Condition="TargetExists == false" Execute="AI_Entry"/>
@@ -146,7 +146,7 @@
 
         <AI_GuardAttackSuccess UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="gv_TargetSearchRange" SearchIdentifier="Player">
             <Event_OnExecute>
-                <AIEvent Type="SetAction" Action="AC_GuardAttackSuccess"/>
+                <AIEvent Type="SetAction" Action="AC_AttackSuccess"/>
             </Event_OnExecute>
 
             <Branch Condition="TargetExists == false" Execute="AI_Entry"/>
@@ -171,7 +171,7 @@
 
         <AI_GuardBroken UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="gv_TargetSearchRange" SearchIdentifier="Player">
             <Event_OnExecute>
-                <AIEvent Type="SetAction" Action="AC_GuardBreak"/>
+                <AIEvent Type="SetAction" Action="AC_GuardBroken"/>
             </Event_OnExecute>
 
             <Branch Condition="TargetExists == false" Execute="AI_Entry"/>

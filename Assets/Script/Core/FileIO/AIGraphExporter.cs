@@ -87,6 +87,17 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
                 readGlobalVariable(nodeList[i], ref _aiGraphGlobalVariables);
                 continue;
             }
+            else if(nodeList[i].Name == "AIPackage")
+            {
+                AIPackageBaseData packageData = readAIPackageFromXML(nodeList[i]);
+                if(packageData == null)
+                    return null;
+
+                aiPackageIndexDic.Add(packageData._name,aiPackageList.Count);
+                aiPackageList.Add(packageData);
+
+                continue;
+            }
             else if(nodeList[i].Name == "Include")
             {
                 if(nodeList[i].Attributes.Count == 0)
@@ -401,8 +412,6 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
             return null;
         }
 
-        Dictionary<string, XmlNodeList> branchSetDic = new Dictionary<string, XmlNodeList>();
-
         XmlNode node = xmlDoc.FirstChild;
         
         if(node.Name.Equals("AIPackage") == false)
@@ -410,7 +419,13 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
             DebugUtil.assert_fileOpen(false,"잘못된 xml 타입. name : {0}",path,XMLScriptConverter.getLineNumberFromXMLNode(node),node.Name);
             return null;
         }
-        
+
+        return readAIPackageFromXML(node);
+    }
+
+    public static AIPackageBaseData readAIPackageFromXML(XmlNode node)
+    {
+        Dictionary<string, XmlNodeList> branchSetDic = new Dictionary<string, XmlNodeList>();
         string defaultAIName = "";
 
         AIPackageBaseData aiPackageBaseData = new AIPackageBaseData();

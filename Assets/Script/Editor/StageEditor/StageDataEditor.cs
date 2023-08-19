@@ -534,7 +534,11 @@ public class StageDataEditor : EditorWindow
 
             Handles.color = currentColor;
             if(_drawScreenToMousePoint || i == _pointSelectedIndex)
+            {
                 drawInGameScreenSection(stagePointData._stagePoint,stagePointData._maxLimitedDistance);
+                if(stagePointData._maxLimitedDistance > 0f)
+                    drawInGameScreenSection(stagePointData._stagePoint,0f);
+            }
 
             if(_drawScreenToMousePoint && i > 0)
                 drawScreenSectionConnectLine(_editStageData._stagePointData[i - 1]._stagePoint,_editStageData._stagePointData[i - 1]._maxLimitedDistance,stagePointData._stagePoint,stagePointData._maxLimitedDistance);
@@ -742,7 +746,7 @@ public class StageDataEditor : EditorWindow
             return;
         }
 
-        Transform gizmoParent = _editItemParent.transform.Find("Gizmos");
+        Transform gizmoParent = _editItemParent.transform.Find("Editor_Gizmos");
         if(gizmoParent == null)
         {
             Debug.LogError("뭔가 잘못됐습니다. 에디터를 다시 켜 주세요");
@@ -750,7 +754,7 @@ public class StageDataEditor : EditorWindow
             return;
         }
 
-        Transform characterParent = _editItemParent.transform.Find("Characters");
+        Transform characterParent = _editItemParent.transform.Find("Editor_Characters");
         if(characterParent == null)
         {
             Debug.LogError("뭔가 잘못됐습니다. 에디터를 다시 켜 주세요");
@@ -760,6 +764,17 @@ public class StageDataEditor : EditorWindow
 
         _editItemGizmoParent = gizmoParent.gameObject;
         _editItemCharacterParent = characterParent.gameObject;
+
+        for(int index = 0; index < gizmoParent.childCount; ++index)
+        {
+            Transform child = gizmoParent.GetChild(index);
+            if(child.name.Contains("Editor_") == false)
+            {
+                child.parent = null;
+                DestroyImmediate(child.gameObject);
+                --index;
+            }
+        }
 
         for(int index = 0; index < _editItemGizmoParent.transform.childCount; ++index)
         {
@@ -778,10 +793,10 @@ public class StageDataEditor : EditorWindow
         if(_editItemParent != null)
         {
             _gizmoItemPool.Clear();
-            Transform gizmoParent = _editItemParent.transform.Find("Gizmos");
+            Transform gizmoParent = _editItemParent.transform.Find("Editor_Gizmos");
             if(gizmoParent == null)
             {
-                gizmoParent = new GameObject("Gizmos").transform;
+                gizmoParent = new GameObject("Editor_Gizmos").transform;
                 gizmoParent.transform.SetParent(_editItemParent.transform);
             }
             else
@@ -794,10 +809,10 @@ public class StageDataEditor : EditorWindow
             _editItemGizmoParent = gizmoParent.gameObject;
 
             _characterItemPool.Clear();
-            Transform characterParent = _editItemParent.transform.Find("Characters");
+            Transform characterParent = _editItemParent.transform.Find("Editor_Characters");
             if(characterParent == null)
             {
-                characterParent = new GameObject("Characters").transform;
+                characterParent = new GameObject("Editor_Characters").transform;
                 characterParent.transform.SetParent(_editItemParent.transform);
             }
             else
@@ -809,16 +824,27 @@ public class StageDataEditor : EditorWindow
             }
             _editItemCharacterParent = characterParent.gameObject;
 
+            for(int index = 0; index < gizmoParent.childCount; ++index)
+            {
+                Transform child = gizmoParent.GetChild(index);
+                if(child.name.Contains("Editor_") == false)
+                {
+                    child.parent = null;
+                    DestroyImmediate(child.gameObject);
+                    --index;
+                }
+            }
+
             return;
         }
 
         _editItemParent = new GameObject("EditorItemXXXXXX");
         _editItemParent.tag = "EditorItem";
 
-        _editItemGizmoParent = new GameObject("Gizmos");
+        _editItemGizmoParent = new GameObject("Editor_Gizmos");
         _editItemGizmoParent.transform.SetParent(_editItemParent.transform);
 
-        _editItemCharacterParent = new GameObject("Characters");
+        _editItemCharacterParent = new GameObject("Editor_Characters");
         _editItemCharacterParent.transform.SetParent(_editItemParent.transform);
     }
 
