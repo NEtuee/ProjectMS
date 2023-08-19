@@ -15,6 +15,7 @@
     <UpdatePhase>
         <WaitSecond Time="1.0"/>
 
+        <CallAIEvent EventName="EventSignal" UniqueKey="Player" EventTargetType="Range" SearchIdentifier="Enemy" Range="999.0"/>
         <!-- <AIMove UniqueKey="Player" StartAction="AIMove_Start" EndAction="AIMove_End" LoopAction="AIMove_Loop" EndPosition="3.0 0.0 0.0"/>
 
         <AIMove UniqueKey="Player" StartAction="AIMove_Start" EndAction="AIMove_End" LoopAction="AIMove_Loop" EndPosition="3.0 2.0 0.0"/>

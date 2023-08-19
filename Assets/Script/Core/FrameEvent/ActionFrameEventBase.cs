@@ -37,6 +37,7 @@ public enum FrameEventType
     FrameEvent_SequencerSignal,
     FrameEvent_ApplyPostProcessProfile,
     FrameEvent_SetDirectionType,
+    FrameEvent_Torque,
 
     Count,
 }
@@ -761,6 +762,61 @@ public class ActionFrameEvent_ShakeEffect : ActionFrameEventBase
                 _shakeTime = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
             else if(attributes[i].Name == "Speed")
                 _shakeSpeed = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
+        }
+    }
+}
+
+
+public class ActionFrameEvent_Torque : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_Torque;}
+
+    private enum TorqueModifyType
+    {
+        Set,
+        Add,
+        Count,
+    };
+
+    private TorqueModifyType _torqueModifyType = TorqueModifyType.Count;
+    private FloatEx _value = new FloatEx();
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        if(executeEntity is GameEntityBase == false)
+            return false;
+
+        GameEntityBase entity = (GameEntityBase)executeEntity;
+        switch(_torqueModifyType)
+        {
+            case TorqueModifyType.Set:
+            entity.setTorque(_value);
+            break;
+            case TorqueModifyType.Add:
+            entity.addTorque(_value);
+            break;
+            case TorqueModifyType.Count:
+            DebugUtil.assert(false, "잘못된 토크 모디파이 타입");
+            break;
+        }
+        
+        return true;
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            if(attributes[i].Name == "Add")
+            {
+                _value.loadFromXML(attributes[i].Value);
+                _torqueModifyType = TorqueModifyType.Add;
+            }
+            if(attributes[i].Name == "Set")
+            {
+                _value.loadFromXML(attributes[i].Value);
+                _torqueModifyType = TorqueModifyType.Set;
+            }
         }
     }
 }

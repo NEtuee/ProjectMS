@@ -1,19 +1,27 @@
-<ActionGraph Name="TutorialStudentAction" DefaultAction="Idle" DefaultFramePerSecond="12">
+<ActionGraph Name="TutorialStudentAction" DefaultAction="AC_Idle" DefaultFramePerSecond="12">
 
-    <Idle MovementType="FrameEvent" DirectionType="AlwaysRight">
-        <Animation Preset="Sprites/Enemy/TutorialStudent/0_idle" XFlip="true" Duration="1">
-            <FrameEvent Type="Movement" StartTime="0" Friction="5" MaxVelocity="10" Velocity="Random_2^5" Speed="0"/>
-        </Animation>
-
-        <Branch Condition="End == true" Execute="IdleLoop"/>
-    </Idle>
-
-    <IdleLoop MovementType="FrameEvent" DirectionType="AlwaysRight">
+    <AC_Idle MovementType="FrameEvent" DirectionType="AlwaysRight">
         <Animation Preset="Sprites/Enemy/TutorialStudent/0_idle" XFlip="true" Duration="1">
         </Animation>
 
-        <Branch Condition="End == true" Execute="IdleLoop"/>
-    </IdleLoop>
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_Idle>
+
+    <AC_Floating MovementType="FrameEvent" DirectionType="AI" RotationType="Torque">
+        <Animation Preset="Sprites/Enemy/TutorialStudent/0_idle" XFlip="true" Duration="1">
+            <FrameEvent Type="Movement" StartTime="0" Friction="15" MaxVelocity="10" Velocity="Random_7^10" Speed="0"/>
+            <FrameEvent Type="Torque" StartTime="0" Add="Random_-10^10"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_FloatingLoop"/>
+    </AC_Floating>
+
+    <AC_FloatingLoop MovementType="FrameEvent" DirectionType="Keep" RotationType="Torque">
+        <Animation Preset="Sprites/Enemy/TutorialStudent/0_idle" XFlip="true" Duration="1">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_FloatingLoop"/>
+    </AC_FloatingLoop>
 
     <Dead MovementType="Empty" DirectionType="MoveInput">
         <AnimationHeader MasterPath="Sprites/Enemy/TutorialStudent/"/>

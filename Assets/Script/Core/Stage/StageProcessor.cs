@@ -53,6 +53,9 @@ public class StageProcessor : Singleton<StageProcessor>
         for(int index = 0; index < _stageData._stagePointData.Count; ++index)
         {
             StagePointData stagePointData = _stageData._stagePointData[index];
+            if(_spawnedCharacterEntityDictionary.ContainsKey(index) == false)
+                _spawnedCharacterEntityDictionary.Add(index,new List<CharacterEntityBase>());
+
             foreach(var characterSpawnData in stagePointData._characterSpawnData)
             {
                 CharacterInfoData infoData = CharacterInfoManager.Instance().GetCharacterInfoData(characterSpawnData._characterKey);
@@ -90,10 +93,6 @@ public class StageProcessor : Singleton<StageProcessor>
                 }
 
                 createdCharacter.setActiveSelf(activeSelf);
-
-                if(_spawnedCharacterEntityDictionary.ContainsKey(index) == false)
-                    _spawnedCharacterEntityDictionary.Add(index,new List<CharacterEntityBase>());
-                
                 _spawnedCharacterEntityDictionary[index].Add(createdCharacter);
             }
         }

@@ -71,6 +71,11 @@ public class PhysicsBodyEx
         _currentTorque += torque;
     }
 
+    public void setTorque(float torque)
+    {
+        _currentTorque = torque;
+    }
+
     public void addForce(Vector3 force)
     {
         _currentVelocity += force;

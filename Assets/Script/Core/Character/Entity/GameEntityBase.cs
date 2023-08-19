@@ -47,6 +47,8 @@ public class GameEntityBase : SequencerObjectBase
 
     private DefenceType         _currentDefenceType = DefenceType.Empty;
 
+    private PhysicsBodyEx       _physicsBody = new PhysicsBodyEx();
+
 
     private Vector3             _currentVelocity = Vector3.zero;
     private Vector3             _recentlyAttackPoint = Vector3.zero;
@@ -72,6 +74,7 @@ public class GameEntityBase : SequencerObjectBase
     private bool                _blockAI = false;
 
     private DirectionType       _currentDirectionType = DirectionType.AlwaysRight;
+    private RotationType        _currentRotationType = RotationType.AlwaysRight;
 
 
     private Quaternion          _actionStartRotation = Quaternion.identity;
@@ -155,6 +158,8 @@ public class GameEntityBase : SequencerObjectBase
 
         _enabledLaserEffectItems.Clear();
 
+        _physicsBody.initialize(false,0f,10f);
+
         _movementControl.initialize();
         _actionGraph.initialize(ResourceContainerEx.Instance().GetActionGraph(characterInfo._actionGraphPath));
         _aiGraph.initialize(this, _actionGraph, ResourceContainerEx.Instance().GetAIGraph(characterInfo._aiGraphPath));
@@ -171,6 +176,7 @@ public class GameEntityBase : SequencerObjectBase
 
         applyActionBuffList(_actionGraph.getDefaultBuffList());
         _currentDirectionType = _actionGraph.getDirectionType();
+        _currentRotationType = _actionGraph.getCurrentRotationType();
 
         CollisionInfoData data = new CollisionInfoData(characterInfo._characterRadius,0f,0f,0f, CollisionType.Character);
         _collisionInfo = new CollisionInfo(data);
@@ -239,6 +245,8 @@ public class GameEntityBase : SequencerObjectBase
         base.initialize();
 
         _enabledLaserEffectItems.Clear();
+
+        _physicsBody.initialize(false,0f,10f);
         
         _movementControl.initialize();
         _actionGraph.initialize(ResourceContainerEx.Instance().GetActionGraph(actionGraphPath));
@@ -336,11 +344,18 @@ public class GameEntityBase : SequencerObjectBase
         {
             string prevActionName = _actionGraph.getCurrentActionName();
 
+            _physicsBody.progress(deltaTime);
+
             //action,movementGraph 바뀌는 시점
             if(_actionGraph.progress(deltaTime) == true)
             {
                 _currentDefenceType = _actionGraph.getCurrentDefenceType();
                 _currentDirectionType = _actionGraph.getDirectionType();
+
+                if(_currentRotationType == RotationType.Torque && _currentRotationType != _actionGraph.getCurrentRotationType())
+                    _physicsBody.setTorque(0f);
+
+                _currentRotationType = _actionGraph.getCurrentRotationType();
 #if UNITY_EDITOR
                 addActionChangeLog(_actionGraph.getCurrentAction_Debug());
 #endif
@@ -585,6 +600,8 @@ public class GameEntityBase : SequencerObjectBase
         _deadEventDelegate = null;
 
         _enabledLaserEffectItems.Clear();
+
+        _physicsBody.initialize(false,0f,10f);
 
         _sequencerProcessManager.clearSequencerGraphProcessManager();
 
@@ -908,9 +925,11 @@ public class GameEntityBase : SequencerObjectBase
 
     private void updateRotation()
     {
-        RotationType rotationType = RotationType.AlwaysRight;
+        RotationType rotationType = _currentRotationType;
         if(_actionGraph != null)
-            rotationType = _actionGraph.getCurrentRotationType();
+        {
+            rotationType = _currentRotationType;
+        }
 
         float targetRotation = 0f;
         switch(rotationType)
@@ -929,15 +948,18 @@ public class GameEntityBase : SequencerObjectBase
                 break;
             case RotationType.Keep:
                 break;
+            case RotationType.Torque:
+                targetRotation = _spriteRotation.eulerAngles.z + _physicsBody.getCurrentTorqueValue() * GlobalTimer.Instance().getSclaedDeltaTime();
+                break;
     
         }
-        DebugUtil.assert((int)RotationType.Count == 5, "check this");
+        DebugUtil.assert((int)RotationType.Count == 6, "check this");
 
         if(_actionGraph != null && _actionGraph.isRotateBySpeed())
         {
             if (MathEx.equals(_spriteRotation.eulerAngles.z, targetRotation, float.Epsilon) == false)
             {
-                float angle = Mathf.MoveTowardsAngle(_spriteRotation.eulerAngles.z, targetRotation, _actionGraph.getCurrentRotateSpeed() * Time.deltaTime);
+                float angle = Mathf.MoveTowardsAngle(_spriteRotation.eulerAngles.z, targetRotation, _actionGraph.getCurrentRotateSpeed() * GlobalTimer.Instance().getSclaedDeltaTime());
                 _spriteRotation = Quaternion.Euler(0f,0f,angle);
             }
         }
@@ -974,6 +996,9 @@ public class GameEntityBase : SequencerObjectBase
             
         return _actionGraph.getAnimationPlayTimeByIndex(actionIndex);
     }
+
+    public void addTorque(float torque) {_physicsBody.addTorque(torque);}
+    public void setTorque(float torque) {_physicsBody.setTorque(torque);}
 
     public bool isMoving() {return _movementControl.isMoving();}
     public bool isValid() {return _movementControl != null && _actionGraph != null && _spriteRenderer != null && gameObject.activeInHierarchy;}

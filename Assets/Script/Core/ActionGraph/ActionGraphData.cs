@@ -173,6 +173,7 @@ public enum RotationType
     MousePoint,
     MoveDirection,
     Keep,
+    Torque,
     Count,
 }
 

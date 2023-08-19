@@ -81,13 +81,15 @@ public static class FrameEventLoader
             outFrameEvent = new ActionFrameEvent_ApplyPostProcessProfile();
         else if(type == "SetDirectionType")
             outFrameEvent = new ActionFrameEvent_SetDirectionType();
+        else if(type == "Torque")
+            outFrameEvent = new ActionFrameEvent_Torque();
         else
         {
             DebugUtil.assert(false, "invalid frameEvent type: {0}",type);
             return null;
         }
 
-        DebugUtil.assert((int)FrameEventType.Count == 34, "check here");
+        DebugUtil.assert((int)FrameEventType.Count == 35, "check here");
 
 
         if(outFrameEvent == null)

@@ -24,7 +24,7 @@ InQuote,MovementType=,"Empty,RootMotion,GraphPreset,FrameEvent"
 InQuote,DirectionType=,"AlwaysRight,Keep,MoveInput,MousePoint,AttackedPoint,MoveDirection,AI,AITarget"
 InQuote,DefenceDirectionType=,"Direction,MousePoint"
 InQuote,FlipType=,"AlwaysTurnOff,Direction,MousePoint,Keep"
-InQuote,RotationType=,"AlwaysTurnOff,Direction,MousePoint,MoveDirection,Keep"
+InQuote,RotationType=,"AlwaysTurnOff,Direction,MousePoint,MoveDirection,Keep,Torque"
 InQuote,DefenceType=,"Empty,Guard,Parry,Evade"
 InQuote,IsActionSelection=,"true,false"
 InQuote,NormalizedSpeed=,"true,false"
@@ -105,8 +105,8 @@ FrameEvent,ApplyPostProcessProfile,"Path=~~,BlendTime=~~,ApplyType=~~"
 InQuote,ApplyType=,"BaseBlend,Additional"
 FrameEvent,SetDirectionType,DirectionType=~~
 ShortCut,__FrameEvent_SetDirectionType,<FrameEvent Type=~SetDirectionType~ StartTime=~0~ DirectionType=~~/>
-,,
-,,
+FrameEvent,Torque,"Set=~~,Add=~~"
+ShortCut,__FrameEvent_Torque,<FrameEvent Type=~Torque~ StartTime=~0~ Add=~~/>
 ,,
 ,,
 ,,
