@@ -22,6 +22,7 @@
                 <AIEvent Type="SetAction" Action="AC_AttackMain"/>
             </Event_OnExecute>
             
+            <Branch Condition="AttackSuccess" Execute="AI_AttackSuccess"/>
             <Branch Condition="End" Execute="AI_AttackRecover"/>
         </AI_AttackMain>
         <AI_AttackSuccess UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" SearchIdentifier="Player">

@@ -50,7 +50,7 @@
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="(TargetDistance <= gv_guardAttackDistance) && (getStat_AttackDelay >= 1.0)" Execute="Attack"/>
         <Branch Condition="(TargetDistance <= gv_guardOnDistance)" Execute="RepressMode"/>
-        <Branch Condition="GraphExecutedTime >= gv_movingTime" Execute="Entry"/>
+        <!-- <Branch Condition="GraphExecutedTime >= gv_movingTime" Execute="Entry"/> -->
     </Chase>
 
     <DefenseMode Package="TateDefensePackage">

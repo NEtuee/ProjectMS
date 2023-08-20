@@ -79,12 +79,6 @@ MonoBehaviour:
     _attackStartDistance: 0.1
     _attackRayRadius: 0
     _pushVector: {x: 2.5, y: 0, z: 0}
-  - _name: TateChanGuardAttack
-    _attackRadius: 0.2
-    _attackAngle: 360
-    _attackStartDistance: 0
-    _attackRayRadius: 0
-    _pushVector: {x: 3, y: 0, z: 0}
   - _name: MagicalBullet
     _attackRadius: 0.2
     _attackAngle: 360
@@ -236,8 +230,14 @@ MonoBehaviour:
     _attackRayRadius: 0.2
     _pushVector: {x: 5, y: 0, z: 0}
   - _name: Barricade_Normal
-    _attackRadius: 0.4
+    _attackRadius: 0.2
     _attackAngle: 0
     _attackStartDistance: 0
-    _attackRayRadius: 0.1
+    _attackRayRadius: 0.2
+    _pushVector: {x: 4, y: 0, z: 0}
+  - _name: Tate_Normal
+    _attackRadius: 0.2
+    _attackAngle: 0
+    _attackStartDistance: 0
+    _attackRayRadius: 0.2
     _pushVector: {x: 7, y: 0, z: 0}
