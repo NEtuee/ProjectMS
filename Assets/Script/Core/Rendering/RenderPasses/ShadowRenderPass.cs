@@ -14,6 +14,7 @@ public class ShadowRenderPass : AkaneRenderPass
     {
         shadowLayer = (1 << LayerMask.NameToLayer("ShadowMap"));
         shadowRenderTexture = new RenderTexture(1024, 1024, 1, RenderTextureFormat.Shadowmap, 1);
+        shadowRenderTexture.filterMode = FilterMode.Point;
     }
     public override void Draw(Camera renderCamera, RenderTexture buffer)
     {

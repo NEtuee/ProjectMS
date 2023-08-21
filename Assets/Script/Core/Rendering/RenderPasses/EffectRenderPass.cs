@@ -18,6 +18,7 @@ public class EffectRenderPass : AkaneRenderPass
         shadowScreenLayer = (1 << LayerMask.NameToLayer("EffectEtc"));
 
         effectRenderTexture = new RenderTexture(960, 640, 1, RenderTextureFormat.ARGBHalf, 1);
+        effectRenderTexture.filterMode = FilterMode.Point;
     }
     public override void Draw(Camera renderCamera, RenderTexture buffer)
     {

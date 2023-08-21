@@ -14,6 +14,7 @@ public class CharacterRenderPass : AkaneRenderPass
     {
         characterLayer = (1 << LayerMask.NameToLayer("Character"));
         characterRenderTexture = new RenderTexture(1024, 1024, 1, RenderTextureFormat.ARGBHalf, 1);
+        characterRenderTexture.filterMode = FilterMode.Point;
     }
     public override void Draw(Camera renderCamera, RenderTexture buffer)
     {

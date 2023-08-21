@@ -14,6 +14,7 @@ public class BackgroundRenderPass : AkaneRenderPass
     {
         backgroundLayer = (1 << LayerMask.NameToLayer("Background"));
         backgroundRenderTexture = new RenderTexture(1024, 1024, 1, RenderTextureFormat.ARGBHalf, 1);
+        backgroundRenderTexture.filterMode = FilterMode.Point;
     }
     public override void Draw(Camera renderCamera, RenderTexture buffer)
     {
