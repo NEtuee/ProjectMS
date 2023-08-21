@@ -3,19 +3,27 @@
     <InitializePhase>
         <ApplyPostProcessProfile Path="PostProcessProfile/PostProcessProfile_Default"/>
 
-        <SetCameraTarget UniqueKey="Player" CameraMode="TargetCenterMode"/>
+        <!-- <SetCameraTarget UniqueKey="Player" CameraMode="TargetCenterMode"/> -->
         <SetAudioListner UniqueKey="Player"/>
         <SetCrossHair UniqueKey="Player"/>
         <SetHPSphere UniqueKey="Player"/>
+
+        <SetAction UniqueKey="Player" Action="SQ_Intro_Sleep"/>
+
+        <BlockInput Enable="True"/>
 
         <SetCameraZoom Size="0.0"/>
         
     </InitializePhase>
 
     <UpdatePhase>
-        <WaitSecond Time="1.0"/>
+        <QTEFence KeyName="AttackCharge"/>
+
+        <SetAction UniqueKey="Player" Action="SQ_Intro_ToIdle"/>
+        <BlockInput Enable="False"/>
 
         <CallAIEvent EventName="EventSignal" UniqueKey="Player" EventTargetType="Range" SearchIdentifier="Enemy" Range="999.0"/>
+
         <!-- <AIMove UniqueKey="Player" StartAction="AIMove_Start" EndAction="AIMove_End" LoopAction="AIMove_Loop" EndPosition="3.0 0.0 0.0"/>
 
         <AIMove UniqueKey="Player" StartAction="AIMove_Start" EndAction="AIMove_End" LoopAction="AIMove_Loop" EndPosition="3.0 2.0 0.0"/>

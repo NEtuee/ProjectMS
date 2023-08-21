@@ -25,6 +25,7 @@ public enum SequencerGraphEventType
     SetAction,
     PlayAnimation,
     AIMove,
+    QTEFence,
 
     Count,
 }
@@ -67,6 +68,37 @@ public class SequencerGraphEvent_WaitSignal : SequencerGraphEventBase
         }
     }
 }
+
+public class SequencerGraphEvent_QTEFence : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.QTEFence;
+
+    private string _keyName = "";
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        return ActionKeyInputManager.Instance().keyCheck(_keyName);
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "KeyName")
+                _keyName = attrValue;
+        }
+    }
+}
+
 
 public class SequencerGraphEvent_CallAIEvent : SequencerGraphEventBase
 {
@@ -562,7 +594,7 @@ public class SequencerGraphEvent_BlockInput : SequencerGraphEventBase
 
     public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
     {
-        GameEntityBase playerEntity = StageProcessor.Instance().getPlayerEntity();
+        GameEntityBase playerEntity = processor.getUniqueEntity("Player");
         if(playerEntity == null)
         {
             DebugUtil.assert(false,"플레이어가 존재하지 않습니다.");

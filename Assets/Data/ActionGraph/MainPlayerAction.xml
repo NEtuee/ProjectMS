@@ -490,8 +490,30 @@
         <Branch Condition="End" Execute="AIMove_End"/>
     </AIMove_End>
 
+    <!-- 여기부터 시퀀스 액션 -->
+
+    <SQ_Intro_Sleep MovementType="Empty" DirectionType="AlwaysRight" FlipType="AlwaysTurnOff" RotationType="AlwaysRight">
+        <Animation Path="Sprites/NewPlayer/Sequencer/Intro_0" FramePerSecond="1">
+        </Animation>
+
+        <Branch Condition="End" Execute="SQ_Intro_Sleep"/>
+    </SQ_Intro_Sleep>
+
+    <SQ_Intro_ToIdle MovementType="FrameEvent" DirectionType="AlwaysUp" FlipType="Keep">
+        <Animation Preset="Sprites/NewPlayer/idle/" XFlip="true" Duration="0.3">
+            <FrameEvent Type="Movement" StartTime="0" Friction="25" MaxVelocity="10" Velocity="10" Speed="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Idle"/>
+    </SQ_Intro_ToIdle>
 
 
+
+
+
+
+
+    <!-- 근접 전투 시퀀스 액션 -->
 
     <BranchSet Name="MeleeHit">
         <Branch Condition="Hit" Execute="AC_Melee_Hit"/>

@@ -880,6 +880,15 @@ public class GameEntityBase : SequencerObjectBase
             case DirectionType.AlwaysRight:
                 direction = Vector3.right;
                 break;
+            case DirectionType.AlwaysLeft:
+                direction = Vector3.left;
+                break;
+            case DirectionType.AlwaysUp:
+                direction = Vector3.up;
+                break;
+            case DirectionType.AlwaysDown:
+                direction = Vector3.down;
+                break;
             case DirectionType.Keep:
                 break;
             case DirectionType.MoveInput:

@@ -133,6 +133,8 @@ public class SequencrGraphLoader : LoaderBase<SequencerGraphBaseData>
             spawnEvent = new SequencerGraphEvent_PlayAnimation();
         else if(node.Name == "AIMove")
             spawnEvent = new SequencerGraphEvent_AIMove();
+        else if(node.Name == "QTEFence")
+            spawnEvent = new SequencerGraphEvent_QTEFence();
 
         if(spawnEvent == null)
         {

@@ -95,6 +95,9 @@ public class ActionGraphNodeData
 public enum DirectionType
 {
     AlwaysRight = 0,
+    AlwaysUp,
+    AlwaysLeft,
+    AlwaysDown,
     Keep,
     MoveInput,
     MousePoint,
