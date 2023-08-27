@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ScreenIndicatorUI : MonoBehaviour
 {
+    public static ScreenIndicatorUI _instance;
+
     public float _magnitude = 1f;
     public Sprite _indicatorSprite;
 
@@ -18,15 +20,18 @@ public class ScreenIndicatorUI : MonoBehaviour
 
     private Vector3[,] _screenSectors = new Vector3[4,2];
 
-    public void Start()
-    {
-        float orthoSize = Camera.main.orthographicSize;
-        float aspectRatio = Camera.main.aspect;
-        float height = orthoSize * 2f;
-        float width = height * aspectRatio;
+    private bool _active = true;
 
-        _cameraSizeHalf.x = width * 0.5f;
-        _cameraSizeHalf.y = height * 0.5f;
+    public void Awake()
+    {
+        _instance = this;
+    }
+
+    public void Start()
+    {        
+        updateCameraSize();
+
+        _active = true;
 
         _characterManager.addCharacterEnableDelegate(addCharacter);
         _characterManager.addCharacterDisableDelegate(disableCharacter);
@@ -34,13 +39,15 @@ public class ScreenIndicatorUI : MonoBehaviour
 
     public void Update()
     {
+        updateCameraSize();
+
         Vector3 center = Camera.main.transform.position;
         caclculateScreenSectors(center);
 
         foreach(var item in _enabledCharacters)
         {
             bool isInCamera = isInCameraSector(center, item.Key.transform.position);
-            item.Value.gameObject.SetActive(isInCamera == false);
+            item.Value.gameObject.SetActive(_active && isInCamera == false);
 
             if(isInCamera)
                 continue;
@@ -51,6 +58,22 @@ public class ScreenIndicatorUI : MonoBehaviour
             item.Value.transform.position = sectorPosition;
             item.Value.transform.rotation = Quaternion.Euler(0f,0f,MathEx.directionToAngle(direction));
         }
+    }
+
+    public void setActive(bool value)
+    {
+        _active = value;
+    }
+
+    public void updateCameraSize()
+    {
+        float orthoSize = Camera.main.orthographicSize;
+        float aspectRatio = Camera.main.aspect;
+        float height = orthoSize * 2f;
+        float width = height * aspectRatio;
+
+        _cameraSizeHalf.x = width * 0.5f;
+        _cameraSizeHalf.y = height * 0.5f;
     }
 
     public SpriteRenderer getIndicator()

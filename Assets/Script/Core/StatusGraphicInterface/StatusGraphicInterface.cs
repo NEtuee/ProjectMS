@@ -162,6 +162,17 @@ public class StatusGraphicInterface
         }
     }
 
+    public void setActive(bool value)
+    {
+        foreach(var item in _graphicInterface)
+        {
+            if(value)
+                item.active();
+            else
+                item.deactive();
+        }
+    }
+
     public void updatePosition()
     {
         if(_targetStatusInfoData._graphicInterfaceData == null)

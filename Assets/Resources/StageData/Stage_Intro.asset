@@ -16,49 +16,77 @@ MonoBehaviour:
   _backgroundPrefabPath: Prefab/StageBackground/Stage_Intro_Background
   _stagePointData:
   - _stagePoint: {x: 0, y: 0, z: 0}
-    _maxLimitedDistance: 0.5
+    _maxLimitedDistance: 0
+    _cameraZoomSize: 2
+    _cameraZoomSpeed: 8
+    _lerpCameraZoom: 1
     _onEnterSequencerPath:
-    - TutorialStageStart.xml
+    - TutorialStage/TutorialStageStart.xml
     _onExitSequencerPath: []
     _characterSpawnData:
     - _characterKey: TutorialStudent
       _uniqueKey: 
+      _startAction: AC_Idle
       _flip: 0
       _searchIdentifier: 1
       _activeType: 0
-      _localPosition: {x: -3.45, y: -2.4, z: 0}
+      _localPosition: {x: -3.45, y: -1.28, z: 0}
     - _characterKey: TutorialStudent
       _uniqueKey: 
+      _startAction: AC_Idle
       _flip: 0
       _searchIdentifier: 1
       _activeType: 0
-      _localPosition: {x: -1.9, y: -2.43, z: 0}
+      _localPosition: {x: -2.05, y: -1.28, z: 0}
     - _characterKey: TutorialStudent
       _uniqueKey: 
+      _startAction: AC_Idle
       _flip: 0
       _searchIdentifier: 1
       _activeType: 0
-      _localPosition: {x: 3.29, y: -2.37, z: 0}
+      _localPosition: {x: 3.29, y: -1.3, z: 0}
     - _characterKey: TutorialStudent
       _uniqueKey: 
+      _startAction: AC_Idle
       _flip: 0
       _searchIdentifier: 1
       _activeType: 0
-      _localPosition: {x: 1.85, y: -2.39, z: 0}
+      _localPosition: {x: 1.85, y: -1.29, z: 0}
     - _characterKey: TutorialStudent
       _uniqueKey: 
+      _startAction: AC_Idle
       _flip: 0
       _searchIdentifier: 1
       _activeType: 0
-      _localPosition: {x: 0.46, y: -2.41, z: 0}
+      _localPosition: {x: 0.46, y: -1.29, z: 0}
     - _characterKey: Akane
       _uniqueKey: Player
+      _startAction: SQ_Intro_Sleep
       _flip: 0
       _searchIdentifier: 0
-      _activeType: 1
-      _localPosition: {x: -0.604, y: -2.515, z: 0}
-  - _stagePoint: {x: 4.87, y: 0, z: 0}
-    _maxLimitedDistance: 0.5
+      _activeType: 0
+      _localPosition: {x: -0.78, y: -1.11, z: 0}
+  - _stagePoint: {x: 0, y: 0.78, z: 0}
+    _maxLimitedDistance: 0
+    _cameraZoomSize: 2.8
+    _cameraZoomSpeed: 8
+    _lerpCameraZoom: 0
     _onEnterSequencerPath: []
     _onExitSequencerPath: []
     _characterSpawnData: []
+  - _stagePoint: {x: 6.94, y: 0.78, z: 0}
+    _maxLimitedDistance: 0
+    _cameraZoomSize: 2.8
+    _cameraZoomSpeed: 4
+    _lerpCameraZoom: 0
+    _onEnterSequencerPath:
+    - TutorialStage/TutorialStageEnd.xml
+    _onExitSequencerPath: []
+    _characterSpawnData:
+    - _characterKey: TutorialTeacher
+      _uniqueKey: Teacher
+      _startAction: Idle
+      _flip: 0
+      _searchIdentifier: 1
+      _activeType: 0
+      _localPosition: {x: -0.010000229, y: 0, z: 0}

@@ -10,7 +10,7 @@ LineStart,<TeleportTargetTo,"UniqueKey=~~,Position=~~"
 LineStart,<ApplyPostProcessProfile,"Path=~~,BlendTime=~~,ApplyType=~~"
 LineStart,<CallAIEvent,"EventName=~~,UniqueKey=~~,Range=~~,SearchIdentifier=~~,EventTargetType=~~"
 LineStart,<WaitSignal,Signal=~~
-LineStart,<SetCameraZoom,Size=~~
+LineStart,<SetCameraZoom,"Size=~~,Speed=~~,Force=~~"
 InQuote,SearchIdentifier=,"Player,Enemy,Projectile"
 InQuote,ApplyType=,"BaseBlend,Additional"
 InQuote,CameraMode=,"TargetCenterMode,TwoTargetMode"
@@ -25,7 +25,7 @@ ShortCut,__TeleportTargetTo,<TeleportTargetTo UniqueKey=~~ Position=~0 0 0~/>
 ShortCut,__ApplyPostProcessProfile,<ApplyPostProcessProfile Path=~PostProcessProfile/~/>
 ShortCut,__CallAIEvent,<CallAIEvent EventName=~~ UniqueKey=~~/>
 ShortCut,__WaitSignal,<WaitSignal Signal=~~/>
-ShortCut,__SetCameraZoom,<SetCameraZoom Size=~~/>
+ShortCut,__SetCameraZoom,<SetCameraZoom Size=~~ Speed=~~/>
 ShortCut,__InitializePhase,<InitializePhase>#n#n</InitializePhase>
 ShortCut,__UpdatePhase,<UpdatePhase>#n#n</UpdatePhase>
 ShortCut,__EndPhase,<EndPhase>#n#n</EndPhase>
@@ -37,7 +37,7 @@ InQuote,EventTargetType=,"UniqueTarget,Range"
 ShortCut,__ForceQuit,<ForceQuit/>
 LineStart,<BlockInput,Enable=~~
 ShortCut,__BlockInput,<BlockInput Enable=~~/>
-InQuote,Enable=,"true,false"
+InQuote,Enable=,"True,False"
 LineStart,<BlockAI,"Enable=~~,UniqueKey=~~"
 ShortCut,__BlockAI,<BlockAI UniqueKey=~~ Enable=~~/>
 LineStart,<SetAction,"UniqueKey=~~,Action=~~"
@@ -48,20 +48,20 @@ LineStart,<AIMove,"UniqueKey=~~,StartAction=~~,LoopAction=~~,EndAction=~~,EndPos
 ShortCut,__AIMove,<AIMove UniqueKey=~~ StartAction=~~ LoopAction=~~ EndAction=~~ EndPosition=~~/>
 LineStart,<QTEFence,KeyName=~~
 ShortCut,__QTEFence,<QTEFence KeyName=~~/>
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
+InQuote,Force=,"True,False"
+LineStart,<SetCameraPosition,TargetPosition=~~
+ShortCut,__SetCameraPosition,<SetCameraPosition TargetPosition=~~/>
+LineStart,<SetHideUI,Hide=~~
+ShortCut,__SetHideUI,<SetHideUI Hide=~~/>
+InQuote,Hide=,"True,False"
+ShortCut,__ShakeEffect,<ShakeEffect Scale=~~ Speed=~~ Time=~~/>
+LineStart,<ShakeEffect,"Scale=~~,Time=~~,Speed=~~"
+ShortCut,__SetTimeScale,<SetTimeScale Scale=~~ Time=~~ BlendTime=~~/>
+LineStart,<SetTimeScale,"Scale=~~,Time=~~,BlendTime=~~"
+ShortCut,__ZoomEffect,<ZoomEffect Factor=~~/>
+LineStart,<ZoomEffect,Factor=~~
+ShortCut,__DeadFence,<DeadFence UniqueKey=~~/>
+LineStart,<DeadFence,UniqueKey=~~
 ,,
 ,,
 ,,

@@ -12,6 +12,7 @@ public enum CameraModeType
     ArenaMode,
     TargetCenterMode,
     TwoTargetMode,
+    PositionMode,
     Count,
 };
 
@@ -22,6 +23,7 @@ public abstract class CameraModeBase
     public static float _pixelPerUnit = 100f;
 
     protected Vector3 _cameraPosition;
+    protected Vector3 _currentTargetPosition;
     protected ObjectBase _currentTarget;
     protected GameEntityBase _targetEntity;
 
@@ -39,6 +41,11 @@ public abstract class CameraModeBase
     public void setCurrentTarget(ObjectBase obj)
     {
         _currentTarget = obj;
+    }
+
+    public void setCurrentTargetPosition(Vector3 targetPosition)
+    {
+        _currentTargetPosition = targetPosition;
     }
 
     public Vector3 getCameraPosition()
@@ -81,6 +88,29 @@ public class CameraTwoTargetMode : CameraModeBase
         else
             _currentCenterPosition = _currentTarget.transform.position + (_targetEntity.transform.position - _currentTarget.transform.position) * _targetPositionRatio;
     }
+};
+
+public class CameraPositionMode : CameraModeBase
+{
+    public float _targetPositionRatio = 0.25f;
+    public static float _cameraMoveSpeedRate = 8.0f;
+
+    public override CameraModeType getCameraModeType() => CameraModeType.TargetCenterMode;
+    public override void initialize(Vector3 position)
+    {
+        _cameraPosition = position;
+        _targetEntity = null;
+    }
+
+    public override void progress(float deltaTime, Vector3 targetPosition)
+    {
+        _cameraPosition = Vector3.Lerp(_cameraPosition, _currentTargetPosition, _cameraMoveSpeedRate * deltaTime);
+    }
+
+    public override void release()
+    {
+    }
+
 };
 
 public class CameraArenaMode : CameraModeBase
@@ -143,7 +173,7 @@ public class CameraTargetCenterMode : CameraModeBase
 
     public void updateCameraCenter()
     {
-        if(_targetEntity == null || _targetEntity.isDead())
+        if((_targetEntity == null || _targetEntity.isDead()) && _currentTarget != null)
             _currentCenterPosition = _currentTarget.transform.position;
     }
 };
@@ -167,6 +197,7 @@ public class CameraControlEx : Singleton<CameraControlEx>
 
     private float _mainCamSize;
     private float _currentMainCamSize;
+    private float _currentZoomSpeed;
 	private float _camWidth;
 	private float _camHeight;
 
@@ -186,6 +217,7 @@ public class CameraControlEx : Singleton<CameraControlEx>
 
         _mainCamSize = _currentCamera.orthographicSize;
         _currentMainCamSize = _mainCamSize;
+        _currentZoomSpeed = 4f;
 
         _camHeight = _mainCamSize;
 		_camWidth = _camHeight * ((float)Screen.width / (float)Screen.height);
@@ -208,7 +240,7 @@ public class CameraControlEx : Singleton<CameraControlEx>
         if(MathEx.equals(_currentCamera.orthographicSize,_currentMainCamSize,float.Epsilon) == true)
 			_currentCamera.orthographicSize = _currentMainCamSize;
 		else	
-			_currentCamera.orthographicSize = Mathf.Lerp(_currentCamera.orthographicSize,_currentMainCamSize,4f * deltaTime);
+			_currentCamera.orthographicSize = Mathf.Lerp(_currentCamera.orthographicSize,_currentMainCamSize,_currentZoomSpeed * deltaTime);
 
         if(_enableShake)
         {
@@ -242,22 +274,45 @@ public class CameraControlEx : Singleton<CameraControlEx>
     public void Zoom(float scale)
 	{
 		if(_currentCamera.orthographicSize > scale)
-			_currentCamera.orthographicSize = scale;
+        {
+			_currentCamera.orthographicSize = _currentMainCamSize + scale;
+            _currentZoomSpeed = 4f;
+        }
 	}
 
-    public void setZoomSize(float zoomSize)
+    public void setZoomSize(float zoomSize, float speed)
     {
         _currentMainCamSize = zoomSize;
+        _currentZoomSpeed = speed;
     }
 
     public void setDefaultZoomSize()
     {
         _currentMainCamSize = _mainCamSize;
+        _currentZoomSpeed = 4f;
+    }
+
+    public void setZoomSizeForce(float zoomSize)
+    {
+        setZoomSize(zoomSize, 4f);
+        _currentCamera.orthographicSize = zoomSize;
+    }
+
+    public void clearCamera(Vector3 position)
+    {
+        _currentCameraMode = null;
+        _currentTarget = null;
+
+        setDefaultZoomSize();
+
+        Vector3 currentPosition = position;
+        currentPosition.z = -10f;
+        _currentCamera.transform.position = currentPosition + _shakePosition;
     }
 
     public void setCameraMode(CameraModeType mode)
     {
-        if(_currentCamera == null || _currentTarget == null)
+        if(_currentCamera == null )
             return;
 
         if(_currentCameraMode != null && _currentCameraMode.getCameraModeType() == mode)
@@ -280,6 +335,9 @@ public class CameraControlEx : Singleton<CameraControlEx>
                 case CameraModeType.TwoTargetMode:
                     _cameraModes[index] = new CameraTwoTargetMode();
                 break;
+                case CameraModeType.PositionMode:
+                    _cameraModes[index] = new CameraPositionMode();
+                break;
                 default:
                     DebugUtil.assert(false, "잘못된 카메라 모드입니다. 이게 뭐징");
                 break;
@@ -288,6 +346,7 @@ public class CameraControlEx : Singleton<CameraControlEx>
 
         _currentCameraMode = _cameraModes[index];
         _currentCameraMode.setCurrentTarget(_currentTarget);
+        _currentCameraMode.setCurrentTargetPosition(_cameraTargetPosition);
         _currentCameraMode.initialize(_currentCamera.transform.position);
     }
 
@@ -296,6 +355,13 @@ public class CameraControlEx : Singleton<CameraControlEx>
         _currentTarget = obj;
         _currentCameraMode?.setCurrentTarget(_currentTarget);
         _currentCameraMode?.initialize(_currentTarget.transform.position);
+    }
+
+    public void setCameraTargetPosition(Vector3 targetPosition)
+    {
+        _cameraTargetPosition = targetPosition;
+        _currentCameraMode?.setCurrentTargetPosition(_cameraTargetPosition);
+        _currentCameraMode?.initialize(_cameraTargetPosition);
     }
 
     private void updateCameraMode(float deltaTime)

@@ -25,4 +25,12 @@ public class ActionKeyPresetData
     public int[]                       _keyCount = new int[3];
 
     public float                       _multiInputThreshold = 0f;
+
+    public string getKey(int controller, int index)
+    {
+        if(_keys == null || _keys.Length <= controller || _keys[controller] == null || _keys[controller].Length <= index)
+            return "";
+
+        return _keys[controller][index];
+    }
 }

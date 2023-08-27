@@ -1,3 +1,4 @@
+using System.Threading;
 using UnityEngine;
 
 [System.Serializable]
@@ -11,19 +12,27 @@ public struct PhysicsBodyDescription
 
     public bool _useGravity;
 
-    public static PhysicsBodyDescription _empty = new PhysicsBodyDescription
-    {
-        _velocity = new Vector3Ex(), 
-        _torque = new FloatEx(),
-        _friction = 0f, 
-        _angularFriction = 0f,
-        _useGravity = false
-    };
-
-    public void clearPhysicsBody()
+    public PhysicsBodyDescription(object nullObj)
     {
         _velocity = new Vector3Ex();
         _torque = new FloatEx();
+        _friction = 0f;
+        _angularFriction = 0f;
+        _useGravity = false;
+    }
+
+    public void clearPhysicsBody()
+    {
+        if(_velocity == null)
+            _velocity = new Vector3Ex();
+        else
+            _velocity.setValue(UnityEngine.Vector3.zero);
+
+        if(_torque == null)
+            _torque = new FloatEx();
+        else
+            _torque.setValue(0f);
+
         _friction = 0f;
         _angularFriction = 0f;
         _useGravity = false;

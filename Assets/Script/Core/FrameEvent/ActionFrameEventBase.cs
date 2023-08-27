@@ -1,5 +1,6 @@
 using System.Xml;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 public enum FrameEventType
 {
@@ -732,7 +733,7 @@ public class ActionFrameEvent_ZoomEffect : ActionFrameEventBase
         for(int i = 0; i < attributes.Count; ++i)
         {
             if(attributes[i].Name == "Scale")
-                _zoomScale = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
+                _zoomScale = XMLScriptConverter.valueToFloatExtend(attributes[i].Value) - 3.2f;
         }
     }
 }
@@ -1003,7 +1004,7 @@ public class ActionFrameEvent_SetCameraZoom : ActionFrameEventBase
         if(_zoom <= 0f)
             CameraControlEx.Instance().setDefaultZoomSize();
         else
-            CameraControlEx.Instance().setZoomSize(_zoom);
+            CameraControlEx.Instance().setZoomSize(_zoom,4f);
         return true;
     }
 

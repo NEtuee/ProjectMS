@@ -30,6 +30,8 @@ public class ScreenDirector : MonoBehaviour
             _lambda = 0f;
             _alpha = 0f;
             _targetAlpha = 0f;
+
+            updateAlpha();
         }
 
         public void updateAlpha()

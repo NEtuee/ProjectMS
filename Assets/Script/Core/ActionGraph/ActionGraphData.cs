@@ -201,6 +201,7 @@ public enum ConditionNodeUpdateType
     Input_AttackCharge,
     Input_AttackBlood,
     Input_Guard,
+    Input_CanInput,
 
     Attack_Guarded,
     Attack_Success,
@@ -294,6 +295,7 @@ public static class ConditionNodeInfoPreset
         {"InputAttackCharge",new ConditionNodeInfo(ConditionNodeUpdateType.Input_AttackCharge, ConditionNodeType.Bool)},
         {"InputAttackBlood",new ConditionNodeInfo(ConditionNodeUpdateType.Input_AttackBlood, ConditionNodeType.Bool)},
         {"InputGuard",new ConditionNodeInfo(ConditionNodeUpdateType.Input_Guard, ConditionNodeType.Bool)},
+        {"CanInput",new ConditionNodeInfo(ConditionNodeUpdateType.Input_CanInput, ConditionNodeType.Bool)},
 
         {"AttackGuarded",new ConditionNodeInfo(ConditionNodeUpdateType.Attack_Guarded, ConditionNodeType.Bool)},
         {"AttackSuccess",new ConditionNodeInfo(ConditionNodeUpdateType.Attack_Success, ConditionNodeType.Bool)},

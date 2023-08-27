@@ -35,6 +35,14 @@ public class HPSphereUIManager : Singleton<HPSphereUIManager>
         }
     }
 
+    public void setActive(bool value)
+    {
+        for(int i = 0; i < _enabledSpheres.Count; ++i)
+        {
+            _enabledSpheres[i].setActive(value);
+        }
+    }
+
     public void release()
     {
         for(int i = 0; i < _enabledSpheres.Count; ++i)

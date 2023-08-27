@@ -97,6 +97,8 @@ public class SequencrGraphLoader : LoaderBase<SequencerGraphBaseData>
             spawnEvent = new SequencerGraphEvent_WaitSecond(); 
         else if(node.Name == "SetCameraTarget")
             spawnEvent = new SequencerGraphEvent_SetCameraTarget();
+        else if(node.Name == "SetCameraPosition")
+            spawnEvent = new SequencerGraphEvent_SetCameraPosition();
         else if(node.Name == "SetAudioListner")
             spawnEvent = new SequencerGraphEvent_SetAudioListner();
         else if(node.Name == "SetCrossHair")
@@ -135,6 +137,16 @@ public class SequencrGraphLoader : LoaderBase<SequencerGraphBaseData>
             spawnEvent = new SequencerGraphEvent_AIMove();
         else if(node.Name == "QTEFence")
             spawnEvent = new SequencerGraphEvent_QTEFence();
+        else if(node.Name == "DeadFence")
+            spawnEvent = new SequencerGraphEvent_DeadFence();
+        else if(node.Name == "SetHideUI")
+            spawnEvent = new SequencerGraphEvent_SetHideUI();
+        else if(node.Name == "SetTimeScale")
+            spawnEvent = new SequencerGraphEvent_SetTimeScale();
+        else if(node.Name == "ShakeEffect")
+            spawnEvent = new SequencerGraphEvent_ShakeEffect();
+        else if(node.Name == "ZoomEffect")
+            spawnEvent = new SequencerGraphEvent_ZoomEffect();
 
         if(spawnEvent == null)
         {

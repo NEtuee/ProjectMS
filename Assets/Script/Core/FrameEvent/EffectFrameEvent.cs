@@ -426,7 +426,7 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
     public bool _usePhysics = false;
     public bool _useFlip = false;
     public bool _castShadow = false;
-    public PhysicsBodyDescription _physicsBodyDesc = PhysicsBodyDescription._empty;
+    public PhysicsBodyDescription _physicsBodyDesc = new PhysicsBodyDescription(null);
     public EffectUpdateType _effectUpdateType = EffectUpdateType.ScaledDeltaTime;
 
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
@@ -591,7 +591,7 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
                     {
                         if(physicsAttributes[j].Name == "UseGravity")
                         {
-                            _physicsBodyDesc._useGravity = bool.Parse(physicsAttributes[i].Value);
+                            _physicsBodyDesc._useGravity = bool.Parse(physicsAttributes[j].Value);
                         }
                         else if(physicsAttributes[j].Name == "Velocity")
                         {
@@ -614,7 +614,6 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
                             DebugUtil.assert(false,"invalid physics attribute data: {0}", physicsAttributes[j].Name);
                         }
                     }
-
                 }
             }
 

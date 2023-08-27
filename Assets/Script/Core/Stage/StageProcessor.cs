@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class StageProcessor : Singleton<StageProcessor>
@@ -50,6 +51,11 @@ public class StageProcessor : Singleton<StageProcessor>
         if(_stageData._stagePointData[0]._onEnterSequencerPath == null)
             return;
 
+        CameraControlEx.Instance().clearCamera(_stageData._stagePointData[0]._stagePoint);
+        CameraControlEx.Instance().setZoomSizeForce(_stageData._stagePointData[0]._cameraZoomSize);
+
+        ScreenDirector._instance.initialize();
+
         for(int index = 0; index < _stageData._stagePointData.Count; ++index)
         {
             StagePointData stagePointData = _stageData._stagePointData[index];
@@ -94,6 +100,12 @@ public class StageProcessor : Singleton<StageProcessor>
 
                 createdCharacter.setActiveSelf(activeSelf);
                 _spawnedCharacterEntityDictionary[index].Add(createdCharacter);
+
+                if(characterSpawnData._startAction != "")
+                {
+                    createdCharacter.setAction(characterSpawnData._startAction);
+                    createdCharacter.progress(0f);
+                }
             }
         }
 
@@ -155,6 +167,13 @@ public class StageProcessor : Singleton<StageProcessor>
         Vector3 resultPoint;
         float resultDistance;
         float fraction = getLimitedFractionOnLine(_targetTransform.position, out resultPoint, out resultDistance);
+        if(_stageData._stagePointData.Count - 1 > _currentPoint && _stageData._stagePointData[_currentPoint]._lerpCameraZoom)
+        {
+            float currentZoom = _stageData._stagePointData[_currentPoint]._cameraZoomSize;
+            currentZoom = math.lerp(currentZoom, _stageData._stagePointData[_currentPoint + 1]._cameraZoomSize, fraction);
+            CameraControlEx.Instance().setZoomSize(currentZoom,_stageData._stagePointData[_currentPoint]._cameraZoomSpeed);
+        }
+
         if(_isEnd == false && fraction >= 1f)
         {
             startExitSequencers(_stageData._stagePointData[_currentPoint],_currentPoint,true);
@@ -168,6 +187,8 @@ public class StageProcessor : Singleton<StageProcessor>
             else
             {
                 startEnterSequencers(_stageData._stagePointData[_currentPoint],_currentPoint,true);
+                CameraControlEx.Instance().setZoomSize(_stageData._stagePointData[_currentPoint]._cameraZoomSize,_stageData._stagePointData[_currentPoint]._cameraZoomSpeed);
+
                 if(_spawnedCharacterEntityDictionary.ContainsKey(_currentPoint))
                 {
                     for(int index = 0; index < _spawnedCharacterEntityDictionary[_currentPoint].Count; ++index)

@@ -47,7 +47,7 @@ public class EffectRequestData : MessageData
     public Transform _parentTransform = null;
     public Animator _timelineAnimator = null;
 
-    public PhysicsBodyDescription _physicsBodyDesc;
+    public PhysicsBodyDescription _physicsBodyDesc = new PhysicsBodyDescription(null);
 
     public float _lifeTime = 0f;
     public float _trailWidth = 0f;

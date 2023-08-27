@@ -178,7 +178,7 @@ public class ActionKeyInputManager : Singleton<ActionKeyInputManager>
 
     private string getKeyCode(int index, ActionKeyPresetData presetData)
     {
-        return presetData._keys[(int)ControllerEx.Instance().getCurrentControllerType()][index];
+        return presetData.getKey((int)ControllerEx.Instance().getCurrentControllerType(),index);
     }
 
 

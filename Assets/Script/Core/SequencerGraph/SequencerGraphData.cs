@@ -7,6 +7,7 @@ public enum SequencerGraphEventType
     SpawnCharacter,
     WaitSecond,
     SetCameraTarget,
+    SetCameraPosition,
     SetAudioListner,
     SetCrossHair,
     SetHPSphere,
@@ -17,6 +18,7 @@ public enum SequencerGraphEventType
     CallAIEvent,
     WaitSignal,
     SetCameraZoom,
+    ZoomEffect,
     FadeIn,
     FadeOut,
     ForceQuit,
@@ -26,6 +28,10 @@ public enum SequencerGraphEventType
     PlayAnimation,
     AIMove,
     QTEFence,
+    DeadFence,
+    SetHideUI,
+    ShakeEffect,
+    SetTimeScale,
 
     Count,
 }
@@ -69,6 +75,116 @@ public class SequencerGraphEvent_WaitSignal : SequencerGraphEventBase
     }
 }
 
+
+public class SequencerGraphEvent_SetTimeScale : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SetTimeScale;
+
+    public float _targetTimeScale = 0f;
+    public float _timeScalingTime = 0f;
+    public float _timeScaleBlendTime = 0f;
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        Vector3Data data = MessageDataPooling.GetMessageData<Vector3Data>();
+        data.value = new UnityEngine.Vector3(_targetTimeScale, _timeScalingTime, _timeScaleBlendTime);
+
+        Message msg = MessagePool.GetMessage();
+        msg.Set(MessageTitles.entity_setTimeScale,0,data,null);
+        MasterManager.instance.HandleMessage(msg);
+
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            if(attributes[i].Name == "Scale")
+                _targetTimeScale = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
+            else if(attributes[i].Name == "Time")
+                _timeScalingTime = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
+            else if(attributes[i].Name == "BlendTime")
+                _timeScaleBlendTime = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
+        }
+    }
+}
+
+public class SequencerGraphEvent_ShakeEffect : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.ShakeEffect;
+
+    public float _shakeTime = 0f;
+    public float _shakeScale = 0f;
+    public float _shakeSpeed = 1f;
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        CameraControlEx.Instance().setShake(_shakeScale, _shakeSpeed, _shakeTime);
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            if(attributes[i].Name == "Scale")
+                _shakeScale = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
+            else if(attributes[i].Name == "Time")
+                _shakeTime = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
+            else if(attributes[i].Name == "Speed")
+                _shakeSpeed = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
+        }
+    }
+}
+
+
+public class SequencerGraphEvent_SetHideUI : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SetHideUI;
+
+    public bool _value;
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        HPSphereUIManager.Instance().setActive(_value == false);
+        CrossHairUI._instance.setActive(_value == false);
+        ScreenIndicatorUI._instance.setActive(_value == false);
+
+        processor.getUniqueEntity("Player")?.setGraphicInterfaceActive(_value == false);
+
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "Hide")
+                _value = bool.Parse(attrValue);
+        }
+    }
+}
+
 public class SequencerGraphEvent_QTEFence : SequencerGraphEventBase
 {
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.QTEFence;
@@ -95,6 +211,37 @@ public class SequencerGraphEvent_QTEFence : SequencerGraphEventBase
 
             if(attrName == "KeyName")
                 _keyName = attrValue;
+        }
+    }
+}
+
+public class SequencerGraphEvent_DeadFence : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.DeadFence;
+
+    private string _uniqueKey = "";
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        GameEntityBase uniqueEntity = processor.getUniqueEntity(_uniqueKey);
+        return uniqueEntity == null;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "UniqueKey")
+                _uniqueKey = attrValue;
         }
     }
 }
@@ -662,11 +809,11 @@ public class SequencerGraphEvent_FadeOut : SequencerGraphEventBase
     }
 }
 
-public class SequencerGraphEvent_SetCameraZoom : SequencerGraphEventBase
+public class SequencerGraphEvent_ZoomEffect : SequencerGraphEventBase
 {
-    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SetCameraZoom;
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.ZoomEffect;
 
-    private float _zoom = -1f;
+    private FloatEx _zoom = new FloatEx();
 
     public override void Initialize(SequencerGraphProcessor processor)
     {
@@ -674,10 +821,44 @@ public class SequencerGraphEvent_SetCameraZoom : SequencerGraphEventBase
 
     public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
     {
-        if(_zoom <= 0f)
+        CameraControlEx.Instance().Zoom(_zoom);
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            if(attributes[i].Name == "Factor")
+                _zoom.loadFromXML(attributes[i].Value);
+        }
+    }
+}
+
+public class SequencerGraphEvent_SetCameraZoom : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SetCameraZoom;
+
+    private FloatEx _zoom = new FloatEx();
+    private FloatEx _zoomSpeed = new FloatEx();
+    private bool _force = false;
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        if(_zoom.getValue() <= 0f)
             CameraControlEx.Instance().setDefaultZoomSize();
         else
-            CameraControlEx.Instance().setZoomSize(_zoom);
+        {
+            if(_force)
+                CameraControlEx.Instance().setZoomSizeForce(_zoom);
+            else 
+                CameraControlEx.Instance().setZoomSize(_zoom,_zoomSpeed);
+        }
         return true;
     }
 
@@ -687,7 +868,11 @@ public class SequencerGraphEvent_SetCameraZoom : SequencerGraphEventBase
         for(int i = 0; i < attributes.Count; ++i)
         {
             if(attributes[i].Name == "Size")
-                _zoom = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
+                _zoom.loadFromXML(attributes[i].Value);
+            else if(attributes[i].Name == "Speed")
+                _zoomSpeed.loadFromXML(attributes[i].Value);
+            else if(attributes[i].Name == "Force")
+                _force = bool.Parse(attributes[i].Value);
         }
     }
 }
@@ -1085,6 +1270,40 @@ public class SequencerGraphEvent_SetCameraTarget : SequencerGraphEventBase
                 _uniqueKey = attrValue;
             else if(attrName == "CameraMode")
                 _cameraMode = (CameraModeType)System.Enum.Parse(typeof(CameraModeType), attrValue);
+        }
+    }
+}
+
+public class SequencerGraphEvent_SetCameraPosition : SequencerGraphEventBase
+{
+    private Vector3 _cameraTargetPosition = Vector3.zero;
+
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SetCameraPosition;
+    
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+        
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        CameraControlEx.Instance().setCameraMode(CameraModeType.PositionMode);
+        CameraControlEx.Instance().setCameraTargetPosition(_cameraTargetPosition);
+
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "TargetPosition")
+                _cameraTargetPosition = XMLScriptConverter.valueToVector3(attrValue);
         }
     }
 }

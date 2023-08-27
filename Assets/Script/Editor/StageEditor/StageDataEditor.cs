@@ -307,8 +307,39 @@ public class StageDataEditor : EditorWindow
 
         characterSpawnData._uniqueKey = EditorGUILayout.TextField("Unique Key",characterSpawnData._uniqueKey);
 
+        
+        var characterInfo = ResourceContainerEx.Instance().getCharacterInfo("Assets\\Data\\StaticData\\CharacterInfo.xml");
+        if(characterInfo.ContainsKey(characterSpawnData._characterKey) == false)
+        {
+            DebugUtil.assert(false,"말이 안되는 상황");
+            return;
+        }
 
+        CharacterInfoData characterInfoData = characterInfo[characterSpawnData._characterKey];
+        ActionGraphBaseData baseData = ResourceContainerEx.Instance().GetActionGraph(characterInfoData._actionGraphPath);
+        if(baseData == null)
+        {
+            DebugUtil.assert(false,"말이 안되는 상황");
+            return;
+        }
 
+        List<string> actionNameList = new List<string>();
+        for(int index = 1; index < baseData._actionNodeCount; ++index)
+        {
+            actionNameList.Add(baseData._actionNodeData[index]._nodeName);
+        }
+
+        int currentIndex = actionNameList.FindIndex((x)=>{return x == characterSpawnData._startAction;});
+        if(currentIndex == -1)
+            currentIndex = baseData._defaultActionIndex - 1;
+
+        string newStartAction = actionNameList[EditorGUILayout.Popup("Start Action", currentIndex,actionNameList.ToArray())];
+        if(newStartAction != characterSpawnData._startAction)
+        {
+            stagePointDataEditObject._characterObjectList[_characterSelectedIndex].sprite = getActionSpriteFromCharacter(characterInfoData, newStartAction);
+            characterSpawnData._startAction = newStartAction;
+        }
+        
         stagePointDataEditObject._characterObjectList[_characterSelectedIndex].flipX = characterSpawnData._flip;
     }
 
@@ -322,6 +353,9 @@ public class StageDataEditor : EditorWindow
 
         GUILayout.Label("Position: " + stagePointData._stagePoint.ToString()); 
         stagePointData._maxLimitedDistance = EditorGUILayout.FloatField("Radius", stagePointData._maxLimitedDistance);
+        stagePointData._cameraZoomSize = EditorGUILayout.FloatField("ZoomSize", stagePointData._cameraZoomSize);
+        stagePointData._cameraZoomSpeed = EditorGUILayout.FloatField("ZoomSpeed", stagePointData._cameraZoomSpeed);
+        stagePointData._lerpCameraZoom = EditorGUILayout.Toggle("LerpToNextZoom", stagePointData._lerpCameraZoom);
 
         if(stagePointDataEditObject._onEnterSequencerPathProperty == null || stagePointDataEditObject._onExitSequencerPathProperty == null)
         {
@@ -442,9 +476,26 @@ public class StageDataEditor : EditorWindow
         if(_editStageData == null)
             return;
 
+        roundPixelPerfect();
+
         EditorUtility.SetDirty(_editStageData);
         if(_backgroundPrefabObject != null)
             PrefabUtility.SaveAsPrefabAssetAndConnect(_backgroundPrefabObject, "Assets/Resources/" + _editStageData._backgroundPrefabPath + ".prefab",InteractionMode.AutomatedAction);
+    }
+
+    public void roundPixelPerfect()
+    {
+        foreach(var item in _editingStagePointList)
+        {
+            item._stagePointData._stagePoint = MathEx.round(item._stagePointData._stagePoint, 2);
+            item._gizmoItem.transform.position = item._stagePointData._stagePoint;
+
+            for(int index = 0; index < item._characterSpawnDataList.Count; ++index)
+            {
+                item._characterSpawnDataList[index]._localPosition = MathEx.round(item._characterSpawnDataList[index]._localPosition, 2);
+                item._characterObjectList[index].transform.position = item._stagePointData._stagePoint + item._characterSpawnDataList[index]._localPosition;
+            }
+        }
     }
 
     public void setEditStageData(StageData stageData)
@@ -535,13 +586,15 @@ public class StageDataEditor : EditorWindow
             Handles.color = currentColor;
             if(_drawScreenToMousePoint || i == _pointSelectedIndex)
             {
-                drawInGameScreenSection(stagePointData._stagePoint,stagePointData._maxLimitedDistance);
+                drawInGameScreenSection(stagePointData._stagePoint,stagePointData._cameraZoomSize,stagePointData._maxLimitedDistance);
                 if(stagePointData._maxLimitedDistance > 0f)
-                    drawInGameScreenSection(stagePointData._stagePoint,0f);
+                    drawInGameScreenSection(stagePointData._stagePoint,stagePointData._cameraZoomSize,0f);
             }
 
             if(_drawScreenToMousePoint && i > 0)
-                drawScreenSectionConnectLine(_editStageData._stagePointData[i - 1]._stagePoint,_editStageData._stagePointData[i - 1]._maxLimitedDistance,stagePointData._stagePoint,stagePointData._maxLimitedDistance);
+                drawScreenSectionConnectLine(
+                    _editStageData._stagePointData[i - 1]._stagePoint,_editStageData._stagePointData[i - 1]._cameraZoomSize,_editStageData._stagePointData[i - 1]._maxLimitedDistance,
+                    stagePointData._stagePoint,stagePointData._cameraZoomSize,stagePointData._maxLimitedDistance);
 
             if(i < _editStageData._stagePointData.Count - 1 )
             {
@@ -604,6 +657,8 @@ public class StageDataEditor : EditorWindow
     {
         StagePointDataEditObject editObject = new StagePointDataEditObject();
         StagePointData stagePointData = new StagePointData(spawnPosition);
+        stagePointData._cameraZoomSize = Camera.main.orthographicSize;
+
         _editStageData._stagePointData.Add(stagePointData);
 
         editObject._stagePointData = stagePointData;
@@ -707,7 +762,7 @@ public class StageDataEditor : EditorWindow
             for(int index = 0; index < editObject._characterSpawnDataList.Count; ++index)
             {
                 SpriteRenderer characterEditItem = getCharacterItem();
-                characterEditItem.sprite = getFirstActionSpriteFromCharacter(characterInfo[editObject._characterSpawnDataList[index]._characterKey]);
+                characterEditItem.sprite = getActionSpriteFromCharacter(characterInfo[editObject._characterSpawnDataList[index]._characterKey],editObject._characterSpawnDataList[index]._startAction);
                 characterEditItem.sortingOrder = 10;
                 characterEditItem.transform.position = item._stagePoint + editObject._characterSpawnDataList[index]._localPosition;
                 characterEditItem.flipX = editObject._characterSpawnDataList[index]._flip;
@@ -899,9 +954,9 @@ public class StageDataEditor : EditorWindow
         _characterItemPool.Enqueue(spriteRenderer);
     }
 
-    private Rect getInGameScreenSection(Vector3 position, float radius)
+    private Rect getInGameScreenSection(Vector3 position, float zoomSize, float radius)
     {
-        float mainCamSize = Camera.main.orthographicSize;
+        float mainCamSize = zoomSize;
         float camHeight = mainCamSize * 2f + radius * 2f;
 		float camWidth = camHeight * ((float)800f / (float)600f) + radius * 2f;
 
@@ -920,7 +975,7 @@ public class StageDataEditor : EditorWindow
         Count,
     };
 
-    private void drawScreenSectionConnectLine(Vector3 one, float oneRadius, Vector3 two, float twoRadius)
+    private void drawScreenSectionConnectLine(Vector3 one, float oneZoomSize,float oneRadius, Vector3 two, float twoZoomSize, float twoRadius)
     {
         Side side = Side.Count;
         if(one.x > two.x && one.y > two.y)
@@ -932,8 +987,8 @@ public class StageDataEditor : EditorWindow
         else// if(one.x < two.x && one.y < two.y)
             side = Side.LeftBottom;
         
-        Rect oneRect = getInGameScreenSection(one,oneRadius);
-        Rect twoRect = getInGameScreenSection(two,twoRadius);
+        Rect oneRect = getInGameScreenSection(one,oneZoomSize,oneRadius);
+        Rect twoRect = getInGameScreenSection(two,twoZoomSize,twoRadius);
 
         Color currentColor = Handles.color;
         Handles.color = Color.blue;
@@ -968,9 +1023,9 @@ public class StageDataEditor : EditorWindow
         Handles.color = currentColor;
     }
 
-    private void drawInGameScreenSection(Vector3 position, float radius)
+    private void drawInGameScreenSection(Vector3 position, float zoomSize, float radius)
     {
-        Rect rectangle = getInGameScreenSection(position, radius);
+        Rect rectangle = getInGameScreenSection(position, zoomSize, radius);
         Handles.DrawSolidRectangleWithOutline(rectangle,new Color(0f,0f,0f,0f),Color.blue);
     }
 
@@ -994,6 +1049,37 @@ public class StageDataEditor : EditorWindow
         ActionGraphBaseData baseData = ResourceContainerEx.Instance().GetActionGraph(characterInfoData._actionGraphPath);
         AnimationPlayDataInfo playDataInfo = baseData._animationPlayData[baseData._actionNodeData[baseData._defaultActionIndex]._animationInfoIndex][0];
 
+        Sprite[] sprites = ResourceContainerEx.Instance().GetSpriteAll(playDataInfo._path);
+        if(sprites == null)
+            return null;
+        
+        return sprites[0];
+    }
+
+    private Sprite getActionSpriteFromCharacter(CharacterInfoData characterInfoData, string actionName)
+    {
+        StaticDataLoader.loadStaticData();
+        ActionGraphBaseData baseData = ResourceContainerEx.Instance().GetActionGraph(characterInfoData._actionGraphPath);
+        if(baseData == null)
+            return null;
+
+        int targetIndex = -1;
+        for(int index = 0; index < baseData._actionNodeData.Length; ++index)
+        {
+            if(baseData._actionNodeData[index]._nodeName == actionName)
+            {
+                targetIndex = index;
+                break;
+            }
+        }
+
+        if(targetIndex < 0)
+            targetIndex = baseData._defaultActionIndex;
+
+        if(baseData._actionNodeData[targetIndex]._animationInfoIndex == -1)
+            return null;
+
+        AnimationPlayDataInfo playDataInfo = baseData._animationPlayData[baseData._actionNodeData[targetIndex]._animationInfoIndex][0];
         Sprite[] sprites = ResourceContainerEx.Instance().GetSpriteAll(playDataInfo._path);
         if(sprites == null)
             return null;

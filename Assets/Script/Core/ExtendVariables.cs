@@ -132,6 +132,7 @@ public class FloatEx : ExtendVariable<float>
         if(float.TryParse(valueString,out float result))
         {
             _value = result;
+            _isRandom = false;
             return;
         }
 

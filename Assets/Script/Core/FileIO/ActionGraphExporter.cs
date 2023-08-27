@@ -443,11 +443,11 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             }
         }
 
-        if(branchStartIndex == branchDataList.Count)
-        {
-            DebugUtil.assert_fileOpen(false,"branch data not exists [Line: {0}] [FileName: {1}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node), XMLScriptConverter.getLineFromXMLNode(node), filePath);
-            return null;
-        }
+        // if(branchStartIndex == branchDataList.Count)
+        // {
+        //     DebugUtil.assert_fileOpen(false,"branch data not exists [Line: {0}] [FileName: {1}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node), XMLScriptConverter.getLineFromXMLNode(node), filePath);
+        //     return null;
+        // }
 
         animationDataList.Add(animationPlayDataInfoList.ToArray());
 

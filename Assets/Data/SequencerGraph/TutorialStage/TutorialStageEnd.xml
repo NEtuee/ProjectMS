@@ -1,0 +1,19 @@
+<SequencerGraph Name="TutorialStageEnd">
+
+    <InitializePhase>
+    </InitializePhase>
+
+    <UpdatePhase>
+        <DeadFence UniqueKey="Teacher"/>
+        <BlockInput Enable="True"/>
+        <SetHideUI Hide="True"/>
+
+        <WaitSecond Time="1.5"/>
+
+        <SetAction UniqueKey="Player" Action="SQ_Intro_KillTeacher"/>
+
+        <WaitSecond Time="1.5"/>
+        <FadeIn Lambda="4.0"/>
+    </UpdatePhase>
+
+</SequencerGraph>

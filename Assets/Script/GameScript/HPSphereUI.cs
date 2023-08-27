@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using YamlDotNet.Core.Tokens;
 
 public class HPSphereUI
 {
@@ -19,6 +20,7 @@ public class HPSphereUI
     private AnimationCustomPreset _bpFadeAnimation;
 
     private float _prevBattlePoint = 0f;
+    private bool _activeSelf = false;
 
     private Vector3 _shakeOffset = Vector3.zero;
 
@@ -73,13 +75,22 @@ public class HPSphereUI
 
         _bpAnimationSpriteObject.SetActive(false);
 
+        _activeSelf = true;
+
+    }
+
+    public void setActive(bool value)
+    {
+        _hpSpriteObject.SetActive(value);
+        _bpGaugeSpriteObject.SetActive(value);
+        _bpAnimationSpriteObject.SetActive(value);
+
+        _activeSelf = value;
     }
 
     public void release()
     {
-        _hpSpriteObject.SetActive(false);
-        _bpGaugeSpriteObject.SetActive(false);
-        _bpAnimationSpriteObject.SetActive(false);
+        setActive(false);
     }
 
     public void progress(Vector3 followPosition, float deltaTime)
@@ -116,7 +127,7 @@ public class HPSphereUI
             if(percentage > 1f)
                 percentage = 1f;
 
-            _hpSpriteObject.SetActive(true);
+            _hpSpriteObject.SetActive(_activeSelf);
             _hpSpriteObject.transform.localScale = Vector3.one * percentage;
         }
     }
@@ -135,19 +146,19 @@ public class HPSphereUI
                 percentage = 1f;
 
             if(_bpAnimation.isEnd())
-                _bpGaugeSpriteObject.SetActive(true);
-            _bpAnimationSpriteObject.SetActive(true);
+                _bpGaugeSpriteObject.SetActive(_activeSelf);
+            _bpAnimationSpriteObject.SetActive(_activeSelf);
             _bpGaugeSpriteObject.transform.localScale = Vector3.one * percentage;
         }
 
         if(percentage == 1f && _prevBattlePoint == 1f && _bpAnimation.isEnd())
         {   
-            _bpGaugeSpriteObject.SetActive(true);
+            _bpGaugeSpriteObject.SetActive(_activeSelf);
             _bpAnimation.changeAnimationByCustomPreset("Sprites/UI/HPSphere/HPBPFull",_bpFullAnimation);
         }
         else if(_prevBattlePoint == 1f && percentage < 1f)
         {
-            _bpGaugeSpriteObject.SetActive(true);
+            _bpGaugeSpriteObject.SetActive(_activeSelf);
             _bpAnimation.changeAnimationByCustomPreset("Sprites/UI/HPSphere/BPFade",_bpFadeAnimation);
         }
 

@@ -72,6 +72,7 @@ public class GameEntityBase : SequencerObjectBase
     private bool                _initializeFromCharacter = false;
     private bool                _activeSelf = true;
     private bool                _blockAI = false;
+    private bool                _blockInput = false;
 
     private DirectionType       _currentDirectionType = DirectionType.AlwaysRight;
     private RotationType        _currentRotationType = RotationType.AlwaysRight;
@@ -142,6 +143,7 @@ public class GameEntityBase : SequencerObjectBase
         _blockAIByEditor = false;
 #endif
         _blockAI = false;
+        _blockInput = false;
 
         _currentVelocity = Vector3.zero;
         _currentTarget = null;
@@ -591,6 +593,7 @@ public class GameEntityBase : SequencerObjectBase
 
         _blockAIByEditor = false;
         _blockAI = false;
+        _blockInput = false;
 
         _currentVelocity = Vector3.zero;
         _currentTarget = null;
@@ -692,6 +695,7 @@ public class GameEntityBase : SequencerObjectBase
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Input_AttackCharge, Input.GetMouseButton(0));
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Input_AttackBlood, Input.GetKey(KeyCode.R));
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Input_Guard, Input.GetMouseButton(1));
+        _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Input_CanInput, _blockInput == false);
 
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Attack_Guarded, _attackState == AttackState.AttackGuarded);
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Attack_Success, _attackState == AttackState.AttackSuccess);
@@ -1006,6 +1010,11 @@ public class GameEntityBase : SequencerObjectBase
         return _actionGraph.getAnimationPlayTimeByIndex(actionIndex);
     }
 
+    public void setGraphicInterfaceActive(bool value)
+    {
+        _graphicInterface?.setActive(value);
+    }
+
     public void addTorque(float torque) {_physicsBody.addTorque(torque);}
     public void setTorque(float torque) {_physicsBody.setTorque(torque);}
 
@@ -1034,7 +1043,7 @@ public class GameEntityBase : SequencerObjectBase
     public void setActiveSelf(bool active) {_activeSelf = active;}
     public int getActionIndex(string actionName) {return _actionGraph.getActionIndex(actionName);}
 
-    public void blockInput(bool value) {_actionGraph.blockInput(value);}
+    public void blockInput(bool value) {_blockInput = value; _actionGraph.blockInput(value);}
     public float getHeadUpOffset() {return _headUpOffset;}
 
     public float getCustomValue(string customValueName) {return _actionGraph.getCustomValue(customValueName);}

@@ -78,7 +78,7 @@ public class AnimationPresetFrameEventData_SpriteEffect
     public Vector3              _spawnOffset = Vector3.zero;
 
     [Tooltip("물리 바디 셋팅")]
-    public PhysicsBodyDescription _physicsBodyDesc = PhysicsBodyDescription._empty;
+    public PhysicsBodyDescription _physicsBodyDesc = new PhysicsBodyDescription(null);
 
     [Tooltip("시간 느려지는거에 영향 받을지 여부 (ScaledDeltaTime이면 영향 받음")]
     public EffectUpdateType     _effectUpdateType = EffectUpdateType.ScaledDeltaTime;
