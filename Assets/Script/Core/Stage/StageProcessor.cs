@@ -109,21 +109,23 @@ public class StageProcessor : Singleton<StageProcessor>
             }
         }
 
-        foreach(var path in _stageData._stagePointData[0]._onEnterSequencerPath)
+        if(_stageData._stagePointData[0]._onEnterSequencerPath != null && _stageData._stagePointData[0]._onEnterSequencerPath.Length != 0)
         {
-            SequencerGraphProcessor processor = _sequencerProcessManager.startSequencerFromStage(path,_stageData._stagePointData[0],_spawnedCharacterEntityDictionary[0],null,false);
-            GameEntityBase playerEntity = processor?.getUniqueEntity("Player");
+            for(int index = 0; index < _stageData._stagePointData[0]._onEnterSequencerPath.Length; ++index)
+            {
+                SequencerGraphProcessor processor = _sequencerProcessManager.startSequencerFromStage(_stageData._stagePointData[0]._onEnterSequencerPath[index],_stageData._stagePointData[0],_spawnedCharacterEntityDictionary[0],null,false);
 
-            if(_playerEntity != null && playerEntity != null)
-            {
-                DebugUtil.assert(false,"Stage에 Player가 2명 이상 존재합니다. 데이터를 확인해 주세요. [StageName: {0}]",data._stageName);
-                stopStage();
-                return;
+                // if(_playerEntity != null && playerEntity != null)
+                // {
+                //     DebugUtil.assert(false,"Stage에 Player가 2명 이상 존재합니다. 데이터를 확인해 주세요. [StageName: {0}]",data._stageName);
+                //     stopStage();
+                //     return;
+                // }
+                // else 
+                if(_playerEntity == null)
+                    _playerEntity = processor?.getUniqueEntity("Player");
             }
-            else if(playerEntity != null)
-            {
-                _playerEntity = playerEntity;
-            }
+            
         }
 
         if(_stageData._backgroundPrefabPath != "")
@@ -176,7 +178,7 @@ public class StageProcessor : Singleton<StageProcessor>
 
         if(_isEnd == false && fraction >= 1f)
         {
-            startExitSequencers(_stageData._stagePointData[_currentPoint],_currentPoint,true);
+            startExitSequencers(_stageData._stagePointData[_currentPoint],_currentPoint,_currentPoint != 0);
 
             ++_currentPoint;
             if(_currentPoint >= _stageData._stagePointData.Count)
@@ -255,7 +257,6 @@ public class StageProcessor : Singleton<StageProcessor>
         StagePointData nextPoint = isEndPoint ? startPoint : _stageData._stagePointData[_currentPoint + 1];
 
         Vector3 perpendicular = isEndPoint ? (startPoint._stagePoint + _offsetPosition) : MathEx.getPerpendicularPointOnLineSegment((startPoint._stagePoint + _offsetPosition), (nextPoint._stagePoint + _offsetPosition),targetPositionWithoutZ);
-        
         float resultFraction = isEndPoint ? 1f : (perpendicular - (startPoint._stagePoint + _offsetPosition)).magnitude * (1f / ((nextPoint._stagePoint + _offsetPosition) - (startPoint._stagePoint + _offsetPosition)).magnitude);
         float limitedDistance = Mathf.Lerp(startPoint._maxLimitedDistance, nextPoint._maxLimitedDistance, resultFraction);
 

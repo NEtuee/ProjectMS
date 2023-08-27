@@ -95,7 +95,7 @@ public class CameraPositionMode : CameraModeBase
     public float _targetPositionRatio = 0.25f;
     public static float _cameraMoveSpeedRate = 8.0f;
 
-    public override CameraModeType getCameraModeType() => CameraModeType.TargetCenterMode;
+    public override CameraModeType getCameraModeType() => CameraModeType.PositionMode;
     public override void initialize(Vector3 position)
     {
         _cameraPosition = position;
@@ -361,12 +361,11 @@ public class CameraControlEx : Singleton<CameraControlEx>
     {
         _cameraTargetPosition = targetPosition;
         _currentCameraMode?.setCurrentTargetPosition(_cameraTargetPosition);
-        _currentCameraMode?.initialize(_cameraTargetPosition);
     }
 
     private void updateCameraMode(float deltaTime)
     {
-        if(_currentCameraMode == null || _currentTarget == null)
+        if(_currentCameraMode == null)
             return;
 
         if(_currentTarget is GameEntityBase)
@@ -374,7 +373,7 @@ public class CameraControlEx : Singleton<CameraControlEx>
         else
             _currentCameraMode.setCurrentTargetEntity(null);
 
-        _currentCameraMode.progress(deltaTime,_currentTarget.transform.position);
+        _currentCameraMode.progress(deltaTime,_currentTarget == null ? _cameraTargetPosition : _currentTarget.transform.position);
     }
 
     public void SyncPosition()

@@ -7,9 +7,6 @@
         <SetCrossHair UniqueKey="Player"/>
         <SetHPSphere UniqueKey="Player"/>
 
-        <SetHideUI Hide="True"/>
-        <BlockInput Enable="True"/>
-
     </InitializePhase>
 
     <UpdatePhase>
@@ -20,20 +17,11 @@
         <SetAction UniqueKey="Player" Action="SQ_Intro_ToIdle"/>
         <CallAIEvent EventName="EventSignal" UniqueKey="Player" EventTargetType="Range" SearchIdentifier="Enemy" Range="999.0"/>
 
-        <!-- <SetCameraPosition TargetPosition="0.0 0.54 0.0"/> -->
-        <SetCameraTarget UniqueKey="Player" CameraMode="TargetCenterMode"/>
-        <ZoomEffect Factor="-0.2"/>
-        <!-- <SetCameraZoom Size="2.8" Speed="1.0"/> -->
+        <SetCameraPosition TargetPosition="0.0 0.8 0.0"/>
+        <ZoomEffect Factor="-0.3"/>
 
-        <ShakeEffect Scale="1.1" Speed="35.0" Time="0.25"/>
-        <SetTimeScale Scale="0.0" Time="0.1" BlendTime="0.07"/>
-
-        <WaitSecond Time="0.5"/>
-        
-        <BlockInput Enable="False"/>
-        <SetHideUI Hide="False"/>
-        
-        
+        <ShakeEffect Scale="0.5" Speed="35.0" Time="0.25"/>
+        <SetTimeScale Scale="0.0" Time="0.08" BlendTime="0.07"/>
 
         <!-- <AIMove UniqueKey="Player" StartAction="AIMove_Start" EndAction="AIMove_End" LoopAction="AIMove_Loop" EndPosition="3.0 0.0 0.0"/>
 

@@ -1245,14 +1245,13 @@ public class SequencerGraphEvent_SetCameraTarget : SequencerGraphEventBase
     
     public override void Initialize(SequencerGraphProcessor processor)
     {
-        
     }
 
     public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
     {
-        CameraControlEx.Instance().setCameraTarget(processor.getUniqueEntity(_uniqueKey));
         if(_cameraMode != CameraModeType.Count)
             CameraControlEx.Instance().setCameraMode(_cameraMode);
+        CameraControlEx.Instance().setCameraTarget(processor.getUniqueEntity(_uniqueKey));
 
         return true;
     }
