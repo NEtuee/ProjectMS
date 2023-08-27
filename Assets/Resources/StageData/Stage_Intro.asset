@@ -22,7 +22,10 @@ MonoBehaviour:
     _lerpCameraZoom: 1
     _onEnterSequencerPath:
     - TutorialStage/TutorialStageStart.xml
-    _onExitSequencerPath: []
+    - ActiveSequencerMode.xml
+    _onExitSequencerPath:
+    - DeactiveSequencerMode.xml
+    - SetCameraTargetToPlayer.xml
     _characterSpawnData:
     - _characterKey: TutorialStudent
       _uniqueKey: 
