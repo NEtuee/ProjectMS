@@ -169,14 +169,7 @@ public class MasterManager : MessageHub<ManagerBase>
         FMODAudioManager.Instance().updateAudio();
 
         if(Input.GetKeyDown(KeyCode.Escape))
-        {
-            Message msg = MessagePool.GetMessage();
-            msg.Set(MessageTitles.game_stageEnd,MessageReceiver._boradcastNumber,null,null);
-
             StageProcessor.Instance().stopStage();
-
-            HandleBroadcastMessage(msg);
-        }
     }
 
     public void LateUpdate()

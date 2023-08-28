@@ -136,12 +136,8 @@ public class GameEditorMaster : MonoBehaviour
             stageButton.GetComponent<Button>().onClick.AddListener(()=>{
                 if(_activeEditor)
                     editorOff();
-                Message msg = MessagePool.GetMessage();
-                msg.Set(MessageTitles.game_stageEnd,MessageReceiver._boradcastNumber,null,null);
+
                 StageProcessor.Instance().stopStage();
-        
-                MasterManager.instance.HandleBroadcastMessage(msg);
-                
                 StageProcessor.Instance().startStage(stageData[indexPointer],Vector3.zero);
                 stageSelectorOnOff();
                 

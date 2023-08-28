@@ -32,6 +32,7 @@ public enum SequencerGraphEventType
     SetHideUI,
     ShakeEffect,
     SetTimeScale,
+    NextStage,
 
     Count,
 }
@@ -75,6 +76,32 @@ public class SequencerGraphEvent_WaitSignal : SequencerGraphEventBase
     }
 }
 
+public class SequencerGraphEvent_NextStage : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.NextStage;
+
+    public string _stageDataPath = "";
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        StageProcessor.Instance().requestStartStage(_stageDataPath);
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            if(attributes[i].Name == "Path")
+                _stageDataPath = attributes[i].Value;
+        }
+    }
+}
 
 public class SequencerGraphEvent_SetTimeScale : SequencerGraphEventBase
 {

@@ -143,6 +143,8 @@ public class SequencrGraphLoader : LoaderBase<SequencerGraphBaseData>
             spawnEvent = new SequencerGraphEvent_SetHideUI();
         else if(node.Name == "SetTimeScale")
             spawnEvent = new SequencerGraphEvent_SetTimeScale();
+        else if(node.Name == "NextStage")
+            spawnEvent = new SequencerGraphEvent_NextStage();
         else if(node.Name == "ShakeEffect")
             spawnEvent = new SequencerGraphEvent_ShakeEffect();
         else if(node.Name == "ZoomEffect")

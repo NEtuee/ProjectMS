@@ -5,10 +5,17 @@ using UnityEngine;
 
 public class StageProcessor : Singleton<StageProcessor>
 {
+    struct StartNextStageRequsetDesc
+    {
+        public bool _startNextStage;
+        public string _stageDataPath;
+    }
+
     public StageData _stageData = null;
 
     private int _currentPoint = 0;
     private bool _isEnd = false;
+    private StartNextStageRequsetDesc _startNextStageRequestDesc = new StartNextStageRequsetDesc();
 
     private Transform _targetTransform;
 
@@ -23,6 +30,18 @@ public class StageProcessor : Singleton<StageProcessor>
     Dictionary<int,List<CharacterEntityBase>> _spawnedCharacterEntityDictionary = new Dictionary<int, List<CharacterEntityBase>>();
 
     private SequencerGraphProcessManager _sequencerProcessManager = new SequencerGraphProcessManager(null);
+
+    public StageProcessor()
+    {
+        _startNextStageRequestDesc._stageDataPath = "";
+        _startNextStageRequestDesc._startNextStage = false;
+    }
+
+    public void requestStartStage(string stagePath)
+    {
+        _startNextStageRequestDesc._startNextStage = true;
+        _startNextStageRequestDesc._stageDataPath = stagePath;
+    }
 
     public void setTargetTransform(Transform target)
     {
@@ -157,12 +176,34 @@ public class StageProcessor : Singleton<StageProcessor>
         {
             item.Clear();
         }
+
+        Message msg = MessagePool.GetMessage();
+        msg.Set(MessageTitles.game_stageEnd,MessageReceiver._boradcastNumber,null,null);
+
+        MasterManager.instance.HandleBroadcastMessage(msg);
     }
 
     public void processStage(float deltaTime)
     {
         if(isValid() == false)
             return;
+        
+        if(_startNextStageRequestDesc._startNextStage)
+        {
+            _startNextStageRequestDesc._startNextStage = false;
+            stopStage();
+
+            StageData stageData = ResourceContainerEx.Instance().GetStageData(_startNextStageRequestDesc._stageDataPath);
+            if(stageData == null)
+            {
+                DebugUtil.assert(false,"대상 스테이지 데이터가 존재하지 않습니다. [Path: {0}]",_startNextStageRequestDesc._stageDataPath);
+                return;
+            }
+
+            startStage(stageData,Vector3.zero);
+
+            return;
+        }
 
         _sequencerProcessManager?.progress(deltaTime);
 
