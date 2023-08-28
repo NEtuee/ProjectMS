@@ -137,6 +137,11 @@ public class StatusGraphicInterface
         updatePosition();
     }
 
+    public void setInterfaceOffset(Vector3 value)
+    {
+        _interfaceOffset = value;
+    }
+
     public void release()
     {
         if(_graphicInterface.Count != 0)

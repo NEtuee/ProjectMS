@@ -173,6 +173,10 @@ public class GameEntityBase : SequencerObjectBase
 
         _danmakuGraph.initialize(this);
 
+        float headUpOffset = _actionGraph.getCurrentHeadUpOffset();
+        if(headUpOffset >= 0f)
+            _headUpOffset = headUpOffset;
+
         _statusInfo.initialize(this,characterInfo._statusName);
         _graphicInterface.initialize(this,_statusInfo,new Vector3(0f, _headUpOffset, 0f), true);
 
@@ -185,6 +189,8 @@ public class GameEntityBase : SequencerObjectBase
         CollisionManager.Instance().registerObject(_collisionInfo, this);
         
         _spriteRenderer.sprite = _actionGraph.getCurrentSprite(_actionGraph.getCurrentRotationType() != RotationType.AlwaysRight ? (_spriteRotation * _actionStartRotation).eulerAngles.z : MathEx.directionToAngle(_direction));
+
+        
 
         initializeActionValue();
 
@@ -267,6 +273,8 @@ public class GameEntityBase : SequencerObjectBase
         _deadEventDelegate = null;
 
         applyActionBuffList(_actionGraph.getDefaultBuffList());
+
+        _headUpOffset = _actionGraph.getCurrentHeadUpOffset();
 
         CollisionInfoData data = new CollisionInfoData(0.2f,0f,0f,0f, CollisionType.Character);
         _collisionInfo = new CollisionInfo(data);
@@ -377,6 +385,17 @@ public class GameEntityBase : SequencerObjectBase
                     _actionStartRotation = _spriteRotation;
                     _actionStartRotation = Quaternion.Inverse(_actionStartRotation);
                 }
+
+                float headUpOffset = _actionGraph.getCurrentHeadUpOffset();
+                if(headUpOffset >= 0f)
+                    _headUpOffset = headUpOffset;
+                else if(_characterInfo != null)
+                    _headUpOffset = _characterInfo._headUpOffset;
+                else
+                    _headUpOffset = 0f;
+
+                _graphicInterface.setInterfaceOffset(Vector3.up * _headUpOffset);
+
 
                 if(_actionGraph.checkCurrentActionFlag(ActionFlags.ClearPush))
                     _currentVelocity = Vector3.zero;

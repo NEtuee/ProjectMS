@@ -35,7 +35,7 @@ InQuote,UpdateType=,"ScaledDeltaTime,NoneScaledDeltaTime"
 InQuote,ToTarget=,"true,false"
 InQuote,AngleType=,"Normal,AttackPoint,Direction"
 InQuote,SearchIdentifier=,"Player,Enemy,Projectile"
-InScope,,"MovementType=~~,MovementGraphPreset=~~,DirectionType=~~,DefenceDirectionType=~~,FlipType=~~,RotationType=~~,MoveScale=~~,IsActionSelection=~~,ApplyBuff=~~,NormalizedSpeed=~~,DefenceType=~~,DefenceAngle=~~,DirectionUpdateOnce=~~,IsActionSelection=~~,FlipTypeUpdateOnce=~~,RotateBySpeed=~~,RotateSpeed=~~,DirectionAngle=~~,Flags=~~"
+InScope,,"MovementType=~~,MovementGraphPreset=~~,DirectionType=~~,DefenceDirectionType=~~,FlipType=~~,RotationType=~~,MoveScale=~~,IsActionSelection=~~,ApplyBuff=~~,NormalizedSpeed=~~,DefenceType=~~,DefenceAngle=~~,DirectionUpdateOnce=~~,IsActionSelection=~~,FlipTypeUpdateOnce=~~,RotateBySpeed=~~,RotateSpeed=~~,DirectionAngle=~~,Flags=~~,HeadUpOffset=~~"
 LineStart,<Branch,"Key=~~,Condition=~~,Execute=~~,Weight=~~"
 LineStart,<Animation,"Preset=~~,Duration=~~,Path=~~,StartTime=~~,EndTime=~~,FramePerSecond=~~,Loop=~~,XFlip=~~,YFlip=~~,RotationPreset=~~,ScalePreset=~~,AngleBaseAnimation=~~"
 LineStart,<MultiSelectAnimation,"Path=~~,Condition=~~"
@@ -107,7 +107,7 @@ FrameEvent,SetDirectionType,DirectionType=~~
 ShortCut,__FrameEvent_SetDirectionType,<FrameEvent Type=~SetDirectionType~ StartTime=~0~ DirectionType=~~/>
 FrameEvent,Torque,"Set=~~,Add=~~"
 ShortCut,__FrameEvent_Torque,<FrameEvent Type=~Torque~ StartTime=~0~ Add=~~/>
-,,
+ShortCut,__FrameEvent_DeactiveTalkBalloon,<FrameEvent Type=~DeactiveTalkBalloon~ StartTime=~0~/>
 ,,
 ,,
 ,,

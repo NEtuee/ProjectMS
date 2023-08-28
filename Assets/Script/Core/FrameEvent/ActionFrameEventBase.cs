@@ -31,6 +31,7 @@ public enum FrameEventType
     FrameEvent_SpawnCharacter,
     FrameEvent_ReleaseCatch,
     FrameEvent_TalkBalloon,
+    FrameEvent_DeactiveTalkBalloon,
     FrameEvent_SetAction,
     FrameEvent_CallAIEvent,
     FrameEvent_AudioPlay,
@@ -519,6 +520,28 @@ public class ActionFrameEvent_TalkBalloon : ActionFrameEventBase
             }
 
         }
+    }
+}
+
+public class ActionFrameEvent_DeactiveTalkBalloon : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_DeactiveTalkBalloon;}
+
+    public override void initialize()
+    {
+    }
+
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        if(executeEntity is GameEntityBase == false)
+            return true;
+
+        TalkBalloonManager.Instance().deactiveTalkBalloon(executeEntity.transform);
+        return true;
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
     }
 }
 

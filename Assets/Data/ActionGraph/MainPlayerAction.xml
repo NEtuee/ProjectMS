@@ -493,8 +493,9 @@
 
     <!-- 여기부터 시퀀스 액션 -->
 
-    <SQ_Intro_Sleep MovementType="Empty" DirectionType="AlwaysRight" FlipType="AlwaysTurnOff" RotationType="AlwaysRight">
-        <Animation Path="Sprites/NewPlayer/Sequencer/Intro_0" FramePerSecond="1">
+    <SQ_Intro_Sleep MovementType="Empty" DirectionType="AlwaysRight" FlipType="AlwaysTurnOff" RotationType="AlwaysRight" HeadUpOffset="0.2">
+        <Animation Preset="Sprites/NewPlayer/Sequencer/Intro_0" XFlip="true" Duration="7.0">
+            <FrameEvent Type="TalkBalloon" StartTime="0" Text="ZZZZZZZ" Time="4"/>
         </Animation>
 
         <Branch Condition="End" Execute="SQ_Intro_Sleep"/>
@@ -503,6 +504,7 @@
     <SQ_Intro_ToIdle MovementType="FrameEvent" DirectionType="AlwaysUp" FlipType="Keep">
         <Animation Preset="Sprites/NewPlayer/idle/" XFlip="true" Duration="0.3">
             <FrameEvent Type="Movement" StartTime="0" Friction="25" MaxVelocity="10" Velocity="10" Speed="0"/>
+            <FrameEvent Type="DeactiveTalkBalloon" StartTime="0"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="Idle"/>

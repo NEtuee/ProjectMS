@@ -69,6 +69,8 @@ public class ActionGraphNodeData
     public float                        _defenceAngle = 360f;
     public float                        _moveScale = 1f;
     public float                        _rotateSpeed = -1f;
+    public float                        _headUpOffset = -1f;
+
     public bool                         _normalizedSpeed = false;
     public bool                         _rotateBySpeed = false;
 

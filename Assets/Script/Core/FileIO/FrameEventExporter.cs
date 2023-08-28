@@ -67,6 +67,8 @@ public static class FrameEventLoader
             outFrameEvent = new ActionFrameEvent_ReleaseCatch();
         else if(type == "TalkBalloon")
             outFrameEvent = new ActionFrameEvent_TalkBalloon();
+        else if(type == "DeactiveTalkBalloon")
+            outFrameEvent = new ActionFrameEvent_DeactiveTalkBalloon();
         else if(type == "SetAction")
             outFrameEvent = new ActionFrameEvent_SetAction();
         else if(type == "CallAIEvent")
@@ -89,7 +91,7 @@ public static class FrameEventLoader
             return null;
         }
 
-        DebugUtil.assert((int)FrameEventType.Count == 35, "check here");
+        DebugUtil.assert((int)FrameEventType.Count == 36, "check here");
 
 
         if(outFrameEvent == null)

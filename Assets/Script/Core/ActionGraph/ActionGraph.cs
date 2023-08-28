@@ -721,6 +721,7 @@ public class ActionGraph
     public float getCurrentFrame() {return _animationPlayer.getCurrentFrame();}
     public float getCurrentDefenceAngle() {return getCurrentAction()._defenceAngle;}
     public float getCurrentDirectionAngle() {return getCurrentAction()._additionalDirectionAngle;}
+    public float getCurrentHeadUpOffset() {return getCurrentAction()._headUpOffset;}
     public DefenceType getCurrentDefenceType() {return getCurrentAction()._defenceType;}
     public RotationType getCurrentRotationType() {return getCurrentAction()._rotationType;}
     public DirectionType getDirectionType() {return getCurrentAction()._directionType;}

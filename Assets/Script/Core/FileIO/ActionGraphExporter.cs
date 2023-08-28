@@ -344,6 +344,10 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
                     nodeData._actionFlag |= (ulong)((ActionFlags)System.Enum.Parse(typeof(ActionFlags), flags[i]));
                 }
             }
+            else if(targetName == "HeadUpOffset")
+            {
+                nodeData._headUpOffset = float.Parse(targetValue);
+            }
             else
             {
                 DebugUtil.assert_fileOpen(false,"invalid attribute type !!! : {0} [Line: {1}] [FileName: {2}]", _currentFileName, XMLScriptConverter.getLineNumberFromXMLNode(node), targetName, XMLScriptConverter.getLineFromXMLNode(node), filePath);
