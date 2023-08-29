@@ -168,16 +168,16 @@ public class StageDataEditor : EditorWindow
                 }
 
                 GUI.enabled = true;
+                if(GUILayout.Button("Open", GUILayout.Width(45f)))
+                {
+                    string fullPath = IOControl.PathForDocumentsFile("Assets/Data/SequencerGraph/") + targetList[index];
+                    FileDebugger.OpenFileWithCursor(fullPath,0);
+                }
+
                 if(GUILayout.Button("X",GUILayout.Width(25f)))
                     deleteIndex = index;
 
-                Color colorOrigin = GUI.color;
-                if(index == 0)
-                    GUI.color = Color.green;
                 GUILayout.Label(targetList[index]);
-                if(index == 0)
-                    GUI.color = colorOrigin;
-
                 GUILayout.EndHorizontal();
             }
 
@@ -469,7 +469,8 @@ public class StageDataEditor : EditorWindow
             for(int i = 0; i < stagePointData._characterSpawnData.Length; ++i)
             {
                 if(_pointCharacterSearchString != "" && (searchStringCompare(stagePointData._characterSpawnData[i]._characterKey,_pointCharacterSearchStringList) == false 
-                        && searchStringCompare(stagePointData._characterSpawnData[i]._uniqueKey,_pointCharacterSearchStringList) == false))
+                        && searchStringCompare(stagePointData._characterSpawnData[i]._uniqueKey,_pointCharacterSearchStringList) == false
+                        && searchStringCompare(stagePointData._characterSpawnData[i]._uniqueGroupKey,_pointCharacterSearchStringList) == false))
                     continue;
 
                 GUILayout.BeginHorizontal();
@@ -479,8 +480,11 @@ public class StageDataEditor : EditorWindow
 
                 string targetName = stagePointData._characterSpawnData[i]._characterKey;
                 if(stagePointData._characterSpawnData[i]._uniqueKey != "")
-                    targetName += ": " + stagePointData._characterSpawnData[i]._uniqueKey;
-                GUILayout.Label(targetName,GUILayout.Width(150f));
+                    targetName += " [Key: " + stagePointData._characterSpawnData[i]._uniqueKey + "]";
+                if(stagePointData._characterSpawnData[i]._uniqueGroupKey != "")
+                    targetName += " [Group: " + stagePointData._characterSpawnData[i]._uniqueGroupKey + "]";
+
+                GUILayout.Label(targetName,GUILayout.Width(200f));
 
                 if(GUILayout.Button("Pick"))
                     selectCharacter(_pointSelectedIndex, i);
@@ -519,19 +523,39 @@ public class StageDataEditor : EditorWindow
             || _editStageData._stagePointData[_pointSelectedIndex] == null
             || _editStageData._stagePointData[_pointSelectedIndex]._characterSpawnData == null 
             || _editStageData._stagePointData[_pointSelectedIndex]._characterSpawnData.Length <= _characterSelectedIndex 
-            || _characterSelectedIndex < 0)
+            || _characterSelectedIndex < 0
+            || _editingStagePointList.Count <= _pointSelectedIndex)
             return;
-
+ 
         StagePointData stagePointData = _editStageData._stagePointData[_pointSelectedIndex];
         StagePointCharacterSpawnData characterSpawnData = _editStageData._stagePointData[_pointSelectedIndex]._characterSpawnData[_characterSelectedIndex];
         StagePointDataEditObject stagePointDataEditObject = _editingStagePointList[_pointSelectedIndex];
 
-        GUILayout.Label("Local Position: " + characterSpawnData._localPosition.ToString());
+        Vector3 worldPositionOrigin = characterSpawnData._localPosition + stagePointData._stagePoint;
+        Vector3 localPositionOrigin = characterSpawnData._localPosition;
+
+        Vector3 newWorldPositionOrigin = EditorGUILayout.Vector3Field("World Position",worldPositionOrigin);
+        if(worldPositionOrigin != newWorldPositionOrigin)
+        {
+            characterSpawnData._localPosition = newWorldPositionOrigin - stagePointData._stagePoint;
+            localPositionOrigin = characterSpawnData._localPosition;
+            stagePointDataEditObject._characterSpawnDataList[_characterSelectedIndex]._localPosition = characterSpawnData._localPosition;
+            stagePointDataEditObject._characterObjectList[_characterSelectedIndex].transform.position = stagePointData._stagePoint + characterSpawnData._localPosition;
+        }
+
+        characterSpawnData._localPosition = EditorGUILayout.Vector3Field("Local Position",characterSpawnData._localPosition);
+        if(characterSpawnData._localPosition != localPositionOrigin)
+        {
+            stagePointDataEditObject._characterSpawnDataList[_characterSelectedIndex]._localPosition = characterSpawnData._localPosition;
+            stagePointDataEditObject._characterObjectList[_characterSelectedIndex].transform.position = stagePointData._stagePoint + characterSpawnData._localPosition;
+        }
+
         characterSpawnData._flip = EditorGUILayout.Toggle("Flip",characterSpawnData._flip);
         characterSpawnData._searchIdentifier = (SearchIdentifier)EditorGUILayout.EnumPopup("Search Identifier", characterSpawnData._searchIdentifier);
         characterSpawnData._activeType = (StageSpawnCharacterActiveType)EditorGUILayout.EnumPopup("Active Type", characterSpawnData._activeType);
 
         characterSpawnData._uniqueKey = EditorGUILayout.TextField("Unique Key",characterSpawnData._uniqueKey);
+        characterSpawnData._uniqueGroupKey = EditorGUILayout.TextField("Unique Group Key",characterSpawnData._uniqueGroupKey);
 
         
         var characterInfo = ResourceContainerEx.Instance().getCharacterInfo("Assets\\Data\\StaticData\\CharacterInfo.xml");
@@ -795,8 +819,12 @@ public class StageDataEditor : EditorWindow
                         Handles.DrawLine(stagePointData._stagePoint,characterWorld);
                     }
 
+                    characterWorld += Vector3.right * 0.1f;
                     if(stagePointData._characterSpawnData[index]._uniqueKey != "")
-                        Handles.Label(characterWorld,stagePointData._characterSpawnData[index]._uniqueKey);
+                        Handles.Label(characterWorld,"Unique Key: " + stagePointData._characterSpawnData[index]._uniqueKey);
+                    
+                    if(stagePointData._characterSpawnData[index]._uniqueGroupKey != "")
+                        Handles.Label(characterWorld + Vector3.down * 0.1f,"Unique Group Key: " + stagePointData._characterSpawnData[index]._uniqueGroupKey);
 
                     Handles.color = currentColor;
                     Handles.Label(characterWorld + Vector3.down * 0.2f,stagePointData._characterSpawnData[index]._activeType.ToString());

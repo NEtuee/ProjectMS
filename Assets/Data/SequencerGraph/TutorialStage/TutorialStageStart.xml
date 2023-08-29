@@ -18,7 +18,7 @@
         <ApplyPostProcessProfile Path="PostProcessProfile/AdditionalTest" BlendTime="0.5" ApplyType="Additional"/>
 
         <SetAction UniqueKey="Player" Action="SQ_Intro_ToIdle"/>
-        <CallAIEvent EventName="EventSignal" UniqueKey="Player" EventTargetType="Range" SearchIdentifier="Enemy" Range="999.0"/>
+        <SetAction UniqueGroupKey="Student" Action="AC_Floating"/>
 
         <SetCameraPosition TargetPosition="0.0 0.8 0.0"/>
         <ZoomEffect Factor="-0.3"/>

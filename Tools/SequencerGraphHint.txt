@@ -38,10 +38,10 @@ ShortCut,__ForceQuit,<ForceQuit/>
 LineStart,<BlockInput,Enable=~~
 ShortCut,__BlockInput,<BlockInput Enable=~~/>
 InQuote,Enable=,"True,False"
-LineStart,<BlockAI,"Enable=~~,UniqueKey=~~"
-ShortCut,__BlockAI,<BlockAI UniqueKey=~~ Enable=~~/>
-LineStart,<SetAction,"UniqueKey=~~,Action=~~"
-ShortCut,__SetAction,<SetAction UniqueKey=~~ Action=~~/>
+LineStart,<BlockAI,"Enable=~~,UniqueKey=~~,UniqueGroupKey=~~"
+ShortCut,__BlockAI,<BlockAI UniqueKey=~~ UniqueGroupKey=~~ Enable=~~/>
+LineStart,<SetAction,"UniqueKey=~~,UniqueGroupKey=~~,Action=~~"
+ShortCut,__SetAction,<SetAction UniqueKey=~~ UniqueGroupKey=~~ Action=~~/>
 LineStart,<PlayAnimation,"UniqueKey=~~,PlayAnimation=~~"
 ShortCut,__PlayAnimation,<PlayAnimation UniqueKey=~~ Path=~~/>
 LineStart,<AIMove,"UniqueKey=~~,StartAction=~~,LoopAction=~~,EndAction=~~,EndPosition=~~"
@@ -60,8 +60,8 @@ ShortCut,__SetTimeScale,<SetTimeScale Scale=~~ Time=~~ BlendTime=~~/>
 LineStart,<SetTimeScale,"Scale=~~,Time=~~,BlendTime=~~"
 ShortCut,__ZoomEffect,<ZoomEffect Factor=~~/>
 LineStart,<ZoomEffect,Factor=~~
-ShortCut,__DeadFence,<DeadFence UniqueKey=~~/>
-LineStart,<DeadFence,UniqueKey=~~
+ShortCut,__DeadFence,<DeadFence UniqueKey=~~ UniqueGroupKey=~~/>
+LineStart,<DeadFence,"UniqueKey=~~,UniqueGroupKey=~~"
 ShortCut,__NextStage,<NextStage Path=~~/>
 LineStart,<NextStage,Path=~~
 ,,

@@ -11,7 +11,9 @@ public class SequencerGraphProcessor
     }
 
     private SequencerGraphBaseData              _currentSequencer = null;
-    public Dictionary<string, GameEntityBase>  _uniqueEntityDictionary = new Dictionary<string, GameEntityBase>();
+    public Dictionary<string, GameEntityBase>   _uniqueEntityDictionary = new Dictionary<string, GameEntityBase>();
+    public Dictionary<string, List<GameEntityBase>> _uniqueGroupEntityDictionary = new Dictionary<string, List<GameEntityBase>>();
+
     private int                                 _currentIndex = 0;
     private bool                                _isSequencerEventEnd = false;
 
@@ -27,6 +29,7 @@ public class SequencerGraphProcessor
         _isSequencerEventEnd = false;
 
         _uniqueEntityDictionary.Clear();
+        _uniqueGroupEntityDictionary.Clear();
         _deleteUniqueTargetList.Clear();
         _signalList.Clear();
     }
@@ -41,6 +44,17 @@ public class SequencerGraphProcessor
 
         foreach(var item in _deleteUniqueTargetList)
             _uniqueEntityDictionary.Remove(item);
+        
+        foreach(var item in _uniqueGroupEntityDictionary.Values)
+        {
+            for(int index = 0; index < item.Count;)
+            {
+                if(item[index].isDead())
+                    item.RemoveAt(index);
+                else
+                    ++index;
+            }
+        }
 
         _deleteUniqueTargetList.Clear();
 
@@ -112,6 +126,28 @@ public class SequencerGraphProcessor
         return _uniqueEntityDictionary[uniqueKey];
     }
 
+    public void addUniqueGroupEntity(string uniqueGroupKey, GameEntityBase uniqueEntity)
+    {
+        if(uniqueEntity == null)
+            return;
+
+        if(_uniqueGroupEntityDictionary.ContainsKey(uniqueGroupKey) == false)
+            _uniqueGroupEntityDictionary.Add(uniqueGroupKey, new List<GameEntityBase>());
+
+        _uniqueGroupEntityDictionary[uniqueGroupKey].Add(uniqueEntity);
+    }
+
+    public List<GameEntityBase> getUniqueGroup(string uniqueGroup)
+    {
+        if(_uniqueGroupEntityDictionary.ContainsKey(uniqueGroup) == false)
+        {
+            DebugUtil.assert(false,"존재하지 않는 유니크 그룹 입니다. 오타는 아닌가요? [Group: {0}]",uniqueGroup);
+            return null;
+        }
+
+        return _uniqueGroupEntityDictionary[uniqueGroup];
+    }
+
     public bool isValid()
     {
         return _currentSequencer != null;
@@ -160,10 +196,12 @@ public class SequencerGraphProcessor
 
         for(int index = 0; index < pointCharacters.Count; ++index)
         {
-            if(currentPoint._characterSpawnData[index]._uniqueKey == "")
-                continue;
+            if(currentPoint._characterSpawnData[index]._uniqueKey != "")
+                addUniqueEntity(currentPoint._characterSpawnData[index]._uniqueKey, pointCharacters[index]);
+            
+            if(currentPoint._characterSpawnData[index]._uniqueGroupKey != "")
+                addUniqueGroupEntity(currentPoint._characterSpawnData[index]._uniqueGroupKey, pointCharacters[index]);
 
-            addUniqueEntity(currentPoint._characterSpawnData[index]._uniqueKey, pointCharacters[index]);
         }
 
         if(ownerEntity != null)

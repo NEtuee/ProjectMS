@@ -13,6 +13,7 @@ public class StagePointCharacterSpawnData
 {
     public string   _characterKey = "";
     public string   _uniqueKey = "";
+    public string   _uniqueGroupKey = "";
     public string   _startAction = "";
     public bool     _flip = false;
     public SearchIdentifier _searchIdentifier = SearchIdentifier.Enemy;

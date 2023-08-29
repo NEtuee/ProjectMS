@@ -247,6 +247,7 @@ public class SequencerGraphEvent_DeadFence : SequencerGraphEventBase
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.DeadFence;
 
     private string _uniqueKey = "";
+    private string _uniqueGroupKey = "";
 
     public override void Initialize(SequencerGraphProcessor processor)
     {
@@ -254,8 +255,18 @@ public class SequencerGraphEvent_DeadFence : SequencerGraphEventBase
 
     public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
     {
-        GameEntityBase uniqueEntity = processor.getUniqueEntity(_uniqueKey);
-        return uniqueEntity == null;
+        bool success = true;
+        if(_uniqueKey != "")
+            success = processor.getUniqueEntity(_uniqueKey) == null;
+        
+        if(success && _uniqueGroupKey != "")
+        {
+            var list = processor.getUniqueGroup(_uniqueGroupKey);
+            if(list != null)
+                success = list.Count == 0;
+        }
+        
+        return success;
     }
 
     public override void loadXml(XmlNode node)
@@ -269,6 +280,8 @@ public class SequencerGraphEvent_DeadFence : SequencerGraphEventBase
 
             if(attrName == "UniqueKey")
                 _uniqueKey = attrValue;
+            else if(attrName == "UniqueGroupKey")
+                _uniqueGroupKey = attrValue;
         }
     }
 }
@@ -679,7 +692,8 @@ public class SequencerGraphEvent_SetAction : SequencerGraphEventBase
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SetAction;
 
     private string _actionName;
-    private string _uniqueKey;
+    private string _uniqueKey = "";
+    private string _uniqueGroupKey = "";
 
     public override void Initialize(SequencerGraphProcessor processor)
     {
@@ -687,14 +701,33 @@ public class SequencerGraphEvent_SetAction : SequencerGraphEventBase
 
     public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
     {
-        GameEntityBase uniqueEntity = processor.getUniqueEntity(_uniqueKey);
-        if(uniqueEntity == null)
+        if(_uniqueKey != "")
         {
-            DebugUtil.assert(false,"대상 Unique Entity가 존재하지 않습니다 : {0}",_uniqueKey);
-            return true;
+            GameEntityBase uniqueEntity = processor.getUniqueEntity(_uniqueKey);
+            if(uniqueEntity == null)
+            {
+                DebugUtil.assert(false,"대상 Unique Entity가 존재하지 않습니다 : {0}",_uniqueKey);
+                return true;
+            }
+
+            uniqueEntity.setAction(_actionName);
         }
 
-        uniqueEntity.setAction(_actionName);
+        if(_uniqueGroupKey != "")
+        {
+            var uniqueGroup = processor.getUniqueGroup(_uniqueGroupKey);
+            if(uniqueGroup == null)
+            {
+                DebugUtil.assert(false,"대상 Unique Group이 존재하지 않습니다 : {0}",_uniqueGroupKey);
+                return true;
+            }
+
+            foreach(var item in uniqueGroup)
+            {
+                item.setAction(_actionName);
+            }
+        }
+        
 
         return true;
     }
@@ -710,6 +743,8 @@ public class SequencerGraphEvent_SetAction : SequencerGraphEventBase
 
             if(attrName == "UniqueKey")
                 _uniqueKey = attrValue;
+            else if(attrName == "UniqueGroupKey")
+                _uniqueGroupKey = attrValue;
             else if(attrName == "Action")
                 _actionName = attrValue;
         }
@@ -721,6 +756,7 @@ public class SequencerGraphEvent_BlockAI : SequencerGraphEventBase
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.BlockAI;
 
     public string _uniqueKey = "";
+    public string _uniqueGroupKey = "";
     public bool _value = false;
 
     public override void Initialize(SequencerGraphProcessor processor)
@@ -729,11 +765,27 @@ public class SequencerGraphEvent_BlockAI : SequencerGraphEventBase
 
     public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
     {
-        ObjectBase executeTargetEntity = processor.getUniqueEntity(_uniqueKey);
-        if(executeTargetEntity == null || executeTargetEntity is GameEntityBase == false)
-            return true;
+        if(_uniqueKey != "")
+        {
+            ObjectBase executeTargetEntity = processor.getUniqueEntity(_uniqueKey);
+            if(executeTargetEntity == null || executeTargetEntity is GameEntityBase == false)
+                return true;
 
-        (executeTargetEntity as GameEntityBase).blockAI(_value);
+            (executeTargetEntity as GameEntityBase).blockAI(_value);
+        }
+
+        if(_uniqueGroupKey != "")
+        {
+            var uniqueGroup = processor.getUniqueGroup(_uniqueGroupKey);
+            if(uniqueGroup == null)
+                return true;
+
+            foreach(var item in uniqueGroup)
+            {
+                item.blockAI(_value);
+            }
+        }
+        
 
         return true;
     }
@@ -751,7 +803,8 @@ public class SequencerGraphEvent_BlockAI : SequencerGraphEventBase
                 _value = bool.Parse(attrValue);
             else if(attrName == "UniqueKey")
                 _uniqueKey = attributes[i].Value;
-
+            else if(attrName == "UniqueGroupKey")
+                _uniqueGroupKey = attributes[i].Value;
         }
     }
 }

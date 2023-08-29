@@ -7,7 +7,7 @@
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_Idle>
 
-    <AC_Floating MovementType="FrameEvent" DirectionType="AI" RotationType="Torque">
+    <AC_Floating MovementType="FrameEvent" DirectionType="AlwaysUp" RotationType="Torque">
         <Animation Preset="Sprites/Enemy/TutorialStudent/0_idle" XFlip="true" Duration="1">
             <FrameEvent Type="Movement" StartTime="0" Friction="15" MaxVelocity="10" Velocity="Random_7^10" Speed="0"/>
             <FrameEvent Type="Torque" StartTime="0" Add="Random_-10^10"/>
