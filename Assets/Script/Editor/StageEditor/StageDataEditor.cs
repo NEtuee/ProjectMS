@@ -244,6 +244,12 @@ public class StageDataEditor : EditorWindow
             {
                 GUILayout.BeginHorizontal();
                 GUILayout.Space(25f);
+                if(GUILayout.Button("Open", GUILayout.Width(45f)))
+                {
+                    string fullPath = item.FullName;
+                    FileDebugger.OpenFileWithCursor(fullPath,0);
+                }
+                
                 if(GUILayout.Button(item.Name,buttonStyle))
                 {
                     clear();
