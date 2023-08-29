@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using System;
+using NUnit.Framework.Internal;
 
 [InitializeOnLoad]
 public class StageDataEditor : EditorWindow
@@ -54,6 +56,227 @@ public class StageDataEditor : EditorWindow
             return syncSuccess;
         }
     }
+    
+    private class SequencerPathEditor
+    {
+        bool _listOpen = false;
+        bool _viewerOpen = false;
+        bool _updateFileList = true;
+        
+        string _currentFilePath = "";
+        string _currentFolderName = "";
+        string _label = "";
+
+        string _outFilePath = "";
+
+        Vector2 _sequencerViewerScroll = Vector2.zero;
+        Vector2 _fileViewerScroll = Vector2.zero;
+
+        List<System.IO.DirectoryInfo> _directoryInfoList = new List<System.IO.DirectoryInfo>();
+        List<System.IO.FileInfo> _fileInfoList = new List<System.IO.FileInfo>();
+
+        Stack<System.IO.DirectoryInfo> _openFolderPath = new Stack<System.IO.DirectoryInfo>();
+
+        public SequencerPathEditor(string label)
+        {
+            _label = label;
+        }
+
+
+        public void draw(ref string[] targetList)
+        {
+            EditorGUILayout.BeginHorizontal();
+            if(GUILayout.Button(_listOpen ? "▼" : "▶", GUILayout.Width(25f)))
+            {
+                _listOpen = !_listOpen; 
+                if(_listOpen == false)
+                {
+                    _viewerOpen = false;
+                    clear();
+                }
+            }
+
+            if(GUILayout.Button(_viewerOpen ? "○" : "•", GUILayout.Width(25f)))
+            {
+                _viewerOpen = !_viewerOpen;
+                if(_viewerOpen)
+                    _listOpen = true;
+                clear();
+            }
+
+            GUILayout.Label(_label,GUILayout.ExpandWidth(true));
+
+            EditorGUILayout.EndHorizontal();
+
+            if(_listOpen)
+            {
+                drawSequencerList(ref targetList);
+            }
+
+            if(_viewerOpen)
+            {
+                if(drawFileList())
+                    addItem(ref targetList);
+            }
+
+        }
+
+        private void deleteItem(int index, ref string[] targetList)
+        {
+            List<string> stringList = new List<string>();
+            stringList.AddRange(targetList);
+
+            stringList.RemoveAt(index);
+
+            targetList = stringList.ToArray();
+        }
+
+        private void addItem(ref string[] targetList)
+        {
+            List<string> stringList = new List<string>();
+            stringList.AddRange(targetList);
+
+            stringList.Add(_outFilePath);
+
+            targetList = stringList.ToArray();
+        }
+
+        private void drawSequencerList(ref string[] targetList)
+        {
+            _sequencerViewerScroll = GUILayout.BeginScrollView(_sequencerViewerScroll, "box");
+
+            GUILayout.Label("Sequencer List");
+            int deleteIndex = -1;
+            for(int index = 0; index < targetList.Length; ++index)
+            {
+                GUILayout.BeginHorizontal();
+
+                GUI.enabled = index > 0;
+                if(GUILayout.Button("▲",GUILayout.Width(25f)))
+                {
+                    string temp = targetList[index];
+                    targetList[index] = targetList[index - 1];
+                    targetList[index - 1] = temp;
+                }
+
+                GUI.enabled = index < targetList.Length - 1;
+                if(GUILayout.Button("▼",GUILayout.Width(25f)))
+                {
+                    string temp = targetList[index];
+                    targetList[index] = targetList[index + 1];
+                    targetList[index + 1] = temp;
+                }
+
+                GUI.enabled = true;
+                if(GUILayout.Button("X",GUILayout.Width(25f)))
+                    deleteIndex = index;
+
+                Color colorOrigin = GUI.color;
+                if(index == 0)
+                    GUI.color = Color.green;
+                GUILayout.Label(targetList[index]);
+                if(index == 0)
+                    GUI.color = colorOrigin;
+
+                GUILayout.EndHorizontal();
+            }
+
+            GUI.enabled = true;
+
+            GUILayout.EndScrollView();
+
+            if(deleteIndex >= 0)
+                deleteItem(deleteIndex, ref targetList);
+        }
+
+        private bool drawFileList()
+        {
+            if(_updateFileList)
+                IOControl.getAllFileList(_currentFilePath,".xml",ref _directoryInfoList,ref _fileInfoList);
+
+            GUILayout.BeginVertical("box");
+
+            Color colorOrigin = GUI.color;
+            GUI.color = Color.green;
+            GUILayout.Label("File Selector");
+
+            GUI.color = colorOrigin;
+
+            _fileViewerScroll = GUILayout.BeginScrollView(_fileViewerScroll, "box");
+
+            GUILayout.BeginHorizontal();
+            
+            GUILayout.Space(25f);
+            if(GUILayout.Button("<", GUILayout.Width(25f)) && _openFolderPath.Count > 0)
+            {
+                var folder = _openFolderPath.Pop();
+                _currentFilePath = folder.FullName;
+                _currentFolderName = folder.Name;
+                
+                _updateFileList = true;
+                return false;
+            }
+            
+            GUILayout.Label(_currentFolderName);
+
+            GUILayout.EndHorizontal();
+
+            foreach(var item in _directoryInfoList)
+            {
+                GUILayout.BeginHorizontal();
+                if(GUILayout.Button(">", GUILayout.Width(25f)))
+                {
+                    _openFolderPath.Push(item.Parent);
+
+                    _currentFilePath = item.FullName;
+                    _currentFolderName = item.Name;
+
+                    _updateFileList = true;
+                }
+                GUILayout.Label(item.Name);
+                GUILayout.EndHorizontal();
+            }
+
+            GUIStyle buttonStyle = new GUIStyle(GUI.skin.button);
+            buttonStyle.alignment = TextAnchor.MiddleLeft;
+
+            foreach(var item in _fileInfoList)
+            {
+                GUILayout.BeginHorizontal();
+                GUILayout.Space(25f);
+                if(GUILayout.Button(item.Name,buttonStyle))
+                {
+                    clear();
+                    _outFilePath = item.FullName;
+                    _outFilePath = _outFilePath.Replace(IOControl.PathForDocumentsFile("Assets\\Data\\SequencerGraph\\").Replace('/','\\'),"");
+
+                    _viewerOpen = false;
+                    return true;
+                }
+                GUILayout.EndHorizontal();
+            }
+
+            GUILayout.EndScrollView();
+
+            GUILayout.EndVertical();
+
+            return false;
+        }
+
+        public void clear()
+        {
+            _currentFilePath = IOControl.PathForDocumentsFile("Assets/Data/SequencerGraph");
+            _currentFolderName = "SequencerGraph";
+            _outFilePath = "";
+            _fileViewerScroll = Vector2.zero;
+            _directoryInfoList.Clear();
+            _fileInfoList.Clear();
+            _openFolderPath.Clear();
+
+            _updateFileList = true;
+        }
+    }
+    
     public StageData _editStageData;
 
     private static StageDataEditor _window;
@@ -88,6 +311,9 @@ public class StageDataEditor : EditorWindow
         "Character Palette",
         "Sequencer Palette",
     };
+
+    private SequencerPathEditor _onEnterSequencerPathEditor = new SequencerPathEditor("On Enter Sequencer Path");
+    private SequencerPathEditor _onExitSequencerPathEditor = new SequencerPathEditor("On Exit Sequencer Path");
 
     private int _pointSelectedIndex = -1;
     private int _characterSelectedIndex = -1;
@@ -357,20 +583,23 @@ public class StageDataEditor : EditorWindow
         stagePointData._cameraZoomSpeed = EditorGUILayout.FloatField("ZoomSpeed", stagePointData._cameraZoomSpeed);
         stagePointData._lerpCameraZoom = EditorGUILayout.Toggle("LerpToNextZoom", stagePointData._lerpCameraZoom);
 
-        if(stagePointDataEditObject._onEnterSequencerPathProperty == null || stagePointDataEditObject._onExitSequencerPathProperty == null)
-        {
-            if(_stageDataListProperty != null && _stageDataListProperty.hasChildren && _stageDataListProperty.arraySize > _pointSelectedIndex)
-            {
-                SerializedProperty stagePointDataProperty = _stageDataListProperty.GetArrayElementAtIndex(_pointSelectedIndex);
-                stagePointDataEditObject._onEnterSequencerPathProperty = stagePointDataProperty.FindPropertyRelative("_onEnterSequencerPath");
-                stagePointDataEditObject._onExitSequencerPathProperty = stagePointDataProperty.FindPropertyRelative("_onExitSequencerPath");
-            }
-        }
-        else
-        {
-            EditorGUILayout.PropertyField(stagePointDataEditObject._onEnterSequencerPathProperty);
-            EditorGUILayout.PropertyField(stagePointDataEditObject._onExitSequencerPathProperty);
-        }
+        _onEnterSequencerPathEditor.draw(ref stagePointData._onEnterSequencerPath);
+        _onExitSequencerPathEditor.draw(ref stagePointData._onExitSequencerPath);
+
+        // if(stagePointDataEditObject._onEnterSequencerPathProperty == null || stagePointDataEditObject._onExitSequencerPathProperty == null)
+        // {
+        //     if(_stageDataListProperty != null && _stageDataListProperty.hasChildren && _stageDataListProperty.arraySize > _pointSelectedIndex)
+        //     {
+        //         SerializedProperty stagePointDataProperty = _stageDataListProperty.GetArrayElementAtIndex(_pointSelectedIndex);
+        //         stagePointDataEditObject._onEnterSequencerPathProperty = stagePointDataProperty.FindPropertyRelative("_onEnterSequencerPath");
+        //         stagePointDataEditObject._onExitSequencerPathProperty = stagePointDataProperty.FindPropertyRelative("_onExitSequencerPath");
+        //     }
+        // }
+        // else
+        // {
+        //     EditorGUILayout.PropertyField(stagePointDataEditObject._onEnterSequencerPathProperty);
+        //     EditorGUILayout.PropertyField(stagePointDataEditObject._onExitSequencerPathProperty);
+        // }
     }
 
     private void onPointGUI()

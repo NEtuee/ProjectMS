@@ -170,6 +170,50 @@ public static class IOControl {
 		}
 	}
 
+	public static void getAllFileList(string path, string extension, ref List<DirectoryInfo> directoryInfoList, ref List<FileInfo> fileInfoList)
+	{
+		directoryInfoList.Clear();
+		fileInfoList.Clear();
+
+		DirectoryInfo di = new DirectoryInfo(path);
+		foreach (DirectoryInfo directory in di.GetDirectories())
+		{
+			directoryInfoList.Add(directory);
+		}
+		foreach (FileInfo file in di.GetFiles())
+		{
+			if(file.Extension.ToLower() != extension)
+				continue;
+
+			fileInfoList.Add(file);
+		}
+	}
+
+	public static void getFileList(string path, string extension, ref List<string> fileList)
+	{
+		fileList.Clear();
+
+		DirectoryInfo di = new DirectoryInfo(PathForDocumentsFile(path));
+		foreach (FileInfo file in di.GetFiles())
+		{
+			if(file.Extension.ToLower() != extension)
+				continue;
+
+			fileList.Add(file.Name);
+		}
+	}
+
+	public static void getDirectoryList(string path, ref List<string> directoryList)
+	{
+		directoryList.Clear();
+
+		DirectoryInfo di = new DirectoryInfo(PathForDocumentsFile(path));
+		foreach (DirectoryInfo directory in di.GetDirectories())
+		{
+			directoryList.Add(directory.Name);
+		}
+	}
+
 	public static string PathForDocumentsFile(string str)
 	{
 		string path = "";
