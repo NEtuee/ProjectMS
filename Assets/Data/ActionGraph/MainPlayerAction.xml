@@ -469,6 +469,7 @@
     </Stun>
 
 
+    <!-- 여기부터 AI 액션 -->
 
     <AIMove_Start MovementType="GraphPreset" MovementGraphPreset="TEST" DirectionType="AI" RotationType="Direction" FlipType="Direction" RotateBySpeed="True" RotateSpeed="gv_rotateSpeed">
         <Animation Preset="Sprites/NewPlayer/DashRoll/" XFlip="true" Duration="0.25">
@@ -526,6 +527,16 @@
         <Branch Condition="End" Execute="SQ_Intro_KillLoop"/>
     </SQ_Intro_KillLoop>
 
+
+    <SQ_KickDash MovementType="FrameEvent" DirectionType="AlwaysRight" FlipType="Direction" RotationType="AlwaysRight">
+        <Animation Preset="Sprites/NewPlayer/kick/" XFlip="true" ScalePreset="YSpring" Duration="0.44">
+            <FrameEvent Type="Movement" StartTime="0" Friction="20.0" MaxVelocity="8" Speed="0" Velocity="8"/>
+        </Animation>
+        <Animation Preset="Sprites/NewPlayer/kick_stop/" XFlip="true" Duration="0.5">
+        </Animation>
+
+        <Branch Condition="End" Execute="Idle"/>
+    </SQ_KickDash>
 
 
 
