@@ -113,7 +113,7 @@ public class StageProcessor : Singleton<StageProcessor>
                         activeSelf = true;
                     break;
                     case StageSpawnCharacterActiveType.PointActivated:
-                        activeSelf = false;
+                        activeSelf = index == 0;
                     break;
                 }
 
