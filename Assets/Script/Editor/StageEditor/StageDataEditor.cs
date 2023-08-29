@@ -67,6 +67,9 @@ public class StageDataEditor : EditorWindow
         string _currentFolderName = "";
         string _label = "";
 
+        string _searchString = "";
+        string[] _searchStringSplit = null;
+
         string _outFilePath = "";
 
         Vector2 _sequencerViewerScroll = Vector2.zero;
@@ -202,6 +205,13 @@ public class StageDataEditor : EditorWindow
 
             GUI.color = colorOrigin;
 
+            string searchString = EditorGUILayout.TextField("Search",_searchString);
+            if(_searchString != searchString)
+            {
+                _searchString = searchString;
+                _searchStringSplit = _searchString.Split(' ');
+            }
+
             _fileViewerScroll = GUILayout.BeginScrollView(_fileViewerScroll, "box");
 
             GUILayout.BeginHorizontal();
@@ -223,6 +233,9 @@ public class StageDataEditor : EditorWindow
 
             foreach(var item in _directoryInfoList)
             {
+                if(stringSearch(item.Name) == false)
+                    continue;
+
                 GUILayout.BeginHorizontal();
                 if(GUILayout.Button(">", GUILayout.Width(25f)))
                 {
@@ -242,6 +255,9 @@ public class StageDataEditor : EditorWindow
 
             foreach(var item in _fileInfoList)
             {
+                if(stringSearch(item.Name) == false)
+                    continue;
+
                 GUILayout.BeginHorizontal();
                 GUILayout.Space(25f);
                 if(GUILayout.Button("Open", GUILayout.Width(45f)))
@@ -267,6 +283,22 @@ public class StageDataEditor : EditorWindow
             GUILayout.EndVertical();
 
             return false;
+        }
+
+        public bool stringSearch(string targetString)
+        {
+            if(_searchStringSplit == null)
+                return true;
+
+            string lower = targetString.ToLower();
+
+            foreach(var item in _searchStringSplit)
+            {
+                if(lower.Contains(item.ToLower()) == false)
+                    return false;
+            }
+            
+            return true;
         }
 
         public void clear()
