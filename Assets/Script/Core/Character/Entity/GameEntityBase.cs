@@ -189,7 +189,8 @@ public class GameEntityBase : SequencerObjectBase
         CollisionManager.Instance().registerObject(_collisionInfo, this);
         
         _spriteRenderer.sprite = _actionGraph.getCurrentSprite(_actionGraph.getCurrentRotationType() != RotationType.AlwaysRight ? (_spriteRotation * _actionStartRotation).eulerAngles.z : MathEx.directionToAngle(_direction));
-
+        _spriteRenderer.flipX = false;
+        _spriteRenderer.flipY = false;
         
 
         initializeActionValue();
@@ -644,6 +645,8 @@ public class GameEntityBase : SequencerObjectBase
         applyActionBuffList(_actionGraph.getDefaultBuffList());
 
         _spriteRenderer.sprite = _actionGraph.getCurrentSprite(_actionGraph.getCurrentRotationType() != RotationType.AlwaysRight ? (_spriteRotation * _actionStartRotation).eulerAngles.z : MathEx.directionToAngle(_direction));
+        _spriteRenderer.flipX = false;
+        _spriteRenderer.flipY = false;
 
         initializeActionValue();
 

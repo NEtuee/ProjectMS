@@ -144,6 +144,13 @@ public class StageDataEditor : EditorWindow
 
         private void addItem(ref string[] targetList)
         {
+            if(targetList == null)
+            {
+                targetList = new string[1];
+                targetList[0] = _outFilePath;
+
+                return;
+            }
             List<string> stringList = new List<string>();
             stringList.AddRange(targetList);
 
@@ -157,6 +164,9 @@ public class StageDataEditor : EditorWindow
             _sequencerViewerScroll = GUILayout.BeginScrollView(_sequencerViewerScroll, "box");
 
             GUILayout.Label("Sequencer List");
+            if(targetList == null)
+                return;
+
             int deleteIndex = -1;
             for(int index = 0; index < targetList.Length; ++index)
             {
