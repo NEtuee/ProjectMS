@@ -89,6 +89,9 @@ public class StageDataEditor : EditorWindow
         public void draw(ref string[] targetList)
         {
             EditorGUILayout.BeginHorizontal();
+
+            Color colorOrigin = GUI.color;
+            GUI.color = _listOpen ? Color.green : colorOrigin;
             if(GUILayout.Button(_listOpen ? "▼" : "▶", GUILayout.Width(25f)))
             {
                 _listOpen = !_listOpen; 
@@ -98,7 +101,9 @@ public class StageDataEditor : EditorWindow
                     clear();
                 }
             }
+            GUI.color = colorOrigin;
 
+            GUI.color = _viewerOpen ? Color.green : colorOrigin;
             if(GUILayout.Button(_viewerOpen ? "○" : "•", GUILayout.Width(25f)))
             {
                 _viewerOpen = !_viewerOpen;
@@ -106,8 +111,11 @@ public class StageDataEditor : EditorWindow
                     _listOpen = true;
                 clear();
             }
+            GUI.color = colorOrigin;
 
+            GUI.color = _listOpen ? Color.green : colorOrigin;
             GUILayout.Label(_label,GUILayout.ExpandWidth(true));
+            GUI.color = colorOrigin;
 
             EditorGUILayout.EndHorizontal();
 
@@ -787,6 +795,19 @@ public class StageDataEditor : EditorWindow
                 item._characterObjectList[index].transform.position = item._stagePointData._stagePoint + item._characterSpawnDataList[index]._localPosition;
             }
         }
+
+        if(_backgroundPrefabObject != null)
+            roundPixelPerfectRecursive(_backgroundPrefabObject.transform);
+    }
+
+    public void roundPixelPerfectRecursive(Transform root)
+    {
+        root.transform.position = MathEx.round(root.transform.position,2);
+
+        for(int index = 0; index < root.childCount; ++index)
+        {
+            roundPixelPerfectRecursive(root.GetChild(index));
+        }
     }
 
     public void setEditStageData(StageData stageData)
@@ -851,11 +872,9 @@ public class StageDataEditor : EditorWindow
                 for(int index = 0; index < stagePointData._characterSpawnData.Length; ++index)
                 {
                     Vector3 characterWorld = stagePointData._stagePoint + stagePointData._characterSpawnData[index]._localPosition;
-                    if(i == _pointSelectedIndex)
-                    {
-                        Handles.color = Color.green;
-                        Handles.DrawLine(stagePointData._stagePoint,characterWorld);
-                    }
+
+                    Handles.color = i == _pointSelectedIndex ? Color.green : Color.gray;
+                    Handles.DrawLine(stagePointData._stagePoint,characterWorld);
 
                     characterWorld += Vector3.right * 0.1f;
                     if(stagePointData._characterSpawnData[index]._uniqueKey != "")

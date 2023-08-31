@@ -69,6 +69,8 @@ public abstract class ObjectBase : MessageReceiver, IProgress
             return;
 
         transform.position = position;
+        _spriteObject.transform.position = MathEx.round(transform.position,2);
+
         updateChildTransform();
     }
 

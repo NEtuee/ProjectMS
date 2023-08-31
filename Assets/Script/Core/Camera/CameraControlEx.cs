@@ -384,6 +384,7 @@ public class CameraControlEx : Singleton<CameraControlEx>
         Vector3 currentPosition = _currentCameraMode.getCameraPosition();
         currentPosition.z = -10f;
         _currentCamera.transform.position = currentPosition + _shakePosition;
+        _currentCamera.transform.position = MathEx.round(_currentCamera.transform.position, 2);
     }
 
     public bool IsInCameraBound(Vector3 pos)
