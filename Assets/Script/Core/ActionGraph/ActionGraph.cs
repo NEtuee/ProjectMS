@@ -52,6 +52,8 @@ public class ActionGraph
         _prevActionNodeIndex = -1;
         _currentAnimationIndex = 0;
 
+        _blockInput = false;
+
         setDefaultAction();
     }
 

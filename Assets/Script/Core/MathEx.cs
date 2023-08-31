@@ -1,3 +1,7 @@
+using System;
+using System.Diagnostics;
+using Unity.Mathematics;
+
 public static class MathEx
 {
     public static UnityEngine.Vector3 deleteZ(UnityEngine.Vector3 vector3) {return new UnityEngine.Vector3(vector3.x,vector3.y,0f);}
@@ -247,10 +251,44 @@ public static class MathEx
 		return new UnityEngine.Vector3(round(value.x, digits), round(value.y, digits), round(value.z, digits));
 	}
 
+	public static UnityEngine.Vector3 ceiling(UnityEngine.Vector3 value, int digits)
+	{
+		return new UnityEngine.Vector3(ceiling(value.x, digits), ceiling(value.y, digits), ceiling(value.z, digits));
+	}
+
+	public static UnityEngine.Vector3 floor(UnityEngine.Vector3 value, int digits)
+	{
+		return new UnityEngine.Vector3(floor(value.x, digits), floor(value.y, digits), floor(value.z, digits));
+	}
+
+	public static UnityEngine.Vector3 floorNoSign(UnityEngine.Vector3 value, int digits)
+	{
+		return new UnityEngine.Vector3(floorNoSign(value.x, digits), floorNoSign(value.y, digits), floorNoSign(value.z, digits));
+	}
+
 	public static float round(float value, int digits)
 	{
 		return (float)System.Math.Round(value,digits);
 	}
+
+	public static float floorNoSign(float value, int digits)
+	{
+		float factor = (float)Math.Pow(10.0,(double)digits);
+		float sign = value < 0f ? -1f : 1f;
+        return (float)Math.Floor(MathEx.abs(value) * factor) * (1f / factor) * sign;
+	}
+
+	public static float ceiling(float value, int digits)
+    {
+		float factor = (float)Math.Pow(10.0,(double)digits);
+        return (float)Math.Ceiling(value * factor) / factor;
+    }
+
+	public static float floor(float value, int digits)
+    {
+		float factor = (float)Math.Pow(10.0,(double)digits);
+        return (float)Math.Floor(value * factor) / factor;
+    }
 
 	public static UnityEngine.Vector3 lemniscate(float time)
 	{

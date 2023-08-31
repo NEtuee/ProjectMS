@@ -57,7 +57,7 @@ public abstract class CameraModeBase
 public class CameraTwoTargetMode : CameraModeBase
 {
     public float _targetPositionRatio = 0.25f;
-    public static float _cameraMoveSpeedRate = 8.0f;
+    public static float _cameraMoveSpeedRate = 7.3f;
 
     private Vector3 _currentCenterPosition;
 
@@ -73,7 +73,7 @@ public class CameraTwoTargetMode : CameraModeBase
     public override void progress(float deltaTime, Vector3 targetPosition)
     {
         updateCameraCenter();
-        _cameraPosition = Vector3.Lerp(_cameraPosition, _currentCenterPosition, _cameraMoveSpeedRate * deltaTime);
+        _cameraPosition = MathEx.damp(_cameraPosition, _currentCenterPosition, _cameraMoveSpeedRate, deltaTime);
         GizmoHelper.instance.drawLine(_currentCenterPosition, targetPosition, Color.red);
     }
 
@@ -147,7 +147,7 @@ public class CameraArenaMode : CameraModeBase
 
 public class CameraTargetCenterMode : CameraModeBase
 {
-    public static float _cameraMoveSpeedRate = 8.0f;
+    public static float _cameraMoveSpeedRate = 7.3f;
 
     private Vector3 _currentCenterPosition;
 
@@ -163,7 +163,7 @@ public class CameraTargetCenterMode : CameraModeBase
     public override void progress(float deltaTime, Vector3 targetPosition)
     {
         updateCameraCenter();
-        _cameraPosition = Vector3.Lerp(_cameraPosition, _currentCenterPosition, _cameraMoveSpeedRate * deltaTime);
+        _cameraPosition = MathEx.damp(_cameraPosition, _currentCenterPosition, _cameraMoveSpeedRate, deltaTime);
         GizmoHelper.instance.drawLine(_currentCenterPosition, targetPosition, Color.red);
     }
 
@@ -383,8 +383,13 @@ public class CameraControlEx : Singleton<CameraControlEx>
 
         Vector3 currentPosition = _currentCameraMode.getCameraPosition();
         currentPosition.z = -10f;
+
         _currentCamera.transform.position = currentPosition + _shakePosition;
-        _currentCamera.transform.position = MathEx.round(_currentCamera.transform.position, 2);
+    }
+
+    public bool isCameraTargetObject(ObjectBase targetObject)
+    {
+        return _currentTarget == targetObject;
     }
 
     public bool IsInCameraBound(Vector3 pos)
