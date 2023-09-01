@@ -460,10 +460,10 @@ public class StageDataEditor : EditorWindow
             _editStageData._stageName = EditorGUILayout.TextField("Stage Name",_editStageData._stageName);
 
             GUILayout.BeginHorizontal();
-            _editStageData._backgroundPrefabPath = EditorGUILayout.ObjectField("Prefab",_editStageData._backgroundPrefabPath, typeof(GameObject), true) as GameObject;
+            _editStageData._backgroundPrefabPath = EditorGUILayout.ObjectField("Background Prefab",_editStageData._backgroundPrefabPath, typeof(GameObject), true) as GameObject;
             if(_editStageData._backgroundPrefabPath == null && _backgroundPrefabObject != null)
                 DestroyImmediate(_backgroundPrefabObject);
-                
+
             if(GUILayout.Button("New", GUILayout.Width(40f)) && _editItemParent != null)
             {
                 bool createNew = true;
