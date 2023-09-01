@@ -41,7 +41,7 @@ public class StagePointData
 public class StageData : ScriptableObject
 {
     public string _stageName;
-    public string _backgroundPrefabPath = "";
+    public GameObject _backgroundPrefabPath = null;
 
     public List<StagePointData> _stagePointData = new List<StagePointData>();
 }

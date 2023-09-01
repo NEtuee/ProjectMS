@@ -408,8 +408,22 @@ public class StageDataEditor : EditorWindow
         bool reloadData = false;
         GUILayout.BeginHorizontal();
             StageData editStageData = EditorGUILayout.ObjectField("Edit Data", _editStageData, typeof(StageData), true) as StageData;
+
+            if(GUILayout.Button("New", GUILayout.Width(40f)))
+            {
+                bool createNew = true;
+                if(editStageData != null)
+                    createNew = EditorUtility.DisplayDialog("alert","이미 편집중인 스테이지가 존재합니다. 새로 생성 하시겠습니까?","네","아니오");
+
+                if(createNew)
+                {
+                    editStageData = ScriptableObject.CreateInstance<StageData>();
+                    editStageData._stageName = "NewStage";
+                }
+            }
+
             GUI.enabled = editStageData != null;
-            if(GUILayout.Button("Refresh"))
+            if(GUILayout.Button("Refresh", GUILayout.Width(70f)))
                 reloadData = true;
             GUI.enabled = true;
         GUILayout.EndHorizontal();
@@ -444,7 +458,45 @@ public class StageDataEditor : EditorWindow
 
         GUILayout.BeginVertical("box");
             _editStageData._stageName = EditorGUILayout.TextField("Stage Name",_editStageData._stageName);
-            _editStageData._backgroundPrefabPath = EditorGUILayout.TextField("Prefab Path",_editStageData._backgroundPrefabPath);
+
+            GUILayout.BeginHorizontal();
+            _editStageData._backgroundPrefabPath = EditorGUILayout.ObjectField("Prefab",_editStageData._backgroundPrefabPath, typeof(GameObject), true) as GameObject;
+            if(_editStageData._backgroundPrefabPath == null && _backgroundPrefabObject != null)
+                DestroyImmediate(_backgroundPrefabObject);
+                
+            if(GUILayout.Button("New", GUILayout.Width(40f)) && _editItemParent != null)
+            {
+                bool createNew = true;
+                if(_editStageData._backgroundPrefabPath != null)
+                    createNew = EditorUtility.DisplayDialog("alert","이미 편집중인 배경이 존재합니다. 새로 생성 하시겠습니까?","네","아니오");
+
+                if(createNew)
+                {
+                    string defaultName = _editStageData._stageName + ".prefab";
+                    string filePath = EditorUtility.SaveFilePanel(
+                        "Save Stage Background",
+                        "Assets/Resources/Prefab/StageBackground/",
+                        defaultName,
+                        "prefab"
+                    );
+
+                    if (string.IsNullOrEmpty(filePath)) 
+                        return;
+
+                    if(_backgroundPrefabObject != null)
+                        DestroyImmediate(_backgroundPrefabObject);
+
+                    _backgroundPrefabObject = new GameObject();
+                    _backgroundPrefabObject.name = filePath.Remove(0, filePath.LastIndexOf("/") + 1);
+                    _backgroundPrefabObject.name = _backgroundPrefabObject.name.Replace(".prefab","");
+                    _backgroundPrefabObject.transform.position = _editStageData._stagePointData.Count == 0 ? Vector3.zero : _editStageData._stagePointData[0]._stagePoint;
+                    _backgroundPrefabObject.transform.SetParent(_editItemParent.transform);
+
+                    filePath = FileUtil.GetProjectRelativePath(filePath);
+                    _editStageData._backgroundPrefabPath = PrefabUtility.SaveAsPrefabAsset(_backgroundPrefabObject,filePath);
+                }
+            }
+            GUILayout.EndHorizontal();
 
             Color currentColor = GUI.color;
             GUI.color = _drawScreenToMousePoint ? Color.green : Color.red;
@@ -789,7 +841,51 @@ public class StageDataEditor : EditorWindow
 
         EditorUtility.SetDirty(_editStageData);
         if(_backgroundPrefabObject != null)
-            PrefabUtility.SaveAsPrefabAssetAndConnect(_backgroundPrefabObject, "Assets/Resources/" + _editStageData._backgroundPrefabPath + ".prefab",InteractionMode.AutomatedAction);
+        {
+            string filePath = "";
+            if(AssetDatabase.Contains(_editStageData._backgroundPrefabPath) == false)
+            {
+                DebugUtil.assert(false, "Background Prefab이 Scene Object입니다. Prefab을 넣어 주세요");
+                return;
+                // string defaultName = _editStageData._stageName + ".prefab";
+                // filePath = EditorUtility.SaveFilePanel(
+                //     "Save Stage Background",
+                //     "Assets/Resources/Prefab/StageBackground/",
+                //     defaultName,
+                //     "prefab"
+                // );
+    
+                // if (string.IsNullOrEmpty(filePath)) 
+                //     return;
+    
+                // filePath = FileUtil.GetProjectRelativePath(filePath);
+                // AssetDatabase.CreateAsset(_backgroundPrefabObject, filePath);
+                // AssetDatabase.SaveAssets();
+            }
+            else
+            {
+                filePath = AssetDatabase.GetAssetPath(_editStageData._backgroundPrefabPath);
+                PrefabUtility.SaveAsPrefabAssetAndConnect(_backgroundPrefabObject, filePath,InteractionMode.AutomatedAction);
+            }
+        }
+
+        if(AssetDatabase.Contains(_editStageData) == false)
+        {
+            string defaultName = _editStageData._stageName + ".asset";
+            string path = EditorUtility.SaveFilePanel(
+                "Save Stage Data",
+                "Assets/Resources/StageData/",
+                defaultName,
+                "asset"
+            );
+
+            if (string.IsNullOrEmpty(path)) 
+                return;
+
+            path = FileUtil.GetProjectRelativePath(path);
+            AssetDatabase.CreateAsset(_editStageData, path);
+            AssetDatabase.SaveAssets();
+        }
     }
 
     public void roundPixelPerfect()
@@ -1037,16 +1133,9 @@ public class StageDataEditor : EditorWindow
         if(_backgroundPrefabObject != null)
             DestroyImmediate(_backgroundPrefabObject);
         
-        if(_editStageData._backgroundPrefabPath != "")
+        if(_editStageData._backgroundPrefabPath != null)
         {
-            GameObject prefab = ResourceContainerEx.Instance().GetPrefab(_editStageData._backgroundPrefabPath);
-            if(prefab == null)
-            {
-                DebugUtil.assert(false, "StageData의 Background Prefab Path가 잘못되었습니다. 확인 필요");
-                return;
-            }
-
-            _backgroundPrefabObject = Instantiate(prefab);
+            _backgroundPrefabObject = Instantiate(_editStageData._backgroundPrefabPath);
             _backgroundPrefabObject.transform.position = _editStageData._stagePointData.Count == 0 ? Vector3.zero : _editStageData._stagePointData[0]._stagePoint;
             _backgroundPrefabObject.transform.SetParent(_editItemParent.transform);
         }
