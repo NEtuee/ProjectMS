@@ -11,21 +11,28 @@ public class StageDataEditor : EditorWindow
     private class StagePointDataEditObject
     {
         public StagePointData _stagePointData;
-        public SerializedProperty _onEnterSequencerPathProperty = null;
-        public SerializedProperty _onExitSequencerPathProperty = null;
 
         public GameObject _gizmoItem;
         public List<SpriteRenderer> _characterObjectList = new List<SpriteRenderer>();
         public List<StagePointCharacterSpawnData> _characterSpawnDataList = new List<StagePointCharacterSpawnData>();
 
-        public bool syncPosition()
+        public bool syncPosition(bool isMiniStage)
         {
             if(_stagePointData == null || _gizmoItem == null)
                 return false;
 
-            bool syncSuccess = _stagePointData._stagePoint != _gizmoItem.transform.position;
-            _stagePointData._stagePoint = _gizmoItem.transform.position;
-
+            bool syncSuccess = false;
+            
+            if(isMiniStage == false)
+            {
+                syncSuccess = _stagePointData._stagePoint != _gizmoItem.transform.position;
+                _stagePointData._stagePoint = _gizmoItem.transform.position;
+            }
+            else
+            {
+                _gizmoItem.transform.position = Vector3.zero;
+            }
+            
             if(syncSuccess == false)
             {
                 for(int index = 0; index < _characterObjectList.Count; ++index)
@@ -57,6 +64,33 @@ public class StageDataEditor : EditorWindow
         }
     }
     
+    private class MiniStageDataEditObject
+    {
+        public MiniStageListItem    _miniStageData = null;
+        public GameObject           _gizmoItem = null;
+
+        private Vector3             _pivotPosition = Vector3.zero;
+
+        public bool syncPosition(Vector3 pivotPosition)
+        {
+            if(_miniStageData == null || _gizmoItem == null)
+                return false;
+
+            bool syncSuccess = _pivotPosition != pivotPosition;
+            if(syncSuccess)
+            {
+                _pivotPosition = pivotPosition;
+                _gizmoItem.transform.position = _pivotPosition + _miniStageData._localStagePosition;
+            }
+            else
+            {
+                _miniStageData._localStagePosition = _gizmoItem.transform.position - pivotPosition;
+            }
+
+            return syncSuccess;
+        }
+    }
+
     private class SequencerPathEditor
     {
         bool _listOpen = false;
@@ -345,7 +379,8 @@ public class StageDataEditor : EditorWindow
     private Queue<GameObject> _gizmoItemPool = new Queue<GameObject>();
     private Queue<SpriteRenderer> _characterItemPool = new Queue<SpriteRenderer>();
 
-    private List<StagePointDataEditObject> _editingStagePointList = new List<StagePointDataEditObject>();
+    private List<StagePointDataEditObject>  _editingStagePointList = new List<StagePointDataEditObject>();
+    private List<MiniStageDataEditObject>   _editingMiniStageDataList = new List<MiniStageDataEditObject>();
 
     private GameObject _backgroundPrefabObject = null;
     
@@ -776,6 +811,31 @@ public class StageDataEditor : EditorWindow
 
     private void onMiniStageInspectorGUI()
     {
+        if(_editingMiniStageDataList == null || _editingMiniStageDataList.Count == 0 || _editStageData._miniStageData.Count <= _miniStageSelectedIndex || _miniStageSelectedIndex < 0)
+            return;
+
+        MiniStageListItem miniStageListItem = _editStageData._miniStageData[_miniStageSelectedIndex];
+        MiniStageDataEditObject miniStageDataEditObject = _editingMiniStageDataList[_miniStageSelectedIndex];
+
+        GUILayout.BeginVertical("box");
+        GUILayout.Label("Trigger");
+        bool isChanged = false;
+        float triggerWidth = EditorGUILayout.FloatField("Width", miniStageListItem._overrideTriggerWidth);
+        float triggerHeight = EditorGUILayout.FloatField("Height", miniStageListItem._overrideTriggerHeight);
+        Vector3 triggerOffset = EditorGUILayout.Vector3Field("Offset", miniStageListItem._overrideTriggerOffset);
+
+        isChanged |= triggerWidth != miniStageListItem._overrideTriggerWidth;
+        isChanged |= triggerHeight != miniStageListItem._overrideTriggerHeight;
+        isChanged |= triggerOffset != miniStageListItem._overrideTriggerOffset;
+        GUILayout.EndVertical();
+
+        if(isChanged)
+        {
+            miniStageListItem._overrideTriggerWidth = triggerWidth;
+            miniStageListItem._overrideTriggerHeight = triggerHeight;
+            miniStageListItem._overrideTriggerOffset = triggerOffset;
+            SceneView.RepaintAll();
+        }
     }
 
     private void onPointInspectorGUI()
@@ -840,10 +900,19 @@ public class StageDataEditor : EditorWindow
     private void onPointGUI()
     {
         GUILayout.BeginHorizontal();
+
+            if(_editStageData._isMiniStage)
+            {
+                MiniStageData miniStageData = _editStageData as MiniStageData;
+                GUI.enabled = miniStageData._stagePointData.Count < 1;
+            }
+
             if(GUILayout.Button("Add Point"))
             {
                 addStagePoint(Vector3.zero);
             }
+            GUI.enabled = true;
+
         GUILayout.EndHorizontal();
 
 
@@ -907,10 +976,23 @@ public class StageDataEditor : EditorWindow
     private void addMiniStageToStage( MiniStageData miniStageData)
     {
         MiniStageListItem listItem = new MiniStageListItem();
-        listItem._stagePosition = Vector3.zero;
+        listItem._localStagePosition = Vector3.zero;
         listItem._data = miniStageData;
+        
+        listItem._overrideTargetSearchIdentifier = miniStageData._targetSearchIdentifier;
+        listItem._overrideTriggerWidth = miniStageData._triggerWidth;
+        listItem._overrideTriggerHeight = miniStageData._triggerHeight;
+        listItem._overrideTriggerOffset = miniStageData._triggerOffset;
 
+        MiniStageDataEditObject editObject = new MiniStageDataEditObject();
+        editObject._miniStageData = listItem;
+        editObject._gizmoItem = getGizmoItem();
+        editObject._gizmoItem.transform.position = _editStageData._stagePointData[0]._stagePoint;
+
+        _editingMiniStageDataList.Add(editObject);
         _editStageData._miniStageData.Add(listItem);
+
+        selectMiniStage(_editingMiniStageDataList.Count - 1);
     }
 
     void Update() 
@@ -921,7 +1003,8 @@ public class StageDataEditor : EditorWindow
         if(Application.isPlaying)
             return;
 
-        if(_editStageData._stagePointData.Count != 0 && _editingStagePointList.Count == 0)
+        if(_editStageData._stagePointData.Count != 0 && _editingStagePointList.Count == 0 ||
+            _editStageData._miniStageData.Count != 0 && _editingMiniStageDataList.Count == 0)
             constructGizmoPoints();
 
         bool repaint = false;
@@ -934,10 +1017,25 @@ public class StageDataEditor : EditorWindow
                 continue;
             }
 
-            repaint |= _editingStagePointList[i].syncPosition();
+            repaint |= _editingStagePointList[i].syncPosition(_editStageData._isMiniStage);
 
             if(i == 0 && _backgroundPrefabObject != null)
                 _backgroundPrefabObject.transform.position = _editingStagePointList[i]._stagePointData._stagePoint;
+        }
+
+        if(_editStageData._stagePointData.Count != 0)
+        {
+            for(int i = 0; i < _editingMiniStageDataList.Count; ++i)
+            {
+                if(_editingMiniStageDataList[i]._gizmoItem == null)
+                {
+                    deleteMiniStage(i);
+                    --i;
+                    continue;
+                }
+
+                repaint |= _editingMiniStageDataList[i].syncPosition(_editStageData._stagePointData[0]._stagePoint);
+            }
         }
 
         if(repaint)
@@ -1154,6 +1252,30 @@ public class StageDataEditor : EditorWindow
                 Handles.DrawLine(stagePointData._stagePoint, _editStageData._stagePointData[i + 1]._stagePoint);
             }
         }
+
+        if(_editStageData._stagePointData.Count != 0)
+        {
+            for(int i = 0; i < _editStageData._miniStageData.Count; ++i)
+            {
+                MiniStageListItem miniStageListItem = _editStageData._miniStageData[i];
+                MiniStageData miniStageData = miniStageListItem._data;
+                Vector3 itemPosition = miniStageListItem._localStagePosition + _editStageData._stagePointData[0]._stagePoint;
+                Handles.CapFunction capFunction = (controlID, position, rotation, size, eventType)=>{
+                    Handles.RectangleHandleCap(controlID, position, rotation, size, eventType);
+                };
+
+                if(Handles.Button(itemPosition,Camera.current.transform.rotation,0.1f,0.2f,capFunction))
+                {
+                    _editMenuSelectedIndex = 2;
+                    selectMiniStage(i);
+                }
+
+                Rect rectangle = new Rect();
+                Vector3 centerPosition = itemPosition + miniStageData._triggerOffset;
+                rectangle.Set(centerPosition.x - (miniStageListItem._overrideTriggerWidth * 0.5f),centerPosition.y - (miniStageListItem._overrideTriggerHeight * 0.5f),miniStageListItem._overrideTriggerWidth,miniStageListItem._overrideTriggerHeight);
+                Handles.DrawSolidRectangleWithOutline(rectangle,new Color(0f,0f,0f,0f),Color.green);
+            }
+        }
     }
 
     public void drawArrow(Vector3 start, Vector3 end, float arrowLength)
@@ -1190,6 +1312,7 @@ public class StageDataEditor : EditorWindow
 
     private void selectMiniStage(int miniStageIndex)
     {
+        PingTarget(_editingMiniStageDataList[miniStageIndex]._gizmoItem);
         _miniStageSelectedIndex = miniStageIndex;
     }
 
@@ -1254,6 +1377,9 @@ public class StageDataEditor : EditorWindow
             return;
 
         _editStageData._miniStageData.RemoveAt(miniStageIndex);
+
+        returnGizmoItem(_editingMiniStageDataList[miniStageIndex]._gizmoItem);
+        _editingMiniStageDataList.RemoveAt(miniStageIndex);
     }
 
     private void loadStageData()
@@ -1323,6 +1449,19 @@ public class StageDataEditor : EditorWindow
 
             _editingStagePointList.Add(editObject);
         }
+
+        if(_editStageData._stagePointData.Count != 0)
+        {
+            foreach(var item in _editStageData._miniStageData)
+            {
+                MiniStageDataEditObject editObject = new MiniStageDataEditObject();
+                editObject._miniStageData = item;
+                editObject._gizmoItem = getGizmoItem();
+                editObject._gizmoItem.transform.position = _editStageData._stagePointData[0]._stagePoint + item._localStagePosition;
+
+                _editingMiniStageDataList.Add(editObject);
+            }
+        }
     }
 
     private void clearStagePointList()
@@ -1338,9 +1477,15 @@ public class StageDataEditor : EditorWindow
             returnGizmoItem(_editingStagePointList[index]._gizmoItem);
         }
 
+        for(int index = 0; index < _editingMiniStageDataList.Count; ++index)
+        {
+            returnGizmoItem(_editingMiniStageDataList[index]._gizmoItem);
+        }
+
         _gizmoItemPool.Clear();
         _characterItemPool.Clear();
         _editingStagePointList.Clear();
+        _editingMiniStageDataList.Clear();
 
         if(_editItemParent == null)
             _editItemParent = GameObject.FindGameObjectWithTag("EditorItem");
