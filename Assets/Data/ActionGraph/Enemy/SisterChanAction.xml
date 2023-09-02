@@ -136,7 +136,7 @@
     <AC_ThunderStroke MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/SisterHelena/1_thunderStroke/"/>
         <Animation Preset="1_thunderReady" XFlip="true" Duration="0.7">
-            <FrameEvent Type="Projectile" StartTime="0.2" GraphName="ThunderStroke" DirectionType="AI" SpawnTargetType="Target"/>
+            <FrameEvent Type="Projectile" StartTime="0.2" GraphName="ThunderStroke" DirectionType="AI" SpawnTargetType="AITarget"/>
         </Animation>
         <Animation Preset="2_thunderMain" XFlip="true" Duration="0.5">
             
