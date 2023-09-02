@@ -81,6 +81,7 @@ public struct Triangle
     public Vector3[] getVertices() {return _vertices;}
 }
 
+[System.Serializable]
 public class BoundBox
 {
     private Vector3[] _vertices;

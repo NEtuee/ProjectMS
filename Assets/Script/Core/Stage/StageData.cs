@@ -37,12 +37,20 @@ public class StagePointData
     public StagePointData(Vector3 point) {_stagePoint = point;}
 }
 
-[CreateAssetMenu(fileName = "StageData", menuName = "Scriptable Object/Stage Data", order = int.MaxValue)]
-public class StageData : ScriptableObject
+[System.Serializable]
+public struct MiniStageListItem
 {
-    public string _stageName;
-    public string _backgroundPrefabPath = "";
-
-    public List<StagePointData> _stagePointData = new List<StagePointData>();
+    public Vector3          _stagePosition;
+    public MiniStageData    _data;
 }
 
+[CreateAssetMenu(fileName = "StageData", menuName = "Scriptable Object/Stage Data", order = 3)]
+public class StageData : ScriptableObject
+{
+    public string           _stageName;
+    public GameObject       _backgroundPrefabPath = null;
+    public bool             _isMiniStage = false;
+
+    public List<StagePointData> _stagePointData = new List<StagePointData>();
+    public List<MiniStageListItem>  _miniStageData = new List<MiniStageListItem>();
+}

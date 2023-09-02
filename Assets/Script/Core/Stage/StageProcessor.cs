@@ -147,13 +147,9 @@ public class StageProcessor : Singleton<StageProcessor>
             
         }
 
-        if(_stageData._backgroundPrefabPath != "")
+        if(_stageData._backgroundPrefabPath != null)
         {
-            GameObject prefabObject = ResourceContainerEx.Instance().GetPrefab(_stageData._backgroundPrefabPath);
-            if(prefabObject == null)
-                return;
-
-            _stageBackgroundOjbect = GameObject.Instantiate(prefabObject);
+            _stageBackgroundOjbect = GameObject.Instantiate(_stageData._backgroundPrefabPath);
 
             _stageBackgroundOjbect.SetActive(true);
             _stageBackgroundOjbect.transform.position = startPosition;
