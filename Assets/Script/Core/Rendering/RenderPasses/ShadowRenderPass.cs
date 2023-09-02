@@ -8,11 +8,12 @@ public class ShadowRenderPass : AkaneRenderPass
     [SerializeField] private RenderTexture shadowRenderTexture;
 
     private static int shadowLayer;
-    protected override int layerMasks { get; set; } = shadowLayer;
+    public override int layerMasks => shadowLayer;
+    public override string layerName => "ShadowMap";
 
-    public void OnEnable()
+    public void Awake()
     {
-        shadowLayer = (1 << LayerMask.NameToLayer("ShadowMap"));
+        shadowLayer = (1 << LayerMask.NameToLayer(layerName));
         shadowRenderTexture = new RenderTexture(1024, 1024, 1, RenderTextureFormat.Shadowmap, 1);
         shadowRenderTexture.filterMode = FilterMode.Point;
     }

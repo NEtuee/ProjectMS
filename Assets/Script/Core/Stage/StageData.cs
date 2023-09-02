@@ -38,10 +38,16 @@ public class StagePointData
 }
 
 [System.Serializable]
-public struct MiniStageListItem
+public class MiniStageListItem
 {
-    public Vector3          _stagePosition;
-    public MiniStageData    _data;
+    public Vector3                  _localStagePosition;
+    public MiniStageData            _data;
+
+    public SearchIdentifier         _overrideTargetSearchIdentifier = SearchIdentifier.Enemy;
+
+    public float                    _overrideTriggerWidth = 0f;
+    public float                    _overrideTriggerHeight = 0f;
+    public Vector3                  _overrideTriggerOffset = Vector3.zero;
 }
 
 [CreateAssetMenu(fileName = "StageData", menuName = "Scriptable Object/Stage Data", order = 3)]

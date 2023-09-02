@@ -86,6 +86,7 @@ public abstract class ObjectBase : MessageReceiver, IProgress
 
         _animator = _spriteObject.AddComponent<Animator>();
         _spriteRenderer = _spriteObject.AddComponent<SpriteRenderer>();
+        _spriteRenderer.drawMode = SpriteDrawMode.Sliced;
         _spriteRenderer.material = Material.Instantiate(getBaseMaterial());
     }
 
