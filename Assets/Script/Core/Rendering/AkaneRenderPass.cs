@@ -5,9 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public abstract class AkaneRenderPass : ScriptableObject
 {
-    public abstract int layerMasks { get; }
-    public abstract string layerName { get; }
+    protected abstract int layerMasks { get; set; }
     public abstract RenderTexture RenderTexture { get; }
-
     public abstract void Draw(Camera renderCamera, RenderTexture buffer);
 }

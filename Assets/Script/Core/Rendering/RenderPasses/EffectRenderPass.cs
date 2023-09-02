@@ -7,15 +7,15 @@ public class EffectRenderPass : AkaneRenderPass
 {
     private static int effectLayer;
     private static int shadowScreenLayer;
-    public override int layerMasks => effectLayer | shadowScreenLayer;
-    public override string layerName => "EffectEtc";
+    protected override int layerMasks { get; set; } = effectLayer | shadowScreenLayer;
+
     public override RenderTexture RenderTexture { get { return effectRenderTexture; } }
     [SerializeField] private RenderTexture effectRenderTexture;
 
-    public void Awake()
+    public void OnEnable()
     {
-        effectLayer = (1 << LayerMask.NameToLayer(layerName));
-      //  shadowScreenLayer = (1 << LayerMask.NameToLayer("EffectEtc"));
+        effectLayer = (1 << LayerMask.NameToLayer("EffectEtc"));
+        shadowScreenLayer = (1 << LayerMask.NameToLayer("EffectEtc"));
 
         effectRenderTexture = new RenderTexture(960, 640, 1, RenderTextureFormat.ARGBHalf, 1);
         effectRenderTexture.filterMode = FilterMode.Point;

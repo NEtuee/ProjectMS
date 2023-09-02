@@ -11,29 +11,8 @@ public class CombinePass : AkaneRenderPass
     CharacterRenderPass characterRenderPass;
     ShadowRenderPass shadowRenderPass;
 
-    Dictionary<string, AkaneRenderPass> renderPasses = new Dictionary<string, AkaneRenderPass>();
-
     private static int shadowScreenLayer;
-    public override int layerMasks => shadowScreenLayer;
-    public override string layerName => "ShadowScreen";
-
-    public void AddPass<T>(T renderPass) where T : AkaneRenderPass
-    {   
-        renderPasses.Add(renderPass.layerName, renderPass);
-    }
-
-    public void Awake()
-    {
-        shadowScreenLayer = (1 << LayerMask.NameToLayer(layerName));
-
-        if (renderMaterial == null)
-        {
-            var quad = GameObject.FindGameObjectWithTag("ScreenResultMesh");
-
-            var renderer = quad.GetComponent<Renderer>();
-            renderMaterial = renderer.sharedMaterial;
-        }
-    }
+    protected override int layerMasks { get; set; } = shadowScreenLayer;
 
     public static CombinePass CreateInstance(BackgroundRenderPass backgroundPass, CharacterRenderPass characterPass, ShadowRenderPass shadowPass)
     {
@@ -43,6 +22,19 @@ public class CombinePass : AkaneRenderPass
         pass.shadowRenderPass = shadowPass;
 
         return pass;
+    }
+
+    public void OnEnable()
+    {
+        shadowScreenLayer = (1 << LayerMask.NameToLayer("ShadowScreen"));
+
+        if (renderMaterial == null)
+        {
+            var quad = GameObject.FindGameObjectWithTag("ScreenResultMesh");
+
+            var renderer = quad.GetComponent<Renderer>();
+            renderMaterial = renderer.sharedMaterial;
+        }
     }
     public override void Draw(Camera renderCamera, RenderTexture buffer)
     {
