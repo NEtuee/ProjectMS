@@ -8,11 +8,12 @@ public class BackgroundRenderPass : AkaneRenderPass
     [SerializeField] private RenderTexture backgroundRenderTexture;
 
     private static int backgroundLayer;
-    protected override int layerMasks { get; set; } = backgroundLayer;
-
-    public void OnEnable()
+    public override int layerMasks => backgroundLayer;
+    public override string layerName => "Background";
+        
+    public void Awake()
     {
-        backgroundLayer = (1 << LayerMask.NameToLayer("Background"));
+        backgroundLayer = (1 << LayerMask.NameToLayer(layerName));
         backgroundRenderTexture = new RenderTexture(1024, 1024, 1, RenderTextureFormat.ARGBHalf, 1);
         backgroundRenderTexture.filterMode = FilterMode.Point;
     }
