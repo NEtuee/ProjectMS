@@ -126,6 +126,8 @@ public class StageDataEditor : EditorWindow
 
             if(_viewerOpen)
             {
+                EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+
                 if(drawFileList())
                     addItem(ref targetList);
             }
@@ -349,8 +351,10 @@ public class StageDataEditor : EditorWindow
     
     private Vector2 _pointItemScroll = Vector2.zero;
     private Vector2 _characterSpawnScroll = Vector2.zero;
+    private Vector2 _miniStageScroll = Vector2.zero;
 
     private CharacterInfoView _characterInfoView = new CharacterInfoView();
+    private MiniStageListView _miniStageListView = new MiniStageListView();
     public SerializedObject _stageDataSerializedObject;
     public SerializedProperty _stageDataListProperty;
 
@@ -358,14 +362,14 @@ public class StageDataEditor : EditorWindow
     {
         "Point",
         "Character",
-        "Trigger",
+        "MiniStage",
     };
 
     private string[] _editMenuStrings = 
     {
         "Inspector",
         "Character Palette",
-        "Sequencer Palette",
+        "MiniStage Palette",
     };
 
     private SequencerPathEditor _onEnterSequencerPathEditor = new SequencerPathEditor("On Enter Sequencer Path");
@@ -376,10 +380,16 @@ public class StageDataEditor : EditorWindow
     private int _editItemMenuSelectedIndex = 0;
     private int _editMenuSelectedIndex = 0;
 
+    private int _miniStageSelectedIndex = 0;
+
 
     private string _pointCharacterSearchString = "";
     private string[] _pointCharacterSearchStringList;
     private string _pointCharacterSearchStringCompare = "";
+
+    private string _miniStageSearchString = "";
+    private string[] _miniStageSearchStringList;
+    private string _miniStageSearchStringCompare = "";
 
     private bool _drawScreenToMousePoint = false;
 
@@ -407,7 +417,12 @@ public class StageDataEditor : EditorWindow
 
         bool reloadData = false;
         GUILayout.BeginHorizontal();
-            StageData editStageData = EditorGUILayout.ObjectField("Edit Data", _editStageData, typeof(StageData), true) as StageData;
+            StageData editStageData = EditorGUILayout.ObjectField("Stage Data", _editStageData, typeof(StageData), true) as StageData;
+            MiniStageData editMiniStage = _miniStageListView.getNewMiniStageData();
+            if(editMiniStage != null)
+            {
+                editStageData = editMiniStage;
+            }
 
             if(GUILayout.Button("New", GUILayout.Width(40f)))
             {
@@ -522,7 +537,7 @@ public class StageDataEditor : EditorWindow
             else if(_editItemMenuSelectedIndex == 1)
                 onCharacterGUI();
             else if(_editItemMenuSelectedIndex == 2)
-                onTriggerGUI();
+                onMiniStageGUI();
         GUILayout.EndVertical();
 
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
@@ -536,8 +551,10 @@ public class StageDataEditor : EditorWindow
                     onPointInspectorGUI();
                 else if(_editItemMenuSelectedIndex == 1)
                     onCharacterInspectorGUI();
+                else if(_editItemMenuSelectedIndex == 2)
+                    onMiniStageInspectorGUI();
             }
-            if(_editMenuSelectedIndex == 1)
+            else if(_editMenuSelectedIndex == 1)
             {
                 _characterInfoView.OnGUI();
                 string addedCharacter = _characterInfoView.getAddedCharacter();
@@ -546,11 +563,67 @@ public class StageDataEditor : EditorWindow
                     addCharacterToPoint(_pointSelectedIndex,addedCharacter);
                 }
             }
+            else if(_editMenuSelectedIndex == 2)
+            {
+                _miniStageListView.OnGUI();
+                MiniStageData miniStageData = _miniStageListView.getAddedMiniStage();
+                if(miniStageData != null)
+                    addMiniStageToStage(miniStageData);
+            }
         GUILayout.EndVertical();
     }
 
-    private void onTriggerGUI()
+    private void onMiniStageGUI()
     {
+        if(_editStageData._stagePointData.Count <= _pointSelectedIndex || _pointSelectedIndex < 0 )
+            return;
+        
+        _miniStageSearchString = EditorGUILayout.TextField("Search",_miniStageSearchString);
+        if(_miniStageSearchStringCompare != _miniStageSearchString)
+        {
+            if(_miniStageSearchString == "")
+                _miniStageSearchStringList = null;
+            else
+                _miniStageSearchStringList = _miniStageSearchString.Split(' ');
+            _miniStageSearchStringCompare = _miniStageSearchString;
+        }
+
+        _miniStageScroll = GUILayout.BeginScrollView(_miniStageScroll,"box");
+
+            for(int i = 0; i < _editStageData._miniStageData.Count; ++i)
+            {
+                if(_pointCharacterSearchString != "" && (searchStringCompare(_editStageData._miniStageData[i]._data._stageName,_miniStageSearchStringList) == false 
+                        && searchStringCompare(_editStageData._miniStageData[i]._data.name,_miniStageSearchStringList) == false))
+                    continue;
+
+                if(_editStageData._miniStageData[i]._data == null)
+                    deleteMiniStage(i--);
+
+                GUILayout.BeginHorizontal();
+
+                Color currentColor = GUI.color;
+                GUI.color = i == _miniStageSelectedIndex ? Color.green : currentColor;
+
+                string targetName = _editStageData._miniStageData[i]._data.name + ": " + _editStageData._miniStageData[i]._data._stageName;
+
+                GUILayout.Label(targetName,GUILayout.Width(200f));
+
+                if(GUILayout.Button("Pick"))
+                    selectMiniStage(i);
+
+                if(GUILayout.Button("Delete MiniStage"))
+                {
+                    deleteMiniStage(i--);
+                    if(i == _miniStageSelectedIndex)
+                        _miniStageSelectedIndex = -1;
+                }
+
+                GUI.color = currentColor;
+
+                GUILayout.EndHorizontal();
+            }
+
+        GUILayout.EndScrollView();
     }
 
     private void onCharacterGUI()
@@ -701,6 +774,10 @@ public class StageDataEditor : EditorWindow
         stagePointDataEditObject._characterObjectList[_characterSelectedIndex].flipX = characterSpawnData._flip;
     }
 
+    private void onMiniStageInspectorGUI()
+    {
+    }
+
     private void onPointInspectorGUI()
     {
         if(_editingStagePointList == null || _editingStagePointList.Count == 0 || _editStageData._stagePointData.Count <= _pointSelectedIndex || _pointSelectedIndex < 0)
@@ -710,10 +787,36 @@ public class StageDataEditor : EditorWindow
         StagePointDataEditObject stagePointDataEditObject = _editingStagePointList[_pointSelectedIndex];
 
         GUILayout.Label("Position: " + stagePointData._stagePoint.ToString()); 
-        stagePointData._maxLimitedDistance = EditorGUILayout.FloatField("Radius", stagePointData._maxLimitedDistance);
-        stagePointData._cameraZoomSize = EditorGUILayout.FloatField("ZoomSize", stagePointData._cameraZoomSize);
-        stagePointData._cameraZoomSpeed = EditorGUILayout.FloatField("ZoomSpeed", stagePointData._cameraZoomSpeed);
-        stagePointData._lerpCameraZoom = EditorGUILayout.Toggle("LerpToNextZoom", stagePointData._lerpCameraZoom);
+        if(_editStageData._isMiniStage == false)
+        {
+            stagePointData._maxLimitedDistance = EditorGUILayout.FloatField("Radius", stagePointData._maxLimitedDistance);
+            stagePointData._cameraZoomSize = EditorGUILayout.FloatField("ZoomSize", stagePointData._cameraZoomSize);
+            stagePointData._cameraZoomSpeed = EditorGUILayout.FloatField("ZoomSpeed", stagePointData._cameraZoomSpeed);
+            stagePointData._lerpCameraZoom = EditorGUILayout.Toggle("LerpToNextZoom", stagePointData._lerpCameraZoom);
+        }
+        else if(_editStageData is MiniStageData)
+        {
+            MiniStageData miniStageData = _editStageData as MiniStageData;
+            GUILayout.BeginVertical("box");
+            GUILayout.Label("Trigger");
+            bool isChanged = false;
+            float triggerWidth = EditorGUILayout.FloatField("Width", miniStageData._triggerWidth);
+            float triggerHeight = EditorGUILayout.FloatField("Height", miniStageData._triggerHeight);
+            Vector3 triggerOffset = EditorGUILayout.Vector3Field("Offset", miniStageData._triggerOffset);
+
+            isChanged |= triggerWidth != miniStageData._triggerWidth;
+            isChanged |= triggerHeight != miniStageData._triggerHeight;
+            isChanged |= triggerOffset != miniStageData._triggerOffset;
+            GUILayout.EndVertical();
+
+            if(isChanged)
+            {
+                miniStageData._triggerWidth = triggerWidth;
+                miniStageData._triggerHeight = triggerHeight;
+                miniStageData._triggerOffset = triggerOffset;
+                SceneView.RepaintAll();
+            }
+        }
 
         _onEnterSequencerPathEditor.draw(ref stagePointData._onEnterSequencerPath);
         _onExitSequencerPathEditor.draw(ref stagePointData._onExitSequencerPath);
@@ -799,6 +902,15 @@ public class StageDataEditor : EditorWindow
         stagePointDataEdit._characterSpawnDataList.Add(spawnData);
         stagePointDataEdit._characterObjectList.Add(characterEditItem);
         stagePointData._characterSpawnData = stagePointDataEdit._characterSpawnDataList.ToArray();
+    }
+
+    private void addMiniStageToStage( MiniStageData miniStageData)
+    {
+        MiniStageListItem listItem = new MiniStageListItem();
+        listItem._stagePosition = Vector3.zero;
+        listItem._data = miniStageData;
+
+        _editStageData._miniStageData.Add(listItem);
     }
 
     void Update() 
@@ -960,6 +1072,15 @@ public class StageDataEditor : EditorWindow
         //     Handles.DrawSolidRectangleWithOutline(rectangle,new Color(0f,0f,0f,0f),Color.blue);
         // }
 
+        if(_editStageData._isMiniStage)
+        {
+            MiniStageData miniStageData = _editStageData as MiniStageData;
+
+            Rect rectangle = new Rect();
+            rectangle.Set(miniStageData._triggerOffset.x - (miniStageData._triggerWidth * 0.5f),miniStageData._triggerOffset.y - (miniStageData._triggerHeight * 0.5f),miniStageData._triggerWidth,miniStageData._triggerHeight);
+            Handles.DrawSolidRectangleWithOutline(rectangle,new Color(0f,0f,0f,0f),Color.green);
+        }
+
         for(int i = 0; i < _editStageData._stagePointData.Count; ++i)
         {
             StagePointData stagePointData = _editStageData._stagePointData[i];
@@ -1004,7 +1125,7 @@ public class StageDataEditor : EditorWindow
                 selectPoint(i);
 
             Handles.color = currentColor;
-            if(_drawScreenToMousePoint || i == _pointSelectedIndex)
+            if(_drawScreenToMousePoint || (i == _pointSelectedIndex && _editStageData._isMiniStage == false))
             {
                 drawInGameScreenSection(stagePointData._stagePoint,stagePointData._cameraZoomSize,stagePointData._maxLimitedDistance);
                 if(stagePointData._maxLimitedDistance > 0f)
@@ -1067,6 +1188,11 @@ public class StageDataEditor : EditorWindow
         _characterSelectedIndex = characterIndex;
     }
 
+    private void selectMiniStage(int miniStageIndex)
+    {
+        _miniStageSelectedIndex = miniStageIndex;
+    }
+
     private void PingTarget(GameObject obj)
     {
         EditorGUIUtility.PingObject(obj);
@@ -1122,10 +1248,22 @@ public class StageDataEditor : EditorWindow
         _editingStagePointList[pointIndex]._characterObjectList.RemoveAt(characterIndex);
     }
 
+    private void deleteMiniStage(int miniStageIndex)
+    {
+        if(_editStageData._miniStageData.Count <= miniStageIndex || miniStageIndex < 0 )
+            return;
+
+        _editStageData._miniStageData.RemoveAt(miniStageIndex);
+    }
+
     private void loadStageData()
     {
         _pointSelectedIndex = 0;
         _characterSelectedIndex = 0;
+        _miniStageSelectedIndex = 0;
+
+        _editMenuSelectedIndex = 0;
+        _editItemMenuSelectedIndex = 0;
 
         if(_editStageData == null)
             return;
@@ -1502,7 +1640,123 @@ public class StageDataEditor : EditorWindow
 }
 
 
+public class MiniStageListView
+{
+    static private string _miniStagePath = "StageData/MiniStageData/";
+   
+    private string _searchString = "";
+    private string[] _searchStringList;
+    private string _searchStringCompare = "";
 
+    private Vector2 _scrollPosition;
+    private MiniStageData _addedMiniStageData = null;
+    private MiniStageData _newMiniStageData = null;
+
+    public void OnGUI()
+    {
+        if(GUILayout.Button("New"))
+        {
+            string defaultName = ".asset";
+            string filePath = EditorUtility.SaveFilePanel(
+                "Save Mini Stage",
+                "Assets/Resources/StageData/MiniStageData/",
+                defaultName,
+                "asset"
+            );
+
+            if (string.IsNullOrEmpty(filePath)) 
+                return;
+
+            filePath = FileUtil.GetProjectRelativePath(filePath);
+            MiniStageData miniStgaeData = ScriptableObject.CreateInstance<MiniStageData>();
+            miniStgaeData._stageName = "NewStage";
+            AssetDatabase.CreateAsset(miniStgaeData, filePath);
+            AssetDatabase.SaveAssets();
+
+            _newMiniStageData = miniStgaeData;
+        }
+
+        _searchString = EditorGUILayout.TextField("Search",_searchString);
+        if(_searchStringCompare != _searchString)
+        {
+            if(_searchString == "")
+                _searchStringList = null;
+            else
+                _searchStringList = _searchString.Split(' ');
+
+            _searchStringCompare = _searchString;
+        }
+
+        UnityEngine.Object[] miniStageDataArray = Resources.LoadAll(_miniStagePath,typeof(MiniStageData));
+        if(miniStageDataArray == null)
+            return;
+
+        _scrollPosition = GUILayout.BeginScrollView(_scrollPosition);
+        foreach(var item in miniStageDataArray)
+        {
+            MiniStageData data = item as MiniStageData;
+            if(_searchString != "" && (searchStringCompare(data._stageName) == false))
+                continue;
+
+            GUILayout.BeginHorizontal("box");
+
+            if(GUILayout.Button("Show",GUILayout.Width(50f)))
+            {
+                PingTarget(data);
+            }
+
+            if(GUILayout.Button("Edit",GUILayout.Width(50f)))
+            {
+                _newMiniStageData = data;
+            }
+            
+            if(GUILayout.Button("Add",GUILayout.Width(50f)))
+            {
+                _addedMiniStageData = data;
+            }
+
+            GUILayout.Label(data.name + ": " + data._stageName);
+            GUILayout.EndHorizontal();
+        }
+
+        GUILayout.EndScrollView();
+    }
+
+    private void PingTarget(ScriptableObject obj)
+    {
+        EditorUtility.FocusProjectWindow();
+        EditorGUIUtility.PingObject(obj);
+    }
+
+    public MiniStageData getAddedMiniStage()
+    {
+        MiniStageData data = _addedMiniStageData;
+        _addedMiniStageData = null;
+
+        return data;
+    }
+
+    public MiniStageData getNewMiniStageData()
+    {
+        MiniStageData data = _newMiniStageData;
+        _newMiniStageData = null;
+
+        return data;
+    }
+
+    private bool searchStringCompare(string target)
+    {
+        string lowerTarget = target.ToLower();
+        foreach(var stringItem in _searchStringList)
+        {
+            if(lowerTarget.Contains(stringItem))
+                return true;
+        }
+
+        return false;
+    }
+
+}
 
 public class CharacterInfoView
 {
