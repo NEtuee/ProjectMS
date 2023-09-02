@@ -124,12 +124,20 @@ public class GameEditorMaster : MonoBehaviour
         sizeDelta.y = 50f + 45f * (float)stageData.Length;
         _stageSelectorContent.sizeDelta = sizeDelta;
 
+        int offsetIndex = 0;
+
         for(int index = 0; index < stageData.Length; ++index)
         {
+            if(stageData[index]._isMiniStage)
+            {
+                ++offsetIndex;
+                continue;
+            }
+
             GameObject stageButton = Instantiate(_stageSelectorButtonItemPrefab);
             RectTransform rectTransform = stageButton.GetComponent<RectTransform>();
             rectTransform.SetParent(_stageSelectorContent,false);
-            rectTransform.anchoredPosition = new Vector3(0f,-(40f + 45f * (float)index));
+            rectTransform.anchoredPosition = new Vector3(0f,-(40f + 45f * (float)(index - offsetIndex)));
 
             int indexPointer = index;
             stageButton.GetComponentInChildren<Text>().text = stageData[index]._stageName;

@@ -71,6 +71,8 @@ public class StageDataEditor : EditorWindow
 
         private Vector3             _pivotPosition = Vector3.zero;
 
+        public List<SpriteRenderer> _characterObjectList = new List<SpriteRenderer>();
+
         public bool syncPosition(Vector3 pivotPosition)
         {
             if(_miniStageData == null || _gizmoItem == null)
@@ -85,6 +87,14 @@ public class StageDataEditor : EditorWindow
             else
             {
                 _miniStageData._localStagePosition = _gizmoItem.transform.position - pivotPosition;
+            }
+
+            if(_miniStageData._data._stagePointData.Count > 0)
+            {
+                for(int index = 0; index < _characterObjectList.Count; ++index)
+                {
+                    _characterObjectList[index].transform.position = _miniStageData._data._stagePointData[0]._characterSpawnData[index]._localPosition + _gizmoItem.transform.position;
+                }
             }
 
             return syncSuccess;
@@ -992,6 +1002,19 @@ public class StageDataEditor : EditorWindow
         _editingMiniStageDataList.Add(editObject);
         _editStageData._miniStageData.Add(listItem);
 
+        var characterInfo = ResourceContainerEx.Instance().getCharacterInfo("Assets\\Data\\StaticData\\CharacterInfo.xml");
+        for(int index = 0; index < miniStageData._stagePointData[0]._characterSpawnData.Length; ++index)
+        {
+            var spawnData = miniStageData._stagePointData[0]._characterSpawnData[index];
+            SpriteRenderer characterEditItem = getCharacterItem();
+            characterEditItem.sprite = getActionSpriteFromCharacter(characterInfo[spawnData._characterKey],spawnData._startAction);
+            characterEditItem.sortingOrder = 10;
+            characterEditItem.transform.position = editObject._gizmoItem.transform.position + spawnData._localPosition;
+            characterEditItem.flipX = spawnData._flip;
+    
+            editObject._characterObjectList.Add(characterEditItem);
+        }
+
         selectMiniStage(_editingMiniStageDataList.Count - 1);
     }
 
@@ -1271,7 +1294,7 @@ public class StageDataEditor : EditorWindow
                 }
 
                 Rect rectangle = new Rect();
-                Vector3 centerPosition = itemPosition + miniStageData._triggerOffset;
+                Vector3 centerPosition = itemPosition + miniStageListItem._overrideTriggerOffset;
                 rectangle.Set(centerPosition.x - (miniStageListItem._overrideTriggerWidth * 0.5f),centerPosition.y - (miniStageListItem._overrideTriggerHeight * 0.5f),miniStageListItem._overrideTriggerWidth,miniStageListItem._overrideTriggerHeight);
                 Handles.DrawSolidRectangleWithOutline(rectangle,new Color(0f,0f,0f,0f),Color.green);
             }
@@ -1378,6 +1401,12 @@ public class StageDataEditor : EditorWindow
 
         _editStageData._miniStageData.RemoveAt(miniStageIndex);
 
+        for(int characterIndex = 0; characterIndex < _editingMiniStageDataList[miniStageIndex]._characterObjectList.Count; ++characterIndex)
+        {
+            SpriteRenderer characterItem = _editingMiniStageDataList[miniStageIndex]._characterObjectList[characterIndex];
+            returnCharacterItem(characterItem);
+        }
+
         returnGizmoItem(_editingMiniStageDataList[miniStageIndex]._gizmoItem);
         _editingMiniStageDataList.RemoveAt(miniStageIndex);
     }
@@ -1458,9 +1487,25 @@ public class StageDataEditor : EditorWindow
                 editObject._miniStageData = item;
                 editObject._gizmoItem = getGizmoItem();
                 editObject._gizmoItem.transform.position = _editStageData._stagePointData[0]._stagePoint + item._localStagePosition;
-
                 _editingMiniStageDataList.Add(editObject);
+
+                if(item._data._stagePointData.Count == 0)
+                    continue;
+
+                for(int index = 0; index < item._data._stagePointData[0]._characterSpawnData.Length; ++index)
+                {
+                    var spawnData = item._data._stagePointData[0]._characterSpawnData[index];
+                    SpriteRenderer characterEditItem = getCharacterItem();
+                    characterEditItem.sprite = getActionSpriteFromCharacter(characterInfo[spawnData._characterKey],spawnData._startAction);
+                    characterEditItem.sortingOrder = 10;
+                    characterEditItem.transform.position = editObject._gizmoItem.transform.position + spawnData._localPosition;
+                    characterEditItem.flipX = spawnData._flip;
+    
+                    editObject._characterObjectList.Add(characterEditItem);
+                }
+
             }
+            
         }
     }
 
@@ -1479,6 +1524,12 @@ public class StageDataEditor : EditorWindow
 
         for(int index = 0; index < _editingMiniStageDataList.Count; ++index)
         {
+            for(int characterIndex = 0; characterIndex < _editingMiniStageDataList[index]._characterObjectList.Count; ++characterIndex)
+            {
+                SpriteRenderer characterItem = _editingMiniStageDataList[index]._characterObjectList[characterIndex];
+                returnCharacterItem(characterItem);
+            }
+
             returnGizmoItem(_editingMiniStageDataList[index]._gizmoItem);
         }
 

@@ -95,14 +95,7 @@ public class BoundBox
     public BoundBox(float width, float height, Vector3 localPivot)
     {
         _vertices = new Vector3[4];
-
-        _width = width;
-        _height = height;
-
-        _worldCenter = Vector3.zero;
-        _localPivot = localPivot;
-
-        _l = _r = _b = _t = 0f;
+        setData(width,height,localPivot);
     }
 
     public bool isValid()

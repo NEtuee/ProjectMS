@@ -93,6 +93,10 @@ public class AIGraph
         _rotateProcessTimer = 0f;
         _rotateAngle = 0f;
 
+        _rotateStartDirection = Vector3.right;
+        _recentlyAiDirection = Vector3.zero;
+        _recentlyAiTargetPosition = Vector3.zero;
+
         _reservedEvents.Clear();
         _reservedTargetEvents.Clear();
         _reservedCustomEvents.Clear();

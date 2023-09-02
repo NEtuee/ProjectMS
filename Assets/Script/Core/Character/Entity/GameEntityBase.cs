@@ -137,6 +137,7 @@ public class GameEntityBase : SequencerObjectBase
         detachChildObject();
         setParentObject(null);
 
+        Debug.Log(direction);
         setDirection(direction);
 
 #if UNITY_EDITOR
@@ -151,6 +152,9 @@ public class GameEntityBase : SequencerObjectBase
         _characterLifeTime = 0f;
         _leftHP = 0f;
         _deadEventDelegate = null;
+
+        _updateDirection = true;
+        _updateFlipState = true;
         
         gameObject.name = characterInfo._displayName;
         actionGraphPath = characterInfo._actionGraphPath;
@@ -622,6 +626,9 @@ public class GameEntityBase : SequencerObjectBase
         _leftHP = 0f;
         _deadEventDelegate = null;
 
+        _updateDirection = true;
+        _updateFlipState = true;
+
         _enabledLaserEffectItems.Clear();
 
         _physicsBody.initialize(false,0f,10f);
@@ -901,6 +908,7 @@ public class GameEntityBase : SequencerObjectBase
     public Vector3 getDirectionFromType(DirectionType directionType)
     {
         Vector3 direction = _direction;
+
         switch(directionType)
         {
             case DirectionType.AlwaysRight:
