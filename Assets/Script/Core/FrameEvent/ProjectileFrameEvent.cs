@@ -165,7 +165,7 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
             spawnPosition = executeEntity.transform.position;
             break;
             case SetTargetType.SetTargetType_Target:
-            spawnPosition = targetEntity.transform.position;
+            spawnPosition = targetEntity == null ? executeEntity.transform.position : targetEntity.transform.position;
             break;
             case SetTargetType.SetTargetType_AITarget:
             GameEntityBase aiTarget = ((GameEntityBase)executeEntity).getCurrentTargetEntity();
