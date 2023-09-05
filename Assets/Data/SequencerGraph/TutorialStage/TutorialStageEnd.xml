@@ -1,8 +1,5 @@
 <SequencerGraph Name="TutorialStageEnd">
 
-    <InitializePhase>
-    </InitializePhase>
-
     <UpdatePhase>
         <DeadFence UniqueKey="Teacher"/>
         <BlockInput Enable="True"/>
@@ -13,7 +10,7 @@
         <SetAction UniqueKey="Player" Action="SQ_Intro_KillTeacher"/>
 
         <WaitSecond Time="1.5"/>
-        <FadeIn Lambda="4.0"/>
+        <FadeOut Lambda="4.0"/>
 
         <WaitSecond Time="3.0"/>
         <NextStage Path="StageData/Stage_0_0"/>

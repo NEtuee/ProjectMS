@@ -119,9 +119,9 @@ public class SequencrGraphLoader : LoaderBase<SequencerGraphBaseData>
             spawnEvent = new SequencerGraphEvent_WaitSignal();
         else if(node.Name == "SetCameraZoom")
             spawnEvent = new SequencerGraphEvent_SetCameraZoom();
-        else if(node.Name == "FadeIn")
-            spawnEvent = new SequencerGraphEvent_FadeIn();
         else if(node.Name == "FadeOut")
+            spawnEvent = new SequencerGraphEvent_FadeIn();
+        else if(node.Name == "FadeIn")
             spawnEvent = new SequencerGraphEvent_FadeOut();
         else if(node.Name == "ForceQuit")
             spawnEvent = new SequencerGraphEvent_ForceQuit();

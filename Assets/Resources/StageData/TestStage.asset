@@ -13,30 +13,39 @@ MonoBehaviour:
   m_Name: TestStage
   m_EditorClassIdentifier: 
   _stageName: TestStage
-  _backgroundPrefabPath: 
+  _backgroundPrefabPath: {fileID: 0}
+  _isMiniStage: 0
   _stagePointData:
-  - _stagePoint: {x: -11.24, y: -4.82, z: 0}
-    _maxLimitedDistance: 0
+  - _stagePoint: {x: 4.76, y: -9.54, z: 0}
+    _maxLimitedDistance: 1
     _cameraZoomSize: 3.2
-    _onEnterSequencerPath: []
-    _onExitSequencerPath: []
-    _characterSpawnData:
-    - _characterKey: Akane
-      _uniqueKey: 
-      _startAction: 
-      _flip: 0
-      _searchIdentifier: 1
-      _activeType: 0
-      _localPosition: {x: 0.67999935, y: -1.4099998, z: 0}
-  - _stagePoint: {x: 5.11, y: -4.32, z: 0}
-    _maxLimitedDistance: 0
-    _cameraZoomSize: 3.2
+    _cameraZoomSpeed: 0
+    _lerpCameraZoom: 0
     _onEnterSequencerPath: []
     _onExitSequencerPath: []
     _characterSpawnData: []
-  - _stagePoint: {x: 9.07, y: -6.91, z: 0}
+  - _stagePoint: {x: 13.95, y: -10.59, z: 0}
     _maxLimitedDistance: 0
-    _cameraZoomSize: 3.2
+    _cameraZoomSize: 3
+    _cameraZoomSpeed: 4
+    _lerpCameraZoom: 0
     _onEnterSequencerPath: []
     _onExitSequencerPath: []
     _characterSpawnData: []
+  - _stagePoint: {x: 20.49, y: -8.44, z: 0}
+    _maxLimitedDistance: 0
+    _cameraZoomSize: 3
+    _cameraZoomSpeed: 4
+    _lerpCameraZoom: 0
+    _onEnterSequencerPath: []
+    _onExitSequencerPath: []
+    _characterSpawnData: []
+  - _stagePoint: {x: 26.23, y: -11.68, z: 0}
+    _maxLimitedDistance: 0
+    _cameraZoomSize: 3
+    _cameraZoomSpeed: 4
+    _lerpCameraZoom: 0
+    _onEnterSequencerPath: []
+    _onExitSequencerPath: []
+    _characterSpawnData: []
+  _miniStageData: []

@@ -29,8 +29,8 @@ public class StagePointData
     public float        _cameraZoomSize = 0f;
     public float        _cameraZoomSpeed = 4f;
     public bool         _lerpCameraZoom = false;
-    public string[]     _onEnterSequencerPath = null;
-    public string[]     _onExitSequencerPath = null;
+    public string[]     _onEnterSequencerPath = new string[0];
+    public string[]     _onExitSequencerPath = new string[0];
 
     public StagePointCharacterSpawnData[] _characterSpawnData = null;
 

@@ -209,7 +209,6 @@ public class StageDataEditor : EditorWindow
         private void drawSequencerList(ref string[] targetList)
         {
             _sequencerViewerScroll = GUILayout.BeginScrollView(_sequencerViewerScroll, "box");
-
             GUILayout.BeginHorizontal();
 
             GUILayout.Label("Sequencer List");
@@ -227,7 +226,7 @@ public class StageDataEditor : EditorWindow
                 if(file != null)
                 {
                     string templatePath = IOControl.PathForDocumentsFile("Assets/ScriptTemplates/79-Action Script__Sequencer Graph-NewSequencerGraph.xml.txt");
-                    _outFilePath = filePath.Remove(0,filePath.LastIndexOf('/') + 1);
+                    _outFilePath = filePath.Replace(IOControl.PathForDocumentsFile("Assets/Data/SequencerGraph/").Replace('\\','/'),"");
 
                     StreamReader streamReader = new StreamReader(templatePath);
                     
@@ -239,13 +238,13 @@ public class StageDataEditor : EditorWindow
                     file.Close();
 
                     addItem(ref targetList);
+
+                    FileDebugger.OpenFileWithCursor(filePath,0);
                     _outFilePath = "";
                 }
             }
 
             GUILayout.EndHorizontal();
-            if(targetList == null)
-                return;
 
             int deleteIndex = -1;
             for(int index = 0; index < targetList.Length; ++index)
@@ -368,7 +367,7 @@ public class StageDataEditor : EditorWindow
                 {
                     clear();
                     _outFilePath = item.FullName;
-                    _outFilePath = _outFilePath.Replace(IOControl.PathForDocumentsFile("Assets\\Data\\SequencerGraph\\").Replace('/','\\'),"");
+                    _outFilePath = _outFilePath.Replace(IOControl.PathForDocumentsFile("Assets\\Data\\SequencerGraph\\").Replace('/','\\'),"").Replace('\\','/');
 
                     _viewerOpen = false;
                     return true;
@@ -513,6 +512,10 @@ public class StageDataEditor : EditorWindow
                 {
                     editStageData = ScriptableObject.CreateInstance<StageData>();
                     editStageData._stageName = "NewStage";
+
+                    StagePointData stagePointData = new StagePointData(Vector3.zero);
+                    stagePointData._cameraZoomSize = Camera.main.orthographicSize;
+                    editStageData._stagePointData.Add(stagePointData);
                 }
             }
 
@@ -864,10 +867,12 @@ public class StageDataEditor : EditorWindow
         GUILayout.BeginVertical("box");
         GUILayout.Label("Trigger");
         bool isChanged = false;
+        SearchIdentifier searchIdentifier = (SearchIdentifier)EditorGUILayout.EnumPopup("Search Identifier", miniStageListItem._overrideTargetSearchIdentifier);
         float triggerWidth = EditorGUILayout.FloatField("Width", miniStageListItem._overrideTriggerWidth);
         float triggerHeight = EditorGUILayout.FloatField("Height", miniStageListItem._overrideTriggerHeight);
         Vector3 triggerOffset = EditorGUILayout.Vector3Field("Offset", miniStageListItem._overrideTriggerOffset);
 
+        isChanged |= searchIdentifier != miniStageListItem._overrideTargetSearchIdentifier;
         isChanged |= triggerWidth != miniStageListItem._overrideTriggerWidth;
         isChanged |= triggerHeight != miniStageListItem._overrideTriggerHeight;
         isChanged |= triggerOffset != miniStageListItem._overrideTriggerOffset;
@@ -875,6 +880,7 @@ public class StageDataEditor : EditorWindow
 
         if(isChanged)
         {
+            miniStageListItem._overrideTargetSearchIdentifier = searchIdentifier;
             miniStageListItem._overrideTriggerWidth = triggerWidth;
             miniStageListItem._overrideTriggerHeight = triggerHeight;
             miniStageListItem._overrideTriggerOffset = triggerOffset;
@@ -893,7 +899,7 @@ public class StageDataEditor : EditorWindow
         GUILayout.Label("Position: " + stagePointData._stagePoint.ToString()); 
         if(_editStageData._isMiniStage == false)
         {
-            stagePointData._maxLimitedDistance = EditorGUILayout.FloatField("Radius", stagePointData._maxLimitedDistance);
+            stagePointData._maxLimitedDistance = EditorGUILayout.FloatField("CameraBound Radius", stagePointData._maxLimitedDistance);
             stagePointData._cameraZoomSize = EditorGUILayout.FloatField("ZoomSize", stagePointData._cameraZoomSize);
             stagePointData._cameraZoomSpeed = EditorGUILayout.FloatField("ZoomSpeed", stagePointData._cameraZoomSpeed);
             stagePointData._lerpCameraZoom = EditorGUILayout.Toggle("LerpToNextZoom", stagePointData._lerpCameraZoom);
@@ -904,10 +910,12 @@ public class StageDataEditor : EditorWindow
             GUILayout.BeginVertical("box");
             GUILayout.Label("Trigger");
             bool isChanged = false;
+            SearchIdentifier searchIdentifier = (SearchIdentifier)EditorGUILayout.EnumPopup("Search Identifier", miniStageData._targetSearchIdentifier);
             float triggerWidth = EditorGUILayout.FloatField("Width", miniStageData._triggerWidth);
             float triggerHeight = EditorGUILayout.FloatField("Height", miniStageData._triggerHeight);
             Vector3 triggerOffset = EditorGUILayout.Vector3Field("Offset", miniStageData._triggerOffset);
 
+            isChanged |= searchIdentifier != miniStageData._targetSearchIdentifier;
             isChanged |= triggerWidth != miniStageData._triggerWidth;
             isChanged |= triggerHeight != miniStageData._triggerHeight;
             isChanged |= triggerOffset != miniStageData._triggerOffset;
@@ -915,6 +923,7 @@ public class StageDataEditor : EditorWindow
 
             if(isChanged)
             {
+                miniStageData._targetSearchIdentifier = searchIdentifier;
                 miniStageData._triggerWidth = triggerWidth;
                 miniStageData._triggerHeight = triggerHeight;
                 miniStageData._triggerOffset = triggerOffset;
@@ -1900,6 +1909,11 @@ public class MiniStageListView
             filePath = FileUtil.GetProjectRelativePath(filePath);
             MiniStageData miniStgaeData = ScriptableObject.CreateInstance<MiniStageData>();
             miniStgaeData._stageName = "NewStage";
+
+            StagePointData stagePointData = new StagePointData(Vector3.zero);
+            stagePointData._cameraZoomSize = Camera.main.orthographicSize;
+            miniStgaeData._stagePointData.Add(stagePointData);
+
             AssetDatabase.CreateAsset(miniStgaeData, filePath);
             AssetDatabase.SaveAssets();
 
