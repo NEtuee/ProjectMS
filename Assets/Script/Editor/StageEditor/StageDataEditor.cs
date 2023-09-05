@@ -1,3 +1,4 @@
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -209,7 +210,40 @@ public class StageDataEditor : EditorWindow
         {
             _sequencerViewerScroll = GUILayout.BeginScrollView(_sequencerViewerScroll, "box");
 
+            GUILayout.BeginHorizontal();
+
             GUILayout.Label("Sequencer List");
+            if(GUILayout.Button("New", GUILayout.Width(40f)))
+            {
+                string defaultName = "NewSequencer" + ".xml";
+                string filePath = EditorUtility.SaveFilePanel(
+                    "New Sequencer",
+                    "Assets/Data/SequencerGraph/",
+                    defaultName,
+                    "xml"
+                );
+
+                var file = File.CreateText(filePath);
+                if(file != null)
+                {
+                    string templatePath = IOControl.PathForDocumentsFile("Assets/ScriptTemplates/79-Action Script__Sequencer Graph-NewSequencerGraph.xml.txt");
+                    _outFilePath = filePath.Remove(0,filePath.LastIndexOf('/') + 1);
+
+                    StreamReader streamReader = new StreamReader(templatePath);
+                    
+                    string templateResult = streamReader.ReadToEnd();
+                    templateResult = templateResult.Replace("#SCRIPTNAME#", _outFilePath.Remove(_outFilePath.IndexOf('.'), 4));
+
+                    file.WriteLine(templateResult);
+                    file.Flush();
+                    file.Close();
+
+                    addItem(ref targetList);
+                    _outFilePath = "";
+                }
+            }
+
+            GUILayout.EndHorizontal();
             if(targetList == null)
                 return;
 
