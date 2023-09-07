@@ -460,7 +460,7 @@ public class GameEntityBase : SequencerObjectBase
             _statusInfo.updateDebugTextXXX(debugTextManager);
         }
         
-        CollisionManager.Instance().collisionRequest(_collisionInfo,this,collisionTest,collisionEndEvent);
+        CollisionManager.Instance().collisionRequest(_collisionInfo,this,gameEntityCollisionEvent,collisionEndEvent);
     }
 
     public override void deactive()
@@ -569,9 +569,26 @@ public class GameEntityBase : SequencerObjectBase
         _debugColor = Color.red;
     }
 
-    private void collisionTest(CollisionSuccessData data)
+    private void gameEntityCollisionEvent(CollisionSuccessData data)
     {
         _debugColor = Color.green;
+
+        if(data._target == null || data._target is GameEntityBase == false)
+            return;
+        
+        GameEntityBase targetEntity = data._target as GameEntityBase;
+        if (targetEntity.getCurrentSearchIdentifier() != getCurrentSearchIdentifier())
+            return;
+
+        float totalRadius = targetEntity.getCollisionInfo().getRadius() + getCollisionInfo().getRadius();
+        float collapseDistance = totalRadius - Vector3.Distance(targetEntity.transform.position, data._startPoint);
+
+        float scaledDeltaTime = GlobalTimer.Instance().getSclaedDeltaTime();
+        scaledDeltaTime = MathEx.clampf(scaledDeltaTime, 0f, 0.5f);
+
+        Vector3 direction = (targetEntity.transform.position - data._startPoint).normalized;
+        targetEntity.transform.position += direction * collapseDistance * scaledDeltaTime;
+        transform.position -= direction * collapseDistance * scaledDeltaTime;
     }
 
     private void collisionEndEvent()

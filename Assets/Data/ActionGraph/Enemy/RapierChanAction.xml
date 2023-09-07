@@ -106,19 +106,7 @@
         <Animation Preset="2_attackMain" XFlip="true" Duration="0.35">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2204" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="24" MaxVelocity="10" Velocity="10" Speed="0"/>
-            <FrameEvent Type="Attack" StartTime="0" EndTime="0.1" AttackPreset="Rapier_Normal"> <!-- TODO -->
-                <OnHit>
-                    <FrameEvent Type="AudioPlay" StartTime="0" ID="2205" Attach="true"/>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
-                    
-                    <FrameEvent Type="StopUpdate" Time="0.1"/>
-                    <FrameEvent Type="SetTimeScale" Scale="0.1" Time="0.1" BlendTime="0.1"/>
-                    <FrameEvent Type="ShakeEffect" Scale="0.1" Speed="10.0" Time="0.1"/>
-                    
-                    <!-- visual -->
-                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
-                </OnHit>
-            </FrameEvent>
+
         </Animation>
 
         <Branch Condition="End" Execute="AC_AttackRecover"/>

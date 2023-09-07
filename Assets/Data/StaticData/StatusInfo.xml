@@ -38,6 +38,14 @@
 
         <DeclareGraphicInterface Target="HP" Color="1 0 0 1" HorizontalGap="0.1"/>
     </CommonHpOneEnemyStatus>
+
+    <CommonHpOneEnemyStatusNoUI>
+      <Stat Type="HP" Max="1" Min="0" Init="1"/>
+      <Stat Type="Blood" Max="100" Min="0" Init="3"/>
+      <Stat Type="Battle" Max="0" Min="0" Init="0"/>
+      <Stat Type="Custom" Name="GuardPoint" Max="3" Min="0" Init="3"/>
+    </CommonHpOneEnemyStatusNoUI>
+  
     <CommonHpTwoEnemyStatus>
         <Stat Type="HP" Max="2" Min="0" Init="2"/>
         <Stat Type="Blood" Max="100" Min="0" Init="3"/>
