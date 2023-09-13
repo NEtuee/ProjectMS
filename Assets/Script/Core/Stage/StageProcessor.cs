@@ -91,8 +91,8 @@ public class StageProcessor : Singleton<StageProcessor>
             CameraControlEx.Instance().setZoomSizeForce(_stageData._stagePointData[0]._cameraZoomSize);
 
             ScreenDirector._instance.initialize();
+            UIRepeater.Instance().initialize();
         }
-        
 
         for(int index = 0; index < _stageData._stagePointData.Count; ++index)
         {
@@ -166,8 +166,11 @@ public class StageProcessor : Singleton<StageProcessor>
                     //     return;
                     // }
                     // else 
-                    if(_playerEntity == null)
-                       setPlayEntity(processor?.getUniqueEntity("Player"));
+                    if (_playerEntity == null)
+                    {
+                        setPlayEntity(processor?.getUniqueEntity("Player"));
+                        UIRepeater.Instance().registerUniqueEntity("Player", getPlayerEntity());
+                    }
                 }
 
             }

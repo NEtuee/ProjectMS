@@ -91,6 +91,7 @@ public class ScreenDirector : MonoBehaviour
     static public ScreenDirector _instance = null;
 
     public ScreenFader _screenFader = new ScreenFader();
+    public GameObject _mainHudParent;
 
     public void Awake()
     {
@@ -121,5 +122,11 @@ public class ScreenDirector : MonoBehaviour
     public void ScreenFadeOut(float lambda)
     {
         _screenFader.fadeOut(lambda);
+    }
+
+    public void setActiveMainHud(bool active)
+    {
+        UIRepeater.Instance().updateUIRepeater();
+        _mainHudParent?.SetActive(active);
     }
 }

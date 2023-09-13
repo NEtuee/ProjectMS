@@ -137,7 +137,6 @@ public class GameEntityBase : SequencerObjectBase
         detachChildObject();
         setParentObject(null);
 
-        Debug.Log(direction);
         setDirection(direction);
 
 #if UNITY_EDITOR
@@ -1097,6 +1096,7 @@ public class GameEntityBase : SequencerObjectBase
     public void setCustomValue(string customValueName, float value) {_actionGraph.setCustomValue(customValueName, value);}
     public void addCustomValue(string customValueName, float value) {_actionGraph.addCustomValue(customValueName, value);}
 
+    public StatusInfo getStatusInfo() { return _statusInfo; }
     public float getStatusPercentage(string targetName) {return _statusInfo.getCurrentStatusPercentage(targetName);}
 
     public void executeAIEvent(AIChildEventType eventType) {_aiGraph.executeAIEvent(eventType);}

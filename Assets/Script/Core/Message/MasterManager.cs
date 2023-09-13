@@ -79,6 +79,7 @@ public class MasterManager : MessageHub<ManagerBase>
         FMODAudioManager.Instance().initialize();
         CameraControlEx.Instance().initialize();
         DanmakuManager.Instance().initialize();
+        UIRepeater.Instance().clear();
 
         StageProcessor.Instance().setTargetTransform(CameraControlEx.Instance().getCurrentCamera().transform);
     }
@@ -162,6 +163,7 @@ public class MasterManager : MessageHub<ManagerBase>
         ManagersReceiveMessageProcessing();
         ReceiveMessageProcessing();
 
+        UIRepeater.Instance().updateUIRepeater();
         HPSphereUIManager.Instance().progress(deltaTime);
         TalkBalloonManager.Instance().updateTalkBalloonManager(deltaTime);
         CameraControlEx.Instance().progress(deltaTime);
