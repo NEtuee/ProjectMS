@@ -426,6 +426,7 @@ public class GameEntityBase : SequencerObjectBase
             _spriteRenderer.transform.localScale = outScale;
 
             updateRotation();
+            _actionGraph.getCurrentAnimationTranslation(out _localSpritePosition);
 
             _spriteRenderer.sprite = _actionGraph.getCurrentSprite(_actionGraph.getCurrentRotationType() != RotationType.AlwaysRight ? (_spriteRotation * _actionStartRotation).eulerAngles.z : MathEx.directionToAngle(_direction));
 

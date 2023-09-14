@@ -174,6 +174,12 @@ public class EffectItem : EffectItemBase
                 AnimationScalePreset scalePreset = ResourceContainerEx.Instance().GetScriptableObject("Preset\\AnimationScalePreset") as AnimationScalePreset;
                 _animationPlayData._scalePresetData = scalePreset.getPresetData(effectData._animationCustomPreset._scalePresetName);
             }
+
+            if(effectData._animationCustomPreset._translationPresetName != "")
+            {
+                AnimationTranslationPreset translationPreset = ResourceContainerEx.Instance().GetScriptableObject("Preset\\AnimationTranslationPreset") as AnimationTranslationPreset;
+                _animationPlayData._translationPresetData = translationPreset.getPresetData(effectData._animationCustomPreset._translationPresetName);
+            }
         }
 
         _animationPlayer.initialize();
@@ -246,11 +252,14 @@ public class EffectItem : EffectItemBase
             _spriteRenderer.transform.localRotation *= Quaternion.Euler(0f,0f,torque * deltaTime);
         }
 
+        Vector3 translationPreset = Vector3.zero;
+        _animationPlayer.getCurrentAnimationTranslation(out translationPreset);
+
         Vector3 worldPosition = _localPosition;
         if(_parentTransform != null)
             worldPosition = _parentTransform.position + _localPosition;
 
-        _spriteRenderer.transform.position = worldPosition;
+        _spriteRenderer.transform.position = worldPosition + translationPreset;
 
         return isEnd;
     }

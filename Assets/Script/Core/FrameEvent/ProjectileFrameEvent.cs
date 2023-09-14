@@ -29,11 +29,12 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
 
     private Vector3                         _positionOffset = Vector3.zero;
 
+    private SearchIdentifier                _targetSearchIdentifier = SearchIdentifier.Count;
     private PredictionType                  _predictionType = PredictionType.Path;
     private Vector3[]                       _pathPredictionArray = null;
     private int                             _predictionAccuracy = 0;
     private float                           _startTerm = 0f;
-
+    private float                           _directionAngle = 0f;
     bool                                    _useFlip = false;
 
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
@@ -49,7 +50,7 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
 
         GameEntityBase gameEntityBase = executeEntity as GameEntityBase;
 
-        float defaultAngle = getDefaultAngle(gameEntityBase, _directionType);
+        float defaultAngle = getDefaultAngle(gameEntityBase, _directionType) + _directionAngle;
 
         ProjectileGraphShotInfoData shotInfo;
         getShotInfo(_projectileGraphName,_useType,defaultAngle,ref _shotInfo,out shotInfo);
@@ -110,11 +111,11 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
                 
             }
             
-            ProjectileManager._instance.spawnProjectileDelayed(_projectileGraphName, _startTerm,executeEntity,targetEntity,_setTargetType,ref shotInfo,executeEntity,executeEntity._searchIdentifier);
+            ProjectileManager._instance.spawnProjectileDelayed(_projectileGraphName, _startTerm,executeEntity,targetEntity,_setTargetType,ref shotInfo,executeEntity,_targetSearchIdentifier == SearchIdentifier.Count ? executeEntity._searchIdentifier : _targetSearchIdentifier);
         }
         else
         {
-            ProjectileManager._instance.spawnProjectile(_projectileGraphName,ref shotInfo,spawnPosition,executeEntity,executeEntity._searchIdentifier);
+            ProjectileManager._instance.spawnProjectile(_projectileGraphName,ref shotInfo,spawnPosition,executeEntity,_targetSearchIdentifier == SearchIdentifier.Count ? executeEntity._searchIdentifier : _targetSearchIdentifier);
         }
         
         return true;
@@ -301,6 +302,14 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
             else if(attrName == "UseFlip")
             {
                 _useFlip = bool.Parse(attrValue);
+            }
+            else if(attrName == "SearchIdentifier")
+            {
+                _targetSearchIdentifier = (SearchIdentifier)System.Enum.Parse(typeof(SearchIdentifier), attrValue);
+            }
+            else if(attrName == "DirectionAngle")
+            {
+                _directionAngle = float.Parse(attrValue);
             }
         }
 

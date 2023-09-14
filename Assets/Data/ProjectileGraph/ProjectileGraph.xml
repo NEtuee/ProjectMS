@@ -325,6 +325,42 @@
         </Event>
     </BaseBall>
 
+    <ChairProjectile DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">
+        <Animation Preset="Sprites/Projectile/ChairProjectile" XFlip="true" Duration="0.5">        
+        </Animation>
+
+        <CollisionInfo Radius="0.1" Angle="0"/>
+        <DefaultShotInfo Velocity="7" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="5"/>
+        <Event>
+            <OnHit>
+                <FrameEvent Type="Attack" StartFrame="0" AttackPreset="BaseBall">
+                    <OnHit>
+                        <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
+                        <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
+                    </OnHit>
+
+                    <OnGuard>
+                        <FrameEvent Type="TimelineEffect" StartFrame="0" Path="Prefab/Effect/Test_Timeline" Attach="true" ToTarget="true"/>
+                        <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Effect/ChairDummy" FramePerSecond="0.2" CastShadow="True">
+                            <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
+                        </FrameEvent>
+                    </OnGuard>
+                </FrameEvent>
+            </OnHit>
+    
+            <OnHitEnd>
+                <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0"/>
+                <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Effect/ChairDummy" FramePerSecond="0.2" CastShadow="True">
+                    <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
+                </FrameEvent>
+            </OnHitEnd>
+    
+            <OnEnd>
+                <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc" FramePerSecond="18.0" Offset="0.0 0.0 0.0"/>
+            </OnEnd>
+        </Event>
+    </ChairProjectile>
+
     <ThunderStroke DefaultFramePerSecond="10" UseSpriteRotation="true" PenetrateCount="999">
         <Animation Preset="Sprites/Projectile/ThunderStrokeBase" XFlip="true" Duration="0.5">
         </Animation>

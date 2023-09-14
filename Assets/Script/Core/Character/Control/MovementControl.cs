@@ -32,7 +32,13 @@ public class MovementControl
 
     public void setMoveScale(float moveScale){_currentMovement?.setMoveScale(moveScale);}
 
-    public void addFrameToWorld(ObjectBase targetObject){_currentMovement?.AddFrameToWorldTransform(targetObject);}
+    public void addFrameToWorld(ObjectBase targetObject)
+    {
+        if (_currentMovement == null)
+            targetObject.updatePosition(targetObject.transform.position);
+        else
+            _currentMovement?.AddFrameToWorldTransform(targetObject);
+    }
 
     public Vector3 getMoveDirection()
     {

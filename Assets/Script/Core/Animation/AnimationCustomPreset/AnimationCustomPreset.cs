@@ -122,6 +122,7 @@ public class AnimationPresetFrameEventData_TimelineEffect
 public class AnimationCustomPreset : ScriptableObject
 {
     public AnimationCustomPresetData _animationCustomPresetData;
+    public string _translationPresetName = "";
     public string _rotationPresetName="";
     public string _scalePresetName = "";
 
@@ -259,6 +260,9 @@ public class AnimationCustomPresetEditor : Editor
         if(currentTexture != null)
         {
             Rect rect = GUILayoutUtility.GetRect(currentTexture.width, currentTexture.height);
+            Vector3 translation = Vector3.zero;
+            _animationPlayer.getCurrentAnimationTranslation(out translation);
+            rect.center += new Vector2(translation.x, translation.y) * 100f;
 
             Vector3 scale = Vector3.one;
             _animationPlayer.getCurrentAnimationScale(out scale);
@@ -269,7 +273,6 @@ public class AnimationCustomPresetEditor : Editor
             GUI.DrawTexture(rect, currentTexture,ScaleMode.ScaleToFit);
             EditorGUIUtility.RotateAroundPivot(-_animationPlayer.getCurrentAnimationRotation().eulerAngles.z, rect.center);
             EditorGUIUtility.ScaleAroundPivot(Vector3.one,rect.center);
-
         }
 
 
@@ -297,6 +300,12 @@ public class AnimationCustomPresetEditor : Editor
         {
             AnimationScalePreset scalePreset = ResourceContainerEx.Instance().GetScriptableObject("Preset\\AnimationScalePreset") as AnimationScalePreset;
             playData._scalePresetData = scalePreset.getPresetData(animationCustomPreset._scalePresetName);
+        }
+
+        if (animationCustomPreset._translationPresetName != "")
+        {
+            AnimationTranslationPreset translationPreset = ResourceContainerEx.Instance().GetScriptableObject("Preset\\AnimationTranslationPreset") as AnimationTranslationPreset;
+            playData._translationPresetData = translationPreset.getPresetData(animationCustomPreset._translationPresetName);
         }
 
         return playData;

@@ -11,7 +11,8 @@ public class AnimationPlayDataInfo
     public ActionFrameEventBase[]       _timeEventData = null;
 
     public MultiSelectAnimationData[]   _multiSelectAnimationData = null;
-    
+
+    public AnimationTranslationPresetData _translationPresetData = null;
     public AnimationRotationPresetData  _rotationPresetData = null;
     public AnimationScalePresetData     _scalePresetData = null;
     public AnimationCustomPresetData    _customPresetData = null;
@@ -402,6 +403,27 @@ public class AnimationPlayer
     public AnimationTimeProcessor getTimeProcessor(){return _animationTimeProcessor;}
     public MovementGraph getCurrentMovementGraph() {return _currentMovementGraph;}
 
+    public bool getCurrentAnimationTranslation(out Vector3 outTranslation)
+    {
+        if (_currentAnimationPlayData == null || _currentAnimationPlayData._translationPresetData == null)
+        {
+            outTranslation = Vector3.zero;
+            return false;
+        }
+
+        Vector2 currentTranslation = _currentAnimationPlayData._translationPresetData.evaulate(_animationTimeProcessor.getCurrentAnimationNormalizedTime());
+        outTranslation = new Vector3(currentTranslation.x, currentTranslation.y, 0f);
+        return true;
+    }
+
+    public Vector3 getAnimationTranslationPerFrame()
+    {
+        if (_currentAnimationPlayData == null || _currentAnimationPlayData._translationPresetData == null)
+            return Vector3.one;
+
+        Vector2 translation = _currentAnimationPlayData._translationPresetData.getTranslationValuePerFrameFromTime(getMoveValuePerFrameFromTimeDesc());
+        return new Vector3(translation.x, translation.y, 1f);
+    }
 
     public bool getCurrentAnimationScale(out Vector3 outScale)
     {

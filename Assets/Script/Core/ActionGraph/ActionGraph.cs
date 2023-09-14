@@ -738,6 +738,7 @@ public class ActionGraph
     public UnityEngine.Quaternion getCurrentAnimationRotation() {return _animationPlayer.getCurrentAnimationRotation();}
     public UnityEngine.Vector3 getAnimationScalePerFrame() {return _animationPlayer.getAnimationScalePerFrame();}
     public bool getCurrentAnimationScale(out UnityEngine.Vector3 outScale) {return _animationPlayer.getCurrentAnimationScale(out outScale);}
+    public bool getCurrentAnimationTranslation(out UnityEngine.Vector3 outTranslation) { return _animationPlayer.getCurrentAnimationTranslation(out outTranslation); }
     public FlipState getCurrentFlipState() {return _animationPlayer.getCurrentFlipState();}
     public FlipType getCurrentFlipType() {return getCurrentAction()._flipType;}
     public MovementGraph getCurrentMovementGraph() {return _animationPlayer.getCurrentMovementGraph();}

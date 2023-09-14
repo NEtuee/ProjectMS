@@ -518,6 +518,11 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
                 AnimationScalePreset preset = ResourceContainerEx.Instance().GetScriptableObject("Preset\\AnimationScalePreset") as AnimationScalePreset;
                 playData._scalePresetData = preset.getPresetData(targetValue);
             }
+            else if(targetName == "TranslationPreset")
+            {
+                AnimationTranslationPreset preset = ResourceContainerEx.Instance().GetScriptableObject("Preset\\AnimationTranslationPreset") as AnimationTranslationPreset;
+                playData._translationPresetData = preset.getPresetData(targetValue);
+            }
             else if(targetName == "AngleBaseAnimation")
             {
                 playData._isAngleBaseAnimation = bool.Parse(targetValue);
@@ -556,6 +561,12 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
                 {
                     AnimationScalePreset scalePreset = ResourceContainerEx.Instance().GetScriptableObject("Preset\\AnimationScalePreset") as AnimationScalePreset;
                     playData._scalePresetData = scalePreset.getPresetData(animationCustomPreset._scalePresetName);
+                }
+
+                if(animationCustomPreset._translationPresetName != "")
+                {
+                    AnimationTranslationPreset scalePreset = ResourceContainerEx.Instance().GetScriptableObject("Preset\\AnimationTranslationPreset") as AnimationTranslationPreset;
+                    playData._translationPresetData = scalePreset.getPresetData(animationCustomPreset._translationPresetName);
                 }
                 
                 playData._frameEventData = readFrameEventFromAnimationPreset(animationCustomPreset);

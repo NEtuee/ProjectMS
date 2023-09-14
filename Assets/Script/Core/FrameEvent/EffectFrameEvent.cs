@@ -464,12 +464,16 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
         PhysicsBodyDescription physicsBody = _physicsBodyDesc;
         if(_usePhysics)
         {
-            GameEntityBase requester = (GameEntityBase)executeEntity;
-            float angle = MathEx.directionToAngle(executeEntity.getDirection());
-            if(_useFlip && requester.getFlipState().xFlip)
+            float angle = 0f;
+            if(executeEntity is GameEntityBase)
             {
-                angle -= 180f;
-                angle *= -1f;
+                GameEntityBase requester = (GameEntityBase)executeEntity;
+                MathEx.directionToAngle(executeEntity.getDirection());
+                if(_useFlip && requester.getFlipState().xFlip)
+                {
+                    angle -= 180f;
+                    angle *= -1f;
+                }
             }
 
             physicsBody._velocity.setValue(Quaternion.Euler(0f,0f, angle) * physicsBody._velocity.getValue());

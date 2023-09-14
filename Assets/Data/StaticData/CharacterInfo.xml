@@ -164,6 +164,16 @@
         ProjectileCollisionRadius=""
     />
 
+    <Chair
+        DisplayName="의자"
+        ActionGraph="Assets/Data/ActionGraph/Object/ChairObject.xml"
+        AIGraph="Assets/Data/AIGraph/CommonEnemyAI.xml"
+        StatusInfoName="CommonEnemyStatusNoUI"
+
+        CollisionRadius="0.35"
+        ProjectileCollisionRadius=""
+    />
+
     <TutorialTeacher
         DisplayName="튜토리얼 선생"
         ActionGraph="Assets/Data/ActionGraph/Enemy/TurorialTeacherAction.xml"

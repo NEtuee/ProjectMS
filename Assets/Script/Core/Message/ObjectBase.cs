@@ -22,7 +22,7 @@ public abstract class ObjectBase : MessageReceiver, IProgress
     protected SpriteRenderer        _spriteRenderer;
     protected Animator              _animator;
     protected Vector3               _direction = Vector3.right;
-
+    protected Vector3               _localSpritePosition = Vector3.zero;
     protected ObjectBase            _parentObject = null;
     protected ObjectBase            _childObject = null;
     private Vector3                 _childPivot = Vector3.zero;
@@ -36,6 +36,7 @@ public abstract class ObjectBase : MessageReceiver, IProgress
     {
         _attackState = AttackState.Default;
         _defenceState = DefenceState.Default;
+
     }
 
     protected override void Awake()
@@ -75,6 +76,7 @@ public abstract class ObjectBase : MessageReceiver, IProgress
         else
             _spriteObject.transform.localPosition = Vector3.zero;
 
+        _spriteObject.transform.localPosition += _localSpritePosition;
         updateChildTransform();
     }
 
