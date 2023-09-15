@@ -696,6 +696,7 @@ public class ActionGraph
     public bool isActionLoop() {return _currentActionNodeIndex == _prevActionNodeIndex;}
     public int[] getDefaultBuffList() {return _actionGraphBaseData._defaultBuffList;}
     public int[] getCurrentBuffList() {return getCurrentAction()._applyBuffList;}
+    public AttackType getCurrentIgnoreAttackType() {return getCurrentAction()._ignoreAttackType;}
     public float getCurrentMoveScale() 
     {
         if(getCurrentAction()._normalizedSpeed == false)

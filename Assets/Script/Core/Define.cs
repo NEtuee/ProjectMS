@@ -30,10 +30,11 @@ public enum CallAIEventTargetType
 
 public enum AttackType
 {
-    Default,
-    GuardBreak,
-    Catch,
-    Count,
+    None = 0,
+    Default = 0b001,
+    GuardBreak = 0b010,
+    Catch = 0b100,
+    Count = 3,
 }
 
 public enum AttackState

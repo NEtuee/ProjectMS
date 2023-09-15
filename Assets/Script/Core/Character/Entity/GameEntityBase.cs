@@ -1097,6 +1097,7 @@ public class GameEntityBase : SequencerObjectBase
     public void setCustomValue(string customValueName, float value) {_actionGraph.setCustomValue(customValueName, value);}
     public void addCustomValue(string customValueName, float value) {_actionGraph.addCustomValue(customValueName, value);}
 
+    public AttackType getCurrentIgnoreAttackType() {return _actionGraph.getCurrentIgnoreAttackType();}
     public StatusInfo getStatusInfo() { return _statusInfo; }
     public float getStatusPercentage(string targetName) {return _statusInfo.getCurrentStatusPercentage(targetName);}
 

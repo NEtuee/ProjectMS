@@ -1,6 +1,6 @@
 <ActionGraph Name="ChairObject" DefaultAction="Idle" DefaultFramePerSecond="12">
 
-    <Idle MovementType="Empty" DirectionType="Keep">
+    <Idle MovementType="Empty" DirectionType="Keep" IgnoreAttackType="Default Catch">
         <AnimationHeader MasterPath="Sprites/Effect/"/>
         <Animation Preset="ChairDummy" XFlip="true" Duration="2">
         </Animation>
@@ -15,7 +15,7 @@
             <FrameEvent Type="ZoomEffect" Scale="2.3"/>
             <FrameEvent Type="KillEntity" StartTime="0"/>
 
-            <FrameEvent Type="Projectile" StartTime="0" GraphName="ChairProjectile" DirectionType="AttackedPoint" SpawnTargetType="Self" SearchIdentifier="Player" DirectionAngle="180.0"/>
+            <FrameEvent Type="Projectile" StartTime="0" GraphName="ChairProjectile" DirectionType="AttackedPoint" SpawnTargetType="Self" SearchIdentifier="Projectile" DirectionAngle="180.0"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="Dead_Kicked"/>

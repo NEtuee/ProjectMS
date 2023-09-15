@@ -1354,6 +1354,8 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
     private HashSet<ObjectBase>     _collisionList = new HashSet<ObjectBase>();
     private List<CollisionSuccessData> _collisionOrder = new List<CollisionSuccessData>();
 
+    private int                     _collisionCount = -1;
+
     public ActionFrameEvent_Attack()
     {
         _collisionDelegate = attackPrepare;
@@ -1377,7 +1379,11 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
 
     public void attackProcess()
     {
-        for(int i = 0; i < _collisionOrder.Count; ++i)
+        int attackCount = _collisionCount < 0 ? _collisionOrder.Count : _collisionCount;
+        if(attackCount > _collisionOrder.Count)
+            attackCount = _collisionOrder.Count;
+
+        for(int i = 0; i < attackCount; ++i)
         {
             if(attackTarget(_collisionOrder[i]) == false)
                 break;
@@ -1397,6 +1403,9 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
         if(targetEntity._searchIdentifier == requester._searchIdentifier)
             return;
         
+        if((targetEntity.getCurrentIgnoreAttackType() & _attackType) != 0)
+            return;
+
         float distanceSq = (((GameEntityBase)successData._target).transform.position - successData._startPoint).sqrMagnitude;
         for(int i = 0; i < _collisionOrder.Count; ++i)
         {
@@ -1648,6 +1657,10 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
             else if(attributes[i].Name == "CatchOffset")
             {
                 _catchOffset = XMLScriptConverter.valueToVector3(attributes[i].Value);
+            }
+            else if(attributes[i].Name == "AttackCount")
+            {
+                _collisionCount = int.Parse(attributes[i].Value);
             }
 
         }

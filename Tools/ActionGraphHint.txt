@@ -1,6 +1,6 @@
 HintType,Symbol,TextList
 FrameEvent,Test,Log=~~
-FrameEvent,Attack,"Radius=~~,Angle=~~,StartDistance=~~,AttackPreset=~~,Push=~~,IgnoreDefenceType=~~,CatchOffset=~~,AttackType=~~"
+FrameEvent,Attack,"Radius=~~,Angle=~~,StartDistance=~~,AttackPreset=~~,Push=~~,IgnoreDefenceType=~~,CatchOffset=~~,AttackType=~~,AttackCount=~~"
 FrameEvent,ApplyBuff,ApplyBuff=~~
 FrameEvent,ApplyBuffTarget,ApplyBuff=~~
 FrameEvent,DeleteBuff,BuffList=~~
@@ -35,7 +35,7 @@ InQuote,UpdateType=,"ScaledDeltaTime,NoneScaledDeltaTime"
 InQuote,ToTarget=,"true,false"
 InQuote,AngleType=,"Normal,AttackPoint,Direction"
 InQuote,SearchIdentifier=,"Player,Enemy,Projectile"
-InScope,,"MovementType=~~,MovementGraphPreset=~~,DirectionType=~~,DefenceDirectionType=~~,FlipType=~~,RotationType=~~,MoveScale=~~,IsActionSelection=~~,ApplyBuff=~~,NormalizedSpeed=~~,DefenceType=~~,DefenceAngle=~~,DirectionUpdateOnce=~~,IsActionSelection=~~,FlipTypeUpdateOnce=~~,RotateBySpeed=~~,RotateSpeed=~~,DirectionAngle=~~,Flags=~~,HeadUpOffset=~~"
+InScope,,"MovementType=~~,MovementGraphPreset=~~,DirectionType=~~,DefenceDirectionType=~~,FlipType=~~,RotationType=~~,MoveScale=~~,IsActionSelection=~~,ApplyBuff=~~,NormalizedSpeed=~~,DefenceType=~~,DefenceAngle=~~,DirectionUpdateOnce=~~,IsActionSelection=~~,FlipTypeUpdateOnce=~~,RotateBySpeed=~~,RotateSpeed=~~,DirectionAngle=~~,Flags=~~,HeadUpOffset=~~,IgnoreAttackType=~~"
 LineStart,<Branch,"Key=~~,Condition=~~,Execute=~~,Weight=~~"
 LineStart,<Animation,"Preset=~~,Duration=~~,Path=~~,StartTime=~~,EndTime=~~,FramePerSecond=~~,Loop=~~,XFlip=~~,YFlip=~~,RotationPreset=~~,ScalePreset=~~,AngleBaseAnimation=~~"
 LineStart,<MultiSelectAnimation,"Path=~~,Condition=~~"
@@ -108,7 +108,7 @@ ShortCut,__FrameEvent_SetDirectionType,<FrameEvent Type=~SetDirectionType~ Start
 FrameEvent,Torque,"Set=~~,Add=~~"
 ShortCut,__FrameEvent_Torque,<FrameEvent Type=~Torque~ StartTime=~0~ Add=~~/>
 ShortCut,__FrameEvent_DeactiveTalkBalloon,<FrameEvent Type=~DeactiveTalkBalloon~ StartTime=~0~/>
-,,
+InQuote,IgnoreAttackType=,"Default,GuardBreak,Catch"
 ,,
 ,,
 ,,

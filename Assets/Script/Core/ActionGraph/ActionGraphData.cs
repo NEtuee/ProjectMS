@@ -64,6 +64,7 @@ public class ActionGraphNodeData
     public DefenceType                  _defenceType = DefenceType.Empty;
 
     public int[]                        _applyBuffList = null;
+    public AttackType                   _ignoreAttackType = AttackType.None;
 
     public float                        _additionalDirectionAngle = 0f;
     public float                        _defenceAngle = 360f;

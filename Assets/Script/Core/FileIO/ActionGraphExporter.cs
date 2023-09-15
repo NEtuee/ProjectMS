@@ -303,6 +303,14 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
                     nodeData._applyBuffList[i] = buffKey;
                 }
             }
+            else if(targetName == "IgnoreAttackType")
+            {
+                string[] targetTypeArray = targetValue.Split(' ');
+                foreach(var item in targetTypeArray)
+                {
+                    nodeData._ignoreAttackType |= (AttackType)System.Enum.Parse(typeof(AttackType), item);
+                }
+            }
             else if(targetName == "NormalizedSpeed")
             {
                 nodeData._normalizedSpeed = bool.Parse(targetValue);

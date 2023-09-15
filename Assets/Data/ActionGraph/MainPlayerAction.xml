@@ -260,7 +260,7 @@
 
     <DashRoll_Kick MovementType="FrameEvent" DirectionType="MousePoint" RotationType="MoveDirection" FlipType="MousePoint" DirectionUpdateOnce="true" Flags="ClearPush">
         <Animation Preset="Sprites/NewPlayer/DashRoll/" XFlip="true" Duration="0.25">
-            <FrameEvent Type="Attack" StartTime="0" AttackType="GuardBreak" AttackPreset="Akane_Kick" IgnoreDefenceType="Guard">
+            <FrameEvent Type="Attack" StartTime="0" AttackType="GuardBreak" AttackPreset="Akane_Kick" IgnoreDefenceType="Guard" AttackCount="1">
                 <OnGuardBreak>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="GuardPointDecrease"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="TargetBattleIncrement" Condition="getTargetFrameTag_Groggy == false"/>
