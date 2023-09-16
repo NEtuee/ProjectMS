@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class AkaneRenderTexture2D
@@ -31,16 +32,48 @@ public class AkaneRenderPipeline : MonoBehaviour
         renderPasses = new List<AkaneRenderPass>();
 
         BackgroundRenderPass backgroundPass = ScriptableObject.CreateInstance<BackgroundRenderPass>();
+        backgroundPass.Awake();
         CharacterRenderPass characterPass = ScriptableObject.CreateInstance<CharacterRenderPass>();
+        characterPass.Awake();
         ShadowRenderPass shadowPass = ScriptableObject.CreateInstance<ShadowRenderPass>();
+        shadowPass.Awake();
         EffectRenderPass effectPass = ScriptableObject.CreateInstance<EffectRenderPass>();
-        CombinePass combinePass = CombinePass.CreateInstance(backgroundPass, characterPass, shadowPass);
+        effectPass.Awake();
+
+        InterfaceRenderPass interfacePass = ScriptableObject.CreateInstance<InterfaceRenderPass>();
+        interfacePass.Awake();
+
+        PerspectiveRenderPass perspectivePass = ScriptableObject.CreateInstance<PerspectiveRenderPass>();
+        perspectivePass.Awake();
+
+        PerspectiveDepthRenderPass perspectiveDepthPass = ScriptableObject.CreateInstance<PerspectiveDepthRenderPass>();
+        perspectiveDepthPass.Awake();
+
+        CombinePass combinePass = CombinePass.CreateInstance(backgroundPass, characterPass, shadowPass, perspectivePass, interfacePass, perspectiveDepthPass);
+        combinePass.Awake();
+
+        EmptyRenderPass emptyPass = ScriptableObject.CreateInstance<EmptyRenderPass>();
+        emptyPass.Awake();
+
+
+
+        combinePass.AddPass(backgroundPass);
+       // combinePass.AddPass(perspectivePass);
+        combinePass.AddPass(characterPass);
+        combinePass.AddPass(shadowPass);
+        combinePass.AddPass(effectPass);
+      //  combinePass.AddPass(interfacePass);
 
         renderPasses.Add(backgroundPass);
+        renderPasses.Add(perspectivePass);
+        renderPasses.Add(perspectiveDepthPass);
         renderPasses.Add(characterPass);
         renderPasses.Add(shadowPass);
         renderPasses.Add(effectPass);
         renderPasses.Add(combinePass);
+        renderPasses.Add(interfacePass);
+        renderPasses.Add(combinePass);
+        renderPasses.Add(emptyPass);
     }
 
     private void Awake()
@@ -81,11 +114,13 @@ public class AkaneRenderPipeline : MonoBehaviour
     }
     private void internalDraw()
     {
-        for (int i = 0; i < renderPasses.Count; ++i)
+     //   UnityEditorInternal.RenderDoc.BeginCaptureRenderDoc(UnityEditor.EditorWindow.GetWindow<SceneView>("Scene"));
+        for (int i = 0; i < renderPasses.Count; i++)
         {
             var renderPass = renderPasses[i];
 
             renderPass.Draw(internalCamera, renderPass.RenderTexture);
         }
+//.RenderDoc.EndCaptureRenderDoc(UnityEditor.EditorWindow.GetWindow<SceneView>("Scene"));
     }
 }
