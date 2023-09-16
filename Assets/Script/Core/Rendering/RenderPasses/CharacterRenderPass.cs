@@ -8,11 +8,12 @@ public class CharacterRenderPass : AkaneRenderPass
     [SerializeField] private RenderTexture characterRenderTexture;
 
     private static int characterLayer;
-    protected override int layerMasks { get; set; } = characterLayer;
+    public override int layerMasks => characterLayer;
+    public override string layerName => "Character";
 
-    public void OnEnable()
+    public void Awake()
     {
-        characterLayer = (1 << LayerMask.NameToLayer("Character"));
+        characterLayer = (1 << LayerMask.NameToLayer(layerName));
         characterRenderTexture = new RenderTexture(1024, 1024, 1, RenderTextureFormat.ARGBHalf, 1);
         characterRenderTexture.filterMode = FilterMode.Point;
     }
@@ -24,5 +25,6 @@ public class CharacterRenderPass : AkaneRenderPass
         renderCamera.Render();
 
         renderCamera.cullingMask = 0;
+
     }
 }

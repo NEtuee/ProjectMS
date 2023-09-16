@@ -28,7 +28,7 @@ public class HPSphereUI
     {
         _hpSpriteObject = new GameObject("SpriteObject");
         _hpSpriteObject.transform.position = Vector3.zero;
-        _hpSpriteObject.layer = LayerMask.NameToLayer("Character");
+        _hpSpriteObject.layer = LayerMask.NameToLayer("Interface");
 
         _hpSpriteRenderer = _hpSpriteObject.AddComponent<SpriteRenderer>();
         _hpSpriteRenderer.material = Material.Instantiate(ResourceContainerEx.Instance().GetMaterial("Material/Material_SpriteDefaultWithPixelSnap"));
@@ -37,7 +37,7 @@ public class HPSphereUI
         _bpGaugeSpriteObject = new GameObject("BPGauge");
         _bpGaugeSpriteObject.transform.position = Vector3.zero;
         _bpGaugeSpriteObject.transform.SetParent(_hpSpriteObject.transform);
-        _bpGaugeSpriteObject.layer = LayerMask.NameToLayer("Character");
+        _bpGaugeSpriteObject.layer = LayerMask.NameToLayer("Interface");
 
         _bpGaugeSpriteRenderer = _bpGaugeSpriteObject.AddComponent<SpriteRenderer>();
         _bpGaugeSpriteRenderer.material = Material.Instantiate(ResourceContainerEx.Instance().GetMaterial("Material/Material_SpriteDefaultWithPixelSnap"));
@@ -46,7 +46,7 @@ public class HPSphereUI
         _bpAnimationSpriteObject = new GameObject("BPAnimation");
         _bpAnimationSpriteObject.transform.position = Vector3.zero;
         _bpAnimationSpriteObject.transform.SetParent(_hpSpriteObject.transform);
-        _bpAnimationSpriteObject.layer = LayerMask.NameToLayer("Character");
+        _bpAnimationSpriteObject.layer = LayerMask.NameToLayer("Interface");
 
         _bpAnimationSpriteRenderer = _bpAnimationSpriteObject.AddComponent<SpriteRenderer>();
         _bpAnimationSpriteRenderer.material = Material.Instantiate(ResourceContainerEx.Instance().GetMaterial("Material/Material_SpriteDefaultWithPixelSnap"));
