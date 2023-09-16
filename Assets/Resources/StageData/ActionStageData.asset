@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _stageName: ActionTestStage
   _backgroundPrefabPath: {fileID: 3160829639783268931, guid: ab97559538486194b90a8a12b173cc6a, type: 3}
+  _isMiniStage: 0
   _stagePointData:
   - _stagePoint: {x: -3.82, y: -4.96, z: 0}
     _maxLimitedDistance: 999999
@@ -23,4 +24,13 @@ MonoBehaviour:
     _onEnterSequencerPath:
     - TestStage.xml
     _onExitSequencerPath: []
-    _characterSpawnData: []
+    _characterSpawnData:
+    - _characterKey: Akane
+      _uniqueKey: Player
+      _uniqueGroupKey: 
+      _startAction: Idle
+      _flip: 0
+      _searchIdentifier: 0
+      _activeType: 0
+      _localPosition: {x: 0, y: 0, z: 0}
+  _miniStageData: []
