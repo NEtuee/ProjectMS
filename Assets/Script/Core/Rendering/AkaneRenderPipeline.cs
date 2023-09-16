@@ -32,12 +32,12 @@ public class AkaneRenderPipeline : MonoBehaviour
         renderPasses = new List<AkaneRenderPass>();
 
         BackgroundRenderPass backgroundPass = ScriptableObject.CreateInstance<BackgroundRenderPass>();
+        backgroundPass.Awake();
         CharacterRenderPass characterPass = ScriptableObject.CreateInstance<CharacterRenderPass>();
+        characterPass.Awake();
         ShadowRenderPass shadowPass = ScriptableObject.CreateInstance<ShadowRenderPass>();
+        shadowPass.Awake();
         EffectRenderPass effectPass = ScriptableObject.CreateInstance<EffectRenderPass>();
-<<<<<<< HEAD
-        CombinePass combinePass = CombinePass.CreateInstance(backgroundPass, characterPass, shadowPass);
-=======
         effectPass.Awake();
 
         InterfaceRenderPass interfacePass = ScriptableObject.CreateInstance<InterfaceRenderPass>();
@@ -63,7 +63,6 @@ public class AkaneRenderPipeline : MonoBehaviour
         combinePass.AddPass(shadowPass);
         combinePass.AddPass(effectPass);
       //  combinePass.AddPass(interfacePass);
->>>>>>> 91e846b5 (스프라이트 크기 버그 수정, 3d 2d 배경 분리, 인터페이스 패스 추가, 태그 추가, 빈 렌더패스 추가)
 
         renderPasses.Add(backgroundPass);
         renderPasses.Add(perspectivePass);
@@ -71,14 +70,10 @@ public class AkaneRenderPipeline : MonoBehaviour
         renderPasses.Add(characterPass);
         renderPasses.Add(shadowPass);
         renderPasses.Add(effectPass);
-<<<<<<< HEAD
         renderPasses.Add(combinePass);
-=======
         renderPasses.Add(interfacePass);
         renderPasses.Add(combinePass);
         renderPasses.Add(emptyPass);
-
->>>>>>> 91e846b5 (스프라이트 크기 버그 수정, 3d 2d 배경 분리, 인터페이스 패스 추가, 태그 추가, 빈 렌더패스 추가)
     }
 
     private void Awake()

@@ -8,8 +8,7 @@ public class PerspectiveRenderPass : AkaneRenderPass
     public override int layerMasks => perspectiveLayer;
     private static int perspectiveLayer;
     public override string layerName => "Perspective";
-
-    //   public override RenderTexture RenderTexture => perspectiveRenderTexture;
+    
     public override RenderTexture RenderTexture { get { return perspectiveRenderTexture; } }
     [SerializeField] private RenderTexture perspectiveRenderTexture;
     public void Awake()
