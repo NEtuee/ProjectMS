@@ -1747,8 +1747,11 @@ public class StageDataEditor : EditorWindow
     private Rect getInGameScreenSection(Vector3 position, float zoomSize, float radius)
     {
         float mainCamSize = zoomSize;
-        float camHeight = mainCamSize * 2f + radius * 2f;
-		float camWidth = camHeight * ((float)800f / (float)600f) + radius * 2f;
+        float camHeight = (mainCamSize) * 2f;
+		float camWidth = camHeight * ((float)800f / (float)600f);
+
+        camHeight += radius * 2f;
+        camWidth += radius * 2f;
 
         Rect rectangle = new Rect();
         rectangle.Set(position.x - (camWidth * 0.5f),position.y - (camHeight * 0.5f),camWidth,camHeight);
