@@ -76,8 +76,8 @@ InQuote,AttackType=,"Default,GuardBreak,Catch"
 ShortCut,__FrameEvent_ReleaseCatch,<FrameEvent Type=~ReleaseCatch~ StartTime=~0~ Push=~~/>
 FrameEvent,ReleaseCatch,Push=~~
 InQuote,FollowDirection,"true,false"
-ShortCut,__FrameEvent_TalkBalloon,<FrameEvent Type=~TalkBalloon~ StartTime=~0~ Text=~~ Time=~~/>
-FrameEvent,TalkBalloon,"Text=~~,Time=~~"
+ShortCut,__FrameEvent_TalkBalloon,<FrameEvent Type=~TalkBalloon~ StartTime=~0~ SimpleTalkKey=~~/>
+FrameEvent,TalkBalloon,SimpleTalkKey=~~
 ShortCut,__FrameEvent_SetTimeScale,<FrameEvent Type=~SetTimeScale~ StartTime=~0~ Scale=~~ Time=~~ BlendTime=~~/>
 FrameEvent,SetTimeScale,"Scale=~~,Time=~~,BlendTime=~~"
 ShortCut,__FrameEvent_ShakeEffect,<FrameEvent Type=~ShakeEffect~ StartTime=~0~ Scale=~~ Speed=~~ Time=~~/>

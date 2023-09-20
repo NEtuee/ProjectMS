@@ -3,9 +3,9 @@
     <Idle MovementType="Empty" DirectionType="MoveInput">
         <AnimationHeader MasterPath="Sprites/Enemy/TutorialTeacher/"/>
         <Animation Preset="idle_0" XFlip="true" Duration="3">
-            <FrameEvent Type="TalkBalloon" Condition="getWeight_RandVector4^x" StartTime="0" Text="뭐지? 자기과시?" Time="2.0"/>
-            <FrameEvent Type="TalkBalloon" Condition="getWeight_RandVector4^y" StartTime="0" Text="죽고 싶은 것인가?" Time="2.0"/>
-            <FrameEvent Type="TalkBalloon" Condition="getWeight_RandVector4^z" StartTime="0" Text="수업중에 무슨 짓이지?" Time="2.0"/>
+            <FrameEvent Type="TalkBalloon" Condition="getWeight_RandVector4^x" StartTime="0" SimpleTalkKey="Talk_TutorialTeacher_0"/>
+            <FrameEvent Type="TalkBalloon" Condition="getWeight_RandVector4^y" StartTime="0" SimpleTalkKey="Talk_TutorialTeacher_1"/>
+            <FrameEvent Type="TalkBalloon" Condition="getWeight_RandVector4^z" StartTime="0" SimpleTalkKey="Talk_TutorialTeacher_2"/>
 
         </Animation>
 

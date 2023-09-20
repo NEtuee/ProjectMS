@@ -12,6 +12,7 @@ public class SequencerGraphProcessor
 
     private SequencerGraphBaseData              _currentSequencer = null;
     public Dictionary<string, GameEntityBase>   _uniqueEntityDictionary = new Dictionary<string, GameEntityBase>();
+    public Dictionary<string, GameEntityBase>   _sustainEntityDictionary = new Dictionary<string, GameEntityBase>();
     public Dictionary<string, List<GameEntityBase>> _uniqueGroupEntityDictionary = new Dictionary<string, List<GameEntityBase>>();
 
     private int                                 _currentIndex = 0;
@@ -29,6 +30,7 @@ public class SequencerGraphProcessor
         _isSequencerEventEnd = false;
 
         _uniqueEntityDictionary.Clear();
+        _sustainEntityDictionary.Clear();
         _uniqueGroupEntityDictionary.Clear();
         _deleteUniqueTargetList.Clear();
         _signalList.Clear();
@@ -36,27 +38,42 @@ public class SequencerGraphProcessor
 
     public void progress(float deltaTime)
     {
-        foreach(var item in _uniqueEntityDictionary)
         {
-            if(item.Value.isDead())
-                _deleteUniqueTargetList.Add(item.Key);
-        }
-
-        foreach(var item in _deleteUniqueTargetList)
-            _uniqueEntityDictionary.Remove(item);
-        
-        foreach(var item in _uniqueGroupEntityDictionary.Values)
-        {
-            for(int index = 0; index < item.Count;)
+            foreach(var item in _uniqueEntityDictionary)
             {
-                if(item[index].isDead())
-                    item.RemoveAt(index);
-                else
-                    ++index;
+                if(item.Value.isDead())
+                    _deleteUniqueTargetList.Add(item.Key);
             }
+
+            foreach(var item in _deleteUniqueTargetList)
+                _uniqueEntityDictionary.Remove(item);
+
+            foreach(var item in _uniqueGroupEntityDictionary.Values)
+            {
+                for(int index = 0; index < item.Count;)
+                {
+                    if(item[index].isDead())
+                        item.RemoveAt(index);
+                    else
+                        ++index;
+                }
+            }
+
+            _deleteUniqueTargetList.Clear();
         }
 
-        _deleteUniqueTargetList.Clear();
+        {
+            foreach(var item in _sustainEntityDictionary)
+            {
+                if(item.Value.isDead())
+                    _deleteUniqueTargetList.Add(item.Key);
+            }
+
+            foreach(var item in _deleteUniqueTargetList)
+                _sustainEntityDictionary.Remove(item);
+
+            _deleteUniqueTargetList.Clear();
+        }
 
         if(_currentSequencer == null || _isSequencerEventEnd)
             return;
