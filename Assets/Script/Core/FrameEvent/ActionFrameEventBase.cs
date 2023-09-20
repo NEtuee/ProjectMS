@@ -756,7 +756,7 @@ public class ActionFrameEvent_ZoomEffect : ActionFrameEventBase
         for(int i = 0; i < attributes.Count; ++i)
         {
             if(attributes[i].Name == "Scale")
-                _zoomScale = XMLScriptConverter.valueToFloatExtend(attributes[i].Value) - 3.2f;
+                _zoomScale = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
         }
     }
 }

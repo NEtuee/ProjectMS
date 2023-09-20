@@ -61,7 +61,7 @@
         <Animation Preset="4_hit" XFlip="true" Duration="1.25">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountIncrease"/>
-            <FrameEvent Type="ZoomEffect" Scale="2.8"/>
+            <FrameEvent Type="ZoomEffect" Scale="-0.4"/>
             <FrameEvent Type="StopUpdate" Time="0.15"/>
 
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
@@ -76,7 +76,7 @@
         <Animation Preset="4_hit" XFlip="true" Duration="1.25">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountIncrease"/>
-            <FrameEvent Type="ZoomEffect" Scale="2.8"/>
+            <FrameEvent Type="ZoomEffect" Scale="-0.4"/>
             <FrameEvent Type="StopUpdate" Time="0.15"/>
             
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
@@ -93,7 +93,7 @@
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BattleClear"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="Groggy"/>
 
-            <FrameEvent Type="ZoomEffect" Scale="2.8"/>
+            <FrameEvent Type="ZoomEffect" Scale="-0.4"/>
             <FrameEvent Type="StopUpdate" Time="0.15"/>
         </Animation>
 
@@ -149,7 +149,7 @@
                 <OnCatch>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CatchedSet"/>
                     
-                    <FrameEvent Type="ZoomEffect" Scale="2.8"/>
+                    <FrameEvent Type="ZoomEffect" Scale="-0.4"/>
                     <FrameEvent Type="StopUpdate" Time="0.15"/>
                     
                     <!-- visual -->
@@ -194,7 +194,7 @@
             <FrameEvent Type="Attack" StartTime="0" AttackPreset="Najimi_Catch">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
-                    <FrameEvent Type="ZoomEffect" Scale="2.8"/>
+                    <FrameEvent Type="ZoomEffect" Scale="-0.4"/>
                     <FrameEvent Type="StopUpdate" Time="0.15"/>
 
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
