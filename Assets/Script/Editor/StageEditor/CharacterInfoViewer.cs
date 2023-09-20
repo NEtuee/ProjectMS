@@ -122,6 +122,7 @@ public class CharacterInfoViewer : EditorWindow
             EditorGUILayout.LabelField("Status: " + _selectedData._statusName);
             EditorGUILayout.LabelField("Radius: " + _selectedData._characterRadius);
             EditorGUILayout.LabelField("HeadUpOffset: " + _selectedData._headUpOffset);
+            EditorGUILayout.LabelField("SearchIdentifier: " + _selectedData._searchIdentifer);
 
             GUILayout.EndScrollView();
 

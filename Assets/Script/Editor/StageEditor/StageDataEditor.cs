@@ -600,7 +600,10 @@ public class StageDataEditor : EditorWindow
 
             GUILayout.BeginHorizontal();
                 if(GUILayout.Button("Draw Camera Bound"))
+                {
                     _drawScreenToMousePoint = !_drawScreenToMousePoint;
+                    SceneView.RepaintAll();
+                }
 
                 GUI.color = currentColor;
 
@@ -686,6 +689,10 @@ public class StageDataEditor : EditorWindow
                 Color currentColor = GUI.color;
                 GUI.color = i == _miniStageSelectedIndex ? Color.green : currentColor;
 
+                bool selected = i == _miniStageSelectedIndex;
+                if(selected)
+                    GUILayout.BeginHorizontal("box");
+
                 string targetName = _editStageData._miniStageData[i]._data.name + ": " + _editStageData._miniStageData[i]._data._stageName;
 
                 GUILayout.Label(targetName,GUILayout.Width(200f));
@@ -693,6 +700,7 @@ public class StageDataEditor : EditorWindow
                 if(GUILayout.Button("Pick"))
                     selectMiniStage(i);
 
+                GUI.color = new Color(1f,0.2f,0.2f);
                 if(GUILayout.Button("Delete MiniStage"))
                 {
                     deleteMiniStage(i--);
@@ -701,6 +709,9 @@ public class StageDataEditor : EditorWindow
                 }
 
                 GUI.color = currentColor;
+
+                if(selected)
+                    GUILayout.EndHorizontal();
 
                 GUILayout.EndHorizontal();
             }
@@ -741,6 +752,10 @@ public class StageDataEditor : EditorWindow
                 Color currentColor = GUI.color;
                 GUI.color = i == _characterSelectedIndex ? Color.green : currentColor;
 
+                bool selected = i == _characterSelectedIndex;
+                if(selected)
+                    GUILayout.BeginHorizontal("box");
+
                 string targetName = stagePointData._characterSpawnData[i]._characterKey;
                 if(stagePointData._characterSpawnData[i]._uniqueKey != "")
                     targetName += " [Key: " + stagePointData._characterSpawnData[i]._uniqueKey + "]";
@@ -752,6 +767,7 @@ public class StageDataEditor : EditorWindow
                 if(GUILayout.Button("Pick"))
                     selectCharacter(_pointSelectedIndex, i);
 
+                GUI.color = new Color(1f,0.2f,0.2f);
                 if(GUILayout.Button("Delete Character"))
                 {
                     deleteCharacter(_pointSelectedIndex, i);
@@ -760,6 +776,9 @@ public class StageDataEditor : EditorWindow
                 }
 
                 GUI.color = currentColor;
+
+                if(selected)
+                    GUILayout.EndHorizontal();
 
                 GUILayout.EndHorizontal();
             }
@@ -991,6 +1010,11 @@ public class StageDataEditor : EditorWindow
                 GUI.color = i == _pointSelectedIndex ? Color.green : currentColor;
 
                 GUI.enabled = i > 0;
+
+                bool selected = i == _pointSelectedIndex;
+                if(selected)
+                    GUILayout.BeginHorizontal("box");
+
                 if(GUILayout.Button("▲",GUILayout.Width(25f)))
                 {
                     StagePointData temp = _editStageData._stagePointData[i];
@@ -1021,11 +1045,12 @@ public class StageDataEditor : EditorWindow
                 }
 
                 GUI.enabled = true;
-                GUILayout.Label(_editStageData._stagePointData[i]._pointName,GUILayout.Width(150f));
+                GUILayout.Label(i + ". " + _editStageData._stagePointData[i]._pointName,GUILayout.Width(150f));
 
                 if(GUILayout.Button("Pick"))
                     selectPoint(i);
 
+                GUI.color = new Color(1f,0.2f,0.2f);
                 if(GUILayout.Button("Delete Point"))
                 {
                     deleteStagePoint(i);
@@ -1034,6 +1059,9 @@ public class StageDataEditor : EditorWindow
                 }
 
                 GUI.color = currentColor;
+
+                if(selected)
+                    GUILayout.EndHorizontal();
 
                 GUILayout.EndHorizontal();
             }
@@ -1059,6 +1087,7 @@ public class StageDataEditor : EditorWindow
         spawnData._characterKey = characterKey;
         spawnData._flip = false;
         spawnData._localPosition = Vector3.zero;
+        spawnData._searchIdentifier = characterInfo[characterKey]._searchIdentifer;
 
         SpriteRenderer characterEditItem = getCharacterItem();
         characterEditItem.sprite = getFirstActionSpriteFromCharacter(characterInfo[characterKey]);
@@ -1068,6 +1097,9 @@ public class StageDataEditor : EditorWindow
         stagePointDataEdit._characterSpawnDataList.Add(spawnData);
         stagePointDataEdit._characterObjectList.Add(characterEditItem);
         stagePointData._characterSpawnData = stagePointDataEdit._characterSpawnDataList.ToArray();
+
+        _characterSpawnScroll.y = float.MaxValue;
+        selectCharacter(_pointSelectedIndex, stagePointDataEdit._characterSpawnDataList.Count - 1);
     }
 
     private void addMiniStageToStage( MiniStageData miniStageData)
@@ -1102,6 +1134,7 @@ public class StageDataEditor : EditorWindow
             editObject._characterObjectList.Add(characterEditItem);
         }
 
+        _miniStageScroll.y = float.MaxValue;
         selectMiniStage(_editingMiniStageDataList.Count - 1);
     }
 
@@ -1206,6 +1239,8 @@ public class StageDataEditor : EditorWindow
             AssetDatabase.CreateAsset(_editStageData, path);
             AssetDatabase.SaveAssets();
         }
+
+        AssetDatabase.SaveAssets();
     }
 
     public void roundPixelPerfect()
@@ -1466,6 +1501,7 @@ public class StageDataEditor : EditorWindow
 
         _editingStagePointList.Add(editObject);
 
+        _pointItemScroll.y = float.MaxValue;
         selectPoint(_editStageData._stagePointData.Count - 1);
 
         EditorUtility.SetDirty(_editStageData);
@@ -2193,6 +2229,7 @@ public class CharacterInfoView
             EditorGUILayout.LabelField("Status: " + _selectedData._statusName);
             EditorGUILayout.LabelField("Radius: " + _selectedData._characterRadius);
             EditorGUILayout.LabelField("HeadUpOffset: " + _selectedData._headUpOffset);
+            EditorGUILayout.LabelField("SearchIdentifier: " + _selectedData._searchIdentifer);
 
             GUILayout.EndScrollView();
 

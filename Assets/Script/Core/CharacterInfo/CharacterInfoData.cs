@@ -9,4 +9,6 @@ public class CharacterInfoData
 
     public float        _characterRadius;
     public float        _headUpOffset;
+
+    public SearchIdentifier _searchIdentifer = SearchIdentifier.Enemy;
 }
