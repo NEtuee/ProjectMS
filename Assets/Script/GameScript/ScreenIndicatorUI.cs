@@ -46,6 +46,12 @@ public class ScreenIndicatorUI : MonoBehaviour
 
         foreach(var item in _enabledCharacters)
         {
+            if(item.Key.isActiveSelf() == false)
+            {
+                item.Value.gameObject.SetActive(false);
+                continue;
+            }
+            
             bool isInCamera = isInCameraSector(center, item.Key.transform.position);
             item.Value.gameObject.SetActive(_active && isInCamera == false);
 

@@ -1098,6 +1098,8 @@ public class GameEntityBase : SequencerObjectBase
             _spriteRenderer.enabled = true;
     }
 
+    public bool isActiveSelf() {return _activeSelf;}
+
     public int getActionIndex(string actionName) {return _actionGraph.getActionIndex(actionName);}
 
     public void blockInput(bool value) {_blockInput = value; _actionGraph.blockInput(value);}
