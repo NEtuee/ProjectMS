@@ -984,7 +984,38 @@ public class StageDataEditor : EditorWindow
                 Color currentColor = GUI.color;
                 GUI.color = i == _pointSelectedIndex ? Color.green : currentColor;
 
-                GUILayout.Label(_editStageData._stagePointData[i]._pointName,GUILayout.Width(200f));
+                GUI.enabled = i > 0;
+                if(GUILayout.Button("▲",GUILayout.Width(25f)))
+                {
+                    StagePointData temp = _editStageData._stagePointData[i];
+                    _editStageData._stagePointData[i] = _editStageData._stagePointData[i - 1];
+                    _editStageData._stagePointData[i - 1] = temp;
+
+                    StagePointDataEditObject temp2 = _editingStagePointList[i];
+                    _editingStagePointList[i] = _editingStagePointList[i - 1];
+                    _editingStagePointList[i - 1] = temp2;
+
+                    _pointSelectedIndex = i - 1;
+                    SceneView.RepaintAll();
+                }
+
+                GUI.enabled = i < _editStageData._stagePointData.Count - 1;
+                if(GUILayout.Button("▼",GUILayout.Width(25f)))
+                {
+                    StagePointData temp = _editStageData._stagePointData[i];
+                    _editStageData._stagePointData[i] = _editStageData._stagePointData[i + 1];
+                    _editStageData._stagePointData[i + 1] = temp;
+
+                    StagePointDataEditObject temp2 = _editingStagePointList[i];
+                    _editingStagePointList[i] = _editingStagePointList[i + 1];
+                    _editingStagePointList[i + 1] = temp2;
+
+                    _pointSelectedIndex = i + 1;
+                    SceneView.RepaintAll();
+                }
+
+                GUI.enabled = true;
+                GUILayout.Label(_editStageData._stagePointData[i]._pointName,GUILayout.Width(150f));
 
                 if(GUILayout.Button("Pick"))
                     selectPoint(i);
