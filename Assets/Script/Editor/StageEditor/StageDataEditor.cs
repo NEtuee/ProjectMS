@@ -899,6 +899,7 @@ public class StageDataEditor : EditorWindow
         GUILayout.Label("Position: " + stagePointData._stagePoint.ToString()); 
         if(_editStageData._isMiniStage == false)
         {
+            stagePointData._pointName = EditorGUILayout.TextField("Name",stagePointData._pointName);
             stagePointData._maxLimitedDistance = EditorGUILayout.FloatField("CameraBound Radius", stagePointData._maxLimitedDistance);
             stagePointData._cameraZoomSize = EditorGUILayout.FloatField("ZoomSize", stagePointData._cameraZoomSize);
             stagePointData._cameraZoomSpeed = EditorGUILayout.FloatField("ZoomSpeed", stagePointData._cameraZoomSpeed);
@@ -962,7 +963,13 @@ public class StageDataEditor : EditorWindow
 
             if(GUILayout.Button("Add Point"))
             {
-                addStagePoint(Vector3.zero);
+                addStagePoint();
+            }
+
+            GUI.enabled = GUI.enabled ? _pointSelectedIndex >= 0 && _pointSelectedIndex < _editingStagePointList.Count - 1 : false;
+            if(GUILayout.Button("Insert Point Next"))
+            {
+                insertNextStagePoint(_pointSelectedIndex);
             }
             GUI.enabled = true;
 
@@ -977,7 +984,7 @@ public class StageDataEditor : EditorWindow
                 Color currentColor = GUI.color;
                 GUI.color = i == _pointSelectedIndex ? Color.green : currentColor;
 
-                GUILayout.Label(i.ToString(),GUILayout.Width(25f));
+                GUILayout.Label(_editStageData._stagePointData[i]._pointName,GUILayout.Width(200f));
 
                 if(GUILayout.Button("Pick"))
                     selectPoint(i);
@@ -1314,8 +1321,8 @@ public class StageDataEditor : EditorWindow
                 Handles.DrawLine(stagePointData._stagePoint - right * stagePointData._maxLimitedDistance, 
                                 _editStageData._stagePointData[i + 1]._stagePoint - right * _editStageData._stagePointData[i + 1]._maxLimitedDistance);
 
-                drawArrow(stagePointData._stagePoint, _editStageData._stagePointData[i + 1]._stagePoint, 0.3f);
-                Handles.DrawLine(stagePointData._stagePoint, _editStageData._stagePointData[i + 1]._stagePoint);
+                Color arrowColor = i == _pointSelectedIndex ? Color.green : currentColor;
+                drawArrow(stagePointData._stagePoint, _editStageData._stagePointData[i + 1]._stagePoint, 0.3f, arrowColor);
             }
         }
 
@@ -1344,7 +1351,7 @@ public class StageDataEditor : EditorWindow
         }
     }
 
-    public void drawArrow(Vector3 start, Vector3 end, float arrowLength)
+    public void drawArrow(Vector3 start, Vector3 end, float arrowLength, Color color)
     {
         Vector3 direction = (end - start).normalized;
         Vector3 arrowUp = new Vector3(-1f,1f).normalized * arrowLength;
@@ -1355,8 +1362,14 @@ public class StageDataEditor : EditorWindow
         arrowUp = rotate * arrowUp;
         arrowDown = rotate * arrowDown;
 
+        Color beforeColor = Handles.color;
+        Handles.color = color;
+
+        Handles.DrawLine(start, end);
         Handles.DrawLine(end, end + arrowUp);
         Handles.DrawLine(end, end + arrowDown);
+
+        Handles.color = beforeColor;
     }
 
     private void selectPoint(int index)
@@ -1388,12 +1401,26 @@ public class StageDataEditor : EditorWindow
         Selection.activeGameObject = obj;
     }
 
-    private void addStagePoint(Vector3 spawnPosition)
+    private void addStagePoint()
     {
+        Vector3 spawnPosition = Vector3.zero;
+        if(_editingStagePointList.Count == 1)
+        {
+            spawnPosition = _editingStagePointList[0]._stagePointData._stagePoint + Vector3.right;
+        }
+        else if(_editingStagePointList.Count > 1)
+        {
+            spawnPosition = _editingStagePointList[_editingStagePointList.Count - 1]._gizmoItem.transform.position;
+            spawnPosition += (_editingStagePointList[_editingStagePointList.Count - 1]._gizmoItem.transform.position - _editingStagePointList[_editingStagePointList.Count - 2]._gizmoItem.transform.position).normalized;
+        }
+
         StagePointDataEditObject editObject = new StagePointDataEditObject();
         StagePointData stagePointData = new StagePointData(spawnPosition);
         stagePointData._cameraZoomSize = Camera.main.orthographicSize;
+        stagePointData._pointName = "New Point " + _editingStagePointList.Count;
 
+
+        
         _editStageData._stagePointData.Add(stagePointData);
 
         editObject._stagePointData = stagePointData;
@@ -1403,6 +1430,41 @@ public class StageDataEditor : EditorWindow
         _editingStagePointList.Add(editObject);
 
         selectPoint(_editStageData._stagePointData.Count - 1);
+
+        EditorUtility.SetDirty(_editStageData);
+    }
+
+    private void insertNextStagePoint(int index)
+    {
+        if(index < 0 && _editingStagePointList.Count - 1 >= index)
+            return;
+
+        Vector3 spawnPosition = Vector3.zero;
+        if(index == _editingStagePointList.Count)
+        {
+            spawnPosition = _editingStagePointList[index]._gizmoItem.transform.position;
+            spawnPosition += (_editingStagePointList[index]._gizmoItem.transform.position - _editingStagePointList[index - 1]._gizmoItem.transform.position).normalized;
+        }
+        else
+        {
+            spawnPosition = _editingStagePointList[index]._gizmoItem.transform.position;
+            spawnPosition += (_editingStagePointList[index + 1]._gizmoItem.transform.position - _editingStagePointList[index]._gizmoItem.transform.position) * 0.5f;
+        }
+
+        StagePointDataEditObject editObject = new StagePointDataEditObject();
+        StagePointData stagePointData = new StagePointData(spawnPosition);
+        stagePointData._cameraZoomSize = Camera.main.orthographicSize;
+        stagePointData._pointName = "New Point" + (index + 1);
+
+        _editStageData._stagePointData.Insert(index + 1, stagePointData);
+
+        editObject._stagePointData = stagePointData;
+        editObject._gizmoItem = getGizmoItem();
+        editObject._gizmoItem.transform.position = stagePointData._stagePoint;
+
+        _editingStagePointList.Insert(index + 1, editObject);
+
+        selectPoint(index + 1);
 
         EditorUtility.SetDirty(_editStageData);
     }
@@ -1474,6 +1536,12 @@ public class StageDataEditor : EditorWindow
             _backgroundPrefabObject = Instantiate(_editStageData._backgroundPrefabPath);
             _backgroundPrefabObject.transform.position = _editStageData._stagePointData.Count == 0 ? Vector3.zero : _editStageData._stagePointData[0]._stagePoint;
             _backgroundPrefabObject.transform.SetParent(_editItemParent.transform);
+        }
+
+        for(int index = 0; index < _editStageData._stagePointData.Count; ++index)
+        {
+            if(_editStageData._stagePointData[index]._pointName == "")
+                _editStageData._stagePointData[index]._pointName = "New Point " + index;
         }
 
         _stageDataSerializedObject = new SerializedObject(_editStageData);

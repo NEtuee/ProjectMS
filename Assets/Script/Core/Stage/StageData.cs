@@ -24,6 +24,7 @@ public class StagePointCharacterSpawnData
 [System.Serializable]
 public class StagePointData
 {
+    public string       _pointName = "";
     public Vector3      _stagePoint = Vector3.zero;
     public float        _maxLimitedDistance = 0f;
     public float        _cameraZoomSize = 0f;
