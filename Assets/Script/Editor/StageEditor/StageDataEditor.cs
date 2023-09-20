@@ -814,13 +814,13 @@ public class StageDataEditor : EditorWindow
         }
 
         characterSpawnData._flip = EditorGUILayout.Toggle("Flip",characterSpawnData._flip);
+        characterSpawnData._hideWhenDeactive = EditorGUILayout.Toggle("Hide When Deactive", characterSpawnData._hideWhenDeactive);
         characterSpawnData._searchIdentifier = (SearchIdentifier)EditorGUILayout.EnumPopup("Search Identifier", characterSpawnData._searchIdentifier);
         characterSpawnData._activeType = (StageSpawnCharacterActiveType)EditorGUILayout.EnumPopup("Active Type", characterSpawnData._activeType);
 
         characterSpawnData._uniqueKey = EditorGUILayout.TextField("Unique Key",characterSpawnData._uniqueKey);
         characterSpawnData._uniqueGroupKey = EditorGUILayout.TextField("Unique Group Key",characterSpawnData._uniqueGroupKey);
 
-        
         var characterInfo = ResourceContainerEx.Instance().getCharacterInfo("Assets\\Data\\StaticData\\CharacterInfo.xml");
         if(characterInfo.ContainsKey(characterSpawnData._characterKey) == false)
         {
@@ -851,6 +851,13 @@ public class StageDataEditor : EditorWindow
         {
             stagePointDataEditObject._characterObjectList[_characterSelectedIndex].sprite = getActionSpriteFromCharacter(characterInfoData, newStartAction);
             characterSpawnData._startAction = newStartAction;
+        }
+
+        if(characterSpawnData._hideWhenDeactive)
+        {
+            Color alphaClor = Color.white;
+            alphaClor.a = 0.5f;
+            stagePointDataEditObject._characterObjectList[_characterSelectedIndex].color = alphaClor;
         }
         
         stagePointDataEditObject._characterObjectList[_characterSelectedIndex].flipX = characterSpawnData._flip;
@@ -974,7 +981,6 @@ public class StageDataEditor : EditorWindow
             GUI.enabled = true;
 
         GUILayout.EndHorizontal();
-
 
         _pointItemScroll = GUILayout.BeginScrollView(_pointItemScroll,"box");
             for(int i = 0; i < _editStageData._stagePointData.Count; ++i)

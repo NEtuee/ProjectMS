@@ -139,7 +139,7 @@ public class StageProcessor : Singleton<StageProcessor>
                     break;
                 }
 
-                createdCharacter.setActiveSelf(activeSelf);
+                createdCharacter.setActiveSelf(activeSelf,characterSpawnData._hideWhenDeactive);
                 _spawnedCharacterEntityDictionary[index].Add(createdCharacter);
 
                 if(characterSpawnData._startAction != "")
@@ -288,7 +288,7 @@ public class StageProcessor : Singleton<StageProcessor>
                         for(int index = 0; index < _spawnedCharacterEntityDictionary[_currentPoint].Count; ++index)
                         {
                             if(_stageData._stagePointData[_currentPoint]._characterSpawnData[index]._activeType == StageSpawnCharacterActiveType.PointActivated)
-                                _spawnedCharacterEntityDictionary[_currentPoint][index]?.setActiveSelf(true);
+                                _spawnedCharacterEntityDictionary[_currentPoint][index]?.setActiveSelf(true,false);
                         }
                     }
                 }
@@ -329,7 +329,7 @@ public class StageProcessor : Singleton<StageProcessor>
                     for(int index = 0; index < _spawnedCharacterEntityDictionary[_currentPoint].Count; ++index)
                     {
                         if(_stageData._stagePointData[_currentPoint]._characterSpawnData[index]._activeType == StageSpawnCharacterActiveType.PointActivated)
-                            _spawnedCharacterEntityDictionary[_currentPoint][index]?.setActiveSelf(true);
+                            _spawnedCharacterEntityDictionary[_currentPoint][index]?.setActiveSelf(true,false);
                     }
                 }
             }

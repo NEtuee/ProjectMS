@@ -16,6 +16,7 @@ public class StagePointCharacterSpawnData
     public string   _uniqueGroupKey = "";
     public string   _startAction = "";
     public bool     _flip = false;
+    public bool     _hideWhenDeactive = false;
     public SearchIdentifier _searchIdentifier = SearchIdentifier.Enemy;
     public StageSpawnCharacterActiveType _activeType = StageSpawnCharacterActiveType.Spawn;
     public Vector3  _localPosition = Vector3.zero;

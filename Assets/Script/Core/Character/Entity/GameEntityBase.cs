@@ -191,6 +191,7 @@ public class GameEntityBase : SequencerObjectBase
         _collisionInfo = new CollisionInfo(data);
         CollisionManager.Instance().registerObject(_collisionInfo, this);
         
+        _spriteRenderer.enabled = true;
         _spriteRenderer.sprite = _actionGraph.getCurrentSprite(_actionGraph.getCurrentRotationType() != RotationType.AlwaysRight ? (_spriteRotation * _actionStartRotation).eulerAngles.z : MathEx.directionToAngle(_direction));
         _spriteRenderer.flipX = false;
         _spriteRenderer.flipY = false;
@@ -354,7 +355,7 @@ public class GameEntityBase : SequencerObjectBase
             _actionGraph.setActionConditionData_Float(ConditionNodeUpdateType.AI_GraphStateExecutedTime, 0f);
         }
 
-        if(_actionGraph != null)
+        if(_actionGraph != null && _activeSelf)
         {
             string prevActionName = _actionGraph.getCurrentActionName();
 
@@ -668,6 +669,7 @@ public class GameEntityBase : SequencerObjectBase
 
         applyActionBuffList(_actionGraph.getDefaultBuffList());
 
+        _spriteRenderer.enabled = true;
         _spriteRenderer.sprite = _actionGraph.getCurrentSprite(_actionGraph.getCurrentRotationType() != RotationType.AlwaysRight ? (_spriteRotation * _actionStartRotation).eulerAngles.z : MathEx.directionToAngle(_direction));
         _spriteRenderer.flipX = false;
         _spriteRenderer.flipY = false;
@@ -1087,7 +1089,15 @@ public class GameEntityBase : SequencerObjectBase
 
     public void addSequencerSignal(string signal) {_sequencerProcessManager.addSequencerSignal(signal);}
 
-    public void setActiveSelf(bool active) {_activeSelf = active;}
+    public void setActiveSelf(bool active, bool hideGraphics) 
+    {
+        _activeSelf = active;
+        if(hideGraphics)
+            _spriteRenderer.enabled = _activeSelf;
+        else
+            _spriteRenderer.enabled = true;
+    }
+
     public int getActionIndex(string actionName) {return _actionGraph.getActionIndex(actionName);}
 
     public void blockInput(bool value) {_blockInput = value; _actionGraph.blockInput(value);}
