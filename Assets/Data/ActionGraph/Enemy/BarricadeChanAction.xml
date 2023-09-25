@@ -38,9 +38,10 @@
         <Animation Preset="3_hit" XFlip="true" Duration="1.25">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
+            <!--
             <FrameEvent Type="ZoomEffect" Scale="2.8"/>
+            -->
             <FrameEvent Type="StopUpdate" Time="0.15"/>
-
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
         </Animation>
@@ -53,9 +54,10 @@
         <Animation Preset="3_hit" XFlip="true" Duration="1.25">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
+            <!--
             <FrameEvent Type="ZoomEffect" Scale="2.8"/>
+            -->
             <FrameEvent Type="StopUpdate" Time="0.15"/>
-            
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
         </Animation>
@@ -69,7 +71,9 @@
             <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Enemy/BarricadeChan/0_default/4_dead" FramePerSecond="0.2" CastShadow="True">
                 <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
             </FrameEvent>
+            <!--
             <FrameEvent Type="ZoomEffect" Scale="2.3"/>
+            -->
             <FrameEvent Type="KillEntity" StartTime="0"/>
         </Animation>
 

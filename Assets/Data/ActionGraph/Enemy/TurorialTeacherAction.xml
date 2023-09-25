@@ -24,8 +24,10 @@
                 <Physics UseGravity="True" Velocity="0.0 0.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
             </FrameEvent>
 
+            <!--
             <FrameEvent Type="ZoomEffect" Scale="2.3"/>
             <FrameEvent Type="SetTimeScale" Scale="0.1" Time="1.0" BlendTime="1.0"/>
+            -->
             <FrameEvent Type="KillEntity" StartTime="0"/>
 
         </Animation>

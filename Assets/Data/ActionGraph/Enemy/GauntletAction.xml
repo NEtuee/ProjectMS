@@ -47,9 +47,10 @@
         <Animation Preset="4_hit" XFlip="true" Duration="1.25">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2301" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
+            <!--
             <FrameEvent Type="ZoomEffect" Scale="2.8"/>
+            -->
             <FrameEvent Type="StopUpdate" Time="0.15"/>
-
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
         </Animation>
@@ -61,9 +62,10 @@
         <AnimationHeader MasterPath="Sprites/Enemy/Gauntlet/0_default/"/>
         <Animation Preset="4_hit" XFlip="true" Duration="1.25">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
+            <!--
             <FrameEvent Type="ZoomEffect" Scale="2.8"/>
+            -->
             <FrameEvent Type="StopUpdate" Time="0.15"/>
-            
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
         </Animation>

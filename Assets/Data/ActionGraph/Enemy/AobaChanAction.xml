@@ -47,7 +47,9 @@
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2402" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountIncrease"/>
+            <!--
             <FrameEvent Type="ZoomEffect" Scale="2.8"/>
+            -->
             <FrameEvent Type="StopUpdate" Time="0.15"/>
 
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="ResetRaisen" EventTargetType="Self"/>
@@ -67,7 +69,9 @@
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2402" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountIncrease"/>
+            <!--
             <FrameEvent Type="ZoomEffect" Scale="2.8"/>
+            -->
             <FrameEvent Type="StopUpdate" Time="0.15"/>
 
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="ResetRaisen" EventTargetType="Self"/>
@@ -88,8 +92,9 @@
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BattleClear"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="Groggy"/>
-
+            <!--
             <FrameEvent Type="ZoomEffect" Scale="2.8"/>
+            -->
             <FrameEvent Type="StopUpdate" Time="0.15"/>
         </Animation>
 
@@ -107,8 +112,10 @@
     <Dead DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/0_default/"/>
         <Animation Preset="5_dead" XFlip="true" Duration="1">
+            <!--
             <FrameEvent Type="SetTimeScale" Scale="0.1" Time="1.0" BlendTime="1.0"/>
             <FrameEvent Type="ZoomEffect" Scale="2.3"/>
+            -->
         </Animation>
 
         <Branch Condition="End == true" Execute="Dead_Loop"/>
@@ -422,7 +429,9 @@
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2401" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountIncrease"/>
+            <!--
             <FrameEvent Type="ZoomEffect" Scale="2.8"/>
+            -->
             <FrameEvent Type="StopUpdate" Time="0.15"/>
         </Animation>
 
