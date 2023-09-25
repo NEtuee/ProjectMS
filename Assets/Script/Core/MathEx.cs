@@ -29,6 +29,8 @@ public static class MathEx
         return degree;
     }
 
+	public static float distancef(float a, float b) {return abs(a - b);}
+
 	public static UnityEngine.Vector3 convergence0(UnityEngine.Vector3 value, float a)
 	{
 		if(MathEx.equals(a,0f,float.Epsilon))

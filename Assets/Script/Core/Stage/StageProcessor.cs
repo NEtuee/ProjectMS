@@ -398,10 +398,21 @@ public class StageProcessor : Singleton<StageProcessor>
         float resultFraction = isEndPoint ? 1f : (perpendicular - (startPoint._stagePoint + _offsetPosition)).magnitude * (1f / ((nextPoint._stagePoint + _offsetPosition) - (startPoint._stagePoint + _offsetPosition)).magnitude);
         float limitedDistance = Mathf.Lerp(startPoint._maxLimitedDistance, nextPoint._maxLimitedDistance, resultFraction);
 
-        distance = Vector3.Distance(targetPositionWithoutZ, perpendicular);
-
-        if(distance > limitedDistance)
-            resultPoint = perpendicular + (targetPositionWithoutZ - perpendicular).normalized * limitedDistance;
+        resultPoint = targetPositionWithoutZ;
+        if(MathEx.distancef(targetPositionWithoutZ.y,perpendicular.y) > limitedDistance)
+        {
+            if(targetPositionWithoutZ.y > perpendicular.y)
+                resultPoint.y = perpendicular.y + limitedDistance;
+            else
+                resultPoint.y = perpendicular.y - limitedDistance;
+        }
+        if(MathEx.distancef(targetPositionWithoutZ.x,perpendicular.x) > limitedDistance)
+        {
+            if(targetPositionWithoutZ.x > perpendicular.x)
+                resultPoint.x = perpendicular.x + limitedDistance;
+            else
+                resultPoint.x = perpendicular.x - limitedDistance;
+        }
 
         return resultFraction;
     }

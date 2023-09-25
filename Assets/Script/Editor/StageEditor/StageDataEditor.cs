@@ -1360,8 +1360,8 @@ public class StageDataEditor : EditorWindow
             
             Handles.color = i == _pointSelectedIndex ? Color.green : currentColor;
 
-            if(stagePointData._maxLimitedDistance > 0f)
-                drawCircleWithHandle(stagePointData._stagePoint,stagePointData._maxLimitedDistance);
+            // if(stagePointData._maxLimitedDistance > 0f)
+            //     drawCircleWithHandle(stagePointData._stagePoint,stagePointData._maxLimitedDistance);
 
             Handles.Label(stagePointData._stagePoint, i.ToString());
             if(Handles.Button(itemPosition,Camera.current.transform.rotation,0.1f,0.2f,capFunction))
