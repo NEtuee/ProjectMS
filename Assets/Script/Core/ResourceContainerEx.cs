@@ -141,8 +141,6 @@ public class ResourceContainerEx : Singleton<ResourceContainerEx>
 	private DataResourceItem<SequencerGraphBaseData,SequencrGraphLoader>		_sequencerGraphResource = new DataResourceItem<SequencerGraphBaseData,SequencrGraphLoader>();
 	private DataResourceItem<Dictionary<string, CharacterInfoData>,CharacterInfoLoader>	_characterInfoResource = new DataResourceItem<Dictionary<string, CharacterInfoData>,CharacterInfoLoader>();
 
-
-
 	public MovementGraph getMovementgraph(string folderName, bool ignorePreload = false)
 	{
 		DebugUtil.assert(false,"movement graph is unavailable");

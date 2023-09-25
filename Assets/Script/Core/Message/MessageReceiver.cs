@@ -41,7 +41,7 @@ public abstract class MessageReceiver : UniqueIDBase
     public void ReceiveMessageProcessing()
     {
         //foreach(var msg in _receiveQueue)
-        int messageLimit = 100;
+        int messageLimit = 1000;
         while(_receiveQueue.Count != 0)
         {
             Message msg = _receiveQueue.Dequeue();

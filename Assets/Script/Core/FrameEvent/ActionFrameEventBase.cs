@@ -485,7 +485,7 @@ public class ActionFrameEvent_TalkBalloon : ActionFrameEventBase
 {
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_TalkBalloon;}
 
-    private string _text = "";
+    private string _key = "";
     private float _time = 0f;
 
     public override void initialize()
@@ -497,7 +497,14 @@ public class ActionFrameEvent_TalkBalloon : ActionFrameEventBase
         if(executeEntity is GameEntityBase == false)
             return true;
 
-        TalkBalloonManager.Instance().activeTalkBalloon(executeEntity.transform,new UnityEngine.Vector3(0f, (executeEntity as GameEntityBase).getHeadUpOffset(),0f),_text,_time);
+        SubtitleData_SimpleTalk simpleTalkData = SubtitleManager.Instance().getSimpleTalkData(_key);
+        if(simpleTalkData == null)
+        {
+            DebugUtil.assert(false,"존재하지 않는 SimpleTalk Key 입니다. 데이터를 확인 해 주세요. [Key: {0}]",_key);
+            return true;
+        }
+
+        TalkBalloonManager.Instance().activeTalkBalloon(executeEntity.transform,new UnityEngine.Vector3(0f, (executeEntity as GameEntityBase).getHeadUpOffset(),0f),simpleTalkData._text,simpleTalkData._time);
         return true;
     }
 
@@ -510,16 +517,12 @@ public class ActionFrameEvent_TalkBalloon : ActionFrameEventBase
             string attrName = attributes[i].Name;
             string attrValue = attributes[i].Value;
 
-            if(attributes[i].Name == "Text")
-            {
-                _text = attributes[i].Value;
-            }
-            else if(attributes[i].Name == "Time")
-            {
-                _time = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
-            }
-
+            if(attributes[i].Name == "SimpleTalkKey")
+                _key = attributes[i].Value;
         }
+
+        if(_key == "")
+            DebugUtil.assert(false,"SimpleTalk Key가 존재하지 않습니다. 이거 필수임");
     }
 }
 
@@ -756,7 +759,7 @@ public class ActionFrameEvent_ZoomEffect : ActionFrameEventBase
         for(int i = 0; i < attributes.Count; ++i)
         {
             if(attributes[i].Name == "Scale")
-                _zoomScale = XMLScriptConverter.valueToFloatExtend(attributes[i].Value) - 3.2f;
+                _zoomScale = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
         }
     }
 }
