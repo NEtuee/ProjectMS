@@ -31,10 +31,17 @@ public class StagePointData
     public float        _cameraZoomSize = 0f;
     public float        _cameraZoomSpeed = 4f;
     public bool         _lerpCameraZoom = false;
+    public bool         _cameraBoundToTrigger = false;
     public string[]     _onEnterSequencerPath = new string[0];
     public string[]     _onExitSequencerPath = new string[0];
 
     public StagePointCharacterSpawnData[] _characterSpawnData = null;
+
+    public bool                     _useTriggerBound = false;
+    public SearchIdentifier         _targetSearchIdentifier = SearchIdentifier.Enemy;
+    public float                    _triggerWidth = 1f;
+    public float                    _triggerHeight = 1f;
+    public Vector3                  _triggerOffset = Vector3.zero;
 
     public StagePointData(Vector3 point) {_stagePoint = point;}
 }

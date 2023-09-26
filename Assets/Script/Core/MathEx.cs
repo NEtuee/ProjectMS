@@ -1,6 +1,8 @@
 using System;
 using System.Diagnostics;
+using System.Numerics;
 using Unity.Mathematics;
+using UnityEngine.UIElements;
 
 public static class MathEx
 {
@@ -9,7 +11,7 @@ public static class MathEx
     public static int abs(int a){return a < 0 ? -a : a;}
     public static float abs(float a){return a < 0 ? -a : a;}
     
-
+	public static float easeOutCubic(float delta) {return 1f - (float)UnityEngine.Mathf.Pow(1.0f - delta, 3.0f);}
 
     public static float lerpf(float a, float b, float time){return a + (b - a) * time;}
     public static UnityEngine.Vector2 lerpV2(UnityEngine.Vector2 a, UnityEngine.Vector2 b, float time) {return new UnityEngine.Vector2(lerpf(a.x,b.x,time),lerpf(a.y,b.y,time));}
@@ -299,6 +301,19 @@ public static class MathEx
 		float y = scale * UnityEngine.Mathf.Sin(2f * time) / 2f;
 
 		return new UnityEngine.Vector3(x, y, 0f);
+	}
+
+	public static bool intersectRect(UnityEngine.Vector3 point, UnityEngine.Vector3 center, float width, float height)
+	{
+		float l,r,b,t;
+
+        l = center.x - width * 0.5f;
+        r = center.x + width * 0.5f;
+
+        b = center.y - height * 0.5f;
+        t = center.y + height * 0.5f;
+
+        return (l < point.x && r > point.x) && (b < point.y && t > point.y);
 	}
 
 	public static bool findLineIntersection(UnityEngine.Vector2 p1, UnityEngine.Vector2 p2, UnityEngine.Vector2 p3, UnityEngine.Vector2 p4, out UnityEngine.Vector2 intersection)

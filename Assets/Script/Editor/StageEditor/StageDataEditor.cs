@@ -470,6 +470,8 @@ public class StageDataEditor : EditorWindow
     private string _miniStageSearchStringCompare = "";
 
     private bool _drawScreenToMousePoint = false;
+    private bool _drawTriggerBound = false;
+    private bool _enableBackground = true;
 
     [MenuItem("Tools/StageDataEditor", priority = 0)]
     public static void ShowWindow()
@@ -546,6 +548,8 @@ public class StageDataEditor : EditorWindow
         if(reloadData || editStageData != _editStageData)
         {
             _editStageData = editStageData;
+            _enableBackground = true;
+
             constructGizmoPoints();
             loadStageData();
         }
@@ -561,6 +565,12 @@ public class StageDataEditor : EditorWindow
             if(_editStageData._backgroundPrefabPath == null && _backgroundPrefabObject != null)
                 DestroyImmediate(_backgroundPrefabObject);
 
+            bool enableBackground = EditorGUILayout.Toggle(_enableBackground,GUILayout.Width(15f));
+            if(_enableBackground != enableBackground)
+            {
+                _enableBackground = enableBackground;
+                _backgroundPrefabObject?.SetActive(_enableBackground);
+            }
             if(GUILayout.Button("New", GUILayout.Width(40f)) && _editItemParent != null)
             {
                 bool createNew = true;
@@ -588,6 +598,7 @@ public class StageDataEditor : EditorWindow
                     _backgroundPrefabObject.name = _backgroundPrefabObject.name.Replace(".prefab","");
                     _backgroundPrefabObject.transform.position = _editStageData._stagePointData.Count == 0 ? Vector3.zero : _editStageData._stagePointData[0]._stagePoint;
                     _backgroundPrefabObject.transform.SetParent(_editItemParent.transform);
+                    _backgroundPrefabObject.layer = LayerMask.NameToLayer("Background");
 
                     filePath = FileUtil.GetProjectRelativePath(filePath);
                     _editStageData._backgroundPrefabPath = PrefabUtility.SaveAsPrefabAsset(_backgroundPrefabObject,filePath);
@@ -596,15 +607,20 @@ public class StageDataEditor : EditorWindow
             GUILayout.EndHorizontal();
 
             Color currentColor = GUI.color;
-            GUI.color = _drawScreenToMousePoint ? Color.green : Color.red;
 
             GUILayout.BeginHorizontal();
-                if(GUILayout.Button("Draw Camera Bound"))
+                GUI.color = _drawScreenToMousePoint ? Color.green : Color.red;
+                if(GUILayout.Button("Camera Bound"))
                 {
                     _drawScreenToMousePoint = !_drawScreenToMousePoint;
                     SceneView.RepaintAll();
                 }
-
+                GUI.color = _drawTriggerBound ? Color.green : Color.red;
+                if(GUILayout.Button("Trigger Bound"))
+                {
+                    _drawTriggerBound = !_drawTriggerBound;
+                    SceneView.RepaintAll();
+                }
                 GUI.color = currentColor;
 
                 if(GUILayout.Button("Save Data"))
@@ -957,7 +973,42 @@ public class StageDataEditor : EditorWindow
                 SceneView.RepaintAll();
             }
         }
+        
+        GUILayout.Space(10f);
+        bool useTriggerBound = EditorGUILayout.Toggle("Use Trigger Bound", stagePointData._useTriggerBound);
+        if(stagePointData._useTriggerBound != useTriggerBound)
+        {
+            stagePointData._useTriggerBound = useTriggerBound;
+            SceneView.RepaintAll();
+        }
 
+        if(stagePointData._useTriggerBound)
+        {
+            bool isChanged = false;
+            GUILayout.BeginVertical("box");
+            SearchIdentifier searchIdentifier = (SearchIdentifier)EditorGUILayout.EnumPopup("Search Identifier", stagePointData._targetSearchIdentifier);
+            float triggerWidth = EditorGUILayout.FloatField("Width", stagePointData._triggerWidth);
+            float triggerHeight = EditorGUILayout.FloatField("Height", stagePointData._triggerHeight);
+            Vector3 triggerOffset = EditorGUILayout.Vector3Field("Offset", stagePointData._triggerOffset);
+
+            GUILayout.EndVertical();
+
+            isChanged |= searchIdentifier != stagePointData._targetSearchIdentifier;
+            isChanged |= triggerWidth != stagePointData._triggerWidth;
+            isChanged |= triggerHeight != stagePointData._triggerHeight;
+            isChanged |= triggerOffset != stagePointData._triggerOffset;
+
+            if(isChanged)
+            {
+                stagePointData._targetSearchIdentifier = searchIdentifier;
+                stagePointData._triggerWidth = triggerWidth;
+                stagePointData._triggerHeight = triggerHeight;
+                stagePointData._triggerOffset = triggerOffset;
+                SceneView.RepaintAll();
+            }
+        }
+
+        GUILayout.Space(10f);
         _onEnterSequencerPathEditor.draw(ref stagePointData._onEnterSequencerPath);
         _onExitSequencerPathEditor.draw(ref stagePointData._onExitSequencerPath);
 
@@ -1091,6 +1142,7 @@ public class StageDataEditor : EditorWindow
 
         SpriteRenderer characterEditItem = getCharacterItem();
         characterEditItem.sprite = getFirstActionSpriteFromCharacter(characterInfo[characterKey]);
+        characterEditItem.sortingLayerName = "Character";
         characterEditItem.sortingOrder = 10;
         characterEditItem.transform.position = stagePointData._stagePoint;
 
@@ -1127,6 +1179,7 @@ public class StageDataEditor : EditorWindow
             var spawnData = miniStageData._stagePointData[0]._characterSpawnData[index];
             SpriteRenderer characterEditItem = getCharacterItem();
             characterEditItem.sprite = getActionSpriteFromCharacter(characterInfo[spawnData._characterKey],spawnData._startAction);
+            characterEditItem.sortingLayerName = "Character";
             characterEditItem.sortingOrder = 10;
             characterEditItem.transform.position = editObject._gizmoItem.transform.position + spawnData._localPosition;
             characterEditItem.flipX = spawnData._flip;
@@ -1321,7 +1374,7 @@ public class StageDataEditor : EditorWindow
 
             Rect rectangle = new Rect();
             rectangle.Set(miniStageData._triggerOffset.x - (miniStageData._triggerWidth * 0.5f),miniStageData._triggerOffset.y - (miniStageData._triggerHeight * 0.5f),miniStageData._triggerWidth,miniStageData._triggerHeight);
-            Handles.DrawSolidRectangleWithOutline(rectangle,new Color(0f,0f,0f,0f),Color.green);
+            Handles.DrawSolidRectangleWithOutline(rectangle,new Color(0f,1f,0f,0.05f),Color.green);
         }
 
         for(int i = 0; i < _editStageData._stagePointData.Count; ++i)
@@ -1374,6 +1427,14 @@ public class StageDataEditor : EditorWindow
                 if(stagePointData._maxLimitedDistance > 0f)
                     drawInGameScreenSection(stagePointData._stagePoint,stagePointData._cameraZoomSize,0f);
             }
+            
+            if( ( i == _pointSelectedIndex || _drawTriggerBound ) && stagePointData._useTriggerBound)
+            {
+                Rect rectangle = new Rect();
+                Vector3 centerPosition = stagePointData._stagePoint + stagePointData._triggerOffset;
+                rectangle.Set(centerPosition.x - (stagePointData._triggerWidth * 0.5f),centerPosition.y - (stagePointData._triggerHeight * 0.5f),stagePointData._triggerWidth,stagePointData._triggerHeight);
+                Handles.DrawSolidRectangleWithOutline(rectangle,new Color(0f,1f,0f,0.05f),Color.green);
+            }
 
             if(_drawScreenToMousePoint && i > 0)
                 drawScreenSectionConnectLine(
@@ -1418,7 +1479,7 @@ public class StageDataEditor : EditorWindow
                 Rect rectangle = new Rect();
                 Vector3 centerPosition = itemPosition + miniStageListItem._overrideTriggerOffset;
                 rectangle.Set(centerPosition.x - (miniStageListItem._overrideTriggerWidth * 0.5f),centerPosition.y - (miniStageListItem._overrideTriggerHeight * 0.5f),miniStageListItem._overrideTriggerWidth,miniStageListItem._overrideTriggerHeight);
-                Handles.DrawSolidRectangleWithOutline(rectangle,new Color(0f,0f,0f,0f),Color.green);
+                Handles.DrawSolidRectangleWithOutline(rectangle,new Color(0f,1f,0f,0.05f),Color.green);
             }
         }
     }
@@ -1863,7 +1924,9 @@ public class StageDataEditor : EditorWindow
             characterItem = _characterItemPool.Dequeue();
         
         characterItem.gameObject.SetActive(true);
+        characterItem.gameObject.layer = LayerMask.NameToLayer("Character");
         characterItem.transform.SetParent(_editItemCharacterParent.transform);
+        characterItem.sortingLayerName = "Character";
         characterItem.sprite = null;
         characterItem.flipX = false;
 

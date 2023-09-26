@@ -22,6 +22,8 @@ public class StageProcessor : Singleton<StageProcessor>
     private Vector3 _smoothDampVelocity;
 
     private Vector3 _offsetPosition = Vector3.zero;
+    private Vector3 _cameraPositionBlendStartPosition;
+    private float _cameraPositionBlendTimeLeft = 0f;
 
     private GameEntityBase _playerEntity = null;
     private GameObject _stageBackgroundOjbect = null;
@@ -309,6 +311,23 @@ public class StageProcessor : Singleton<StageProcessor>
             CameraControlEx.Instance().setZoomSize(currentZoom,_stageData._stagePointData[_currentPoint]._cameraZoomSpeed);
         }
 
+        if(_isEnd == false && _currentPoint < _stageData._stagePointData.Count - 1)
+        {
+            StagePointData stagePoint = _stageData._stagePointData[_currentPoint + 1];
+            if(stagePoint._useTriggerBound)
+            {
+                GizmoHelper.instance.drawRectangle(stagePoint._stagePoint + _offsetPosition + stagePoint._triggerOffset,new Vector3(stagePoint._triggerWidth * 0.5f, stagePoint._triggerHeight * 0.5f),Color.green);
+                bool intersectionResult = MathEx.intersectRect(_playerEntity.transform.position,stagePoint._stagePoint + _offsetPosition + stagePoint._triggerOffset,stagePoint._triggerWidth,stagePoint._triggerHeight);
+
+                if(intersectionResult)
+                {
+                    fraction = 1f;
+                    _cameraPositionBlendStartPosition = resultPoint;
+                    _cameraPositionBlendTimeLeft = 1f;
+                }
+            }
+        }
+
         if(_isEnd == false && fraction >= 1f)
         {
             startExitSequencers(_stageData._stagePointData[_currentPoint],_currentPoint,_currentPoint != 0);
@@ -338,6 +357,12 @@ public class StageProcessor : Singleton<StageProcessor>
         foreach(var item in _miniStageProcessor)
         {
             item.processStage(deltaTime);
+        }
+
+        if(_cameraPositionBlendTimeLeft != 0f)
+        {
+            resultPoint = Vector2.Lerp(_cameraPositionBlendStartPosition, resultPoint, MathEx.easeOutCubic(1f - _cameraPositionBlendTimeLeft) );
+            _cameraPositionBlendTimeLeft -= deltaTime;
         }
 
         resultPoint.z = -10f;
