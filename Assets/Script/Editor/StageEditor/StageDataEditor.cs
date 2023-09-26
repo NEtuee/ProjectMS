@@ -946,6 +946,7 @@ public class StageDataEditor : EditorWindow
             stagePointData._cameraZoomSize = EditorGUILayout.FloatField("ZoomSize", stagePointData._cameraZoomSize);
             stagePointData._cameraZoomSpeed = EditorGUILayout.FloatField("ZoomSpeed", stagePointData._cameraZoomSpeed);
             stagePointData._lerpCameraZoom = EditorGUILayout.Toggle("LerpToNextZoom", stagePointData._lerpCameraZoom);
+            stagePointData._lockCameraInBound = EditorGUILayout.Toggle("Camera Bound Lock", stagePointData._lockCameraInBound);
         }
         else if(_editStageData is MiniStageData)
         {
@@ -1443,17 +1444,6 @@ public class StageDataEditor : EditorWindow
 
             if(i < _editStageData._stagePointData.Count - 1 )
             {
-                Vector3 direction = _editStageData._stagePointData[i + 1]._stagePoint - stagePointData._stagePoint;
-                direction.Normalize();
-
-                Vector3 right = Vector3.Cross(direction,Vector3.forward);
-                right.Normalize();
-
-                Handles.DrawLine(stagePointData._stagePoint + right * stagePointData._maxLimitedDistance, 
-                                _editStageData._stagePointData[i + 1]._stagePoint + right * _editStageData._stagePointData[i + 1]._maxLimitedDistance);
-                Handles.DrawLine(stagePointData._stagePoint - right * stagePointData._maxLimitedDistance, 
-                                _editStageData._stagePointData[i + 1]._stagePoint - right * _editStageData._stagePointData[i + 1]._maxLimitedDistance);
-
                 Color arrowColor = i == _pointSelectedIndex ? Color.green : currentColor;
                 drawArrow(stagePointData._stagePoint, _editStageData._stagePointData[i + 1]._stagePoint, 0.3f, arrowColor);
             }
@@ -1498,9 +1488,9 @@ public class StageDataEditor : EditorWindow
         Color beforeColor = Handles.color;
         Handles.color = color;
 
-        Handles.DrawLine(start, end);
-        Handles.DrawLine(end, end + arrowUp);
-        Handles.DrawLine(end, end + arrowDown);
+        Handles.DrawLine(start, end,2f);
+        Handles.DrawLine(end, end + arrowUp,2f);
+        Handles.DrawLine(end, end + arrowDown,2f);
 
         Handles.color = beforeColor;
     }
@@ -1588,7 +1578,7 @@ public class StageDataEditor : EditorWindow
         StagePointDataEditObject editObject = new StagePointDataEditObject();
         StagePointData stagePointData = new StagePointData(spawnPosition);
         stagePointData._cameraZoomSize = Camera.main.orthographicSize;
-        stagePointData._pointName = "New Point" + (index + 1);
+        stagePointData._pointName = "New Point " + (index + 1);
 
         _editStageData._stagePointData.Insert(index + 1, stagePointData);
 

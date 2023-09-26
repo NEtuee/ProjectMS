@@ -419,24 +419,35 @@ public class StageProcessor : Singleton<StageProcessor>
         StagePointData startPoint = _stageData._stagePointData[_currentPoint];
         StagePointData nextPoint = isEndPoint ? startPoint : _stageData._stagePointData[_currentPoint + 1];
 
-        Vector3 perpendicular = isEndPoint ? (startPoint._stagePoint + _offsetPosition) : MathEx.getPerpendicularPointOnLineSegment((startPoint._stagePoint + _offsetPosition), (nextPoint._stagePoint + _offsetPosition),targetPositionWithoutZ);
-        float resultFraction = isEndPoint ? 1f : (perpendicular - (startPoint._stagePoint + _offsetPosition)).magnitude * (1f / ((nextPoint._stagePoint + _offsetPosition) - (startPoint._stagePoint + _offsetPosition)).magnitude);
-        float limitedDistance = Mathf.Lerp(startPoint._maxLimitedDistance, nextPoint._maxLimitedDistance, resultFraction);
+        Vector3 onLinePosition = targetPositionWithoutZ;
+        float resultFraction = 0f;
+        float limitedDistance = 0f;
+        if(startPoint._lockCameraInBound)
+        {
+            onLinePosition = startPoint._stagePoint + _offsetPosition;
+            limitedDistance = startPoint._maxLimitedDistance;
+        }
+        else
+        {
+            onLinePosition = isEndPoint ? (startPoint._stagePoint + _offsetPosition) : MathEx.getPerpendicularPointOnLineSegment((startPoint._stagePoint + _offsetPosition), (nextPoint._stagePoint + _offsetPosition),targetPositionWithoutZ);
+            resultFraction = isEndPoint ? 1f : (onLinePosition - (startPoint._stagePoint + _offsetPosition)).magnitude * (1f / ((nextPoint._stagePoint + _offsetPosition) - (startPoint._stagePoint + _offsetPosition)).magnitude);
+            limitedDistance = Mathf.Lerp(startPoint._maxLimitedDistance, nextPoint._maxLimitedDistance, resultFraction);
+        }
 
         resultPoint = targetPositionWithoutZ;
-        if(MathEx.distancef(targetPositionWithoutZ.y,perpendicular.y) > limitedDistance)
+        if(MathEx.distancef(targetPositionWithoutZ.y,onLinePosition.y) > limitedDistance)
         {
-            if(targetPositionWithoutZ.y > perpendicular.y)
-                resultPoint.y = perpendicular.y + limitedDistance;
+            if(targetPositionWithoutZ.y > onLinePosition.y)
+                resultPoint.y = onLinePosition.y + limitedDistance;
             else
-                resultPoint.y = perpendicular.y - limitedDistance;
+                resultPoint.y = onLinePosition.y - limitedDistance;
         }
-        if(MathEx.distancef(targetPositionWithoutZ.x,perpendicular.x) > limitedDistance)
+        if(MathEx.distancef(targetPositionWithoutZ.x,onLinePosition.x) > limitedDistance)
         {
-            if(targetPositionWithoutZ.x > perpendicular.x)
-                resultPoint.x = perpendicular.x + limitedDistance;
+            if(targetPositionWithoutZ.x > onLinePosition.x)
+                resultPoint.x = onLinePosition.x + limitedDistance;
             else
-                resultPoint.x = perpendicular.x - limitedDistance;
+                resultPoint.x = onLinePosition.x - limitedDistance;
         }
 
         return resultFraction;
