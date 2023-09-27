@@ -27,16 +27,26 @@
         <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="Hit" Execute="Hit"/> 
         <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
-        <Branch Condition="TargetExists && 
+        <Branch Weight="RandBoolean^True" Condition="TargetExists && 
                            (gv_AttackRange >= TargetDistance) && 
                            (GraphExecutedTime > gv_atariChanTransitionTime)" Execute="Attack"/>
     </Chase>
+
+    <RandomMove Package="CommonRandMovePackage">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="Hit" Execute="Hit"/> 
+        <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
+        
+        <Branch Weight="RandBoolean^True" Condition="GraphExecutedTime > gv_atariChanTransitionTime" Execute="Chase"/>
+        <Branch Weight="RandBoolean^False" Condition="GraphExecutedTime > gv_atariChanTransitionTime" Execute="RandomMove"/>
+    </RandomMove>
 
     <Attack Package="CommonLockOnAttackPackage">
         <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="Hit" Execute="Hit"/> 
         <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
-        <Branch Condition="CurrentPackageEnd" Execute="Chase"/>
+        <Branch Weight="RandBoolean^True" Condition="CurrentPackageEnd" Execute="RandomMove"/>
+        <Branch Weight="RandBoolean^False" Condition="CurrentPackageEnd" Execute="Chase"/>
     </Attack>
 
     <Hit Package="CommonHitPackage">
