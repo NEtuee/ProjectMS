@@ -182,7 +182,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
         {
             if(actionIndexDic.ContainsKey(item.Value) == false)
             {
-                DebugUtil.assert_fileOpen(false,"대상 액션이 존재하지 않습니다. : [Action: {0}] [FileName: {1}]",_currentFileName,XMLScriptConverter.getLineNumberFromXMLNode(node),item.Value, _currentFileName);
+                DebugUtil.assert_fileOpen(false,"Execute 하려는 State가 존재하지 않습니다. : [State: {0}] [FileName: {1}]",item.Value,XMLScriptConverter.getLineNumberFromXMLNode(node),item.Value, _currentFileName);
                 return null;
             }
             else if(item.Value == defaultAiNodeName)

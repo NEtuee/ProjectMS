@@ -4,9 +4,10 @@
     <Include Path="Common\CommonDeadPackage.xml"/>
     <Include Path="Common\CommonHitPackage.xml"/>
     <Include Path="Common\CommonChasePackage.xml"/>
-    <Include Path="Common\CommonLockOnAttackPackage.xml"/>
+    <Include Path="Common\CommonLockOnRotateAttackPackage.xml"/>
     <Include Path="Common\CommonIdlePackage.xml"/>
     <Include Path="Common\CommonGuardBrokenPackage.xml"/>
+    <Include Path="Common\CommonAlertMovePackage.xml"/>
 
     <!-- 플레이어를 인지하는 거리 -->
     <GlobalVariable Name="gv_SightRange" Value="7.5"/>
@@ -27,16 +28,35 @@
         <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="Hit" Execute="Hit"/> 
         <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
-        <Branch Condition="TargetExists && 
+        <Branch Weight="RandBoolean^True" Condition="TargetExists && 
                            (gv_AttackRange >= TargetDistance) && 
                            (GraphExecutedTime > gv_atariChanTransitionTime)" Execute="Attack"/>
+
+        <Branch Weight="RandBoolean^False" Condition="TargetExists && 
+                           (gv_AttackRange >= TargetDistance) && 
+                           (GraphExecutedTime > gv_atariChanTransitionTime)" Execute="RandomAlertMove"/>
     </Chase>
 
-    <Attack Package="CommonLockOnAttackPackage">
+    <RandomMove Package="CommonRandMovePackage">
         <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="Hit" Execute="Hit"/> 
         <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
-        <Branch Condition="CurrentPackageEnd" Execute="Chase"/>
+        <Branch Weight="RandBoolean^True" Condition="(GraphExecutedTime > gv_atariChanTransitionTime)" Execute="Chase"/>
+        <Branch Weight="RandBoolean^False" Condition="(GraphExecutedTime > gv_atariChanTransitionTime)" Execute="RandomMove"/>
+    </RandomMove>
+
+    <RandomAlertMove Package="CommonAlertMovePackage">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="Hit" Execute="Hit"/> 
+        <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
+        <Branch Condition="GraphExecutedTime > 0.5" Execute="Chase"/>
+    </RandomAlertMove>
+
+    <Attack Package="CommonLockOnRotateAttackPackage">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="Hit" Execute="Hit"/> 
+        <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
+        <Branch Condition="CurrentPackageEnd" Execute="RandomMove"/>
     </Attack>
 
     <Hit Package="CommonHitPackage">

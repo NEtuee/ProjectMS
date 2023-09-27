@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Xml;
 using UnityEngine;
 
@@ -359,6 +361,7 @@ public class AIEvent_ClearTarget : AIEventBase
 public class AIEvent_SetDirectionToTarget : AIEventBase
 {
     float _directionAngle = 0f;
+    float _rotateSpeed = 0f;
     public override AIEventType getFrameEventType() {return AIEventType.AIEvent_SetDirectionToTarget;}
     public override void onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
@@ -368,11 +371,24 @@ public class AIEvent_SetDirectionToTarget : AIEventBase
         GameEntityBase executeGameEntity = (GameEntityBase)executeEntity;
         if(executeGameEntity.getCurrentTargetEntity() == null)
             return;
-        
+
         Vector3 direction = executeGameEntity.getCurrentTargetEntity().transform.position - executeGameEntity.transform.position;
         direction.Normalize();
         direction = Quaternion.Euler(0f,0f,_directionAngle) * direction;
-        executeGameEntity.setAiDirection(direction);
+
+        if(_rotateSpeed == 0)
+        {
+            executeGameEntity.setAiDirection(direction);
+        }
+        else
+        {
+            Vector3 currentDirection = executeGameEntity.getAiDirection();
+            float angle = Vector3.SignedAngle(currentDirection, direction, Vector3.forward);
+            float theta = Mathf.MoveTowardsAngle(0f,angle,_rotateSpeed * GlobalTimer.Instance().getSclaedDeltaTime());
+
+            executeGameEntity.setAiDirection(Quaternion.Euler(0f,0f,theta) * currentDirection);
+        }
+        
     }
 
     public override void loadFromXML(XmlNode node) 
@@ -386,6 +402,10 @@ public class AIEvent_SetDirectionToTarget : AIEventBase
             if(attrName == "Angle")
             {
                 _directionAngle = XMLScriptConverter.valueToFloatExtend(attrValue);
+            }
+            else if(attrName == "Speed")
+            {
+                _rotateSpeed = XMLScriptConverter.valueToFloatExtend(attrValue);
             }
         }
     }

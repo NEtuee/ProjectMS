@@ -1143,6 +1143,7 @@ public class GameEntityBase : SequencerObjectBase
 
     public void setAiDirection(float angle) {_aiGraph.setAIDirection(angle);}
     public void setAiDirection(Vector3 direction) {_aiGraph.setAIDirection(direction);}
+    public Vector3 getAiDirection() {return _aiGraph.getRecentlyAIDirection();}
 
     public void setAnimationSpeed(float speed) {_actionGraph.setAnimationSpeed(speed);}
 
