@@ -28,6 +28,13 @@
         <Stat Type="Custom" Name="GuardPoint" Max="3" Min="0" Init="3"/>
     </CommonEnemyStatusNoUI>
 
+    <CommonEnemyStatusNoUITest>
+        <Stat Type="HP" Max="99999" Min="0" Init="99999"/>
+        <Stat Type="Blood" Max="100" Min="0" Init="3"/>
+        <Stat Type="Battle" Max="0" Min="0" Init="0"/>
+        <Stat Type="Custom" Name="GuardPoint" Max="3" Min="0" Init="3"/>
+    </CommonEnemyStatusNoUITest>
+
     <CommonHpOneEnemyStatus>
         <Stat Type="HP" Max="1" Min="0" Init="1"/>
         <Stat Type="Blood" Max="100" Min="0" Init="3"/>

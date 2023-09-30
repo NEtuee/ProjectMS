@@ -182,12 +182,19 @@ Shader "Custom/SpriteShadowScreenShader"
 					float shadowSample = SampleSpriteTexture(_PerspectiveDepthTexture, texcoord);
 
 					float sunAngle = _SunAngle;
-					float additionalShadowDistance = _ShadowDistance * ((1.0 - shadowSample) * _ShadowDistanceRatio);
+
+					float near = 0.3f;
+					float far = 1000.0f;
+
+					float clipDistance = far * near;
+					float shadowDistance = (shadowSample * clipDistance);
+				//		shadowDistance *= shadowDistance;
+					float additionalShadowDistance = _ShadowDistance * ((clipDistance / shadowDistance) * _ShadowDistanceRatio);
 					float2 toUV = (1.0 / _ScreenSize.xy);
 
 					float2 shadowDirection = float2(cos(sunAngle), sin(sunAngle));
 
-					float2 shadowSampleTarget = toUV * (shadowDirection * (_ShadowDistance + additionalShadowDistance));
+					float2 shadowSampleTarget = toUV * (shadowDirection * (_ShadowDistance + additionalShadowDistance * _ShadowDistance));
 					float2 shadowOffset = toUV * shadowDirection * _ShadowDistanceOffset;
 
 					fixed4 shadowReSample = _ShadowColor * SampleSpriteTexture(_CharacterTexture, texcoord + shadowOffset + shadowSampleTarget);
