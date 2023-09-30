@@ -296,6 +296,8 @@
                     <FrameEvent Type="TeleportToTarget"/>
                 </OnEvade>
             </FrameEvent>
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="ZeroApKickFailed" Condition="(getStat_DashPoint < 1.0)"/>
+
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_DashFriction" MaxVelocity="gv_DashVelocity" Speed="0" Velocity="gv_DashVelocity" Condition="(getStat_DashPoint >= 1.0)"/>
             <FrameEvent Type="ApplyBuff" StartTime="0.031" ApplyBuff="DashPointConsumption"/>
 
@@ -304,6 +306,7 @@
         </Animation>
         
         <Branch Condition="AttackSuccess || AttackGuarded || AttackGuardBreak || AttackGuardBreakFail" Execute="Kicked"/>
+        <Branch Condition="getFrameTag_ZeroApKickFailed" Execute="MoveAll"/>
         <Branch Key="getKey_AttackCharge == true" Condition="End" Execute="MoveAll"/>
         <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="MoveStop"/>
         <Branch Key="getKey_AttackCharge == false" Condition="getFrameTag_MoveCancel" Execute="MoveStop"/>
