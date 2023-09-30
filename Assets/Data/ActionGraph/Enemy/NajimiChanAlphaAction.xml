@@ -66,7 +66,7 @@
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountIncrease"/>
             <!--
-            <FrameEvent Type="ZoomEffect" Scale="2.8"/>
+            <FrameEvent Type="ZoomEffect" Scale="-0.4"/>
             -->
             <FrameEvent Type="StopUpdate" Time="0.15"/>
 
@@ -85,7 +85,7 @@
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountIncrease"/>
             <!--
-            <FrameEvent Type="ZoomEffect" Scale="2.8"/>
+            <FrameEvent Type="ZoomEffect" Scale="-0.4"/>
             -->
             <FrameEvent Type="StopUpdate" Time="0.15"/>
             
@@ -104,7 +104,7 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="Groggy"/>
 
             <!--
-            <FrameEvent Type="ZoomEffect" Scale="2.8"/>
+            <FrameEvent Type="ZoomEffect" Scale="-0.4"/>
             -->
             <FrameEvent Type="StopUpdate" Time="0.15"/>
         </Animation>
@@ -125,7 +125,7 @@
         <Animation Preset="5_dead" XFlip="true" Duration="1">
             <!--
             <FrameEvent Type="SetTimeScale" Scale="0.1" Time="1.0" BlendTime="1.0"/>
-            <FrameEvent Type="ZoomEffect" Scale="2.3"/>
+            <FrameEvent Type="ZoomEffect" Scale="-0.9"/>
             -->
         </Animation>
 
@@ -158,7 +158,7 @@
                     <FrameEvent Type="AudioPlay" StartTime="0" ID="2102" Attach="true"/>
                     <FrameEvent Type="ApplyBuffTarget" StartTime="0" ApplyBuff="CommonHalfAttack"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CatchedSet"/>
-                    <FrameEvent Type="ZoomEffect" Scale="2.8"/>
+                    <FrameEvent Type="ZoomEffect" Scale="-0.4"/>
                     <FrameEvent Type="StopUpdate" Time="0.15"/>
                     
                     <!-- visual -->
@@ -206,7 +206,7 @@
                     <FrameEvent Type="AudioPlay" StartTime="0" ID="2104" Attach="true"/>
 
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
-                    <FrameEvent Type="ZoomEffect" Scale="2.8"/>
+                    <FrameEvent Type="ZoomEffect" Scale="-0.4"/>
                     <FrameEvent Type="StopUpdate" Time="0.15"/>
 
                     <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Impact" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true" AngleType="AttackPoint"/>
