@@ -59,6 +59,11 @@ public class DebugTextManager : MonoBehaviour
 
     public void updateDebugText(string targetName, string text)
     {
+        updateDebugText(targetName,text,stayTime);
+    }
+
+    public void updateDebugText(string targetName, string text, float time)
+    {
         if(_debugTextList.ContainsKey(targetName) == false)
         {
             TextMesh debugText = Instantiate(debugTextPrefab).GetComponent<TextMesh>();
@@ -67,13 +72,13 @@ public class DebugTextManager : MonoBehaviour
 
             DebugItem item = new DebugItem();
             item._textMesh = debugText;
-            item._timer = stayTime;
+            item._timer = time;
             item._itemKey = targetName;
 
             _debugTextList.Add(targetName,item);
         }
 
         _debugTextList[targetName]._textMesh.text = text;
-        _debugTextList[targetName]._timer = stayTime;
+        _debugTextList[targetName]._timer = time;
     }
 }
