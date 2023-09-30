@@ -91,7 +91,7 @@
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
                     <!-- <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" ToTarget="true"/>-->
                     
-                    <FrameEvent Type="ZoomEffect" StartTime="0" Scale="2.8"/>
+                    <FrameEvent Type="ZoomEffect" StartTime="0" Scale="-0.4"/>
                     <FrameEvent Type="StopUpdate" StartTime="0" Time="0.15"/>
 
                     <FrameEvent Type="Test" StartTime="0" Log="Attack"/>
@@ -100,7 +100,7 @@
                 <OnGuard>
                     <!-- <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" ToTarget="true"/>-->
                     
-                    <FrameEvent Type="ZoomEffect" StartTime="0" Scale="3.1"/>
+                    <FrameEvent Type="ZoomEffect" StartTime="0" Scale="-0.1"/>
                     <FrameEvent Type="StopUpdate" StartTime="0" Time="0.05"/>
                 </OnGuard>
             </FrameEvent>

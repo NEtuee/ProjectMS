@@ -41,7 +41,7 @@
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
                     <FrameEvent Type="TeleportToTarget"/>
 
-                    <FrameEvent Type="ZoomEffect" StartFrame="0" Scale="2.8"/>
+                    <FrameEvent Type="ZoomEffect" StartFrame="0" Scale="-0.4"/>
                     <FrameEvent Type="StopUpdate" StartFrame="0" Time="0.15"/>
 
                     <FrameEvent Type="Movement" StartFrame="0" Friction="12" Velocity="-3" Speed="0"/>

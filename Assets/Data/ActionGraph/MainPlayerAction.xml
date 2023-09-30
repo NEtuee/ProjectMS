@@ -156,7 +156,7 @@
 
                     <FrameEvent Type="SetAction" Condition="getTargetFrameTag_Groggy" Action="AttackSuccessFar"/>
                     <FrameEvent Type="SetTimeScale" Condition="getTargetFrameTag_Groggy" Scale="0.1" Time="0.1" BlendTime="0.2"/>
-                    <FrameEvent Type="ZoomEffect" Condition="getTargetFrameTag_Groggy" Scale="2.9"/>
+                    <FrameEvent Type="ZoomEffect" Condition="getTargetFrameTag_Groggy" Scale="-0.3"/>
                     <FrameEvent Type="ShakeEffect" Condition="getTargetFrameTag_Groggy" Scale="0.15" Speed="35.0" Time="0.2"/>
                 </OnHit>
                 <OnGuard>
@@ -222,7 +222,7 @@
 
                     <FrameEvent Type="SetAction" Condition="getTargetFrameTag_Groggy" Action="AttackSuccessFar"/>
                     <FrameEvent Type="SetTimeScale" Condition="getTargetFrameTag_Groggy" Scale="0.1" Time="0.1" BlendTime="0.2"/>
-                    <FrameEvent Type="ZoomEffect" Condition="getTargetFrameTag_Groggy" Scale="2.9"/>
+                    <FrameEvent Type="ZoomEffect" Condition="getTargetFrameTag_Groggy" Scale="-0.3"/>
                     <FrameEvent Type="ShakeEffect" Condition="getTargetFrameTag_Groggy" Scale="0.15" Speed="35.0" Time="0.2"/>
                 </OnHit>
                 <OnGuard>
@@ -273,7 +273,7 @@
 
 
                     <FrameEvent Type="SetTimeScale" Condition="getTargetFrameTag_Groggy" Scale="0.1" Time="0.1" BlendTime="0.2"/>
-                    <FrameEvent Type="ZoomEffect" Condition="getTargetFrameTag_Groggy" Scale="2.9"/>
+                    <FrameEvent Type="ZoomEffect" Condition="getTargetFrameTag_Groggy" Scale="-0.3"/>
                     <FrameEvent Type="ShakeEffect" Condition="getTargetFrameTag_Groggy" Scale="0.15" Speed="35.0" Time="0.2"/>
                 </OnGuardBreak>
 
@@ -288,7 +288,7 @@
                     <FrameEvent Type="StopUpdate" Time="0.07"/>
 
                     <FrameEvent Type="SetTimeScale" Condition="getTargetFrameTag_Groggy" Scale="0.1" Time="0.1" BlendTime="0.2"/>
-                    <FrameEvent Type="ZoomEffect" Condition="getTargetFrameTag_Groggy" Scale="2.9"/>
+                    <FrameEvent Type="ZoomEffect" Condition="getTargetFrameTag_Groggy" Scale="-0.3"/>
                     <FrameEvent Type="ShakeEffect" Condition="getTargetFrameTag_Groggy" Scale="0.15" Speed="35.0" Time="0.2"/>
                 </OnGuardBreakFail>
                 
@@ -315,7 +315,7 @@
 
             <!-- <FrameEvent Type="Danmaku" StartTime="0" Path="Enemy/MagicalFirecrack.xml" Offset="1 1 0" UseFlip="true"/>-->
 
-            <FrameEvent Type="ZoomEffect" StartTime="0" Scale="3.1"/>
+            <FrameEvent Type="ZoomEffect" StartTime="0" Scale="-0.1"/>
             
         </Animation>
 

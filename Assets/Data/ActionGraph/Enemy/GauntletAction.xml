@@ -48,7 +48,7 @@
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2301" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <!--
-            <FrameEvent Type="ZoomEffect" Scale="2.8"/>
+            <FrameEvent Type="ZoomEffect" Scale="-0.4"/>
             -->
             <FrameEvent Type="StopUpdate" Time="0.15"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
@@ -63,7 +63,7 @@
         <Animation Preset="4_hit" XFlip="true" Duration="1.25">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <!--
-            <FrameEvent Type="ZoomEffect" Scale="2.8"/>
+            <FrameEvent Type="ZoomEffect" Scale="-0.4"/>
             -->
             <FrameEvent Type="StopUpdate" Time="0.15"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
@@ -98,7 +98,7 @@
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CatchedSet"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
                     
-                    <FrameEvent Type="ZoomEffect" Scale="2.8"/>
+                    <FrameEvent Type="ZoomEffect" Scale="-0.4"/>
                     <FrameEvent Type="StopUpdate" Time="0.15"/>
                     
                     <!-- visual -->
@@ -147,7 +147,7 @@
                 <OnHit>
                     <FrameEvent Type="AudioPlay" StartTime="0" ID="2305" Attach="true"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
-                    <FrameEvent Type="ZoomEffect" Scale="2.8"/>
+                    <FrameEvent Type="ZoomEffect" Scale="-0.4"/>
                     <FrameEvent Type="StopUpdate" Time="0.15"/>
 
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>

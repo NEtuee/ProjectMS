@@ -48,7 +48,7 @@
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountIncrease"/>
             <!--
-            <FrameEvent Type="ZoomEffect" Scale="2.8"/>
+            <FrameEvent Type="ZoomEffect" Scale="-3.2"/>
             -->
             <FrameEvent Type="StopUpdate" Time="0.15"/>
 
@@ -70,7 +70,7 @@
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountIncrease"/>
             <!--
-            <FrameEvent Type="ZoomEffect" Scale="2.8"/>
+            <FrameEvent Type="ZoomEffect" Scale="-3.2"/>
             -->
             <FrameEvent Type="StopUpdate" Time="0.15"/>
 
@@ -93,7 +93,7 @@
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BattleClear"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="Groggy"/>
             <!--
-            <FrameEvent Type="ZoomEffect" Scale="2.8"/>
+            <FrameEvent Type="ZoomEffect" Scale="-3.2"/>
             -->
             <FrameEvent Type="StopUpdate" Time="0.15"/>
         </Animation>
@@ -310,7 +310,7 @@
                     <FrameEvent Type="TeleportToTarget" StartTime="0"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CatchedSet"/>
                     
-                    <FrameEvent Type="ZoomEffect" Scale="2.8"/>
+                    <FrameEvent Type="ZoomEffect" Scale="-0.4"/>
                     <FrameEvent Type="StopUpdate" Time="0.15"/>
                 </OnCatch>
             </FrameEvent>
@@ -347,7 +347,7 @@
             <FrameEvent Type="Movement" StartTime="0" Friction="12"/>
             <FrameEvent Type="ReleaseCatch" StartTime="0" Push="5 0 0"/>
 
-            <FrameEvent Type="ZoomEffect" Scale="1.5"/>
+            <FrameEvent Type="ZoomEffect" Scale="-1.7"/>
             <FrameEvent Type="StopUpdate" Time="0.07"/>
             <FrameEvent Type="SetTimeScale" Scale="0.7" Time="0.1" BlendTime="0.1"/>
             <FrameEvent Type="ShakeEffect" Scale="0.15" Speed="35.0" Time="0.1"/>
@@ -430,7 +430,7 @@
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountIncrease"/>
             <!--
-            <FrameEvent Type="ZoomEffect" Scale="2.8"/>
+            <FrameEvent Type="ZoomEffect" Scale="-3.2"/>
             -->
             <FrameEvent Type="StopUpdate" Time="0.15"/>
         </Animation>
