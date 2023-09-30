@@ -397,6 +397,13 @@ public class ActionFrameEvent_AudioPlay : ActionFrameEventBase
         else
             FMODAudioManager.Instance().Play(_audioID, centerPosition + offset);
 
+        if(executeEntity is GameEntityBase)
+        {
+            GameEntityBase entityBase = (executeEntity as GameEntityBase);
+            if(entityBase._soundDebug || GameEditorMaster._instance._soundDebugAll)
+                entityBase.debugTextManager.updateDebugText("Sound: " + _audioID,"AudioEvent: " + _audioID.ToString(),1f);
+        }
+
         return true;
     }
 
