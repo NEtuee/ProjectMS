@@ -36,6 +36,7 @@ public class AnimationPlayDataInfo
     public bool                         _isLoop = false;
     public bool                         _hasMovementGraph = false;
     public bool                         _isAngleBaseAnimation = false;
+    public bool                         _multiSelectConditionUpdateOnce = false;
 
 
     public FlipState                    _flipState;
@@ -86,6 +87,8 @@ public class AnimationPlayer
     private string _currentAnimationName;
     private Sprite[] _currentAnimationSprites;
     private MovementGraph _currentMovementGraph;
+
+    private bool _multiSelectAnimationUpdated = false;
 
     private int _currentFrameEventIndex;
     private int _currentTimeEventIndex;
@@ -139,6 +142,10 @@ public class AnimationPlayer
         if(_currentAnimationPlayData == null || _currentAnimationPlayData._multiSelectAnimationDataCount == 0)
             return;
 
+        if(_currentAnimationPlayData._multiSelectConditionUpdateOnce && _multiSelectAnimationUpdated)
+            return;
+
+        _multiSelectAnimationUpdated = true;
         for(int i = 0; i < _currentAnimationPlayData._multiSelectAnimationDataCount; ++i)
         {
             if(actionGraph.processActionCondition(_currentAnimationPlayData._multiSelectAnimationData[i]._actionConditionData) == true)
@@ -281,6 +288,7 @@ public class AnimationPlayer
         }
 
         DebugUtil.assert(_currentAnimationSprites != null, "애니메이션 스프라이트 배열이 null입니다. 해당 경로에 스프라이트가 존재 하나요? : {0}",playData._path);
+        _multiSelectAnimationUpdated = false;
 
         _currentAnimationName = playData._path;
 

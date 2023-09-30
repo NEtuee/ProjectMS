@@ -160,6 +160,18 @@
         ProjectileCollisionRadius=""
     />
 -->
+    <TutorialStudentTest
+        DisplayName="튜토리얼 더미 체력 개많음"
+        ActionGraph="Assets/Data/ActionGraph/Enemy/TutorialStudentAction.xml"
+        AIGraph="Assets/Data/AIGraph/Enemy/TutorialStudentAI.xml"
+        StatusInfoName="CommonEnemyStatusNoUITest"
+
+        CollisionRadius="0.35"
+        ProjectileCollisionRadius=""
+
+        SearchIdentifier="Enemy"
+    />
+
     <TutorialStudent
         DisplayName="튜토리얼 더미"
         ActionGraph="Assets/Data/ActionGraph/Enemy/TutorialStudentAction.xml"

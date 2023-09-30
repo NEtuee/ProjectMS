@@ -343,7 +343,10 @@
     </Kicked>
 
     <AttackSuccess MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
-        <Animation Preset="Sprites/NewPlayer/attack/" XFlip="true" ScalePreset="YSpring" Duration="0.315">
+        <Animation Preset="Sprites/NewPlayer/attack/" XFlip="true" ScalePreset="YSpring" Duration="0.315" MultiSelectUpdateOnce="True">
+            <MultiSelectAnimation Path="Sprites/NewPlayer/attack2/" Condition="getWeight_RandVector3^x"/>
+            <MultiSelectAnimation Path="Sprites/NewPlayer/attack3/" Condition="getWeight_RandVector3^y"/>
+
             <FrameEvent Type="AudioPlay" StartTime="0" ID="1000" Attach="true"/>
 
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_AttackFriction" MaxVelocity="gv_AttackVelocity" Speed="0" Velocity="gv_AttackVelocity"/>
@@ -372,7 +375,10 @@
     </EvadeSuccess>
 
     <AttackSuccessFar MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
-        <Animation Preset="Sprites/NewPlayer/attack/" XFlip="true" ScalePreset="YSpring" Duration="0.315">
+        <Animation Preset="Sprites/NewPlayer/attack/" XFlip="true" ScalePreset="YSpring" Duration="0.315" MultiSelectUpdateOnce="True">
+            <MultiSelectAnimation Path="Sprites/NewPlayer/attack2/" Condition="getWeight_RandVector3^x"/>
+            <MultiSelectAnimation Path="Sprites/NewPlayer/attack3/" Condition="getWeight_RandVector3^y"/>
+
             <FrameEvent Type="AudioPlay" StartTime="0" ID="1000" Attach="true"/>
 
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_AttackFriction" MaxVelocity="gv_AttackFarVelocity" Speed="0" Velocity="gv_AttackFarVelocity"/>
