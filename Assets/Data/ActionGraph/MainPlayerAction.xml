@@ -1,10 +1,11 @@
 
 
-<ActionGraph Name="Test" DefaultAction="Idle" DefaultFramePerSecond="4" DefaultBuff="BattleDecrementKeep DashPointRegenDelayed BloodAlertEffect DecreaseBloodPointDelayed BloodPointToHP ClearOutlineXXX">
+<ActionGraph Name="Test" DefaultAction="Spawn" DefaultFramePerSecond="4" DefaultBuff="BattleDecrementKeep DashPointRegenDelayed BloodAlertEffect DecreaseBloodPointDelayed BloodPointToHP ClearOutlineXXX">
 
     <GlobalVariable Name="gv_DashVelocity" Value="10"/>
-    <GlobalVariable Name="gv_LongDashVelocity" Value="30"/>
+    <GlobalVariable Name="gv_LongDashVelocity" Value="35"/>
     <GlobalVariable Name="gv_DashFriction" Value="24"/>
+    <GlobalVariable Name="gv_LongDashFriction" Value="10"/>
 
     <GlobalVariable Name="gv_MoveSpeed" Value="45"/>
     <GlobalVariable Name="gv_MoveVelocityMax" Value="3"/>
@@ -51,7 +52,17 @@
         <Branch Key="getKey_DashMove" Condition="getFrameTag_MoveCancel" Execute="MoveAll"/>
         <Branch Key="getKey_NormalMove == true" Condition="getFrameTag_MoveCancel" Execute="MoveAll"/>
     </BranchSet>
+    <Spawn MovementType="FrameEvent" DirectionType="Keep" FlipType="Keep">
+        <Animation Preset="Sprites/NewPlayer/idle/" XFlip="true" Duration="0.1">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="1007" Attach="true"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="gv_IdleFriction" Speed="0"/>
+        </Animation>
 
+        <UseBranchSet Name="IdleBranchSet"/>
+        <Branch Condition="(AngleFlipDirectionToStick >= 90.0) && CanInput" Execute="Idle_Transition"/>
+
+        <Branch Condition="End" Execute="Idle"/>
+    </Spawn>
     <Idle MovementType="FrameEvent" DirectionType="Keep" FlipType="Keep">
         <Animation Preset="Sprites/NewPlayer/idle/" XFlip="true" Duration="1.2">
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_IdleFriction" Speed="0"/>
@@ -240,7 +251,7 @@
                 </OnEvade>
 
             </FrameEvent>
-            <FrameEvent Type="Movement" StartTime="0" Friction="gv_DashFriction" MaxVelocity="gv_LongDashVelocity" Speed="0" Velocity="gv_LongDashVelocity" Condition="(getStat_DashPoint >= 1.0) && (getStat_HP > 1.0)"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="gv_LongDashFriction" MaxVelocity="gv_LongDashVelocity" Speed="0" Velocity="gv_LongDashVelocity" Condition="(getStat_DashPoint >= 1.0) && (getStat_HP > 1.0)"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="ClearBloodPoint" Condition="(getStat_DashPoint >= 1.0) && (getStat_HP > 1.0)"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="CommonAttack" Condition="(getStat_DashPoint >= 1.0) && (getStat_HP > 1.0)"/>
             <FrameEvent Type="ApplyBuff" StartTime="0.031" ApplyBuff="DashPointConsumption" Condition="(getStat_DashPoint >= 1.0)"/>
@@ -248,10 +259,10 @@
             <FrameEvent Type="FrameTag" StartTime="0.156" EndFrame="999" Tag="MoveCancel"/>
             <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="0.016" Tag="Attack"/>
 
-            <FrameEvent Type="AudioPlay" Condition="AttackSuccess == false" StartTime="0.05" ID="1002" Attach="true"/>
+            <FrameEvent Type="AudioPlay" Condition="AttackSuccess == false" StartTime="0.05" ID="1009" Attach="true"/>
         </Animation>
 
-        <Branch Condition="AttackSuccess" Execute="AttackSuccess"/>
+        <Branch Condition="AttackSuccess" Execute="AttackSuccess_Long"/>
         <Branch Condition="AttackGuarded" Execute="AttackGuarded"/>
         <Branch Key="getKey_AttackCharge == true" Condition="End" Execute="MoveAll"/>
         <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="MoveStop"/>
@@ -303,6 +314,7 @@
 
             <FrameEvent Type="FrameTag" StartTime="0.156" EndFrame="999" Tag="MoveCancel"/>
             <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="0.016" Tag="Attack"/>
+            <FrameEvent Type="AudioPlay" Condition="AttackSuccess == false" StartTime="0.05" ID="1002" Attach="true"/>
         </Animation>
         
         <Branch Condition="AttackSuccess || AttackGuarded || AttackGuardBreak || AttackGuardBreakFail" Execute="Kicked"/>
@@ -362,6 +374,23 @@
         <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="AttackStop"/>
         <UseBranchSet Name="CancelBranch"/>
     </AttackSuccess>
+    <AttackSuccess_Long MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
+        <Animation Preset="Sprites/NewPlayer/attack/" XFlip="true" ScalePreset="YSpring" Duration="0.315" MultiSelectUpdateOnce="True">
+            <MultiSelectAnimation Path="Sprites/NewPlayer/attack2/" Condition="getWeight_RandVector3^x"/>
+            <MultiSelectAnimation Path="Sprites/NewPlayer/attack3/" Condition="getWeight_RandVector3^y"/>
+
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="1006" Attach="true"/>
+
+            <FrameEvent Type="Movement" StartTime="0" Friction="gv_AttackFriction" MaxVelocity="gv_AttackVelocity" Speed="0" Velocity="gv_AttackVelocity"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="DashPointReset"/>
+            <FrameEvent Type="FrameTag" StartTime="0.26" EndFrame="999" Tag="MoveCancel"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="AttackSuccess"/>
+        </Animation>
+
+        <Branch Key="(getKey_AttackCharge == true) || (getKey_NormalMove == true)" Condition="End" Execute="MoveAll"/>
+        <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="AttackStop"/>
+        <UseBranchSet Name="CancelBranch"/>
+    </AttackSuccess_Long>
     <EvadeSuccess MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
         <Animation Preset="Sprites/NewPlayer/attack/" XFlip="true" ScalePreset="YSpring" Duration="0.315">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="1000" Attach="true"/>
@@ -408,7 +437,7 @@
     <Hit MovementType="FrameEvent" DirectionType="MousePoint" DefenceDirectionType="MousePoint" FlipType="Keep" DefenceType="Guard" DefenceAngle="180.0">
         <Animation Preset="Sprites/NewPlayer/Hit/" XFlip="true" Duration="0.5">
             <MultiSelectAnimation Path="Sprites/NewPlayer/empty" Condition="IsCatchTarget"/>
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="1003" Attach="true"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="1004 " Attach="true"/>
 
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_IdleFriction" MaxVelocity="0" Velocity="0" Speed="0"/>
             <FrameEvent Type="ApplyBuff" ApplyBuff="ClearBloodPoint"/>
@@ -429,6 +458,7 @@
             </FrameEvent>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="Dead"/>
             <FrameEvent Type="KillEntity" StartTime="10.0"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="1008" Attach="true"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="Dead"/>

@@ -109,7 +109,11 @@ MonoBehaviour:
         Data3: 1106610342
         Data4: 1533589674
       Path: event:/SFX/Akane/HitStrong
-    parameters: []
+    parameters:
+    - name: AkaneHit
+      id: 10041
+      min: 0
+      max: 5
   - name: HitWeak
     id: 1005
     defaultVolume: 1
@@ -123,6 +127,66 @@ MonoBehaviour:
         Data3: 1528716478
         Data4: -1817575777
       Path: event:/SFX/Akane/HitWeak
+    parameters: []
+  - name: ChouKetsusen
+    id: 1006
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: -364574598
+        Data2: 1248261431
+        Data3: 1697479050
+        Data4: 1618846544
+      Path: event:/SFX/Akane/ChouKetsusen
+    parameters: []
+  - name: AkaneEntry
+    id: 1007
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: 668382827
+        Data2: 1074668240
+        Data3: -942867284
+        Data4: -1735977227
+      Path: event:/SFX/Akane/AkaneEntry
+    parameters: []
+  - name: Dead
+    id: 1008
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: -1373153372
+        Data2: 1234544351
+        Data3: -1074828922
+        Data4: -368781483
+      Path: event:/SFX/Akane/Dead
+    parameters:
+    - name: AkaneDead
+      id: 10081
+      min: 0
+      max: 5
+  - name: ChoDash
+    id: 1009
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: -1998063404
+        Data2: 1233893770
+        Data3: 1561892790
+        Data4: 1201840538
+      Path: event:/SFX/Akane/ChoDash
     parameters: []
   - name: Dash
     id: 2100
@@ -670,6 +734,24 @@ MonoBehaviour:
         Data4: -1220890036
       Path: event:/SFX/Enemy/Aoba/UnwaverRaisenActivate
     parameters: []
+  - name: MainTitle
+    id: 5000
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: 195881040
+        Data2: 1331590542
+        Data3: -1519986046
+        Data4: 528917875
+      Path: event:/UI/MainTitle
+    parameters:
+    - name: MainTitle
+      id: 50001
+      min: 0
+      max: 4
   - name: AmbVolumeControl
     id: 5001
     defaultVolume: 1
