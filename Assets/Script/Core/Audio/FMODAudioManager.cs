@@ -131,6 +131,20 @@ public class FMODAudioManager : Singleton<FMODAudioManager>
         }
     }
 
+    public void setParam(ref FMODUnity.StudioEventEmitter eventEmitter, int audioID, int[] parameterID, float[] value)
+    {
+        AudioInfoItem.AudioInfo audioInfo = FindAudioInfo(audioID);
+        for(int index = 0; index < parameterID.Length; ++index)
+        {
+            AudioInfoItem.AudioParameter parameter = audioInfo.FindParameter(parameterID[index]);
+            if(parameter == null)
+                return;
+
+            float resultValue = Mathf.Clamp(value[index],parameter.min,parameter.max);
+            eventEmitter.SetParameter(parameter.name, resultValue);
+        }
+    }
+
     public void SetParam(int audioID, int parameterID, float value)
     {
         var n = FindAudioInfo(audioID).FindParameter(parameterID);

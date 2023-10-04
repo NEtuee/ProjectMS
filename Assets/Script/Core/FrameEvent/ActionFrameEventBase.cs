@@ -368,6 +368,9 @@ public class ActionFrameEvent_AudioPlay : ActionFrameEventBase
     public bool _attach = false;
     public bool _useFlip = false;
 
+    public int[] _parameterID = null;
+    public float[] _parameterValue = null;
+
     public UnityEngine.Vector3 _spawnOffset = UnityEngine.Vector3.zero;
 
     public override void initialize()
@@ -392,10 +395,15 @@ public class ActionFrameEvent_AudioPlay : ActionFrameEventBase
             offset = UnityEngine.Quaternion.Euler(0f,0f,angle) * offset;
         }
 
+        FMODUnity.StudioEventEmitter eventEmitter = null;
+
         if(_attach)
-            FMODAudioManager.Instance().Play(_audioID,offset,_toTarget ? targetEntity.transform : executeEntity.transform);
+            eventEmitter = FMODAudioManager.Instance().Play(_audioID,offset,_toTarget ? targetEntity.transform : executeEntity.transform);
         else
-            FMODAudioManager.Instance().Play(_audioID, centerPosition + offset);
+            eventEmitter = FMODAudioManager.Instance().Play(_audioID, centerPosition + offset);
+
+        if(eventEmitter != null && isValidParameter())
+            FMODAudioManager.Instance().setParam(ref eventEmitter,_audioID,_parameterID,_parameterValue);
 
         if(executeEntity is GameEntityBase)
         {
@@ -405,6 +413,11 @@ public class ActionFrameEvent_AudioPlay : ActionFrameEventBase
         }
 
         return true;
+    }
+
+    public bool isValidParameter()
+    {
+        return _parameterID != null && _parameterValue != null && _parameterID.Length == _parameterValue.Length;
     }
 
     public override void loadFromXML(XmlNode node)
@@ -444,6 +457,28 @@ public class ActionFrameEvent_AudioPlay : ActionFrameEventBase
                 _spawnOffset.x = XMLScriptConverter.valueToFloatExtend(vector[0]);
                 _spawnOffset.y = XMLScriptConverter.valueToFloatExtend(vector[1]);
                 _spawnOffset.z = XMLScriptConverter.valueToFloatExtend(vector[2]);
+            }
+            else if(attributes[i].Name == "ParameterID")
+            {
+                string[] paramIDArray = attributes[i].Value.Split(' ');
+                List<int> idList = new List<int>();
+                foreach(var item in paramIDArray)
+                {
+                    idList.Add(int.Parse(item));
+                }
+
+                _parameterID = idList.ToArray();
+            }
+            else if(attributes[i].Name == "ParameterValue")
+            {
+                string[] paramValueArray = attributes[i].Value.Split(' ');
+                List<float> valueList = new List<float>();
+                foreach(var item in paramValueArray)
+                {
+                    valueList.Add(float.Parse(item));
+                }
+
+                _parameterValue = valueList.ToArray();
             }
         }
     }
