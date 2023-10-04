@@ -124,6 +124,10 @@ public static class BuffDataLoader
 
                 buffData._animationEffect = attrValue;
             }
+            else if(attrName == "AudioID")
+            {
+                buffData._audioID = int.Parse(attrValue);
+            }
             else
             {
                 DebugUtil.assert(false, "invalid attribute name from buffInfo: {0} [Line: {1}] [FileName: {2}]",node.Name, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);

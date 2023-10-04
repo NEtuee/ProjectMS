@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Numerics;
 
 public class StatusInfo
 {
@@ -51,6 +52,8 @@ public class StatusInfo
         public ParticleEffectItem _particleEffect;
         public TimelineEffectItem _timelineEffect;
         public AnimationEffectItem _animationEffect;
+
+        public FMODUnity.StudioEventEmitter _audioEmitter;
 
         public float _startedTime;
         public int _uniqueKey = 0;
@@ -235,6 +238,7 @@ public class StatusInfo
         buffItem._particleEffect = null;
         buffItem._timelineEffect = null;
         buffItem._animationEffect = null;
+        buffItem._audioEmitter = null;
         
         _currentlyAppliedBuffList.Add(buffItem);
 
@@ -264,6 +268,8 @@ public class StatusInfo
                 _currentlyAppliedBuffList[i]._timelineEffect.release();
             if(_currentlyAppliedBuffList[i]._animationEffect != null)
                 _currentlyAppliedBuffList[i]._animationEffect.release();
+            if(_currentlyAppliedBuffList[i]._audioEmitter != null)
+                _currentlyAppliedBuffList[i]._audioEmitter.Stop();
 
             _buffItemPool.enqueue(_currentlyAppliedBuffList[i]);
         }
@@ -295,6 +301,8 @@ public class StatusInfo
             buffItem._timelineEffect.release();
         if(buffItem._animationEffect != null)
             buffItem._animationEffect.release();
+        if(buffItem._audioEmitter != null)
+            buffItem._audioEmitter.Stop();
 
         _buffItemPool.enqueue(buffItem);
         _currentlyAppliedBuffList.RemoveAt(index);
@@ -445,6 +453,11 @@ public class StatusInfo
 
                         requestData.isUsing = true;
                     }
+
+                    if(buffData._audioID >= 0 && buffItem._audioEmitter == null && _ownerObject != null)
+                    {
+                        buffItem._audioEmitter = FMODAudioManager.Instance().Play(buffData._audioID,UnityEngine.Vector3.zero,_ownerObject.transform);
+                    }
                 }
 
                 
@@ -465,6 +478,11 @@ public class StatusInfo
                 {
                     buffItem._animationEffect.stopEffect();
                     buffItem._animationEffect = null;
+                }
+                if(buffItem._audioEmitter != null)
+                {
+                    buffItem._audioEmitter.Stop();
+                    buffItem._audioEmitter = null;
                 }
             }
                 

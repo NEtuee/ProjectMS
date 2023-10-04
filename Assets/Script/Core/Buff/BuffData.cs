@@ -21,6 +21,8 @@ public class BuffData
     public string              _timelineEffect = "";
     public string              _animationEffect = "";
 
+    public int                 _audioID = -1;
+
     public BuffData()
     {
         _buffName = null;
@@ -38,6 +40,7 @@ public class BuffData
         _particleEffect = "";
         _timelineEffect = "";
         _animationEffect = "";
+        _audioID = -1;
     }
 
     public void copy(BuffData target)
@@ -54,6 +57,7 @@ public class BuffData
         _particleEffect = target._particleEffect;
         _timelineEffect = target._timelineEffect;
         _animationEffect = target._animationEffect;
+        _audioID = target._audioID;
     }
 
 
