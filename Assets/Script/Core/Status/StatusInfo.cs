@@ -54,6 +54,7 @@ public class StatusInfo
         public AnimationEffectItem _animationEffect;
 
         public FMODUnity.StudioEventEmitter _audioEmitter;
+        public bool _audioPlay = false;
 
         public float _startedTime;
         public int _uniqueKey = 0;
@@ -239,6 +240,7 @@ public class StatusInfo
         buffItem._timelineEffect = null;
         buffItem._animationEffect = null;
         buffItem._audioEmitter = null;
+        buffItem._audioPlay = false;
         
         _currentlyAppliedBuffList.Add(buffItem);
 
@@ -270,6 +272,7 @@ public class StatusInfo
                 _currentlyAppliedBuffList[i]._animationEffect.release();
             if(_currentlyAppliedBuffList[i]._audioEmitter != null)
                 _currentlyAppliedBuffList[i]._audioEmitter.Stop();
+            _currentlyAppliedBuffList[i]._audioPlay = false;
 
             _buffItemPool.enqueue(_currentlyAppliedBuffList[i]);
         }
@@ -303,6 +306,7 @@ public class StatusInfo
             buffItem._animationEffect.release();
         if(buffItem._audioEmitter != null)
             buffItem._audioEmitter.Stop();
+        buffItem._audioPlay = false;
 
         _buffItemPool.enqueue(buffItem);
         _currentlyAppliedBuffList.RemoveAt(index);
@@ -454,12 +458,16 @@ public class StatusInfo
                         requestData.isUsing = true;
                     }
 
-                    if(buffData._audioID >= 0 && buffItem._audioEmitter == null && _ownerObject != null)
+                    if(buffData._audioID >= 0 && buffItem._audioPlay == false && _ownerObject != null)
                     {
+                        buffItem._audioPlay = true;
                         buffItem._audioEmitter = FMODAudioManager.Instance().Play(buffData._audioID,UnityEngine.Vector3.zero,_ownerObject.transform);
+
+                        bool isOneShot = false;
+                        if(buffItem._audioEmitter.EventDescription.isOneshot(out isOneShot) == FMOD.RESULT.OK)
+                            buffItem._audioEmitter = null;
                     }
                 }
-
                 
             }
             else
@@ -484,6 +492,8 @@ public class StatusInfo
                     buffItem._audioEmitter.Stop();
                     buffItem._audioEmitter = null;
                 }
+
+                buffItem._audioPlay = false;
             }
                 
 
