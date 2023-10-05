@@ -22,6 +22,7 @@ public class BuffData
     public string              _animationEffect = "";
 
     public int                 _audioID = -1;
+    public int[]               _audioParameter = null;
 
     public BuffData()
     {
@@ -41,6 +42,7 @@ public class BuffData
         _timelineEffect = "";
         _animationEffect = "";
         _audioID = -1;
+        _audioParameter = null;
     }
 
     public void copy(BuffData target)
@@ -58,6 +60,7 @@ public class BuffData
         _timelineEffect = target._timelineEffect;
         _animationEffect = target._animationEffect;
         _audioID = target._audioID;
+        _audioParameter = target._audioParameter;
     }
 
 

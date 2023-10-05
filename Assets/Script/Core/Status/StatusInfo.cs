@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Numerics;
 
 public class StatusInfo
@@ -464,9 +465,12 @@ public class StatusInfo
                         buffItem._audioEmitter = FMODAudioManager.Instance().Play(buffData._audioID,UnityEngine.Vector3.zero,_ownerObject.transform);
 
                         bool isOneShot = false;
-                        if(buffItem._audioEmitter.EventDescription.isOneshot(out isOneShot) == FMOD.RESULT.OK)
+                        if(buffItem._audioEmitter.EventDescription.isOneshot(out isOneShot) == FMOD.RESULT.OK && isOneShot)
                             buffItem._audioEmitter = null;
                     }
+
+                    if(buffItem._audioEmitter != null)
+                        FMODAudioManager.Instance().setParam(ref buffItem._audioEmitter,buffData._audioID,buffData._audioParameter,getCurrentStatusPercentage(buffData._buffCustomStatusName));
                 }
                 
             }
@@ -518,7 +522,7 @@ public class StatusInfo
             return 0f;
         }
             
-        return status._realValue / _statusInfoData._statusData[status._statusIndex].getMaxValue();
+        return status._realValue * (1f / _statusInfoData._statusData[status._statusIndex].getMaxValue());
     }
 
     public float getCurrentStatus(string targetName)
