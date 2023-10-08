@@ -938,7 +938,20 @@ public class StageDataEditor : EditorWindow
         StagePointData stagePointData = _editStageData._stagePointData[_pointSelectedIndex];
         StagePointDataEditObject stagePointDataEditObject = _editingStagePointList[_pointSelectedIndex];
 
+        GUILayout.BeginHorizontal();
+
         GUILayout.Label("Position: " + stagePointData._stagePoint.ToString()); 
+        if(GUILayout.Button("Copy", GUILayout.Width(40f)))
+        {
+            string copyString = MathEx.round( stagePointData._stagePoint.x,2).ToString() + " ";
+            copyString += MathEx.round( stagePointData._stagePoint.y,2).ToString() + " ";
+            copyString += MathEx.round( stagePointData._stagePoint.z,2).ToString();
+
+            GUIUtility.systemCopyBuffer = copyString;
+        }
+
+        GUILayout.EndHorizontal();
+
         if(_editStageData._isMiniStage == false)
         {
             stagePointData._pointName = EditorGUILayout.TextField("Name",stagePointData._pointName);
