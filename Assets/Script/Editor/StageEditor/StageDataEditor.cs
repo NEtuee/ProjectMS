@@ -557,6 +557,8 @@ public class StageDataEditor : EditorWindow
         if(_editStageData == null)
             return;
 
+        editorKeyCheck();
+
         GUILayout.BeginVertical("box");
             _editStageData._stageName = EditorGUILayout.TextField("Stage Name",_editStageData._stageName);
 
@@ -672,6 +674,52 @@ public class StageDataEditor : EditorWindow
                     addMiniStageToStage(miniStageData);
             }
         GUILayout.EndVertical();
+    }
+
+    private void editorKeyCheck()
+    {
+        Event e = Event.current;
+        switch (e.type)
+        {
+            case EventType.KeyDown:
+            if (Event.current.keyCode == (KeyCode.Period))
+            {
+                if(_editItemMenuSelectedIndex == 0)
+                {
+                    if(_editingStagePointList.Count - 1 > _pointSelectedIndex)
+                        selectPoint(_pointSelectedIndex + 1);
+                }
+                else if(_editItemMenuSelectedIndex == 1)
+                {
+                    if(_editingStagePointList[_pointSelectedIndex]._stagePointData._characterSpawnData.Length - 1 > _characterSelectedIndex)
+                        selectCharacter(_pointSelectedIndex, _characterSelectedIndex + 1);
+                }
+                else if(_editItemMenuSelectedIndex == 2)
+                {
+                    if(_editingMiniStageDataList.Count - 1 > _miniStageSelectedIndex)
+                        selectMiniStage(_miniStageSelectedIndex + 1);
+                }
+            }
+            else if(Event.current.keyCode == KeyCode.Comma)
+            {
+                if(_editItemMenuSelectedIndex == 0)
+                {
+                    if(_pointSelectedIndex > 0)
+                        selectPoint(_pointSelectedIndex - 1);
+                }
+                else if(_editItemMenuSelectedIndex == 1)
+                {
+                    if(_characterSelectedIndex > 0)
+                        selectCharacter(_pointSelectedIndex, _characterSelectedIndex - 1);
+                }
+                else if(_editItemMenuSelectedIndex == 2)
+                {
+                    if(_miniStageSelectedIndex > 0)
+                        selectMiniStage(_miniStageSelectedIndex - 1);
+                }
+            }
+            break;
+        }
     }
 
     private void onMiniStageGUI()
@@ -1365,6 +1413,8 @@ public class StageDataEditor : EditorWindow
 
         if(Application.isPlaying)
             return;
+
+        editorKeyCheck();
 
         // if(_drawScreenToMousePoint)
         // {
