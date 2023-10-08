@@ -33,6 +33,7 @@ public enum SequencerGraphEventType
     ShakeEffect,
     SetTimeScale,
     NextStage,
+    ToastMessage,
 
     Count,
 }
@@ -72,6 +73,41 @@ public class SequencerGraphEvent_WaitSignal : SequencerGraphEventBase
 
             if(attrName == "Signal")
                 _targetSignal = attrValue;
+        }
+    }
+}
+
+public class SequencerGraphEvent_ToastMessage : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.ToastMessage;
+
+    public string _text = "";
+    public float _time = 1f;
+    public Color _color = Color.white;
+
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        ToastMessage._instance.ShowToastMessage(_text,_time,_color);
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            if(attributes[i].Name == "Text")
+                _text = attributes[i].Value;
+            else if(attributes[i].Name == "Time")
+                _time = float.Parse(attributes[i].Value);
+            else if(attributes[i].Name == "Color")
+                _color = XMLScriptConverter.valueToLinearColor(attributes[i].Value);
+            
         }
     }
 }

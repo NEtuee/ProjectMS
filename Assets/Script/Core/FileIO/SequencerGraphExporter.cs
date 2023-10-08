@@ -149,6 +149,8 @@ public class SequencrGraphLoader : LoaderBase<SequencerGraphBaseData>
             spawnEvent = new SequencerGraphEvent_ShakeEffect();
         else if(node.Name == "ZoomEffect")
             spawnEvent = new SequencerGraphEvent_ZoomEffect();
+        else if(node.Name == "ToastMessage")
+            spawnEvent = new SequencerGraphEvent_ToastMessage();
 
         if(spawnEvent == null)
         {
