@@ -17,7 +17,7 @@ MonoBehaviour:
   _isMiniStage: 0
   _stagePointData:
   - _pointName: New Point 0
-    _stagePoint: {x: -3.82, y: -4.96, z: 0}
+    _stagePoint: {x: 0, y: 0, z: 0}
     _maxLimitedDistance: 99999
     _cameraZoomSize: 3
     _cameraZoomSpeed: 0
@@ -36,10 +36,22 @@ MonoBehaviour:
       _hideWhenDeactive: 0
       _searchIdentifier: 0
       _activeType: 0
-      _localPosition: {x: 0, y: 0, z: 0}
+      _localPosition: {x: -2.21, y: 1.46, z: 0}
+    - _characterKey: Akane
+      _uniqueKey: Test
+      _uniqueGroupKey: 
+      _startAction: Spawn
+      _flip: 0
+      _hideWhenDeactive: 0
+      _searchIdentifier: 0
+      _activeType: 0
+      _localPosition: {x: -2.22, y: -0.6, z: 0}
     _useTriggerBound: 0
     _targetSearchIdentifier: 0
     _triggerWidth: 0
     _triggerHeight: 0
     _triggerOffset: {x: 0, y: 0, z: 0}
   _miniStageData: []
+  _markerData:
+  - _name: TargetMarker
+    _position: {x: 3.53, y: -2.44, z: 0}

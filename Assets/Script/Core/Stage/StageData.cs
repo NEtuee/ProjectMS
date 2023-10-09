@@ -77,4 +77,15 @@ public class StageData : ScriptableObject
     public List<StagePointData>         _stagePointData = new List<StagePointData>();
     public List<MiniStageListItem>      _miniStageData = new List<MiniStageListItem>();
     public List<MarkerItem>             _markerData = new List<MarkerItem>();
+
+    public MarkerItem findMarker(string markerName)
+    {
+        foreach(var item in _markerData)
+        {
+            if(item._name == markerName)
+                return item;
+        }
+
+        return null;
+    }
 }

@@ -32,6 +32,14 @@
         <WaitSecond Time="3.0"/>
         <ToastMessage Text="3"/>
 
+        <Task ProcessType="StepByStep">
+            <WaitSecond Time="0.5"/>
+            <AIMove UniqueKey="Player" StartAction="AIMove_Start" EndAction="AIMove_End" LoopAction="AIMove_Loop" EndPositionMarker="TargetMarker"/>
+        </Task>
+
+        <AIMove UniqueKey="Test" StartAction="AIMove_Start" EndAction="AIMove_End" LoopAction="AIMove_Loop" EndPositionMarker="TargetMarker"/>
+        <ToastMessage Text="Arrive"/>
+
         <!-- <AIMove UniqueKey="Player" StartAction="AIMove_Start" EndAction="AIMove_End" LoopAction="AIMove_Loop" EndPosition="3.0 0.0 0.0"/>
 
         <AIMove UniqueKey="Player" StartAction="AIMove_Start" EndAction="AIMove_End" LoopAction="AIMove_Loop" EndPosition="3.0 2.0 0.0"/>

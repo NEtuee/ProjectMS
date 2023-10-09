@@ -83,13 +83,13 @@ public class SequencerGraphProcessor
         public override bool runTask(float deltaTime)
         {
             if(_sequencerGraphEventList == null)
-                return true;
+                return false;
             
             if(_taskProcessing == false)
-                return true;
+                return false;
 
-            bool eventEnd = true;
-            for(int index = 0; index < _eventList.Count; ++index)
+            _taskProcessing = false;
+            for (int index = 0; index < _eventList.Count; ++index)
             {
                 var item = _eventList[index];
                 if(item._isEventEnd)
@@ -97,10 +97,9 @@ public class SequencerGraphProcessor
                 
                 item._isEventEnd = item._event.Execute(_sequencerGraphProessor,deltaTime);
                 if(item._isEventEnd == false)
-                    eventEnd = false;
+                    _taskProcessing = true;
             }
 
-            _taskProcessing = eventEnd;
             return _taskProcessing;
         }
     }
@@ -111,19 +110,19 @@ public class SequencerGraphProcessor
         public override bool runTask(float deltaTime)
         {
             if(_sequencerGraphEventList == null)
-                return true;
+                return false;
             
             if(_taskProcessing == false)
-                return true;
+                return false;
 
             for(int index = _currentEventIndex; index < _eventCount; ++index)
             {
                 _currentEventIndex = index;
                 if(_sequencerGraphEventList[index].Execute(_sequencerGraphProessor, deltaTime) == false)
-                    return false;
+                    return true;
             }
 
-            _taskProcessing = true;
+            _taskProcessing = false;
             return _taskProcessing;
         }
     }
@@ -132,6 +131,8 @@ public class SequencerGraphProcessor
     public Dictionary<string, GameEntityBase>   _uniqueEntityDictionary = new Dictionary<string, GameEntityBase>();
     public Dictionary<string, GameEntityBase>   _sustainEntityDictionary = new Dictionary<string, GameEntityBase>();
     public Dictionary<string, List<GameEntityBase>> _uniqueGroupEntityDictionary = new Dictionary<string, List<GameEntityBase>>();
+
+    public Dictionary<string, MarkerItem>       _markerDicionary = new Dictionary<string, MarkerItem>();
 
     public SimplePool<SequencerAllAtOnceTaskProcessor>      _allAtOnceTaskPool = new SimplePool<SequencerAllAtOnceTaskProcessor>();
     public SimplePool<SequencerStepTaskProcessor>           _stepTaskPool = new SimplePool<SequencerStepTaskProcessor>();
@@ -153,6 +154,7 @@ public class SequencerGraphProcessor
         _uniqueEntityDictionary.Clear();
         _sustainEntityDictionary.Clear();
         _uniqueGroupEntityDictionary.Clear();
+        _markerDicionary.Clear();
         _deleteUniqueTargetList.Clear();
         _signalList.Clear();
     }
@@ -345,7 +347,7 @@ public class SequencerGraphProcessor
     {
         for(int index = 0; index < _processingTaskList.Count; ++index)
         {
-            if(_processingTaskList[index].runTask(deltaTime))
+            if(_processingTaskList[index].runTask(deltaTime) == false)
             {
                returnTaskToPool(_processingTaskList[index]);
 
@@ -378,7 +380,7 @@ public class SequencerGraphProcessor
         _processingTaskList.Clear();
     }
 
-    public void startSequencerFromStage(string sequencerGraphPath, StagePointData currentPoint, List<CharacterEntityBase> pointCharacters, GameEntityBase ownerEntity, GameEntityBase targetEntity, bool includePlayer = false)
+    public void startSequencerFromStage(string sequencerGraphPath, StagePointData currentPoint, List<CharacterEntityBase> pointCharacters, GameEntityBase ownerEntity, GameEntityBase targetEntity, List<MarkerItem> markerList, bool includePlayer = false)
     {
         _currentSequencer = ResourceContainerEx.Instance().GetSequencerGraph(sequencerGraphPath);
         if(_currentSequencer == null)
@@ -390,6 +392,11 @@ public class SequencerGraphProcessor
         {
             DebugUtil.assert(false, "발생시 통보 요망");
             return;
+        }
+
+        foreach(var item in markerList)
+        {
+            _markerDicionary.Add(item._name,item);
         }
 
         for(int index = 0; index < pointCharacters.Count; ++index)
@@ -426,6 +433,13 @@ public class SequencerGraphProcessor
         }
     }
 
+    public MarkerItem getMarker(string markerName)
+    {
+        if(_markerDicionary.ContainsKey(markerName) == false)
+            return null;
+        
+        return _markerDicionary[markerName];
+    }
 
     public void startSequencer(string sequencerGraphPath, GameEntityBase ownerEntity, GameEntityBase targetEntity, bool includePlayer = false)
     {

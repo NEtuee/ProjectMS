@@ -1414,6 +1414,9 @@ public class StageDataEditor : EditorWindow
                 continue;
             }
 
+            if(i == 0)
+                _editingStagePointList[i]._gizmoItem.transform.position = _editingStagePointList[i]._stagePointData._stagePoint;
+
             repaint |= _editingStagePointList[i].syncPosition(_editStageData._isMiniStage);
 
             if(i == 0 && _backgroundPrefabObject != null)
@@ -2039,6 +2042,10 @@ public class StageDataEditor : EditorWindow
 
         if(_editStageData._markerData.Count != 0)
         {
+            Vector3 offsetPosition = Vector3.zero;
+            if(_editStageData._stagePointData.Count != 0)
+                offsetPosition = _editStageData._stagePointData[0]._stagePoint;
+
             foreach(var item in _editStageData._markerData)
             {
                 MarkerDataEditObject editObject = new MarkerDataEditObject();
