@@ -1,12 +1,12 @@
 HintType,Symbol,TextList
-LineStart,<SpawnCharacter,"CharacterKey=~~,Position=~~,SearchIdentifier=~~,UniqueKey=~~"
+LineStart,<SpawnCharacter,"CharacterKey=~~,Position=~~,SearchIdentifier=~~,UniqueKey=~~,PositionMarker=~~"
 LineStart,<WaitSecond,Time=~~
 LineStart,<SetCameraTarget,"UniqueKey=~~,CameraMode=~~"
 LineStart,<SetAudioListner,UniqueKey=~~
 LineStart,<SetCrossHair,UniqueKey=~~
 LineStart,<SetHPSphere,UniqueKey=~~
 LineStart,<WaitTargetDead,UniqueKey=~~
-LineStart,<TeleportTargetTo,"UniqueKey=~~,Position=~~"
+LineStart,<TeleportTargetTo,"UniqueKey=~~,Position=~~,PositionMarker=~~"
 LineStart,<ApplyPostProcessProfile,"Path=~~,BlendTime=~~,ApplyType=~~"
 LineStart,<CallAIEvent,"EventName=~~,UniqueKey=~~,Range=~~,SearchIdentifier=~~,EventTargetType=~~"
 LineStart,<WaitSignal,Signal=~~
@@ -44,12 +44,12 @@ LineStart,<SetAction,"UniqueKey=~~,UniqueGroupKey=~~,Action=~~"
 ShortCut,__SetAction,<SetAction UniqueKey=~~ UniqueGroupKey=~~ Action=~~/>
 LineStart,<PlayAnimation,"UniqueKey=~~,PlayAnimation=~~"
 ShortCut,__PlayAnimation,<PlayAnimation UniqueKey=~~ Path=~~/>
-LineStart,<AIMove,"UniqueKey=~~,StartAction=~~,LoopAction=~~,EndAction=~~,EndPosition=~~"
+LineStart,<AIMove,"UniqueKey=~~,StartAction=~~,LoopAction=~~,EndAction=~~,EndPosition=~~,EndPositionMarker=~~"
 ShortCut,__AIMove,<AIMove UniqueKey=~~ StartAction=~~ LoopAction=~~ EndAction=~~ EndPosition=~~/>
 LineStart,<QTEFence,KeyName=~~
 ShortCut,__QTEFence,<QTEFence KeyName=~~/>
 InQuote,Force=,"True,False"
-LineStart,<SetCameraPosition,TargetPosition=~~
+LineStart,<SetCameraPosition,"TargetPosition=~~,TargetPositionMarker=~~"
 ShortCut,__SetCameraPosition,<SetCameraPosition TargetPosition=~~/>
 LineStart,<SetHideUI,Hide=~~
 ShortCut,__SetHideUI,<SetHideUI Hide=~~/>
