@@ -34,6 +34,7 @@ public enum SequencerGraphEventType
     SetTimeScale,
     NextStage,
     ToastMessage,
+    Task,
 
     Count,
 }
@@ -76,6 +77,57 @@ public class SequencerGraphEvent_WaitSignal : SequencerGraphEventBase
         }
     }
 }
+
+public class SequencerGraphEvent_Task : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.Task;
+
+    public SequencerGraphEventBase[] _eventList = null;
+    public SequencerGraphProcessor.TaskProcessType taskProcessType;
+
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+        foreach (var item in _eventList)
+        {
+            item.Initialize(processor);
+        }
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        if(taskProcessType == SequencerGraphProcessor.TaskProcessType.Count)
+            return true;
+            
+        processor.addTask(_eventList,taskProcessType);
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            if(attributes[i].Name == "ProcessType")
+                taskProcessType = (SequencerGraphProcessor.TaskProcessType)System.Enum.Parse(typeof(SequencerGraphProcessor.TaskProcessType), attributes[i].Value);
+        }
+
+        if(taskProcessType == SequencerGraphProcessor.TaskProcessType.Count)
+        {
+            DebugUtil.assert(false, "TaskProcessType은 필수입니다");
+            return;
+        }
+
+        List<SequencerGraphEventBase> eventList = new List<SequencerGraphEventBase>();
+        for(int index = 0; index < node.ChildNodes.Count; ++index)
+        {
+            eventList.Add(SequencrGraphLoader.readEventData(node.ChildNodes[index]));
+        }
+        _eventList = eventList.ToArray();
+    }
+}
+
 
 public class SequencerGraphEvent_ToastMessage : SequencerGraphEventBase
 {

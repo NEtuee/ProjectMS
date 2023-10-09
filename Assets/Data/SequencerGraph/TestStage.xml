@@ -14,7 +14,23 @@
 
     <UpdatePhase>
         <WaitSecond Time="1.0"/>
-        <ToastMessage Text="Test Stage"/>
+
+        <Task ProcessType="AllAtOnce">
+            <WaitSecond Time="1.0"/>
+            <ToastMessage Text="0"/>
+        </Task>
+
+        <Task ProcessType="StepByStep">
+            <WaitSecond Time="1.0"/>
+            <ToastMessage Text="1"/>
+        </Task>
+        <Task ProcessType="StepByStep">
+            <WaitSecond Time="2.0"/>
+            <ToastMessage Text="2"/>
+        </Task>
+
+        <WaitSecond Time="3.0"/>
+        <ToastMessage Text="3"/>
 
         <!-- <AIMove UniqueKey="Player" StartAction="AIMove_Start" EndAction="AIMove_End" LoopAction="AIMove_Loop" EndPosition="3.0 0.0 0.0"/>
 

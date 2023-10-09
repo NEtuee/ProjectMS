@@ -88,7 +88,7 @@ public class SequencrGraphLoader : LoaderBase<SequencerGraphBaseData>
         return phaseData;
     }
 
-    private static SequencerGraphEventBase readEventData(XmlNode node)
+    public static SequencerGraphEventBase readEventData(XmlNode node)
     {
         SequencerGraphEventBase spawnEvent = null;
         if(node.Name == "SpawnCharacter")
@@ -151,6 +151,8 @@ public class SequencrGraphLoader : LoaderBase<SequencerGraphBaseData>
             spawnEvent = new SequencerGraphEvent_ZoomEffect();
         else if(node.Name == "ToastMessage")
             spawnEvent = new SequencerGraphEvent_ToastMessage();
+        else if(node.Name == "Task")
+            spawnEvent = new SequencerGraphEvent_Task();
 
         if(spawnEvent == null)
         {
