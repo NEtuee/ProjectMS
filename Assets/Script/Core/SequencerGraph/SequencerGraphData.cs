@@ -33,6 +33,8 @@ public enum SequencerGraphEventType
     ShakeEffect,
     SetTimeScale,
     NextStage,
+    ToastMessage,
+    Task,
 
     Count,
 }
@@ -72,6 +74,92 @@ public class SequencerGraphEvent_WaitSignal : SequencerGraphEventBase
 
             if(attrName == "Signal")
                 _targetSignal = attrValue;
+        }
+    }
+}
+
+public class SequencerGraphEvent_Task : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.Task;
+
+    public SequencerGraphEventBase[] _eventList = null;
+    public SequencerGraphProcessor.TaskProcessType taskProcessType;
+
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+        foreach (var item in _eventList)
+        {
+            item.Initialize(processor);
+        }
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        if(taskProcessType == SequencerGraphProcessor.TaskProcessType.Count)
+            return true;
+            
+        processor.addTask(_eventList,taskProcessType);
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            if(attributes[i].Name == "ProcessType")
+                taskProcessType = (SequencerGraphProcessor.TaskProcessType)System.Enum.Parse(typeof(SequencerGraphProcessor.TaskProcessType), attributes[i].Value);
+        }
+
+        if(taskProcessType == SequencerGraphProcessor.TaskProcessType.Count)
+        {
+            DebugUtil.assert(false, "TaskProcessType은 필수입니다");
+            return;
+        }
+
+        List<SequencerGraphEventBase> eventList = new List<SequencerGraphEventBase>();
+        for(int index = 0; index < node.ChildNodes.Count; ++index)
+        {
+            eventList.Add(SequencrGraphLoader.readEventData(node.ChildNodes[index]));
+        }
+        _eventList = eventList.ToArray();
+    }
+}
+
+
+public class SequencerGraphEvent_ToastMessage : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.ToastMessage;
+
+    public string _text = "";
+    public float _time = 1f;
+    public Color _color = Color.white;
+
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        ToastMessage._instance.ShowToastMessage(_text,_time,_color);
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            if(attributes[i].Name == "Text")
+                _text = attributes[i].Value;
+            else if(attributes[i].Name == "Time")
+                _time = float.Parse(attributes[i].Value);
+            else if(attributes[i].Name == "Color")
+                _color = XMLScriptConverter.valueToLinearColor(attributes[i].Value);
+            
         }
     }
 }
@@ -429,6 +517,8 @@ public class SequencerGraphEvent_AIMove : SequencerGraphEventBase
     private string _loopAction = "";
     private string _endAction = "";
 
+    private string _markerName = "";
+
     private int _startActionIndex = -1;
     private int _loopActionIndex = -1;
     private int _endActionIndex = -1;
@@ -461,6 +551,13 @@ public class SequencerGraphEvent_AIMove : SequencerGraphEventBase
         {
             DebugUtil.assert(false,"대상 Unique Entity가 존재하지 않습니다 : {0}",_uniqueKey);
             return;
+        }
+
+        if(_markerName != "")
+        {
+            MarkerItem item = processor.getMarker(_markerName);
+            if(item != null)
+                _endPosition = item._position;
         }
 
         _totalAnimationPlayTime = 0f;
@@ -637,6 +734,8 @@ public class SequencerGraphEvent_AIMove : SequencerGraphEventBase
                 _endAction = attrValue;
             else if(attrName == "EndPosition")
                 _endPosition = XMLScriptConverter.valueToVector3(attrValue);
+            else if(attrName == "EndPositionMarker")
+                _markerName = attrValue;
         }
 
         DebugUtil.assert(_loopAction != "", "Loop Action은 필수입니다. [Line: {0}]", XMLScriptConverter.getLineNumberFromXMLNode(node));
@@ -966,12 +1065,19 @@ public class SequencerGraphEvent_SpawnCharacter : SequencerGraphEventBase
     private SpawnCharacterOptionDesc    _spawnDesc = SpawnCharacterOptionDesc.defaultValue;
 
     private string                      _uniqueEntityKey = "";
+    private string                      _markerName = "";
 
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SpawnCharacter;
     
     public override void Initialize(SequencerGraphProcessor processor)
     {
         _characterInfoData = CharacterInfoManager.Instance().GetCharacterInfoData(_characterKey);
+        if(_markerName != "")
+        {
+            MarkerItem item = processor.getMarker(_markerName);
+            if(item != null)
+                _spawnDesc._position = item._position;
+        }
     }
 
     public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
@@ -1004,6 +1110,10 @@ public class SequencerGraphEvent_SpawnCharacter : SequencerGraphEventBase
             else if(attrName == "Position")
             {
                 _spawnDesc._position = XMLScriptConverter.valueToVector3(attrValue);
+            }
+            else if(attrName == "PositionMarker")
+            {
+                _markerName = attrValue;
             }
             else if(attrName == "SearchIdentifier")
             {
@@ -1239,13 +1349,19 @@ public class SequencerGraphEvent_ApplyPostProcessProfile : SequencerGraphEventBa
 public class SequencerGraphEvent_TeleportTargetTo : SequencerGraphEventBase
 {
     private string _uniqueKey = "";
+    private string _markerName = "";
     private Vector3 _targetPosition;
 
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.TeleportTargetTo;
     
     public override void Initialize(SequencerGraphProcessor processor)
     {
-        
+        if(_markerName != "")
+        {
+            MarkerItem item = processor.getMarker(_markerName);
+            if(item != null)
+                _targetPosition = item._position;
+        }
     }
 
     public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
@@ -1274,6 +1390,8 @@ public class SequencerGraphEvent_TeleportTargetTo : SequencerGraphEventBase
                 _uniqueKey = attrValue;
             else if(attrName == "Position")
                 _targetPosition = XMLScriptConverter.valueToVector3(attrValue);
+            else if(attrName == "PositionMarker")
+                _markerName = attrValue;
         }
     }
 }
@@ -1357,12 +1475,18 @@ public class SequencerGraphEvent_SetCameraTarget : SequencerGraphEventBase
 public class SequencerGraphEvent_SetCameraPosition : SequencerGraphEventBase
 {
     private Vector3 _cameraTargetPosition = Vector3.zero;
+    private string _markerName = "";
 
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SetCameraPosition;
     
     public override void Initialize(SequencerGraphProcessor processor)
     {
-        
+        if(_markerName != "")
+        {
+            MarkerItem item = processor.getMarker(_markerName);
+            if(item != null)
+                _cameraTargetPosition = item._position;
+        }
     }
 
     public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
@@ -1384,6 +1508,8 @@ public class SequencerGraphEvent_SetCameraPosition : SequencerGraphEventBase
 
             if(attrName == "TargetPosition")
                 _cameraTargetPosition = XMLScriptConverter.valueToVector3(attrValue);
+            else if(attrName == "TargetPositionMarker")
+                _markerName = attrValue;
         }
     }
 }

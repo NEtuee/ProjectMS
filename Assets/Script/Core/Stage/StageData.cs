@@ -60,6 +60,13 @@ public class MiniStageListItem
     public Vector3                  _overrideTriggerOffset = Vector3.zero;
 }
 
+[System.Serializable]
+public class MarkerItem
+{
+    public string       _name;
+    public Vector3      _position;
+}
+
 [CreateAssetMenu(fileName = "StageData", menuName = "Scriptable Object/Stage Data", order = 3)]
 public class StageData : ScriptableObject
 {
@@ -67,6 +74,18 @@ public class StageData : ScriptableObject
     public GameObject       _backgroundPrefabPath = null;
     public bool             _isMiniStage = false;
 
-    public List<StagePointData> _stagePointData = new List<StagePointData>();
-    public List<MiniStageListItem>  _miniStageData = new List<MiniStageListItem>();
+    public List<StagePointData>         _stagePointData = new List<StagePointData>();
+    public List<MiniStageListItem>      _miniStageData = new List<MiniStageListItem>();
+    public List<MarkerItem>             _markerData = new List<MarkerItem>();
+
+    public MarkerItem findMarker(string markerName)
+    {
+        foreach(var item in _markerData)
+        {
+            if(item._name == markerName)
+                return item;
+        }
+
+        return null;
+    }
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using UnityEngine;
 
 public class SequencerGraphProcessor
@@ -10,18 +11,139 @@ public class SequencerGraphProcessor
         public int _savedIndex;
     }
 
+    public enum TaskProcessType
+    {
+        StepByStep,
+        AllAtOnce,
+        Count,
+    }
+
+    public abstract class SequencerTaskProcessorBase
+    {
+        protected SequencerGraphProcessor     _sequencerGraphProessor;
+        protected SequencerGraphEventBase[]   _sequencerGraphEventList;
+        protected int                         _eventCount;
+        protected int                         _currentEventIndex;
+        protected bool                        _taskProcessing = false;
+
+        public void initialize(SequencerGraphProcessor processor)
+        {
+            _sequencerGraphProessor = processor;
+        }
+
+        public virtual void setTask(SequencerGraphEventBase[] eventList)
+        {
+            if(_sequencerGraphProessor == null)
+            {
+                DebugUtil.assert(false, "must call initialize");
+                return;
+            }
+
+            if(eventList == null)
+            {
+                _sequencerGraphEventList = null;
+                return;
+            }
+
+            _sequencerGraphEventList = eventList;
+
+            _eventCount = eventList.Length;
+            _currentEventIndex = 0;
+            _taskProcessing = true;
+        }
+
+        public abstract TaskProcessType getTaskType();
+
+        public abstract bool runTask(float deltaTime);
+    }
+
+    public class SequencerAllAtOnceTaskProcessor : SequencerTaskProcessorBase
+    {
+        public struct AllAtOnceTaskEventWrapper
+        {
+            public SequencerGraphEventBase  _event;
+            public bool                     _isEventEnd;
+        }
+
+        public List<AllAtOnceTaskEventWrapper> _eventList = new List<AllAtOnceTaskEventWrapper>();
+
+        public override TaskProcessType getTaskType() => TaskProcessType.AllAtOnce;
+
+        public override void setTask(SequencerGraphEventBase[] eventList)
+        {
+            base.setTask(eventList);
+            _eventList.Clear();
+
+            foreach(var item in eventList)
+            {
+                _eventList.Add(new AllAtOnceTaskEventWrapper{_event = item, _isEventEnd = false});
+            }
+        }
+
+        public override bool runTask(float deltaTime)
+        {
+            if(_sequencerGraphEventList == null)
+                return false;
+            
+            if(_taskProcessing == false)
+                return false;
+
+            _taskProcessing = false;
+            for (int index = 0; index < _eventList.Count; ++index)
+            {
+                var item = _eventList[index];
+                if(item._isEventEnd)
+                    continue;
+                
+                item._isEventEnd = item._event.Execute(_sequencerGraphProessor,deltaTime);
+                if(item._isEventEnd == false)
+                    _taskProcessing = true;
+            }
+
+            return _taskProcessing;
+        }
+    }
+
+    public class SequencerStepTaskProcessor : SequencerTaskProcessorBase
+    {
+        public override TaskProcessType getTaskType() => TaskProcessType.StepByStep;
+        public override bool runTask(float deltaTime)
+        {
+            if(_sequencerGraphEventList == null)
+                return false;
+            
+            if(_taskProcessing == false)
+                return false;
+
+            for(int index = _currentEventIndex; index < _eventCount; ++index)
+            {
+                _currentEventIndex = index;
+                if(_sequencerGraphEventList[index].Execute(_sequencerGraphProessor, deltaTime) == false)
+                    return true;
+            }
+
+            _taskProcessing = false;
+            return _taskProcessing;
+        }
+    }
+
     private SequencerGraphBaseData              _currentSequencer = null;
     public Dictionary<string, GameEntityBase>   _uniqueEntityDictionary = new Dictionary<string, GameEntityBase>();
     public Dictionary<string, GameEntityBase>   _sustainEntityDictionary = new Dictionary<string, GameEntityBase>();
     public Dictionary<string, List<GameEntityBase>> _uniqueGroupEntityDictionary = new Dictionary<string, List<GameEntityBase>>();
+
+    public Dictionary<string, MarkerItem>       _markerDicionary = new Dictionary<string, MarkerItem>();
+
+    public SimplePool<SequencerAllAtOnceTaskProcessor>      _allAtOnceTaskPool = new SimplePool<SequencerAllAtOnceTaskProcessor>();
+    public SimplePool<SequencerStepTaskProcessor>           _stepTaskPool = new SimplePool<SequencerStepTaskProcessor>();
 
     private int                                 _currentIndex = 0;
     private bool                                _isSequencerEventEnd = false;
 
     private eventIndexItem                      _savedEventItem = new eventIndexItem{_savedIndex = 0, _targetSequencerGraph = null};
 
+    private List<SequencerTaskProcessorBase>    _processingTaskList = new List<SequencerTaskProcessorBase>();
     private List<string>                        _deleteUniqueTargetList = new List<string>();
-
     private List<string>                        _signalList = new List<string>();
 
     public void initialize()
@@ -32,6 +154,7 @@ public class SequencerGraphProcessor
         _uniqueEntityDictionary.Clear();
         _sustainEntityDictionary.Clear();
         _uniqueGroupEntityDictionary.Clear();
+        _markerDicionary.Clear();
         _deleteUniqueTargetList.Clear();
         _signalList.Clear();
     }
@@ -105,6 +228,8 @@ public class SequencerGraphProcessor
 
             ++index;
         }
+
+        runTask(deltaTime);
         
         if(_isSequencerEventEnd)
             stopSequencer();
@@ -195,9 +320,67 @@ public class SequencerGraphProcessor
         _currentSequencer = null;
         _savedEventItem._savedIndex = -1;
         _savedEventItem._targetSequencerGraph = null;
+
+        clearTask();
     }
 
-    public void startSequencerFromStage(string sequencerGraphPath, StagePointData currentPoint, List<CharacterEntityBase> pointCharacters, GameEntityBase ownerEntity, GameEntityBase targetEntity, bool includePlayer = false)
+    public void addTask(SequencerGraphEventBase[] eventList, TaskProcessType taskProcessType)
+    {
+        SequencerTaskProcessorBase task = null;
+        switch(taskProcessType)
+        {
+            case TaskProcessType.AllAtOnce:
+            task = _allAtOnceTaskPool.dequeue();
+            break;
+            case TaskProcessType.StepByStep:
+            task = _stepTaskPool.dequeue();
+            break;
+        }
+
+        task.initialize(this);
+        task.setTask(eventList);
+
+        _processingTaskList.Add(task);
+    }
+
+    public void runTask(float deltaTime)
+    {
+        for(int index = 0; index < _processingTaskList.Count; ++index)
+        {
+            if(_processingTaskList[index].runTask(deltaTime) == false)
+            {
+               returnTaskToPool(_processingTaskList[index]);
+
+               _processingTaskList.RemoveAt(index);
+               index -= 1; 
+            }
+        }
+    }
+
+    public void returnTaskToPool(SequencerTaskProcessorBase task)
+    {
+        switch(task.getTaskType())
+        {
+            case TaskProcessType.AllAtOnce:
+            _allAtOnceTaskPool.enqueue(task as SequencerAllAtOnceTaskProcessor);
+            break;
+            case TaskProcessType.StepByStep:
+            _stepTaskPool.enqueue(task as SequencerStepTaskProcessor);
+            break;
+        }
+    }
+
+    public void clearTask()
+    {
+        foreach(var item in _processingTaskList)
+        {
+            returnTaskToPool(item);
+        }
+
+        _processingTaskList.Clear();
+    }
+
+    public void startSequencerFromStage(string sequencerGraphPath, StagePointData currentPoint, List<CharacterEntityBase> pointCharacters, GameEntityBase ownerEntity, GameEntityBase targetEntity, List<MarkerItem> markerList, bool includePlayer = false)
     {
         _currentSequencer = ResourceContainerEx.Instance().GetSequencerGraph(sequencerGraphPath);
         if(_currentSequencer == null)
@@ -209,6 +392,11 @@ public class SequencerGraphProcessor
         {
             DebugUtil.assert(false, "발생시 통보 요망");
             return;
+        }
+
+        foreach(var item in markerList)
+        {
+            _markerDicionary.Add(item._name,item);
         }
 
         for(int index = 0; index < pointCharacters.Count; ++index)
@@ -245,6 +433,13 @@ public class SequencerGraphProcessor
         }
     }
 
+    public MarkerItem getMarker(string markerName)
+    {
+        if(_markerDicionary.ContainsKey(markerName) == false)
+            return null;
+        
+        return _markerDicionary[markerName];
+    }
 
     public void startSequencer(string sequencerGraphPath, GameEntityBase ownerEntity, GameEntityBase targetEntity, bool includePlayer = false)
     {

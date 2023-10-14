@@ -13,6 +13,7 @@ public class GameEditorMaster : MonoBehaviour
     public bool _aiDebugAll = false;
     public bool _statusDebugAll = false;
     public bool _animationDebugAll = false;
+    public bool _soundDebugAll = false;
 
     public Slider   _timeMagnitudeSlider;
     public Text     _timeMagnitudeText;
@@ -22,6 +23,7 @@ public class GameEditorMaster : MonoBehaviour
     public Toggle   _aiDebugToggle;
     public Toggle   _statusDebugToggle;
     public Toggle   _animationDebugToggle;
+    public Toggle   _soundDebugToggle;
 
     public RectTransform _stageSelectorContent;
     public GameObject _stageSelectorButtonItemPrefab;
@@ -211,6 +213,7 @@ public class GameEditorMaster : MonoBehaviour
     public void setAiDebug() {_aiDebugAll = !_aiDebugAll;}
     public void setStatusDebug() {_statusDebugAll = !_statusDebugAll;}
     public void setAnimationDebug() {_animationDebugAll = !_animationDebugAll;}
+    public void setSoundDebug() {_soundDebugAll = !_soundDebugAll;}
 
     public void setTargetDebugSwitch(bool clear = false)
     {
@@ -218,6 +221,7 @@ public class GameEditorMaster : MonoBehaviour
         _aiDebugToggle.isOn = clear ? false : (_currentlySelectedEntity != null ? _currentlySelectedEntity._aiDebug : false);
         _statusDebugToggle.isOn = clear ? false : (_currentlySelectedEntity != null ? _currentlySelectedEntity._statusDebug : false);
         _animationDebugToggle.isOn = clear ? false : (_currentlySelectedEntity != null ? _currentlySelectedEntity._animationDebug : false);
+        _soundDebugToggle.isOn = clear ? false : (_currentlySelectedEntity != null ? _currentlySelectedEntity._soundDebug : false);
     }
 
 
@@ -225,11 +229,13 @@ public class GameEditorMaster : MonoBehaviour
     public void setTargetAiDebug() {if(_currentlySelectedEntity==null) return; _currentlySelectedEntity._aiDebug = _aiDebugToggle.isOn;}
     public void setTargetStatusDebug() {if(_currentlySelectedEntity==null) return; _currentlySelectedEntity._statusDebug =  _statusDebugToggle.isOn;}
     public void setTargetAnimationDebug() {if(_currentlySelectedEntity==null) return; _currentlySelectedEntity._animationDebug = _animationDebugToggle.isOn;}
+    public void setTargetSoundDebug() {if(_currentlySelectedEntity==null) return; _currentlySelectedEntity._soundDebug = _soundDebugToggle.isOn;}
 
     public bool isActionDebug() {return _actionDebugAll;}
     public bool isAiDebug() {return _aiDebugAll;}
     public bool isStatusDebug() {return _statusDebugAll;}
     public bool isAnimationDebug() {return _animationDebugAll;}
+    public bool isSoundDebug() {return _soundDebugAll;}
 
     private void editorOn()
     {

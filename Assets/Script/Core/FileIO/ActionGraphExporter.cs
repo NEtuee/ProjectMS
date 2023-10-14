@@ -535,6 +535,10 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             {
                 playData._isAngleBaseAnimation = bool.Parse(targetValue);
             }
+            else if(targetName == "MultiSelectUpdateOnce")
+            {
+                playData._multiSelectConditionUpdateOnce = bool.Parse(targetValue);
+            }
             else if(targetName == "AngleBaseAnimationCount")
             {
                 playData._angleBaseAnimationSpriteCount = int.Parse(targetValue);
@@ -637,7 +641,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
                     MultiSelectAnimationData animationData = readMultiSelectAnimationData(nodeList[i], filePath);
                     if(animationData == null)
                         continue;
-                    
+
                     multiSelectAnimationList.Add(animationData);
                 }
                 else

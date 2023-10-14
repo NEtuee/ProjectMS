@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Numerics;
 
 public class StatusInfo
 {
@@ -51,6 +53,9 @@ public class StatusInfo
         public ParticleEffectItem _particleEffect;
         public TimelineEffectItem _timelineEffect;
         public AnimationEffectItem _animationEffect;
+
+        public FMODUnity.StudioEventEmitter _audioEmitter;
+        public bool _audioPlay = false;
 
         public float _startedTime;
         public int _uniqueKey = 0;
@@ -235,6 +240,8 @@ public class StatusInfo
         buffItem._particleEffect = null;
         buffItem._timelineEffect = null;
         buffItem._animationEffect = null;
+        buffItem._audioEmitter = null;
+        buffItem._audioPlay = false;
         
         _currentlyAppliedBuffList.Add(buffItem);
 
@@ -264,6 +271,9 @@ public class StatusInfo
                 _currentlyAppliedBuffList[i]._timelineEffect.release();
             if(_currentlyAppliedBuffList[i]._animationEffect != null)
                 _currentlyAppliedBuffList[i]._animationEffect.release();
+            if(_currentlyAppliedBuffList[i]._audioEmitter != null)
+                _currentlyAppliedBuffList[i]._audioEmitter.Stop();
+            _currentlyAppliedBuffList[i]._audioPlay = false;
 
             _buffItemPool.enqueue(_currentlyAppliedBuffList[i]);
         }
@@ -295,6 +305,9 @@ public class StatusInfo
             buffItem._timelineEffect.release();
         if(buffItem._animationEffect != null)
             buffItem._animationEffect.release();
+        if(buffItem._audioEmitter != null)
+            buffItem._audioEmitter.Stop();
+        buffItem._audioPlay = false;
 
         _buffItemPool.enqueue(buffItem);
         _currentlyAppliedBuffList.RemoveAt(index);
@@ -445,8 +458,20 @@ public class StatusInfo
 
                         requestData.isUsing = true;
                     }
-                }
 
+                    if(buffData._audioID >= 0 && buffItem._audioPlay == false && _ownerObject != null)
+                    {
+                        buffItem._audioPlay = true;
+                        buffItem._audioEmitter = FMODAudioManager.Instance().Play(buffData._audioID,UnityEngine.Vector3.zero,_ownerObject.transform);
+
+                        bool isOneShot = false;
+                        if(buffItem._audioEmitter.EventDescription.isOneshot(out isOneShot) == FMOD.RESULT.OK && isOneShot)
+                            buffItem._audioEmitter = null;
+                    }
+
+                    if(buffItem._audioEmitter != null)
+                        FMODAudioManager.Instance().setParam(ref buffItem._audioEmitter,buffData._audioID,buffData._audioParameter,getCurrentStatusPercentage(buffData._buffCustomStatusName));
+                }
                 
             }
             else
@@ -466,6 +491,13 @@ public class StatusInfo
                     buffItem._animationEffect.stopEffect();
                     buffItem._animationEffect = null;
                 }
+                if(buffItem._audioEmitter != null)
+                {
+                    buffItem._audioEmitter.Stop();
+                    buffItem._audioEmitter = null;
+                }
+
+                buffItem._audioPlay = false;
             }
                 
 
@@ -490,7 +522,7 @@ public class StatusInfo
             return 0f;
         }
             
-        return status._realValue / _statusInfoData._statusData[status._statusIndex].getMaxValue();
+        return status._realValue * (1f / _statusInfoData._statusData[status._statusIndex].getMaxValue());
     }
 
     public float getCurrentStatus(string targetName)

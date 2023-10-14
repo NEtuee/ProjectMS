@@ -102,6 +102,21 @@ public class StageDataEditor : EditorWindow
         }
     }
 
+    private class MarkerDataEditObject
+    {
+        public MarkerItem           _markerData = null;
+        public GameObject           _gizmoItem = null;
+
+        public bool syncPosition()
+        {
+            if(_markerData == null || _gizmoItem == null)
+                return false;
+
+            _markerData._position = _gizmoItem.transform.position;
+            return true;
+        }
+    }
+
     private class SequencerPathEditor
     {
         bool _listOpen = false;
@@ -424,12 +439,14 @@ public class StageDataEditor : EditorWindow
 
     private List<StagePointDataEditObject>  _editingStagePointList = new List<StagePointDataEditObject>();
     private List<MiniStageDataEditObject>   _editingMiniStageDataList = new List<MiniStageDataEditObject>();
+    private List<MarkerDataEditObject>      _editingMarkerDataList = new List<MarkerDataEditObject>();
 
     private GameObject _backgroundPrefabObject = null;
     
     private Vector2 _pointItemScroll = Vector2.zero;
     private Vector2 _characterSpawnScroll = Vector2.zero;
     private Vector2 _miniStageScroll = Vector2.zero;
+    private Vector2 _markerScroll = Vector2.zero;
 
     private CharacterInfoView _characterInfoView = new CharacterInfoView();
     private MiniStageListView _miniStageListView = new MiniStageListView();
@@ -441,6 +458,7 @@ public class StageDataEditor : EditorWindow
         "Point",
         "Character",
         "MiniStage",
+        "Marker",
     };
 
     private string[] _editMenuStrings = 
@@ -459,6 +477,7 @@ public class StageDataEditor : EditorWindow
     private int _editMenuSelectedIndex = 0;
 
     private int _miniStageSelectedIndex = 0;
+    private int _markerSelectedIndex = 0;
 
 
     private string _pointCharacterSearchString = "";
@@ -468,6 +487,10 @@ public class StageDataEditor : EditorWindow
     private string _miniStageSearchString = "";
     private string[] _miniStageSearchStringList;
     private string _miniStageSearchStringCompare = "";
+
+    private string _markerSearchString = "";
+    private string[] _markerSearchStringList;
+    private string _markerSearchStringCompare = "";
 
     private bool _drawScreenToMousePoint = false;
     private bool _drawTriggerBound = false;
@@ -557,6 +580,8 @@ public class StageDataEditor : EditorWindow
         if(_editStageData == null)
             return;
 
+        editorKeyCheck();
+
         GUILayout.BeginVertical("box");
             _editStageData._stageName = EditorGUILayout.TextField("Stage Name",_editStageData._stageName);
 
@@ -631,7 +656,20 @@ public class StageDataEditor : EditorWindow
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
         GUILayout.BeginVertical("box",GUILayout.Height(200f));
-            _editItemMenuSelectedIndex = GUILayout.SelectionGrid(_editItemMenuSelectedIndex,_editItemMenuStrings,_editItemMenuStrings.Length);
+            int selectedIndex = GUILayout.SelectionGrid(_editItemMenuSelectedIndex,_editItemMenuStrings,_editItemMenuStrings.Length);
+            if(_editItemMenuSelectedIndex != selectedIndex)
+            {
+                _editItemMenuSelectedIndex = selectedIndex;
+                if(_editItemMenuSelectedIndex == 0)
+                    selectPoint(_pointSelectedIndex);
+                else if(_editItemMenuSelectedIndex == 1)
+                    selectCharacter(_pointSelectedIndex,_characterSelectedIndex);
+                else if(_editItemMenuSelectedIndex == 2)
+                    selectMiniStage(_miniStageSelectedIndex);
+                else if(_editItemMenuSelectedIndex == 3)
+                    selectMarker(_markerSelectedIndex);
+            }
+
             GUILayout.Space(5f);
             if(_editItemMenuSelectedIndex == 0)
                 onPointGUI();
@@ -639,6 +677,8 @@ public class StageDataEditor : EditorWindow
                 onCharacterGUI();
             else if(_editItemMenuSelectedIndex == 2)
                 onMiniStageGUI();
+            else if(_editItemMenuSelectedIndex == 3)
+                onMarkerGUI();
         GUILayout.EndVertical();
 
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
@@ -654,6 +694,8 @@ public class StageDataEditor : EditorWindow
                     onCharacterInspectorGUI();
                 else if(_editItemMenuSelectedIndex == 2)
                     onMiniStageInspectorGUI();
+                else if(_editItemMenuSelectedIndex == 3)
+                    onMarkerInspectorGUI();
             }
             else if(_editMenuSelectedIndex == 1)
             {
@@ -672,6 +714,62 @@ public class StageDataEditor : EditorWindow
                     addMiniStageToStage(miniStageData);
             }
         GUILayout.EndVertical();
+    }
+
+    private void editorKeyCheck()
+    {
+        Event e = Event.current;
+        switch (e.type)
+        {
+            case EventType.KeyDown:
+            if (Event.current.keyCode == (KeyCode.Period))
+            {
+                if(_editItemMenuSelectedIndex == 0)
+                {
+                    if(_editingStagePointList.Count - 1 > _pointSelectedIndex)
+                        selectPoint(_pointSelectedIndex + 1);
+                }
+                else if(_editItemMenuSelectedIndex == 1)
+                {
+                    if(_editingStagePointList[_pointSelectedIndex]._stagePointData._characterSpawnData.Length - 1 > _characterSelectedIndex)
+                        selectCharacter(_pointSelectedIndex, _characterSelectedIndex + 1);
+                }
+                else if(_editItemMenuSelectedIndex == 2)
+                {
+                    if(_editingMiniStageDataList.Count - 1 > _miniStageSelectedIndex)
+                        selectMiniStage(_miniStageSelectedIndex + 1);
+                }
+                else if(_editItemMenuSelectedIndex == 3)
+                {
+                    if(_editingMarkerDataList.Count - 1 > _markerSelectedIndex)
+                        selectMarker(_markerSelectedIndex + 1);
+                }
+            }
+            else if(Event.current.keyCode == KeyCode.Comma)
+            {
+                if(_editItemMenuSelectedIndex == 0)
+                {
+                    if(_pointSelectedIndex > 0)
+                        selectPoint(_pointSelectedIndex - 1);
+                }
+                else if(_editItemMenuSelectedIndex == 1)
+                {
+                    if(_characterSelectedIndex > 0)
+                        selectCharacter(_pointSelectedIndex, _characterSelectedIndex - 1);
+                }
+                else if(_editItemMenuSelectedIndex == 2)
+                {
+                    if(_miniStageSelectedIndex > 0)
+                        selectMiniStage(_miniStageSelectedIndex - 1);
+                }
+                else if(_editItemMenuSelectedIndex == 3)
+                {
+                    if(_markerSelectedIndex > 0)
+                        selectMarker(_markerSelectedIndex - 1);
+                }
+            }
+            break;
+        }
     }
 
     private void onMiniStageGUI()
@@ -722,6 +820,71 @@ public class StageDataEditor : EditorWindow
                     deleteMiniStage(i--);
                     if(i == _miniStageSelectedIndex)
                         _miniStageSelectedIndex = -1;
+                }
+
+                GUI.color = currentColor;
+
+                if(selected)
+                    GUILayout.EndHorizontal();
+
+                GUILayout.EndHorizontal();
+            }
+
+        GUILayout.EndScrollView();
+    }
+
+    private void onMarkerGUI()
+    {
+        GUILayout.BeginHorizontal();
+        _markerSearchString = EditorGUILayout.TextField("Search",_markerSearchString);
+        if(_markerSearchStringCompare != _markerSearchString)
+        {
+            if(_markerSearchString == "")
+                _markerSearchStringList = null;
+            else
+                _markerSearchStringList = _markerSearchString.Split(' ');
+            _markerSearchStringCompare = _markerSearchString;
+        }
+
+        if(GUILayout.Button("New", GUILayout.Width(40f)))
+        {
+            addMarker();
+        }
+
+        GUILayout.EndHorizontal();
+
+        _markerScroll = GUILayout.BeginScrollView(_markerScroll,"box");
+
+            for(int i = 0; i < _editStageData._markerData.Count; ++i)
+            {
+                if(_markerSearchString != "" && (searchStringCompare(_editStageData._markerData[i]._name,_markerSearchStringList) == false))
+                    continue;
+
+                if(_editStageData._markerData[i] == null)
+                    deleteMarker(i--);
+
+                GUILayout.BeginHorizontal();
+
+                Color currentColor = GUI.color;
+                GUI.color = i == _markerSelectedIndex ? Color.green : currentColor;
+
+                bool selected = i == _markerSelectedIndex;
+                if(selected)
+                    GUILayout.BeginHorizontal("box");
+
+                string targetName = _editStageData._markerData[i]._name;
+
+                GUILayout.Label(targetName,GUILayout.Width(200f));
+
+                if(GUILayout.Button("Pick"))
+                    selectMarker(i);
+
+                GUI.color = new Color(1f,0.2f,0.2f);
+                if(GUILayout.Button("Delete Marker"))
+                {
+                    deleteMarker(i--);
+                    if(i == _markerSelectedIndex)
+                        _markerSelectedIndex = -1;
                 }
 
                 GUI.color = currentColor;
@@ -930,6 +1093,29 @@ public class StageDataEditor : EditorWindow
         }
     }
 
+    private void onMarkerInspectorGUI()
+    {
+        if(_editingMarkerDataList == null || _editingMarkerDataList.Count == 0 || _editStageData._markerData.Count <= _markerSelectedIndex || _markerSelectedIndex < 0)
+            return;
+
+        MarkerItem markerItem = _editStageData._markerData[_markerSelectedIndex];
+        MarkerDataEditObject editObject = _editingMarkerDataList[_markerSelectedIndex];
+
+        markerItem._name = EditorGUILayout.TextField("Name",markerItem._name);
+
+        GUILayout.BeginHorizontal();
+        markerItem._position = EditorGUILayout.Vector3Field("World Position", markerItem._position);
+        if(GUILayout.Button("Copy", GUILayout.Width(40f)))
+        {
+            string copyString = MathEx.round( markerItem._position.x,2).ToString() + " ";
+            copyString += MathEx.round( markerItem._position.y,2).ToString() + " ";
+            copyString += MathEx.round( markerItem._position.z,2).ToString();
+
+            GUIUtility.systemCopyBuffer = copyString;
+        }
+        GUILayout.EndHorizontal();
+    }
+
     private void onPointInspectorGUI()
     {
         if(_editingStagePointList == null || _editingStagePointList.Count == 0 || _editStageData._stagePointData.Count <= _pointSelectedIndex || _pointSelectedIndex < 0)
@@ -938,7 +1124,20 @@ public class StageDataEditor : EditorWindow
         StagePointData stagePointData = _editStageData._stagePointData[_pointSelectedIndex];
         StagePointDataEditObject stagePointDataEditObject = _editingStagePointList[_pointSelectedIndex];
 
+        GUILayout.BeginHorizontal();
+
         GUILayout.Label("Position: " + stagePointData._stagePoint.ToString()); 
+        if(GUILayout.Button("Copy", GUILayout.Width(40f)))
+        {
+            string copyString = MathEx.round( stagePointData._stagePoint.x,2).ToString() + " ";
+            copyString += MathEx.round( stagePointData._stagePoint.y,2).ToString() + " ";
+            copyString += MathEx.round( stagePointData._stagePoint.z,2).ToString();
+
+            GUIUtility.systemCopyBuffer = copyString;
+        }
+
+        GUILayout.EndHorizontal();
+
         if(_editStageData._isMiniStage == false)
         {
             stagePointData._pointName = EditorGUILayout.TextField("Name",stagePointData._pointName);
@@ -1200,8 +1399,9 @@ public class StageDataEditor : EditorWindow
         if(Application.isPlaying)
             return;
 
-        if(_editStageData._stagePointData.Count != 0 && _editingStagePointList.Count == 0 ||
-            _editStageData._miniStageData.Count != 0 && _editingMiniStageDataList.Count == 0)
+        if((_editStageData._stagePointData.Count != 0 && _editingStagePointList.Count == 0) ||
+            (_editStageData._miniStageData.Count != 0 && _editingMiniStageDataList.Count == 0) ||
+            (_editStageData._markerData.Count != 0 && _editingMarkerDataList.Count == 0))
             constructGizmoPoints();
 
         bool repaint = false;
@@ -1213,6 +1413,9 @@ public class StageDataEditor : EditorWindow
                 --i;
                 continue;
             }
+
+            if(i == 0)
+                _editingStagePointList[i]._gizmoItem.transform.position = _editingStagePointList[i]._stagePointData._stagePoint;
 
             repaint |= _editingStagePointList[i].syncPosition(_editStageData._isMiniStage);
 
@@ -1232,6 +1435,21 @@ public class StageDataEditor : EditorWindow
                 }
 
                 repaint |= _editingMiniStageDataList[i].syncPosition(_editStageData._stagePointData[0]._stagePoint);
+            }
+        }
+
+        if(_editStageData._markerData.Count != 0)
+        {
+            for(int i = 0; i < _editingMarkerDataList.Count; ++i)
+            {
+                if(_editingMarkerDataList[i]._gizmoItem == null)
+                {
+                    deleteMarker(i);
+                    --i;
+                    continue;
+                }
+
+                repaint |= _editingMarkerDataList[i].syncPosition();
             }
         }
 
@@ -1353,6 +1571,8 @@ public class StageDataEditor : EditorWindow
         if(Application.isPlaying)
             return;
 
+        editorKeyCheck();
+
         // if(_drawScreenToMousePoint)
         // {
         //     Vector3 mousePosition = Event.current.mousePosition;
@@ -1449,6 +1669,28 @@ public class StageDataEditor : EditorWindow
             }
         }
 
+        for(int i = 0; i < _editStageData._markerData.Count; ++i)
+        {
+            MarkerItem markerItem = _editStageData._markerData[i];
+            if(markerItem == null)
+                continue;
+
+            Vector3 itemPosition = markerItem._position;
+            Handles.CapFunction capFunction = (controlID, position, rotation, size, eventType)=>{
+                Handles.CircleHandleCap(controlID, position, rotation, size, eventType);
+            };
+
+            Color currentColor = Handles.color;
+            
+            Handles.color = i == _markerSelectedIndex ? Color.green : currentColor;
+
+            Handles.Label(itemPosition, "Marker: " + markerItem._name);
+            if(Handles.Button(itemPosition,Camera.current.transform.rotation,0.1f,0.2f,capFunction))
+                selectMarker(i);
+            
+            Handles.color = currentColor;
+        }
+
         if(_editStageData._stagePointData.Count != 0)
         {
             for(int i = 0; i < _editStageData._miniStageData.Count; ++i)
@@ -1497,6 +1739,9 @@ public class StageDataEditor : EditorWindow
 
     private void selectPoint(int index)
     {
+        if(_editingStagePointList.Count <= index || index < 0)
+            return;
+
         PingTarget(_editingStagePointList[index]._gizmoItem);
         Repaint();
 
@@ -1506,6 +1751,12 @@ public class StageDataEditor : EditorWindow
 
     private void selectCharacter(int pointIndex, int characterIndex)
     {
+        if(_editingStagePointList.Count <= pointIndex || pointIndex < 0)
+            return;
+        
+        if(_editingStagePointList[pointIndex]._characterObjectList.Count <= characterIndex || characterIndex < 0)
+            return;
+
         PingTarget(_editingStagePointList[pointIndex]._characterObjectList[characterIndex].gameObject);
         Repaint();
 
@@ -1514,8 +1765,20 @@ public class StageDataEditor : EditorWindow
 
     private void selectMiniStage(int miniStageIndex)
     {
+        if(_editingMiniStageDataList.Count <= miniStageIndex || miniStageIndex < 0)
+            return;
+
         PingTarget(_editingMiniStageDataList[miniStageIndex]._gizmoItem);
         _miniStageSelectedIndex = miniStageIndex;
+    }
+
+    private void selectMarker(int markerIndex)
+    {
+        if(_editingMarkerDataList.Count <= markerIndex || markerIndex < 0)
+            return;
+            
+        PingTarget(_editingMarkerDataList[markerIndex]._gizmoItem);
+        _markerSelectedIndex = markerIndex;
     }
 
     private void PingTarget(GameObject obj)
@@ -1554,6 +1817,29 @@ public class StageDataEditor : EditorWindow
 
         _pointItemScroll.y = float.MaxValue;
         selectPoint(_editStageData._stagePointData.Count - 1);
+
+        EditorUtility.SetDirty(_editStageData);
+    }
+
+    private void addMarker()
+    {
+        Vector3 spawnPosition = SceneView.lastActiveSceneView.camera.transform.position;
+        spawnPosition.z = 0f;
+
+        MarkerDataEditObject editObject = new MarkerDataEditObject();
+        MarkerItem markerItem = new MarkerItem();
+        markerItem._name = "New Marker " + _editingMarkerDataList.Count;
+        markerItem._position = spawnPosition;
+        
+        editObject._markerData = markerItem;
+        editObject._gizmoItem = getGizmoItem();
+        editObject._gizmoItem.transform.position = spawnPosition;
+
+        _editStageData._markerData.Add(markerItem);
+        _editingMarkerDataList.Add(editObject);
+
+        _markerScroll.y = float.MaxValue;
+        selectMarker(_editingMarkerDataList.Count - 1);
 
         EditorUtility.SetDirty(_editStageData);
     }
@@ -1638,6 +1924,17 @@ public class StageDataEditor : EditorWindow
 
         returnGizmoItem(_editingMiniStageDataList[miniStageIndex]._gizmoItem);
         _editingMiniStageDataList.RemoveAt(miniStageIndex);
+    }
+
+    private void deleteMarker(int markerIndex)
+    {
+        if(_editStageData._markerData.Count <= markerIndex || markerIndex < 0 )
+            return;
+
+        _editStageData._markerData.RemoveAt(markerIndex);
+
+        returnGizmoItem(_editingMarkerDataList[markerIndex]._gizmoItem);
+        _editingMarkerDataList.RemoveAt(markerIndex);
     }
 
     private void loadStageData()
@@ -1742,6 +2039,23 @@ public class StageDataEditor : EditorWindow
             }
             
         }
+
+        if(_editStageData._markerData.Count != 0)
+        {
+            Vector3 offsetPosition = Vector3.zero;
+            if(_editStageData._stagePointData.Count != 0)
+                offsetPosition = _editStageData._stagePointData[0]._stagePoint;
+
+            foreach(var item in _editStageData._markerData)
+            {
+                MarkerDataEditObject editObject = new MarkerDataEditObject();
+                editObject._markerData = item;
+                editObject._gizmoItem = getGizmoItem();
+                editObject._gizmoItem.transform.position = item._position;
+                _editingMarkerDataList.Add(editObject);
+            }
+            
+        }
     }
 
     private void clearStagePointList()
@@ -1768,10 +2082,16 @@ public class StageDataEditor : EditorWindow
             returnGizmoItem(_editingMiniStageDataList[index]._gizmoItem);
         }
 
+        for(int index = 0; index < _editingMarkerDataList.Count; ++index)
+        {
+            returnGizmoItem(_editingMarkerDataList[index]._gizmoItem);
+        }
+
         _gizmoItemPool.Clear();
         _characterItemPool.Clear();
         _editingStagePointList.Clear();
         _editingMiniStageDataList.Clear();
+        _editingMarkerDataList.Clear();
 
         if(_editItemParent == null)
             _editItemParent = GameObject.FindGameObjectWithTag("EditorItem");
