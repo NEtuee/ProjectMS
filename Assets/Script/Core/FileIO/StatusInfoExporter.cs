@@ -32,15 +32,22 @@ public static class StatusInfoLoader
         }
 
         Dictionary<string, StatusInfoData> StatusInfoDataList = new Dictionary<string, StatusInfoData>();
-
         XmlNodeList projectileNodes = xmlDoc.FirstChild.ChildNodes;
-        for(int nodeIndex = 0; nodeIndex < projectileNodes.Count; ++nodeIndex)
+        try
         {
-            StatusInfoData baseData = readStatusInfoData(projectileNodes[nodeIndex]);
-            if(baseData == null)
-                return null;
+            for(int nodeIndex = 0; nodeIndex < projectileNodes.Count; ++nodeIndex)
+            {
+                StatusInfoData baseData = readStatusInfoData(projectileNodes[nodeIndex]);
+                if(baseData == null)
+                    return null;
 
-            StatusInfoDataList.Add(baseData._statusInfoName,baseData);
+                StatusInfoDataList.Add(baseData._statusInfoName,baseData);
+            }
+        }
+        catch(System.Exception ex)
+        {
+            DebugUtil.assert(false,"xml parsing exception : {0}\n",ex.Message,xmlDoc.BaseURI);
+            return null;
         }
 
         return StatusInfoDataList;

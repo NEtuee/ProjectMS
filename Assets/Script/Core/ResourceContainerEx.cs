@@ -94,26 +94,33 @@ public class DataResourceItem<Value, Loader> where Value : class where Loader : 
 		if(_resourceContainer.ContainsKey(path))
 			return _resourceContainer[path];
 #endif
-
-		Value obj = loader.readFromXML(path);
-		if(obj == null)
-			return null;
+		try
+		{
+			Value obj = loader.readFromXML(path);
+			if(obj == null)
+				return null;
 #if UNITY_EDITOR
-		if(_resourceContainer.ContainsKey(path))
-		{
-			ValueWithTimeStamp item = _resourceContainer[path];
-			item._value = obj;
-			item._timeStamp = timeStamp;
-		}
-		else
-		{
-			_resourceContainer.Add(path,new ValueWithTimeStamp(){_value = obj, _timeStamp = timeStamp});
-		}
+			if(_resourceContainer.ContainsKey(path))
+			{
+				ValueWithTimeStamp item = _resourceContainer[path];
+				item._value = obj;
+				item._timeStamp = timeStamp;
+			}
+			else
+			{
+				_resourceContainer.Add(path,new ValueWithTimeStamp(){_value = obj, _timeStamp = timeStamp});
+			}
 #else
-		_resourceContainer.Add(path,obj);
+			_resourceContainer.Add(path,obj);
 #endif
+			return obj;
+		}
+		catch(Exception ex)
+		{
+			DebugUtil.assert(false,"xml parsing exception : {0}\n{1}",ex.Message,path);
+		}
 
-		return obj;
+		return null;
 	}
 
 	private DateTime getTimeStamp(string path)
