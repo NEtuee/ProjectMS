@@ -37,7 +37,7 @@ InQuote,AngleType=,"Normal,AttackPoint,Direction"
 InQuote,SearchIdentifier=,"Player,Enemy,Projectile"
 InScope,,"MovementType=~~,MovementGraphPreset=~~,DirectionType=~~,DefenceDirectionType=~~,FlipType=~~,RotationType=~~,MoveScale=~~,IsActionSelection=~~,ApplyBuff=~~,NormalizedSpeed=~~,DefenceType=~~,DefenceAngle=~~,DirectionUpdateOnce=~~,IsActionSelection=~~,FlipTypeUpdateOnce=~~,RotateBySpeed=~~,RotateSpeed=~~,DirectionAngle=~~,Flags=~~,HeadUpOffset=~~,IgnoreAttackType=~~"
 LineStart,<Branch,"Key=~~,Condition=~~,Execute=~~,Weight=~~"
-LineStart,<Animation,"Preset=~~,Duration=~~,Path=~~,StartTime=~~,EndTime=~~,FramePerSecond=~~,Loop=~~,XFlip=~~,YFlip=~~,RotationPreset=~~,ScalePreset=~~,AngleBaseAnimation=~~"
+LineStart,<Animation,"Preset=~~,Duration=~~,Path=~~,StartTime=~~,EndTime=~~,FramePerSecond=~~,Loop=~~,XFlip=~~,YFlip=~~,RotationPreset=~~,ScalePreset=~~,AngleBaseAnimation=~~,MultiSelectUpdateOnce=~~"
 LineStart,<MultiSelectAnimation,"Path=~~,Condition=~~"
 LineStart,<Physics,"UseGravity=~~,Velocity=~~,Friction=~~,Torque=~~,AngularFriction=~~"
 LineStart,<BranchSet,Name=~~
@@ -91,7 +91,7 @@ ShortCut,__FrameEvent_CallAIEvent,<FrameEvent Type=~CallAIEvent~ StartTime=~0~ E
 FrameEvent,CallAIEvent,"EventName=~~,EventTargetType=~~,Range=~~,SearchIdentifier=~~"
 InQuote,EventTargetType=,"Range,Self,FrameEventTarget,Summoner"
 ShortCut,__FrameEvent_AudioPlay,<FrameEvent Type=~AudioPlay~ StartTime=~0~ ID=~~/>
-FrameEvent,AudioPlay,"ID=~~,ToTarget=~~,Attach=~~,UseFlip=~~"
+FrameEvent,AudioPlay,"ID=~~,ToTarget=~~,Attach=~~,UseFlip=~~,ParamterID=~~,ParameterValue=~~"
 InQuote,Flags=,"ClearPush,LaserEffect"
 ShortCut,__FrameEvent_Test,<FrameEvent Type=~Test~ StartTime=~0~ Log=~~/>
 FrameEvent,SetCameraZoom,Size=~~
@@ -109,7 +109,7 @@ FrameEvent,Torque,"Set=~~,Add=~~"
 ShortCut,__FrameEvent_Torque,<FrameEvent Type=~Torque~ StartTime=~0~ Add=~~/>
 ShortCut,__FrameEvent_DeactiveTalkBalloon,<FrameEvent Type=~DeactiveTalkBalloon~ StartTime=~0~/>
 InQuote,IgnoreAttackType=,"Default,GuardBreak,Catch"
-,,
+InQuote,MultiSelectUpdateOnce=,"True,False"
 ,,
 ,,
 ,,

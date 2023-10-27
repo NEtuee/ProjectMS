@@ -25,6 +25,7 @@ public class GameEntityBase : SequencerObjectBase
     public bool                 _statusDebug = false;
     public bool                 _aiDebug = false;
     public bool                 _animationDebug = false;
+    public bool                 _soundDebug = false;
 
     
     private ActionGraph         _actionGraph;

@@ -159,7 +159,7 @@ public class StageProcessor : Singleton<StageProcessor>
             {
                 for(int index = 0; index < _stageData._stagePointData[0]._onEnterSequencerPath.Length; ++index)
                 {
-                    SequencerGraphProcessor processor = _sequencerProcessManager.startSequencerFromStage(_stageData._stagePointData[0]._onEnterSequencerPath[index],_stageData._stagePointData[0],_spawnedCharacterEntityDictionary[0],null,false);
+                    SequencerGraphProcessor processor = _sequencerProcessManager.startSequencerFromStage(_stageData._stagePointData[0]._onEnterSequencerPath[index],_stageData._stagePointData[0],_spawnedCharacterEntityDictionary[0],null,_stageData._markerData,false);
 
                     // if(_playerEntity != null && playerEntity != null)
                     // {
@@ -281,7 +281,7 @@ public class StageProcessor : Singleton<StageProcessor>
                     {
                         for(int index = 0; index < _stageData._stagePointData[0]._onEnterSequencerPath.Length; ++index)
                         {
-                            SequencerGraphProcessor processor = _sequencerProcessManager.startSequencerFromStage(_stageData._stagePointData[0]._onEnterSequencerPath[index],_stageData._stagePointData[0],_spawnedCharacterEntityDictionary[0],null,false);
+                            SequencerGraphProcessor processor = _sequencerProcessManager.startSequencerFromStage(_stageData._stagePointData[0]._onEnterSequencerPath[index],_stageData._stagePointData[0],_spawnedCharacterEntityDictionary[0],null,_stageData._markerData,false);
                         }
                     }
 
@@ -381,7 +381,7 @@ public class StageProcessor : Singleton<StageProcessor>
 
         foreach(var path in pointData._onEnterSequencerPath)
         {
-            _sequencerProcessManager.startSequencerFromStage(path,pointData,_spawnedCharacterEntityDictionary[pointIndex],null,includePlayer);
+            _sequencerProcessManager.startSequencerFromStage(path,pointData,_spawnedCharacterEntityDictionary[pointIndex],null,_stageData._markerData,includePlayer);
         }
     }
 
@@ -392,7 +392,7 @@ public class StageProcessor : Singleton<StageProcessor>
 
         foreach(var path in pointData._onExitSequencerPath)
         {
-            _sequencerProcessManager.startSequencerFromStage(path,pointData,_spawnedCharacterEntityDictionary[pointIndex],null,includePlayer);
+            _sequencerProcessManager.startSequencerFromStage(path,pointData,_spawnedCharacterEntityDictionary[pointIndex],null,_stageData._markerData,includePlayer);
         }
     }
 

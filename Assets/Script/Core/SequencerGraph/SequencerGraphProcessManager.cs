@@ -44,11 +44,11 @@ public class SequencerGraphProcessManager
         }
     }
 
-    public SequencerGraphProcessor startSequencerFromStage(string sequencerKey, StagePointData currentPoint, List<CharacterEntityBase> pointCharacters, GameEntityBase targetEntity,bool includePlayer)
+    public SequencerGraphProcessor startSequencerFromStage(string sequencerKey, StagePointData currentPoint, List<CharacterEntityBase> pointCharacters, GameEntityBase targetEntity,List<MarkerItem> markerList, bool includePlayer)
     {
         SequencerGraphProcessor processor = _sequencerGrpahProcessorPool.dequeue();
         processor.clearSequencerGraphProcessor();
-        processor.startSequencerFromStage(sequencerKey,currentPoint,pointCharacters,_ownerEntity,targetEntity,includePlayer);
+        processor.startSequencerFromStage(sequencerKey,currentPoint,pointCharacters,_ownerEntity,targetEntity,markerList,includePlayer);
 
         _activeProcessorList.Add(processor);
 
