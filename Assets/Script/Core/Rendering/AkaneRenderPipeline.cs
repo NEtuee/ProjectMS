@@ -26,7 +26,8 @@ public class AkaneRenderPipeline : MonoBehaviour
 {
     [SerializeField] private Camera internalCamera;
     [SerializeField] private List<AkaneRenderPass> renderPasses;
-
+    [SerializeField] private float fieldOfView;
+    static public float FieldOfView;
     private void initializeRenderResources()
     {
         renderPasses = new List<AkaneRenderPass>();
@@ -58,11 +59,11 @@ public class AkaneRenderPipeline : MonoBehaviour
 
 
         combinePass.AddPass(backgroundPass);
-       // combinePass.AddPass(perspectivePass);
+        // combinePass.AddPass(perspectivePass);
         combinePass.AddPass(characterPass);
         combinePass.AddPass(shadowPass);
         combinePass.AddPass(effectPass);
-      //  combinePass.AddPass(interfacePass);
+        //  combinePass.AddPass(interfacePass);
 
         renderPasses.Add(backgroundPass);
         renderPasses.Add(perspectivePass);
@@ -84,6 +85,7 @@ public class AkaneRenderPipeline : MonoBehaviour
     [ExecuteAlways]
     private void LateUpdate()
     {
+        FieldOfView = fieldOfView;
         if (Application.isPlaying == true)
         {
             internalDraw();
@@ -114,13 +116,13 @@ public class AkaneRenderPipeline : MonoBehaviour
     }
     private void internalDraw()
     {
-     //   UnityEditorInternal.RenderDoc.BeginCaptureRenderDoc(UnityEditor.EditorWindow.GetWindow<SceneView>("Scene"));
+        //   UnityEditorInternal.RenderDoc.BeginCaptureRenderDoc(UnityEditor.EditorWindow.GetWindow<SceneView>("Scene"));
         for (int i = 0; i < renderPasses.Count; i++)
         {
             var renderPass = renderPasses[i];
 
             renderPass.Draw(internalCamera, renderPass.RenderTexture);
         }
-//.RenderDoc.EndCaptureRenderDoc(UnityEditor.EditorWindow.GetWindow<SceneView>("Scene"));
+        //.RenderDoc.EndCaptureRenderDoc(UnityEditor.EditorWindow.GetWindow<SceneView>("Scene"));
     }
 }
