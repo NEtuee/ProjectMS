@@ -157,6 +157,8 @@ public class SequencrGraphLoader : LoaderBase<SequencerGraphBaseData>
             spawnEvent = new SequencerGraphEvent_LetterBoxShow();
         else if(node.Name == "LetterBoxHide")
             spawnEvent = new SequencerGraphEvent_LetterBoxHide();
+        else if(node.Name == "TalkBalloon")
+            spawnEvent = new SequencerGraphEvent_TalkBalloon();
 
         if(spawnEvent == null)
         {
