@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using UnityEngine;
 using ICSharpCode.WpfDesign.XamlDom;
+using System;
 
 public static class BuffDataLoader
 {
@@ -35,19 +36,27 @@ public static class BuffDataLoader
 
         Dictionary<int, BuffData> buffDataList = new Dictionary<int, BuffData>();
 
-        XmlNodeList projectileNodes = xmlDoc.FirstChild.ChildNodes;
-        for(int nodeIndex = 0; nodeIndex < projectileNodes.Count; ++nodeIndex)
+        try
         {
-            BuffData baseData = readBuffData(projectileNodes[nodeIndex], ref buffDataList);
-            if(baseData == null)
-                return null;
-
-            if(buffDataList.ContainsKey(baseData._buffKey) == true)
+            XmlNodeList projectileNodes = xmlDoc.FirstChild.ChildNodes;
+            for(int nodeIndex = 0; nodeIndex < projectileNodes.Count; ++nodeIndex)
             {
-                DebugUtil.assert(false, "buff key overlap: key {0} [FileName: {1}]", baseData._buffKey, _currentFileName);
-                continue;
+                BuffData baseData = readBuffData(projectileNodes[nodeIndex], ref buffDataList);
+                if(baseData == null)
+                    return null;
+
+                if(buffDataList.ContainsKey(baseData._buffKey) == true)
+                {
+                    DebugUtil.assert(false, "buff key overlap: key {0} [FileName: {1}]", baseData._buffKey, _currentFileName);
+                    continue;
+                }
+                buffDataList.Add(baseData._buffKey,baseData);
             }
-            buffDataList.Add(baseData._buffKey,baseData);
+        }
+        catch(Exception ex)
+        {
+            DebugUtil.assert(false,"xml parsing exception : {0}\n",ex.Message,xmlDoc.BaseURI);
+            return null;
         }
 
         return buffDataList;
