@@ -35,6 +35,8 @@ public enum SequencerGraphEventType
     NextStage,
     ToastMessage,
     Task,
+    LetterBoxShow,
+    LetterBoxHide,
 
     Count,
 }
@@ -75,6 +77,44 @@ public class SequencerGraphEvent_WaitSignal : SequencerGraphEventBase
             if(attrName == "Signal")
                 _targetSignal = attrValue;
         }
+    }
+}
+
+public class SequencerGraphEvent_LetterBoxHide : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.LetterBoxHide;
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        LetterBox._instance.Hide();
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+    }
+}
+
+public class SequencerGraphEvent_LetterBoxShow : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.LetterBoxShow;
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        LetterBox._instance.Show();
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
     }
 }
 
