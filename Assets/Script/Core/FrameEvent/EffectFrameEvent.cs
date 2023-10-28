@@ -517,7 +517,7 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
                 string[] vector = attributes[i].Value.Split(' ');
                 if(vector == null || vector.Length != 3)
                 {
-                    DebugUtil.assert(false, "invalid vector3 data: {0}",attributes[i].Value);
+                    DebugUtil.assert(false, "invalid vector3 data: {0} [FileName: {1}] [Line: {2}]",attributes[i].Value,node.BaseURI,XMLScriptConverter.getLineNumberFromXMLNode(node));
                     return;
                 }
 
@@ -533,7 +533,7 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
                     string[] randomData = data.Split('^');
                     if(randomData == null || randomData.Length != 2)
                     {
-                        DebugUtil.assert(false, "invalid float2 data: {0}, {1}",attributes[i].Name, attributes[i].Value);
+                        DebugUtil.assert(false, "invalid float2 data: {0}, {1} [FileName: {2}] [Line: {3}]",attributes[i].Name, attributes[i].Value,node.BaseURI,XMLScriptConverter.getLineNumberFromXMLNode(node));
                         return;
                     }
                     
@@ -549,7 +549,7 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
                     float angleValue = 0f;
                     if(float.TryParse(attributes[i].Value,out angleValue) == false)
                     {
-                        DebugUtil.assert(false, "invalid float data: {0}, {1}",attributes[i].Name, attributes[i].Value);
+                        DebugUtil.assert(false, "invalid float data: {0}, {1} [FileName: {2}] [Line: {3}]",attributes[i].Name, attributes[i].Value,node.BaseURI,XMLScriptConverter.getLineNumberFromXMLNode(node));
                         return;
                     }
 

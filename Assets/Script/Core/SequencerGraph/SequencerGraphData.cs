@@ -35,6 +35,9 @@ public enum SequencerGraphEventType
     NextStage,
     ToastMessage,
     Task,
+    LetterBoxShow,
+    LetterBoxHide,
+    TalkBalloon,
 
     Count,
 }
@@ -75,6 +78,119 @@ public class SequencerGraphEvent_WaitSignal : SequencerGraphEventBase
             if(attrName == "Signal")
                 _targetSignal = attrValue;
         }
+    }
+}
+
+public class SequencerGraphEvent_TalkBalloon : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.TalkBalloon;
+
+    private string _uniqueKey = "";
+    private string _uniqueGroupKey = "";
+
+    private string _key = "";
+    private float _time = 0f;
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        SubtitleData_SimpleTalk simpleTalkData = SubtitleManager.Instance().getSimpleTalkData(_key);
+        if(simpleTalkData == null)
+        {
+            DebugUtil.assert(false,"존재하지 않는 SimpleTalk Key 입니다. 데이터를 확인 해 주세요. [Key: {0}]",_key);
+            return true;
+        }
+
+        if(_uniqueKey != "")
+        {
+            GameEntityBase uniqueEntity = processor.getUniqueEntity(_uniqueKey);
+            if(uniqueEntity == null)
+            {
+                DebugUtil.assert(false,"대상 Unique Entity가 존재하지 않습니다 : {0}",_uniqueKey);
+                return true;
+            }
+
+            TalkBalloonManager.Instance().activeTalkBalloon(uniqueEntity.transform,new UnityEngine.Vector3(0f, uniqueEntity.getHeadUpOffset(),0f),simpleTalkData._text,simpleTalkData._time);
+        }
+
+        if(_uniqueGroupKey != "")
+        {
+            var uniqueGroup = processor.getUniqueGroup(_uniqueGroupKey);
+            if(uniqueGroup == null)
+            {
+                DebugUtil.assert(false,"대상 Unique Group이 존재하지 않습니다 : {0}",_uniqueGroupKey);
+                return true;
+            }
+
+            foreach(var item in uniqueGroup)
+            {
+                TalkBalloonManager.Instance().activeTalkBalloon(item.transform,new UnityEngine.Vector3(0f, item.getHeadUpOffset(),0f),simpleTalkData._text,simpleTalkData._time);
+            }
+        }
+
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attributes[i].Name == "SimpleTalkKey")
+                _key = attributes[i].Value;
+            else if(attrName == "UniqueKey")
+                _uniqueKey = attrValue;
+            else if(attrName == "UniqueGroupKey")
+                _uniqueGroupKey = attrValue;
+        }
+
+        if(_key == "")
+            DebugUtil.assert(false,"SimpleTalk Key가 존재하지 않습니다. 이거 필수임");
+    }
+}
+
+public class SequencerGraphEvent_LetterBoxHide : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.LetterBoxHide;
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        LetterBox._instance.Hide();
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+    }
+}
+
+public class SequencerGraphEvent_LetterBoxShow : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.LetterBoxShow;
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        LetterBox._instance.Show();
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
     }
 }
 

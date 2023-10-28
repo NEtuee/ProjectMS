@@ -8,7 +8,7 @@ public class PerspectiveRenderPass : AkaneRenderPass
     public override int layerMasks => perspectiveLayer;
     private static int perspectiveLayer;
     public override string layerName => "Perspective";
-    
+    private float fieldOfView;
     public override RenderTexture RenderTexture { get { return perspectiveRenderTexture; } }
     [SerializeField] private RenderTexture perspectiveRenderTexture;
     public void Awake()
@@ -24,7 +24,7 @@ public class PerspectiveRenderPass : AkaneRenderPass
         renderCamera.cullingMask = layerMasks;
         
         renderCamera.orthographic = false;
-
+        renderCamera.fieldOfView = AkaneRenderPipeline.FieldOfView;
         renderCamera.Render();
 
         renderCamera.cullingMask = 0;

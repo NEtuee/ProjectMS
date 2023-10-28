@@ -88,30 +88,18 @@ public static class XMLScriptConverter
             return result;
 
         if(valueString.Contains("Random_") == false)
-        {
-            DebugUtil.assert(false,"잘못된 Float Type Value : {0}", valueString);
-            return 0f;
-        }
+            throw new Exception($"잘못된 Float Type Value : {valueString}");
 
         string[] randomRangeString = valueString.Replace("Random_",string.Empty).Split('^');
         if(randomRangeString.Length != 2)
-        {
-            DebugUtil.assert(false,"잘못된 Float Type Value : {0}", valueString);
-            return 0f;
-        }
+            throw new Exception($"잘못된 Float Type Value : {valueString}");
 
         float min, max;
         if(float.TryParse(randomRangeString[0],out min) == false)
-        {
-            DebugUtil.assert(false,"잘못된 Float Type Value : {0}", valueString);
-            return 0f;
-        }
+            throw new Exception($"잘못된 Float Type Value : {valueString}");
 
         if(float.TryParse(randomRangeString[1],out max) == false)
-        {
-            DebugUtil.assert(false,"잘못된 Float Type Value : {0}", valueString);
-            return 0f;
-        }
+            throw new Exception($"잘못된 Float Type Value : {valueString}");
 
         return UnityEngine.Random.Range(min,max);
     }
@@ -120,10 +108,7 @@ public static class XMLScriptConverter
     {
         string[] splitted = valueString.Split(' ');
         if(splitted.Length != 3)
-        {
-            DebugUtil.assert(false,"invalid vector3 string: {0}", valueString);
-            return Vector3.zero;
-        }
+            throw new Exception($"잘못된 Vector3 Type Value : {valueString}");
 
         return new Vector3(valueToFloatExtend(splitted[0]), valueToFloatExtend(splitted[1]), valueToFloatExtend(splitted[2]));
     }
@@ -132,10 +117,7 @@ public static class XMLScriptConverter
     {
         string[] splitted = valueString.Split(' ');
         if(splitted.Length != 4)
-        {
-            DebugUtil.assert(false,"invalid color string: {0}", valueString);
-            return Color.white;
-        }
+            throw new Exception($"잘못된 Color Type Value : {valueString}");
 
         return new Color(valueToFloatExtend(splitted[0]), valueToFloatExtend(splitted[1]), valueToFloatExtend(splitted[2]), valueToFloatExtend(splitted[3]));
     }
