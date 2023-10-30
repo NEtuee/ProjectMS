@@ -1,27 +1,26 @@
 <ActionGraph Name="MeleeAction" DefaultAction="Idle" DefaultFramePerSecond="12">
-<!-- TODO: Add Passive Dodge Action & Resource Preset-->
 <!-- Movement Speed Option Variant Set -->
-<GlobalVariable Name="gv_MovementSpeed" Value="15"/>
-<GlobalVariable Name="gv_MovementVelocity" Value="0"/>
-<GlobalVariable Name="gv_MovementMaxVelocity" Value="5"/>
-<GlobalVariable Name="gv_MovementFriction" Value="0"/>
+<GlobalVariable Name="gv_MovementSpeed"             Value="15"/>
+<GlobalVariable Name="gv_MovementVelocity"          Value="0"/>
+<GlobalVariable Name="gv_MovementMaxVelocity"       Value="5"/>
+<GlobalVariable Name="gv_MovementFriction"          Value="0"/>
 
 <!-- AttackReady Movement Speed Option Variant Set-->
-<GlobalVariable Name="gv_AtkRdMovementSpeed" Value="15"/>
-<GlobalVariable Name="gv_AtkRdMovementVelocity" Value="0"/>
-<GlobalVariable Name="gv_AtkRdMovementMaxVelocity" Value="5"/>
-<GlobalVariable Name="gv_AtkRdMovementFriction" Value="0"/>
+<GlobalVariable Name="gv_AtkRdMovementSpeed"        Value="15"/>
+<GlobalVariable Name="gv_AtkRdMovementVelocity"     Value="0"/>
+<GlobalVariable Name="gv_AtkRdMovementMaxVelocity"  Value="5"/>
+<GlobalVariable Name="gv_AtkRdMovementFriction"     Value="0"/>
 
 <!-- Attack Movement Speed Option Variant Set-->
-<GlobalVariable Name="gv_AtkMovementSpeed" Value="0"/>
-<GlobalVariable Name="gv_AtkMovementVelocity" Value="10"/>
-<GlobalVariable Name="gv_AtkMovementMaxVelocity" Value="10"/>
-<GlobalVariable Name="gv_AtkMovementFriction" Value="24"/>
+<GlobalVariable Name="gv_AtkMovementSpeed"          Value="0"/>
+<GlobalVariable Name="gv_AtkMovementVelocity"       Value="10"/>
+<GlobalVariable Name="gv_AtkMovementMaxVelocity"    Value="10"/>
+<GlobalVariable Name="gv_AtkMovementFriction"       Value="24"/>
 
 <!-- Defualt Action -->
     <AC_Entry MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/_Preset/_MeleePreset/0_default/"/>
-        <Animation Preset="1_idle" XFlip="true" Duration="1">
+        <AnimationHeader MasterPath="Sprites/_Preset/_MeleePreset/"/>
+        <Animation Preset="0_default/1_idle" XFlip="true" Duration="1">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
         </Animation>
 
@@ -29,8 +28,8 @@
     </AC_Entry>
 
     <AC_Idle MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/_Preset/_MeleePreset/0_default/"/>
-        <Animation Preset="1_idle" XFlip="true" Duration="1">
+        <AnimationHeader MasterPath="Sprites/_Preset/_MeleePreset/"/>
+        <Animation Preset="0_default/1_idle" XFlip="true" Duration="1">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
         </Animation>
 
@@ -38,8 +37,8 @@
     </AC_Idle>
 
     <AC_Move MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/_Preset/_MeleePreset/0_default/"/>
-        <Animation Preset="2_move" XFlip="true" Duration="0.5">
+        <AnimationHeader MasterPath="Sprites/_Preset/_MeleePreset/"/>
+        <Animation Preset="0_default/2_move" XFlip="true" Duration="0.5">
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_MovementFriction" MaxVelocity="gv_MovementMaxVelocity" Velocity="gv_MovementVelocity" Speed="gv_MovementSpeed"/>
 
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
@@ -50,8 +49,8 @@
     </AC_Move>
 
     <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/_Preset/_MeleePreset/0_default/"/>
-        <Animation Preset="3_hit" XFlip="true" Duration="1.25">
+        <AnimationHeader MasterPath="Sprites/_Preset/_MeleePreset/"/>
+        <Animation Preset="0_default/3_hit" XFlip="true" Duration="1.25">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
 
@@ -63,24 +62,9 @@
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_Hit>
 
-    <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/_Preset/_MeleePreset/0_default/"/>
-        <Animation Preset="3_hit" XFlip="true" Duration="1.25">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
-            <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
-
-            <FrameEvent Type="StopUpdate" Time="0.15"/>
-            
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
-        </Animation>
-
-        <Branch Condition="End == true" Execute="AC_Idle"/>
-    </AC_GuardBroken>
-
     <Dead DirectionType="Keep" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/_Preset/_MeleePreset/0_default/"/>
-        <Animation Preset="4_dead" XFlip="true" Duration="1">
+        <AnimationHeader MasterPath="Sprites/_Preset/_MeleePreset/"/>
+        <Animation Preset="0_default/4_dead" XFlip="true" Duration="1">
             <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Enemy/RapierChan/0_default/4_dead" FramePerSecond="0.2" CastShadow="True">
                 <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
             </FrameEvent>
@@ -97,8 +81,8 @@
 
 <!-- Attack Action -->
     <AC_AttackReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/_Preset/_MeleePreset/1_default/"/>
-        <Animation Preset="1_attackReady" XFlip="true" Duration="0.4">
+        <AnimationHeader MasterPath="Sprites/_Preset/_MeleePreset/"/>
+        <Animation Preset="1_attack/1_attackReady" XFlip="true" Duration="0.4">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2203" Attach="true"/>
             
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_AtkRdMovementFriction" MaxVelocity="gv_AtkRdMovementMaxVelocity" Velocity="gv_AtkRdMovementVelocity" Speed="gv_AtkRdMovementSpeed"/>
@@ -112,8 +96,8 @@
     </AC_AttackReady>
 
     <AC_AttackMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction">
-        <AnimationHeader MasterPath="Sprites/_Preset/_MeleePreset/1_default/"/>
-        <Animation Preset="2_attackMain" XFlip="true" Duration="0.35">
+        <AnimationHeader MasterPath="Sprites/_Preset/_MeleePreset/"/>
+        <Animation Preset="1_attack/2_attackMain" XFlip="true" Duration="0.35">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2204" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Velocity="gv_AtkMovementVelocity" Speed="gv_AtkMovementSpeed"/>
             <FrameEvent Type="Attack" StartTime="0" EndTime="0.1" AttackPreset="Preset_Melee_Normal">
@@ -133,8 +117,8 @@
     </AC_AttackMain>
 
     <AC_AttackRecover MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/_Preset/_MeleePreset/1_default/"/>
-        <Animation Preset="3_attackRecover" XFlip="true" Duration="1.47">
+        <AnimationHeader MasterPath="Sprites/_Preset/_MeleePreset/"/>
+        <Animation Preset="1_attack/3_attackRecover" XFlip="true" Duration="1.47">
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
         </Animation>
@@ -142,5 +126,44 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_AttackRecover>
 <!-- Attack Action -->
+
+<!-- Defense Action -->
+    <AC_Dodge MovementType="GraphPreset" MovementGraphPreset="Preset_Dodge" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/_Preset/_MeleePreset/"/>
+        <Animation Preset="2_defense/2_dodge" XFlip="true" Duration="0.7">
+            
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_Dodge>
+
+    <AC_Guard MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" DefenceType="Guard" DefenceDirectionType="Direction" DefenceAngle="180">
+        <AnimationHeader MasterPath="Sprites/_Preset/_MeleePreset/"/>
+        <Animation Preset="2_defense/2_guard" XFlip="true" Duration="0.5">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
+            
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Guard"/>
+    </AC_Guard>
+
+    <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/_Preset/_MeleePreset/"/>
+        <Animation Preset="2_defense/3_guardBroken" XFlip="true" Duration="1.25">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
+
+            <FrameEvent Type="StopUpdate" Time="0.15"/>
+            
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_GuardBroken>
+<!-- Defense Action -->
+
 
 </ActionGraph>
