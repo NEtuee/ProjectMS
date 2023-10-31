@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEditor;
 
@@ -113,8 +114,6 @@ public class CharacterInfoViewer : EditorWindow
 
             GUILayout.BeginVertical("box");
 
-            _characterInfoScrollPosition = GUILayout.BeginScrollView(_characterInfoScrollPosition);
-
             EditorGUILayout.LabelField(_selectedData._displayName);
             GUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField("ActionGraph\t");
@@ -125,7 +124,7 @@ public class CharacterInfoViewer : EditorWindow
                 }
                 if(GUILayout.Button("Open"))
                 {
-                    FileDebugger.OpenFileWithCursor(_selectedData._actionGraphPath, 0);
+                    FileDebugger.OpenFileWithCursor(_selectedData._actionGraphPath, 1);
                 }
             GUILayout.EndHorizontal();
             GUILayout.BeginHorizontal();
@@ -137,11 +136,11 @@ public class CharacterInfoViewer : EditorWindow
                 }
                 if(GUILayout.Button("Open"))
                 {
-                    FileDebugger.OpenFileWithCursor(_selectedData._aiGraphPath, 0);
+                    FileDebugger.OpenFileWithCursor(_selectedData._aiGraphPath, 1);
                 }
             GUILayout.EndHorizontal();
             GUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField("Status");
+                EditorGUILayout.LabelField("Status: " + _selectedData._statusName);
                 if(GUILayout.Button("Go"))
                 {
                     TextAsset asset = AssetDatabase.LoadAssetAtPath<TextAsset>(StaticDataLoader.statusInfoPath);
@@ -149,11 +148,11 @@ public class CharacterInfoViewer : EditorWindow
                 }
                 if(GUILayout.Button("Open"))
                 {
-                    FileDebugger.OpenFileWithCursor(StaticDataLoader.statusInfoPath, 0);
+                    string statusName = _selectedData._statusName + ">";
+                    FileDebugger.OpenFileWithCursor(StaticDataLoader.statusInfoPath,FileDebugger.findLine(StaticDataLoader.statusInfoPath, statusName));
                 }
             GUILayout.EndHorizontal();
 
-            GUILayout.EndScrollView();
             GUILayout.EndVertical();
             GUILayout.EndVertical();
         }
@@ -161,6 +160,10 @@ public class CharacterInfoViewer : EditorWindow
 
     private void PingTarget(Object obj)
     {
+        if(obj==null)
+        {
+            Debug.Log("Not Found");
+        }
         EditorGUIUtility.PingObject(obj);
         EditorUtility.FocusProjectWindow();
     }

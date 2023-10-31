@@ -1,3 +1,4 @@
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,5 +12,19 @@ public class FileDebugger
         string command = $"{vscodePath} -g {filePath}:{lineNumber}";
 
         Process.Start("cmd.exe", $"/c {command}");
+    }
+
+    public static int findLine(string filePath, string targetString)
+    {
+        var lines = File.ReadLines(StaticDataLoader.statusInfoPath);
+        int line = 1;
+        foreach(var item in lines)
+        {
+            if(item.Contains(targetString))
+                break;
+            ++line;
+        }
+
+        return line;
     }
 }
