@@ -1,0 +1,74 @@
+<AIGraph Name="MeleeAI" DefaultState="Peace_Idle">
+
+    <!-- 인지 옵션값 설정 -->
+    <GlobalVariable Name="gv_CognitiveRange"    Value="3.5"/>   <!-- PC 인지 거리 : 해당 거리 내 PC 존재 시 인지한다. -->
+    <GlobalVariable Name="gv_OvlivionRange"     Value="7.0"/>   <!-- 인지 망각 거리 : 해당 거리 밖 PC 존재 시 망각 시간을 카운트한다. -->
+    <GlobalVariable Name="gv_OvlivionTime"      Value="5.0"/>   <!-- 인지 망각 시간 : 카운트 된 시간이 망각 시간을 초과하면 평화 상태로 돌아간다. -->
+
+    <!-- 평화 상태 행동 타입 설정 -->
+    <GlobalVariable Name="gv_bIsIdleType"       Value="True"/>  <!-- 대기형 -->
+    <GlobalVariable Name="gv_bIsRandMoveType"   Value="False"/> <!-- 랜덤이동형 -->
+    <GlobalVariable Name="gv_bIsMoveType"       Value="False"/> <!-- 지정이동형(보류) -->
+
+    <!-- 전투 상태 행동 타입 설정 -->
+        <!-- TODO: IsLockOn, RecoverDelay, IsPassiveDefense, IsDodgeType, IsGuardType, HitCountThreshold, GuardCountThreshold -->
+        <!-- TODO: 공격 타입(Normal, LockOn, Bump-공격 성공 여부 판단이 필요한 연출) -->
+        <!-- TODO: 이동 타입(추격Only, 추격/경계 스위칭 등)-->
+        <!-- TODO: 패시브 방어 타입(Dodge, Guard, CounterAttack, HitCountThreshold, GuardCountThreshold) -->
+    
+    <!-- 행동 옵션값 설정 -->
+    <GlobalVariable Name="gv_MeleeAttackRange"  Value="3.5"/>   <!-- 공격 사거리 -->
+    <GlobalVariable Name="gv_TransitionDelay"   Value="0.2"/>   <!-- State 전환 지연시간 -->
+
+
+
+    <!-- 패키지 인클루드 : 공통 -->
+    <Include Path="Common\CommonDeadPackage.xml"/>          <!-- 사망 패키지 -->
+    <Include Path="Common\CommonHitPackage.xml"/>           <!-- 피격 패키지 -->
+    <Include Path="Common\CommonGuardBrokenPackage.xml"/>   <!-- 가드 해제 패키지 -->
+    <!-- 패키지 인클루드 : 평화 상태 -->
+    <Include Path="Common\CommonIdlePackage.xml"/>          <!-- 대기 패키지 -->
+    <Include Path="Common\CommonRandMovePackage.xml"/>      <!-- 랜덤 이동 패키지-->
+                                                            <!-- 지정 이동 패키지 (보류) -->
+    <!-- 패키지 인클루드 : 전투 상태 -->
+    <Include Path="Common\CommonChasePackage.xml"/>         <!-- 추격 패키지 -->
+    <Include Path="Common\CommonAttackPackage.xml"/>        <!-- 공격 패키지 -->
+    <Include Path="Common\CommonLockOnAttackPackage.xml"/>  <!-- 락온 공격 패키지 -->
+                                                            <!-- 회피 이동 패키지(TODO) -->
+                                                            <!-- 가드 패키지(TODO) -->
+    
+    <!-- 피격 리액션 브랜치 셋 -->
+    <BranchSet Name="HitReactionSet">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="Hit" Execute="Hit"/> 
+        <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
+        <!-- TODO: Hit Count Threshold 기반 Passive Defense 분기 -->
+        <!-- TODO: Guard Count Threshold 기반 Passive Defense 분기 -->
+
+    </BranchSet>
+
+    <!-- AI 스테이트 -->
+    <Peace_Idle Package="CommonIdlePackage">
+        
+    </Peace_Idle>
+
+    <Peace_RandMove Package="CommonRandMovePackage">
+        
+    </Peace_RandMove>
+
+    <Chase Package="CommonChasePackage">
+        
+    </Chase>
+
+    <MeleeAttack Package="CommonAttackPackage">
+        
+    </MeleeAttack>
+    
+    <MeleeLockOnAttack Package="CommonLockOnAttackPackage">
+        
+    </MeleeLockOnAttack>
+
+    <Dead Package="CommonDeadPackage">
+    </Dead>
+
+</AIGraph>

@@ -347,4 +347,17 @@
 
         SearchIdentifier="Enemy"
     />
+
+    <MeleePreset
+        DisplayName="근접 프리셋 테스트 캐릭터"
+        ActionGraph="Assets/Data/ActionGraph/_Preset/MeleeAction.xml"
+        AIGraph="Assets/Data/AIGraph/_Preset/MeleeAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        SearchIdentifier="Enemy"
+    />
 </CharacterInfo>
