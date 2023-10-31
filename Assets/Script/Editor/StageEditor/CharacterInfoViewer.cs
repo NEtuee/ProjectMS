@@ -101,7 +101,7 @@ public class CharacterInfoViewer : EditorWindow
         {
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
-            GUILayout.BeginHorizontal("box");
+            GUILayout.BeginVertical("box");
 
             if(_characterTexture != null)
             {
@@ -111,25 +111,58 @@ public class CharacterInfoViewer : EditorWindow
                 GUI.DrawTexture(rect, _characterTexture,ScaleMode.ScaleToFit);
             }
 
-            GUILayout.BeginVertical();
+            GUILayout.BeginVertical("box");
 
             _characterInfoScrollPosition = GUILayout.BeginScrollView(_characterInfoScrollPosition);
 
             EditorGUILayout.LabelField(_selectedData._displayName);
-            EditorGUILayout.LabelField("ActionGraph: " + _selectedData._actionGraphPath);
-            EditorGUILayout.LabelField("AIGraph: " + _selectedData._aiGraphPath);
-            
-            EditorGUILayout.LabelField("Status: " + _selectedData._statusName);
-            EditorGUILayout.LabelField("Radius: " + _selectedData._characterRadius);
-            EditorGUILayout.LabelField("HeadUpOffset: " + _selectedData._headUpOffset);
-            EditorGUILayout.LabelField("SearchIdentifier: " + _selectedData._searchIdentifer);
+            GUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField("ActionGraph\t");
+                if(GUILayout.Button("Go"))
+                {
+                    TextAsset asset = AssetDatabase.LoadAssetAtPath<TextAsset>(_selectedData._actionGraphPath);
+                    PingTarget(asset);
+                }
+                if(GUILayout.Button("Open"))
+                {
+                    FileDebugger.OpenFileWithCursor(_selectedData._actionGraphPath, 0);
+                }
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField("AIGraph\t");
+                if(GUILayout.Button("Go"))
+                {
+                    TextAsset asset = AssetDatabase.LoadAssetAtPath<TextAsset>(_selectedData._aiGraphPath);
+                    PingTarget(asset);
+                }
+                if(GUILayout.Button("Open"))
+                {
+                    FileDebugger.OpenFileWithCursor(_selectedData._aiGraphPath, 0);
+                }
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField("Status");
+                if(GUILayout.Button("Go"))
+                {
+                    TextAsset asset = AssetDatabase.LoadAssetAtPath<TextAsset>(StaticDataLoader.statusInfoPath);
+                    PingTarget(asset);
+                }
+                if(GUILayout.Button("Open"))
+                {
+                    FileDebugger.OpenFileWithCursor(StaticDataLoader.statusInfoPath, 0);
+                }
+            GUILayout.EndHorizontal();
 
             GUILayout.EndScrollView();
-
             GUILayout.EndVertical();
-
-            GUILayout.EndHorizontal();
+            GUILayout.EndVertical();
         }
+    }
+
+    private void PingTarget(Object obj)
+    {
+        EditorGUIUtility.PingObject(obj);
+        EditorUtility.FocusProjectWindow();
     }
 
     private Sprite getFirstActionSpriteFromCharacter(CharacterInfoData characterInfoData)
