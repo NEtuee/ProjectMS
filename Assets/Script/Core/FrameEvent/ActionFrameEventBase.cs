@@ -40,6 +40,7 @@ public enum FrameEventType
     FrameEvent_ApplyPostProcessProfile,
     FrameEvent_SetDirectionType,
     FrameEvent_Torque,
+    FrameEvent_EffectPreset,
 
     Count,
 }
@@ -528,7 +529,6 @@ public class ActionFrameEvent_TalkBalloon : ActionFrameEventBase
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_TalkBalloon;}
 
     private string _key = "";
-    private float _time = 0f;
 
     public override void initialize()
     {
@@ -835,6 +835,34 @@ public class ActionFrameEvent_ShakeEffect : ActionFrameEventBase
     }
 }
 
+public class ActionFrameEvent_EffectPreset : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_EffectPreset;}
+
+    private string _effectInfoKey = "";
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        if(executeEntity is GameEntityBase == false)
+            return false;
+
+        EffectRequestData requestData = EffectInfoManager.Instance().createRequestData(_effectInfoKey,executeEntity,targetEntity);
+        if(requestData == null)
+            return true;
+
+        executeEntity.SendMessageEx(MessageTitles.effect_spawnEffect,UniqueIDBase.QueryUniqueID("EffectManager"),requestData);
+        return true;
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            if(attributes[i].Name == "Key")
+                _effectInfoKey = attributes[i].Value;
+        }
+    }
+}
 
 public class ActionFrameEvent_Torque : ActionFrameEventBase
 {

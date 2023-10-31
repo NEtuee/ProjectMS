@@ -146,9 +146,8 @@
                     <FrameEvent Type="ApplyBuff" ApplyBuff="BattleIncrement"/>
                     <FrameEvent Type="ApplyBuff" ApplyBuff="IncreaseBloodPoint"/>
 
-
-                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Slash" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
-                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Blood" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
+                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Slash"/>
+                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
 
                     <!-- 마테리얼 히트 이펙트 -->
                     <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/MaterialHit_Timeline" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true"/>
@@ -211,9 +210,8 @@
                     <FrameEvent Type="ApplyBuff" ApplyBuff="BattleIncrement"/>
                     <FrameEvent Type="ApplyBuff" ApplyBuff="IncreaseBloodPoint"/>
 
-
-                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/SlashSuper" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
-                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Blood" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
+                    <FrameEvent Type="EffectPreset" StartTime="0" Key="SlashSuper"/>
+                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
 
                     <!-- 마테리얼 히트 이펙트 -->
                     <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/MaterialHit_Timeline" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true"/>

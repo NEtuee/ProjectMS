@@ -89,7 +89,6 @@ public class SequencerGraphEvent_TalkBalloon : SequencerGraphEventBase
     private string _uniqueGroupKey = "";
 
     private string _key = "";
-    private float _time = 0f;
 
     public override void Initialize(SequencerGraphProcessor processor)
     {
