@@ -11,31 +11,52 @@
     <GlobalVariable Name="gv_bIsMoveType"       Value="False"/> <!-- 지정이동형(보류) -->
 
     <!-- 전투 상태 행동 타입 설정 -->
-        <!-- TODO: IsLockOn, RecoverDelay, IsPassiveDefense, IsDodgeType, IsGuardType, HitCountThreshold, GuardCountThreshold -->
-        <!-- TODO: 공격 타입(Normal, LockOn, Bump-공격 성공 여부 판단이 필요한 연출) -->
-        <!-- TODO: 이동 타입(추격Only, 추격/경계 스위칭 등)-->
-        <!-- TODO: 패시브 방어 타입(Dodge, Guard, CounterAttack, HitCountThreshold, GuardCountThreshold) -->
-    
+    <!-- 공격 타입 설정 -->
+    <GlobalVariable Name="gv_bIsNormalAttack"               Value="True"/>      <!-- 일반 공격 타입 : 공격을 실행한다. -->
+    <GlobalVariable Name="gv_bIsLockOnlAttack"              Value="False"/>     <!-- 락온 공격 타입 : PC를 추적하며 공격을 실행한다. -->
+    <GlobalVariable Name="gv_bIsBumpAttack"                 Value="False"/>     <!-- 충돌 공격 타입 : PC 공격 성공 시 액션(리커버)이 바뀌는 공격을 실행한다. -->
+    <!-- 이동 타입 설정 -->
+    <GlobalVariable Name="gv_bIsFixed"                      Value="False"/>     <!-- 고정 타입 : 배치된 현재 자리를 고수한다. -->
+    <GlobalVariable Name="gv_bIsChase"                      Value="True"/>      <!-- 추격 타입 : PC를 계속해서 추격한다. -->
+    <GlobalVariable Name="gv_bIsAlert"                      Value="False"/>     <!-- 경계 타입 : 거리가 멀어지면 PC를 추격, 가까우면 측면으로 이동한다. -->
+    <!-- 이동 거리 설정-->      
+    <GlobalVariable Name="gv_ChaseThreshold"                Value="3.0"/>       <!-- PC와 Value 이상 거리가 벌어진 경우 추격한다. -->
+    <GlobalVariable Name="gv_AlertThreshold"                Value="0.0"/>       <!-- PC와 Value 이상 거리가 가까워진 경우 경계한다. -->
+    <!-- 패시브 방어 반응 임계치 설정 -->
+    <GlobalVariable Name="gv_HitCountThreshold"             Value="3.0"/>       <!-- 누적 피격 횟수 트리거 : 해당 횟수 충족 시 패시브 방어 동작 (가드를 제외한 모든 피격 카운트) -->
+    <GlobalVariable Name="gv_GuardCountThreshold"           Value="3.0"/>       <!-- 누적 가드 횟수 트리거 : 해당 횟수 충족 시 패시브 방어 동작 (가드 중 모든 피격 시 카운트) -->
+    <!-- 패시브 방어(누적 피격) 반응 타입 설정 -->
+    <GlobalVariable Name="gv_bIsDodgeToPassiveDef_Hit"      Value="True"/>      <!-- 누적 피격 시 패시브 방어 : 회피 타입 -->
+    <GlobalVariable Name="gv_bIsGuardToPassiveDef_Hit"      Value="False"/>     <!-- 누적 피격 시 패시브 방어 : 방어 타입 -->
+    <GlobalVariable Name="gv_bIsCounterToPassiveDef_Hit"    Value="False"/>     <!-- 누적 피격 시 패시브 방어 : 반격 타입 -->
+    <!-- 패시브 방어(누적 가드) 반응 타입 설정 -->
+    <GlobalVariable Name="gv_bIsDodgeToPassiveDef_Guard"    Value="True"/>      <!-- 누적 피격 시 패시브 방어 : 회피 타입 -->
+    <GlobalVariable Name="gv_bIsCounterToPassiveDef_Guard"  Value="False"/>     <!-- 누적 피격 시 패시브 방어 : 반격 타입 -->
+
     <!-- 행동 옵션값 설정 -->
     <GlobalVariable Name="gv_MeleeAttackRange"  Value="3.5"/>   <!-- 공격 사거리 -->
     <GlobalVariable Name="gv_TransitionDelay"   Value="0.2"/>   <!-- State 전환 지연시간 -->
-
+    <!-- TODO: 해당 옵션값을 기준으로 TargetExist, TargetDistance 비교 연산. 이를 위해 CommonPackage에서의 Search 범위는 최대값으로 설정 통일할 것. -->
 
 
     <!-- 패키지 인클루드 : 공통 -->
     <Include Path="Common\CommonDeadPackage.xml"/>          <!-- 사망 패키지 -->
     <Include Path="Common\CommonHitPackage.xml"/>           <!-- 피격 패키지 -->
+    
     <Include Path="Common\CommonGuardBrokenPackage.xml"/>   <!-- 가드 해제 패키지 -->
     <!-- 패키지 인클루드 : 평화 상태 -->
     <Include Path="Common\CommonIdlePackage.xml"/>          <!-- 대기 패키지 -->
     <Include Path="Common\CommonRandMovePackage.xml"/>      <!-- 랜덤 이동 패키지-->
                                                             <!-- 지정 이동 패키지 (보류) -->
     <!-- 패키지 인클루드 : 전투 상태 -->
-    <Include Path="Common\CommonChasePackage.xml"/>         <!-- 추격 패키지 -->
-    <Include Path="Common\CommonAttackPackage.xml"/>        <!-- 공격 패키지 -->
+    <Include Path="Common\CommonChasePackage.xml"/>         <!-- 추격 이동 패키지 -->
+    <Include Path="Common\CommonAlertPackage.xml"/>         <!-- 경계 이동 패키지 -->
+    <Include Path="Common\CommonAwayPackage.xml"/>          <!-- 후진 이동 패키지 -->
+    <Include Path="Common\CommonAttackPackage.xml"/>        <!-- 일반 공격 패키지 -->
     <Include Path="Common\CommonLockOnAttackPackage.xml"/>  <!-- 락온 공격 패키지 -->
-                                                            <!-- 회피 이동 패키지(TODO) -->
-                                                            <!-- 가드 패키지(TODO) -->
+    <Include Path="Common\CommonBumpAttackPackage.xml"/>    <!-- 충돌 공격 패키지 (공격 성공 시 액션 전환)-->
+    <Include Path="Common\CommonDodgePackage.xml"/>         <!-- 회피 패키지 -->
+    <Include Path="Common\CommonGuardPackage.xml"/>         <!-- 가드 패키지 -->
     
     <!-- 피격 리액션 브랜치 셋 -->
     <BranchSet Name="HitReactionSet">
@@ -47,26 +68,73 @@
 
     </BranchSet>
 
-    <!-- AI 스테이트 -->
+    <!-- AI 스테이트 : Init -->
+    <Entry Package="EmptyPackage">
+        <Branch Condition="gv_bIsIdleType"     Execute="Peace_Idle"/>
+        <Branch Condition="gv_bIsRandMoveType" Execute="Peace_RandMove"/>
+        <Branch Condition="gv_bIsMoveType"     Execute="Peace_Move"/>
+    </Entry>
+
+    <!-- AI 스테이트 : 평화 상태 -->
     <Peace_Idle Package="CommonIdlePackage">
-        
+        <UseBranchSet Name="HitReactionSet"/>
     </Peace_Idle>
 
     <Peace_RandMove Package="CommonRandMovePackage">
-        
+        <UseBranchSet Name="HitReactionSet"/>
     </Peace_RandMove>
 
+    <Peace_Move Package="EmptyPackage"> <!-- TODO -->
+        <UseBranchSet Name="HitReactionSet"/>
+    </Peace_Move>
+
+    <!-- AI 스테이트 : 전투 상태 : 이동 -->
+    <Fixed Package="CommonIdlePackage">
+        <UseBranchSet Name="HitReactionSet"/>
+    </Fixed>
+
     <Chase Package="CommonChasePackage">
-        
+        <UseBranchSet Name="HitReactionSet"/>
     </Chase>
 
+    <Alert Package="CommonAlertPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+    </Alert>
+
+    <Away Package="CommonAwayPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+    </Away>
+
+    <!-- AI 스테이트 : 전투 상태 : 공격 -->
     <MeleeAttack Package="CommonAttackPackage">
-        
+        <UseBranchSet Name="HitReactionSet"/>
     </MeleeAttack>
     
     <MeleeLockOnAttack Package="CommonLockOnAttackPackage">
-        
+        <UseBranchSet Name="HitReactionSet"/>
     </MeleeLockOnAttack>
+
+    <MeleeBumpAttack Package="CommonBumpAttackPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+    </MeleeBumpAttack>
+
+    <!-- AI 스테이트 : 전투 상태 : 패시브 방어 -->
+    <Dodge Package="CommonDodgePackage">
+        <UseBranchSet Name="HitReactionSet"/>
+    </Dodge>
+
+    <Guard Package="CommonGuardPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+    </Guard>
+
+    <!-- AI 스테이트 : 피격 상태 -->
+    <Hit Package="CommonHitPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+    </Hit>
+
+    <GuardBroken Package="CommonGuardBrokenPackage">
+        
+    </GuardBroken>
 
     <Dead Package="CommonDeadPackage">
     </Dead>
