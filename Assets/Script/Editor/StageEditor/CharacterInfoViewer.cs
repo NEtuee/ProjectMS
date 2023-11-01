@@ -160,10 +160,12 @@ public class CharacterInfoViewer : EditorWindow
 
     private void PingTarget(Object obj)
     {
-        if(obj==null)
+        if(obj == null)
         {
             Debug.Log("Not Found");
+            return;
         }
+
         EditorGUIUtility.PingObject(obj);
         EditorUtility.FocusProjectWindow();
     }
