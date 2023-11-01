@@ -585,7 +585,6 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
                     playData._translationPresetData = scalePreset.getPresetData(animationCustomPreset._translationPresetName);
                 }
                 
-                playData._frameEventData = readFrameEventFromAnimationPreset(animationCustomPreset);
                 playData._frameEventDataCount = playData._frameEventData == null ? 0 : playData._frameEventData.Length;
             }
             else if(targetName == "Duration")
@@ -679,77 +678,6 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         }
 
         return playData;
-    }
-
-    private static ActionFrameEventBase[] readFrameEventFromAnimationPreset(AnimationCustomPreset preset)
-    {
-        List<ActionFrameEventBase> frameEventList = new List<ActionFrameEventBase>();
-
-        if(preset._spriteEffects != null)
-        {
-            foreach(var item in preset._spriteEffects)
-            {
-                ActionFrameEvent_Effect effectFrameEvent = new ActionFrameEvent_Effect();
-                effectFrameEvent._startFrame = item._startFrame;
-                effectFrameEvent._attach = item._attach;
-                effectFrameEvent._castShadow = item._castShadow;
-                effectFrameEvent._effectPath = item._effectPresetPath;
-                effectFrameEvent._effectUpdateType = item._effectUpdateType;
-                effectFrameEvent._followEntity = item._followEntityAngle;
-                effectFrameEvent._physicsBodyDesc = item._physicsBodyDesc;
-                effectFrameEvent._randomValue = item._randomAngle;
-                effectFrameEvent._random = item._randomAngleEnable;
-                effectFrameEvent._spawnAngle = item._spawnAngle;
-                effectFrameEvent._spawnOffset = item._spawnOffset;
-                effectFrameEvent._toTarget = item._toTarget;
-                effectFrameEvent._useFlip = item._useFlipForPhysics;
-                effectFrameEvent._usePhysics = item._usePhysics;
-
-                frameEventList.Add(effectFrameEvent);
-            }
-        }
-        
-        if(preset._particleEffects != null)
-        {
-            foreach(var item in preset._particleEffects)
-            {
-                ActionFrameEvent_ParticleEffect particleFrameEvent = new ActionFrameEvent_ParticleEffect();
-                particleFrameEvent._startFrame = item._startFrame;
-                particleFrameEvent._angleDirectionType = item._angleDirectionType;
-                particleFrameEvent._attach = item._attach;
-                particleFrameEvent._effectPath = item._effectPrefabPath;
-                particleFrameEvent._spawnOffset = item._spawnOffset;
-                particleFrameEvent._toTarget = item._toTarget;
-                particleFrameEvent._followDirection = item._followDirection;
-
-                frameEventList.Add(particleFrameEvent);
-            }
-        }
-
-        if(preset._timelineEffects != null)
-        {
-            foreach(var item in preset._timelineEffects)
-            {
-                ActionFrameEvent_TimelineEffect timelineFrameEvent = new ActionFrameEvent_TimelineEffect();
-                timelineFrameEvent._startFrame = item._startFrame;
-                timelineFrameEvent._angleDirectionType = item._angleDirectionType;
-                timelineFrameEvent._attach = item._attach;
-                timelineFrameEvent._effectPath = item._effectPrefabPath;
-                timelineFrameEvent._spawnOffset = item._spawnOffset;
-                timelineFrameEvent._toTarget = item._toTarget;
-                timelineFrameEvent._followDirection = item._followDirection;
-                timelineFrameEvent._effectUpdateType = item._effectUpdateType;
-                timelineFrameEvent._lifeTime = item._lifeTime;
-
-                frameEventList.Add(timelineFrameEvent);
-            }
-        }
-
-        frameEventList.Sort((x,y)=>{
-            return x._startFrame.CompareTo(y._startFrame);
-        });
-
-        return frameEventList.Count == 0 ? null : frameEventList.ToArray();
     }
 
     private static MultiSelectAnimationData readMultiSelectAnimationData(XmlNode node, string filePath)
