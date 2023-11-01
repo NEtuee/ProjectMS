@@ -7,7 +7,7 @@ using ICSharpCode.WpfDesign.XamlDom;
 
 public static class EffectInfoExporter
 {
-    public static Dictionary<string,EffectInfoDataBase> readFromXML(string path)
+    public static Dictionary<string,EffectInfoDataBase[]> readFromXML(string path)
     {
         PositionXmlDocument xmlDoc = new PositionXmlDocument();
         try
@@ -31,7 +31,7 @@ public static class EffectInfoExporter
             return null;
         }
 
-        Dictionary<string,EffectInfoDataBase> effectInfoDataDictionary = new Dictionary<string,EffectInfoDataBase>();
+        Dictionary<string,List<EffectInfoDataBase>> effectInfoDataDictionary = new Dictionary<string,List<EffectInfoDataBase>>();
 
         XmlNodeList effectInfoNodes = xmlDoc.FirstChild.ChildNodes;
         for(int index = 0; index < effectInfoNodes.Count; ++index)
@@ -42,11 +42,32 @@ public static class EffectInfoExporter
                 if(effectInfoData == null)
                     return null;
 
-                effectInfoDataDictionary.Add(effectInfoData._key, effectInfoData);
+                if(effectInfoDataDictionary.ContainsKey(effectInfoData._key) == false)
+                    effectInfoDataDictionary.Add(effectInfoData._key, new List<EffectInfoDataBase>());
+                
+                foreach(var item in effectInfoDataDictionary[effectInfoData._key])
+                {
+                    if(item.compareMaterialExactly(effectInfoData._attackMaterial,effectInfoData._defenceMaterial))
+                    {
+                        DebugUtil.assert_fileOpen(false, "ParticleEffect는 서로 다른 AttackMaterial, DefenceMaterial을 가지고 있어야 같은 이름으로 선언할 수 있습니다. [EffectInfo Key: {0}]",path,XMLScriptConverter.getLineNumberFromXMLNode(effectInfoNodes[index]), effectInfoData._key);
+                        return null;
+                    }
+                }
+
+                if(effectInfoData.compareMaterialExactly(CommonMaterial.Empty,CommonMaterial.Empty))
+                    effectInfoDataDictionary[effectInfoData._key].Add(effectInfoData);
+                else
+                    effectInfoDataDictionary[effectInfoData._key].Insert(0,effectInfoData);
             }
         }
 
-        return effectInfoDataDictionary;
+        Dictionary<string,EffectInfoDataBase[]> resultEffectInfoDataDictionary = new Dictionary<string,EffectInfoDataBase[]>();
+        foreach(var item in effectInfoDataDictionary)
+        {
+            resultEffectInfoDataDictionary.Add(item.Key,item.Value.ToArray());
+        }
+
+        return resultEffectInfoDataDictionary;
     }
 
     private static ParticleEffectInfoData readParticleEffectInfoData(XmlNode node, string filePath)
@@ -111,6 +132,14 @@ public static class EffectInfoExporter
             else if(attrName == "CastShadow")
             {
                 effectInfoData._castShadow = bool.Parse(attrValue);
+            }
+            else if(attrName == "AttackMaterial")
+            {
+                effectInfoData._attackMaterial = (CommonMaterial)System.Enum.Parse(typeof(CommonMaterial), attrValue);
+            }
+            else if(attrName == "DefenceMaterial")
+            {
+                effectInfoData._defenceMaterial = (CommonMaterial)System.Enum.Parse(typeof(CommonMaterial), attrValue);
             }
         }
 

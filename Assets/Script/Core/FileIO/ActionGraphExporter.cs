@@ -275,6 +275,10 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             {
                 nodeData._defenceType = (DefenceType)System.Enum.Parse(typeof(DefenceType), targetValue);
             }
+            else if(targetName == "CharacterMaterial")
+            {
+                nodeData._characterMaterial = (CommonMaterial)System.Enum.Parse(typeof(CommonMaterial), targetValue);
+            }
             else if(targetName == "DefenceAngle")
             {
                 nodeData._defenceAngle = XMLScriptConverter.valueToFloatExtend(targetValue);

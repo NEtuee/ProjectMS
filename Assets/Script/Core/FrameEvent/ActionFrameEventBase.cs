@@ -90,32 +90,14 @@ public abstract class ActionFrameEventBase
     public virtual void onExit(ObjectBase executeEntity){}
     public abstract void loadFromXML(XmlNode node);
 
+    public virtual void initializeFromAttack(CommonMaterial attackMaterial) {}
+
     public bool checkCondition(GameEntityBase targetEntity)
     {
         if(_conditionCompareData == null)
             return true;
 
         return targetEntity.processActionCondition(_conditionCompareData);
-    }
-
-    public void executeChildFrameEvent(ChildFrameEventType eventType, ObjectBase executeEntity, ObjectBase targetEntity)
-    {
-        if(_childFrameEventItems == null || _childFrameEventItems.ContainsKey(eventType) == false)
-            return;
-        
-        ChildFrameEventItem childFrameEventItem = _childFrameEventItems[eventType];
-        GameEntityBase executeGameEntity = null;
-        if(executeEntity is GameEntityBase)
-            executeGameEntity = executeEntity as GameEntityBase;
-
-        for(int i = 0; i < childFrameEventItem._childFrameEventCount; ++i)
-        {
-            if(executeGameEntity != null && childFrameEventItem._childFrameEvents[i].checkCondition(executeGameEntity) == false)
-                continue;
-
-            childFrameEventItem._childFrameEvents[i].initialize();
-            childFrameEventItem._childFrameEvents[i].onExecute(executeEntity, targetEntity);
-        }
     }
 }
 
@@ -840,17 +822,27 @@ public class ActionFrameEvent_EffectPreset : ActionFrameEventBase
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_EffectPreset;}
 
     private string _effectInfoKey = "";
+    private CommonMaterial _attackMaterial;
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
         if(executeEntity is GameEntityBase == false)
             return false;
 
-        EffectRequestData requestData = EffectInfoManager.Instance().createRequestData(_effectInfoKey,executeEntity,targetEntity);
-        if(requestData == null)
-            return true;
-
-        executeEntity.SendMessageEx(MessageTitles.effect_spawnEffect,UniqueIDBase.QueryUniqueID("EffectManager"),requestData);
+        CommonMaterial defenceMaterial = CommonMaterial.Empty;
+        if(targetEntity != null && targetEntity is GameEntityBase)
+            defenceMaterial = (targetEntity as GameEntityBase).getCharacterMaterial();
+        
+        EffectRequestData requestData = EffectInfoManager.Instance().createRequestData(_effectInfoKey,executeEntity,targetEntity,_attackMaterial, defenceMaterial);
+        if(requestData != null)
+            executeEntity.SendMessageEx(MessageTitles.effect_spawnEffect,UniqueIDBase.QueryUniqueID("EffectManager"),requestData);
+        
         return true;
+    }
+
+    public override void initializeFromAttack(CommonMaterial attackMaterial)
+    {
+        base.initializeFromAttack(attackMaterial);
+        _attackMaterial = attackMaterial;
     }
 
     public override void loadFromXML(XmlNode node)
@@ -1424,6 +1416,8 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
     private UnityEngine.Vector3     _pushVector = UnityEngine.Vector3.zero;
     private UnityEngine.Vector3     _catchOffset = UnityEngine.Vector3.zero;
 
+    private CommonMaterial          _attackMaterial = CommonMaterial.Empty;
+
     private HashSet<ObjectBase>     _collisionList = new HashSet<ObjectBase>();
     private List<CollisionSuccessData> _collisionOrder = new List<CollisionSuccessData>();
 
@@ -1640,6 +1634,27 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
         return attackSuccess;
     }
 
+    public void executeChildFrameEvent(ChildFrameEventType eventType, ObjectBase executeEntity, ObjectBase targetEntity)
+    {
+        if(_childFrameEventItems == null || _childFrameEventItems.ContainsKey(eventType) == false)
+            return;
+        
+        ChildFrameEventItem childFrameEventItem = _childFrameEventItems[eventType];
+        GameEntityBase executeGameEntity = null;
+        if(executeEntity is GameEntityBase)
+            executeGameEntity = executeEntity as GameEntityBase;
+
+        for(int i = 0; i < childFrameEventItem._childFrameEventCount; ++i)
+        {
+            if(executeGameEntity != null && childFrameEventItem._childFrameEvents[i].checkCondition(executeGameEntity) == false)
+                continue;
+
+            childFrameEventItem._childFrameEvents[i].initializeFromAttack(_attackMaterial);
+            childFrameEventItem._childFrameEvents[i].initialize();
+            childFrameEventItem._childFrameEvents[i].onExecute(executeEntity, targetEntity);
+        }
+    }
+
     private bool canIgnoreDefenceType(DefenceType defenceType)
     {
         if(_ignoreDefenceType == null || _ignoreDefenceType.Length == 0)
@@ -1697,6 +1712,7 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
                 startDistance = presetData._attackStartDistance;
                 rayRadius = presetData._attackRayRadius;
                 _pushVector = presetData._pushVector;
+                _attackMaterial = presetData._attackMaterial;
             }
             else if(attributes[i].Name == "IgnoreDefenceType")
             {

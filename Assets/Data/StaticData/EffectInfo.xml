@@ -1,12 +1,25 @@
 <EffectInfo>
     <!-- BasePath: Assets/Resources/ -->
-    <!-- 확장자 쓰기 금지 -->
+    <!-- Path에 확장자 쓰기 금지 -->
     <ParticleEffect Key="Slash" 
-        AttackMaterial="" 
+        AttackMaterial=""
         DefenceMaterial=""
         Path="Prefab/Effect/Slash"
         Offset="0.0 0.0 0.0"
         ToTarget="True"
+        UpdateType="ScaledDeltaTime"
+        Attach="False"
+        AngleType="AttackPoint"
+        LifeTime="0.0"
+        FollowDirection="False"
+        CastShadow="False"
+    />
+    <ParticleEffect Key="SlashNoTarget" 
+        AttackMaterial=""
+        DefenceMaterial=""
+        Path="Prefab/Effect/Slash"
+        Offset="0.0 0.0 0.0"
+        ToTarget="False"
         UpdateType="ScaledDeltaTime"
         Attach="False"
         AngleType="AttackPoint"

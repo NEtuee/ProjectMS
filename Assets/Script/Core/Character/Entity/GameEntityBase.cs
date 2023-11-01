@@ -1099,6 +1099,16 @@ public class GameEntityBase : SequencerObjectBase
             _spriteRenderer.enabled = true;
     }
 
+    public CommonMaterial getCharacterMaterial()
+    {
+        CommonMaterial commonMaterial = _actionGraph.getCurrentMaterial();
+        if(commonMaterial == CommonMaterial.Count)
+            return _characterInfo._defaultMaterial;
+        
+        
+        return commonMaterial;
+    }
+
     public bool isActiveSelf() {return _activeSelf;}
 
     public int getActionIndex(string actionName) {return _actionGraph.getActionIndex(actionName);}

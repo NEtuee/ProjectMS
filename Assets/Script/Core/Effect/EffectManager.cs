@@ -42,7 +42,6 @@ public class EffectRequestData : MessageData
     public Vector3 _scale;
     public Quaternion _rotation;
 
-
     public ObjectBase _executeEntity = null;
     public Transform _parentTransform = null;
     public Animator _timelineAnimator = null;

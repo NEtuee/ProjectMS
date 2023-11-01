@@ -62,6 +62,7 @@ public class ActionGraphNodeData
     public RotationType                 _rotationType = RotationType.AlwaysRight;
     public FlipType                     _flipType = FlipType.AlwaysTurnOff;
     public DefenceType                  _defenceType = DefenceType.Empty;
+    public CommonMaterial               _characterMaterial = CommonMaterial.Count;
 
     public int[]                        _applyBuffList = null;
     public AttackType                   _ignoreAttackType = AttackType.None;

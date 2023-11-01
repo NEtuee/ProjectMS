@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class EffectInfoManager : Singleton<EffectInfoManager>
 {
-    public Dictionary<string, EffectInfoDataBase> _effectInfoData;
+    public Dictionary<string, EffectInfoDataBase[]> _effectInfoData;
 
-    public void setEffectInfoData(Dictionary<string, EffectInfoDataBase> effectInfoData)
+    public void setEffectInfoData(Dictionary<string, EffectInfoDataBase[]> effectInfoData)
     {
         _effectInfoData = effectInfoData;
     }
 
-    public EffectInfoDataBase getEffectInfoData(string key)
+    public EffectInfoDataBase[] getEffectInfoData(string key)
     {
         if(_effectInfoData == null)
         {
@@ -25,13 +25,19 @@ public class EffectInfoManager : Singleton<EffectInfoManager>
         return _effectInfoData[key];
     }
 
-    public EffectRequestData createRequestData(string key, ObjectBase executeEntity, ObjectBase targetEntity)
+    public EffectRequestData createRequestData(string key, ObjectBase executeEntity, ObjectBase targetEntity, CommonMaterial attackMaterial, CommonMaterial defenceMaterial)
     {
-        EffectInfoDataBase info = getEffectInfoData(key);
-        if(info == null)
+        EffectInfoDataBase[] infoArray = getEffectInfoData(key);
+        if(infoArray == null)
             return null;
 
-        return info.createEffectRequestData(executeEntity,targetEntity);
+        foreach(var item in infoArray)
+        {
+            if(item.compareMaterial(attackMaterial, defenceMaterial))
+                return item.createEffectRequestData(executeEntity,targetEntity);
+        }
+
+        return null;
     }
 
 

@@ -731,6 +731,7 @@ public class ActionGraph
     public bool getCurrentDirectionUpdateOnce() {return getCurrentAction()._directionUpdateOnce;}
     public bool getCurrentFlipTypeUpdateOnce() {return getCurrentAction()._flipTypeUpdateOnce;}
 
+    public CommonMaterial getCurrentMaterial() {return getCurrentAction()._characterMaterial;}
     public DefenceDirectionType getDefenceDirectionType() {return getCurrentAction()._defenceDirectionType;}
     public MoveValuePerFrameFromTimeDesc getMoveValuePerFrameFromTimeDesc(){return _animationPlayer.getMoveValuePerFrameFromTimeDesc();}
     public string getCurrentActionName() {return getCurrentAction()._nodeName; }
