@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using FMOD;
 using UnityEngine;
 
 public class EffectInfoManager : Singleton<EffectInfoManager>
@@ -23,6 +24,20 @@ public class EffectInfoManager : Singleton<EffectInfoManager>
             return null;
 
         return _effectInfoData[key];
+    }
+
+    public bool requestEffect(string effectInfoKey, GameEntityBase executeEntity, ObjectBase targetEntity, CommonMaterial attackMaterial)
+    {
+        CommonMaterial defenceMaterial = CommonMaterial.Empty;
+        if(targetEntity != null && targetEntity is GameEntityBase)
+            defenceMaterial = (targetEntity as GameEntityBase).getCharacterMaterial();
+        
+        EffectRequestData requestData = createRequestData(effectInfoKey,executeEntity,targetEntity,attackMaterial, defenceMaterial);
+        if(requestData == null)
+            return false;
+
+        executeEntity.SendMessageEx(MessageTitles.effect_spawnEffect,UniqueIDBase.QueryUniqueID("EffectManager"),requestData);
+        return true;
     }
 
     public EffectRequestData createRequestData(string key, ObjectBase executeEntity, ObjectBase targetEntity, CommonMaterial attackMaterial, CommonMaterial defenceMaterial)

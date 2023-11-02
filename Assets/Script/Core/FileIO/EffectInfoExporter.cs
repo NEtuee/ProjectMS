@@ -121,6 +121,10 @@ public static class EffectInfoExporter
             {
                 effectInfoData._angleDirectionType = (AngleDirectionType)System.Enum.Parse(typeof(AngleDirectionType), attrValue);
             }
+            else if(attrName == "AngleOffset")
+            {
+                effectInfoData._angleOffset = XMLScriptConverter.valueToFloatExtend(attrValue);
+            }
             else if(attrName == "LifeTime")
             {
                 effectInfoData._lifeTime = XMLScriptConverter.valueToFloatExtend(attrValue);
@@ -140,6 +144,14 @@ public static class EffectInfoExporter
             else if(attrName == "DefenceMaterial")
             {
                 effectInfoData._defenceMaterial = (CommonMaterial)System.Enum.Parse(typeof(CommonMaterial), attrValue);
+            }
+            else if(attrName == "DependentAction")
+            {
+                effectInfoData._dependentAction = bool.Parse(attrValue);
+            }
+            else
+            {
+                DebugUtil.assert_fileOpen(false, "알 수 없는 EffectInfo Attribute", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node));    
             }
         }
 

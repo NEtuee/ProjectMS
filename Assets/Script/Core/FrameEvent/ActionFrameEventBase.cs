@@ -828,14 +828,7 @@ public class ActionFrameEvent_EffectPreset : ActionFrameEventBase
         if(executeEntity is GameEntityBase == false)
             return false;
 
-        CommonMaterial defenceMaterial = CommonMaterial.Empty;
-        if(targetEntity != null && targetEntity is GameEntityBase)
-            defenceMaterial = (targetEntity as GameEntityBase).getCharacterMaterial();
-        
-        EffectRequestData requestData = EffectInfoManager.Instance().createRequestData(_effectInfoKey,executeEntity,targetEntity,_attackMaterial, defenceMaterial);
-        if(requestData != null)
-            executeEntity.SendMessageEx(MessageTitles.effect_spawnEffect,UniqueIDBase.QueryUniqueID("EffectManager"),requestData);
-        
+        EffectInfoManager.Instance().requestEffect(_effectInfoKey,executeEntity as GameEntityBase, targetEntity,_attackMaterial);
         return true;
     }
 

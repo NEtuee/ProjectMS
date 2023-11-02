@@ -9,11 +9,12 @@
         ToTarget="True"
         UpdateType="ScaledDeltaTime"
         Attach="False"
-        AngleType="AttackPoint"
+        AngleType="Direction"
         LifeTime="0.0"
         FollowDirection="False"
         CastShadow="False"
     />
+
     <ParticleEffect Key="SlashNoTarget" 
         AttackMaterial=""
         DefenceMaterial=""
@@ -22,11 +23,12 @@
         ToTarget="False"
         UpdateType="ScaledDeltaTime"
         Attach="False"
-        AngleType="AttackPoint"
+        AngleType="Direction"
         LifeTime="0.0"
         FollowDirection="False"
         CastShadow="False"
     />
+
     <ParticleEffect Key="SlashSuper" 
         AttackMaterial="" 
         DefenceMaterial=""
@@ -35,11 +37,12 @@
         ToTarget="True"
         UpdateType="ScaledDeltaTime"
         Attach="False"
-        AngleType="AttackPoint"
+        AngleType="Direction"
         LifeTime="0.0"
         FollowDirection="False"
         CastShadow="False"
     />
+
     <ParticleEffect Key="Blood" 
         AttackMaterial="" 
         DefenceMaterial=""
@@ -48,9 +51,39 @@
         ToTarget="True"
         UpdateType="ScaledDeltaTime"
         Attach="False"
-        AngleType="AttackPoint"
+        AngleType="Direction"
         LifeTime="0.0"
         FollowDirection="False"
         CastShadow="False"
     />
+
+    <ParticleEffect Key="LightningTrail" 
+        AttackMaterial="" 
+        DefenceMaterial=""
+        Path="Prefab/Effect/fx_chainlightning"
+        Offset="0.0 0.0 0.0"
+        ToTarget="False"
+        UpdateType="ScaledDeltaTime"
+        Attach="True"
+        AngleType="Direction"
+        LifeTime="0.5"
+        FollowDirection="False"
+        CastShadow="False"
+    />
+
+    <ParticleEffect Key="Laser" 
+        AttackMaterial="" 
+        DefenceMaterial=""
+        Path="Prefab/Effect/fx_lasor"
+        AngleOffset="-90.0"
+        Offset="0.3 0.0 0.0"
+        ToTarget="False"
+        UpdateType="ScaledDeltaTime"
+        Attach="False"
+        AngleType="Direction"
+        LifeTime="0.5"
+        FollowDirection="False"
+        CastShadow="False"
+    />
+
 </EffectInfo>

@@ -34,6 +34,7 @@ public class EffectRequestData : MessageData
     public bool _usePhysics;
     public bool _useFlip;
     public bool _castShadow;
+    public bool _dependentAction;
 
     public EffectType _effectType;
     public EffectUpdateType _updateType = EffectUpdateType.ScaledDeltaTime;
@@ -74,6 +75,7 @@ public class EffectRequestData : MessageData
         _usePhysics = false;
         _useFlip = false;
         _castShadow = false;
+        _dependentAction = false;
         _effectType = EffectType.SpriteEffect;
         _updateType = EffectUpdateType.ScaledDeltaTime;
         _position = Vector3.zero;
@@ -395,8 +397,10 @@ public class ParticleEffectItem : EffectItemBase
 
     public ObjectBase               _executeObject;
     public bool                     _followDirection;
+    private bool                    _dependentAction = false;
     public Transform                _parentTransform = null;
 
+    public float                    _lifeTime = 0f;
 
 
     public void createItem(string prefabPath)
@@ -435,9 +439,12 @@ public class ParticleEffectItem : EffectItemBase
         _effectUpdateType = effectData._updateType;
 
         _effectObject.transform.position = effectData._position;
-        _effectObject.transform.rotation = _executeObject ? Quaternion.Euler(0f,0f,MathEx.directionToAngle(_executeObject.getDirection())) : effectData._rotation;
+        _effectObject.transform.rotation = effectData._rotation;
 
         _parentTransform = effectData._parentTransform;
+        _dependentAction = effectData._dependentAction;
+
+        _lifeTime = effectData._lifeTime;
 
         _stopEffect = false;
 
@@ -480,19 +487,37 @@ public class ParticleEffectItem : EffectItemBase
             break;
         }
 
+        if(_lifeTime > 0f)
+        {
+            _lifeTime -= deltaTime;
+            if(_lifeTime <= 0f)
+                stopAllParticleSystem();
+        }
+
+        if(_dependentAction && _executeObject is GameEntityBase && (_executeObject as GameEntityBase).isActionChangeFrame())
+        {
+            _dependentAction = false;
+            stopAllParticleSystem();
+        }
+         
+
         if(_followDirection)
             _effectObject.transform.rotation = Quaternion.Euler(0f,0f,MathEx.directionToAngle(_executeObject.getDirection()));
 
         return isAllParticleEnd();
     }
 
-    public override void release()
+    public void stopAllParticleSystem()
     {
         foreach(var item in _allParticleSystems)
         {
             item.Stop();
         }
+    }
 
+    public override void release()
+    {
+        stopAllParticleSystem();
         disableEffect();
     }
 
