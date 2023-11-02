@@ -247,6 +247,10 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
 
                 nodeData._packageIndex = aiPackageIndexDic[targetValue];
             }
+            else if(targetName == "CoolTime")
+            {
+                nodeData._coolDownTime = XMLScriptConverter.valueToFloatExtend(targetValue);
+            }
             else
             {
                 DebugUtil.assert_fileOpen(false,"유효하지 않은 어트리뷰트입니다. !!! : [Type: {0}] [Line: {1}] [FileName: {2}]",_currentFileName,XMLScriptConverter.getLineNumberFromXMLNode(node), targetName, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);

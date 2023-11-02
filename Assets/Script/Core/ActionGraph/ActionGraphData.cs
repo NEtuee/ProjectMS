@@ -235,6 +235,7 @@ public enum ConditionNodeUpdateType
     AI_CurrentPackageEnd,
     AI_PackageStateExecutedTime,
     AI_GraphStateExecutedTime,
+    AI_GraphCoolTime,
 
     Status,
     Key,
@@ -328,6 +329,7 @@ public static class ConditionNodeInfoPreset
         {"CurrentPackageEnd",new ConditionNodeInfo(ConditionNodeUpdateType.AI_CurrentPackageEnd, ConditionNodeType.Bool)},
         {"PackageExecutedTime",new ConditionNodeInfo(ConditionNodeUpdateType.AI_PackageStateExecutedTime, ConditionNodeType.Float)},
         {"GraphExecutedTime",new ConditionNodeInfo(ConditionNodeUpdateType.AI_GraphStateExecutedTime, ConditionNodeType.Float)},
+        {"AIGraphCoolTime",new ConditionNodeInfo(ConditionNodeUpdateType.AI_GraphCoolTime, ConditionNodeType.Float)},
 
         {"Status",new ConditionNodeInfo(ConditionNodeUpdateType.Status, ConditionNodeType.Float)},
         {"Key",new ConditionNodeInfo(ConditionNodeUpdateType.Key, ConditionNodeType.Bool)},
@@ -359,7 +361,7 @@ public class ActionGraphConditionNodeData_AICustomValue : ActionGraphConditionNo
 
     public ActionGraphConditionNodeData_AICustomValue()
     {
-        setLiteral(System.BitConverter.GetBytes(0f));
+        setLiteral(System.BitConverter.GetBytes(false));
     }
     
     public string getCustomValueName() 
@@ -417,6 +419,18 @@ public class ActionGraphConditionNodeData_Status : ActionGraphConditionNodeData
     }
     
     public string getStatus() {return _targetStatus;}
+    
+}
+[System.Serializable]
+public class ActionGraphConditionNodeData_AIGraphCoolTime : ActionGraphConditionNodeData
+{
+    public string _graphNodeName = "";
+
+    public ActionGraphConditionNodeData_AIGraphCoolTime()
+    {
+    }
+    
+    public string getNodeName() {return _graphNodeName;}
     
 }
 [System.Serializable]

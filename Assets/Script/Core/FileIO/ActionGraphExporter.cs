@@ -1017,6 +1017,17 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         return item;
     }
 
+    private static ActionGraphConditionNodeData_AIGraphCoolTime isAIGraphCoolTime(string symbol)
+    {
+        if(symbol.Contains("aiGraphCoolTime_") == false)
+            return null;
+
+        ActionGraphConditionNodeData_AIGraphCoolTime item = new ActionGraphConditionNodeData_AIGraphCoolTime();
+        item._symbolName = "AIGraphCoolTime";
+        item._graphNodeName = symbol.Replace("aiGraphCoolTime_","");
+        return item;
+    }
+
     private static ActionGraphConditionNodeData_Key isKey(string symbol)
     {
         if(symbol.Contains("getKey_") == false)
