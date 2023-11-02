@@ -2,6 +2,7 @@
 public class AnimationCustomPresetData
 {
     public float[]      _duration = null;
+    public string[]     _effectFrameEvent = null;
     public int          _playCount = 0;
 
     public float getTotalDuration()

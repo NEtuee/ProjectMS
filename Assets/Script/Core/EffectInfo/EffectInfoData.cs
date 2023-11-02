@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public abstract class EffectInfoDataBase
@@ -39,6 +40,8 @@ public class ParticleEffectInfoData : EffectInfoDataBase
     public bool                _attach = false;
     public bool                _followDirection = false;
     public bool                _castShadow = false;
+    public bool                _dependentAction = false;
+    public float               _angleOffset = 0f;
     public float               _lifeTime = 0f;
 
     public CommonMaterial      _attackMaterial = CommonMaterial.Empty;
@@ -67,14 +70,16 @@ public class ParticleEffectInfoData : EffectInfoDataBase
         EffectRequestData requestData = MessageDataPooling.GetMessageData<EffectRequestData>();
         requestData.clearRequestData();
         requestData._effectPath = _effectPath;
-        requestData._position = centerPosition + _spawnOffset;
         requestData._rotation = getAngleByType(executeEntity, requestData._position, _angleDirectionType);
+        requestData._position = centerPosition + requestData._rotation * _spawnOffset;
+        requestData._rotation *=  Quaternion.Euler(0f,0f,_angleOffset);
         requestData._updateType = _effectUpdateType;
         requestData._effectType = EffectType.ParticleEffect;
         requestData._lifeTime = _lifeTime;
         requestData._executeEntity = executeEntity;
         requestData._followDirection = _followDirection;
         requestData._castShadow = _castShadow;
+        requestData._dependentAction = _dependentAction;
 
         if(_attach)
         {
