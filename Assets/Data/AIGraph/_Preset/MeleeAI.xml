@@ -1,4 +1,4 @@
-<AIGraph Name="MeleeAI" DefaultState="Entry">
+<AIGraph Name="MeleeAI" DefaultState="Entry_Peace">
 <!-- 옵션 설정 -->
     <!-- 인지 옵션값 설정 -->
     <GlobalVariable Name="gv_CognitiveRange"    Value="3.5"/>   <!-- PC 인지 거리 : 해당 거리 내 PC 존재 시 인지한다. -->
@@ -47,6 +47,7 @@
 
 <!-- 패키지 인클루드 -->
     <!-- 패키지 인클루드 : 공통 -->
+    <Include Path="EmptyPackage.xml"/>          <!-- 사망 패키지 -->
     <Include Path="Common\CommonDeadPackage.xml"/>          <!-- 사망 패키지 -->
     <Include Path="Common\CommonHitPackage.xml"/>           <!-- 피격 패키지 -->
     
@@ -132,15 +133,13 @@
         <Branch Condition="gv_bIsCounterToPassiveDef_Guard"  Execute="Battle_CounterAttack"/>
     </BranchSet>
 
-
     <!-- 피격 리액션 브랜치 셋 -->
     <BranchSet Name="HitReactionSet">
         <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="Hit" Execute="Hit"/> 
         <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
-        <!-- TODO: Hit Count Threshold 기반 Passive Defense 분기  (Execute Battle_DefenseByHit)-->
-        <!-- TODO: Guard Count Threshold 기반 Passive Defense 분기 (Execute Battle_DefenseByGuard)-->
-
+        <Branch Condition="gv_HitCountThreshold" Execute="Battle_DefenseByHit"/>
+        <Branch Condition="gv_GuardCountThreshold" Execute="Battle_DefenseByGuard"/>
     </BranchSet>
 <!-- 브랜치 셋 -->
 
