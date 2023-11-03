@@ -1,21 +1,21 @@
 <ActionGraph Name="MeleeAction" DefaultAction="AC_Entry" DefaultFramePerSecond="12">
 <!-- Movement Speed Option Variant Set -->
-<GlobalVariable Name="gv_MovementSpeed"             Value="15"/>
-<GlobalVariable Name="gv_MovementVelocity"          Value="0"/>
-<GlobalVariable Name="gv_MovementMaxVelocity"       Value="5"/>
-<GlobalVariable Name="gv_MovementFriction"          Value="0"/>
+<GlobalVariable Name="gv_MovementSpeed"             Value="15.0"/>  <!-- Speed는 Velocity = 0 과 병행 사용 불가-->
+<GlobalVariable Name="gv_MovementVelocity"          Value="0.0"/>   
+<GlobalVariable Name="gv_MovementMaxVelocity"       Value="5.0"/>
+<GlobalVariable Name="gv_MovementFriction"          Value="0.0"/>
 
 <!-- AttackReady Movement Speed Option Variant Set-->
-<GlobalVariable Name="gv_AtkRdMovementSpeed"        Value="15"/>
-<GlobalVariable Name="gv_AtkRdMovementVelocity"     Value="0"/>
-<GlobalVariable Name="gv_AtkRdMovementMaxVelocity"  Value="5"/>
-<GlobalVariable Name="gv_AtkRdMovementFriction"     Value="0"/>
+<GlobalVariable Name="gv_AtkRdMovementSpeed"        Value="15.0"/>  <!-- Speed는 Velocity = 0 과 병행 사용 불가-->
+<GlobalVariable Name="gv_AtkRdMovementVelocity"     Value="0.0"/>   
+<GlobalVariable Name="gv_AtkRdMovementMaxVelocity"  Value="5.0"/>
+<GlobalVariable Name="gv_AtkRdMovementFriction"     Value="0.0"/>
 
 <!-- Attack Movement Speed Option Variant Set-->
-<GlobalVariable Name="gv_AtkMovementSpeed"          Value="0"/>
-<GlobalVariable Name="gv_AtkMovementVelocity"       Value="10"/>
-<GlobalVariable Name="gv_AtkMovementMaxVelocity"    Value="10"/>
-<GlobalVariable Name="gv_AtkMovementFriction"       Value="24"/>
+<GlobalVariable Name="gv_AtkMovementSpeed"          Value="0.0"/>   <!-- Speed는 Velocity = 0 과 병행 사용 불가-->
+<GlobalVariable Name="gv_AtkMovementVelocity"       Value="10.0"/>  
+<GlobalVariable Name="gv_AtkMovementMaxVelocity"    Value="10.0"/>
+<GlobalVariable Name="gv_AtkMovementFriction"       Value="24.0"/>
 
 <!-- Defualt Action -->
     <AC_Entry MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
@@ -33,14 +33,17 @@
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
         </Animation>
 
+        <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
+        <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_Idle>
 
     <AC_Move MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/_Preset/_MeleePreset/"/>
         <Animation Preset="0_default/2_move" XFlip="true" Duration="0.5">
-            <FrameEvent Type="Movement" StartTime="0" Friction="gv_MovementFriction" MaxVelocity="gv_MovementMaxVelocity" Velocity="gv_MovementVelocity" Speed="gv_MovementSpeed"/>
-
+            <FrameEvent Type="Movement" Condition="gv_MovementVelocity == 0.0"  StartTime="0" Friction="gv_MovementFriction" MaxVelocity="gv_MovementMaxVelocity" Speed="gv_MovementSpeed"/>
+            <FrameEvent Type="Movement" Condition="gv_MovementVelocity > 0.0" StartTime="0" Friction="gv_MovementFriction" MaxVelocity="gv_MovementMaxVelocity" Velocity="gv_MovementVelocity" Speed="gv_MovementSpeed"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
         </Animation>
@@ -85,7 +88,8 @@
         <Animation Preset="1_attack/1_attackReady" XFlip="true" Duration="0.4">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2203" Attach="true"/>
             
-            <FrameEvent Type="Movement" StartTime="0" Friction="gv_AtkRdMovementFriction" MaxVelocity="gv_AtkRdMovementMaxVelocity" Velocity="gv_AtkRdMovementVelocity" Speed="gv_AtkRdMovementSpeed"/>
+            <FrameEvent Type="Movement" Condition="gv_AtkRdMovementVelocity == 0.0" StartTime="0" Friction="gv_AtkRdMovementFriction" MaxVelocity="gv_AtkRdMovementMaxVelocity" Speed="gv_AtkRdMovementSpeed"/>
+            <FrameEvent Type="Movement" Condition="gv_AtkRdMovementVelocity > 0.0" StartTime="0" Friction="gv_AtkRdMovementFriction" MaxVelocity="gv_AtkRdMovementMaxVelocity" Velocity="gv_AtkRdMovementVelocity" Speed="gv_AtkRdMovementSpeed"/>
 
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
@@ -99,7 +103,9 @@
         <AnimationHeader MasterPath="Sprites/Enemy/_Preset/_MeleePreset/"/>
         <Animation Preset="1_attack/2_attackMain" XFlip="true" Duration="0.35">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2204" Attach="true"/>
-            <FrameEvent Type="Movement" StartTime="0" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Velocity="gv_AtkMovementVelocity" Speed="gv_AtkMovementSpeed"/>
+            <FrameEvent Type="Movement" Condition="gv_AtkMovementVelocity == 0.0" StartTime="0" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Speed="gv_AtkMovementSpeed"/>
+            <FrameEvent Type="Movement" Condition="gv_AtkMovementVelocity > 0.0" StartTime="0" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Velocity="gv_AtkMovementVelocity" Speed="gv_AtkMovementSpeed"/>
+            
             <FrameEvent Type="Attack" StartTime="0" EndTime="0.1" AttackPreset="Preset_Melee_Normal">
                 <OnHit>
                     <FrameEvent Type="AudioPlay" StartTime="0" ID="2205" Attach="true"/>

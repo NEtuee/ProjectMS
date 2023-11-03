@@ -1,5 +1,6 @@
-<AIGraph Name="MeleeAI" DefaultState="Entry_Peace">
-<!-- 옵션 설정 -->
+<AIGraph Name="MeleeAI" DefaultState="Entry_Battle">
+
+    <!-- 옵션 설정 -->
     <!-- 인지 옵션값 설정 -->
     <GlobalVariable Name="gv_CognitiveRange"    Value="3.5"/>   <!-- PC 인지 거리 : 해당 거리 내 PC 존재 시 인지한다. -->
     <GlobalVariable Name="gv_OvlivionRange"     Value="7.0"/>   <!-- 인지 망각 거리 : 해당 거리 밖 PC 존재 시 망각 시간을 카운트한다. TODO -->
@@ -12,18 +13,18 @@
 
     <!-- 전투 상태 행동 타입 설정 -->
     <!-- 공격 타입 설정 -->
-    <GlobalVariable Name="gv_bIsNormalAttack"               Value="True"/>      <!-- 일반 공격 타입 : 공격을 실행한다. -->
-    <GlobalVariable Name="gv_bIsLockOnlAttack"              Value="False"/>     <!-- 락온 공격 타입 : PC를 추적하며 공격을 실행한다. -->
+    <GlobalVariable Name="gv_bIsNormalAttack"               Value="False"/>      <!-- 일반 공격 타입 : 공격을 실행한다. -->
+    <GlobalVariable Name="gv_bIsLockOnlAttack"              Value="True"/>     <!-- 락온 공격 타입 : PC를 추적하며 공격을 실행한다. -->
     <GlobalVariable Name="gv_bIsBumpAttack"                 Value="False"/>     <!-- 충돌 공격 타입 : PC 공격 성공 시 액션(리커버)이 바뀌는 공격을 실행한다. -->
     <!-- 공격 거리 설정 -->
     <GlobalVariable Name="gv_MeleeAttackRangeMin"           Value="0.0"/>       <!-- 최소 공격 사거리 : Value보다 PC가 가까우면 공격하지 않는다. -->
-    <GlobalVariable Name="gv_MeleeAttackRangeMax"           Value="3.5"/>       <!-- 최대 공격 사거리 : Value보다 PC가 멀면 공격하지 않는다. -->
+    <GlobalVariable Name="gv_MeleeAttackRangeMax"           Value="1.5"/>       <!-- 최대 공격 사거리 : Value보다 PC가 멀면 공격하지 않는다. -->
     <!-- 공격 딜레이 설정 -->
     <GlobalVariable Name="gv_MeleeAttackCoolTime"           Value="0.0"/>       <!-- [기능부재] 쿨타임 : 공격 발동 후 공격 실행이 제한되는 시간 -->
     <!-- 이동 타입 설정 -->
     <GlobalVariable Name="gv_bIsFixed"                      Value="False"/>     <!-- 고정 타입 : 배치된 현재 자리를 고수한다. -->
     <GlobalVariable Name="gv_bIsChaseOnly"                  Value="True"/>      <!-- 추격 타입 : 거리가 멀면 PC를 추격한다. 가까우면 정지한다. -->
-    <GlobalVariable Name="gv_bIsChaseAway"                  Value="True"/>      <!-- 거리 유지 타입 : 거리가 멀면 PC를 추격한다. 가까우면 후진한다. -->
+    <GlobalVariable Name="gv_bIsChaseAway"                  Value="False"/>      <!-- 거리 유지 타입 : 거리가 멀면 PC를 추격한다. 가까우면 후진한다. -->
     <GlobalVariable Name="gv_bIsAlert"                      Value="False"/>     <!-- 경계 타입 : 거리가 멀어지면 PC를 추격, 가까우면(정지거리) 측면으로 이동한다. -->
     <!-- 이동 거리 설정-->      
     <GlobalVariable Name="gv_MoveThreshold"                 Value="3.0"/>       <!-- 최대 거리 : PC와 Value 이상 거리가 벌어진 경우 이동한다. -->
@@ -66,9 +67,23 @@
     <Include Path="Common\CommonDodgePackage.xml"/>         <!-- 회피 패키지 -->
     <Include Path="Common\CommonGuardPackage.xml"/>         <!-- 가드 패키지 -->
 <!-- 패키지 인클루드 -->
+    <BranchSet Name="TestBranchA">
+        <Branch Condition="gv_bIsIdleType"     Execute="Test"/>
+        <Branch Condition="gv_bIsRandMoveType" Execute="Test"/>
+        <Branch Condition="gv_bIsMoveType"     Execute="Test"/>
+        
+    </BranchSet>
+    <BranchSet Name="TestBranchB">
+        <Branch Condition="gv_bIsChaseOnly && (TargetDistance <= gv_StopThreshold)"     Execute="Test"/>
+    </BranchSet>
 
+   <Test Package="EmptyPackage">
+        <UseBranchSet Name="TestBranchA"/>
+        <UseBranchSet Name="TestBranchB"/>
+    </Test>
 <!-- 브랜치 셋 -->
     <!-- 평화 상태 분기 브랜치 셋 -->
+    
     <BranchSet Name="PeaceStateSet">
         <Branch Condition="gv_bIsIdleType"     Execute="Peace_Idle"/>
         <Branch Condition="gv_bIsRandMoveType" Execute="Peace_RandMove"/>
@@ -94,18 +109,62 @@
         <Branch Condition="gv_bIsChaseAway"     Execute="Chase"/>
         <Branch Condition="gv_bIsAlert"         Execute="Chase"/>
     </BranchSet>
-    <!-- 추격 이동 브랜치 셋 -->
+
+    <BranchSet Name="tFixedMovementSet">
+        <!-- 추격 이동 브랜치 셋 -->
+        <Branch Condition="gv_bIsChaseOnly && (TargetDistance > gv_MoveThreshold)"      Execute="Chase"/>
+        <!-- 거리 유지 이동 브랜치 셋 -->
+        <Branch Condition="gv_bIsChaseAway && (TargetDistance <= gv_AwayThreshold)"     Execute="Away"/>
+        <Branch Condition="gv_bIsChaseAway && (TargetDistance > gv_MoveThreshold)"      Execute="Chase"/>
+        <!-- 경계 이동 브랜치 셋 -->
+        <Branch Condition="gv_bIsAlert && (TargetDistance <= gv_AwayThreshold)"         Execute="Away"/>
+        <Branch Condition="gv_bIsAlert && (TargetDistance <= gv_StopThreshold)"         Execute="Alert"/>
+        <Branch Condition="gv_bIsAlert && (TargetDistance > gv_MoveThreshold)"          Execute="Chase"/>
+    </BranchSet>
+    <BranchSet Name="tChaseMovementSet">
+        <!-- 추격 이동 브랜치 셋 -->
+        <Branch Condition="gv_bIsChaseOnly && (TargetDistance <= gv_StopThreshold)"     Execute="Fixed"/>
+        <!-- 거리 유지 이동 브랜치 셋 -->
+        <Branch Condition="gv_bIsChaseAway && (TargetDistance <= gv_AwayThreshold)"     Execute="Away"/>
+        <Branch Condition="gv_bIsChaseAway && (TargetDistance <= gv_StopThreshold)"     Execute="Fixed"/>
+        <!-- 경계 이동 브랜치 셋 -->
+        <Branch Condition="gv_bIsAlert && (TargetDistance <= gv_AwayThreshold)"     Execute="Away"/>
+        <Branch Condition="gv_bIsAlert && (TargetDistance <= gv_StopThreshold)"     Execute="Alert"/>
+    </BranchSet>
+    <BranchSet Name="tAlertMovementSet">
+        <!-- 추격 이동 브랜치 셋 -->
+        <Branch Condition="gv_bIsChaseOnly && (TargetDistance <= gv_StopThreshold)"     Execute="Fixed"/>
+        <Branch Condition="gv_bIsChaseOnly && (TargetDistance > gv_MoveThreshold)"      Execute="Chase"/>
+        <!-- 거리 유지 이동 브랜치 셋 -->
+        <Branch Condition="gv_bIsChaseAway && (TargetDistance <= gv_AwayThreshold)"     Execute="Away"/>
+        <Branch Condition="gv_bIsChaseAway && (TargetDistance <= gv_StopThreshold)"     Execute="Fixed"/>
+        <Branch Condition="gv_bIsChaseAway && (TargetDistance > gv_MoveThreshold)"      Execute="Chase"/>
+        <!-- 경계 이동 브랜치 셋 -->
+        <Branch Condition="gv_bIsAlert && (TargetDistance <= gv_AwayThreshold)"     Execute="Away"/>
+        <Branch Condition="gv_bIsAlert && (TargetDistance <= gv_StopThreshold)"     Execute="Alert"/>
+        <Branch Condition="gv_bIsAlert && (TargetDistance > gv_MoveThreshold)"      Execute="Chase"/>
+    </BranchSet>
+    <BranchSet Name="tAwayMovementSet">
+        <!-- 추격 이동 브랜치 셋 -->
+        <Branch Condition="gv_bIsChaseOnly && (TargetDistance <= gv_StopThreshold)"     Execute="Fixed"/>
+        <Branch Condition="gv_bIsChaseOnly && (TargetDistance > gv_MoveThreshold)"      Execute="Chase"/>
+        <!-- 거리 유지 이동 브랜치 셋 -->
+        <Branch Condition="gv_bIsChaseAway && (TargetDistance <= gv_StopThreshold)"     Execute="Fixed"/>
+        <Branch Condition="gv_bIsChaseAway && (TargetDistance > gv_MoveThreshold)"      Execute="Chase"/>
+        <!-- 경계 이동 브랜치 셋 -->
+        <Branch Condition="gv_bIsAlert && (TargetDistance <= gv_StopThreshold)"     Execute="Alert"/>
+        <Branch Condition="gv_bIsAlert && (TargetDistance > gv_MoveThreshold)"      Execute="Chase"/>
+    </BranchSet>
+    
     <BranchSet Name="ChaseOnlyMovementSet">
         <Branch Condition="gv_bIsChaseOnly && (TargetDistance <= gv_StopThreshold)"     Execute="Fixed"/>
         <Branch Condition="gv_bIsChaseOnly && (TargetDistance > gv_MoveThreshold)"      Execute="Chase"/>
-    </BranchSet>
-    <!-- 거리 유지 이동 브랜치 셋 -->
+    </BranchSet>    
     <BranchSet Name="ChaseAwayMovementSet">
         <Branch Condition="gv_bIsChaseAway && (TargetDistance <= gv_AwayThreshold)"     Execute="Away"/>
         <Branch Condition="gv_bIsChaseAway && (TargetDistance <= gv_StopThreshold)"     Execute="Fixed"/>
         <Branch Condition="gv_bIsChaseAway && (TargetDistance > gv_MoveThreshold)"      Execute="Chase"/>
     </BranchSet>
-    <!-- 경계 이동 브랜치 셋 -->
     <BranchSet Name="AlertMovementSet">
         <Branch Condition="gv_bIsAlert && (TargetDistance <= gv_AwayThreshold)"     Execute="Away"/>
         <Branch Condition="gv_bIsAlert && (TargetDistance <= gv_StopThreshold)"     Execute="Alert"/>
@@ -138,14 +197,15 @@
         <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="Hit" Execute="Hit"/> 
         <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
-        <Branch Condition="gv_HitCountThreshold" Execute="Battle_DefenseByHit"/>
-        <Branch Condition="gv_GuardCountThreshold" Execute="Battle_DefenseByGuard"/>
+        <Branch Condition="gv_HitCountThreshold <= getStat_HitCount" Execute="Battle_DefenseByHit"/>
+        <Branch Condition="gv_GuardCountThreshold <= getStat_GuardCount" Execute="Battle_DefenseByGuard"/>
     </BranchSet>
 <!-- 브랜치 셋 -->
 
 <!-- 스테이트 -->
+ 
     <!-- AI 스테이트 : Init -->
-    <Entry_Peace Package="EmptyPackage">
+    <Entry_Peace Package="CommonIdlePackage">
         <UseBranchSet Name="PeaceStateSet"/>
     </Entry_Peace>
 
@@ -164,27 +224,27 @@
 
 
     <!-- AI 스테이트 : 전투 상태 : 분기 -->
-    <Entry_Battle Package="EmptyPackage">
+    <Entry_Battle Package="CommonIdlePackage">
         <UseBranchSet Name="BattleEntrySet"/>
     </Entry_Battle>
 
-    <Battle_Move Package="EmptyPackage">
+    <Battle_Move Package="CommonIdlePackage">
         <UseBranchSet Name="BattleMovementJudgeSet"/>
     </Battle_Move>
 
-    <Battle_Attack Package="EmptyPackage">
+    <Battle_Attack Package="CommonIdlePackage">
         <UseBranchSet Name="BattleAttackJudgeSet"/>
     </Battle_Attack>
     
-    <Battle_CounterAttack Package="EmptyPackage">
+    <Battle_CounterAttack Package="CommonIdlePackage">
         <UseBranchSet Name="BattleAttackJudgeSet"/>
     </Battle_CounterAttack>
 
-    <Battle_DefenseByHit Package="EmptyPackage">
+    <Battle_DefenseByHit Package="CommonIdlePackage">
         <UseBranchSet Name="BattleDefenseByHitJudgeSet"/>
     </Battle_DefenseByHit>
 
-    <Battle_DefenseByGuard Package="EmptyPackage">
+    <Battle_DefenseByGuard Package="CommonIdlePackage">
         <UseBranchSet Name="BattleDefenseByGuardJudgeSet"/>
     </Battle_DefenseByGuard>
     
@@ -192,33 +252,41 @@
     <Fixed Package="CommonIdlePackage">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="AttackTriggerSet"/>
+        <!--
         <UseBranchSet Name="ChaseOnlyMovementSet"/>
         <UseBranchSet Name="ChaseAwayMovementSet"/>
-        <UseBranchSet Name="BattlePackageEndSet"/>
+        <UseBranchSet Name="tFixedMovementSet"/>
+        -->
     </Fixed>
 
     <Chase Package="CommonChasePackage">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="AttackTriggerSet"/>
+        <!--
         <UseBranchSet Name="ChaseOnlyMovementSet"/>
         <UseBranchSet Name="ChaseAwayMovementSet"/>
         <UseBranchSet Name="AlertMovementSet"/>
-        <UseBranchSet Name="BattlePackageEndSet"/>
+        <UseBranchSet Name="tChaseMovementSet"/>
+        -->
     </Chase>
 
     <Alert Package="CommonAlertPackage">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="AttackTriggerSet"/>
-        <UseBranchSet Name="AlertMovementSet"/>
-        <UseBranchSet Name="BattlePackageEndSet"/>
+        <!--
+        <UseBranchSet Name="AlertMovementSet"/>        
+        <UseBranchSet Name="tAlertMovementSet"/>
+        -->
     </Alert>
 
     <Away Package="CommonAwayPackage">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="AttackTriggerSet"/>
+        <!--
         <UseBranchSet Name="ChaseAwayMovementSet"/>
         <UseBranchSet Name="AlertMovementSet"/>
-        <UseBranchSet Name="BattlePackageEndSet"/>
+        <UseBranchSet Name="tAwayMovementSet"/>
+        -->
     </Away>
 
     <!-- AI 스테이트 : 전투 상태 : 공격 -->
