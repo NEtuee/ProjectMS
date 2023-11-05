@@ -815,6 +815,12 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         //DebugUtil.assert(ReadConditionFormula(formula,0, ref resultIndex, out end,symbolList,compareTypeList) == true,"Tlqkfsusdk");
         DebugUtil.assert_fileOpen(readConditionFormula(formula,ref symbolList,ref compareTypeList, globalVariableContainer, node, filePath) == true,"[Line: {0}] [FileName: {1}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node), XMLScriptConverter.getLineFromXMLNode(node), filePath);
 
+        if(symbolList.Count == 1)
+        {
+            ActionGraphConditionNodeData conditionNodeData = symbolList[symbolList.Count - 1];
+            DebugUtil.assert_fileOpen(ActionGraph.isNodeType(conditionNodeData,ConditionNodeType.Bool) == true, "Condition 결과가 Boolean 타입이 아닙니다. [Type: {0}]",filePath,XMLScriptConverter.getLineNumberFromXMLNode(node),ConditionNodeInfoPreset._nodePreset[conditionNodeData._symbolName]._nodeType);
+        }
+
         ActionGraphConditionCompareData compareData = new ActionGraphConditionCompareData();
         compareData._compareTypeArray = compareTypeList.ToArray();
         compareData._compareTypeCount = compareTypeList.Count;

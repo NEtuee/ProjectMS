@@ -548,7 +548,7 @@ public class ActionGraph
         return false;
     }
 
-    public bool isNodeType(ActionGraphConditionNodeData nodeData, ConditionNodeType nodeType)
+    public static bool isNodeType(ActionGraphConditionNodeData nodeData, ConditionNodeType nodeType)
     {
         return nodeType == ConditionNodeInfoPreset._nodePreset[nodeData._symbolName]._nodeType;
     }
