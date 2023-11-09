@@ -361,7 +361,7 @@ public class ActionGraphConditionNodeData_AICustomValue : ActionGraphConditionNo
 
     public ActionGraphConditionNodeData_AICustomValue()
     {
-        setLiteral(System.BitConverter.GetBytes(false));
+        setLiteral(System.BitConverter.GetBytes(0f));
     }
     
     public string getCustomValueName() 
