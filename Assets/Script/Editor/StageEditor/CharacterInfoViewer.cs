@@ -44,6 +44,8 @@ public class CharacterInfoViewer : EditorWindow
             _searchStringCompare = _searchString;
         }
 
+        
+
         const string kCharacterInfoPath = "Assets\\Data\\StaticData\\CharacterInfo.xml";
         Dictionary<string,CharacterInfoData> characterInfo = ResourceContainerEx.Instance().getCharacterInfo(kCharacterInfoPath);
 
@@ -114,7 +116,11 @@ public class CharacterInfoViewer : EditorWindow
 
             GUILayout.BeginVertical("box");
 
-            EditorGUILayout.LabelField(_selectedData._displayName);
+            GUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(_selectedData._displayName);
+                if(GUILayout.Button("Open"))
+                    FileDebugger.OpenFileWithCursor(kCharacterInfoPath,FileDebugger.findLine(kCharacterInfoPath, _selectedData._displayName));
+            GUILayout.EndHorizontal();
             GUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField("ActionGraph\t");
                 if(GUILayout.Button("Go"))

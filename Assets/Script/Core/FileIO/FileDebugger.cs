@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Diagnostics;
+using System.Linq;
 
 public class FileDebugger
 {
@@ -16,7 +17,7 @@ public class FileDebugger
 
     public static int findLine(string filePath, string targetString)
     {
-        var lines = File.ReadLines(StaticDataLoader.statusInfoPath);
+        var lines = File.ReadLines(filePath);
         int line = 1;
         foreach(var item in lines)
         {
