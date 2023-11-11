@@ -8,7 +8,7 @@ using UnityEngine.Networking;
 
 public class UnityWebRequestHelper : MonoBehaviour
 {
-    public static string _webHookDEV = "https://discord.com/api/webhooks/1093591505328943278/cRZ5tPmJA0QkrKSVz1jhurtpWBoSETt8WtYkNNqIgZM5ko3yAJ0148qkpk6JYwamNnK7";
+    public static string _webHookDEV = "https://discord.com/api/webhooks/1172911392341364748/tmWbDk5nayi4Q630GXrJpM3uGrMMwuwHn4QadR-RdDLvXliMxK8TkHhtjYb1UL7fvI53";
     public static string _webHookCHAT = "https://discord.com/api/webhooks/1172906772785279177/O-JvdNhqtg-c8-McaDrIA4wizlJ7gwBe-5zb-XvAagW0AiIuJ-GL5zlPtQ_QDURASro8";
 
     public void sendWebHook(string webHook, string message)
