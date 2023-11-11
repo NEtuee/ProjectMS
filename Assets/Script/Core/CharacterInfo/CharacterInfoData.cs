@@ -11,4 +11,5 @@ public class CharacterInfoData
     public float        _headUpOffset;
 
     public SearchIdentifier _searchIdentifer = SearchIdentifier.Enemy;
+    public CommonMaterial   _defaultMaterial = CommonMaterial.Skin;
 }

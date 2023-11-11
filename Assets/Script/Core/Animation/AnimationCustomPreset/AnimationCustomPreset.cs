@@ -5,119 +5,6 @@ using System.IO;
 using UnityEditor;
 #endif
 
-public enum AnimationPresetFrameEventType
-{
-    TimelineEffect,
-    ParticleEffect,
-    SpriteEffect,
-
-}
-
-[System.Serializable]
-public class AnimationPresetFrameEventData_ParticleEffect
-{
-    [Tooltip("파티클 이펙트 프리팹 경로 (프리팹 이름 포함)")]
-    public string              _effectPrefabPath = "";
-
-    [Tooltip("생성 프레임")]
-    public float               _startFrame = 0f;
-
-    [Tooltip("대상(공격 대상 등)을 기준으로 이펙트 생성")]
-    public bool                _toTarget = false;
-
-    [Tooltip("이펙트 기준이 되는 오브젝트의 자식으로 Attach")]
-    public bool                _attach = false;
-
-    [Tooltip("위치 오프셋")]
-    public Vector3             _spawnOffset = Vector3.zero;
-
-    [Tooltip("방향 지정 타입 사용 안하고 캐릭터 방향으로 돌리기")]
-    public bool                _followDirection = false;
-
-    [Tooltip("방향 지정 타입. Direction은 캐릭터 방향, AttackPoint는 공격당했을 때 공격 시작 지점에서 바라보는 방향")]
-    public AngleDirectionType  _angleDirectionType = AngleDirectionType.identity;
-}
-
-[System.Serializable]
-public class AnimationPresetFrameEventData_SpriteEffect
-{
-    [Tooltip("이펙트 프리셋 경로")]
-    public string               _effectPresetPath = "";
-
-    [Tooltip("생성 프레임")]
-    public float               _startFrame = 0f;
-
-    [Tooltip("각도")]
-    public float                _spawnAngle = 0f;
-
-    [Tooltip("이펙트를 소환하는 오브젝트의 각도를 따라간다")]
-    public bool                 _followEntityAngle = false;
-
-    [Tooltip("대상(공격 대상 등)을 기준으로 이펙트 생성")]
-    public bool                 _toTarget = false;
-
-    [Tooltip("이펙트 기준이 되는 오브젝트의 자식으로 Attach")]
-    public bool                 _attach = false;
-
-    [Tooltip("물리 바디를 사용한다. 설정은 PhysicsBodyDesc에서")]
-    public bool                 _usePhysics = false;
-
-    [Tooltip("이펙트를 소환하는 오브젝트의 Flip Type에 따라 물리 방향이 바뀐다.")]
-    public bool                 _useFlipForPhysics = false;
-
-    [Tooltip("이펙트의 그림자를 그린다. (레이어가 바뀌기 때문에 특정 쉐이더 적용 안될 수 있음)")]
-    public bool                 _castShadow = false;
-
-    [Tooltip("랜덤 각도 적용 여부")]
-    public bool                 _randomAngleEnable = false;
-
-    [Tooltip("랜덤 각도 min max")]
-    public Vector2              _randomAngle = Vector2.zero;
-
-    [Tooltip("위치 오프셋")]
-    public Vector3              _spawnOffset = Vector3.zero;
-
-    [Tooltip("물리 바디 셋팅")]
-    public PhysicsBodyDescription _physicsBodyDesc = new PhysicsBodyDescription(null);
-
-    [Tooltip("시간 느려지는거에 영향 받을지 여부 (ScaledDeltaTime이면 영향 받음")]
-    public EffectUpdateType     _effectUpdateType = EffectUpdateType.ScaledDeltaTime;
-
-}
-
-[System.Serializable]
-public class AnimationPresetFrameEventData_TimelineEffect
-{
-    [Tooltip("타임라인 이펙트 프리펩 경로 (프리팹 이름 포함)")]
-    public string               _effectPrefabPath = "";
-
-    [Tooltip("생성 프레임")]
-    public float               _startFrame = 0f;
-
-    [Tooltip("대상(공격 대상 등)을 기준으로 이펙트 생성")]
-    public bool                 _toTarget = false;
-
-    [Tooltip("이펙트 기준이 되는 오브젝트의 자식으로 Attach")]
-    public bool                 _attach = false;
-
-    [Tooltip("이펙트 플레이 시간 (0이면 적용 안함, 이펙트 길이를 강제로 LifeTime으로 맞춘다)")]
-    public float                _lifeTime = 0f;
-
-    [Tooltip("위치 오프셋")]
-    public Vector3              _spawnOffset = Vector3.zero;
-
-    [Tooltip("시간 느려지는거에 영향 받을지 여부 (ScaledDeltaTime이면 영향 받음, 파티클은 적용 안됨")]
-    public EffectUpdateType     _effectUpdateType = EffectUpdateType.ScaledDeltaTime;
-
-    [Tooltip("방향 지정 타입 사용 안하고 캐릭터 방향으로 돌리기")]
-    public bool                _followDirection = false;
-
-    [Tooltip("방향 지정 타입. Direction은 캐릭터 방향, AttackPoint는 공격당했을 때 공격 시작 지점에서 바라보는 방향")]
-    public AngleDirectionType   _angleDirectionType = AngleDirectionType.identity;
-
-}
-
-
 [CreateAssetMenu(fileName = "AnimationCustomPreset", menuName = "Scriptable Object/Animation Custom Preset", order = int.MaxValue)]
 public class AnimationCustomPreset : ScriptableObject
 {
@@ -125,10 +12,6 @@ public class AnimationCustomPreset : ScriptableObject
     public string _translationPresetName = "";
     public string _rotationPresetName="";
     public string _scalePresetName = "";
-
-    public AnimationPresetFrameEventData_SpriteEffect[] _spriteEffects = null;
-    public AnimationPresetFrameEventData_ParticleEffect[] _particleEffects = null;
-    public AnimationPresetFrameEventData_TimelineEffect[] _timelineEffects = null;
 }
 
 #if UNITY_EDITOR

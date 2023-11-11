@@ -19,243 +19,284 @@ MonoBehaviour:
     _attackStartDistance: 0.1
     _attackRayRadius: 0.17
     _pushVector: {x: 1.5, y: 0, z: 0}
+    _attackMaterial: 0
   - _name: PlayerAttackLong
     _attackRadius: 100
     _attackAngle: 0
     _attackStartDistance: 0.1
     _attackRayRadius: 0.25
     _pushVector: {x: 1.5, y: 0, z: 0}
+    _attackMaterial: 0
   - _name: PlayerBloodSpreadTest
     _attackRadius: 1
     _attackAngle: 140
     _attackStartDistance: 0
     _attackRayRadius: 0
     _pushVector: {x: 0, y: 0, z: 0}
+    _attackMaterial: 0
   - _name: ATK_F_ChargeAttack
     _attackRadius: 5
     _attackAngle: 8
     _attackStartDistance: 0
     _attackRayRadius: 0
     _pushVector: {x: 0, y: 0, z: 0}
+    _attackMaterial: 0
   - _name: ATK_C_Thrust
     _attackRadius: 2
     _attackAngle: 8
     _attackStartDistance: 0
     _attackRayRadius: 0
     _pushVector: {x: 0, y: 0, z: 0}
+    _attackMaterial: 0
   - _name: Player_JustGuardBreak
     _attackRadius: 1
     _attackAngle: 140
     _attackStartDistance: 0
     _attackRayRadius: 0
     _pushVector: {x: 0, y: 0, z: 0}
+    _attackMaterial: 0
   - _name: ATK_C_ComboAttack
     _attackRadius: 1
     _attackAngle: 45
     _attackStartDistance: 0
     _attackRayRadius: 0
     _pushVector: {x: 0, y: 0, z: 0}
+    _attackMaterial: 0
   - _name: projectileTest
     _attackRadius: 0.2
     _attackAngle: 360
     _attackStartDistance: 0
     _attackRayRadius: 0
     _pushVector: {x: 1, y: 0, z: 0}
+    _attackMaterial: 0
   - _name: ATK_N_DefenseWave
     _attackRadius: 3
     _attackAngle: 360
     _attackStartDistance: 0
     _attackRayRadius: 0
     _pushVector: {x: 3, y: 0, z: 0}
+    _attackMaterial: 0
   - _name: tutorial_spear
     _attackRadius: 0.2
     _attackAngle: 360
     _attackStartDistance: 0
     _attackRayRadius: 0
     _pushVector: {x: 1, y: 0, z: 0}
+    _attackMaterial: 0
   - _name: AttackGuardBreak
     _attackRadius: 0.8
     _attackAngle: 180
     _attackStartDistance: 0.1
     _attackRayRadius: 0
     _pushVector: {x: 1.5, y: 0, z: 0}
+    _attackMaterial: 0
   - _name: Akane_Kick
     _attackRadius: 1.5
     _attackAngle: 8
     _attackStartDistance: 0.1
     _attackRayRadius: 0
     _pushVector: {x: 2.5, y: 0, z: 0}
+    _attackMaterial: 0
   - _name: MagicalBullet
     _attackRadius: 0.2
     _attackAngle: 360
     _attackStartDistance: 0
     _attackRayRadius: 0
     _pushVector: {x: 1, y: 0, z: 0}
+    _attackMaterial: 0
   - _name: AtrariRush
     _attackRadius: 0.2
     _attackAngle: 180
     _attackStartDistance: 0
     _attackRayRadius: 0
     _pushVector: {x: 5, y: 0, z: 0}
+    _attackMaterial: 0
   - _name: Sister_Kick
     _attackRadius: 2
     _attackAngle: 8
     _attackStartDistance: 0
     _attackRayRadius: 0
     _pushVector: {x: 3, y: 0, z: 0}
+    _attackMaterial: 0
   - _name: Najimi_Catch
     _attackRadius: 0.2
     _attackAngle: 360
     _attackStartDistance: 0
     _attackRayRadius: 0
     _pushVector: {x: 0, y: 0, z: 0}
+    _attackMaterial: 0
   - _name: Najimi_BatonSlash
     _attackRadius: 4.5
     _attackAngle: 4
     _attackStartDistance: 0.1
     _attackRayRadius: 0
     _pushVector: {x: 1, y: 0, z: 0}
+    _attackMaterial: 0
   - _name: LaserTest
     _attackRadius: 5.5
     _attackAngle: 0
     _attackStartDistance: 0.1
     _attackRayRadius: 0.5
     _pushVector: {x: 3, y: 0, z: 0}
+    _attackMaterial: 0
   - _name: Najimi_Pitching
     _attackRadius: 100
     _attackAngle: 0
     _attackStartDistance: 0.1
     _attackRayRadius: 0.4
     _pushVector: {x: 3, y: 0, z: 0}
+    _attackMaterial: 0
   - _name: BaseBall
     _attackRadius: 0.2
     _attackAngle: 360
     _attackStartDistance: 0
     _attackRayRadius: 0
     _pushVector: {x: 1, y: 0, z: 0}
+    _attackMaterial: 0
   - _name: Najimi_Beam
     _attackRadius: 100
     _attackAngle: 0
     _attackStartDistance: 0.1
     _attackRayRadius: 0.8
     _pushVector: {x: 5, y: 0, z: 0}
+    _attackMaterial: 0
   - _name: Najimi_Rush
     _attackRadius: 0.2
     _attackAngle: 45
     _attackStartDistance: 0.1
     _attackRayRadius: 0
     _pushVector: {x: 0, y: 0, z: 0}
+    _attackMaterial: 0
   - _name: MagicalFireworkBullet
     _attackRadius: 1
     _attackAngle: 360
     _attackStartDistance: 0
     _attackRayRadius: 0
     _pushVector: {x: 0, y: 0, z: 0}
+    _attackMaterial: 0
   - _name: Reito_Punch
     _attackRadius: 0.4
     _attackAngle: 45
     _attackStartDistance: 0.1
     _attackRayRadius: 0
     _pushVector: {x: 7, y: 0, z: 0}
+    _attackMaterial: 0
   - _name: Reito_Beam
     _attackRadius: 100
     _attackAngle: 0
     _attackStartDistance: 0.1
     _attackRayRadius: 0.6
     _pushVector: {x: 5, y: 0, z: 0}
+    _attackMaterial: 0
   - _name: Aoba_Raisen
     _attackRadius: 4.5
     _attackAngle: 0
     _attackStartDistance: 0.1
     _attackRayRadius: 0.2
     _pushVector: {x: 1, y: 0, z: 0}
+    _attackMaterial: 0
   - _name: Aoba_Choraisen
     _attackRadius: 100
     _attackAngle: 0
     _attackStartDistance: 0.1
     _attackRayRadius: 0.25
     _pushVector: {x: 1.5, y: 0, z: 0}
+    _attackMaterial: 0
   - _name: Aoba_UnwaverRaisen
     _attackRadius: 2
     _attackAngle: 0
     _attackStartDistance: 0
     _attackRayRadius: 0
     _pushVector: {x: 0, y: 0, z: 0}
+    _attackMaterial: 0
   - _name: Aoba_Stungun
     _attackRadius: 3
     _attackAngle: 60
     _attackStartDistance: 0.1
     _attackRayRadius: 0
     _pushVector: {x: 1, y: 0, z: 0}
+    _attackMaterial: 0
   - _name: Aoba_EmpGrenade
     _attackRadius: 3
     _attackAngle: 0
     _attackStartDistance: 0
     _attackRayRadius: 0
     _pushVector: {x: 0, y: 0, z: 0}
+    _attackMaterial: 0
   - _name: Aoba_Discharge
     _attackRadius: 1.8
     _attackAngle: 0
     _attackStartDistance: 0
     _attackRayRadius: 0
     _pushVector: {x: 0, y: 0, z: 0}
+    _attackMaterial: 0
   - _name: Aoba_ElectronicShock
     _attackRadius: 0.2
     _attackAngle: 0
     _attackStartDistance: 0
     _attackRayRadius: 0
     _pushVector: {x: 0, y: 0, z: 0}
+    _attackMaterial: 0
   - _name: Aoba_Tsuba
     _attackRadius: 10
     _attackAngle: 0
     _attackStartDistance: 0
     _attackRayRadius: 0
     _pushVector: {x: 0, y: 0, z: 0}
+    _attackMaterial: 0
   - _name: Aoba_Storm
     _attackRadius: 4
     _attackAngle: 0
     _attackStartDistance: 0
     _attackRayRadius: 0.2
     _pushVector: {x: 0, y: 0, z: 0}
+    _attackMaterial: 0
   - _name: Rapier_Normal
     _attackRadius: 0.4
     _attackAngle: 0
     _attackStartDistance: 0
     _attackRayRadius: 0.1
     _pushVector: {x: 0.1, y: 0, z: 0}
+    _attackMaterial: 0
   - _name: Luger_Normal
     _attackRadius: 100
     _attackAngle: 0
     _attackStartDistance: 0.1
     _attackRayRadius: 0.2
     _pushVector: {x: 5, y: 0, z: 0}
+    _attackMaterial: 0
   - _name: Barricade_Normal
     _attackRadius: 0.2
     _attackAngle: 0
     _attackStartDistance: 0
     _attackRayRadius: 0.2
     _pushVector: {x: 4, y: 0, z: 0}
+    _attackMaterial: 0
   - _name: Tate_Normal
     _attackRadius: 0.2
     _attackAngle: 0
     _attackStartDistance: 0
     _attackRayRadius: 0.2
     _pushVector: {x: 7, y: 0, z: 0}
+    _attackMaterial: 0
   - _name: Sister_ThunderStroke
     _attackRadius: 1
     _attackAngle: 0
     _attackStartDistance: 0
     _attackRayRadius: 0
     _pushVector: {x: 0, y: 0, z: 0}
+    _attackMaterial: 0
   - _name: Preset_Melee_Normal
     _attackRadius: 0.4
     _attackAngle: 0
     _attackStartDistance: 0
     _attackRayRadius: 0.1
     _pushVector: {x: 0.1, y: 0, z: 0}
+    _attackMaterial: 0
   - _name: Preset_Ranged_Normal
     _attackRadius: 100
     _attackAngle: 0
     _attackStartDistance: 0.1
     _attackRayRadius: 0.2
     _pushVector: {x: 5, y: 0, z: 0}
+    _attackMaterial: 0

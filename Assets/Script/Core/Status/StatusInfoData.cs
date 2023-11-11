@@ -95,6 +95,8 @@ public enum StatusType
     Stamina,
     Blood,
     Battle,
+    HitCount,
+    GuardCount,
     Custom,
     Count,
 }

@@ -9,6 +9,12 @@ public class AIGraph
         public Dictionary<AIChildEventType,AIChildFrameEventItem> _eventDic;
     }
 
+    struct AIGraphStateCoolDownSet
+    {
+        public float _checkStartTime;
+        public float _coolTime;
+    }
+
     private int _currentAINodeIndex = -1;
     private int _prevAINodeIndex = -1;
 
@@ -46,6 +52,8 @@ public class AIGraph
     private List<ReservedAIEventItem> _reservedTargetEvents = new List<ReservedAIEventItem>();
 
     private List<string> _reservedCustomEvents = new List<string>();
+
+    private Dictionary<string, AIGraphStateCoolDownSet> _graphStateCoolTimeMap = new Dictionary<string, AIGraphStateCoolDownSet>();
 
 
     public AIGraph(){}
@@ -100,6 +108,7 @@ public class AIGraph
         _reservedEvents.Clear();
         _reservedTargetEvents.Clear();
         _reservedCustomEvents.Clear();
+        _graphStateCoolTimeMap.Clear();
     }
 
     public void setDefaultAINode(GameEntityBase targetEntity)
@@ -136,6 +145,16 @@ public class AIGraph
         _aiPackageStateChanged = processAIPackage(deltaTime, getCurrentAIPackageNode(), targetEntity);
 
         processRotate(deltaTime);
+
+        if(_actionGraph != null)
+        {
+            foreach(var item in _graphStateCoolTimeMap)
+            {
+                _actionGraph.setAIGraphCoolTimeValue(item.Key, graphStateCoolDownCheck(item.Key));
+            }
+        }
+
+
         return true;
     }
 
@@ -214,6 +233,10 @@ public class AIGraph
 
         if(nodeChanged == true)
         {
+            AIGraphNodeData nodeData = getCurrentAINode();
+            if(nodeData._coolDownTime != 0)
+                setGraphStateCoolDown(nodeData._nodeName,nodeData._coolDownTime);
+
             _rotateProcess = false;
 
             _packageEnd = false;
@@ -450,6 +473,23 @@ public class AIGraph
         _recentlyAiDirection.x = Mathf.Cos(angle);
         _recentlyAiDirection.y = Mathf.Sin(angle);
         _recentlyAiDirection.z = 0f;
+    }
+
+    private void setGraphStateCoolDown(string aiGraphStateName,float coolTime)
+    {
+        if(coolTime <= 0f)
+            return;
+        
+        _graphStateCoolTimeMap[aiGraphStateName] = new AIGraphStateCoolDownSet{_checkStartTime = GlobalTimer.Instance().getScaledGlobalTime(), _coolTime = coolTime};
+    }
+
+    public bool graphStateCoolDownCheck(string aiGraphStateName)
+    {
+        if(_graphStateCoolTimeMap.ContainsKey(aiGraphStateName) == false)
+            return true;
+
+        AIGraphStateCoolDownSet coolDownSet = _graphStateCoolTimeMap[aiGraphStateName];
+        return GlobalTimer.Instance().getScaledGlobalTime() - coolDownSet._checkStartTime >= coolDownSet._coolTime; 
     }
 
     public AIGraphCustomValue[] getCustomValueData() {return _aiGraphBaseData._customValueData;}

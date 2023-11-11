@@ -1,5 +1,9 @@
 #if UNITY_EDITOR
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEditor;
 using System.Diagnostics;
 #endif
@@ -70,6 +74,20 @@ public static class DebugUtil
         return false;     
     }
 
+    public static void sendDiscordMessage_chat(string message)
+    {
+        GameObject coroutineObject = new GameObject("DiscordWebHookSender");
+        UnityWebRequestHelper helepr = coroutineObject.AddComponent<UnityWebRequestHelper>();
+        helepr.sendWebHook(UnityWebRequestHelper._webHookCHAT, message);
+    }
+
+    public static void sendDiscordMessage_dev(string message)
+    {
+        GameObject coroutineObject = new GameObject("DiscordWebHookSender");
+        UnityWebRequestHelper helepr = coroutineObject.AddComponent<UnityWebRequestHelper>();
+        helepr.sendWebHook(UnityWebRequestHelper._webHookDEV, message);
+    }
+
 }
 
 #if UNITY_EDITOR
@@ -131,7 +149,13 @@ public class CustomDialog_OpenFile : EditorWindow
         GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             
-            if (buttonTriggered || GUILayout.Button("Open File",GUILayout.Width(100f), GUILayout.Height(30f)))
+            if (GUILayout.Button("Send Discord",GUILayout.Width(100f), GUILayout.Height(30f)))
+            {
+                DebugUtil.sendDiscordMessage_dev(messageText);
+                this.Close();
+            }
+
+            if (GUILayout.Button("Open File",GUILayout.Width(100f), GUILayout.Height(30f)))
             {
                 FileDebugger.OpenFileWithCursor(_filePath, _fileLineNumber);
                 this.Close();
@@ -206,6 +230,13 @@ public class CustomDialog : EditorWindow
 
         GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
+
+            if (GUILayout.Button("Send Discord",GUILayout.Width(100f), GUILayout.Height(30f)))
+            {
+                DebugUtil.sendDiscordMessage_dev(messageText);
+                this.Close();
+            }
+
             if (buttonTriggered || GUILayout.Button(buttonText,GUILayout.Width(100f), GUILayout.Height(30f)))
                 this.Close();
 
@@ -218,3 +249,5 @@ public class CustomDialog : EditorWindow
     }
 }
 #endif
+
+

@@ -8,7 +8,7 @@ using ICSharpCode.WpfDesign.XamlDom;
 public class AIGraphLoader : LoaderBase<AIGraphBaseData>
 {
 
-    private static string _aiPackageRoot = "Assets\\Data\\AIPackage\\";
+    private static string _aiPackageRoot = "";
 
     private static Dictionary<string, string> _aiGraphGlobalVariables = new Dictionary<string, string>();
     private static Dictionary<string, string> _aiPackageGlobalVariables = new Dictionary<string, string>();
@@ -246,6 +246,10 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
                 }
 
                 nodeData._packageIndex = aiPackageIndexDic[targetValue];
+            }
+            else if(targetName == "CoolTime")
+            {
+                nodeData._coolDownTime = XMLScriptConverter.valueToFloatExtend(targetValue);
             }
             else
             {

@@ -40,6 +40,7 @@ public enum FrameEventType
     FrameEvent_ApplyPostProcessProfile,
     FrameEvent_SetDirectionType,
     FrameEvent_Torque,
+    FrameEvent_EffectPreset,
 
     Count,
 }
@@ -89,32 +90,14 @@ public abstract class ActionFrameEventBase
     public virtual void onExit(ObjectBase executeEntity){}
     public abstract void loadFromXML(XmlNode node);
 
+    public virtual void initializeFromAttack(CommonMaterial attackMaterial) {}
+
     public bool checkCondition(GameEntityBase targetEntity)
     {
         if(_conditionCompareData == null)
             return true;
 
         return targetEntity.processActionCondition(_conditionCompareData);
-    }
-
-    public void executeChildFrameEvent(ChildFrameEventType eventType, ObjectBase executeEntity, ObjectBase targetEntity)
-    {
-        if(_childFrameEventItems == null || _childFrameEventItems.ContainsKey(eventType) == false)
-            return;
-        
-        ChildFrameEventItem childFrameEventItem = _childFrameEventItems[eventType];
-        GameEntityBase executeGameEntity = null;
-        if(executeEntity is GameEntityBase)
-            executeGameEntity = executeEntity as GameEntityBase;
-
-        for(int i = 0; i < childFrameEventItem._childFrameEventCount; ++i)
-        {
-            if(executeGameEntity != null && childFrameEventItem._childFrameEvents[i].checkCondition(executeGameEntity) == false)
-                continue;
-
-            childFrameEventItem._childFrameEvents[i].initialize();
-            childFrameEventItem._childFrameEvents[i].onExecute(executeEntity, targetEntity);
-        }
     }
 }
 
@@ -528,7 +511,6 @@ public class ActionFrameEvent_TalkBalloon : ActionFrameEventBase
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_TalkBalloon;}
 
     private string _key = "";
-    private float _time = 0f;
 
     public override void initialize()
     {
@@ -835,6 +817,37 @@ public class ActionFrameEvent_ShakeEffect : ActionFrameEventBase
     }
 }
 
+public class ActionFrameEvent_EffectPreset : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_EffectPreset;}
+
+    private string _effectInfoKey = "";
+    private CommonMaterial _attackMaterial;
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        if(executeEntity is GameEntityBase == false)
+            return false;
+
+        EffectInfoManager.Instance().requestEffect(_effectInfoKey,executeEntity as GameEntityBase, targetEntity,_attackMaterial);
+        return true;
+    }
+
+    public override void initializeFromAttack(CommonMaterial attackMaterial)
+    {
+        base.initializeFromAttack(attackMaterial);
+        _attackMaterial = attackMaterial;
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            if(attributes[i].Name == "Key")
+                _effectInfoKey = attributes[i].Value;
+        }
+    }
+}
 
 public class ActionFrameEvent_Torque : ActionFrameEventBase
 {
@@ -1396,6 +1409,8 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
     private UnityEngine.Vector3     _pushVector = UnityEngine.Vector3.zero;
     private UnityEngine.Vector3     _catchOffset = UnityEngine.Vector3.zero;
 
+    private CommonMaterial          _attackMaterial = CommonMaterial.Empty;
+
     private HashSet<ObjectBase>     _collisionList = new HashSet<ObjectBase>();
     private List<CollisionSuccessData> _collisionOrder = new List<CollisionSuccessData>();
 
@@ -1612,6 +1627,27 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
         return attackSuccess;
     }
 
+    public void executeChildFrameEvent(ChildFrameEventType eventType, ObjectBase executeEntity, ObjectBase targetEntity)
+    {
+        if(_childFrameEventItems == null || _childFrameEventItems.ContainsKey(eventType) == false)
+            return;
+        
+        ChildFrameEventItem childFrameEventItem = _childFrameEventItems[eventType];
+        GameEntityBase executeGameEntity = null;
+        if(executeEntity is GameEntityBase)
+            executeGameEntity = executeEntity as GameEntityBase;
+
+        for(int i = 0; i < childFrameEventItem._childFrameEventCount; ++i)
+        {
+            if(executeGameEntity != null && childFrameEventItem._childFrameEvents[i].checkCondition(executeGameEntity) == false)
+                continue;
+
+            childFrameEventItem._childFrameEvents[i].initializeFromAttack(_attackMaterial);
+            childFrameEventItem._childFrameEvents[i].initialize();
+            childFrameEventItem._childFrameEvents[i].onExecute(executeEntity, targetEntity);
+        }
+    }
+
     private bool canIgnoreDefenceType(DefenceType defenceType)
     {
         if(_ignoreDefenceType == null || _ignoreDefenceType.Length == 0)
@@ -1669,6 +1705,7 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
                 startDistance = presetData._attackStartDistance;
                 rayRadius = presetData._attackRayRadius;
                 _pushVector = presetData._pushVector;
+                _attackMaterial = presetData._attackMaterial;
             }
             else if(attributes[i].Name == "IgnoreDefenceType")
             {

@@ -26,6 +26,7 @@ public class GameEntityBase : SequencerObjectBase
     public bool                 _aiDebug = false;
     public bool                 _animationDebug = false;
     public bool                 _soundDebug = false;
+    
 
     
     private ActionGraph         _actionGraph;
@@ -74,6 +75,7 @@ public class GameEntityBase : SequencerObjectBase
     private bool                _activeSelf = true;
     private bool                _blockAI = false;
     private bool                _blockInput = false;
+    private bool                _isActionChangeFrame = false;
 
     private DirectionType       _currentDirectionType = DirectionType.AlwaysRight;
     private RotationType        _currentRotationType = RotationType.AlwaysRight;
@@ -301,6 +303,9 @@ public class GameEntityBase : SequencerObjectBase
     public override void progress(float deltaTime)
     {
         base.progress(deltaTime);
+        if(_isActionChangeFrame)
+            _isActionChangeFrame = false;
+
         _characterLifeTime += deltaTime;
 
         if(_sequencerProcessManager != null)
@@ -365,6 +370,8 @@ public class GameEntityBase : SequencerObjectBase
             //action,movementGraph 바뀌는 시점
             if(_actionGraph.progress(deltaTime) == true)
             {
+                _isActionChangeFrame = true;
+
                 _currentDefenceType = _actionGraph.getCurrentDefenceType();
                 _currentDirectionType = _actionGraph.getDirectionType();
 
@@ -1099,6 +1106,17 @@ public class GameEntityBase : SequencerObjectBase
             _spriteRenderer.enabled = true;
     }
 
+    public CommonMaterial getCharacterMaterial()
+    {
+        CommonMaterial commonMaterial = _actionGraph.getCurrentMaterial();
+        if(commonMaterial == CommonMaterial.Count)
+            return _characterInfo._defaultMaterial;
+        
+        
+        return commonMaterial;
+    }
+
+    public bool isActionChangeFrame() {return _isActionChangeFrame;}
     public bool isActiveSelf() {return _activeSelf;}
 
     public int getActionIndex(string actionName) {return _actionGraph.getActionIndex(actionName);}
