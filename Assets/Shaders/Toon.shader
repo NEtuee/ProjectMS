@@ -9,9 +9,7 @@ Shader "Unlit/Toon"
     SubShader
     {
         Tags { "RenderType"="Opaque"
-        "LightMode" = "ForwardBase"
-        "PassFlage" = "OnlyDirecrional"
-        "Queue" = "Opaque" }
+        "LightMode" = "ForwardBase"}
         LOD 100
         
 
@@ -47,7 +45,6 @@ Shader "Unlit/Toon"
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
-            float _Shadow;
 
             v2f vert (appdata v)
             {
@@ -56,7 +53,6 @@ Shader "Unlit/Toon"
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 UNITY_TRANSFER_FOG(o,o.vertex);
                 o.worldNormal = UnityObjectToWorldNormal(v.normal);
-                TRANSFER_SHADOW(o)
                 return o;
             }
 
@@ -77,10 +73,8 @@ Shader "Unlit/Toon"
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);
 
-                float Shadow = saturate(SHADOW_ATTENUATION(i));
-                Shadow = lerp(Shadow, 1, _Shadow);
 
-                return col * _Color * (_AmbientColor + light) * Shadow;
+                return col * _Color * (_AmbientColor + light);
             }
             ENDCG
         }
