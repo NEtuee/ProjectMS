@@ -48,24 +48,24 @@
 
 <!-- 패키지 인클루드 -->
     <!-- 패키지 인클루드 : 공통 -->
-    <Include Path="Assets/Data/AIPackage/EmptyPackage.xml"/>          <!-- 사망 패키지 -->
-    <Include Path="Assets/Data/AIPackage/Common/CommonDeadPackage.xml"/>          <!-- 사망 패키지 -->
-    <Include Path="Assets/Data/AIPackage/Common/CommonHitPackage.xml"/>           <!-- 피격 패키지 -->
+    <Include Path="Assets/Data/AILibrary/Package/EmptyPackage.xml"/>          <!-- 사망 패키지 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonDeadPackage.xml"/>          <!-- 사망 패키지 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonHitPackage.xml"/>           <!-- 피격 패키지 -->
     
-    <Include Path="Assets/Data/AIPackage/Common/CommonGuardBrokenPackage.xml"/>   <!-- 가드 해제 패키지 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonGuardBrokenPackage.xml"/>   <!-- 가드 해제 패키지 -->
     <!-- 패키지 인클루드 : 평화 상태 -->
-    <Include Path="Assets/Data/AIPackage/Common/CommonIdlePackage.xml"/>          <!-- 대기 패키지 -->
-    <Include Path="Assets/Data/AIPackage/Common/CommonRandMovePackage.xml"/>      <!-- 랜덤 이동 패키지-->
+    <Include Path="Assets/Data/AILibrary/Package/CommonIdlePackage.xml"/>          <!-- 대기 패키지 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonRandMovePackage.xml"/>      <!-- 랜덤 이동 패키지-->
                                                             <!-- 지정 이동 패키지 (보류) -->
     <!-- 패키지 인클루드 : 전투 상태 -->
-    <Include Path="Assets/Data/AIPackage/Common/CommonChasePackage.xml"/>         <!-- 추격 이동 패키지 -->
-    <Include Path="Assets/Data/AIPackage/Common/CommonAlertPackage.xml"/>         <!-- 경계 이동 패키지 -->
-    <Include Path="Assets/Data/AIPackage/Common/CommonAwayPackage.xml"/>          <!-- 후진 이동 패키지 -->
-    <Include Path="Assets/Data/AIPackage/Common/CommonAttackPackage.xml"/>        <!-- 일반 공격 패키지 -->
-    <Include Path="Assets/Data/AIPackage/Common/CommonLockOnAttackPackage.xml"/>  <!-- 락온 공격 패키지 -->
-    <Include Path="Assets/Data/AIPackage/Common/CommonBumpAttackPackage.xml"/>    <!-- 충돌 공격 패키지 (공격 성공 시 액션 전환)-->
-    <Include Path="Assets/Data/AIPackage/Common/CommonDodgePackage.xml"/>         <!-- 회피 패키지 -->
-    <Include Path="Assets/Data/AIPackage/Common/CommonGuardPackage.xml"/>         <!-- 가드 패키지 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonChasePackage.xml"/>         <!-- 추격 이동 패키지 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonAlertPackage.xml"/>         <!-- 경계 이동 패키지 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonAwayPackage.xml"/>          <!-- 후진 이동 패키지 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonAttackPackage.xml"/>        <!-- 일반 공격 패키지 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonLockOnAttackPackage.xml"/>  <!-- 락온 공격 패키지 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonBumpAttackPackage.xml"/>    <!-- 충돌 공격 패키지 (공격 성공 시 액션 전환)-->
+    <Include Path="Assets/Data/AILibrary/Package/CommonDodgePackage.xml"/>         <!-- 회피 패키지 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonGuardPackage.xml"/>         <!-- 가드 패키지 -->
 <!-- 패키지 인클루드 -->
     <BranchSet Name="TestBranchA">
         <Branch Condition="gv_bIsIdleType"     Execute="Test"/>
