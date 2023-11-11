@@ -1,23 +1,23 @@
 <AIGraph Name="NajimiChanAlphaAI" DefaultState="DashRushReady">
 
-    <Include Path="Common/CommonDeadPackage.xml"/>
-    <Include Path="Common/CommonHitPackage.xml"/>
-    <Include Path="Common/CommonChasePackage.xml"/>
-    <Include Path="Common/CommonSystemChasePackage.xml"/>
-    <Include Path="Common/CommonAttackPackage.xml"/>
-    <Include Path="Common/CommonIdlePackage.xml"/>
-    <Include Path="Common/CommonGuardBrokenPackage.xml"/>
-    <Include Path="Common/CommonRunawayPackage.xml"/>
-    <Include Path="Common/CommonGroggyPackage.xml"/>
-    <Include Path="Common/CommonDashPackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonDeadPackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonHitPackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonChasePackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonSystemChasePackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonAttackPackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonIdlePackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonGuardBrokenPackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonRunawayPackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonGroggyPackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonDashPackage.xml"/>
 
-    <Include Path="Enemy/OsananaNajimi/NajimiRushPackage.xml"/>
-    <Include Path="Enemy/OsananaNajimi/NajimiDodgePackage.xml"/>
-    <Include Path="Enemy/OsananaNajimi/NajimiAttackReadyPackage.xml"/>
-    <Include Path="Enemy/OsananaNajimi/NajimiPitchingPackage.xml"/>
-    <Include Path="Enemy/OsananaNajimi/NajimiStunChasePackage.xml"/>
+    <Include Path="Assets/Data/Character/OsananaNajimiAlpha/NajimiRushPackage.xml"/>
+    <Include Path="Assets/Data/Character/OsananaNajimiAlpha/NajimiDodgePackage.xml"/>
+    <Include Path="Assets/Data/Character/OsananaNajimiAlpha/NajimiAttackReadyPackage.xml"/>
+    <Include Path="Assets/Data/Character/OsananaNajimiAlpha/NajimiPitchingPackage.xml"/>
+    <Include Path="Assets/Data/Character/OsananaNajimiAlpha/NajimiStunChasePackage.xml"/>
     
-    <Include Path="Common\CommonTestPackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common\CommonTestPackage.xml"/>
     <Test Package="CommonTestPackage">
         <Branch Condition="CurrentPackageEnd" Execute="Test"/>
     </Test>

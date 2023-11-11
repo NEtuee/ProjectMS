@@ -1,15 +1,15 @@
 <AIGraph Name="SisterChanAI" DefaultState="Entry">
 
-    <Include Path="Common\CommonDeadPackage.xml"/>
-    <Include Path="Common\CommonHitPackage.xml"/>
-    <Include Path="Common\CommonChasePackage.xml"/>
-    <Include Path="Common\CommonSystemChasePackage.xml"/>
-    <Include Path="Common\CommonIdlePackage.xml"/>
-    <Include Path="Common\CommonGuardBrokenPackage.xml"/>
-    <Include Path="Common\CommonGroggyPackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonDeadPackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonHitPackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonChasePackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonSystemChasePackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonIdlePackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonGuardBrokenPackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonGroggyPackage.xml"/>
 
-    <Include Path="Enemy\SisterHelena\SisterThunderStrokePackage.xml"/>
-    <Include Path="Enemy\SisterHelena\SisterLightningBoltPackage.xml"/>
+    <Include Path="Assets/Data/Character/SisterHelena/SisterThunderStrokePackage.xml"/>
+    <Include Path="Assets/Data/Character/SisterHelena/SisterLightningBoltPackage.xml"/>
 
     <!-- 보스전 대기 시간 (나중에 보스전 시작 트리거를 받아야 함)-->
     <GlobalVariable Name="gv_sisterReadyTime" Value="3.0"/>

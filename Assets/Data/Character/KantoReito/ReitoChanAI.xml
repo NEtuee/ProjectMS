@@ -1,26 +1,26 @@
 <AIGraph Name="ReitoChanAI" DefaultState="Entry">
 
-    <Include Path="Common/CommonTestPackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonTestPackage.xml"/>
    
 
-    <Include Path="Common/CommonDeadPackage.xml"/>
-    <Include Path="Common/CommonHitPackage.xml"/>
-    <Include Path="Common/CommonChasePackage.xml"/>
-    <Include Path="Common/CommonSystemChasePackage.xml"/>
-    <Include Path="Common/CommonAttackPackage.xml"/>
-    <Include Path="Common/CommonIdlePackage.xml"/>
-    <Include Path="Common/CommonGuardBrokenPackage.xml"/>
-    <Include Path="Common/CommonRunawayPackage.xml"/>
-    <Include Path="Common/CommonGroggyPackage.xml"/>
-    <Include Path="Common/CommonDashPackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonDeadPackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonHitPackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonChasePackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonSystemChasePackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonAttackPackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonIdlePackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonGuardBrokenPackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonRunawayPackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonGroggyPackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonDashPackage.xml"/>
 
-    <Include Path="Enemy/KantoReito/ReitoPunchPackage.xml"/>
-    <Include Path="Enemy/KantoReito/ReitoSpwanGauntletPackage.xml"/>
-    <Include Path="Enemy/KantoReito/ReitoCremationBeamPackage.xml"/>
-    <Include Path="Enemy/KantoReito/ReitoDodgePackage.xml"/>
-    <Include Path="Enemy/KantoReito/ReitoAttackReadyPackage.xml"/>
-    <Include Path="Enemy/KantoReito/ReitoChaseAttackReadyPackage.xml"/>
-    <Include Path="Enemy/KantoReito/ReitoLinearDashPackage.xml"/>
+    <Include Path="Assets/Data/Character/KantoReito/ReitoPunchPackage.xml"/>
+    <Include Path="Assets/Data/Character/KantoReito/ReitoSpwanGauntletPackage.xml"/>
+    <Include Path="Assets/Data/Character/KantoReito/ReitoCremationBeamPackage.xml"/>
+    <Include Path="Assets/Data/Character/KantoReito/ReitoDodgePackage.xml"/>
+    <Include Path="Assets/Data/Character/KantoReito/ReitoAttackReadyPackage.xml"/>
+    <Include Path="Assets/Data/Character/KantoReito/ReitoChaseAttackReadyPackage.xml"/>
+    <Include Path="Assets/Data/Character/KantoReito/ReitoLinearDashPackage.xml"/>
 
     <Test Package="CommonTestPackage">
         <Branch Condition="CurrentPackageEnd" Execute="Test"/>

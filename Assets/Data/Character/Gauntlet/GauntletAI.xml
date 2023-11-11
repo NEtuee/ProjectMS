@@ -1,13 +1,13 @@
 <AIGraph Name="GauntletAI" DefaultState="Entry">
 
-    <Include Path="Common/CommonDeadPackage.xml"/>
-    <Include Path="Common/CommonHitPackage.xml"/>
-    <Include Path="Common/CommonIdlePackage.xml"/>
-    <Include Path="Common/CommonGuardBrokenPackage.xml"/>
-    <Include Path="Common/CommonChasePackage.xml"/>
-    <Include Path="Common/CommonSystemChasePackage.xml"/>
-    <Include Path="Common/CommonAlertMovePackage.xml"/>
-    <Include Path="Enemy/KantoReito/GauntletRushPackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonDeadPackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonHitPackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonIdlePackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonGuardBrokenPackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonChasePackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonSystemChasePackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonAlertMovePackage.xml"/>
+    <Include Path="Assets/Data/Character/KantoReito/GauntletRushPackage.xml"/>
     
     
     <GlobalVariable Name="gv_najimiSystemChaseRange" Value="9.75"/>     <!-- 카메라 범위 값. 카메라 바깥으로 사라지지 않게 추격 -->

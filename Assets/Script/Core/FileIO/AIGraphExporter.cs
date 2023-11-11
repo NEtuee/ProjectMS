@@ -8,7 +8,7 @@ using ICSharpCode.WpfDesign.XamlDom;
 public class AIGraphLoader : LoaderBase<AIGraphBaseData>
 {
 
-    private static string _aiPackageRoot = "Assets\\Data\\AIPackage\\";
+    private static string _aiPackageRoot = "";
 
     private static Dictionary<string, string> _aiGraphGlobalVariables = new Dictionary<string, string>();
     private static Dictionary<string, string> _aiPackageGlobalVariables = new Dictionary<string, string>();

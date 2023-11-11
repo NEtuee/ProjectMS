@@ -1,16 +1,16 @@
 <AIGraph Name="EmptyAIGraph" DefaultState="Entry">
 
-    <Include Path="Enemy/TateChanPackage.xml"/>
-    <Include Path="Enemy/Tate/TateRepressPackage.xml"/>
-    <Include Path="Enemy/Tate/TateDefensePackage.xml"/>
-    <Include Path="Enemy/Tate/TateGuardBreakHitPackage.xml"/>
-    <Include Path="Enemy/Tate/TateDodgePackage.xml"/>
-    <Include Path="Common/CommonDeadPackage.xml"/>
-    <Include Path="Common/CommonChasePackage.xml"/>
-    <Include Path="Common/CommonBumpAttackPackage.xml"/>
-    <Include Path="Common/CommonIdlePackage.xml"/>
-    <Include Path="Common/CommonHitPackage.xml"/>
-    <Include Path="Common/CommonGuardBrokenPackage.xml"/>
+    <Include Path="Assets/Data/Character/TateChan/TateChanPackage.xml"/>
+    <Include Path="Assets/Data/Character/TateChan/TateRepressPackage.xml"/>
+    <Include Path="Assets/Data/Character/TateChan/TateDefensePackage.xml"/>
+    <Include Path="Assets/Data/Character/TateChan/TateGuardBreakHitPackage.xml"/>
+    <Include Path="Assets/Data/Character/TateChan/TateDodgePackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonDeadPackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonChasePackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonBumpAttackPackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonIdlePackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonHitPackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonGuardBrokenPackage.xml"/>
     
     <!-- 타겟 인지 거리 -->
     <GlobalVariable Name="gv_TargetSearchRange" Value="10.0"/>

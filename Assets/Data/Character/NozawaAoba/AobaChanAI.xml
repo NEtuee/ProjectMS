@@ -1,23 +1,23 @@
 <AIGraph Name="AobaChanAI" DefaultState="Entry">
 
-    <Include Path="Common/CommonTestPackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonTestPackage.xml"/>
 
-    <Include Path="Common/CommonDeadPackage.xml"/>
-    <Include Path="Common/CommonHitPackage.xml"/>
-    <Include Path="Common/CommonChasePackage.xml"/>
-    <Include Path="Common/CommonIdlePackage.xml"/>
-    <Include Path="Common/CommonGuardBrokenPackage.xml"/>
-    <Include Path="Common/CommonGroggyPackage.xml"/>
-    <Include Path="Common/CommonDashPackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonDeadPackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonHitPackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonChasePackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonIdlePackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonGuardBrokenPackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonGroggyPackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonDashPackage.xml"/>
 
-    <Include Path="Enemy/NozawaAoba/AobaStormRaisenPackage.xml"/>
-    <Include Path="Enemy/NozawaAoba/AobaChargeRaisenPackage.xml"/>
-    <Include Path="Enemy/NozawaAoba/AobaUnwaverRaisenPackage.xml"/>
-    <Include Path="Enemy/NozawaAoba/AobaEmpPackage.xml"/>
-    <Include Path="Enemy/NozawaAoba/AobaWarpChasePackage.xml"/>
-    <Include Path="Enemy/NozawaAoba/AobaTsubaPackage.xml"/>
-    <Include Path="Enemy/NozawaAoba/AobaTsubaReadyPackage.xml"/>
-    <Include Path="Enemy/NozawaAoba/AobaDodgePackage.xml"/>
+    <Include Path="Assets/Data/Character/NozawaAoba/AobaStormRaisenPackage.xml"/>
+    <Include Path="Assets/Data/Character/NozawaAoba/AobaChargeRaisenPackage.xml"/>
+    <Include Path="Assets/Data/Character/NozawaAoba/AobaUnwaverRaisenPackage.xml"/>
+    <Include Path="Assets/Data/Character/NozawaAoba/AobaEmpPackage.xml"/>
+    <Include Path="Assets/Data/Character/NozawaAoba/AobaWarpChasePackage.xml"/>
+    <Include Path="Assets/Data/Character/NozawaAoba/AobaTsubaPackage.xml"/>
+    <Include Path="Assets/Data/Character/NozawaAoba/AobaTsubaReadyPackage.xml"/>
+    <Include Path="Assets/Data/Character/NozawaAoba/AobaDodgePackage.xml"/>
 
     <CustomValue Name="CurrentRaisenCount" Value="0.0"/>
     <CustomValue Name="CurrentStormCount" Value="0.0"/>

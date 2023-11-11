@@ -1,13 +1,13 @@
 <AIGraph Name="LugerChanAI" DefaultState="Entry">
 
-    <Include Path="Common\CommonRandMovePackage.xml"/>
-    <Include Path="Common\CommonDeadPackage.xml"/>
-    <Include Path="Common\CommonHitPackage.xml"/>
-    <Include Path="Common\CommonChasePackage.xml"/>
-    <Include Path="Common\CommonLockOnRotateAttackPackage.xml"/>
-    <Include Path="Common\CommonIdlePackage.xml"/>
-    <Include Path="Common\CommonGuardBrokenPackage.xml"/>
-    <Include Path="Common\CommonAlertMovePackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonRandMovePackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonDeadPackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonHitPackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonChasePackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonLockOnRotateAttackPackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonIdlePackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonGuardBrokenPackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonAlertMovePackage.xml"/>
 
     <!-- 플레이어를 인지하는 거리 -->
     <GlobalVariable Name="gv_SightRange" Value="7.5"/>

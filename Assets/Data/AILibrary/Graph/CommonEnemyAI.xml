@@ -1,6 +1,6 @@
 <AIGraph Name="CommonEnemyAI" DefaultState="Entry">
-    <Include Path="EmptyPackage.xml"/>
-    <Include Path="Common/CommonDeadPackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/EmptyPackage.xml"/>
+    <Include Path="Assets/Data/AIPackage/Common/CommonDeadPackage.xml"/>
 
     <Entry Package="EmptyPackage">
         <Branch Condition="Dead" Execute="Dead"/>
