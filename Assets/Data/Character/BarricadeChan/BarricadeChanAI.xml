@@ -1,12 +1,12 @@
 <AIGraph Name="BarricadeChanAI" DefaultState="Entry">
 
-    <Include Path="Assets/Data/AIPackage/Common/CommonRandMovePackage.xml"/>
-    <Include Path="Assets/Data/AIPackage/Common/CommonDeadPackage.xml"/>
-    <Include Path="Assets/Data/AIPackage/Common/CommonHitPackage.xml"/>
-    <Include Path="Assets/Data/AIPackage/Common/CommonChasePackage.xml"/>
-    <Include Path="Assets/Data/AIPackage/Common/CommonLockOnAttackPackage.xml"/>
-    <Include Path="Assets/Data/AIPackage/Common/CommonIdlePackage.xml"/>
-    <Include Path="Assets/Data/AIPackage/Common/CommonGuardBrokenPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonRandMovePackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonDeadPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonHitPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonChasePackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonLockOnAttackPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonIdlePackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonGuardBrokenPackage.xml"/>
 
     <!-- 플레이어를 인지하는 거리 -->
     <GlobalVariable Name="gv_SightRange" Value="3.5"/>

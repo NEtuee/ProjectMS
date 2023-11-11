@@ -1,15 +1,15 @@
 <AIGraph Name="NajimiChanAlphaAI" DefaultState="DashRushReady">
 
-    <Include Path="Assets/Data/AIPackage/Common/CommonDeadPackage.xml"/>
-    <Include Path="Assets/Data/AIPackage/Common/CommonHitPackage.xml"/>
-    <Include Path="Assets/Data/AIPackage/Common/CommonChasePackage.xml"/>
-    <Include Path="Assets/Data/AIPackage/Common/CommonSystemChasePackage.xml"/>
-    <Include Path="Assets/Data/AIPackage/Common/CommonAttackPackage.xml"/>
-    <Include Path="Assets/Data/AIPackage/Common/CommonIdlePackage.xml"/>
-    <Include Path="Assets/Data/AIPackage/Common/CommonGuardBrokenPackage.xml"/>
-    <Include Path="Assets/Data/AIPackage/Common/CommonRunawayPackage.xml"/>
-    <Include Path="Assets/Data/AIPackage/Common/CommonGroggyPackage.xml"/>
-    <Include Path="Assets/Data/AIPackage/Common/CommonDashPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonDeadPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonHitPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonChasePackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonSystemChasePackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonAttackPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonIdlePackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonGuardBrokenPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonRunawayPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonGroggyPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonDashPackage.xml"/>
 
     <Include Path="Assets/Data/Character/OsananaNajimiAlpha/NajimiRushPackage.xml"/>
     <Include Path="Assets/Data/Character/OsananaNajimiAlpha/NajimiDodgePackage.xml"/>
@@ -17,7 +17,7 @@
     <Include Path="Assets/Data/Character/OsananaNajimiAlpha/NajimiPitchingPackage.xml"/>
     <Include Path="Assets/Data/Character/OsananaNajimiAlpha/NajimiStunChasePackage.xml"/>
     
-    <Include Path="Assets/Data/AIPackage/Common\CommonTestPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonTestPackage.xml"/>
     <Test Package="CommonTestPackage">
         <Branch Condition="CurrentPackageEnd" Execute="Test"/>
     </Test>
