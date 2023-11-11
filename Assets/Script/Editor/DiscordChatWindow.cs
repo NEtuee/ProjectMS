@@ -21,9 +21,6 @@ public class DiscordChatWindow : EditorWindow
         GUILayout.Label("아카네로 메시지를 보내보자");
         _text = EditorGUILayout.TextArea(_text,GUILayout.ExpandHeight(true));
 
-        if(Event.current.keyCode == KeyCode.Return)
-            sendMessage();
-
         if(GUILayout.Button("Send!") && _text.Trim() != "")
             sendMessage();
     }
