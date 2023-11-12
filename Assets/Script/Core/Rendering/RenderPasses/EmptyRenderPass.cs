@@ -16,9 +16,9 @@ public class EmptyRenderPass : AkaneRenderPass
         emptyTexture = new RenderTexture(1024, 1024, 1);
     }
 
-    public override void Draw(Camera renderCamera, RenderTexture buffer)
+    public override void Draw(Camera renderCamera)
     {
-        renderCamera.targetTexture = buffer;
+        renderCamera.targetTexture = RenderTexture;
         renderCamera.cullingMask = layerMasks;
 
         renderCamera.Render();

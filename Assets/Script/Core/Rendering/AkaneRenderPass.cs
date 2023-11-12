@@ -8,5 +8,5 @@ public abstract class AkaneRenderPass : ScriptableObject
     public abstract int layerMasks { get; }
     public abstract string layerName { get; }
     public abstract RenderTexture RenderTexture { get; }
-    public abstract void Draw(Camera renderCamera, RenderTexture buffer);
+    public abstract void Draw(Camera renderCamera);
 }

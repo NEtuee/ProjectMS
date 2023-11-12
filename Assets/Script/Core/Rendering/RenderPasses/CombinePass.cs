@@ -49,7 +49,7 @@ public class CombinePass : AkaneRenderPass
         pass.perspectiveDepthRenderPass = perspectiveDepthPass;
         return pass;
     }
-    public override void Draw(Camera renderCamera, RenderTexture buffer)
+    public override void Draw(Camera renderCamera)
     {
         renderMaterial?.SetTexture("_CharacterTexture", characterRenderPass?.RenderTexture);
         renderMaterial?.SetTexture("_MainTex", backgroundRenderPass?.RenderTexture);

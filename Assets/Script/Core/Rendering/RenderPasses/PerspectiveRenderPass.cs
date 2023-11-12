@@ -18,9 +18,9 @@ public class PerspectiveRenderPass : AkaneRenderPass
         perspectiveRenderTexture.filterMode = FilterMode.Point;
     }
 
-    public override void Draw(Camera renderCamera, RenderTexture buffer)
+    public override void Draw(Camera renderCamera)
     {
-        renderCamera.targetTexture = buffer;
+        renderCamera.targetTexture = RenderTexture;
         renderCamera.cullingMask = layerMasks;
         
         renderCamera.orthographic = false;

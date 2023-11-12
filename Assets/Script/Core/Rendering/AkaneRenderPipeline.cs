@@ -3,24 +3,6 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class AkaneRenderTexture2D
-{
-    public AkaneRenderTexture2D(string layer, int width, int height, RenderTextureFormat format = RenderTextureFormat.ARGBHalf)
-    {
-        Texture = new RenderTexture(width, height, 1, format);
-        Layer = layer;
-    }
-
-    public AkaneRenderTexture2D(string layer, RenderTexture renderTexture)
-    {
-        Texture = renderTexture;
-        Layer = layer;
-    }
-
-    public RenderTexture Texture;
-    public string Layer;
-}
-
 [ExecuteAlways]
 public class AkaneRenderPipeline : MonoBehaviour
 {
@@ -56,14 +38,10 @@ public class AkaneRenderPipeline : MonoBehaviour
         EmptyRenderPass emptyPass = ScriptableObject.CreateInstance<EmptyRenderPass>();
         emptyPass.Awake();
 
-
-
         combinePass.AddPass(backgroundPass);
-        // combinePass.AddPass(perspectivePass);
         combinePass.AddPass(characterPass);
         combinePass.AddPass(shadowPass);
         combinePass.AddPass(effectPass);
-        //  combinePass.AddPass(interfacePass);
 
         renderPasses.Add(backgroundPass);
         renderPasses.Add(perspectivePass);
@@ -116,13 +94,11 @@ public class AkaneRenderPipeline : MonoBehaviour
     }
     private void internalDraw()
     {
-        //   UnityEditorInternal.RenderDoc.BeginCaptureRenderDoc(UnityEditor.EditorWindow.GetWindow<SceneView>("Scene"));
         for (int i = 0; i < renderPasses.Count; i++)
         {
             var renderPass = renderPasses[i];
 
-            renderPass.Draw(internalCamera, renderPass.RenderTexture);
+            renderPass.Draw(internalCamera);
         }
-        //.RenderDoc.EndCaptureRenderDoc(UnityEditor.EditorWindow.GetWindow<SceneView>("Scene"));
     }
 }
