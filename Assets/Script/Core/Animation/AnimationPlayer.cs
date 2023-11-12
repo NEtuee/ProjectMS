@@ -90,6 +90,7 @@ public class AnimationPlayer
 
     private bool _multiSelectAnimationUpdated = false;
 
+    private int _currentAnimationFrameEventIndex;
     private int _currentFrameEventIndex;
     private int _currentTimeEventIndex;
 
@@ -120,7 +121,10 @@ public class AnimationPlayer
 
         bool isEnd = _animationTimeProcessor.updateTime(deltaTime);
         if(isEnd == false && _animationTimeProcessor.isLoopedThisFrame())
+        {
             _currentFrameEventIndex = 0;
+            _currentAnimationFrameEventIndex = 0;
+        }
             
         if(targetEntity != null)
         {
@@ -182,6 +186,23 @@ public class AnimationPlayer
             return;
 
         float currentFrame = _animationTimeProcessor.getCurrentFrame();
+        if(playData._customPresetData != null && playData._customPresetData._effectFrameEvent != null && targetEntity is GameEntityBase)
+        {
+            for(int i = _currentAnimationFrameEventIndex; i < playData._customPresetData._effectFrameEvent.Length; ++i)
+            {
+                string effectEvent = playData._customPresetData._effectFrameEvent[i];
+                if(MathEx.equals((float)i, currentFrame,float.Epsilon) == true || (float)i < currentFrame)
+                {
+                    EffectInfoManager.Instance().requestEffect(effectEvent,targetEntity as GameEntityBase, null,CommonMaterial.Empty);
+                    _currentAnimationFrameEventIndex++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+
         for(int i = _currentFrameEventIndex; i < playData._frameEventDataCount; ++i)
         {
             if (playData._frameEventData == null || playData._frameEventData.Length == 0)
@@ -219,6 +240,9 @@ public class AnimationPlayer
                 break;
             }
         }
+
+        
+        
 
         float currentTotalTime = _animationTimeProcessor.getAnimationTotalPlayTime();
         for(int i = _currentTimeEventIndex; i < playData._timeEventDataCount; ++i)
@@ -275,6 +299,7 @@ public class AnimationPlayer
                 break;
         }
 
+        _currentAnimationFrameEventIndex = 0;
     }
 
     public void changeAnimation(AnimationPlayDataInfo playData)
@@ -372,6 +397,9 @@ public class AnimationPlayer
         }
         _frameEventProcessList.Clear();
         _currentFrameEventIndex = -1;
+        _currentAnimationFrameEventIndex = 0;
+        _currentTimeEventIndex = 0;
+        
     }
 
     public int angleToSectorNumberByAngleBaseSpriteCount(float angleDegree)

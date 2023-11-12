@@ -30,7 +30,7 @@ InQuote,IsActionSelection=,"true,false"
 InQuote,NormalizedSpeed=,"true,false"
 InQuote,Attach=,"true,false"
 InQuote,DirectionUpdateOnce=,"true,false"
-InQuote,Condition=,"ActionTest,ActionDash,End,AngleBetweenStick,AngleDirection,IsXFlip,IsYFlip,CurrentFrame,AttackSuccess,AttackGuarded,AttackParried,AttackGuardBreak,DefenceSuccess,ParrySuccess,Hit,EvadeSuccess,GuardBroken,CurrentFrame,TargetExists,TargetDistance,ArrivedTarget,CurrentPackageEnd,getStat_,getKey_,getFrameTag_,getTargetFrameTag_,getWeight_,true,false,PackageExecutedTime,GraphExecutedTime,AttackGuardBreakFail,GuardBreakFail,IsCatcher,IsCatchTarget,AttackCatchTarget,Catched,LifeTime,ActionExecutedTime,customValue_,Dead,CanInput"
+InQuote,Condition=,"ActionTest,ActionDash,End,AngleBetweenStick,AngleDirection,IsXFlip,IsYFlip,CurrentFrame,AttackSuccess,AttackGuarded,AttackParried,AttackGuardBreak,DefenceSuccess,ParrySuccess,Hit,EvadeSuccess,GuardBroken,CurrentFrame,TargetExists,TargetDistance,ArrivedTarget,CurrentPackageEnd,getStat_,getKey_,getFrameTag_,getTargetFrameTag_,getWeight_,true,false,PackageExecutedTime,GraphExecutedTime,AttackGuardBreakFail,GuardBreakFail,IsCatcher,IsCatchTarget,AttackCatchTarget,Catched,LifeTime,ActionExecutedTime,customValue_,Dead,CanInput,aiGraphCoolTime_"
 InQuote,UpdateType=,"ScaledDeltaTime,NoneScaledDeltaTime"
 InQuote,ToTarget=,"true,false"
 InQuote,AngleType=,"Normal,AttackPoint,Direction"
@@ -110,8 +110,8 @@ ShortCut,__FrameEvent_Torque,<FrameEvent Type=~Torque~ StartTime=~0~ Add=~~/>
 ShortCut,__FrameEvent_DeactiveTalkBalloon,<FrameEvent Type=~DeactiveTalkBalloon~ StartTime=~0~/>
 InQuote,IgnoreAttackType=,"Default,GuardBreak,Catch"
 InQuote,MultiSelectUpdateOnce=,"True,False"
-,,
-,,
+FrameEvent,EffectPreset,Key=~~
+ShortCut,__FrameEvent_EffectPreset,<FrameEvent Type=~EffectPreset~ StartTime=~0~ Key=~~/>
 ,,
 ,,
 ,,

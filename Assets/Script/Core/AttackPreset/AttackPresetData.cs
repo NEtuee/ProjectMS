@@ -8,4 +8,6 @@ public class AttackPresetData
     public float                _attackRayRadius = 0f;
 
     public UnityEngine.Vector3  _pushVector;
+
+    public CommonMaterial       _attackMaterial;
 }

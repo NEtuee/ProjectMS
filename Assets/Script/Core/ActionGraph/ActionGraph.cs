@@ -1,5 +1,6 @@
 
 using System.Collections.Generic;
+using System.Linq;
 
 [System.Serializable]
 public class ActionGraph
@@ -21,6 +22,8 @@ public class ActionGraph
 
     private HashSet<string>                     _currentFrameTag = new HashSet<string>();
     private List<byte[]>                        _conditionResultList = new List<byte[]>();
+
+    private Dictionary<string, bool>            _graphStateCoolTimeMap = new Dictionary<string, bool>();
 
     public ActionGraph(){}
     public ActionGraph(ActionGraphBaseData baseData){_actionGraphBaseData = baseData;}
@@ -53,6 +56,8 @@ public class ActionGraph
         _currentAnimationIndex = 0;
 
         _blockInput = false;
+
+        _graphStateCoolTimeMap.Clear();
 
         setDefaultAction();
     }
@@ -102,7 +107,7 @@ public class ActionGraph
 
     private void createCoditionNodeDataAll()
     {
-        DebugUtil.assert((int)ConditionNodeUpdateType.Count == 49, "check this");
+        DebugUtil.assert((int)ConditionNodeUpdateType.Count == 50, "check this");
 
         foreach(var item in ConditionNodeInfoPreset._nodePreset.Values)
         {
@@ -114,7 +119,8 @@ public class ActionGraph
                 item._updateType == ConditionNodeUpdateType.TargetFrameTag ||
                 item._updateType == ConditionNodeUpdateType.Weight ||
                 item._updateType == ConditionNodeUpdateType.AngleSector || 
-                item._updateType == ConditionNodeUpdateType.AICustomValue)
+                item._updateType == ConditionNodeUpdateType.AICustomValue ||
+                item._updateType == ConditionNodeUpdateType.AI_GraphCoolTime)
                 continue;
 
             createConditionNodeData(item);
@@ -542,7 +548,7 @@ public class ActionGraph
         return false;
     }
 
-    public bool isNodeType(ActionGraphConditionNodeData nodeData, ConditionNodeType nodeType)
+    public static bool isNodeType(ActionGraphConditionNodeData nodeData, ConditionNodeType nodeType)
     {
         return nodeType == ConditionNodeInfoPreset._nodePreset[nodeData._symbolName]._nodeType;
     }
@@ -600,7 +606,11 @@ public class ActionGraph
 
             return data.getLiteral();
         }
-
+        else if(updateType == ConditionNodeUpdateType.AI_GraphCoolTime)
+        {
+            ActionGraphConditionNodeData_AIGraphCoolTime data = (ActionGraphConditionNodeData_AIGraphCoolTime)nodeData;
+            return checkAIGraphCoolTimeValue(data._graphNodeName) ? CommonConditionNodeData.trueByte : CommonConditionNodeData.falseByte;
+        }
 
         if(_actionConditionNodeData.ContainsKey(updateType) == false)
         {
@@ -643,6 +653,19 @@ public class ActionGraph
     {
         if(_currentFrameTag.Contains(tag))
             _currentFrameTag.Remove(tag);
+    }
+
+    public void setAIGraphCoolTimeValue(string graphNodeName, bool result)
+    {
+        _graphStateCoolTimeMap[graphNodeName] = result;
+    }
+
+    public bool checkAIGraphCoolTimeValue(string graphNodeName)
+    {
+        if(_graphStateCoolTimeMap.ContainsKey(graphNodeName) == false)
+            return true;
+
+        return _graphStateCoolTimeMap[graphNodeName];
     }
 
     public void setCustomValue(string customValueName, float value)
@@ -731,6 +754,7 @@ public class ActionGraph
     public bool getCurrentDirectionUpdateOnce() {return getCurrentAction()._directionUpdateOnce;}
     public bool getCurrentFlipTypeUpdateOnce() {return getCurrentAction()._flipTypeUpdateOnce;}
 
+    public CommonMaterial getCurrentMaterial() {return getCurrentAction()._characterMaterial;}
     public DefenceDirectionType getDefenceDirectionType() {return getCurrentAction()._defenceDirectionType;}
     public MoveValuePerFrameFromTimeDesc getMoveValuePerFrameFromTimeDesc(){return _animationPlayer.getMoveValuePerFrameFromTimeDesc();}
     public string getCurrentActionName() {return getCurrentAction()._nodeName; }

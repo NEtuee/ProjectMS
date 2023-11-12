@@ -34,6 +34,7 @@ public class AIGraphNodeData
         _packageIndex = -1;
         _branchIndexStart = 0;
         _branchCount = 0;
+        _coolDownTime = 0f;
     }
 
     public string                       _nodeName;
@@ -44,6 +45,7 @@ public class AIGraphNodeData
     public int                          _packageIndex;
     public int                          _branchIndexStart;
     public int                          _branchCount;
+    public float                        _coolDownTime;
 
 #if UNITY_EDITOR
     public int _lineNumber = 0;

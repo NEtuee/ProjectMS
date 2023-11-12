@@ -62,6 +62,16 @@ public enum DefenceState
     GuardBreakFail,
 }
 
+public enum CommonMaterial
+{
+    Empty,
+    Skin,
+    Metal,
+    Katana,
+    Laser,
+    Count,
+}
+
 
 public struct Triangle
 {

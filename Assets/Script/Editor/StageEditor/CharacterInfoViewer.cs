@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEditor;
 
@@ -42,6 +43,8 @@ public class CharacterInfoViewer : EditorWindow
 
             _searchStringCompare = _searchString;
         }
+
+        
 
         const string kCharacterInfoPath = "Assets\\Data\\StaticData\\CharacterInfo.xml";
         Dictionary<string,CharacterInfoData> characterInfo = ResourceContainerEx.Instance().getCharacterInfo(kCharacterInfoPath);
@@ -101,7 +104,7 @@ public class CharacterInfoViewer : EditorWindow
         {
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
-            GUILayout.BeginHorizontal("box");
+            GUILayout.BeginVertical("box");
 
             if(_characterTexture != null)
             {
@@ -111,25 +114,66 @@ public class CharacterInfoViewer : EditorWindow
                 GUI.DrawTexture(rect, _characterTexture,ScaleMode.ScaleToFit);
             }
 
-            GUILayout.BeginVertical();
+            GUILayout.BeginVertical("box");
 
-            _characterInfoScrollPosition = GUILayout.BeginScrollView(_characterInfoScrollPosition);
-
-            EditorGUILayout.LabelField(_selectedData._displayName);
-            EditorGUILayout.LabelField("ActionGraph: " + _selectedData._actionGraphPath);
-            EditorGUILayout.LabelField("AIGraph: " + _selectedData._aiGraphPath);
-            
-            EditorGUILayout.LabelField("Status: " + _selectedData._statusName);
-            EditorGUILayout.LabelField("Radius: " + _selectedData._characterRadius);
-            EditorGUILayout.LabelField("HeadUpOffset: " + _selectedData._headUpOffset);
-            EditorGUILayout.LabelField("SearchIdentifier: " + _selectedData._searchIdentifer);
-
-            GUILayout.EndScrollView();
+            GUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(_selectedData._displayName);
+                if(GUILayout.Button("Open"))
+                    FileDebugger.OpenFileWithCursor(kCharacterInfoPath,FileDebugger.findLine(kCharacterInfoPath, _selectedData._displayName));
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField("ActionGraph\t");
+                if(GUILayout.Button("Go"))
+                {
+                    TextAsset asset = AssetDatabase.LoadAssetAtPath<TextAsset>(_selectedData._actionGraphPath);
+                    PingTarget(asset);
+                }
+                if(GUILayout.Button("Open"))
+                {
+                    FileDebugger.OpenFileWithCursor(_selectedData._actionGraphPath, 1);
+                }
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField("AIGraph\t");
+                if(GUILayout.Button("Go"))
+                {
+                    TextAsset asset = AssetDatabase.LoadAssetAtPath<TextAsset>(_selectedData._aiGraphPath);
+                    PingTarget(asset);
+                }
+                if(GUILayout.Button("Open"))
+                {
+                    FileDebugger.OpenFileWithCursor(_selectedData._aiGraphPath, 1);
+                }
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField("Status: " + _selectedData._statusName);
+                if(GUILayout.Button("Go"))
+                {
+                    TextAsset asset = AssetDatabase.LoadAssetAtPath<TextAsset>(StaticDataLoader.statusInfoPath);
+                    PingTarget(asset);
+                }
+                if(GUILayout.Button("Open"))
+                {
+                    string statusName = _selectedData._statusName + ">";
+                    FileDebugger.OpenFileWithCursor(StaticDataLoader.statusInfoPath,FileDebugger.findLine(StaticDataLoader.statusInfoPath, statusName));
+                }
+            GUILayout.EndHorizontal();
 
             GUILayout.EndVertical();
-
-            GUILayout.EndHorizontal();
+            GUILayout.EndVertical();
         }
+    }
+
+    private void PingTarget(Object obj)
+    {
+        if(obj == null)
+        {
+            Debug.Log("Not Found");
+            return;
+        }
+
+        EditorGUIUtility.PingObject(obj);
+        EditorUtility.FocusProjectWindow();
     }
 
     private Sprite getFirstActionSpriteFromCharacter(CharacterInfoData characterInfoData)
