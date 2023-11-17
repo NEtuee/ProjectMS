@@ -1,17 +1,19 @@
+using System;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 
-namespace SequencerGraph
+namespace AkaneSequencerGraph
 {
-    public class SequenceNode : Node
+    [Serializable]
+    public class AkaneSequenceNode : Node
     {
-        public SequenceNode()
+        public AkaneSequenceNode()
         {
         }
     }
 
-    public abstract class ReservedPhaseNode : SequenceNode
+    public abstract class ReservedPhaseNode : AkaneSequenceNode
     {
         public Port NextPort { get; private set; }
 
@@ -61,7 +63,7 @@ namespace SequencerGraph
         }
     }
 
-    public abstract class EventNode : SequenceNode
+    public abstract class EventNode : AkaneSequenceNode
     {
         public Port PrevPort { get; private set; }
         public Port NextPort { get; private set; }

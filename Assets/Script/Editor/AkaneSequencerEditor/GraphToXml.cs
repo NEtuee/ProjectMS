@@ -4,11 +4,11 @@ using System.IO;
 using System.Text;
 using UnityEngine;
 
-namespace SequencerGraph
+namespace AkaneSequencerGraph
 {
     public static class GraphFile
     {
-        public static void GraphToXmlFile(SequenceGraphView graphView, string fileName) 
+        public static void GraphToXmlFile(AkaneSequencerGraphView graphView, string fileName) 
         {
             if (graphView == null)
             {

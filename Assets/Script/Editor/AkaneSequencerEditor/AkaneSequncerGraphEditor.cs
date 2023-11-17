@@ -6,29 +6,67 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace SequencerGraph
+namespace AkaneSequencerGraph
 {
-    public class SampleGraphEditorWindow : EditorWindow
+    public class AkaneSequencerGraphEditorWindow : EditorWindow
     {
+        public AkaneSequencerGraphData CurrentData;
+
+        private AkaneSequencerGraphView _akaneSequencerGraphView;
+        
         [MenuItem("CustomWindow/Open SampleGraphView")]
-        public static void Open()
+        public static void Open(AkaneSequencerGraphData data)
         {
-            GetWindow<SampleGraphEditorWindow>("SampleGraphWindow");
+            var editorWindow = GetWindow<AkaneSequencerGraphEditorWindow>("SampleGraphWindow");
+            editorWindow.Init(data);
         }
 
         private void OnEnable()
         {
-            var graphView = new SequenceGraphView(this)
+            var graphView = new AkaneSequencerGraphView(this)
             {
                 style = { flexGrow = 1 }
             };
+            _akaneSequencerGraphView = graphView;
             rootVisualElement.Add(graphView);
-            
+
             rootVisualElement.Add(new Button(() => { GraphFile.GraphToXmlFile(graphView, "Test");}){text = "Generate"});
+            rootVisualElement.Add(new Button(() =>
+            {
+                CurrentData.InitalizePhaseNodeList.Clear();
+                CurrentData.UpdatePhaseNodeList.Clear();
+                CurrentData.EndPhaseNodeList.Clear();
+
+                CurrentData.InitializePhase = graphView.InitializePhase;
+                CurrentData.UpdatePhase = graphView.UpdatePhase;
+                CurrentData.EndPhase = graphView.EndPhase;
+                
+                var (phaseNode, childNodeList) = graphView.GetInitializePhase();
+                CurrentData.InitalizePhaseNodeList.AddRange(childNodeList);
+                
+                (phaseNode, childNodeList) = graphView.GetUpdatePhase();
+                CurrentData.UpdatePhaseNodeList.AddRange(childNodeList);
+                
+                (phaseNode, childNodeList) = graphView.GetEndPhase();
+                CurrentData.EndPhaseNodeList.AddRange(childNodeList);
+            }){text = "Save"});
+        }
+
+        public void Init(AkaneSequencerGraphData data)
+        {
+            CurrentData = data;
+            
+            if (_akaneSequencerGraphView != null)
+            {
+                _akaneSequencerGraphView.InitNode(data.InitalizePhaseNodeList);
+                _akaneSequencerGraphView.InitNode(data.UpdatePhaseNodeList);
+                _akaneSequencerGraphView.InitNode(data.EndPhaseNodeList); 
+                _akaneSequencerGraphView.InitPhaseNode(data.InitializePhase, data.UpdatePhase, data.EndPhase);
+            }
         }
     }
 
-    public class SequenceGraphView : GraphView
+    public class AkaneSequencerGraphView : GraphView
     {
         public EditorWindow OwnerWindow { get; private set; }
 
@@ -36,7 +74,7 @@ namespace SequencerGraph
         public UpdatePhaseNode UpdatePhase { get; private set; }
         public EndPhaseNode EndPhase { get; private set; }
 
-        public SequenceGraphView(EditorWindow owner) : base()
+        public AkaneSequencerGraphView(EditorWindow owner) : base()
         {
             OwnerWindow = owner;
 
@@ -67,6 +105,32 @@ namespace SequencerGraph
 
             // var styleSheet = (StyleSheet)EditorGUIUtility.Load("DialogueSystem/DSGraphViewStyles.uss");
             // styleSheets.Add(styleSheet);
+        }
+
+        public void InitNode(List<AkaneSequenceNode> nodeList)
+        {
+            foreach (var node in nodeList)
+            {
+                AddElement(node);
+            }
+        }
+
+        public void InitPhaseNode(InitializePhaseNode init, UpdatePhaseNode update, EndPhaseNode end)
+        {
+            if (init != null)
+            {
+                InitializePhase.SetPosition(init.GetPosition());
+            }
+
+            if (update != null)
+            {
+                UpdatePhase.SetPosition(update.GetPosition());
+            }
+            
+            if (end != null)
+            {
+                EndPhase.SetPosition(end.GetPosition());
+            }
         }
 
         public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
@@ -142,9 +206,9 @@ namespace SequencerGraph
 
     public class NodeSearchWindowProvider : ScriptableObject, ISearchWindowProvider
     {
-        private SequenceGraphView _graphView;
+        private AkaneSequencerGraphView _graphView;
 
-        public void Initialize(SequenceGraphView graphView)
+        public void Initialize(AkaneSequencerGraphView graphView)
         {
             _graphView = graphView;
         }
@@ -159,7 +223,7 @@ namespace SequencerGraph
                 foreach (var type in assembly.GetTypes())
                 {
                     if (type.IsClass && !type.IsAbstract &&
-                        (type.IsSubclassOf(typeof(SequenceNode))) &&
+                        (type.IsSubclassOf(typeof(AkaneSequenceNode))) &&
                         type != typeof(InitializePhaseNode) &&
                         type != typeof(UpdatePhaseNode) &&
                         type != typeof(EndPhaseNode))
@@ -180,7 +244,7 @@ namespace SequencerGraph
                 return false;
             }
 
-            var node = Activator.CreateInstance(type) as SequenceNode;
+            var node = Activator.CreateInstance(type) as AkaneSequenceNode;
             if (node == null)
             {
                 return false;
