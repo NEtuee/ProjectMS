@@ -13,8 +13,8 @@
 
 <!-- Attack Movement Speed Option Variant Set-->
 <GlobalVariable Name="gv_AtkMovementSpeed"          Value="0.0"/>   <!-- Speed는 Velocity = 0 과 병행 사용 불가-->
-<GlobalVariable Name="gv_AtkMovementVelocity"       Value="10.0"/>  
-<GlobalVariable Name="gv_AtkMovementMaxVelocity"    Value="10.0"/>
+<GlobalVariable Name="gv_AtkMovementVelocity"       Value="12.0"/>  
+<GlobalVariable Name="gv_AtkMovementMaxVelocity"    Value="12.0"/>
 <GlobalVariable Name="gv_AtkMovementFriction"       Value="24.0"/>
 
 <!-- Defualt Action -->
@@ -31,10 +31,14 @@
         <AnimationHeader MasterPath="Sprites/Enemy/_Preset/_MeleePreset/"/>
         <Animation Preset="0_default/1_idle" XFlip="true" Duration="1">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+            
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
+            
         </Animation>
 
-        <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-        <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+        <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+        <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_Idle>
@@ -44,8 +48,8 @@
         <Animation Preset="0_default/2_move" XFlip="true" Duration="0.5">
             <FrameEvent Type="Movement" Condition="gv_MovementVelocity == 0.0"  StartTime="0" Friction="gv_MovementFriction" MaxVelocity="gv_MovementMaxVelocity" Speed="gv_MovementSpeed"/>
             <FrameEvent Type="Movement" Condition="gv_MovementVelocity > 0.0" StartTime="0" Friction="gv_MovementFriction" MaxVelocity="gv_MovementMaxVelocity" Velocity="gv_MovementVelocity" Speed="gv_MovementSpeed"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Move"/>
@@ -56,10 +60,11 @@
         <Animation Preset="0_default/3_hit" XFlip="true" Duration="1.25">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountIncrease"/>
 
             <FrameEvent Type="StopUpdate" Time="0.15"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
@@ -91,22 +96,22 @@
             <FrameEvent Type="Movement" Condition="gv_AtkRdMovementVelocity == 0.0" StartTime="0" Friction="gv_AtkRdMovementFriction" MaxVelocity="gv_AtkRdMovementMaxVelocity" Speed="gv_AtkRdMovementSpeed"/>
             <FrameEvent Type="Movement" Condition="gv_AtkRdMovementVelocity > 0.0" StartTime="0" Friction="gv_AtkRdMovementFriction" MaxVelocity="gv_AtkRdMovementMaxVelocity" Velocity="gv_AtkRdMovementVelocity" Speed="gv_AtkRdMovementSpeed"/>
 
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
             
         </Animation>
     
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_AttackReady>
 
-    <AC_AttackMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction">
+    <AC_AttackMain MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/_Preset/_MeleePreset/"/>
         <Animation Preset="1_attack/2_attackMain" XFlip="true" Duration="0.35">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2204" Attach="true"/>
             <FrameEvent Type="Movement" Condition="gv_AtkMovementVelocity == 0.0" StartTime="0" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Speed="gv_AtkMovementSpeed"/>
             <FrameEvent Type="Movement" Condition="gv_AtkMovementVelocity > 0.0" StartTime="0" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Velocity="gv_AtkMovementVelocity" Speed="gv_AtkMovementSpeed"/>
             
-            <FrameEvent Type="Attack" StartTime="0" EndTime="0.1" AttackPreset="Preset_Melee_Normal">
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.2" AttackPreset="Preset_Melee_Normal">
                 <OnHit>
                     <FrameEvent Type="AudioPlay" StartTime="0" ID="2205" Attach="true"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
@@ -125,8 +130,8 @@
     <AC_AttackRecover MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/_Preset/_MeleePreset/"/>
         <Animation Preset="1_attack/3_attackRecover" XFlip="true" Duration="1.47">
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>
@@ -137,7 +142,8 @@
     <AC_Dodge MovementType="GraphPreset" MovementGraphPreset="Preset_Dodge" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/_Preset/_MeleePreset/"/>
         <Animation Preset="2_defense/1_dodge" XFlip="true" Duration="0.7">
-            
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>
@@ -147,9 +153,10 @@
         <AnimationHeader MasterPath="Sprites/Enemy/_Preset/_MeleePreset/"/>
         <Animation Preset="2_defense/2_guard" XFlip="true" Duration="0.5">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
-            
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+            <FrameEvent Type="ApplyBuff" Condition="DefenceSuccess" StartTime="0" EndTime="999" ApplyBuff="GuardCountIncrease"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Guard"/>
@@ -160,11 +167,13 @@
         <Animation Preset="2_defense/3_guardBroken" XFlip="true" Duration="1.25">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountIncrease"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
 
             <FrameEvent Type="StopUpdate" Time="0.15"/>
             
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>

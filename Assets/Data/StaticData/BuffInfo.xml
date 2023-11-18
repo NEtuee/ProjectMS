@@ -583,5 +583,44 @@
 
         TimelineEffect="Prefab/Effect/Guard_Timeline"
     />
+    <HitCountIncrease
+        Key="58"
+        StatusName="HitCount"
+
+        UpdateType="OneShot"
+        ApplyType="Direct"
+
+        Factor="1.0"
+    />
+
+    <HitCountClear
+        Key="59"
+        StatusName="HitCount"
+
+        UpdateType="OneShot"
+        ApplyType="DirectSet"
+
+        Factor="0.0"
+    />
+    
+    <GuardCountIncrease
+        Key="60"
+        StatusName="GuardCount"
+
+        UpdateType="OneShot"
+        ApplyType="Direct"
+
+        Factor="1.0"
+    />
+
+    <GuardCountClear
+        Key="61"
+        StatusName="GuardCount"
+
+        UpdateType="OneShot"
+        ApplyType="DirectSet"
+
+        Factor="0.0"
+    />
 
 </BuffInfo>
