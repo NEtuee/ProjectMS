@@ -138,52 +138,6 @@
         <Branch Condition="gv_bIsChaseAway"     Execute="Chase"/>
         <Branch Condition="gv_bIsAlert"         Execute="Chase"/>
     </BranchSet>
-
-    <BranchSet Name="tFixedMovementSet">
-        <!-- 추격 이동 브랜치 셋 -->
-        <Branch Condition="gv_bIsChaseOnly && (TargetDistance > gv_MoveThreshold)"      Execute="Chase"/>
-        <!-- 거리 유지 이동 브랜치 셋 -->
-        <Branch Condition="gv_bIsChaseAway && (TargetDistance <= gv_AwayThreshold)"     Execute="Away"/>
-        <Branch Condition="gv_bIsChaseAway && (TargetDistance > gv_MoveThreshold)"      Execute="Chase"/>
-        <!-- 경계 이동 브랜치 셋 -->
-        <Branch Condition="gv_bIsAlert && (TargetDistance <= gv_AwayThreshold)"         Execute="Away"/>
-        <Branch Condition="gv_bIsAlert && (TargetDistance <= gv_StopThreshold)"         Execute="Alert"/>
-        <Branch Condition="gv_bIsAlert && (TargetDistance > gv_MoveThreshold)"          Execute="Chase"/>
-    </BranchSet>
-    <BranchSet Name="tChaseMovementSet">
-        <!-- 추격 이동 브랜치 셋 -->
-        <Branch Condition="gv_bIsChaseOnly && (TargetDistance <= gv_StopThreshold)"     Execute="Fixed"/>
-        <!-- 거리 유지 이동 브랜치 셋 -->
-        <Branch Condition="gv_bIsChaseAway && (TargetDistance <= gv_AwayThreshold)"     Execute="Away"/>
-        <Branch Condition="gv_bIsChaseAway && (TargetDistance <= gv_StopThreshold)"     Execute="Fixed"/>
-        <!-- 경계 이동 브랜치 셋 -->
-        <Branch Condition="gv_bIsAlert && (TargetDistance <= gv_AwayThreshold)"     Execute="Away"/>
-        <Branch Condition="gv_bIsAlert && (TargetDistance <= gv_StopThreshold)"     Execute="Alert"/>
-    </BranchSet>
-    <BranchSet Name="tAlertMovementSet">
-        <!-- 추격 이동 브랜치 셋 -->
-        <Branch Condition="gv_bIsChaseOnly && (TargetDistance <= gv_StopThreshold)"     Execute="Fixed"/>
-        <Branch Condition="gv_bIsChaseOnly && (TargetDistance > gv_MoveThreshold)"      Execute="Chase"/>
-        <!-- 거리 유지 이동 브랜치 셋 -->
-        <Branch Condition="gv_bIsChaseAway && (TargetDistance <= gv_AwayThreshold)"     Execute="Away"/>
-        <Branch Condition="gv_bIsChaseAway && (TargetDistance <= gv_StopThreshold)"     Execute="Fixed"/>
-        <Branch Condition="gv_bIsChaseAway && (TargetDistance > gv_MoveThreshold)"      Execute="Chase"/>
-        <!-- 경계 이동 브랜치 셋 -->
-        <Branch Condition="gv_bIsAlert && (TargetDistance <= gv_AwayThreshold)"     Execute="Away"/>
-        <Branch Condition="gv_bIsAlert && (TargetDistance <= gv_StopThreshold)"     Execute="Alert"/>
-        <Branch Condition="gv_bIsAlert && (TargetDistance > gv_MoveThreshold)"      Execute="Chase"/>
-    </BranchSet>
-    <BranchSet Name="tAwayMovementSet">
-        <!-- 추격 이동 브랜치 셋 -->
-        <Branch Condition="gv_bIsChaseOnly && (TargetDistance <= gv_StopThreshold)"     Execute="Fixed"/>
-        <Branch Condition="gv_bIsChaseOnly && (TargetDistance > gv_MoveThreshold)"      Execute="Chase"/>
-        <!-- 거리 유지 이동 브랜치 셋 -->
-        <Branch Condition="gv_bIsChaseAway && (TargetDistance <= gv_StopThreshold)"     Execute="Fixed"/>
-        <Branch Condition="gv_bIsChaseAway && (TargetDistance > gv_MoveThreshold)"      Execute="Chase"/>
-        <!-- 경계 이동 브랜치 셋 -->
-        <Branch Condition="gv_bIsAlert && (TargetDistance <= gv_StopThreshold)"     Execute="Alert"/>
-        <Branch Condition="gv_bIsAlert && (TargetDistance > gv_MoveThreshold)"      Execute="Chase"/>
-    </BranchSet>
     
     <BranchSet Name="ChaseOnlyMovementSet">
         <Branch Condition="gv_bIsChaseOnly && (TargetDistance <= gv_StopThreshold)"     Execute="Fixed"/>
@@ -306,9 +260,6 @@
         <UseBranchSet Name="ChaseOnlyMovementSet"/>
         <UseBranchSet Name="ChaseAwayMovementSet"/>
         <UseBranchSet Name="AlertMovementSet"/>
-        <!--
-        <UseBranchSet Name="tFixedMovementSet"/>
-        -->
     </Fixed>
 
     <Chase Package="CommonChasePackage">
@@ -318,9 +269,6 @@
         <UseBranchSet Name="ChaseOnlyMovementSet"/>
         <UseBranchSet Name="ChaseAwayMovementSet"/>
         <UseBranchSet Name="AlertMovementSet"/>
-        <!--
-        <UseBranchSet Name="tChaseMovementSet"/>
-        -->
     </Chase>
 
     <Alert Package="CommonAlertPackage">
@@ -330,9 +278,6 @@
         <UseBranchSet Name="ChaseOnlyMovementSet"/>
         <UseBranchSet Name="ChaseAwayMovementSet"/>
         <UseBranchSet Name="AlertMovementSet"/>      
-        <!--
-        <UseBranchSet Name="tAlertMovementSet"/>
-        -->
     </Alert>
 
     <Away Package="CommonAwayPackage">
@@ -342,9 +287,6 @@
         <UseBranchSet Name="ChaseOnlyMovementSet"/>
         <UseBranchSet Name="ChaseAwayMovementSet"/>
         <UseBranchSet Name="AlertMovementSet"/>
-        <!--
-        <UseBranchSet Name="tAwayMovementSet"/>
-        -->
     </Away>
 
     <!-- AI 스테이트 : 전투 상태 : 공격 -->
