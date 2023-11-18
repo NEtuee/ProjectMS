@@ -225,4 +225,17 @@
 
         SearchIdentifier="Enemy"
     />
+
+    <SchoolDoor
+        DisplayName="학교 문"
+        ActionGraph="Assets/Data/Character/BigDoor/BigDoor.xml"
+        AIGraph="Assets/Data/AILibrary/Graph/CommonEnemyAI.xml"
+        StatusInfoName="CommonEnemyStatusNoUI"
+
+        CollisionRadius="0.35"
+        ProjectileCollisionRadius=""
+
+        SearchIdentifier="Enemy"
+    />
+
 </CharacterInfo>
