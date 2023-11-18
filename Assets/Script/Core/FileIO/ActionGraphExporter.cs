@@ -946,6 +946,10 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         if(nodeData != null)
             return nodeData;
 
+        nodeData = isAIGraphCoolTime(symbol);
+        if(nodeData != null)
+            return nodeData;
+
         nodeData = new ActionGraphConditionNodeData();
     
         if(ConditionNodeInfoPreset._nodePreset.ContainsKey(symbol) == false)
