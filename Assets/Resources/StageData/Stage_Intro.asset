@@ -26,8 +26,7 @@ MonoBehaviour:
     _cameraBoundToTrigger: 0
     _onEnterSequencerPath:
     - TutorialStage/TutorialStageStart.xml
-    _onExitSequencerPath:
-    - TutorialStage/TutorialStageStart_Exit.xml
+    _onExitSequencerPath: []
     _characterSpawnData:
     - _characterKey: TutorialStudent
       _uniqueKey: 
@@ -96,7 +95,8 @@ MonoBehaviour:
     _lerpCameraZoom: 0
     _lockCameraInBound: 0
     _cameraBoundToTrigger: 0
-    _onEnterSequencerPath: []
+    _onEnterSequencerPath:
+    - TutorialStage/TutorialStageStart_Exit.xml
     _onExitSequencerPath: []
     _characterSpawnData: []
     _useTriggerBound: 0
