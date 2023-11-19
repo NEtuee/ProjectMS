@@ -1,0 +1,135 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eebfbc6ece9cebc4cbd3e126679ce50a, type: 3}
+  m_Name: Stage_0_1
+  m_EditorClassIdentifier: 
+  _stageName: Stage_0_1
+  _backgroundPrefabPath: {fileID: 5337001891740601288, guid: 00cbd5e47acca3d4cbd884e21a77b07c, type: 3}
+  _isMiniStage: 0
+  _stagePointData:
+  - _pointName: New Point 0
+    _stagePoint: {x: 0, y: 0, z: 0}
+    _maxLimitedDistance: 0
+    _cameraZoomSize: 3
+    _cameraZoomSpeed: 4
+    _lerpCameraZoom: 0
+    _lockCameraInBound: 0
+    _cameraBoundToTrigger: 0
+    _onEnterSequencerPath:
+    - Stage_0_1_01.xml
+    _onExitSequencerPath: []
+    _characterSpawnData:
+    - _characterKey: Akane
+      _uniqueKey: Player
+      _uniqueGroupKey: 
+      _startAction: Spawn
+      _flip: 0
+      _hideWhenDeactive: 0
+      _searchIdentifier: 0
+      _activeType: 0
+      _localPosition: {x: -4.56, y: 0, z: 0}
+    - _characterKey: SchoolDoor
+      _uniqueKey: SchoolDoor
+      _uniqueGroupKey: 
+      _startAction: Idle
+      _flip: 0
+      _hideWhenDeactive: 0
+      _searchIdentifier: 1
+      _activeType: 0
+      _localPosition: {x: 0.11, y: 0, z: 0}
+    _useTriggerBound: 0
+    _targetSearchIdentifier: 1
+    _triggerWidth: 1
+    _triggerHeight: 1
+    _triggerOffset: {x: 0, y: 0, z: 0}
+  - _pointName: New Point 1
+    _stagePoint: {x: 13.01, y: 0, z: 0}
+    _maxLimitedDistance: 0
+    _cameraZoomSize: 3
+    _cameraZoomSpeed: 4
+    _lerpCameraZoom: 0
+    _lockCameraInBound: 0
+    _cameraBoundToTrigger: 0
+    _onEnterSequencerPath:
+    - Stage_0_1_02.xml
+    _onExitSequencerPath: []
+    _characterSpawnData:
+    - _characterKey: RapierChan
+      _uniqueKey: Mob00
+      _uniqueGroupKey: MobGroup
+      _startAction: AC_Idle
+      _flip: 1
+      _hideWhenDeactive: 0
+      _searchIdentifier: 1
+      _activeType: 0
+      _localPosition: {x: 1.94, y: -0.71, z: 0}
+    - _characterKey: RapierChan
+      _uniqueKey: Mob01
+      _uniqueGroupKey: MobGroup
+      _startAction: AC_Idle
+      _flip: 1
+      _hideWhenDeactive: 0
+      _searchIdentifier: 1
+      _activeType: 0
+      _localPosition: {x: 0.05, y: 4.09, z: 0}
+    - _characterKey: RapierChan
+      _uniqueKey: Mob02
+      _uniqueGroupKey: MobGroup
+      _startAction: AC_Idle
+      _flip: 1
+      _hideWhenDeactive: 0
+      _searchIdentifier: 1
+      _activeType: 0
+      _localPosition: {x: 2.2, y: -0.23, z: 0}
+    - _characterKey: RapierChan
+      _uniqueKey: Mob03
+      _uniqueGroupKey: MobGroup
+      _startAction: AC_Idle
+      _flip: 1
+      _hideWhenDeactive: 0
+      _searchIdentifier: 1
+      _activeType: 0
+      _localPosition: {x: 2.1, y: 0.4, z: 0}
+    - _characterKey: SchoolDoor
+      _uniqueKey: SchoolDoor
+      _uniqueGroupKey: 
+      _startAction: Idle
+      _flip: 0
+      _hideWhenDeactive: 0
+      _searchIdentifier: 1
+      _activeType: 0
+      _localPosition: {x: 0, y: 0, z: 0}
+    _useTriggerBound: 1
+    _targetSearchIdentifier: 0
+    _triggerWidth: 10
+    _triggerHeight: 10
+    _triggerOffset: {x: 0, y: 0, z: 0}
+  - _pointName: New Point 2
+    _stagePoint: {x: 34.03, y: 0, z: 0}
+    _maxLimitedDistance: 0
+    _cameraZoomSize: 3
+    _cameraZoomSpeed: 4
+    _lerpCameraZoom: 0
+    _lockCameraInBound: 0
+    _cameraBoundToTrigger: 0
+    _onEnterSequencerPath: []
+    _onExitSequencerPath: []
+    _characterSpawnData: []
+    _useTriggerBound: 0
+    _targetSearchIdentifier: 1
+    _triggerWidth: 1
+    _triggerHeight: 1
+    _triggerOffset: {x: 0, y: 0, z: 0}
+  _miniStageData: []
+  _markerData:
+  - _name: CameraPoint01
+    _position: {x: 33.55, y: -0.37367645, z: 0}
