@@ -1,6 +1,8 @@
 <SequencerGraph Name="Stage_0_1_01">
 
     <InitializePhase>
+        <FadeIn Lambda="5.0"/>
+        
         <SetCrossHair UniqueKey="Player"/>
         <SetHideUI Hide="True"/>
         <BlockInput Enable="True"/>
