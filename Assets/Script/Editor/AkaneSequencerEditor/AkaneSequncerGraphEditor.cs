@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NUnit.Framework;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -36,6 +37,7 @@ namespace AkaneSequencerGraph
                 CurrentData.InitalizePhaseNodeList.Clear();
                 CurrentData.UpdatePhaseNodeList.Clear();
                 CurrentData.EndPhaseNodeList.Clear();
+                CurrentData.EdgeList.Clear();
 
                 CurrentData.InitializePhase = graphView.InitializePhase;
                 CurrentData.UpdatePhase = graphView.UpdatePhase;
@@ -49,6 +51,22 @@ namespace AkaneSequencerGraph
                 
                 (phaseNode, childNodeList) = graphView.GetEndPhase();
                 CurrentData.EndPhaseNodeList.AddRange(childNodeList);
+
+                foreach (var edge in graphView.edges.ToList())
+                {
+                    var to = edge.input.node as AkaneSequenceNode;
+                    var from = edge.output.node as AkaneSequenceNode;
+
+                    if (from == null || to == null)
+                    {
+                        continue;
+                    }
+
+                    var edgeData = new EdgeSaveData(from.Guid, to.Guid);
+                    
+                    CurrentData.EdgeList.Add(edgeData);
+                }
+                
             }){text = "Save"});
         }
 
@@ -62,6 +80,32 @@ namespace AkaneSequencerGraph
                 _akaneSequencerGraphView.InitNode(data.UpdatePhaseNodeList);
                 _akaneSequencerGraphView.InitNode(data.EndPhaseNodeList); 
                 _akaneSequencerGraphView.InitPhaseNode(data.InitializePhase, data.UpdatePhase, data.EndPhase);
+
+                var allNode = new List<AkaneSequenceNode>();
+                allNode.AddRange(data.InitalizePhaseNodeList);
+                allNode.AddRange(data.UpdatePhaseNodeList);
+                allNode.AddRange(data.EndPhaseNodeList);
+                allNode.Add(data.InitializePhase);
+                allNode.Add(data.UpdatePhase);
+                allNode.Add(data.EndPhase);
+
+                foreach (var edgeData in data.EdgeList)
+                {
+                    var from = allNode.FirstOrDefault(x => x?.Guid == edgeData.From);
+                    var to = allNode.FirstOrDefault(x => x?.Guid == edgeData.To);
+                    
+                    if (from == null || to == null) continue;
+                    
+                    var input = to.inputContainer.Children().FirstOrDefault(x => x is Port) as Port;
+                    var output = from.outputContainer.Children().FirstOrDefault(x => x is Port) as Port;
+
+                    if (input == null || output == null) continue;
+                    
+                    var edge = new Edge() {input = input, output = output};
+                    edge.input.Connect(edge);
+                    edge.output.Connect(edge);
+                    _akaneSequencerGraphView.Add(edge);
+                }
             }
         }
     }
@@ -83,13 +127,6 @@ namespace AkaneSequencerGraph
             var gridBackground = new GridBackground();
             gridBackground.StretchToParentSize();
             Insert(0, gridBackground);
-
-            InitializePhase = new InitializePhaseNode();
-            UpdatePhase = new UpdatePhaseNode();
-            EndPhase = new EndPhaseNode();
-            AddElement(InitializePhase);
-            AddElement(UpdatePhase);
-            AddElement(EndPhase);
 
             this.AddManipulator(new ContentDragger());
             this.AddManipulator(new SelectionDragger());
@@ -119,18 +156,33 @@ namespace AkaneSequencerGraph
         {
             if (init != null)
             {
-                InitializePhase.SetPosition(init.GetPosition());
+                InitializePhase = init;
             }
+            else
+            {
+                InitializePhase = new InitializePhaseNode(Guid.NewGuid().ToString());
+            }
+            AddElement(InitializePhase);
 
             if (update != null)
             {
-                UpdatePhase.SetPosition(update.GetPosition());
+                UpdatePhase = update;
             }
+            else
+            {
+                UpdatePhase = new UpdatePhaseNode(Guid.NewGuid().ToString());
+            }
+            AddElement(UpdatePhase);
             
             if (end != null)
             {
-                EndPhase.SetPosition(end.GetPosition());
+                EndPhase = end;
             }
+            else
+            {
+                EndPhase = new EndPhaseNode(Guid.NewGuid().ToString());
+            }
+            AddElement(EndPhase);
         }
 
         public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
@@ -244,7 +296,8 @@ namespace AkaneSequencerGraph
                 return false;
             }
 
-            var node = Activator.CreateInstance(type) as AkaneSequenceNode;
+            var guid = Guid.NewGuid().ToString();
+            var node = Activator.CreateInstance(type, guid) as AkaneSequenceNode;
             if (node == null)
             {
                 return false;

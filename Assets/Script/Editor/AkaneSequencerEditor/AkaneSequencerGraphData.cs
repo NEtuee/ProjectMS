@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using AkaneSequencerGraph;
+using NUnit.Framework;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "SequencerGraphFile", menuName = "SequencerGraphFile")]
@@ -24,11 +25,12 @@ public sealed class AkaneSequencerGraphData : ScriptableObject
     public InitializePhaseNode InitializePhase;
     public UpdatePhaseNode UpdatePhase;
     public EndPhaseNode EndPhase;
-
-
+    
     public List<AkaneSequenceNode> InitalizePhaseNodeList = new List<AkaneSequenceNode>();
     public List<AkaneSequenceNode> UpdatePhaseNodeList = new List<AkaneSequenceNode>();
     public List<AkaneSequenceNode> EndPhaseNodeList = new List<AkaneSequenceNode>();
+
+    public List<EdgeSaveData> EdgeList = new List<EdgeSaveData>();
 
     public int HashCode => InstanceID.GetHashCode();
     
@@ -78,5 +80,18 @@ public sealed class AkaneSequencerGraphData : ScriptableObject
     public sealed class Data
     {
         public string Name;
+    }
+}
+
+[SerializeField]
+public sealed class EdgeSaveData
+{
+    public string From;
+    public string To;
+
+    public EdgeSaveData(string fromGuid, string toGuid)
+    {
+        From = fromGuid;
+        To = toGuid;
     }
 }

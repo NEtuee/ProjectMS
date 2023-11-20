@@ -8,8 +8,12 @@ namespace AkaneSequencerGraph
     [Serializable]
     public class AkaneSequenceNode : Node
     {
-        public AkaneSequenceNode()
+        public string Guid => _guid;
+        protected string _guid;
+
+        public AkaneSequenceNode(string guid)
         {
+            _guid = guid;
         }
     }
 
@@ -20,7 +24,7 @@ namespace AkaneSequencerGraph
         public abstract string GetOpenContext();
         public abstract string GetCloseContext();
 
-        protected ReservedPhaseNode()
+        protected ReservedPhaseNode(string guid) : base(guid)
         {
             capabilities -= Capabilities.Deletable;
 
@@ -35,7 +39,7 @@ namespace AkaneSequencerGraph
         public override string GetOpenContext() => "<InitializePhase>";
         public override string GetCloseContext() => "</InitializePhase>";
 
-        public InitializePhaseNode() : base()
+        public InitializePhaseNode(string guid) : base(guid)
         {
             title = "InitializePhase";
         }
@@ -46,7 +50,7 @@ namespace AkaneSequencerGraph
         public override string GetOpenContext() => "<UpdatePhase>";
         public override string GetCloseContext() => "</UpdatePhase>";
 
-        public UpdatePhaseNode() : base()
+        public UpdatePhaseNode(string guid) : base(guid)
         {
             title = "UpdatePhase";
         }
@@ -57,7 +61,7 @@ namespace AkaneSequencerGraph
         public override string GetOpenContext() => "<EndPhase>";
         public override string GetCloseContext() => "</EndPhase>";
 
-        public EndPhaseNode() : base()
+        public EndPhaseNode(string guid) : base(guid)
         {
             title = "EndPhase";
         }
@@ -68,7 +72,7 @@ namespace AkaneSequencerGraph
         public Port PrevPort { get; private set; }
         public Port NextPort { get; private set; }
 
-        protected EventNode()
+        protected EventNode(string guid) : base(guid)
         {
             PrevPort = Port.Create<Edge>(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(Port));
             PrevPort.portName = "Prev";
@@ -93,7 +97,7 @@ namespace AkaneSequencerGraph
         private readonly TextField _eventNameTextField;
         private readonly TextField _uniqueKeyTextField;
 
-        public CallAIEventNode() : base()
+        public CallAIEventNode(string guid) : base(guid)
         {
             title = "CallAIEvent";
 
@@ -116,7 +120,7 @@ namespace AkaneSequencerGraph
 
         private readonly FloatField _sizeFloatField;
 
-        public SetCameraZoomNode() : base()
+        public SetCameraZoomNode(string guid) : base(guid)
         {
             title = "SetCameraZoom";
 
@@ -137,7 +141,7 @@ namespace AkaneSequencerGraph
         private readonly FloatField _blendTimeFloatField;
         private readonly TextField _applyTypeField;
 
-        public ApplyPostProcessProfileNode() : base()
+        public ApplyPostProcessProfileNode(string guid) : base(guid)
         {
             title = "ApplyPostProcessProfile";
 
@@ -159,7 +163,7 @@ namespace AkaneSequencerGraph
 
         private readonly TextField _signalTextField;
 
-        public WaitSignalNode() : base()
+        public WaitSignalNode(string guid) : base(guid)
         {
             title = "WaitSignal";
 
