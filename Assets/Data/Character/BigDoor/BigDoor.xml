@@ -9,8 +9,12 @@
 
     <Dead MovementType="Empty" DirectionType="Keep">
         <Animation Path="Sprites/Object/Door" XFlip="true" Duration="2">
-            <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Object/Door" FramePerSecond="0.2" CastShadow="True">
-                <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
+            <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Object/DoorLeft" FramePerSecond="0.1" CastShadow="True" Offset="-0.2 0.0 0.0">
+                <Physics UseGravity="True" Velocity="Random_-7.5^0.0 Random_6^12" Friction="1" Torque="Random_20^30" AngularFriction="10.0"/>
+            </FrameEvent>
+
+            <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Object/DoorRight" FramePerSecond="0.1" CastShadow="True" Offset="0.2 0.0 0.0">
+                <Physics UseGravity="True" Velocity="Random_0.0^7.5 Random_6^12" Friction="1" Torque="Random_20^30" AngularFriction="10.0"/>
             </FrameEvent>
 
             <FrameEvent Type="KillEntity" StartTime="0"/>
