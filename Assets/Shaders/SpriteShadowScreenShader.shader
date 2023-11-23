@@ -198,7 +198,6 @@ Shader "Custom/SpriteShadowScreenShader"
 
 					float clipDistance = far - near;
 					float shadowDistance = (shadowSample * clipDistance);
-				//		shadowDistance *= shadowDistance;
 					float additionalShadowDistance = _ShadowDistance * ((clipDistance / shadowDistance) * _ShadowDistanceRatio);
 					float2 toUV = (1.0 / _ScreenSize.xy);
 
@@ -209,8 +208,6 @@ Shader "Custom/SpriteShadowScreenShader"
 
 					fixed4 shadowReSample = SampleSpriteTexture(_CharacterTexture, texcoord + shadowOffset + shadowSampleTarget);
 						
-			//		fixed4 characterShadowSample = Color;
-
 					return shadowReSample * _ShadowColor;
 				}
 
@@ -239,7 +236,6 @@ Shader "Custom/SpriteShadowScreenShader"
 						for (float i = 1.0 / Quality; i <= 1.0; i += 1.0 / Quality)
 						{
 							Color += drawCharacterShadow(sampleBackground(texcoord + float2(cos(d), sin(d)) * Radius * i), texcoord + float2(cos(d), sin(d)) * Radius * i);
-								//shadowReSample * sampleBackground(texcoord + float2(cos(d), sin(d)) * Radius * i);
 						}
 					}
 
@@ -251,8 +247,6 @@ Shader "Custom/SpriteShadowScreenShader"
 
 				fixed4 bluredBackgroundSample(float2 texcoord)
 				{
-				//	fixed4 backgroundSample = SampleSpriteTexture(_MainTex, texcoord) * _BackgroundColorTint;
-
 					float Pi = 6.28318530718; // Pi*2
 
 					// GAUSSIAN BLUR SETTINGS {{{

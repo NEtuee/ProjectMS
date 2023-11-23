@@ -16,21 +16,24 @@ MonoBehaviour:
   _backgroundPrefabPath: {fileID: 8569523503928986211, guid: 2db6268239a67c043b60f9da492d0f28, type: 3}
   _isMiniStage: 0
   _stagePointData:
-  - _stagePoint: {x: 0, y: 0, z: 0}
+  - _pointName: New Point 0
+    _stagePoint: {x: 0, y: 0, z: 0}
     _maxLimitedDistance: 0
     _cameraZoomSize: 2
     _cameraZoomSpeed: 10
     _lerpCameraZoom: 1
+    _lockCameraInBound: 0
+    _cameraBoundToTrigger: 0
     _onEnterSequencerPath:
     - TutorialStage/TutorialStageStart.xml
-    _onExitSequencerPath:
-    - TutorialStage/TutorialStageStart_Exit.xml
+    _onExitSequencerPath: []
     _characterSpawnData:
     - _characterKey: TutorialStudent
       _uniqueKey: 
       _uniqueGroupKey: Student
       _startAction: AC_Idle
       _flip: 0
+      _hideWhenDeactive: 0
       _searchIdentifier: 1
       _activeType: 0
       _localPosition: {x: -3.16, y: -1.28, z: 0}
@@ -39,6 +42,7 @@ MonoBehaviour:
       _uniqueGroupKey: Student
       _startAction: AC_Idle
       _flip: 0
+      _hideWhenDeactive: 0
       _searchIdentifier: 1
       _activeType: 0
       _localPosition: {x: -1.91, y: -1.28, z: 0}
@@ -47,6 +51,7 @@ MonoBehaviour:
       _uniqueGroupKey: Student
       _startAction: AC_Idle
       _flip: 0
+      _hideWhenDeactive: 0
       _searchIdentifier: 1
       _activeType: 0
       _localPosition: {x: 3.07, y: -1.3, z: 0}
@@ -55,6 +60,7 @@ MonoBehaviour:
       _uniqueGroupKey: Student
       _startAction: AC_Idle
       _flip: 0
+      _hideWhenDeactive: 0
       _searchIdentifier: 1
       _activeType: 0
       _localPosition: {x: 1.86, y: -1.29, z: 0}
@@ -63,6 +69,7 @@ MonoBehaviour:
       _uniqueGroupKey: Student
       _startAction: AC_Idle
       _flip: 0
+      _hideWhenDeactive: 0
       _searchIdentifier: 1
       _activeType: 0
       _localPosition: {x: 0.58, y: -1.29, z: 0}
@@ -71,22 +78,40 @@ MonoBehaviour:
       _uniqueGroupKey: 
       _startAction: SQ_Intro_Sleep
       _flip: 0
+      _hideWhenDeactive: 0
       _searchIdentifier: 0
       _activeType: 0
       _localPosition: {x: -0.65, y: -1.11, z: 0}
-  - _stagePoint: {x: 0, y: 1, z: 0}
+    _useTriggerBound: 0
+    _targetSearchIdentifier: 0
+    _triggerWidth: 0
+    _triggerHeight: 0
+    _triggerOffset: {x: 0, y: 0, z: 0}
+  - _pointName: New Point 1
+    _stagePoint: {x: 0, y: 1, z: 0}
     _maxLimitedDistance: 0
     _cameraZoomSize: 3
     _cameraZoomSpeed: 8
     _lerpCameraZoom: 0
-    _onEnterSequencerPath: []
+    _lockCameraInBound: 0
+    _cameraBoundToTrigger: 0
+    _onEnterSequencerPath:
+    - TutorialStage/TutorialStageStart_Exit.xml
     _onExitSequencerPath: []
     _characterSpawnData: []
-  - _stagePoint: {x: 6.94, y: 1, z: 0}
+    _useTriggerBound: 0
+    _targetSearchIdentifier: 0
+    _triggerWidth: 0
+    _triggerHeight: 0
+    _triggerOffset: {x: 0, y: 0, z: 0}
+  - _pointName: New Point 2
+    _stagePoint: {x: 6.94, y: 1, z: 0}
     _maxLimitedDistance: 0
     _cameraZoomSize: 3
     _cameraZoomSpeed: 4
     _lerpCameraZoom: 0
+    _lockCameraInBound: 1
+    _cameraBoundToTrigger: 0
     _onEnterSequencerPath:
     - TutorialStage/TutorialStageEnd.xml
     _onExitSequencerPath: []
@@ -96,7 +121,14 @@ MonoBehaviour:
       _uniqueGroupKey: 
       _startAction: Idle
       _flip: 0
+      _hideWhenDeactive: 0
       _searchIdentifier: 1
       _activeType: 0
-      _localPosition: {x: -0.010000229, y: 0, z: 0}
+      _localPosition: {x: -0.01, y: 0, z: 0}
+    _useTriggerBound: 0
+    _targetSearchIdentifier: 0
+    _triggerWidth: 0
+    _triggerHeight: 0
+    _triggerOffset: {x: 0, y: 0, z: 0}
   _miniStageData: []
+  _markerData: []

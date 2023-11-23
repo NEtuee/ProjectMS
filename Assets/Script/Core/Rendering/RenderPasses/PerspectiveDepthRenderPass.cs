@@ -7,6 +7,7 @@ public class PerspectiveDepthRenderPass : AkaneRenderPass
     public override int layerMasks => perspectiveLayer;
     private static int perspectiveLayer;
     public override string layerName => "Perspective";
+
     public override RenderTexture RenderTexture { get { return perspectiveDepthRenderTexture; } }
     [SerializeField] private RenderTexture perspectiveDepthRenderTexture;
     public void Awake()
@@ -16,9 +17,9 @@ public class PerspectiveDepthRenderPass : AkaneRenderPass
         perspectiveDepthRenderTexture.filterMode = FilterMode.Point;
     }
 
-    public override void Draw(Camera renderCamera, RenderTexture buffer)
+    public override void Draw(Camera renderCamera)
     {
-        renderCamera.targetTexture = buffer;
+        renderCamera.targetTexture = RenderTexture;
         renderCamera.cullingMask = layerMasks;
 
         renderCamera.orthographic = false;

@@ -329,7 +329,7 @@ public static class ConditionNodeInfoPreset
         {"CurrentPackageEnd",new ConditionNodeInfo(ConditionNodeUpdateType.AI_CurrentPackageEnd, ConditionNodeType.Bool)},
         {"PackageExecutedTime",new ConditionNodeInfo(ConditionNodeUpdateType.AI_PackageStateExecutedTime, ConditionNodeType.Float)},
         {"GraphExecutedTime",new ConditionNodeInfo(ConditionNodeUpdateType.AI_GraphStateExecutedTime, ConditionNodeType.Float)},
-        {"AIGraphCoolTime",new ConditionNodeInfo(ConditionNodeUpdateType.AI_GraphCoolTime, ConditionNodeType.Float)},
+        {"AIGraphCoolTime",new ConditionNodeInfo(ConditionNodeUpdateType.AI_GraphCoolTime, ConditionNodeType.Bool)},
 
         {"Status",new ConditionNodeInfo(ConditionNodeUpdateType.Status, ConditionNodeType.Float)},
         {"Key",new ConditionNodeInfo(ConditionNodeUpdateType.Key, ConditionNodeType.Bool)},

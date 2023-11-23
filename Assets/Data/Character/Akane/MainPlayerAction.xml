@@ -171,6 +171,7 @@
                 </OnHit>
                 <OnGuard>
                     <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="DashPointConsumption"/>
+                    <FrameEvent Type="ApplyBuffTarget" StartTime="0" ApplyBuff="GuardCountIncrease"/>
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" ToTarget="True"/>
 
                     <FrameEvent Type="TeleportToTarget"/>
@@ -236,6 +237,7 @@
                 </OnHit>
                 <OnGuard>
                     <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="DashPointConsumption"/>
+                    <FrameEvent Type="ApplyBuffTarget" StartTime="0" ApplyBuff="GuardCountIncrease"/>
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" ToTarget="True"/>
 
                     <FrameEvent Type="TeleportToTarget"/>
@@ -272,6 +274,7 @@
             <FrameEvent Type="Attack" StartTime="0" AttackType="GuardBreak" AttackPreset="Akane_Kick" IgnoreDefenceType="Guard" AttackCount="1">
                 <OnGuardBreak>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="GuardPointDecrease"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="GuardCountIncrease"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="TargetBattleIncrement" Condition="getTargetFrameTag_Groggy == false"/>
 
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc" FramePerSecond="18.0" Offset="0.0 0.0 0.0" ToTarget="true"/>

@@ -217,7 +217,7 @@
         DisplayName="근접 프리셋 테스트 캐릭터"
         ActionGraph="Assets/Data/CharacterPreset/_ActionPreset/MeleeAction.xml"
         AIGraph="Assets/Data/CharacterPreset/_AIPreset/MeleeAI.xml"
-        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        StatusInfoName="CommonHpThreeEnemyStatus"
         
         CollisionRadius="0.2"
         HeadUpOffset="0.5"
@@ -225,4 +225,17 @@
 
         SearchIdentifier="Enemy"
     />
+
+    <SchoolDoor
+        DisplayName="학교 문"
+        ActionGraph="Assets/Data/Character/BigDoor/BigDoor.xml"
+        AIGraph="Assets/Data/AILibrary/Graph/CommonEnemyAI.xml"
+        StatusInfoName="CommonEnemyStatusNoUI"
+
+        CollisionRadius="0.35"
+        ProjectileCollisionRadius=""
+
+        SearchIdentifier="Enemy"
+    />
+
 </CharacterInfo>

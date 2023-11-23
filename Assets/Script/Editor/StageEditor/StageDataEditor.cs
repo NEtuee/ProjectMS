@@ -237,6 +237,9 @@ public class StageDataEditor : EditorWindow
                     "xml"
                 );
 
+                if(filePath == null || filePath == "")
+                    return;
+
                 var file = File.CreateText(filePath);
                 if(file != null)
                 {
@@ -1210,7 +1213,7 @@ public class StageDataEditor : EditorWindow
 
         GUILayout.Space(10f);
         _onEnterSequencerPathEditor.draw(ref stagePointData._onEnterSequencerPath);
-        _onExitSequencerPathEditor.draw(ref stagePointData._onExitSequencerPath);
+        //_onExitSequencerPathEditor.draw(ref stagePointData._onExitSequencerPath);
 
         // if(stagePointDataEditObject._onEnterSequencerPathProperty == null || stagePointDataEditObject._onExitSequencerPathProperty == null)
         // {
