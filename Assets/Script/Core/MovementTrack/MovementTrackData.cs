@@ -132,6 +132,7 @@ public class MovementTrackProcessor
                     deltaTime = _trackPathProcessRate;
                     _trackPathProcessRate = 0f;
                     _waitSecondTime = _trackData._trackPointData[_currentPointIndex]._waitSecond;
+                    _isLinearPath = _trackData._trackPointData[_currentPointIndex]._isLinearPath;
                     continue;
                 }
             }

@@ -1329,7 +1329,12 @@ public class StageDataEditor : EditorWindow
             pointData._easeType = (MathEx.EaseType)EditorGUILayout.EnumPopup("Ease Type", pointData._easeType);
             pointData._speedToNextPoint = EditorGUILayout.FloatField("Speed", pointData._speedToNextPoint);
             pointData._waitSecond = EditorGUILayout.FloatField("Wait Second", pointData._waitSecond);
-            pointData._isLinearPath = EditorGUILayout.Toggle("Is Linear Path",pointData._isLinearPath);
+            bool isLinear = EditorGUILayout.Toggle("Is Linear Path",pointData._isLinearPath);
+            if(pointData._isLinearPath != isLinear)
+            {
+                pointData._isLinearPath = isLinear;
+                SceneView.RepaintAll();
+            }
             GUILayout.Space(10f);
             GUILayout.BeginHorizontal();
                 if(GUILayout.Button("Point"))
@@ -2002,7 +2007,7 @@ public class StageDataEditor : EditorWindow
                         {
                             float sample = 0f;
                             float sampleRate = 0.05f;
-                            for(int loop = 0; loop < 19; ++loop)
+                            for(int loop = 0; loop < 20; ++loop)
                             {
                                 Vector2 startPoint = pointData._point;
                                 Vector2 endPoint = pointData2._point;
@@ -2013,7 +2018,6 @@ public class StageDataEditor : EditorWindow
                                 Vector2 second = MathEx.getPointOnBezierCurve(startPoint, bezierPoint0, bezierPoint1, endPoint, sample + sampleRate);
 
                                 Handles.DrawLine(first, second);
-
                                 sample += sampleRate;
                             }
                         }
