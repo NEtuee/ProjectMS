@@ -1,4 +1,7 @@
 <ActionGraph Name="MeleeAction" DefaultAction="AC_Entry" DefaultFramePerSecond="12">
+<!-- AnimationHeader MasterPath -->
+<GlobalVariable Name="gv_MasterPath" Value="Sprites/Enemy/_Preset/_MeleePreset/"/>
+
 <!-- Movement Speed Option Variant Set -->
 <GlobalVariable Name="gv_MovementSpeed"             Value="15.0"/>  <!-- Speed는 Velocity = 0 과 병행 사용 불가-->
 <GlobalVariable Name="gv_MovementVelocity"          Value="0.0"/>   
@@ -19,7 +22,7 @@
 
 <!-- Defualt Action -->
     <AC_Entry MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/_Preset/_MeleePreset/"/>
+        <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="0_default/1_idle" XFlip="true" Duration="1">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
         </Animation>
@@ -28,7 +31,7 @@
     </AC_Entry>
 
     <AC_Idle MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/_Preset/_MeleePreset/"/>
+        <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="0_default/1_idle" XFlip="true" Duration="1">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
             
@@ -44,7 +47,7 @@
     </AC_Idle>
 
     <AC_Move MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/_Preset/_MeleePreset/"/>
+        <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="0_default/2_move" XFlip="true" Duration="0.5">
             <FrameEvent Type="Movement" Condition="gv_MovementVelocity == 0.0"  StartTime="0" Friction="gv_MovementFriction" MaxVelocity="gv_MovementMaxVelocity" Speed="gv_MovementSpeed"/>
             <FrameEvent Type="Movement" Condition="gv_MovementVelocity > 0.0" StartTime="0" Friction="gv_MovementFriction" MaxVelocity="gv_MovementMaxVelocity" Velocity="gv_MovementVelocity" Speed="gv_MovementSpeed"/>
@@ -56,7 +59,7 @@
     </AC_Move>
 
     <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/_Preset/_MeleePreset/"/>
+        <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="0_default/3_hit" XFlip="true" Duration="1.25">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
@@ -71,7 +74,7 @@
     </AC_Hit>
 
     <Dead DirectionType="Keep" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/_Preset/_MeleePreset/"/>
+        <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="0_default/4_dead" XFlip="true" Duration="1">
             <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Enemy/RapierChan/0_default/4_dead" FramePerSecond="0.2" CastShadow="True">
                 <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
@@ -89,7 +92,7 @@
 
 <!-- Attack Action -->
     <AC_AttackReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/_Preset/_MeleePreset/"/>
+        <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="1_attack/1_attackReady" XFlip="true" Duration="0.4">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2203" Attach="true"/>
             
@@ -105,7 +108,7 @@
     </AC_AttackReady>
 
     <AC_AttackMain MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/_Preset/_MeleePreset/"/>
+        <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="1_attack/2_attackMain" XFlip="true" Duration="0.35">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2204" Attach="true"/>
             <FrameEvent Type="Movement" Condition="gv_AtkMovementVelocity == 0.0" StartTime="0" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Speed="gv_AtkMovementSpeed"/>
@@ -128,7 +131,7 @@
     </AC_AttackMain>
 
     <AC_AttackRecover MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/_Preset/_MeleePreset/"/>
+        <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="1_attack/3_attackRecover" XFlip="true" Duration="1.47">
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
@@ -140,7 +143,7 @@
 
 <!-- Defense Action -->
     <AC_Dodge MovementType="GraphPreset" MovementGraphPreset="Preset_Dodge" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/_Preset/_MeleePreset/"/>
+        <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_defense/1_dodge" XFlip="true" Duration="0.7">
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
@@ -150,7 +153,7 @@
     </AC_Dodge>
 
     <AC_Guard MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" DefenceType="Guard" DefenceDirectionType="Direction" DefenceAngle="180">
-        <AnimationHeader MasterPath="Sprites/Enemy/_Preset/_MeleePreset/"/>
+        <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_defense/2_guard" XFlip="true" Duration="0.5">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" Condition="DefenceSuccess" StartTime="0" EndTime="999" ApplyBuff="GuardCountIncrease"/>
@@ -163,7 +166,7 @@
     </AC_Guard>
 
     <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/_Preset/_MeleePreset/"/>
+        <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_defense/3_guardBroken" XFlip="true" Duration="1.25">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
