@@ -1732,7 +1732,7 @@ public class StageDataEditor : EditorWindow
             GameObject gizmoHelper = GameObject.FindGameObjectWithTag("GizmoHelper");
             if(gizmoHelper != null)
             {
-                gizmoHelper.GetComponent<GizmoHelper>().drawCircle(trackPosition,0.05f,6,Color.white);
+                gizmoHelper.GetComponent<GizmoHelper>().drawCircle(trackPosition,0.1f,6,Color.magenta);
                 SceneView.RepaintAll();
             }
         }
