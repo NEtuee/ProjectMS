@@ -86,4 +86,19 @@
         CastShadow="False"
     />
 
+    <ParticleEffect Key="DashTrail" 
+        AttackMaterial="" 
+        DefenceMaterial=""
+        Path="Prefab/Effect/fx_dashTrail"
+        AngleOffset="0.0"
+        Offset="-0.1 0.0 0.0"
+        ToTarget="False"
+        UpdateType="ScaledDeltaTime"
+        Attach="True"
+        AngleType="Direction"
+        LifeTime="0.0"
+        FollowDirection="False"
+        CastShadow="False"
+    />
+
 </EffectInfo>

@@ -192,6 +192,8 @@
             <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="0.016" Tag="Attack"/>
 
             <FrameEvent Type="AudioPlay" Condition="AttackSuccess == false" StartTime="0.05" ID="1002" Attach="true"/>
+
+            <FrameEvent Type="EffectPreset" Condition="AttackSuccess == false" StartTime="0.05" Key="DashTrail"/>
         </Animation>
 
         <Branch Condition="AttackSuccess" Execute="AttackSuccess"/>
@@ -260,6 +262,8 @@
             <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="0.016" Tag="Attack"/>
 
             <FrameEvent Type="AudioPlay" Condition="AttackSuccess == false" StartTime="0.05" ID="1009" Attach="true"/>
+
+            <FrameEvent Type="EffectPreset" Condition="AttackSuccess == false" StartTime="0.05" Key="DashTrail"/>
         </Animation>
 
         <Branch Condition="AttackSuccess" Execute="AttackSuccess_Long"/>
@@ -316,6 +320,8 @@
             <FrameEvent Type="FrameTag" StartTime="0.156" EndFrame="999" Tag="MoveCancel"/>
             <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="0.016" Tag="Attack"/>
             <FrameEvent Type="AudioPlay" Condition="AttackSuccess == false" StartTime="0.05" ID="1002" Attach="true"/>
+
+            <FrameEvent Type="EffectPreset" Condition="AttackSuccess == false" StartTime="0.05" Key="DashTrail"/>
         </Animation>
         
         <Branch Condition="AttackSuccess || AttackGuarded || AttackGuardBreak || AttackGuardBreakFail" Execute="Kicked"/>
