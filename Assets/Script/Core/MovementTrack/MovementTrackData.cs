@@ -74,6 +74,27 @@ public class MovementTrackProcessor
         _isLinearPath = _trackData._trackPointData[0]._isLinearPath;
         _isEnd = false;
     }
+
+    public void clear()
+    {
+        _trackData = null;
+        _currentPointIndex = 0;
+        _trackPathProcessRate = 0f;
+        _waitSecondTime = 0f;
+        _isLinearPath = false;
+        _isEnd = false;
+    }
+
+    public bool getCurrentTrackStartPosition(out Vector2 outPosition)
+    {
+        outPosition = Vector2.zero;
+        if(_trackData == null)
+            return false;
+
+        outPosition = _trackData._trackPointData[0]._point;
+        return true;
+    }
+    
     public bool processTrack(float deltaTime, out Vector2 resultPoint)
     {
         resultPoint = Vector2.zero;

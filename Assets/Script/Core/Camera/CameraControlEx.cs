@@ -2,11 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-
-
-
-
 public enum CameraModeType
 {
     ArenaMode,
@@ -308,6 +303,9 @@ public class CameraControlEx : Singleton<CameraControlEx>
         Vector3 currentPosition = position;
         currentPosition.z = -10f;
         _currentCamera.transform.position = currentPosition + _shakePosition;
+
+        CameraControlEx.Instance().setCameraMode(CameraModeType.PositionMode);
+        CameraControlEx.Instance().setCameraTargetPosition(_currentCamera.transform.position);
     }
 
     public void setCameraMode(CameraModeType mode)
@@ -376,15 +374,24 @@ public class CameraControlEx : Singleton<CameraControlEx>
         _currentCameraMode.progress(deltaTime,_currentTarget == null ? _cameraTargetPosition : _currentTarget.transform.position);
     }
 
+    public Vector3 getCameraPosition()
+    {
+        Vector3 currentPosition = _currentCameraMode == null ? _currentCamera.transform.position : _currentCameraMode.getCameraPosition();
+        currentPosition.z = -10f;
+        return currentPosition;
+    }
+
+    public void setCameraPosition(Vector3 position)
+    {
+        _currentCamera.transform.position = position;
+    }
+
     public void SyncPosition()
     {
         if(_currentCamera == null || _currentCameraMode == null)
             return;
 
-        Vector3 currentPosition = _currentCameraMode.getCameraPosition();
-        currentPosition.z = -10f;
-
-        _currentCamera.transform.position = currentPosition + _shakePosition;
+        _currentCamera.transform.position = getCameraPosition() + _shakePosition;
     }
 
     public bool isCameraTargetObject(ObjectBase targetObject)

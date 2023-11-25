@@ -850,6 +850,26 @@ public class StageDataEditor : EditorWindow
                         selectMarker(_markerSelectedIndex - 1);
                 }
             }
+            // else if(Event.current.keyCode == KeyCode.Alpha1)
+            // {
+            //     _editItemMenuSelectedIndex = 0;
+            // }
+            // else if(Event.current.keyCode == KeyCode.Alpha2)
+            // {
+            //     _editItemMenuSelectedIndex = 1;
+            // }
+            // else if(Event.current.keyCode == KeyCode.Alpha3)
+            // {
+            //     _editItemMenuSelectedIndex = 2;
+            // }
+            // else if(Event.current.keyCode == KeyCode.Alpha4)
+            // {
+            //     _editItemMenuSelectedIndex = 3;
+            // }
+            // else if(Event.current.keyCode == KeyCode.Alpha5)
+            // {
+            //     _editItemMenuSelectedIndex = 4;
+            // }
             break;
         }
     }
@@ -2541,6 +2561,7 @@ public class StageDataEditor : EditorWindow
         _editingStagePointList.Clear();
         _editingMiniStageDataList.Clear();
         _editingMarkerDataList.Clear();
+        _editingTrackDataList.Clear();
 
         if(_editItemParent == null)
             _editItemParent = GameObject.FindGameObjectWithTag("EditorItem");

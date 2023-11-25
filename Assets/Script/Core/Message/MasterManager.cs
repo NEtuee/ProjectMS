@@ -81,7 +81,7 @@ public class MasterManager : MessageHub<ManagerBase>
         DanmakuManager.Instance().initialize();
         UIRepeater.Instance().clear();
 
-        StageProcessor.Instance().setTargetTransform(CameraControlEx.Instance().getCurrentCamera().transform);
+        StageProcessor.Instance().setTargetCameraControl(CameraControlEx.Instance());
     }
     public void Start()
     {

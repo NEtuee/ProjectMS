@@ -38,6 +38,7 @@ public enum SequencerGraphEventType
     LetterBoxShow,
     LetterBoxHide,
     TalkBalloon,
+    CameraTrack,
 
     Count,
 }
@@ -78,6 +79,40 @@ public class SequencerGraphEvent_WaitSignal : SequencerGraphEventBase
             if(attrName == "Signal")
                 _targetSignal = attrValue;
         }
+    }
+}
+
+public class SequencerGraphEvent_CameraTrack : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.CameraTrack;
+
+    private string _trackName = "";
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        StageProcessor.Instance().startCameraTrack(_trackName);
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attributes[i].Name == "TrackName")
+                _trackName = attributes[i].Value;
+        }
+
+        if(_trackName == "")
+            DebugUtil.assert(false,"Track Name이 존재하지 않습니다. 이거 필수임");
     }
 }
 

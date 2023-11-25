@@ -159,6 +159,8 @@ public class SequencrGraphLoader : LoaderBase<SequencerGraphBaseData>
             spawnEvent = new SequencerGraphEvent_LetterBoxHide();
         else if(node.Name == "TalkBalloon")
             spawnEvent = new SequencerGraphEvent_TalkBalloon();
+        else if(node.Name == "CameraTrack")
+            spawnEvent = new SequencerGraphEvent_CameraTrack();
 
         if(spawnEvent == null)
         {

@@ -17,7 +17,7 @@ public class StageProcessor : Singleton<StageProcessor>
     private bool _isEnd = false;
     private StartNextStageRequsetDesc _startNextStageRequestDesc = new StartNextStageRequsetDesc();
 
-    private Transform _targetTransform;
+    private CameraControlEx _targetCameraControl;
 
     private Vector3 _smoothDampVelocity;
 
@@ -37,6 +37,10 @@ public class StageProcessor : Singleton<StageProcessor>
     private List<StageProcessor> _miniStageProcessor = new List<StageProcessor>();
 
     private SequencerGraphProcessManager _sequencerProcessManager = new SequencerGraphProcessManager(null);
+    private MovementTrackProcessor _trackProcessor = new MovementTrackProcessor();
+
+    private Vector3         _cameraTrackPositionError = Vector3.zero;
+    private float           _cameraTrackPositionErrorReduceTime = 0f;
 
     public StageProcessor()
     {
@@ -50,9 +54,9 @@ public class StageProcessor : Singleton<StageProcessor>
         _startNextStageRequestDesc._stageDataPath = stagePath;
     }
 
-    public void setTargetTransform(Transform target)
+    public void setTargetCameraControl(CameraControlEx target)
     {
-        _targetTransform = target;
+        _targetCameraControl = target;
     }
 
     public void startMiniStage(MiniStageListItem data, Vector3 startPosition)
@@ -303,7 +307,7 @@ public class StageProcessor : Singleton<StageProcessor>
 
         Vector3 resultPoint;
         float resultDistance;
-        float fraction = getLimitedFractionOnLine(_targetTransform.position, out resultPoint, out resultDistance);
+        float fraction = getLimitedFractionOnLine(_targetCameraControl.getCameraPosition(), out resultPoint, out resultDistance);
         if(_stageData._stagePointData.Count - 1 > _currentPoint && _stageData._stagePointData[_currentPoint]._lerpCameraZoom)
         {
             float currentZoom = _stageData._stagePointData[_currentPoint]._cameraZoomSize;
@@ -365,13 +369,72 @@ public class StageProcessor : Singleton<StageProcessor>
             _cameraPositionBlendTimeLeft -= deltaTime;
         }
 
+        Vector2 trackPosition;
+        if(_trackProcessor.isEnd() == false && _trackProcessor.processTrack(deltaTime,out trackPosition))
+        {
+            if(_trackProcessor.isEnd())
+            {
+                _cameraTrackPositionError = (Vector3)trackPosition - resultPoint;
+                _cameraTrackPositionErrorReduceTime = 0f;
+                _trackProcessor.clear();
+            }
+            else
+            {
+                resultPoint = trackPosition;
+            }
+        }
+
+        if(_cameraTrackPositionErrorReduceTime < 1f)
+        {
+            _cameraTrackPositionErrorReduceTime += deltaTime;
+            if(_cameraTrackPositionErrorReduceTime > 1f)
+                _cameraTrackPositionErrorReduceTime = 1f;
+
+            resultPoint = resultPoint + _cameraTrackPositionError * (1f - _cameraTrackPositionErrorReduceTime);
+        }
+
         resultPoint.z = -10f;
-        _targetTransform.position = resultPoint;
+        _targetCameraControl.setCameraPosition(resultPoint);
         for(int index = 0; index < _stageData._stagePointData.Count; ++index)
         {
             Color targetColor = index < _currentPoint ? Color.green : ( index == _currentPoint ? Color.magenta : Color.red);
             GizmoHelper.instance.drawCircle(_stageData._stagePointData[index]._stagePoint + _offsetPosition, 0.3f, 12, targetColor);
         }
+    }
+
+    public MovementTrackData getTrackData(string trackName)
+    {
+        if(_stageData == null)
+            return null;
+        foreach(MovementTrackData trackData in _stageData._trackData)
+        {
+            if(trackData._name == trackName)
+                return trackData;
+        }
+        return null;
+    }
+
+    public void startCameraTrack(string trackName)
+    {
+        MovementTrackData trackData = getTrackData(trackName);
+        if(trackData == null)
+            return;
+            
+        startCameraTrack(trackData);
+    }
+
+    public void startCameraTrack(MovementTrackData trackData)
+    {
+        _trackProcessor.initialize(trackData);
+
+        Vector2 trackStartPosition;
+        if(_trackProcessor.getCurrentTrackStartPosition(out trackStartPosition) == false)
+            return;
+
+        Vector3 resultPosition = trackStartPosition;
+
+        _cameraTrackPositionError = _targetCameraControl.getCameraPosition() - resultPosition;
+        _cameraTrackPositionErrorReduceTime = 0f;
     }
 
     public void startEnterSequencers(StagePointData pointData, int pointIndex, bool includePlayer)
