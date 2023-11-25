@@ -69,9 +69,12 @@ public class CrossHairUI : MonoBehaviour
 
     public void Update()
     {
-        if (_targetPosition == null)
+        if (_targetPosition == null || _targetEntity == null || _targetEntity.isDead())
+        {
+            _targetPosition = null;
+            _targetEntity = null;
             return;
-
+        }
         Vector3 worldMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         worldMousePosition.z = 0f;
 
