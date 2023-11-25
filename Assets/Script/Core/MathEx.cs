@@ -394,6 +394,44 @@ public static class MathEx
 		return new UnityEngine.Vector2();
 	}
 
+	public static float getEaseFormula(EaseType type, float start, float end, float time)
+	{
+		if(type == EaseType.Linear)
+		{
+			return linear(start,end,time);
+		}
+		else if(type == EaseType.EaseInQuad)
+		{
+			return easeInOutQuad(start,end,time);
+		}
+		else if(type == EaseType.EaseOutQuad)
+		{
+			return easeOutQuad(start,end,time);
+		}
+		else if(type == EaseType.EaseInOutQuad)
+		{
+			return easeInOutQuad(start,end,time);
+		}
+		else if(type == EaseType.EaseInCubic)
+		{
+			return easeInCubic(start,end,time);
+		}
+		else if(type == EaseType.EaseOutCubic)
+		{
+			return easeOutCubic(start,end,time);
+		}
+		else if(type == EaseType.EaseInOutCubic)
+		{
+			return easeInOutCubic(start,end,time);
+		}
+		else
+		{
+			DebugUtil.assert(false,"잘못된 EaseType " + type);
+		}
+
+		return 0f;
+	}
+
 	public static UnityEngine.Vector2 LinearVector2(UnityEngine.Vector2 start, UnityEngine.Vector2 end ,float time)
 	{
 		return UnityEngine.Vector2.Lerp(start,end,time);

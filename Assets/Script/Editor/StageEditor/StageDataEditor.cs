@@ -131,6 +131,8 @@ public class StageDataEditor : EditorWindow
         public GameObject           _selectedPointGizmo = null;
         public SelectInfo           _pointSelectinfo = SelectInfo.Point;
 
+        public Vector2              _pointListScroll = Vector2.zero;
+
         public int _selectedPointIndex = 0;
 
         public bool syncPosition()
@@ -519,6 +521,8 @@ public class StageDataEditor : EditorWindow
     public SerializedObject _stageDataSerializedObject;
     public SerializedProperty _stageDataListProperty;
 
+    private MovementTrackProcessor _trackProcessor = new MovementTrackProcessor();
+
     private string[] _editItemMenuStrings = 
     {
         "Point",
@@ -566,6 +570,7 @@ public class StageDataEditor : EditorWindow
     private bool _drawScreenToMousePoint = false;
     private bool _drawTriggerBound = false;
     private bool _enableBackground = true;
+    float _prevTime = 0f;
 
     [MenuItem("Tools/StageDataEditor", priority = 0)]
     public static void ShowWindow()
@@ -1265,10 +1270,76 @@ public class StageDataEditor : EditorWindow
         MovementTrackDataEditObject editObject = _editingTrackDataList[_trackSelectedIndex];
 
         trackItem._name = EditorGUILayout.TextField("Name",trackItem._name);
+        GUILayout.BeginScrollView(editObject._pointListScroll, "box", GUILayout.Height(200f));
+            for(int i = 0; i < trackItem._trackPointData.Count; ++i)
+            {
+                if(trackItem._trackPointData[i] == null)
+                    deleteTrackPoint(i--);
+
+                GUILayout.BeginHorizontal();
+
+                Color currentColor = GUI.color;
+                GUI.color = i == editObject._selectedPointIndex ? Color.green : currentColor;
+
+                bool selected = i == editObject._selectedPointIndex;
+                if(selected)
+                    GUILayout.BeginHorizontal("box");
+
+                GUILayout.Label("Point " + i,GUILayout.Width(200f));
+
+                if(GUILayout.Button("Pick"))
+                    selectTrackPoint(i, MovementTrackDataEditObject.SelectInfo.Point);
+
+                GUI.color = new Color(1f,0.2f,0.2f);
+                if(GUILayout.Button("Delete Point"))
+                {
+                    deleteTrackPoint(i--);
+                    if(i == editObject._selectedPointIndex)
+                        editObject._selectedPointIndex = -1;
+                }
+
+                GUI.color = currentColor;
+
+                if(selected)
+                    GUILayout.EndHorizontal();
+
+                GUILayout.EndHorizontal();
+            }
+
+        GUILayout.EndScrollView();
 
         GUILayout.BeginHorizontal();
-
+            if(GUILayout.Button("New Point"))
+            {
+                addTrackPoint();
+            }
+            if(GUILayout.Button("Test Play"))
+            {
+                trackItem.calculateTrackLength();
+                _trackProcessor.initialize(trackItem);
+            }
         GUILayout.EndHorizontal();
+
+        if(editObject._selectedPointIndex < 0 || trackItem._trackPointData.Count <= editObject._selectedPointIndex)
+            return;
+
+        GUILayout.Space(10f);
+        GUILayout.BeginVertical("box");
+            MovementTrackPointData pointData = trackItem._trackPointData[editObject._selectedPointIndex];
+            pointData._easeType = (MathEx.EaseType)EditorGUILayout.EnumPopup("Ease Type", pointData._easeType);
+            pointData._speedToNextPoint = EditorGUILayout.FloatField("Speed", pointData._speedToNextPoint);
+            pointData._waitSecond = EditorGUILayout.FloatField("Wait Second", pointData._waitSecond);
+
+            GUILayout.Space(10f);
+            GUILayout.BeginHorizontal();
+                if(GUILayout.Button("Point"))
+                    selectTrackPoint(editObject._selectedPointIndex, MovementTrackDataEditObject.SelectInfo.Point);
+                if(GUILayout.Button("Bezier"))
+                    selectTrackPoint(editObject._selectedPointIndex, MovementTrackDataEditObject.SelectInfo.BezierPoint);
+                if(GUILayout.Button("BezierInv"))
+                    selectTrackPoint(editObject._selectedPointIndex, MovementTrackDataEditObject.SelectInfo.BezierPointInv);
+            GUILayout.EndHorizontal();
+        GUILayout.EndVertical();
     }
 
     private void onPointInspectorGUI()
@@ -1625,6 +1696,20 @@ public class StageDataEditor : EditorWindow
 
         if(repaint)
             Repaint();
+
+        float deltaTime = (float)EditorApplication.timeSinceStartup - _prevTime;
+        Vector2 trackPosition;
+        if(_trackProcessor.isEnd() == false && _trackProcessor.processTrack(deltaTime,out trackPosition))
+        {
+            GameObject gizmoHelper = GameObject.FindGameObjectWithTag("GizmoHelper");
+            if(gizmoHelper != null)
+            {
+                gizmoHelper.GetComponent<GizmoHelper>().drawCircle(trackPosition,0.05f,6,Color.white);
+                SceneView.RepaintAll();
+            }
+        }
+
+        _prevTime = (float)EditorApplication.timeSinceStartup;
     }
 
     public void saveCurrentData()
@@ -1633,6 +1718,11 @@ public class StageDataEditor : EditorWindow
             return;
 
         roundPixelPerfect();
+
+        foreach(var item in _editingTrackDataList)
+        {
+            item._trackData.calculateTrackLength();
+        }
 
         EditorUtility.SetDirty(_editStageData);
         if(_backgroundPrefabObject != null)
@@ -2124,6 +2214,19 @@ public class StageDataEditor : EditorWindow
         EditorUtility.SetDirty(_editStageData);
     }
 
+    private void addTrackPoint()
+    {
+        if(_editingTrackDataList.Count <= _trackSelectedIndex || _trackSelectedIndex < 0)
+            return;
+        int pointCount = _editingTrackDataList[_trackSelectedIndex]._trackData._trackPointData.Count;
+        MovementTrackPointData pointData = new MovementTrackPointData();
+        pointData._point = pointCount == 0 ? (Vector2)SceneView.lastActiveSceneView.camera.transform.position : _editingTrackDataList[_trackSelectedIndex]._trackData._trackPointData[pointCount - 1]._point + Vector2.right * 3f;
+        pointData._bezierPoint = pointData._point + Vector2.right;
+
+        _editingTrackDataList[_trackSelectedIndex]._trackData._trackPointData.Add(pointData);
+        selectTrackPoint(pointCount, MovementTrackDataEditObject.SelectInfo.Point);
+    }
+
     private void selectTrackPoint(int index, MovementTrackDataEditObject.SelectInfo selectInfo)
     {
         if(_editingTrackDataList.Count <= _trackSelectedIndex || _trackSelectedIndex < 0)
@@ -2241,6 +2344,14 @@ public class StageDataEditor : EditorWindow
 
         returnGizmoItem(_editingTrackDataList[trackIndex]._selectedPointGizmo);
         _editingTrackDataList.RemoveAt(trackIndex);
+    }
+
+    private void deleteTrackPoint(int trackIndex)
+    {
+        if(_editStageData._trackData[_trackSelectedIndex]._trackPointData.Count <= trackIndex || trackIndex < 0 )
+            return;
+
+        _editStageData._trackData[_trackSelectedIndex]._trackPointData.RemoveAt(trackIndex);
     }
 
     private void loadStageData()
