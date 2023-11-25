@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEditor;
 using System;
 using NUnit.Framework.Internal;
+using System.Net;
 
 [InitializeOnLoad]
 public class StageDataEditor : EditorWindow
@@ -113,6 +114,66 @@ public class StageDataEditor : EditorWindow
                 return false;
 
             _markerData._position = _gizmoItem.transform.position;
+            return true;
+        }
+    }
+
+    private class MovementTrackDataEditObject
+    {
+        public enum SelectInfo
+        {
+            Point,
+            BezierPoint,
+            BezierPointInv,
+        }
+
+        public MovementTrackData    _trackData = null;
+        public GameObject           _selectedPointGizmo = null;
+        public SelectInfo           _pointSelectinfo = SelectInfo.Point;
+
+        public int _selectedPointIndex = 0;
+
+        public bool syncPosition()
+        {
+            if(_trackData == null || _selectedPointGizmo == null || _selectedPointIndex >= _trackData._trackPointData.Count || _selectedPointIndex < 0)
+                return false;
+
+            switch(_pointSelectinfo)
+            {
+                case SelectInfo.Point:
+                    Vector3 bezierPointVector = _trackData._trackPointData[_selectedPointIndex]._bezierPoint - _trackData._trackPointData[_selectedPointIndex]._point;
+                    _trackData._trackPointData[_selectedPointIndex]._point = _selectedPointGizmo.transform.position;
+                    _trackData._trackPointData[_selectedPointIndex]._bezierPoint = _selectedPointGizmo.transform.position + bezierPointVector;
+                break;
+                case SelectInfo.BezierPoint:
+                    _trackData._trackPointData[_selectedPointIndex]._bezierPoint = _selectedPointGizmo.transform.position;
+                break;
+                case SelectInfo.BezierPointInv:
+                    _trackData._trackPointData[_selectedPointIndex]._bezierPoint = _trackData._trackPointData[_selectedPointIndex].convertInverseBezierPointToBezierPoint(_selectedPointGizmo.transform.position);
+                break;
+            }
+
+            return true;
+        }
+
+        public bool syncGizmoPosition()
+        {
+            if(_trackData == null || _selectedPointGizmo == null || _selectedPointIndex >= _trackData._trackPointData.Count || _selectedPointIndex < 0)
+                return false;
+
+            switch(_pointSelectinfo)
+            {
+                case SelectInfo.Point:
+                    _selectedPointGizmo.transform.position = _trackData._trackPointData[_selectedPointIndex]._point;
+                break;
+                case SelectInfo.BezierPoint:
+                    _selectedPointGizmo.transform.position = _trackData._trackPointData[_selectedPointIndex]._bezierPoint;
+                break;
+                case SelectInfo.BezierPointInv:
+                    _selectedPointGizmo.transform.position = _trackData._trackPointData[_selectedPointIndex].getInverseBezierPoint();
+                break;
+            }
+
             return true;
         }
     }
@@ -443,6 +504,7 @@ public class StageDataEditor : EditorWindow
     private List<StagePointDataEditObject>  _editingStagePointList = new List<StagePointDataEditObject>();
     private List<MiniStageDataEditObject>   _editingMiniStageDataList = new List<MiniStageDataEditObject>();
     private List<MarkerDataEditObject>      _editingMarkerDataList = new List<MarkerDataEditObject>();
+    private List<MovementTrackDataEditObject> _editingTrackDataList = new List<MovementTrackDataEditObject>();
 
     private GameObject _backgroundPrefabObject = null;
     
@@ -450,6 +512,7 @@ public class StageDataEditor : EditorWindow
     private Vector2 _characterSpawnScroll = Vector2.zero;
     private Vector2 _miniStageScroll = Vector2.zero;
     private Vector2 _markerScroll = Vector2.zero;
+    private Vector2 _trackScroll = Vector2.zero;
 
     private CharacterInfoView _characterInfoView = new CharacterInfoView();
     private MiniStageListView _miniStageListView = new MiniStageListView();
@@ -462,6 +525,7 @@ public class StageDataEditor : EditorWindow
         "Character",
         "MiniStage",
         "Marker",
+        "Track",
     };
 
     private string[] _editMenuStrings = 
@@ -474,26 +538,30 @@ public class StageDataEditor : EditorWindow
     private SequencerPathEditor _onEnterSequencerPathEditor = new SequencerPathEditor("On Enter Sequencer Path");
     private SequencerPathEditor _onExitSequencerPathEditor = new SequencerPathEditor("On Exit Sequencer Path");
 
-    private int _pointSelectedIndex = -1;
-    private int _characterSelectedIndex = -1;
-    private int _editItemMenuSelectedIndex = 0;
-    private int _editMenuSelectedIndex = 0;
+    private int         _pointSelectedIndex = -1;
+    private int         _characterSelectedIndex = -1;
+    private int         _editItemMenuSelectedIndex = 0;
+    private int         _editMenuSelectedIndex = 0;
 
-    private int _miniStageSelectedIndex = 0;
-    private int _markerSelectedIndex = 0;
+    private int         _miniStageSelectedIndex = 0;
+    private int         _markerSelectedIndex = 0;
+    private int         _trackSelectedIndex = 0;
 
+    private string      _pointCharacterSearchString = "";
+    private string[]    _pointCharacterSearchStringList;
+    private string      _pointCharacterSearchStringCompare = "";
 
-    private string _pointCharacterSearchString = "";
-    private string[] _pointCharacterSearchStringList;
-    private string _pointCharacterSearchStringCompare = "";
+    private string      _miniStageSearchString = "";
+    private string[]    _miniStageSearchStringList;
+    private string      _miniStageSearchStringCompare = "";
 
-    private string _miniStageSearchString = "";
-    private string[] _miniStageSearchStringList;
-    private string _miniStageSearchStringCompare = "";
+    private string      _markerSearchString = "";
+    private string[]    _markerSearchStringList;
+    private string      _markerSearchStringCompare = "";
 
-    private string _markerSearchString = "";
-    private string[] _markerSearchStringList;
-    private string _markerSearchStringCompare = "";
+    private string      _trackSearchString = "";
+    private string[]    _trackSearchStringList;
+    private string      _trackSearchStringCompare = "";
 
     private bool _drawScreenToMousePoint = false;
     private bool _drawTriggerBound = false;
@@ -671,6 +739,8 @@ public class StageDataEditor : EditorWindow
                     selectMiniStage(_miniStageSelectedIndex);
                 else if(_editItemMenuSelectedIndex == 3)
                     selectMarker(_markerSelectedIndex);
+                else if(_editItemMenuSelectedIndex == 4)
+                    selectTrack(_trackSelectedIndex);
             }
 
             GUILayout.Space(5f);
@@ -682,6 +752,8 @@ public class StageDataEditor : EditorWindow
                 onMiniStageGUI();
             else if(_editItemMenuSelectedIndex == 3)
                 onMarkerGUI();
+            else if(_editItemMenuSelectedIndex == 4)
+                onTrackGUI();
         GUILayout.EndVertical();
 
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
@@ -699,6 +771,8 @@ public class StageDataEditor : EditorWindow
                     onMiniStageInspectorGUI();
                 else if(_editItemMenuSelectedIndex == 3)
                     onMarkerInspectorGUI();
+                else if(_editItemMenuSelectedIndex == 4)
+                    onTrackInspectorGUI();
             }
             else if(_editMenuSelectedIndex == 1)
             {
@@ -888,6 +962,69 @@ public class StageDataEditor : EditorWindow
                     deleteMarker(i--);
                     if(i == _markerSelectedIndex)
                         _markerSelectedIndex = -1;
+                }
+
+                GUI.color = currentColor;
+
+                if(selected)
+                    GUILayout.EndHorizontal();
+
+                GUILayout.EndHorizontal();
+            }
+
+        GUILayout.EndScrollView();
+    }
+
+    private void onTrackGUI()
+    {
+        GUILayout.BeginHorizontal();
+        _trackSearchString = EditorGUILayout.TextField("Search",_trackSearchString);
+        if(_trackSearchStringCompare != _trackSearchString)
+        {
+            if(_trackSearchString == "")
+                _trackSearchStringList = null;
+            else
+                _trackSearchStringList = _trackSearchString.Split(' ');
+            _trackSearchStringCompare = _trackSearchString;
+        }
+
+        if(GUILayout.Button("New", GUILayout.Width(40f)))
+            addTrack();
+
+        GUILayout.EndHorizontal();
+
+        _trackScroll = GUILayout.BeginScrollView(_trackScroll,"box");
+
+            for(int i = 0; i < _editStageData._trackData.Count; ++i)
+            {
+                if(_trackSearchString != "" && (searchStringCompare(_editStageData._trackData[i]._name,_trackSearchStringList) == false))
+                    continue;
+
+                if(_editStageData._trackData[i] == null)
+                    deleteTrack(i--);
+
+                GUILayout.BeginHorizontal();
+
+                Color currentColor = GUI.color;
+                GUI.color = i == _trackSelectedIndex ? Color.green : currentColor;
+
+                bool selected = i == _trackSelectedIndex;
+                if(selected)
+                    GUILayout.BeginHorizontal("box");
+
+                string targetName = _editStageData._trackData[i]._name;
+
+                GUILayout.Label(targetName,GUILayout.Width(200f));
+
+                if(GUILayout.Button("Pick"))
+                    selectTrack(i);
+
+                GUI.color = new Color(1f,0.2f,0.2f);
+                if(GUILayout.Button("Delete Track"))
+                {
+                    deleteTrack(i--);
+                    if(i == _trackSelectedIndex)
+                        _trackSelectedIndex = -1;
                 }
 
                 GUI.color = currentColor;
@@ -1116,6 +1253,21 @@ public class StageDataEditor : EditorWindow
 
             GUIUtility.systemCopyBuffer = copyString;
         }
+        GUILayout.EndHorizontal();
+    }
+
+    private void onTrackInspectorGUI()
+    {
+        if(_editingTrackDataList == null || _editingTrackDataList.Count == 0 || _editStageData._trackData.Count <= _trackSelectedIndex || _trackSelectedIndex < 0)
+            return;
+
+        MovementTrackData trackItem = _editStageData._trackData[_trackSelectedIndex];
+        MovementTrackDataEditObject editObject = _editingTrackDataList[_trackSelectedIndex];
+
+        trackItem._name = EditorGUILayout.TextField("Name",trackItem._name);
+
+        GUILayout.BeginHorizontal();
+
         GUILayout.EndHorizontal();
     }
 
@@ -1456,6 +1608,21 @@ public class StageDataEditor : EditorWindow
             }
         }
 
+        if(_editStageData._trackData.Count != 0)
+        {
+            for(int i = 0; i < _editingTrackDataList.Count; ++i)
+            {
+                if(_editingTrackDataList[i]._selectedPointGizmo == null)
+                {
+                    deleteTrack(i);
+                    --i;
+                    continue;
+                }
+
+                repaint |= _editingTrackDataList[i].syncPosition();
+            }
+        }
+
         if(repaint)
             Repaint();
     }
@@ -1694,6 +1861,73 @@ public class StageDataEditor : EditorWindow
             Handles.color = currentColor;
         }
 
+        if(_editItemMenuSelectedIndex == 4)
+        {
+            for(int i = 0; i < _editStageData._trackData.Count; ++i)
+            {
+                if(_trackSelectedIndex != i)
+                    continue;
+
+                MovementTrackData trackData = _editStageData._trackData[_trackSelectedIndex];
+                if(trackData == null)
+                    continue;
+
+                for(int index = 0; index < trackData._trackPointData.Count; ++index)
+                {
+                    MovementTrackPointData pointData = trackData._trackPointData[index];
+                    Vector3 itemPosition = pointData._point;
+                    Handles.CapFunction capFunction = (controlID, position, rotation, size, eventType)=>{
+                        Handles.CircleHandleCap(controlID, position, rotation, size, eventType);
+                    };
+
+                    Color currentColor = Handles.color;
+
+                    if(Handles.Button(itemPosition,Camera.current.transform.rotation,0.1f,0.2f,capFunction))
+                        selectTrackPoint(index, MovementTrackDataEditObject.SelectInfo.Point);
+
+                    Handles.color = Color.red;
+                    Handles.DrawLine(itemPosition, pointData._bezierPoint);
+                    if(Handles.Button(pointData._bezierPoint,Camera.current.transform.rotation,0.05f,0.1f,capFunction))
+                        selectTrackPoint(index, MovementTrackDataEditObject.SelectInfo.BezierPoint);
+
+                    Handles.color = Color.blue;
+                    Handles.DrawLine(itemPosition, pointData.getInverseBezierPoint());
+                    if(Handles.Button(pointData.getInverseBezierPoint(),Camera.current.transform.rotation,0.05f,0.1f,capFunction))
+                        selectTrackPoint(index, MovementTrackDataEditObject.SelectInfo.BezierPointInv);
+
+                    Handles.color = currentColor;
+
+                    if(index == 0)
+                    {
+                        Handles.Label(itemPosition, "Track: " + trackData._name);
+                    }
+
+                    if(index < trackData._trackPointData.Count - 1)
+                    {
+                        MovementTrackPointData pointData2 = trackData._trackPointData[index + 1];
+
+                        float sample = 0f;
+                        float sampleRate = 0.05f;
+                        for(int loop = 0; loop < 19; ++loop)
+                        {
+                            Vector2 startPoint = pointData._point;
+                            Vector2 endPoint = pointData2._point;
+                            Vector2 bezierPoint0 = pointData._bezierPoint;
+                            Vector2 bezierPoint1 = pointData2.getInverseBezierPoint();
+
+                            Vector2 first = MathEx.getPointOnBezierCurve(startPoint, bezierPoint0, bezierPoint1, endPoint, sample);
+                            Vector2 second = MathEx.getPointOnBezierCurve(startPoint, bezierPoint0, bezierPoint1, endPoint, sample + sampleRate);
+
+                            Handles.DrawLine(first, second);
+
+                            sample += sampleRate;
+                        }
+                    }
+                }
+            }
+        }
+        
+
         if(_editStageData._stagePointData.Count != 0)
         {
             for(int i = 0; i < _editStageData._miniStageData.Count; ++i)
@@ -1784,6 +2018,15 @@ public class StageDataEditor : EditorWindow
         _markerSelectedIndex = markerIndex;
     }
 
+    private void selectTrack(int trackIndex)
+    {
+        if(_editingTrackDataList.Count <= trackIndex || trackIndex < 0)
+            return;
+            
+        PingTarget(_editingTrackDataList[trackIndex]._selectedPointGizmo);
+        _trackSelectedIndex = trackIndex;
+    }
+
     private void PingTarget(GameObject obj)
     {
         EditorGUIUtility.PingObject(obj);
@@ -1845,6 +2088,55 @@ public class StageDataEditor : EditorWindow
         selectMarker(_editingMarkerDataList.Count - 1);
 
         EditorUtility.SetDirty(_editStageData);
+    }
+
+    private void addTrack()
+    {
+        Vector3 spawnPosition = SceneView.lastActiveSceneView.camera.transform.position;
+        spawnPosition.z = 0f;
+
+        MovementTrackDataEditObject editObject = new MovementTrackDataEditObject();
+        MovementTrackData trackData = new MovementTrackData();
+        trackData._name = "New Track " + _editingTrackDataList.Count;
+
+        MovementTrackPointData pointData = new MovementTrackPointData();
+        pointData._point = spawnPosition;
+        pointData._bezierPoint = pointData._point + Vector2.right;
+
+        MovementTrackPointData pointData2 = new MovementTrackPointData();
+        pointData2._point = spawnPosition + Vector3.right * 3f;
+        pointData2._bezierPoint = pointData2._point + Vector2.right;
+        
+        trackData._trackPointData.Add(pointData);
+        trackData._trackPointData.Add(pointData2);
+
+        editObject._trackData = trackData;
+        editObject._selectedPointGizmo = getGizmoItem();
+        editObject._selectedPointGizmo.transform.position = spawnPosition;
+
+        _editStageData._trackData.Add(trackData);
+        _editingTrackDataList.Add(editObject);
+
+        _trackScroll.y = float.MaxValue;
+        selectTrack(_editingMarkerDataList.Count - 1);
+        selectTrackPoint(0, MovementTrackDataEditObject.SelectInfo.Point);
+
+        EditorUtility.SetDirty(_editStageData);
+    }
+
+    private void selectTrackPoint(int index, MovementTrackDataEditObject.SelectInfo selectInfo)
+    {
+        if(_editingTrackDataList.Count <= _trackSelectedIndex || _trackSelectedIndex < 0)
+            return;
+
+        if(_editingTrackDataList[_trackSelectedIndex]._trackData._trackPointData.Count <= index || index < 0)
+            return;
+
+        _editingTrackDataList[_trackSelectedIndex]._pointSelectinfo = selectInfo;
+        _editingTrackDataList[_trackSelectedIndex]._selectedPointIndex = index;
+
+        _editingTrackDataList[_trackSelectedIndex].syncGizmoPosition();
+        PingTarget(_editingTrackDataList[_trackSelectedIndex]._selectedPointGizmo);
     }
 
     private void insertNextStagePoint(int index)
@@ -1938,6 +2230,17 @@ public class StageDataEditor : EditorWindow
 
         returnGizmoItem(_editingMarkerDataList[markerIndex]._gizmoItem);
         _editingMarkerDataList.RemoveAt(markerIndex);
+    }
+
+    private void deleteTrack(int trackIndex)
+    {
+        if(_editStageData._trackData.Count <= trackIndex || trackIndex < 0 )
+            return;
+
+        _editStageData._trackData.RemoveAt(trackIndex);
+
+        returnGizmoItem(_editingTrackDataList[trackIndex]._selectedPointGizmo);
+        _editingTrackDataList.RemoveAt(trackIndex);
     }
 
     private void loadStageData()
@@ -2056,6 +2359,24 @@ public class StageDataEditor : EditorWindow
                 editObject._gizmoItem = getGizmoItem();
                 editObject._gizmoItem.transform.position = item._position;
                 _editingMarkerDataList.Add(editObject);
+            }
+            
+        }
+
+        if(_editStageData._trackData.Count != 0)
+        {
+            Vector3 offsetPosition = Vector3.zero;
+            if(_editStageData._stagePointData.Count != 0)
+                offsetPosition = _editStageData._stagePointData[0]._stagePoint;
+
+            foreach(var item in _editStageData._trackData)
+            {
+                MovementTrackDataEditObject editObject = new MovementTrackDataEditObject();
+                editObject._trackData = item;
+                editObject._selectedPointGizmo = getGizmoItem();
+                if(item._trackPointData.Count != 0)
+                    editObject._selectedPointGizmo.transform.position = item._trackPointData[0]._point;
+                _editingTrackDataList.Add(editObject);
             }
             
         }

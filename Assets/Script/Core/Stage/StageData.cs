@@ -77,6 +77,7 @@ public class StageData : ScriptableObject
     public List<StagePointData>         _stagePointData = new List<StagePointData>();
     public List<MiniStageListItem>      _miniStageData = new List<MiniStageListItem>();
     public List<MarkerItem>             _markerData = new List<MarkerItem>();
+    public List<MovementTrackData>      _trackData = new List<MovementTrackData>();
 
     public MarkerItem findMarker(string markerName)
     {
