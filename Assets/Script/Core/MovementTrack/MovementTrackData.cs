@@ -12,6 +12,8 @@ public class MovementTrackPointData
     public float       _speedToNextPoint = 1f;
     public float       _waitSecond = 0f;
 
+    public bool        _isLinearPath;
+
     public Vector2 getInverseBezierPoint()
     {
         return _point - (_bezierPoint - _point);
@@ -53,6 +55,7 @@ public class MovementTrackProcessor
     public int      _currentPointIndex = 0;
     public float    _trackPathProcessRate = 0f;
     public float    _waitSecondTime = 0f;
+    public bool     _isLinearPath = false;
     public bool     _isEnd = false;
     public MovementTrackProcessor()
     {
@@ -68,6 +71,7 @@ public class MovementTrackProcessor
         _currentPointIndex = 0;
         _trackPathProcessRate = 0f;
         _waitSecondTime = _trackData._trackPointData[0]._waitSecond;
+        _isLinearPath = _trackData._trackPointData[0]._isLinearPath;
         _isEnd = false;
     }
     public bool processTrack(float deltaTime, out Vector2 resultPoint)
@@ -117,23 +121,32 @@ public class MovementTrackProcessor
             {
                 _trackPathProcessRate -= 1f;
                 _currentPointIndex += 1;
-                if(_trackPathProcessRate == 0f || _currentPointIndex == _trackData._trackPointData.Count - 1)
+                if(_currentPointIndex == _trackData._trackPointData.Count - 1)
                 {
                     _isEnd = true;
                     _trackPathProcessRate = 1f;
                 }
-                else
+                else if(_trackPathProcessRate != 0f)
                 {
                     _trackPathProcessRate *= finalSpeed;
                     deltaTime = _trackPathProcessRate;
                     _trackPathProcessRate = 0f;
+                    _waitSecondTime = _trackData._trackPointData[_currentPointIndex]._waitSecond;
                     continue;
                 }
             }
 
             float finalRate = _trackPathProcessRate;
             finalRate = MathEx.getEaseFormula(point0._easeType,0f,1f,finalRate);
-            resultPoint = MathEx.getPointOnBezierCurve(point0._point,point0._bezierPoint,point1.getInverseBezierPoint(),point1._point, finalRate);
+
+            if(_isLinearPath)
+            {
+                resultPoint = Vector2.Lerp(point0._point, point1._point, finalRate);
+            }
+            else
+            {
+                resultPoint = MathEx.getPointOnBezierCurve(point0._point,point0._bezierPoint,point1.getInverseBezierPoint(),point1._point, finalRate);
+            }
             break;
         }
         return true;

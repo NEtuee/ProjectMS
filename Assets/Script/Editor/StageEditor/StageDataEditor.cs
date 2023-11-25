@@ -1329,7 +1329,7 @@ public class StageDataEditor : EditorWindow
             pointData._easeType = (MathEx.EaseType)EditorGUILayout.EnumPopup("Ease Type", pointData._easeType);
             pointData._speedToNextPoint = EditorGUILayout.FloatField("Speed", pointData._speedToNextPoint);
             pointData._waitSecond = EditorGUILayout.FloatField("Wait Second", pointData._waitSecond);
-
+            pointData._isLinearPath = EditorGUILayout.Toggle("Is Linear Path",pointData._isLinearPath);
             GUILayout.Space(10f);
             GUILayout.BeginHorizontal();
                 if(GUILayout.Button("Point"))
@@ -1562,7 +1562,7 @@ public class StageDataEditor : EditorWindow
         
         StagePointCharacterSpawnData spawnData = new StagePointCharacterSpawnData();
         spawnData._characterKey = characterKey;
-        spawnData._flip = false;
+        spawnData._flip = true;
         spawnData._localPosition = Vector3.zero;
         spawnData._searchIdentifier = characterInfo[characterKey]._searchIdentifer;
 
@@ -1975,16 +1975,19 @@ public class StageDataEditor : EditorWindow
                     if(Handles.Button(itemPosition,Camera.current.transform.rotation,0.1f,0.2f,capFunction))
                         selectTrackPoint(index, MovementTrackDataEditObject.SelectInfo.Point);
 
-                    Handles.color = Color.red;
-                    Handles.DrawLine(itemPosition, pointData._bezierPoint);
-                    if(Handles.Button(pointData._bezierPoint,Camera.current.transform.rotation,0.05f,0.1f,capFunction))
-                        selectTrackPoint(index, MovementTrackDataEditObject.SelectInfo.BezierPoint);
+                    if(pointData._isLinearPath == false)
+                    {
+                        Handles.color = Color.red;
+                        Handles.DrawLine(itemPosition, pointData._bezierPoint);
+                        if(Handles.Button(pointData._bezierPoint,Camera.current.transform.rotation,0.05f,0.1f,capFunction))
+                            selectTrackPoint(index, MovementTrackDataEditObject.SelectInfo.BezierPoint);
 
-                    Handles.color = Color.blue;
-                    Handles.DrawLine(itemPosition, pointData.getInverseBezierPoint());
-                    if(Handles.Button(pointData.getInverseBezierPoint(),Camera.current.transform.rotation,0.05f,0.1f,capFunction))
-                        selectTrackPoint(index, MovementTrackDataEditObject.SelectInfo.BezierPointInv);
-
+                        Handles.color = Color.blue;
+                        Handles.DrawLine(itemPosition, pointData.getInverseBezierPoint());
+                        if(Handles.Button(pointData.getInverseBezierPoint(),Camera.current.transform.rotation,0.05f,0.1f,capFunction))
+                            selectTrackPoint(index, MovementTrackDataEditObject.SelectInfo.BezierPointInv);
+                    }
+                    
                     Handles.color = currentColor;
 
                     if(index == 0)
@@ -1995,23 +1998,30 @@ public class StageDataEditor : EditorWindow
                     if(index < trackData._trackPointData.Count - 1)
                     {
                         MovementTrackPointData pointData2 = trackData._trackPointData[index + 1];
-
-                        float sample = 0f;
-                        float sampleRate = 0.05f;
-                        for(int loop = 0; loop < 19; ++loop)
+                        if(pointData._isLinearPath == false)
                         {
-                            Vector2 startPoint = pointData._point;
-                            Vector2 endPoint = pointData2._point;
-                            Vector2 bezierPoint0 = pointData._bezierPoint;
-                            Vector2 bezierPoint1 = pointData2.getInverseBezierPoint();
+                            float sample = 0f;
+                            float sampleRate = 0.05f;
+                            for(int loop = 0; loop < 19; ++loop)
+                            {
+                                Vector2 startPoint = pointData._point;
+                                Vector2 endPoint = pointData2._point;
+                                Vector2 bezierPoint0 = pointData._bezierPoint;
+                                Vector2 bezierPoint1 = pointData2.getInverseBezierPoint();
 
-                            Vector2 first = MathEx.getPointOnBezierCurve(startPoint, bezierPoint0, bezierPoint1, endPoint, sample);
-                            Vector2 second = MathEx.getPointOnBezierCurve(startPoint, bezierPoint0, bezierPoint1, endPoint, sample + sampleRate);
+                                Vector2 first = MathEx.getPointOnBezierCurve(startPoint, bezierPoint0, bezierPoint1, endPoint, sample);
+                                Vector2 second = MathEx.getPointOnBezierCurve(startPoint, bezierPoint0, bezierPoint1, endPoint, sample + sampleRate);
 
-                            Handles.DrawLine(first, second);
+                                Handles.DrawLine(first, second);
 
-                            sample += sampleRate;
+                                sample += sampleRate;
+                            }
                         }
+                        else
+                        {
+                            Handles.DrawLine(pointData._point, pointData2._point);
+                        }
+                        
                     }
                 }
             }
