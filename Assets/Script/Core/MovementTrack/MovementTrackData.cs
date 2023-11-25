@@ -109,7 +109,7 @@ public class MovementTrackProcessor
                 _isEnd = true;
                 DebugUtil.assert(false, "트랙 패스 길이가 0입니다. 뭔가 잘못됨 통보 바람 [Name: {0}]", _trackData._name);
             }
-            float speed = point0._speedToNextPoint;
+            float speed = MathEx.lerpf(point0._speedToNextPoint,point1._speedToNextPoint, _trackPathProcessRate);
             float finalSpeed = (trackLength / speed);
             float resultRate = deltaTime / finalSpeed;
             _trackPathProcessRate += resultRate;
