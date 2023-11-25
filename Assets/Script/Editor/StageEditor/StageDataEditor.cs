@@ -1290,6 +1290,9 @@ public class StageDataEditor : EditorWindow
         MovementTrackDataEditObject editObject = _editingTrackDataList[_trackSelectedIndex];
 
         trackItem._name = EditorGUILayout.TextField("Name",trackItem._name);
+        trackItem._startBlend = EditorGUILayout.Toggle("Start Blend", trackItem._startBlend);
+        trackItem._endBlend = EditorGUILayout.Toggle("End Blend", trackItem._endBlend);
+
         GUILayout.BeginScrollView(editObject._pointListScroll, "box", GUILayout.Height(200f));
             for(int i = 0; i < trackItem._trackPointData.Count; ++i)
             {

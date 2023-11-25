@@ -374,8 +374,16 @@ public class StageProcessor : Singleton<StageProcessor>
         {
             if(_trackProcessor.isEnd())
             {
-                _cameraTrackPositionError = (Vector3)trackPosition - resultPoint;
-                _cameraTrackPositionErrorReduceTime = 0f;
+                if(_trackProcessor.isEndBlend())
+                {
+                    _cameraTrackPositionError = (Vector3)trackPosition - resultPoint;
+                    _cameraTrackPositionErrorReduceTime = 0f;
+                }
+                else
+                {
+                    _cameraTrackPositionErrorReduceTime = 1f;
+                }
+                
                 _trackProcessor.clear();
             }
             else
@@ -433,8 +441,15 @@ public class StageProcessor : Singleton<StageProcessor>
 
         Vector3 resultPosition = trackStartPosition;
 
-        _cameraTrackPositionError = _targetCameraControl.getCameraPosition() - resultPosition;
-        _cameraTrackPositionErrorReduceTime = 0f;
+        if(trackData._startBlend)
+        {
+            _cameraTrackPositionError = _targetCameraControl.getCameraPosition() - resultPosition;
+            _cameraTrackPositionErrorReduceTime = 0f;
+        }
+        else
+        {
+            _cameraTrackPositionErrorReduceTime = 1f;
+        }
     }
 
     public void startEnterSequencers(StagePointData pointData, int pointIndex, bool includePlayer)

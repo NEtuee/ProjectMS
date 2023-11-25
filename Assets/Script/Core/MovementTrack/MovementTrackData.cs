@@ -30,8 +30,11 @@ public class MovementTrackData
 {
     public string       _name;
     public List<MovementTrackPointData> _trackPointData = new List<MovementTrackPointData>();
-    public float[] _pointLengthArray;
-    public float _trackTotalLength;
+    public float[]      _pointLengthArray;
+    public float        _trackTotalLength;
+
+    public bool         _startBlend = true;
+    public bool         _endBlend = true;
 
     public void calculateTrackLength()
     {
@@ -100,6 +103,7 @@ public class MovementTrackProcessor
         resultPoint = Vector2.zero;
         if(deltaTime <= 0f)
             return false;
+
         if(_trackData == null || _trackData._trackPointData.Count == 0)
             return false;
             
@@ -172,6 +176,14 @@ public class MovementTrackProcessor
             break;
         }
         return true;
+    }
+
+    public bool isEndBlend()
+    {
+        if(_trackData == null)
+            return false;
+
+        return _trackData._endBlend;
     }
 
     public bool isEnd() {return _isEnd;}
