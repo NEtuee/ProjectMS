@@ -5,13 +5,16 @@ using System.IO;
 using UnityEditor;
 using UnityEditor.AssetImporters;
 using System;
+using System.Text;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace XMLUtil.ToBin
 {
     [CustomEditor(typeof(TextAsset))]
     public class XML2BinEditor : Editor
     {
-        private Editor _editor;
+        private Editor _editor = null;
+        private string _filePath = string.Empty;
         private bool _isXml = false;
 
         public override void OnInspectorGUI()
@@ -23,13 +26,34 @@ namespace XMLUtil.ToBin
             {
                 if (GUILayout.Button("Convert Bin"))
                 {
-                    Debug.Log("Test");
+                    if (_filePath == string.Empty)
+                    {
+                        Debug.LogWarning($"Is Not Have xml File Path");
+                        return;
+                    }
+
+                    CreateBinFile();
                 }
             }
             GUILayout.Space(20);
             GUILayout.EndVertical();
 
             DrawDefaultGUI();
+        }
+
+        private void CreateBinFile()
+        {
+            string savePath = Path.GetDirectoryName(_filePath);
+            string fileName = Path.GetFileNameWithoutExtension(_filePath);
+            FileStream fileStream = new FileStream(savePath + $"/{fileName}.bin", FileMode.OpenOrCreate);
+            
+            using (BinaryWriter wr = new BinaryWriter(fileStream))
+            {
+                var textAsset = target as TextAsset;
+                wr.Write(textAsset.bytes);
+            }
+
+            AssetDatabase.Refresh();
         }
 
         private void DrawDefaultGUI()
@@ -52,15 +76,15 @@ namespace XMLUtil.ToBin
                 _editor.OnInspectorGUI();
         }
 
-        private void CheckIsXml()
+        private void SetUpXml()
         {
-            string path = AssetDatabase.GetAssetPath(target);
-            _isXml = path.Contains(".xml");
+            _filePath = AssetDatabase.GetAssetPath(target);
+            _isXml = _filePath.Contains(".xml");
         }
 
         private void OnEnable()
         {
-            CheckIsXml();
+            SetUpXml();
         }
     }
 }
