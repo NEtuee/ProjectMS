@@ -16,8 +16,8 @@
     
     <TateChan
         DisplayName="타테짱"
-        ActionGraph="Assets/Data/Character/TateChan/TateChanAction.xml"
-        AIGraph="Assets/Data/Character/TateChan/TateChanAI.xml"
+        ActionGraph="Assets/Data/Character/Boss/TateChan/TateChanAction.xml"
+        AIGraph="Assets/Data/Character/Boss/TateChan/TateChanAI.xml"
         StatusInfoName="TateChanStatus"
 
         HeadUpOffset="0.5"
@@ -64,7 +64,7 @@
 
     <Chair
         DisplayName="의자"
-        ActionGraph="Assets/Data/Character/Chair/ChairObject.xml"
+        ActionGraph="Assets/Data/Character/Object/Chair/ChairObject.xml"
         AIGraph="Assets/Data/AILibrary/Graph/CommonEnemyAI.xml"
         StatusInfoName="CommonEnemyStatusNoUI"
 
@@ -87,8 +87,8 @@
 
     <OsananaNajimiAlpha
         DisplayName="오사나나 나지미"
-        ActionGraph="Assets/Data/Character/OsananaNajimiAlpha/NajimiChanAlphaAction.xml"
-        AIGraph="Assets/Data/Character/OsananaNajimiAlpha/NajimiChanAlphaAI.xml"
+        ActionGraph="Assets/Data/Character/Boss/OsananaNajimiAlpha/NajimiChanAlphaAction.xml"
+        AIGraph="Assets/Data/Character/Boss/OsananaNajimiAlpha/NajimiChanAlphaAI.xml"
         StatusInfoName="OsananaNajimiStatus"
         
         CollisionRadius="0.2"
@@ -100,8 +100,8 @@
 
     <KantoReito
         DisplayName="칸토 레이토"
-        ActionGraph="Assets/Data/Character/KantoReito/ReitoChanAction.xml"
-        AIGraph="Assets/Data/Character/KantoReito/ReitoChanAI.xml"
+        ActionGraph="Assets/Data/Character/Boss/KantoReito/ReitoChanAction.xml"
+        AIGraph="Assets/Data/Character/Boss/KantoReito/ReitoChanAI.xml"
         StatusInfoName="KantoReitoStatus"
         
         CollisionRadius="0.2"
@@ -113,8 +113,8 @@
 
     <NozawaAoba
         DisplayName="노자와 아오바"
-        ActionGraph="Assets/Data/Character/NozawaAoba/AobaChanAction.xml"
-        AIGraph="Assets/Data/Character/NozawaAoba/AobaChanAI.xml"
+        ActionGraph="Assets/Data/Character/Boss/NozawaAoba/AobaChanAction.xml"
+        AIGraph="Assets/Data/Character/Boss/NozawaAoba/AobaChanAI.xml"
         StatusInfoName="NozawaAobaStatus"
         
         CollisionRadius="0.2"
@@ -126,8 +126,8 @@
 
     <Gauntlet
         DisplayName="건틀렛"
-        ActionGraph="Assets/Data/Character/Gauntlet/GauntletAction.xml"
-        AIGraph="Assets/Data/Character/Gauntlet/GauntletAI.xml"
+        ActionGraph="Assets/Data/Character/Object/Gauntlet/GauntletAction.xml"
+        AIGraph="Assets/Data/Character/Object/Gauntlet/GauntletAI.xml"
         StatusInfoName="GauntletStatus"
         
         CollisionRadius="0.2"
@@ -139,8 +139,8 @@
 
     <FireworkBullet
         DisplayName="폭죽탄"
-        ActionGraph="Assets/Data/Character/FireworkBullet/FireworkBulletAction.xml"
-        AIGraph="Assets/Data/Character/FireworkBullet/FireworkBulletAI.xml"
+        ActionGraph="Assets/Data/Character/Object/FireworkBullet/FireworkBulletAction.xml"
+        AIGraph="Assets/Data/Character/Object/FireworkBullet/FireworkBulletAI.xml"
         StatusInfoName="ActionProjectileStatus"
         
         CollisionRadius="0.2"
@@ -151,8 +151,8 @@
 
     <EmpGrenade
         DisplayName="EMP그레네이드"
-        ActionGraph="Assets/Data/Character/EmpGrenade/EmpGrenadeAction.xml"
-        AIGraph="Assets/Data/Character/EmpGrenade/EmpGrenadeAI.xml"
+        ActionGraph="Assets/Data/Character/Object/EmpGrenade/EmpGrenadeAction.xml"
+        AIGraph="Assets/Data/Character/Object/EmpGrenade/EmpGrenadeAI.xml"
         StatusInfoName="ActionProjectileStatus"
         
         CollisionRadius="0.2"
@@ -163,8 +163,8 @@
     
     <RapierChan
         DisplayName="선도부 선봉부대 레이피어쨩"
-        ActionGraph="Assets/Data/Character/RapierChan/RapierChanAction.xml"
-        AIGraph="Assets/Data/Character/RapierChan/RapierChanAI.xml"
+        ActionGraph="Assets/Data/Character/Enemy/01_RapierChan/RapierChanAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/01_RapierChan/RapierChanAI.xml"
         StatusInfoName="CommonHpOneEnemyStatusNoUI"
         
         CollisionRadius="0.2"
@@ -176,8 +176,8 @@
 
     <LugerChan
         DisplayName="선도부 마법부대 루거쨩"
-        ActionGraph="Assets/Data/Character/LugerChan/LugerChanAction.xml"
-        AIGraph="Assets/Data/Character/LugerChan/LugerChanAI.xml"
+        ActionGraph="Assets/Data/Character/Enemy/01_LugerChan/LugerChanAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/01_LugerChan/LugerChanAI.xml"
         StatusInfoName="CommonHpOneEnemyStatusNoUI"
         
         CollisionRadius="0.2"
@@ -189,8 +189,8 @@
 
     <BarricadeChan
         DisplayName="선도부 마법부대 바리케이드쨩"
-        ActionGraph="Assets/Data/Character/BarricadeChan/BarricadeChanAction.xml"
-        AIGraph="Assets/Data/Character/BarricadeChan/BarricadeChanAI.xml"
+        ActionGraph="Assets/Data/Character/Enemy/01_BarricadeChan/BarricadeChanAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/01_BarricadeChan/BarricadeChanAI.xml"
         StatusInfoName="CommonHpThreeEnemyStatus"
         
         CollisionRadius="0.2"
@@ -202,8 +202,8 @@
 
     <SisterHelena
         DisplayName="시스터 헬레나"
-        ActionGraph="Assets/Data/Character/SisterHelena/SisterChanAction.xml"
-        AIGraph="Assets/Data/Character/SisterHelena/SisterChanAI.xml"
+        ActionGraph="Assets/Data/Character/Boss/SisterHelena/SisterChanAction.xml"
+        AIGraph="Assets/Data/Character/Boss/SisterHelena/SisterChanAI.xml"
         StatusInfoName="SisterHelenaStatus"
         
         CollisionRadius="0.2"
@@ -228,7 +228,7 @@
 
     <SchoolDoor
         DisplayName="학교 문"
-        ActionGraph="Assets/Data/Character/BigDoor/BigDoor.xml"
+        ActionGraph="Assets/Data/Character/Object/BigDoor/BigDoor.xml"
         AIGraph="Assets/Data/AILibrary/Graph/CommonEnemyAI.xml"
         StatusInfoName="CommonEnemyStatusNoUI"
 

@@ -381,7 +381,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
                 for(int index = 0; index < xmlAttributes.Count; ++index)
                 {
                     string attrName = xmlAttributes[index].Name;
-                    string attrValue = xmlAttributes[index].Value;
+                    string attrValue = getGlobalVariable(xmlAttributes[index].Value, _globalVariables);
 
                     if(attrName == "MasterPath")
                     {
