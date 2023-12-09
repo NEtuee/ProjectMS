@@ -47,6 +47,9 @@
     <!-- 패시브 방어(누적 가드) 반응 타입 설정 -->
     <GlobalVariable Name="gv_bIsDodgeToPassiveDef_Guard"    Value="False"/>      <!-- 누적 피격 시 패시브 방어 : 회피 타입 -->
     <GlobalVariable Name="gv_bIsCounterToPassiveDef_Guard"  Value="False"/>     <!-- 누적 피격 시 패시브 방어 : 반격 타입 -->
+    <!-- 패시브 방어 실행 지연 시간 설정 -->
+    <GlobalVariable Name="gv_PassiveDef_Hit_DelayTime" Value="0.2"/>            <!-- 누적 피격 반응 지연 시간-->
+    <GlobalVariable Name="gv_PassiveDef_Guard_DelayTime" Value="0.2"/>            <!-- 누적 가드 반응 지연 시간-->
 
     <!-- 행동 옵션값 설정 -->
     <GlobalVariable Name="gv_TransitionDelay"   Value="0.2"/>                   <!-- [보류] State 전환 지연시간 (State 최소 실행 시간) -->
@@ -186,9 +189,11 @@
         <Branch Condition="GuardBreakFail" Execute="GuardBroken"/>
         <Branch Condition="GuardBroken && (getStat_GuardCount >= gv_GuardBrokenThreshold)" Execute="GuardBroken"/> <!-- TODO : 일반 공격도 카운트 되긴 하나, 가드 브레이크로만 파괴 가능한 상태 -->
         <Branch Condition="(gv_bIsDodgeToPassiveDef_Hit || gv_bIsGuardToPassiveDef_Hit || gv_bIsCounterToPassiveDef_Hit) 
-                        && (gv_HitCountThreshold <= getStat_HitCount)" Execute="Battle_DefenseByHit"/>
+                        && (gv_HitCountThreshold <= getStat_HitCount)
+                        && (gv_PassiveDef_Hit_DelayTime <= GraphExecutedTime)" Execute="Battle_DefenseByHit"/>
         <Branch Condition="(gv_bIsDodgeToPassiveDef_Guard || gv_bIsCounterToPassiveDef_Guard)
-                        && (gv_GuardCountThreshold <= getStat_GuardCount)" Execute="Battle_DefenseByGuard"/>
+                        && (gv_GuardCountThreshold <= getStat_GuardCount)
+                        && (gv_PassiveDef_Guard_DelayTime <= GraphExecutedTime)" Execute="Battle_DefenseByGuard"/>
     </BranchSet>
 <!-- 브랜치 셋 -->
 
