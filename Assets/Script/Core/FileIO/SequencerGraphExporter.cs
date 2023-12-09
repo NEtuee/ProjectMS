@@ -161,6 +161,8 @@ public class SequencrGraphLoader : LoaderBase<SequencerGraphBaseData>
             spawnEvent = new SequencerGraphEvent_TalkBalloon();
         else if(node.Name == "CameraTrack")
             spawnEvent = new SequencerGraphEvent_CameraTrack();
+        else if(node.Name == "TaskFence")
+            spawnEvent = new SequencerGraphEvent_TaskFence();
 
         if(spawnEvent == null)
         {

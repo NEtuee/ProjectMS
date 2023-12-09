@@ -39,6 +39,7 @@ public enum SequencerGraphEventType
     LetterBoxHide,
     TalkBalloon,
     CameraTrack,
+    TaskFence,
 
     Count,
 }
@@ -50,6 +51,36 @@ public abstract class SequencerGraphEventBase
     public abstract bool Execute(SequencerGraphProcessor processor, float deltaTime);
     public virtual void Exit(SequencerGraphProcessor processor) {}
     public abstract void loadXml(XmlNode node);
+}
+
+public class SequencerGraphEvent_TaskFence : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.TaskFence;
+
+    public string _taskName = "";
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        return processor.isTaskEnd(_taskName);
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "TaskName")
+                _taskName = attrValue;
+        }
+    }
 }
 
 public class SequencerGraphEvent_WaitSignal : SequencerGraphEventBase
@@ -234,7 +265,7 @@ public class SequencerGraphEvent_Task : SequencerGraphEventBase
 
     public SequencerGraphEventBase[] _eventList = null;
     public SequencerGraphProcessor.TaskProcessType taskProcessType;
-
+    public string _taskName = "";
 
     public override void Initialize(SequencerGraphProcessor processor)
     {
@@ -249,7 +280,7 @@ public class SequencerGraphEvent_Task : SequencerGraphEventBase
         if(taskProcessType == SequencerGraphProcessor.TaskProcessType.Count)
             return true;
             
-        processor.addTask(_eventList,taskProcessType);
+        processor.addTask(_eventList,taskProcessType, _taskName);
         return true;
     }
 
@@ -261,6 +292,8 @@ public class SequencerGraphEvent_Task : SequencerGraphEventBase
         {
             if(attributes[i].Name == "ProcessType")
                 taskProcessType = (SequencerGraphProcessor.TaskProcessType)System.Enum.Parse(typeof(SequencerGraphProcessor.TaskProcessType), attributes[i].Value);
+            else if(attributes[i].Name == "Name")
+                _taskName = attributes[i].Value;
         }
 
         if(taskProcessType == SequencerGraphProcessor.TaskProcessType.Count)

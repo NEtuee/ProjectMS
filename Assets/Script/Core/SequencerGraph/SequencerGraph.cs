@@ -25,13 +25,14 @@ public class SequencerGraphProcessor
         protected int                         _eventCount;
         protected int                         _currentEventIndex;
         protected bool                        _taskProcessing = false;
+        protected string                      _taskName = "";
 
         public void initialize(SequencerGraphProcessor processor)
         {
             _sequencerGraphProessor = processor;
         }
 
-        public virtual void setTask(SequencerGraphEventBase[] eventList)
+        public virtual void setTask(SequencerGraphEventBase[] eventList, string taskName)
         {
             if(_sequencerGraphProessor == null)
             {
@@ -50,11 +51,13 @@ public class SequencerGraphProcessor
             _eventCount = eventList.Length;
             _currentEventIndex = 0;
             _taskProcessing = true;
+            _taskName = taskName;
         }
 
         public abstract TaskProcessType getTaskType();
 
         public abstract bool runTask(float deltaTime);
+        public string getTaskName() {return _taskName;}
     }
 
     public class SequencerAllAtOnceTaskProcessor : SequencerTaskProcessorBase
@@ -69,9 +72,9 @@ public class SequencerGraphProcessor
 
         public override TaskProcessType getTaskType() => TaskProcessType.AllAtOnce;
 
-        public override void setTask(SequencerGraphEventBase[] eventList)
+        public override void setTask(SequencerGraphEventBase[] eventList, string taskName)
         {
-            base.setTask(eventList);
+            base.setTask(eventList, taskName);
             _eventList.Clear();
 
             foreach(var item in eventList)
@@ -324,7 +327,7 @@ public class SequencerGraphProcessor
         clearTask();
     }
 
-    public void addTask(SequencerGraphEventBase[] eventList, TaskProcessType taskProcessType)
+    public void addTask(SequencerGraphEventBase[] eventList, TaskProcessType taskProcessType, string taskName)
     {
         SequencerTaskProcessorBase task = null;
         switch(taskProcessType)
@@ -338,7 +341,7 @@ public class SequencerGraphProcessor
         }
 
         task.initialize(this);
-        task.setTask(eventList);
+        task.setTask(eventList, taskName);
 
         _processingTaskList.Add(task);
     }
@@ -355,6 +358,17 @@ public class SequencerGraphProcessor
                index -= 1; 
             }
         }
+    }
+
+    public bool isTaskEnd(string taskName)
+    {
+        for(int index = 0; index < _processingTaskList.Count; ++index)
+        {
+            if(_processingTaskList[index].getTaskName() == taskName)
+               return false;
+        }
+
+        return true;
     }
 
     public void returnTaskToPool(SequencerTaskProcessorBase task)
