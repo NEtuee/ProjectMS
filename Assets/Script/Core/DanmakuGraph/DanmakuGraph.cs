@@ -213,7 +213,7 @@ public class DanmakuGraph
                 DanmakuVariableEventData eventData = (DanmakuVariableEventData)eventTarget;
                 for(int i = 0; i < eventData._eventCount; ++i)
                 {
-                    playItem.variDanmakuVariable(eventData._type,eventData._eventType[i], eventData._value[i]);
+                    playItem.variDanmakuVariable(eventData._type,eventData._eventType[i], eventData._value[i].getValue());
                 }
             }
             break;

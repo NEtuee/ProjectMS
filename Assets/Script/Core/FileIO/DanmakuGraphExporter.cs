@@ -136,7 +136,7 @@ public class DanmakuGraphLoader : LoaderBase<DanmakuGraphBaseData>
             {
                 DanmakuVariableEventData variableEventData = new DanmakuVariableEventData();
                 List<DanmakuVariableEventType> eventTypeList = new List<DanmakuVariableEventType>();
-                List<float> eventValueList = new List<float>();
+                List<FloatEx> eventValueList = new List<FloatEx>();
 
                 XmlAttributeCollection attributes = node.Attributes;
                 for(int i = 0; i < attributes.Count; ++i)
@@ -150,22 +150,10 @@ public class DanmakuGraphLoader : LoaderBase<DanmakuGraphBaseData>
 
                     eventTypeList.Add(variableEventType);
 
-                    if(attributes[i].Value.Contains("Random_"))
-                    {
-                        string randomData = attributes[i].Value.Replace("Random_","");
-                        string[] randomValue = randomData.Split('^');
-                        if(randomValue == null || randomValue.Length != 2)
-                        {
-                            DebugUtil.assert(false, "invalid danmaku variable event random: {0} [Line: {1}] [FileName: {2}]", attributes[i].Value, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
-                            return null;
-                        }
+                    FloatEx newFloat = new FloatEx();
+                    newFloat.loadFromXML(attributes[i].Value);
                         
-                        eventValueList.Add(Random.Range(XMLScriptConverter.valueToFloatExtend(randomValue[0]),XMLScriptConverter.valueToFloatExtend(randomValue[1])));
-                    }
-                    else
-                    {
-                        eventValueList.Add(XMLScriptConverter.valueToFloatExtend(attributes[i].Value));
-                    }
+                    eventValueList.Add(newFloat);
                 }
 
                 variableEventData._eventCount = eventTypeList.Count;

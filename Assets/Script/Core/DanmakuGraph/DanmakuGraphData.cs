@@ -45,7 +45,7 @@ public class DanmakuVariableEventData : DanmakuEventBase
 
     public int _eventCount;
 
-    public float[] _value;
+    public FloatEx[] _value;
 };
 
 [System.Serializable]
