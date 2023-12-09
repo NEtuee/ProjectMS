@@ -1527,7 +1527,9 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
 
                 if(requester is GameEntityBase)
                     ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnAttack);
-                target.executeAIEvent(AIChildEventType.AIChildEvent_OnAttacked);
+                
+                if(_notifyAttackSuccess)
+                    target.executeAIEvent(AIChildEventType.AIChildEvent_OnAttacked);
 
                 eventType = ChildFrameEventType.ChildFrameEvent_OnHit;
                 attackSuccess = true;
