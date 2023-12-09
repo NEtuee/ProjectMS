@@ -7,9 +7,15 @@ using System;
 public class TimelineEffectControl : MonoBehaviour//, INotificationReceiver
 {
     public PlayableDirector         _playableDirector;
+    public AtteckRayEffect          _rayEffect;
     public bool                     _isCharacterMaterialEffect = false;
     public bool                     _isLaserEffect = false;
     public bool                     _isOutlineEffect = false;
+
+    public void setAttackData(string attackDataName)
+    {
+        _rayEffect?.setAttackData(attackDataName);
+    }
 
     public void setCharacterAnimator(Animator characterAnimator)
     {

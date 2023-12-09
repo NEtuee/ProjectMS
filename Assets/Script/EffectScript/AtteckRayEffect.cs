@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class AtteckRayEffect : MonoBehaviour
 {
-    public string _targetAttackPreset = "";
     public LineRenderer _targetLine;
     public LineRenderer _placeholder;
 
-    public void setAttackData()
+    public void setAttackData(string attackPresetName)
     {
+        Debug.Log("?");
         AttackPreset preset = ResourceContainerEx.Instance().GetScriptableObject("Preset\\AttackPreset") as AttackPreset;
-        AttackPresetData presetData = preset.getPresetData(_targetAttackPreset);
+        AttackPresetData presetData = preset.getPresetData(attackPresetName);
         if(presetData == null)
         {
-            DebugUtil.assert(false, "failed to load attack preset: {0}",_targetAttackPreset);
+            DebugUtil.assert(false, "failed to load attack preset: {0}",attackPresetName);
             return;
         }
 

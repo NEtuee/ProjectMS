@@ -179,7 +179,7 @@ public class CameraTargetCenterMode : CameraModeBase
 
 public class CameraControlEx : Singleton<CameraControlEx>
 {
-    public float _cameraBoundRate = 0.85f;
+    public float _cameraBoundRate = 0.9f;
     private Camera _currentCamera;
     private ObjectBase _currentTarget;
 
