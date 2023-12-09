@@ -380,4 +380,31 @@
         </Event>
     </ThunderStroke>
 
+    <!-- 스케반 원거리 (기관단총) -->
+    <MiniBullet DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">
+        <Animation Preset="Sprites/Projectile/MuzzleFlash" XFlip="true" Duration="5.0">        
+        </Animation>
+
+        <CollisionInfo Radius="0.1" Angle="0"/>
+        <DefaultShotInfo Velocity="7" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="5"/>
+        <Event>
+            <OnHit>
+                <FrameEvent Type="Attack" NotifyAttackSuccess="False" StartFrame="0" AttackPreset="CommonProjectile">
+                    <OnHit>
+                        <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonQuarterAttack"/>
+                    </OnHit>
+                </FrameEvent>
+                <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
+            </OnHit>
+    
+            <OnHitEnd>
+                <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0"/>
+            </OnHitEnd>
+    
+            <OnEnd>
+                <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ParrySucc" FramePerSecond="18.0" Offset="0.0 0.0 0.0"/>
+            </OnEnd>
+        </Event>
+    </MiniBullet>
+
 </ProjectileGraph>

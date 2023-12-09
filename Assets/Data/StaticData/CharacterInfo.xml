@@ -251,4 +251,30 @@
         SearchIdentifier="Enemy"
     />
 
+    <SukebanKatanaChan
+        DisplayName="스케반 카타나쨩"
+        ActionGraph="Assets/Data/Character/Enemy/02_SukebanMelee/SukebanMeleeAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/02_SukebanMelee/SukebanMeleeAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        SearchIdentifier="Enemy"
+    />
+
+    <SukebanUziChan
+        DisplayName="스케반 우지쨩"
+        ActionGraph="Assets/Data/Character/Enemy/02_SukebanRanged/SukebanRangedAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/02_SukebanRanged/SukebanRangedAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        SearchIdentifier="Enemy"
+    />
+
 </CharacterInfo>
