@@ -16,8 +16,9 @@
     <!-- 전투 상태 행동 타입 설정 -->
     <!-- 공격 타입 설정 -->
     <GlobalVariable Name="gv_bIsNormalAttack"               Value="False"/>     <!-- 일반 공격 타입 : 공격을 실행한다. -->
-    <GlobalVariable Name="gv_bIsLockOnlAttack"              Value="True"/>      <!-- 락온 공격 타입 : PC를 추적하며 공격을 실행한다. -->
+    <GlobalVariable Name="gv_bIsLockOnlAttack"              Value="False"/>      <!-- 락온 공격 타입 : PC를 추적하며 공격을 실행한다. -->
     <GlobalVariable Name="gv_bIsBumpAttack"                 Value="False"/>     <!-- 충돌 공격 타입 : PC 공격 성공 시 액션(리커버)이 바뀌는 공격을 실행한다. -->
+    <GlobalVariable Name="gv_bIsLaserAttack"                 Value="True"/>     <!-- 빔 공격 타입 : PC를 추적하다 공격 시점에 추적을 중단한다. -->
     <!-- 공격 거리 설정 -->
     <GlobalVariable Name="gv_MeleeAttackRangeMin"           Value="1.5"/>       <!-- 최소 공격 사거리 : Value보다 PC가 가까우면 공격하지 않는다. -->
     <GlobalVariable Name="gv_MeleeAttackRangeMax"           Value="3.5"/>       <!-- 최대 공격 사거리 : Value보다 PC가 멀면 공격하지 않는다. -->
@@ -71,6 +72,7 @@
     <Include Path="Assets/Data/AILibrary/Package/CommonAttackPackage.xml"/>        <!-- 일반 공격 패키지 -->
     <Include Path="Assets/Data/AILibrary/Package/CommonLockOnAttackPackage.xml"/>  <!-- 락온 공격 패키지 -->
     <Include Path="Assets/Data/AILibrary/Package/CommonBumpAttackPackage.xml"/>    <!-- 충돌 공격 패키지 (공격 성공 시 액션 전환)-->
+    <Include Path="Assets/Data/AILibrary/Package/CommonLaserAttackPackage.xml"/>   <!-- 빔 공격 패키지 (공격 시 추적 불가)-->
     <Include Path="Assets/Data/AILibrary/Package/CommonDodgePackage.xml"/>         <!-- 회피 패키지 -->
     <Include Path="Assets/Data/AILibrary/Package/CommonGuardPackage.xml"/>         <!-- 가드 패키지 -->
 <!-- 패키지 인클루드 -->
@@ -159,6 +161,7 @@
         <Branch Condition="gv_bIsNormalAttack"     Execute="MeleeAttack"/>
         <Branch Condition="gv_bIsLockOnlAttack"    Execute="MeleeLockOnAttack"/>
         <Branch Condition="gv_bIsBumpAttack"       Execute="MeleeBumpAttack"/>
+        <Branch Condition="gv_bIsLaserAttack"       Execute="RangedLaserAttack"/>
     </BranchSet>
     <BranchSet Name="AttackTriggerSet">
         <Branch Condition="aiGraphCoolTime_Battle_Attack
@@ -304,6 +307,11 @@
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </MeleeBumpAttack>
+
+    <RangedLaserAttack Package="CommonLaserAttackPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </RangedLaserAttack>
 
     <!-- AI 스테이트 : 전투 상태 : 패시브 방어 -->
     <Dodge Package="CommonDodgePackage">
