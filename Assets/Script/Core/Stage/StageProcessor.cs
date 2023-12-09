@@ -540,12 +540,6 @@ public class StageProcessor : Singleton<StageProcessor>
 
         while(true)
         {
-            if(isInTriggerBound(pointIndex, position))
-            {
-                getNextPointIndex(ref pointIndex);
-                continue;
-            }
-
             float fraction = getLimitedFractionOnLine(pointIndex, position, out Vector3 resultPosition);
             if(fraction >= 1f)
             {
