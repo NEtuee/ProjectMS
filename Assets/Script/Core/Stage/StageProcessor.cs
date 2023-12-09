@@ -158,6 +158,8 @@ public class StageProcessor : Singleton<StageProcessor>
                     createdCharacter.setAction(characterSpawnData._startAction);
                     createdCharacter.progress(0f);
                 }
+
+                createdCharacter.updateFlipState(FlipType.Direction);
             }
         }
 

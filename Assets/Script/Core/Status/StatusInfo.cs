@@ -543,7 +543,7 @@ public class StatusInfo
             return false;
 
         if(buff._targetStatusName != null && getStatus(buff._targetStatusName) == null)
-            DebugUtil.assert(false, "target status is not exists: [targetName: {0}] [currentStatusInfo: {1}]", buff._targetStatusName,_statusInfoData._statusInfoName);
+            DebugUtil.assert(false, "대상 스테이터스가 존재하지 않습니다.: [스테이터스 이름: {0}] [스테이터스 인포 이름: {1}]", buff._targetStatusName,_statusInfoData._statusInfoName);
 
         if(buff._buffUpdateType == BuffUpdateType.GreaterThenSet)
             return setStat(buff._targetStatusName,getStatus(buff._buffCustomStatusName)._realValue);

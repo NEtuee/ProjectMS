@@ -415,10 +415,9 @@ public class GameEntityBase : SequencerObjectBase
             }
 
             updateDirection();
-            
             if(_updateFlipState)
             {
-                _flipState = getCurrentFlipState();
+                updateFlipState(_actionGraph.getCurrentFlipType());
                 _updateFlipState = _actionGraph.getCurrentFlipTypeUpdateOnce() == false;
             }
 
@@ -439,9 +438,9 @@ public class GameEntityBase : SequencerObjectBase
 
             _spriteRenderer.sprite = _actionGraph.getCurrentSprite(_actionGraph.getCurrentRotationType() != RotationType.AlwaysRight ? (_spriteRotation * _actionStartRotation).eulerAngles.z : MathEx.directionToAngle(_direction));
 
-            _spriteRenderer.flipX = _flipState.xFlip;
-            _spriteRenderer.flipY = _flipState.yFlip;
         }
+        _spriteRenderer.flipX = _flipState.xFlip;
+        _spriteRenderer.flipY = _flipState.yFlip;
 
         if(_statusInfo.isDead())
             _deadEventDelegate?.Invoke(this);
@@ -791,12 +790,15 @@ public class GameEntityBase : SequencerObjectBase
         _danmakuGraph.release();
     }
 
-    private FlipState getCurrentFlipState()
+    public void updateFlipState(FlipType flipType)
+    {
+        _flipState = getCurrentFlipState(flipType);
+    }
+
+    private FlipState getCurrentFlipState(FlipType flipType)
     {
         FlipState currentFlipState = _actionGraph.getCurrentFlipState();
         FlipState flipState = new FlipState();
-
-        FlipType flipType = _actionGraph.getCurrentFlipType();
 
         switch(flipType)
         {
