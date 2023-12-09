@@ -9,7 +9,7 @@
         <Branch Condition="End == true" Execute="AC_Entry"/>
     </AC_Entry>
 
-    <AC_Idle MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+    <AC_Idle MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/RapierChan/0_default/"/>
         <Animation Preset="1_idle" XFlip="true" Duration="1">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>

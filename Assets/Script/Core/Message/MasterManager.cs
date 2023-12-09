@@ -109,9 +109,11 @@ public class MasterManager : MessageHub<ManagerBase>
             Screen.SetResolution(currentResolution.width, currentResolution.height,FullScreenMode.FullScreenWindow);
         }
 
+        float deltaTimeMultiflier = 1f;
+        if(Input.GetKey(KeyCode.LeftBracket))
+            deltaTimeMultiflier = 10f;
 
-
-        float deltaTime = Time.deltaTime;
+        float deltaTime = Time.deltaTime * deltaTimeMultiflier;
         ActionKeyInputManager.Instance().progress(deltaTime);
         GlobalTimer.Instance().setUpdateProcessing(true);
 
