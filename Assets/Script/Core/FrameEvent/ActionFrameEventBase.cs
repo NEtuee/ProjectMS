@@ -1414,6 +1414,7 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
     private HashSet<ObjectBase>     _collisionList = new HashSet<ObjectBase>();
     private List<CollisionSuccessData> _collisionOrder = new List<CollisionSuccessData>();
 
+    private bool                    _notifyAttackSuccess = true;
     private int                     _collisionCount = -1;
 
     public ActionFrameEvent_Attack()
@@ -1521,7 +1522,8 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
             if(_attackType == AttackType.Default)
             {
                 requester.setAttackState(AttackState.AttackSuccess);
-                target.setDefenceState(DefenceState.Hit);
+                if(_notifyAttackSuccess)
+                    target.setDefenceState(DefenceState.Hit);
 
                 if(requester is GameEntityBase)
                     ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnAttack);
@@ -1743,6 +1745,10 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
             else if(attributes[i].Name == "AttackCount")
             {
                 _collisionCount = int.Parse(attributes[i].Value);
+            }
+            else if(attributes[i].Name == "NotifyAttackSuccess")
+            {
+                _notifyAttackSuccess = bool.Parse(attributes[i].Value);
             }
 
         }
