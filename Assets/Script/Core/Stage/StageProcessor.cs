@@ -317,8 +317,7 @@ public class StageProcessor : Singleton<StageProcessor>
         }
 
         Vector3 resultPoint;
-        float resultDistance;
-        float fraction = getLimitedFractionOnLine(_targetCameraControl.getCameraPosition(), out resultPoint, out resultDistance);
+        float fraction = getLimitedFractionOnLine(_currentPoint, _targetCameraControl.getCameraPosition(), out resultPoint);
         if(_stageData._stagePointData.Count - 1 > _currentPoint && _stageData._stagePointData[_currentPoint]._lerpCameraZoom)
         {
             float currentZoom = _stageData._stagePointData[_currentPoint]._cameraZoomSize;
@@ -347,10 +346,8 @@ public class StageProcessor : Singleton<StageProcessor>
         {
             startExitSequencers(_stageData._stagePointData[_currentPoint],_currentPoint,_currentPoint != 0);
 
-            ++_currentPoint;
-            if(_currentPoint >= _stageData._stagePointData.Count)
+            if(getNextPointIndex(ref _currentPoint) == false)
             {
-                _currentPoint = _stageData._stagePointData.Count - 1;
                 _isEnd = true;
             }
             else
@@ -495,18 +492,92 @@ public class StageProcessor : Singleton<StageProcessor>
         return _playerEntity;
     }
 
-    private float getLimitedFractionOnLine(Vector3 targetPosition, out Vector3 resultPoint, out float distance)
+    public bool getNextPointIndex(ref int resultIndex)
+    {
+        resultIndex++;
+        if(resultIndex >= _stageData._stagePointData.Count)
+        {
+            resultIndex = _stageData._stagePointData.Count - 1;
+            return false;
+        }
+
+        return true;
+    }
+
+    public bool getPrevPointIndex(ref int resultIndex)
+    {
+        resultIndex--;
+        if(resultIndex < 0)
+        {
+            resultIndex = 0;
+            return false;
+        }
+
+        return true;
+    }
+
+    private bool isInTriggerBound(int pointIndex, Vector3 position)
+    {
+        if(isValid() == false || pointIndex >= _stageData._stagePointData.Count - 1 || pointIndex < 0)
+            return false;
+
+        StagePointData stagePoint = _stageData._stagePointData[pointIndex + 1];
+        if(stagePoint._useTriggerBound)
+        {
+            GizmoHelper.instance.drawRectangle(stagePoint._stagePoint + _offsetPosition + stagePoint._triggerOffset,new Vector3(stagePoint._triggerWidth * 0.5f, stagePoint._triggerHeight * 0.5f),Color.green);
+            return MathEx.intersectRect(position,stagePoint._stagePoint + _offsetPosition + stagePoint._triggerOffset,stagePoint._triggerWidth,stagePoint._triggerHeight);
+        }
+
+        return false;
+    }
+
+    public void updatePointIndex(Vector3 position, ref int pointIndex)
+    {
+        if(isValid() == false)
+            return;
+
+        while(true)
+        {
+            if(isInTriggerBound(pointIndex, position))
+            {
+                getNextPointIndex(ref pointIndex);
+                continue;
+            }
+
+            float fraction = getLimitedFractionOnLine(pointIndex, position, out Vector3 resultPosition);
+            if(fraction >= 1f)
+            {
+                if(getNextPointIndex(ref pointIndex) == false)
+                    break;
+
+                continue;
+            }
+
+            break;
+        }
+    }
+
+    public bool isInCameraBound(int pointIndex, Vector3 position, out Vector3 resultPosition)
+    {
+        resultPosition = position;
+        if(isValid() == false)
+            return true;
+
+        getLimitedFractionOnLine(pointIndex, position, out resultPosition);
+        return CameraControlEx.Instance().IsInCameraBound(position, resultPosition, out resultPosition);
+    }
+
+    private float getLimitedFractionOnLine(int targetPointIndex, Vector3 targetPosition, out Vector3 resultPoint)
     {
         Vector3 targetPositionWithoutZ = MathEx.deleteZ(targetPosition);
         resultPoint = targetPosition;
-        distance = 0f;
 
-        if(_stageData._stagePointData.Count == 0)
+        if(_stageData._stagePointData.Count == 0 || targetPointIndex >= _stageData._stagePointData.Count)
             return 0f;
 
-        bool isEndPoint = _currentPoint == _stageData._stagePointData.Count - 1;
-        StagePointData startPoint = _stageData._stagePointData[_currentPoint];
-        StagePointData nextPoint = isEndPoint ? startPoint : _stageData._stagePointData[_currentPoint + 1];
+        bool isEndPoint = targetPointIndex == _stageData._stagePointData.Count - 1;
+        StagePointData startPoint = _stageData._stagePointData[targetPointIndex];
+        StagePointData nextPoint = isEndPoint ? startPoint : _stageData._stagePointData[targetPointIndex + 1];
 
         Vector3 onLinePosition = targetPositionWithoutZ;
         float resultFraction = 0f;
