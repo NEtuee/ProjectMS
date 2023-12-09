@@ -137,8 +137,8 @@
     </AC_AttackMain>
 
     <AC_AttackSuccess MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction">
-        <AnimationHeader MasterPath="1_attack/4_attackSuccess"/>
-        <Animation Preset="3_attackSuccess" XFlip="true" Duration="1.0">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="1_attack/4_attackSuccess" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" Condition="gv_AtkSucMovementVelocity == 0.0" StartTime="0" Friction="gv_AtkSucMovementFriction" MaxVelocity="gv_AtkSucMovementMaxVelocity" Speed="gv_AtkSucMovementSpeed"/>
             <FrameEvent Type="Movement" Condition="gv_AtkSucMovementVelocity > 0.0" StartTime="0" Friction="gv_AtkSucMovementFriction" MaxVelocity="gv_AtkSucMovementMaxVelocity" Velocity="gv_AtkSucMovementVelocity" Speed="gv_AtkSucMovementSpeed"/>
         </Animation>

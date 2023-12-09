@@ -226,6 +226,19 @@
         SearchIdentifier="Enemy"
     />
 
+    <RangedPreset
+        DisplayName="원거리 프리셋 테스트 캐릭터"
+        ActionGraph="Assets/Data/CharacterPreset/_ActionPreset/RangedAction.xml"
+        AIGraph="Assets/Data/CharacterPreset/_AIPreset/MeleeAI.xml"
+        StatusInfoName="CommonHpThreeEnemyStatus"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        SearchIdentifier="Enemy"
+    />
+
     <SchoolDoor
         DisplayName="학교 문"
         ActionGraph="Assets/Data/Character/Object/BigDoor/BigDoor.xml"
