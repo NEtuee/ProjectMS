@@ -171,7 +171,11 @@ public class MasterManager : MessageHub<ManagerBase>
         FMODAudioManager.Instance().updateAudio();
 
         if(Input.GetKeyDown(KeyCode.Escape))
+        {
             StageProcessor.Instance().stopStage();
+            ScreenDirector._instance._screenFader.clear();
+            LetterBox._instance.clear();
+        }
     }
 
     public void LateUpdate()

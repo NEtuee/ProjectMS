@@ -63,6 +63,17 @@ public class ScreenDirector : MonoBehaviour
             _faderSpriteRenderer.gameObject.SetActive(true);
         }
 
+        public void clear()
+        {
+            _state = FadeState.None;
+            _isEnd = true;
+            _lambda = 0f;
+            _alpha = 0f;
+            _targetAlpha = 0f;
+
+            _faderSpriteRenderer.gameObject.SetActive(false);
+        }
+
         private bool isDampingEnd()
         {
             return MathEx.equals(_alpha,_targetAlpha,0.01f);

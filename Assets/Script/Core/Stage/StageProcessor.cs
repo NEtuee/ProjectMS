@@ -72,6 +72,11 @@ public class StageProcessor : Singleton<StageProcessor>
     public void startStage(StageData data, Vector3 startPosition)
     {
         _sequencerProcessManager.initialize();
+        _trackProcessor.clear();
+
+        _cameraTrackPositionError = Vector3.zero;
+        _cameraTrackPositionErrorReduceTime = 0f;
+
         _stageData = data;
         bool isMiniStage = _stageData._isMiniStage;
 
@@ -218,6 +223,12 @@ public class StageProcessor : Singleton<StageProcessor>
     public void stopStage()
     {
         _sequencerProcessManager.initialize();
+        
+        _trackProcessor.clear();
+
+        _cameraTrackPositionError = Vector3.zero;
+        _cameraTrackPositionErrorReduceTime = 0f;
+
         bool isMiniStage = _stageData == null ? false : _stageData._isMiniStage;
         _stageData = null;
         _playerEntity = null;
