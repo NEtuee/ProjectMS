@@ -36,6 +36,8 @@ public class EffectRequestData : MessageData
     public bool _castShadow;
     public bool _dependentAction;
 
+    public string _attackDataName;
+
     public EffectType _effectType;
     public EffectUpdateType _updateType = EffectUpdateType.ScaledDeltaTime;
 
@@ -711,7 +713,10 @@ public class TimelineEffectItem : EffectItemBase
             _timelineEffectControl.setCharacterAnimator(effectData._timelineAnimator);
         
         if(_timelineEffectControl != null && _timelineEffectControl._isLaserEffect && _executeObject is GameEntityBase)
+        {
+            _timelineEffectControl.setAttackData(effectData._attackDataName);
             (_executeObject as GameEntityBase).addLaserEffect(this);
+        }
 
         _effectObject.SetActive(true);
         _playableDirector.Stop();

@@ -92,8 +92,8 @@ public class GizmoHelper : MonoBehaviour
 
     public void drawCircle(Vector3 center, float radius, int accuracy, Color color, float time = 0f)
     {
-        // if(AreGizmosVisible() == false)
-        //     return;
+        if(AreGizmosVisible() == false)
+            return;
 
         GizmoCircleData circleData = _circleDataPool.dequeue();// new GizmoCircleData();
         circleData._center = center;

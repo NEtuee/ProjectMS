@@ -27,7 +27,7 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_Dodge>
 
-    <AC_GuardForward MovementType="FrameEvent" DirectionType="AI" DefenceType="Guard" DefenceAngle="270.0" DefenceDirectionType="Direction">
+    <AC_GuardForward MovementType="FrameEvent" DirectionType="AI" DefenceType="Guard" DefenceAngle="270.0" DefenceDirectionType="Direction" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/TateChan/0_default/5_guard/"/>
         <Animation Preset="1_forward" XFlip="true" Duration="1">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="0.2" Speed="1"/>

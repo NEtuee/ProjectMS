@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Runtime.InteropServices;
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -10,6 +12,9 @@ public class CharacterEntityBase : GameEntityBase
 {
     private string _qteEffectPath = "Sprites/UI/QTEHit/";
     private EffectItem _qteEffectItem = null;
+    private bool _isInCameraBound = false;
+    private int _stagePointIndex = 0;
+    private float _targetSearchTime = 0f;
 
     public override void assign()
     {
@@ -32,13 +37,28 @@ public class CharacterEntityBase : GameEntityBase
 
         RegisterRequest(QueryUniqueID("SceneCharacterManager"));
         targetSearchQuick();
+
+        _stagePointIndex = 0;
+        StageProcessor.Instance().updatePointIndex(transform.position, ref _stagePointIndex);
+        _isInCameraBound = StageProcessor.Instance().isInCameraBound(_stagePointIndex, transform.position, out Vector3 resultPosition);
+
+        _targetSearchTime = 1f;
     }
 
     public override void progress(float deltaTime)
     {
         base.progress(deltaTime);
         getMovementControl().addFrameToWorld(this);
+        updateByActionFlag();
 
+        if(isActiveSelf() == false)
+            return;
+
+        _targetSearchTime += deltaTime;
+        if(_targetSearchTime < 1f)
+            return;
+
+        _targetSearchTime = 0f;
         if(isAIGraphValid() && getCurrentTargetSearchType() != TargetSearchType.None)
         {
             TargetSearchDescription desc = MessageDataPooling.GetMessageData<TargetSearchDescription>();
@@ -51,8 +71,6 @@ public class CharacterEntityBase : GameEntityBase
 
             SendMessageEx(MessageTitles.entity_searchNearest,QueryUniqueID("SceneCharacterManager"),desc);
         }
-
-        updateByActionFlag();
     }
 
     public void updateByActionFlag()
@@ -79,8 +97,20 @@ public class CharacterEntityBase : GameEntityBase
     {
         base.afterProgress(deltaTime);
 
-    }
+        if(isActiveSelf() == false)
+            return;
 
+        StageProcessor.Instance().updatePointIndex(transform.position, ref _stagePointIndex);
+        if(_isInCameraBound == false)
+            _isInCameraBound = StageProcessor.Instance().isInCameraBound(_stagePointIndex, transform.position, out Vector3 resultPosition);
+        
+        if(_isInCameraBound)
+        {
+            bool inCameraBound = StageProcessor.Instance().isInCameraBound(_stagePointIndex, transform.position, out Vector3 resultPosition);
+            if(inCameraBound == false)
+                transform.position = resultPosition;
+        }
+    }
 
     private void targetSearchQuick()
     {

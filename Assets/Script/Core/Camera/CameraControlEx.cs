@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 public enum CameraModeType
@@ -178,7 +179,7 @@ public class CameraTargetCenterMode : CameraModeBase
 
 public class CameraControlEx : Singleton<CameraControlEx>
 {
-    public float _cameraBoundRate = 0.85f;
+    public float _cameraBoundRate = 0.9f;
     private Camera _currentCamera;
     private ObjectBase _currentTarget;
 
@@ -399,10 +400,22 @@ public class CameraControlEx : Singleton<CameraControlEx>
         return _currentTarget == targetObject;
     }
 
-    public bool IsInCameraBound(Vector3 pos)
+    public bool IsInCameraBound(Vector3 position, Vector3 cameraPosition, out Vector3 cameraInPosition)
 	{
-		var bound = GetCamBounds();
-		return (pos.x >= bound.x && pos.x <= bound.y && pos.y >= bound.z && pos.y <= bound.w);
+		var bound = GetCamBounds(cameraPosition);
+        cameraInPosition = position;
+        
+        if(position.x < bound.x)
+            cameraInPosition.x = bound.x;
+        else if(position.x > bound.y)
+            cameraInPosition.x = bound.y;
+
+        if(position.y < bound.z)
+            cameraInPosition.y = bound.z;
+        else if(position.y > bound.w)
+            cameraInPosition.y = bound.w;
+
+		return (position.x >= bound.x && position.x <= bound.y && position.y >= bound.z && position.y <= bound.w);
 	}
 
     public Vector3 getRandomPositionInCamera()
@@ -410,9 +423,8 @@ public class CameraControlEx : Singleton<CameraControlEx>
         return new Vector3(Random.Range(-_camWidth * 0.5f,_camWidth * 0.5f),Random.Range(-_camHeight * 0.5f,_camHeight * 0.5f));
     }
 
-    public Vector4 GetCamBounds() //x min x max y min y max
+    public Vector4 GetCamBounds(in Vector3 position) //x min x max y min y max
 	{
-        Vector3 position = _currentCamera.transform.position;
 		return new Vector4(position.x - _cameraBoundHalf.x, position.x + _cameraBoundHalf.x,
 							position.y - _cameraBoundHalf.y, position.y + _cameraBoundHalf.y);
 	}

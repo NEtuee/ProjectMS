@@ -99,4 +99,13 @@ public class LetterBox : MonoBehaviour
 
         _letterBoxParent.SetActive(true);
     }
+
+    public void clear()
+    {
+        _isShow = false;
+        _update = false;
+        _time = 0f;
+
+        _letterBoxParent.SetActive(false);
+    }
 }

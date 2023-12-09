@@ -9,7 +9,7 @@
         <Branch Condition="End == true" Execute="AC_Entry"/>
     </AC_Entry>
 
-    <AC_Idle MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+    <AC_Idle MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/LugerChan/0_default/"/>
         <Animation Preset="1_idle" XFlip="true" Duration="1">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
@@ -101,7 +101,7 @@
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2203" Attach="true"/>
             
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/LugerBeam_TimeLine" Attach="true" AngleType="Direction" LifeTime="0.85" FollowDirection="True"/>
+            <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/CommonBeam_TimeLine" Attach="true" AngleType="Direction" LifeTime="0.85" FollowDirection="True" AttackPreset="Luger_Normal"/>
 
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>

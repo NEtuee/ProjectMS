@@ -109,9 +109,11 @@ public class MasterManager : MessageHub<ManagerBase>
             Screen.SetResolution(currentResolution.width, currentResolution.height,FullScreenMode.FullScreenWindow);
         }
 
+        float deltaTimeMultiflier = 1f;
+        if(Input.GetKey(KeyCode.LeftBracket))
+            deltaTimeMultiflier = 10f;
 
-
-        float deltaTime = Time.deltaTime;
+        float deltaTime = Time.deltaTime * deltaTimeMultiflier;
         ActionKeyInputManager.Instance().progress(deltaTime);
         GlobalTimer.Instance().setUpdateProcessing(true);
 
@@ -171,7 +173,11 @@ public class MasterManager : MessageHub<ManagerBase>
         FMODAudioManager.Instance().updateAudio();
 
         if(Input.GetKeyDown(KeyCode.Escape))
+        {
             StageProcessor.Instance().stopStage();
+            ScreenDirector._instance._screenFader.clear();
+            LetterBox._instance.clear();
+        }
     }
 
     public void LateUpdate()

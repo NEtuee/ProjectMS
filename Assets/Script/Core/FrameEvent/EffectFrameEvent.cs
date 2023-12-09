@@ -145,6 +145,7 @@ public class ActionFrameEvent_TimelineEffect : ActionFrameEventBase
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_TimelineEffect;}
 
     public string               _effectPath = "";
+    public string               _attackPresetName = "";
     public bool                _toTarget = false;
     public bool                _attach = false;
     public bool                _followDirection = false;
@@ -175,6 +176,7 @@ public class ActionFrameEvent_TimelineEffect : ActionFrameEventBase
         requestData._executeEntity = executeEntity;
         requestData._followDirection = _followDirection;
         requestData._castShadow = _castShadow;
+        requestData._attackDataName = _attackPresetName;
 
         if(_attach)
         {
@@ -260,6 +262,10 @@ public class ActionFrameEvent_TimelineEffect : ActionFrameEventBase
             else if(attributes[i].Name == "CastShadow")
             {
                 _castShadow = bool.Parse(attributes[i].Value);
+            }
+            else if(attributes[i].Name == "AttackPreset")
+            {
+                _attackPresetName = attributes[i].Value;
             }
         }
 

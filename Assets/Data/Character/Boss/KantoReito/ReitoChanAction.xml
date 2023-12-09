@@ -246,7 +246,7 @@
         <Animation Preset="1_cremationBeamReady" XFlip="true" Duration="0.85">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2206" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/ReitoCremationBeam_TimeLine" Attach="true" AngleType="Direction" LifeTime="1.05" FollowDirection="True"/>
+            <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/CommonBeam_TimeLine" Attach="true" AngleType="Direction" LifeTime="1.05" FollowDirection="True" AttackPreset="Reito_Beam"/>
 
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
@@ -284,6 +284,7 @@
                     <FrameEvent Type="StopUpdate" Time="0.07"/>
                 </OnGuard>
             </FrameEvent>
+            <FrameEvent Type="EffectPreset" StartTime="0" Key="Laser"/>
         </Animation>
         <Animation Preset="3_cremationBeamRecovery" XFlip="true" Duration="0.3">
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
