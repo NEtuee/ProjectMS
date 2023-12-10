@@ -361,7 +361,7 @@ public class AIEvent_ClearTarget : AIEventBase
 public class AIEvent_SetDirectionToTarget : AIEventBase
 {
     float _directionAngle = 0f;
-    float _rotateSpeed = 0f;
+    float _rotateSpeed = -1f;
     public override AIEventType getFrameEventType() {return AIEventType.AIEvent_SetDirectionToTarget;}
     public override void onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
@@ -376,7 +376,7 @@ public class AIEvent_SetDirectionToTarget : AIEventBase
         direction.Normalize();
         direction = Quaternion.Euler(0f,0f,_directionAngle) * direction;
 
-        if(_rotateSpeed == 0)
+        if(_rotateSpeed == -1f)
         {
             executeGameEntity.setAiDirection(direction);
         }
