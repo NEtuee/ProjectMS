@@ -29,7 +29,7 @@
 
         <Branch Condition="End == true" Execute="AC_Move"/>
     </AC_Move>
-
+ 
     <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/LugerChan/0_default/"/>
         <Animation Preset="3_hit" XFlip="true" Duration="1.25">
