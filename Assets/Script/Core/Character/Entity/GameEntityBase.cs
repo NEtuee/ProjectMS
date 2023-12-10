@@ -511,7 +511,7 @@ public class GameEntityBase : SequencerObjectBase
 
         if(_actionDebug == true || GameEditorMaster._instance._actionDebugAll)
         {
-            GizmoHelper.instance.drawLine(transform.position, transform.position + _direction * 0.5f,Color.magenta);
+            GizmoHelper.instance.drawLine(transform.position, transform.position + _direction * 1.2f,Color.magenta);
             GizmoHelper.instance.drawLine(transform.position, transform.position + ControllerEx.Instance().getJoystickAxisR(transform.position) * 0.5f,Color.cyan);
 
             _collisionInfo.drawCollosionArea(_debugColor);
