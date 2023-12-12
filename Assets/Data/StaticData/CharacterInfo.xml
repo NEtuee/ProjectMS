@@ -277,4 +277,118 @@
         SearchIdentifier="Enemy"
     />
 
+    <PitcherChan
+        DisplayName="운동부 핏쳐쨩"
+        ActionGraph="Assets/Data/Character/Enemy/01_LugerChan/LugerChanAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/01_LugerChan/LugerChanAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        SearchIdentifier="Enemy"
+    />
+
+    <PowerChan
+        DisplayName="운동부 파워쨩"
+        ActionGraph="Assets/Data/Character/Enemy/01_RapierChan/RapierChanAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/01_RapierChan/RapierChanAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        SearchIdentifier="Enemy"
+    />
+
+    <SisterStaffChan
+        DisplayName="수녀원 스태프쨩"
+        ActionGraph="Assets/Data/Character/Enemy/01_LugerChan/LugerChanAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/01_LugerChan/LugerChanAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        SearchIdentifier="Enemy"
+    />
+    
+    <SisterWandChan
+        DisplayName="수녀원 완드쨩"
+        ActionGraph="Assets/Data/Character/Enemy/01_LugerChan/LugerChanAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/01_LugerChan/LugerChanAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        SearchIdentifier="Enemy"
+    />
+
+    <PoliceOmawariChan
+        DisplayName="폴리스 오마와리쨩"
+        ActionGraph="Assets/Data/Character/Enemy/01_RapierChan/RapierChanAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/01_RapierChan/RapierChanAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        SearchIdentifier="Enemy"
+    />
+
+    <PoliceTaihoChan
+        DisplayName="폴리스 타이호쨩"
+        ActionGraph="Assets/Data/Character/Enemy/01_LugerChan/LugerChanAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/01_LugerChan/LugerChanAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        SearchIdentifier="Enemy"
+    />
+
+    <PolicePointChan
+        DisplayName="폴리스 포인트쨩"
+        ActionGraph="Assets/Data/Character/Enemy/01_BarricadeChan/BarricadeChanAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/01_BarricadeChan/BarricadeChanAI.xml"
+        StatusInfoName="CommonHpThreeEnemyStatus"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        SearchIdentifier="Enemy"
+    />
+
+    <StudentAlphaChan
+        DisplayName="학생 알파쨩"
+        ActionGraph="Assets/Data/Character/TestZako/TestZako.xml"
+        AIGraph="Assets/Data/AILibrary/Graph/EmptyAIGraph.xml"
+        StatusInfoName="CommonEnemyStatus"
+
+        CollisionRadius="0.2"
+        ProjectileCollisionRadius=""
+
+        SearchIdentifier="Enemy"
+    />
+
+    <StudentBetaChan
+        DisplayName="학생 베타쨩"
+        ActionGraph="Assets/Data/Character/TestZako/TestZako.xml"
+        AIGraph="Assets/Data/AILibrary/Graph/EmptyAIGraph.xml"
+        StatusInfoName="CommonEnemyStatus"
+
+        CollisionRadius="0.2"
+        ProjectileCollisionRadius=""
+
+        SearchIdentifier="Enemy"
+    />
 </CharacterInfo>
