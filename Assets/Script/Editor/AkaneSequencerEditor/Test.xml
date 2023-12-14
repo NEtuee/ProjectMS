@@ -1,0 +1,18 @@
+<SequencerGraph Name = "Test">
+
+    <InitializePhase>
+    </InitializePhase>
+
+    <UpdatePhase>
+          <Task ProcessType = "StepByStep"/>
+          <SpawnCharacter CharacterKey = "" Position = "0 0 0" PositionMarker = "" SearchIdentifier = "Player" UniqueKey = ""/>
+          <WaitSecond Time = "0"/>
+          </Task>
+
+          <SetCrossHair UniqueKey = "rrr"/>
+    </UpdatePhase>
+
+    <EndPhase>
+    </EndPhase>
+
+</SequencerGraph>
