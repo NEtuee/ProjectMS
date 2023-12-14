@@ -12,7 +12,7 @@ public class AkaneSequencerGraphDataImporterEditor : ScriptedImporterEditor
         {
             AssetImporter importer = target as AssetImporter;
             var graphData = AssetDatabase.LoadAssetAtPath<AkaneSequencerGraphData>(importer.assetPath);
-            AkaneSequencerGraphEditorWindow.Open(graphData);
+            AkaneSequencerGraphEditorWindow.Open(graphData, importer.assetPath);
         }
         
         ApplyRevertGUI(); 

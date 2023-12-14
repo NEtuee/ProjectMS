@@ -1,18 +1,18 @@
 <SequencerGraph Name = "Test">
 
     <InitializePhase>
-          <CallAIEvent EventName = "MeleeFightStart" UniqueKey = "Owner"/>
-          <SetCameraZoom Size = "2.6"/>
-          <ApplyPostProcessProfile Path = "PostProcessProfile/AdditionalTest" BlendTime = "0.5" ApplyType = "Additional"/>
     </InitializePhase>
 
     <UpdatePhase>
-          <WaitSignal Signal = "EndMelee"/>
+          <Task ProcessType = "StepByStep"/>
+          <SpawnCharacter CharacterKey = "" Position = "0 0 0" PositionMarker = "" SearchIdentifier = "Player" UniqueKey = ""/>
+          <WaitSecond Time = "0"/>
+          </Task>
+
+          <SetCrossHair UniqueKey = "rrr"/>
     </UpdatePhase>
 
     <EndPhase>
-          <CallAIEvent EventName = "MeleeFightEnd" UniqueKey = "Owner"/>
-          <SetCameraZoom Size = "0"/>
     </EndPhase>
-    
+
 </SequencerGraph>

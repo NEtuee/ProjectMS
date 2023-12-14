@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using UnityEditor;
 using UnityEngine;
 
 namespace AkaneSequencerGraph
@@ -15,7 +16,7 @@ namespace AkaneSequencerGraph
                 return;
             }
 
-            var filePath = Path.Combine(Application.dataPath, "Script/Editor/SequencerEditor");
+            var filePath = Path.Combine(Application.dataPath, "Script/Editor/AkaneSequencerEditor");
             if (Directory.Exists(filePath) == false)
             {
                 Debug.LogError($"{filePath} : 해당 경로 없음");
@@ -53,7 +54,7 @@ namespace AkaneSequencerGraph
             streamWriter.Write(sb.ToString());
             streamWriter.Flush();
             streamWriter.Close();
-
+            
             void AddPhaseContext(ReservedPhaseNode phaseNode, List<EventNode> childNodeList)
             {
                 if (phaseNode == null)
@@ -67,8 +68,22 @@ namespace AkaneSequencerGraph
                 {
                     foreach (var eventNode in childNodeList)
                     {
-                        sb.Append(eventContextSpace);
-                        sb.AppendLine(eventNode.GetResultContext());
+                        if (eventNode.title == "TaskCall")
+                        {
+                            if (eventNode is TaskCallNode taskCallNode)
+                            {
+                                var taskNode = graphView.GetTaskEventNode(taskCallNode.TaskKey);
+                                if (taskNode != null)
+                                {
+                                    sb.AppendLine(taskNode.GetContext());
+                                }
+                            }
+                        }
+                        else
+                        {
+                            sb.Append(eventContextSpace);
+                            sb.AppendLine(eventNode.GetResultContext());   
+                        }
                     }
                 }
 

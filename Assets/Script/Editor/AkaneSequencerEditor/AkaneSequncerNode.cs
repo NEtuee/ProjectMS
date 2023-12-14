@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Text;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
@@ -64,6 +66,73 @@ namespace AkaneSequencerGraph
         public EndPhaseNode(string guid) : base(guid)
         {
             title = "EndPhase";
+        }
+    }
+
+    public sealed class TaskEventNode : AkaneSequenceNode
+    {
+        public Port NextPort { get; private set; }
+
+        public string TaskKey => _taskKeyField.value;
+        
+        private readonly EnumField _processEnumField;
+        private readonly TextField _taskKeyField;
+        
+        public TaskEventNode(string guid) : base(guid)
+        {
+            title = "Task";
+            
+            NextPort = Port.Create<Edge>(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(Port));
+            NextPort.portName = "Start";
+            outputContainer.Add(NextPort);
+            
+            _processEnumField = new EnumField("ProcessType", SequencerGraphProcessor.TaskProcessType.StepByStep);
+            mainContainer.Add(_processEnumField);
+
+            _taskKeyField = new TextField("TaskKey");
+            mainContainer.Add(_taskKeyField);
+        }
+
+        public string GetContext()
+        {
+            var eventContextSpace = "          ";
+            var sb = new StringBuilder();
+            sb.Append(eventContextSpace);
+            sb.AppendLine($"<Task ProcessType = \"{_processEnumField.value}\"/>");
+
+            var edge = NextPort.connections.FirstOrDefault();
+            if (edge == null)
+            {
+                sb.Append(eventContextSpace);
+                sb.AppendLine($"</Task>");
+                return sb.ToString();
+            }
+
+            var node = edge.input.node as EventNode;
+            if (node == null)
+            {
+                sb.Append(eventContextSpace);
+                sb.AppendLine($"</Task>");
+                return sb.ToString();
+            }
+
+            while (node != null)
+            {
+                sb.Append(eventContextSpace);
+                sb.AppendLine(node.GetResultContext());
+
+                var nextEdge = node.NextPort.connections.FirstOrDefault();
+                if (nextEdge == null)
+                {
+                    break;
+                }
+                
+                node = nextEdge.input.node as EventNode;
+            }
+            
+            sb.Append(eventContextSpace);
+            sb.AppendLine($"</Task>");
+            return sb.ToString();
         }
     }
 
@@ -700,35 +769,54 @@ namespace AkaneSequencerGraph
         protected override string Context() => "<ToastMessage Text = \"{0}\" Time = \"{1}\" Color = \"{2}\"/>";
     }
     
-    public sealed class TaskNode : EventNode
+    public sealed class TaskCallNode : EventNode
     {
-        private readonly EnumField _processEnumField;
-
-        public TaskNode(string guid) : base(guid)
+        public string TaskKey => _taskKeyField.value;
+        
+        private readonly TextField _taskKeyField;
+    
+        public TaskCallNode(string guid) : base(guid)
         {
-            title = "Task";
+            title = "TaskCall";
 
-            _processEnumField = new EnumField("ProcessType", SequencerGraphProcessor.TaskProcessType.StepByStep);
-
-            mainContainer.Add(_processEnumField);
+            _taskKeyField = new TextField("Task Key");
+            mainContainer.Add(_taskKeyField);
         }
-
-        public override string GetResultContext() => string.Format(Context(), _processEnumField.value);
-
-        protected override string Context() => "<Task ProcessType = \"{0}\"/>";
+    
+        public override string GetResultContext() => string.Empty;
+    
+        protected override string Context() => string.Empty;
     }
     
-    public sealed class TaskEndNode : EventNode
-    {
-        public TaskEndNode(string guid) : base(guid)
-        {
-            title = "TaskEnd";
-        }
-
-        public override string GetResultContext() => string.Format(Context());
-
-        protected override string Context() => "</Task>";
-    }
+    // public sealed class TaskNode : EventNode
+    // {
+    //     private readonly EnumField _processEnumField;
+    //
+    //     public TaskNode(string guid) : base(guid)
+    //     {
+    //         title = "Task";
+    //
+    //         _processEnumField = new EnumField("ProcessType", SequencerGraphProcessor.TaskProcessType.StepByStep);
+    //
+    //         mainContainer.Add(_processEnumField);
+    //     }
+    //
+    //     public override string GetResultContext() => string.Format(Context(), _processEnumField.value);
+    //
+    //     protected override string Context() => "<Task ProcessType = \"{0}\"/>";
+    // }
+    //
+    // public sealed class TaskEndNode : EventNode
+    // {
+    //     public TaskEndNode(string guid) : base(guid)
+    //     {
+    //         title = "TaskEnd";
+    //     }
+    //
+    //     public override string GetResultContext() => string.Format(Context());
+    //
+    //     protected override string Context() => "</Task>";
+    // }
     
     public sealed class LetterBoxShowNode : EventNode
     {

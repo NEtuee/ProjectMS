@@ -6,6 +6,7 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Object = UnityEngine.Object;
 
 namespace AkaneSequencerGraph
 {
@@ -14,12 +15,13 @@ namespace AkaneSequencerGraph
         public AkaneSequencerGraphData CurrentData;
 
         private AkaneSequencerGraphView _akaneSequencerGraphView;
+        private string _assetPath;
         
         [MenuItem("CustomWindow/Open SampleGraphView")]
-        public static void Open(AkaneSequencerGraphData data)
+        public static void Open(AkaneSequencerGraphData data, string path)
         {
             var editorWindow = GetWindow<AkaneSequencerGraphEditorWindow>("SampleGraphWindow");
-            editorWindow.Init(data);
+            editorWindow.Init(data, path);
         }
 
         private void OnEnable()
@@ -34,24 +36,30 @@ namespace AkaneSequencerGraph
             rootVisualElement.Add(new Button(() => { GraphFile.GraphToXmlFile(graphView, "Test");}){text = "Generate"});
             rootVisualElement.Add(new Button(() =>
             {
-                CurrentData.InitalizePhaseNodeList.Clear();
-                CurrentData.UpdatePhaseNodeList.Clear();
-                CurrentData.EndPhaseNodeList.Clear();
-                CurrentData.EdgeList.Clear();
+                ScriptableObject scriptableObject = ScriptableObject.CreateInstance<AkaneSequencerGraphData>();
+                var data = (AkaneSequencerGraphData) scriptableObject;
+                
+                data.InitalizePhaseNodeList.Clear();
+                data.UpdatePhaseNodeList.Clear();
+                data.EndPhaseNodeList.Clear();
+                data.TaskNodeList.Clear();
+                data.EdgeList.Clear();
 
-                CurrentData.InitializePhase = graphView.InitializePhase;
-                CurrentData.UpdatePhase = graphView.UpdatePhase;
-                CurrentData.EndPhase = graphView.EndPhase;
+                data.InitializePhase = graphView.InitializePhase;
+                data.UpdatePhase = graphView.UpdatePhase;
+                data.EndPhase = graphView.EndPhase;
                 
                 var (phaseNode, childNodeList) = graphView.GetInitializePhase();
-                CurrentData.InitalizePhaseNodeList.AddRange(childNodeList);
+                data.InitalizePhaseNodeList.AddRange(childNodeList);
                 
                 (phaseNode, childNodeList) = graphView.GetUpdatePhase();
-                CurrentData.UpdatePhaseNodeList.AddRange(childNodeList);
+                data.UpdatePhaseNodeList.AddRange(childNodeList);
                 
                 (phaseNode, childNodeList) = graphView.GetEndPhase();
-                CurrentData.EndPhaseNodeList.AddRange(childNodeList);
+                data.EndPhaseNodeList.AddRange(childNodeList);
 
+                data.TaskNodeList.AddRange(graphView.GetTaskNodeList());
+                
                 foreach (var edge in graphView.edges.ToList())
                 {
                     var to = edge.input.node as AkaneSequenceNode;
@@ -64,30 +72,29 @@ namespace AkaneSequencerGraph
 
                     var edgeData = new EdgeSaveData(from.Guid, to.Guid);
                     
-                    CurrentData.EdgeList.Add(edgeData);
+                    data.EdgeList.Add(edgeData);
                 }
                 
+                EditorUtility.SetDirty(scriptableObject);
+                AssetDatabase.CreateAsset(scriptableObject, _assetPath);
+                AssetDatabase.SaveAssets();
             }){text = "Save"});
         }
 
-        public void Init(AkaneSequencerGraphData data)
+        public void Init(AkaneSequencerGraphData data, string assetPath)
         {
             CurrentData = data;
+            _assetPath = assetPath;
             
             if (_akaneSequencerGraphView != null)
             {
                 _akaneSequencerGraphView.InitNode(data.InitalizePhaseNodeList);
                 _akaneSequencerGraphView.InitNode(data.UpdatePhaseNodeList);
                 _akaneSequencerGraphView.InitNode(data.EndPhaseNodeList); 
+                _akaneSequencerGraphView.InitNode(data.TaskNodeList);
                 _akaneSequencerGraphView.InitPhaseNode(data.InitializePhase, data.UpdatePhase, data.EndPhase);
 
-                var allNode = new List<AkaneSequenceNode>();
-                allNode.AddRange(data.InitalizePhaseNodeList);
-                allNode.AddRange(data.UpdatePhaseNodeList);
-                allNode.AddRange(data.EndPhaseNodeList);
-                allNode.Add(data.InitializePhase);
-                allNode.Add(data.UpdatePhase);
-                allNode.Add(data.EndPhase);
+                var allNode = _akaneSequencerGraphView.nodes.ToList().Select(node => node as AkaneSequenceNode).ToList();
 
                 foreach (var edgeData in data.EdgeList)
                 {
@@ -151,7 +158,7 @@ namespace AkaneSequencerGraph
                 AddElement(node);
             }
         }
-
+        
         public void InitPhaseNode(InitializePhaseNode init, UpdatePhaseNode update, EndPhaseNode end)
         {
             if (init != null)
@@ -202,6 +209,60 @@ namespace AkaneSequencerGraph
 
             return compatiblePorts;
         }
+        
+        public TaskEventNode GetTaskEventNode(string key)
+        {
+            var nodeList = nodes.ToList();
+            foreach (var node in nodeList)
+            {
+                if (node is TaskEventNode taskEventNode)
+                {
+                    if (taskEventNode.TaskKey == key)
+                    {
+                        return taskEventNode;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public List<AkaneSequenceNode> GetTaskNodeList()
+        {
+            var result = new List<AkaneSequenceNode>();
+            
+            var nodeList = nodes.ToList();
+            foreach (var node in nodeList)
+            {
+                if (node is TaskEventNode taskEventNode)
+                {
+                    result.Add(taskEventNode);
+                    
+                    var firstEdge = taskEventNode.NextPort.connections.FirstOrDefault();
+                    if (firstEdge == null)
+                    {
+                        continue;
+                    }
+            
+                    var currentNode = firstEdge.input.node as EventNode;
+
+                    while (currentNode != null)
+                    {
+                        result.Add(currentNode);
+                
+                        var edge = currentNode.NextPort.connections.FirstOrDefault();
+                        if (edge == null)
+                        {
+                            break;
+                        }
+
+                        currentNode = edge.input.node as EventNode;;
+                    }
+                }
+            }
+
+            return result;
+        }
 
         public (ReservedPhaseNode phaseNode, List<EventNode> childNodeList) GetInitializePhase()
         {
@@ -217,7 +278,7 @@ namespace AkaneSequencerGraph
         {
             return GetPhaseNodeList(EndPhase);
         }
-
+        
         private (ReservedPhaseNode phaseNode, List<EventNode> childNodeList) GetPhaseNodeList(ReservedPhaseNode phaseNode)
         {
             if (phaseNode == null)
