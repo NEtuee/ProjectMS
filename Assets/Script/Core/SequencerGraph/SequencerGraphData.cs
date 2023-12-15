@@ -561,7 +561,7 @@ public class SequencerGraphEvent_DeadFence : SequencerGraphEventBase
 
 public class SequencerGraphEvent_CallAIEvent : SequencerGraphEventBase
 {
-    enum SequencerCallAIEventTargetType
+    public enum SequencerCallAIEventTargetType
     {
         UniqueTarget,
         Range,

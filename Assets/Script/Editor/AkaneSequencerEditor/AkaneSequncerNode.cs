@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Text;
+using System.Xml;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
@@ -8,7 +9,7 @@ using UnityEditor.UIElements;
 namespace AkaneSequencerGraph
 {
     [Serializable]
-    public class AkaneSequenceNode : Node
+    public abstract class AkaneSequenceNode : Node
     {
         public string Guid => _guid;
         protected string _guid;
@@ -19,6 +20,7 @@ namespace AkaneSequencerGraph
         }
     }
 
+    [Serializable]
     public abstract class ReservedPhaseNode : AkaneSequenceNode
     {
         public Port NextPort { get; private set; }
@@ -36,6 +38,7 @@ namespace AkaneSequencerGraph
         }
     }
 
+    [Serializable]
     public sealed class InitializePhaseNode : ReservedPhaseNode
     {
         public override string GetOpenContext() => "<InitializePhase>";
@@ -47,6 +50,7 @@ namespace AkaneSequencerGraph
         }
     }
 
+    [Serializable]
     public sealed class UpdatePhaseNode : ReservedPhaseNode
     {
         public override string GetOpenContext() => "<UpdatePhase>";
@@ -58,6 +62,7 @@ namespace AkaneSequencerGraph
         }
     }
 
+    [Serializable]
     public sealed class EndPhaseNode : ReservedPhaseNode
     {
         public override string GetOpenContext() => "<EndPhase>";
@@ -74,6 +79,7 @@ namespace AkaneSequencerGraph
         public Port NextPort { get; private set; }
 
         public string TaskKey => _taskKeyField.value;
+        public int ProcessTypeInt => Convert.ToInt32(_processEnumField.value);
         
         private readonly EnumField _processEnumField;
         private readonly TextField _taskKeyField;
@@ -91,6 +97,12 @@ namespace AkaneSequencerGraph
 
             _taskKeyField = new TextField("TaskKey");
             mainContainer.Add(_taskKeyField);
+        }
+
+        public void SetParam(string taskKey, SequencerGraphProcessor.TaskProcessType processType)
+        {
+            _taskKeyField.value = taskKey;
+            _processEnumField.value = processType;
         }
 
         public string GetContext()
@@ -153,6 +165,7 @@ namespace AkaneSequencerGraph
         }
 
         public abstract string GetResultContext();
+        public abstract void SetParameterFromXml(XmlAttributeCollection attributes);
         protected abstract string Context();
         
         protected string ParseVectorString(Vector3Field vector3Field)
@@ -210,6 +223,36 @@ namespace AkaneSequencerGraph
             _searchIdentifierEnumField.value,
             _uniqueKeyTextFiled.text);
 
+        public override void SetParameterFromXml(XmlAttributeCollection attributes)
+        {
+            for (int i = 0; i < attributes.Count; ++i)
+            {
+                string attrName = attributes[i].Name;
+                string attrValue = attributes[i].Value;
+                    
+                if(attrName == "CharacterKey")
+                {
+                    _characterKeyTextField.value = attrValue;
+                }
+                else if(attrName == "Position")
+                {
+                    _positionField.value = XMLScriptConverter.valueToVector3(attrValue);
+                }
+                else if(attrName == "PositionMarker")
+                {
+                    _positionMakerTextField.value = attrValue;
+                }
+                else if(attrName == "SearchIdentifier")
+                {
+                    _searchIdentifierEnumField.value = (SearchIdentifier)System.Enum.Parse(typeof(SearchIdentifier), attrValue);
+                }
+                else if(attrName == "UniqueKey")
+                {
+                    _uniqueKeyTextFiled.value = attrValue;
+                }
+            }
+        }
+        
         protected override string Context() => "<SpawnCharacter CharacterKey = \"{0}\" Position = \"{1}\" PositionMarker = \"{2}\" SearchIdentifier = \"{3}\" UniqueKey = \"{4}\"/>";
     }
 
@@ -229,12 +272,28 @@ namespace AkaneSequencerGraph
         }
 
         public override string GetResultContext() => string.Format(Context(), _timeTextField.value);
+        
+        public override void SetParameterFromXml(XmlAttributeCollection attributes)
+        {
+            for (int i = 0; i < attributes.Count; ++i)
+            {
+                string attrName = attributes[i].Name;
+                string attrValue = attributes[i].Value;
+                    
+                if(attrName == "Time")
+                {
+                    _timeTextField.value = XMLScriptConverter.valueToFloatExtend(attrValue);;
+                }
+            }
+        }
+        
         protected override string Context() => "<WaitSecond Time = \"{0}\"/>";
     }
     
     public sealed class SetCameraTargetNode : EventNode
     {
         private readonly TextField _uniqueKeyTextField;
+        private readonly EnumField _cameraTargetModeField;
         
         public SetCameraTargetNode(string guid) : base(guid)
         {
@@ -242,18 +301,40 @@ namespace AkaneSequencerGraph
             
             _uniqueKeyTextField = new TextField("UniqueKey");
             _uniqueKeyTextField.style.minWidth = new StyleLength(20f);
+
+            _cameraTargetModeField = new EnumField("CameraMode", CameraModeType.ArenaMode);
             
             mainContainer.Add(_uniqueKeyTextField);
+            mainContainer.Add(_cameraTargetModeField);
         }
 
         public override string GetResultContext() => string.Format(Context(), _uniqueKeyTextField.text);
 
+        public override void SetParameterFromXml(XmlAttributeCollection attributes)
+        {
+            for (int i = 0; i < attributes.Count; ++i)
+            {
+                string attrName = attributes[i].Name;
+                string attrValue = attributes[i].Value;
+                    
+                if(attrName == "UniqueKey")
+                {
+                    _uniqueKeyTextField.value = attrValue;
+                }
+                else if(attrName == "CameraMode")
+                {
+                    _cameraTargetModeField.value = (CameraModeType)System.Enum.Parse(typeof(CameraModeType), attrValue);
+                }
+            }
+        }
+        
         protected override string Context() => "<SetCameraTarget UniqueKey = \"{0}\" CameraMode = \"TargetCenterMode\"/>";
     }
     
     public sealed class SetCameraPositionNode : EventNode
     {
         private readonly Vector3Field _targetPositionVectorField;
+        private readonly TextField _makerNameField;
         
         public SetCameraPositionNode(string guid) : base(guid)
         {
@@ -261,11 +342,32 @@ namespace AkaneSequencerGraph
             
             _targetPositionVectorField = new Vector3Field("TargetPosition");
             _targetPositionVectorField.style.minWidth = new StyleLength(20f);
+
+            _makerNameField = new TextField("MakerName");
             
             mainContainer.Add(_targetPositionVectorField);
+            mainContainer.Add(_makerNameField);
         }
 
         public override string GetResultContext() => string.Format(Context(), ParseVectorString(_targetPositionVectorField));
+        
+        public override void SetParameterFromXml(XmlAttributeCollection attributes)
+        {
+            for (int i = 0; i < attributes.Count; ++i)
+            {
+                string attrName = attributes[i].Name;
+                string attrValue = attributes[i].Value;
+                    
+                if(attrName == "TargetPosition")
+                {
+                    _targetPositionVectorField.value = XMLScriptConverter.valueToVector3(attrValue);;
+                }
+                else if(attrName == "TargetPositionMarker")
+                {
+                    _makerNameField.value = attrValue;
+                }
+            }
+        }
 
         protected override string Context() => "<SetCameraPosition TargetPosition = \"{0}\"/>";
     }
@@ -285,6 +387,20 @@ namespace AkaneSequencerGraph
         }
 
         public override string GetResultContext() => string.Format(Context(), _uniqueKeyTextField.text);
+        
+        public override void SetParameterFromXml(XmlAttributeCollection attributes)
+        {
+            for (int i = 0; i < attributes.Count; ++i)
+            {
+                string attrName = attributes[i].Name;
+                string attrValue = attributes[i].Value;
+                    
+                if(attrName == "UniqueKey")
+                {
+                    _uniqueKeyTextField.value = attrValue;
+                }
+            }
+        }
 
         protected override string Context() => "<SetAudioListner UniqueKey = \"{0}\"/>";
     }
@@ -305,6 +421,20 @@ namespace AkaneSequencerGraph
 
         public override string GetResultContext() => string.Format(Context(), _uniqueKeyTextField.text);
 
+        public override void SetParameterFromXml(XmlAttributeCollection attributes)
+        {
+            for (int i = 0; i < attributes.Count; ++i)
+            {
+                string attrName = attributes[i].Name;
+                string attrValue = attributes[i].Value;
+                    
+                if(attrName == "UniqueKey")
+                {
+                    _uniqueKeyTextField.value = attrValue;
+                }
+            }
+        }
+        
         protected override string Context() => "<SetCrossHair UniqueKey = \"{0}\"/>";
     }
     
@@ -324,6 +454,20 @@ namespace AkaneSequencerGraph
 
         public override string GetResultContext() => string.Format(Context(), _uniqueKeyTextField.text);
 
+        public override void SetParameterFromXml(XmlAttributeCollection attributes)
+        {
+            for (int i = 0; i < attributes.Count; ++i)
+            {
+                string attrName = attributes[i].Name;
+                string attrValue = attributes[i].Value;
+                    
+                if(attrName == "UniqueKey")
+                {
+                    _uniqueKeyTextField.value = attrValue;
+                }
+            }
+        }
+        
         protected override string Context() => "<SetHPSphere UniqueKey = \"{0}\"/>";
     }
     
@@ -352,6 +496,28 @@ namespace AkaneSequencerGraph
 
         public override string GetResultContext() => string.Format(Context(), _uniqueKeyTextField.text, ParseVectorString(_positionVectorField), _positionMakerTextField.text);
 
+        public override void SetParameterFromXml(XmlAttributeCollection attributes)
+        {
+            for (int i = 0; i < attributes.Count; ++i)
+            {
+                string attrName = attributes[i].Name;
+                string attrValue = attributes[i].Value;
+                    
+                if(attrName == "UniqueKey")
+                {
+                    _uniqueKeyTextField.value = attrValue;
+                }
+                else if (attrName == "Position")
+                {
+                    _positionVectorField.value = XMLScriptConverter.valueToVector3(attrValue);
+                }
+                else if (attrName == "PositionMarker")
+                {
+                    _positionMakerTextField.value = attrValue;
+                }
+            }
+        }
+        
         protected override string Context() => "<TeleportTargetTo UniqueKey = \"{0}\" Position = \"{1}\" PositionMarker = \"{2}\"/>";
     }
     
@@ -376,6 +542,28 @@ namespace AkaneSequencerGraph
             mainContainer.Add(_pathTextField);
             mainContainer.Add(_blendTimeFloatField);
             mainContainer.Add(_applyTypeEnumField);
+        }
+        
+        public override void SetParameterFromXml(XmlAttributeCollection attributes)
+        {
+            for (int i = 0; i < attributes.Count; ++i)
+            {
+                string attrName = attributes[i].Name;
+                string attrValue = attributes[i].Value;
+                    
+                if(attrName == "Path")
+                {
+                    _pathTextField.value = attrValue;
+                }
+                else if (attrName == "BlendTime")
+                {
+                    _blendTimeFloatField.value = XMLScriptConverter.valueToFloatExtend(attrValue);
+                }
+                else if (attrName == "ApplyType")
+                {
+                    _applyTypeEnumField.value = (PostProcessProfileApplyType)System.Enum.Parse(typeof(PostProcessProfileApplyType), attrValue);
+                }
+            }
         }
     }
 
@@ -403,7 +591,7 @@ namespace AkaneSequencerGraph
 
             _eventNameTextField = new TextField("EventName");
             _uniqueKeyTextField = new TextField("UniqueKey");
-            _eventTargetTypeEnumField = new EnumField("EventTargetType", CallAIEventTargetType.Range);
+            _eventTargetTypeEnumField = new EnumField("EventTargetType", SequencerGraphEvent_CallAIEvent.SequencerCallAIEventTargetType.Range);
             _rangeFloatField = new FloatField("Range");
             _searchIdentifierEnumField = new EnumField("SearchIdentifier", SearchIdentifier.Player);
             
@@ -418,6 +606,36 @@ namespace AkaneSequencerGraph
             mainContainer.Add(_eventTargetTypeEnumField);
             mainContainer.Add(_rangeFloatField);
             mainContainer.Add(_searchIdentifierEnumField);
+        }
+        
+        public override void SetParameterFromXml(XmlAttributeCollection attributes)
+        {
+            for (int i = 0; i < attributes.Count; ++i)
+            {
+                string attrName = attributes[i].Name;
+                string attrValue = attributes[i].Value;
+                    
+                if(attrName == "EventName")
+                {
+                    _eventNameTextField.value = attrValue;
+                }
+                else if (attrName == "UniqueKey")
+                {
+                    _uniqueKeyTextField.value = attrValue;
+                }
+                else if (attrName == "EventTargetType")
+                {
+                    _eventTargetTypeEnumField.value =  (SequencerGraphEvent_CallAIEvent.SequencerCallAIEventTargetType)System.Enum.Parse(typeof(SequencerGraphEvent_CallAIEvent.SequencerCallAIEventTargetType), attrValue);
+                }
+                else if (attrName == "Range")
+                {
+                    _rangeFloatField.value = float.Parse(attrValue);
+                }
+                else if (attrName == "SearchIdentifier")
+                {
+                    _searchIdentifierEnumField.value = (SearchIdentifier)System.Enum.Parse(typeof(SearchIdentifier), attrValue);
+                }
+            }
         }
     }
     
@@ -436,6 +654,20 @@ namespace AkaneSequencerGraph
             _signalTextField = new TextField("Signal");
 
             mainContainer.Add(_signalTextField);
+        }
+        
+        public override void SetParameterFromXml(XmlAttributeCollection attributes)
+        {
+            for (int i = 0; i < attributes.Count; ++i)
+            {
+                string attrName = attributes[i].Name;
+                string attrValue = attributes[i].Value;
+                    
+                if(attrName == "Signal")
+                {
+                    _signalTextField.value = attrValue;
+                }
+            }
         }
     }
 
@@ -461,6 +693,28 @@ namespace AkaneSequencerGraph
             mainContainer.Add(_speedFloatField);
             mainContainer.Add(_forceToggle);
         }
+        
+        public override void SetParameterFromXml(XmlAttributeCollection attributes)
+        {
+            for (int i = 0; i < attributes.Count; ++i)
+            {
+                string attrName = attributes[i].Name;
+                string attrValue = attributes[i].Value;
+                    
+                if (attrName == "Size")
+                {
+                    _sizeFloatField.value = float.Parse(attrValue);
+                }
+                else if (attrName == "Speed")
+                {
+                    _speedFloatField.value = float.Parse(attrValue);
+                }
+                else if (attrName == "Force")
+                {
+                    _forceToggle.value = bool.Parse(attrValue);
+                }
+            }
+        }
     }
 
     public sealed class ZoomEffectNode : EventNode
@@ -471,13 +725,27 @@ namespace AkaneSequencerGraph
         {
             title = "ZoomEffect";
             
-            _zoomEffectFloatField = new FloatField("ZoomEffect");
+            _zoomEffectFloatField = new FloatField("Factor");
             
             mainContainer.Add(_zoomEffectFloatField);
         }
 
         public override string GetResultContext() => string.Format(Context(), _zoomEffectFloatField.value);
 
+        public override void SetParameterFromXml(XmlAttributeCollection attributes)
+        {
+            for (int i = 0; i < attributes.Count; ++i)
+            {
+                string attrName = attributes[i].Name;
+                string attrValue = attributes[i].Value;
+                    
+                if (attrName == "Factor")
+                {
+                    _zoomEffectFloatField.value = float.Parse(attrValue);
+                }
+            }
+        }
+        
         protected override string Context() => "<ZoomEffect Factor = \"{0}\"/>";
     }
     
@@ -496,6 +764,20 @@ namespace AkaneSequencerGraph
 
         public override string GetResultContext() => string.Format(Context(), _lambdaFloatField.value);
 
+        public override void SetParameterFromXml(XmlAttributeCollection attributes)
+        {
+            for (int i = 0; i < attributes.Count; ++i)
+            {
+                string attrName = attributes[i].Name;
+                string attrValue = attributes[i].Value;
+                    
+                if (attrName == "Lambda")
+                {
+                    _lambdaFloatField.value =XMLScriptConverter.valueToFloatExtend(attrValue);
+                }
+            }
+        }
+        
         protected override string Context() => "<FadeIn Lambda = \"{0}\"/>";
     }
     
@@ -514,6 +796,20 @@ namespace AkaneSequencerGraph
 
         public override string GetResultContext() => string.Format(Context(), _lambdaFloatField.value);
 
+        public override void SetParameterFromXml(XmlAttributeCollection attributes)
+        {
+            for (int i = 0; i < attributes.Count; ++i)
+            {
+                string attrName = attributes[i].Name;
+                string attrValue = attributes[i].Value;
+                    
+                if (attrName == "Lambda")
+                {
+                    _lambdaFloatField.value = XMLScriptConverter.valueToFloatExtend(attrValue);
+                }
+            }
+        }
+        
         protected override string Context() => "<FadeOut Lambda = \"{0}\"/>";
     }
     
@@ -526,6 +822,10 @@ namespace AkaneSequencerGraph
 
         public override string GetResultContext() => string.Format(Context());
 
+        public override void SetParameterFromXml(XmlAttributeCollection attributes)
+        {
+        }
+        
         protected override string Context() => "<ForceQuit/>";
     }
 
@@ -543,6 +843,20 @@ namespace AkaneSequencerGraph
         }
 
         public override string GetResultContext() => string.Format(Context(), _enableToggle.value);
+        
+        public override void SetParameterFromXml(XmlAttributeCollection attributes)
+        {
+            for (int i = 0; i < attributes.Count; ++i)
+            {
+                string attrName = attributes[i].Name;
+                string attrValue = attributes[i].Value;
+                    
+                if (attrName == "Enable")
+                {
+                    _enableToggle.value = bool.Parse(attrValue);
+                }
+            }
+        }
 
         protected override string Context() => "<BlockInput Enable = \"{0}\"/>";
     }
@@ -568,6 +882,28 @@ namespace AkaneSequencerGraph
 
         public override string GetResultContext() => string.Format(Context(), _uniqueKeyTextField.text, _uniqueGroupTextField.text, _enableToggle.value);
 
+        public override void SetParameterFromXml(XmlAttributeCollection attributes)
+        {
+            for (int i = 0; i < attributes.Count; ++i)
+            {
+                string attrName = attributes[i].Name;
+                string attrValue = attributes[i].Value;
+                    
+                if (attrName == "Enable")
+                {
+                    _enableToggle.value = bool.Parse(attrValue);
+                }
+                else if (attrName == "UniqueKey")
+                {
+                    _uniqueKeyTextField.value = attrValue;
+                }
+                else if (attrName == "UniqueGroupKey")
+                {
+                    _uniqueGroupTextField.value = attrValue;
+                }
+            }
+        }
+        
         protected override string Context() => "<BlockAINode UniqueKey = \"{0}\" UniqueGroup = \"{1}\" Enable = \"{2}\"/>";
     }
     
@@ -592,6 +928,28 @@ namespace AkaneSequencerGraph
 
         public override string GetResultContext() => string.Format(Context(), _uniqueKeyTextField.text, _uniqueGroupTextField.text, _actionTextField.text);
 
+        public override void SetParameterFromXml(XmlAttributeCollection attributes)
+        {
+            for (int i = 0; i < attributes.Count; ++i)
+            {
+                string attrName = attributes[i].Name;
+                string attrValue = attributes[i].Value;
+                    
+                if (attrName == "UniqueKey")
+                {
+                    _uniqueKeyTextField.value = attrValue;
+                }
+                else if (attrName == "UniqueGroupKey")
+                {
+                    _uniqueGroupTextField.value = attrValue;
+                }
+                else if (attrName == "Action")
+                {
+                    _actionTextField.value = attrValue;
+                }
+            }
+        }
+        
         protected override string Context() => "<SetAction UniqueKey = \"{0}\" UniqueGroup = \"{1}\" Action = \"{2}\"/>";
     }
     
@@ -613,6 +971,24 @@ namespace AkaneSequencerGraph
 
         public override string GetResultContext() => string.Format(Context(), _uniqueKeyTextField.text, _pathTextField.text);
 
+        public override void SetParameterFromXml(XmlAttributeCollection attributes)
+        {
+            for (int i = 0; i < attributes.Count; ++i)
+            {
+                string attrName = attributes[i].Name;
+                string attrValue = attributes[i].Value;
+                    
+                if (attrName == "UniqueKey")
+                {
+                    _uniqueKeyTextField.value = attrValue;
+                }
+                else if (attrName == "Path")
+                {
+                    _pathTextField.value = attrValue;
+                }
+            }
+        }
+        
         protected override string Context() => "<PlayAnimationNode UniqueKey = \"{0}\" Path = \"{1}\"/>";
     }
     
@@ -652,6 +1028,40 @@ namespace AkaneSequencerGraph
             ParseVectorString(_endPositionVectorField),
             _endPositionMakerTextField.text);
 
+        public override void SetParameterFromXml(XmlAttributeCollection attributes)
+        {
+            for (int i = 0; i < attributes.Count; ++i)
+            {
+                string attrName = attributes[i].Name;
+                string attrValue = attributes[i].Value;
+                    
+                if (attrName == "UniqueKey")
+                {
+                    _uniqueKeyTextField.value = attrValue;
+                }
+                else if (attrName == "StartAction")
+                {
+                    _startActionTextField.value = attrValue;
+                }
+                else if (attrName == "LoopAction")
+                {
+                    _loopActionTextField.value = attrValue;
+                }
+                else if (attrName == "EndAction")
+                {
+                    _endActionTextField.value = attrValue;
+                }
+                else if (attrName == "EndPosition")
+                {
+                    _endPositionVectorField.value = XMLScriptConverter.valueToVector3(attrValue);
+                }
+                else if (attrName == "EndPositionMarker")
+                {
+                    _endPositionMakerTextField.value = attrValue;
+                }
+            }
+        }
+        
         protected override string Context() => "<AIMove UniqueKey = \"{0}\" StartAction = \"{1}\" LoopAction = \"{2}\" EndAction = \"{3}\" EndPosition = \"{4}\" EndPositionMarker = \"{5}\"/>";
     }
     
@@ -669,19 +1079,60 @@ namespace AkaneSequencerGraph
         }
 
         public override string GetResultContext() => string.Format(Context(), _keyNameTextField.text);
+        
+        public override void SetParameterFromXml(XmlAttributeCollection attributes)
+        {
+            for (int i = 0; i < attributes.Count; ++i)
+            {
+                string attrName = attributes[i].Name;
+                string attrValue = attributes[i].Value;
+                    
+                if (attrName == "KeyName")
+                {
+                    _keyNameTextField.value = attrValue;
+                }
+            }
+        }
 
         protected override string Context() => "<QTEFence KeyName = \"{0}\"/>";
     }
     
     public sealed class DeadFenceNode : EventNode
     {
+        private readonly TextField _uniqueKeyTextField;
+        private readonly TextField _uniqueGroupKeyTextField;
+        
         public DeadFenceNode(string guid) : base(guid)
         {
             title = "DeadFence";
+            
+            _uniqueKeyTextField = new TextField("UniqueKey");
+            _uniqueGroupKeyTextField = new TextField("UniqueGroupKey");
+            
+            mainContainer.Add(_uniqueKeyTextField);
+            mainContainer.Add(_uniqueGroupKeyTextField);
         }
 
         public override string GetResultContext() => string.Format(Context());
 
+        public override void SetParameterFromXml(XmlAttributeCollection attributes)
+        {
+            for (int i = 0; i < attributes.Count; ++i)
+            {
+                string attrName = attributes[i].Name;
+                string attrValue = attributes[i].Value;
+                    
+                if (attrName == "UniqueKey")
+                {
+                    _uniqueKeyTextField.value = attrValue;
+                }
+                else if (attrName == "UniqueGroupKey")
+                {
+                    _uniqueGroupKeyTextField.value = attrValue;
+                }
+            }
+        }
+        
         protected override string Context() => "<DeadFence/>";
     }
     
@@ -700,6 +1151,20 @@ namespace AkaneSequencerGraph
 
         public override string GetResultContext() => string.Format(Context(), _hideToggle.value);
 
+        public override void SetParameterFromXml(XmlAttributeCollection attributes)
+        {
+            for (int i = 0; i < attributes.Count; ++i)
+            {
+                string attrName = attributes[i].Name;
+                string attrValue = attributes[i].Value;
+                    
+                if (attrName == "Hide")
+                {
+                    _hideToggle.value = bool.Parse(attrValue);;
+                }
+            }
+        }
+        
         protected override string Context() => "<SetHideUI Hide = \"{0}\"/>";
     }
     
@@ -715,7 +1180,7 @@ namespace AkaneSequencerGraph
 
             _scaleFloatField = new FloatField("Scale");
             _timeFloatField = new FloatField("Time");
-            _blendTimeFloatField = new FloatField("BlendTime");
+            _blendTimeFloatField = new FloatField("Speed");
             
             mainContainer.Add(_scaleFloatField);
             mainContainer.Add(_timeFloatField);
@@ -724,6 +1189,28 @@ namespace AkaneSequencerGraph
 
         public override string GetResultContext() => string.Format(Context(), _scaleFloatField.value, _timeFloatField.value, _blendTimeFloatField.value);
 
+        public override void SetParameterFromXml(XmlAttributeCollection attributes)
+        {
+            for (int i = 0; i < attributes.Count; ++i)
+            {
+                string attrName = attributes[i].Name;
+                string attrValue = attributes[i].Value;
+                    
+                if (attrName == "Scale")
+                {
+                    _scaleFloatField.value = XMLScriptConverter.valueToFloatExtend(attrValue);
+                }
+                else if (attrName == "Time")
+                {
+                    _timeFloatField.value = XMLScriptConverter.valueToFloatExtend(attrValue);
+                }
+                else if (attrName == "Speed")
+                {
+                    _blendTimeFloatField.value = XMLScriptConverter.valueToFloatExtend(attrValue);
+                }
+            }
+        }
+        
         protected override string Context() => "<ShakeEffect Scale = \"{0}\" Time = \"{1}\" BlendTime = \"{2}\"/>";
     }
     
@@ -742,6 +1229,20 @@ namespace AkaneSequencerGraph
 
         public override string GetResultContext() => string.Format(Context(), _pathTextField.text);
 
+        public override void SetParameterFromXml(XmlAttributeCollection attributes)
+        {
+            for (int i = 0; i < attributes.Count; ++i)
+            {
+                string attrName = attributes[i].Name;
+                string attrValue = attributes[i].Value;
+                    
+                if (attrValue == "Path")
+                {
+                    _pathTextField.value = attrValue;
+                }
+            }
+        }
+        
         protected override string Context() => "<NextStage Path = \"{0}\"/>";
     }
     
@@ -766,6 +1267,28 @@ namespace AkaneSequencerGraph
 
         public override string GetResultContext() => string.Format(Context(), _textTextField.text, _timeTextField.value, ParseColorString(_colorField));
 
+        public override void SetParameterFromXml(XmlAttributeCollection attributes)
+        {
+            for (int i = 0; i < attributes.Count; ++i)
+            {
+                string attrName = attributes[i].Name;
+                string attrValue = attributes[i].Value;
+                    
+                if (attrName == "Text")
+                {
+                    _textTextField.value = attrValue;
+                }
+                else if (attrName == "Time")
+                {
+                    _timeTextField.value = float.Parse(attrValue);
+                }
+                else if (attrName == "Color")
+                {
+                    _colorField.value = XMLScriptConverter.valueToLinearColor(attrValue);
+                }
+            }
+        }
+        
         protected override string Context() => "<ToastMessage Text = \"{0}\" Time = \"{1}\" Color = \"{2}\"/>";
     }
     
@@ -782,41 +1305,20 @@ namespace AkaneSequencerGraph
             _taskKeyField = new TextField("Task Key");
             mainContainer.Add(_taskKeyField);
         }
+
+        public void SetTaskKey(string taskKey)
+        {
+            _taskKeyField.value = taskKey;
+        }
     
         public override string GetResultContext() => string.Empty;
-    
+        
+        public override void SetParameterFromXml(XmlAttributeCollection attributes)
+        {
+        }
+        
         protected override string Context() => string.Empty;
     }
-    
-    // public sealed class TaskNode : EventNode
-    // {
-    //     private readonly EnumField _processEnumField;
-    //
-    //     public TaskNode(string guid) : base(guid)
-    //     {
-    //         title = "Task";
-    //
-    //         _processEnumField = new EnumField("ProcessType", SequencerGraphProcessor.TaskProcessType.StepByStep);
-    //
-    //         mainContainer.Add(_processEnumField);
-    //     }
-    //
-    //     public override string GetResultContext() => string.Format(Context(), _processEnumField.value);
-    //
-    //     protected override string Context() => "<Task ProcessType = \"{0}\"/>";
-    // }
-    //
-    // public sealed class TaskEndNode : EventNode
-    // {
-    //     public TaskEndNode(string guid) : base(guid)
-    //     {
-    //         title = "TaskEnd";
-    //     }
-    //
-    //     public override string GetResultContext() => string.Format(Context());
-    //
-    //     protected override string Context() => "</Task>";
-    // }
     
     public sealed class LetterBoxShowNode : EventNode
     {
@@ -827,6 +1329,10 @@ namespace AkaneSequencerGraph
 
         public override string GetResultContext() => string.Format(Context());
 
+        public override void SetParameterFromXml(XmlAttributeCollection attributes)
+        {
+        }
+        
         protected override string Context() => "<LetterBoxShow/>";
     }
     
@@ -839,6 +1345,10 @@ namespace AkaneSequencerGraph
 
         public override string GetResultContext() => string.Format(Context());
 
+        public override void SetParameterFromXml(XmlAttributeCollection attributes)
+        {
+        }
+        
         protected override string Context() => "<LetterBoxHide/>";
     }
     
@@ -863,6 +1373,28 @@ namespace AkaneSequencerGraph
 
         public override string GetResultContext() => string.Format(Context(), _uniqueKeyTextField.text, _uniqueGroupTextField.text, _simpleTalkKeyTextField.text);
 
+        public override void SetParameterFromXml(XmlAttributeCollection attributes)
+        {
+            for (int i = 0; i < attributes.Count; ++i)
+            {
+                string attrName = attributes[i].Name;
+                string attrValue = attributes[i].Value;
+                    
+                if (attrName == "SimpleTalkKey")
+                {
+                    _simpleTalkKeyTextField.value = attrValue;
+                }
+                else if (attrName == "UniqueKey")
+                {
+                    _uniqueKeyTextField.value = attrValue;
+                }
+                else if (attrName == "UniqueGroupKey")
+                {
+                    _uniqueGroupTextField.value = attrValue;
+                }
+            }
+        }
+        
         protected override string Context() => "<SetAction UniqueKey = \"{0}\" UniqueGroup = \"{1}\" SimpleTalkKey = \"{2}\"/>";
     }
 }
