@@ -594,7 +594,7 @@ public class ActionFrameEvent_ReleaseCatch : ActionFrameEventBase
         if(_pushVector.sqrMagnitude > float.Epsilon && pushTarget is GameEntityBase)
         {
             GameEntityBase target = (pushTarget as GameEntityBase);
-            UnityEngine.Vector3 attackPointDirection = parentObject.getDirection();
+            UnityEngine.Vector3 attackPointDirection = executeEntity.getDirection();
             target.setVelocity(UnityEngine.Quaternion.Euler(0f,0f,UnityEngine.Mathf.Atan2(attackPointDirection.y,attackPointDirection.x) * UnityEngine.Mathf.Rad2Deg) * _pushVector);
         }
 
