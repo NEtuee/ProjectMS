@@ -97,6 +97,9 @@ public class ActionGraph
             changeAnimation(getCurrentAction()._animationInfoIndex, _currentAnimationIndex);
         }
 
+        if(isEnd)
+            _currentAnimationIndex = getCurrentAction()._animationInfoCount - 1;
+
         setActionConditionData_Bool(ConditionNodeUpdateType.Action_AnimationEnd,isEnd);
     }
 
@@ -731,12 +734,43 @@ public class ActionGraph
     public float getAnimationPlayTimeByIndex(int actionIndex)
     {
         int animationInfoIndex = _actionGraphBaseData._actionNodeData[actionIndex]._animationInfoIndex;
-        return _actionGraphBaseData._animationPlayData[animationInfoIndex][0]._duration;
+        int animationInfoCount = _actionGraphBaseData._actionNodeData[actionIndex]._animationInfoCount;
+
+        float totalDuration = 0f;
+        for(int index = 0; index < animationInfoCount; ++index)
+        {
+            totalDuration += _actionGraphBaseData._animationPlayData[animationInfoIndex][index]._duration;
+        }
+
+        return totalDuration;
     }
 
     public bool checkCurrentActionFlag(ActionFlags flag)
     {
         return (getCurrentAction()._actionFlag & (ulong)flag) != 0;
+    }
+
+    public MoveValuePerFrameFromTimeDesc getMoveValuePerFrameFromTimeDesc()
+    {
+        if(getCurrentAction()._animationInfoCount == 1)
+            return _animationPlayer.getMoveValuePerFrameFromTimeDesc();
+
+        float totalDuration = getAnimationPlayTimeByIndex(_currentActionNodeIndex);
+        int currentAnimationInfoIndex = getCurrentAction()._animationInfoIndex;
+
+        float passedDurationRate = 0f;
+        for(int index = 0; index < _currentAnimationIndex; ++index)
+        {
+            float duration = _actionGraphBaseData._animationPlayData[currentAnimationInfoIndex][index]._duration;
+            passedDurationRate += duration * (1f / totalDuration);
+        }
+
+        float currentDuration = _actionGraphBaseData._animationPlayData[currentAnimationInfoIndex][_currentAnimationIndex]._duration;
+        MoveValuePerFrameFromTimeDesc timeDesc = _animationPlayer.getMoveValuePerFrameFromTimeDesc();
+        timeDesc.currentNormalizedTime = passedDurationRate + (timeDesc.currentTime * (1f / totalDuration));
+        timeDesc.prevNormalizedTime = passedDurationRate + (timeDesc.prevTime * (1f / totalDuration));
+
+        return timeDesc;
     }
 
     public string getCurrentAnimationName() {return _animationPlayer.getCurrentAnimationName();}
@@ -756,7 +790,6 @@ public class ActionGraph
 
     public CommonMaterial getCurrentMaterial() {return getCurrentAction()._characterMaterial;}
     public DefenceDirectionType getDefenceDirectionType() {return getCurrentAction()._defenceDirectionType;}
-    public MoveValuePerFrameFromTimeDesc getMoveValuePerFrameFromTimeDesc(){return _animationPlayer.getMoveValuePerFrameFromTimeDesc();}
     public string getCurrentActionName() {return getCurrentAction()._nodeName; }
     public UnityEngine.Sprite getCurrentSprite(float currentAngleDegree) {return _animationPlayer.getCurrentSprite(currentAngleDegree);}
     public UnityEngine.Quaternion getAnimationRotationPerFrame() {return _animationPlayer.getAnimationRotationPerFrame();}

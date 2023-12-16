@@ -229,6 +229,9 @@ public class AnimationTimeProcessor
         MoveValuePerFrameFromTimeDesc desc;
         desc.currentNormalizedTime = getCurrentNormalizedTime();
         desc.prevNormalizedTime = getPrevNormalizedTime();
+        desc.currentTime = getCurrentTime();
+        desc.prevTime = getPrevTime();
+        
         desc.loopCount = _customPresetData != null ? 0 : getTotalLoopCount();
 
         return desc;
@@ -278,6 +281,14 @@ public class AnimationTimeProcessor
         return (_currentAnimationTime - _animationStartTime) * (1f /_animationTime);
     }
 
+    public float getCurrentTime()
+    {
+        if(_customPresetData != null)
+            return _animationTotalPlayTime;
+
+        return (_currentAnimationTime - _animationStartTime);
+    }
+
     public float getCurrentAnimationNormalizedTime()
     {
         if(_isEnd)
@@ -295,6 +306,14 @@ public class AnimationTimeProcessor
             return _prevAnimationTotalPlayTime * (1f / _actionDuration);
 
         return (_prevAnimationTime - _animationStartTime) * (1f / _animationTime);
+    }
+
+    public float getPrevTime()
+    {
+        if(_customPresetData != null)
+            return _prevAnimationTotalPlayTime;
+
+        return (_prevAnimationTime - _animationStartTime);
     }
 
     public float getCurrentFrame()

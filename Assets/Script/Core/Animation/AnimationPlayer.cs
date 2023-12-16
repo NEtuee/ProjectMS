@@ -241,9 +241,6 @@ public class AnimationPlayer
             }
         }
 
-        
-        
-
         float currentTotalTime = _animationTimeProcessor.getAnimationTotalPlayTime();
         for(int i = _currentTimeEventIndex; i < playData._timeEventDataCount; ++i)
         {
