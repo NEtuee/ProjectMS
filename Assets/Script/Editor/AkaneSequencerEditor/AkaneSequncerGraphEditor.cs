@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Xml;
 using NUnit.Framework;
@@ -17,12 +18,17 @@ namespace AkaneSequencerGraph
 
         private AkaneSequencerGraphView _akaneSequencerGraphView;
         private string _assetPath;
+
+        private Button _folderTargetButton;
+        private string _targetXmlSavePath;
+        private string _fileName;
         
         [MenuItem("CustomWindow/Open SampleGraphView")]
         public static void Open(AkaneSequencerGraphData data, string path)
         {
-            var editorWindow = GetWindow<AkaneSequencerGraphEditorWindow>("SampleGraphWindow");
-            editorWindow.Init(data, path);
+            var fileName = Path.GetFileNameWithoutExtension(path);
+            var editorWindow = GetWindow<AkaneSequencerGraphEditorWindow>(fileName);
+            editorWindow.Init(data, path, fileName);
         }
 
         private void OnEnable()
@@ -34,7 +40,20 @@ namespace AkaneSequencerGraph
             _akaneSequencerGraphView = graphView;
             rootVisualElement.Add(graphView);
 
-            rootVisualElement.Add(new Button(() => { GraphFile.GraphToXmlFile(graphView, "Test");}){text = "Generate"});
+            _folderTargetButton = new Button(() =>
+            {
+                _targetXmlSavePath = EditorUtility.OpenFolderPanel("Save Target Folder", "", "");
+                _folderTargetButton.text = _targetXmlSavePath;
+            });
+
+            _folderTargetButton.text = _targetXmlSavePath;
+
+            rootVisualElement.Add(_folderTargetButton);
+            rootVisualElement.Add(new Button(() =>
+            {
+                GraphFile.GraphToXmlFile(graphView, _targetXmlSavePath, _fileName);
+            }){text = "Generate"});
+            
             rootVisualElement.Add(new Button(() =>
             {
                 ScriptableObject scriptableObject = ScriptableObject.CreateInstance<AkaneSequencerGraphData>();
@@ -92,10 +111,17 @@ namespace AkaneSequencerGraph
             }){text = "Save"});
         }
 
-        public void Init(AkaneSequencerGraphData data, string assetPath)
+        public void Init(AkaneSequencerGraphData data, string assetPath, string fileName)
         {
             CurrentData = data;
             _assetPath = assetPath;
+            _fileName = fileName;
+            _targetXmlSavePath = Path.GetDirectoryName(assetPath);
+
+            if (_folderTargetButton != null)
+            {
+                _folderTargetButton.text = _targetXmlSavePath;
+            }
             
             if (_akaneSequencerGraphView != null)
             {
