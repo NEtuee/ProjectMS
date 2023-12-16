@@ -84,6 +84,7 @@ public class StatusInfo
 
     private SimplePool<BuffItem> _buffItemPool = new SimplePool<BuffItem>();
 
+    private bool _isImmortal = false;
     private bool _isDead = false;
     private int _uniqueKeyIndex = 0;
 
@@ -108,6 +109,7 @@ public class StatusInfo
         _ownerObject = owner;
         
         _isDead = false;
+        _isImmortal = false;
         _statusInfoData = getStatusInfoData(dataName);
         createStatusValueDictionary(_statusInfoData);
 
@@ -125,6 +127,7 @@ public class StatusInfo
         clearBuff();
 
         _isDead = false;
+        _isImmortal = false;
         foreach(Status item in _statusValues.Values)
         {
             _statusInfoData._statusData[item._statusIndex].initStat(ref item._value);
@@ -335,8 +338,18 @@ public class StatusInfo
         }
 
         Status hpStatus = getStatus("HP");
-        if(_isDead == false && hpStatus != null && hpStatus._value <= 0f)
+        if(_isImmortal == false && _isDead == false && hpStatus != null && hpStatus._value <= 0f)
             setDead(true);
+    }
+
+    public void setImmortal(bool immortal)
+    {
+        _isImmortal = immortal;
+    }
+
+    public bool isImmortal()
+    {
+        return _isImmortal;
     }
 
     public void setDead(bool value)

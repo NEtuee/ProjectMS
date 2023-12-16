@@ -24,6 +24,7 @@ public class GameEditorMaster : MonoBehaviour
     public Toggle   _statusDebugToggle;
     public Toggle   _animationDebugToggle;
     public Toggle   _soundDebugToggle;
+    public Toggle   _immortalToggle;
 
     public RectTransform _stageSelectorContent;
     public GameObject _stageSelectorButtonItemPrefab;
@@ -222,6 +223,7 @@ public class GameEditorMaster : MonoBehaviour
         _statusDebugToggle.isOn = clear ? false : (_currentlySelectedEntity != null ? _currentlySelectedEntity._statusDebug : false);
         _animationDebugToggle.isOn = clear ? false : (_currentlySelectedEntity != null ? _currentlySelectedEntity._animationDebug : false);
         _soundDebugToggle.isOn = clear ? false : (_currentlySelectedEntity != null ? _currentlySelectedEntity._soundDebug : false);
+        _immortalToggle.isOn = clear ? false : (_currentlySelectedEntity != null ? _currentlySelectedEntity.getStatusInfo().isImmortal() : false);
     }
 
 
@@ -230,6 +232,7 @@ public class GameEditorMaster : MonoBehaviour
     public void setTargetStatusDebug() {if(_currentlySelectedEntity==null) return; _currentlySelectedEntity._statusDebug =  _statusDebugToggle.isOn;}
     public void setTargetAnimationDebug() {if(_currentlySelectedEntity==null) return; _currentlySelectedEntity._animationDebug = _animationDebugToggle.isOn;}
     public void setTargetSoundDebug() {if(_currentlySelectedEntity==null) return; _currentlySelectedEntity._soundDebug = _soundDebugToggle.isOn;}
+    public void setTargetImmortal() {if(_currentlySelectedEntity==null) return; _currentlySelectedEntity.getStatusInfo().setImmortal(_immortalToggle.isOn);}
 
     public bool isActionDebug() {return _actionDebugAll;}
     public bool isAiDebug() {return _aiDebugAll;}
