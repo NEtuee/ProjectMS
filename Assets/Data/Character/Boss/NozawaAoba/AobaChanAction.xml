@@ -442,6 +442,7 @@
         <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/5_unwaverRaisen/"/>
         <!-- 준비 자세 -->
         <Animation Preset="1_unwaverReady" XFlip="true" Duration="0.7">
+            <FrameEvent Type="SetDirectionType" StartTime="0.016" DirectionType="Keep"/>
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2413" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
             <FrameEvent Type="TimelineEffect" StartTime="0.35" Path="Prefab/Effect/MaterialAttackPre_Timeline" Offset="0.0 0.0 0.0" Attach="true"/>
@@ -451,6 +452,7 @@
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2417" Attach="true"/>
             <FrameEvent Type="Attack" StartTime="0" EndTime="0.4" AttackPreset="Aoba_UnwaverRaisen">
                 <OnHit>
+                    <FrameEvent Type="SetDirectionType" StartTime="0" DirectionType="AI"/>
                     <FrameEvent Type="AudioPlay" StartTime="0" ID="2407" Attach="true"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
 
