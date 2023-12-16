@@ -982,10 +982,10 @@ public class GameEntityBase : SequencerObjectBase
             case DirectionType.MoveDirection:
                 direction = getMovementControl().getMoveDirection();
                 break;
-            case DirectionType.CatchTarget:
+            case DirectionType.CatchTargetFace:
                 ObjectBase catchObject = getParentObject() == null ? getChildObject() : getParentObject();
                 if(catchObject != null)
-                    direction = catchObject.getDirection();
+                    direction = -catchObject.getDirection();
                 break;
             case DirectionType.Count:
                 DebugUtil.assert(false, "invalid direction type : {0}",_currentDirectionType);
