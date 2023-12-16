@@ -9,14 +9,14 @@ namespace AkaneSequencerGraph
 {
     public static class GraphFile
     {
-        public static void GraphToXmlFile(AkaneSequencerGraphView graphView, string fileName) 
+        public static void GraphToXmlFile(AkaneSequencerGraphView graphView, string path, string fileName) 
         {
             if (graphView == null)
             {
                 return;
             }
 
-            var filePath = Path.Combine(Application.dataPath, "Script/Editor/AkaneSequencerEditor");
+            var filePath = path;
             if (Directory.Exists(filePath) == false)
             {
                 Debug.LogError($"{filePath} : 해당 경로 없음");
@@ -54,6 +54,8 @@ namespace AkaneSequencerGraph
             streamWriter.Write(sb.ToString());
             streamWriter.Flush();
             streamWriter.Close();
+            
+            AssetDatabase.Refresh(); 
             
             void AddPhaseContext(ReservedPhaseNode phaseNode, List<EventNode> childNodeList)
             {
