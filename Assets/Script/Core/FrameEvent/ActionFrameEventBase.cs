@@ -78,7 +78,7 @@ public abstract class ActionFrameEventBase
     public float                                _startFrame;
     public float                                _endFrame;
 
-    public bool                                 _isTimeBase = false;
+    public bool                                 _isTimeBase = true;
 
     public ActionGraphConditionCompareData      _conditionCompareData = null;
 
