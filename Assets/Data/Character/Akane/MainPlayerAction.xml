@@ -188,7 +188,7 @@
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_DashFriction" MaxVelocity="gv_DashVelocity" Speed="0" Velocity="gv_DashVelocity" Condition="(getStat_DashPoint >= 1.0)"/>
             <FrameEvent Type="ApplyBuff" StartTime="0.031" ApplyBuff="DashPointConsumption" Condition="(getStat_DashPoint >= 1.0)"/>
 
-            <FrameEvent Type="FrameTag" StartTime="0.156" EndFrame="999" Tag="MoveCancel"/>
+            <FrameEvent Type="FrameTag" StartTime="0.156" EndTime="999" Tag="MoveCancel"/>
             <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="0.016" Tag="Attack"/>
 
             <FrameEvent Type="AudioPlay" Condition="AttackSuccess == false" StartTime="0.05" ID="1002" Attach="true"/>
@@ -258,7 +258,7 @@
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="CommonAttack" Condition="(getStat_DashPoint >= 1.0) && (getStat_HP > 1.0)"/>
             <FrameEvent Type="ApplyBuff" StartTime="0.031" ApplyBuff="DashPointConsumption" Condition="(getStat_DashPoint >= 1.0)"/>
 
-            <FrameEvent Type="FrameTag" StartTime="0.156" EndFrame="999" Tag="MoveCancel"/>
+            <FrameEvent Type="FrameTag" StartTime="0.156" EndTime="999" Tag="MoveCancel"/>
             <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="0.016" Tag="Attack"/>
 
             <FrameEvent Type="AudioPlay" Condition="AttackSuccess == false" StartTime="0.05" ID="1009" Attach="true"/>
@@ -312,12 +312,12 @@
                     <FrameEvent Type="TeleportToTarget"/>
                 </OnEvade>
             </FrameEvent>
-            <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="ZeroApKickFailed" Condition="(getStat_DashPoint < 1.0)"/>
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="999" Tag="ZeroApKickFailed" Condition="(getStat_DashPoint < 1.0)"/>
 
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_DashFriction" MaxVelocity="gv_DashVelocity" Speed="0" Velocity="gv_DashVelocity" Condition="(getStat_DashPoint >= 1.0)"/>
             <FrameEvent Type="ApplyBuff" StartTime="0.031" ApplyBuff="DashPointConsumption"/>
 
-            <FrameEvent Type="FrameTag" StartTime="0.156" EndFrame="999" Tag="MoveCancel"/>
+            <FrameEvent Type="FrameTag" StartTime="0.156" EndTime="999" Tag="MoveCancel"/>
             <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="0.016" Tag="Attack"/>
             <FrameEvent Type="AudioPlay" Condition="AttackSuccess == false" StartTime="0.05" ID="1002" Attach="true"/>
 
@@ -354,7 +354,7 @@
             <FrameEvent Type="ApplyBuff" StartTime="0" Condition="(getStat_DashPoint >= 1.0)" ApplyBuff="DashPointConsumption"/>
 
             <FrameEvent Type="Movement" StartTime="0" Friction="3" Speed="0" Velocity="-1.5 "/>
-            <FrameEvent Type="FrameTag" StartTime="0.198" EndFrame="999" Tag="MoveCancel"/>
+            <FrameEvent Type="FrameTag" StartTime="0.198" EndTime="999" Tag="MoveCancel"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="DashPointIncrement"/>
         </Animation>
 
@@ -373,8 +373,8 @@
 
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_AttackFriction" MaxVelocity="gv_AttackVelocity" Speed="0" Velocity="gv_AttackVelocity"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="DashPointReset"/>
-            <FrameEvent Type="FrameTag" StartTime="0.26" EndFrame="999" Tag="MoveCancel"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="AttackSuccess"/>
+            <FrameEvent Type="FrameTag" StartTime="0.26" EndTime="999" Tag="MoveCancel"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="AttackSuccess"/>
         </Animation>
 
         <Branch Key="(getKey_AttackCharge == true) || (getKey_NormalMove == true)" Condition="End" Execute="MoveAll"/>
@@ -390,8 +390,8 @@
 
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_AttackFriction" MaxVelocity="gv_AttackVelocity" Speed="0" Velocity="gv_AttackVelocity"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="DashPointReset"/>
-            <FrameEvent Type="FrameTag" StartTime="0.26" EndFrame="999" Tag="MoveCancel"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="AttackSuccess"/>
+            <FrameEvent Type="FrameTag" StartTime="0.26" EndTime="999" Tag="MoveCancel"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="AttackSuccess"/>
         </Animation>
 
         <Branch Key="(getKey_AttackCharge == true) || (getKey_NormalMove == true)" Condition="End" Execute="MoveAll"/>
@@ -404,8 +404,8 @@
 
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_AttackFriction" MaxVelocity="gv_AttackVelocity" Speed="0" Velocity="gv_AttackVelocity"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="DashPointReset"/>
-            <FrameEvent Type="FrameTag" StartTime="0.26" EndFrame="999" Tag="MoveCancel"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="Evaded"/>
+            <FrameEvent Type="FrameTag" StartTime="0.26" EndTime="999" Tag="MoveCancel"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="Evaded"/>
         </Animation>
 
         <Branch Key="(getKey_AttackCharge == true) || (getKey_NormalMove == true)" Condition="End" Execute="MoveAll"/>
@@ -422,8 +422,8 @@
 
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_AttackFriction" MaxVelocity="gv_AttackFarVelocity" Speed="0" Velocity="gv_AttackFarVelocity"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="DashPointReset"/>
-            <FrameEvent Type="FrameTag" StartTime="0.26" EndFrame="999" Tag="MoveCancel"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="AttackSuccess"/>
+            <FrameEvent Type="FrameTag" StartTime="0.26" EndTime="999" Tag="MoveCancel"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="AttackSuccess"/>
         </Animation>
 
         <UseBranchSet Name="CancelBranch"/>
@@ -477,12 +477,12 @@
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Velocity="0" Speed="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="StunClear"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="ClearBloodPoint"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="Recatchable" Condition="getStat_IsCatched == 1.0"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="Catched"/>
-            <FrameEvent Type="ReleaseCatch" StartTime="0" Push="4 0 0" Condition="(getStat_IsCatched == 0.0) && (getTargetFrameTag_Hold == false)"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="Recatchable" Condition="getStat_IsCatched == 1.0"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="Catched"/>
+            <FrameEvent Type="ReleaseCatch" StartTime="0" Push="2 0 0" Condition="(getStat_IsCatched == 0.0) && (getTargetFrameTag_Hold == false)"/>
         </Animation>
 
-        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="Dead" Execute="Dead"/>   
         <Branch Condition="IsCatchTarget == false" Execute="CatchReleased"/>
         <Branch Condition="End == true" Execute="Catched"/>
     </Catched>
@@ -490,10 +490,11 @@
     <CatchReleased MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction" RotationType="Direction">
         <Animation Preset="Sprites/NewPlayer/catchRealese/" XFlip="true" Duration="1.3">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="1001" Attach="true"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="9" Speed="0" Velocity="-5"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="CatchedClear"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="StunClear"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="1.3" Tag="CatchReleased"/>
-            <FrameEvent Type="FrameTag" StartTime="0.7" EndFrame="1.3" Tag="MoveCancel"/>
+            <FrameEvent Type="FrameTag" StartTime="0.7" EndTime="1.3" Tag="MoveCancel"/>
         </Animation>
         
         <UseBranchSet Name="CancelBranch"/>
@@ -505,7 +506,7 @@
         <Animation Preset="Sprites/NewPlayer/stun" XFlip="true" Duration="3.0">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="1004" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="3" Speed="0"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="Stun"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="Stun"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="ClearBloodPoint"/>
             <FrameEvent Type="ApplyBuff" StartTime="3.0" ApplyBuff="StunClear"/>
         </Animation>
