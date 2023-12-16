@@ -109,6 +109,7 @@ public enum DirectionType
     MoveDirection,
     AI,
     AITarget,
+    CatchTarget,
     Count,
 }
 
