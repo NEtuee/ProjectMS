@@ -55,9 +55,9 @@
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="ResetRaisen" EventTargetType="Self"/>
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="ResetStorm" EventTargetType="Self"/>
 
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="DodgeAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="DodgeAvail"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
@@ -77,9 +77,9 @@
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="ResetRaisen" EventTargetType="Self"/>
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="ResetStorm" EventTargetType="Self"/>
             
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="DodgeAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="DodgeAvail"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
@@ -125,8 +125,8 @@
     <AC_StormPre MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/1_stormRaisen/"/>
         <Animation Preset="1_stormPre" XFlip="true" Duration="0.1">
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_StormPre"/>
@@ -154,8 +154,8 @@
     <AC_StormPost MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/1_stormRaisen/"/>
         <Animation Preset="3_stormPost" XFlip="true" Duration="0.05">
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_StormPost"/>
@@ -188,8 +188,8 @@
             
             </FrameEvent>
             <FrameEvent Type="AudioPlay" StartTime="0.01" ID="2404" Attach="true" Condition="AttackSuccess == false"/>
-            <FrameEvent Type="FrameTag" StartTime="0.2" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0.2" EndFrame="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.2" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.2" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Entry"/>
@@ -200,9 +200,9 @@
         <Animation Preset="6_stormRaisenSuccess" XFlip="true" Duration="0.44">
             <FrameEvent Type="Movement" StartTime="0" Friction="90" MaxVelocity="20" Speed="0"/>
             
-            <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="GbAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="DodgeAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="999" Tag="DodgeAvail"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Entry"/>
@@ -214,12 +214,12 @@
         <Animation Preset="1_empReady" XFlip="true" Duration="0.2">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
         </Animation>
-        <Animation Preset="2_empThrow" XFlip="true" Duration="0.5">
+        <Animation Preset="2_empThrow" XFlip="true" Duration="0.3">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2414" Attach="true"/>
             <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="EmpGrenade" Offset="0 0 0" SearchIdentifier="Enemy" UseFlip="True"/>
 
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
     
         <Branch Condition="End" Execute="AC_Idle"/>
@@ -269,8 +269,8 @@
                 </OnHit>
             </FrameEvent>
             <FrameEvent Type="AudioPlay" StartTime="0.01" ID="2404" Attach="true" Condition="AttackSuccess == false"/>
-            <FrameEvent Type="FrameTag" StartTime="0.2" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0.2" EndFrame="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.2" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.2" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Entry"/>
@@ -281,9 +281,9 @@
         <Animation Preset="5_chargeRaisenSuccess" XFlip="true" Duration="0.44">
             <FrameEvent Type="Movement" StartTime="0" Friction="90" MaxVelocity="20" Speed="0"/>
             
-            <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="GbAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="DodgeAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="999" Tag="DodgeAvail"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Entry"/>
@@ -359,14 +359,14 @@
     <AC_Away MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/4_Tsuba/"/>
         <!-- 밀리기 -->
-        <Animation Preset="5_away" XFlip="true" Duration="1.0">
-            <FrameEvent Type="Movement" StartTime="0" Friction="12" Velocity="-9" Speed="0"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+        <Animation Preset="5_away" XFlip="true" Duration="0.9">
+            <FrameEvent Type="Movement" StartTime="0" Friction="4" MaxVelocity="9" Velocity="-4" Speed="0"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
-        <Animation Preset="6_recover" XFlip="true" Duration="1.0">
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+        <Animation Preset="6_recover" XFlip="true" Duration="0.1">
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>
@@ -402,8 +402,8 @@
                 </OnHit>
             </FrameEvent>
             <FrameEvent Type="AudioPlay" StartTime="0.01" ID="2406" Attach="true" Condition="AttackSuccess == false"/>
-            <FrameEvent Type="FrameTag" StartTime="0.2" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0.2" EndFrame="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.2" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.2" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Entry"/>
@@ -414,9 +414,9 @@
         <Animation Preset="3_raisenSuccess" XFlip="true" Duration="0.44">
             <FrameEvent Type="Movement" StartTime="0" Friction="15" MaxVelocity="6.5" Velocity="6.5" Speed="0"/>
 
-            <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="GbAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="DodgeAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="999" Tag="DodgeAvail"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Entry"/>
@@ -476,9 +476,9 @@
         <Animation Preset="3_unwaverSuccess" XFlip="true" Duration="0.44">
             <FrameEvent Type="Movement" StartTime="0" Friction="90" MaxVelocity="20" Speed="0"/>
             
-            <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="GbAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="DodgeAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="999" Tag="DodgeAvail"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Entry"/>
@@ -512,8 +512,8 @@
             </FrameEvent>
 
             <FrameEvent Type="AudioPlay" StartTime="0.01" ID="2404" Attach="true" Condition="AttackSuccess==false"/>
-            <FrameEvent Type="FrameTag" StartTime="0.2" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0.2" EndFrame="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.2" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.2" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>
@@ -524,9 +524,9 @@
         <Animation Preset="3_choraisenSuccess" XFlip="true" Duration="0.44">
             <FrameEvent Type="Movement" StartTime="0" Friction="90" MaxVelocity="20" Speed="0"/>
             
-            <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="GbAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0.0" EndFrame="999" Tag="DodgeAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="999" Tag="DodgeAvail"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Entry"/>
@@ -552,9 +552,9 @@
         <Animation Preset="2_warpSuccess" XFlip="true" Duration="0.2">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Velocity="-3" Speed="0"/>
             
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="DodgeAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="DodgeAvail"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Entry"/>
