@@ -371,7 +371,7 @@
             <OnEnd>
                 <!-- TODO: 번개 이펙트 -->
 
-                <FrameEvent Type="Attack" StartFrame="0" AttackPreset="Sister_ThunderStroke">
+                <FrameEvent Type="Attack" StartFrame="0" AttackPreset="Helena_Thunder">
                     <OnHit>
                         <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonDoubleAttack"/>
                     </OnHit>
@@ -379,6 +379,25 @@
             </OnEnd>
         </Event>
     </ThunderStroke>
+    
+    <Thunder DefaultFramePerSecond="10" UseSpriteRotation="true" PenetrateCount="999">
+        <Animation Preset="Sprites/Projectile/ThunderBase" XFlip="true" Duration="1.0">
+        </Animation>
+
+        <CollisionInfo Radius="0.4" Angle="0"/>
+        
+        <DefaultShotInfo Velocity="0" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="0.5"/>
+        <Event>    
+            <OnEnd>
+                <FrameEvent Type="EffectPreset" StartTime="0.0" Key="Thunder"/>
+                <FrameEvent Type="Attack" StartFrame="0.0" AttackPreset="Helena_Thunder">
+                    <OnHit>
+                        <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonDoubleAttack"/>
+                    </OnHit>
+                </FrameEvent>
+            </OnEnd>
+        </Event>
+    </Thunder>
 
     <!-- 스케반 원거리 (기관단총) -->
     <MiniBullet DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">

@@ -1,4 +1,4 @@
-<AIGraph Name="SisterChanAI" DefaultState="Entry">
+<AIGraph Name="SisterChanAI" DefaultState="Test">
 
     <Include Path="Assets/Data/AILibrary/Package/CommonDeadPackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonHitPackage.xml"/>
@@ -24,7 +24,7 @@
 
     <!-- Groggy Pattern -->
     <GlobalVariable Name="gv_sisterStdBattle" Value="20.0"/>
-
+    
 
     <BranchSet Name="IsPlayerDead">
             <Branch Condition="Dead" Execute="Dead"/>
@@ -40,6 +40,22 @@
         <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
     </BranchSet>
 
+    <Test Package="CommonIdlePackage">
+        <Branch Condition="Hit" Execute="TestHit"/>
+        <Branch Condition="(GuardBreakFail || GuardBroken) && getFrameTag_GbAvail" Execute="TestGuardBroken"/>
+    </Test>
+
+    <TestHit Package="CommonHitPackage">
+        <Branch Condition="Hit" Execute="TestHit"/>
+        <Branch Condition="(GuardBreakFail || GuardBroken) && getFrameTag_GbAvail" Execute="TestGuardBroken"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Test"/>
+    </TestHit>
+
+    <TestGuardBroken Package="CommonGuardBrokenPackage">
+        <Branch Condition="Hit" Execute="TestHit"/>
+        <Branch Condition="(GuardBreakFail || GuardBroken) && getFrameTag_GbAvail" Execute="TestGuardBroken"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Test"/>
+    </TestGuardBroken>
 
     <Entry Package="CommonIdlePackage">
         <UseBranchSet Name="IsPlayerDead"/>
