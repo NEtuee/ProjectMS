@@ -26,8 +26,9 @@ public class EffectInfoManager : Singleton<EffectInfoManager>
         return _effectInfoData[key];
     }
 
-    public bool requestEffect(string effectInfoKey, GameEntityBase executeEntity, ObjectBase targetEntity, CommonMaterial attackMaterial)
+    public bool requestEffect(string effectInfoKey, ObjectBase executeEntity, ObjectBase targetEntity, CommonMaterial attackMaterial)
     {
+        DebugUtil.log(effectInfoKey);
         CommonMaterial defenceMaterial = CommonMaterial.Empty;
         if(targetEntity != null && targetEntity is GameEntityBase)
             defenceMaterial = (targetEntity as GameEntityBase).getCharacterMaterial();

@@ -826,10 +826,7 @@ public class ActionFrameEvent_EffectPreset : ActionFrameEventBase
     private CommonMaterial _attackMaterial;
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
-        if(executeEntity is GameEntityBase == false)
-            return false;
-
-        EffectInfoManager.Instance().requestEffect(_effectInfoKey,executeEntity as GameEntityBase, targetEntity,_attackMaterial);
+        EffectInfoManager.Instance().requestEffect(_effectInfoKey,executeEntity, targetEntity,_attackMaterial);
         return true;
     }
 
