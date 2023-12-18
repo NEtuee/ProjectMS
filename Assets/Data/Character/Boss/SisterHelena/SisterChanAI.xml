@@ -2,6 +2,7 @@
 
     <Include Path="Assets/Data/AILibrary/Package/CommonDeadPackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonHitPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonAttackPackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonChasePackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonSystemChasePackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonIdlePackage.xml"/>
@@ -40,9 +41,10 @@
         <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
     </BranchSet>
 
-    <Test Package="CommonIdlePackage">
+    <Test Package="CommonAttackPackage">
         <Branch Condition="Hit" Execute="TestHit"/>
         <Branch Condition="(GuardBreakFail || GuardBroken) && getFrameTag_GbAvail" Execute="TestGuardBroken"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Test"/>
     </Test>
 
     <TestHit Package="CommonHitPackage">

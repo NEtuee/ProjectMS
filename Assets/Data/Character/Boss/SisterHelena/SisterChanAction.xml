@@ -183,7 +183,7 @@
     </AC_LightningBoltShot>
 
     <!-- 근거리 공격: 달빛 베기-->
-    <AC_SwordAttackReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+    <AC_AttackReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="1_attack/1_attackReady" XFlip="true" Duration="0.48">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2203" Attach="true"/>
@@ -195,10 +195,10 @@
             
         </Animation>
     
-        <Branch Condition="End" Execute="AC_SwordAttackMain"/>
-    </AC_SwordAttackReady>
+        <Branch Condition="End" Execute="AC_AttackMain"/>
+    </AC_AttackReady>
 
-    <AC_SwordAttackMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction">
+    <AC_AttackMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="1_attack/2_attackMain" XFlip="true" Duration="0.35">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2204" Attach="true"/>
@@ -215,13 +215,13 @@
                 </OnHit>
             </FrameEvent>
             
-            <FrameEvent Type="Projectile" StartTime="0.3" GraphName="Thunder" DirectionType="AI" SpawnTargetType="AITarget"/>
+            <FrameEvent Type="Projectile" StartTime="0.2" GraphName="Thunder" DirectionType="AI" SpawnTargetType="AITarget"/>
         </Animation>
 
-        <Branch Condition="End" Execute="AC_SwordAttackRecover"/>
-    </AC_SwordAttackMain>
+        <Branch Condition="End" Execute="AC_AttackRecover"/>
+    </AC_AttackMain>
 
-    <AC_SwordAttackRecover MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+    <AC_AttackRecover MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="1_attack/3_attackRecover" XFlip="true" Duration="0.2">
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
@@ -229,7 +229,7 @@
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>
-    </AC_SwordAttackRecover>
+    </AC_AttackRecover>
     <!-- 근거리 공격: 횡베기-->
 
     <!-- 근거리 공격: 십자베기-->
