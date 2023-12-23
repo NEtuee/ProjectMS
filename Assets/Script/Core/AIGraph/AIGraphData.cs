@@ -32,6 +32,7 @@ public class AIGraphNodeData
     public AIGraphNodeData()
     {
         _packageIndex = -1;
+        _packageEntryNodeIndex = -1;
         _branchIndexStart = 0;
         _branchCount = 0;
         _coolDownTime = 0f;
@@ -43,6 +44,7 @@ public class AIGraphNodeData
     public Dictionary<string,AIChildFrameEventItem> _customAIEvents = new Dictionary<string, AIChildFrameEventItem>();
 
     public int                          _packageIndex;
+    public int                          _packageEntryNodeIndex;
     public int                          _branchIndexStart;
     public int                          _branchCount;
     public float                        _coolDownTime;

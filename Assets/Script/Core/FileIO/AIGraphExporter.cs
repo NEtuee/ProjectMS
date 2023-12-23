@@ -224,6 +224,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
         AIGraphNodeData nodeData = new AIGraphNodeData();
         nodeData._nodeName = node.Name;
 
+        string aiPackageEntryNode = "";
         //action attribute
         XmlAttributeCollection actionAttributes = node.Attributes;
         if(actionAttributes == null)
@@ -251,6 +252,17 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
             {
                 nodeData._coolDownTime = XMLScriptConverter.valueToFloatExtend(targetValue);
             }
+            else if(targetName == "EntryNode")
+            {
+                aiPackageEntryNode = targetValue;
+                if(aiPackageIndexDic.ContainsKey(aiPackageEntryNode) == false)
+                {
+                    DebugUtil.assert_fileOpen(false,"존재하지 않는 PackageNode입니다 !!! : [Name: {0}] [Type: {1}] [Line: {2}] [FileName: {3}]",_currentFileName,XMLScriptConverter.getLineNumberFromXMLNode(node), aiPackageEntryNode, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
+                    return null;
+                }
+
+                nodeData._packageEntryNodeIndex = aiPackageIndexDic[aiPackageEntryNode];
+            }
             else
             {
                 DebugUtil.assert_fileOpen(false,"유효하지 않은 어트리뷰트입니다. !!! : [Type: {0}] [Line: {1}] [FileName: {2}]",_currentFileName,XMLScriptConverter.getLineNumberFromXMLNode(node), targetName, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
@@ -264,7 +276,6 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
 
         for(int i = 0; i < nodeList.Count; ++i)
         {
-            
             if(nodeList[i].Name == "Branch")
             {
                 ActionGraphBranchData branchData = ActionGraphLoader.ReadActionBranch(nodeList[i],ref actionCompareDic,ref compareDataList, ref _aiGraphGlobalVariables, _currentFileName);
@@ -566,7 +577,6 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
             {
                 defaultState = targetValue;
             }
-
         }
     }
 
