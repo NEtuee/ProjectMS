@@ -165,7 +165,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
                 continue;
             }
             
-            AIGraphNodeData nodeData = readAIGraphNode(nodeList[i], ref aiPackageIndexDic, ref actionCompareDic, ref branchDataList,ref compareDataList, in branchSetDic);
+            AIGraphNodeData nodeData = readAIGraphNode(nodeList[i], ref aiPackageList, ref aiPackageIndexDic, ref actionCompareDic, ref branchDataList,ref compareDataList, in branchSetDic);
             if(nodeData == null)
             {
                 DebugUtil.assert_fileOpen(false,"NodeData가 null입니다. 로드 실패! : [NodeName: {0}] [Line: {1}] [FileName: {2}]",_currentFileName,XMLScriptConverter.getLineNumberFromXMLNode(nodeList[i]), nodeList[i].Name, XMLScriptConverter.getLineFromXMLNode(nodeList[i]), _currentFileName);
@@ -219,7 +219,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
         return aiBaseData;
     }
 
-    private static AIGraphNodeData readAIGraphNode(XmlNode node, ref Dictionary<string, int> aiPackageIndexDic,ref Dictionary<ActionGraphBranchData, string> actionCompareDic,ref List<ActionGraphBranchData> branchDataList, ref List<ActionGraphConditionCompareData> compareDataList, in Dictionary<string, XmlNodeList> branchSetDic)
+    private static AIGraphNodeData readAIGraphNode(XmlNode node, ref List<AIPackageBaseData> aiPackageList, ref Dictionary<string, int> aiPackageIndexDic,ref Dictionary<ActionGraphBranchData, string> actionCompareDic,ref List<ActionGraphBranchData> branchDataList, ref List<ActionGraphConditionCompareData> compareDataList, in Dictionary<string, XmlNodeList> branchSetDic)
     {
         AIGraphNodeData nodeData = new AIGraphNodeData();
         nodeData._nodeName = node.Name;
@@ -255,13 +255,26 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
             else if(targetName == "EntryNode")
             {
                 aiPackageEntryNode = targetValue;
-                if(aiPackageIndexDic.ContainsKey(aiPackageEntryNode) == false)
+
+                bool find = false;
+                for(int i = 0; i < aiPackageList[nodeData._packageIndex]._aiNodeCount; ++i)
                 {
-                    DebugUtil.assert_fileOpen(false,"존재하지 않는 PackageNode입니다 !!! : [Name: {0}] [Type: {1}] [Line: {2}] [FileName: {3}]",_currentFileName,XMLScriptConverter.getLineNumberFromXMLNode(node), aiPackageEntryNode, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
-                    return null;
+                    AIPackageNodeData packageNode = aiPackageList[nodeData._packageIndex]._aiPackageNodeData[i];
+
+                    if(packageNode._nodeName == aiPackageEntryNode)
+                    {
+                        nodeData._packageEntryNodeIndex = i;
+                        find = true;
+                        break;
+                    }
                 }
 
-                nodeData._packageEntryNodeIndex = aiPackageIndexDic[aiPackageEntryNode];
+                if(find == false)
+                {
+                    Debug.Log(aiPackageEntryNode);
+                    DebugUtil.assert_fileOpen(false,"존재하지 않는 PackageNode입니다 !!! : [Name: {0}] [Line: {1}] [FileName: {2}]",_currentFileName,XMLScriptConverter.getLineNumberFromXMLNode(node), aiPackageEntryNode, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
+                    return null;
+                }
             }
             else
             {
