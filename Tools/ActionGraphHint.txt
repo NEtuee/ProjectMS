@@ -35,7 +35,7 @@ InQuote,UpdateType=,"ScaledDeltaTime,NoneScaledDeltaTime"
 InQuote,ToTarget=,"true,false"
 InQuote,AngleType=,"Normal,AttackPoint,Direction"
 InQuote,SearchIdentifier=,"Player,Enemy,Projectile"
-InScope,,"MovementType=~~,MovementGraphPreset=~~,DirectionType=~~,DefenceDirectionType=~~,FlipType=~~,RotationType=~~,MoveScale=~~,IsActionSelection=~~,ApplyBuff=~~,NormalizedSpeed=~~,DefenceType=~~,DefenceAngle=~~,DirectionUpdateOnce=~~,IsActionSelection=~~,FlipTypeUpdateOnce=~~,RotateBySpeed=~~,RotateSpeed=~~,DirectionAngle=~~,Flags=~~,HeadUpOffset=~~,IgnoreAttackType=~~"
+InScope,,"MovementType=~~,MovementGraphPreset=~~,DirectionType=~~,DefenceDirectionType=~~,FlipType=~~,RotationType=~~,MoveScale=~~,IsActionSelection=~~,ApplyBuff=~~,NormalizedSpeed=~~,DefenceType=~~,DefenceAngle=~~,DirectionUpdateOnce=~~,IsActionSelection=~~,FlipTypeUpdateOnce=~~,RotateBySpeed=~~,RotateSpeed=~~,DirectionAngle=~~,Flags=~~,HeadUpOffset=~~,IgnoreAttackType=~~,ActiveCollision=~~"
 LineStart,<Branch,"Key=~~,Condition=~~,Execute=~~,Weight=~~"
 LineStart,<Animation,"Preset=~~,Duration=~~,Path=~~,StartTime=~~,EndTime=~~,FramePerSecond=~~,Loop=~~,XFlip=~~,YFlip=~~,RotationPreset=~~,ScalePreset=~~,AngleBaseAnimation=~~,MultiSelectUpdateOnce=~~"
 LineStart,<MultiSelectAnimation,"Path=~~,Condition=~~"
@@ -113,7 +113,7 @@ InQuote,MultiSelectUpdateOnce=,"True,False"
 FrameEvent,EffectPreset,Key=~~
 ShortCut,__FrameEvent_EffectPreset,<FrameEvent Type=~EffectPreset~ StartTime=~0~ Key=~~/>
 InQuote,NotifyAttackSuccess=,"True,False"
-,,
+InQuote,ActiveCollision=,"True,False"
 ,,
 ,,
 ,,

@@ -715,6 +715,7 @@ public class ActionGraph
 
     public float getActionExecutedTime() {return _actionExecutedTime;}
 
+    public bool isActiveCollision() {return getCurrentAction()._activeCollision;}
     public void setAnimationSpeed(float speed) {_animationPlayer.setAnimationSpeed(speed);}
 
     public bool checkFrameTag(string tag) {return _currentFrameTag.Contains(tag);}

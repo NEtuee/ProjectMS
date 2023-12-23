@@ -9,13 +9,17 @@ public class CollisionInfo
     private BoundBox _boundBox;
     private Triangle _triangle;
 
+    private bool _activeCollision = true;
+
     private int _uniqueID = 0;
 
     public CollisionInfo(CollisionInfoData data)
     {
         _collisionInfoData = data;
         _centerPosition = Vector3.zero;
-        
+
+        _activeCollision = true;
+
         _boundBox = data.getBoundBox();
         _triangle = new Triangle(true);
 
@@ -29,6 +33,9 @@ public class CollisionInfo
 
     public bool collisionCheck(CollisionInfo target)
     {
+        if(_activeCollision == false || target._activeCollision == false)
+            return false;
+
         if(isValid() == false || target.isValid() == false)
         {
             DebugUtil.assert(false,"충돌 데이터가 유효하지 않습니다. 통보 요망 : [{0}/{1}], [{2}/{3}]",getCollisionType(),isValid(),target.getCollisionType(), target.isValid());
@@ -143,7 +150,8 @@ public class CollisionInfo
 
         _boundBox.updateBoundBox(position);
     }
-
+ 
+    public void setActiveCollision(bool active) {_activeCollision = active;}
     public int getUniqueID() {return _uniqueID;}
     public float getRadius() {return _collisionInfoData.getRadius();}
     public float getSqrRadius() {return _collisionInfoData.getSqrRadius();}

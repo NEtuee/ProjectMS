@@ -80,6 +80,7 @@ public class ActionGraphNodeData
     public bool                         _directionUpdateOnce = false;
     public bool                         _flipTypeUpdateOnce = false;
 
+    public bool                         _activeCollision = true;
     public bool                         _isDummyAction = false;
 
     public bool                         _hasAngleSector = false;
