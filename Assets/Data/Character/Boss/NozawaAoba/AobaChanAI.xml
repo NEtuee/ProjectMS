@@ -53,13 +53,14 @@
     <GlobalVariable Name="gv_najimiStdBattle" Value="20.0"/>     <!-- 나지미 그로기 기준 배틀 포인트 -->
 
     <!-- Test -->
-        <Test Package="AobaStormRaisenPackage">
+        <Test Package="AobaTsubaReadyPackage">
+            <Branch Condition="Hit" Execute="Test2"/>
             <Branch Condition="Hit && getFrameTag_HitAvail" Execute="TestHit"/>
             <Branch Condition="(GuardBreakFail || GuardBroken) && getFrameTag_GbAvail" Execute="TestGuardBroken"/>
-            <Branch Condition="CurrentPackageEnd" Execute="Test"/>
+            <Branch Condition="CurrentPackageEnd" Execute="Test2"/>
         </Test>
 
-        <Test2 Package="AobaUnwaverRaisenPackage">
+        <Test2 Package="AobaTsubaPackage">
             <Branch Condition="Hit && getFrameTag_HitAvail" Execute="TestHit"/>
             <Branch Condition="(GuardBreakFail || GuardBroken) && getFrameTag_GbAvail" Execute="TestGuardBroken"/>
             <Branch Condition="CurrentPackageEnd" Execute="Test"/>

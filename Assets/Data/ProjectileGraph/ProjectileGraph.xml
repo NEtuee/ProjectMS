@@ -426,4 +426,64 @@
         </Event>
     </MiniBullet>
 
+    <!-- 헬레나의 붉은 마도서-->
+    <Helena_CrimsonGrimoire DefaultFramePerSecond="4" UseSpriteRotation="false" PenetrateCount="1">
+        <Animation Preset="Sprites/Enemy/Gauntlet/0_default/5_spawn" XFlip="true" Duration="0.8"> <!-- TODO -->
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="CountCrimson" EventTargetType="Summoner"/>        
+        </Animation>
+
+        <CollisionInfo Radius="0.1" Angle="0"/>
+        <DefaultShotInfo Velocity="7" Acceleration="0" Friction="14" Angle="0" AngularAcceleration="0" LifeTime="0.8"/>
+        
+        <Event>
+            <OnHit>
+                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="Helena_CrimsonGrimoire" Offset="0 0 0" SearchIdentifier="Enemy" Inherit="true"/>
+            </OnHit>
+    
+            <OnEnd>
+                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="Helena_CrimsonGrimoire" Offset="0 0 0" SearchIdentifier="Enemy" Inherit="true"/>
+            </OnEnd>
+        </Event>
+    </Helena_CrimsonGrimoire>
+
+    <!-- 헬레나의 갈록 마도서-->
+    <Helena_OliveGrimoire DefaultFramePerSecond="4" UseSpriteRotation="false" PenetrateCount="1">
+        <Animation Preset="Sprites/Enemy/Gauntlet/0_default/5_spawn" XFlip="true" Duration="0.8"> <!-- TODO -->
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="CountOlive" EventTargetType="Summoner"/>        
+        </Animation>
+
+        <CollisionInfo Radius="0.1" Angle="0"/>
+        <DefaultShotInfo Velocity="7" Acceleration="0" Friction="14" Angle="0" AngularAcceleration="0" LifeTime="0.8"/>
+        
+        <Event>
+            <OnHit>
+                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="Helena_OliveGrimoire" Offset="0 0 0" SearchIdentifier="Enemy" Inherit="true"/>
+            </OnHit>
+
+            <OnEnd>
+                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="Helena_OliveGrimoire" Offset="0 0 0" SearchIdentifier="Enemy" Inherit="true"/>
+            </OnEnd>
+        </Event>
+    </Helena_OliveGrimoire>
+
+    <!-- 헬레나의 푸른 마도서-->
+    <Helena_BlueGrimoire DefaultFramePerSecond="4" UseSpriteRotation="false" PenetrateCount="1">
+        <Animation Preset="Sprites/Enemy/Gauntlet/0_default/5_spawn" XFlip="true" Duration="0.8">   <!-- TODO -->
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="CountBlue" EventTargetType="Summoner"/>        
+        </Animation>
+
+        <CollisionInfo Radius="0.1" Angle="0"/>
+        <DefaultShotInfo Velocity="7" Acceleration="0" Friction="14" Angle="0" AngularAcceleration="0" LifeTime="0.8"/>
+        
+        <Event>
+            <OnHit>
+                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="Helena_BlueGrimoire" Offset="0 0 0" SearchIdentifier="Enemy" Inherit="true"/>
+            </OnHit>
+    
+            <OnEnd>
+                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="Helena_BlueGrimoire" Offset="0 0 0" SearchIdentifier="Enemy" Inherit="true"/>
+            </OnEnd>
+        </Event>
+    </Helena_BlueGrimoire>
+
 </ProjectileGraph>

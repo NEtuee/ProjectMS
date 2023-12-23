@@ -51,9 +51,7 @@
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountIncrease"/>
-            <!--
-            <FrameEvent Type="ZoomEffect" Scale="-0.4"/>
-            -->
+
             <FrameEvent Type="StopUpdate" Time="0.15"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
@@ -70,9 +68,6 @@
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BattleClear"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="Groggy"/>
 
-            <!--
-            <FrameEvent Type="ZoomEffect" Scale="-0.4"/>
-            -->
             <FrameEvent Type="StopUpdate" Time="0.15"/>
         </Animation>
 
@@ -98,18 +93,43 @@
 
 <!-- Attack Action -->
     <!-- 소환: 마도서 소환 -->
-    <AC_SpawnBookMain MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <Animation Preset="Sprites/Enemy/SisterHelena/3_spawnHolyNail" XFlip="true" Duration="1.0">
+    <AC_SpawnOliveMain MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <Animation Preset="Sprites/Enemy/SisterHelena/3_spawnHolyNail" XFlip="true" Duration="1.0"> <!-- TODO -->
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2208" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <FrameEvent Type="Danmaku" StartTime="0.5" Path="Enemy\ReitoGauntlet.xml"/> <!-- TODO: 성정 캐릭터 추가 -->
-            
+            <FrameEvent Type="Projectile" StartTime="0" GraphName="Helena_OliveGrimoire" DirectionType="AI" SpawnTargetType="AITarget"/>
+
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>
-    </AC_SpawnBookMain>
+    </AC_SpawnOliveMain>
+    <AC_SpawnCrimsonMain MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <Animation Preset="Sprites/Enemy/SisterHelena/3_spawnHolyNail" XFlip="true" Duration="1.0"> <!-- TODO -->
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2208" Attach="true"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
+            <FrameEvent Type="Projectile" StartTime="0" GraphName="Helena_CrimsonGrimoire" DirectionType="AI" SpawnTargetType="AITarget"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_SpawnCrimsonMain>
+    <AC_SpawnBlueMain MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <Animation Preset="Sprites/Enemy/SisterHelena/3_spawnHolyNail" XFlip="true" Duration="1.0"> <!-- TODO -->
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2208" Attach="true"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
+            <FrameEvent Type="Projectile" StartTime="0" GraphName="Helena_BlueGrimoire" DirectionType="AI" SpawnTargetType="AITarget"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_SpawnBlueMain>
+
     <!-- 잡기: 십자검 찌르기 -->
     <AC_GrabThrust MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <Animation Path="">
@@ -183,7 +203,7 @@
     </AC_LightningBoltShot>
 
     <!-- 근거리 공격: 달빛 베기-->
-    <AC_AttackReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+    <AC_ThunderSlashReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="1_attack/1_attackReady" XFlip="true" Duration="0.48">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2203" Attach="true"/>
@@ -195,10 +215,10 @@
             
         </Animation>
     
-        <Branch Condition="End" Execute="AC_AttackMain"/>
-    </AC_AttackReady>
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_ThunderSlashReady>
 
-    <AC_AttackMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction">
+    <AC_ThunderSlashMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="1_attack/2_attackMain" XFlip="true" Duration="0.35">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2204" Attach="true"/>
@@ -218,10 +238,10 @@
             <FrameEvent Type="Projectile" StartTime="0.2" GraphName="Thunder" DirectionType="AI" SpawnTargetType="AITarget"/>
         </Animation>
 
-        <Branch Condition="End" Execute="AC_AttackRecover"/>
-    </AC_AttackMain>
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_ThunderSlashMain>
 
-    <AC_AttackRecover MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+    <AC_ThunderSlashRecover MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="1_attack/3_attackRecover" XFlip="true" Duration="0.2">
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
@@ -229,7 +249,8 @@
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>
-    </AC_AttackRecover>
+    </AC_ThunderSlashRecover>
+
     <!-- 근거리 공격: 횡베기-->
 
     <!-- 근거리 공격: 십자베기-->

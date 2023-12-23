@@ -9,6 +9,8 @@
     <Include Path="Assets/Data/AILibrary/Package/CommonGuardBrokenPackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonGroggyPackage.xml"/>
 
+    <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterThunderSlashPackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterSpawnBookPackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterThunderStrokePackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterLightningBoltPackage.xml"/>
 
@@ -23,8 +25,38 @@
     <GlobalVariable Name="gv_SystemChaseRange" Value="9.75"/>     <!-- 카메라 범위 값. 카메라 바깥으로 사라지지 않게 추격 -->
     <GlobalVariable Name="gv_AobaStdDistance" Value="3.5"/>     <!-- 아오바 거리 판단 기준 (구 2.0) -->
 
+    <GlobalVariable Name="gv_MaxCrimson" Value="3.0"/>      <!-- 헬레나의 붉은 마도서 최대 개수 -->
+    <GlobalVariable Name="gv_MaxOlive" Value="2.0"/>        <!-- 헬레나의 갈록 마도서 최대 개수 -->
+    <GlobalVariable Name="gv_MaxBlue" Value="1.0"/>         <!-- 헬레나의 푸른 마도서 최대 개수 -->
+
     <!-- Groggy Pattern -->
     <GlobalVariable Name="gv_sisterStdBattle" Value="20.0"/>
+
+    <!-- Custom Value -->
+    <CustomValue Name="CountCrimson" Value="0.0"/>
+    <CustomValue Name="CountOlive" Value="0.0"/>
+    <CustomValue Name="CountBlue" Value="0.0"/>
+
+    <CustomEvent_CountCrimson>
+        <AIEvent Type="AddCustomValue" Name="CountCrimson" Value="1.0"/>
+    </CustomEvent_CountCrimson>
+    <CustomEvent_DiscountCrimson>
+        <AIEvent Type="AddCustomValue" Name="CountCrimson" Value="-1.0"/>
+    </CustomEvent_DiscountCrimson>
+    
+    <CustomEvent_CountOlive>
+        <AIEvent Type="AddCustomValue" Name="CountOlive" Value="1.0"/>
+    </CustomEvent_CountOlive>
+    <CustomEvent_DiscountOlive>
+        <AIEvent Type="AddCustomValue" Name="CountOlive" Value="-1.0"/>
+    </CustomEvent_DiscountOlive>
+    
+    <CustomEvent_CountBlue>
+        <AIEvent Type="AddCustomValue" Name="CountBlue" Value="1.0"/>
+    </CustomEvent_CountBlue>
+    <CustomEvent_DiscountBlue>
+        <AIEvent Type="AddCustomValue" Name="CountBlue" Value="-1.0"/>
+    </CustomEvent_DiscountBlue>
     
 
     <BranchSet Name="IsPlayerDead">
@@ -40,8 +72,8 @@
         <Branch Condition="Hit" Execute="Hit"/>
         <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
     </BranchSet>
-
-    <Test Package="CommonAttackPackage">
+    
+    <Test Package="SisterSpawnBookPackage" EntryNode="AI_Olive">
         <Branch Condition="Hit" Execute="TestHit"/>
         <Branch Condition="(GuardBreakFail || GuardBroken) && getFrameTag_GbAvail" Execute="TestGuardBroken"/>
         <Branch Condition="CurrentPackageEnd" Execute="Test"/>
@@ -105,6 +137,24 @@
 
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </ThunderStroke>
+
+    <SpawnBook_Olive Package="SisterSpawnBookPackage" EntryNode="AI_Olive">
+        <UseBranchSet Name="IsPlayerDead"/>
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+    </SpawnBook_Olive>
+
+    <SpawnBook_Crimson Package="SisterSpawnBookPackage" EntryNode="AI_Crimson">
+        <UseBranchSet Name="IsPlayerDead"/>
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+    </SpawnBook_Crimson>
+
+    <SpawnBook_Blue Package="SisterSpawnBookPackage" EntryNode="AI_Blue">
+        <UseBranchSet Name="IsPlayerDead"/>
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+    </SpawnBook_Blue>
 
     <WarpChase Package="CommonSystemChasePackage">
         <UseBranchSet Name="IsPlayerDead"/>
