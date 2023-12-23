@@ -325,7 +325,7 @@ public class AIGraph
         _prevAINodeIndex = _currentAINodeIndex;
         _currentAINodeIndex = aiPackageIndex;
 
-        changeAIPackageState(getCurrentAIPackage()._defaultAIIndex);
+        changeAIPackageState(getCurrentAINode()._packageEntryNodeIndex == -1 ? getCurrentAIPackage()._defaultAIIndex : getCurrentAINode()._packageEntryNodeIndex);
         _prevPackageStateIndex = -1;
 
         if(reserveEvent)
