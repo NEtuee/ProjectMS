@@ -110,9 +110,9 @@ public class SceneCharacterManager : ManagerBase
             createCharacterFromPool(desc._characterInfoData, desc._spawnCharacterOptionDesc);
         });
 
-        AddAction(MessageTitles.game_stageEnd, (msg)=>{
-            deregisterAll();
-        });
+        // AddAction(MessageTitles.game_stageEnd, (msg)=>{
+        //     deregisterAll();
+        // });
     }
 
     public override void initialize()
