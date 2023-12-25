@@ -1,7 +1,7 @@
 <AIGraph Name="#SCRIPTNAME#" DefaultState="Entry">
 
-    <Include Path="EmptyPackage.xml"/>
-    <Include Path="Common/CommonDeadPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/EmptyPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonDeadPackage.xml"/>
     
     <Entry Package="EmptyPackage">
         <Branch Condition="Dead" Execute="Dead"/>

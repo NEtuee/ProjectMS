@@ -1,0 +1,30 @@
+<AIGraph Name="EmptyAIGraph" DefaultState="Entry">
+
+    <Include Path="Assets/Data/AILibrary/Package/EmptyPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonDeadPackage.xml"/>
+    
+    <AIPackage Name="FearPackage" DefaultState="Entry">
+        <CustomEvent_Fear>
+            <AIEvent Type="ExecuteState" Execute="Fear"/>
+        </CustomEvent_Fear>
+        
+        <AIState>
+            <Entry UpdateTime="999.0">
+            </Entry>
+
+            <Fear UpdateTime="999.0" TargetSearchType="Near" TargetSearchRange="10.0" SearchIdentifier="Player">
+                <Event_OnExecute>
+                    <AIEvent Type="SetAction" Action="AC_Fear"/>
+                </Event_OnExecute>
+            </Fear>
+        </AIState>
+    </AIPackage>
+    
+    <Entry Package="FearPackage">
+        <Branch Condition="Dead" Execute="Dead"/>
+    </Entry>
+
+    <Dead Package="CommonDeadPackage">
+    </Dead>
+
+</AIGraph>

@@ -956,8 +956,6 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
                 string attrName = attributes[i].Name;
                 string attrValue = attributes[i].Value;
 
-                Debug.Log(attrName);
-
                 if(attrName != "Execute")
                     continue;
 

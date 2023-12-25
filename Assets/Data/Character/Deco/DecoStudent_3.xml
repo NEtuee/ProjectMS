@@ -1,0 +1,32 @@
+<ActionGraph Name="DecoStudent_3" DefaultAction="AC_Idle" DefaultFramePerSecond="8">
+
+    <AC_Idle MovementType="Empty" DirectionType="AI" FlipType="Direction" ActiveCollision="False">
+        <AnimationHeader MasterPath="Sprites/Deco/Student_3/"/>
+        <Animation Path="Idle" XFlip="true">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_Idle>
+
+    <AC_Fear MovementType="FrameEvent" DirectionType="AITarget" FlipType="Direction" ActiveCollision="False">
+        <AnimationHeader MasterPath="Sprites/Deco/Student_3/"/>
+        <Animation Path="Fear" XFlip="true">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="0.1" Speed="-10"/>
+        </Animation>
+    </AC_Fear>
+
+    <Dead MovementType="Empty" DirectionType="MoveInput">
+        <AnimationHeader MasterPath="Sprites/Deco/Student_3/"/>
+        <Animation Path="Idle" XFlip="true">
+
+            <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Deco/Student_3/Idle" FramePerSecond="0.2" CastShadow="True">
+                <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
+            </FrameEvent>
+            <FrameEvent Type="KillEntity" StartTime="0"/>
+
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Dead"/>
+    </Dead>
+
+</ActionGraph>
