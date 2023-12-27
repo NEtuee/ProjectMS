@@ -187,6 +187,8 @@ public class GameEntityBase : SequencerObjectBase
         _graphicInterface.initialize(this,_statusInfo,new Vector3(0f, _headUpOffset, 0f), true);
 
         applyActionBuffList(_actionGraph.getDefaultBuffList());
+        applyActionBuffList();
+
         _currentDirectionType = _actionGraph.getDirectionType();
         _currentRotationType = _actionGraph.getCurrentRotationType();
 
@@ -283,6 +285,7 @@ public class GameEntityBase : SequencerObjectBase
         _deadEventDelegate = null;
 
         applyActionBuffList(_actionGraph.getDefaultBuffList());
+        applyActionBuffList();
 
         _headUpOffset = _actionGraph.getCurrentHeadUpOffset();
 
@@ -497,7 +500,7 @@ public class GameEntityBase : SequencerObjectBase
         if(_actionDebug == true || GameEditorMaster._instance._actionDebugAll)
         {
             debugTextManager.updateDebugText("Action","Action: " + getCurrentActionName());
-            debugTextManager.updateDebugText("Defence","Defence: " + getDefenceType());
+            debugTextManager.updateDebugText("Defence","Defence: " + getDefenceType() + (_statusInfo.getDefenceType() != DefenceType.Count ? "(Buff)" : "(Action)"));
 
             string frameTag = "";
             HashSet<string> frameTagList = _actionGraph.getCurrentFrameTagList();
@@ -1205,7 +1208,13 @@ public class GameEntityBase : SequencerObjectBase
     public string getCurrentAIPackageStateName() {return _aiGraph.getCurrentAIPackageStateName();}
     public string getCurrentActionName() {return _actionGraph == null ? "" : _actionGraph.getCurrentActionName();}
     public float getDefenceAngle() {return _actionGraph.getCurrentDefenceAngle();}
-    public DefenceType getDefenceType() {return _currentDefenceType;}
+    public DefenceType getDefenceType() 
+    {
+        if(_statusInfo != null && _statusInfo.getDefenceType() != DefenceType.Count)
+            return _statusInfo.getDefenceType();
+
+        return _currentDefenceType;
+    }
     public MoveValuePerFrameFromTimeDesc getMoveValuePerFrameFromTimeDesc(){return _actionGraph.getMoveValuePerFrameFromTimeDesc();}
     public MovementGraph getCurrentMovementGraph(){return _actionGraph.getCurrentMovementGraph();}
     public MovementGraphPresetData getCurrentMovementGraphPreset() {return _actionGraph.getCurrentMovementGraphPreset();}
