@@ -291,10 +291,22 @@
     />
 
     <PowerChan
-        DisplayName="운동부 파워쨩"
-        ActionGraph="Assets/Data/Character/Enemy/01_RapierChan/RapierChanAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/01_RapierChan/RapierChanAI.xml"
-        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        DisplayName="운동부 바벨쨩"
+        ActionGraph="Assets/Data/Character/Enemy/03_BarbellMelee/BarbellMeleeAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/03_BarbellMelee/BarbellMeleeAI.xml"
+        StatusInfoName="CommonHpThreeEnemyStatus"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        SearchIdentifier="Enemy"
+    />    
+    <DumbellChan
+        DisplayName="운동부 덤벨쨩"
+        ActionGraph="Assets/Data/Character/Enemy/03_DumbellRanged/DumbellRangedAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/03_DumbellRanged/DumbellRangedAI.xml"
+        StatusInfoName="CommonHpTwoEnemyStatus"
         
         CollisionRadius="0.2"
         HeadUpOffset="0.5"
