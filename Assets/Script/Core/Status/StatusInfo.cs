@@ -84,6 +84,8 @@ public class StatusInfo
 
     private SimplePool<BuffItem> _buffItemPool = new SimplePool<BuffItem>();
 
+    private DefenceType _currentDefenceType = DefenceType.Count;
+
     private bool _isImmortal = false;
     private bool _isDead = false;
     private int _uniqueKeyIndex = 0;
@@ -110,6 +112,7 @@ public class StatusInfo
         
         _isDead = false;
         _isImmortal = false;
+        _currentDefenceType = DefenceType.Count;
         _statusInfoData = getStatusInfoData(dataName);
         createStatusValueDictionary(_statusInfoData);
 
@@ -128,6 +131,7 @@ public class StatusInfo
 
         _isDead = false;
         _isImmortal = false;
+        _currentDefenceType = DefenceType.Count;
         foreach(Status item in _statusValues.Values)
         {
             _statusInfoData._statusData[item._statusIndex].initStat(ref item._value);
@@ -360,6 +364,7 @@ public class StatusInfo
     private void updateBuff()
     {
         float globalTime = GlobalTimer.Instance().getScaledGlobalTime();
+        _currentDefenceType = DefenceType.Count;
 
         for(int i = 0; i < _currentlyAppliedBuffList.Count;)
         {
@@ -552,42 +557,53 @@ public class StatusInfo
 
     private bool updateBuffXXX(BuffData buff)
     {
-        if(buff.isBuffValid() == false)
-            return false;
+        if(buff._buffType == BuffType.Status)
+        {
+            if(buff.isStatusBuffValid() == false)
+                return false;
 
-        if(buff._targetStatusName != null && getStatus(buff._targetStatusName) == null)
+            if(buff._targetStatusName != null && getStatus(buff._targetStatusName) == null)
             DebugUtil.assert(false, "대상 스테이터스가 존재하지 않습니다.: [스테이터스 이름: {0}] [스테이터스 인포 이름: {1}]", buff._targetStatusName,_statusInfoData._statusInfoName);
 
-        if(buff._buffUpdateType == BuffUpdateType.GreaterThenSet)
-            return setStat(buff._targetStatusName,getStatus(buff._buffCustomStatusName)._realValue);
+            if(buff._buffUpdateType == BuffUpdateType.GreaterThenSet)
+                return setStat(buff._targetStatusName,getStatus(buff._buffCustomStatusName)._realValue);
 
-        switch(buff._buffApplyType)
+            switch(buff._buffApplyType)
+            {
+                case BuffApplyType.Direct:
+                {
+                    Status status = getStatus(buff._targetStatusName);
+                    variRegenStat(buff._targetStatusName, -status._regenFactor);
+
+                    status.updateBuffList(_currentlyAppliedBuffList);
+                    return variStat(buff._targetStatusName, buff._buffVaryStatFactor);
+                }
+                case BuffApplyType.Additional:
+                {
+                    return variAddtionalStat(buff._targetStatusName, buff._buffVaryStatFactor);
+                }
+                case BuffApplyType.DirectDelta:
+                {
+                    return variRegenStat(buff._targetStatusName, buff._buffVaryStatFactor);
+                }
+                case BuffApplyType.DirectSet:
+                {
+                    getStatus(buff._targetStatusName).updateBuffList(_currentlyAppliedBuffList);
+                    return setStat(buff._targetStatusName, buff._buffVaryStatFactor);
+                }
+                case BuffApplyType.Empty:
+                {
+                    return true;
+                }
+            }
+        }
+        else if(buff._buffType == BuffType.Defence)
         {
-            case BuffApplyType.Direct:
-            {
-                Status status = getStatus(buff._targetStatusName);
-                variRegenStat(buff._targetStatusName, -status._regenFactor);
+            if(buff.isDefenceBuffValid() == false)
+                return false;
 
-                status.updateBuffList(_currentlyAppliedBuffList);
-                return variStat(buff._targetStatusName, buff._buffVaryStatFactor);
-            }
-            case BuffApplyType.Additional:
-            {
-                return variAddtionalStat(buff._targetStatusName, buff._buffVaryStatFactor);
-            }
-            case BuffApplyType.DirectDelta:
-            {
-                return variRegenStat(buff._targetStatusName, buff._buffVaryStatFactor);
-            }
-            case BuffApplyType.DirectSet:
-            {
-                getStatus(buff._targetStatusName).updateBuffList(_currentlyAppliedBuffList);
-                return setStat(buff._targetStatusName, buff._buffVaryStatFactor);
-            }
-            case BuffApplyType.Empty:
-            {
-                return true;
-            }
+            _currentDefenceType = buff._defenceType;
+            return true;
         }
 
         DebugUtil.assert(false, "invalid buff apply type: {0}",buff._buffApplyType);
@@ -603,7 +619,7 @@ public class StatusInfo
         }
 
         BuffData buff = _buffDataDictionary[buffKey];
-        if(buff.isBuffValid() == false)
+        if(buff.isStatusBuffValid() == false)
             return false;
 
         return buff._targetStatusName == status;
@@ -618,7 +634,7 @@ public class StatusInfo
         }
 
         BuffData buff = _buffDataDictionary[buffKey];
-        if(buff.isBuffValid() == false)
+        if(buff.isStatusBuffValid() == false)
             return 0f;
 
         if(getStatus(buff._targetStatusName) == null)
@@ -700,6 +716,11 @@ public class StatusInfo
             
         _statusInfoData._statusData[status._statusIndex].variStat(ref status._realValue, 0f, value);
         return true;
+    }
+
+    public DefenceType getDefenceType()
+    {
+        return _currentDefenceType;
     }
 
     public bool setStat(string name, float value)

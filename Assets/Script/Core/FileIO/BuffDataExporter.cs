@@ -36,27 +36,19 @@ public static class BuffDataLoader
 
         Dictionary<int, BuffData> buffDataList = new Dictionary<int, BuffData>();
 
-        try
+        XmlNodeList projectileNodes = xmlDoc.FirstChild.ChildNodes;
+        for(int nodeIndex = 0; nodeIndex < projectileNodes.Count; ++nodeIndex)
         {
-            XmlNodeList projectileNodes = xmlDoc.FirstChild.ChildNodes;
-            for(int nodeIndex = 0; nodeIndex < projectileNodes.Count; ++nodeIndex)
-            {
-                BuffData baseData = readBuffData(projectileNodes[nodeIndex], ref buffDataList);
-                if(baseData == null)
-                    return null;
+            BuffData baseData = readBuffData(projectileNodes[nodeIndex], ref buffDataList);
+            if(baseData == null)
+                return null;
 
-                if(buffDataList.ContainsKey(baseData._buffKey) == true)
-                {
-                    DebugUtil.assert(false, "buff key overlap: key {0} [FileName: {1}]", baseData._buffKey, _currentFileName);
-                    continue;
-                }
-                buffDataList.Add(baseData._buffKey,baseData);
+            if(buffDataList.ContainsKey(baseData._buffKey) == true)
+            {
+                DebugUtil.assert(false, "buff key overlap: key {0} [FileName: {1}]", baseData._buffKey, _currentFileName);
+                continue;
             }
-        }
-        catch(Exception ex)
-        {
-            DebugUtil.assert(false,"xml parsing exception : {0}\n",ex.Message,xmlDoc.BaseURI);
-            return null;
+            buffDataList.Add(baseData._buffKey,baseData);
         }
 
         return buffDataList;
@@ -147,6 +139,14 @@ public static class BuffDataLoader
                 }
 
                 buffData._audioParameter = idList.ToArray();
+            }
+            else if(attrName == "BuffType")
+            {
+                buffData._buffType = (BuffType)System.Enum.Parse(typeof(BuffType), attrValue);
+            }
+            else if(attrName == "DefenceType")
+            {
+                buffData._defenceType = (DefenceType)System.Enum.Parse(typeof(DefenceType), attrValue);
             }
             else
             {

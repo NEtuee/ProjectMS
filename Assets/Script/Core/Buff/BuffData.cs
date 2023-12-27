@@ -5,8 +5,12 @@ public class BuffData
     public string              _buffName;
     public int                 _buffKey;
     public string              _targetStatusName;
+
+    public BuffType            _buffType;
     public BuffUpdateType      _buffUpdateType;
     public BuffApplyType       _buffApplyType;
+
+    public DefenceType         _defenceType;
 
     public bool                _allowOverlap = false;
 
@@ -29,8 +33,10 @@ public class BuffData
         _buffName = null;
         _buffKey = -1;
         _targetStatusName = null;
+        _buffType = BuffType.Status;
         _buffUpdateType = BuffUpdateType.Count;
         _buffApplyType = BuffApplyType.Count;
+        _defenceType = DefenceType.Count;
         _allowOverlap = false;
 
         _buffVaryStatFactor = 0f;
@@ -49,8 +55,10 @@ public class BuffData
     {
         _buffKey = target._buffKey;
         _targetStatusName = target._targetStatusName;
+        _buffType = target._buffType;
         _buffUpdateType = target._buffUpdateType;
         _buffApplyType = target._buffApplyType;
+        _defenceType = target._defenceType;
         _allowOverlap = target._allowOverlap;
         _buffVaryStatFactor = target._buffVaryStatFactor;
         _buffCustomValue0 = target._buffCustomValue0;
@@ -64,9 +72,14 @@ public class BuffData
     }
 
 
-    public bool isBuffValid()
+    public bool isStatusBuffValid()
     {
-        return _buffKey >= 0 && _buffUpdateType != BuffUpdateType.Count && _buffApplyType != BuffApplyType.Count;
+        return _buffKey >= 0 && _buffUpdateType != BuffUpdateType.Count && _buffApplyType != BuffApplyType.Count && _buffType != BuffType.Count;
+    }
+
+    public bool isDefenceBuffValid()
+    {
+        return _buffKey >= 0 && _buffUpdateType != BuffUpdateType.Count && _defenceType != DefenceType.Count && _buffType != BuffType.Count;
     }
 }
 
@@ -96,3 +109,10 @@ public enum BuffUpdateType
     GreaterThenSet,
     Count,
 };
+
+public enum BuffType
+{
+    Status,
+    Defence,
+    Count,
+}
