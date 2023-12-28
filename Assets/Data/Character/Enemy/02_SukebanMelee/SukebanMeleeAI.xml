@@ -185,9 +185,9 @@
     <!-- 피격 리액션 브랜치 셋 -->
     <BranchSet Name="HitReactionSet">
         <Branch Condition="Dead" Execute="Dead"/>
-        <Branch Condition="Hit" Execute="Hit"/> 
-        <Branch Condition="GuardBreakFail" Execute="GuardBroken"/>
-        <Branch Condition="GuardBroken && (getStat_GuardCount >= gv_GuardBrokenThreshold)" Execute="GuardBroken"/> <!-- TODO : 일반 공격도 카운트 되긴 하나, 가드 브레이크로만 파괴 가능한 상태 -->
+        <Branch Condition="Hit && getFrameTag_HitAvail" Execute="Hit"/>
+        <Branch Condition="GuardBreakFail && getFrameTag_GbAvail" Execute="GuardBroken"/>
+        <Branch Condition="GuardBroken && (getStat_GuardCount >= gv_GuardBrokenThreshold) && getFrameTag_GbAvail" Execute="GuardBroken"/> <!-- TODO : 일반 공격도 카운트 되긴 하나, 가드 브레이크로만 파괴 가능한 상태 -->
         <Branch Condition="(gv_bIsDodgeToPassiveDef_Hit || gv_bIsGuardToPassiveDef_Hit || gv_bIsCounterToPassiveDef_Hit) 
                         && (gv_HitCountThreshold <= getStat_HitCount)
                         && (gv_PassiveDef_Hit_DelayTime <= GraphExecutedTime)" Execute="Battle_DefenseByHit"/>
