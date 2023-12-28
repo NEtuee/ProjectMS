@@ -44,11 +44,13 @@
             
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
             
         </Animation>
 
-        <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
-        <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_Idle>
