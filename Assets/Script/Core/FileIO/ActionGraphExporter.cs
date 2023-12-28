@@ -461,6 +461,11 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
                     branchDataList.Add(branchData);
                 }
             }
+            else
+            {
+                DebugUtil.assert_fileOpen(false,"잘못된 Action Node입니다. 확인 필요 [Name: {0}] [Line: {1}] [FileName: {2}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node), nodeList[i].Name, XMLScriptConverter.getLineFromXMLNode(node), filePath);
+                return null;
+            }
         }
 
         // if(branchStartIndex == branchDataList.Count)
