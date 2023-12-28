@@ -50,12 +50,17 @@ public class StatusInfo
         public BuffData _buffData;
         //public BuffUpdateState _updateState;
 
+        
+
         public ParticleEffectItem _particleEffect;
         public TimelineEffectItem _timelineEffect;
         public AnimationEffectItem _animationEffect;
 
         public FMODUnity.StudioEventEmitter _audioEmitter;
         public bool _audioPlay = false;
+
+        public bool _spawnStartEffect = false;
+        public bool _spawnEndEffect = false;
 
         public float _startedTime;
         public int _uniqueKey = 0;
@@ -249,6 +254,8 @@ public class StatusInfo
         buffItem._animationEffect = null;
         buffItem._audioEmitter = null;
         buffItem._audioPlay = false;
+        buffItem._spawnStartEffect = false;
+        buffItem._spawnEndEffect = false;
         
         _currentlyAppliedBuffList.Add(buffItem);
 
@@ -272,15 +279,14 @@ public class StatusInfo
             if(_currentlyAppliedBuffList[i]._buffData._buffUpdateType == BuffUpdateType.DelayedContinuous || _currentlyAppliedBuffList[i]._buffData._buffUpdateType == BuffUpdateType.GreaterThenSet )
                 getStatus((_currentlyAppliedBuffList[i]._buffData._targetStatusName)).deleteToUpdateList(_currentlyAppliedBuffList[i]._uniqueKey);        
             
-            if(_currentlyAppliedBuffList[i]._particleEffect != null)
-                _currentlyAppliedBuffList[i]._particleEffect.disableEffect();
-            if(_currentlyAppliedBuffList[i]._timelineEffect != null)
-                _currentlyAppliedBuffList[i]._timelineEffect.release();
-            if(_currentlyAppliedBuffList[i]._animationEffect != null)
-                _currentlyAppliedBuffList[i]._animationEffect.release();
-            if(_currentlyAppliedBuffList[i]._audioEmitter != null)
-                _currentlyAppliedBuffList[i]._audioEmitter.Stop();
+            _currentlyAppliedBuffList[i]._particleEffect?.disableEffect();
+            _currentlyAppliedBuffList[i]._timelineEffect?.release();
+            _currentlyAppliedBuffList[i]._animationEffect?.release();
+            _currentlyAppliedBuffList[i]._audioEmitter?.Stop();
+
             _currentlyAppliedBuffList[i]._audioPlay = false;
+            _currentlyAppliedBuffList[i]._spawnStartEffect = false;
+            _currentlyAppliedBuffList[i]._spawnEndEffect = false;
 
             _buffItemPool.enqueue(_currentlyAppliedBuffList[i]);
         }
@@ -306,15 +312,19 @@ public class StatusInfo
         if(buffItem._buffData._buffUpdateType == BuffUpdateType.DelayedContinuous || buffItem._buffData._buffUpdateType == BuffUpdateType.GreaterThenSet)
             getStatus((buffItem._buffData._targetStatusName)).deleteToUpdateList(buffItem._uniqueKey);
         
-        if(buffItem._particleEffect != null)
-            buffItem._particleEffect.disableEffect();
-        if(buffItem._timelineEffect != null)
-            buffItem._timelineEffect.release();
-        if(buffItem._animationEffect != null)
-            buffItem._animationEffect.release();
-        if(buffItem._audioEmitter != null)
-            buffItem._audioEmitter.Stop();
+        if(buffItem._buffData._buffEndEffectPreset != "" && buffItem._spawnEndEffect == false && _ownerObject != null)
+        {
+            buffItem._spawnEndEffect = true;
+            EffectInfoManager.Instance().requestEffect(buffItem._buffData._buffEndEffectPreset, _ownerObject, null, CommonMaterial.Empty);
+        }
+
+        buffItem._particleEffect?.disableEffect();
+        buffItem._timelineEffect?.release();
+        buffItem._animationEffect?.release();
+        buffItem._audioEmitter?.Stop();
         buffItem._audioPlay = false;
+        buffItem._spawnStartEffect = false;
+        buffItem._spawnEndEffect = false;
 
         _buffItemPool.enqueue(buffItem);
         _currentlyAppliedBuffList.RemoveAt(index);
@@ -435,6 +445,14 @@ public class StatusInfo
                 }
                 else
                 {
+                    buffItem._spawnEndEffect = false;
+
+                    if(buffData._buffStartEffectPreset != "" && buffItem._spawnStartEffect == false && _ownerObject != null)
+                    {
+                        buffItem._spawnStartEffect = true;
+                        EffectInfoManager.Instance().requestEffect(buffData._buffStartEffectPreset, _ownerObject, null, CommonMaterial.Empty);
+                    }
+                    
                     if(buffData._particleEffect != "" && buffItem._particleEffect == null && _ownerObject != null)
                     {
                         EffectRequestData requestData = MessageDataPooling.GetMessageData<EffectRequestData>();
@@ -494,26 +512,25 @@ public class StatusInfo
             }
             else
             {
-                if(buffItem._particleEffect != null)
+                buffItem._spawnStartEffect = false;
+
+                if(buffData._buffEndEffectPreset != "" && buffItem._spawnEndEffect == false && _ownerObject != null)
                 {
-                    buffItem._particleEffect.stopEffect();
-                    buffItem._particleEffect = null;
+                    buffItem._spawnEndEffect = true;
+                    EffectInfoManager.Instance().requestEffect(buffData._buffEndEffectPreset, _ownerObject, null, CommonMaterial.Empty);
                 }
-                if(buffItem._timelineEffect != null)
-                {
-                    buffItem._timelineEffect.stopEffect();
-                    buffItem._timelineEffect = null;
-                }
-                if(buffItem._animationEffect != null)
-                {
-                    buffItem._animationEffect.stopEffect();
-                    buffItem._animationEffect = null;
-                }
-                if(buffItem._audioEmitter != null)
-                {
-                    buffItem._audioEmitter.Stop();
-                    buffItem._audioEmitter = null;
-                }
+
+                buffItem._particleEffect?.stopEffect();
+                buffItem._particleEffect = null;
+
+                buffItem._timelineEffect?.stopEffect();
+                buffItem._timelineEffect = null;
+
+                buffItem._animationEffect?.stopEffect();
+                buffItem._animationEffect = null;
+
+                buffItem._audioEmitter?.Stop();
+                buffItem._audioEmitter = null;
 
                 buffItem._audioPlay = false;
             }

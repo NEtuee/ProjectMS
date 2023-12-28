@@ -21,6 +21,9 @@ public class BuffData
 
     public string              _buffCustomStatusName;
 
+    public string              _buffStartEffectPreset = "";
+    public string              _buffEndEffectPreset = "";
+
     public string              _particleEffect = "";
     public string              _timelineEffect = "";
     public string              _animationEffect = "";
@@ -44,6 +47,9 @@ public class BuffData
         _buffCustomValue1 = 0f;
         _buffCustomValue2 = null;
 
+        _buffStartEffectPreset = "";
+        _buffEndEffectPreset = "";
+
         _particleEffect = "";
         _timelineEffect = "";
         _animationEffect = "";
@@ -64,6 +70,8 @@ public class BuffData
         _buffCustomValue0 = target._buffCustomValue0;
         _buffCustomValue1 = target._buffCustomValue1;
         _buffCustomValue2 = target._buffCustomValue2;
+        _buffStartEffectPreset = target._buffStartEffectPreset;
+        _buffEndEffectPreset = target._buffEndEffectPreset;
         _particleEffect = target._particleEffect;
         _timelineEffect = target._timelineEffect;
         _animationEffect = target._animationEffect;

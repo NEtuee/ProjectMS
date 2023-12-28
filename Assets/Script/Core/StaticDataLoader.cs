@@ -14,12 +14,12 @@ public static class StaticDataLoader
 
     public static void loadStaticData()
     {
+        EffectInfoManager.Instance().setEffectInfoData(EffectInfoExporter.readFromXML(effectInfoPath));
         StatusInfo.setStatusInfoDataDictionary(StatusInfoLoader.readFromXML(statusInfoPath));
         StatusInfo.setBuffDataDictionary(BuffDataLoader.readFromXML(buffInfoPath));
         ActionKeyInputManager.Instance().setPresetData(ActionKeyPresetDataLoader.readFromXML(keyPresetPath));
         WeightRandomManager.Instance().setWeightGroupData(WeightRandomExporter.readFromXML(weightRandomPath));
         CharacterInfoManager.Instance().SetCharacterInfo(ResourceContainerEx.Instance().getCharacterInfo(characterInfoPath));
-        EffectInfoManager.Instance().setEffectInfoData(EffectInfoExporter.readFromXML(effectInfoPath));
         SubtitleManager.Instance().SetSubtitleSimpleTalkData(SubtitleSimpleTalkDataLoader.readFromXML(subtitleSimpleTalkDataPath));
     }
 }

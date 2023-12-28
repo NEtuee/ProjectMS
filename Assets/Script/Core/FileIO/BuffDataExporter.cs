@@ -101,6 +101,20 @@ public static class BuffDataLoader
                 buffData._buffCustomValue2 = attrValue.Split(' ');
             else if(attrName == "AllowOverlap")
                 buffData._allowOverlap = bool.Parse(attrValue);
+            else if(attrName == "StartEffectPreset")
+            {
+                if(EffectInfoManager.Instance().getEffectInfoData(attrValue) == null)
+                    DebugUtil.assert(false,"대상 ParticleEffect가 존재하지 않습니다. [BuffInfo: {0}] [ParticleEffect: {1}] [Line: {2}] [FileName: {3}]",node.Name,attrValue, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
+
+                buffData._buffStartEffectPreset = attrValue;
+            }
+            else if(attrName == "EndEffectPreset")
+            {
+                if(EffectInfoManager.Instance().getEffectInfoData(attrValue) == null)
+                    DebugUtil.assert(false,"대상 ParticleEffect가 존재하지 않습니다. [BuffInfo: {0}] [ParticleEffect: {1}] [Line: {2}] [FileName: {3}]",node.Name,attrValue, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
+
+                buffData._buffEndEffectPreset = attrValue;
+            }
             else if(attrName == "ParticleEffect")
             {
                 GameObject prefab = ResourceContainerEx.Instance().GetPrefab(attrValue);
