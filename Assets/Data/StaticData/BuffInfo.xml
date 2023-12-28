@@ -641,4 +641,18 @@
         DefenceType="Guard"
     />
 
+    <StartEndEffectTest
+        Key="64"
+
+        UpdateType="StatSection"
+        ApplyType="Empty"
+
+        TargetStatusName="HP"
+        MinValue="0"
+        MaxValue="2"
+
+        StartEffectPreset="AttackImpactSelf"
+        EndEffectPreset="Thunder"
+    />
+
 </BuffInfo>

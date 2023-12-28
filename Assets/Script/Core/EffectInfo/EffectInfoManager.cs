@@ -26,19 +26,20 @@ public class EffectInfoManager : Singleton<EffectInfoManager>
         return _effectInfoData[key];
     }
 
-    public bool requestEffect(string effectInfoKey, ObjectBase executeEntity, ObjectBase targetEntity, CommonMaterial attackMaterial)
+    public EffectItemBase requestEffect(string effectInfoKey, ObjectBase executeEntity, ObjectBase targetEntity, CommonMaterial attackMaterial)
     {
-        DebugUtil.log(effectInfoKey);
         CommonMaterial defenceMaterial = CommonMaterial.Empty;
         if(targetEntity != null && targetEntity is GameEntityBase)
             defenceMaterial = (targetEntity as GameEntityBase).getCharacterMaterial();
         
         EffectRequestData requestData = createRequestData(effectInfoKey,executeEntity,targetEntity,attackMaterial, defenceMaterial);
         if(requestData == null)
-            return false;
+            return null;
 
-        executeEntity.SendMessageEx(MessageTitles.effect_spawnEffect,UniqueIDBase.QueryUniqueID("EffectManager"),requestData);
-        return true;
+        EffectItemBase itemBase = EffectManager._instance.createEffect(requestData);
+        requestData.isUsing = true;
+
+        return itemBase;
     }
 
     public EffectRequestData createRequestData(string key, ObjectBase executeEntity, ObjectBase targetEntity, CommonMaterial attackMaterial, CommonMaterial defenceMaterial)
