@@ -157,17 +157,12 @@
                     
                     <FrameEvent Type="StopUpdate" Time="0.07"/>
                     
-                    <FrameEvent Type="SetTimeScale" Scale="0.7" Time="0.07" BlendTime="0.07"/>
-                    <FrameEvent Type="ShakeEffect" Scale="0.07" Speed="35.0" Time="0.07"/>
+                    <FrameEvent Type="SetTimeScale" Condition="Kill == false" Scale="0.7" Time="0.05" BlendTime="0.07"/>
+                    <FrameEvent Type="ShakeEffect" Condition="Kill == false" Scale="0.1" Speed="35.0" Time="0.15"/>
 
                     <FrameEvent Type="SetAction" Condition="Kill" Action="AttackSuccessFar"/>
-                    <FrameEvent Type="SetTimeScale" Condition="Kill" Scale="0.2" Time="0.2" BlendTime="0.2"/>
-                    <FrameEvent Type="ShakeEffect" Condition="Kill" Scale="0.15" Speed="35.0" Time="0.2"/>
-
-                    <FrameEvent Type="SetAction" Condition="getTargetFrameTag_Groggy" Action="AttackSuccessFar"/>
-                    <FrameEvent Type="SetTimeScale" Condition="getTargetFrameTag_Groggy" Scale="0.1" Time="0.1" BlendTime="0.2"/>
-                    <FrameEvent Type="ZoomEffect" Condition="getTargetFrameTag_Groggy" Scale="-0.3"/>
-                    <FrameEvent Type="ShakeEffect" Condition="getTargetFrameTag_Groggy" Scale="0.15" Speed="35.0" Time="0.2"/>
+                    <FrameEvent Type="SetTimeScale" Condition="Kill" Scale="0.1" Time="0.1" BlendTime="0.07"/>
+                    <FrameEvent Type="ShakeEffect" Condition="Kill" Scale="0.15" Speed="35.0" Time="0.15"/>
                 </OnHit>
                 <OnGuard>
                     <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="DashPointConsumption"/>
@@ -228,17 +223,11 @@
 
                     <FrameEvent Type="StopUpdate" Time="0.07"/>
                     
-                    <FrameEvent Type="SetTimeScale" Scale="0.2" Time="0.2" BlendTime="0.2"/>
-                    <FrameEvent Type="ShakeEffect" Scale="0.15" Speed="35.0" Time="0.2"/>
+                    <FrameEvent Type="ShakeEffect" Condition="Kill == false" Scale="0.1" Speed="35.0" Time="0.2"/>
 
                     <FrameEvent Type="SetAction" Condition="Kill" Action="AttackSuccessFar"/>
-                    <FrameEvent Type="SetTimeScale" Condition="Kill" Scale="0.2" Time="0.2" BlendTime="0.2"/>
-                    <FrameEvent Type="ShakeEffect" Condition="Kill" Scale="0.15" Speed="35.0" Time="0.2"/>
-
-                    <FrameEvent Type="SetAction" Condition="getTargetFrameTag_Groggy" Action="AttackSuccessFar"/>
-                    <FrameEvent Type="SetTimeScale" Condition="getTargetFrameTag_Groggy" Scale="0.1" Time="0.1" BlendTime="0.2"/>
-                    <FrameEvent Type="ZoomEffect" Condition="getTargetFrameTag_Groggy" Scale="-0.3"/>
-                    <FrameEvent Type="ShakeEffect" Condition="getTargetFrameTag_Groggy" Scale="0.15" Speed="35.0" Time="0.2"/>
+                    <FrameEvent Type="SetTimeScale" Scale="0.1" Time="0.1" BlendTime="0.07"/>
+                    <FrameEvent Type="ShakeEffect" Condition="Kill" Scale="0.15" Speed="35.0" Time="0.25"/>
                 </OnHit>
                 <OnGuard>
                     <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="DashPointConsumption"/>
@@ -290,10 +279,8 @@
                     <FrameEvent Type="TeleportToTarget" DistanceOffset="0"/>
                     <FrameEvent Type="StopUpdate" Time="0.07"/>
 
-
-                    <FrameEvent Type="SetTimeScale" Condition="getTargetFrameTag_Groggy" Scale="0.1" Time="0.1" BlendTime="0.2"/>
-                    <FrameEvent Type="ZoomEffect" Condition="getTargetFrameTag_Groggy" Scale="-0.3"/>
-                    <FrameEvent Type="ShakeEffect" Condition="getTargetFrameTag_Groggy" Scale="0.15" Speed="35.0" Time="0.2"/>
+                    <FrameEvent Type="SetTimeScale" Scale="0.1" Time="0.02" BlendTime="0.01"/>
+                    <FrameEvent Type="ShakeEffect" Scale="0.1" Speed="35.0" Time="0.07"/>
                 </OnGuardBreak>
 
                 <OnGuardBreakFail>
@@ -301,14 +288,9 @@
                     
                     <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/ParrySucc" Offset="0.0 0.0 0.0" Attach="false" ToTarget="true" AngleType="identity"/>
 
-                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Impact" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true" AngleType="AttackPoint"/>
-
                     <FrameEvent Type="TeleportToTarget" DistanceOffset="0"/>
                     <FrameEvent Type="StopUpdate" Time="0.07"/>
 
-                    <FrameEvent Type="SetTimeScale" Condition="getTargetFrameTag_Groggy" Scale="0.1" Time="0.1" BlendTime="0.2"/>
-                    <FrameEvent Type="ZoomEffect" Condition="getTargetFrameTag_Groggy" Scale="-0.3"/>
-                    <FrameEvent Type="ShakeEffect" Condition="getTargetFrameTag_Groggy" Scale="0.15" Speed="35.0" Time="0.2"/>
                 </OnGuardBreakFail>
                 
                 <OnEvade>
