@@ -486,12 +486,12 @@
         </Event>
     </Helena_BlueGrimoire>
 
-    <Dumbell DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">
+    <Dumbell DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1" Gravity="-9.8">
         <Animation Preset="Sprites/Projectile/Dumbell" XFlip="true" Duration="5.0">        
         </Animation>
 
         <CollisionInfo Radius="0.1" Angle="0"/>
-        <DefaultShotInfo Velocity="10.5" Acceleration="0" Friction="16" Angle="0" AngularAcceleration="0" LifeTime="0.5"/>
+        <DefaultShotInfo Velocity="10.5" Acceleration="0" Friction="3" Angle="0" AngularAcceleration="0" LifeTime="5.0"/>
         <Event>
             <OnHit>
                 <FrameEvent Type="Attack" StartTime="0" AttackPreset="Dumbell">

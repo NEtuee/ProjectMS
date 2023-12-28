@@ -21,6 +21,7 @@ public class ProjectileGraphBaseData
     public float                        _collisionRadius = 0.1f;
     public float                        _collisionAngle = 0f;
     public float                        _collisionStartDistance = 0f;
+    public float                        _gravity = 0f;
 
     public bool                         _useSpriteRotation = false;
     public bool                         _castShadow = false;

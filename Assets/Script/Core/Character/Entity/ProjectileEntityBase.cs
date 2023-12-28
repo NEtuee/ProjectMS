@@ -15,6 +15,8 @@ public class ProjectileEntityBase : ObjectBase
     private HashSet<int> _collisionUniqueIDList = new HashSet<int>();
 
     private bool _spriteRotation = false;
+    private float _gravity = 0f;
+    private float _gravityAccumulate = 0f;
 
     public override void assign()
     {
@@ -37,6 +39,9 @@ public class ProjectileEntityBase : ObjectBase
     public void setData(ProjectileGraphBaseData baseData)
     {
         _spriteRotation = baseData._useSpriteRotation;
+        _gravity = baseData._gravity;
+        _gravityAccumulate = 0f;
+
         _projectileGraph.setData(baseData);
         _collisionInfo.setCollisionInfo(baseData._collisionRadius, baseData._collisionAngle, baseData._collisionStartDistance);
 
@@ -95,6 +100,9 @@ public class ProjectileEntityBase : ObjectBase
 
         Vector3 movementOfFrame = _projectileGraph.getMovementOfFrame();
         transform.position += movementOfFrame;
+
+        _gravityAccumulate += _gravity * deltaTime;
+        transform.position += Vector3.up * _gravityAccumulate * deltaTime;
 
         _spriteRenderer.sprite = _projectileGraph.getCurrentSprite();
         _spriteRenderer.transform.localRotation = _projectileGraph.getCurrentAnimationRotation();

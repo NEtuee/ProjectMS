@@ -194,6 +194,10 @@ public class ProjectileGraphLoader : LoaderBase<ProjectileGraphBaseData[]>
             {
                 baseData._executeBySummoner = bool.Parse(targetValue);
             }
+            else if(targetName == "Gravity")
+            {
+                baseData._gravity = float.Parse(targetValue);
+            }
             else
             {
                 DebugUtil.assert(false,"invalid Attribute : {0} [Line: {1}] [FileName: {2}]", targetName, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
