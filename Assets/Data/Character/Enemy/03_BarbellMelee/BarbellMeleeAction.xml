@@ -131,7 +131,7 @@
                     <FrameEvent Type="ShakeEffect" Scale="0.1" Speed="10.0" Time="0.1"/>
                 </OnHit>
             </FrameEvent>
-            
+            <FrameEvent Type="FrameTag" StartTime="0.12" EndTime="0.3" Tag="GbAvail"/>
         </Animation>
 
         <Animation Preset="1_attack/1_attackReady" XFlip="true" Duration="0.3">
@@ -165,7 +165,7 @@
             </FrameEvent>
 
             <FrameEvent Type="FrameTag" StartTime="0.3" EndTime="0.7" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0.3" EndTime="0.7" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.12" EndTime="0.7" Tag="GbAvail"/>
             
         </Animation>
 
