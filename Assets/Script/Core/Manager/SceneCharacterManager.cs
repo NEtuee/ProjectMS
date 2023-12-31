@@ -111,7 +111,19 @@ public class SceneCharacterManager : ManagerBase
         });
 
         AddAction(MessageTitles.game_stageEnd, (msg)=>{
-            deregisterAll();
+            bool forceEnd = ((BoolData)msg.data).value;
+
+            foreach(var receiver in _receivers.Values)
+            {
+                if(receiver == null || !receiver.gameObject.activeInHierarchy || !receiver.enabled)
+                    continue;
+
+                if(forceEnd == false && (receiver as GameEntityBase).isKeepAliveEntity())
+                    continue;
+
+                receiver.deactive();
+                receiver.DeregisterRequest();
+            }
         });
     }
 

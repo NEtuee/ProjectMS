@@ -26,7 +26,7 @@ public class GameEntityBase : SequencerObjectBase
     public bool                 _aiDebug = false;
     public bool                 _animationDebug = false;
     public bool                 _soundDebug = false;
-    
+    public bool                 _keepAliveEntity = false;    
 
     
     private ActionGraph         _actionGraph;
@@ -157,7 +157,8 @@ public class GameEntityBase : SequencerObjectBase
 
         _updateDirection = true;
         _updateFlipState = true;
-        
+        setKeepAliveEntity(false);
+
         gameObject.name = characterInfo._displayName;
         actionGraphPath = characterInfo._actionGraphPath;
         aiGraphPath = characterInfo._aiGraphPath;
@@ -283,6 +284,10 @@ public class GameEntityBase : SequencerObjectBase
         _statusInfo.initialize(this,statusInfoName);
 
         _deadEventDelegate = null;
+
+        _updateDirection = true;
+        _updateFlipState = true;
+        setKeepAliveEntity(false);
 
         applyActionBuffList(_actionGraph.getDefaultBuffList());
         applyActionBuffList();
@@ -661,6 +666,7 @@ public class GameEntityBase : SequencerObjectBase
 
         _updateDirection = true;
         _updateFlipState = true;
+        setKeepAliveEntity(false);
 
         _enabledLaserEffectItems.Clear();
 
@@ -1130,6 +1136,9 @@ public class GameEntityBase : SequencerObjectBase
         
         return commonMaterial;
     }
+
+    public void setKeepAliveEntity(bool value) {_keepAliveEntity = value;}
+    public bool isKeepAliveEntity() {return _keepAliveEntity;}
 
     public bool isActionChangeFrame() {return _isActionChangeFrame;}
     public bool isActiveSelf() {return _activeSelf;}
