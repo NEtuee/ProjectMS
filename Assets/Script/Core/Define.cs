@@ -193,6 +193,11 @@ public class BoundBox
 
     public Vector3[] getVertices() {return _vertices;}
 
+    public float getBottomCollisionOffset(Vector3 point)
+    {
+        return point.y - _b;
+    }
+
     public bool intersection(Vector3 point)
     {
         return (_l < point.x && _r > point.x) && (_b < point.y && _t > point.y);

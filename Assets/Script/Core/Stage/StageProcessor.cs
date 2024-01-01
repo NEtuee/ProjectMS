@@ -4,12 +4,15 @@ using Unity.Mathematics;
 using UnityEngine;
 using System;
 
-public class StageProcessor : Singleton<StageProcessor>
+public class StageProcessor
 {
     struct StartNextStageRequsetDesc
     {
         public bool _startNextStage;
         public string _stageDataPath;
+        public string _startMarkerName;
+
+        public Vector3 _keepAliveEntityPositionOffset;
     }
 
     public StageData _stageData = null;
@@ -30,6 +33,8 @@ public class StageProcessor : Singleton<StageProcessor>
     private GameObject _stageBackgroundOjbect = null;
 
     private MiniStageListItem   _miniStageInfo = null;
+
+    private float               _miniStageTriggerBottomHitOffset;
     private BoundBox            _miniStageTrigger = new BoundBox(0f,0f,Vector3.zero);
 
     Dictionary<int,List<SequencerGraphProcessor.SpawnedCharacterEntityInfo>> _spawnedCharacterEntityDictionary = new Dictionary<int, List<SequencerGraphProcessor.SpawnedCharacterEntityInfo>>();
@@ -48,12 +53,24 @@ public class StageProcessor : Singleton<StageProcessor>
     {
         _startNextStageRequestDesc._stageDataPath = "";
         _startNextStageRequestDesc._startNextStage = false;
+        _startNextStageRequestDesc._startMarkerName = "";
+        _startNextStageRequestDesc._keepAliveEntityPositionOffset = Vector3.zero;
     }
 
-    public void requestStartStage(string stagePath)
+    public void requestStartStage(string stagePath, string markerName = "")
     {
         _startNextStageRequestDesc._startNextStage = true;
         _startNextStageRequestDesc._stageDataPath = stagePath;
+        _startNextStageRequestDesc._startMarkerName = markerName;
+        _startNextStageRequestDesc._keepAliveEntityPositionOffset = Vector3.zero;
+    }
+
+    public void requestStartStage(string stagePath, string markerName, Vector3 keepAliveOffset)
+    {
+        _startNextStageRequestDesc._startNextStage = true;
+        _startNextStageRequestDesc._stageDataPath = stagePath;
+        _startNextStageRequestDesc._startMarkerName = markerName;
+        _startNextStageRequestDesc._keepAliveEntityPositionOffset = keepAliveOffset;
     }
 
     public void setTargetCameraControl(CameraControlEx target)
@@ -68,10 +85,10 @@ public class StageProcessor : Singleton<StageProcessor>
         _miniStageTrigger.setData(data._overrideTriggerWidth * 0.5f,data._overrideTriggerHeight * 0.5f,data._overrideTriggerOffset);
         _miniStageTrigger.updateBoundBox(worldPosition);
 
-        startStage(data._data, worldPosition);
+        startStage(data._data, worldPosition, Vector3.zero);
     }
 
-    public void startStage(StageData data, Vector3 startPosition)
+    public void startStage(StageData data, Vector3 startPosition, Vector3 keepEntityPosition)
     {
         _sequencerProcessManager.initialize();
         _trackProcessor.clear();
@@ -118,7 +135,7 @@ public class StageProcessor : Singleton<StageProcessor>
                 if(_keepAliveMap.ContainsKey(characterSpawnData._uniqueKey))
                 {
                     CharacterEntityBase characterEntity = _keepAliveMap[characterSpawnData._uniqueKey];
-                    characterEntity.updatePosition((stagePointData._stagePoint + _offsetPosition) + characterSpawnData._localPosition);
+                    characterEntity.updatePosition(keepEntityPosition);
 
                     SequencerGraphProcessor.SpawnedCharacterEntityInfo keepEntityInfo = new SequencerGraphProcessor.SpawnedCharacterEntityInfo();
                     characterEntity.setKeepAliveEntity(characterSpawnData._keepAlive);
@@ -261,7 +278,10 @@ public class StageProcessor : Singleton<StageProcessor>
         _isEnd = false;
         _offsetPosition = Vector3.zero;
         if(_stageBackgroundOjbect != null)
+        {
             GameObject.Destroy(_stageBackgroundOjbect);
+            _stageBackgroundOjbect = null;
+        }
 
         _keepAliveMap.Clear();
         foreach(var item in _spawnedCharacterEntityDictionary.Values)
@@ -318,7 +338,20 @@ public class StageProcessor : Singleton<StageProcessor>
                 return;
             }
 
-            startStage(stageData,Vector3.zero);
+            Vector3 markerPosition = Vector3.zero;
+            if(_startNextStageRequestDesc._startMarkerName != "")
+            {
+                MarkerItem marker = stageData.findMarker(_startNextStageRequestDesc._startMarkerName);
+                if(marker == null)
+                {
+                    DebugUtil.assert(false,"대상 마커가 존재하지 않습니다. [Marker: {0}] [Path: {1}]",_startNextStageRequestDesc._startMarkerName, _startNextStageRequestDesc._stageDataPath);
+                    return;
+                }
+
+                markerPosition = marker._position + _startNextStageRequestDesc._keepAliveEntityPositionOffset;
+            }
+
+            startStage(stageData,Vector3.zero,markerPosition);
 
             return;
         }
@@ -332,6 +365,7 @@ public class StageProcessor : Singleton<StageProcessor>
                 _isEnd = _miniStageTrigger.intersection(_playerEntity.transform.position);
                 if(_isEnd)
                 {
+                    _miniStageTriggerBottomHitOffset = _miniStageTrigger.getBottomCollisionOffset(_playerEntity.transform.position);
                     if(_stageData._stagePointData[0]._onEnterSequencerPath != null && _stageData._stagePointData[0]._onEnterSequencerPath.Length != 0)
                     {
                         for(int index = 0; index < _stageData._stagePointData[0]._onEnterSequencerPath.Length; ++index)
@@ -409,6 +443,12 @@ public class StageProcessor : Singleton<StageProcessor>
         foreach(var item in _miniStageProcessor)
         {
             item.processStage(deltaTime);
+
+            if(item._isEnd && item._miniStageInfo._isPortal)
+            {
+                Vector3 offset = Vector3.up * item._miniStageTriggerBottomHitOffset;
+                requestStartStage(item._miniStageInfo._targetStageName,item._miniStageInfo._targetMarkerName,offset);
+            }
         }
 
         if(_cameraPositionBlendTimeLeft != 0f)
