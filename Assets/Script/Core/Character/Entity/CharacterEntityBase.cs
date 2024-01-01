@@ -38,6 +38,8 @@ public class CharacterEntityBase : GameEntityBase
         RegisterRequest(QueryUniqueID("SceneCharacterManager"));
         targetSearchQuick();
 
+        setSortingOrder(0);
+
         _stagePointIndex = 0;
         MasterManager.instance._stageProcessor.updatePointIndex(transform.position, ref _stagePointIndex);
         _isInCameraBound = MasterManager.instance._stageProcessor.isInCameraBound(_stagePointIndex, transform.position, out Vector3 resultPosition);

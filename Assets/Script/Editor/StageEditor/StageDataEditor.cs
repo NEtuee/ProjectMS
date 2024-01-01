@@ -1185,6 +1185,8 @@ public class StageDataEditor : EditorWindow
         characterSpawnData._uniqueKey = EditorGUILayout.TextField("Unique Key",characterSpawnData._uniqueKey);
         characterSpawnData._uniqueGroupKey = EditorGUILayout.TextField("Unique Group Key",characterSpawnData._uniqueGroupKey);
 
+        characterSpawnData._sortingOrder = EditorGUILayout.IntField("Sorting Order", characterSpawnData._sortingOrder);
+
         var characterInfo = ResourceContainerEx.Instance().getCharacterInfo("Assets\\Data\\StaticData\\CharacterInfo.xml");
         if(characterInfo.ContainsKey(characterSpawnData._characterKey) == false)
         {

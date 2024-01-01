@@ -19,13 +19,15 @@ public struct SpawnCharacterOptionDesc
     public Vector3          _direction;
     public Quaternion       _rotation;
     public SearchIdentifier _searchIdentifier;
+    public int              _sortingOrder;
 
     public static SpawnCharacterOptionDesc defaultValue = new SpawnCharacterOptionDesc
     { 
         _position = Vector3.zero, 
         _direction = Vector3.right, 
         _rotation = Quaternion.identity, 
-        _searchIdentifier = SearchIdentifier.Count
+        _searchIdentifier = SearchIdentifier.Count,
+        _sortingOrder = 0,
     };
 }
 
@@ -341,6 +343,7 @@ public class SceneCharacterManager : ManagerBase
         characterEntity.transform.rotation = spawnDesc._rotation;
 
         characterEntity.initializeCharacter(characterData,spawnDesc._direction);
+        characterEntity.setSortingOrder(spawnDesc._sortingOrder);
         
         _onCharacterEnabled(characterEntity);
         return characterEntity;

@@ -259,6 +259,14 @@ public abstract class ObjectBase : MessageReceiver, IProgress
         return _spriteRenderer?.material;
     }
 
+    public void setSortingOrder(int sortingOrder)
+    {
+        if(_spriteRenderer == null)
+            return;
+
+        _spriteRenderer.sortingOrder = sortingOrder;
+    }
+
     public Transform getSpriteRendererTransform()
     {
         if(_spriteRenderer == null)

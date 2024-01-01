@@ -160,6 +160,7 @@ public class StageProcessor
                 spawnDesc._direction = characterSpawnData._flip ? Vector3.left : Vector3.right;
                 spawnDesc._rotation = Quaternion.identity;
                 spawnDesc._searchIdentifier = characterSpawnData._searchIdentifier;
+                spawnDesc._sortingOrder = characterSpawnData._sortingOrder;
 
                 CharacterEntityBase createdCharacter = sceneCharacterManager.createCharacterFromPool(infoData,spawnDesc);
                 if(createdCharacter == null)
