@@ -1406,6 +1406,8 @@ public class SequencerGraphEvent_SetCrossHair : SequencerGraphEventBase
 
         CrossHairUI._instance.setTarget(unqueEntity);
         CrossHairUI._instance.setActive(true);
+
+        APUI._instance.setTarget(unqueEntity);
         return true;
     }
 
