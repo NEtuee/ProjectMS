@@ -89,7 +89,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
             }
             else if(nodeList[i].Name == "AIPackage")
             {
-                AIPackageBaseData packageData = readAIPackageFromXML(nodeList[i]);
+                AIPackageBaseData packageData = readAIPackageFromXML(nodeList[i], true, _currentFileName);
                 if(packageData == null)
                     return null;
 
@@ -448,10 +448,10 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
             return null;
         }
 
-        return readAIPackageFromXML(node);
+        return readAIPackageFromXML(node, false, "");
     }
 
-    public static AIPackageBaseData readAIPackageFromXML(XmlNode node)
+    public static AIPackageBaseData readAIPackageFromXML(XmlNode node, bool fromAIGraph, string aIGraphPath)
     {
         Dictionary<string, XmlNodeList> branchSetDic = new Dictionary<string, XmlNodeList>();
         string defaultAIName = "";
@@ -524,7 +524,8 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
         {
             if(aiIndexDic.ContainsKey(item.Value) == false)
             {
-                DebugUtil.assert_fileOpen(false,"대상 스테이트가 존재하지 않습니다. 오타는 아닌가요? : {0} [FileName: {1}]",_currentPackageFileName,XMLScriptConverter.getLineNumberFromXMLNode(node),item.Value, _currentPackageFileName);
+                string fileName = fromAIGraph ? aIGraphPath : aiPackageBaseData._fullPath;
+                DebugUtil.assert_fileOpen(false,"대상 스테이트가 존재하지 않습니다. 오타는 아닌가요? : {0} [FileName: {1}] [PackageName: {2}]",_currentPackageFileName,XMLScriptConverter.getLineNumberFromXMLNode(node),item.Value, fileName,aiPackageBaseData._name);
                 return null;
             }
             else if(item.Value == defaultAIName)
@@ -539,7 +540,8 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
         {
             if(aiIndexDic.ContainsKey(item.Key) == false)
             {
-                DebugUtil.assert_fileOpen(false,"aiExecuteEvent의 대상이 존재하지 않습니다. 오타는 아닌가요? : {0} [FileName: {1}]",_currentPackageFileName,XMLScriptConverter.getLineNumberFromXMLNode(node),item.Key, _currentPackageFileName);
+                string fileName = fromAIGraph ? aIGraphPath : aiPackageBaseData._fullPath;
+                DebugUtil.assert_fileOpen(false,"aiExecuteEvent의 대상이 존재하지 않습니다. 오타는 아닌가요? : {0} [FileName: {1}] [PackageName: {2}]",_currentPackageFileName,XMLScriptConverter.getLineNumberFromXMLNode(node),item.Key, fileName,aiPackageBaseData._name);
                 return null;
             }
 
@@ -554,7 +556,8 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
         {
             if(aiIndexDic.ContainsKey(defaultAIName) == false)
             {
-                DebugUtil.assert_fileOpen(false, "디폴트 스테이트가 존재하지 않습니다. 오타는 아닌가요? : {0} [FileName: {1}]",_currentPackageFileName,XMLScriptConverter.getLineNumberFromXMLNode(node),defaultAIName, _currentPackageFileName);
+                string fileName = fromAIGraph ? aIGraphPath : aiPackageBaseData._fullPath;
+                DebugUtil.assert_fileOpen(false, "디폴트 스테이트가 존재하지 않습니다. 오타는 아닌가요? : {0} [FileName: {1}] [PackageName: {2}]",_currentPackageFileName,XMLScriptConverter.getLineNumberFromXMLNode(node),defaultAIName, fileName,aiPackageBaseData._name);
                 return null;
             }
 
