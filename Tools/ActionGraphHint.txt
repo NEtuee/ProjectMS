@@ -5,7 +5,7 @@ FrameEvent,ApplyBuff,ApplyBuff=~~
 FrameEvent,ApplyBuffTarget,ApplyBuff=~~
 FrameEvent,DeleteBuff,BuffList=~~
 FrameEvent,SetDefenceType,DefenceType=~/${1|Empty Guard Parry Evade}~
-FrameEvent,Effect,"Path=~~,FramePerSecond=~~,Offset=~~,Angle=~~,ToTarget=~~,UseFlip=~~,Attach=~~,UpdateType=~~"
+FrameEvent,Effect,"Path=~~,FramePerSecond=~~,Offset=~~,Angle=~~,ToTarget=~~,UseFlip=~~,Attach=~~,UpdateType=~~,BehindCharacter=~~"
 FrameEvent,SetFrameTag,"EndTime=~~,Tag=~~,Tag=~~"
 FrameEvent,Projectile,"GraphName=~~,DirectionType=~~,ShotInfoUseType=~~,SpawnTargetType=~~,StartTerm=~~,PredictionAccuracy=~~,Offset=~~,UseFlip=~~,SearchIdentifier=~~,DirectionAngle=~~"
 FrameEvent,Danmaku,"Path=~~,Offset=~~,UseFlip=~~"
@@ -114,7 +114,7 @@ FrameEvent,EffectPreset,Key=~~
 ShortCut,__FrameEvent_EffectPreset,<FrameEvent Type=~EffectPreset~ StartTime=~0~ Key=~~/>
 InQuote,NotifyAttackSuccess=,"True,False"
 InQuote,ActiveCollision=,"True,False"
-,,
+InQuote,BehindCharacter=,"True,False"
 ,,
 ,,
 ,,

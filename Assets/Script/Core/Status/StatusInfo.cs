@@ -560,6 +560,18 @@ public class StatusInfo
         return status._realValue * (1f / _statusInfoData._statusData[status._statusIndex].getMaxValue());
     }
 
+    public float getMaxStatus(string targetName)
+    {
+        Status status = getStatus(targetName);
+        if(status == null)
+        {
+            DebugUtil.assert(false, "target status is not exists: [targetName: {0}] [currentStatusInfo: {1}]", targetName,_statusInfoData._statusInfoName);
+            return 0f;
+        }
+
+        return _statusInfoData._statusData[status._statusIndex].getMaxValue();
+    }
+
     public float getCurrentStatus(string targetName)
     {
         Status status = getStatus(targetName);
@@ -570,6 +582,11 @@ public class StatusInfo
         }
             
         return status._realValue;
+    }
+
+    public bool isUseHPEffect()
+    {
+        return _statusInfoData._useHPEffect;
     }
 
     private bool updateBuffXXX(BuffData buff)

@@ -2,12 +2,15 @@
 public class StatusInfoData
 {
     public string _statusInfoName;
+    public bool _useHPEffect;
+
     public StatusDataFloat[] _statusData;
     public StatusGraphicInterfaceData[] _graphicInterfaceData;
 
-    public StatusInfoData(string name, StatusDataFloat[] statusArray, StatusGraphicInterfaceData[] graphicInterfaceArray)
+    public StatusInfoData(string name, bool useHPEffect, StatusDataFloat[] statusArray, StatusGraphicInterfaceData[] graphicInterfaceArray)
     {
         _statusInfoName = name;
+        _useHPEffect = useHPEffect;
         _statusData = statusArray;
         _graphicInterfaceData = graphicInterfaceArray;
     }

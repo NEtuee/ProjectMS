@@ -35,6 +35,8 @@ public class EffectRequestData : MessageData
     public bool _useFlip;
     public bool _castShadow;
     public bool _dependentAction;
+    public bool _behindCharacter;
+    public bool _manualEnd;
 
     public string _attackDataName;
 
@@ -78,6 +80,8 @@ public class EffectRequestData : MessageData
         _useFlip = false;
         _castShadow = false;
         _dependentAction = false;
+        _behindCharacter = false;
+        _manualEnd = false;
         _effectType = EffectType.SpriteEffect;
         _updateType = EffectUpdateType.ScaledDeltaTime;
         _position = Vector3.zero;
@@ -130,6 +134,8 @@ public class EffectItem : EffectItemBase
     private Quaternion              _rotation;
     private bool                    _usePhysics = false;
     private bool                    _useFlip = false;
+    private bool                    _manualEnd = false;
+    private float                   _endTimer = -1f;
 
     public void createItem()
     {
@@ -162,6 +168,8 @@ public class EffectItem : EffectItemBase
         _animationPlayData._flipState = new FlipState{xFlip = false, yFlip = false};
 
         _stopEffect = false;
+
+        _endTimer = -1f;
 
         if(effectData._animationCustomPreset != null)
         {
@@ -196,7 +204,8 @@ public class EffectItem : EffectItemBase
         if(_parentTransform != null && _parentTransform.gameObject.activeInHierarchy == false)
             _parentTransform = null;
 
-        _spriteRenderer.gameObject.layer = effectData._castShadow ? LayerMask.NameToLayer("Character") : LayerMask.NameToLayer("EffectEtc");
+        _spriteRenderer.gameObject.layer = effectData._castShadow ? LayerMask.NameToLayer("Character") : effectData._behindCharacter ? LayerMask.NameToLayer("Background") :  LayerMask.NameToLayer("EffectEtc");
+        _spriteRenderer.sortingOrder = effectData._castShadow ? ( effectData._behindCharacter ? -999 : 999 ) : 999;
 
         _spriteRenderer.transform.position = effectData._position;
         _spriteRenderer.transform.localRotation = Quaternion.Euler(0f,0f,effectData._angle);
@@ -210,6 +219,7 @@ public class EffectItem : EffectItemBase
 
         _physicsBody.initialize(effectData._physicsBodyDesc);
         _usePhysics = effectData._usePhysics;
+        _manualEnd = effectData._manualEnd;
 
         _useFlip = effectData._useFlip;
         _rotation = effectData._rotation;
@@ -264,7 +274,19 @@ public class EffectItem : EffectItemBase
 
         _spriteRenderer.transform.position = worldPosition + translationPreset;
 
-        return isEnd;
+        if(_endTimer > 0f)
+        {
+            _endTimer -= deltaTime;
+            if(_endTimer < 0f)
+                stopEffect();
+        }
+
+        return _manualEnd ? false : isEnd;
+    }
+
+    public void setEndTime(float time)
+    {
+        _endTimer = time;
     }
 
     public override void release()
