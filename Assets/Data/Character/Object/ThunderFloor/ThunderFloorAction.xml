@@ -1,20 +1,20 @@
 <ActionGraph Name="ThunderFloorAction" DefaultAction="AC_Move" DefaultFramePerSecond="12">
 <GlobalVariable Name="gv_MasterPath" Value="Sprites/Projectile/"/>
 
-    <Idle MovementType="Empty" DirectionType="MoveInput">
+    <AC_Idle MovementType="Empty" DirectionType="MoveInput">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="empty" XFlip="true" Duration="0.5">
         </Animation>
 
-        <Branch Condition="End == true" Execute="Idle"/>
-    </Idle>
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_Idle>
 
-    <AC_Move MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+    <AC_Move MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" DefenceType="Evade">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="empty" XFlip="true" Duration="0.2">
+        <Animation Preset="BaseBall" XFlip="true" Duration="0.1">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="5" Speed="15"/>
             
-            <FrameEvent Type="Projectile" StartTime="0.2" GraphName="Thunder" DirectionType="AI" SpawnTargetType="Self"/>
+            <FrameEvent Type="Projectile" StartTime="0.05" GraphName="Thunder" DirectionType="AI" SpawnTargetType="Self"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Move"/>

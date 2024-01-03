@@ -6,14 +6,8 @@
     <Include Path="Assets/Data/AILibrary/Package/CommonGuardBrokenPackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonChasePackage.xml"/>
     
-    <AIPackage Name="SisterThunderSlashPackage" DefaultState="AI_Entry">
+    <AIPackage Name="Test" DefaultState="TerminatePackage">
         <AIState>
-            <AI_Entry UpdateTime="0.0">
-                <Event_OnExecute>
-                    <AIEvent Type="SetAction" Action="AC_Idle"/>
-                </Event_OnExecute>
-                <Branch Condition="true" Execute="AI_AttackReady"/>
-            </AI_Entry>
             <TerminatePackage>
                 <Event_OnExecute>
                     <AIEvent Type="TerminatePackage"/>
@@ -23,7 +17,7 @@
     </AIPackage>
 
     <Move Package="CommonChasePackage">
-        <Branch Condition="PackageExecutedTime > 5.0" Execute="Dead"/>
+        <Branch Condition="GraphExecutedTime > 5.0" Execute="Dead"/>
     </Move>
 
     <Dead Package="CommonDeadPackage">
