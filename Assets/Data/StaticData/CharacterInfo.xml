@@ -340,6 +340,19 @@
 
         SearchIdentifier="Enemy"
     />
+    
+    <ThunderFloor
+        DisplayName="헬레나 전기장판"
+        ActionGraph="Assets/Data/Character/Object/ThunderFloor/ThunderFloorAction.xml"
+        AIGraph="Assets/Data/Character/Object/ThunderFloor/ThunderFloorAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        SearchIdentifier="Enemy"
+    />
 
     <PoliceOmawariChan
         DisplayName="폴리스 오마와리쨩"
