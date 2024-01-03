@@ -61,6 +61,8 @@ public static class StatusInfoLoader
         HashSet<string> nameCheck = new HashSet<string>();
         XmlNodeList statusNodes = node.ChildNodes;
 
+        bool useHPEffect = false;
+
         for(int i = 0; i < statusNodes.Count; ++i)
         {
             if(statusNodes[i].Name == "Stat")
@@ -126,9 +128,13 @@ public static class StatusInfoLoader
 
                 graphicInterfaceDataList.Add(data);
             }
+            else if(statusNodes[i].Name == "UseHPEffect")
+            {
+                useHPEffect = true;
+            }
         }
 
-        StatusInfoData statusInfoData = new StatusInfoData(node.Name,statusInfoDataList.ToArray(),graphicInterfaceDataList.ToArray());
+        StatusInfoData statusInfoData = new StatusInfoData(node.Name,useHPEffect,statusInfoDataList.ToArray(),graphicInterfaceDataList.ToArray());
 
         return statusInfoData;
     }

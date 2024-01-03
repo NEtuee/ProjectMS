@@ -432,6 +432,7 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
     public bool _usePhysics = false;
     public bool _useFlip = false;
     public bool _castShadow = false;
+    public bool _behindCharacter = false;
     public PhysicsBodyDescription _physicsBodyDesc = new PhysicsBodyDescription(null);
     public EffectUpdateType _effectUpdateType = EffectUpdateType.ScaledDeltaTime;
 
@@ -457,6 +458,7 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
         requestData._effectType = EffectType.SpriteEffect;
         requestData._updateType = _effectUpdateType;
         requestData._castShadow = _castShadow;
+        requestData._behindCharacter = _behindCharacter;
 
         if(_attach)
             requestData._parentTransform = _toTarget ? targetEntity.transform : executeEntity.transform;
@@ -582,7 +584,10 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
             {
                 _castShadow = bool.Parse(attributes[i].Value);
             }
-
+            else if(attributes[i].Name == "BehindCharacter")
+            {
+                _behindCharacter = bool.Parse(attributes[i].Value);
+            }
         }
 
         if(node.HasChildNodes)

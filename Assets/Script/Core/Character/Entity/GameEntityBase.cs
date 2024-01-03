@@ -66,6 +66,7 @@ public class GameEntityBase : SequencerObjectBase
     private float               _headUpOffset = 0f;
     private float               _characterLifeTime = 0f;
 
+    private float               _dealedHP = 0f;
     private float               _leftHP = 0f;
 
     private bool                _updateDirection = true;
@@ -76,6 +77,7 @@ public class GameEntityBase : SequencerObjectBase
     private bool                _blockAI = false;
     private bool                _blockInput = false;
     private bool                _isActionChangeFrame = false;
+    private bool                _useHPEffect = false;
 
     private DirectionType       _currentDirectionType = DirectionType.AlwaysRight;
     private RotationType        _currentRotationType = RotationType.AlwaysRight;
@@ -84,7 +86,21 @@ public class GameEntityBase : SequencerObjectBase
     private Quaternion          _actionStartRotation = Quaternion.identity;
     private Quaternion          _angleBaseRotation = Quaternion.identity;
 
+    private List<EffectItem>    _hpEffect = new List<EffectItem>();
     private List<TimelineEffectItem> _enabledLaserEffectItems = new List<TimelineEffectItem>();
+
+    private static string[] _hpEffectPath = new string[3]
+    {
+        "",
+        "",
+        "",
+    };
+    private static Vector3[] _hpEffectOffset = new Vector3[3]
+    {
+        Vector3.zero,
+        Vector3.zero,
+        Vector3.zero,
+    };
 
 #if UNITY_EDITOR
     [HideInInspector] public bool _blockAIByEditor = false;
@@ -186,6 +202,7 @@ public class GameEntityBase : SequencerObjectBase
 
         _statusInfo.initialize(this,characterInfo._statusName);
         _graphicInterface.initialize(this,_statusInfo,new Vector3(0f, _headUpOffset, 0f), true);
+        _useHPEffect = getStatusInfo().isUseHPEffect();
 
         applyActionBuffList(_actionGraph.getDefaultBuffList());
         applyActionBuffList();
@@ -204,9 +221,13 @@ public class GameEntityBase : SequencerObjectBase
         _spriteRenderer.flipX = false;
         _spriteRenderer.flipY = false;
         
-
         initializeActionValue();
 
+        foreach(var item in _hpEffect)
+        {
+            item.stopEffect();
+        }
+        _hpEffect.Clear();
 
 #if UNITY_EDITOR
         _actionGraphChangeLog.Clear();
@@ -298,11 +319,18 @@ public class GameEntityBase : SequencerObjectBase
         _collisionInfo = new CollisionInfo(data);
 
         _graphicInterface.initialize(this,_statusInfo,new Vector3(0f, _collisionInfo.getRadius(), 0f), true);
+        _useHPEffect = getStatusInfo().isUseHPEffect();
 
         CollisionManager.Instance().registerObject(_collisionInfo, this);
         _collisionInfo.setActiveCollision(_actionGraph.isActiveCollision());
 
         initializeActionValue();
+
+        foreach(var item in _hpEffect)
+        {
+            item.stopEffect();
+        }
+        _hpEffect.Clear();
     }
 
     private void initializeActionValue()
@@ -326,6 +354,21 @@ public class GameEntityBase : SequencerObjectBase
         _statusInfo.updateActionConditionData(this);
 
         _leftHP = _statusInfo.getCurrentStatus("HP");
+        _dealedHP = _statusInfo.getMaxStatus("HP") - _leftHP;
+
+        if(_useHPEffect)
+        {
+            if(_hpEffect.Count < _hpEffectOffset.Length)
+            {
+                if(_dealedHP > (float)_hpEffect.Count)
+                {
+                    EffectRequestData requestData;
+
+                    //EffectManager._instance.createEffect()
+                }
+            }
+        }
+        
 
         _danmakuGraph.process(deltaTime);
 
@@ -487,15 +530,29 @@ public class GameEntityBase : SequencerObjectBase
     public override void deactive()
     {
         _graphicInterface.release();
+
+        foreach(var item in _hpEffect)
+        {
+            item.stopEffect();
+        }
+        _hpEffect.Clear();
+
         base.deactive();
     }
 
     public override void dispose(bool disposeFromMaster)
     {
         CollisionManager.Instance().deregisterObject(_collisionInfo.getCollisionInfoData(),this);
+        _graphicInterface.release();
         _aiGraph.release();
         _actionGraph.release();
         _danmakuGraph.release();
+
+        foreach(var item in _hpEffect)
+        {
+            item.stopEffect();
+        }
+        _hpEffect.Clear();
 
         base.dispose(disposeFromMaster);
     }
@@ -687,6 +744,7 @@ public class GameEntityBase : SequencerObjectBase
 
         _statusInfo.initialize(this,_characterInfo._statusName);
         _graphicInterface.initialize(this,_statusInfo,new Vector3(0f, _headUpOffset, 0f), true);
+        _useHPEffect = getStatusInfo().isUseHPEffect();
 
         applyActionBuffList(_actionGraph.getDefaultBuffList());
 
@@ -696,6 +754,12 @@ public class GameEntityBase : SequencerObjectBase
         _spriteRenderer.flipY = false;
 
         initializeActionValue();
+
+        foreach(var item in _hpEffect)
+        {
+            item.stopEffect();
+        }
+        _hpEffect.Clear();
 
         addActionChangeLog(_actionGraph.getCurrentAction_Debug());
         addAIChangeLog(_aiGraph.getCurrentAINode_Debug());
