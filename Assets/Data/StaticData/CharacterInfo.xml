@@ -341,10 +341,22 @@
         SearchIdentifier="Enemy"
     />
     
-    <ThunderFloor
-        DisplayName="헬레나 전기장판"
-        ActionGraph="Assets/Data/Character/Object/ThunderFloor/ThunderFloorAction.xml"
-        AIGraph="Assets/Data/Character/Object/ThunderFloor/ThunderFloorAI.xml"
+    <ThunderFloor_Chase
+        DisplayName="헬레나 전기장판 (추격)"
+        ActionGraph="Assets/Data/Character/Object/ThunderFloor/ThunderFloor_ChaseAction.xml"
+        AIGraph="Assets/Data/Character/Object/ThunderFloor/ThunderFloor_ChaseAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        SearchIdentifier="Enemy"
+    />
+    <ThunderFloor_Shoot
+        DisplayName="헬레나 전기장판 (발사)"
+        ActionGraph="Assets/Data/Character/Object/ThunderFloor/ThunderFloor_ShootAction.xml"
+        AIGraph="Assets/Data/Character/Object/ThunderFloor/ThunderFloor_ShootAI.xml"
         StatusInfoName="CommonHpOneEnemyStatusNoUI"
         
         CollisionRadius="0.2"

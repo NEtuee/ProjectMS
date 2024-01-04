@@ -1,4 +1,4 @@
-<ActionGraph Name="ThunderFloorAction" DefaultAction="AC_Move" DefaultFramePerSecond="12">
+<ActionGraph Name="ThunderFloor_ShootAction" DefaultAction="AC_Move" DefaultFramePerSecond="12">
 <GlobalVariable Name="gv_MasterPath" Value="Sprites/Projectile/"/>
 
     <AC_Idle MovementType="Empty" DirectionType="MoveInput">
@@ -11,10 +11,10 @@
 
     <AC_Move MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" DefenceType="Evade">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="BaseBall" XFlip="true" Duration="0.1">
-            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="5" Speed="15"/>
+        <Animation Preset="empty" XFlip="true" Duration="0.026">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="100" Velocity="25" Speed="0"/>
             
-            <FrameEvent Type="Projectile" StartTime="0.05" GraphName="Thunder" DirectionType="AI" SpawnTargetType="Self"/>
+            <FrameEvent Type="Projectile" StartTime="0.013" GraphName="Thunder" DirectionType="AI" SpawnTargetType="Self"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Move"/>
@@ -25,9 +25,8 @@
         <Animation Preset="empty" XFlip="true" Duration="0.5">
 
             <FrameEvent Type="KillEntity" StartTime="0"/>
-
+            
         </Animation>
-
         <Branch Condition="End == true" Execute="Dead"/>
     </Dead>
 

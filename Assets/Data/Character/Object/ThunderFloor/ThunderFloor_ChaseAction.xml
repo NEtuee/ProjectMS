@@ -1,0 +1,33 @@
+<ActionGraph Name="ThunderFloor_ChaseAction" DefaultAction="AC_Move" DefaultFramePerSecond="12">
+<GlobalVariable Name="gv_MasterPath" Value="Sprites/Projectile/"/>
+
+    <AC_Idle MovementType="Empty" DirectionType="MoveInput">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="empty" XFlip="true" Duration="0.5">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_Idle>
+
+    <AC_Move MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" DefenceType="Evade">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="empty" XFlip="true" Duration="0.1">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="20" Velocity="0" Speed="65"/>
+            
+            <FrameEvent Type="Projectile" StartTime="0.05" GraphName="Thunder" DirectionType="AI" SpawnTargetType="Self"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Move"/>
+    </AC_Move>
+
+    <Dead MovementType="Empty" DirectionType="MoveInput">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="empty" XFlip="true" Duration="0.5">
+
+            <FrameEvent Type="KillEntity" StartTime="0"/>
+            
+        </Animation>
+        <Branch Condition="End == true" Execute="Dead"/>
+    </Dead>
+
+</ActionGraph>

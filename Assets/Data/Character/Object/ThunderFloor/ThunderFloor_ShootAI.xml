@@ -1,0 +1,32 @@
+<AIGraph Name="ThunderFloor_ShootAI" DefaultState="Move">
+
+    <Include Path="Assets/Data/AILibrary/Package/CommonDeadPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonIdlePackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonChasePackage.xml"/>
+    
+    <AIPackage Name="ThunderFloor_ShootPackage" DefaultState="AI_Shoot">
+        <AIState>
+            <AI_Shoot UpdateTime="0.2" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+                <Event_OnExecute>
+                    <AIEvent Type="SetDirectionToTarget"/>
+                    <AIEvent Type="SetAction" Action="AC_Move"/>
+                </Event_OnExecute>
+                
+                <Branch Condition="false" Execute="TerminatePackage"/>
+            </AI_Shoot>
+            <TerminatePackage>
+                <Event_OnExecute>
+                    <AIEvent Type="TerminatePackage"/>
+                </Event_OnExecute>
+            </TerminatePackage>
+        </AIState>
+    </AIPackage>
+
+    <Move Package="ThunderFloor_ShootPackage">
+        <Branch Condition="GraphExecutedTime > 1.0" Execute="Dead"/>
+    </Move>
+
+    <Dead Package="CommonDeadPackage">
+    </Dead>
+
+</AIGraph>
