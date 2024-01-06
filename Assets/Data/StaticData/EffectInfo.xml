@@ -99,6 +99,21 @@
         FollowDirection="False"
         CastShadow="False"
     />
+    
+    <ParticleEffect Key="LaserLoop" 
+        AttackMaterial="" 
+        DefenceMaterial=""
+        Path="Prefab/Effect/LaserLoop"
+        AngleOffset="-90.0"
+        Offset="0.3 0.0 0.0"
+        ToTarget="False"
+        UpdateType="ScaledDeltaTime"
+        Attach="False"
+        AngleType="Direction"
+        LifeTime="3"
+        FollowDirection="False"
+        CastShadow="False"
+    />
 
     <ParticleEffect Key="DashTrail" 
         AttackMaterial="" 
