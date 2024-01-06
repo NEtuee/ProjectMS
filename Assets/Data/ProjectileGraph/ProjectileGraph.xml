@@ -415,6 +415,8 @@
                 <FrameEvent Type="Attack" NotifyAttackSuccess="False" StartFrame="0" AttackPreset="CommonProjectile">
                     <OnHit>
                         <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonQuarterAttack"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
                     </OnHit>
                 </FrameEvent>
                 <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
@@ -504,6 +506,9 @@
                         <FrameEvent Type="Effect" Path="Sprites/Projectile/Dumbell" FramePerSecond="0.2" CastShadow="True" Offset="0.0 0.1 0.0" ToTarget="true" AngleType="AttackPoint">
                             <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
                         </FrameEvent>
+
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
                     </OnHit>
                 </FrameEvent>
             </OnHit>

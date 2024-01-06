@@ -125,6 +125,9 @@
                 <OnHit>
                     <FrameEvent Type="AudioPlay" StartTime="0" ID="2205" Attach="true"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
+
+                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Slash"/>
+                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
                     
                     <FrameEvent Type="StopUpdate" Time="0.1"/>
                     <FrameEvent Type="SetTimeScale" Scale="0.1" Time="0.1" BlendTime="0.1"/>

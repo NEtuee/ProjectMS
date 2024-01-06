@@ -110,9 +110,10 @@
         UpdateType="ScaledDeltaTime"
         Attach="False"
         AngleType="Direction"
-        LifeTime="3"
+        LifeTime="3.0"
         FollowDirection="False"
         CastShadow="False"
+        DependentAction="False"
     />
 
     <ParticleEffect Key="DashTrail" 
@@ -160,7 +161,7 @@
         CastShadow="False"
     />
 
-    <ParticleEffect Key="AttackImpact" 
+    <ParticleEffect Key="Smash" 
         AttackMaterial="" 
         DefenceMaterial=""
         Path="Prefab/Effect/Impact"
@@ -188,6 +189,6 @@
         LifeTime="0.0"
         FollowDirection="False"
         CastShadow="False"
-    />
+    /> 
 
 </EffectInfo>
