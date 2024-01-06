@@ -345,7 +345,7 @@
         <Animation Preset="4_tsubaAttack" XFlip="true" Duration="0.5">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2412" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12"/>
-            <FrameEvent Type="ReleaseCatch" StartTime="0" Push="5 0 0"/>
+            <FrameEvent Type="ReleaseCatch" StartTime="0" Push="5 0 0" TargetAction="AC_AobaTsuba_Fail"/>
 
             <FrameEvent Type="ZoomEffect" Scale="-1.7"/>
             <FrameEvent Type="StopUpdate" Time="0.07"/>

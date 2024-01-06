@@ -486,6 +486,21 @@
 
         <Branch Condition="End" Execute="Idle"/>
     </CatchReleased>
+    
+    <AC_AobaTsuba_Fail MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction">
+        <Animation Preset="Sprites/NewPlayer/catchRealese/Aoba_Tsuba/" XFlip="true" Duration="1.3">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="1001" Attach="true"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="9" Speed="0" Velocity="-5"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="CatchedClear"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="StunClear"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="1.3" Tag="CatchReleased"/>
+            <FrameEvent Type="FrameTag" StartTime="0.7" EndTime="1.3" Tag="MoveCancel"/>
+        </Animation>
+        
+        <UseBranchSet Name="CancelBranch"/>
+
+        <Branch Condition="End" Execute="Idle"/>
+    </AC_AobaTsuba_Fail>
 
     <Stun MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" ApplyBuff="StunEscape">
         <Animation Preset="Sprites/NewPlayer/stun" XFlip="true" Duration="3.0">
