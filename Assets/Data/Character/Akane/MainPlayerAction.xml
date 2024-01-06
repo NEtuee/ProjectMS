@@ -473,7 +473,7 @@
     </Catched>
 
     <CatchReleased MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction">
-        <Animation Preset="Sprites/NewPlayer/catchRealese/" XFlip="true" Duration="1.3">
+        <Animation Preset="Sprites/NewPlayer/catchRealese/Common/" XFlip="true" Duration="1.3">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="1001" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="9" Speed="0" Velocity="-5"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="CatchedClear"/>
