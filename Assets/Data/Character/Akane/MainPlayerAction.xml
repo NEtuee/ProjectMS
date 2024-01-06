@@ -274,7 +274,7 @@
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="TargetBattleIncrement" Condition="getTargetFrameTag_Groggy == false"/>
 
                     <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/ParrySucc" Offset="0.0 0.0 0.0" Attach="false" ToTarget="true" AngleType="identity"/>
-                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Impact" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true" AngleType="AttackPoint"/>
+                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
 
                     <FrameEvent Type="TeleportToTarget" DistanceOffset="0"/>
                     <FrameEvent Type="StopUpdate" Time="0.07"/>
