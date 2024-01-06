@@ -1572,11 +1572,11 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
             }
             else if(_attackType == AttackType.Catch)
             {
-                requester.setAttackState(AttackState.AttackCatch);
-                target.setDefenceState(DefenceState.Catched);
-
                 if(target.hasParentObject() == false)
                 {
+                    requester.setAttackState(AttackState.AttackCatch);
+                    target.setDefenceState(DefenceState.Catched);
+                
                     AttachChildDescription description;
                     description._childObject = target;
                     description._pivot = _catchOffset;
