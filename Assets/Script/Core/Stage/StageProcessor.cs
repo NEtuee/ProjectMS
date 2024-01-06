@@ -121,6 +121,7 @@ public class StageProcessor
             CameraControlEx.Instance().setZoomSizeForce(_stageData._stagePointData[0]._cameraZoomSize);
 
             ScreenDirector._instance.initialize();
+            LetterBox._instance.clear();
             UIRepeater.Instance().initialize();
         }
 
