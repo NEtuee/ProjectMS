@@ -321,22 +321,22 @@
 
     <AC_Tsuba_Entry MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/4_Tsuba/"/>
-        <Animation Preset="2_tsubaEntry" XFlip="true" Duration="1.0">
+        <Animation Preset="2_tsubaEntry" XFlip="true" Duration="0.3">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2411" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12"/>
         </Animation>
 
-        <Branch Condition="getKey_Escape_1 || getKey_Escape_2" Execute="AC_Tsuba_Struggle"/>
+        <Branch Condition="getKey_Escape_1 || getKey_Escape_2 || End" Execute="AC_Tsuba_Struggle"/>
     </AC_Tsuba_Entry>
 
     <AC_Tsuba_Struggle MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/4_Tsuba/"/>
-        <Animation Preset="3_tsubaStruggle" XFlip="true" Duration="1.0">
+        <Animation Preset="3_tsubaStruggle" XFlip="true" Duration="0.3">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2411" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12"/>
         </Animation>
 
-        <Branch Condition="getKey_Escape_1 || getKey_Escape_2" Execute="AC_Tsuba_Entry"/>
+        <Branch Condition="getKey_Escape_1 || getKey_Escape_2 || End" Execute="AC_Tsuba_Entry"/>
     </AC_Tsuba_Struggle>
  
     <AC_Tsuba_Attack MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
