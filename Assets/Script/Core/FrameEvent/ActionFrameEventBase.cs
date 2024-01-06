@@ -1575,24 +1575,23 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
                 requester.setAttackState(AttackState.AttackCatch);
                 target.setDefenceState(DefenceState.Catched);
 
-                if(target.hasParentObject())
-                    target.getParentObject().detachChildObject();
-                else if(target.hasChildObject())
-                    target.detachChildObject();
+                if(target.hasParentObject() == false)
+                {
+                    AttachChildDescription description;
+                    description._childObject = target;
+                    description._pivot = _catchOffset;
 
-                AttachChildDescription description;
-                description._childObject = target;
-                description._pivot = _catchOffset;
+                    requester.attachChildObject(description);
 
-                requester.attachChildObject(description);
-
-                if(requester is GameEntityBase)
-                    ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnCatchTarget);
-                target.executeAIEvent(AIChildEventType.AIChildEvent_OnCatched);
+                    if(requester is GameEntityBase)
+                        ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnCatchTarget);
+                    target.executeAIEvent(AIChildEventType.AIChildEvent_OnCatched);
+                }
 
                 eventType = ChildFrameEventType.ChildFrameEvent_OnCatch;
 
-                attackSuccess = false;
+                executeChildFrameEvent(ChildFrameEventType.ChildFrameEvent_OnHit, requester, target);
+                attackSuccess = true;
             }
         }
         else if(guardSuccess && target.getDefenceType() == DefenceType.Guard)
