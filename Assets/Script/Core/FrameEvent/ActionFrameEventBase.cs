@@ -1575,6 +1575,11 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
                 requester.setAttackState(AttackState.AttackCatch);
                 target.setDefenceState(DefenceState.Catched);
 
+                if(target.hasParentObject())
+                    target.getParentObject().detachChildObject();
+                else if(target.hasChildObject())
+                    target.detachChildObject();
+
                 AttachChildDescription description;
                 description._childObject = target;
                 description._pivot = _catchOffset;
