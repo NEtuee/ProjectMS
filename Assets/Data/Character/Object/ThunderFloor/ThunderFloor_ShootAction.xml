@@ -1,7 +1,7 @@
 <ActionGraph Name="ThunderFloor_ShootAction" DefaultAction="AC_Move" DefaultFramePerSecond="12">
 <GlobalVariable Name="gv_MasterPath" Value="Sprites/Projectile/"/>
 
-    <AC_Idle MovementType="Empty" DirectionType="MoveInput">
+    <AC_Idle MovementType="Empty" DirectionType="AI" ActiveCollision="False">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="empty" XFlip="true" Duration="0.5">
         </Animation>
@@ -9,7 +9,7 @@
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_Idle>
 
-    <AC_Move MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" DefenceType="Evade">
+    <AC_Move MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" ActiveCollision="False">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="empty" XFlip="true" Duration="0.026">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="100" Velocity="25" Speed="0"/>
@@ -20,7 +20,7 @@
         <Branch Condition="End == true" Execute="AC_Move"/>
     </AC_Move>
 
-    <Dead MovementType="Empty" DirectionType="MoveInput">
+    <Dead MovementType="Empty" DirectionType="AI" ActiveCollision="False">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="empty" XFlip="true" Duration="0.5">
 

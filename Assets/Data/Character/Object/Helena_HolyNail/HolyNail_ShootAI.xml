@@ -1,0 +1,42 @@
+<AIGraph Name="HolyNail_ShootAI" DefaultState="Move">
+
+    <Include Path="Assets/Data/AILibrary/Package/CommonDeadPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonIdlePackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonChasePackage.xml"/>
+    
+    <AIPackage Name="HolyNail_ShootPackage" DefaultState="AI_Shoot">
+        <AIState>
+            <AI_Shoot UpdateTime="0.2" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+                <Event_OnExecute>
+                    <AIEvent Type="SetDirectionToTarget"/>
+                    <AIEvent Type="SetAction" Action="AC_Ready"/>
+                </Event_OnExecute>
+                
+                <Branch Condition="false" Execute="TerminatePackage"/>
+            </AI_Shoot>
+
+            <TerminatePackage>
+                <Event_OnExecute>
+                    <AIEvent Type="TerminatePackage"/>
+                </Event_OnExecute>
+            </TerminatePackage>
+        </AIState>
+    </AIPackage>
+
+    <CustomValue Name="IsCatching" Value="0.0"/>
+    <CustomEvent_AkaneCatched>
+        <AIEvent Type="SetCustomValue" Name="IsCatching" Value="1.0"/>
+    </CustomEvent_AkaneCatched>
+    <CustomEvent_AkaneReleased>
+        <AIEvent Type="SetCustomValue" Name="IsCatching" Value="0.0"/>
+    </CustomEvent_AkaneReleased>
+
+    <Move Package="HolyNail_ShootPackage">
+        <Branch Condition="CurrentPackageEnd" Execute="Dead"/>
+        <Branch Condition="(TargetDistance > 20.0) && (IsCatcher == false)" Execute="Dead"/>
+    </Move>
+
+    <Dead Package="CommonDeadPackage">
+    </Dead>
+
+</AIGraph>
