@@ -577,6 +577,7 @@ public class ActionFrameEvent_ReleaseCatch : ActionFrameEventBase
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_ReleaseCatch;}
 
     private UnityEngine.Vector3         _pushVector;
+    private string                      _catchTargetAction = "";
 
     public override void initialize()
     {
@@ -584,18 +585,25 @@ public class ActionFrameEvent_ReleaseCatch : ActionFrameEventBase
 
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
-                ObjectBase parentObject = executeEntity.hasChildObject() ? executeEntity : (executeEntity.hasParentObject() ? executeEntity.getParentObject() : null);
+        ObjectBase parentObject = executeEntity.hasChildObject() ? executeEntity : (executeEntity.hasParentObject() ? executeEntity.getParentObject() : null);
         if(parentObject == null)
             return true;
 
         ObjectBase childObject = parentObject.getChildObject();
         ObjectBase pushTarget = executeEntity == parentObject ? childObject : parentObject;
 
-        if(_pushVector.sqrMagnitude > float.Epsilon && pushTarget is GameEntityBase)
+        if(pushTarget is GameEntityBase)
         {
             GameEntityBase target = (pushTarget as GameEntityBase);
-            UnityEngine.Vector3 attackPointDirection = executeEntity.getDirection();
-            target.setVelocity(UnityEngine.Quaternion.Euler(0f,0f,UnityEngine.Mathf.Atan2(attackPointDirection.y,attackPointDirection.x) * UnityEngine.Mathf.Rad2Deg) * _pushVector);
+
+            if(_catchTargetAction != "")
+                target.setAction(_catchTargetAction);
+            
+            if(_pushVector.sqrMagnitude > float.Epsilon)
+            {
+                UnityEngine.Vector3 attackPointDirection = executeEntity.getDirection();
+                target.setVelocity(UnityEngine.Quaternion.Euler(0f,0f,UnityEngine.Mathf.Atan2(attackPointDirection.y,attackPointDirection.x) * UnityEngine.Mathf.Rad2Deg) * _pushVector);
+            }
         }
 
         parentObject.detachChildObject();
@@ -616,7 +624,10 @@ public class ActionFrameEvent_ReleaseCatch : ActionFrameEventBase
             {
                 _pushVector = XMLScriptConverter.valueToVector3(attributes[i].Value);
             }
-
+            else if(attrName == "TargetAction")
+            {
+                _catchTargetAction = attrValue;
+            }
         }
     }
 }

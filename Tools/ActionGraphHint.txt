@@ -73,8 +73,8 @@ ShortCut,__FrameEvent_ZoomEffect,<FrameEvent Type=~ZoomEffect~ StartTime=~0~ Sca
 ShortCut,__FrameEvent_StopUpdate,<FrameEvent Type=~StopUpdate~ StartTime=~0~ Time=~~/>
 ShortCut,__FrameEvent_SpawnCharacter,<FrameEvent Type=~SpawnCharacter~ StartTime=~0~ CharacterKey=~~ Offset=~0 0 0~ SearchIdentifier=~~ InheritDirection=~~/>
 InQuote,AttackType=,"Default,GuardBreak,Catch"
-ShortCut,__FrameEvent_ReleaseCatch,<FrameEvent Type=~ReleaseCatch~ StartTime=~0~ Push=~~/>
-FrameEvent,ReleaseCatch,Push=~~
+ShortCut,__FrameEvent_ReleaseCatch,<FrameEvent Type=~ReleaseCatch~ StartTime=~0~ Push=~~ TargetAction=~~/>
+FrameEvent,ReleaseCatch,"Push=~~,TargetAction=~~"
 InQuote,FollowDirection,"true,false"
 ShortCut,__FrameEvent_TalkBalloon,<FrameEvent Type=~TalkBalloon~ StartTime=~0~ SimpleTalkKey=~~/>
 FrameEvent,TalkBalloon,SimpleTalkKey=~~
