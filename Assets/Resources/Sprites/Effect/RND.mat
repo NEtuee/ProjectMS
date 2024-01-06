@@ -7,10 +7,10 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: fx_circle
-  m_Shader: {fileID: 10721, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: BLUR_ON GLOWTEX_ON GLOW_ON ONLYINNEROUTLINE_ON _ _EMISSIVE_SIMPLE
-    _ONLYOUTLINE_ON _OUTLINE_NML _POSTERIZEOUTLINE_ON
+  m_Name: RND
+  m_Shader: {fileID: 4800000, guid: 7fd9a73c35d61db4c852b82580cc08c7, type: 3}
+  m_ShaderKeywords: BILBOARDY_ON GLOWTEX_ON ONLYINNEROUTLINE_ON _ _BILLBOARDY_ON
+    _EMISSIVE_SIMPLE _ONLYOUTLINE_ON _OUTLINE_NML _POSTERIZEOUTLINE_ON
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -45,6 +45,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ClippingMask:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -85,11 +89,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _FadeBurnTex:
-        m_Texture: {fileID: 2800000, guid: 8004a636da421a74797b229fb9c6d02c, type: 3}
+        m_Texture: {fileID: 2800000, guid: 677cca399782dea41aedc1d292ecb67d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _FadeTex:
-        m_Texture: {fileID: 2800000, guid: f67703f7fbf795240a3ef30d7709a918, type: 3}
+        m_Texture: {fileID: 2800000, guid: 7aad8c583ef292e48b06af0d1f2fab97, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _GlowTex:
@@ -196,7 +200,7 @@ Material:
     - _BaseColor_Step: 0.5
     - _BaseShade_Feather: 0.0001
     - _Base_Speed: 0
-    - _BillboardY: 0
+    - _BillboardY: 1
     - _BlendOp: 0
     - _BlurHD: 0
     - _BlurIntensity: 100
@@ -215,6 +219,7 @@ Material:
     - _ClipUvLeft: 0
     - _ClipUvRight: 0
     - _ClipUvUp: 0
+    - _Clipping_Level: 0
     - _ColorChangeLuminosity: 0.217
     - _ColorChangeTolerance: 0.25
     - _ColorChangeTolerance2: 0.25
@@ -295,8 +300,10 @@ Material:
     - _InnerOutlineAlpha: 1
     - _InnerOutlineGlow: 250
     - _InnerOutlineThickness: 3
+    - _Inverse_Clipping: 0
     - _Inverse_MatcapMask: 0
     - _Inverse_Z_Axis_BLD: 1
+    - _IsBaseMapAlphaAsClippingMask: 0
     - _Is_BLD: 0
     - _Is_BakedNormal: 0
     - _Is_BlendAddToHiColor: 0
@@ -412,6 +419,7 @@ Material:
     - _Tweak_RimLightMaskLevel: 0
     - _Tweak_ShadingGradeMapLevel: 0
     - _Tweak_SystemShadowsLevel: 0
+    - _Tweak_transparency: 0
     - _TwistUvAmount: 1
     - _TwistUvPosX: 0.5
     - _TwistUvPosY: 0.5
@@ -429,7 +437,7 @@ Material:
     - _ZWrite: 0
     - _ZoomUvAmount: 5
     - _simpleUI: 0
-    - _utsTechnique: 0
+    - _utsTechnique: 1
     - _utsVersion: 2.09
     m_Colors:
     - _1st_ShadeColor: {r: 1, g: 1, b: 1, a: 1}
@@ -439,7 +447,7 @@ Material:
     - _Ap_RimLightColor: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 1, g: 0, b: 0, a: 0.14901961}
     - _ColorChangeNewCol: {r: 1, g: 1, b: 0, a: 1}
     - _ColorChangeNewCol2: {r: 1, g: 1, b: 0, a: 1}
     - _ColorChangeNewCol3: {r: 1, g: 1, b: 0, a: 1}
