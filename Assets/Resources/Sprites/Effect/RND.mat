@@ -9,12 +9,12 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: RND
   m_Shader: {fileID: 4800000, guid: 7fd9a73c35d61db4c852b82580cc08c7, type: 3}
-  m_ShaderKeywords: BILBOARDY_ON GLOWTEX_ON ONLYINNEROUTLINE_ON _ _BILLBOARDY_ON
-    _EMISSIVE_SIMPLE _ONLYOUTLINE_ON _OUTLINE_NML _POSTERIZEOUTLINE_ON
+  m_ShaderKeywords: BILBOARDY_ON GLOWTEX_ON ONLYINNEROUTLINE_ON UNITY_UI_ALPHACLIP
+    _ _BILLBOARDY_ON _EMISSIVE_SIMPLE _ONLYOUTLINE_ON _OUTLINE_NML _POSTERIZEOUTLINE_ON
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 3000
   stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
@@ -224,6 +224,7 @@ Material:
     - _ColorChangeTolerance: 0.25
     - _ColorChangeTolerance2: 0.25
     - _ColorChangeTolerance3: 0.25
+    - _ColorMask: 15
     - _ColorRampBlend: 1
     - _ColorRampLuminosity: 0
     - _ColorRampOutline: 0
@@ -236,7 +237,7 @@ Material:
     - _Cull: 2
     - _CullMode: 2
     - _CullingOption: 0
-    - _Cutoff: 0.5
+    - _Cutoff: 0.01
     - _DetailNormalMapScale: 1
     - _DistortAmount: 0.5
     - _DistortTexXSpeed: 5
@@ -407,6 +408,11 @@ Material:
     - _SoftParticlesNearFadeDistance: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
+    - _Stencil: 0
+    - _StencilComp: 3
+    - _StencilOp: 3
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
     - _StepOffset: 0
     - _TextureScrollXSpeed: 1
     - _TextureScrollYSpeed: 0
@@ -426,6 +432,7 @@ Material:
     - _TwistUvRadius: 0.67
     - _UVSec: 0
     - _Unlit_Intensity: 1
+    - _UseUIAlphaClip: 1
     - _Use_1stAs2nd: 0
     - _Use_BaseAs1st: 0
     - _WaveAmount: 24
@@ -447,7 +454,7 @@ Material:
     - _Ap_RimLightColor: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
-    - _Color: {r: 1, g: 0, b: 0, a: 0.14901961}
+    - _Color: {r: 1, g: 1, b: 1, a: 0.7176471}
     - _ColorChangeNewCol: {r: 1, g: 1, b: 0, a: 1}
     - _ColorChangeNewCol2: {r: 1, g: 1, b: 0, a: 1}
     - _ColorChangeNewCol3: {r: 1, g: 1, b: 0, a: 1}
