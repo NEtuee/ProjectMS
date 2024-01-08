@@ -4,17 +4,27 @@
     <Include Path="Assets/Data/AILibrary/Package/CommonIdlePackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonChasePackage.xml"/>
     
-    <AIPackage Name="HolyNail_ShootPackage" DefaultState="AI_Shoot">
+    <AIPackage Name="HolyNail_ShootPackage" DefaultState="AI_Ready">
         <AIState>
-            <AI_Shoot UpdateTime="0.2" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+            <AI_Ready UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
                 <Event_OnExecute>
                     <AIEvent Type="SetDirectionToTarget"/>
                     <AIEvent Type="SetAction" Action="AC_Ready"/>
                 </Event_OnExecute>
+
+                <Event_OnFrame>
+                    <AIEvent Type="SetDirectionToTarget"/>
+                </Event_OnFrame>
+                
+                <Branch Condition="End" Execute="AI_Shoot"/>
+            </AI_Ready>
+            <AI_Shoot UpdateTime="0.2" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+                <Event_OnExecute>
+                    <AIEvent Type="SetAction" Action="AC_Shot"/>
+                </Event_OnExecute>
                 
                 <Branch Condition="false" Execute="TerminatePackage"/>
             </AI_Shoot>
-
             <TerminatePackage>
                 <Event_OnExecute>
                     <AIEvent Type="TerminatePackage"/>
@@ -22,14 +32,6 @@
             </TerminatePackage>
         </AIState>
     </AIPackage>
-
-    <CustomValue Name="IsCatching" Value="0.0"/>
-    <CustomEvent_AkaneCatched>
-        <AIEvent Type="SetCustomValue" Name="IsCatching" Value="1.0"/>
-    </CustomEvent_AkaneCatched>
-    <CustomEvent_AkaneReleased>
-        <AIEvent Type="SetCustomValue" Name="IsCatching" Value="0.0"/>
-    </CustomEvent_AkaneReleased>
 
     <Move Package="HolyNail_ShootPackage">
         <Branch Condition="CurrentPackageEnd" Execute="Dead"/>

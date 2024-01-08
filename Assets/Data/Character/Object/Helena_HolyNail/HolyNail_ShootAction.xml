@@ -1,4 +1,4 @@
-<ActionGraph Name="HolyNail_ShootAction" DefaultAction="AC_Move" DefaultFramePerSecond="12">
+<ActionGraph Name="HolyNail_ShootAction" DefaultAction="AC_Idle" DefaultFramePerSecond="12">
 <GlobalVariable Name="gv_MasterPath" Value="Sprites/Projectile/"/>
 
     <AC_Idle MovementType="Empty" DirectionType="AI" ActiveCollision="False">
@@ -17,14 +17,16 @@
 
         <Branch Condition="End == true" Execute="AC_Move"/>
     </AC_Move>
+
     <AC_Ready MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction" ActiveCollision="False">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="HolyNail" XFlip="true" Duration="0.026">
+        <Animation Preset="HolyNail" XFlip="true" Duration="1.0">
+            <FrameEvent Type="Test" StartTime="1.0" Log="HolyNail_EndofReady"/>
         </Animation>
 
-        <Branch Condition="true" Execute="AC_Shot"/>
+        <Branch Condition="End" Execute="AC_Idle"/>
     </AC_Ready>
-    <AC_Shot MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" ActiveCollision="False">
+    <AC_Shot MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction" ActiveCollision="False">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="HolyNail" XFlip="true" Duration="0.026">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="100" Velocity="30" Speed="0"/>
@@ -45,9 +47,9 @@
         <Branch Condition="End == true" Execute="AC_Shot"/>
     </AC_Shot>
 
-    <AC_Entry MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/4_Tsuba/"/>
-        <Animation Preset="2_tsubaEntry" XFlip="true" Duration="0.3">
+    <AC_Entry MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/Gauntlet/1_rush/"/>
+        <Animation Preset="4_grabMain" XFlip="true" Duration="0.3">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="0" Velocity="0" Speed="0"/>
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2411" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12"/>
@@ -57,9 +59,9 @@
         <Branch Condition="IsCatcher == false" Execute="AC_Away"/>
     </AC_Entry>
 
-    <AC_Struggle MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/4_Tsuba/"/>
-        <Animation Preset="3_tsubaStruggle" XFlip="true" Duration="0.3">
+    <AC_Struggle MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/Gauntlet/1_rush/"/>
+        <Animation Preset="5_struggle" XFlip="true" Duration="0.3">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="0" Velocity="0" Speed="0"/>
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2411" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12"/>
@@ -69,7 +71,7 @@
         <Branch Condition="IsCatcher == false" Execute="AC_Away"/>
     </AC_Struggle>
 
-    <AC_Away MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+    <AC_Away MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="HolyNail" XFlip="true" Duration="0.9">
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="AkaneReleased" EventTargetType="Summoner"/>
