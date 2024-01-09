@@ -1,20 +1,78 @@
-<AIGraph Name="SisterChanAI" DefaultState="Entry">
+<AIGraph Name="SisterChanAI" DefaultState="Entry_Battle">
+    <!-- 옵션 설정 -->
+    <!-- 인지 옵션값 설정 -->
+    <GlobalVariable Name="gv_CognitiveRange"    Value="4.0"/>   <!-- PC 인지 거리 : 해당 거리 내 PC 존재 시 인지한다. -->
+    <GlobalVariable Name="gv_CognitiveDelay"    Value="0.5"/>   <!-- 인지 지연 시간 : 해당 거리 내 PC 존재 시 인지까지 이루어지는 지연 시간. -->
+    <GlobalVariable Name="gv_OvlivionRange"     Value="7.0"/>   <!-- [보류] 인지 망각 거리 : 해당 거리 밖 PC 존재 시 망각 시간을 카운트한다. -->
+    <GlobalVariable Name="gv_OvlivionTime"      Value="5.0"/>   <!-- [보류] 인지 망각 시간 : 카운트 된 시간이 망각 시간을 초과하면 평화 상태로 돌아간다. -->
+    <!-- TODO: 위의 옵션값을 기준으로 TargetExist, TargetDistance 비교 연산. 이를 위해 CommonPackage에서의 Search 범위는 최대값으로 설정 통일할 것. -->
+
+    <!-- 평화 상태 행동 타입 설정 -->
+    <GlobalVariable Name="gv_bIsIdleType"       Value="True"/>  <!-- 대기형 -->
+    <GlobalVariable Name="gv_bIsRandMoveType"   Value="False"/> <!-- 랜덤이동형 -->
+    <GlobalVariable Name="gv_bIsMoveType"       Value="False"/> <!-- [보류] 지정이동형 -->
+
+    <!-- 전투 상태 행동 타입 설정 -->
+    <!-- 공격 타입 설정 -->
+        <!-- TODO: 보스 AI에 있어서 공격 타입 설정 방법 필요 -->
+        <!-- TODO: 커스텀의 영역으로 남겨두는 선택지 있음. -->
+    <!-- 공격 거리 설정 -->
+    <GlobalVariable Name="gv_MeleeAttackRangeMin"           Value="0.0"/>       <!-- 최소 공격 사거리 : Value보다 PC가 가까우면 공격하지 않는다. -->
+    <GlobalVariable Name="gv_MeleeAttackRangeMax"           Value="3.5"/>       <!-- 최대 공격 사거리 : Value보다 PC가 멀면 원거리 공격으로 이행한다. -->
+    <!-- 공격 딜레이 설정 -->
+        <!-- TODO: 공격별 쿨타임 등록해서 관리할 것 -->
+    <GlobalVariable Name="gv_MeleeAttackCoolTime"           Value="2.0"/>       <!-- 쿨타임 : 공격 발동 후 공격 실행이 제한되는 시간 -->
+    <!-- 가드 옵션 설정 -->
+    <GlobalVariable Name="gv_GuardTime"                     Value="3.0"/>       <!-- 방어 지속 시간 -->
+    <GlobalVariable Name="gv_GuardBrokenThreshold"          Value="3.0"/>       <!-- 가드 브레이크 공격을 막을 수 있는 횟수 -->
+    <!-- 이동 타입 설정 -->
+        <!-- TODO: 보스 AI에 있어서 이동 타입 설정 방법 필요 -->
+        <!-- TODO: 기존 이동은 공격을 겸하는 방식으로 이루어졌었음. 개선 필요. -->
+        <!-- TODO: 일단은 스킬 이동을 고려해 커스텀으로 돌려야 함. -->
+    <GlobalVariable Name="gv_bIsSystemChase"                Value="True"/>     <!-- 시스템 추격: 일정 거리 이상일 시 PC로 워프한다. (카메라 밖에서 동작) -->
+    <GlobalVariable Name="gv_bIsDash"                       Value="True"/>     <!-- 시스템 추격: 일정 거리 이상일 시 PC로 워프한다. (카메라 밖에서 동작) -->
+    <!-- 이동 거리 설정 -->
+    <GlobalVariable Name="gv_SystemChaseThreshold"          Value="9.75"/>     <!-- 시스템 추격 거리: 카메라 범위 값. 카메라 바깥으로 사라지지 않게 추격 -->
+    <GlobalVariable Name="gv_MoveThreshold"                 Value="3.0"/>       <!-- 최대 거리 : PC와 Value 이상 거리가 벌어진 경우 이동한다. -->
+    <GlobalVariable Name="gv_StopThreshold"                 Value="2.7"/>       <!-- 최소 거리 : PC와 Value 이상 거리가 가까워진 경우 정지 또는 경계한다. -->
+    <GlobalVariable Name="gv_AwayThreshold"                 Value="1.5"/>       <!-- 최소 거리 : PC와 Value 이상 거리가 가까워진 경우 거리를 벌린다. -->
+    <!-- 패시브 방어 반응 임계치 설정 -->
+    <GlobalVariable Name="gv_HitCountThreshold"             Value="3.0"/>       <!-- 누적 피격 횟수 트리거 : 해당 횟수 충족 시 패시브 방어 동작 (가드를 제외한 모든 피격 카운트) -->
+    <GlobalVariable Name="gv_GuardCountThreshold"           Value="2.0"/>       <!-- 누적 가드 횟수 트리거 : 해당 횟수 충족 시 패시브 방어 동작 (가드 중 모든 피격 시 카운트) -->
+    <!-- 패시브 방어(누적 피격) 반응 타입 설정 -->
+        <!-- TODO: 피격 리액션이 상황에 따라 다른 것으로 실행될 수 있음. 복수 선택 가능하게. -->
+    <GlobalVariable Name="gv_bIsDodgeToPassiveDef_Hit"      Value="True"/>      <!-- 누적 피격 시 패시브 방어 : 회피 타입 -->
+    <GlobalVariable Name="gv_bIsCounterToPassiveDef_Hit"    Value="False"/>      <!-- 누적 피격 시 패시브 방어 : 반격 타입 -->
+    <GlobalVariable Name="gv_bIsGuardToPassiveDef_Hit"      Value="False"/>      <!-- 누적 피격 시 패시브 방어 : 방어 타입 -->
+    <!-- 패시브 방어(누적 가드) 반응 타입 설정 -->
+    <GlobalVariable Name="gv_bIsDodgeToPassiveDef_Guard"    Value="False"/>      <!-- 누적 피격 시 패시브 방어 : 회피 타입 -->
+    <GlobalVariable Name="gv_bIsCounterToPassiveDef_Guard"  Value="False"/>     <!-- 누적 피격 시 패시브 방어 : 반격 타입 -->
+    <!-- 패시브 방어 실행 지연 시간 설정 -->
+    <GlobalVariable Name="gv_PassiveDef_Hit_DelayTime" Value="0.0"/>            <!-- 누적 피격 반응 지연 시간-->
+    <GlobalVariable Name="gv_PassiveDef_Guard_DelayTime" Value="0.2"/>            <!-- 누적 가드 반응 지연 시간-->
+
+    <!-- 행동 옵션값 설정 -->
+    <GlobalVariable Name="gv_TransitionDelay"   Value="0.2"/>                   <!-- [보류] State 전환 지연시간 (State 최소 실행 시간) -->
+    
 
     <Include Path="Assets/Data/AILibrary/Package/CommonDeadPackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonHitPackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonAttackPackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonChasePackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonDashPackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonSystemChasePackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonIdlePackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonGuardBrokenPackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonGroggyPackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonDodgePackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonGuardPackage.xml"/>
 
     <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterThunderSlashPackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterSpawnBookPackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterLightningBoltPackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterHolyNailPackage.xml"/>
 
+    
     <!-- 보스전 대기 시간 (나중에 보스전 시작 트리거를 받아야 함)-->
     <GlobalVariable Name="gv_sisterReadyTime" Value="3.0"/>
     <!-- 시스터 발차기 사거리 -->
@@ -23,13 +81,12 @@
     <GlobalVariable Name="gv_sisterTrasitionTime" Value="0.3"/>
 
     <!-- Std Values -->
-    <GlobalVariable Name="gv_SystemChaseRange" Value="9.75"/>     <!-- 카메라 범위 값. 카메라 바깥으로 사라지지 않게 추격 -->
     <GlobalVariable Name="gv_AobaStdDistance" Value="3.5"/>     <!-- 아오바 거리 판단 기준 (구 2.0) -->
 
     <GlobalVariable Name="gv_MaxCrimson" Value="3.0"/>      <!-- 헬레나의 붉은 마도서 최대 개수 -->
     <GlobalVariable Name="gv_MaxOlive" Value="2.0"/>        <!-- 헬레나의 갈록 마도서 최대 개수 -->
     <GlobalVariable Name="gv_MaxBlue" Value="1.0"/>         <!-- 헬레나의 푸른 마도서 최대 개수 -->
-
+    
     <!-- Groggy Pattern -->
     <GlobalVariable Name="gv_sisterStdBattle" Value="20.0"/>
 
@@ -73,13 +130,59 @@
         <Branch Condition="getTargetFrameTag_Dead" Execute="EnemyWin"/>
     </BranchSet>
     <BranchSet Name="WarpChaseSet">
-        <Branch Condition="TargetDistance >= gv_SystemChaseRange" Execute="WarpChase"/>
+        <Branch Condition="TargetDistance >= gv_SystemChaseThreshold" Execute="WarpChase"/>
     </BranchSet>
+
+    <!-- 피격 리액션 브랜치 셋 -->
     <BranchSet Name="HitReactionSet">
         <Branch Condition="Dead" Execute="Dead"/>
-        <Branch Condition="(getStat_Battle >= gv_sisterStdBattle)" Execute="Groggy"/>
-        <Branch Condition="Hit" Execute="Hit"/>
-        <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
+        <Branch Condition="getTargetFrameTag_Dead" Execute="EnemyWin"/>
+        <Branch Condition="Hit && getFrameTag_HitAvail" Execute="Hit"/>
+        <Branch Condition="GuardBreakFail && getFrameTag_GbAvail" Execute="GuardBroken"/>
+        <Branch Condition="GuardBroken && (getStat_GuardCount >= gv_GuardBrokenThreshold) && getFrameTag_GbAvail" Execute="GuardBroken"/> <!-- TODO : 일반 공격도 카운트 되긴 하나, 가드 브레이크로만 파괴 가능한 상태 -->
+        <Branch Condition="(gv_bIsDodgeToPassiveDef_Hit || gv_bIsGuardToPassiveDef_Hit || gv_bIsCounterToPassiveDef_Hit) 
+                        && (gv_HitCountThreshold <= getStat_HitCount)
+                        && (gv_PassiveDef_Hit_DelayTime <= GraphExecutedTime)" Execute="Battle_DefenseByHit"/>
+        <Branch Condition="(gv_bIsDodgeToPassiveDef_Guard || gv_bIsCounterToPassiveDef_Guard)
+                        && (gv_GuardCountThreshold <= getStat_GuardCount)
+                        && (gv_PassiveDef_Guard_DelayTime <= GraphExecutedTime)" Execute="Battle_DefenseByGuard"/>
+    </BranchSet>
+    <!-- 전투 패시브 방어 분기 브랜치 셋 -->
+    <BranchSet Name="BattleDefenseByHitJudgeSet">
+        <Branch Condition="gv_bIsDodgeToPassiveDef_Hit"      Execute="Dodge"/>
+        <Branch Condition="gv_bIsGuardToPassiveDef_Hit"      Execute="Guard"/>
+        <Branch Condition="gv_bIsCounterToPassiveDef_Hit"    Execute="Battle_CounterAttack"/>
+    </BranchSet>
+    <BranchSet Name="BattleDefenseByGuardJudgeSet">
+        <Branch Condition="gv_bIsDodgeToPassiveDef_Guard"    Execute="Dodge"/>
+        <Branch Condition="gv_bIsCounterToPassiveDef_Guard"  Execute="Battle_CounterAttack"/>
+    </BranchSet>
+
+    <!-- 전투 행동 분기 브랜치 셋-->
+    <BranchSet Name="BattleEntrySet">
+        <Branch Condition="(TargetDistance >= gv_MeleeAttackRangeMin)"  Execute="Battle_Attack"/>
+        <!-- TODO: 보스전의 이동은 별도 설정 필요 -->
+        <Branch Condition="true"                                        Execute="Battle_Move"/>
+    </BranchSet>
+    <!-- 전투 공격 분기 브랜치 셋 -->
+    <BranchSet Name="BattleAttackJudgeSet">
+        <!-- TODO: 일단 기존 방식대로 분기 -->
+        <Branch Condition="(TargetDistance > gv_MeleeAttackRangeMax)" Execute="JudgeRangedAttack"/>
+        <Branch Condition="(TargetDistance <= gv_MeleeAttackRangeMax)" Execute="JudgeMeleeAttack"/>
+    </BranchSet>
+    <BranchSet Name="AttackTriggerSet">
+        <Branch Condition="(TargetDistance >= gv_MeleeAttackRangeMin)"  Execute="Battle_Attack"/>
+    </BranchSet>
+    <!-- 전투 이동 분기 브랜치 셋 -->
+    <BranchSet Name="BattleMovementJudgeSet">
+        <!-- TODO: 보스전의 이동은 별도 설정 필요 -->
+        <Branch Condition="gv_bIsSystemChase && (TargetDistance >= gv_SystemChaseThreshold)" Execute="WarpChase"/>
+        <Branch Condition="true" Execute="Entry_Battle"/>
+    </BranchSet>
+
+    <!-- 전투 행동 초기화 브랜치 셋 -->
+    <BranchSet Name="BattlePackageEndSet">
+        <Branch Condition="CurrentPackageEnd" Execute="Entry_Battle"/>
     </BranchSet>
     <!-- BranchSet -->
 
@@ -103,115 +206,120 @@
         </TestGuardBroken>
     <!-- Test -->
 
-    <!-- State -->
-    <Entry Package="CommonIdlePackage">
-        <UseBranchSet Name="IsPlayerDead"/>
-        <UseBranchSet Name="HitReactionSet"/>
-        <UseBranchSet Name="WarpChaseSet"/>
+    <!-- Preset State -->
+    <Entry_Battle Package="CommonIdlePackage">
+        <UseBranchSet Name="BattleEntrySet"/>
+    </Entry_Battle>
+    
+    <Battle_Move Package="CommonIdlePackage">
+        <!-- TODO: 보스전의 이동은 별도 설정 필요-->
+        <UseBranchSet Name="BattleMovementJudgeSet"/>
+    </Battle_Move>
 
-        <Branch Condition="true" Execute="JudgeDist"/>
-    </Entry>
+    <Battle_Attack Package="CommonIdlePackage">
+        <UseBranchSet Name="BattleAttackJudgeSet"/>
+    </Battle_Attack>
 
-    <!-- 거리 판단 -->
-    <JudgeDist Package="CommonIdlePackage">
-        <UseBranchSet Name="IsPlayerDead"/>
-        <UseBranchSet Name="WarpChaseSet"/>
+    <Battle_DefenseByHit Package="CommonIdlePackage">
+        <UseBranchSet Name="BattleDefenseByHitJudgeSet"/>
+    </Battle_DefenseByHit>
 
-        <Branch Condition="TargetDistance > gv_AobaStdDistance" Execute="JudgeApproachAttack"/>
-        <Branch Condition="TargetDistance <= gv_AobaStdDistance" Execute="JudgeShortAttack"/>
-    </JudgeDist>
+    <Battle_DefenseByGuard Package="CommonIdlePackage">
+        <UseBranchSet Name="BattleDefenseByGuardJudgeSet"/>
+    </Battle_DefenseByGuard>
 
-    <!-- 원거리 판단 -->
-    <JudgeApproachAttack Package="CommonIdlePackage">
-        <UseBranchSet Name="IsPlayerDead"/>
+    <Battle_CounterAttack Package="CommonIdlePackage">
+        <UseBranchSet Name="BattleAttackJudgeSet"/>
+    </Battle_CounterAttack>
+    <!-- Preset State -->
+
+    <!-- AI 스테이트 : 전투 분기 -->
+    <JudgeRangedAttack Package="CommonIdlePackage">
         <!-- 라이트닝 볼트 -->
         <Branch Weight="RandVector3^x" Condition="true" Execute="LightningBoltShot"/>
         <Branch Weight="RandVector3^y" Condition="true" Execute="LightningBoltChase"/>
         <!-- 접근 -->
-        <Branch Weight="RandVector3^z" Condition="true" Execute="WarpChase"/>
-    </JudgeApproachAttack>
+        <Branch Weight="RandVector3^z" Condition="true" Execute="Dash"/>
+    </JudgeRangedAttack>
 
-    <!-- 근거리 판단-->
-    <JudgeShortAttack Package="CommonIdlePackage">
-        <UseBranchSet Name="IsPlayerDead"/>
+    <JudgeMeleeAttack Package="CommonIdlePackage">
         <!-- 낙뢰 베기 -->
         <Branch Weight="RandBoolean^True" Condition="true" Execute="ThunderSlash"/>
         <!-- 멀어지기 -->
         <Branch Weight="RandBoolean^False" Condition="true" Execute="Dodge"/>
-    </JudgeShortAttack>
+    </JudgeMeleeAttack>
 
+    <!-- AI 스테이트 : 전투 상태 : 이동 -->
+    <WarpChase Package="CommonSystemChasePackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </WarpChase>
+
+    <Dash Package="CommonDodgePackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </Dash>
+
+    <!-- AI 스테이트 : 전투 상태 : 공격 -->
     <!-- 원거리 공격: 라이트닝볼트 (발사) -->
     <LightningBoltShot Package="SisterLightningBoltPackage" EntryNode="AI_LightningBoltReadyToShot">
-        <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
-
-        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
     </LightningBoltShot>
     
     <!-- 원거리 공격: 라이트닝볼트 (추격) -->
     <LightningBoltChase Package="SisterLightningBoltPackage" EntryNode="AI_LightningBoltReadyToThrow">
-        <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
-
-        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
     </LightningBoltChase>
 
     <!-- 근거리 공격: 달빛베기 -->
     <ThunderSlash Package="SisterThunderSlashPackage">
-        <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
-
-        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
     </ThunderSlash>
 
     <!-- 소환: 마도서 소환 -->
     <SpawnBook_Olive Package="SisterSpawnBookPackage" EntryNode="AI_Olive">
-        <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
-        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
     </SpawnBook_Olive>
 
     <SpawnBook_Crimson Package="SisterSpawnBookPackage" EntryNode="AI_Crimson">
-        <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
-        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
     </SpawnBook_Crimson>
 
     <SpawnBook_Blue Package="SisterSpawnBookPackage" EntryNode="AI_Blue">
-        <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
-        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
     </SpawnBook_Blue>
 
-    <WarpChase Package="CommonSystemChasePackage">
-        <UseBranchSet Name="IsPlayerDead"/>
-        <UseBranchSet Name="HitReactionSet"/>
-        
-        <Branch Condition="CurrentPackageEnd" Execute="JudgeDist"/>
-    </WarpChase>
-
+    <!-- AI 스테이트 : 전투 상태 : 패시브 방어 -->
     <Dodge Package="CommonDodgePackage">
-        <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
-        
-        <Branch Condition="CurrentPackageEnd" Execute="JudgeDist"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
     </Dodge>
-
-    <GuardBroken Package="CommonGuardBrokenPackage">
-        <UseBranchSet Name="IsPlayerDead"/>
+    
+    <Guard Package="CommonGuardPackage">
         <UseBranchSet Name="HitReactionSet"/>
-        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+        <Branch Condition="(GraphExecutedTime  >= gv_GuardTime)" Execute="Entry_Battle"/>
+    </Guard>
+
+    <!-- AI 스테이트 : 전투 상태 : 피격 상태 -->
+    <GuardBroken Package="CommonGuardBrokenPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
     </GuardBroken>
 
     <Hit Package="CommonHitPackage">
-        <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
-        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
     </Hit>
 
     <Groggy Package="CommonGroggyPackage">
-        <UseBranchSet Name="IsPlayerDead"/>
-        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
     </Groggy>
 
     <Dead Package="CommonDeadPackage">

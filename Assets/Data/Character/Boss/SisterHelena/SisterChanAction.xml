@@ -19,6 +19,11 @@
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="0_default/1_idle" XFlip="true" Duration="1">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+            
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
@@ -35,6 +40,15 @@
 
         <Branch Condition="End == true" Execute="AC_Move"/>
     </AC_Move>
+    <AC_Dash MovementType="GraphPreset" MovementGraphPreset="Preset_Dodge" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/"/>
+        <Animation Preset="0_default/3_dash" XFlip="true" Duration="0.7">
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_Dash>
 
     <AC_SystemChase MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
@@ -125,7 +139,7 @@
                 </OnHit>
             </FrameEvent>
             
-            <FrameEvent Type="Projectile" StartTime="0.2" GraphName="Thunder" DirectionType="AI" SpawnTargetType="AITarget"/>
+            <FrameEvent Type="Projectile" StartTime="0.2" GraphName="Thunder_Small" DirectionType="AI" SpawnTargetType="AITarget"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>
@@ -133,7 +147,7 @@
 
     <AC_ThunderSlashRecover MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="1_attack/3_attackRecover" XFlip="true" Duration="0.2">
+        <Animation Preset="1_attack/3_attackRecover" XFlip="true" Duration="1.2">
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
@@ -160,7 +174,7 @@
         <AnimationHeader MasterPath="Sprites/Enemy/SisterHelena/2_cremationBeam/"/>
         <Animation Preset="2_cremationBeamShot" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_ShootAction" Offset="0 0 0" SearchIdentifier="Projectile" InheritDirection="true"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="1.0 0 0" SearchIdentifier="Projectile" InheritDirection="true" UseFlip="true"/>
 
         </Animation>
         <Animation Preset="3_cremationBeamRecovery" XFlip="true" Duration="0.3">
@@ -176,7 +190,7 @@
         <AnimationHeader MasterPath="Sprites/Enemy/SisterHelena/2_cremationBeam/"/>
         <Animation Preset="2_cremationBeamShot" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_ChaseAction" Offset="0 0 0" SearchIdentifier="Projectile" InheritDirection="true"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Chase" Offset="1.5 0 0" SearchIdentifier="Projectile" InheritDirection="true" UseFlip="true"/>
 
         </Animation>
         <Animation Preset="3_cremationBeamRecovery" XFlip="true" Duration="0.3">
