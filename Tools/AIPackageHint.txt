@@ -64,10 +64,10 @@ ShortCut,__CustomEvent,<CustomEvent_>#n#n</CustomEvent_>
 AIEvent,SequencerSignal,Signal=~~
 ShortCut,__AIEvent_SequencerSignal,<AIEvent Type=~SequencerSignal~ Signal=~~/>
 AIEvent,SetDirectionToTarget,"Angle=~~,Speed=~~"
-,,
-,,
-,,
-,,
+ShortCut,__AIEvent_AttachRotateSlot,<AIEvent Type=~AttachRotateSlot~ TargetType=~~/>
+AIEvent,SetCustomValue,TargetType=~~
+InQuote,TargetType=,"Target,Summoner"
+ShortCut,__AIEvent_DetachRotateSlot,<AIEvent Type=~DetachRotateSlot~/>
 ,,
 ,,
 ,,

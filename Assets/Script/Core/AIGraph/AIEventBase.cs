@@ -19,6 +19,8 @@ public enum AIEventType
     AIEvent_SetCustomValue,
     AIEvent_AddCustomValue,
     AIEvent_SequencerSignal,
+    AIEvent_AttachRotateSlot,
+    AIEvent_DetachRotateSlot,
     Count,
 }
 
@@ -65,6 +67,74 @@ public abstract class AIEventBase
 
 }
 
+public class AIEvent_DetachRotateSlot : AIEventBase
+{
+    private SetRotateSlotType _rotateSlotType = SetRotateSlotType.None;
+
+    public override AIEventType getFrameEventType() {return AIEventType.AIEvent_DetachRotateSlot;}
+    public override void onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        if(executeEntity is GameEntityBase == false)
+            return;
+
+        (executeEntity as GameEntityBase).detachToSlot();
+    }
+
+    public override void loadFromXML(XmlNode node) 
+    {
+    }
+}
+
+public class AIEvent_AttachRotateSlot : AIEventBase
+{
+    private SetRotateSlotType _rotateSlotType = SetRotateSlotType.None;
+
+    public override AIEventType getFrameEventType() {return AIEventType.AIEvent_AttachRotateSlot;}
+    public override void onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        if(executeEntity is GameEntityBase == false)
+            return;
+
+        if(_rotateSlotType == SetRotateSlotType.None)
+            return;
+
+        GameEntityBase executeTargetEntity = null;
+        switch(_rotateSlotType)
+        {
+            case SetRotateSlotType.Target:
+            {
+                executeTargetEntity = (executeEntity as GameEntityBase).getCurrentTargetEntity();
+            }
+            break;
+            case SetRotateSlotType.Summoner:
+            {
+                if(executeEntity.getSummonObject() is GameEntityBase == false)
+                    return;
+
+                executeTargetEntity = executeEntity.getSummonObject() as GameEntityBase;
+            }
+            break;
+        }
+
+        (executeEntity as GameEntityBase).attachToSlot(executeTargetEntity);
+    }
+
+    public override void loadFromXML(XmlNode node) 
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "TargetType")
+                _rotateSlotType = (SetRotateSlotType)System.Enum.Parse(typeof(SetRotateSlotType), attrValue);
+        }
+
+        if(_rotateSlotType == SetRotateSlotType.None)
+            DebugUtil.assert(false, "AIEvent_SetRotateSlot의 _rotateSlotType은 필수 입력 해야 합니다.");
+    }
+}
 
 public class AIEvent_SequencerSignal : AIEventBase
 {
