@@ -1,4 +1,4 @@
-<AIGraph Name="SisterChanAI" DefaultState="Test">
+<AIGraph Name="SisterChanAI" DefaultState="Entry">
 
     <Include Path="Assets/Data/AILibrary/Package/CommonDeadPackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonHitPackage.xml"/>
@@ -8,11 +8,12 @@
     <Include Path="Assets/Data/AILibrary/Package/CommonIdlePackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonGuardBrokenPackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonGroggyPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonDodgePackage.xml"/>
 
     <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterThunderSlashPackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterSpawnBookPackage.xml"/>
-    <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterThunderStrokePackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterLightningBoltPackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterHolyNailPackage.xml"/>
 
     <!-- 보스전 대기 시간 (나중에 보스전 시작 트리거를 받아야 함)-->
     <GlobalVariable Name="gv_sisterReadyTime" Value="3.0"/>
@@ -36,7 +37,8 @@
     <CustomValue Name="CountCrimson" Value="0.0"/>
     <CustomValue Name="CountOlive" Value="0.0"/>
     <CustomValue Name="CountBlue" Value="0.0"/>
-
+    <CustomValue Name="IsCatching" Value="0.0"/>
+    
     <CustomEvent_CountCrimson>
         <AIEvent Type="AddCustomValue" Name="CountCrimson" Value="1.0"/>
     </CustomEvent_CountCrimson>
@@ -58,13 +60,20 @@
         <AIEvent Type="AddCustomValue" Name="CountBlue" Value="-1.0"/>
     </CustomEvent_DiscountBlue>
     
+    <CustomEvent_AkaneCatched>
+        <AIEvent Type="SetCustomValue" Name="IsCatching" Value="1.0"/>
+    </CustomEvent_AkaneCatched>
+    <CustomEvent_AkaneReleased>
+        <AIEvent Type="SetCustomValue" Name="IsCatching" Value="0.0"/>
+    </CustomEvent_AkaneReleased>
 
+    <!-- BranchSet -->
     <BranchSet Name="IsPlayerDead">
-            <Branch Condition="Dead" Execute="Dead"/>
-            <Branch Condition="getTargetFrameTag_Dead" Execute="EnemyWin"/>
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="getTargetFrameTag_Dead" Execute="EnemyWin"/>
     </BranchSet>
     <BranchSet Name="WarpChaseSet">
-            <Branch Condition="TargetDistance >= gv_SystemChaseRange" Execute="WarpChase"/>
+        <Branch Condition="TargetDistance >= gv_SystemChaseRange" Execute="WarpChase"/>
     </BranchSet>
     <BranchSet Name="HitReactionSet">
         <Branch Condition="Dead" Execute="Dead"/>
@@ -72,25 +81,29 @@
         <Branch Condition="Hit" Execute="Hit"/>
         <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
     </BranchSet>
-    
-    <Test Package="SisterSpawnBookPackage" EntryNode="AI_Olive">
-        <Branch Condition="Hit" Execute="TestHit"/>
-        <Branch Condition="(GuardBreakFail || GuardBroken) && getFrameTag_GbAvail" Execute="TestGuardBroken"/>
-        <Branch Condition="CurrentPackageEnd" Execute="Test"/>
-    </Test>
+    <!-- BranchSet -->
 
-    <TestHit Package="CommonHitPackage">
-        <Branch Condition="Hit" Execute="TestHit"/>
-        <Branch Condition="(GuardBreakFail || GuardBroken) && getFrameTag_GbAvail" Execute="TestGuardBroken"/>
-        <Branch Condition="CurrentPackageEnd" Execute="Test"/>
-    </TestHit>
+    <!-- Test -->
+        <Test Package="SisterSpawnBookPackage" EntryNode="AI_Olive">
+            <Branch Condition="Hit" Execute="TestHit"/>
+            <Branch Condition="(GuardBreakFail || GuardBroken) && getFrameTag_GbAvail" Execute="TestGuardBroken"/>
+            <Branch Condition="CurrentPackageEnd" Execute="Test"/>
+        </Test>
 
-    <TestGuardBroken Package="CommonGuardBrokenPackage">
-        <Branch Condition="Hit" Execute="TestHit"/>
-        <Branch Condition="(GuardBreakFail || GuardBroken) && getFrameTag_GbAvail" Execute="TestGuardBroken"/>
-        <Branch Condition="CurrentPackageEnd" Execute="Test"/>
-    </TestGuardBroken>
+        <TestHit Package="CommonHitPackage">
+            <Branch Condition="Hit" Execute="TestHit"/>
+            <Branch Condition="(GuardBreakFail || GuardBroken) && getFrameTag_GbAvail" Execute="TestGuardBroken"/>
+            <Branch Condition="CurrentPackageEnd" Execute="Test"/>
+        </TestHit>
 
+        <TestGuardBroken Package="CommonGuardBrokenPackage">
+            <Branch Condition="Hit" Execute="TestHit"/>
+            <Branch Condition="(GuardBreakFail || GuardBroken) && getFrameTag_GbAvail" Execute="TestGuardBroken"/>
+            <Branch Condition="CurrentPackageEnd" Execute="Test"/>
+        </TestGuardBroken>
+    <!-- Test -->
+
+    <!-- State -->
     <Entry Package="CommonIdlePackage">
         <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
@@ -112,32 +125,46 @@
     <JudgeApproachAttack Package="CommonIdlePackage">
         <UseBranchSet Name="IsPlayerDead"/>
         <!-- 라이트닝 볼트 -->
-        <Branch Condition="true" Execute="LightningBolt"/>
-
+        <Branch Weight="RandVector3^x" Condition="true" Execute="LightningBoltShot"/>
+        <Branch Weight="RandVector3^y" Condition="true" Execute="LightningBoltChase"/>
+        <!-- 접근 -->
+        <Branch Weight="RandVector3^z" Condition="true" Execute="WarpChase"/>
     </JudgeApproachAttack>
-
-    <LightningBolt Package="SisterLightningBoltPackage">
-        <UseBranchSet Name="IsPlayerDead"/>
-        <UseBranchSet Name="HitReactionSet"/>
-
-        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
-    </LightningBolt>
 
     <!-- 근거리 판단-->
     <JudgeShortAttack Package="CommonIdlePackage">
         <UseBranchSet Name="IsPlayerDead"/>
-        <!-- 낙뢰 -->
-        <Branch Condition="true" Execute="ThunderStroke"/>
-
+        <!-- 낙뢰 베기 -->
+        <Branch Weight="RandBoolean^True" Condition="true" Execute="ThunderSlash"/>
+        <!-- 멀어지기 -->
+        <Branch Weight="RandBoolean^False" Condition="true" Execute="Dodge"/>
     </JudgeShortAttack>
 
-    <ThunderStroke Package="SisterThunderStrokePackage">
+    <!-- 원거리 공격: 라이트닝볼트 (발사) -->
+    <LightningBoltShot Package="SisterLightningBoltPackage" EntryNode="AI_LightningBoltReadyToShot">
         <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
 
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
-    </ThunderStroke>
+    </LightningBoltShot>
+    
+    <!-- 원거리 공격: 라이트닝볼트 (추격) -->
+    <LightningBoltChase Package="SisterLightningBoltPackage" EntryNode="AI_LightningBoltReadyToThrow">
+        <UseBranchSet Name="IsPlayerDead"/>
+        <UseBranchSet Name="HitReactionSet"/>
 
+        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+    </LightningBoltChase>
+
+    <!-- 근거리 공격: 달빛베기 -->
+    <ThunderSlash Package="SisterThunderSlashPackage">
+        <UseBranchSet Name="IsPlayerDead"/>
+        <UseBranchSet Name="HitReactionSet"/>
+
+        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+    </ThunderSlash>
+
+    <!-- 소환: 마도서 소환 -->
     <SpawnBook_Olive Package="SisterSpawnBookPackage" EntryNode="AI_Olive">
         <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
@@ -161,7 +188,14 @@
         <UseBranchSet Name="HitReactionSet"/>
         
         <Branch Condition="CurrentPackageEnd" Execute="JudgeDist"/>
-    </WarpChase>   
+    </WarpChase>
+
+    <Dodge Package="CommonDodgePackage">
+        <UseBranchSet Name="IsPlayerDead"/>
+        <UseBranchSet Name="HitReactionSet"/>
+        
+        <Branch Condition="CurrentPackageEnd" Execute="JudgeDist"/>
+    </Dodge>
 
     <GuardBroken Package="CommonGuardBrokenPackage">
         <UseBranchSet Name="IsPlayerDead"/>

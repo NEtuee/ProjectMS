@@ -141,10 +141,10 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_ThunderSlashRecover>
 
-    <!-- 원거리 공격: 라이트닝볼트(빔) -->
-    <AC_LightningBoltReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="LaserEffect">
-        <AnimationHeader MasterPath="Sprites/Enemy/SisterHelena/2_cremationBeam/"/>
-        <Animation Preset="1_cremationBeamReady" XFlip="true" Duration="0.85">
+    <!-- 원거리 공격: 라이트닝볼트 준비 -->
+    <AC_LightningBoltReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/KantoReito/2_cremationBeam/"/>
+        <Animation Preset="1_cremationBeamReady" XFlip="true" Duration="0.35">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2206" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
 
@@ -155,11 +155,12 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_LightningBoltReady>
 
-    <AC_LightningBoltShot MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" Flags="LaserEffect">
+    <!-- 원거리 공격: 라이트닝볼트(발사) -->
+    <AC_LightningBoltShot MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/SisterHelena/2_cremationBeam/"/>
         <Animation Preset="2_cremationBeamShot" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor" Offset="0 0 0" SearchIdentifier="Projectile" InheritDirection="true"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_ShootAction" Offset="0 0 0" SearchIdentifier="Projectile" InheritDirection="true"/>
 
         </Animation>
         <Animation Preset="3_cremationBeamRecovery" XFlip="true" Duration="0.3">
@@ -169,6 +170,108 @@
 
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_LightningBoltShot>
+
+    <!-- 원거리 공격: 라이트닝볼트(추격) -->
+    <AC_LightningBoltThrow MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/SisterHelena/2_cremationBeam/"/>
+        <Animation Preset="2_cremationBeamShot" XFlip="true" Duration="1.0">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_ChaseAction" Offset="0 0 0" SearchIdentifier="Projectile" InheritDirection="true"/>
+
+        </Animation>
+        <Animation Preset="3_cremationBeamRecovery" XFlip="true" Duration="0.3">
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_LightningBoltThrow>
+
+
+    <!-- 잡기 공격: 성정 발사 -->
+    <AC_HolyNailReady MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" Flags="LaserEffect">
+        <AnimationHeader MasterPath="Sprites/Enemy/KantoReito/2_cremationBeam/"/>
+        <Animation Preset="1_cremationBeamReady" XFlip="true" Duration="0.85">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2206" Attach="true"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
+            <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/CommonBeam_TimeLine" Attach="true" AngleType="Direction" LifeTime="1.05" FollowDirection="True" AttackPreset="Reito_Beam"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_HolyNailShot"/>
+    </AC_HolyNailReady>
+
+    <AC_HolyNailShot MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" Flags="LaserEffect">
+        <AnimationHeader MasterPath="Sprites/Enemy/SisterHelena/2_cremationBeam/"/>
+        <Animation Preset="2_cremationBeamShot" XFlip="true" Duration="1.0">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
+
+            <FrameEvent Type="Attack" StartTime="0.2" AttackPreset="Najimi_Pitching">
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
+
+                    <FrameEvent Type="StopUpdate" Time="0.07"/>
+                    <FrameEvent Type="SetTimeScale" Scale="0.2" Time="0.2" BlendTime="0.2"/>
+                    <FrameEvent Type="ShakeEffect" Scale="0.15" Speed="35.0" Time="0.2"/>
+
+                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Slash" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
+                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Blood" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
+                    <FrameEvent Type="StopUpdate" Time="0.07"/>
+                </OnHit>
+            
+            </FrameEvent>
+        </Animation>
+        <Animation Preset="3_cremationBeamRecovery" XFlip="true" Duration="0.3">
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_HolyNailShot>
+    <!-- 잡기 공격: 못박기 -->
+    <AC_HolyNailSmashReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="1_attack/1_attackReady" XFlip="true" Duration="0.48">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2203" Attach="true"/>
+            
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="5" Velocity="0" Speed="15"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+            
+        </Animation>
+    
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_HolyNailSmashReady>
+    <AC_HolyNailSmashMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="1_attack/2_attackMain" XFlip="true" Duration="0.35">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2204" Attach="true"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="24" MaxVelocity="12" Velocity="12" Speed="0"/>
+            
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.2" AttackPreset="SukebanMelee_Normal">   <!-- TODO: Helena -->
+                <OnHit>
+                    <FrameEvent Type="AudioPlay" StartTime="0" ID="2205" Attach="true"/>
+                    <!-- TODO: 못에 잡혀 있는 상태면, 극딜 / 아니면 평딜, 이펙트도 다르게. 사운드도 다르게 -->
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
+                    
+                    <FrameEvent Type="StopUpdate" Time="0.1"/>
+                    <FrameEvent Type="SetTimeScale" Scale="0.1" Time="0.1" BlendTime="0.1"/>
+                    <FrameEvent Type="ShakeEffect" Scale="0.1" Speed="10.0" Time="0.1"/>
+                </OnHit>
+            </FrameEvent>
+            
+            <FrameEvent Type="Projectile" StartTime="0.2" GraphName="Thunder" DirectionType="AI" SpawnTargetType="AITarget"/>
+        </Animation>
+        <Animation Preset="1_attack/3_attackRecover" XFlip="true" Duration="0.2">
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_HolyNailSmashMain>
 
     <!-- 소환: 마도서 소환 -->
     <AC_SpawnOliveMain MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
@@ -208,30 +311,26 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_SpawnBlueMain>
 
-    <!-- 원거리 공격: 낙뢰(강) -->
-    <AC_LightningThunderMain MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/SisterHelena/1_thunderStroke/"/>
-        <Animation Preset="1_thunderReady" XFlip="true" Duration="0.7">
-            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <FrameEvent Type="Projectile" StartTime="0.2" GraphName="ThunderStroke" DirectionType="AI" SpawnTargetType="AITarget"/>
-        </Animation>
-        <Animation Preset="2_thunderMain" XFlip="true" Duration="0.5">
-        </Animation>
-    </AC_LightningThunderMain>
-    <!-- 원거리 공격: 낙뢰(약) -->
-
 <!-- Attack Action -->
 
 <!-- Defense Action -->
+    <AC_Dodge MovementType="GraphPreset" MovementGraphPreset="Preset_Dodge" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/"/>
+        <Animation Preset="0_default/3_dash" XFlip="true" Duration="0.7">
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_Dodge>
+
     <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="0_default/3_hit" XFlip="true" Duration="1.25">
+        <Animation Preset="2_defense/3_guardBroken" XFlip="true" Duration="1.25">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountIncrease"/>
-            <!--
-            <FrameEvent Type="ZoomEffect" Scale="-0.4"/>
-            -->
+
             <FrameEvent Type="StopUpdate" Time="0.15"/>
             
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>

@@ -365,6 +365,18 @@
 
         SearchIdentifier="Enemy"
     />
+    <HolyNail_Shoot
+        DisplayName="헬레나 성정 (발사)"
+        ActionGraph="Assets/Data/Character/Object/Helena_HolyNail/HolyNail_ShootAction.xml"
+        AIGraph="Assets/Data/Character/Object/Helena_HolyNail/HolyNail_ShootAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        SearchIdentifier="Enemy"
+    />
 
     <PoliceOmawariChan
         DisplayName="폴리스 오마와리쨩"

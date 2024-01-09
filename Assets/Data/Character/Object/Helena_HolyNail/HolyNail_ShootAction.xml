@@ -1,0 +1,98 @@
+<ActionGraph Name="HolyNail_ShootAction" DefaultAction="AC_Idle" DefaultFramePerSecond="12">
+<GlobalVariable Name="gv_MasterPath" Value="Sprites/Projectile/"/>
+
+    <AC_Idle MovementType="Empty" DirectionType="AI" ActiveCollision="False">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="HolyNail" XFlip="true" Duration="0.5">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_Idle>
+
+    <AC_Move MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" ActiveCollision="False">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="HolyNail" XFlip="true" Duration="0.026">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="100" Velocity="25" Speed="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Move"/>
+    </AC_Move>
+
+    <AC_Ready MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction" ActiveCollision="False">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="HolyNail" XFlip="true" Duration="1.0">
+            <FrameEvent Type="Test" StartTime="1.0" Log="HolyNail_EndofReady"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_Ready>
+    <AC_Shot MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction" ActiveCollision="False">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="HolyNail" XFlip="true" Duration="0.026">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="100" Velocity="30" Speed="0"/>
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.026" AttackPreset="Helena_Nail" AttackType="Catch" >
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" StartTime="0" ApplyBuff="CommonHalfAttack"/>
+                    <FrameEvent Type="ZoomEffect" Scale="-0.4"/>
+                    <FrameEvent Type="StopUpdate" Time="0.15"/>
+                </OnHit>    
+                <OnCatch>
+                    <FrameEvent Type="CallAIEvent" StartTime="0" EventName="AkaneCatched" EventTargetType="Summoner"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CatchedSet"/>
+                </OnCatch>
+            </FrameEvent>
+        </Animation>
+
+        <Branch Condition="AttackCatchTarget" Execute="AC_Entry"/>
+        <Branch Condition="End == true" Execute="AC_Shot"/>
+    </AC_Shot>
+
+    <AC_Entry MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/Gauntlet/1_rush/"/>
+        <Animation Preset="4_grabMain" XFlip="true" Duration="0.3">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="0" Velocity="0" Speed="0"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2411" Attach="true"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="12"/>
+        </Animation>
+
+        <Branch Condition="getKey_Escape_1 || getKey_Escape_2 || End" Execute="AC_Struggle"/>
+        <Branch Condition="IsCatcher == false" Execute="AC_Away"/>
+    </AC_Entry>
+
+    <AC_Struggle MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/Gauntlet/1_rush/"/>
+        <Animation Preset="5_struggle" XFlip="true" Duration="0.3">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="0" Velocity="0" Speed="0"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2411" Attach="true"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="12"/>
+        </Animation>
+
+        <Branch Condition="getKey_Escape_1 || getKey_Escape_2 || End" Execute="AC_Entry"/>
+        <Branch Condition="IsCatcher == false" Execute="AC_Away"/>
+    </AC_Struggle>
+
+    <AC_Away MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="HolyNail" XFlip="true" Duration="0.9">
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="AkaneReleased" EventTargetType="Summoner"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="4" MaxVelocity="9" Velocity="-4" Speed="0"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="Dead"/>
+    </AC_Away>
+
+    <Dead MovementType="Empty" DirectionType="AI" ActiveCollision="False">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="empty" XFlip="true" Duration="0.5">
+            <FrameEvent Type="Effect" StartTime="0" Path="Sprites/Projectile/HolyNail" FramePerSecond="0.2" CastShadow="True">
+                <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
+            </FrameEvent>
+            <FrameEvent Type="KillEntity" StartTime="0"/>
+            
+        </Animation>
+        <Branch Condition="End == true" Execute="Dead"/>
+    </Dead>
+
+</ActionGraph>
