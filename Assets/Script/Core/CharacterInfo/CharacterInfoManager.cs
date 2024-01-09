@@ -20,7 +20,10 @@ public class CharacterInfoManager : Singleton<CharacterInfoManager>
         }
 
         if(_characterInfoData.ContainsKey(key) == false)
+        {
+            DebugUtil.assert(false,"해당 캐릭터가 존재하지 않습니다. 오타는 아닌가요? [Key: {0}]", key);
             return null;
+        }
 
         return _characterInfoData[key];
 
