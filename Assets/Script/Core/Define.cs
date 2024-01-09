@@ -27,6 +27,12 @@ public enum CallAIEventTargetType
     Summoner,
 }
 
+public enum SetRotateSlotType
+{
+    None,
+    Target,
+    Summoner,
+}
 
 public enum AttackType
 {

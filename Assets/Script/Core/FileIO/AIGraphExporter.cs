@@ -933,9 +933,17 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
                 {
                     aiEvent = new AIEvent_AddCustomValue();
                 }
-                else if(attrValue == "AIEvent_SequencerSignal")
+                else if(attrValue == "SequencerSignal")
                 {
                     aiEvent = new AIEvent_SequencerSignal();
+                }
+                else if(attrValue == "AttachRotateSlot")
+                {
+                    aiEvent = new AIEvent_AttachRotateSlot();
+                }
+                else if(attrValue == "DetachRotateSlot")
+                {
+                    aiEvent = new AIEvent_DetachRotateSlot();
                 }
                 else
                 {

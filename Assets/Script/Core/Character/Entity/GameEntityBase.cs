@@ -11,9 +11,7 @@ public delegate void DeadEventDelegate(GameEntityBase collisionData);
 
 public class GameEntityBase : SequencerObjectBase
 {
-
     public static float         _defaultFriction = 4f;
-
 
     public string               actionGraphPath = "Assets\\Data\\ActionGraph\\ActionGraphTest.xml";
     public string               aiGraphPath = "Assets\\Data\\AIGraph\\CommonEnemyAI.xml";
@@ -68,6 +66,9 @@ public class GameEntityBase : SequencerObjectBase
 
     private float               _dealedHP = 0f;
     private float               _leftHP = 0f;
+    private float               _rotateSlotSpeed = 0f;
+    private float               _rotateSlotRadius = 0f;
+    private float               _currentRotateSlotAngle = 0f;
 
     private bool                _updateDirection = true;
     private bool                _updateFlipState = true;
@@ -88,19 +89,8 @@ public class GameEntityBase : SequencerObjectBase
 
     private List<EffectItem>    _hpEffect = new List<EffectItem>();
     private List<TimelineEffectItem> _enabledLaserEffectItems = new List<TimelineEffectItem>();
-
-    private static string[] _hpEffectPath = new string[3]
-    {
-        "",
-        "",
-        "",
-    };
-    private static Vector3[] _hpEffectOffset = new Vector3[3]
-    {
-        Vector3.zero,
-        Vector3.zero,
-        Vector3.zero,
-    };
+    private List<GameEntityBase> _rotateSlotList = new List<GameEntityBase>();
+    private GameEntityBase      _rotateSlotParent = null;
 
 #if UNITY_EDITOR
     [HideInInspector] public bool _blockAIByEditor = false;
@@ -220,7 +210,8 @@ public class GameEntityBase : SequencerObjectBase
         _spriteRenderer.sprite = _actionGraph.getCurrentSprite(_actionGraph.getCurrentRotationType() != RotationType.AlwaysRight ? (_spriteRotation * _actionStartRotation).eulerAngles.z : MathEx.directionToAngle(_direction));
         _spriteRenderer.flipX = false;
         _spriteRenderer.flipY = false;
-        
+
+        setRotateSlotValue(0f, 0f);
         initializeActionValue();
 
         foreach(var item in _hpEffect)
@@ -324,6 +315,7 @@ public class GameEntityBase : SequencerObjectBase
         CollisionManager.Instance().registerObject(_collisionInfo, this);
         _collisionInfo.setActiveCollision(_actionGraph.isActiveCollision());
 
+        setRotateSlotValue(0f, 0f);
         initializeActionValue();
 
         foreach(var item in _hpEffect)
@@ -355,20 +347,6 @@ public class GameEntityBase : SequencerObjectBase
 
         _leftHP = _statusInfo.getCurrentStatus("HP");
         _dealedHP = _statusInfo.getMaxStatus("HP") - _leftHP;
-
-        if(_useHPEffect)
-        {
-            if(_hpEffect.Count < _hpEffectOffset.Length)
-            {
-                if(_dealedHP > (float)_hpEffect.Count)
-                {
-                    EffectRequestData requestData;
-
-                    //EffectManager._instance.createEffect()
-                }
-            }
-        }
-        
 
         _danmakuGraph.process(deltaTime);
 
@@ -465,7 +443,6 @@ public class GameEntityBase : SequencerObjectBase
 
                 _graphicInterface.setInterfaceOffset(Vector3.up * _headUpOffset);
 
-
                 if(_actionGraph.checkCurrentActionFlag(ActionFlags.ClearPush))
                     _currentVelocity = Vector3.zero;
             }
@@ -536,6 +513,13 @@ public class GameEntityBase : SequencerObjectBase
             item.stopEffect();
         }
         _hpEffect.Clear();
+
+        detachToSlot();
+        foreach(var item in _rotateSlotList)
+        {
+            item._rotateSlotParent = null;
+        }
+        _rotateSlotList.Clear();
 
         base.deactive();
     }
@@ -669,6 +653,62 @@ public class GameEntityBase : SequencerObjectBase
         transform.position -= direction * collapseDistance * scaledDeltaTime;
     }
 
+    protected void updateAttachedSlot(float deltaTime)
+    {
+        if(_rotateSlotList.Count == 0)
+            return;
+        
+        _currentRotateSlotAngle += _rotateSlotSpeed * deltaTime;
+        if(_currentRotateSlotAngle >= 360f)
+            _currentRotateSlotAngle -= 360f;
+
+        float angle = 360f * (1f / (float)_rotateSlotList.Count);
+        for(int index = 0; index < _rotateSlotList.Count; ++index)
+        {
+            Quaternion rotation = Quaternion.Euler(0f,0f,_currentRotateSlotAngle + angle * (float)(index + 1));
+
+            Vector3 learpedPosition = Vector3.Lerp(_rotateSlotList[index].transform.position,transform.position + rotation * (Vector3.right * _rotateSlotRadius), 0.2f);
+            _rotateSlotList[index].updatePosition(learpedPosition);
+        }
+    }
+
+    public bool hasRotateSlot()
+    {
+        return _rotateSlotParent != null;
+    }
+
+    public void setRotateSlotValue(float speed, float radius)
+    {
+        _rotateSlotRadius = radius;
+        _rotateSlotSpeed = speed;
+    }
+
+    public void attachToSlot(GameEntityBase parentEntity)
+    {
+        if(_rotateSlotParent != null)
+            detachToSlot();
+
+        parentEntity._rotateSlotList.Add(this);
+        _rotateSlotParent = parentEntity;
+    }
+
+    public void detachToSlot()
+    {
+        if(_rotateSlotParent == null)
+            return;
+        
+        for(int index = 0; index < _rotateSlotParent._rotateSlotList.Count; ++index)
+        {
+            if(_rotateSlotParent._rotateSlotList[index] == this)
+            {
+                _rotateSlotParent._rotateSlotList.RemoveAt(index);
+                break;
+            }
+        }
+
+        _rotateSlotParent = null;
+    }
+
     private void collisionEndEvent()
     {
 
@@ -753,6 +793,7 @@ public class GameEntityBase : SequencerObjectBase
         _spriteRenderer.flipX = false;
         _spriteRenderer.flipY = false;
 
+        setRotateSlotValue(0f, 0f);
         initializeActionValue();
 
         foreach(var item in _hpEffect)

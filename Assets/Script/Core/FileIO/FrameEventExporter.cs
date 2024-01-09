@@ -87,13 +87,15 @@ public static class FrameEventLoader
             outFrameEvent = new ActionFrameEvent_Torque();
         else if(type == "EffectPreset")
             outFrameEvent = new ActionFrameEvent_EffectPreset();
+        else if(type == "SetRotateSlotValue")
+            outFrameEvent = new ActionFrameEvent_SetRotateSlotValue();
         else
         {
             DebugUtil.assert(false, "invalid frameEvent type: {0}",type);
             return null;
         }
 
-        DebugUtil.assert((int)FrameEventType.Count == 37, "check here");
+        DebugUtil.assert((int)FrameEventType.Count == 38, "check here");
 
 
         if(outFrameEvent == null)

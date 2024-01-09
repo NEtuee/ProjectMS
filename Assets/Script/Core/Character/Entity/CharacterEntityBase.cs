@@ -50,7 +50,11 @@ public class CharacterEntityBase : GameEntityBase
     public override void progress(float deltaTime)
     {
         base.progress(deltaTime);
-        getMovementControl().addFrameToWorld(this);
+
+        if(hasRotateSlot() == false)
+            getMovementControl().addFrameToWorld(this);
+
+        updateAttachedSlot(deltaTime);
         updateByActionFlag();
 
         if(isActiveSelf() == false)

@@ -41,6 +41,7 @@ public enum FrameEventType
     FrameEvent_SetDirectionType,
     FrameEvent_Torque,
     FrameEvent_EffectPreset,
+    FrameEvent_SetRotateSlotValue,
 
     Count,
 }
@@ -825,6 +826,34 @@ public class ActionFrameEvent_ShakeEffect : ActionFrameEventBase
                 _shakeTime = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
             else if(attributes[i].Name == "Speed")
                 _shakeSpeed = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
+        }
+    }
+}
+
+public class ActionFrameEvent_SetRotateSlotValue : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_SetRotateSlotValue;}
+
+    float _radius = 0f;
+    float _speed = 0f;
+
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        if(executeEntity is GameEntityBase)
+            (executeEntity as GameEntityBase).setRotateSlotValue(_speed, _radius);
+            
+        return true;
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            if(attributes[i].Name == "Radius")
+                _radius = float.Parse(attributes[i].Value);
+            else if(attributes[i].Name == "Speed")
+                _speed = float.Parse(attributes[i].Value);
         }
     }
 }
