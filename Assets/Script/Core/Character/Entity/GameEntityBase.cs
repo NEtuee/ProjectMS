@@ -1106,9 +1106,14 @@ public class GameEntityBase : SequencerObjectBase
                 if(catchObject != null)
                     direction = -catchObject.getDirection();
                 break;
+            case DirectionType.Summoner:
+                if(getSummonObject() != null)
+                    direction = getSummonObject().getDirection();
+                break;
             case DirectionType.Count:
                 DebugUtil.assert(false, "invalid direction type : {0}",_currentDirectionType);
                 break;
+            
         }
 
         if(direction.sqrMagnitude == 0f)
