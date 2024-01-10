@@ -6,8 +6,8 @@ AIEvent,SetAngleDirection,Angle=~~
 AIEvent,Test,Log=~~
 InQuote,Condition=,"ActionTest,ActionDash,End,AngleBetweenStick,AngleDirection,IsXFlip,IsYFlip,CurrentFrame,AttackSuccess,AttackGuarded,AttackParried,AttackGuardBreak,DefenceSuccess,ParrySuccess,Hit,EvadeSuccess,GuardBroken,CurrentFrame,TargetExists,TargetDistance,ArrivedTarget,CurrentPackageEnd,getStat_,getKey_,getFrameTag_,getTargetFrameTag_,getWeight_,true,false,PackageExecutedTime,GraphExecutedTime,AttackGuardBreakFail,GuardBreakFail,IsCatcher,IsCatchTarget,AttackCatchTarget,Catched,LifeTime,ActionExecutedTime,customValue_,Dead,CanInput,aiGraphCoolTime_"
 InQuote,Consume=,"true,false"
-InQuote,SearchIdentifier,"Player,Enemy"
-InQuote,TargetSearchType,"Near,NearDirection,NearMousePointDirection"
+InQuote,SearchIdentifier=,"Player,Enemy"
+InQuote,TargetSearchType=,"Near,NearDirection,NearMousePointDirection"
 InQuote,Type=,"Test,SetAngleDirection,SetDirectionToTarget,SetAction,ClearTarget,ExecuteState,TerminatePackage,KillEntity"
 InScope,,"Update=~~,TargetSearchType=~~,TargetSearchRange=~~,TargetSearchStartRange=~~,TargetSearchSphereRadius=~~,SearchIdentifier=~~,TargetPosition=~~,ArriveThreshold=~~"
 LineStart,<AIPackage,"Name=~~,DefaultState=~~"

@@ -1442,6 +1442,7 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
     private System.Action           _collisionEndEvent;
     
     private DefenceType[]           _ignoreDefenceType = null;
+    private DirectionType           _targetDirectionType = DirectionType.Count;
 
     private AttackType              _attackType;
     private UnityEngine.Vector3     _pushVector = UnityEngine.Vector3.zero;
@@ -1469,7 +1470,15 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
 
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
-        _collisionInfo.updateCollisionInfo(executeEntity.transform.position,executeEntity.getDirection());
+        if(_targetDirectionType != DirectionType.Count && executeEntity is GameEntityBase)
+        {
+            GameEntityBase gameEntityBase = executeEntity as GameEntityBase;
+            _collisionInfo.updateCollisionInfo(executeEntity.transform.position,gameEntityBase.getDirectionFromType(_targetDirectionType));
+        }
+        else
+        {
+            _collisionInfo.updateCollisionInfo(executeEntity.transform.position,executeEntity.getDirection());
+        }
         _collisionInfo.drawCollosionArea(UnityEngine.Color.red, _startFrame != _endFrame ? 0f : 1f);
         CollisionManager.Instance().collisionRequest(_collisionInfo,executeEntity,_collisionDelegate,_collisionEndEvent);
 
@@ -1793,6 +1802,10 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
             else if(attributes[i].Name == "NotifyAttackSuccess")
             {
                 _notifyAttackSuccess = bool.Parse(attributes[i].Value);
+            }
+            else if(attributes[i].Name == "DirectionType")
+            {
+                _targetDirectionType = (DirectionType)System.Enum.Parse(typeof(DirectionType), attributes[i].Value);
             }
 
         }
