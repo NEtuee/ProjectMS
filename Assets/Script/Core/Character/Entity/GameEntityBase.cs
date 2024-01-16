@@ -1294,6 +1294,7 @@ public class GameEntityBase : SequencerObjectBase
 
     public void terminateAIPackage() {_aiGraph.terminatePackage();}
     public void setAIState(int index) {_aiGraph.changeAIPackageStateOther(index);}
+    public void setAINode(int index) {_aiGraph.changeAINodeOther(index);}
 
     public void setAiDirection(float angle) {_aiGraph.setAIDirection(angle);}
     public void setAiDirection(Vector3 direction) {_aiGraph.setAIDirection(direction);}
@@ -1358,6 +1359,12 @@ public class GameEntityBaseEditor : Editor
     private string _actionListSearchString = "";
     private string[] _actionListSearchStringArray = null;
 
+
+
+    private Vector2 _aiListScroll = Vector2.zero;
+    private string _aiListSearchString = "";
+    private string[] _aiListSearchStringArray = null;
+
     public void OnEnable()
     {
         control = (GameEntityBase)target;
@@ -1396,43 +1403,104 @@ public class GameEntityBaseEditor : Editor
         }
         EditorGUILayout.EndHorizontal();
 
+        GUILayout.BeginHorizontal();
+
+        GUILayout.BeginVertical("box",GUILayout.ExpandWidth(true));
+
         GUILayout.Label("Action List");
-        string searchString = _actionListSearchString;
-
-        _actionListScroll = EditorGUILayout.BeginScrollView(_actionListScroll,"box",GUILayout.Height(200f));
         {
-            _actionListSearchString = EditorGUILayout.TextField("Search",_actionListSearchString);
+            string searchString = _actionListSearchString;
 
-            if(_actionListSearchString != searchString)
-                _actionListSearchStringArray = _actionListSearchString.ToLower().Split(' ');
-
-            for(int index = 0; index < actionBaseData._actionNodeCount; ++index)
+            _actionListScroll = EditorGUILayout.BeginScrollView(_actionListScroll,"box",GUILayout.Height(200f));
             {
-                if(_actionListSearchString != "")
+                _actionListSearchString = EditorGUILayout.TextField("Search",_actionListSearchString);
+
+                if(_actionListSearchString != searchString)
+                    _actionListSearchStringArray = _actionListSearchString.ToLower().Split(' ');
+
+                for(int index = 0; index < actionBaseData._actionNodeCount; ++index)
                 {
-                    string lowerString = actionBaseData._actionNodeData[index]._nodeName.ToLower();
-                    bool contains = false;
-                    foreach(var targetString in _actionListSearchStringArray)
+                    if(_actionListSearchString != "")
                     {
-                        contains = lowerString.Contains(targetString);
-                        if(contains)
-                            break;
+                        string lowerString = actionBaseData._actionNodeData[index]._nodeName.ToLower();
+                        bool contains = false;
+                        foreach(var targetString in _actionListSearchStringArray)
+                        {
+                            contains = lowerString.Contains(targetString);
+                            if(contains)
+                                break;
+                        }
+
+                        if(contains == false)
+                            continue;
                     }
 
-                    if(contains == false)
-                        continue;
+                    EditorGUILayout.BeginHorizontal();
+                    if(GUILayout.Button(actionBaseData._actionNodeData[index]._nodeName, buttonStyle))
+                        control.setAction(index);
+
+                    if(GUILayout.Button("Open",GUILayout.Width(50f)))
+                        FileDebugger.OpenFileWithCursor(actionBaseData._fullPath,actionBaseData._actionNodeData[index]._lineNumber);
+                    EditorGUILayout.EndHorizontal();
                 }
-
-                EditorGUILayout.BeginHorizontal();
-                if(GUILayout.Button(actionBaseData._actionNodeData[index]._nodeName, buttonStyle))
-                    control.setAction(index);
-
-                if(GUILayout.Button("Open",GUILayout.Width(50f)))
-                    FileDebugger.OpenFileWithCursor(actionBaseData._fullPath,actionBaseData._actionNodeData[index]._lineNumber);
-                EditorGUILayout.EndHorizontal();
             }
+            EditorGUILayout.EndScrollView();
         }
-        EditorGUILayout.EndScrollView();
+        
+
+
+        GUILayout.EndVertical();
+
+        GUILayout.BeginVertical("box",GUILayout.ExpandWidth(true));
+
+        GUILayout.Label("AI State List");
+        AIGraphBaseData aiBaseData = control.getAIGraph_Debug().getAIGraphBaseData_Debug();
+        if(aiBaseData != null)
+        {
+            string searchString = _aiListSearchString;
+
+            _aiListScroll = EditorGUILayout.BeginScrollView(_aiListScroll,"box",GUILayout.Height(200f));
+            {
+                _aiListSearchString = EditorGUILayout.TextField("Search",_aiListSearchString);
+
+                if(_aiListSearchString != searchString)
+                    _aiListSearchStringArray = _aiListSearchString.ToLower().Split(' ');
+
+                for(int index = 0; index < aiBaseData._aiNodeCount; ++index)
+                {
+                    if(_aiListSearchString != "")
+                    {
+                        string lowerString = aiBaseData._aiGraphNodeData[index]._nodeName.ToLower();
+                        bool contains = false;
+                        foreach(var targetString in _aiListSearchStringArray)
+                        {
+                            contains = lowerString.Contains(targetString);
+                            if(contains)
+                                break;
+                        }
+
+                        if(contains == false)
+                            continue;
+                    }
+
+                    EditorGUILayout.BeginHorizontal();
+                    if(GUILayout.Button(aiBaseData._aiGraphNodeData[index]._nodeName, buttonStyle))
+                    {
+                        control._blockAIByEditor = false;
+                        control.setAINode(index);
+                    }
+
+                    if(GUILayout.Button("Open",GUILayout.Width(50f)))
+                        FileDebugger.OpenFileWithCursor(aiBaseData._fullPath,aiBaseData._aiGraphNodeData[index]._lineNumber);
+                    EditorGUILayout.EndHorizontal();
+                }
+            }
+            EditorGUILayout.EndScrollView();
+        }
+
+        GUILayout.EndVertical();
+
+        GUILayout.EndHorizontal();
 
 
         EditorGUILayout.Space(10f);
