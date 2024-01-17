@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Numerics;
 using Unity.Mathematics;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 public static class MathEx
@@ -563,6 +564,12 @@ public static class MathEx
 		if (value < 1) return end * 0.5f * value * value * value * value + start;
 		value -= 2;
 		return -end * 0.5f * (value * value * value * value - 2) + start;
+	}
+	
+	public static float easeOutExpo(float start, float end, float value)
+	{
+		end -= start;
+		return end * (-Mathf.Pow(2, -10 * value) + 1) + start;
 	}
 
 //움직임 목록에 포함 안되있는 식들===============================================

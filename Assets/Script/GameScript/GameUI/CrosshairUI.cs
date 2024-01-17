@@ -257,7 +257,7 @@ public class CrosshairUI : IUIElement
             }   
         }
 
-        var curPosition = MathEx.easeInOutQuart(_startPosition, _endPosition, t);
+        var curPosition = MathEx.easeOutExpo(_startPosition, _endPosition, t);
         _binder.SubMarker.transform.localPosition = new Vector3(curPosition, 0, 0);
     }
 
