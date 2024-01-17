@@ -30,7 +30,7 @@ public class CrossHairUI : MonoBehaviour
     {
         _instance = this;
         createGuidLineObjects(_guidLineCount);
-        createGagueObjects();
+        createGagueObjects(); 
     }
 
     public void createGuidLineObjects(int count)

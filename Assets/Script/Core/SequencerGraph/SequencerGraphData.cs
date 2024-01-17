@@ -460,7 +460,8 @@ public class SequencerGraphEvent_SetHideUI : SequencerGraphEventBase
     public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
     {
         HPSphereUIManager.Instance().setActive(_value == false);
-        CrossHairUI._instance.setActive(_value == false);
+        //CrossHairUI._instance.setActive(_value == false);
+        GameUI.Instance.SetActiveCrossHair(_value == false);
         ScreenIndicatorUI._instance.setActive(_value == false);
         ScreenDirector._instance.setActiveMainHud(_value == false);
 
@@ -1403,11 +1404,10 @@ public class SequencerGraphEvent_SetCrossHair : SequencerGraphEventBase
             DebugUtil.assert(false,"대상 Unique Entity가 존재하지 않습니다 : {0}",_uniqueKey);
             return true;
         }
+        
+        GameUI.Instance.SetEntity(unqueEntity);
+        GameUI.Instance.SetActiveCrossHair(true);
 
-        CrossHairUI._instance.setTarget(unqueEntity);
-        CrossHairUI._instance.setActive(true);
-
-        APUI._instance.setTarget(unqueEntity);
         return true;
     }
 
