@@ -24,6 +24,8 @@
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+
+            <FrameEvent Type="SetRotateSlotValue" StartTime="0" Speed="90" Radius="1.0"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
@@ -324,6 +326,107 @@
 
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_SpawnBlueMain>
+
+    <AC_CommandBook MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/1_idle" XFlip="true" Duration="1.5">
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="CommandToLaser" EventTargetType="Range" Range="2.0" SearchIdentifier="Enemy"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Pray"/>
+    </AC_CommandBook>
+    
+
+    <!-- 잡기: 배리어 -->
+    <AC_Pray MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/1_idle" XFlip="true" Duration="1.5">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+            <FrameEvent Type="ApplyBuff" StartTime="1" ApplyBuff="HelenaBarriorOn"/>
+
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Pray"/>
+    </AC_Pray>
+
+    <AC_Barrior MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/4_Tsuba/"/>
+        <Animation Preset="1_kamae" XFlip="true" Duration="0.35">
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.2" AttackPreset="Aoba_Tsuba" AttackType="Catch" CatchOffset="0.1 0 0">
+                <OnCatch>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CatchedSet"/>
+                    
+                    <FrameEvent Type="ZoomEffect" Scale="-0.4"/>
+                    <FrameEvent Type="StopUpdate" Time="0.15"/>
+                </OnCatch>
+            </FrameEvent>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_Barrior>
+
+    <AC_Barrior_Entry MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/4_Tsuba/"/>
+        <Animation Preset="2_tsubaEntry" XFlip="true" Duration="0.3">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2411" Attach="true"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="12"/>
+        </Animation>
+
+        <Branch Condition="getKey_Escape_1 || getKey_Escape_2 || End" Execute="AC_Barrior_Struggle"/>
+    </AC_Barrior_Entry>
+
+    <AC_Barrior_Struggle MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/4_Tsuba/"/>
+        <Animation Preset="3_tsubaStruggle" XFlip="true" Duration="0.3">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2411" Attach="true"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="12"/>
+        </Animation>
+
+        <Branch Condition="getKey_Escape_1 || getKey_Escape_2 || End" Execute="AC_Barrior_Entry"/>
+    </AC_Barrior_Struggle>
+ 
+    <AC_Barrior_Defense MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/4_Tsuba/"/>
+        <!-- 밀치기, 아카네 딜레이 0.7s-->
+        <Animation Preset="4_tsubaAttack" XFlip="true" Duration="0.5">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2412" Attach="true"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="12"/>
+            <FrameEvent Type="ReleaseCatch" StartTime="0" Push="5 0 0" TargetAction="AC_AobaTsuba_Fail"/>
+
+            <FrameEvent Type="ZoomEffect" Scale="-1.7"/>
+            <FrameEvent Type="StopUpdate" Time="0.07"/>
+            <FrameEvent Type="SetTimeScale" Scale="0.7" Time="0.1" BlendTime="0.1"/>
+            <FrameEvent Type="ShakeEffect" Scale="0.15" Speed="35.0" Time="0.1"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Entry"/>
+    </AC_Barrior_Defense>
+
+    <AC_Barrior_Broken MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/4_Tsuba/"/>
+        <!-- 밀리기 -->
+        <Animation Preset="5_away" XFlip="true" Duration="0.9">
+            <FrameEvent Type="Movement" StartTime="0" Friction="4" MaxVelocity="9" Velocity="-4" Speed="0"/>
+            <FrameEvent Type="DeleteBuff" StartTime="0" BuffList="HelenaBarriorOn"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+        <Animation Preset="6_recover" XFlip="true" Duration="0.1">
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_Barrior_Broken>
 
 <!-- Attack Action -->
 

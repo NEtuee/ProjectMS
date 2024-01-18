@@ -71,6 +71,7 @@
     <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterSpawnBookPackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterLightningBoltPackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterHolyNailPackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterBarriorPackage.xml"/>
 
     
     <!-- 보스전 대기 시간 (나중에 보스전 시작 트리거를 받아야 함)-->
@@ -137,6 +138,7 @@
     <BranchSet Name="HitReactionSet">
         <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="getTargetFrameTag_Dead" Execute="EnemyWin"/>
+        <Branch Condition="DefenceSuccess" Execute="BarriorActivated"/>
         <Branch Condition="Hit && getFrameTag_HitAvail" Execute="Hit"/>
         <Branch Condition="GuardBreakFail && getFrameTag_GbAvail" Execute="GuardBroken"/>
         <Branch Condition="GuardBroken && (getStat_GuardCount >= gv_GuardBrokenThreshold) && getFrameTag_GbAvail" Execute="GuardBroken"/> <!-- TODO : 일반 공격도 카운트 되긴 하나, 가드 브레이크로만 파괴 가능한 상태 -->
@@ -294,6 +296,16 @@
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </SpawnBook_Blue>
+
+    <ActivateBarrior Package="SisterBarriorPackage" EntryNode="AI_Pray">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>        
+    </ActivateBarrior>
+    
+    <BarriorActivated Package="SisterBarriorPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>        
+    </BarriorActivated>
 
     <!-- AI 스테이트 : 전투 상태 : 패시브 방어 -->
     <Dodge Package="CommonDodgePackage">

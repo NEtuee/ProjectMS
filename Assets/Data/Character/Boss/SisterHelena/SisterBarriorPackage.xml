@@ -1,0 +1,85 @@
+<AIPackage Name="SisterBarriorPackage" DefaultState="AI_Barrior">
+
+    <AIState>
+        <AI_Pray UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <Event_OnExecute>    
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="AC_Pray"/>
+            </Event_OnExecute>
+
+            <Branch Condition="End" Execute="TerminatePackage"/>
+        </AI_Pray>
+
+        <AI_Barrior UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <Event_OnExecute>    
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="AC_Barrior"/>
+            </Event_OnExecute>
+
+            <Branch Weight="RandVector3^x" Condition="AttackCatchTarget" Execute="AI_Barrior_Entry_Short"/>
+            <Branch Weight="RandVector3^y" Condition="AttackCatchTarget" Execute="AI_Barrior_Entry_Long"/>
+            <Branch Weight="RandVector3^z" Condition="AttackCatchTarget" Execute="AI_Barrior_Entry_Long"/>
+            <Branch Condition="End" Execute="TerminatePackage"/>
+        </AI_Barrior>
+
+        <AI_Barrior_Entry_Short UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <Event_OnExecute>
+                <AIEvent Type="SetAction" Action="AC_Barrior_Entry"/>
+            </Event_OnExecute>
+
+            <Branch Condition="(PackageExecutedTime >= 0.86)" Execute="AI_Barrior_Defense"/>
+            <Branch Condition="IsCatcher == false" Execute="AI_Barrior_Broken"/>
+        </AI_Barrior_Entry_Short>
+
+        <AI_Barrior_Entry_Long UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <Event_OnExecute>
+                <AIEvent Type="SetAction" Action="AC_Barrior_Entry"/>
+            </Event_OnExecute>
+
+            <Branch Condition="(PackageExecutedTime >= 0.9)" Execute="AI_Barrior_Defense"/>
+            <Branch Condition="IsCatcher == false" Execute="AI_Barrior_Broken"/>
+        </AI_Barrior_Entry_Long>
+
+        <AI_Barrior_Defense UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <Event_OnExecute>
+                <AIEvent Type="SetAction" Action="AC_Barrior_Defense"/>
+            </Event_OnExecute>
+            
+            <Branch Condition="End" Execute="AI_LightningBoltReadyToShot"/> <!-- 방어 성공 후 바로 공격 -->
+        </AI_Barrior_Defense>
+
+        <AI_Barrior_Broken UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <Event_OnExecute>
+                <AIEvent Type="SetAction" Action="AC_Barrior_Broken"/>
+            </Event_OnExecute>
+        
+            <Branch Condition="End" Execute="TerminatePackage"/>
+        </AI_Barrior_Broken>
+        
+        <!-- 라이트닝 볼트 -->
+        <AI_LightningBoltReadyToShot UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="AC_LightningBoltReady"/>
+            </Event_OnExecute>
+
+            <Branch Condition="End" Execute="AI_LightningBoltShot"/>
+        </AI_LightningBoltReadyToShot>
+        <AI_LightningBoltShot UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="AC_LightningBoltShot"/>
+            </Event_OnExecute>
+
+            <Branch Condition="End" Execute="TerminatePackage"/>
+        </AI_LightningBoltShot>
+
+        <TerminatePackage>
+            <Event_OnExecute>
+                <AIEvent Type="TerminatePackage"/>
+            </Event_OnExecute>
+        </TerminatePackage>
+
+    </AIState>
+
+</AIPackage>
