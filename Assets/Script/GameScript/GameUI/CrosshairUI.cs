@@ -21,6 +21,7 @@ public class CrosshairUI : IUIElement
 
     private readonly float _startPosition = -0.36f;
     private readonly float _endPosition = -0.12f;
+    private float _squreStartPosition;
     private float _posDiff;
 
     private List<CharacterEntityBase> _detectList = new List<CharacterEntityBase>();
@@ -45,6 +46,8 @@ public class CrosshairUI : IUIElement
     private Color _mainCursorTargetColor;
     private Color _subCursorTargetColor;
     private float _colorCompleteTime;
+
+    private Coroutine _idleToDetectColorCoroutine;
     
     public bool CheckValidBinderLink(out string reason)
     {
@@ -67,6 +70,8 @@ public class CrosshairUI : IUIElement
     {
         _posDiff = _endPosition - _startPosition;
         _binder.SubMarker.transform.localPosition = new Vector3(_startPosition, 0, 0);
+
+        _squreStartPosition = _startPosition * _startPosition;
         
         AttackPreset preset = ResourceContainerEx.Instance().GetScriptableObject("Preset\\AttackPreset") as AttackPreset;
         AttackPresetData presetData = preset.getPresetData("PlayerAttackTest");
@@ -119,10 +124,14 @@ public class CrosshairUI : IUIElement
         _collisionInfo.updateCollisionInfo(targetPosition, characterToMouse.normalized);
         
         CollisionManager.Instance().collisionRequest(_collisionInfo, ownerEntity, OnDetectEnemy, OnCollisionEnd);
+
+        _binder.DebugDetect = _enemyDetect;
         
         TweenPosition();
 
         TweenColor();
+
+        CheckCloseToOwner(worldMousePosition, targetPosition);
     }
 
     private void OnDetectEnemy(CollisionSuccessData collisionSuccessData)
@@ -157,7 +166,6 @@ public class CrosshairUI : IUIElement
         {
             _state = State.IdleToDetect;
             StartIdleToDetect();
-            _binder.state = _state;
             return;
         }
         
@@ -166,21 +174,18 @@ public class CrosshairUI : IUIElement
         {
             _state = State.DetectToIdle;
             StartDetectToIdle();
-            _binder.state = _state;
             return;
         }
         
         if (_prevDetect == false && _enemyDetect == false && _tweeningNow == false)
         {
             _state = State.Idle;
-            _binder.state = _state;
             return;
         }
         
         if (_prevDetect == true && _enemyDetect == true && _tweeningNow == false)
         {
             _state = State.Detect;
-            _binder.state = _state;
             return;
         }
     }
@@ -192,7 +197,7 @@ public class CrosshairUI : IUIElement
 
         _completeTime = Time.time + _binder.LerpTime * t;
         
-        _binder.StartCoroutine(StartColorLerp());
+        _idleToDetectColorCoroutine = _binder.StartCoroutine(StartColorLerp());
     }
 
     private void StartDetectToIdle()
@@ -201,6 +206,12 @@ public class CrosshairUI : IUIElement
         var t = _endPosition - _binder.SubMarker.transform.localPosition.x / _posDiff;
 
         t = 1 - t;
+
+        if (_idleToDetectColorCoroutine != null)
+        {
+            _binder.StopCoroutine(_idleToDetectColorCoroutine);
+            _idleToDetectColorCoroutine = null;
+        }
         
         _completeTime = Time.time +_binder.LerpTime * t;
         
@@ -223,6 +234,8 @@ public class CrosshairUI : IUIElement
         _subCursorTargetColor = _binder.DetectIdleColor;
 
         _colorCompleteTime = Time.time + _binder.ColorLerpTime;
+
+        _idleToDetectColorCoroutine = null;
     }
 
     private void TweenPosition()
@@ -269,5 +282,19 @@ public class CrosshairUI : IUIElement
 
         _binder.MainCusor.color = Color.Lerp(_binder.MainCusor.color, _mainCursorTargetColor, t);
         _binder.SubCusor.color = Color.Lerp(_binder.SubCusor.color, _subCursorTargetColor, t);
+    }
+
+    private void CheckCloseToOwner(Vector3 mousePosition, Vector3 ownerPosition)
+    {
+        if (_enemyDetect == true)
+        {
+            return;
+        }
+        
+        var sqrDist = Vector3.SqrMagnitude(mousePosition - ownerPosition);
+        if (sqrDist < _squreStartPosition)
+        {
+            _binder.SubMarker.transform.position = ownerPosition;
+        }
     }
 }

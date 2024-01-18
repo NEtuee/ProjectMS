@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class CrosshairUIBinder : UIObjectBinder
 {
@@ -22,7 +23,8 @@ public class CrosshairUIBinder : UIObjectBinder
     [Range(0f, 0.5f)]
     public float DetectHighlightTime = 0.1f;
 
-    public CrosshairUI.State state;
+    [Header("Debug")]
+    public bool DebugDetect;
     
     public override bool CheckValidLink(out string reason)
     {
