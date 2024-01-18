@@ -1,6 +1,7 @@
 using System.Xml;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Numerics;
 
 public enum FrameEventType
 {
@@ -42,6 +43,7 @@ public enum FrameEventType
     FrameEvent_Torque,
     FrameEvent_EffectPreset,
     FrameEvent_SetRotateSlotValue,
+    FrameEvent_FollowAttack,
 
     Count,
 }
@@ -56,6 +58,11 @@ public enum ChildFrameEventType
     ChildFrameEvent_OnGuardBreakFail,
     ChildFrameEvent_OnCatch,
     ChildFrameEvent_OnKill,
+
+    ChildFrameEvent_OnBegin,
+    ChildFrameEvent_OnEnter,
+    ChildFrameEvent_OnExit,
+    ChildFrameEvent_OnEnd,
 
     Count,
 }
@@ -830,6 +837,151 @@ public class ActionFrameEvent_ShakeEffect : ActionFrameEventBase
     }
 }
 
+public class ActionFrameEvent_FollowAttack : ActionFrameEventBase
+{
+    public enum FollowType
+    {
+        Attach,
+        Movement,
+        Count,
+    }
+
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_FollowAttack;}
+
+    private FrameEventMovement _frameEventMovement = new FrameEventMovement();
+    
+    private FollowType      _followType = FollowType.Count;
+    
+    private bool            _isFirst = false;
+    private bool            _toTarget = false;
+    private bool            _isCollision = false;
+
+    private float           _radius = 0f;
+
+    private SearchIdentifier _searchIdentifier = SearchIdentifier.Enemy;
+
+    private UnityEngine.Vector3         _direction = UnityEngine.Vector3.zero;
+    private UnityEngine.Vector3         _position = UnityEngine.Vector3.zero;
+    private UnityEngine.Vector3         _offset = UnityEngine.Vector3.zero;
+
+    private List<CollisionObjectData>   _collisionData = new List<CollisionObjectData>();
+    private HashSet<object>             _collisionHash = new HashSet<object>();
+
+    public override void initialize()
+    {
+        base.initialize();
+
+        _isFirst = true;
+        _direction = UnityEngine.Vector3.zero;
+        _position = UnityEngine.Vector3.zero;
+
+        _collisionData.Clear();
+        _collisionHash.Clear();
+
+        _isCollision = false;
+    }
+
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        if(executeEntity is GameEntityBase == false)
+            return true;
+        
+        GameEntityBase gameEntityBase = executeEntity as GameEntityBase;
+        if(gameEntityBase.getCurrentTargetEntity() == null)
+            return true;
+
+        UnityEngine.Vector3 targetPosition = gameEntityBase.getCurrentTargetEntity().transform.position;
+        if(_isFirst)
+        {
+            _frameEventMovement.initialize(gameEntityBase);
+            if(_toTarget)
+                _position = targetPosition + _offset;
+            else
+                _position = gameEntityBase.transform.position + _offset;
+        }
+
+        _direction = targetPosition - _position;
+        _direction.Normalize();
+
+        if(_isFirst)
+            executeChildFrameEvent(ChildFrameEventType.ChildFrameEvent_OnBegin, executeEntity, targetEntity);
+
+        _frameEventMovement.progress(GlobalTimer.Instance().getSclaedDeltaTime(),_direction);
+        _position += _frameEventMovement.getMovementOfFrame();
+
+        _frameEventMovement.resetMovementOfFrame();
+
+        _collisionData.Clear();
+        if(CollisionManager.Instance().queryRangeAll(CollisionType.Attack,_position,_radius, ref _collisionData))
+        {
+            if(_isCollision == false)
+                executeChildFrameEvent(ChildFrameEventType.ChildFrameEvent_OnEnter,executeEntity,targetEntity);
+            
+            _isCollision = true;
+        }
+        else if(_isCollision)
+        {
+            executeChildFrameEvent(ChildFrameEventType.ChildFrameEvent_OnExit,executeEntity,targetEntity);
+            _isCollision = false;
+        }
+
+        return true;
+    }
+
+    public override void onExit(ObjectBase executeEntity)
+    {
+        base.onExit(executeEntity);
+        executeChildFrameEvent(ChildFrameEventType.ChildFrameEvent_OnEnd, executeEntity, null);
+    }
+
+    public void executeChildFrameEvent(ChildFrameEventType eventType, ObjectBase executeEntity, ObjectBase targetEntity)
+    {
+        if(_childFrameEventItems == null || _childFrameEventItems.ContainsKey(eventType) == false)
+            return;
+        
+        ChildFrameEventItem childFrameEventItem = _childFrameEventItems[eventType];
+        GameEntityBase executeGameEntity = null;
+        if(executeEntity is GameEntityBase)
+            executeGameEntity = executeEntity as GameEntityBase;
+
+        for(int i = 0; i < childFrameEventItem._childFrameEventCount; ++i)
+        {
+            if(executeGameEntity != null && childFrameEventItem._childFrameEvents[i].checkCondition(executeGameEntity) == false)
+                continue;
+
+            if(childFrameEventItem._childFrameEvents[i].getFrameEventType() == FrameEventType.FrameEvent_Movement)
+            {
+                childFrameEventItem._childFrameEvents[i].initialize();
+                (childFrameEventItem._childFrameEvents[i] as ActionFrameEvent_Movement).setMovementValue(_frameEventMovement,_direction);
+                continue;
+            }
+
+            childFrameEventItem._childFrameEvents[i].initialize();
+            childFrameEventItem._childFrameEvents[i].onExecute(executeEntity, targetEntity);
+        }
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "FollowType")
+            {
+                _followType = (FollowType)System.Enum.Parse(typeof(FollowType), attributes[i].Value);
+            }
+            else if(attrName == "Radius")
+            {
+                _radius = float.Parse(attrValue);
+            }
+        }
+    }
+
+}
+
 public class ActionFrameEvent_SetRotateSlotValue : ActionFrameEventBase
 {
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_SetRotateSlotValue;}
@@ -984,12 +1136,18 @@ public class ActionFrameEvent_Movement : ActionFrameEventBase
             return false;
         }
 
-        for(int i = 0; i < _valueListCount; ++i)
-        {
-            ((FrameEventMovement)currentMovement).setMovementValue(_setValueList[i]._value,_setValueList[i]._targetValue);
-        }
+        UnityEngine.Vector3 direction = executeEntity.getDirection();
+        setMovementValue((FrameEventMovement)currentMovement, direction);
         
         return true;
+    }
+
+    public void setMovementValue(FrameEventMovement movement, UnityEngine.Vector3 direction)
+    {
+        for(int i = 0; i < _valueListCount; ++i)
+        {
+            movement.setMovementValue(direction,_setValueList[i]._value,_setValueList[i]._targetValue);
+        }
     }
 
     public override void loadFromXML(XmlNode node)

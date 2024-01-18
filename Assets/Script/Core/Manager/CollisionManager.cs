@@ -176,6 +176,31 @@ public class CollisionManager : Singleton<CollisionManager>
         _collisionRequestCount = 0;
     }
 
+    public bool queryRangeAll(CollisionType collisionType, Vector3 centerPosition, float range, ref List<CollisionObjectData> resultCollisionList)
+    {
+        bool find = false;
+        for(int i = 0; i < _collisionTypeCount; ++i)
+        {
+            if(canCollision((CollisionType)i, collisionType) == false)
+                continue;
+            
+            List<CollisionObjectData> collisionList = _collisionObjectList[i];
+            for(int collisionIndex = 0; collisionIndex < collisionList.Count; ++collisionIndex)
+            {
+                float circleDistance = Vector3.Distance(centerPosition, collisionList[i]._collisionInfo.getCenterPosition());
+                bool circleCollision = circleDistance < range + collisionList[i]._collisionInfo.getRadius();
+
+                if(circleCollision)
+                {
+                    find = true;
+                    resultCollisionList.Add(collisionList[i]);
+                }
+            }
+        }
+
+        return find;
+    }
+
     private void collisionCheck(int layer, CollisionRequestData request)
     {
         if(canCollision(request._collision.getCollisionType(), (CollisionType)layer) == false)

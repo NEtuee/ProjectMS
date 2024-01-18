@@ -37,6 +37,16 @@ public abstract class MovementBase
         movementOfFrame = Vector3.zero;
     }
 
+    public Vector3 getMovementOfFrame()
+    {
+        return movementOfFrame;
+    }
+
+    public void resetMovementOfFrame()
+    {
+        movementOfFrame = Vector3.zero;
+    }
+
     public virtual void SetFrameToLocalTransform(ObjectBase target)
     {
         DebugUtil.assert(false,"do not use this");
