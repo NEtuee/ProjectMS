@@ -43,7 +43,7 @@
 <GlobalVariable Name="gv_AtkSucMovementFriction"       Value="24.0"/>
 
 <!-- Defualt Action -->
-    <AC_Entry MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+    <AC_Entry MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="0_default/1_idle" XFlip="true" Duration="1">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
@@ -52,7 +52,7 @@
         <Branch Condition="End == true" Execute="AC_Entry"/>
     </AC_Entry>
 
-    <AC_Idle MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+    <AC_Idle MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="0_default/1_idle" XFlip="true" Duration="1">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
@@ -226,6 +226,15 @@
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_GuardBroken>
 <!-- Defense Action -->
+
+<!-- Sequencer Action -->
+    <SQ_Hit MovementType="GraphPreset" MovementGraphPreset="Sequencer_Curve" DirectionType="Keep" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/3_hit" XFlip="true" Duration="1.25">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="SQ_Hit"/>
+    </SQ_Hit>
 
 
 </ActionGraph>

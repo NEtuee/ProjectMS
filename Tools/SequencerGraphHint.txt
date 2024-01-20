@@ -77,9 +77,9 @@ ShortCut,__CameraTrack,<CameraTrack TrackName=~~/>
 LineStart,<CameraTrack,TrackName=~~
 ShortCut,__TaskFence,<TaskFence TaskName=~~/>
 LineStart,<TaskFence,TaskName=~~
-,,
-,,
-,,
+ShortCut,__SetDirection,<SetDirection UniqueKey=~~ UniqueGroupKey=~~ DirectionType=~~/>
+LineStart,<TaskFence,"DirectionType=~~,UniqueKey=~~,UniqueGroupKey=~~"
+InQuote,DirectionType=,"AlwaysRight,AlwaysLeft,AlwaysUp,AlwaysDown,Keep,MoveInput,MousePoint,AttackedPoint,MoveDirection,AI,AITarget,CatchTargetFace,Summoner,ToSummoner"
 ,,
 ,,
 ,,

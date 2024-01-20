@@ -533,7 +533,10 @@ public class StageProcessor
 
         if(trackData._startBlend)
         {
-            _cameraTrackPositionError = _targetCameraControl.getCameraPosition() - resultPosition;
+            Vector3 resultPoint;
+            getLimitedFractionOnLine(_currentPoint, _targetCameraControl.getCameraPosition(), out resultPoint);
+
+            _cameraTrackPositionError = resultPoint - resultPosition;
             _cameraTrackPositionErrorReduceTime = 0f;
         }
         else

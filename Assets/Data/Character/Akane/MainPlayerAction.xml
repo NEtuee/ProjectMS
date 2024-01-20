@@ -526,7 +526,7 @@
     </AIMove_Start>
 
     <AIMove_Loop MovementType="GraphPreset" MovementGraphPreset="TEST" DirectionType="AI" RotationType="Direction" FlipType="Direction" RotateBySpeed="True" RotateSpeed="gv_rotateSpeed">
-         <Animation Preset="Sprites/NewPlayer/stun" XFlip="true" Duration="0.1">
+         <Animation Preset="Sprites/NewPlayer/MoveDirection" XFlip="true" Duration="0.1">
         </Animation>
 
         <Branch Condition="End == true" Execute="AIMove_Loop"/>

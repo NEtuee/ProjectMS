@@ -100,6 +100,7 @@ public class MovementControl
 
         _currentMovement.initialize(targetEntity);
         _currentMovement.updateFirst(targetEntity);
+
         return newMovement;
     }
 }

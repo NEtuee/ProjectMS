@@ -1,6 +1,6 @@
 <ActionGraph Name="DecoStudent_3" DefaultAction="AC_Idle" DefaultFramePerSecond="8">
 
-    <AC_Idle MovementType="Empty" DirectionType="AI" FlipType="Direction" ActiveCollision="False">
+    <AC_Idle MovementType="Empty" DirectionType="Keep" FlipType="Direction" ActiveCollision="False">
         <AnimationHeader MasterPath="Sprites/Deco/Student_3/"/>
         <Animation Path="Idle" XFlip="true">
         </Animation>
@@ -8,10 +8,9 @@
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_Idle>
 
-    <AC_Fear MovementType="FrameEvent" DirectionType="AITarget" FlipType="Direction" ActiveCollision="False">
+    <AC_Fear MovementType="Empty" DirectionType="AITarget" FlipType="Direction" ActiveCollision="False">
         <AnimationHeader MasterPath="Sprites/Deco/Student_3/"/>
         <Animation Path="Fear" XFlip="true">
-            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="0.1" Speed="-10"/>
         </Animation>
     </AC_Fear>
 

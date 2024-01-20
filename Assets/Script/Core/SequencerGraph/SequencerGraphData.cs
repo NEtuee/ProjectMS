@@ -40,6 +40,7 @@ public enum SequencerGraphEventType
     TalkBalloon,
     CameraTrack,
     TaskFence,
+    SetDirection,
 
     Count,
 }
@@ -144,6 +145,70 @@ public class SequencerGraphEvent_CameraTrack : SequencerGraphEventBase
 
         if(_trackName == "")
             DebugUtil.assert(false,"Track Name이 존재하지 않습니다. 이거 필수임");
+    }
+}
+
+public class SequencerGraphEvent_SetDirection : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SetDirection;
+
+    private string _uniqueKey = "";
+    private string _uniqueGroupKey = "";
+
+    private DirectionType _directionType = DirectionType.AlwaysRight;
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        if(_uniqueKey != "")
+        {
+            GameEntityBase uniqueEntity = processor.getUniqueEntity(_uniqueKey);
+            if(uniqueEntity == null)
+            {
+                DebugUtil.assert(false,"대상 Unique Entity가 존재하지 않습니다 : {0}",_uniqueKey);
+                return true;
+            }
+
+            uniqueEntity.setDirection(uniqueEntity.getDirectionFromType(_directionType));
+        }
+
+        if(_uniqueGroupKey != "")
+        {
+            var uniqueGroup = processor.getUniqueGroup(_uniqueGroupKey);
+            if(uniqueGroup == null)
+            {
+                DebugUtil.assert(false,"대상 Unique Group이 존재하지 않습니다 : {0}",_uniqueGroupKey);
+                return true;
+            }
+
+            foreach(var item in uniqueGroup)
+            {
+                item.setDirection(item.getDirectionFromType(_directionType));
+            }
+        }
+
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attributes[i].Name == "DirectionType")
+                _directionType = (DirectionType)System.Enum.Parse(typeof(DirectionType), attributes[i].Value);
+            else if(attrName == "UniqueKey")
+                _uniqueKey = attrValue;
+            else if(attrName == "UniqueGroupKey")
+                _uniqueGroupKey = attrValue;
+        }
     }
 }
 
@@ -722,6 +787,7 @@ public class SequencerGraphEvent_AIMove : SequencerGraphEventBase
     private float _processTimer = 0f;
     private bool _loopActionOnly = false;
 
+    private bool _aiBlockState = false;
 
     private float _startActionDistance = 0f;
     private float _loopActionDistance = 0f;
@@ -746,6 +812,8 @@ public class SequencerGraphEvent_AIMove : SequencerGraphEventBase
             if(item != null)
                 _endPosition = item._position;
         }
+
+        _aiBlockState = uniqueEntity.isAIBlocked();
 
         _totalAnimationPlayTime = 0f;
         _totalLoopAnimationPlayTime = 0f;
@@ -795,7 +863,9 @@ public class SequencerGraphEvent_AIMove : SequencerGraphEventBase
                 return;
             }
 
-            _loopActionDistance = presetData.getTotalMovement();
+            _loopActionDistance = presetData.getTotalMovement() * uniqueEntity.getMoveScaleFromActionIndex(_loopActionIndex);
+
+            Debug.Log(_loopActionDistance);
             _loopAnimationPlayTime = uniqueEntity.getAnimationPlayTimeFromActionIndex(_loopActionIndex);
         }
 
@@ -830,8 +900,13 @@ public class SequencerGraphEvent_AIMove : SequencerGraphEventBase
                 _totalLoopAnimationPlayTime = _loopAnimationPlayTime * rate;
 
                 _totalAnimationPlayTime = 0f;
-
                 _loopActionOnly = true;
+
+                if(rate < 1f)
+                {
+                    _totalLoopAnimationPlayTime = _loopAnimationPlayTime;
+                    uniqueEntity.setAdditionalMoveScale(rate);
+                }
             }
             else
             {
@@ -842,7 +917,6 @@ public class SequencerGraphEvent_AIMove : SequencerGraphEventBase
             }
 
             _totalAnimationPlayTime += _totalLoopAnimationPlayTime;
-
             Vector3 direction = (_endPosition - _startPosition).normalized;
             uniqueEntity.blockAI(true);
             uniqueEntity.setDirection(direction);
@@ -894,7 +968,8 @@ public class SequencerGraphEvent_AIMove : SequencerGraphEventBase
         if(_processTimer >= _totalAnimationPlayTime)
         {
             uniqueEntity.transform.position = _endPosition;
-            uniqueEntity.blockAI(false);
+            uniqueEntity.resetAdditionalMoveScale();
+            uniqueEntity.blockAI(_aiBlockState);
             uniqueEntity.setDefaultAction();
             return true;
         }

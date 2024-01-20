@@ -69,6 +69,7 @@ public class GameEntityBase : SequencerObjectBase
     private float               _rotateSlotSpeed = 0f;
     private float               _rotateSlotRadius = 0f;
     private float               _currentRotateSlotAngle = 0f;
+    private float               _additionalMoveScale = 1f;
 
     private bool                _updateDirection = true;
     private bool                _updateFlipState = true;
@@ -183,6 +184,7 @@ public class GameEntityBase : SequencerObjectBase
 
         _movementControl.changeMovement(this,_actionGraph.getCurrentMovement());
         _movementControl.setMoveScale(_actionGraph.getCurrentMoveScale());
+        _additionalMoveScale = 1f;
 
         _danmakuGraph.initialize(this);
 
@@ -291,6 +293,7 @@ public class GameEntityBase : SequencerObjectBase
 
         _movementControl.changeMovement(this,_actionGraph.getCurrentMovement());
         _movementControl.setMoveScale(_actionGraph.getCurrentMoveScale());
+        _additionalMoveScale = 1f;
 
         _danmakuGraph.initialize(this);
         _statusInfo.initialize(this,statusInfoName);
@@ -420,7 +423,7 @@ public class GameEntityBase : SequencerObjectBase
                 {
                     applyActionBuffList();
                     _movementControl.changeMovement(this,_actionGraph.getCurrentMovement());
-                    _movementControl.setMoveScale(_actionGraph.getCurrentMoveScale());
+                    _movementControl.setMoveScale(_actionGraph.getCurrentMoveScale() * _additionalMoveScale);
 
                     _updateDirection = true;
                     _updateFlipState = true;
@@ -732,6 +735,11 @@ public class GameEntityBase : SequencerObjectBase
         }
     }
 
+    public bool isAIBlocked()
+    {
+        return _blockAI;
+    }
+
 #if UNITY_EDITOR
     public void blockAI_Debug(bool value)
     {
@@ -780,6 +788,7 @@ public class GameEntityBase : SequencerObjectBase
 
         _movementControl.changeMovement(this,_actionGraph.getCurrentMovement());
         _movementControl.setMoveScale(_actionGraph.getCurrentMoveScale());
+        _additionalMoveScale = 1f;
 
         _danmakuGraph.initialize(this);
 
@@ -1200,6 +1209,14 @@ public class GameEntityBase : SequencerObjectBase
         return _actionGraph.getMovementGraphPresetByIndex(actionIndex);
     }
 
+    public float getMoveScaleFromActionIndex(int actionIndex)
+    {
+        if(actionIndex == -1)
+            return 1f;
+            
+        return _actionGraph.getMoveScaleByIndex(actionIndex);
+    }
+
     public float getAnimationPlayTimeFromActionIndex(int actionIndex)
     {
         if(actionIndex == -1)
@@ -1255,6 +1272,23 @@ public class GameEntityBase : SequencerObjectBase
         
         
         return commonMaterial;
+    }
+
+    public void setAdditionalMoveScale(float additionalMoveScale)
+    {
+        _additionalMoveScale = additionalMoveScale;
+        _movementControl?.setMoveScale(_actionGraph.getCurrentMoveScale() * _additionalMoveScale);
+    }
+
+    public void resetAdditionalMoveScale()
+    {
+        _additionalMoveScale = 1f;
+        _movementControl?.setMoveScale(_actionGraph.getCurrentMoveScale());
+    }
+    
+    public bool isIndicatorVisible()
+    {
+        return _characterInfo._indicatorVisible;
     }
 
     public void setKeepAliveEntity(bool value) {_keepAliveEntity = value;}

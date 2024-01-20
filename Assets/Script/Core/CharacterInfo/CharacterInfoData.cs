@@ -10,6 +10,8 @@ public class CharacterInfoData
     public float        _characterRadius;
     public float        _headUpOffset;
 
+    public bool         _indicatorVisible = true;
+
     public SearchIdentifier _searchIdentifer = SearchIdentifier.Enemy;
     public CommonMaterial   _defaultMaterial = CommonMaterial.Skin;
 }

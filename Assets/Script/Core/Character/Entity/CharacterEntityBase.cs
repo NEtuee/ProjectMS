@@ -61,7 +61,7 @@ public class CharacterEntityBase : GameEntityBase
             return;
 
         _targetSearchTime += deltaTime;
-        if(_targetSearchTime < 1f)
+        if(_targetSearchTime < 0.5f)
             return;
 
         _targetSearchTime = 0f;

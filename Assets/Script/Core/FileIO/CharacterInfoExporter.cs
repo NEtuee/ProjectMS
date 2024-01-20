@@ -71,6 +71,8 @@ public class CharacterInfoLoader : LoaderBase<Dictionary<string,CharacterInfoDat
                 characterInfoData._searchIdentifer = (SearchIdentifier)System.Enum.Parse(typeof(SearchIdentifier), attrValue);
             else if(attrName == "DefaultMaterial")
                 characterInfoData._defaultMaterial = (CommonMaterial)System.Enum.Parse(typeof(CommonMaterial), attrValue);
+            else if(attrName == "IndicatorVisible")
+                characterInfoData._indicatorVisible = bool.Parse(attrValue);
         }
 
         return characterInfoData;

@@ -163,6 +163,8 @@ public class SequencrGraphLoader : LoaderBase<SequencerGraphBaseData>
             spawnEvent = new SequencerGraphEvent_CameraTrack();
         else if(node.Name == "TaskFence")
             spawnEvent = new SequencerGraphEvent_TaskFence();
+        else if(node.Name == "SetDirection")
+            spawnEvent = new SequencerGraphEvent_SetDirection();
 
         if(spawnEvent == null)
         {

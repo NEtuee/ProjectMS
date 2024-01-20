@@ -39,7 +39,7 @@ public abstract class MovementBase
 
     public Vector3 getMovementOfFrame()
     {
-        return movementOfFrame;
+        return movementOfFrame * _moveScale;
     }
 
     public void resetMovementOfFrame()
