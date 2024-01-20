@@ -120,8 +120,8 @@ ShortCut,__FrameEvent_SetRotateSlotValue,<FrameEvent Type=~SetRotateSlotValue~ S
 FrameEvent,FollowAttack,"FollowType=~~,Radius=~~,MoveTime=~~,CharacterKey=~~,ToTarget=~~"
 ShortCut,__FrameEvent_FollowAttack,<FrameEvent Type=~FollowAttack~ StartTime=~0~ EndTime=~1~ FollowType=~Attach~ Radius=~~ MoveTime=~~ CharacterKey=~~>#n#t<OnBegin>#n#t</OnBegin>#n#n#t<OnEnter>#n#t</OnEnter>#n#n#t<OnExit>#n#t</OnExit>#n#n#t<OnEnd>#n#t</OnEnd>#n</FrameEvent>
 InQuote,FollowType=,"Attach,Movement"
-,,
-,,
+ShortCut,__FrameEvent_SetAction,<FrameEvent Type=~SetAction~ StartTime=~0~ Action=~~/>
+FrameEvent,SetAction,Action=~~
 ,,
 ,,
 ,,
