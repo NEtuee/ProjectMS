@@ -102,7 +102,7 @@ public class CrosshairUI : IUIElement
     {
         var mainCamera = Camera.main;
 
-        if (mainCamera == null || isDead == true)
+        if (mainCamera == null || isDead == true || _binder == null || _binder.gameObject.activeInHierarchy == false)
         {
             return;
         }

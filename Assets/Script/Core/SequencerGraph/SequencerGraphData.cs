@@ -530,11 +530,11 @@ public class SequencerGraphEvent_DeadFence : SequencerGraphEventBase
     {
         bool success = true;
         if(_uniqueKey != "")
-            success = processor.getUniqueEntity(_uniqueKey) == null;
+            success = processor.getUniqueEntity(_uniqueKey, false) == null;
         
         if(success && _uniqueGroupKey != "")
         {
-            var list = processor.getUniqueGroup(_uniqueGroupKey);
+            var list = processor.getUniqueGroup(_uniqueGroupKey, false);
             if(list != null)
                 success = list.Count == 0;
         }

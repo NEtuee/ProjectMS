@@ -23,12 +23,14 @@ public class GraphicInterface
 
     public void active()
     {
-        _parentTransform?.gameObject.SetActive(true);
+        if(_parentTransform != null)
+            _parentTransform.gameObject.SetActive(true);
     }
 
     public void deactive()
     {
-        _parentTransform?.gameObject.SetActive(false);
+        if(_parentTransform != null)
+            _parentTransform.gameObject.SetActive(false);
     }
 
     public bool isValidGraphicinterface()

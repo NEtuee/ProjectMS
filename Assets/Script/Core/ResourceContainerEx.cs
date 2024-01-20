@@ -115,12 +115,6 @@ public class DataResourceItem<Value, Loader> where Value : class where Loader : 
 #endif
 			return obj;
 		}
-		// catch(Exception ex)
-		// {
-		// 	DebugUtil.assert(false,"xml parsing exception : {0}\n{1}",ex.Message,path);
-		// }
-
-		return null;
 	}
 
 	private DateTime getTimeStamp(string path)

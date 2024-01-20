@@ -269,11 +269,11 @@ public class SequencerGraphProcessor
         _uniqueEntityDictionary.Add(uniqueKey,uniqueEntity);
     }
 
-    public GameEntityBase getUniqueEntity(string uniqueKey)
+    public GameEntityBase getUniqueEntity(string uniqueKey, bool validCheck = true)
     {
         if(_uniqueEntityDictionary.ContainsKey(uniqueKey) == false)
         {
-            DebugUtil.assert(false,"존재하지 않는 유니크 엔티티 입니다. 오타는 아닌가요? [Key: {0}]",uniqueKey);
+            DebugUtil.assert(validCheck == false,"존재하지 않는 유니크 엔티티 입니다. 오타는 아닌가요? [Key: {0}]",uniqueKey);
             return null;
         }
 
@@ -291,11 +291,11 @@ public class SequencerGraphProcessor
         _uniqueGroupEntityDictionary[uniqueGroupKey].Add(uniqueEntity);
     }
 
-    public List<GameEntityBase> getUniqueGroup(string uniqueGroup)
+    public List<GameEntityBase> getUniqueGroup(string uniqueGroup, bool validCheck = true)
     {
         if(_uniqueGroupEntityDictionary.ContainsKey(uniqueGroup) == false)
         {
-            DebugUtil.assert(false,"존재하지 않는 유니크 그룹 입니다. 오타는 아닌가요? [Group: {0}]",uniqueGroup);
+            DebugUtil.assert(validCheck == false,"존재하지 않는 유니크 그룹 입니다. 오타는 아닌가요? [Group: {0}]",uniqueGroup);
             return null;
         }
 
