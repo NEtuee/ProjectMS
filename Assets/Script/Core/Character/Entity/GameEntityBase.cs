@@ -546,8 +546,8 @@ public class GameEntityBase : SequencerObjectBase
     {
         if(_actionDebug == true || GameEditorMaster._instance._actionDebugAll)
         {
-            debugTextManager.updateDebugText("Action","Action: " + getCurrentActionName());
-            debugTextManager.updateDebugText("Defence","Defence: " + getDefenceType() + (_statusInfo.getDefenceType() != DefenceType.Count ? "(Buff)" : "(Action)"));
+            debugTextManager.updateDebugText("Action","Action: " + getCurrentActionName(), UnityEngine.Color.white);
+            debugTextManager.updateDebugText("Defence","Defence: " + getDefenceType() + (_statusInfo.getDefenceType() != DefenceType.Count ? "(Buff)" : "(Action)"), UnityEngine.Color.white);
 
             string frameTag = "";
             HashSet<string> frameTagList = _actionGraph.getCurrentFrameTagList();
@@ -556,7 +556,7 @@ public class GameEntityBase : SequencerObjectBase
                 frameTag += item + ", ";
             }
 
-            debugTextManager.updateDebugText("FrameTag","FrameTag: " + frameTag);
+            debugTextManager.updateDebugText("FrameTag","FrameTag: " + frameTag, UnityEngine.Color.white);
         }
     
         if(getDefenceAngle() != 0f)
@@ -576,9 +576,9 @@ public class GameEntityBase : SequencerObjectBase
         {
             if(_aiGraph != null && _aiGraph.isValid())
             {
-                debugTextManager.updateDebugText("AIState","AIState: " + _aiGraph.getCurrentAIStateName());
-                debugTextManager.updateDebugText("AIPackage","   AIPackage: " + _aiGraph.getCurrentPackageName());
-                debugTextManager.updateDebugText("AI","   AIPackageState: " + getCurrentAIPackageStateName());
+                debugTextManager.updateDebugText("AIState","AIState: " + _aiGraph.getCurrentAIStateName(), UnityEngine.Color.white);
+                debugTextManager.updateDebugText("AIPackage","   AIPackage: " + _aiGraph.getCurrentPackageName(), UnityEngine.Color.white);
+                debugTextManager.updateDebugText("AI","   AIPackageState: " + getCurrentAIPackageStateName(), UnityEngine.Color.white);
             }
 
             if(_aiGraph.hasTargetPosition() == true)
@@ -615,7 +615,7 @@ public class GameEntityBase : SequencerObjectBase
             Dictionary<string, float> customValueDictionary = _actionGraph.getCustomValueDictionary();
             foreach(var item in customValueDictionary)
             {
-                debugTextManager.updateDebugText(item.Key,"   " + item.Key + ": " + item.Value);
+                debugTextManager.updateDebugText(item.Key,"   " + item.Key + ": " + item.Value, UnityEngine.Color.white);
             }
 
             if(_currentTarget != null)
@@ -626,7 +626,7 @@ public class GameEntityBase : SequencerObjectBase
 
         if(_animationDebug || GameEditorMaster._instance._animationDebugAll)
         {
-            debugTextManager.updateDebugText("Animation","Animation: " + _actionGraph.getCurrentAnimationName());
+            debugTextManager.updateDebugText("Animation","Animation: " + _actionGraph.getCurrentAnimationName(), UnityEngine.Color.white);
         }
 
         _debugColor = Color.red;
@@ -1110,6 +1110,10 @@ public class GameEntityBase : SequencerObjectBase
             case DirectionType.Summoner:
                 if(getSummonObject() != null)
                     direction = getSummonObject().getDirection();
+                break;
+            case DirectionType.ToSummoner:
+                if(getSummonObject() != null)
+                    direction = (getSummonObject().transform.position - transform.position).normalized;
                 break;
             case DirectionType.Count:
                 DebugUtil.assert(false, "invalid direction type : {0}",_currentDirectionType);

@@ -112,6 +112,7 @@ public enum DirectionType
     AITarget,
     CatchTargetFace,
     Summoner,
+    ToSummoner,
     Count,
 }
 

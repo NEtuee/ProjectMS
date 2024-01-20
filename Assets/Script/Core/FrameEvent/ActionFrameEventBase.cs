@@ -402,7 +402,7 @@ public class ActionFrameEvent_AudioPlay : ActionFrameEventBase
         {
             GameEntityBase entityBase = (executeEntity as GameEntityBase);
             if(entityBase._soundDebug || GameEditorMaster._instance._soundDebugAll)
-                entityBase.debugTextManager.updateDebugText("Sound: " + _audioID,"AudioEvent: " + _audioID.ToString(),1f);
+                entityBase.debugTextManager.updateDebugText("Sound: " + _audioID,"AudioEvent: " + _audioID.ToString(),1f,UnityEngine.Color.white);
         }
 
         return true;
