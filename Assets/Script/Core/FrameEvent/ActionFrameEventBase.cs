@@ -953,7 +953,7 @@ public class ActionFrameEvent_FollowAttack : ActionFrameEventBase
 
         _crossHairEntity.updatePosition(_position);
 
-        gameEntityBase.setDirection((targetPosition - gameEntityBase.transform.position).normalized);
+        gameEntityBase.setDirection((_position - gameEntityBase.transform.position).normalized);
         _crossHairEntity.setDirection(_direction);
 
         _collisionData.Clear();
