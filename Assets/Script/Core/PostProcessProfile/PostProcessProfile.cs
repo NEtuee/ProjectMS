@@ -31,6 +31,10 @@ public class PostProcessProfileData
     public bool _useShadowColor = true;
     public Color _shadowColor = Color.white;
 
+
+    public bool _useImpactFrame = true;
+    public float _impactFrame = 0f;
+
     public bool _useBrightness = true;
     public float _brightness = 0f;
 
@@ -83,6 +87,8 @@ public class PostProcessProfileData
         if(_useShadowColor)
             targetMaterial.SetColor("_ShadowColor",_shadowColor);
 
+        if(_useImpactFrame)
+            targetMaterial.SetFloat("_ImpactFrame",_impactFrame);
         if(_useBrightness)
             targetMaterial.SetFloat("_Brightness",_brightness);
         if(_useSaturation)
@@ -140,84 +146,107 @@ public class PostProcessProfileData
 
     public void blend(PostProcessProfile destination, float ratio)
     {
-        if(_useSunAngle)
+        if(destination._profileData._useSunAngle)
             _sunAngle                   = Mathf.LerpAngle(_sunAngle, destination._profileData._sunAngle, ratio);
-        if(_useShadowDistance)
+        if(destination._profileData._useShadowDistance)
             _shadowDistance             = Mathf.Lerp(_shadowDistance, destination._profileData._shadowDistance, ratio);
-        if(_useShadowDistanceRatio)
+        if(destination._profileData._useShadowDistanceRatio)
             _shadowDistanceRatio        = Mathf.Lerp(_shadowDistanceRatio, destination._profileData._shadowDistanceRatio, ratio);
-        if(_useScreenSize)
+        if(destination._profileData._useScreenSize)
             _screenSize                 = Vector2.Lerp(_screenSize, destination._profileData._screenSize, ratio);
-        if(_useShadowDistanceOffset)
+        if(destination._profileData._useShadowDistanceOffset)
             _shadowDistanceOffset       = Mathf.Lerp(_shadowDistanceOffset, destination._profileData._shadowDistanceOffset, ratio);
-        if(_useShadowColor)
+        if(destination._profileData._useShadowColor)
             _shadowColor                = Color.Lerp(_shadowColor, destination._profileData._shadowColor, ratio);
-        if(_useBrightness)
+        if(destination._profileData._useImpactFrame)
+            _impactFrame                = Mathf.Lerp(_impactFrame, destination._profileData._impactFrame, ratio);//ratio >= 0.5f ? destination._profileData._impactFrame : _impactFrame;
+        if(destination._profileData._useBrightness)
             _brightness                 = Mathf.Lerp(_brightness, destination._profileData._brightness, ratio);
-        if(_useSaturation)
+        if(destination._profileData._useSaturation)
             _saturation                 = Mathf.Lerp(_saturation, destination._profileData._saturation, ratio);
-        if(_useColorTint)
+        if(destination._profileData._useColorTint)
             _colorTint                  = Color.Lerp(_colorTint, destination._profileData._colorTint, ratio);
-        if(_useBackgroundColorTint)
+        if(destination._profileData._useBackgroundColorTint)
             _backgroundColorTint        = Color.Lerp(_backgroundColorTint, destination._profileData._backgroundColorTint, ratio);
-        if(_useBlurSize)
+        if(destination._profileData._useBlurSize)
             _blurSize                   = Mathf.Lerp(_blurSize, destination._profileData._blurSize, ratio);
-        if(_useMultiSampleDistance)
+        if(destination._profileData._useMultiSampleDistance)
             _multiSampleDistance        = Mathf.Lerp(_multiSampleDistance, destination._profileData._multiSampleDistance, ratio);
-        if(_useMultiSampleColorTintRight)
+        if(destination._profileData._useMultiSampleColorTintRight)
             _multiSampleColorTintRight  = Color.Lerp(_multiSampleColorTintRight, destination._profileData._multiSampleColorTintRight, ratio);
-        if(_useMultiSampleColorTintLeft)
+        if(destination._profileData._useMultiSampleColorTintLeft)
             _multiSampleColorTintLeft   = Color.Lerp(_multiSampleColorTintLeft, destination._profileData._multiSampleColorTintLeft, ratio);
-        if(_useFogRate)
+        if(destination._profileData._useFogRate)
             _fogRate                    = Mathf.Lerp(_fogRate, destination._profileData._fogRate, ratio);
-        if(_useFogStrength)
+        if(destination._profileData._useFogStrength)
             _fogStrength                = Mathf.Lerp(_fogStrength, destination._profileData._fogStrength, ratio);
-        if(_useFogColor)
+        if(destination._profileData._useFogColor)
             _fogColor                   = Color.Lerp(_fogColor, destination._profileData._fogColor, ratio);
         _pixelSnap                  = ratio >= 0.5f ? destination._profileData._pixelSnap : _pixelSnap;
     }
 
     public void blendCopy(PostProcessProfileData source, PostProcessProfileData destination, float ratio)
     {
-        if(_useSunAngle)
+        if(destination._useSunAngle)
             _sunAngle                   = Mathf.LerpAngle(source._sunAngle, destination._sunAngle, ratio);
-        if(_useShadowDistance)
+        if(destination._useShadowDistance)
             _shadowDistance             = Mathf.Lerp(source._shadowDistance, destination._shadowDistance, ratio);
-        if(_useShadowDistanceRatio)
+        if(destination._useShadowDistanceRatio)
             _shadowDistanceRatio        = Mathf.Lerp(source._shadowDistanceRatio, destination._shadowDistanceRatio, ratio);
-        if(_useScreenSize)
+        if(destination._useScreenSize)
             _screenSize                 = Vector2.Lerp(source._screenSize, destination._screenSize, ratio);
-        if(_useShadowDistanceOffset)
+        if(destination._useShadowDistanceOffset)
             _shadowDistanceOffset       = Mathf.Lerp(source._shadowDistanceOffset, destination._shadowDistanceOffset, ratio);
-        if(_useShadowColor)
+        if(destination._useShadowColor)
             _shadowColor                = Color.Lerp(source._shadowColor, destination._shadowColor, ratio);
-        if(_useBrightness)
+        if(destination._useImpactFrame)
+            _impactFrame                = Mathf.Lerp(_impactFrame, destination._impactFrame, ratio);//ratio >= 0.5f ? destination._impactFrame : source._impactFrame;
+        if(destination._useBrightness)
             _brightness                 = Mathf.Lerp(source._brightness, destination._brightness, ratio);
-        if(_useSaturation)
+        if(destination._useSaturation)
             _saturation                 = Mathf.Lerp(source._saturation, destination._saturation, ratio);
-        if(_useColorTint)
+        if(destination._useColorTint)
             _colorTint                  = Color.Lerp(source._colorTint, destination._colorTint, ratio);
-        if(_useBackgroundColorTint)
+        if(destination._useBackgroundColorTint)
             _backgroundColorTint        = Color.Lerp(source._backgroundColorTint, destination._backgroundColorTint, ratio);
-        if(_useBlurSize)
+        if(destination._useBlurSize)
             _blurSize                   = Mathf.Lerp(source._blurSize, destination._blurSize, ratio);
-        if(_useMultiSampleDistance)
+        if(destination._useMultiSampleDistance)
             _multiSampleDistance        = Mathf.Lerp(source._multiSampleDistance, destination._multiSampleDistance, ratio);
-        if(_useMultiSampleColorTintRight)
+        if(destination._useMultiSampleColorTintRight)
             _multiSampleColorTintRight  = Color.Lerp(source._multiSampleColorTintRight, destination._multiSampleColorTintRight, ratio);
-        if(_useMultiSampleColorTintLeft)
+        if(destination._useMultiSampleColorTintLeft)
             _multiSampleColorTintLeft   = Color.Lerp(source._multiSampleColorTintLeft, destination._multiSampleColorTintLeft, ratio);
-        if(_useFogRate)
+        if(destination._useFogRate)
             _fogRate                    = Mathf.Lerp(source._fogRate, destination._fogRate, ratio);
-        if(_useFogStrength)
+        if(destination._useFogStrength)
             _fogStrength                = Mathf.Lerp(source._fogStrength, destination._fogStrength, ratio);
-        if(_useFogColor)
+        if(destination._useFogColor)
             _fogColor                   = Color.Lerp(source._fogColor, destination._fogColor, ratio);
-        _pixelSnap                  = ratio >= 0.5f ? destination._pixelSnap : source._pixelSnap;
+        _pixelSnap                      = ratio >= 0.5f ? destination._pixelSnap : source._pixelSnap;
     }
 
     public void copy(PostProcessProfile profile)
     {
+        _useSunAngle                    = profile._profileData._useSunAngle;
+        _useShadowDistance              = profile._profileData._useShadowDistance;
+        _useShadowDistanceRatio         = profile._profileData._useShadowDistanceRatio;
+        _useScreenSize                  = profile._profileData._useScreenSize;
+        _useShadowDistanceOffset        = profile._profileData._useShadowDistanceOffset;
+        _useShadowColor                 = profile._profileData._useShadowColor;
+        _useImpactFrame                 = profile._profileData._useImpactFrame;
+        _useBrightness                  = profile._profileData._useBrightness;
+        _useSaturation                  = profile._profileData._useSaturation;
+        _useColorTint                   = profile._profileData._useColorTint;
+        _useBackgroundColorTint         = profile._profileData._useBackgroundColorTint;
+        _useBlurSize                    = profile._profileData._useBlurSize;
+        _useMultiSampleDistance         = profile._profileData._useMultiSampleDistance;
+        _useMultiSampleColorTintRight   = profile._profileData._useMultiSampleColorTintRight;
+        _useMultiSampleColorTintLeft    = profile._profileData._useMultiSampleColorTintLeft;
+        _useFogRate                     = profile._profileData._useFogRate;
+        _useFogStrength                 = profile._profileData._useFogStrength;
+        _useFogColor                    = profile._profileData._useFogColor;
+
         if(_useSunAngle)
             _sunAngle                   = profile._profileData._sunAngle;
         if(_useShadowDistance)
@@ -230,6 +259,8 @@ public class PostProcessProfileData
             _shadowDistanceOffset       = profile._profileData._shadowDistanceOffset;
         if(_useShadowColor)
             _shadowColor                = profile._profileData._shadowColor;
+        if(_useImpactFrame)
+            _impactFrame                = profile._profileData._impactFrame;
         if(_useBrightness)
             _brightness                 = profile._profileData._brightness;
         if(_useSaturation)
@@ -290,6 +321,7 @@ public class PostProcessProfileEditor : Editor
         isChange |= colorPicker("Shadow Color",ref controll._profileData._shadowColor,ref controll._profileData._useShadowColor);
 
         GUILayout.Space(20f);
+        isChange |= floatSlider("ImpactFrame",ref controll._profileData._impactFrame, 0f, 1f,ref controll._profileData._useImpactFrame);
         isChange |= floatSlider("Brightness",ref controll._profileData._brightness, 0f, 5f,ref controll._profileData._useBrightness);
         isChange |= floatSlider("Saturation",ref controll._profileData._saturation, 0f, 1f,ref controll._profileData._useSaturation);
         isChange |= colorPicker("Color Tint",ref controll._profileData._colorTint,ref controll._profileData._useColorTint);

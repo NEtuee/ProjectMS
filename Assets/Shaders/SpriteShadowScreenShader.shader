@@ -23,6 +23,7 @@ Shader "Custom/SpriteShadowScreenShader"
 		_ShadowColor("ShadowColor", Color) = (0,0,0,1)
 
 		[Space][Space][Space]
+		_ImpactFrame("Impact Frame", Range(0.0, 1.0)) = 1.0
 		_Brightness("Brightness", Range(0.0, 5.0)) = 1.0
 		_Saturation("Saturation", Range(0.0, 1.0)) = 1.0
 		_ColorTint("Color Tint", Color) = (1,1,1,1)
@@ -39,7 +40,6 @@ Shader "Custom/SpriteShadowScreenShader"
 		_FogRate("Fog Rate", Range(0.0, 1.0)) = 0.0
 		_FogStrength("Fog Strength", Range(0.0, 1.0)) = 1.0
 		_FogColor("Fog Color", Color) = (1,1,1,1)
-
 
 		[MaterialToggle] PixelSnap("Pixel snap", Float) = 0
 	}
@@ -114,6 +114,7 @@ Shader "Custom/SpriteShadowScreenShader"
 				float _ShadowDistanceOffset;
 				float4 _ScreenSize;
 
+				float _ImpactFrame;
 				float _Brightness;
 				float _Saturation;
 				fixed4 _ColorTint;
@@ -154,15 +155,15 @@ Shader "Custom/SpriteShadowScreenShader"
 				static const float2 resolution = float2(1024, 1024);
 
 				/*
-				1. ±×¸²ÀÚ´Â ¿ÀÇÁ¼Â Á¶ÀýÀÌ ÀÖ´Ù.
-				2. ¾î¶² ¸ÊÀÇ »ùÇÃ¸µ °ª¿¡ µû¶ó ¿ÀÇÁ¼ÂÀ» Á¶Á¤ÇÑ´Ù.
-				3. °ªÀÌ ¾ø´Â ±¸°£¿¡´Â ±×¸²ÀÚ°¡ ¾È³ª¿Í¾ßÇÑ´Ù.
+				1. ï¿½×¸ï¿½ï¿½Ú´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½.
+				2. ï¿½î¶² ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ã¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
+				3. ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×¸ï¿½ï¿½Ú°ï¿½ ï¿½È³ï¿½ï¿½Í¾ï¿½ï¿½Ñ´ï¿½.
 				*/
 				fixed4 drawCharacter(float2 texcoord)
 				{
 					fixed4 characterSample = SampleSpriteTexture(_CharacterTexture, texcoord);
 
-					return characterSample;
+					return fixed4(characterSample.xyz * (1.0 - _ImpactFrame), characterSample.w);
 				}
 
 				fixed4 drawPerspective(float2 texcoord)
@@ -266,49 +267,47 @@ Shader "Custom/SpriteShadowScreenShader"
 						}
 					}
 					Color /= Quality * Directions - backgroundBrightnessFactor;
-					return Color;
-					}
+					return Color + fixed4(_ImpactFrame,_ImpactFrame,_ImpactFrame,_ImpactFrame);
+				}
 
-					fixed4 allTogether(float2 texcoord)
-					{
-						fixed4 backgroundSample = bluredBackgroundSample(texcoord);
-						fixed4 characterSample = drawCharacter(texcoord);
-						fixed4 characterShadow = bluredShadowSample(texcoord);
-						fixed4 perspectiveSample = drawPerspective(texcoord);
-						fixed4 interfaceSample = drawInterface(texcoord);
+				fixed4 allTogether(float2 texcoord)
+				{
+					fixed4 backgroundSample = bluredBackgroundSample(texcoord);
+					fixed4 characterSample = drawCharacter(texcoord);
+					fixed4 characterShadow = bluredShadowSample(texcoord);
+					fixed4 perspectiveSample = drawPerspective(texcoord);
+					fixed4 interfaceSample = drawInterface(texcoord);
 
-						fixed4 shadowdedBackground = lerp(perspectiveSample, characterShadow, characterShadow.a);
-						fixed4 mixed = lerp(backgroundSample, shadowdedBackground, perspectiveSample.a);
-						fixed4 mixed2 = lerp(mixed, characterSample, characterSample.a);
-						fixed4 mixed3 = lerp(mixed2, interfaceSample, interfaceSample.a);
-						return mixed3;
+					fixed4 shadowdedBackground = lerp(perspectiveSample, characterShadow, characterShadow.a);
+					fixed4 mixed = lerp(backgroundSample, shadowdedBackground, perspectiveSample.a);
+					fixed4 mixed2 = lerp(mixed, characterSample, characterSample.a);
+					fixed4 mixed3 = lerp(mixed2, interfaceSample, interfaceSample.a);
+					return mixed3;
+				}
 
-						return backgroundSample;
-					}
+				fixed4 onlyShadow(v2f IN)
+				{
+					fixed4 characterColor = SampleSpriteTexture(_CharacterTexture, IN.texcoord);
+					fixed4 backgroundSample = SampleSpriteTexture(_MainTex, IN.texcoord);
+					fixed4 shadowMap = SampleSpriteTexture(_ShadowMapTexture, IN.texcoord);
 
-					fixed4 onlyShadow(v2f IN)
-					{
-						fixed4 characterColor = SampleSpriteTexture(_CharacterTexture, IN.texcoord);
-						fixed4 backgroundSample = SampleSpriteTexture(_MainTex, IN.texcoord);
-						fixed4 shadowMap = SampleSpriteTexture(_ShadowMapTexture, IN.texcoord);
+					float sunAngle = _SunAngle * 0.0174532925 + 3.141592;
+					float additionalShadowDistance = _ShadowDistance * ((1.0 - shadowMap.r) * _ShadowDistanceRatio);
+					float2 toUV = (1.0 / _ScreenSize.xy);
 
-						float sunAngle = _SunAngle * 0.0174532925 + 3.141592;
-						float additionalShadowDistance = _ShadowDistance * ((1.0 - shadowMap.r) * _ShadowDistanceRatio);
-						float2 toUV = (1.0 / _ScreenSize.xy);
+					float2 shadowDirection = float2(cos(sunAngle),sin(sunAngle));
 
-						float2 shadowDirection = float2(cos(sunAngle),sin(sunAngle));
+					float2 shadowSampleTarget = toUV * (shadowDirection * (_ShadowDistance + additionalShadowDistance));
+					float2 shadowOffset = toUV * shadowDirection * _ShadowDistanceOffset;
 
-						float2 shadowSampleTarget = toUV * (shadowDirection * (_ShadowDistance + additionalShadowDistance));
-						float2 shadowOffset = toUV * shadowDirection * _ShadowDistanceOffset;
+					float characterShadowSample = SampleSpriteTexture(_CharacterTexture, IN.texcoord + shadowOffset + shadowSampleTarget).a;
 
-						float characterShadowSample = SampleSpriteTexture(_CharacterTexture, IN.texcoord + shadowOffset + shadowSampleTarget).a;
+					return _ShadowColor * characterShadowSample;
+				}
 
-						return _ShadowColor * characterShadowSample;
-					}
-
-					fixed4 frag(v2f IN) : SV_Target
-					{
-						fixed4 resultColor = allTogether(IN.texcoord);
+				fixed4 frag(v2f IN) : SV_Target
+				{
+					fixed4 resultColor = allTogether(IN.texcoord);
 
 					//brigtness
 					resultColor.rgb *= _Brightness;
@@ -327,7 +326,7 @@ Shader "Custom/SpriteShadowScreenShader"
 
 					return resultColor;
 				}
-			ENDCG
+				ENDCG
 			}
-		}
+	}
 }

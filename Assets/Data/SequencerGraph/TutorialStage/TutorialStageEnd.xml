@@ -2,6 +2,9 @@
 
     <UpdatePhase>
         <DeadFence UniqueKey="Teacher"/>
+        <SetTimeScale Scale="0.2" Time="1.0" BlendTime="0.3"/>
+        <ApplyPostProcessProfile Path="PostProcessProfile/ImpactFrame" ApplyType="Additional" BlendTime="0.6"/>
+
         <WaitSecond Time="0.5"/>
 
         <SpawnCharacter CharacterKey="SchoolDoor" Position="7.0 1.0 0" SearchIdentifier="Enemy" UniqueKey="Door"/>

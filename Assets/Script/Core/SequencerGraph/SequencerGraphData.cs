@@ -530,7 +530,10 @@ public class SequencerGraphEvent_DeadFence : SequencerGraphEventBase
     {
         bool success = true;
         if(_uniqueKey != "")
-            success = processor.getUniqueEntity(_uniqueKey, false) == null;
+        {
+            GameEntityBase targetCharacter = processor.getUniqueEntity(_uniqueKey, false);
+            success = targetCharacter == null || targetCharacter.isDead();
+        }
         
         if(success && _uniqueGroupKey != "")
         {
