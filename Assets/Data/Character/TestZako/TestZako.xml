@@ -2,7 +2,29 @@
 <ActionGraph Name="TestZako" DefaultAction="Idle" DefaultFramePerSecond="0.5">
 
     <Idle DirectionType="Keep" FlipType="Direction" DefenceType="Guard" DefenceAngle="360.0" DefenceDirectionType="Direction">
-        <Animation Path="Resources/Sprites/DummyPlayer/Idle/" StartFrame="0" EndFrame="1" XFlip="true">
+        <Animation Path="Resources/Sprites/DummyPlayer/Idle/" StartFrame="0" EndFrame="1" FramePerSecond="0.1" XFlip="true">
+            <FrameEvent Type="Test" StartTime="0" Log="loop"/>
+            <FrameEvent Type="FollowAttack" StartTime="0" EndTime="3" FollowType="Movement" Radius="1" MoveTime="999" CharacterKey="Chair" ToTarget="false">
+                <OnBegin>
+                    <FrameEvent Type="Test" StartTime="0" Log="begin"/>
+                    <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="3" Speed="10"/>
+                </OnBegin>
+            
+                <OnEnter>
+                    <FrameEvent Type="Test" StartTime="0" Log="enter"/>
+                </OnEnter>
+            
+                <OnExit>
+                    <FrameEvent Type="Test" StartTime="0" Log="exit"/>
+                </OnExit>
+
+                <OnEnd>
+                    <FrameEvent Type="Attack" StartTime="0" Radius="1.0">
+                        <OnHit>
+                        </OnHit>
+                    </FrameEvent>
+                </OnEnd>
+            </FrameEvent>
         </Animation>
 
         <Branch Condition="Catched" Execute="Catched"/>
