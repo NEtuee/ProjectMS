@@ -1186,7 +1186,8 @@ public class StageDataEditor : EditorWindow
         characterSpawnData._uniqueGroupKey = EditorGUILayout.TextField("Unique Group Key",characterSpawnData._uniqueGroupKey);
 
         characterSpawnData._sortingOrder = EditorGUILayout.IntField("Sorting Order", characterSpawnData._sortingOrder);
-
+        stagePointDataEditObject._characterObjectList[_characterSelectedIndex].sortingOrder = 10 + characterSpawnData._sortingOrder;
+        
         var characterInfo = ResourceContainerEx.Instance().getCharacterInfo("Assets\\Data\\StaticData\\CharacterInfo.xml");
         if(characterInfo.ContainsKey(characterSpawnData._characterKey) == false)
         {
@@ -1426,6 +1427,8 @@ public class StageDataEditor : EditorWindow
         {
             stagePointData._pointName = EditorGUILayout.TextField("Name",stagePointData._pointName);
             stagePointData._maxLimitedDistance = EditorGUILayout.FloatField("CameraBound Radius", stagePointData._maxLimitedDistance);
+            stagePointData._horizontalLimitedDistance = EditorGUILayout.FloatField("Horizontal", stagePointData._horizontalLimitedDistance);
+            stagePointData._verticalLimitedDistance = EditorGUILayout.FloatField("Vertical", stagePointData._verticalLimitedDistance);
             stagePointData._cameraZoomSize = EditorGUILayout.FloatField("ZoomSize", stagePointData._cameraZoomSize);
             stagePointData._cameraZoomSpeed = EditorGUILayout.FloatField("ZoomSpeed", stagePointData._cameraZoomSpeed);
             stagePointData._lerpCameraZoom = EditorGUILayout.Toggle("LerpToNextZoom", stagePointData._lerpCameraZoom);
@@ -1965,9 +1968,12 @@ public class StageDataEditor : EditorWindow
             Handles.color = currentColor;
             if(_drawScreenToMousePoint || (i == _pointSelectedIndex && _editStageData._isMiniStage == false))
             {
-                drawInGameScreenSection(stagePointData._stagePoint,stagePointData._cameraZoomSize,stagePointData._maxLimitedDistance);
-                if(stagePointData._maxLimitedDistance > 0f)
-                    drawInGameScreenSection(stagePointData._stagePoint,stagePointData._cameraZoomSize,0f);
+                drawInGameScreenSection(stagePointData._stagePoint,stagePointData._cameraZoomSize,
+                            stagePointData._horizontalLimitedDistance + stagePointData._maxLimitedDistance,
+                            stagePointData._verticalLimitedDistance + stagePointData._maxLimitedDistance);
+
+                if(stagePointData._maxLimitedDistance > 0f || stagePointData._horizontalLimitedDistance > 0f || stagePointData._verticalLimitedDistance > 0f)
+                    drawInGameScreenSection(stagePointData._stagePoint,stagePointData._cameraZoomSize,0f,0f);
             }
             
             if( ( i == _pointSelectedIndex || _drawTriggerBound ) && stagePointData._useTriggerBound)
@@ -1979,9 +1985,17 @@ public class StageDataEditor : EditorWindow
             }
 
             if(_drawScreenToMousePoint && i > 0)
+            {
+                StagePointData pointData = _editStageData._stagePointData[i - 1];
                 drawScreenSectionConnectLine(
-                    _editStageData._stagePointData[i - 1]._stagePoint,_editStageData._stagePointData[i - 1]._cameraZoomSize,_editStageData._stagePointData[i - 1]._maxLimitedDistance,
-                    stagePointData._stagePoint,stagePointData._cameraZoomSize,stagePointData._maxLimitedDistance);
+                    pointData._stagePoint,pointData._cameraZoomSize,
+                    pointData._horizontalLimitedDistance + pointData._maxLimitedDistance,
+                    pointData._verticalLimitedDistance + pointData._maxLimitedDistance,
+
+                    stagePointData._stagePoint,stagePointData._cameraZoomSize,
+                    stagePointData._horizontalLimitedDistance + stagePointData._maxLimitedDistance,
+                    stagePointData._verticalLimitedDistance + stagePointData._maxLimitedDistance);
+            }
 
             if(i < _editStageData._stagePointData.Count - 1 )
             {
@@ -2764,14 +2778,14 @@ public class StageDataEditor : EditorWindow
         _characterItemPool.Enqueue(spriteRenderer);
     }
 
-    private Rect getInGameScreenSection(Vector3 position, float zoomSize, float radius)
+    private Rect getInGameScreenSection(Vector3 position, float zoomSize, float width, float height)
     {
         float mainCamSize = zoomSize;
         float camHeight = (mainCamSize) * 2f;
 		float camWidth = camHeight * ((float)800f / (float)600f);
 
-        camHeight += radius * 2f;
-        camWidth += radius * 2f;
+        camHeight += height * 2f;
+        camWidth += width * 2f;
 
         Rect rectangle = new Rect();
         rectangle.Set(position.x - (camWidth * 0.5f),position.y - (camHeight * 0.5f),camWidth,camHeight);
@@ -2788,7 +2802,7 @@ public class StageDataEditor : EditorWindow
         Count,
     };
 
-    private void drawScreenSectionConnectLine(Vector3 one, float oneZoomSize,float oneRadius, Vector3 two, float twoZoomSize, float twoRadius)
+    private void drawScreenSectionConnectLine(Vector3 one, float oneZoomSize,float oneWidth, float oneHeight, Vector3 two, float twoZoomSize, float twoWidth, float twoHeight)
     {
         Side side = Side.Count;
         if(one.x > two.x && one.y > two.y)
@@ -2800,8 +2814,8 @@ public class StageDataEditor : EditorWindow
         else// if(one.x < two.x && one.y < two.y)
             side = Side.LeftBottom;
         
-        Rect oneRect = getInGameScreenSection(one,oneZoomSize,oneRadius);
-        Rect twoRect = getInGameScreenSection(two,twoZoomSize,twoRadius);
+        Rect oneRect = getInGameScreenSection(one,oneZoomSize,oneWidth,oneHeight);
+        Rect twoRect = getInGameScreenSection(two,twoZoomSize,twoWidth,twoHeight);
 
         Color currentColor = Handles.color;
         Handles.color = Color.blue;
@@ -2836,9 +2850,9 @@ public class StageDataEditor : EditorWindow
         Handles.color = currentColor;
     }
 
-    private void drawInGameScreenSection(Vector3 position, float zoomSize, float radius)
+    private void drawInGameScreenSection(Vector3 position, float zoomSize, float width, float height)
     {
-        Rect rectangle = getInGameScreenSection(position, zoomSize, radius);
+        Rect rectangle = getInGameScreenSection(position, zoomSize, width,height);
         Handles.DrawSolidRectangleWithOutline(rectangle,new Color(0f,0f,0f,0f),Color.blue);
     }
 

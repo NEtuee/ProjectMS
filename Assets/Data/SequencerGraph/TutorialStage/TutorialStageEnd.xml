@@ -2,18 +2,18 @@
 
     <UpdatePhase>
         <DeadFence UniqueKey="Teacher"/>
-        <SetTimeScale Scale="0.2" Time="1.0" BlendTime="0.3"/>
-        <ApplyPostProcessProfile Path="PostProcessProfile/ImpactFrame" ApplyType="Additional" BlendTime="0.6"/>
-
-        <WaitSecond Time="0.5"/>
-
-        <SpawnCharacter CharacterKey="SchoolDoor" Position="7.0 1.0 0" SearchIdentifier="Enemy" UniqueKey="Door"/>
-
-        <WaitSecond Time="1.0"/>
-        <DeadFence UniqueKey="Door"/>
 
         <BlockInput Enable="True"/>
         <SetHideUI Hide="True"/>
+
+        <SetTimeScale Scale="0.2" Time="1.0" BlendTime="0.5"/>
+        <ApplyPostProcessProfile Path="PostProcessProfile/ImpactFrame" ApplyType="Additional" BlendTime="0.6"/>
+
+        <WaitSecond Time="2.5"/>
+
+        <SetAction UniqueKey="Player" Action="SQ_Intro_KillTeacher"/>
+
+        <WaitSecond Time="1.5"/>
 
         <FadeOut Lambda="5.0"/>
         <WaitSecond Time="1.5"/>
