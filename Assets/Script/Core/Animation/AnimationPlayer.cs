@@ -73,9 +73,9 @@ public struct FrameEventProcessDescription
         _targetFrameEvent.onExecute(_executeObject);
     }
 
-    public void exitFrameEvent()
+    public void exitFrameEvent(bool isForceEnd)
     {
-        _targetFrameEvent.onExit(_executeObject);
+        _targetFrameEvent.onExit(_executeObject,isForceEnd);
     }
 }
 
@@ -172,7 +172,7 @@ public class AnimationPlayer
             if(_frameEventProcessList[i]._endTime <= _animationTimeProcessor.getAnimationTotalPlayTime() || 
                MathEx.equals(_frameEventProcessList[i]._endTime, _animationTimeProcessor.getAnimationTotalPlayTime(), float.Epsilon))
             {
-                _frameEventProcessList[i].exitFrameEvent();
+                _frameEventProcessList[i].exitFrameEvent(false);
                 _frameEventProcessList.RemoveAt(i);
             }
             else
@@ -230,7 +230,7 @@ public class AnimationPlayer
                 }
                 else
                 {
-                    frameEvent.onExit(targetEntity);
+                    frameEvent.onExit(targetEntity, false);
                 }
 
                 _currentFrameEventIndex++;
@@ -266,7 +266,7 @@ public class AnimationPlayer
                 }
                 else
                 {
-                    frameEvent.onExit(targetEntity);
+                    frameEvent.onExit(targetEntity, false);
                 }
 
                 _currentTimeEventIndex++;
@@ -353,7 +353,7 @@ public class AnimationPlayer
 
         for(int i = 0; i < _frameEventProcessList.Count; ++i)
         {
-            _frameEventProcessList[i].exitFrameEvent();
+            _frameEventProcessList[i].exitFrameEvent(true);
         }
         _frameEventProcessList.Clear();
 
@@ -390,7 +390,7 @@ public class AnimationPlayer
 
         for(int i = 0; i < _frameEventProcessList.Count; ++i)
         {
-            _frameEventProcessList[i].exitFrameEvent();
+            _frameEventProcessList[i].exitFrameEvent(true);
         }
         _frameEventProcessList.Clear();
         _currentFrameEventIndex = -1;

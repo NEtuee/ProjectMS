@@ -89,6 +89,8 @@ public static class FrameEventLoader
             outFrameEvent = new ActionFrameEvent_EffectPreset();
         else if(type == "SetRotateSlotValue")
             outFrameEvent = new ActionFrameEvent_SetRotateSlotValue();
+        else if(type == "FollowAttack")
+            outFrameEvent = new ActionFrameEvent_FollowAttack();
         else
         {
             DebugUtil.assert(false, "invalid frameEvent type: {0}",type);

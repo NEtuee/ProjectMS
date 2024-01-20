@@ -117,9 +117,9 @@ InQuote,ActiveCollision=,"True,False"
 InQuote,BehindCharacter=,"True,False"
 FrameEvent,SetRotateSlotValue,"Speed=~~,Radius=~~"
 ShortCut,__FrameEvent_SetRotateSlotValue,<FrameEvent Type=~SetRotateSlotValue~ StartTime=~0~ Speed=~~ Radius=~~/>
-,,
-,,
-,,
+FrameEvent,FollowAttack,"FollowType=~~,Radius=~~,MoveTime=~~,CharacterKey=~~,ToTarget=~~"
+ShortCut,__FrameEvent_FollowAttack,<FrameEvent Type=~FollowAttack~ StartTime=~0~ EndTime=~1~ FollowType=~Attach~ Radius=~~ MoveTime=~~ CharacterKey=~~>#n#t<OnBegin>#n#t</OnBegin>#n#n#t<OnEnter>#n#t</OnEnter>#n#n#t<OnExit>#n#t</OnExit>#n</FrameEvent>
+InQuote,FollowType=,"Attach,Movement"
 ,,
 ,,
 ,,

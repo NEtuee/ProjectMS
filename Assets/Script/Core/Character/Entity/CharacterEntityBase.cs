@@ -69,7 +69,7 @@ public class CharacterEntityBase : GameEntityBase
         {
             TargetSearchDescription desc = MessageDataPooling.GetMessageData<TargetSearchDescription>();
             desc._requester = this;
-            desc._searchIdentifier = getCurrentSearchIdentifier();
+            desc._searchIdentifier = getCurrentAISearchIdentifier();
             desc._searchRange = getCurrentTargetSearchRange();
             desc._searchStartRange = getCurrentTargetSearchStartRange();
             desc._searchSphereRadius = getCurrentTargetSearchSphereRadius();
@@ -124,7 +124,7 @@ public class CharacterEntityBase : GameEntityBase
         {
             TargetSearchDescription desc = MessageDataPooling.GetMessageData<TargetSearchDescription>();
             desc._requester = this;
-            desc._searchIdentifier = getCurrentSearchIdentifier();
+            desc._searchIdentifier = getCurrentAISearchIdentifier();
             desc._searchRange = getCurrentTargetSearchRange();
             desc._searchStartRange = getCurrentTargetSearchStartRange();
             desc._searchSphereRadius = getCurrentTargetSearchSphereRadius();

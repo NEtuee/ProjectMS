@@ -2,6 +2,8 @@ using System.Xml;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Numerics;
+using System.Drawing;
+using UnityEngine.UIElements;
 
 public enum FrameEventType
 {
@@ -95,7 +97,7 @@ public abstract class ActionFrameEventBase
     public abstract FrameEventType getFrameEventType();
     public virtual void initialize(){}
     public abstract bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null);
-    public virtual void onExit(ObjectBase executeEntity){}
+    public virtual void onExit(ObjectBase executeEntity, bool isForceEnd){}
     public abstract void loadFromXML(XmlNode node);
 
     public virtual void initializeFromAttack(CommonMaterial attackMaterial) {}
@@ -852,11 +854,18 @@ public class ActionFrameEvent_FollowAttack : ActionFrameEventBase
     
     private FollowType      _followType = FollowType.Count;
     
+    private string          _characterKey = "";
+
     private bool            _isFirst = false;
     private bool            _toTarget = false;
     private bool            _isCollision = false;
 
     private float           _radius = 0f;
+    private float           _moveTimer = 0f;
+
+    private float           _moveTime = 0f;
+
+    private GameEntityBase  _crossHairEntity = null;
 
     private SearchIdentifier _searchIdentifier = SearchIdentifier.Enemy;
 
@@ -874,6 +883,8 @@ public class ActionFrameEvent_FollowAttack : ActionFrameEventBase
         _isFirst = true;
         _direction = UnityEngine.Vector3.zero;
         _position = UnityEngine.Vector3.zero;
+
+        _moveTimer = 0f;
 
         _collisionData.Clear();
         _collisionHash.Clear();
@@ -898,40 +909,95 @@ public class ActionFrameEvent_FollowAttack : ActionFrameEventBase
                 _position = targetPosition + _offset;
             else
                 _position = gameEntityBase.transform.position + _offset;
+
+            SpawnCharacterOptionDesc desc = new SpawnCharacterOptionDesc();
+            desc._position = _position;
+            desc._searchIdentifier = gameEntityBase._searchIdentifier;
+            DebugUtil.log(desc._searchIdentifier.ToString());
+
+            CharacterInfoData characterInfoData = CharacterInfoManager.Instance().GetCharacterInfoData(_characterKey);
+            _crossHairEntity = (SceneCharacterManager._managerInstance as SceneCharacterManager).createCharacterFromPool(characterInfoData,desc);
+        }
+
+        if(_isFirst)
+        {
+            executeChildFrameEvent(ChildFrameEventType.ChildFrameEvent_OnBegin, _crossHairEntity, targetEntity);
+            _isFirst = false;
         }
 
         _direction = targetPosition - _position;
         _direction.Normalize();
 
-        if(_isFirst)
-            executeChildFrameEvent(ChildFrameEventType.ChildFrameEvent_OnBegin, executeEntity, targetEntity);
+        if(_moveTime != 0f)
+            _moveTimer += GlobalTimer.Instance().getSclaedDeltaTime();
 
-        _frameEventMovement.progress(GlobalTimer.Instance().getSclaedDeltaTime(),_direction);
-        _position += _frameEventMovement.getMovementOfFrame();
+        if(_moveTime == 0f || (_moveTimer < _moveTime))
+        {
+            switch(_followType)
+            {
+                case FollowType.Attach:
+                {
+                    _position = targetPosition;
+                }
+                break;
+                case FollowType.Movement:
+                {
+                    _frameEventMovement.progress(GlobalTimer.Instance().getSclaedDeltaTime(),_direction);
+                    _position += _frameEventMovement.getMovementOfFrame();
+            
+                    _frameEventMovement.resetMovementOfFrame();
+                }
+                break;
+            }
+        }
 
-        _frameEventMovement.resetMovementOfFrame();
+        _crossHairEntity.updatePosition(_position);
+
+        gameEntityBase.setDirection((targetPosition - gameEntityBase.transform.position).normalized);
+        _crossHairEntity.setDirection(_direction);
 
         _collisionData.Clear();
-        if(CollisionManager.Instance().queryRangeAll(CollisionType.Attack,_position,_radius, ref _collisionData))
+        bool collision = false;
+        CollisionManager.Instance().queryRangeAll(CollisionType.Attack,_position,_radius, ref _collisionData);
+        foreach(var item in _collisionData)
+        {
+            if((item._collisionObject as GameEntityBase)._searchIdentifier != gameEntityBase._searchIdentifier)
+            {
+                collision = true;
+                break;
+            }
+        }
+
+        GizmoHelper.instance.drawCircle(_position,_radius,6,collision ? UnityEngine.Color.green : UnityEngine.Color.red);
+        if(collision)
         {
             if(_isCollision == false)
-                executeChildFrameEvent(ChildFrameEventType.ChildFrameEvent_OnEnter,executeEntity,targetEntity);
+                executeChildFrameEvent(ChildFrameEventType.ChildFrameEvent_OnEnter,_crossHairEntity,targetEntity);
             
             _isCollision = true;
         }
         else if(_isCollision)
         {
-            executeChildFrameEvent(ChildFrameEventType.ChildFrameEvent_OnExit,executeEntity,targetEntity);
+            executeChildFrameEvent(ChildFrameEventType.ChildFrameEvent_OnExit,_crossHairEntity,targetEntity);
             _isCollision = false;
         }
+
+        DebugUtil.assert(_crossHairEntity.getDirectionType() == DirectionType.Keep, "FollowAttack Entity의 DirectionType은 항상 Keep이어야 합니다.");
+        DebugUtil.assert(_crossHairEntity.isDead() == false && _crossHairEntity.isActiveSelf(), "FollowAttack Entity는 죽으면 안됩니다.");
 
         return true;
     }
 
-    public override void onExit(ObjectBase executeEntity)
+    public override void onExit(ObjectBase executeEntity, bool isForceEnd)
     {
-        base.onExit(executeEntity);
-        executeChildFrameEvent(ChildFrameEventType.ChildFrameEvent_OnEnd, executeEntity, null);
+        base.onExit(executeEntity,isForceEnd);
+
+        if(isForceEnd == false)
+            executeChildFrameEvent(ChildFrameEventType.ChildFrameEvent_OnEnd, _crossHairEntity, null);
+        
+        _crossHairEntity?.deactive();
+        _crossHairEntity?.DeregisterRequest();
+        _crossHairEntity = null;
     }
 
     public void executeChildFrameEvent(ChildFrameEventType eventType, ObjectBase executeEntity, ObjectBase targetEntity)
@@ -976,6 +1042,18 @@ public class ActionFrameEvent_FollowAttack : ActionFrameEventBase
             else if(attrName == "Radius")
             {
                 _radius = float.Parse(attrValue);
+            }
+            else if(attrName == "MoveTime")
+            {
+                _moveTime = float.Parse(attrValue);
+            }
+            else if(attrName == "CharacterKey")
+            {
+                _characterKey = attrValue;
+            }
+            else if(attrName == "ToTarget")
+            {
+                _toTarget = bool.Parse(attrValue);
             }
         }
     }
@@ -1248,7 +1326,7 @@ public class ActionFrameEvent_SetFrameTag : ActionFrameEventBase
         return requester.applyFrameTag(_frameTag);
     }
 
-    public override void onExit(ObjectBase executeEntity)
+    public override void onExit(ObjectBase executeEntity, bool isForceEnd)
     {
         if(executeEntity is GameEntityBase == false)
             return;
@@ -1285,7 +1363,7 @@ public class ActionFrameEvent_SetCameraZoom : ActionFrameEventBase
         return true;
     }
 
-    public override void onExit(ObjectBase executeEntity)
+    public override void onExit(ObjectBase executeEntity, bool isForceEnd)
     {
         CameraControl.Instance().setDelay(false);
 
@@ -1314,7 +1392,7 @@ public class ActionFrameEvent_SetCameraDelay : ActionFrameEventBase
         return true;
     }
 
-    public override void onExit(ObjectBase executeEntity)
+    public override void onExit(ObjectBase executeEntity, bool isForceEnd)
     {
         CameraControl.Instance().setDelay(false);
 

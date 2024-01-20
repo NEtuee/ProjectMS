@@ -176,24 +176,24 @@ public class CollisionManager : Singleton<CollisionManager>
         _collisionRequestCount = 0;
     }
 
-    public bool queryRangeAll(CollisionType collisionType, Vector3 centerPosition, float range, ref List<CollisionObjectData> resultCollisionList)
+    public bool queryRangeAll(CollisionType collisionType, Vector3 centerPosition, float radius, ref List<CollisionObjectData> resultCollisionList)
     {
         bool find = false;
         for(int i = 0; i < _collisionTypeCount; ++i)
         {
-            if(canCollision((CollisionType)i, collisionType) == false)
+            if(canCollision(collisionType,(CollisionType)i) == false)
                 continue;
             
             List<CollisionObjectData> collisionList = _collisionObjectList[i];
             for(int collisionIndex = 0; collisionIndex < collisionList.Count; ++collisionIndex)
             {
-                float circleDistance = Vector3.Distance(centerPosition, collisionList[i]._collisionInfo.getCenterPosition());
-                bool circleCollision = circleDistance < range + collisionList[i]._collisionInfo.getRadius();
+                float circleDistance = Vector3.Distance(centerPosition, collisionList[collisionIndex]._collisionInfo.getCenterPosition());
+                bool circleCollision = circleDistance < radius + collisionList[collisionIndex]._collisionInfo.getRadius();
 
                 if(circleCollision)
                 {
                     find = true;
-                    resultCollisionList.Add(collisionList[i]);
+                    resultCollisionList.Add(collisionList[collisionIndex]);
                 }
             }
         }

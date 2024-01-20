@@ -506,6 +506,7 @@ public class GameEntityBase : SequencerObjectBase
 
     public override void deactive()
     {
+        setActiveSelf(false,false);
         _graphicInterface.release();
 
         foreach(var item in _hpEffect)
@@ -639,7 +640,7 @@ public class GameEntityBase : SequencerObjectBase
             return;
         
         GameEntityBase targetEntity = data._target as GameEntityBase;
-        if (targetEntity.getCurrentSearchIdentifier() != getCurrentSearchIdentifier())
+        if (targetEntity._searchIdentifier != _searchIdentifier)
             return;
 
         float totalRadius = targetEntity.getCollisionInfo().getRadius() + getCollisionInfo().getRadius();
@@ -1182,6 +1183,11 @@ public class GameEntityBase : SequencerObjectBase
         updateDirection();
     }
 
+    public DirectionType getDirectionType()
+    {
+        return _currentDirectionType;
+    }
+
     public MovementGraphPresetData getMovementGraphPresetDataFromActionIndex(int actionIndex)
     {
         if(actionIndex == -1)
@@ -1283,7 +1289,7 @@ public class GameEntityBase : SequencerObjectBase
 
     public bool isAIGraphValid() {return _aiGraph != null && _aiGraph.isValid();}
     public TargetSearchType getCurrentTargetSearchType() {return _aiGraph.getCurrentTargetSearchType();}
-    public SearchIdentifier getCurrentSearchIdentifier() {return _aiGraph.getCurrentSearchIdentifier();}
+    public SearchIdentifier getCurrentAISearchIdentifier() {return _aiGraph.getCurrentSearchIdentifier();}
     public float getCurrentTargetSearchRange() {return _aiGraph.getCurrentTargetSearchRange();}
     public float getCurrentTargetSearchStartRange() {return _aiGraph.getCurrentTargetSearchStartRange();}
     public float getCurrentTargetSearchSphereRadius() {return _aiGraph.getCurrentTargetSearchSphereRadius();}

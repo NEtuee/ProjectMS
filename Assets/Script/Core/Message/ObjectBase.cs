@@ -64,17 +64,17 @@ public abstract class ObjectBase : MessageReceiver, IProgress
         gameObject.SetActive(false);
     }
 
-    public void updatePosition(Vector3 position)
+    public void updatePosition(Vector3 position, bool forceIgnoreTrim = false)
     {
         if(hasParentObject())
             return;
 
         transform.position = position;
 
-        if(CameraControlEx.Instance().isCameraTargetObject(this) == false)
-            _spriteObject.transform.position = MathEx.floorNoSign(transform.position,2);
-        else
+        if(forceIgnoreTrim || CameraControlEx.Instance().isCameraTargetObject(this))
             _spriteObject.transform.localPosition = Vector3.zero;
+        else
+            _spriteObject.transform.position = MathEx.floorNoSign(transform.position,2);
 
         _spriteObject.transform.localPosition += _localSpritePosition;
         updateChildTransform();
