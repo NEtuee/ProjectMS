@@ -15,8 +15,6 @@
     <UpdatePhase>
         <WaitSecond Time="1.0"/>
         <SetAction UniqueKey="SchoolDoor" UniqueGroupKey="" Action="Dead"/>
-        <WaitSecond Time="0.05"/>
-        <TeleportTargetTo UniqueKey="Player" Position="0 0 0"/>
         <WaitSecond Time="1.0"/>
         <ToastMessage Text="아카네가 교실 문을 부수고 복도에 나타남" Time="3.0"/>
         <!-- <SetCameraPosition TargetPositionMarker="CameraPoint01"/> -->
@@ -27,6 +25,7 @@
         <!-- <SetCameraPosition TargetPosition="0 0 0"/> -->
         <TalkBalloon UniqueKey="Player" SimpleTalkKey="Talk_Stage01_1"/>
         <WaitSecond Time="3.0"/>
+        
         <LetterBoxHide/>
         <BlockInput Enable="False"/>
         <SetHideUI Hide="False"/>

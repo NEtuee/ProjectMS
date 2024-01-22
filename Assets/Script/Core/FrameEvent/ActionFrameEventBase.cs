@@ -1,6 +1,9 @@
 using System.Xml;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Numerics;
+using System.Drawing;
+using UnityEngine.UIElements;
 
 public enum FrameEventType
 {
@@ -42,6 +45,7 @@ public enum FrameEventType
     FrameEvent_Torque,
     FrameEvent_EffectPreset,
     FrameEvent_SetRotateSlotValue,
+    FrameEvent_FollowAttack,
 
     Count,
 }
@@ -56,6 +60,11 @@ public enum ChildFrameEventType
     ChildFrameEvent_OnGuardBreakFail,
     ChildFrameEvent_OnCatch,
     ChildFrameEvent_OnKill,
+
+    ChildFrameEvent_OnBegin,
+    ChildFrameEvent_OnEnter,
+    ChildFrameEvent_OnExit,
+    ChildFrameEvent_OnEnd,
 
     Count,
 }
@@ -88,7 +97,7 @@ public abstract class ActionFrameEventBase
     public abstract FrameEventType getFrameEventType();
     public virtual void initialize(){}
     public abstract bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null);
-    public virtual void onExit(ObjectBase executeEntity){}
+    public virtual void onExit(ObjectBase executeEntity, bool isForceEnd){}
     public abstract void loadFromXML(XmlNode node);
 
     public virtual void initializeFromAttack(CommonMaterial attackMaterial) {}
@@ -393,7 +402,7 @@ public class ActionFrameEvent_AudioPlay : ActionFrameEventBase
         {
             GameEntityBase entityBase = (executeEntity as GameEntityBase);
             if(entityBase._soundDebug || GameEditorMaster._instance._soundDebugAll)
-                entityBase.debugTextManager.updateDebugText("Sound: " + _audioID,"AudioEvent: " + _audioID.ToString(),1f);
+                entityBase.debugTextManager.updateDebugText("Sound: " + _audioID,"AudioEvent: " + _audioID.ToString(),1f,UnityEngine.Color.white);
         }
 
         return true;
@@ -830,6 +839,227 @@ public class ActionFrameEvent_ShakeEffect : ActionFrameEventBase
     }
 }
 
+public class ActionFrameEvent_FollowAttack : ActionFrameEventBase
+{
+    public enum FollowType
+    {
+        Attach,
+        Movement,
+        Count,
+    }
+
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_FollowAttack;}
+
+    private FrameEventMovement _frameEventMovement = new FrameEventMovement();
+    
+    private FollowType      _followType = FollowType.Count;
+    
+    private string          _characterKey = "";
+
+    private bool            _isFirst = false;
+    private bool            _toTarget = false;
+    private bool            _isCollision = false;
+
+    private float           _radius = 0f;
+    private float           _moveTimer = 0f;
+
+    private float           _moveTime = 0f;
+
+    private GameEntityBase  _crossHairEntity = null;
+
+    private SearchIdentifier _searchIdentifier = SearchIdentifier.Enemy;
+
+    private UnityEngine.Vector3         _direction = UnityEngine.Vector3.zero;
+    private UnityEngine.Vector3         _position = UnityEngine.Vector3.zero;
+    private UnityEngine.Vector3         _offset = UnityEngine.Vector3.zero;
+
+    private List<CollisionObjectData>   _collisionData = new List<CollisionObjectData>();
+    private HashSet<object>             _collisionHash = new HashSet<object>();
+
+    public override void initialize()
+    {
+        base.initialize();
+
+        _isFirst = true;
+        _direction = UnityEngine.Vector3.zero;
+        _position = UnityEngine.Vector3.zero;
+
+        _moveTimer = 0f;
+
+        _collisionData.Clear();
+        _collisionHash.Clear();
+
+        _isCollision = false;
+    }
+
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        if(executeEntity is GameEntityBase == false)
+            return true;
+        
+        GameEntityBase gameEntityBase = executeEntity as GameEntityBase;
+        if(gameEntityBase.getCurrentTargetEntity() == null)
+            return true;
+
+        UnityEngine.Vector3 targetPosition = gameEntityBase.getCurrentTargetEntity().transform.position;
+        if(_isFirst)
+        {
+            _frameEventMovement.initialize(gameEntityBase);
+            if(_toTarget)
+                _position = targetPosition + _offset;
+            else
+                _position = gameEntityBase.transform.position + _offset;
+
+            SpawnCharacterOptionDesc desc = new SpawnCharacterOptionDesc();
+            desc._position = _position;
+            desc._searchIdentifier = gameEntityBase._searchIdentifier;
+            DebugUtil.log(desc._searchIdentifier.ToString());
+
+            CharacterInfoData characterInfoData = CharacterInfoManager.Instance().GetCharacterInfoData(_characterKey);
+            _crossHairEntity = (SceneCharacterManager._managerInstance as SceneCharacterManager).createCharacterFromPool(characterInfoData,desc);
+        }
+
+        if(_isFirst)
+        {
+            executeChildFrameEvent(ChildFrameEventType.ChildFrameEvent_OnBegin, _crossHairEntity, targetEntity);
+            _isFirst = false;
+        }
+
+        _direction = targetPosition - _position;
+        _direction.Normalize();
+
+        if(_moveTime != 0f)
+            _moveTimer += GlobalTimer.Instance().getSclaedDeltaTime();
+
+        if(_moveTime == 0f || (_moveTimer < _moveTime))
+        {
+            switch(_followType)
+            {
+                case FollowType.Attach:
+                {
+                    _position = targetPosition;
+                }
+                break;
+                case FollowType.Movement:
+                {
+                    _frameEventMovement.progress(GlobalTimer.Instance().getSclaedDeltaTime(),_direction);
+                    _position += _frameEventMovement.getMovementOfFrame();
+            
+                    _frameEventMovement.resetMovementOfFrame();
+                }
+                break;
+            }
+        }
+
+        _crossHairEntity.updatePosition(_position);
+
+        gameEntityBase.setDirection((_position - gameEntityBase.transform.position).normalized);
+        _crossHairEntity.setDirection(_direction);
+
+        _collisionData.Clear();
+        bool collision = false;
+        CollisionManager.Instance().queryRangeAll(CollisionType.Attack,_position,_radius, ref _collisionData);
+        foreach(var item in _collisionData)
+        {
+            if((item._collisionObject as GameEntityBase)._searchIdentifier != gameEntityBase._searchIdentifier)
+            {
+                collision = true;
+                break;
+            }
+        }
+
+        GizmoHelper.instance.drawCircle(_position,_radius,6,collision ? UnityEngine.Color.green : UnityEngine.Color.red);
+        if(collision)
+        {
+            if(_isCollision == false)
+                executeChildFrameEvent(ChildFrameEventType.ChildFrameEvent_OnEnter,_crossHairEntity,targetEntity);
+            
+            _isCollision = true;
+        }
+        else if(_isCollision)
+        {
+            executeChildFrameEvent(ChildFrameEventType.ChildFrameEvent_OnExit,_crossHairEntity,targetEntity);
+            _isCollision = false;
+        }
+
+        DebugUtil.assert(_crossHairEntity.getDirectionType() == DirectionType.Keep, "FollowAttack Entity의 DirectionType은 항상 Keep이어야 합니다.");
+        DebugUtil.assert(_crossHairEntity.isDead() == false && _crossHairEntity.isActiveSelf(), "FollowAttack Entity는 죽으면 안됩니다.");
+
+        return true;
+    }
+
+    public override void onExit(ObjectBase executeEntity, bool isForceEnd)
+    {
+        base.onExit(executeEntity,isForceEnd);
+
+        if(isForceEnd == false)
+            executeChildFrameEvent(ChildFrameEventType.ChildFrameEvent_OnEnd, _crossHairEntity, null);
+        
+        _crossHairEntity?.deactive();
+        _crossHairEntity?.DeregisterRequest();
+        _crossHairEntity = null;
+    }
+
+    public void executeChildFrameEvent(ChildFrameEventType eventType, ObjectBase executeEntity, ObjectBase targetEntity)
+    {
+        if(_childFrameEventItems == null || _childFrameEventItems.ContainsKey(eventType) == false)
+            return;
+        
+        ChildFrameEventItem childFrameEventItem = _childFrameEventItems[eventType];
+        GameEntityBase executeGameEntity = null;
+        if(executeEntity is GameEntityBase)
+            executeGameEntity = executeEntity as GameEntityBase;
+
+        for(int i = 0; i < childFrameEventItem._childFrameEventCount; ++i)
+        {
+            if(executeGameEntity != null && childFrameEventItem._childFrameEvents[i].checkCondition(executeGameEntity) == false)
+                continue;
+
+            if(childFrameEventItem._childFrameEvents[i].getFrameEventType() == FrameEventType.FrameEvent_Movement)
+            {
+                childFrameEventItem._childFrameEvents[i].initialize();
+                (childFrameEventItem._childFrameEvents[i] as ActionFrameEvent_Movement).setMovementValue(_frameEventMovement,_direction);
+                continue;
+            }
+
+            childFrameEventItem._childFrameEvents[i].initialize();
+            childFrameEventItem._childFrameEvents[i].onExecute(executeEntity, targetEntity);
+        }
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "FollowType")
+            {
+                _followType = (FollowType)System.Enum.Parse(typeof(FollowType), attributes[i].Value);
+            }
+            else if(attrName == "Radius")
+            {
+                _radius = float.Parse(attrValue);
+            }
+            else if(attrName == "MoveTime")
+            {
+                _moveTime = float.Parse(attrValue);
+            }
+            else if(attrName == "CharacterKey")
+            {
+                _characterKey = attrValue;
+            }
+            else if(attrName == "ToTarget")
+            {
+                _toTarget = bool.Parse(attrValue);
+            }
+        }
+    }
+
+}
+
 public class ActionFrameEvent_SetRotateSlotValue : ActionFrameEventBase
 {
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_SetRotateSlotValue;}
@@ -980,16 +1210,22 @@ public class ActionFrameEvent_Movement : ActionFrameEventBase
         
         if(currentMovement.getMovementType() != MovementBase.MovementType.FrameEvent)
         {
-            DebugUtil.assert(false,"movement frame event is only can use, when movement type is frameEvent movement : currentType[{0}]", currentMovement.getMovementType().ToString());
+            DebugUtil.assert(false,"movement frame event is only can use, when movement type is frameEvent movement : currentType[{0}] Action[{1}] FullPath[{2}]", currentMovement.getMovementType().ToString(), ((GameEntityBase)executeEntity).getCurrentActionName(),((GameEntityBase)executeEntity).actionGraphPath);
             return false;
         }
 
-        for(int i = 0; i < _valueListCount; ++i)
-        {
-            ((FrameEventMovement)currentMovement).setMovementValue(_setValueList[i]._value,_setValueList[i]._targetValue);
-        }
+        UnityEngine.Vector3 direction = executeEntity.getDirection();
+        setMovementValue((FrameEventMovement)currentMovement, direction);
         
         return true;
+    }
+
+    public void setMovementValue(FrameEventMovement movement, UnityEngine.Vector3 direction)
+    {
+        for(int i = 0; i < _valueListCount; ++i)
+        {
+            movement.setMovementValue(direction,_setValueList[i]._value,_setValueList[i]._targetValue);
+        }
     }
 
     public override void loadFromXML(XmlNode node)
@@ -1090,7 +1326,7 @@ public class ActionFrameEvent_SetFrameTag : ActionFrameEventBase
         return requester.applyFrameTag(_frameTag);
     }
 
-    public override void onExit(ObjectBase executeEntity)
+    public override void onExit(ObjectBase executeEntity, bool isForceEnd)
     {
         if(executeEntity is GameEntityBase == false)
             return;
@@ -1127,7 +1363,7 @@ public class ActionFrameEvent_SetCameraZoom : ActionFrameEventBase
         return true;
     }
 
-    public override void onExit(ObjectBase executeEntity)
+    public override void onExit(ObjectBase executeEntity, bool isForceEnd)
     {
         CameraControl.Instance().setDelay(false);
 
@@ -1156,7 +1392,7 @@ public class ActionFrameEvent_SetCameraDelay : ActionFrameEventBase
         return true;
     }
 
-    public override void onExit(ObjectBase executeEntity)
+    public override void onExit(ObjectBase executeEntity, bool isForceEnd)
     {
         CameraControl.Instance().setDelay(false);
 

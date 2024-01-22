@@ -1,0 +1,62 @@
+<SequencerGraph Name="Stage_2_1_0">
+
+    <InitializePhase>
+        <FadeIn Lambda="5.0"/>
+
+        <SetCameraTarget UniqueKey="Player" CameraMode="TargetCenterMode"/>
+        <SetCrossHair UniqueKey="Player"/>
+        <SetHideUI Hide="True"/>
+        <BlockInput Enable="True"/>
+
+        <BlockAI UniqueGroupKey="EnemyGroup" Enable="True"/>
+        
+        <LetterBoxShow/>
+    </InitializePhase>
+
+    <UpdatePhase>
+
+        <Task ProcessType="StepByStep">
+            <AIMove UniqueKey="YakisobaChan" LoopAction="Move" EndPositionMarker="TargetMarker"/>
+        </Task>
+
+        <Task ProcessType="StepByStep">
+            <WaitSecond Time="2.0"/>
+            <TalkBalloon UniqueKey="YakisobaChan" SimpleTalkKey="Talk_Stage02_1_0"/>
+
+            <WaitSecond Time="1.5"/>
+            <TalkBalloon UniqueKey="SukebanHit" SimpleTalkKey="Talk_Stage02_1_1"/>
+            <AIMove UniqueKey="SukebanHit" LoopAction="SQ_Hit" EndPositionMarker="SukebanHit"/>
+            
+            <WaitSecond Time="0.1"/>
+            <SetDirection UniqueKey="SukebanAsk" DirectionType="AlwaysRight"/>
+            <TalkBalloon UniqueKey="SukebanAsk" SimpleTalkKey="Talk_Stage02_1_1_2"/>
+
+            <WaitSecond Time="0.4"/>
+            <TalkBalloon UniqueKey="SukebanHit" SimpleTalkKey="Talk_Stage02_1_1_1"/>
+        </Task>
+
+        <CameraTrack TrackName="Camera0"/>
+
+        <WaitSecond Time="6.0"/>
+        <TalkBalloon UniqueKey="SukebanChoco" SimpleTalkKey="Talk_Stage02_1_1_3"/>
+        <WaitSecond Time="1.5"/>
+
+        <AIMove UniqueKey="Player" StartAction="AIMove_Start" LoopAction="AIMove_Loop" EndAction="AIMove_End" EndPositionMarker="PlayerMarker"/>
+        <TalkBalloon UniqueKey="Player" SimpleTalkKey="Talk_Stage02_1_2"/>
+
+        <WaitSecond Time="0.5"/>
+
+        <SetAction UniqueKey="YakisobaChan" Action="Dead"/>
+        <BlockAI UniqueGroupKey="EnemyGroup" Enable="False"/>
+
+        <LetterBoxHide/>
+        <SetHideUI Hide="False"/>
+        <BlockInput Enable="False"/>
+
+        <WaitSignal Signal="NeverEnd"/>
+    </UpdatePhase>
+
+    <EndPhase>
+    </EndPhase>
+
+</SequencerGraph>

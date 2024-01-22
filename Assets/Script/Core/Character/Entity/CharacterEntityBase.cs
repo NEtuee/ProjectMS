@@ -61,7 +61,7 @@ public class CharacterEntityBase : GameEntityBase
             return;
 
         _targetSearchTime += deltaTime;
-        if(_targetSearchTime < 1f)
+        if(_targetSearchTime < 0.5f)
             return;
 
         _targetSearchTime = 0f;
@@ -69,7 +69,7 @@ public class CharacterEntityBase : GameEntityBase
         {
             TargetSearchDescription desc = MessageDataPooling.GetMessageData<TargetSearchDescription>();
             desc._requester = this;
-            desc._searchIdentifier = getCurrentSearchIdentifier();
+            desc._searchIdentifier = getCurrentAISearchIdentifier();
             desc._searchRange = getCurrentTargetSearchRange();
             desc._searchStartRange = getCurrentTargetSearchStartRange();
             desc._searchSphereRadius = getCurrentTargetSearchSphereRadius();
@@ -124,7 +124,7 @@ public class CharacterEntityBase : GameEntityBase
         {
             TargetSearchDescription desc = MessageDataPooling.GetMessageData<TargetSearchDescription>();
             desc._requester = this;
-            desc._searchIdentifier = getCurrentSearchIdentifier();
+            desc._searchIdentifier = getCurrentAISearchIdentifier();
             desc._searchRange = getCurrentTargetSearchRange();
             desc._searchStartRange = getCurrentTargetSearchStartRange();
             desc._searchSphereRadius = getCurrentTargetSearchSphereRadius();

@@ -69,14 +69,14 @@ public class FrameEventMovement : MovementBase
         
     }
 
-    public void setMovementValue(float value, int valueType)
+    public void setMovementValue(Vector3 direction, float value, int valueType)
     {
         if(valueType == 1)
         {
-            if(MathEx.equals(_targetEntity.getDirection().sqrMagnitude, 0f, float.Epsilon) == false)
+            if(MathEx.equals(direction.sqrMagnitude, 0f, float.Epsilon) == false)
             {
                 float targetVelocity = value > _movementValues[2] ? _movementValues[2] : value;
-                _currentVelocity = _targetEntity.getDirection() * targetVelocity;
+                _currentVelocity = direction * targetVelocity;
             }
             return;
         }

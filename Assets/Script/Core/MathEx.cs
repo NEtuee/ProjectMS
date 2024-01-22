@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Numerics;
 using Unity.Mathematics;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 public static class MathEx
@@ -500,7 +501,7 @@ public static class MathEx
 	{
 		return new UnityEngine.Vector2(easeInOutCubic(start.x,end.x,time),easeInOutCubic(start.y,end.y,time));
 	}
-
+	
 	public static float linear(float start, float end, float value)
 	{
 		return lerpf(start, end, value);
@@ -547,6 +548,28 @@ public static class MathEx
 		if (value < 1) return end * 0.5f * value * value * value + start;
 		value -= 2;
 		return end * 0.5f * (value * value * value + 2) + start;
+	}
+	
+	public static float easeOutQuart(float start, float end, float value)
+	{
+		value--;
+		end -= start;
+		return -end * (value * value * value * value - 1) + start;
+	}
+
+	public static float easeInOutQuart(float start, float end, float value)
+	{
+		value /= .5f;
+		end -= start;
+		if (value < 1) return end * 0.5f * value * value * value * value + start;
+		value -= 2;
+		return -end * 0.5f * (value * value * value * value - 2) + start;
+	}
+	
+	public static float easeOutExpo(float start, float end, float value)
+	{
+		end -= start;
+		return end * (-Mathf.Pow(2, -10 * value) + 1) + start;
 	}
 
 //움직임 목록에 포함 안되있는 식들===============================================

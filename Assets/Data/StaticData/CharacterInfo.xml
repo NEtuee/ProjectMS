@@ -443,8 +443,8 @@
 
     <Helena_CrimsonGrimoire
         DisplayName="헬레나의 붉은 마도서"
-        ActionGraph="Assets/Data/Character/TestZako/TestZako.xml"
-        AIGraph="Assets/Data/AILibrary/Graph/EmptyAIGraph.xml"
+        ActionGraph="Assets/Data/Character/Object/Helena_CrimsonGirmoire/CrimsonGirmoireAction.xml"
+        AIGraph="Assets/Data/Character/Object/Helena_CrimsonGirmoire/CrimsonGirmoireAI.xml"
         StatusInfoName="CommonEnemyStatus"
 
         CollisionRadius="0.2"
@@ -490,6 +490,7 @@
 
         CollisionRadius="0.2"
         ProjectileCollisionRadius=""
+        IndicatorVisible="False"
 
         SearchIdentifier="Enemy"
     />
@@ -502,6 +503,7 @@
 
         CollisionRadius="0.2"
         ProjectileCollisionRadius=""
+        IndicatorVisible="False"
 
         SearchIdentifier="Enemy"
     />
@@ -514,6 +516,7 @@
 
         CollisionRadius="0.2"
         ProjectileCollisionRadius=""
+        IndicatorVisible="False"
 
         SearchIdentifier="Enemy"
     />
@@ -526,6 +529,7 @@
 
         CollisionRadius="0.2"
         ProjectileCollisionRadius=""
+        IndicatorVisible="False"
 
         SearchIdentifier="Enemy"
     />
@@ -538,6 +542,7 @@
 
         CollisionRadius="0.2"
         ProjectileCollisionRadius=""
+        IndicatorVisible="False"
 
         SearchIdentifier="Enemy"
     />
@@ -550,6 +555,7 @@
 
         CollisionRadius="0.2"
         ProjectileCollisionRadius=""
+        IndicatorVisible="False"
 
         SearchIdentifier="Enemy"
     />
@@ -562,6 +568,7 @@
 
         CollisionRadius="0.2"
         ProjectileCollisionRadius=""
+        IndicatorVisible="False"
 
         SearchIdentifier="Enemy"
     />
@@ -574,6 +581,7 @@
 
         CollisionRadius="0.2"
         ProjectileCollisionRadius=""
+        IndicatorVisible="False"
 
         SearchIdentifier="Enemy"
     />
@@ -585,6 +593,20 @@
         StatusInfoName="CommonEnemyStatus"
 
         CollisionRadius="0.2"
+        ProjectileCollisionRadius=""
+        IndicatorVisible="False"
+
+        SearchIdentifier="Enemy"
+    />
+
+    <YakisobaChan
+        DisplayName="야끼소바쨩"
+        ActionGraph="Assets/Data/Character/Deco/YakisobaChan.xml"
+        AIGraph="Assets/Data/AILibrary/Graph/EmptyAIGraph.xml"
+        StatusInfoName="CommonEnemyStatus"
+
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
         ProjectileCollisionRadius=""
 
         SearchIdentifier="Enemy"

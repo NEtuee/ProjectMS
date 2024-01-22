@@ -69,6 +69,7 @@ public class GameEntityBase : SequencerObjectBase
     private float               _rotateSlotSpeed = 0f;
     private float               _rotateSlotRadius = 0f;
     private float               _currentRotateSlotAngle = 0f;
+    private float               _additionalMoveScale = 1f;
 
     private bool                _updateDirection = true;
     private bool                _updateFlipState = true;
@@ -183,6 +184,7 @@ public class GameEntityBase : SequencerObjectBase
 
         _movementControl.changeMovement(this,_actionGraph.getCurrentMovement());
         _movementControl.setMoveScale(_actionGraph.getCurrentMoveScale());
+        _additionalMoveScale = 1f;
 
         _danmakuGraph.initialize(this);
 
@@ -291,6 +293,7 @@ public class GameEntityBase : SequencerObjectBase
 
         _movementControl.changeMovement(this,_actionGraph.getCurrentMovement());
         _movementControl.setMoveScale(_actionGraph.getCurrentMoveScale());
+        _additionalMoveScale = 1f;
 
         _danmakuGraph.initialize(this);
         _statusInfo.initialize(this,statusInfoName);
@@ -420,7 +423,7 @@ public class GameEntityBase : SequencerObjectBase
                 {
                     applyActionBuffList();
                     _movementControl.changeMovement(this,_actionGraph.getCurrentMovement());
-                    _movementControl.setMoveScale(_actionGraph.getCurrentMoveScale());
+                    _movementControl.setMoveScale(_actionGraph.getCurrentMoveScale() * _additionalMoveScale);
 
                     _updateDirection = true;
                     _updateFlipState = true;
@@ -506,6 +509,7 @@ public class GameEntityBase : SequencerObjectBase
 
     public override void deactive()
     {
+        setActiveSelf(false,false);
         _graphicInterface.release();
 
         foreach(var item in _hpEffect)
@@ -545,8 +549,8 @@ public class GameEntityBase : SequencerObjectBase
     {
         if(_actionDebug == true || GameEditorMaster._instance._actionDebugAll)
         {
-            debugTextManager.updateDebugText("Action","Action: " + getCurrentActionName());
-            debugTextManager.updateDebugText("Defence","Defence: " + getDefenceType() + (_statusInfo.getDefenceType() != DefenceType.Count ? "(Buff)" : "(Action)"));
+            debugTextManager.updateDebugText("Action","Action: " + getCurrentActionName(), UnityEngine.Color.white);
+            debugTextManager.updateDebugText("Defence","Defence: " + getDefenceType() + (_statusInfo.getDefenceType() != DefenceType.Count ? "(Buff)" : "(Action)"), UnityEngine.Color.white);
 
             string frameTag = "";
             HashSet<string> frameTagList = _actionGraph.getCurrentFrameTagList();
@@ -555,7 +559,7 @@ public class GameEntityBase : SequencerObjectBase
                 frameTag += item + ", ";
             }
 
-            debugTextManager.updateDebugText("FrameTag","FrameTag: " + frameTag);
+            debugTextManager.updateDebugText("FrameTag","FrameTag: " + frameTag, UnityEngine.Color.white);
         }
     
         if(getDefenceAngle() != 0f)
@@ -575,9 +579,9 @@ public class GameEntityBase : SequencerObjectBase
         {
             if(_aiGraph != null && _aiGraph.isValid())
             {
-                debugTextManager.updateDebugText("AIState","AIState: " + _aiGraph.getCurrentAIStateName());
-                debugTextManager.updateDebugText("AIPackage","   AIPackage: " + _aiGraph.getCurrentPackageName());
-                debugTextManager.updateDebugText("AI","   AIPackageState: " + getCurrentAIPackageStateName());
+                debugTextManager.updateDebugText("AIState","AIState: " + _aiGraph.getCurrentAIStateName(), UnityEngine.Color.white);
+                debugTextManager.updateDebugText("AIPackage","   AIPackage: " + _aiGraph.getCurrentPackageName(), UnityEngine.Color.white);
+                debugTextManager.updateDebugText("AI","   AIPackageState: " + getCurrentAIPackageStateName(), UnityEngine.Color.white);
             }
 
             if(_aiGraph.hasTargetPosition() == true)
@@ -614,7 +618,7 @@ public class GameEntityBase : SequencerObjectBase
             Dictionary<string, float> customValueDictionary = _actionGraph.getCustomValueDictionary();
             foreach(var item in customValueDictionary)
             {
-                debugTextManager.updateDebugText(item.Key,"   " + item.Key + ": " + item.Value);
+                debugTextManager.updateDebugText(item.Key,"   " + item.Key + ": " + item.Value, UnityEngine.Color.white);
             }
 
             if(_currentTarget != null)
@@ -625,7 +629,7 @@ public class GameEntityBase : SequencerObjectBase
 
         if(_animationDebug || GameEditorMaster._instance._animationDebugAll)
         {
-            debugTextManager.updateDebugText("Animation","Animation: " + _actionGraph.getCurrentAnimationName());
+            debugTextManager.updateDebugText("Animation","Animation: " + _actionGraph.getCurrentAnimationName(), UnityEngine.Color.white);
         }
 
         _debugColor = Color.red;
@@ -639,7 +643,7 @@ public class GameEntityBase : SequencerObjectBase
             return;
         
         GameEntityBase targetEntity = data._target as GameEntityBase;
-        if (targetEntity.getCurrentSearchIdentifier() != getCurrentSearchIdentifier())
+        if (targetEntity._searchIdentifier != _searchIdentifier)
             return;
 
         float totalRadius = targetEntity.getCollisionInfo().getRadius() + getCollisionInfo().getRadius();
@@ -731,6 +735,11 @@ public class GameEntityBase : SequencerObjectBase
         }
     }
 
+    public bool isAIBlocked()
+    {
+        return _blockAI;
+    }
+
 #if UNITY_EDITOR
     public void blockAI_Debug(bool value)
     {
@@ -779,6 +788,7 @@ public class GameEntityBase : SequencerObjectBase
 
         _movementControl.changeMovement(this,_actionGraph.getCurrentMovement());
         _movementControl.setMoveScale(_actionGraph.getCurrentMoveScale());
+        _additionalMoveScale = 1f;
 
         _danmakuGraph.initialize(this);
 
@@ -1110,6 +1120,10 @@ public class GameEntityBase : SequencerObjectBase
                 if(getSummonObject() != null)
                     direction = getSummonObject().getDirection();
                 break;
+            case DirectionType.ToSummoner:
+                if(getSummonObject() != null)
+                    direction = (getSummonObject().transform.position - transform.position).normalized;
+                break;
             case DirectionType.Count:
                 DebugUtil.assert(false, "invalid direction type : {0}",_currentDirectionType);
                 break;
@@ -1182,12 +1196,25 @@ public class GameEntityBase : SequencerObjectBase
         updateDirection();
     }
 
+    public DirectionType getDirectionType()
+    {
+        return _currentDirectionType;
+    }
+
     public MovementGraphPresetData getMovementGraphPresetDataFromActionIndex(int actionIndex)
     {
         if(actionIndex == -1)
             return null;
             
         return _actionGraph.getMovementGraphPresetByIndex(actionIndex);
+    }
+
+    public float getMoveScaleFromActionIndex(int actionIndex)
+    {
+        if(actionIndex == -1)
+            return 1f;
+            
+        return _actionGraph.getMoveScaleByIndex(actionIndex);
     }
 
     public float getAnimationPlayTimeFromActionIndex(int actionIndex)
@@ -1247,6 +1274,23 @@ public class GameEntityBase : SequencerObjectBase
         return commonMaterial;
     }
 
+    public void setAdditionalMoveScale(float additionalMoveScale)
+    {
+        _additionalMoveScale = additionalMoveScale;
+        _movementControl?.setMoveScale(_actionGraph.getCurrentMoveScale() * _additionalMoveScale);
+    }
+
+    public void resetAdditionalMoveScale()
+    {
+        _additionalMoveScale = 1f;
+        _movementControl?.setMoveScale(_actionGraph.getCurrentMoveScale());
+    }
+    
+    public bool isIndicatorVisible()
+    {
+        return _characterInfo._indicatorVisible;
+    }
+
     public void setKeepAliveEntity(bool value) {_keepAliveEntity = value;}
     public bool isKeepAliveEntity() {return _keepAliveEntity;}
 
@@ -1283,7 +1327,7 @@ public class GameEntityBase : SequencerObjectBase
 
     public bool isAIGraphValid() {return _aiGraph != null && _aiGraph.isValid();}
     public TargetSearchType getCurrentTargetSearchType() {return _aiGraph.getCurrentTargetSearchType();}
-    public SearchIdentifier getCurrentSearchIdentifier() {return _aiGraph.getCurrentSearchIdentifier();}
+    public SearchIdentifier getCurrentAISearchIdentifier() {return _aiGraph.getCurrentSearchIdentifier();}
     public float getCurrentTargetSearchRange() {return _aiGraph.getCurrentTargetSearchRange();}
     public float getCurrentTargetSearchStartRange() {return _aiGraph.getCurrentTargetSearchStartRange();}
     public float getCurrentTargetSearchSphereRadius() {return _aiGraph.getCurrentTargetSearchSphereRadius();}
@@ -1294,6 +1338,7 @@ public class GameEntityBase : SequencerObjectBase
 
     public void terminateAIPackage() {_aiGraph.terminatePackage();}
     public void setAIState(int index) {_aiGraph.changeAIPackageStateOther(index);}
+    public void setAINode(int index) {_aiGraph.changeAINodeOther(index);}
 
     public void setAiDirection(float angle) {_aiGraph.setAIDirection(angle);}
     public void setAiDirection(Vector3 direction) {_aiGraph.setAIDirection(direction);}
@@ -1358,6 +1403,12 @@ public class GameEntityBaseEditor : Editor
     private string _actionListSearchString = "";
     private string[] _actionListSearchStringArray = null;
 
+
+
+    private Vector2 _aiListScroll = Vector2.zero;
+    private string _aiListSearchString = "";
+    private string[] _aiListSearchStringArray = null;
+
     public void OnEnable()
     {
         control = (GameEntityBase)target;
@@ -1396,43 +1447,104 @@ public class GameEntityBaseEditor : Editor
         }
         EditorGUILayout.EndHorizontal();
 
+        GUILayout.BeginHorizontal();
+
+        GUILayout.BeginVertical("box",GUILayout.ExpandWidth(true));
+
         GUILayout.Label("Action List");
-        string searchString = _actionListSearchString;
-
-        _actionListScroll = EditorGUILayout.BeginScrollView(_actionListScroll,"box",GUILayout.Height(200f));
         {
-            _actionListSearchString = EditorGUILayout.TextField("Search",_actionListSearchString);
+            string searchString = _actionListSearchString;
 
-            if(_actionListSearchString != searchString)
-                _actionListSearchStringArray = _actionListSearchString.ToLower().Split(' ');
-
-            for(int index = 0; index < actionBaseData._actionNodeCount; ++index)
+            _actionListScroll = EditorGUILayout.BeginScrollView(_actionListScroll,"box",GUILayout.Height(200f));
             {
-                if(_actionListSearchString != "")
+                _actionListSearchString = EditorGUILayout.TextField("Search",_actionListSearchString);
+
+                if(_actionListSearchString != searchString)
+                    _actionListSearchStringArray = _actionListSearchString.ToLower().Split(' ');
+
+                for(int index = 0; index < actionBaseData._actionNodeCount; ++index)
                 {
-                    string lowerString = actionBaseData._actionNodeData[index]._nodeName.ToLower();
-                    bool contains = false;
-                    foreach(var targetString in _actionListSearchStringArray)
+                    if(_actionListSearchString != "")
                     {
-                        contains = lowerString.Contains(targetString);
-                        if(contains)
-                            break;
+                        string lowerString = actionBaseData._actionNodeData[index]._nodeName.ToLower();
+                        bool contains = false;
+                        foreach(var targetString in _actionListSearchStringArray)
+                        {
+                            contains = lowerString.Contains(targetString);
+                            if(contains)
+                                break;
+                        }
+
+                        if(contains == false)
+                            continue;
                     }
 
-                    if(contains == false)
-                        continue;
+                    EditorGUILayout.BeginHorizontal();
+                    if(GUILayout.Button(actionBaseData._actionNodeData[index]._nodeName, buttonStyle))
+                        control.setAction(index);
+
+                    if(GUILayout.Button("Open",GUILayout.Width(50f)))
+                        FileDebugger.OpenFileWithCursor(actionBaseData._fullPath,actionBaseData._actionNodeData[index]._lineNumber);
+                    EditorGUILayout.EndHorizontal();
                 }
-
-                EditorGUILayout.BeginHorizontal();
-                if(GUILayout.Button(actionBaseData._actionNodeData[index]._nodeName, buttonStyle))
-                    control.setAction(index);
-
-                if(GUILayout.Button("Open",GUILayout.Width(50f)))
-                    FileDebugger.OpenFileWithCursor(actionBaseData._fullPath,actionBaseData._actionNodeData[index]._lineNumber);
-                EditorGUILayout.EndHorizontal();
             }
+            EditorGUILayout.EndScrollView();
         }
-        EditorGUILayout.EndScrollView();
+        
+
+
+        GUILayout.EndVertical();
+
+        GUILayout.BeginVertical("box",GUILayout.ExpandWidth(true));
+
+        GUILayout.Label("AI State List");
+        AIGraphBaseData aiBaseData = control.getAIGraph_Debug().getAIGraphBaseData_Debug();
+        if(aiBaseData != null)
+        {
+            string searchString = _aiListSearchString;
+
+            _aiListScroll = EditorGUILayout.BeginScrollView(_aiListScroll,"box",GUILayout.Height(200f));
+            {
+                _aiListSearchString = EditorGUILayout.TextField("Search",_aiListSearchString);
+
+                if(_aiListSearchString != searchString)
+                    _aiListSearchStringArray = _aiListSearchString.ToLower().Split(' ');
+
+                for(int index = 0; index < aiBaseData._aiNodeCount; ++index)
+                {
+                    if(_aiListSearchString != "")
+                    {
+                        string lowerString = aiBaseData._aiGraphNodeData[index]._nodeName.ToLower();
+                        bool contains = false;
+                        foreach(var targetString in _aiListSearchStringArray)
+                        {
+                            contains = lowerString.Contains(targetString);
+                            if(contains)
+                                break;
+                        }
+
+                        if(contains == false)
+                            continue;
+                    }
+
+                    EditorGUILayout.BeginHorizontal();
+                    if(GUILayout.Button(aiBaseData._aiGraphNodeData[index]._nodeName, buttonStyle))
+                    {
+                        control._blockAIByEditor = false;
+                        control.setAINode(index);
+                    }
+
+                    if(GUILayout.Button("Open",GUILayout.Width(50f)))
+                        FileDebugger.OpenFileWithCursor(aiBaseData._fullPath,aiBaseData._aiGraphNodeData[index]._lineNumber);
+                    EditorGUILayout.EndHorizontal();
+                }
+            }
+            EditorGUILayout.EndScrollView();
+        }
+
+        GUILayout.EndVertical();
+
+        GUILayout.EndHorizontal();
 
 
         EditorGUILayout.Space(10f);

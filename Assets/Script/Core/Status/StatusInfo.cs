@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Numerics;
 
 public class StatusInfo
@@ -245,6 +246,17 @@ public class StatusInfo
 
     private void applyBuff(BuffData buff, float startedTime)
     {
+        if(buff._targetStatusName != null && getStatus(buff._targetStatusName) == null)
+        {
+            if(_ownerObject is GameEntityBase)
+            {
+                GameEntityBase gameEntityBase = (_ownerObject as GameEntityBase);
+                if(GameEditorMaster._instance._statusDebugAll || gameEntityBase._statusDebug)
+                    gameEntityBase.debugTextManager.updateDebugText(buff._buffName,$"Target Status not Exists. Buff:[{buff._buffName}] Status:[{buff._targetStatusName}]",2f,UnityEngine.Color.red);
+            }
+            return;
+        }
+
         BuffItem buffItem = _buffItemPool.dequeue();
         buffItem._buffData = buff;
         buffItem._uniqueKey = _uniqueKeyIndex++;
@@ -596,9 +608,6 @@ public class StatusInfo
             if(buff.isStatusBuffValid() == false)
                 return false;
 
-            if(buff._targetStatusName != null && getStatus(buff._targetStatusName) == null)
-            DebugUtil.assert(false, "대상 스테이터스가 존재하지 않습니다.: [스테이터스 이름: {0}] [스테이터스 인포 이름: {1}]", buff._targetStatusName,_statusInfoData._statusInfoName);
-
             if(buff._buffUpdateType == BuffUpdateType.GreaterThenSet)
                 return setStat(buff._targetStatusName,getStatus(buff._buffCustomStatusName)._realValue);
 
@@ -772,6 +781,9 @@ public class StatusInfo
 
     private Status getStatus(string name)
     {
+        if(name == null)
+            return null;
+
         if(_statusValues.ContainsKey(name) == false)
             return null;
 
@@ -788,7 +800,7 @@ public class StatusInfo
             Status stat = getStatus(statusDataFloat._statusName);
             string statText = ": " + stat._value;
 
-            debugTextManager.updateDebugText(debugText, debugText + statText);
+            debugTextManager.updateDebugText(debugText, debugText + statText, UnityEngine.Color.white);
         }
 
         for(int i = 0; i < _currentlyAppliedBuffList.Count; ++i)
@@ -796,7 +808,7 @@ public class StatusInfo
             BuffData data = _currentlyAppliedBuffList[i]._buffData;
             string debugText = data._buffName;
 
-            debugTextManager.updateDebugText(debugText, "[Buff] " + debugText);
+            debugTextManager.updateDebugText(debugText, "[Buff] " + debugText, UnityEngine.Color.white);
         }
     }
 

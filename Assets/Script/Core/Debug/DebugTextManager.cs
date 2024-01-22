@@ -57,12 +57,12 @@ public class DebugTextManager : MonoBehaviour
         }
     }
 
-    public void updateDebugText(string targetName, string text)
+    public void updateDebugText(string targetName, string text, Color color)
     {
-        updateDebugText(targetName,text,stayTime);
+        updateDebugText(targetName,text,stayTime,color);
     }
 
-    public void updateDebugText(string targetName, string text, float time)
+    public void updateDebugText(string targetName, string text, float time, Color color)
     {
         if(_debugTextList.ContainsKey(targetName) == false)
         {
@@ -72,6 +72,7 @@ public class DebugTextManager : MonoBehaviour
 
             DebugItem item = new DebugItem();
             item._textMesh = debugText;
+            item._textMesh.color = color;
             item._timer = time;
             item._itemKey = targetName;
 

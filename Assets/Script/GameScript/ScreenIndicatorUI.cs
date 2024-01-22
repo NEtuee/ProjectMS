@@ -113,6 +113,9 @@ public class ScreenIndicatorUI : MonoBehaviour
 
     public void addCharacter(CharacterEntityBase character)
     {
+        if(character.isIndicatorVisible() == false)
+            return;
+            
         SpriteRenderer spriteRenderer = getIndicator();
 
         Vector3 center = Camera.main.transform.position;

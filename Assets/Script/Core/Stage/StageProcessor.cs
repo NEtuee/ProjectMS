@@ -533,7 +533,10 @@ public class StageProcessor
 
         if(trackData._startBlend)
         {
-            _cameraTrackPositionError = _targetCameraControl.getCameraPosition() - resultPosition;
+            Vector3 resultPoint;
+            getLimitedFractionOnLine(_currentPoint, _targetCameraControl.getCameraPosition(), out resultPoint);
+
+            _cameraTrackPositionError = resultPoint - resultPosition;
             _cameraTrackPositionErrorReduceTime = 0f;
         }
         else
@@ -658,32 +661,42 @@ public class StageProcessor
         Vector3 onLinePosition = targetPositionWithoutZ;
         float resultFraction = 0f;
         float limitedDistance = 0f;
+        float verticalLimitedDistance = 0f;
+        float horizontalLimitedDistance = 0f;
+
         if(startPoint._lockCameraInBound)
         {
             onLinePosition = startPoint._stagePoint + _offsetPosition;
             limitedDistance = startPoint._maxLimitedDistance;
+            verticalLimitedDistance = startPoint._verticalLimitedDistance;
+            horizontalLimitedDistance = startPoint._horizontalLimitedDistance;
         }
         else
         {
             onLinePosition = isEndPoint ? (startPoint._stagePoint + _offsetPosition) : MathEx.getPerpendicularPointOnLineSegment((startPoint._stagePoint + _offsetPosition), (nextPoint._stagePoint + _offsetPosition),targetPositionWithoutZ);
             resultFraction = isEndPoint ? 1f : (onLinePosition - (startPoint._stagePoint + _offsetPosition)).magnitude * (1f / ((nextPoint._stagePoint + _offsetPosition) - (startPoint._stagePoint + _offsetPosition)).magnitude);
             limitedDistance = Mathf.Lerp(startPoint._maxLimitedDistance, nextPoint._maxLimitedDistance, resultFraction);
+            verticalLimitedDistance = Mathf.Lerp(startPoint._verticalLimitedDistance, nextPoint._verticalLimitedDistance, resultFraction);
+            horizontalLimitedDistance = Mathf.Lerp(startPoint._horizontalLimitedDistance, nextPoint._horizontalLimitedDistance, resultFraction);
         }
 
+        verticalLimitedDistance += limitedDistance;
+        horizontalLimitedDistance += limitedDistance;
+
         resultPoint = targetPositionWithoutZ;
-        if(MathEx.distancef(targetPositionWithoutZ.y,onLinePosition.y) > limitedDistance)
+        if(MathEx.distancef(targetPositionWithoutZ.y,onLinePosition.y) > verticalLimitedDistance)
         {
             if(targetPositionWithoutZ.y > onLinePosition.y)
-                resultPoint.y = onLinePosition.y + limitedDistance;
+                resultPoint.y = onLinePosition.y + verticalLimitedDistance;
             else
-                resultPoint.y = onLinePosition.y - limitedDistance;
+                resultPoint.y = onLinePosition.y - verticalLimitedDistance;
         }
-        if(MathEx.distancef(targetPositionWithoutZ.x,onLinePosition.x) > limitedDistance)
+        if(MathEx.distancef(targetPositionWithoutZ.x,onLinePosition.x) > horizontalLimitedDistance)
         {
             if(targetPositionWithoutZ.x > onLinePosition.x)
-                resultPoint.x = onLinePosition.x + limitedDistance;
+                resultPoint.x = onLinePosition.x + horizontalLimitedDistance;
             else
-                resultPoint.x = onLinePosition.x - limitedDistance;
+                resultPoint.x = onLinePosition.x - horizontalLimitedDistance;
         }
 
         return resultFraction;

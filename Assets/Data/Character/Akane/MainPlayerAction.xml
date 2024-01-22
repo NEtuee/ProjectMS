@@ -269,7 +269,7 @@
         <Animation Preset="Sprites/NewPlayer/DashRoll/" XFlip="true" Duration="0.25">
             <FrameEvent Type="Attack" StartTime="0" AttackType="GuardBreak" AttackPreset="Akane_Kick" IgnoreDefenceType="Guard" AttackCount="1">
                 <OnGuardBreak>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="GuardPointDecrease"/>
+                    <!-- <FrameEvent Type="ApplyBuffTarget" ApplyBuff="GuardPointDecrease"/> -->
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="GuardCountIncrease"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="TargetBattleIncrement" Condition="getTargetFrameTag_Groggy == false"/>
 
@@ -526,7 +526,7 @@
     </AIMove_Start>
 
     <AIMove_Loop MovementType="GraphPreset" MovementGraphPreset="TEST" DirectionType="AI" RotationType="Direction" FlipType="Direction" RotateBySpeed="True" RotateSpeed="gv_rotateSpeed">
-         <Animation Preset="Sprites/NewPlayer/stun" XFlip="true" Duration="0.1">
+         <Animation Preset="Sprites/NewPlayer/MoveDirection" XFlip="true" Duration="0.1">
         </Animation>
 
         <Branch Condition="End == true" Execute="AIMove_Loop"/>

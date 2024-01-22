@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ScreenDirector : MonoBehaviour
 {
@@ -14,7 +15,7 @@ public class ScreenDirector : MonoBehaviour
             FadeOut,
         }
 
-        public SpriteRenderer   _faderSpriteRenderer = null;
+        public Image   _faderImage = null;
 
         private FadeState       _state = FadeState.None;
         private bool            _isEnd = false;
@@ -25,7 +26,7 @@ public class ScreenDirector : MonoBehaviour
         public void initialize()
         {
             _state = FadeState.None;
-            _faderSpriteRenderer.gameObject.SetActive(false);
+            _faderImage.gameObject.SetActive(false);
             _isEnd = false;
             _lambda = 0f;
             _alpha = 0f;
@@ -36,9 +37,9 @@ public class ScreenDirector : MonoBehaviour
 
         public void updateAlpha()
         {
-            Color color = _faderSpriteRenderer.color;
+            Color color = _faderImage.color;
             color.a = _alpha;
-            _faderSpriteRenderer.color = color;
+            _faderImage.color = color;
         }
 
         public void fadeIn(float lambda)
@@ -49,7 +50,7 @@ public class ScreenDirector : MonoBehaviour
             _alpha = 0f;
             _targetAlpha = 1f;
 
-            _faderSpriteRenderer.gameObject.SetActive(true);
+            _faderImage.gameObject.SetActive(true);
         }
 
         public void fadeOut(float lambda)
@@ -60,7 +61,7 @@ public class ScreenDirector : MonoBehaviour
             _alpha = 1f;
             _targetAlpha = 0f;
 
-            _faderSpriteRenderer.gameObject.SetActive(true);
+            _faderImage.gameObject.SetActive(true);
         }
 
         public void clear()
@@ -71,7 +72,7 @@ public class ScreenDirector : MonoBehaviour
             _alpha = 0f;
             _targetAlpha = 0f;
 
-            _faderSpriteRenderer.gameObject.SetActive(false);
+            _faderImage.gameObject.SetActive(false);
         }
 
         private bool isDampingEnd()
@@ -91,7 +92,7 @@ public class ScreenDirector : MonoBehaviour
                 _isEnd = true;
 
                 if(_state == FadeState.FadeOut)
-                    _faderSpriteRenderer.gameObject.SetActive(false);
+                    _faderImage.gameObject.SetActive(false);
             }
 
             updateAlpha();

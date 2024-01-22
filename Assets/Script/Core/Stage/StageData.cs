@@ -30,6 +30,8 @@ public class StagePointData
     public string       _pointName = "";
     public Vector3      _stagePoint = Vector3.zero;
     public float        _maxLimitedDistance = 0f;
+    public float        _verticalLimitedDistance = 0f;
+    public float        _horizontalLimitedDistance = 0f;
     public float        _cameraZoomSize = 0f;
     public float        _cameraZoomSpeed = 4f;
     public bool         _lerpCameraZoom = false;

@@ -19,6 +19,8 @@ MonoBehaviour:
   - _pointName: New Point 0
     _stagePoint: {x: 0, y: 0, z: 0}
     _maxLimitedDistance: 0
+    _verticalLimitedDistance: 0
+    _horizontalLimitedDistance: 0
     _cameraZoomSize: 2
     _cameraZoomSpeed: 10
     _lerpCameraZoom: 1
@@ -34,6 +36,8 @@ MonoBehaviour:
       _startAction: AC_Idle
       _flip: 0
       _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
       _searchIdentifier: 1
       _activeType: 0
       _localPosition: {x: -3.16, y: -1.28, z: 0}
@@ -43,6 +47,8 @@ MonoBehaviour:
       _startAction: AC_Idle
       _flip: 0
       _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
       _searchIdentifier: 1
       _activeType: 0
       _localPosition: {x: -1.91, y: -1.28, z: 0}
@@ -52,6 +58,8 @@ MonoBehaviour:
       _startAction: AC_Idle
       _flip: 0
       _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
       _searchIdentifier: 1
       _activeType: 0
       _localPosition: {x: 3.07, y: -1.3, z: 0}
@@ -61,6 +69,8 @@ MonoBehaviour:
       _startAction: AC_Idle
       _flip: 0
       _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
       _searchIdentifier: 1
       _activeType: 0
       _localPosition: {x: 1.86, y: -1.29, z: 0}
@@ -70,6 +80,8 @@ MonoBehaviour:
       _startAction: AC_Idle
       _flip: 0
       _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
       _searchIdentifier: 1
       _activeType: 0
       _localPosition: {x: 0.58, y: -1.29, z: 0}
@@ -79,6 +91,8 @@ MonoBehaviour:
       _startAction: SQ_Intro_Sleep
       _flip: 0
       _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
       _searchIdentifier: 0
       _activeType: 0
       _localPosition: {x: -0.65, y: -1.11, z: 0}
@@ -90,6 +104,8 @@ MonoBehaviour:
   - _pointName: New Point 1
     _stagePoint: {x: 0, y: 1, z: 0}
     _maxLimitedDistance: 0
+    _verticalLimitedDistance: 0
+    _horizontalLimitedDistance: 0
     _cameraZoomSize: 3
     _cameraZoomSpeed: 8
     _lerpCameraZoom: 0
@@ -105,8 +121,10 @@ MonoBehaviour:
     _triggerHeight: 0
     _triggerOffset: {x: 0, y: 0, z: 0}
   - _pointName: New Point 2
-    _stagePoint: {x: 6.94, y: 1, z: 0}
+    _stagePoint: {x: 3.74, y: 1, z: 0}
     _maxLimitedDistance: 0
+    _verticalLimitedDistance: 0
+    _horizontalLimitedDistance: 3
     _cameraZoomSize: 3
     _cameraZoomSpeed: 4
     _lerpCameraZoom: 0
@@ -122,9 +140,11 @@ MonoBehaviour:
       _startAction: Idle
       _flip: 0
       _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
       _searchIdentifier: 1
       _activeType: 0
-      _localPosition: {x: -0.01, y: 0, z: 0}
+      _localPosition: {x: 3.77, y: 0, z: 0}
     _useTriggerBound: 0
     _targetSearchIdentifier: 0
     _triggerWidth: 0
@@ -132,3 +152,4 @@ MonoBehaviour:
     _triggerOffset: {x: 0, y: 0, z: 0}
   _miniStageData: []
   _markerData: []
+  _trackData: []

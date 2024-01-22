@@ -22,6 +22,7 @@ public class AIGraph
     private int _prevPackageStateIndex = -1;
 
     private int _changePackageStateIndex = -1;
+    private int _changeAINodeIndex = -1;
 
     private float _updateTimer = 0f;
     private float _arriveThreshold = 0f;
@@ -86,6 +87,7 @@ public class AIGraph
         _prevPackageStateIndex = -1;
 
         _changePackageStateIndex = -1;
+        _changeAINodeIndex = -1;
 
         _updateTimer = 0f;
         _arriveThreshold = 0f;
@@ -219,14 +221,23 @@ public class AIGraph
     private bool processAINode(float deltaTime, AIGraphNodeData aiGraphNode, GameEntityBase targetEntity)
     {
         bool nodeChanged = false;
-        int startIndex = aiGraphNode._branchIndexStart;
-        for(int i = startIndex; i < startIndex + aiGraphNode._branchCount; ++i)
+
+        if(_changeAINodeIndex == -1)
         {
-            if(processActionBranch(_aiGraphBaseData._branchData[i],_aiGraphBaseData._conditionCompareData) == true)
+            int startIndex = aiGraphNode._branchIndexStart;
+            for(int i = startIndex; i < startIndex + aiGraphNode._branchCount; ++i)
             {
-                nodeChanged = changeAINode(_aiGraphBaseData._branchData[i]._branchActionIndex, targetEntity, false);
-                break;
+                if(processActionBranch(_aiGraphBaseData._branchData[i],_aiGraphBaseData._conditionCompareData) == true)
+                {
+                    nodeChanged = changeAINode(_aiGraphBaseData._branchData[i]._branchActionIndex, targetEntity, false);
+                    break;
+                }
             }
+        }
+        else
+        {
+            nodeChanged = changeAINode(_changeAINodeIndex,targetEntity,false);
+            _changeAINodeIndex = -1;
         }
 
         _aiGraphExecutedTimer += deltaTime;
@@ -241,6 +252,7 @@ public class AIGraph
 
             _packageEnd = false;
             _changePackageStateIndex = -1;
+            _changeAINodeIndex = -1;
 
             _aiGraphExecutedTimer = 0f;
 
@@ -346,6 +358,18 @@ public class AIGraph
         }
         _changePackageStateIndex = aiPackageStateIndex;
         _packageEnd = false;
+    }
+
+    public void changeAINodeOther(int ainodeIndex)
+    {
+        if(ainodeIndex == -1)
+        {
+            DebugUtil.assert(false,"잘못된 AI Node 인덱스 입니다: {0}",ainodeIndex);
+            return;
+        }
+
+        _changeAINodeIndex = ainodeIndex;
+        _packageEnd = true;
     }
 
     private bool changeAIPackageState(int aiPackageStateIndex)

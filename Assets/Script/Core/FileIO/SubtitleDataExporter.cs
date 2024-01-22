@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using UnityEngine;
 using ICSharpCode.WpfDesign.XamlDom;
+using System.Linq;
 
 public static class SubtitleSimpleTalkDataLoader
 {
@@ -46,6 +47,11 @@ public static class SubtitleSimpleTalkDataLoader
                 if(simpleTalkData == null)
                     return null;
 
+                if(simpleTalkDataDictionary.ContainsKey(simpleTalkNodes[index].Name))
+                {
+                    DebugUtil.assert(false,"SimpleTalk Key가 중복됩니다! 수정해주세요. Key: [{0}]",simpleTalkNodes[index].Name);
+                    continue;
+                }
                 simpleTalkDataDictionary.Add(simpleTalkNodes[index].Name, simpleTalkData);
             }
         }

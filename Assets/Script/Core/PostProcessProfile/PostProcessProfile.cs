@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using YamlDotNet.Serialization;
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -9,53 +11,108 @@ using UnityEditor;
 [System.Serializable]
 public class PostProcessProfileData
 {
+    public bool _useSunAngle = true;
     public float _sunAngle = 0f;
+
+    public bool _useShadowDistance = true;
     public float _shadowDistance = 0f;
+
+    public bool _useShadowDistanceRatio = true;
     public float _shadowDistanceRatio = 0f;
 
+    
+    public bool _useScreenSize = true;
     public Vector2 _screenSize = new Vector2();
+
+
+    public bool _useShadowDistanceOffset = true;
     public float _shadowDistanceOffset = 0f;
+
+    public bool _useShadowColor = true;
     public Color _shadowColor = Color.white;
 
+
+    public bool _useImpactFrame = true;
+    public float _impactFrame = 0f;
+
+    public bool _useBrightness = true;
     public float _brightness = 0f;
+
+    public bool _useSaturation = true;
     public float _saturation = 0f;
+
+    public bool _useColorTint = true;
     public Color _colorTint = Color.white;
+
+    public bool _useBackgroundColorTint = true;
     public Color _backgroundColorTint = Color.white;
 
+    public bool _useBlurSize = true;
     public float _blurSize = 0f;
+
+    public bool _useMultiSampleDistance = true;
     public float _multiSampleDistance = 0f;
+
+    public bool _useMultiSampleColorTintRight = true;
     public Color _multiSampleColorTintRight = Color.white;
+
+    public bool _useMultiSampleColorTintLeft = true;
     public Color _multiSampleColorTintLeft = Color.white;
 
+
+    public bool _useFogRate = true;
     public float _fogRate = 0f;
+
+    public bool _useFogStrength = true;
     public float _fogStrength = 0f;
+
+    public bool _useFogColor = true;
     public Color _fogColor = Color.white;
 
     public bool _pixelSnap = false;
 
     public void syncValueToMaterial(Material targetMaterial)
     {
-        targetMaterial.SetFloat("_SunAngle",_sunAngle);
-        targetMaterial.SetFloat("_ShadowDistance",_shadowDistance);
-        targetMaterial.SetFloat("_ShadowDistanceRatio",_shadowDistanceRatio);
+        if(_useSunAngle)
+            targetMaterial.SetFloat("_SunAngle",_sunAngle);
+        if(_useShadowDistance)
+            targetMaterial.SetFloat("_ShadowDistance",_shadowDistance);
+        if(_useShadowDistanceRatio)
+            targetMaterial.SetFloat("_ShadowDistanceRatio",_shadowDistanceRatio);
 
-        targetMaterial.SetVector("_ScreenSize",new Vector4(_screenSize.x,_screenSize.y,0f,0f));
-        targetMaterial.SetFloat("_ShadowDistanceOffset",_shadowDistanceOffset);
-        targetMaterial.SetColor("_ShadowColor",_shadowColor);
+        if(_useScreenSize)
+            targetMaterial.SetVector("_ScreenSize",new Vector4(_screenSize.x,_screenSize.y,0f,0f));
+        if(_useShadowDistanceOffset)
+            targetMaterial.SetFloat("_ShadowDistanceOffset",_shadowDistanceOffset);
+        if(_useShadowColor)
+            targetMaterial.SetColor("_ShadowColor",_shadowColor);
 
-        targetMaterial.SetFloat("_Brightness",_brightness);
-        targetMaterial.SetFloat("_Saturation",_saturation);
-        targetMaterial.SetColor("_ColorTint",_colorTint);
-        targetMaterial.SetColor("_BackgroundColorTint",_backgroundColorTint);
+        if(_useImpactFrame)
+            targetMaterial.SetFloat("_ImpactFrame",_impactFrame);
+        if(_useBrightness)
+            targetMaterial.SetFloat("_Brightness",_brightness);
+        if(_useSaturation)
+            targetMaterial.SetFloat("_Saturation",_saturation);
+        if(_useColorTint)
+            targetMaterial.SetColor("_ColorTint",_colorTint);
+        if(_useBackgroundColorTint)
+            targetMaterial.SetColor("_BackgroundColorTint",_backgroundColorTint);
         
-        targetMaterial.SetFloat("_BlurSize",_blurSize);
-        targetMaterial.SetFloat("_MultiSampleDistance",_multiSampleDistance);
-        targetMaterial.SetColor("_MultiSampleColorTintRight",_multiSampleColorTintRight);
-        targetMaterial.SetColor("_MultiSampleColorTintLeft",_multiSampleColorTintLeft);
+        if(_useBlurSize)
+            targetMaterial.SetFloat("_BlurSize",_blurSize);
+        if(_useMultiSampleDistance)
+            targetMaterial.SetFloat("_MultiSampleDistance",_multiSampleDistance);
+        if(_useMultiSampleColorTintRight)
+            targetMaterial.SetColor("_MultiSampleColorTintRight",_multiSampleColorTintRight);
+        if(_useMultiSampleColorTintLeft)
+            targetMaterial.SetColor("_MultiSampleColorTintLeft",_multiSampleColorTintLeft);
 
-        targetMaterial.SetFloat("_FogRate",_fogRate);
-        targetMaterial.SetFloat("_FogStrength",_fogStrength);
-        targetMaterial.SetColor("_FogColor",_fogColor);
+        if(_useFogRate)
+            targetMaterial.SetFloat("_FogRate",_fogRate);
+        if(_useFogStrength)
+            targetMaterial.SetFloat("_FogStrength",_fogStrength);
+        if(_useFogColor)
+            targetMaterial.SetColor("_FogColor",_fogColor);
 
         targetMaterial.SetFloat("PixelSnap",_pixelSnap ? 1f : 0f);
     }
@@ -89,67 +146,143 @@ public class PostProcessProfileData
 
     public void blend(PostProcessProfile destination, float ratio)
     {
-        _sunAngle                   = Mathf.LerpAngle(_sunAngle, destination._profileData._sunAngle, ratio);
-        _shadowDistance             = Mathf.Lerp(_shadowDistance, destination._profileData._shadowDistance, ratio);
-        _shadowDistanceRatio        = Mathf.Lerp(_shadowDistanceRatio, destination._profileData._shadowDistanceRatio, ratio);
-        _screenSize                 = Vector2.Lerp(_screenSize, destination._profileData._screenSize, ratio);
-        _shadowDistanceOffset       = Mathf.Lerp(_shadowDistanceOffset, destination._profileData._shadowDistanceOffset, ratio);
-        _shadowColor                = Color.Lerp(_shadowColor, destination._profileData._shadowColor, ratio);
-        _brightness                 = Mathf.Lerp(_brightness, destination._profileData._brightness, ratio);
-        _saturation                 = Mathf.Lerp(_saturation, destination._profileData._saturation, ratio);
-        _colorTint                  = Color.Lerp(_colorTint, destination._profileData._colorTint, ratio);
-        _backgroundColorTint        = Color.Lerp(_backgroundColorTint, destination._profileData._backgroundColorTint, ratio);
-        _blurSize                   = Mathf.Lerp(_blurSize, destination._profileData._blurSize, ratio);
-        _multiSampleDistance        = Mathf.Lerp(_multiSampleDistance, destination._profileData._multiSampleDistance, ratio);
-        _multiSampleColorTintRight  = Color.Lerp(_multiSampleColorTintRight, destination._profileData._multiSampleColorTintRight, ratio);
-        _multiSampleColorTintLeft   = Color.Lerp(_multiSampleColorTintLeft, destination._profileData._multiSampleColorTintLeft, ratio);
-        _fogRate                    = Mathf.Lerp(_fogRate, destination._profileData._fogRate, ratio);
-        _fogStrength                = Mathf.Lerp(_fogStrength, destination._profileData._fogStrength, ratio);
-        _fogColor                   = Color.Lerp(_fogColor, destination._profileData._fogColor, ratio);
+        if(destination._profileData._useSunAngle)
+            _sunAngle                   = Mathf.LerpAngle(_sunAngle, destination._profileData._sunAngle, ratio);
+        if(destination._profileData._useShadowDistance)
+            _shadowDistance             = Mathf.Lerp(_shadowDistance, destination._profileData._shadowDistance, ratio);
+        if(destination._profileData._useShadowDistanceRatio)
+            _shadowDistanceRatio        = Mathf.Lerp(_shadowDistanceRatio, destination._profileData._shadowDistanceRatio, ratio);
+        if(destination._profileData._useScreenSize)
+            _screenSize                 = Vector2.Lerp(_screenSize, destination._profileData._screenSize, ratio);
+        if(destination._profileData._useShadowDistanceOffset)
+            _shadowDistanceOffset       = Mathf.Lerp(_shadowDistanceOffset, destination._profileData._shadowDistanceOffset, ratio);
+        if(destination._profileData._useShadowColor)
+            _shadowColor                = Color.Lerp(_shadowColor, destination._profileData._shadowColor, ratio);
+        if(destination._profileData._useImpactFrame)
+            _impactFrame                = Mathf.Lerp(_impactFrame, destination._profileData._impactFrame, ratio);//ratio >= 0.5f ? destination._profileData._impactFrame : _impactFrame;
+        if(destination._profileData._useBrightness)
+            _brightness                 = Mathf.Lerp(_brightness, destination._profileData._brightness, ratio);
+        if(destination._profileData._useSaturation)
+            _saturation                 = Mathf.Lerp(_saturation, destination._profileData._saturation, ratio);
+        if(destination._profileData._useColorTint)
+            _colorTint                  = Color.Lerp(_colorTint, destination._profileData._colorTint, ratio);
+        if(destination._profileData._useBackgroundColorTint)
+            _backgroundColorTint        = Color.Lerp(_backgroundColorTint, destination._profileData._backgroundColorTint, ratio);
+        if(destination._profileData._useBlurSize)
+            _blurSize                   = Mathf.Lerp(_blurSize, destination._profileData._blurSize, ratio);
+        if(destination._profileData._useMultiSampleDistance)
+            _multiSampleDistance        = Mathf.Lerp(_multiSampleDistance, destination._profileData._multiSampleDistance, ratio);
+        if(destination._profileData._useMultiSampleColorTintRight)
+            _multiSampleColorTintRight  = Color.Lerp(_multiSampleColorTintRight, destination._profileData._multiSampleColorTintRight, ratio);
+        if(destination._profileData._useMultiSampleColorTintLeft)
+            _multiSampleColorTintLeft   = Color.Lerp(_multiSampleColorTintLeft, destination._profileData._multiSampleColorTintLeft, ratio);
+        if(destination._profileData._useFogRate)
+            _fogRate                    = Mathf.Lerp(_fogRate, destination._profileData._fogRate, ratio);
+        if(destination._profileData._useFogStrength)
+            _fogStrength                = Mathf.Lerp(_fogStrength, destination._profileData._fogStrength, ratio);
+        if(destination._profileData._useFogColor)
+            _fogColor                   = Color.Lerp(_fogColor, destination._profileData._fogColor, ratio);
         _pixelSnap                  = ratio >= 0.5f ? destination._profileData._pixelSnap : _pixelSnap;
     }
 
     public void blendCopy(PostProcessProfileData source, PostProcessProfileData destination, float ratio)
     {
-        _sunAngle                   = Mathf.LerpAngle(source._sunAngle, destination._sunAngle, ratio);
-        _shadowDistance             = Mathf.Lerp(source._shadowDistance, destination._shadowDistance, ratio);
-        _shadowDistanceRatio        = Mathf.Lerp(source._shadowDistanceRatio, destination._shadowDistanceRatio, ratio);
-        _screenSize                 = Vector2.Lerp(source._screenSize, destination._screenSize, ratio);
-        _shadowDistanceOffset       = Mathf.Lerp(source._shadowDistanceOffset, destination._shadowDistanceOffset, ratio);
-        _shadowColor                = Color.Lerp(source._shadowColor, destination._shadowColor, ratio);
-        _brightness                 = Mathf.Lerp(source._brightness, destination._brightness, ratio);
-        _saturation                 = Mathf.Lerp(source._saturation, destination._saturation, ratio);
-        _colorTint                  = Color.Lerp(source._colorTint, destination._colorTint, ratio);
-        _backgroundColorTint        = Color.Lerp(source._backgroundColorTint, destination._backgroundColorTint, ratio);
-        _blurSize                   = Mathf.Lerp(source._blurSize, destination._blurSize, ratio);
-        _multiSampleDistance        = Mathf.Lerp(source._multiSampleDistance, destination._multiSampleDistance, ratio);
-        _multiSampleColorTintRight  = Color.Lerp(source._multiSampleColorTintRight, destination._multiSampleColorTintRight, ratio);
-        _multiSampleColorTintLeft   = Color.Lerp(source._multiSampleColorTintLeft, destination._multiSampleColorTintLeft, ratio);
-        _fogRate                    = Mathf.Lerp(source._fogRate, destination._fogRate, ratio);
-        _fogStrength                = Mathf.Lerp(source._fogStrength, destination._fogStrength, ratio);
-        _fogColor                   = Color.Lerp(source._fogColor, destination._fogColor, ratio);
-        _pixelSnap                  = ratio >= 0.5f ? destination._pixelSnap : source._pixelSnap;
+        if(destination._useSunAngle)
+            _sunAngle                   = Mathf.LerpAngle(source._sunAngle, destination._sunAngle, ratio);
+        if(destination._useShadowDistance)
+            _shadowDistance             = Mathf.Lerp(source._shadowDistance, destination._shadowDistance, ratio);
+        if(destination._useShadowDistanceRatio)
+            _shadowDistanceRatio        = Mathf.Lerp(source._shadowDistanceRatio, destination._shadowDistanceRatio, ratio);
+        if(destination._useScreenSize)
+            _screenSize                 = Vector2.Lerp(source._screenSize, destination._screenSize, ratio);
+        if(destination._useShadowDistanceOffset)
+            _shadowDistanceOffset       = Mathf.Lerp(source._shadowDistanceOffset, destination._shadowDistanceOffset, ratio);
+        if(destination._useShadowColor)
+            _shadowColor                = Color.Lerp(source._shadowColor, destination._shadowColor, ratio);
+        if(destination._useImpactFrame)
+            _impactFrame                = Mathf.Lerp(_impactFrame, destination._impactFrame, ratio);//ratio >= 0.5f ? destination._impactFrame : source._impactFrame;
+        if(destination._useBrightness)
+            _brightness                 = Mathf.Lerp(source._brightness, destination._brightness, ratio);
+        if(destination._useSaturation)
+            _saturation                 = Mathf.Lerp(source._saturation, destination._saturation, ratio);
+        if(destination._useColorTint)
+            _colorTint                  = Color.Lerp(source._colorTint, destination._colorTint, ratio);
+        if(destination._useBackgroundColorTint)
+            _backgroundColorTint        = Color.Lerp(source._backgroundColorTint, destination._backgroundColorTint, ratio);
+        if(destination._useBlurSize)
+            _blurSize                   = Mathf.Lerp(source._blurSize, destination._blurSize, ratio);
+        if(destination._useMultiSampleDistance)
+            _multiSampleDistance        = Mathf.Lerp(source._multiSampleDistance, destination._multiSampleDistance, ratio);
+        if(destination._useMultiSampleColorTintRight)
+            _multiSampleColorTintRight  = Color.Lerp(source._multiSampleColorTintRight, destination._multiSampleColorTintRight, ratio);
+        if(destination._useMultiSampleColorTintLeft)
+            _multiSampleColorTintLeft   = Color.Lerp(source._multiSampleColorTintLeft, destination._multiSampleColorTintLeft, ratio);
+        if(destination._useFogRate)
+            _fogRate                    = Mathf.Lerp(source._fogRate, destination._fogRate, ratio);
+        if(destination._useFogStrength)
+            _fogStrength                = Mathf.Lerp(source._fogStrength, destination._fogStrength, ratio);
+        if(destination._useFogColor)
+            _fogColor                   = Color.Lerp(source._fogColor, destination._fogColor, ratio);
+        _pixelSnap                      = ratio >= 0.5f ? destination._pixelSnap : source._pixelSnap;
     }
 
     public void copy(PostProcessProfile profile)
     {
-        _sunAngle                   = profile._profileData._sunAngle;
-        _shadowDistance             = profile._profileData._shadowDistance ;
-        _shadowDistanceRatio        = profile._profileData._shadowDistanceRatio;
-        _screenSize                 = profile._profileData._screenSize;
-        _shadowDistanceOffset       = profile._profileData._shadowDistanceOffset;
-        _shadowColor                = profile._profileData._shadowColor;
-        _brightness                 = profile._profileData._brightness;
-        _saturation                 = profile._profileData._saturation;
-        _colorTint                  = profile._profileData._colorTint;
-        _backgroundColorTint        = profile._profileData._backgroundColorTint;
-        _blurSize                   = profile._profileData._blurSize;
-        _multiSampleDistance        = profile._profileData._multiSampleDistance;
-        _multiSampleColorTintRight  = profile._profileData._multiSampleColorTintRight;
-        _multiSampleColorTintLeft   = profile._profileData._multiSampleColorTintLeft;
-        _fogRate                    = profile._profileData._fogRate;
-        _fogStrength                = profile._profileData._fogStrength;
-        _fogColor                   = profile._profileData._fogColor;
+        _useSunAngle                    = profile._profileData._useSunAngle;
+        _useShadowDistance              = profile._profileData._useShadowDistance;
+        _useShadowDistanceRatio         = profile._profileData._useShadowDistanceRatio;
+        _useScreenSize                  = profile._profileData._useScreenSize;
+        _useShadowDistanceOffset        = profile._profileData._useShadowDistanceOffset;
+        _useShadowColor                 = profile._profileData._useShadowColor;
+        _useImpactFrame                 = profile._profileData._useImpactFrame;
+        _useBrightness                  = profile._profileData._useBrightness;
+        _useSaturation                  = profile._profileData._useSaturation;
+        _useColorTint                   = profile._profileData._useColorTint;
+        _useBackgroundColorTint         = profile._profileData._useBackgroundColorTint;
+        _useBlurSize                    = profile._profileData._useBlurSize;
+        _useMultiSampleDistance         = profile._profileData._useMultiSampleDistance;
+        _useMultiSampleColorTintRight   = profile._profileData._useMultiSampleColorTintRight;
+        _useMultiSampleColorTintLeft    = profile._profileData._useMultiSampleColorTintLeft;
+        _useFogRate                     = profile._profileData._useFogRate;
+        _useFogStrength                 = profile._profileData._useFogStrength;
+        _useFogColor                    = profile._profileData._useFogColor;
+
+        if(_useSunAngle)
+            _sunAngle                   = profile._profileData._sunAngle;
+        if(_useShadowDistance)
+            _shadowDistance             = profile._profileData._shadowDistance ;
+        if(_useShadowDistanceRatio)
+            _shadowDistanceRatio        = profile._profileData._shadowDistanceRatio;
+        if(_useScreenSize)
+            _screenSize                 = profile._profileData._screenSize;
+        if(_useShadowDistanceOffset)
+            _shadowDistanceOffset       = profile._profileData._shadowDistanceOffset;
+        if(_useShadowColor)
+            _shadowColor                = profile._profileData._shadowColor;
+        if(_useImpactFrame)
+            _impactFrame                = profile._profileData._impactFrame;
+        if(_useBrightness)
+            _brightness                 = profile._profileData._brightness;
+        if(_useSaturation)
+            _saturation                 = profile._profileData._saturation;
+        if(_useColorTint)
+            _colorTint                  = profile._profileData._colorTint;
+        if(_useBackgroundColorTint)
+            _backgroundColorTint        = profile._profileData._backgroundColorTint;
+        if(_useBlurSize)
+            _blurSize                   = profile._profileData._blurSize;
+        if(_useMultiSampleDistance)
+            _multiSampleDistance        = profile._profileData._multiSampleDistance;
+        if(_useMultiSampleColorTintRight)
+            _multiSampleColorTintRight  = profile._profileData._multiSampleColorTintRight;
+        if(_useMultiSampleColorTintLeft)
+            _multiSampleColorTintLeft   = profile._profileData._multiSampleColorTintLeft;
+        if(_useFogRate)
+            _fogRate                    = profile._profileData._fogRate;
+        if(_useFogStrength)
+            _fogStrength                = profile._profileData._fogStrength;
+        if(_useFogColor)
+            _fogColor                   = profile._profileData._fogColor;
         _pixelSnap                  = profile._profileData._pixelSnap;
     }
 }
@@ -178,31 +311,32 @@ public class PostProcessProfileEditor : Editor
     public override void OnInspectorGUI()
     {
         bool isChange = false;
-        isChange |= floatSlider("Sun Angle", ref controll._profileData._sunAngle, 0f, 360f);
-        isChange |= floatSlider("Shadow Distance", ref controll._profileData._shadowDistance, 0.1f, 3f);
-        isChange |= floatSlider("Shadow Distance Ratio", ref controll._profileData._shadowDistanceRatio, 0f, 10f);
+        isChange |= floatSlider("Sun Angle", ref controll._profileData._sunAngle, 0f, 360f,ref controll._profileData._useSunAngle);
+        isChange |= floatSlider("Shadow Distance", ref controll._profileData._shadowDistance, 0.1f, 3f,ref controll._profileData._useShadowDistance);
+        isChange |= floatSlider("Shadow Distance Ratio", ref controll._profileData._shadowDistanceRatio, 0f, 10f,ref controll._profileData._useShadowDistanceRatio);
 
         GUILayout.Space(20f);
-        isChange |= vector2Field("Screen Size",ref controll._profileData._screenSize);
-        isChange |= floatSlider("Shadow Distance Offset",ref controll._profileData._shadowDistanceOffset, 0f, 10f);
-        isChange |= colorPicker("Shadow Color",ref controll._profileData._shadowColor);
+        isChange |= vector2Field("Screen Size",ref controll._profileData._screenSize,ref controll._profileData._useScreenSize);
+        isChange |= floatSlider("Shadow Distance Offset",ref controll._profileData._shadowDistanceOffset, 0f, 10f,ref controll._profileData._useShadowDistanceOffset);
+        isChange |= colorPicker("Shadow Color",ref controll._profileData._shadowColor,ref controll._profileData._useShadowColor);
 
         GUILayout.Space(20f);
-        isChange |= floatSlider("Brightness",ref controll._profileData._brightness, 0f, 5f);
-        isChange |= floatSlider("Saturation",ref controll._profileData._saturation, 0f, 1f);
-        isChange |= colorPicker("Color Tint",ref controll._profileData._colorTint);
-        isChange |= colorPicker("Background Color Tint",ref controll._profileData._backgroundColorTint);
+        isChange |= floatSlider("ImpactFrame",ref controll._profileData._impactFrame, 0f, 1f,ref controll._profileData._useImpactFrame);
+        isChange |= floatSlider("Brightness",ref controll._profileData._brightness, 0f, 5f,ref controll._profileData._useBrightness);
+        isChange |= floatSlider("Saturation",ref controll._profileData._saturation, 0f, 1f,ref controll._profileData._useSaturation);
+        isChange |= colorPicker("Color Tint",ref controll._profileData._colorTint,ref controll._profileData._useColorTint);
+        isChange |= colorPicker("Background Color Tint",ref controll._profileData._backgroundColorTint,ref controll._profileData._useBackgroundColorTint);
 
         GUILayout.Space(20f);
-        isChange |= floatSlider("Blur Size",ref controll._profileData._blurSize, 0f, 2f);
-        isChange |= floatSlider("MultiSample Distance",ref controll._profileData._multiSampleDistance, 0f, 5f);
-        isChange |= colorPicker("MultiSample Color Tint Right",ref controll._profileData._multiSampleColorTintRight);
-        isChange |= colorPicker("MultiSample Color Tint Left",ref controll._profileData._multiSampleColorTintLeft);
+        isChange |= floatSlider("Blur Size",ref controll._profileData._blurSize, 0f, 2f,ref controll._profileData._useBlurSize);
+        isChange |= floatSlider("MultiSample Distance",ref controll._profileData._multiSampleDistance, 0f, 5f,ref controll._profileData._useMultiSampleDistance);
+        isChange |= colorPicker("MultiSample Color Tint Right",ref controll._profileData._multiSampleColorTintRight,ref controll._profileData._useMultiSampleColorTintRight);
+        isChange |= colorPicker("MultiSample Color Tint Left",ref controll._profileData._multiSampleColorTintLeft,ref controll._profileData._useMultiSampleColorTintLeft);
 
         GUILayout.Space(20f);
-        isChange |= floatSlider("Fog Rate",ref controll._profileData._fogRate, 0f, 1f);
-        isChange |= floatSlider("Fog Strength",ref controll._profileData._fogStrength, 0f, 1f);
-        isChange |= colorPicker("Fog Color",ref controll._profileData._fogColor);
+        isChange |= floatSlider("Fog Rate",ref controll._profileData._fogRate, 0f, 1f,ref controll._profileData._useFogRate);
+        isChange |= floatSlider("Fog Strength",ref controll._profileData._fogStrength, 0f, 1f,ref controll._profileData._useFogStrength);
+        isChange |= colorPicker("Fog Color",ref controll._profileData._fogColor,ref controll._profileData._useFogColor);
 
         if(isChange)
         {
@@ -228,49 +362,93 @@ public class PostProcessProfileEditor : Editor
         }
     }
 
-    public bool floatSlider(string title, ref float value, float min, float max)
+    public bool floatSlider(string title, ref float value, float min, float max, ref bool active)
     {
+        GUILayout.BeginHorizontal();
+        bool activeDiff = EditorGUILayout.Toggle(active,GUILayout.Width(20f));
+        GUI.enabled = active;
         float beforeValue = EditorGUILayout.Slider(title, value,min,max);
+        GUI.enabled = true;
+        GUILayout.EndHorizontal();
         if(beforeValue != value)
         {
             value = beforeValue;
             return true;
         }
 
+        if(activeDiff != active)
+        {
+            active = activeDiff;
+            return true;
+        }
+
         return false;
     }
 
-    public bool vector2Field(string title, ref Vector2 value)
+    public bool vector2Field(string title, ref Vector2 value, ref bool active)
     {
+        GUILayout.BeginHorizontal();
+        bool activeDiff = EditorGUILayout.Toggle(active,GUILayout.Width(20f));
+        GUI.enabled = active;
         Vector2 afterValue = EditorGUILayout.Vector2Field(title,value);
+        GUI.enabled = true;
+        GUILayout.EndHorizontal();
         if(value != afterValue)
         {
             value = afterValue;
             return true;
         }
 
-        return false;
-    }
-
-    public bool colorPicker(string title, ref Color color)
-    {
-        Color beforeColor = EditorGUILayout.ColorField(title, color);
-        if(MathEx.equals(beforeColor,color,0f) == false)
+        if(activeDiff != active)
         {
-            color = beforeColor;
+            active = activeDiff;
             return true;
         }
 
         return false;
     }
 
-    public bool materialToggle(string title, ref float toggle)
+    public bool colorPicker(string title, ref Color color, ref bool active)
     {
+        GUILayout.BeginHorizontal();
+        bool activeDiff = EditorGUILayout.Toggle(active,GUILayout.Width(20f));
+        GUI.enabled = active;
+        Color beforeColor = EditorGUILayout.ColorField(title, color);
+        GUI.enabled = true;
+        GUILayout.EndHorizontal();
+        if(MathEx.equals(beforeColor,color,0f) == false)
+        {
+            color = beforeColor;
+            return true;
+        }
+
+        if(activeDiff != active)
+        {
+            active = activeDiff;
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool materialToggle(string title, ref float toggle, ref bool active)
+    {
+        GUILayout.BeginHorizontal();
+        bool activeDiff = EditorGUILayout.Toggle(active,GUILayout.Width(20f));
+        GUI.enabled = active;
         bool realToggle = toggle == 1f;
         bool beforeToggle = EditorGUILayout.Toggle(title,realToggle);
+        GUI.enabled = true;
+        GUILayout.EndHorizontal();
         if(realToggle != beforeToggle)
         {
             toggle = beforeToggle ? 1f : 0f;
+            return true;
+        }
+
+        if(activeDiff != active)
+        {
+            active = activeDiff;
             return true;
         }
 
