@@ -72,6 +72,7 @@
     <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterLightningBoltPackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterHolyNailPackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterBarriorPackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterThunderStormPackage.xml"/>
 
     
     <!-- 보스전 대기 시간 (나중에 보스전 시작 트리거를 받아야 함)-->
@@ -240,8 +241,9 @@
         <!-- 라이트닝 볼트 -->
         <Branch Weight="RandVector3^x" Condition="true" Execute="LightningBoltShot"/>
         <Branch Weight="RandVector3^y" Condition="true" Execute="LightningBoltChase"/>
+        <Branch Weight="RandVector3^z" Condition="true" Execute="ThunderStrom"/>
         <!-- 접근 -->
-        <Branch Weight="RandVector3^z" Condition="true" Execute="Dash"/>
+        <!-- <Branch Weight="RandVector3^z" Condition="true" Execute="Dash"/> -->
     </JudgeRangedAttack>
 
     <JudgeMeleeAttack Package="CommonIdlePackage">
@@ -274,6 +276,12 @@
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </LightningBoltChase>
+    
+    <!-- 원거리 공격: 라이트닝볼트 (광역장판) -->
+    <ThunderStrom Package="SisterThunderStormPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </ThunderStrom>
 
     <!-- 근거리 공격: 달빛베기 -->
     <ThunderSlash Package="SisterThunderSlashPackage">

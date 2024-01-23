@@ -53,9 +53,24 @@
         </AIState>
     </AIPackage>
 
-    <CustomEvent_CommandToLaser>
+    <!-- 디태치 커맨드 -->
+    <CustomEvent_Detach>
+        <AIEvent Type="DetachRotateSlot"/>
+    </CustomEvent_Detach>
+    <!-- 공격 커맨드 -->
+    <CustomEvent_LaserToTarget>
         <AIEvent Type="SetAction" Action="AC_Shoot"/>
-    </CustomEvent_CommandToLaser>
+    </CustomEvent_LaserToTarget>
+    <CustomEvent_LaserWith>
+        <AIEvent Type="SetAction" Action="AC_Shoot_with"/>
+    </CustomEvent_LaserWith>
+    <CustomEvent_LaserOut>
+        <AIEvent Type="SetAction" Action="AC_Shoot_out"/>
+    </CustomEvent_LaserOut>
+    <CustomEvent_LaserIn>
+        <AIEvent Type="SetAction" Action="AC_Shoot_in"/>
+    </CustomEvent_LaserIn>
+
 
     <Entry Package="HelenaBookEntryPackage">
         <Branch Condition="CurrentPackageEnd" Execute="Idle_ToTarget"/>
