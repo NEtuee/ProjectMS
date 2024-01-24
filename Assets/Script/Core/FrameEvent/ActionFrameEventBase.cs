@@ -647,6 +647,7 @@ public class ActionFrameEvent_SpawnCharacter : ActionFrameEventBase
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_SpawnCharacter;}
 
     private string                      _characterKey;
+    private string                      _startAINode = "";
 
     private CharacterInfoData           _characterInfoData;
     private SpawnCharacterOptionDesc    _spawnDesc = SpawnCharacterOptionDesc.defaultValue;
@@ -682,6 +683,8 @@ public class ActionFrameEvent_SpawnCharacter : ActionFrameEventBase
             
         CharacterEntityBase createdCharacter = sceneCharacterManager.createCharacterFromPool(_characterInfoData,_spawnDesc);
         createdCharacter.setSummonObject(_inherit ? executeEntity.getSummonObject() : executeEntity);
+        if(_startAINode != "")
+            createdCharacter.setAINode(_startAINode);
 
         return true;
     }
@@ -718,6 +721,10 @@ public class ActionFrameEvent_SpawnCharacter : ActionFrameEventBase
             else if(attrName == "UseFlip")
             {
                 _useFlip = bool.Parse(attrValue);
+            }
+            else if(attrName == "AINode")
+            {
+                _startAINode = attrValue;
             }
         }
     }

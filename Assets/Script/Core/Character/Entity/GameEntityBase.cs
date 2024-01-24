@@ -1339,6 +1339,7 @@ public class GameEntityBase : SequencerObjectBase
     public void terminateAIPackage() {_aiGraph.terminatePackage();}
     public void setAIState(int index) {_aiGraph.changeAIPackageStateOther(index);}
     public void setAINode(int index) {_aiGraph.changeAINodeOther(index);}
+    public void setAINode(string nodeName) {setAINode(_aiGraph.findAINodeIndex(nodeName));}
 
     public void setAiDirection(float angle) {_aiGraph.setAIDirection(angle);}
     public void setAiDirection(Vector3 direction) {_aiGraph.setAIDirection(direction);}

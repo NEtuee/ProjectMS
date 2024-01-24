@@ -395,6 +395,19 @@ public class AIGraph
         return true;
     }
 
+    public int findAINodeIndex(string nodeName)
+    {
+        AIGraphNodeData[] nodeArray = _aiGraphBaseData._aiGraphNodeData;
+        for(int index = 0; index < nodeArray.Length; ++index)
+        {
+            if(nodeArray[index]._nodeName == nodeName)
+                return index;
+        }
+
+        DebugUtil.assert(false, "존재하지 않는 AINode를 찾으려 합니다. 확인 필요 [NodeName: {0}]",nodeName);
+        return -1;
+    }
+
     private void processAIEvent(AIChildEventType aiEventType, GameEntityBase targetEntity)
     {
         if(processAIEvent(aiEventType,targetEntity, getCurrentAIPackageNode()._aiEvents))
