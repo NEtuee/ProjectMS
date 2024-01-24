@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Numerics;
 using System.Drawing;
 using UnityEngine.UIElements;
+using System;
 
 public enum FrameEventType
 {
@@ -1496,15 +1497,33 @@ public class ActionFrameEvent_TeleportToTarget : ActionFrameEventBase
 {
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_TeleportToTarget;}
 
+    private TeleportTarget _teleportTarget = TeleportTarget.ActionTarget;
+
     private float _distanceOffset = 0f;
 
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
-        if(executeEntity is GameEntityBase == false || targetEntity is GameEntityBase == false)
+        if(executeEntity is GameEntityBase == false)
             return false;
         
         GameEntityBase requester = (GameEntityBase)executeEntity;
-        GameEntityBase target = (GameEntityBase)targetEntity;
+        GameEntityBase target = null;
+        
+        switch(_teleportTarget)
+        {
+            case TeleportTarget.ActionTarget:
+                target = targetEntity is GameEntityBase ? (GameEntityBase)targetEntity : null;
+            break;
+            case TeleportTarget.AITarget:
+                target = requester.getCurrentTargetEntity();
+            break;
+            case TeleportTarget.Summoner:
+                target = (GameEntityBase)requester.getSummonObject();
+            break;
+        }
+        DebugUtil.log((target == null).ToString());
+        if(target == null)
+            return true;
 
         UnityEngine.Vector3 direction = (requester.transform.position - target.transform.position).normalized;
 
@@ -1519,6 +1538,8 @@ public class ActionFrameEvent_TeleportToTarget : ActionFrameEventBase
         {
             if(attributes[i].Name == "DistanceOffset")
                 _distanceOffset = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
+            else if(attributes[i].Name == "TeleportTarget")
+                _teleportTarget = (TeleportTarget)Enum.Parse(typeof(TeleportTarget), attributes[i].Value);
         }
     }
 }
@@ -1527,15 +1548,33 @@ public class ActionFrameEvent_TeleportToTargetBack : ActionFrameEventBase
 {
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_TeleportToTargetBack;}
 
+    private TeleportTarget _teleportTarget = TeleportTarget.ActionTarget;
+
     private float _distanceOffset = 0f;
 
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
-        if(executeEntity is GameEntityBase == false || targetEntity is GameEntityBase == false)
+        if(executeEntity is GameEntityBase == false)
             return false;
         
         GameEntityBase requester = (GameEntityBase)executeEntity;
-        GameEntityBase target = (GameEntityBase)targetEntity;
+         GameEntityBase target = null;
+        
+        switch(_teleportTarget)
+        {
+            case TeleportTarget.ActionTarget:
+                target = targetEntity is GameEntityBase ? (GameEntityBase)targetEntity : null;
+            break;
+            case TeleportTarget.AITarget:
+                target = requester.getCurrentTargetEntity();
+            break;
+            case TeleportTarget.Summoner:
+                target = (GameEntityBase)requester.getSummonObject();
+            break;
+        }
+
+        if(target == null)
+            return true;
 
         UnityEngine.Vector3 direction = requester.getDirection();
         UnityEngine.Vector3 perpendicular = MathEx.getPerpendicularPointOnLine(executeEntity.transform.position,executeEntity.transform.position + direction * 9999f, target.transform.position);
@@ -1553,6 +1592,8 @@ public class ActionFrameEvent_TeleportToTargetBack : ActionFrameEventBase
         {
             if(attributes[i].Name == "DistanceOffset")
                 _distanceOffset = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
+            else if(attributes[i].Name == "TeleportTarget")
+                _teleportTarget = (TeleportTarget)Enum.Parse(typeof(TeleportTarget), attributes[i].Value);
         }
     }
 }

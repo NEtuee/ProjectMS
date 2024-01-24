@@ -10,6 +10,13 @@ public enum SearchIdentifier
     Count,
 }
 
+public enum TeleportTarget
+{
+    ActionTarget,
+    AITarget,
+    Summoner,
+}
+
 public enum TargetSearchType
 {
     None = 0,

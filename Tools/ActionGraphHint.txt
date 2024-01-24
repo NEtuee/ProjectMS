@@ -57,8 +57,8 @@ ShortCut,__FrameEvent_Attack,<FrameEvent Type=~Attack~ StartTime=~0~ AttackPrese
 ShortCut,__FrameEvent_ApplyBuff,<FrameEvent Type=~ApplyBuff~ StartTime=~0~ ApplyBuff=~~/>
 ShortCut,__FrameEvent_ApplyBuffTarget,<FrameEvent Type=~ApplyBuffTarget~ StartTime=~0~ ApplyBuff=~~/>
 ShortCut,__FrameEvent_DeleteBuff,<FrameEvent Type=~DeleteBuff~ StartTime=~0~ BuffList=~~/>
-ShortCut,__FrameEvent_TeleportToTarget,<FrameEvent Type=~TeleportToTarget~ StartTime=~0~/>
-ShortCut,__FrameEvent_TeleportToTargetBack,<FrameEvent Type=~TeleportToTargetBack~ StartTime=~0~/>
+ShortCut,__FrameEvent_TeleportToTarget,<FrameEvent Type=~TeleportToTarget~ StartTime=~0~ TeleportTarget=~ActionTarget~/>
+ShortCut,__FrameEvent_TeleportToTargetBack,<FrameEvent Type=~TeleportToTargetBack~ StartTime=~0~ TeleportTarget=~ActionTarget~/>
 ShortCut,__FrameEvent_SetDefenceType,<FrameEvent Type=~SetDefenceType~ StartTime=~0~ DefenceType=~~/>
 ShortCut,__EffectPhysics,<Physics UseGravity=~True~ Velocity=~0.0^10.0~ Friction=~1~ Torque=~360~ AngularFriction=~360~/>
 ShortCut,__FrameEvent_Effect,<FrameEvent Type=~Effect~ StartTime=~0~ Path=~~ FramePerSecond=~~/>
@@ -122,9 +122,9 @@ ShortCut,__FrameEvent_FollowAttack,<FrameEvent Type=~FollowAttack~ StartTime=~0~
 InQuote,FollowType=,"Attach,Movement"
 ShortCut,__FrameEvent_SetAction,<FrameEvent Type=~SetAction~ StartTime=~0~ Action=~~/>
 FrameEvent,SetAction,Action=~~
-,,
-,,
-,,
+InQuote,TeleportTarget=,"ActionTarget,AITarget,Summoner"
+FrameEvent,TeleportToTarget,"DistanceOffset=~~,TeleportTarget=~~"
+FrameEvent,TeleportToTargetBack,"DistanceOffset=~~,TeleportTarget=~~"
 ,,
 ,,
 ,,
