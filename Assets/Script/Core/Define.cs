@@ -25,6 +25,7 @@ public enum CallAIEventTargetType
     Self,
     FrameEventTarget,
     Summoner,
+    SummonTargetRange,
 }
 
 public enum SetRotateSlotType

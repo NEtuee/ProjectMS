@@ -160,9 +160,26 @@ public class ActionFrameEvent_CallAIEvent : ActionFrameEventBase
                         
                     (item as GameEntityBase).executeCustomAIEvent(_customAiEventName);
                 }
-
-                return true;
             }
+            return true;
+            case CallAIEventTargetType.SummonTargetRange:
+            {
+                SceneCharacterManager sceneCharacterManager = SceneCharacterManager._managerInstance as SceneCharacterManager;
+                _rangeSearchEntityList.Clear();
+                sceneCharacterManager.targetSearchRange(executeEntity.transform.position,_range,_searchIdentifier,ref _rangeSearchEntityList);
+
+                foreach(var item in _rangeSearchEntityList)
+                {
+                    if(item == null || item is GameEntityBase == false)
+                        continue;
+                    
+                    if(item.getSummonObject() != executeEntity)
+                        continue;
+
+                    (item as GameEntityBase).executeCustomAIEvent(_customAiEventName);
+                }
+            }
+            return true;
         }
 
         if(executeTargetEntity == null || executeTargetEntity is GameEntityBase == false)
@@ -197,6 +214,11 @@ public class ActionFrameEvent_CallAIEvent : ActionFrameEventBase
             {
                 _searchIdentifier = (SearchIdentifier)System.Enum.Parse(typeof(SearchIdentifier), attrValue);
             }
+        }
+
+        if(_eventTargetType == CallAIEventTargetType.Range || _eventTargetType == CallAIEventTargetType.SummonTargetRange)
+        {
+            DebugUtil.assert_fileOpen(_range != 0f, "EventTargetType이 [{0}] 인데 Range가 0 입니다. Range를 입력해 주세요.",node.BaseURI,XMLScriptConverter.getLineNumberFromXMLNode(node), _eventTargetType.ToString());
         }
     }
 }
