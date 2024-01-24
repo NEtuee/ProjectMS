@@ -17,7 +17,7 @@
             
             <AI_Shoot_L UpdateTime="0.2" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
                 <Event_OnExecute>
-                    <AIEvent Type="SetAngleDirection" Anlge="180.0"/>
+                    <AIEvent Type="SetAngleDirection" Angle="180.0"/>
                     <AIEvent Type="SetAction" Action="AC_Move"/>
                 </Event_OnExecute>
                 
@@ -26,7 +26,7 @@
             
             <AI_Shoot_R UpdateTime="0.2" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
                 <Event_OnExecute>
-                    <AIEvent Type="SetAngleDirection" Anlge="0.0"/>
+                    <AIEvent Type="SetAngleDirection" Angle="0.0"/>
                     <AIEvent Type="SetAction" Action="AC_Move"/>
                 </Event_OnExecute>
                 
@@ -35,7 +35,7 @@
             
             <AI_Shoot_U UpdateTime="0.2" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
                 <Event_OnExecute>
-                    <AIEvent Type="SetAngleDirection" Anlge="90.0"/>
+                    <AIEvent Type="SetAngleDirection" Angle="90.0"/>
                     <AIEvent Type="SetAction" Action="AC_Move"/>
                 </Event_OnExecute>
                 
@@ -44,7 +44,7 @@
             
             <AI_Shoot_D UpdateTime="0.2" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
                 <Event_OnExecute>
-                    <AIEvent Type="SetAngleDirection" Anlge="270.0"/>
+                    <AIEvent Type="SetAngleDirection" Angle="270.0"/>
                     <AIEvent Type="SetAction" Action="AC_Move"/>
                 </Event_OnExecute>
                 
