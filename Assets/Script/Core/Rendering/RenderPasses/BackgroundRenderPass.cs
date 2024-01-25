@@ -19,11 +19,15 @@ public class BackgroundRenderPass : AkaneRenderPass
     }
     public override void Draw(Camera renderCamera)
     {
+        Vector3 positionOrigin = renderCamera.transform.position;
+
+        // renderCamera.transform.position = MathEx.floorNoSign(renderCamera.transform.position,2);
         renderCamera.targetTexture = RenderTexture;
         renderCamera.cullingMask = layerMasks;
 
         renderCamera.Render();
 
+        renderCamera.transform.position = positionOrigin;
         renderCamera.cullingMask = 0;
     }
 }

@@ -125,6 +125,9 @@ public class EnemyIndicator : IUIElement
     
     private void DisableCharacter(CharacterEntityBase character)
     {
+        if(_enabledCharacters.ContainsKey(character) == false)
+            return;
+
         _enabledCharacters[character].Disappear(null);
         ReturnToPool(_enabledCharacters[character]);
         _enabledCharacters.Remove(character); 
