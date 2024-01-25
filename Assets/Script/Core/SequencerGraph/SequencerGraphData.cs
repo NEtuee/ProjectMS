@@ -525,9 +525,7 @@ public class SequencerGraphEvent_SetHideUI : SequencerGraphEventBase
     public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
     {
         HPSphereUIManager.Instance().setActive(_value == false);
-        //CrossHairUI._instance.setActive(_value == false);
         GameUI.Instance.SetActiveCrossHair(_value == false);
-        ScreenIndicatorUI._instance.setActive(_value == false);
         ScreenDirector._instance.setActiveMainHud(_value == false);
 
         processor.getUniqueEntity("Player")?.setGraphicInterfaceActive(_value == false);
