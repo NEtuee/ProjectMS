@@ -73,6 +73,7 @@
     <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterHolyNailPackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterBarriorPackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterThunderStormPackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterCommandBookPackage.xml"/>
 
     
     <!-- 보스전 대기 시간 (나중에 보스전 시작 트리거를 받아야 함)-->
@@ -305,6 +306,25 @@
         <UseBranchSet Name="BattlePackageEndSet"/>
     </SpawnBook_Blue>
 
+    <!-- 명령: 마도서 공격 -->
+    <CommandBook_LaserToTarget Package="SisterCommandBookPackage" EntryNode="AI_LaserToTarget">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </CommandBook_LaserToTarget>
+    <CommandBook_LaserWith Package="SisterCommandBookPackage" EntryNode="AI_LaserWith">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </CommandBook_LaserWith>
+    <CommandBook_LaserOut Package="SisterCommandBookPackage" EntryNode="AI_LaserOut">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </CommandBook_LaserOut>
+    <CommandBook_LaserIn Package="SisterCommandBookPackage" EntryNode="AI_LaserIn">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </CommandBook_LaserIn>
+
+    <!-- 잡기: 배리어 -->
     <ActivateBarrior Package="SisterBarriorPackage" EntryNode="AI_Pray">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>        

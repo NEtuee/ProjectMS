@@ -115,12 +115,10 @@
             <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/CommonBeam_TimeLine" Attach="true" AngleType="Direction" LifeTime="0.85" FollowDirection="True" AttackPreset="Luger_Normal"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
-            
-            <FrameEvent Type="SetDirectionType" StartTime="0.7" DirectionType="Keep"/>
         </Animation>
-        <Animation Preset="1_attack/2_attackMain" XFlip="true" Duration="0.1">
+        <Animation Preset="1_attack/2_attackMain" XFlip="true" Duration="2.0">
             <FrameEvent Type="EffectPreset" StartTime="0" Key="LaserLoop"/>
-            <FrameEvent Type="Attack" StartTime="0.05" EndTime="0.1" AttackPreset="Luger_Normal">
+            <FrameEvent Type="Attack" StartTime="0.05" EndTime="2.0" AttackPreset="Luger_Normal">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
                     
@@ -131,7 +129,6 @@
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
                 </OnHit>
             </FrameEvent>
-            <FrameEvent Type="Movement" StartTime="0.06" Friction="18" MaxVelocity="10" Velocity="-7" Speed="0"/>
         </Animation>
         <Animation Preset="1_attack/3_attackRecover" XFlip="true" Duration="2.0">
         </Animation>

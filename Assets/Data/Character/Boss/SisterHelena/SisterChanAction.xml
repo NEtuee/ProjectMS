@@ -194,12 +194,12 @@
         <AnimationHeader MasterPath="Sprites/Enemy/SisterHelena/2_cremationBeam/"/>
         <Animation Preset="2_cremationBeamShot" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="1 4 0" SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="1 2 0" SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="1 0 0" SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="1 -2 0" SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="1 -4 0" SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
-            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="Left" EventTargetType="Range" Range="100.0" SearchIdentifier="Enemy"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="8 4 0" SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="8 2 0" SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="8 0 0" SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="8 -2 0" SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="8 -4 0" SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="Left" EventTargetType="SummonTargetRange" Range="100.0" SearchIdentifier="Enemy"/>
         </Animation>
         <Animation Preset="3_cremationBeamRecovery" XFlip="true" Duration="0.3">
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
@@ -212,12 +212,12 @@
         <AnimationHeader MasterPath="Sprites/Enemy/SisterHelena/2_cremationBeam/"/>
         <Animation Preset="2_cremationBeamShot" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="1 4 0" SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="1 2 0" SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="1 0 0" SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="1 -2 0" SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="1 -4 0" SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
-            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="Right" EventTargetType="Range" Range="100.0" SearchIdentifier="Enemy"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="-8 4 0" SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="-8 2 0" SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="-8 0 0" SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="-8 -2 0" SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="-8 -4 0" SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="Right" EventTargetType="SummonTargetRange" Range="100.0" SearchIdentifier="Enemy"/>
         </Animation>
         <Animation Preset="3_cremationBeamRecovery" XFlip="true" Duration="0.3">
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
@@ -230,12 +230,12 @@
         <AnimationHeader MasterPath="Sprites/Enemy/SisterHelena/2_cremationBeam/"/>
         <Animation Preset="2_cremationBeamShot" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="1 4 0" SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="1 2 0" SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="1 0 0" SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="1 -2 0" SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="1 -4 0" SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
-            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="Up" EventTargetType="Range" Range="100.0" SearchIdentifier="Enemy"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="4 -4 0"   SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="2 -4 0"   SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="0 -4 0"   SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="-2 -4 0"  SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="-4 -4 0"  SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="Up" EventTargetType="SummonTargetRange" Range="100.0" SearchIdentifier="Enemy"/>
         </Animation>
         <Animation Preset="3_cremationBeamRecovery" XFlip="true" Duration="0.3">
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
@@ -248,12 +248,12 @@
         <AnimationHeader MasterPath="Sprites/Enemy/SisterHelena/2_cremationBeam/"/>
         <Animation Preset="2_cremationBeamShot" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="1 4 0" SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="1 2 0" SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="1 0 0" SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="1 -2 0" SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="1 -4 0" SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
-            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="Down" EventTargetType="Range" Range="100.0" SearchIdentifier="Enemy"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="4 4 0"   SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="2 4 0"   SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="0 4 0"   SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="-2 4 0"  SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="-4 4 0"  SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="Down" EventTargetType="SummonTargetRange" Range="100.0" SearchIdentifier="Enemy"/>
         </Animation>
         <Animation Preset="3_cremationBeamRecovery" XFlip="true" Duration="0.3">
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
@@ -578,7 +578,7 @@
     <AC_InvisibleTurn MovementType="Empty" DirectionType="AI" FlipType="Direction" ActiveCollision="False">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/"/>
         <Animation Preset="0_default/2_move" XFlip="true" Duration="0.016">
-            <FrameEvent Type="TeleportToTarget" StartTime="0"/>
+            <FrameEvent Type="TeleportToTarget" StartTime="0" TeleportTarget="AITarget"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_InvisibleMove"/>
