@@ -1837,8 +1837,6 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
 
     private bool attackTarget(CollisionSuccessData successData)
     {
-        _collisionInfo.drawCollosionArea(UnityEngine.Color.green,1f);
-
         ObjectBase requester = (ObjectBase)successData._requester;
         GameEntityBase target = (GameEntityBase)successData._target;
 
@@ -1847,6 +1845,7 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
         else
             _collisionList.Add(target);
 
+        _collisionInfo.drawCollosionArea(UnityEngine.Color.green,1f);
 
         ChildFrameEventType eventType = ChildFrameEventType.Count;
 

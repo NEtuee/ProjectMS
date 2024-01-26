@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Playables;
 
@@ -46,6 +47,7 @@ public class EffectRequestData : MessageData
     public Vector3 _position;
     public Vector3 _scale;
     public Quaternion _rotation;
+    public Quaternion _rotationOffset;
 
     public ObjectBase _executeEntity = null;
     public Transform _parentTransform = null;
@@ -87,6 +89,7 @@ public class EffectRequestData : MessageData
         _position = Vector3.zero;
         _scale = Vector3.one;
         _rotation = Quaternion.identity;
+        _rotationOffset = Quaternion.identity;
         _parentTransform = null;
         _timelineAnimator = null;
         _physicsBodyDesc.clearPhysicsBody();
@@ -426,6 +429,9 @@ public class ParticleEffectItem : EffectItemBase
 
     public float                    _lifeTime = 0f;
 
+    private bool                    _skipFirstFrame = true;
+    private Quaternion              _rotationOffset;
+
 
     public void createItem(string prefabPath)
     {
@@ -464,6 +470,7 @@ public class ParticleEffectItem : EffectItemBase
 
         _effectObject.transform.position = effectData._position;
         _effectObject.transform.rotation = effectData._rotation;
+        _rotationOffset = effectData._rotationOffset;
 
         _parentTransform = effectData._parentTransform;
         _dependentAction = effectData._dependentAction;
@@ -471,6 +478,7 @@ public class ParticleEffectItem : EffectItemBase
         _lifeTime = effectData._lifeTime;
 
         _stopEffect = false;
+        _skipFirstFrame = true;
 
         if(_parentTransform != null && _parentTransform.gameObject.activeInHierarchy == false)
             _parentTransform = null;
@@ -511,22 +519,28 @@ public class ParticleEffectItem : EffectItemBase
             break;
         }
 
-        if(_lifeTime > 0f)
+        if(_dependentAction == false && _lifeTime > 0f)
         {
             _lifeTime -= deltaTime;
             if(_lifeTime <= 0f)
                 stopAllParticleSystem();
         }
 
-        if(_dependentAction && _executeObject is GameEntityBase && (_executeObject as GameEntityBase).isActionChangeFrame())
+        if(_skipFirstFrame)
         {
-            _dependentAction = false;
-            stopAllParticleSystem();
+            _skipFirstFrame = false;
         }
-         
+        else
+        {
+            if(_dependentAction && _executeObject is GameEntityBase && (_executeObject as GameEntityBase).isActionChangeFrame())
+            {
+                _dependentAction = false;
+                stopAllParticleSystem();
+            }
+        }
 
         if(_followDirection)
-            _effectObject.transform.rotation = Quaternion.Euler(0f,0f,MathEx.directionToAngle(_executeObject.getDirection()));
+            _effectObject.transform.rotation = Quaternion.Euler(0f,0f,MathEx.directionToAngle(_executeObject.getDirection())) * _rotationOffset;
 
         return isAllParticleEnd();
     }

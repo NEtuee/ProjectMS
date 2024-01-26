@@ -1,0 +1,32 @@
+<AIGraph Name="TestZakoAI" DefaultState="Entry">
+
+    <Include Path="Assets/Data/AILibrary/Package/EmptyPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonDeadPackage.xml"/>
+    <AIPackage Name="TEST_LaserLong" DefaultState="Entry">
+        <AIState>
+            <Entry UpdateTime="999.0" TargetSearchType="Near" TargetSearchRange="999" SearchIdentifier="Player">
+                <Event_OnExecute>
+                    <AIEvent Type="SetDirectionToTarget"/>
+                    <AIEvent Type="SetAction" Action="TEST_LaserLong_Start"/>
+                </Event_OnExecute>
+                <Event_OnFrame>
+                    <AIEvent Type="SetDirectionToTarget" Speed="45.0"/>
+                </Event_OnFrame>
+            </Entry>
+
+        </AIState>
+    </AIPackage>
+
+    <Entry Package="EmptyPackage">
+        <Branch Condition="Dead" Execute="Dead"/>
+    </Entry>
+
+    <TEST_LaserLong Package="TEST_LaserLong">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="GraphExecutedTime >= 8.0" Execute="Entry"/>
+    </TEST_LaserLong>
+
+    <Dead Package="CommonDeadPackage">
+    </Dead>
+
+</AIGraph>

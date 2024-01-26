@@ -72,7 +72,8 @@ public class ParticleEffectInfoData : EffectInfoDataBase
         requestData._effectPath = _effectPath;
         requestData._rotation = getAngleByType(executeEntity, requestData._position, _angleDirectionType);
         requestData._position = centerPosition + requestData._rotation * _spawnOffset;
-        requestData._rotation *=  Quaternion.Euler(0f,0f,_angleOffset);
+        requestData._rotationOffset = Quaternion.Euler(0f,0f,_angleOffset);
+        requestData._rotation *= requestData._rotationOffset;
         requestData._updateType = _effectUpdateType;
         requestData._effectType = EffectType.ParticleEffect;
         requestData._lifeTime = _lifeTime;
