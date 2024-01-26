@@ -876,6 +876,11 @@ public class GameEntityBase : SequencerObjectBase
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Action_IsCatchTarget, hasParentObject());
         _actionGraph.setActionConditionData_Float(ConditionNodeUpdateType.Action_ActionExecutedTime, _actionGraph.getActionExecutedTime());
 
+        float toTargetAngle = 0f;
+        if(getCurrentTargetEntity() != null)
+            toTargetAngle = MathEx.clampDegree(Vector3.SignedAngle(Vector3.right, (getCurrentTargetEntity().transform.position - transform.position).normalized, Vector3.forward));
+        _actionGraph.setActionConditionData_Float(ConditionNodeUpdateType.Action_AngleToTarget, toTargetAngle);
+
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Input_AttackCharge, Input.GetMouseButton(0));
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Input_AttackBlood, Input.GetKey(KeyCode.R));
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Input_Guard, Input.GetMouseButton(1));
