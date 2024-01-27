@@ -21,6 +21,9 @@ public class EnemyIndicator : IUIElement
 
     private Camera _mainCamera;
 
+    private SceneCharacterManager.OnCharacterEnabled _onCharacterEnabled;
+    private SceneCharacterManager.OnCharacterDisabled _onCharacterDisabled;
+
     public bool CheckValidBinderLink(out string reason)
     {
         if (_binder == null)
@@ -40,6 +43,8 @@ public class EnemyIndicator : IUIElement
 
     public void Initialize()
     {
+        _onCharacterEnabled = AddCharacter;
+        _onCharacterDisabled = DisableCharacter;
     }
 
     public void InitValue(Camera mainCamera)
@@ -51,8 +56,12 @@ public class EnemyIndicator : IUIElement
         _active = true;
         
         _characterManager = SceneCharacterManager._managerInstance as SceneCharacterManager;
-        _characterManager.addCharacterEnableDelegate(AddCharacter);
-        _characterManager.addCharacterDisableDelegate(DisableCharacter);
+
+        _characterManager.deleteCharacterEnableDelegate(_onCharacterEnabled);
+        _characterManager.deleteCharacterDisableDelegate(_onCharacterDisabled);
+        
+        _characterManager.addCharacterEnableDelegate(_onCharacterEnabled);
+        _characterManager.addCharacterDisableDelegate(_onCharacterDisabled);
     }
 
     public void SetActive(bool active)
@@ -106,9 +115,6 @@ public class EnemyIndicator : IUIElement
 
     private void AddCharacter(CharacterEntityBase character)
     {
-        if(_enabledCharacters.ContainsKey(character) == false)
-            return;
-            
         if(character.isIndicatorVisible() == false)
             return;
             
