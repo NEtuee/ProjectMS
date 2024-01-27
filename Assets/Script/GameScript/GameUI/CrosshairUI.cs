@@ -123,7 +123,14 @@ public class CrosshairUI : IUIElement
         _collisionInfoData.setCollisionInfoData(characterToMouse.magnitude, _attackAngle, _attackStartDistance, CollisionType.Attack);
         _collisionInfo.updateCollisionInfo(targetPosition, characterToMouse.normalized);
         
-        CollisionManager.Instance().collisionRequest(_collisionInfo, ownerEntity, OnDetectEnemy, OnCollisionEnd);
+        CollisionRequestData requestData;
+        requestData._collision = _collisionInfo;
+        requestData._collisionDelegate = OnDetectEnemy;
+        requestData._collisionEndEvent = OnCollisionEnd;
+        requestData._position = targetPosition;
+        requestData._direction = characterToMouse.normalized;
+        requestData._requestObject = ownerEntity;
+        CollisionManager.Instance().collisionRequest(requestData);
 
         _binder.DebugDetect = _enemyDetect;
         

@@ -503,8 +503,15 @@ public class GameEntityBase : SequencerObjectBase
         {
             _statusInfo.updateDebugTextXXX(debugTextManager);
         }
-        
-        CollisionManager.Instance().collisionRequest(_collisionInfo,this,gameEntityCollisionEvent,collisionEndEvent);
+
+        CollisionRequestData requestData;
+        requestData._collision = _collisionInfo;
+        requestData._collisionDelegate = gameEntityCollisionEvent;
+        requestData._collisionEndEvent = collisionEndEvent;
+        requestData._position = transform.position;
+        requestData._direction = getDirection();
+        requestData._requestObject = this;
+        CollisionManager.Instance().collisionRequest(requestData);
     }
 
     public override void deactive()
@@ -560,6 +567,7 @@ public class GameEntityBase : SequencerObjectBase
             }
 
             debugTextManager.updateDebugText("FrameTag","FrameTag: " + frameTag, UnityEngine.Color.white);
+            debugTextManager.updateDebugText("SearchIdentifier","SearchIdentifier: " + _searchIdentifier, UnityEngine.Color.white);
         }
     
         if(getDefenceAngle() != 0f)

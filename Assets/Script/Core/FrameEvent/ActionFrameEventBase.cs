@@ -1780,13 +1780,35 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
         {
             GameEntityBase gameEntityBase = executeEntity as GameEntityBase;
             _collisionInfo.updateCollisionInfo(executeEntity.transform.position,gameEntityBase.getDirectionFromType(_targetDirectionType));
+
+            CollisionRequestData requestData;
+            requestData._collision = _collisionInfo;
+            requestData._collisionDelegate = _collisionDelegate;
+            requestData._collisionEndEvent = _collisionEndEvent;
+            requestData._position = executeEntity.transform.position;
+            requestData._direction = gameEntityBase.getDirectionFromType(_targetDirectionType);
+            requestData._requestObject = executeEntity;
+
+            CollisionManager.Instance().collisionRequest(requestData);
         }
         else
         {
             _collisionInfo.updateCollisionInfo(executeEntity.transform.position,executeEntity.getDirection());
+
+            CollisionRequestData requestData;
+            requestData._collision = _collisionInfo;
+            requestData._collisionDelegate = _collisionDelegate;
+            requestData._collisionEndEvent = _collisionEndEvent;
+            requestData._position = executeEntity.transform.position;
+            requestData._direction = executeEntity.getDirection();
+            requestData._requestObject = executeEntity;
+            
+            CollisionManager.Instance().collisionRequest(requestData);
         }
+
         _collisionInfo.drawCollosionArea(UnityEngine.Color.red, _startFrame != _endFrame ? 0f : 1f);
-        CollisionManager.Instance().collisionRequest(_collisionInfo,executeEntity,_collisionDelegate,_collisionEndEvent);
+
+        
 
         return true;
     }   

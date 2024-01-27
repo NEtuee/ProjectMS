@@ -17,6 +17,9 @@ public struct CollisionRequestData
     public System.Action _collisionEndEvent;
     public CollisionInfo _collision;
 
+    public Vector3 _position;
+    public Vector3 _direction;
+
     public object _requestObject;
 }
 
@@ -145,11 +148,6 @@ public class CollisionManager : Singleton<CollisionManager>
         _collisionObjectList[(int)collisionType].RemoveAt(index);
     }
 
-    public void collisionRequest(CollisionInfo collisionData, object requestObject, CollisionDelegate collisionDelegate, System.Action collisionEndEvent)
-    {
-        collisionRequest(new CollisionRequestData{_collisionDelegate = collisionDelegate, _collisionEndEvent = collisionEndEvent, _requestObject = requestObject, _collision = collisionData});
-    }
-
     public void collisionRequest(CollisionRequestData request)
     {
         ++_collisionRequestCount;
@@ -167,6 +165,7 @@ public class CollisionManager : Singleton<CollisionManager>
 
             for(int i = 0; i < _collisionTypeCount; ++i)
             {
+                request._collision.updateCollisionInfo(request._position, request._direction);
                 collisionCheck(i,request);
             }
 
@@ -213,14 +212,12 @@ public class CollisionManager : Singleton<CollisionManager>
             if(collisionInfo.getUniqueID() == collisionList[i]._collisionInfo.getUniqueID() || request._requestObject == collisionList[i]._collisionObject)
                 continue;
 
-            
             if(collisionInfo.collisionCheck(collisionList[i]._collisionInfo) == true)
             {
                 CollisionSuccessData data;
                 data._requester = request._requestObject;
                 data._target = collisionList[i]._collisionObject;
                 data._startPoint = request._collision.getCenterPosition();
-
                 request._collisionDelegate?.Invoke(data);
             }
                 
