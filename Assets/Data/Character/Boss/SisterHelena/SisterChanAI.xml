@@ -74,6 +74,7 @@
     <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterBarriorPackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterThunderStormPackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterCommandBookPackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterDodgePackage.xml"/>
 
     
     <!-- 보스전 대기 시간 (나중에 보스전 시작 트리거를 받아야 함)-->
@@ -300,6 +301,10 @@
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </SpawnBook_Crimson>
+    <SpawnBook_Crimson_Set Package="SisterSpawnBookPackage" EntryNode="AI_CrimsonSet">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </SpawnBook_Crimson_Set>
 
     <SpawnBook_Blue Package="SisterSpawnBookPackage" EntryNode="AI_Blue">
         <UseBranchSet Name="HitReactionSet"/>
@@ -340,6 +345,18 @@
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </Dodge>
+    <NormalDodge Package="SisterDodgePackage" EntryNode="AI_Dodge">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </NormalDodge>
+    <InvisibleDodge Package="SisterDodgePackage" EntryNode="AI_InvisibleDodge">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </InvisibleDodge>
+    <ExplosionDodge Package="SisterDodgePackage" EntryNode="AI_ExplosionDodge">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </ExplosionDodge>
     
     <Guard Package="CommonGuardPackage">
         <UseBranchSet Name="HitReactionSet"/>

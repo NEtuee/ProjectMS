@@ -60,9 +60,9 @@
     </AIPackage>
 
     <CustomValue Name="Direction" Value="-1.0"/> <!-- 0: Target, 1: Left, 2: Right, 3: Up, 4: Down -->
-    <CustomEvent_Test>
+    <CustomEvent_Target>
         <AIEvent Type="SetCustomValue" Name="Direction" Value="0.0"/>
-    </CustomEvent_Test>
+    </CustomEvent_Target>
     <CustomEvent_Left>
         <AIEvent Type="SetCustomValue" Name="Direction" Value="1.0"/>
     </CustomEvent_Left>

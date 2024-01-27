@@ -6,10 +6,10 @@
                 <AIEvent Type="SetDirectionToTarget"/>
             </Event_OnExecute>
             
-            <Branch Condition="(AngleDirection >= 135.0) && (AngleDirection <= 225.0) " Execute="AI_Left"/>
-            <Branch Condition="(AngleDirection >= 315.0) || (AngleDirection <= 45.0)" Execute="AI_Right"/>
-            <Branch Condition="(AngleDirection >= 225.0) && (AngleDirection <= 315.0)" Execute="AI_Up"/>
-            <Branch Condition="(AngleDirection >= 45.0) && (AngleDirection <= 135.0)" Execute="AI_Down"/>
+            <Branch Condition="(AngleToTarget >= 135.0) && (AngleToTarget <= 225.0) " Execute="AI_Left"/>
+            <Branch Condition="(AngleToTarget >= 315.0) || (AngleToTarget <= 45.0)" Execute="AI_Right"/>
+            <Branch Condition="(AngleToTarget >= 225.0) && (AngleToTarget <= 315.0)" Execute="AI_Down"/>
+            <Branch Condition="(AngleToTarget >= 45.0) && (AngleToTarget <= 135.0)" Execute="AI_Up"/>
         </AI_ThunderStorm>
         <AI_ThunderStorm_Random UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
         

@@ -57,6 +57,11 @@
     <CustomEvent_Detach>
         <AIEvent Type="DetachRotateSlot"/>
     </CustomEvent_Detach>
+    <!-- 디태치 커맨드 -->
+    <CustomEvent_DetachExplosion>
+        <AIEvent Type="DetachRotateSlot"/>
+        <AIEvent Type="SetAction" Action="AC_ExplosionStart"/>  
+    </CustomEvent_DetachExplosion>
     <!-- 공격 커맨드 -->
     <CustomEvent_LaserToTarget>
         <AIEvent Type="SetAction" Action="AC_Shoot"/>

@@ -135,17 +135,19 @@
         <Branch Condition="End == true" Execute="AC_Idle_WithHelena"/>
     </AC_Shoot_out>
     
-    <AC_Shoot_in MovementType="FrameEvent" DirectionType="ToSummoner" FlipType="Direction" Flags="LaserEffect">
+    <AC_Shoot_in MovementType="FrameEvent" DirectionType="AITarget" FlipType="Direction" Flags="LaserEffect"> 
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="1_attack/1_attackReady" XFlip="true" Duration="0.8">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
             <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/CommonBeam_TimeLine" Attach="true" AngleType="Direction" LifeTime="0.85" FollowDirection="True" AttackPreset="Luger_Normal"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+            <FrameEvent Type="SetDirectionType" StartTime="0.6" DirectionType="Keep"/>
+
         </Animation>
-        <Animation Preset="1_attack/2_attackMain" XFlip="true" Duration="2.0">
-            <FrameEvent Type="EffectPreset" StartTime="0" Key="Helena_LaserIn"/>
-            <FrameEvent Type="Attack" StartTime="0.05" EndTime="2.0" AttackPreset="Luger_Normal">
+        <Animation Preset="1_attack/2_attackMain" XFlip="true" Duration="0.1">
+            <FrameEvent Type="EffectPreset" StartTime="0" Key="Helena_LaserShot"/>
+            <FrameEvent Type="Attack" StartTime="0.05" EndTime="0.1" AttackPreset="Luger_Normal">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
                     
@@ -160,11 +162,20 @@
         </Animation>
         <Animation Preset="1_attack/3_attackRecover" XFlip="true" Duration="2.0">
         </Animation>
-
         <Branch Condition="End == true" Execute="AC_Idle_WithHelena"/>
     </AC_Shoot_in>
     
-    <Explosion MovementType="Empty" DirectionType="Keep" DefenceType="Evade" DefenceAngle="360">
+    <AC_ExplosionStart MovementType="Empty" DirectionType="Keep" DefenceType="Evade" DefenceAngle="360">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/1_idle" XFlip="true" Duration="1.5">
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+        <Branch Condition="End" Execute="AC_Explosion"/>
+    </AC_ExplosionStart>
+    <AC_Explosion MovementType="Empty" DirectionType="Keep" DefenceType="Evade" DefenceAngle="360">
         <Animation Preset="Sprites/Projectile/empty" Duration="0.3">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2415" Attach="true"/>
             <!-- TODO: 폭발 이펙트  -->
@@ -175,7 +186,7 @@
             </FrameEvent>
         </Animation>
         <Branch Condition="End" Execute="Dead"/>
-    </Explosion>
+    </AC_Explosion>
 
     <Dead MovementType="Empty" DirectionType="AI">
         <AnimationHeader MasterPath="gv_MasterPath"/>
