@@ -106,6 +106,9 @@ public class EnemyIndicator : IUIElement
 
     private void AddCharacter(CharacterEntityBase character)
     {
+        if(_enabledCharacters.ContainsKey(character) == false)
+            return;
+            
         if(character.isIndicatorVisible() == false)
             return;
             
