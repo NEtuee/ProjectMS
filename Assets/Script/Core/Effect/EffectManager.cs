@@ -519,7 +519,7 @@ public class ParticleEffectItem : EffectItemBase
             break;
         }
 
-        if(_dependentAction == false && _lifeTime > 0f)
+        if(_lifeTime > 0f)
         {
             _lifeTime -= deltaTime;
             if(_lifeTime <= 0f)
