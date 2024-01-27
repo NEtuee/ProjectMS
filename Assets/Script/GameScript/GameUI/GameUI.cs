@@ -57,7 +57,7 @@ public class GameUI : MonoBehaviour
         var deltaTime = GlobalTimer.Instance().getSclaedDeltaTime();
 
         _hpBpGageUI.UpdateByManager(_targetEntity.getStatusPercentage("HP"), _targetEntity.getStatusPercentage("Blood"));
-        _dashPointUI.UpdateByManager(deltaTime, _targetEntity.getStatus("DashPoint"));
+        _dashPointUI.UpdateByManager(deltaTime, _targetEntity.getStatus("DashPoint"), _targetEntity.getStatus("Blood"));
         _crossHairUI.UpdateByManager(_targetEntity, _targetEntity.isDead(), _targetEntity.transform.position);
         _enemyIndicator.UpdateByManager();
     }
