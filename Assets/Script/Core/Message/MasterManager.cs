@@ -120,6 +120,8 @@ public class MasterManager : MessageHub<ManagerBase>
         ActionKeyInputManager.Instance().progress(deltaTime);
         GlobalTimer.Instance().setUpdateProcessing(true);
 
+        CameraControlEx.Instance().updateDebugMode();
+
         if(_update == false && _frameUpdate == false)
         {
             GlobalTimer.Instance().setUpdateProcessing(false);

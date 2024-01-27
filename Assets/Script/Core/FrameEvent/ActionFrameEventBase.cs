@@ -1521,7 +1521,7 @@ public class ActionFrameEvent_TeleportToTarget : ActionFrameEventBase
                 target = (GameEntityBase)requester.getSummonObject();
             break;
         }
-        DebugUtil.log((target == null).ToString());
+        
         if(target == null)
             return true;
 

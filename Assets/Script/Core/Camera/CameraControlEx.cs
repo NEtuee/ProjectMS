@@ -48,6 +48,11 @@ public abstract class CameraModeBase
     {
         return _cameraPosition;
     }
+
+    public void setCameraPosition(Vector3 cameraPosition)
+    {
+        _cameraPosition = cameraPosition;
+    }
 };
 
 public class CameraTwoTargetMode : CameraModeBase
@@ -207,6 +212,12 @@ public class CameraControlEx : Singleton<CameraControlEx>
 
     private Vector2 _cameraBoundHalf = Vector2.zero;
 
+    private bool _debugCameraMode = false;
+    private Vector3 _debugCameraPosition = Vector3.zero;
+    private bool _debugModeInput = false;
+    private float _debugCameraMoveSpeed = 2f;
+    private float _debugCameraMoveSpeedMultiflier = 4f;
+
     public void initialize()
     {
         _currentCamera = Camera.main;
@@ -227,10 +238,42 @@ public class CameraControlEx : Singleton<CameraControlEx>
         setCameraMode(CameraModeType.TargetCenterMode);
     }
 
+    public void updateDebugMode()
+    {
+        if(_debugCameraMode)
+        {
+            bool debugModeInput = Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.Comma);
+            if(debugModeInput && _debugModeInput == false)
+            {
+                ToastMessage._instance.ShowToastMessage("Free Camera Mode Disabled", 1f, Color.red);
+                _debugCameraMode = false;
+            }
+
+            _debugModeInput = debugModeInput;
+
+            updateDebugCamera();
+        }
+        else
+        {
+            bool debugModeInput = Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.Comma);
+            if(debugModeInput && _debugModeInput == false)
+            {
+                _debugCameraPosition = _currentCamera.transform.position;
+                _debugCameraMode = true;
+
+                ToastMessage._instance.ShowToastMessage("Free Camera Mode Enabled", 1f, Color.green);
+            }
+
+            _debugModeInput = debugModeInput;
+        }
+    }
+
     public void progress(float deltaTime)
     {
+        if(_debugCameraMode)
+            return;
+
         updateCameraMode(deltaTime);
-        
         _postProcessProfileControl.processBlend(deltaTime);
 
         if(MathEx.equals(_currentCamera.orthographicSize,_currentMainCamSize,float.Epsilon) == true)
@@ -253,6 +296,25 @@ public class CameraControlEx : Singleton<CameraControlEx>
         }
 
         GizmoHelper.instance.drawRectangle(_currentCamera.transform.position,_cameraBoundHalf,Color.green);
+    }
+
+    private void updateDebugCamera()
+    {
+        float debugCameraMoveSpeed = _debugCameraMoveSpeed;
+        if(Input.GetKey(KeyCode.LeftShift))
+            debugCameraMoveSpeed *= _debugCameraMoveSpeedMultiflier;
+
+        if(Input.GetKey(KeyCode.UpArrow))
+            _debugCameraPosition += Vector3.up * debugCameraMoveSpeed * Time.deltaTime;
+        if(Input.GetKey(KeyCode.DownArrow))
+            _debugCameraPosition += Vector3.down * debugCameraMoveSpeed * Time.deltaTime;
+        if(Input.GetKey(KeyCode.LeftArrow))
+            _debugCameraPosition += Vector3.left * debugCameraMoveSpeed * Time.deltaTime;
+        if(Input.GetKey(KeyCode.RightArrow))
+            _debugCameraPosition += Vector3.right * debugCameraMoveSpeed * Time.deltaTime;
+
+        _currentCamera.transform.position = _debugCameraPosition;
+        _currentCameraMode.setCameraPosition(_debugCameraPosition);
     }
 
     public void setShake(float scale, float speed, float time)
@@ -384,11 +446,17 @@ public class CameraControlEx : Singleton<CameraControlEx>
 
     public void setCameraPosition(Vector3 position)
     {
+        if(_debugCameraMode)
+            return;
+
         _currentCamera.transform.position = position + _shakePosition;
     }
 
     public void SyncPosition()
     {
+        if(_debugCameraMode)
+            return;
+
         if(_currentCamera == null || _currentCameraMode == null)
             return;
 
