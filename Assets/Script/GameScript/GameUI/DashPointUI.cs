@@ -93,7 +93,8 @@ public class DashPointUI : IUIElement
             {
                 if (currentState == true)
                 {
-                    float delayTime = (current - prevDashPointIndex) * 0.1f;
+                    float delayTime = (current - (prevDashPointIndex + 1f)) * 0.1f;
+                    Debug.Log(delayTime);
                     if (_absorbingFlag == true)
                     {
                         releaseAbsorbing = true;
