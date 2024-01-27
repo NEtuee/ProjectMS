@@ -84,11 +84,10 @@
             <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/CommonBeam_TimeLine" Attach="true" AngleType="Direction" LifeTime="0.85" FollowDirection="True" AttackPreset="Luger_Normal"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
-            
-            <FrameEvent Type="SetDirectionType" StartTime="0.7" DirectionType="Keep"/>
+
         </Animation>
         <Animation Preset="1_attack/2_attackMain" XFlip="true" Duration="0.1">
-            <FrameEvent Type="EffectPreset" StartTime="0" Key="LaserLoop"/>
+            <FrameEvent Type="EffectPreset" StartTime="0" Key="Helena_LaserShot"/>
             <FrameEvent Type="Attack" StartTime="0.05" EndTime="0.1" AttackPreset="Luger_Normal">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
@@ -117,7 +116,7 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
         <Animation Preset="1_attack/2_attackMain" XFlip="true" Duration="2.0">
-            <FrameEvent Type="EffectPreset" StartTime="0" Key="LaserLoop"/>
+            <FrameEvent Type="EffectPreset" StartTime="0" Key="Helena_LaserOut"/>
             <FrameEvent Type="Attack" StartTime="0.05" EndTime="2.0" AttackPreset="Luger_Normal">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
@@ -143,12 +142,10 @@
             <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/CommonBeam_TimeLine" Attach="true" AngleType="Direction" LifeTime="0.85" FollowDirection="True" AttackPreset="Luger_Normal"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
-            
-            <FrameEvent Type="SetDirectionType" StartTime="0.7" DirectionType="Keep"/>
         </Animation>
-        <Animation Preset="1_attack/2_attackMain" XFlip="true" Duration="0.1">
-            <FrameEvent Type="EffectPreset" StartTime="0" Key="LaserLoop"/>
-            <FrameEvent Type="Attack" StartTime="0.05" EndTime="0.1" AttackPreset="Luger_Normal">
+        <Animation Preset="1_attack/2_attackMain" XFlip="true" Duration="2.0">
+            <FrameEvent Type="EffectPreset" StartTime="0" Key="Helena_LaserIn"/>
+            <FrameEvent Type="Attack" StartTime="0.05" EndTime="2.0" AttackPreset="Luger_Normal">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
                     
