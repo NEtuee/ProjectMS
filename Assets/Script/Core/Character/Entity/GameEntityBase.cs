@@ -1469,7 +1469,10 @@ public class GameEntityBaseEditor : Editor
         {
             string searchString = _actionListSearchString;
 
-            _actionListSearchString = EditorGUILayout.TextField("Search",_actionListSearchString);
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Search");
+            _actionListSearchString = EditorGUILayout.TextField(_actionListSearchString);
+            GUILayout.EndHorizontal();
             _actionListScroll = EditorGUILayout.BeginScrollView(_actionListScroll,"box",GUILayout.Height(200f));
             {
                 if(_actionListSearchString != searchString)
@@ -1516,7 +1519,11 @@ public class GameEntityBaseEditor : Editor
         {
             string searchString = _aiListSearchString;
 
-            _aiListSearchString = EditorGUILayout.TextField("Search",_aiListSearchString);
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Search");
+            _aiListSearchString = EditorGUILayout.TextField(_aiListSearchString);
+            GUILayout.EndHorizontal();
+            
             _aiListScroll = EditorGUILayout.BeginScrollView(_aiListScroll,"box",GUILayout.Height(200f));
             {
 
