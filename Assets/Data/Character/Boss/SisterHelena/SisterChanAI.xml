@@ -67,7 +67,7 @@
     <Include Path="Assets/Data/AILibrary/Package/CommonDodgePackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonGuardPackage.xml"/>
 
-    <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterThunderSlashPackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterThunderStrokePackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterSpawnBookPackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterLightningBoltPackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterHolyNailPackage.xml"/>
@@ -250,7 +250,7 @@
 
     <JudgeMeleeAttack Package="CommonIdlePackage">
         <!-- 낙뢰 베기 -->
-        <Branch Weight="RandBoolean^True" Condition="true" Execute="ThunderSlash"/>
+        <Branch Weight="RandBoolean^True" Condition="true" Execute="ThunderStroke"/>
         <!-- 멀어지기 -->
         <Branch Weight="RandBoolean^False" Condition="true" Execute="Dodge"/>
     </JudgeMeleeAttack>
@@ -285,11 +285,11 @@
         <UseBranchSet Name="BattlePackageEndSet"/>
     </ThunderStrom>
 
-    <!-- 근거리 공격: 달빛베기 -->
-    <ThunderSlash Package="SisterThunderSlashPackage">
+    <!-- 근거리 공격: 낙뢰  -->
+    <ThunderStroke Package="SisterThunderStrokePackage">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
-    </ThunderSlash>
+    </ThunderStroke>
 
     <!-- 소환: 마도서 소환 -->
     <SpawnBook_Olive Package="SisterSpawnBookPackage" EntryNode="AI_Olive">
