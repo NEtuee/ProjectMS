@@ -94,7 +94,7 @@ public class ProjectileGraph
             if(executeEntity is GameEntityBase && childFrameEventItem._childFrameEvents[i].checkCondition(executeEntity as GameEntityBase) == false)
                 continue;
             
-            childFrameEventItem._childFrameEvents[i].initialize();
+            childFrameEventItem._childFrameEvents[i].initialize(executeEntity);
             childFrameEventItem._childFrameEvents[i].onExecute(executeEntity, targetEntity);
         }
     }

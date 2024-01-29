@@ -217,7 +217,7 @@ public class AnimationPlayer
                     continue;
                 }
                 
-                frameEvent.initialize();
+                frameEvent.initialize(targetEntity);
                 if(frameEvent.onExecute(targetEntity) == true && frameEvent._endFrame > frameEvent._startFrame)
                 {
                     FrameEventProcessDescription desc;
@@ -253,7 +253,7 @@ public class AnimationPlayer
                     continue;
                 }
                 
-                frameEvent.initialize();
+                frameEvent.initialize(targetEntity);
                 if(frameEvent.onExecute(targetEntity) == true && frameEvent._endFrame > frameEvent._startFrame)
                 {
                     FrameEventProcessDescription desc;

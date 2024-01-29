@@ -13,6 +13,8 @@ public abstract class ObjectBase : MessageReceiver, IProgress
 
     public SearchIdentifier         _searchIdentifier = SearchIdentifier.Enemy;
 
+    public AttackProcessorManager   _attackProcessorManager = new AttackProcessorManager();
+
     protected int                   _currentManagerNumber = -1;
 
     protected AttackState           _attackState = AttackState.Default;
@@ -36,7 +38,6 @@ public abstract class ObjectBase : MessageReceiver, IProgress
     {
         _attackState = AttackState.Default;
         _defenceState = DefenceState.Default;
-
     }
 
     protected override void Awake()
