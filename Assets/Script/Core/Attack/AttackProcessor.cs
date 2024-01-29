@@ -187,6 +187,8 @@ public class AttackProcessor : AttackProcessorBase
     public CollisionDelegate       _collisionDelegate;
     public System.Action           _collisionEndEvent;
 
+    public float                   _attackTermTime = 0f;
+
     public AttackProcessor()
     {
         _collisionDelegate = attackPrepare;
@@ -203,6 +205,18 @@ public class AttackProcessor : AttackProcessorBase
 
     public override void executeAttack(ObjectBase executeEntity, ObjectBase targetEntity)
     {
+        if(_attackFrameEvent._attackTerm > 0f)
+        {
+            _attackTermTime += GlobalTimer.Instance().getSclaedDeltaTime();
+            if(_attackTermTime >= _attackFrameEvent._attackTerm)
+            {
+                _attackTermTime -= _attackFrameEvent._attackTerm;
+                
+                _collisionList.Clear();
+                _collisionOrder.Clear();
+            }
+        }
+
         if(_attackFrameEvent._targetDirectionType != DirectionType.Count && executeEntity is GameEntityBase)
         {
             GameEntityBase gameEntityBase = executeEntity as GameEntityBase;

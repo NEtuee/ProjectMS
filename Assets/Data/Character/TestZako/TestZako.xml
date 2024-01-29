@@ -63,7 +63,7 @@
 
     <TEST_LaserLong_Shot DirectionType="AI" FlipType="Direction" Flags="LaserEffect">
         <Animation Preset="Sprites/DummyPlayer/idle/" Duration="5.0" XFlip="true">
-            <FrameEvent Type="Attack" StartTime="0.3" EndTime="5.0" AttackPreset="Luger_Normal">
+            <FrameEvent Type="Attack" StartTime="0.3" EndTime="5.0" AttackPreset="Luger_Normal" AttackTerm="0.2">
                 <OnHit>
                     <FrameEvent Type="AudioPlay" StartTime="0" ID="2205" Attach="true"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
@@ -74,8 +74,6 @@
                     
                     <!-- visual -->
                     <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
-
-                    <FrameEvent Type="SetAction" Action="Idle"/>
                 </OnHit>
             </FrameEvent>
             <FrameEvent Type="EffectPreset" StartTime="0" Key="LaserLoopFollow"/>

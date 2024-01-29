@@ -1611,6 +1611,7 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
     public HashSet<ObjectBase>     _collisionList = new HashSet<ObjectBase>();
     public List<CollisionSuccessData> _collisionOrder = new List<CollisionSuccessData>();
 
+    public float                   _attackTerm = -1f;
     public bool                    _notifyAttackSuccess = true;
     public int                     _collisionCount = -1;
 
@@ -1745,7 +1746,10 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
             {
                 _targetDirectionType = (DirectionType)System.Enum.Parse(typeof(DirectionType), attributes[i].Value);
             }
-
+            else if(attributes[i].Name == "AttackTerm")
+            {
+                _attackTerm = float.Parse(attributes[i].Value);
+            }
         }
 
         CollisionInfoData data = new CollisionInfoData(radius,angle,startDistance,rayRadius, CollisionType.Attack);
