@@ -295,24 +295,13 @@
             <OnHit>
                 <FrameEvent Type="Attack" StartFrame="0" AttackPreset="BaseBall">
                     <OnHit>
-                        <FrameEvent Type="Test" Log="MagicalBullet OnHit"/>
                         <!-- TODO: 야구공 버프 설정 -->
-                        <FrameEvent Type="ApplyBuffTarget" ApplyBuff="TestProjectileAttack"/>
-                        <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
+                        <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
                     </OnHit>
-
-                    <OnGuard>
-                        <FrameEvent Type="TimelineEffect" StartFrame="0" Path="Prefab/Effect/Test_Timeline" Attach="true" ToTarget="true"/>
-                    </OnGuard>
                 </FrameEvent>
             </OnHit>
-    
-            <OnHitEnd>
-                <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0"/>
-            </OnHitEnd>
-    
-            <OnEnd>
-            </OnEnd>
         </Event>
     </BaseBall>
 

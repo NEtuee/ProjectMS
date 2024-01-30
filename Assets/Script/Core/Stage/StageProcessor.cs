@@ -158,7 +158,10 @@ public class StageProcessor
                 SceneCharacterManager sceneCharacterManager = SceneCharacterManager._managerInstance as SceneCharacterManager;
                 SpawnCharacterOptionDesc spawnDesc = new SpawnCharacterOptionDesc();
                 spawnDesc._position = (stagePointData._stagePoint + _offsetPosition) + characterSpawnData._localPosition;
-                spawnDesc._direction = characterSpawnData._flip ? Vector3.left : Vector3.right;
+                if(characterSpawnData._setDirection)
+                    spawnDesc._direction = MathEx.angleToDirection(characterSpawnData._directionAngle * Mathf.Deg2Rad);
+                else
+                    spawnDesc._direction = characterSpawnData._flip ? Vector3.left : Vector3.right;
                 spawnDesc._rotation = Quaternion.identity;
                 spawnDesc._searchIdentifier = characterSpawnData._searchIdentifier;
                 spawnDesc._sortingOrder = characterSpawnData._sortingOrder;

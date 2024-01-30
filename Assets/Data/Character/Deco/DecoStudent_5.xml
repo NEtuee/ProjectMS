@@ -17,7 +17,7 @@
     <Dead MovementType="Empty" DirectionType="MoveInput">
         <AnimationHeader MasterPath="Sprites/Deco/Student_5/"/>
         <Animation Path="Idle" XFlip="true">
-
+            <FrameEvent Type="DeactiveTalkBalloon" StartTime="0"/>
             <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Deco/Student_5/Idle" FramePerSecond="0.2" CastShadow="True">
                 <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
             </FrameEvent>
