@@ -1,0 +1,60 @@
+<ActionGraph Name="ProjectileShotCharacter" DefaultAction="Idle" DefaultFramePerSecond="12">
+
+    <Idle MovementType="Empty" DirectionType="Keep">
+        <AnimationHeader MasterPath="Sprites/DummyPlayer/"/>
+        <Animation Preset="idle" XFlip="true" Duration="1">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Idle"/>
+    </Idle>
+
+    <BaseBallRepeat MovementType="Empty" DirectionType="Keep">
+        <AnimationHeader MasterPath="Sprites/DummyPlayer/"/>
+        <Animation Preset="idle" XFlip="true" Duration="2.5">
+            <FrameEvent Type="Projectile" StartTime="0" GraphName="BaseBall" DirectionType="Keep" SpawnTargetType="Self"/>
+
+        </Animation>
+
+        <Branch Condition="End == true" Execute="BaseBallRepeat"/>
+    </BaseBallRepeat>
+
+    <BaseBallRepeatFast MovementType="Empty" DirectionType="Keep">
+        <AnimationHeader MasterPath="Sprites/DummyPlayer/"/>
+        <Animation Preset="idle" XFlip="true" Duration="1.5">
+            <FrameEvent Type="Projectile" StartTime="0" GraphName="BaseBall" DirectionType="Keep" SpawnTargetType="Self"/>
+
+        </Animation>
+
+        <Branch Condition="End == true" Execute="BaseBallRepeat"/>
+    </BaseBallRepeatFast>
+
+    <DumbellRepeat MovementType="Empty" DirectionType="Keep">
+        <AnimationHeader MasterPath="Sprites/DummyPlayer/"/>
+        <Animation Preset="idle" XFlip="true" Duration="2.5">
+            <FrameEvent Type="Projectile" StartTime="0" GraphName="Dumbell" DirectionType="Keep" SpawnTargetType="Self"/>
+
+        </Animation>
+
+        <Branch Condition="End == true" Execute="DumbellRepeat"/>
+    </DumbellRepeat>
+
+    <DumbellRepeatFast MovementType="Empty" DirectionType="Keep">
+        <AnimationHeader MasterPath="Sprites/DummyPlayer/"/>
+        <Animation Preset="idle" XFlip="true" Duration="1.5">
+            <FrameEvent Type="Projectile" StartTime="0" GraphName="Dumbell" DirectionType="Keep" SpawnTargetType="Self"/>
+
+        </Animation>
+
+        <Branch Condition="End == true" Execute="DumbellRepeat"/>
+    </DumbellRepeatFast>
+
+    <Dead MovementType="Empty" DirectionType="Keep">
+        <AnimationHeader MasterPath="Sprites/"/>
+        <Animation Preset="" XFlip="true" Duration="1">
+            <FrameEvent Type="KillEntity" StartTime="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Dead"/>
+    </Dead>
+
+</ActionGraph>

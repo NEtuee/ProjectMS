@@ -1,0 +1,14 @@
+<SequencerGraph Name="Stage_2_2_1">
+
+    <InitializePhase>
+    </InitializePhase>
+
+    <UpdatePhase>
+        <WaitSecond Time="0.5"/>
+        <TalkBalloon UniqueKey="TalkStudent_0" SimpleTalkKey="Talk_Stage02_2_0"/>
+        <WaitSecond Time="4.0"/>
+        <TalkBalloon UniqueKey="TalkStudent_1" SimpleTalkKey="Talk_Stage02_2_1"/>
+
+    </UpdatePhase>
+    
+</SequencerGraph>

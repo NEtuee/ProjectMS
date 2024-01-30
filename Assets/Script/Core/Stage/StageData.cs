@@ -16,6 +16,8 @@ public class StagePointCharacterSpawnData
     public string   _uniqueGroupKey = "";
     public string   _startAction = "";
     public bool     _flip = false;
+    public bool     _setDirection = false;
+    public float    _directionAngle = 0f;
     public bool     _hideWhenDeactive = false;
     public bool     _keepAlive = false;
     public int      _sortingOrder = 0;

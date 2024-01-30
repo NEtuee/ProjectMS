@@ -456,6 +456,7 @@
         StatusInfoName="CommonEnemyStatus"
 
         CollisionRadius="0.2"
+        HeadUpOffset="0.5"
         ProjectileCollisionRadius=""
         IndicatorVisible="False"
 
@@ -469,6 +470,7 @@
         StatusInfoName="CommonEnemyStatus"
 
         CollisionRadius="0.2"
+        HeadUpOffset="0.5"
         ProjectileCollisionRadius=""
         IndicatorVisible="False"
 
@@ -482,6 +484,7 @@
         StatusInfoName="CommonEnemyStatus"
 
         CollisionRadius="0.2"
+        HeadUpOffset="0.5"
         ProjectileCollisionRadius=""
         IndicatorVisible="False"
 
@@ -495,6 +498,7 @@
         StatusInfoName="CommonEnemyStatus"
 
         CollisionRadius="0.2"
+        HeadUpOffset="0.5"
         ProjectileCollisionRadius=""
         IndicatorVisible="False"
 
@@ -508,6 +512,7 @@
         StatusInfoName="CommonEnemyStatus"
 
         CollisionRadius="0.2"
+        HeadUpOffset="0.5"
         ProjectileCollisionRadius=""
         IndicatorVisible="False"
 
@@ -521,6 +526,7 @@
         StatusInfoName="CommonEnemyStatus"
 
         CollisionRadius="0.2"
+        HeadUpOffset="0.5"
         ProjectileCollisionRadius=""
         IndicatorVisible="False"
 
@@ -534,6 +540,7 @@
         StatusInfoName="CommonEnemyStatus"
 
         CollisionRadius="0.2"
+        HeadUpOffset="0.5"
         ProjectileCollisionRadius=""
         IndicatorVisible="False"
 
@@ -547,6 +554,7 @@
         StatusInfoName="CommonEnemyStatus"
 
         CollisionRadius="0.2"
+        HeadUpOffset="0.5"
         ProjectileCollisionRadius=""
         IndicatorVisible="False"
 
@@ -560,6 +568,7 @@
         StatusInfoName="CommonEnemyStatus"
 
         CollisionRadius="0.2"
+        HeadUpOffset="0.5"
         ProjectileCollisionRadius=""
         IndicatorVisible="False"
 
@@ -574,6 +583,21 @@
 
         CollisionRadius="0.2"
         HeadUpOffset="0.5"
+        IndicatorVisible="False"
+        ProjectileCollisionRadius=""
+
+        SearchIdentifier="Enemy"
+    />
+
+    <ProjectileShotCharacter
+        DisplayName="프로젝타일 생성용 캐릭터"
+        ActionGraph="Assets/Data/Character/Object/ProjectileShot/ProjectileShotCharacter.xml"
+        AIGraph="Assets/Data/AILibrary/Graph/EmptyAIGraph.xml"
+        StatusInfoName="CommonEnemyStatus"
+
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        IndicatorVisible="False"
         ProjectileCollisionRadius=""
 
         SearchIdentifier="Enemy"

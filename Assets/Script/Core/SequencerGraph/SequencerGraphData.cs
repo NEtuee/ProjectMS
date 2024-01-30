@@ -862,8 +862,6 @@ public class SequencerGraphEvent_AIMove : SequencerGraphEventBase
             }
 
             _loopActionDistance = presetData.getTotalMovement() * uniqueEntity.getMoveScaleFromActionIndex(_loopActionIndex);
-
-            Debug.Log(_loopActionDistance);
             _loopAnimationPlayTime = uniqueEntity.getAnimationPlayTimeFromActionIndex(_loopActionIndex);
         }
 

@@ -14,6 +14,21 @@
         <Branch Condition="End == true" Execute="Move"/>
     </Move>
 
+    <MoveFast MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="AI" ActiveCollision="False" MoveScale="3.0">
+        <Animation Preset="Sprites/Deco/YakisobaChan" XFlip="true" Duration="1">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Move"/>
+    </MoveFast>
+
+    <ImmediatlyKill MovementType="Empty" DirectionType="Keep" ActiveCollision="False">
+        <Animation Preset="Sprites/Deco/YakisobaChan" XFlip="true" Duration="1">
+            <FrameEvent Type="KillEntity" StartTime="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="ImmediatlyKill"/>
+    </ImmediatlyKill>
+
     <Dead MovementType="Empty" DirectionType="Keep" ActiveCollision="False">
         <Animation Preset="Sprites/Deco/YakisobaChan" XFlip="true" Duration="1">
 

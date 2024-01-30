@@ -1177,6 +1177,19 @@ public class StageDataEditor : EditorWindow
         }
 
         characterSpawnData._flip = EditorGUILayout.Toggle("Flip",characterSpawnData._flip);
+        characterSpawnData._setDirection = EditorGUILayout.Toggle("SetDirection",characterSpawnData._setDirection);
+        if(characterSpawnData._setDirection)
+        {
+            GUILayout.BeginHorizontal("box");
+            float angle = EditorGUILayout.FloatField("  Angle",characterSpawnData._directionAngle);
+            if(angle != characterSpawnData._directionAngle)
+            {
+                SceneView.RepaintAll();
+                characterSpawnData._directionAngle = MathEx.clamp360Degree(angle);
+            }
+            GUILayout.EndHorizontal();
+        }
+
         characterSpawnData._hideWhenDeactive = EditorGUILayout.Toggle("Hide When Deactive", characterSpawnData._hideWhenDeactive);
         characterSpawnData._keepAlive = EditorGUILayout.Toggle("Keep Alive", characterSpawnData._keepAlive);
         characterSpawnData._searchIdentifier = (SearchIdentifier)EditorGUILayout.EnumPopup("Search Identifier", characterSpawnData._searchIdentifier);
@@ -1226,7 +1239,7 @@ public class StageDataEditor : EditorWindow
             alphaClor.a = 0.5f;
             stagePointDataEditObject._characterObjectList[_characterSelectedIndex].color = alphaClor;
         }
-        
+
         stagePointDataEditObject._characterObjectList[_characterSelectedIndex].flipX = characterSpawnData._flip;
     }
 
@@ -1943,6 +1956,9 @@ public class StageDataEditor : EditorWindow
 
                     Handles.color = i == _pointSelectedIndex ? Color.green : Color.gray;
                     Handles.DrawLine(stagePointData._stagePoint,characterWorld);
+
+                    if(stagePointData._characterSpawnData[index]._setDirection)
+                        drawArrow(characterWorld,characterWorld + MathEx.angleToDirection(stagePointData._characterSpawnData[index]._directionAngle * Mathf.Deg2Rad) * 0.5f,0.1f,Handles.color);
 
                     characterWorld += Vector3.right * 0.1f;
                     if(stagePointData._characterSpawnData[index]._uniqueKey != "")

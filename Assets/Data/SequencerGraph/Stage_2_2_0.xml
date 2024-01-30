@@ -9,8 +9,10 @@
     </InitializePhase>
 
     <UpdatePhase>
-        <WaitSecond Time="1.0"/>
+        <AIMove UniqueKey="YakisobaChan" LoopAction="MoveFast" EndPositionMarker="TargetMarker"/>
+        <SetAction UniqueKey="YakisobaChan" Action="ImmediatlyKill"/>
 
+        <WaitSecond Time="1.0"/>
         <WaitSignal Signal="NeverEnd"/>
     </UpdatePhase>
 
