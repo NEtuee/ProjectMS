@@ -1,4 +1,4 @@
-<AIGraph Name="SisterChanAI" DefaultState="Entry_Battle">
+<AIGraph Name="SisterChanAI" DefaultState="Test"> <!--Entry_Battle-->
     <!-- 옵션 설정 -->
     <!-- 인지 옵션값 설정 -->
     <GlobalVariable Name="gv_CognitiveRange"    Value="4.0"/>   <!-- PC 인지 거리 : 해당 거리 내 PC 존재 시 인지한다. -->
@@ -69,12 +69,11 @@
 
     <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterThunderStrokePackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterSpawnBookPackage.xml"/>
-    <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterLightningBoltPackage.xml"/>
-    <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterHolyNailPackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterBarriorPackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterThunderStormPackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterCommandBookPackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterDodgePackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterDischargePackage.xml"/>
 
     
     <!-- 보스전 대기 시간 (나중에 보스전 시작 트리거를 받아야 함)-->
@@ -192,20 +191,20 @@
     <!-- BranchSet -->
 
     <!-- Test -->
-        <Test Package="SisterSpawnBookPackage" EntryNode="AI_Olive">
-            <Branch Condition="Hit" Execute="TestHit"/>
+        <Test Package="SisterSpawnBookPackage" EntryNode="AI_Crimson">
+            <Branch Condition="Hit && getFrameTag_HitAvil" Execute="TestHit"/>
             <Branch Condition="(GuardBreakFail || GuardBroken) && getFrameTag_GbAvail" Execute="TestGuardBroken"/>
             <Branch Condition="CurrentPackageEnd" Execute="Test"/>
         </Test>
 
         <TestHit Package="CommonHitPackage">
-            <Branch Condition="Hit" Execute="TestHit"/>
+            <Branch Condition="Hit && getFrameTag_HitAvil" Execute="TestHit"/>
             <Branch Condition="(GuardBreakFail || GuardBroken) && getFrameTag_GbAvail" Execute="TestGuardBroken"/>
             <Branch Condition="CurrentPackageEnd" Execute="Test"/>
         </TestHit>
 
         <TestGuardBroken Package="CommonGuardBrokenPackage">
-            <Branch Condition="Hit" Execute="TestHit"/>
+            <Branch Condition="Hit && getFrameTag_HitAvil" Execute="TestHit"/>
             <Branch Condition="(GuardBreakFail || GuardBroken) && getFrameTag_GbAvail" Execute="TestGuardBroken"/>
             <Branch Condition="CurrentPackageEnd" Execute="Test"/>
         </TestGuardBroken>
@@ -241,8 +240,7 @@
     <!-- AI 스테이트 : 전투 분기 -->
     <JudgeRangedAttack Package="CommonIdlePackage">
         <!-- 라이트닝 볼트 -->
-        <Branch Weight="RandVector3^x" Condition="true" Execute="LightningBoltShot"/>
-        <Branch Weight="RandVector3^y" Condition="true" Execute="LightningBoltChase"/>
+        <Branch Weight="RandVector3^x" Condition="true" Execute="ThunderStroke"/>
         <Branch Weight="RandVector3^z" Condition="true" Execute="ThunderStrom"/>
         <!-- 접근 -->
         <!-- <Branch Weight="RandVector3^z" Condition="true" Execute="Dash"/> -->
@@ -267,18 +265,7 @@
     </Dash>
 
     <!-- AI 스테이트 : 전투 상태 : 공격 -->
-    <!-- 원거리 공격: 라이트닝볼트 (발사) -->
-    <LightningBoltShot Package="SisterLightningBoltPackage" EntryNode="AI_LightningBoltReadyToShot">
-        <UseBranchSet Name="HitReactionSet"/>
-        <UseBranchSet Name="BattlePackageEndSet"/>
-    </LightningBoltShot>
-    
-    <!-- 원거리 공격: 라이트닝볼트 (추격) -->
-    <LightningBoltChase Package="SisterLightningBoltPackage" EntryNode="AI_LightningBoltReadyToThrow">
-        <UseBranchSet Name="HitReactionSet"/>
-        <UseBranchSet Name="BattlePackageEndSet"/>
-    </LightningBoltChase>
-    
+
     <!-- 원거리 공격: 라이트닝볼트 (광역장판) -->
     <ThunderStrom Package="SisterThunderStormPackage">
         <UseBranchSet Name="HitReactionSet"/>
@@ -290,13 +277,12 @@
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </ThunderStroke>
-
-    <!-- 소환: 마도서 소환 -->
-    <SpawnBook_Olive Package="SisterSpawnBookPackage" EntryNode="AI_Olive">
+    <Discharge Package="SisterDischargePackage">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
-    </SpawnBook_Olive>
+    </Discharge>
 
+    <!-- 소환: 마도서 소환 -->
     <SpawnBook_Crimson Package="SisterSpawnBookPackage" EntryNode="AI_Crimson">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
@@ -305,11 +291,6 @@
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </SpawnBook_Crimson_Set>
-
-    <SpawnBook_Blue Package="SisterSpawnBookPackage" EntryNode="AI_Blue">
-        <UseBranchSet Name="HitReactionSet"/>
-        <UseBranchSet Name="BattlePackageEndSet"/>
-    </SpawnBook_Blue>
 
     <!-- 명령: 마도서 공격 -->
     <CommandBook_LaserToTarget Package="SisterCommandBookPackage" EntryNode="AI_LaserToTarget">

@@ -11,9 +11,11 @@
         <AI_AttackReady UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" SearchIdentifier="Player">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
-                <AIEvent Type="SetAction" Action="AC_ThunderStrokeReady"/>
+                <AIEvent Type="SetAction" Action="AC_ThunderStrokeReady_Stay"/>
             </Event_OnExecute>
-            
+            <Event_OnUpdate>
+                <AIEvent Type="SetDirectionToTarget"/>
+            </Event_OnUpdate>
             <Branch Condition="End" Execute="AI_AttackMain"/>
         </AI_AttackReady>
         <AI_AttackMain UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" SearchIdentifier="Player">
@@ -27,9 +29,11 @@
         <AI_AttackReady_A UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" SearchIdentifier="Player">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
-                <AIEvent Type="SetAction" Action="AC_ThunderStrokeReady"/>
+                <AIEvent Type="SetAction" Action="AC_ThunderStrokeReady_Stay"/>
             </Event_OnExecute>
-            
+            <Event_OnUpdate>
+                <AIEvent Type="SetDirectionToTarget"/>
+            </Event_OnUpdate>
             <Branch Condition="End" Execute="AI_AttackMain_A"/>
         </AI_AttackReady_A>
         <AI_AttackMain_A UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" SearchIdentifier="Player">
@@ -43,9 +47,11 @@
         <AI_AttackReady_B UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" SearchIdentifier="Player">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
-                <AIEvent Type="SetAction" Action="AC_ThunderStrokeReady"/>
+                <AIEvent Type="SetAction" Action="AC_ThunderStrokeReady_Stay"/>
             </Event_OnExecute>
-            
+            <Event_OnUpdate>
+                <AIEvent Type="SetDirectionToTarget"/>
+            </Event_OnUpdate>
             <Branch Condition="End" Execute="AI_AttackMain_B"/>
         </AI_AttackReady_B>
         <AI_AttackMain_B UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" SearchIdentifier="Player">

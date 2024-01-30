@@ -95,14 +95,22 @@
 <!-- Default Action -->
 
 <!-- Skill Action -->
-    <!-- [TODO] 근거리 공격: 낙뢰 -->
-    <AC_ThunderStrokeReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+    <!-- 근거리 공격: 낙뢰 -->
+    <AC_ThunderStrokeReady_Stay MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="2_skill/1_thunderStroke/1_attackReady" XFlip="true" Duration="0.48">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2203" Attach="true"/>
-            <!-- TODO: 뒤로 후퇴-->
-            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="5" Velocity="0" Speed="15"/>
+        <Animation Preset="2_skill/1_thunderStroke/1_attackReady" XFlip="true" Duration="0.7">
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+            
+        </Animation>
+        
+        <Branch Condition="TargetDistance <= 2.0" Execute="AC_ThunderStrokeReady"/>
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_ThunderStrokeReady_Stay>
 
+    <AC_ThunderStrokeReady MovementType="GraphPreset" MovementGraphPreset="Helena_BackStep" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="2_skill/1_thunderStroke/1_attackReady" XFlip="true" Duration="0.7">
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
             
@@ -114,12 +122,10 @@
     <AC_ThunderStrokeMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/1_thunderStroke/2_attackMain" XFlip="true" Duration="0.35">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2204" Attach="true"/>
-            <FrameEvent Type="Movement" StartTime="0" Friction="24" MaxVelocity="12" Velocity="12" Speed="0"/>
-            
+            <FrameEvent Type="Movement" StartTime="0" Friction="24" MaxVelocity="12" Velocity="0" Speed="0"/>
             <!-- 낙뢰 -->
             <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="1.0 0 0" SearchIdentifier="Enemy" InheritDirection="true" UseFlip="true"/>
-            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="Target" EventTargetType="SummonTargetRange" Range="100.0" SearchIdentifier="Enemy"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="With" EventTargetType="SummonTargetRange" Range="100.0" SearchIdentifier="Enemy"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>
@@ -127,6 +133,7 @@
 
     <AC_ThunderStrokeRecover MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
+        <!-- 소셜 모션, 지친 모습? 재정비 하는 모습. -->
         <Animation Preset="2_skill/1_thunderStroke/3_attackRecover" XFlip="true" Duration="1.2">
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
@@ -135,10 +142,11 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_ThunderStrokeRecover>
 
-    <!-- [TODO] 근거리 공격: 방전-->
+    <!-- 근거리 공격: 방전-->
     <AC_DischargeReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="2_skill/2_discharge/1_attackReady" XFlip="true" Duration="1">
+        <!-- 기도, 오라, 폭발 차징 표현 -->
+        <Animation Preset="2_skill/2_discharge/1_attackReady" XFlip="true" Duration="0.7">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
             <!-- TODO: 제자리에서 기도, 강인도 상승 -->
         </Animation>
@@ -147,26 +155,32 @@
     </AC_DischargeReady>
     <AC_DischargeMain MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="2_skill/2_discharge/2_attackMain" XFlip="true" Duration="1">
+        <Animation Preset="2_skill/2_discharge/2_attackMain" XFlip="true" Duration="0.5">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
-            <!-- TODO: 반경에 폭발 데미지 -->
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.1" AttackPreset="Helena_Discharge">
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="StunSet"/>
+                </OnHit>
+            </FrameEvent>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_DischargeMain>
     <AC_DischargeRecover MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="2_skill/2_discharge/3_attackRecover" XFlip="true" Duration="1">
+        <Animation Preset="2_skill/2_discharge/3_attackRecover" XFlip="true" Duration="0.5">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
-
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_DischargeRecover>
         
     <!-- 원거리 공격: 썬더스톰 (광역장판) -->
     <AC_ThunderStorm_Left MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="2_skill/3_thunderStorm/1_attackReady" XFlip="true" Duration="1.0">
+        <Animation Preset="2_skill/3_thunderStorm/1_attackReady" XFlip="true" Duration="0.7">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
@@ -263,7 +277,7 @@
         <Animation Preset="2_skill/4_spawnBook" XFlip="true" Duration="1.0">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2208" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <FrameEvent Type="Projectile" StartTime="0" GraphName="Helena_CrimsonGrimoire" DirectionType="AI" SpawnTargetType="Self"/>
+            <FrameEvent Type="Projectile" StartTime="0.3" GraphName="Helena_CrimsonGrimoire" DirectionType="AI" SpawnTargetType="Self"/>
 
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
@@ -276,9 +290,9 @@
         <Animation Preset="2_skill/4_spawnBook" XFlip="true" Duration="1.0">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2208" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <FrameEvent Type="Projectile" StartTime="0" GraphName="Helena_CrimsonGrimoire" DirectionType="AI" DirectionAngle="0.0" SpawnTargetType="Self"/>
-            <FrameEvent Type="Projectile" StartTime="0" GraphName="Helena_CrimsonGrimoire" DirectionType="AI" DirectionAngle="120.0" SpawnTargetType="Self"/>
-            <FrameEvent Type="Projectile" StartTime="0" GraphName="Helena_CrimsonGrimoire" DirectionType="AI" DirectionAngle="2400.0" SpawnTargetType="Self"/>
+            <FrameEvent Type="Projectile" StartTime="0.3" GraphName="Helena_CrimsonGrimoire" DirectionType="AI" DirectionAngle="0.0" SpawnTargetType="Self"/>
+            <FrameEvent Type="Projectile" StartTime="0.3" GraphName="Helena_CrimsonGrimoire" DirectionType="AI" DirectionAngle="120.0" SpawnTargetType="Self"/>
+            <FrameEvent Type="Projectile" StartTime="0.3" GraphName="Helena_CrimsonGrimoire" DirectionType="AI" DirectionAngle="2400.0" SpawnTargetType="Self"/>
 
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
@@ -481,7 +495,7 @@
 
     <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="2_defense/2_guardBroken" XFlip="true" Duration="1.25">
+        <Animation Preset="1_defense/2_guardBroken" XFlip="true" Duration="1.25">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountIncrease"/>

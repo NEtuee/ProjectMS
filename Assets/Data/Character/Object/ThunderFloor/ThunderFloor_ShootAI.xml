@@ -14,6 +14,13 @@
                 
                 <Branch Condition="false" Execute="TerminatePackage"/>
             </AI_Shoot>
+            <AI_Shoot_with UpdateTime="0.2" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+                <Event_OnExecute>
+                    <AIEvent Type="SetAction" Action="AC_Move_with"/>
+                </Event_OnExecute>
+                
+                <Branch Condition="false" Execute="TerminatePackage"/>
+            </AI_Shoot_with>
             
             <AI_Shoot_L UpdateTime="0.2" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
                 <Event_OnExecute>
@@ -59,7 +66,7 @@
         </AIState>
     </AIPackage>
 
-    <CustomValue Name="Direction" Value="-1.0"/> <!-- 0: Target, 1: Left, 2: Right, 3: Up, 4: Down -->
+    <CustomValue Name="Direction" Value="-1.0"/> <!-- 0: Target, 1: Left, 2: Right, 3: Up, 4: Down 5: WithSummoner-->
     <CustomEvent_Target>
         <AIEvent Type="SetCustomValue" Name="Direction" Value="0.0"/>
     </CustomEvent_Target>
@@ -75,6 +82,9 @@
     <CustomEvent_Down>
         <AIEvent Type="SetCustomValue" Name="Direction" Value="4.0"/>
     </CustomEvent_Down>
+    <CustomEvent_With>
+        <AIEvent Type="SetCustomValue" Name="Direction" Value="5.0"/>
+    </CustomEvent_With>
 
     <Entry Package="CommonIdlePackage">
         <Branch Condition="customValue_Direction == 0.0" Execute="Move"/>
@@ -82,6 +92,7 @@
         <Branch Condition="customValue_Direction == 2.0" Execute="Right"/>
         <Branch Condition="customValue_Direction == 3.0" Execute="Up"/>
         <Branch Condition="customValue_Direction == 4.0" Execute="Down"/>
+        <Branch Condition="customValue_Direction == 5.0" Execute="With"/>
     </Entry>
 
     <Move Package="ThunderFloor_ShootPackage">
@@ -99,6 +110,9 @@
     <Down Package="ThunderFloor_ShootPackage" EntryNode="AI_Shoot_D"> 
         <Branch Condition="GraphExecutedTime > 1.0" Execute="Dead"/>
     </Down>
+    <With Package="ThunderFloor_ShootPackage" EntryNode="AI_Shoot_with"> 
+        <Branch Condition="GraphExecutedTime > 1.0" Execute="Dead"/>
+    </With>
 
     <Dead Package="CommonDeadPackage">
     </Dead>
