@@ -438,9 +438,37 @@
         </Animation>
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_Barrior_Broken>
-    <AC_BarriorCounter>
-        <Animation Path="">
+    
+    <AC_BarriorCounter MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="LaserEffect">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="2_skill/6_barrior/6_counter/1_attackReady" XFlip="true" Duration="0.8">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="LaserToTarget" EventTargetType="Range" Range="10.0" SearchIdentifier="Enemy"/>
+            <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/CommonBeam_TimeLine" Attach="true" AngleType="Direction" LifeTime="0.85" FollowDirection="True" AttackPreset="Luger_Normal"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+            
         </Animation>
+        <Animation Preset="2_skill/6_barrior/6_counter/2_attackMain" XFlip="true" Duration="0.1">
+            <FrameEvent Type="SetDirectionType" StartTime="0.0" DirectionType="Keep"/>
+            <FrameEvent Type="EffectPreset" StartTime="0" Key="Helena_LaserShot"/>
+            <FrameEvent Type="Attack" StartTime="0.05" EndTime="0.1" AttackPreset="Luger_Normal">
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
+                    
+                    <FrameEvent Type="StopUpdate" Time="0.1"/>
+                    <FrameEvent Type="SetTimeScale" Scale="0.1" Time="0.1" BlendTime="0.1"/>
+                    <FrameEvent Type="ShakeEffect" Scale="0.1" Speed="10.0" Time="0.1"/>
+                    
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
+                </OnHit>
+            </FrameEvent>
+            <FrameEvent Type="Movement" StartTime="0.06" Friction="18" MaxVelocity="10" Velocity="-7" Speed="0"/>
+        </Animation>
+        <Animation Preset="2_skill/6_barrior/6_counter/3_attackRecover" XFlip="true" Duration="2.0">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_BarriorCounter>
 
     <!-- 회피기 : 투명화 -->
