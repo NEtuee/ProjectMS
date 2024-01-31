@@ -95,31 +95,18 @@
 
     <!-- Custom Value -->
     <CustomValue Name="CountCrimson" Value="0.0"/>
-    <CustomValue Name="CountOlive" Value="0.0"/>
-    <CustomValue Name="CountBlue" Value="0.0"/>
     <CustomValue Name="IsCatching" Value="0.0"/>
     
-    <CustomEvent_CountCrimson>
+    <CustomEvent_AddCrimson>
         <AIEvent Type="AddCustomValue" Name="CountCrimson" Value="1.0"/>
-    </CustomEvent_CountCrimson>
-    <CustomEvent_DiscountCrimson>
+    </CustomEvent_AddCrimson>
+    <CustomEvent_SetCrimson>
+        <AIEvent Type="AddCustomValue" Name="CountCrimson" Value="3.0"/>
+    </CustomEvent_SetCrimson>
+    <CustomEvent_DeleteCrimson>
         <AIEvent Type="AddCustomValue" Name="CountCrimson" Value="-1.0"/>
-    </CustomEvent_DiscountCrimson>
-    
-    <CustomEvent_CountOlive>
-        <AIEvent Type="AddCustomValue" Name="CountOlive" Value="1.0"/>
-    </CustomEvent_CountOlive>
-    <CustomEvent_DiscountOlive>
-        <AIEvent Type="AddCustomValue" Name="CountOlive" Value="-1.0"/>
-    </CustomEvent_DiscountOlive>
-    
-    <CustomEvent_CountBlue>
-        <AIEvent Type="AddCustomValue" Name="CountBlue" Value="1.0"/>
-    </CustomEvent_CountBlue>
-    <CustomEvent_DiscountBlue>
-        <AIEvent Type="AddCustomValue" Name="CountBlue" Value="-1.0"/>
-    </CustomEvent_DiscountBlue>
-    
+    </CustomEvent_DeleteCrimson>
+
     <CustomEvent_AkaneCatched>
         <AIEvent Type="SetCustomValue" Name="IsCatching" Value="1.0"/>
     </CustomEvent_AkaneCatched>

@@ -22,6 +22,10 @@
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_CommandBook_LaserWith"/>
             </Event_OnExecute>
+
+            <Event_OnUpdate>
+                <AIEvent Type="SetDirectionToTarget" Speed="60"/>
+            </Event_OnUpdate>
             
             <Branch Condition="End" Execute="TerminatePackage"/>
         </AI_LaserWith>

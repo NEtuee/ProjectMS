@@ -1,11 +1,11 @@
-<AIGraph Name="CrimsonGirmoireAI" DefaultState="Entry">
+<AIGraph Name="CrimsonGirmoireAI" DefaultState="Attach">
 
     <Include Path="Assets/Data/AILibrary/Package/CommonDeadPackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonIdlePackage.xml"/>
 
     <AIPackage Name="HelenaBookEntryPackage" DefaultState="AI_Attach">
         <AIState>
-            <AI_Attach TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+            <AI_Attach UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
                 <Event_OnExecute>
                     <AIEvent Type="AttachRotateSlot" TargetType="Summoner"/>
                 </Event_OnExecute>
@@ -52,41 +52,132 @@
             </TerminatePackage>
         </AIState>
     </AIPackage>
+    <AIPackage Name="HelenaBookLaserPackage" DefaultState="AI_ToTarget">
+        <AIState>
+            <AI_ToTarget UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+                <Event_OnExecute>
+                    <AIEvent Type="SetDirectionToTarget"/>
+                    <AIEvent Type="SetAction" Action="AC_Shoot"/>
+                </Event_OnExecute>
 
+                <Event_OnFrame>
+                    <AIEvent Type="SetDirectionToTarget" Speed="60"/>
+                </Event_OnFrame>
+
+                <Event_OnExit>
+                    <AIEvent Type="SetCustomValue" Name="Laser" Value="-1.0"/>
+                </Event_OnExit>
+                <Branch Condition="End" Execute="TerminatePackage"/>
+            </AI_ToTarget>
+            <AI_With UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+                <Event_OnExecute>
+                    <AIEvent Type="SetAction" Action="AC_Shoot_with"/>
+                </Event_OnExecute>
+                <Event_OnExit>
+                    <AIEvent Type="SetCustomValue" Name="Laser" Value="-1.0"/>
+                </Event_OnExit>
+
+                <Branch Condition="End" Execute="TerminatePackage"/>
+            </AI_With>
+            <AI_Out UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+                <Event_OnExecute>
+                    <AIEvent Type="SetAction" Action="AC_Shoot_out"/>
+                </Event_OnExecute>
+                <Event_OnExit>
+                    <AIEvent Type="SetCustomValue" Name="Laser" Value="-1.0"/>
+                </Event_OnExit>
+
+                <Branch Condition="End" Execute="TerminatePackage"/>
+            </AI_Out>
+            <AI_In UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+                <Event_OnExecute>
+                    <AIEvent Type="SetDirectionToTarget"/>
+                    <AIEvent Type="SetAction" Action="AC_Shoot_in"/>
+                </Event_OnExecute>
+
+                <Event_OnUpdate>
+                    <AIEvent Type="SetDirectionToTarget" Speed="30"/>
+                </Event_OnUpdate>
+                
+                <Event_OnExit>
+                    <AIEvent Type="SetCustomValue" Name="Laser" Value="-1.0"/>
+                </Event_OnExit>
+
+                <Branch Condition="End" Execute="TerminatePackage"/>
+            </AI_In>
+            
+            <TerminatePackage>
+                <Event_OnExecute>
+                    <AIEvent Type="TerminatePackage"/>
+                </Event_OnExecute>
+            </TerminatePackage>
+        </AIState>
+    </AIPackage>
     <!-- 디태치 커맨드 -->
     <CustomEvent_Detach>
         <AIEvent Type="DetachRotateSlot"/>
     </CustomEvent_Detach>
-    <!-- 디태치 커맨드 -->
+    <!-- 폭발 커맨드 -->
     <CustomEvent_DetachExplosion>
         <AIEvent Type="DetachRotateSlot"/>
         <AIEvent Type="SetAction" Action="AC_ExplosionStart"/>  
     </CustomEvent_DetachExplosion>
     <!-- 공격 커맨드 -->
+    <CustomValue Name="Laser" Value="-1.0"/>    <!-- 0: LaserToTarget, 1: LaserWith, 2:LaserOut, 3: LaserIn-->
     <CustomEvent_LaserToTarget>
-        <AIEvent Type="SetAction" Action="AC_Shoot"/>
+        <AIEvent Type="SetCustomValue" Name="Laser" Value="0.0"/>
     </CustomEvent_LaserToTarget>
     <CustomEvent_LaserWith>
-        <AIEvent Type="SetAction" Action="AC_Shoot_with"/>
+        <AIEvent Type="SetCustomValue" Name="Laser" Value="1.0"/>
     </CustomEvent_LaserWith>
     <CustomEvent_LaserOut>
-        <AIEvent Type="SetAction" Action="AC_Shoot_out"/>
+        <AIEvent Type="SetCustomValue" Name="Laser" Value="2.0"/>
     </CustomEvent_LaserOut>
     <CustomEvent_LaserIn>
-        <AIEvent Type="SetAction" Action="AC_Shoot_in"/>
+        <AIEvent Type="SetCustomValue" Name="Laser" Value="3.0"/>
     </CustomEvent_LaserIn>
 
+    <BranchSet Name="LaserBranchSet">
+        <Branch Condition="(customValue_Laser == 0.0) && CurrentPackageEnd" Execute="LaserToTarget"/>
+        <Branch Condition="(customValue_Laser == 1.0) && CurrentPackageEnd" Execute="LaserWith"/>
+        <Branch Condition="(customValue_Laser == 2.0) && CurrentPackageEnd" Execute="LaserOut"/>
+        <Branch Condition="(customValue_Laser == 3.0) && CurrentPackageEnd" Execute="LaserIn"/>
+        <Branch Condition="(customValue_Laser == -1.0) && CurrentPackageEnd" Execute="Idle_ToTarget"/>
+    </BranchSet>
 
-    <Entry Package="HelenaBookEntryPackage">
+    <Attach Package="HelenaBookEntryPackage">
         <Branch Condition="CurrentPackageEnd" Execute="Idle_ToTarget"/>
-    </Entry>
+    </Attach>
+
+    <Idle_ToTarget Package="HelenaBookStarePackage" EntryNode="AI_ToTarget">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="(customValue_Laser == 0.0)" Execute="LaserToTarget"/>
+        <Branch Condition="(customValue_Laser == 1.0)" Execute="LaserWith"/>
+        <Branch Condition="(customValue_Laser == 2.0)" Execute="LaserOut"/>
+        <Branch Condition="(customValue_Laser == 3.0)" Execute="LaserIn"/>
+        <Branch Condition="(customValue_Laser == -1.0)" Execute="Idle_ToTarget"/>
+    </Idle_ToTarget>
+
+    <LaserToTarget Package="HelenaBookLaserPackage" EntryNode="AI_ToTarget">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <UseBranchSet Name="LaserBranchSet"/>
+    </LaserToTarget>
+    <LaserWith Package="HelenaBookLaserPackage" EntryNode="AI_With">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <UseBranchSet Name="LaserBranchSet"/>
+    </LaserWith>
+    <LaserOut Package="HelenaBookLaserPackage" EntryNode="AI_Out">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <UseBranchSet Name="LaserBranchSet"/>
+    </LaserOut>
+    <LaserIn Package="HelenaBookLaserPackage" EntryNode="AI_In">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <UseBranchSet Name="LaserBranchSet"/>
+    </LaserIn>
 
     <Idle_Keep Package="HelenaBookStarePackage" EntryNode="AI_Keep">
         <Branch Condition="Dead" Execute="Dead"/>
     </Idle_Keep>
-    <Idle_ToTarget Package="HelenaBookStarePackage" EntryNode="AI_ToTarget">
-        <Branch Condition="Dead" Execute="Dead"/>
-    </Idle_ToTarget>
     <Idle_WithHelena Package="HelenaBookStarePackage" EntryNode="AI_WithHelena">
         <Branch Condition="Dead" Execute="Dead"/>
     </Idle_WithHelena>

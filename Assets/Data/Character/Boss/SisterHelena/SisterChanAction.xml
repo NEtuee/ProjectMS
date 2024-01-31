@@ -278,7 +278,7 @@
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2208" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
             <FrameEvent Type="Projectile" StartTime="0.3" GraphName="Helena_CrimsonGrimoire" DirectionType="AI" SpawnTargetType="Self"/>
-
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="AddCrimson" EventTargetType="Self"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
         </Animation>
@@ -293,7 +293,7 @@
             <FrameEvent Type="Projectile" StartTime="0.3" GraphName="Helena_CrimsonGrimoire" DirectionType="AI" DirectionAngle="0.0" SpawnTargetType="Self"/>
             <FrameEvent Type="Projectile" StartTime="0.3" GraphName="Helena_CrimsonGrimoire" DirectionType="AI" DirectionAngle="120.0" SpawnTargetType="Self"/>
             <FrameEvent Type="Projectile" StartTime="0.3" GraphName="Helena_CrimsonGrimoire" DirectionType="AI" DirectionAngle="2400.0" SpawnTargetType="Self"/>
-
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="SetCrimson" EventTargetType="Self"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
         </Animation>
@@ -344,11 +344,11 @@
     <AC_CommandBook_LaserIn MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/5_command/3_laserSurround" XFlip="true" Duration="5.0">
-            <FrameEvent Type="SetRotateSlotValue" StartTime="0" Speed="45" Radius="5.0"/>
+            <FrameEvent Type="SetRotateSlotValue" StartTime="0" Speed="25" Radius="5.0"/>
 
             <FrameEvent Type="CallAIEvent" StartTime="1.0" EventName="LaserIn" EventTargetType="Range" Range="10.0" SearchIdentifier="Enemy"/>
             <FrameEvent Type="SetRotateSlotValue" StartTime="1.6" Speed="0" Radius="5.0"/>
-            <FrameEvent Type="SetRotateSlotValue" StartTime="2.0" Speed="45" Radius="5.0"/>
+            <FrameEvent Type="SetRotateSlotValue" StartTime="2.0" Speed="25" Radius="5.0"/>
 
             <FrameEvent Type="SetRotateSlotValue" StartTime="5.0" Speed="18" Radius="1.0"/>
 
@@ -361,7 +361,6 @@
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_CommandBook_LaserIn>
-    
 
     <!-- 잡기: 배리어 -->
     <AC_Pray MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
@@ -439,6 +438,10 @@
         </Animation>
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_Barrior_Broken>
+    <AC_BarriorCounter>
+        <Animation Path="">
+        </Animation>
+    </AC_BarriorCounter>
 
     <!-- 회피기 : 투명화 -->
     <AC_Disappear MovementType="GraphPreset" MovementGraphPreset="Preset_Dodge" DirectionType="AI" FlipType="Direction" DefenceType="Evade">

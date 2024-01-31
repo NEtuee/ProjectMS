@@ -46,7 +46,7 @@
         <Branch Condition="End == true" Execute="AC_Move"/>
     </AC_Move>
 
-    <AC_Shoot MovementType="FrameEvent" DirectionType="AITarget" FlipType="Direction" Flags="LaserEffect">
+    <AC_Shoot MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="LaserEffect">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="1_attack/1_attackReady" XFlip="true" Duration="0.8">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
@@ -54,10 +54,10 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
             
-            <FrameEvent Type="SetDirectionType" StartTime="0.7" DirectionType="Keep"/>
         </Animation>
         <Animation Preset="1_attack/2_attackMain" XFlip="true" Duration="0.1">
-            <FrameEvent Type="EffectPreset" StartTime="0" Key="LaserLoop"/>
+            <FrameEvent Type="SetDirectionType" StartTime="0.0" DirectionType="Keep"/>
+            <FrameEvent Type="EffectPreset" StartTime="0" Key="Helena_LaserShot"/>
             <FrameEvent Type="Attack" StartTime="0.05" EndTime="0.1" AttackPreset="Luger_Normal">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
@@ -135,17 +135,16 @@
         <Branch Condition="End == true" Execute="AC_Idle_WithHelena"/>
     </AC_Shoot_out>
     
-    <AC_Shoot_in MovementType="FrameEvent" DirectionType="AITarget" FlipType="Direction" Flags="LaserEffect"> 
+    <AC_Shoot_in MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="LaserEffect"> 
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="1_attack/1_attackReady" XFlip="true" Duration="0.8">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
             <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/CommonBeam_TimeLine" Attach="true" AngleType="Direction" LifeTime="0.85" FollowDirection="True" AttackPreset="Luger_Normal"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
-            <FrameEvent Type="SetDirectionType" StartTime="0.6" DirectionType="Keep"/>
-
         </Animation>
         <Animation Preset="1_attack/2_attackMain" XFlip="true" Duration="0.1">
+            <FrameEvent Type="SetDirectionType" StartTime="0.0" DirectionType="Keep"/>
             <FrameEvent Type="EffectPreset" StartTime="0" Key="Helena_LaserShot"/>
             <FrameEvent Type="Attack" StartTime="0.05" EndTime="0.1" AttackPreset="Luger_Normal">
                 <OnHit>
@@ -191,7 +190,7 @@
     <Dead MovementType="Empty" DirectionType="AI">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="0_default/4_dead" XFlip="true" Duration="0.5">
-
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="DeleteCrimson" EventTargetType="Range" SearchIdentifier="Enemy" Range="100.0"/>
             <FrameEvent Type="KillEntity" StartTime="0"/>
             
         </Animation>

@@ -45,7 +45,7 @@
                 <AIEvent Type="SetAction" Action="AC_Barrior_Defense"/>
             </Event_OnExecute>
             
-            <Branch Condition="End" Execute="AI_LightningBoltReadyToShot"/> <!-- 방어 성공 후 바로 공격 -->
+            <Branch Condition="End" Execute="AI_Counter"/> <!-- 방어 성공 후 바로 공격 -->
         </AI_Barrior_Defense>
 
         <AI_Barrior_Broken UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
@@ -56,8 +56,8 @@
             <Branch Condition="End" Execute="TerminatePackage"/>
         </AI_Barrior_Broken>
         
-        <!-- 라이트닝 볼트 -->
-        <AI_LightningBoltReadyToShot UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <!-- 카운터 -->
+        <AI_Counter UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_LightningBoltReady"/>
