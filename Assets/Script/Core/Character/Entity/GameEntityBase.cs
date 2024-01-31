@@ -1418,15 +1418,26 @@ public class GameEntityBaseEditor : Editor
     private string _actionListSearchString = "";
     private string[] _actionListSearchStringArray = null;
 
-
-
     private Vector2 _aiListScroll = Vector2.zero;
     private string _aiListSearchString = "";
     private string[] _aiListSearchStringArray = null;
 
+    private float _aiPackageRepeatTime = 0f;
+    private float _aiPackageRepeatTimer = 0f;
+
+    private int _repeatPackageIndex = -1;
+
     public void OnEnable()
     {
         control = (GameEntityBase)target;
+        EditorApplication.update += Update;
+
+        _repeatPackageIndex = -1;
+    }
+
+    void OnDisable() 
+    {
+        EditorApplication.update -= Update;
     }
 
     public override void OnInspectorGUI()
@@ -1474,7 +1485,7 @@ public class GameEntityBaseEditor : Editor
             GUILayout.Label("Search");
             _actionListSearchString = EditorGUILayout.TextField(_actionListSearchString);
             GUILayout.EndHorizontal();
-            _actionListScroll = EditorGUILayout.BeginScrollView(_actionListScroll,"box",GUILayout.Height(200f));
+            _actionListScroll = EditorGUILayout.BeginScrollView(_actionListScroll,"box",GUILayout.Height(247f));
             {
                 if(_actionListSearchString != searchString)
                     _actionListSearchStringArray = _actionListSearchString.ToLower().Split(' ');
@@ -1524,6 +1535,11 @@ public class GameEntityBaseEditor : Editor
             GUILayout.Label("Search");
             _aiListSearchString = EditorGUILayout.TextField(_aiListSearchString);
             GUILayout.EndHorizontal();
+
+            GUILayout.BeginVertical("box");
+            GUILayout.Label("Repeat Option");
+            _aiPackageRepeatTime = EditorGUILayout.FloatField("Time",_aiPackageRepeatTime);
+            GUILayout.EndVertical();
             
             _aiListScroll = EditorGUILayout.BeginScrollView(_aiListScroll,"box",GUILayout.Height(200f));
             {
@@ -1548,12 +1564,21 @@ public class GameEntityBaseEditor : Editor
                             continue;
                     }
 
+                    Color baseColor = GUI.color;
+                    if(_aiPackageRepeatTime != 0f && _repeatPackageIndex == index)
+                        GUI.color = Color.green;
+
                     EditorGUILayout.BeginHorizontal();
                     if(GUILayout.Button(aiBaseData._aiGraphNodeData[index]._nodeName, buttonStyle))
                     {
                         control._blockAIByEditor = false;
                         control.setAINode(index);
+
+                        if(_aiPackageRepeatTime != 0f)
+                            _repeatPackageIndex = _repeatPackageIndex == index ? -1 : index;
                     }
+
+                    GUI.color = baseColor;
 
                     if(GUILayout.Button("Open",GUILayout.Width(50f)))
                         FileDebugger.OpenFileWithCursor(aiBaseData._fullPath,aiBaseData._aiGraphNodeData[index]._lineNumber);
@@ -1636,6 +1661,34 @@ public class GameEntityBaseEditor : Editor
         }
         EditorGUILayout.EndVertical();
 
+    }
+
+
+    void Update()
+    {
+        if(control.isDead() || control.isActiveSelf() == false || control.gameObject.activeSelf == false)
+        {
+            _aiPackageRepeatTime = 0f;
+            _repeatPackageIndex = -1;
+        }
+
+        if(_aiPackageRepeatTime == 0f)
+        {
+            _repeatPackageIndex = -1;
+            return;
+        }
+
+        if(_repeatPackageIndex == -1)
+            return;
+
+        _aiPackageRepeatTimer += GlobalTimer.Instance().getSclaedDeltaTime();
+        if(_aiPackageRepeatTimer >= _aiPackageRepeatTime)
+        {
+            control._blockAIByEditor = false;
+            control.setAINode(_repeatPackageIndex);
+
+            _aiPackageRepeatTimer = 0f;
+        }
     }
 
     private void PingTarget(ScriptableObject obj)
