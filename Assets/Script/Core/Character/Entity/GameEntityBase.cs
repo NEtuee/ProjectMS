@@ -568,6 +568,7 @@ public class GameEntityBase : SequencerObjectBase
 
             debugTextManager.updateDebugText("FrameTag","FrameTag: " + frameTag, UnityEngine.Color.white);
             debugTextManager.updateDebugText("SearchIdentifier","SearchIdentifier: " + _searchIdentifier, UnityEngine.Color.white);
+            debugTextManager.updateDebugText("ActiveCollision","ActiveCollision: " + _collisionInfo.isActiveCollision(), UnityEngine.Color.white);
         }
     
         if(getDefenceAngle() != 0f)

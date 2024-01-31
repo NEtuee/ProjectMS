@@ -11,6 +11,8 @@ public class CollisionInfo
 
     private bool _activeCollision = true;
 
+    private bool _ignoreCollision = false;
+
     private int _uniqueID = 0;
 
     public CollisionInfo(CollisionInfoData data)
@@ -19,6 +21,7 @@ public class CollisionInfo
         _centerPosition = Vector3.zero;
 
         _activeCollision = true;
+        _ignoreCollision = false;
 
         _boundBox = data.getBoundBox();
         _triangle = new Triangle(true);
@@ -33,7 +36,7 @@ public class CollisionInfo
 
     public bool collisionCheck(CollisionInfo target)
     {
-        if(_activeCollision == false || target._activeCollision == false)
+        if(_activeCollision == false || target._activeCollision == false || _ignoreCollision || target._ignoreCollision)
             return false;
 
         if(isValid() == false || target.isValid() == false)
@@ -152,6 +155,9 @@ public class CollisionInfo
     }
  
     public void setActiveCollision(bool active) {_activeCollision = active;}
+    public bool isActiveCollision() {return _activeCollision;}
+    public void setIgnoreCollision(bool ignoreCollision) {_ignoreCollision = ignoreCollision;}
+    public bool isIgnoreCollision() {return _ignoreCollision;}
     public int getUniqueID() {return _uniqueID;}
     public float getRadius() {return _collisionInfoData.getRadius();}
     public float getSqrRadius() {return _collisionInfoData.getSqrRadius();}
