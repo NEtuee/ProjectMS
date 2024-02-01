@@ -184,7 +184,7 @@ public class GizmoHelper : MonoBehaviour
             Gizmos.color = item._color;
             Gizmos.DrawLine(item._start, item._end);
 
-            if(MasterManager.instance.isGameUpdate() && item._timer <= 0f)
+            if((Application.isPlaying == false || MasterManager.instance.isGameUpdate()) && item._timer <= 0f)
             {
                 _lineDataPool.enqueue(_lineData[index]);
                 _lineData.RemoveAt(index);
@@ -228,7 +228,7 @@ public class GizmoHelper : MonoBehaviour
                 Gizmos.DrawLine(new Vector3(x,y) * item._radius + item._start,new Vector3(x2,y2) * item._radius + item._start);
             }
 
-            if(MasterManager.instance.isGameUpdate() && item._timer <= 0f)
+            if((Application.isPlaying == false || MasterManager.instance.isGameUpdate()) && item._timer <= 0f)
             {
                 _arcDataPool.enqueue(_arcData[index]);
                 _arcData.RemoveAt(index);
@@ -255,7 +255,7 @@ public class GizmoHelper : MonoBehaviour
 
             Gizmos.DrawLine(item._verticies[item._verticies.Length - 1], item._verticies[0]);
 
-            if(MasterManager.instance.isGameUpdate() && item._timer <= 0f)
+            if((Application.isPlaying == false || MasterManager.instance.isGameUpdate()) && item._timer <= 0f)
             {
                 _polygonDataPool.enqueue(_polygonData[index]);
                 _polygonData.RemoveAt(index);
@@ -287,7 +287,7 @@ public class GizmoHelper : MonoBehaviour
                 Gizmos.DrawLine(new Vector3(x,y) * item._radius + item._center,new Vector3(x2,y2) * item._radius + item._center);
             }
 
-            if(MasterManager.instance.isGameUpdate() && item._timer <= 0f)
+            if((Application.isPlaying == false || MasterManager.instance.isGameUpdate()) && item._timer <= 0f)
             {
                 _circleDataPool.enqueue(_circleRequestData[index]);
                 _circleRequestData.RemoveAt(index);

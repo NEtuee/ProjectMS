@@ -88,6 +88,11 @@ public class MovementTrackProcessor
         _isEnd = false;
     }
 
+    public bool isTrackValid()
+    {
+        return _trackData != null;
+    }
+
     public bool getCurrentTrackStartPosition(out Vector2 outPosition)
     {
         outPosition = Vector2.zero;
@@ -106,7 +111,7 @@ public class MovementTrackProcessor
 
         if(_trackData == null || _trackData._trackPointData.Count == 0)
             return false;
-            
+
         if(_isEnd)
         {
             resultPoint = _trackData._trackPointData[_trackData._trackPointData.Count - 1]._point;

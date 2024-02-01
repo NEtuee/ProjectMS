@@ -1,0 +1,23 @@
+<SequencerGraph Name="Stage_2_2_4">
+
+    <InitializePhase>
+        <BlockInput Enable="True"/>
+        <SetHideUI Hide="True"/>
+        <LetterBoxShow/>
+    </InitializePhase>
+
+    <UpdatePhase>
+
+        <Task ProcessType="StepByStep">
+            <CameraTrack TrackName="MoveTrack"/>
+            <IsTrackEnd/>
+
+            <LetterBoxHide/>
+            <BlockInput Enable="False"/>
+            <SetHideUI Hide="False"/>
+        </Task>
+
+
+    </UpdatePhase>
+    
+</SequencerGraph>

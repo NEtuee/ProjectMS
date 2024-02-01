@@ -1781,7 +1781,13 @@ public class StageDataEditor : EditorWindow
             GameObject gizmoHelper = GameObject.FindGameObjectWithTag("GizmoHelper");
             if(gizmoHelper != null)
             {
-                gizmoHelper.GetComponent<GizmoHelper>().drawCircle(trackPosition,0.1f,6,Color.magenta);
+                GizmoHelper gizmoHelperComp = gizmoHelper.GetComponent<GizmoHelper>();
+                gizmoHelperComp.drawCircle(trackPosition,0.1f,6,Color.magenta);
+
+                float mainCamSize = Camera.main.orthographicSize;
+                float camHeight = (mainCamSize) * 2f;
+		        float camWidth = camHeight * ((float)800f / (float)600f);
+                gizmoHelperComp.drawRectangle(trackPosition,new Vector3(camWidth, camHeight, 0f) * 0.5f, Color.blue, 0f );
                 SceneView.RepaintAll();
             }
         }

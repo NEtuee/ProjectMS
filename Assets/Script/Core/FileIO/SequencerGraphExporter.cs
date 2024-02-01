@@ -165,6 +165,10 @@ public class SequencrGraphLoader : LoaderBase<SequencerGraphBaseData>
             spawnEvent = new SequencerGraphEvent_TaskFence();
         else if(node.Name == "SetDirection")
             spawnEvent = new SequencerGraphEvent_SetDirection();
+        else if(node.Name == "BlockPointExit")
+            spawnEvent = new SequencerGraphEvent_BlockPointExit();
+        else if(node.Name == "IsTrackEnd")
+            spawnEvent = new SequencerGraphEvent_CameraTrackFence();
 
         if(spawnEvent == null)
         {

@@ -39,8 +39,10 @@ public enum SequencerGraphEventType
     LetterBoxHide,
     TalkBalloon,
     CameraTrack,
+    CameraTrackFence,
     TaskFence,
     SetDirection,
+    BlockPointExit,
 
     Count,
 }
@@ -111,6 +113,25 @@ public class SequencerGraphEvent_WaitSignal : SequencerGraphEventBase
             if(attrName == "Signal")
                 _targetSignal = attrValue;
         }
+    }
+}
+
+public class SequencerGraphEvent_CameraTrackFence : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.CameraTrackFence;
+
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        return MasterManager.instance._stageProcessor.isTrackEnd();
+    }
+
+    public override void loadXml(XmlNode node)
+    {
     }
 }
 
@@ -1105,6 +1126,37 @@ public class SequencerGraphEvent_SetAction : SequencerGraphEventBase
                 _uniqueGroupKey = attrValue;
             else if(attrName == "Action")
                 _actionName = attrValue;
+        }
+    }
+}
+
+public class SequencerGraphEvent_BlockPointExit : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.BlockPointExit;
+
+    public bool _value = false;
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        MasterManager.instance._stageProcessor.blockPointExit(_value);
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attributes[i].Name == "Enable")
+                _value = bool.Parse(attrValue);
         }
     }
 }
