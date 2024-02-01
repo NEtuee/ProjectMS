@@ -8,7 +8,7 @@
 
     <UpdatePhase>
 
-        <Task ProcessType="StepByStep">
+        <Task Name="MainTask" ProcessType="StepByStep">
             <CameraTrack TrackName="MoveTrack"/>
             <IsTrackEnd/>
 
@@ -16,6 +16,12 @@
             <BlockInput Enable="False"/>
             <SetHideUI Hide="False"/>
         </Task>
+
+        <AIMove UniqueKey="YakisobaChan" LoopAction="MoveFast" EndPositionMarker="TargetMarker2"/>
+        <TalkBalloon UniqueKey="YakisobaChan" SimpleTalkKey="Talk_Stage02_2_3"/>
+
+        <TaskFence TaskName="MainTask"/>
+
 
 
     </UpdatePhase>

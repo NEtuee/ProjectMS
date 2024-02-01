@@ -796,7 +796,20 @@ MonoBehaviour:
     _onEnterSequencerPath:
     - Stage_2_2_4.xml
     _onExitSequencerPath: []
-    _characterSpawnData: []
+    _characterSpawnData:
+    - _characterKey: YakisobaChan
+      _uniqueKey: YakisobaChan
+      _uniqueGroupKey: 
+      _startAction: Idle
+      _flip: 0
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 0
+      _localPosition: {x: 10.83, y: 0, z: 0}
     _useTriggerBound: 0
     _targetSearchIdentifier: 1
     _triggerWidth: 1
@@ -824,6 +837,8 @@ MonoBehaviour:
   _markerData:
   - _name: TargetMarker
     _position: {x: 6.42, y: 0, z: 0}
+  - _name: TargetMarker2
+    _position: {x: 100.43, y: 31.3, z: 0}
   _trackData:
   - _name: MoveTrack
     _trackPointData:

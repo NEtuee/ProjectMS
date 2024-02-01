@@ -121,8 +121,8 @@ public class MovementTrackProcessor
         {
             if(_isEnd)
                 break;
+
             MovementTrackPointData point0 = _trackData._trackPointData[_currentPointIndex];
-            MovementTrackPointData point1 = _trackData._trackPointData[_currentPointIndex + 1];
             if(_waitSecondTime > 0f)
             {
                 _waitSecondTime -= deltaTime;
@@ -137,47 +137,53 @@ public class MovementTrackProcessor
                     return true;
                 }
             }
-            float trackLength = _trackData._pointLengthArray[_currentPointIndex];
-            if(trackLength == 0f)
+
+            if(_currentPointIndex == _trackData._trackPointData.Count - 1)
             {
                 _isEnd = true;
-                DebugUtil.assert(false, "트랙 패스 길이가 0입니다. 뭔가 잘못됨 통보 바람 [Name: {0}]", _trackData._name);
-            }
-            float speed = MathEx.lerpf(point0._speedToNextPoint,point1._speedToNextPoint, _trackPathProcessRate);
-            float finalSpeed = (trackLength / speed);
-            float resultRate = deltaTime / finalSpeed;
-            _trackPathProcessRate += resultRate;
-            if(_trackPathProcessRate >= 1f)
-            {
-                _trackPathProcessRate -= 1f;
-                _currentPointIndex += 1;
-                if(_currentPointIndex == _trackData._trackPointData.Count - 1)
-                {
-                    _isEnd = true;
-                    _trackPathProcessRate = 1f;
-                }
-                else if(_trackPathProcessRate != 0f)
-                {
-                    _trackPathProcessRate *= finalSpeed;
-                    deltaTime = _trackPathProcessRate;
-                    _trackPathProcessRate = 0f;
-                    _waitSecondTime = _trackData._trackPointData[_currentPointIndex]._waitSecond;
-                    _isLinearPath = _trackData._trackPointData[_currentPointIndex]._isLinearPath;
-                    continue;
-                }
-            }
+                _trackPathProcessRate = 1f;
 
-            float finalRate = _trackPathProcessRate;
-            finalRate = MathEx.getEaseFormula(point0._easeType,0f,1f,finalRate);
-
-            if(_isLinearPath)
-            {
-                resultPoint = Vector2.Lerp(point0._point, point1._point, finalRate);
+                resultPoint = _trackData._trackPointData[_trackData._trackPointData.Count - 1]._point;
             }
             else
             {
-                resultPoint = MathEx.getPointOnBezierCurve(point0._point,point0._bezierPoint,point1.getInverseBezierPoint(),point1._point, finalRate);
+                MovementTrackPointData point1 = _trackData._trackPointData[_currentPointIndex + 1];
+
+                float trackLength = _trackData._pointLengthArray[_currentPointIndex];
+                if(trackLength == 0f)
+                {
+                    _isEnd = true;
+                    DebugUtil.assert(false, "트랙 패스 길이가 0입니다. 뭔가 잘못됨 통보 바람 [Name: {0}]", _trackData._name);
+                }
+                float speed = MathEx.lerpf(point0._speedToNextPoint,point1._speedToNextPoint, _trackPathProcessRate);
+                float finalSpeed = (trackLength / speed);
+                float resultRate = deltaTime / finalSpeed;
+                _trackPathProcessRate += resultRate;
+                if(_trackPathProcessRate >= 1f)
+                {
+                    _trackPathProcessRate -= 1f;
+                    _currentPointIndex += 1;
+
+                    if(_trackPathProcessRate != 0f)
+                    {
+                        _trackPathProcessRate *= finalSpeed;
+                        deltaTime = _trackPathProcessRate;
+                        _trackPathProcessRate = 0f;
+                        _waitSecondTime = _trackData._trackPointData[_currentPointIndex]._waitSecond;
+                        _isLinearPath = _trackData._trackPointData[_currentPointIndex]._isLinearPath;
+                        continue;
+                    }
+                }
+
+                float finalRate = _trackPathProcessRate;
+                finalRate = MathEx.getEaseFormula(point0._easeType,0f,1f,finalRate);
+
+                if(_isLinearPath)
+                    resultPoint = Vector2.Lerp(point0._point, point1._point, finalRate);
+                else
+                    resultPoint = MathEx.getPointOnBezierCurve(point0._point,point0._bezierPoint,point1.getInverseBezierPoint(),point1._point, finalRate);
             }
+            
             break;
         }
         return true;
