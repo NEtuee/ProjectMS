@@ -472,27 +472,31 @@
     </AC_BarriorCounter>
 
     <!-- 회피기 : 투명화 -->
-    <AC_Disappear MovementType="GraphPreset" MovementGraphPreset="Preset_Dodge" DirectionType="AI" FlipType="Direction" DefenceType="Evade">
+    <AC_Disappear MovementType="GraphPreset" MovementGraphPreset="Helena_BackStep" DirectionType="AI" FlipType="Direction" DefenceType="Evade">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="2_skill/7_invisibleDodge/1_disappear" XFlip="true" Duration="0.7">
+        <Animation Preset="2_skill/7_invisibleDodge/1_disappear" XFlip="true" Duration="0.3">
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="Detach" EventTargetType="Range" SearchIdentifier="Enemy" Range="100.0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
         </Animation>
 
-        <Branch Condition="End" Execute="AC_Inivisible"/>
+        <Branch Condition="End" Execute="AC_Invisible"/>
     </AC_Disappear>
-    <AC_Inivisible MovementType="Empty" DirectionType="AI" FlipType="Direction" ActiveCollision="False">
+    <AC_Invisible MovementType="Empty" DirectionType="AI" FlipType="Direction" ActiveCollision="False">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="2_skill/7_invisibleDodge/2_invisible" XFlip="true" Duration="0.016">
-            <FrameEvent Type="TeleportToTarget" StartTime="0" TeleportTarget="AITarget"/>
+        <Animation Preset="2_skill/7_invisibleDodge/2_invisible" XFlip="true" Duration="2.0">
+            <FrameEvent Type="TeleportToTarget" StartTime="2.0" TeleportTarget="AITarget"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Appear"/>
-    </AC_Inivisible>
-    <AC_Appear MovementType="GraphPreset" MovementGraphPreset="Preset_Dodge" DirectionType="MousePoint" DirectionAngle="180" FlipType="Direction" ActiveCollision="False">
+    </AC_Invisible>
+    <AC_Appear MovementType="GraphPreset" MovementGraphPreset="Helena_Appear" DirectionType="MousePoint" FlipType="Direction" ActiveCollision="True">
         <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="2_skill/7_invisibleDodge/2_invisible" XFlip="true" Duration="0.1">
+            <FrameEvent Type="SetDirectionType" StartTime="0.016" DirectionType="Keep"/>
+        </Animation>
         <Animation Preset="2_skill/7_invisibleDodge/3_appear" XFlip="true" Duration="0.7">
+            <FrameEvent Type="SetDirectionType" StartTime="0" DirectionType="AITarget"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
         </Animation>
