@@ -33,15 +33,6 @@
             <Branch Condition="End" Execute="TerminatePackage"/>
         </AI_InvisibleDodge_Appear>
 
-        <AI_Dodge UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" SearchIdentifier="Player">
-            <Event_OnExecute>
-                <AIEvent Type="SetDirectionToTarget"/>
-                <AIEvent Type="SetAction" Action="AC_Dodge"/>
-            </Event_OnExecute>
-            
-            <Branch Condition="End" Execute="TerminatePackage"/>
-        </AI_Dodge>
-
         <AI_ExplosionDodge UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" SearchIdentifier="Player">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>

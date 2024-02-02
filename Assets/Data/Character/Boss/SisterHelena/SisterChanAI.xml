@@ -1,4 +1,4 @@
-<AIGraph Name="SisterChanAI" DefaultState="Test"> <!--Entry_Battle-->
+<AIGraph Name="SisterChanAI" DefaultState="Entry_Battle"> <!--Entry_Battle-->
     <!-- 옵션 설정 -->
     <!-- 인지 옵션값 설정 -->
     <GlobalVariable Name="gv_CognitiveRange"    Value="4.0"/>   <!-- PC 인지 거리 : 해당 거리 내 PC 존재 시 인지한다. -->
@@ -37,7 +37,7 @@
     <GlobalVariable Name="gv_StopThreshold"                 Value="2.7"/>       <!-- 최소 거리 : PC와 Value 이상 거리가 가까워진 경우 정지 또는 경계한다. -->
     <GlobalVariable Name="gv_AwayThreshold"                 Value="1.5"/>       <!-- 최소 거리 : PC와 Value 이상 거리가 가까워진 경우 거리를 벌린다. -->
     <!-- 패시브 방어 반응 임계치 설정 -->
-    <GlobalVariable Name="gv_HitCountThreshold"             Value="3.0"/>       <!-- 누적 피격 횟수 트리거 : 해당 횟수 충족 시 패시브 방어 동작 (가드를 제외한 모든 피격 카운트) -->
+    <GlobalVariable Name="gv_HitCountThreshold"             Value="5.0"/>       <!-- 누적 피격 횟수 트리거 : 해당 횟수 충족 시 패시브 방어 동작 (가드를 제외한 모든 피격 카운트) -->
     <GlobalVariable Name="gv_GuardCountThreshold"           Value="2.0"/>       <!-- 누적 가드 횟수 트리거 : 해당 횟수 충족 시 패시브 방어 동작 (가드 중 모든 피격 시 카운트) -->
     <!-- 패시브 방어(누적 피격) 반응 타입 설정 -->
         <!-- TODO: 피격 리액션이 상황에 따라 다른 것으로 실행될 수 있음. 복수 선택 가능하게. -->
@@ -48,7 +48,7 @@
     <GlobalVariable Name="gv_bIsDodgeToPassiveDef_Guard"    Value="False"/>      <!-- 누적 피격 시 패시브 방어 : 회피 타입 -->
     <GlobalVariable Name="gv_bIsCounterToPassiveDef_Guard"  Value="False"/>     <!-- 누적 피격 시 패시브 방어 : 반격 타입 -->
     <!-- 패시브 방어 실행 지연 시간 설정 -->
-    <GlobalVariable Name="gv_PassiveDef_Hit_DelayTime" Value="0.0"/>            <!-- 누적 피격 반응 지연 시간-->
+    <GlobalVariable Name="gv_PassiveDef_Hit_DelayTime" Value="0.2"/>            <!-- 누적 피격 반응 지연 시간-->
     <GlobalVariable Name="gv_PassiveDef_Guard_DelayTime" Value="0.2"/>            <!-- 누적 가드 반응 지연 시간-->
 
     <!-- 행동 옵션값 설정 -->
@@ -140,7 +140,7 @@
     </BranchSet>
     <!-- 전투 패시브 방어 분기 브랜치 셋 -->
     <BranchSet Name="BattleDefenseByHitJudgeSet">
-        <Branch Condition="gv_bIsDodgeToPassiveDef_Hit"      Execute="Dodge"/>
+        <Branch Condition="gv_bIsDodgeToPassiveDef_Hit"      Execute="InvisibleDodge"/>
         <Branch Condition="gv_bIsGuardToPassiveDef_Hit"      Execute="Guard"/>
         <Branch Condition="gv_bIsCounterToPassiveDef_Hit"    Execute="Battle_CounterAttack"/>
     </BranchSet>
@@ -225,20 +225,35 @@
     <!-- Preset State -->
 
     <!-- AI 스테이트 : 전투 분기 -->
-    <JudgeRangedAttack Package="CommonIdlePackage">
-        <!-- 라이트닝 볼트 -->
-        <Branch Weight="RandVector3^x" Condition="true" Execute="ThunderStroke"/>
-        <Branch Weight="RandVector3^z" Condition="true" Execute="ThunderStrom"/>
-        <!-- 접근 -->
-        <!-- <Branch Weight="RandVector3^z" Condition="true" Execute="Dash"/> -->
-    </JudgeRangedAttack>
 
     <JudgeMeleeAttack Package="CommonIdlePackage">
-        <!-- 낙뢰 베기 -->
-        <Branch Weight="RandBoolean^True" Condition="true" Execute="ThunderStroke"/>
-        <!-- 멀어지기 -->
-        <Branch Weight="RandBoolean^False" Condition="true" Execute="Dodge"/>
+        <!-- 방전 -->
+        <Branch Weight="RandBoolean^False" Condition="aiGraphCoolTime_Discharge" Execute="Discharge"/>
+        <!-- 낙뢰 -->
+        <Branch Weight="RandBoolean^True" Condition="aiGraphCoolTime_ThunderStroke" Execute="ThunderStroke"/>
+        <!-- 닷지 : 원거리 분기용 -->
+        <Branch Condition="true" Execute="Dodge"/>
     </JudgeMeleeAttack>
+    <JudgeRangedAttack Package="CommonIdlePackage">
+        <!-- 마도서: 레이저 스핀 -->
+        <Branch Condition="(customValue_CountCrimson >= 3.0) && aiGraphCoolTime_SpawnBook" Execute="ThunderStorm"/>
+        <!-- 필드장악: 번개폭풍 -->
+        <Branch Condition="aiGraphCoolTime_ThunderStorm" Execute="ThunderStorm"/>
+        <!-- 마도서 소환 -->
+        <Branch Condition="(customValue_CountCrimson >= 3.0) && (customValue_CountCrimson <= 5.0) && aiGraphCoolTime_SpawnBook_Crimson" Execute="SpawnBook_Crimson"/>
+        <Branch Condition="(customValue_CountCrimson < 3.0) && aiGraphCoolTime_SpawnBook_Crimson" Execute="SpawnBook_Crimson_Set"/>
+        <!-- 배리어 -->
+        <Branch Condition="aiGraphCoolTime_ActivateBarrior" Execute="ActivateBarrior"/>
+        <!-- 낙뢰 -->
+        <Branch Condition="aiGraphCoolTime_ThunderStroke" Execute="ThunderStroke"/>
+        <!-- 마도서: 레이저 -->
+        <Branch Condition="aiGraphCoolTime_CommandBook_LaserWith" Execute="CommandBook_LaserWith"/>
+        <!-- 마도서: 레이저 서라운드 -->
+        <Branch Condition="(customValue_CountCrimson >= 3.0) && aiGraphCoolTime_CommandBook_LaserIn" Execute="CommandBook_LaserIn"/>
+        
+        <!-- 접근 : 근거리 분기용 -->
+        <Branch Condition="true" Execute="Dash"/>
+    </JudgeRangedAttack>
 
     <!-- AI 스테이트 : 전투 상태 : 이동 -->
     <WarpChase Package="CommonSystemChasePackage">
@@ -253,52 +268,43 @@
 
     <!-- AI 스테이트 : 전투 상태 : 공격 -->
 
-    <!-- 원거리 공격: 라이트닝볼트 (광역장판) -->
-    <ThunderStrom Package="SisterThunderStormPackage">
-        <UseBranchSet Name="HitReactionSet"/>
-        <UseBranchSet Name="BattlePackageEndSet"/>
-    </ThunderStrom>
-
     <!-- 근거리 공격: 낙뢰  -->
-    <ThunderStroke Package="SisterThunderStrokePackage">
+    <ThunderStroke Package="SisterThunderStrokePackage" CoolTime="7.0">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </ThunderStroke>
-    <Discharge Package="SisterDischargePackage">
+    <!-- 근거리 공격: 방전 -->
+    <Discharge Package="SisterDischargePackage" CoolTime="7.0">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </Discharge>
 
     <!-- 소환: 마도서 소환 -->
-    <SpawnBook_Crimson Package="SisterSpawnBookPackage" EntryNode="AI_Crimson">
+    <SpawnBook_Crimson Package="SisterSpawnBookPackage" EntryNode="AI_Crimson" CoolTime="7.0">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </SpawnBook_Crimson>
-    <SpawnBook_Crimson_Set Package="SisterSpawnBookPackage" EntryNode="AI_CrimsonSet">
+    <SpawnBook_Crimson_Set Package="SisterSpawnBookPackage" EntryNode="AI_CrimsonSet" CoolTime="7.0">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </SpawnBook_Crimson_Set>
 
     <!-- 명령: 마도서 공격 -->
-    <CommandBook_LaserToTarget Package="SisterCommandBookPackage" EntryNode="AI_LaserToTarget">
+    <CommandBook_LaserToTarget Package="SisterCommandBookPackage" EntryNode="AI_LaserToTarget" CoolTime="7.0">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </CommandBook_LaserToTarget>
-    <CommandBook_LaserWith Package="SisterCommandBookPackage" EntryNode="AI_LaserWith">
+    <CommandBook_LaserWith Package="SisterCommandBookPackage" EntryNode="AI_LaserWith" CoolTime="7.0">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </CommandBook_LaserWith>
-    <CommandBook_LaserOut Package="SisterCommandBookPackage" EntryNode="AI_LaserOut">
-        <UseBranchSet Name="HitReactionSet"/>
-        <UseBranchSet Name="BattlePackageEndSet"/>
-    </CommandBook_LaserOut>
-    <CommandBook_LaserIn Package="SisterCommandBookPackage" EntryNode="AI_LaserIn">
+    <CommandBook_LaserIn Package="SisterCommandBookPackage" EntryNode="AI_LaserIn" CoolTime="7.0">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </CommandBook_LaserIn>
 
     <!-- 잡기: 배리어 -->
-    <ActivateBarrior Package="SisterBarriorPackage" EntryNode="AI_Pray">
+    <ActivateBarrior Package="SisterBarriorPackage" EntryNode="AI_Pray" CoolTime="7.0">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>        
     </ActivateBarrior>
@@ -308,19 +314,29 @@
         <UseBranchSet Name="BattlePackageEndSet"/>        
     </BarriorActivated>
 
+    <!-- 필드 장악: 라이트닝볼트 (광역장판) -->
+    <ThunderStorm Package="SisterThunderStormPackage" CoolTime="7.0">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </ThunderStorm>
+
+    <!-- 필드 장악: 레이저 서라운드 -->
+    <CommandBook_LaserOut Package="SisterCommandBookPackage" EntryNode="AI_LaserOut" CoolTime="7.0">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </CommandBook_LaserOut>
+
     <!-- AI 스테이트 : 전투 상태 : 패시브 방어 -->
     <Dodge Package="CommonDodgePackage">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </Dodge>
-    <NormalDodge Package="SisterDodgePackage" EntryNode="AI_Dodge">
-        <UseBranchSet Name="HitReactionSet"/>
-        <UseBranchSet Name="BattlePackageEndSet"/>
-    </NormalDodge>
+
     <InvisibleDodge Package="SisterDodgePackage" EntryNode="AI_InvisibleDodge_Disapper">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </InvisibleDodge>
+    
     <ExplosionDodge Package="SisterDodgePackage" EntryNode="AI_ExplosionDodge">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
@@ -341,11 +357,6 @@
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </Hit>
-
-    <Groggy Package="CommonGroggyPackage">
-        <UseBranchSet Name="HitReactionSet"/>
-        <UseBranchSet Name="BattlePackageEndSet"/>
-    </Groggy>
 
     <Dead Package="CommonDeadPackage">
     </Dead>
