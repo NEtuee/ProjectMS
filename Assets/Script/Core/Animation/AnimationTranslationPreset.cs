@@ -28,7 +28,10 @@ public class AnimationTranslationPreset : ScriptableObject
             }
         }
 
-        DebugUtil.assert(target != null, "ÇØ´ç ¾Ö´Ï¸ÞÀÌ¼Ç Æ®·»½½·¹ÀÌ¼Ç ÇÁ¸®¼Â µ¥ÀÌÅÍ°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù. ÀÌ¸§À» Àß¸ø ¾²Áö ¾Ê¾Ò³ª¿ä? : {0}", targetName);
+        DebugUtil._ignoreThrowException = true;
+        DebugUtil.assert(target != null, "ï¿½Ø´ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ Æ®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê½ï¿½ï¿½Ï´ï¿½. ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½ß¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾Ò³ï¿½ï¿½ï¿½? : {0}", targetName);
+
+        DebugUtil._ignoreThrowException = false;
         return target;
     }
 

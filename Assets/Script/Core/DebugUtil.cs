@@ -11,6 +11,7 @@ using System.Diagnostics;
 public static class DebugUtil
 {
     public static bool _ignoreAssert = false;
+    public static bool _ignoreThrowException = false;
 
     public static void log(string errorLog, params System.Object[] errorArgs)
     {
@@ -63,7 +64,9 @@ public static class DebugUtil
             //if(result == true)
             {
                 UnityEngine.Debug.Break();
-                throw new System.Exception(resultString);
+
+                if(_ignoreThrowException == false)
+                    throw new System.Exception(resultString);
             }
         }
         
