@@ -851,8 +851,10 @@ public class SequencerGraphEvent_AIMove : SequencerGraphEventBase
                 return;
             }
 
-            _startActionDistance = presetData.getTotalMovement();
-            _startAnimationPlayTime = uniqueEntity.getAnimationPlayTimeFromActionIndex(_startActionIndex);
+            float moveScale = uniqueEntity.getMoveScaleFromActionIndex(_startActionIndex);
+
+            _startActionDistance = presetData.getTotalMovement() * moveScale;
+            _startAnimationPlayTime = uniqueEntity.getAnimationPlayTimeFromActionIndex(_startActionIndex) * (1f / moveScale);
             _totalAnimationPlayTime += _startAnimationPlayTime;
         }
         if(_endAction != "")
@@ -865,8 +867,10 @@ public class SequencerGraphEvent_AIMove : SequencerGraphEventBase
                 return;
             }
 
-            _endActionDistance = presetData.getTotalMovement();
-            _endAnimationPlayTime = uniqueEntity.getAnimationPlayTimeFromActionIndex(_endActionIndex);
+            float moveScale = uniqueEntity.getMoveScaleFromActionIndex(_endActionIndex);
+
+            _endActionDistance = presetData.getTotalMovement() * moveScale;
+            _endAnimationPlayTime = uniqueEntity.getAnimationPlayTimeFromActionIndex(_endActionIndex) * (1f / moveScale);
             _totalAnimationPlayTime += _endAnimationPlayTime;
         }
         
@@ -882,7 +886,9 @@ public class SequencerGraphEvent_AIMove : SequencerGraphEventBase
                 return;
             }
 
-            _loopActionDistance = presetData.getTotalMovement() * uniqueEntity.getMoveScaleFromActionIndex(_loopActionIndex);
+            float moveScale = uniqueEntity.getMoveScaleFromActionIndex(_loopActionIndex);
+
+            _loopActionDistance = presetData.getTotalMovement() * moveScale;
             _loopAnimationPlayTime = uniqueEntity.getAnimationPlayTimeFromActionIndex(_loopActionIndex);
         }
 

@@ -506,6 +506,12 @@ public class StageProcessor
             Color targetColor = index < _currentPoint ? Color.green : ( index == _currentPoint ? Color.magenta : Color.red);
             GizmoHelper.instance.drawCircle(_stageData._stagePointData[index]._stagePoint + _offsetPosition, 0.3f, 12, targetColor);
         }
+
+        for(int index = 0; index < _stageData._markerData.Count; ++index)
+        {
+            GizmoHelper.instance.drawCircle(_stageData._markerData[index]._position + _offsetPosition, 0.1f, 12, Color.yellow);
+            
+        }
     }
 
     public MovementTrackData getTrackData(string trackName)

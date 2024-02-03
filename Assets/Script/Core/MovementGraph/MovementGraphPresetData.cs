@@ -50,7 +50,7 @@ public class MovementGraphPresetData
             return 0f;
         }
 
-        return _movementCurve.keys[_movementCurve.length - 1].value - _movementCurve.keys[0].value;
+        return (_movementCurve.keys[_movementCurve.length - 1].value - _movementCurve.keys[0].value) * _magnification;
     }
 
     private float normalizedTimeToReal(float normalizedTime)
