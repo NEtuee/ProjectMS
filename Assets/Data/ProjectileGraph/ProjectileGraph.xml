@@ -286,7 +286,7 @@
         </Event>
     </Gauntlet>
     <BaseBall DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">
-        <Animation Preset="Sprites/Projectile/BaseBall" XFlip="true" Duration="5.0">        
+        <Animation Preset="Sprites/Projectile/BaseBall" XFlip="true" Duration="10.0">        
         </Animation>
 
         <CollisionInfo Radius="0.1" Angle="0"/>
@@ -295,24 +295,13 @@
             <OnHit>
                 <FrameEvent Type="Attack" StartFrame="0" AttackPreset="BaseBall">
                     <OnHit>
-                        <FrameEvent Type="Test" Log="MagicalBullet OnHit"/>
                         <!-- TODO: 야구공 버프 설정 -->
-                        <FrameEvent Type="ApplyBuffTarget" ApplyBuff="TestProjectileAttack"/>
-                        <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
+                        <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
                     </OnHit>
-
-                    <OnGuard>
-                        <FrameEvent Type="TimelineEffect" StartFrame="0" Path="Prefab/Effect/Test_Timeline" Attach="true" ToTarget="true"/>
-                    </OnGuard>
                 </FrameEvent>
             </OnHit>
-    
-            <OnHitEnd>
-                <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0"/>
-            </OnHitEnd>
-    
-            <OnEnd>
-            </OnEnd>
         </Event>
     </BaseBall>
 
@@ -352,38 +341,15 @@
     </ChairProjectile>
 
     <ThunderStroke DefaultFramePerSecond="10" UseSpriteRotation="true" PenetrateCount="999">
-        <Animation Preset="Sprites/Projectile/ThunderStrokeBase" XFlip="true" Duration="0.5">
-        </Animation>
-
-        <CollisionInfo Radius="0.1" Angle="0"/>
-        <DefaultShotInfo Velocity="0" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="0.5"/>
-        <Event>    
-            <OnEnd>
-                <!-- TODO: 번개 이펙트 -->
-
-                <FrameEvent Type="Attack" StartFrame="0" AttackPreset="Helena_Thunder">
-                    <OnHit>
-                        <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonDoubleAttack"/>
-                    </OnHit>
-                </FrameEvent>
-            </OnEnd>
-        </Event>
-    </ThunderStroke>
-    
-    <Thunder DefaultFramePerSecond="10" UseSpriteRotation="true" PenetrateCount="999">
-        <Animation Preset="Sprites/Projectile/ThunderBase" XFlip="true" Duration="1.0">
+        <Animation Preset="Sprites/Projectile/ThunderStrokeBase" XFlip="true" Duration="1.0">
         </Animation>
 
         <CollisionInfo Radius="0.4" Angle="0"/>
-        
         <DefaultShotInfo Velocity="0" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="0.4"/>
         <Event>
-            <OnHit>
-                
-            </OnHit>
             <OnEnd>
                 <FrameEvent Type="EffectPreset" StartTime="0.0" Key="Thunder"/>
-                <FrameEvent Type="Attack" StartFrame="0.0" AttackPreset="Helena_Thunder">
+                <FrameEvent Type="Attack" StartFrame="0.0" AttackPreset="Helena_ThunderStroke">
                     <OnHit>
                         <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
                         <FrameEvent Type="CallAIEvent" StartTime="0" EventName="PlayerHit" EventTargetType="Summoner"/>
@@ -391,7 +357,27 @@
                 </FrameEvent>
             </OnEnd>
         </Event>
-    </Thunder>
+    </ThunderStroke>
+    
+    <ThunderStorm DefaultFramePerSecond="10" UseSpriteRotation="true" PenetrateCount="999">
+        <Animation Preset="Sprites/Projectile/ThunderBase" XFlip="true" Duration="1.0">
+        </Animation>
+
+        <CollisionInfo Radius="0.4" Angle="0"/>
+        
+        <DefaultShotInfo Velocity="0" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="0.4"/>
+        <Event>
+            <OnEnd>
+                <FrameEvent Type="EffectPreset" StartTime="0.0" Key="Thunder"/>
+                <FrameEvent Type="Attack" StartFrame="0.0" AttackPreset="Helena_ThunderStorm">
+                    <OnHit>
+                        <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
+                        <FrameEvent Type="CallAIEvent" StartTime="0" EventName="PlayerHit" EventTargetType="Summoner"/>
+                    </OnHit>
+                </FrameEvent>
+            </OnEnd>
+        </Event>
+    </ThunderStorm>
 
     <Thunder_Small DefaultFramePerSecond="10" UseSpriteRotation="true" PenetrateCount="999">
         <Animation Preset="Sprites/Projectile/ThunderBase" XFlip="true" Duration="1.0">

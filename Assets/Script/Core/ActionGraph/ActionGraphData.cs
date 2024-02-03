@@ -205,6 +205,7 @@ public enum ConditionNodeUpdateType
     Action_IsCatcher,
     Action_IsCatchTarget,
     Action_ActionExecutedTime,
+    Action_AngleToTarget,
 
     Input_AttackCharge,
     Input_AttackBlood,
@@ -300,6 +301,7 @@ public static class ConditionNodeInfoPreset
         {"IsCatcher",new ConditionNodeInfo(ConditionNodeUpdateType.Action_IsCatcher, ConditionNodeType.Bool)},
         {"IsCatchTarget",new ConditionNodeInfo(ConditionNodeUpdateType.Action_IsCatchTarget, ConditionNodeType.Bool)},
         {"ActionExecutedTime",new ConditionNodeInfo(ConditionNodeUpdateType.Action_ActionExecutedTime, ConditionNodeType.Float)},
+        {"AngleToTarget",new ConditionNodeInfo(ConditionNodeUpdateType.Action_AngleToTarget, ConditionNodeType.Float)},
 
         {"InputAttackCharge",new ConditionNodeInfo(ConditionNodeUpdateType.Input_AttackCharge, ConditionNodeType.Bool)},
         {"InputAttackBlood",new ConditionNodeInfo(ConditionNodeUpdateType.Input_AttackBlood, ConditionNodeType.Bool)},

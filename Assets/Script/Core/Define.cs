@@ -10,6 +10,13 @@ public enum SearchIdentifier
     Count,
 }
 
+public enum TeleportTarget
+{
+    ActionTarget,
+    AITarget,
+    Summoner,
+}
+
 public enum TargetSearchType
 {
     None = 0,
@@ -25,6 +32,7 @@ public enum CallAIEventTargetType
     Self,
     FrameEventTarget,
     Summoner,
+    SummonTargetRange,
 }
 
 public enum SetRotateSlotType

@@ -1,6 +1,30 @@
 <EffectInfo>
     <!-- BasePath: Assets/Resources/ -->
     <!-- Path에 확장자 쓰기 금지 -->
+
+    <!-- 
+    - AttackMaterial (String) : 공격에 의한 이펙트 생성 시 체크 할 공격의 Material
+    - DefenceMaterial (String) : 공격에 의한 이펙트 생성 시 체크 할 캐릭터의 Material
+
+    - Path (String) : 생성할 이펙트의 Prefab 경로를 작성한다. 모든 이펙트는 Assets/Resources 폴더 내에 있어야 하며, 경로에서는 생략해야 한다. 확장자도 생략한다.
+    - Offset (Vector3) : 이펙트 생성 위치 Offset. AngleType에 따라 회전할 수 있다.
+    - ToTarget (Boolean) : 대상이 존재할 경우 (공격 등) 대상에게 이펙트를 생성한다.
+    - FollowDirection (Boolean) : 이펙트가 계속해서 생성 대상의 방향을 따라 회전한다.
+    - CastShadow (Boolean) : 이펙트의 그림자가 그려질지 여부
+    - Attach (Boolean) : 이펙트 생성 대상에게 이펙트를 붙일지 여부 (이펙트가 대상을 따라다니게 된다)
+    - DependentAction (Boolean) : 이펙트 생성 대상이 캐릭터일 경우, 대상이 현재 실행중인 액션이 종료되면 이펙트도 같이 정지된다.
+    - LifeTime (Float) : 이펙트 LifeTime. 이펙트가 생성된 후 해당 시간이 흐르면 파티클 Emit이 정지된다. 0이면 사용하지 않음
+    - AngleOffset (Float) : 이펙트 생성 시 회전 Offset
+    - UpdateType (Enum) : 이펙트가 업데이트 될 타입을 설정한다 (지금은 의미 없음)
+        - ScaledDeltaTime : 이펙트 업데이트가 게임 시간에 종속된다. (일시 정지 시 이펙트도 멈춤)
+        - NoneScaledDeltaTime : 이펙트가 게임 시간에 상관 없이 작동한다 (일시 정지해도 이펙트가 계속 실행됨)
+    - AngleType (Enum) : 이펙트 생성 시 회전 타입을 설정한다.
+        - identity : 정방향으로 생성된다
+        - Direction : 이펙트 생성 대상의 방향을 따라 생성된다.
+        - AttackPoint : 이펙트 생성 대상이 가장 최근에 받은 공격의 위치에서 대상을 바라보는 방향으로 생성된다. 
+    -->
+
+
     <ParticleEffect Key="Slash" 
         AttackMaterial=""
         DefenceMaterial=""
@@ -189,7 +213,70 @@
         LifeTime="0.0"
         FollowDirection="False"
         CastShadow="False"
-    /> 
+    />
+
+    <ParticleEffect Key="LaserLoopFollow" 
+        AttackMaterial="" 
+        DefenceMaterial=""
+        Path="Prefab/Effect/LaserLoop"
+        AngleOffset="-90.0"
+        Offset="0.0 0.0 0.0"
+        ToTarget="False"
+        UpdateType="ScaledDeltaTime"
+        Attach="True"
+        AngleType="Direction"
+        LifeTime="10.0"
+        FollowDirection="True"
+        CastShadow="False"
+        DependentAction="True"
+    />
+
+    <ParticleEffect Key="Helena_LaserOut" 
+        AttackMaterial="" 
+        DefenceMaterial=""
+        Path="Prefab/Effect/LaserLoop"
+        AngleOffset="-90.0"
+        Offset="0.0 0.0 0.0"
+        ToTarget="False"
+        UpdateType="ScaledDeltaTime"
+        Attach="True"
+        AngleType="Direction"
+        LifeTime="2.0"
+        FollowDirection="True"
+        CastShadow="False"
+        DependentAction="False"
+    />
+    <ParticleEffect Key="Helena_LaserShot" 
+        AttackMaterial="" 
+        DefenceMaterial=""
+        Path="Prefab/Effect/Laser"
+        AngleOffset="-90.0"
+        Offset="0.0 0.0 0.0"
+        ToTarget="False"
+        UpdateType="ScaledDeltaTime"
+        Attach="True"
+        AngleType="Direction"
+        LifeTime="0.1"
+        FollowDirection="True"
+        CastShadow="False"
+        DependentAction="False"
+    />
+
+    <ParticleEffect Key="SpreadYakisobaPan" 
+        AttackMaterial="" 
+        DefenceMaterial=""
+        Path="Prefab/Effect/SpreadYakisobaPan"
+        AngleOffset="0.0"
+        Offset="0.0 0.0 0.0"
+        ToTarget="False"
+        UpdateType="ScaledDeltaTime"
+        Attach="False"
+        AngleType="identity"
+        LifeTime="0.0"
+        FollowDirection="False"
+        CastShadow="True"
+        DependentAction="False"
+    />
 
     <ParticleEffect Key="AttackReady" 
         AttackMaterial="" 

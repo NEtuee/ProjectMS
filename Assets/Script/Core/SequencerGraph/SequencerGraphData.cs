@@ -39,8 +39,11 @@ public enum SequencerGraphEventType
     LetterBoxHide,
     TalkBalloon,
     CameraTrack,
+    CameraTrackFence,
     TaskFence,
     SetDirection,
+    BlockPointExit,
+    EffectPreset,
 
     Count,
 }
@@ -111,6 +114,25 @@ public class SequencerGraphEvent_WaitSignal : SequencerGraphEventBase
             if(attrName == "Signal")
                 _targetSignal = attrValue;
         }
+    }
+}
+
+public class SequencerGraphEvent_CameraTrackFence : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.CameraTrackFence;
+
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        return MasterManager.instance._stageProcessor.isTrackEnd();
+    }
+
+    public override void loadXml(XmlNode node)
+    {
     }
 }
 
@@ -525,9 +547,7 @@ public class SequencerGraphEvent_SetHideUI : SequencerGraphEventBase
     public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
     {
         HPSphereUIManager.Instance().setActive(_value == false);
-        //CrossHairUI._instance.setActive(_value == false);
         GameUI.Instance.SetActiveCrossHair(_value == false);
-        ScreenIndicatorUI._instance.setActive(_value == false);
         ScreenDirector._instance.setActiveMainHud(_value == false);
 
         processor.getUniqueEntity("Player")?.setGraphicInterfaceActive(_value == false);
@@ -832,8 +852,10 @@ public class SequencerGraphEvent_AIMove : SequencerGraphEventBase
                 return;
             }
 
-            _startActionDistance = presetData.getTotalMovement();
-            _startAnimationPlayTime = uniqueEntity.getAnimationPlayTimeFromActionIndex(_startActionIndex);
+            float moveScale = uniqueEntity.getMoveScaleFromActionIndex(_startActionIndex);
+
+            _startActionDistance = presetData.getTotalMovement() * moveScale;
+            _startAnimationPlayTime = uniqueEntity.getAnimationPlayTimeFromActionIndex(_startActionIndex) * (1f / moveScale);
             _totalAnimationPlayTime += _startAnimationPlayTime;
         }
         if(_endAction != "")
@@ -846,8 +868,10 @@ public class SequencerGraphEvent_AIMove : SequencerGraphEventBase
                 return;
             }
 
-            _endActionDistance = presetData.getTotalMovement();
-            _endAnimationPlayTime = uniqueEntity.getAnimationPlayTimeFromActionIndex(_endActionIndex);
+            float moveScale = uniqueEntity.getMoveScaleFromActionIndex(_endActionIndex);
+
+            _endActionDistance = presetData.getTotalMovement() * moveScale;
+            _endAnimationPlayTime = uniqueEntity.getAnimationPlayTimeFromActionIndex(_endActionIndex) * (1f / moveScale);
             _totalAnimationPlayTime += _endAnimationPlayTime;
         }
         
@@ -863,9 +887,9 @@ public class SequencerGraphEvent_AIMove : SequencerGraphEventBase
                 return;
             }
 
-            _loopActionDistance = presetData.getTotalMovement() * uniqueEntity.getMoveScaleFromActionIndex(_loopActionIndex);
+            float moveScale = uniqueEntity.getMoveScaleFromActionIndex(_loopActionIndex);
 
-            Debug.Log(_loopActionDistance);
+            _loopActionDistance = presetData.getTotalMovement() * moveScale;
             _loopAnimationPlayTime = uniqueEntity.getAnimationPlayTimeFromActionIndex(_loopActionIndex);
         }
 
@@ -1048,6 +1072,50 @@ public class SequencerGraphEvent_PlayAnimation : SequencerGraphEventBase
     }
 }
 
+public class SequencerGraphEvent_EffectPreset : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.EffectPreset;
+
+    private string _effectPresetName;
+    private string _uniqueKey = "";
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        if(_uniqueKey != "")
+        {
+            GameEntityBase uniqueEntity = processor.getUniqueEntity(_uniqueKey);
+            if(uniqueEntity == null)
+            {
+                DebugUtil.assert(false,"대상 Unique Entity가 존재하지 않습니다 : {0}",_uniqueKey);
+                return true;
+            }
+
+            EffectInfoManager.Instance().requestEffect(_effectPresetName,uniqueEntity, null, CommonMaterial.Empty);
+        }
+
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "UniqueKey")
+                _uniqueKey = attrValue;
+            else if(attrName == "EffectPreset")
+                _effectPresetName = attrValue;
+        }
+    }
+}
 
 public class SequencerGraphEvent_SetAction : SequencerGraphEventBase
 {
@@ -1109,6 +1177,37 @@ public class SequencerGraphEvent_SetAction : SequencerGraphEventBase
                 _uniqueGroupKey = attrValue;
             else if(attrName == "Action")
                 _actionName = attrValue;
+        }
+    }
+}
+
+public class SequencerGraphEvent_BlockPointExit : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.BlockPointExit;
+
+    public bool _value = false;
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        MasterManager.instance._stageProcessor.blockPointExit(_value);
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attributes[i].Name == "Enable")
+                _value = bool.Parse(attrValue);
         }
     }
 }

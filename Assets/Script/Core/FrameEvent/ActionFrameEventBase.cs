@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Numerics;
 using System.Drawing;
 using UnityEngine.UIElements;
+using System;
 
 public enum FrameEventType
 {
@@ -95,7 +96,7 @@ public abstract class ActionFrameEventBase
     public Dictionary<ChildFrameEventType, ChildFrameEventItem> _childFrameEventItems = null;
     
     public abstract FrameEventType getFrameEventType();
-    public virtual void initialize(){}
+    public virtual void initialize(ObjectBase executeEntity){}
     public abstract bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null);
     public virtual void onExit(ObjectBase executeEntity, bool isForceEnd){}
     public abstract void loadFromXML(XmlNode node);
@@ -123,7 +124,7 @@ public class ActionFrameEvent_CallAIEvent : ActionFrameEventBase
 
     public float _range = 0f;
 
-    public override void initialize()
+    public override void initialize(ObjectBase executeEntity)
     {
     }
 
@@ -160,9 +161,26 @@ public class ActionFrameEvent_CallAIEvent : ActionFrameEventBase
                         
                     (item as GameEntityBase).executeCustomAIEvent(_customAiEventName);
                 }
-
-                return true;
             }
+            return true;
+            case CallAIEventTargetType.SummonTargetRange:
+            {
+                SceneCharacterManager sceneCharacterManager = SceneCharacterManager._managerInstance as SceneCharacterManager;
+                _rangeSearchEntityList.Clear();
+                sceneCharacterManager.targetSearchRange(executeEntity.transform.position,_range,_searchIdentifier,ref _rangeSearchEntityList);
+
+                foreach(var item in _rangeSearchEntityList)
+                {
+                    if(item == null || item is GameEntityBase == false)
+                        continue;
+                    
+                    if(item.getSummonObject() != executeEntity)
+                        continue;
+
+                    (item as GameEntityBase).executeCustomAIEvent(_customAiEventName);
+                }
+            }
+            return true;
         }
 
         if(executeTargetEntity == null || executeTargetEntity is GameEntityBase == false)
@@ -198,6 +216,11 @@ public class ActionFrameEvent_CallAIEvent : ActionFrameEventBase
                 _searchIdentifier = (SearchIdentifier)System.Enum.Parse(typeof(SearchIdentifier), attrValue);
             }
         }
+
+        if(_eventTargetType == CallAIEventTargetType.Range || _eventTargetType == CallAIEventTargetType.SummonTargetRange)
+        {
+            DebugUtil.assert_fileOpen(_range != 0f, "EventTargetType이 [{0}] 인데 Range가 0 입니다. Range를 입력해 주세요.",node.BaseURI,XMLScriptConverter.getLineNumberFromXMLNode(node), _eventTargetType.ToString());
+        }
     }
 }
 
@@ -206,7 +229,7 @@ public class ActionFrameEvent_SetDirectionType : ActionFrameEventBase
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_SetDirectionType;}
     public DirectionType _directionType = DirectionType.Count;
 
-    public override void initialize()
+    public override void initialize(ObjectBase executeEntity)
     {
     }
 
@@ -242,7 +265,7 @@ public class ActionFrameEvent_ApplyPostProcessProfile : ActionFrameEventBase
     private float _blendTime = 0f;
     private PostProcessProfileApplyType _applyType = PostProcessProfileApplyType.BaseBlend;
 
-    public override void initialize()
+    public override void initialize(ObjectBase executeEntity)
     {
     }
 
@@ -289,7 +312,7 @@ public class ActionFrameEvent_SequencerSignal : ActionFrameEventBase
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_SequencerSignal;}
 
     public string _signal = "";
-    public override void initialize()
+    public override void initialize(ObjectBase executeEntity)
     {
     }
 
@@ -323,7 +346,7 @@ public class ActionFrameEvent_PlaySequencer : ActionFrameEventBase
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_PlaySequencer;}
 
     public string _sequencerPath = "";
-    public override void initialize()
+    public override void initialize(ObjectBase executeEntity)
     {
     }
 
@@ -366,7 +389,7 @@ public class ActionFrameEvent_AudioPlay : ActionFrameEventBase
 
     public UnityEngine.Vector3 _spawnOffset = UnityEngine.Vector3.zero;
 
-    public override void initialize()
+    public override void initialize(ObjectBase executeEntity)
     {
     }
 
@@ -483,7 +506,7 @@ public class ActionFrameEvent_SetAction : ActionFrameEventBase
 
     private string _actionName = "";
 
-    public override void initialize()
+    public override void initialize(ObjectBase executeEntity)
     {
     }
 
@@ -522,7 +545,7 @@ public class ActionFrameEvent_TalkBalloon : ActionFrameEventBase
 
     private string _key = "";
 
-    public override void initialize()
+    public override void initialize(ObjectBase executeEntity)
     {
     }
 
@@ -564,7 +587,7 @@ public class ActionFrameEvent_DeactiveTalkBalloon : ActionFrameEventBase
 {
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_DeactiveTalkBalloon;}
 
-    public override void initialize()
+    public override void initialize(ObjectBase executeEntity)
     {
     }
 
@@ -589,7 +612,7 @@ public class ActionFrameEvent_ReleaseCatch : ActionFrameEventBase
     private UnityEngine.Vector3         _pushVector;
     private string                      _catchTargetAction = "";
 
-    public override void initialize()
+    public override void initialize(ObjectBase executeEntity)
     {
     }
 
@@ -647,6 +670,7 @@ public class ActionFrameEvent_SpawnCharacter : ActionFrameEventBase
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_SpawnCharacter;}
 
     private string                      _characterKey;
+    private string                      _startAINode = "";
 
     private CharacterInfoData           _characterInfoData;
     private SpawnCharacterOptionDesc    _spawnDesc = SpawnCharacterOptionDesc.defaultValue;
@@ -657,7 +681,7 @@ public class ActionFrameEvent_SpawnCharacter : ActionFrameEventBase
     private bool                        _inheritDirection = false;
     private bool                        _useFlip = false;
 
-    public override void initialize()
+    public override void initialize(ObjectBase executeEntity)
     {
         _characterInfoData = CharacterInfoManager.Instance().GetCharacterInfoData(_characterKey);
     }
@@ -682,6 +706,8 @@ public class ActionFrameEvent_SpawnCharacter : ActionFrameEventBase
             
         CharacterEntityBase createdCharacter = sceneCharacterManager.createCharacterFromPool(_characterInfoData,_spawnDesc);
         createdCharacter.setSummonObject(_inherit ? executeEntity.getSummonObject() : executeEntity);
+        if(_startAINode != "")
+            createdCharacter.setAINode(_startAINode);
 
         return true;
     }
@@ -718,6 +744,10 @@ public class ActionFrameEvent_SpawnCharacter : ActionFrameEventBase
             else if(attrName == "UseFlip")
             {
                 _useFlip = bool.Parse(attrValue);
+            }
+            else if(attrName == "AINode")
+            {
+                _startAINode = attrValue;
             }
         }
     }
@@ -850,182 +880,35 @@ public class ActionFrameEvent_FollowAttack : ActionFrameEventBase
 
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_FollowAttack;}
 
-    private FrameEventMovement _frameEventMovement = new FrameEventMovement();
+    public FollowType      _followType = FollowType.Count;
     
-    private FollowType      _followType = FollowType.Count;
-    
-    private string          _characterKey = "";
+    public string          _characterKey = "";
 
-    private bool            _isFirst = false;
-    private bool            _toTarget = false;
-    private bool            _isCollision = false;
+    public bool            _toTarget = false;
 
-    private float           _radius = 0f;
-    private float           _moveTimer = 0f;
+    public float           _radius = 0f;
+    public float           _moveTime = 0f;
 
-    private float           _moveTime = 0f;
+    public SearchIdentifier _searchIdentifier = SearchIdentifier.Enemy;
 
-    private GameEntityBase  _crossHairEntity = null;
-
-    private SearchIdentifier _searchIdentifier = SearchIdentifier.Enemy;
-
-    private UnityEngine.Vector3         _direction = UnityEngine.Vector3.zero;
-    private UnityEngine.Vector3         _position = UnityEngine.Vector3.zero;
-    private UnityEngine.Vector3         _offset = UnityEngine.Vector3.zero;
-
-    private List<CollisionObjectData>   _collisionData = new List<CollisionObjectData>();
-    private HashSet<object>             _collisionHash = new HashSet<object>();
-
-    public override void initialize()
+    public override void initialize(ObjectBase executeEntity)
     {
-        base.initialize();
-
-        _isFirst = true;
-        _direction = UnityEngine.Vector3.zero;
-        _position = UnityEngine.Vector3.zero;
-
-        _moveTimer = 0f;
-
-        _collisionData.Clear();
-        _collisionHash.Clear();
-
-        _isCollision = false;
+        base.initialize(executeEntity);
+        executeEntity._attackProcessorManager.initializeAttack(this);
     }
 
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
-        if(executeEntity is GameEntityBase == false)
-            return true;
-        
-        GameEntityBase gameEntityBase = executeEntity as GameEntityBase;
-        if(gameEntityBase.getCurrentTargetEntity() == null)
-            return true;
-
-        UnityEngine.Vector3 targetPosition = gameEntityBase.getCurrentTargetEntity().transform.position;
-        if(_isFirst)
-        {
-            _frameEventMovement.initialize(gameEntityBase);
-            if(_toTarget)
-                _position = targetPosition + _offset;
-            else
-                _position = gameEntityBase.transform.position + _offset;
-
-            SpawnCharacterOptionDesc desc = new SpawnCharacterOptionDesc();
-            desc._position = _position;
-            desc._searchIdentifier = gameEntityBase._searchIdentifier;
-            DebugUtil.log(desc._searchIdentifier.ToString());
-
-            CharacterInfoData characterInfoData = CharacterInfoManager.Instance().GetCharacterInfoData(_characterKey);
-            _crossHairEntity = (SceneCharacterManager._managerInstance as SceneCharacterManager).createCharacterFromPool(characterInfoData,desc);
-        }
-
-        if(_isFirst)
-        {
-            executeChildFrameEvent(ChildFrameEventType.ChildFrameEvent_OnBegin, _crossHairEntity, targetEntity);
-            _isFirst = false;
-        }
-
-        _direction = targetPosition - _position;
-        _direction.Normalize();
-
-        if(_moveTime != 0f)
-            _moveTimer += GlobalTimer.Instance().getSclaedDeltaTime();
-
-        if(_moveTime == 0f || (_moveTimer < _moveTime))
-        {
-            switch(_followType)
-            {
-                case FollowType.Attach:
-                {
-                    _position = targetPosition;
-                }
-                break;
-                case FollowType.Movement:
-                {
-                    _frameEventMovement.progress(GlobalTimer.Instance().getSclaedDeltaTime(),_direction);
-                    _position += _frameEventMovement.getMovementOfFrame();
-            
-                    _frameEventMovement.resetMovementOfFrame();
-                }
-                break;
-            }
-        }
-
-        _crossHairEntity.updatePosition(_position);
-
-        gameEntityBase.setDirection((_position - gameEntityBase.transform.position).normalized);
-        _crossHairEntity.setDirection(_direction);
-
-        _collisionData.Clear();
-        bool collision = false;
-        CollisionManager.Instance().queryRangeAll(CollisionType.Attack,_position,_radius, ref _collisionData);
-        foreach(var item in _collisionData)
-        {
-            if((item._collisionObject as GameEntityBase)._searchIdentifier != gameEntityBase._searchIdentifier)
-            {
-                collision = true;
-                break;
-            }
-        }
-
-        GizmoHelper.instance.drawCircle(_position,_radius,6,collision ? UnityEngine.Color.green : UnityEngine.Color.red);
-        if(collision)
-        {
-            if(_isCollision == false)
-                executeChildFrameEvent(ChildFrameEventType.ChildFrameEvent_OnEnter,_crossHairEntity,targetEntity);
-            
-            _isCollision = true;
-        }
-        else if(_isCollision)
-        {
-            executeChildFrameEvent(ChildFrameEventType.ChildFrameEvent_OnExit,_crossHairEntity,targetEntity);
-            _isCollision = false;
-        }
-
-        DebugUtil.assert(_crossHairEntity.getDirectionType() == DirectionType.Keep, "FollowAttack Entity의 DirectionType은 항상 Keep이어야 합니다.");
-        DebugUtil.assert(_crossHairEntity.isDead() == false && _crossHairEntity.isActiveSelf(), "FollowAttack Entity는 죽으면 안됩니다.");
-
+        executeEntity._attackProcessorManager.executeAttack(this,executeEntity,targetEntity);
         return true;
     }
 
     public override void onExit(ObjectBase executeEntity, bool isForceEnd)
     {
         base.onExit(executeEntity,isForceEnd);
-
-        if(isForceEnd == false)
-            executeChildFrameEvent(ChildFrameEventType.ChildFrameEvent_OnEnd, _crossHairEntity, null);
-        
-        _crossHairEntity?.deactive();
-        _crossHairEntity?.DeregisterRequest();
-        _crossHairEntity = null;
+        executeEntity._attackProcessorManager.exitAttack(this,isForceEnd);
     }
-
-    public void executeChildFrameEvent(ChildFrameEventType eventType, ObjectBase executeEntity, ObjectBase targetEntity)
-    {
-        if(_childFrameEventItems == null || _childFrameEventItems.ContainsKey(eventType) == false)
-            return;
-        
-        ChildFrameEventItem childFrameEventItem = _childFrameEventItems[eventType];
-        GameEntityBase executeGameEntity = null;
-        if(executeEntity is GameEntityBase)
-            executeGameEntity = executeEntity as GameEntityBase;
-
-        for(int i = 0; i < childFrameEventItem._childFrameEventCount; ++i)
-        {
-            if(executeGameEntity != null && childFrameEventItem._childFrameEvents[i].checkCondition(executeGameEntity) == false)
-                continue;
-
-            if(childFrameEventItem._childFrameEvents[i].getFrameEventType() == FrameEventType.FrameEvent_Movement)
-            {
-                childFrameEventItem._childFrameEvents[i].initialize();
-                (childFrameEventItem._childFrameEvents[i] as ActionFrameEvent_Movement).setMovementValue(_frameEventMovement,_direction);
-                continue;
-            }
-
-            childFrameEventItem._childFrameEvents[i].initialize();
-            childFrameEventItem._childFrameEvents[i].onExecute(executeEntity, targetEntity);
-        }
-    }
+    
 
     public override void loadFromXML(XmlNode node)
     {
@@ -1467,15 +1350,33 @@ public class ActionFrameEvent_TeleportToTarget : ActionFrameEventBase
 {
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_TeleportToTarget;}
 
+    private TeleportTarget _teleportTarget = TeleportTarget.ActionTarget;
+
     private float _distanceOffset = 0f;
 
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
-        if(executeEntity is GameEntityBase == false || targetEntity is GameEntityBase == false)
+        if(executeEntity is GameEntityBase == false)
             return false;
         
         GameEntityBase requester = (GameEntityBase)executeEntity;
-        GameEntityBase target = (GameEntityBase)targetEntity;
+        GameEntityBase target = null;
+        
+        switch(_teleportTarget)
+        {
+            case TeleportTarget.ActionTarget:
+                target = targetEntity is GameEntityBase ? (GameEntityBase)targetEntity : null;
+            break;
+            case TeleportTarget.AITarget:
+                target = requester.getCurrentTargetEntity();
+            break;
+            case TeleportTarget.Summoner:
+                target = (GameEntityBase)requester.getSummonObject();
+            break;
+        }
+        
+        if(target == null)
+            return true;
 
         UnityEngine.Vector3 direction = (requester.transform.position - target.transform.position).normalized;
 
@@ -1490,6 +1391,8 @@ public class ActionFrameEvent_TeleportToTarget : ActionFrameEventBase
         {
             if(attributes[i].Name == "DistanceOffset")
                 _distanceOffset = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
+            else if(attributes[i].Name == "TeleportTarget")
+                _teleportTarget = (TeleportTarget)Enum.Parse(typeof(TeleportTarget), attributes[i].Value);
         }
     }
 }
@@ -1498,15 +1401,33 @@ public class ActionFrameEvent_TeleportToTargetBack : ActionFrameEventBase
 {
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_TeleportToTargetBack;}
 
+    private TeleportTarget _teleportTarget = TeleportTarget.ActionTarget;
+
     private float _distanceOffset = 0f;
 
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
-        if(executeEntity is GameEntityBase == false || targetEntity is GameEntityBase == false)
+        if(executeEntity is GameEntityBase == false)
             return false;
         
         GameEntityBase requester = (GameEntityBase)executeEntity;
-        GameEntityBase target = (GameEntityBase)targetEntity;
+         GameEntityBase target = null;
+        
+        switch(_teleportTarget)
+        {
+            case TeleportTarget.ActionTarget:
+                target = targetEntity is GameEntityBase ? (GameEntityBase)targetEntity : null;
+            break;
+            case TeleportTarget.AITarget:
+                target = requester.getCurrentTargetEntity();
+            break;
+            case TeleportTarget.Summoner:
+                target = (GameEntityBase)requester.getSummonObject();
+            break;
+        }
+
+        if(target == null)
+            return true;
 
         UnityEngine.Vector3 direction = requester.getDirection();
         UnityEngine.Vector3 perpendicular = MathEx.getPerpendicularPointOnLine(executeEntity.transform.position,executeEntity.transform.position + direction * 9999f, target.transform.position);
@@ -1524,6 +1445,8 @@ public class ActionFrameEvent_TeleportToTargetBack : ActionFrameEventBase
         {
             if(attributes[i].Name == "DistanceOffset")
                 _distanceOffset = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
+            else if(attributes[i].Name == "TeleportTarget")
+                _teleportTarget = (TeleportTarget)Enum.Parse(typeof(TeleportTarget), attributes[i].Value);
         }
     }
 }
@@ -1673,249 +1596,43 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
 {
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_Attack;}
 
-    private CollisionInfo           _collisionInfo;
-    private CollisionDelegate       _collisionDelegate;
-    private System.Action           _collisionEndEvent;
+    public CollisionInfo           _collisionInfo;
     
-    private DefenceType[]           _ignoreDefenceType = null;
-    private DirectionType           _targetDirectionType = DirectionType.Count;
+    
+    public DefenceType[]           _ignoreDefenceType = null;
+    public DirectionType           _targetDirectionType = DirectionType.Count;
 
-    private AttackType              _attackType;
-    private UnityEngine.Vector3     _pushVector = UnityEngine.Vector3.zero;
-    private UnityEngine.Vector3     _catchOffset = UnityEngine.Vector3.zero;
+    public AttackType              _attackType;
+    public UnityEngine.Vector3     _pushVector = UnityEngine.Vector3.zero;
+    public UnityEngine.Vector3     _catchOffset = UnityEngine.Vector3.zero;
 
-    private CommonMaterial          _attackMaterial = CommonMaterial.Empty;
+    public CommonMaterial          _attackMaterial = CommonMaterial.Empty;
 
-    private HashSet<ObjectBase>     _collisionList = new HashSet<ObjectBase>();
-    private List<CollisionSuccessData> _collisionOrder = new List<CollisionSuccessData>();
+    public HashSet<ObjectBase>     _collisionList = new HashSet<ObjectBase>();
+    public List<CollisionSuccessData> _collisionOrder = new List<CollisionSuccessData>();
 
-    private bool                    _notifyAttackSuccess = true;
-    private int                     _collisionCount = -1;
+    public float                   _attackTerm = -1f;
+    public bool                    _notifyAttackSuccess = true;
+    public int                     _collisionCount = -1;
 
-    public ActionFrameEvent_Attack()
+
+    public override void initialize(ObjectBase executeEntity)
     {
-        _collisionDelegate = attackPrepare;
-        _collisionEndEvent = attackProcess;
-    }
-
-    public override void initialize()
-    {
-        _collisionList.Clear();
-        _collisionOrder.Clear();
+        executeEntity._attackProcessorManager.initializeAttack(this);
     }
 
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
-        if(_targetDirectionType != DirectionType.Count && executeEntity is GameEntityBase)
-        {
-            GameEntityBase gameEntityBase = executeEntity as GameEntityBase;
-            _collisionInfo.updateCollisionInfo(executeEntity.transform.position,gameEntityBase.getDirectionFromType(_targetDirectionType));
-        }
-        else
-        {
-            _collisionInfo.updateCollisionInfo(executeEntity.transform.position,executeEntity.getDirection());
-        }
+        executeEntity._attackProcessorManager.executeAttack(this,executeEntity,targetEntity);
         _collisionInfo.drawCollosionArea(UnityEngine.Color.red, _startFrame != _endFrame ? 0f : 1f);
-        CollisionManager.Instance().collisionRequest(_collisionInfo,executeEntity,_collisionDelegate,_collisionEndEvent);
 
         return true;
     }   
 
-    public void attackProcess()
+    public override void onExit(ObjectBase executeEntity, bool isForceEnd)
     {
-        int attackCount = _collisionCount < 0 ? _collisionOrder.Count : _collisionCount;
-        if(attackCount > _collisionOrder.Count)
-            attackCount = _collisionOrder.Count;
-
-        for(int i = 0; i < attackCount; ++i)
-        {
-            if(attackTarget(_collisionOrder[i]) == false)
-                break;
-        }
-
-        _collisionOrder.Clear();
-    }
-
-    public void attackPrepare(CollisionSuccessData successData)
-    {
-        if(successData._requester is ObjectBase == false || successData._target is GameEntityBase == false)
-            return;
-
-        ObjectBase requester = (ObjectBase)successData._requester;
-        GameEntityBase targetEntity = (GameEntityBase)successData._target;
-
-        if(targetEntity._searchIdentifier == requester._searchIdentifier)
-            return;
-        
-        if((targetEntity.getCurrentIgnoreAttackType() & _attackType) != 0)
-            return;
-
-        float distanceSq = (((GameEntityBase)successData._target).transform.position - successData._startPoint).sqrMagnitude;
-        for(int i = 0; i < _collisionOrder.Count; ++i)
-        {
-            GameEntityBase target = (GameEntityBase)_collisionOrder[i]._target;
-
-            if((target.transform.position - successData._startPoint).sqrMagnitude > distanceSq)
-            {
-                _collisionOrder.Insert(i,successData);
-                return;
-            }
-        }
-
-        _collisionOrder.Add(successData);
-    }
-
-    private bool attackTarget(CollisionSuccessData successData)
-    {
-        _collisionInfo.drawCollosionArea(UnityEngine.Color.green,1f);
-
-        ObjectBase requester = (ObjectBase)successData._requester;
-        GameEntityBase target = (GameEntityBase)successData._target;
-
-        if(_collisionList.Contains(target) == true)
-            return true;
-        else
-            _collisionList.Add(target);
-
-
-        ChildFrameEventType eventType = ChildFrameEventType.Count;
-
-        UnityEngine.Vector3 toTargetDirection = (requester.transform.position - target.transform.position).normalized;
-
-        target.setAttackPoint(successData._startPoint);
-
-        if(requester is GameEntityBase)
-            ((GameEntityBase)requester).setAttackPoint(successData._startPoint);
-
-        float attackInAngle = UnityEngine.Vector3.Angle(target.getCurrentDefenceDirection(), (successData._startPoint - target.transform.position).normalized);
-
-        bool guardSuccess = (attackInAngle < target.getDefenceAngle() * 0.5f);
-        bool canIgnore = canIgnoreDefenceType(target.getDefenceType());
-
-        bool attackSuccess = false;
-
-        if(_pushVector.sqrMagnitude > float.Epsilon)
-        {
-            UnityEngine.Vector3 attackPointDirection = (target.transform.position - successData._startPoint).normalized;
-            target.setVelocity(UnityEngine.Quaternion.Euler(0f,0f,UnityEngine.Mathf.Atan2(attackPointDirection.y,attackPointDirection.x) * UnityEngine.Mathf.Rad2Deg) * _pushVector);
-        }
-
-        if(((guardSuccess == false || target.getDefenceType() == DefenceType.Empty) && target.getDefenceType() != DefenceType.Evade) || canIgnore)
-        {
-            if(_attackType == AttackType.Default)
-            {
-                requester.setAttackState(AttackState.AttackSuccess);
-                if(_notifyAttackSuccess)
-                    target.setDefenceState(DefenceState.Hit);
-
-                if(requester is GameEntityBase)
-                    ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnAttack);
-                
-                if(_notifyAttackSuccess)
-                    target.executeAIEvent(AIChildEventType.AIChildEvent_OnAttacked);
-
-                eventType = ChildFrameEventType.ChildFrameEvent_OnHit;
-                attackSuccess = true;
-            }
-            else if(_attackType == AttackType.GuardBreak)
-            {
-                if(target.getDefenceType() == DefenceType.Empty)
-                {
-                    requester.setAttackState(AttackState.AttackGuardBreakFail);
-                    target.setDefenceState(DefenceState.GuardBreakFail);
-
-                    if(requester is GameEntityBase)
-                        ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnAttackGuardBreakFail);
-                    target.executeAIEvent(AIChildEventType.AIChildEvent_OnGuardBreakFail);
-
-                    eventType = ChildFrameEventType.ChildFrameEvent_OnGuardBreakFail;
-                }
-                else
-                {
-                    requester.setAttackState(AttackState.AttackGuardBreak);
-                    target.setDefenceState(DefenceState.GuardBroken);
-
-                    if(requester is GameEntityBase)
-                        ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnGuardBreak);
-                    target.executeAIEvent(AIChildEventType.AIChildEvent_OnGuardBroken);
-
-                    eventType = ChildFrameEventType.ChildFrameEvent_OnGuardBreak;
-                }
-                
-                attackSuccess = true;
-            }
-            else if(_attackType == AttackType.Catch)
-            {
-                if(target.hasParentObject() == false)
-                {
-                    requester.setAttackState(AttackState.AttackCatch);
-                    target.setDefenceState(DefenceState.Catched);
-                
-                    AttachChildDescription description;
-                    description._childObject = target;
-                    description._pivot = _catchOffset;
-
-                    requester.attachChildObject(description);
-
-                    if(requester is GameEntityBase)
-                        ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnCatchTarget);
-                    target.executeAIEvent(AIChildEventType.AIChildEvent_OnCatched);
-                }
-
-                eventType = ChildFrameEventType.ChildFrameEvent_OnCatch;
-
-                executeChildFrameEvent(ChildFrameEventType.ChildFrameEvent_OnHit, requester, target);
-                attackSuccess = true;
-            }
-        }
-        else if(guardSuccess && target.getDefenceType() == DefenceType.Guard)
-        {
-            requester.setAttackState(AttackState.AttackGuarded);
-            target.setDefenceState(DefenceState.DefenceSuccess);
-
-            if(requester is GameEntityBase)
-                    ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnGuarded);
-            target.executeAIEvent(AIChildEventType.AIChildEvent_OnGuard);
-
-            eventType = ChildFrameEventType.ChildFrameEvent_OnGuard;
-        }
-        else if(guardSuccess && target.getDefenceType() == DefenceType.Parry)
-        {
-            requester.setAttackState(AttackState.AttackParried);
-            target.setDefenceState(DefenceState.ParrySuccess);
-            
-            if(requester is GameEntityBase)
-                    ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnParried);
-            target.executeAIEvent(AIChildEventType.AIChildEvent_OnParry);
-
-            eventType = ChildFrameEventType.ChildFrameEvent_OnParry;
-        }
-        else if(guardSuccess && target.getDefenceType() == DefenceType.Evade)
-        {
-            requester.setAttackState(AttackState.AttackEvade);
-            target.setDefenceState(DefenceState.EvadeSuccess);
-
-            if(requester is GameEntityBase)
-                    ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnEvaded);
-            target.executeAIEvent(AIChildEventType.AIChildEvent_OnEvade);
-
-            eventType = ChildFrameEventType.ChildFrameEvent_OnEvade;
-        }
-        
-        executeChildFrameEvent(eventType, requester, target);
-
-        if(target is GameEntityBase)
-        {
-            GameEntityBase targetGameEntity = (target as GameEntityBase);
-            targetGameEntity.addDeadEvent((item)=>{
-                if(item == null || requester == null || target == null)
-                    return;
-
-                executeChildFrameEvent(ChildFrameEventType.ChildFrameEvent_OnKill, requester, target);
-            });
-        }
-
-        return attackSuccess;
+        base.onExit(executeEntity,isForceEnd);
+        executeEntity._attackProcessorManager.exitAttack(this,isForceEnd);
     }
 
     public void executeChildFrameEvent(ChildFrameEventType eventType, ObjectBase executeEntity, ObjectBase targetEntity)
@@ -1934,23 +1651,9 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
                 continue;
 
             childFrameEventItem._childFrameEvents[i].initializeFromAttack(_attackMaterial);
-            childFrameEventItem._childFrameEvents[i].initialize();
+            childFrameEventItem._childFrameEvents[i].initialize(executeEntity);
             childFrameEventItem._childFrameEvents[i].onExecute(executeEntity, targetEntity);
         }
-    }
-
-    private bool canIgnoreDefenceType(DefenceType defenceType)
-    {
-        if(_ignoreDefenceType == null || _ignoreDefenceType.Length == 0)
-            return false;
-
-        for(int i = 0; i < _ignoreDefenceType.Length; ++i)
-        {
-            if(_ignoreDefenceType[i] == defenceType)
-                return true;
-        }
-
-        return false;
     }
 
     public override void loadFromXML(XmlNode node)
@@ -2043,7 +1746,10 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
             {
                 _targetDirectionType = (DirectionType)System.Enum.Parse(typeof(DirectionType), attributes[i].Value);
             }
-
+            else if(attributes[i].Name == "AttackTerm")
+            {
+                _attackTerm = float.Parse(attributes[i].Value);
+            }
         }
 
         CollisionInfoData data = new CollisionInfoData(radius,angle,startDistance,rayRadius, CollisionType.Attack);

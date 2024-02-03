@@ -1,0 +1,63 @@
+<SequencerGraph Name="Stage_2_2_4">
+
+    <InitializePhase>
+        <BlockInput Enable="True"/>
+        <SetHideUI Hide="True"/>
+        <LetterBoxShow/>
+        <BlockAI UniqueGroupKey="EnemyGroup" Enable="True"/>
+        <BlockPointExit Enable="True"/>
+    </InitializePhase>
+
+    <UpdatePhase>
+
+        <Task Name="MainTask" ProcessType="StepByStep">
+            <CameraTrack TrackName="MoveTrack"/>
+            <IsTrackEnd/>
+        </Task>
+
+        <AIMove UniqueKey="YakisobaChan" LoopAction="Move" EndPositionMarker="TargetMarker2"/>
+        
+        <WaitSecond Time="0.2"/>
+
+        <EffectPreset UniqueKey="YakisobaChan" EffectPreset="SpreadYakisobaPan"/>
+        <TalkBalloon UniqueKey="YakisobaChan" SimpleTalkKey="Talk_Stage02_2_3"/>
+
+        <WaitSecond Time="0.5"/>
+        <EffectPreset UniqueKey="YakisobaChan" EffectPreset="SpreadYakisobaPan"/>
+
+        <WaitSecond Time="1.0"/>
+
+        <Task ProcessType="StepByStep">
+            <AIMove UniqueKey="YakisobaChan" LoopAction="Move" EndPositionMarker="TargetMarker3"/>
+        </Task>
+
+        <Task ProcessType="AllAtOnce">
+            <AIMove UniqueKey="Yakisoba_0" LoopAction="SQ_Move" EndPositionMarker="Yakisoba_0"/>
+            <AIMove UniqueKey="Yakisoba_1" LoopAction="SQ_Move" EndPositionMarker="Yakisoba_1"/>
+            <AIMove UniqueKey="Yakisoba_2" LoopAction="SQ_Move" EndPositionMarker="Yakisoba_2"/>
+            <AIMove UniqueKey="Yakisoba_3" LoopAction="SQ_Move" EndPositionMarker="Yakisoba_3"/>
+        </Task>
+
+        <Task ProcessType="StepByStep">
+            <WaitSecond Time="0.3"/>
+            <TalkBalloon UniqueKey="Yakisoba_0" SimpleTalkKey="Talk_Stage02_2_4"/>
+            <WaitSecond Time="0.3"/>
+            <TalkBalloon UniqueKey="Yakisoba_3" SimpleTalkKey="Talk_Stage02_2_5"/>
+        </Task>
+
+        <TaskFence TaskName="MainTask"/>
+
+        <LetterBoxHide/>
+        <BlockInput Enable="False"/>
+        <SetHideUI Hide="False"/>
+
+        <SetAction UniqueKey="YakisobaChan" Action="ImmediatlyKill"/>
+        
+        <TaskFence TaskName="AllAtOnce"/>
+        <BlockAI UniqueGroupKey="EnemyGroup" Enable="False"/>
+
+        <DeadFence UniqueGroupKey="EnemyGroup"/>
+        <BlockPointExit Enable="False"/>
+    </UpdatePhase>
+    
+</SequencerGraph>

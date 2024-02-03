@@ -47,7 +47,9 @@ public class StageProcessor
     private MovementTrackProcessor _trackProcessor = new MovementTrackProcessor();
 
     private Vector3         _cameraTrackPositionError = Vector3.zero;
-    private float           _cameraTrackPositionErrorReduceTime = 0f;
+    private float           _cameraTrackPositionErrorReduceTime = 1f;
+
+    private bool            _blockPointExit = false;
 
     public StageProcessor()
     {
@@ -94,13 +96,14 @@ public class StageProcessor
         _trackProcessor.clear();
 
         _cameraTrackPositionError = Vector3.zero;
-        _cameraTrackPositionErrorReduceTime = 0f;
+        _cameraTrackPositionErrorReduceTime = 1f;
 
         _stageData = data;
         bool isMiniStage = _stageData._isMiniStage;
 
         _currentPoint = 0;
         _isEnd = false;
+        _blockPointExit = false;
 
         if(_stageData._stagePointData.Count == 0)
             return;
@@ -158,7 +161,10 @@ public class StageProcessor
                 SceneCharacterManager sceneCharacterManager = SceneCharacterManager._managerInstance as SceneCharacterManager;
                 SpawnCharacterOptionDesc spawnDesc = new SpawnCharacterOptionDesc();
                 spawnDesc._position = (stagePointData._stagePoint + _offsetPosition) + characterSpawnData._localPosition;
-                spawnDesc._direction = characterSpawnData._flip ? Vector3.left : Vector3.right;
+                if(characterSpawnData._setDirection)
+                    spawnDesc._direction = MathEx.angleToDirection(characterSpawnData._directionAngle * Mathf.Deg2Rad);
+                else
+                    spawnDesc._direction = characterSpawnData._flip ? Vector3.left : Vector3.right;
                 spawnDesc._rotation = Quaternion.identity;
                 spawnDesc._searchIdentifier = characterSpawnData._searchIdentifier;
                 spawnDesc._sortingOrder = characterSpawnData._sortingOrder;
@@ -270,7 +276,7 @@ public class StageProcessor
         _trackProcessor.clear();
 
         _cameraTrackPositionError = Vector3.zero;
-        _cameraTrackPositionErrorReduceTime = 0f;
+        _cameraTrackPositionErrorReduceTime = 1f;
 
         bool isMiniStage = _stageData == null ? false : _stageData._isMiniStage;
         _stageData = null;
@@ -278,6 +284,8 @@ public class StageProcessor
         _miniStageInfo = null;
         _currentPoint = 0;
         _isEnd = false;
+        _blockPointExit = false;
+
         _offsetPosition = Vector3.zero;
         if(_stageBackgroundOjbect != null)
         {
@@ -418,7 +426,7 @@ public class StageProcessor
             }
         }
 
-        if(_isEnd == false && fraction >= 1f)
+        if(_isEnd == false && _blockPointExit == false && fraction >= 1f)
         {
             startExitSequencers(_stageData._stagePointData[_currentPoint],_currentPoint,_currentPoint != 0);
 
@@ -498,6 +506,12 @@ public class StageProcessor
             Color targetColor = index < _currentPoint ? Color.green : ( index == _currentPoint ? Color.magenta : Color.red);
             GizmoHelper.instance.drawCircle(_stageData._stagePointData[index]._stagePoint + _offsetPosition, 0.3f, 12, targetColor);
         }
+
+        for(int index = 0; index < _stageData._markerData.Count; ++index)
+        {
+            GizmoHelper.instance.drawCircle(_stageData._markerData[index]._position + _offsetPosition, 0.1f, 12, Color.yellow);
+            
+        }
     }
 
     public MovementTrackData getTrackData(string trackName)
@@ -519,6 +533,11 @@ public class StageProcessor
             return;
             
         startCameraTrack(trackData);
+    }
+
+    public bool isTrackEnd()
+    {
+        return (_trackProcessor.isEnd() || _trackProcessor.isTrackValid() == false) && (_cameraTrackPositionErrorReduceTime == 1f);
     }
 
     public void startCameraTrack(MovementTrackData trackData)
@@ -570,6 +589,11 @@ public class StageProcessor
     public bool isValid()
     {
         return _stageData != null;
+    }
+
+    public void blockPointExit(bool value)
+    {
+        _blockPointExit = value;
     }
 
     public GameEntityBase getPlayerEntity()
@@ -631,6 +655,9 @@ public class StageProcessor
 
                 continue;
             }
+
+            if(pointIndex > _currentPoint && _blockPointExit)
+                pointIndex = _currentPoint;
 
             break;
         }

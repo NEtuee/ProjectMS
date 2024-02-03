@@ -67,7 +67,7 @@ LineStart,<NextStage,Path=~~
 ShortCut,__ToastMessage,<ToastMessage Text=~~/>
 LineStart,<ToastMessage,"Text=~~,Time=~~,Color=~~"
 ShortCut,__Task,<Task ProcessType=~~>#n</Task>
-LineStart,<Task,ProcessType=~~
+LineStart,<Task,"ProcessType=~~,Name=~~"
 InQuote,ProcessType=,"StepByStep,AllAtOnce"
 ShortCut,__LetterBoxShow,<LetterBoxShow/>
 ShortCut,__LetterBoxHide,<LetterBoxHide/>
@@ -80,11 +80,11 @@ LineStart,<TaskFence,TaskName=~~
 ShortCut,__SetDirection,<SetDirection UniqueKey=~~ UniqueGroupKey=~~ DirectionType=~~/>
 LineStart,<TaskFence,"DirectionType=~~,UniqueKey=~~,UniqueGroupKey=~~"
 InQuote,DirectionType=,"AlwaysRight,AlwaysLeft,AlwaysUp,AlwaysDown,Keep,MoveInput,MousePoint,AttackedPoint,MoveDirection,AI,AITarget,CatchTargetFace,Summoner,ToSummoner"
-,,
-,,
-,,
-,,
-,,
+LineStart,<BlockPointExit,Enable=~~
+ShortCut,__BlockPointExit,<BlockPointExit Enable=~~/>
+ShortCut,__IsTrackEnd,<IsTrackEnd/>
+LineStart,<EffectPreset,"UniqueKey=~~,EffectPreset=~~"
+ShortCut,__EffectPreset,<EffectPreset UniqueKey=~~ EffectPreset=~~/>
 ,,
 ,,
 ,,

@@ -2,10 +2,12 @@
 
     <InitializePhase>
         <TalkBalloon UniqueKey="Sukeban" SimpleTalkKey="Talk_Stage02_1_3"/>
+        <BlockPointExit Enable="True"/>
     </InitializePhase>
 
     <UpdatePhase>
-        <WaitSecond Time="1.0"/>
+        <DeadFence UniqueGroupKey="EnemyGroup"/>
+        <BlockPointExit Enable="False"/>
 
     </UpdatePhase>
 

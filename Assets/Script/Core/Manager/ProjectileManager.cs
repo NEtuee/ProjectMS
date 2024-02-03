@@ -94,6 +94,7 @@ public class ProjectileManager : PoolingManagerBase<ProjectileEntityBase>
     {
         ProjectileEntityBase entity = dequeuePoolEntity();
 
+        entity.name = name;
         entity._searchIdentifier = searchIdentifier;
         entity.setSummonObject(summoner);
         entity.setData(getProjectileGraphData(name));

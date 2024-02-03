@@ -30,7 +30,7 @@
     <TestZako
         DisplayName="자코"
         ActionGraph="Assets/Data/Character/TestZako/TestZako.xml"
-        AIGraph="Assets/Data/AILibrary/Graph/EmptyAIGraph.xml"
+        AIGraph="Assets/Data/Character/TestZako/TestZakoAI.xml"
         StatusInfoName="CommonEnemyStatus"
 
         CollisionRadius="0.2"
@@ -365,18 +365,6 @@
 
         SearchIdentifier="Enemy"
     />
-    <HolyNail_Shoot
-        DisplayName="헬레나 성정 (발사)"
-        ActionGraph="Assets/Data/Character/Object/Helena_HolyNail/HolyNail_ShootAction.xml"
-        AIGraph="Assets/Data/Character/Object/Helena_HolyNail/HolyNail_ShootAI.xml"
-        StatusInfoName="CommonHpOneEnemyStatusNoUI"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-
-        SearchIdentifier="Enemy"
-    />
 
     <PoliceOmawariChan
         DisplayName="폴리스 오마와리쨩"
@@ -452,28 +440,7 @@
 
         SearchIdentifier="Enemy"
     />
-    <Helena_OliveGrimoire
-        DisplayName="헬레나의 갈록 마도서"
-        ActionGraph="Assets/Data/Character/TestZako/TestZako.xml"
-        AIGraph="Assets/Data/AILibrary/Graph/EmptyAIGraph.xml"
-        StatusInfoName="CommonEnemyStatus"
 
-        CollisionRadius="0.2"
-        ProjectileCollisionRadius=""
-
-        SearchIdentifier="Enemy"
-    />
-    <Helena_BlueGrimoire
-        DisplayName="헬레나의 푸른 마도서"
-        ActionGraph="Assets/Data/Character/TestZako/TestZako.xml"
-        AIGraph="Assets/Data/AILibrary/Graph/EmptyAIGraph.xml"
-        StatusInfoName="CommonEnemyStatus"
-
-        CollisionRadius="0.2"
-        ProjectileCollisionRadius=""
-
-        SearchIdentifier="Enemy"
-    />
 
 
 
@@ -489,6 +456,7 @@
         StatusInfoName="CommonEnemyStatus"
 
         CollisionRadius="0.2"
+        HeadUpOffset="0.5"
         ProjectileCollisionRadius=""
         IndicatorVisible="False"
 
@@ -502,6 +470,7 @@
         StatusInfoName="CommonEnemyStatus"
 
         CollisionRadius="0.2"
+        HeadUpOffset="0.5"
         ProjectileCollisionRadius=""
         IndicatorVisible="False"
 
@@ -515,6 +484,7 @@
         StatusInfoName="CommonEnemyStatus"
 
         CollisionRadius="0.2"
+        HeadUpOffset="0.5"
         ProjectileCollisionRadius=""
         IndicatorVisible="False"
 
@@ -528,6 +498,7 @@
         StatusInfoName="CommonEnemyStatus"
 
         CollisionRadius="0.2"
+        HeadUpOffset="0.5"
         ProjectileCollisionRadius=""
         IndicatorVisible="False"
 
@@ -541,6 +512,7 @@
         StatusInfoName="CommonEnemyStatus"
 
         CollisionRadius="0.2"
+        HeadUpOffset="0.5"
         ProjectileCollisionRadius=""
         IndicatorVisible="False"
 
@@ -554,6 +526,7 @@
         StatusInfoName="CommonEnemyStatus"
 
         CollisionRadius="0.2"
+        HeadUpOffset="0.5"
         ProjectileCollisionRadius=""
         IndicatorVisible="False"
 
@@ -567,6 +540,7 @@
         StatusInfoName="CommonEnemyStatus"
 
         CollisionRadius="0.2"
+        HeadUpOffset="0.5"
         ProjectileCollisionRadius=""
         IndicatorVisible="False"
 
@@ -580,6 +554,7 @@
         StatusInfoName="CommonEnemyStatus"
 
         CollisionRadius="0.2"
+        HeadUpOffset="0.5"
         ProjectileCollisionRadius=""
         IndicatorVisible="False"
 
@@ -593,8 +568,24 @@
         StatusInfoName="CommonEnemyStatus"
 
         CollisionRadius="0.2"
+        HeadUpOffset="0.5"
         ProjectileCollisionRadius=""
         IndicatorVisible="False"
+
+        SearchIdentifier="Enemy"
+    />
+
+    <DecoSportClubStudent
+        DisplayName="데코 운동부 움직임"
+        ActionGraph="Assets/Data/Character/Deco/DecoSportClubStudent.xml"
+        AIGraph="Assets/Data/AILibrary/Graph/EmptyAIGraph.xml"
+        StatusInfoName="CommonEnemyStatus"
+
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+        IndicatorVisible="False"
+        UseCameraBoundLock="False"
 
         SearchIdentifier="Enemy"
     />
@@ -607,6 +598,21 @@
 
         CollisionRadius="0.2"
         HeadUpOffset="0.5"
+        IndicatorVisible="False"
+        ProjectileCollisionRadius=""
+
+        SearchIdentifier="Enemy"
+    />
+
+    <ProjectileShotCharacter
+        DisplayName="프로젝타일 생성용 캐릭터"
+        ActionGraph="Assets/Data/Character/Object/ProjectileShot/ProjectileShotCharacter.xml"
+        AIGraph="Assets/Data/AILibrary/Graph/EmptyAIGraph.xml"
+        StatusInfoName="CommonEnemyStatus"
+
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        IndicatorVisible="False"
         ProjectileCollisionRadius=""
 
         SearchIdentifier="Enemy"

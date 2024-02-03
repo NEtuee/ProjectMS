@@ -503,8 +503,15 @@ public class GameEntityBase : SequencerObjectBase
         {
             _statusInfo.updateDebugTextXXX(debugTextManager);
         }
-        
-        CollisionManager.Instance().collisionRequest(_collisionInfo,this,gameEntityCollisionEvent,collisionEndEvent);
+
+        CollisionRequestData requestData;
+        requestData._collision = _collisionInfo;
+        requestData._collisionDelegate = gameEntityCollisionEvent;
+        requestData._collisionEndEvent = collisionEndEvent;
+        requestData._position = transform.position;
+        requestData._direction = getDirection();
+        requestData._requestObject = this;
+        CollisionManager.Instance().collisionRequest(requestData);
     }
 
     public override void deactive()
@@ -560,6 +567,8 @@ public class GameEntityBase : SequencerObjectBase
             }
 
             debugTextManager.updateDebugText("FrameTag","FrameTag: " + frameTag, UnityEngine.Color.white);
+            debugTextManager.updateDebugText("SearchIdentifier","SearchIdentifier: " + _searchIdentifier, UnityEngine.Color.white);
+            debugTextManager.updateDebugText("ActiveCollision","ActiveCollision: " + _collisionInfo.isActiveCollision(), UnityEngine.Color.white);
         }
     
         if(getDefenceAngle() != 0f)
@@ -875,6 +884,11 @@ public class GameEntityBase : SequencerObjectBase
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Action_IsCatcher, hasChildObject());
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Action_IsCatchTarget, hasParentObject());
         _actionGraph.setActionConditionData_Float(ConditionNodeUpdateType.Action_ActionExecutedTime, _actionGraph.getActionExecutedTime());
+
+        float toTargetAngle = 0f;
+        if(getCurrentTargetEntity() != null)
+            toTargetAngle = MathEx.clampDegree(Vector3.SignedAngle(Vector3.right, (getCurrentTargetEntity().transform.position - transform.position).normalized, Vector3.forward));
+        _actionGraph.setActionConditionData_Float(ConditionNodeUpdateType.Action_AngleToTarget, toTargetAngle);
 
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Input_AttackCharge, Input.GetMouseButton(0));
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Input_AttackBlood, Input.GetKey(KeyCode.R));
@@ -1339,6 +1353,7 @@ public class GameEntityBase : SequencerObjectBase
     public void terminateAIPackage() {_aiGraph.terminatePackage();}
     public void setAIState(int index) {_aiGraph.changeAIPackageStateOther(index);}
     public void setAINode(int index) {_aiGraph.changeAINodeOther(index);}
+    public void setAINode(string nodeName) {setAINode(_aiGraph.findAINodeIndex(nodeName));}
 
     public void setAiDirection(float angle) {_aiGraph.setAIDirection(angle);}
     public void setAiDirection(Vector3 direction) {_aiGraph.setAIDirection(direction);}
@@ -1403,15 +1418,26 @@ public class GameEntityBaseEditor : Editor
     private string _actionListSearchString = "";
     private string[] _actionListSearchStringArray = null;
 
-
-
     private Vector2 _aiListScroll = Vector2.zero;
     private string _aiListSearchString = "";
     private string[] _aiListSearchStringArray = null;
 
+    private float _aiPackageRepeatTime = 0f;
+    private float _aiPackageRepeatTimer = 0f;
+
+    private int _repeatPackageIndex = -1;
+
     public void OnEnable()
     {
         control = (GameEntityBase)target;
+        EditorApplication.update += Update;
+
+        _repeatPackageIndex = -1;
+    }
+
+    void OnDisable() 
+    {
+        EditorApplication.update -= Update;
     }
 
     public override void OnInspectorGUI()
@@ -1455,10 +1481,12 @@ public class GameEntityBaseEditor : Editor
         {
             string searchString = _actionListSearchString;
 
-            _actionListScroll = EditorGUILayout.BeginScrollView(_actionListScroll,"box",GUILayout.Height(200f));
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Search");
+            _actionListSearchString = EditorGUILayout.TextField(_actionListSearchString);
+            GUILayout.EndHorizontal();
+            _actionListScroll = EditorGUILayout.BeginScrollView(_actionListScroll,"box",GUILayout.Height(247f));
             {
-                _actionListSearchString = EditorGUILayout.TextField("Search",_actionListSearchString);
-
                 if(_actionListSearchString != searchString)
                     _actionListSearchStringArray = _actionListSearchString.ToLower().Split(' ');
 
@@ -1503,9 +1531,18 @@ public class GameEntityBaseEditor : Editor
         {
             string searchString = _aiListSearchString;
 
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Search");
+            _aiListSearchString = EditorGUILayout.TextField(_aiListSearchString);
+            GUILayout.EndHorizontal();
+
+            GUILayout.BeginVertical("box");
+            GUILayout.Label("Repeat Option");
+            _aiPackageRepeatTime = EditorGUILayout.FloatField("Time",_aiPackageRepeatTime);
+            GUILayout.EndVertical();
+            
             _aiListScroll = EditorGUILayout.BeginScrollView(_aiListScroll,"box",GUILayout.Height(200f));
             {
-                _aiListSearchString = EditorGUILayout.TextField("Search",_aiListSearchString);
 
                 if(_aiListSearchString != searchString)
                     _aiListSearchStringArray = _aiListSearchString.ToLower().Split(' ');
@@ -1527,12 +1564,21 @@ public class GameEntityBaseEditor : Editor
                             continue;
                     }
 
+                    Color baseColor = GUI.color;
+                    if(_aiPackageRepeatTime != 0f && _repeatPackageIndex == index)
+                        GUI.color = Color.green;
+
                     EditorGUILayout.BeginHorizontal();
                     if(GUILayout.Button(aiBaseData._aiGraphNodeData[index]._nodeName, buttonStyle))
                     {
                         control._blockAIByEditor = false;
                         control.setAINode(index);
+
+                        if(_aiPackageRepeatTime != 0f)
+                            _repeatPackageIndex = _repeatPackageIndex == index ? -1 : index;
                     }
+
+                    GUI.color = baseColor;
 
                     if(GUILayout.Button("Open",GUILayout.Width(50f)))
                         FileDebugger.OpenFileWithCursor(aiBaseData._fullPath,aiBaseData._aiGraphNodeData[index]._lineNumber);
@@ -1615,6 +1661,34 @@ public class GameEntityBaseEditor : Editor
         }
         EditorGUILayout.EndVertical();
 
+    }
+
+
+    void Update()
+    {
+        if(control.isDead() || control.isActiveSelf() == false || control.gameObject.activeSelf == false)
+        {
+            _aiPackageRepeatTime = 0f;
+            _repeatPackageIndex = -1;
+        }
+
+        if(_aiPackageRepeatTime == 0f)
+        {
+            _repeatPackageIndex = -1;
+            return;
+        }
+
+        if(_repeatPackageIndex == -1)
+            return;
+
+        _aiPackageRepeatTimer += GlobalTimer.Instance().getSclaedDeltaTime();
+        if(_aiPackageRepeatTimer >= _aiPackageRepeatTime)
+        {
+            control._blockAIByEditor = false;
+            control.setAINode(_repeatPackageIndex);
+
+            _aiPackageRepeatTimer = 0f;
+        }
     }
 
     private void PingTarget(ScriptableObject obj)

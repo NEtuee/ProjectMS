@@ -8,15 +8,6 @@
             <Branch Condition="true" Execute="TerminatePackage"/>
         </AI_Entry>
 
-        <AI_Olive UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" SearchIdentifier="Player">
-            <Event_OnExecute>
-                <AIEvent Type="SetDirectionToTarget"/>
-                <AIEvent Type="SetAction" Action="AC_SpawnOliveMain"/>
-            </Event_OnExecute>
-            
-            <Branch Condition="End" Execute="TerminatePackage"/>
-        </AI_Olive>
-
         <AI_Crimson UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" SearchIdentifier="Player">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
@@ -26,15 +17,15 @@
             <Branch Condition="End" Execute="TerminatePackage"/>
         </AI_Crimson>
 
-        <AI_Blue UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" SearchIdentifier="Player">
+        <AI_CrimsonSet UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" SearchIdentifier="Player">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
-                <AIEvent Type="SetAction" Action="AC_SpawnBlueMain"/>
+                <AIEvent Type="SetAction" Action="AC_SpawnCrimsonMainSet"/>
             </Event_OnExecute>
             
             <Branch Condition="End" Execute="TerminatePackage"/>
-        </AI_Blue>
-        
+        </AI_CrimsonSet>
+
         <TerminatePackage>
             <Event_OnExecute>
                 <AIEvent Type="TerminatePackage"/>

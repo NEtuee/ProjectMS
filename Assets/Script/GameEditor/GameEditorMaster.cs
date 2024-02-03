@@ -15,9 +15,6 @@ public class GameEditorMaster : MonoBehaviour
     public bool _animationDebugAll = false;
     public bool _soundDebugAll = false;
 
-    public float _debugCameraMoveSpeed = 2f;
-    public float _debugCameraMoveSpeedMultiflier = 4f;
-
     public Slider   _timeMagnitudeSlider;
     public Text     _timeMagnitudeText;
 
@@ -28,6 +25,7 @@ public class GameEditorMaster : MonoBehaviour
     public Toggle   _animationDebugToggle;
     public Toggle   _soundDebugToggle;
     public Toggle   _immortalToggle;
+    public Toggle   _ignoreCollisionToggle;
 
     public RectTransform _stageSelectorContent;
     public GameObject _stageSelectorButtonItemPrefab;
@@ -84,31 +82,6 @@ public class GameEditorMaster : MonoBehaviour
                 continue;
 
             window.mainUpdate(Time.deltaTime);
-        }
-
-        float debugCameraMoveSpeed = _debugCameraMoveSpeed;
-        if(Input.GetKey(KeyCode.LeftShift))
-            debugCameraMoveSpeed *= _debugCameraMoveSpeedMultiflier;
-
-        if(Input.GetKey(KeyCode.UpArrow))
-        {
-            Vector3 position = Camera.main.transform.position;
-            Camera.main.transform.position = position + Vector3.up * debugCameraMoveSpeed * Time.deltaTime;
-        }
-        if(Input.GetKey(KeyCode.DownArrow))
-        {
-            Vector3 position = Camera.main.transform.position;
-            Camera.main.transform.position = position + Vector3.down * debugCameraMoveSpeed * Time.deltaTime;
-        }
-        if(Input.GetKey(KeyCode.LeftArrow))
-        {
-            Vector3 position = Camera.main.transform.position;
-            Camera.main.transform.position = position + Vector3.left * debugCameraMoveSpeed * Time.deltaTime;
-        }
-        if(Input.GetKey(KeyCode.RightArrow))
-        {
-            Vector3 position = Camera.main.transform.position;
-            Camera.main.transform.position = position + Vector3.right * debugCameraMoveSpeed * Time.deltaTime;
         }
 
 #if UNITY_EDITOR
@@ -254,6 +227,7 @@ public class GameEditorMaster : MonoBehaviour
         _animationDebugToggle.isOn = clear ? false : (_currentlySelectedEntity != null ? _currentlySelectedEntity._animationDebug : false);
         _soundDebugToggle.isOn = clear ? false : (_currentlySelectedEntity != null ? _currentlySelectedEntity._soundDebug : false);
         _immortalToggle.isOn = clear ? false : (_currentlySelectedEntity != null ? _currentlySelectedEntity.getStatusInfo().isImmortal() : false);
+        _ignoreCollisionToggle.isOn = clear ? false : (_currentlySelectedEntity != null ? _currentlySelectedEntity.getCollisionInfo().isIgnoreCollision() : false);
     }
 
 
@@ -263,6 +237,7 @@ public class GameEditorMaster : MonoBehaviour
     public void setTargetAnimationDebug() {if(_currentlySelectedEntity==null) return; _currentlySelectedEntity._animationDebug = _animationDebugToggle.isOn;}
     public void setTargetSoundDebug() {if(_currentlySelectedEntity==null) return; _currentlySelectedEntity._soundDebug = _soundDebugToggle.isOn;}
     public void setTargetImmortal() {if(_currentlySelectedEntity==null) return; _currentlySelectedEntity.getStatusInfo().setImmortal(_immortalToggle.isOn);}
+    public void setTargetIgnoreCollision() {if(_currentlySelectedEntity==null) return; _currentlySelectedEntity.getCollisionInfo().setIgnoreCollision(_ignoreCollisionToggle.isOn);}
 
     public bool isActionDebug() {return _actionDebugAll;}
     public bool isAiDebug() {return _aiDebugAll;}

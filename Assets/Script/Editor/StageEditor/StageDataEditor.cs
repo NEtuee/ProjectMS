@@ -18,6 +18,14 @@ public class StageDataEditor : EditorWindow
         public List<SpriteRenderer> _characterObjectList = new List<SpriteRenderer>();
         public List<StagePointCharacterSpawnData> _characterSpawnDataList = new List<StagePointCharacterSpawnData>();
 
+        public void setCharacterActive(bool value)
+        {
+            foreach(var item in _characterObjectList)
+            {
+                item.gameObject.SetActive(value);
+            }
+        }
+
         public bool syncPosition(bool isMiniStage)
         {
             if(_stagePointData == null || _gizmoItem == null)
@@ -570,6 +578,7 @@ public class StageDataEditor : EditorWindow
     private bool _drawScreenToMousePoint = false;
     private bool _drawTriggerBound = false;
     private bool _enableBackground = true;
+    private bool _hideCharacterAll = false;
     float _prevTime = 0f;
 
     [MenuItem("Tools/StageDataEditor", priority = 0)]
@@ -720,6 +729,18 @@ public class StageDataEditor : EditorWindow
                 if(GUILayout.Button("Trigger Bound"))
                 {
                     _drawTriggerBound = !_drawTriggerBound;
+                    SceneView.RepaintAll();
+                }
+                GUI.color = _hideCharacterAll ? Color.green : Color.red;
+                if(GUILayout.Button("Hide Character"))
+                {
+                    _hideCharacterAll = ! _hideCharacterAll;
+
+                    foreach(var item in _editingStagePointList)
+                    {
+                        item.setCharacterActive(_hideCharacterAll == false);
+                    }
+
                     SceneView.RepaintAll();
                 }
                 GUI.color = currentColor;
@@ -1177,6 +1198,19 @@ public class StageDataEditor : EditorWindow
         }
 
         characterSpawnData._flip = EditorGUILayout.Toggle("Flip",characterSpawnData._flip);
+        characterSpawnData._setDirection = EditorGUILayout.Toggle("SetDirection",characterSpawnData._setDirection);
+        if(characterSpawnData._setDirection)
+        {
+            GUILayout.BeginHorizontal("box");
+            float angle = EditorGUILayout.FloatField("  Angle",characterSpawnData._directionAngle);
+            if(angle != characterSpawnData._directionAngle)
+            {
+                SceneView.RepaintAll();
+                characterSpawnData._directionAngle = MathEx.clamp360Degree(angle);
+            }
+            GUILayout.EndHorizontal();
+        }
+
         characterSpawnData._hideWhenDeactive = EditorGUILayout.Toggle("Hide When Deactive", characterSpawnData._hideWhenDeactive);
         characterSpawnData._keepAlive = EditorGUILayout.Toggle("Keep Alive", characterSpawnData._keepAlive);
         characterSpawnData._searchIdentifier = (SearchIdentifier)EditorGUILayout.EnumPopup("Search Identifier", characterSpawnData._searchIdentifier);
@@ -1226,7 +1260,7 @@ public class StageDataEditor : EditorWindow
             alphaClor.a = 0.5f;
             stagePointDataEditObject._characterObjectList[_characterSelectedIndex].color = alphaClor;
         }
-        
+
         stagePointDataEditObject._characterObjectList[_characterSelectedIndex].flipX = characterSpawnData._flip;
     }
 
@@ -1632,6 +1666,7 @@ public class StageDataEditor : EditorWindow
         characterEditItem.sortingLayerName = "Character";
         characterEditItem.sortingOrder = 10;
         characterEditItem.transform.position = stagePointData._stagePoint;
+        characterEditItem.gameObject.SetActive(_hideCharacterAll == false);
 
         stagePointDataEdit._characterSpawnDataList.Add(spawnData);
         stagePointDataEdit._characterObjectList.Add(characterEditItem);
@@ -1672,6 +1707,7 @@ public class StageDataEditor : EditorWindow
                 characterEditItem.sortingOrder = 10;
                 characterEditItem.transform.position = editObject._gizmoItem.transform.position + spawnData._localPosition;
                 characterEditItem.flipX = spawnData._flip;
+                characterEditItem.gameObject.SetActive(_hideCharacterAll == false);
 
                 editObject._characterObjectList.Add(characterEditItem);
             }
@@ -1768,7 +1804,13 @@ public class StageDataEditor : EditorWindow
             GameObject gizmoHelper = GameObject.FindGameObjectWithTag("GizmoHelper");
             if(gizmoHelper != null)
             {
-                gizmoHelper.GetComponent<GizmoHelper>().drawCircle(trackPosition,0.1f,6,Color.magenta);
+                GizmoHelper gizmoHelperComp = gizmoHelper.GetComponent<GizmoHelper>();
+                gizmoHelperComp.drawCircle(trackPosition,0.1f,6,Color.magenta);
+
+                float mainCamSize = Camera.main.orthographicSize;
+                float camHeight = (mainCamSize) * 2f;
+		        float camWidth = camHeight * ((float)800f / (float)600f);
+                gizmoHelperComp.drawRectangle(trackPosition,new Vector3(camWidth, camHeight, 0f) * 0.5f, Color.blue, 0f );
                 SceneView.RepaintAll();
             }
         }
@@ -1935,7 +1977,7 @@ public class StageDataEditor : EditorWindow
 
             Color currentColor = Handles.color;
             
-            if(stagePointData._characterSpawnData != null)
+            if(stagePointData._characterSpawnData != null && _hideCharacterAll == false)
             {
                 for(int index = 0; index < stagePointData._characterSpawnData.Length; ++index)
                 {
@@ -1943,6 +1985,9 @@ public class StageDataEditor : EditorWindow
 
                     Handles.color = i == _pointSelectedIndex ? Color.green : Color.gray;
                     Handles.DrawLine(stagePointData._stagePoint,characterWorld);
+
+                    if(stagePointData._characterSpawnData[index]._setDirection)
+                        drawArrow(characterWorld,characterWorld + MathEx.angleToDirection(stagePointData._characterSpawnData[index]._directionAngle * Mathf.Deg2Rad) * 0.5f,0.1f,Handles.color);
 
                     characterWorld += Vector3.right * 0.1f;
                     if(stagePointData._characterSpawnData[index]._uniqueKey != "")
@@ -2505,6 +2550,7 @@ public class StageDataEditor : EditorWindow
                 characterEditItem.sortingOrder = 10;
                 characterEditItem.transform.position = item._stagePoint + editObject._characterSpawnDataList[index]._localPosition;
                 characterEditItem.flipX = editObject._characterSpawnDataList[index]._flip;
+                characterEditItem.gameObject.SetActive(_hideCharacterAll == false);
 
                 editObject._characterObjectList.Add(characterEditItem);
             }
@@ -2533,6 +2579,7 @@ public class StageDataEditor : EditorWindow
                     characterEditItem.sortingOrder = 10;
                     characterEditItem.transform.position = editObject._gizmoItem.transform.position + spawnData._localPosition;
                     characterEditItem.flipX = spawnData._flip;
+                    characterEditItem.gameObject.SetActive(_hideCharacterAll == false);
     
                     editObject._characterObjectList.Add(characterEditItem);
                 }

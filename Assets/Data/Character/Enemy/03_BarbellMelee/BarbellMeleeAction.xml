@@ -72,7 +72,6 @@
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountIncrease"/>
 
-            <FrameEvent Type="StopUpdate" Time="0.15"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
@@ -238,5 +237,21 @@
     </AC_GuardBroken>
 <!-- Defense Action -->
 
+<!-- Sequencer Action -->
+    <SQ_Move MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="Keep" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/2_move" XFlip="true" Duration="0.5">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="SQ_Move"/>
+    </SQ_Move>
+
+    <SQ_MoveEnd MovementType="GraphPreset" MovementGraphPreset="MoveEnd" DirectionType="Keep" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/2_move" XFlip="true" Duration="1.0">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="SQ_Move"/>
+    </SQ_MoveEnd>
 
 </ActionGraph>

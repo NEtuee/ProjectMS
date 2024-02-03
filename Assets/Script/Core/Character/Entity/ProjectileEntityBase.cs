@@ -118,8 +118,14 @@ public class ProjectileEntityBase : ObjectBase
         _projectileGraph.getCurrentAnimationTranslation(out outTranslation);
         _spriteRenderer.transform.localPosition = outTranslation;
 
-        _collisionInfo.updateCollisionInfo(transform.position,Vector3.right);
-        CollisionManager.Instance().collisionRequest(_collisionInfo,this,_collisionDelegate,null);
+        CollisionRequestData requestData;
+        requestData._collision = _collisionInfo;
+        requestData._collisionDelegate = _collisionDelegate;
+        requestData._collisionEndEvent = null;
+        requestData._position = transform.position;
+        requestData._direction = Vector3.right;
+        requestData._requestObject = this;
+        CollisionManager.Instance().collisionRequest(requestData);
         
         GizmoHelper.instance.drawCircle(transform.position,_collisionInfo.getRadius(),36,_debugColor);
     }

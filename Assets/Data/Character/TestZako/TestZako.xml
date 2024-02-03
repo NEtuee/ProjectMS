@@ -2,36 +2,14 @@
 <ActionGraph Name="TestZako" DefaultAction="Idle" DefaultFramePerSecond="0.5">
 
     <Idle DirectionType="Keep" FlipType="Direction" DefenceType="Guard" DefenceAngle="360.0" DefenceDirectionType="Direction">
-        <Animation Path="Resources/Sprites/DummyPlayer/Idle/" StartFrame="0" EndFrame="1" FramePerSecond="0.1" XFlip="true">
-            <FrameEvent Type="Test" StartTime="0" Log="loop"/>
-            <FrameEvent Type="FollowAttack" StartTime="0" EndTime="3" FollowType="Movement" Radius="1" MoveTime="999" CharacterKey="Chair" ToTarget="false">
-                <OnBegin>
-                    <FrameEvent Type="Test" StartTime="0" Log="begin"/>
-                    <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="3" Speed="10"/>
-                </OnBegin>
-            
-                <OnEnter>
-                    <FrameEvent Type="Test" StartTime="0" Log="enter"/>
-                </OnEnter>
-            
-                <OnExit>
-                    <FrameEvent Type="Test" StartTime="0" Log="exit"/>
-                </OnExit>
-
-                <OnEnd>
-                    <FrameEvent Type="Attack" StartTime="0" Radius="1.0">
-                        <OnHit>
-                        </OnHit>
-                    </FrameEvent>
-                </OnEnd>
-            </FrameEvent>
+        <Animation Path="Resources/Sprites/DummyPlayer/Idle/" StartFrame="0" EndFrame="1" FramePerSecond="0.5" XFlip="true">
         </Animation>
 
         <Branch Condition="Catched" Execute="Catched"/>
         <Branch Condition="End == true" Execute="Idle"/>
         <Branch Condition="GuardBroken" Execute="GuardBroken"/>
     </Idle>
-    
+
     <GuardBroken DirectionType="Keep" FlipType="Direction">
         <Animation Path="Resources/Sprites/DummyPlayer/JustGuardBreak/" StartFrame="0" EndFrame="1" XFlip="true">
         </Animation>
@@ -60,6 +38,51 @@
 
         <Branch Condition="End == true" Execute="Dead"/>
     </Dead>
+
+
+
+
+
+
+
+
+<!-- 레이저 쏘기 테스트 -->
+    <TEST_LaserLong_Start DirectionType="AI" FlipType="Direction"  Flags="LaserEffect">
+        <Animation Preset="Sprites/DummyPlayer/idle/" Duration="1.0" XFlip="true">
+            <FrameEvent Type="TimelineEffect" StartTime="0" 
+                Path="Prefab/Effect/CommonBeam_TimeLine" 
+                Attach="true" 
+                AngleType="Direction" 
+                LifeTime="1.0" 
+                FollowDirection="True" 
+                AttackPreset="Luger_Normal"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="TEST_LaserLong_Shot"/>
+    </TEST_LaserLong_Start>
+
+    <TEST_LaserLong_Shot DirectionType="AI" FlipType="Direction" Flags="LaserEffect">
+        <Animation Preset="Sprites/DummyPlayer/idle/" Duration="5.0" XFlip="true">
+            <FrameEvent Type="Attack" StartTime="0.3" EndTime="5.0" AttackPreset="Luger_Normal" AttackTerm="0.2">
+                <OnHit>
+                    <FrameEvent Type="AudioPlay" StartTime="0" ID="2205" Attach="true"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
+                    
+                    <FrameEvent Type="StopUpdate" Time="0.1"/>
+                    <FrameEvent Type="SetTimeScale" Scale="0.1" Time="0.1" BlendTime="0.1"/>
+                    <FrameEvent Type="ShakeEffect" Scale="0.1" Speed="10.0" Time="0.1"/>
+                    
+                    <!-- visual -->
+                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
+                </OnHit>
+            </FrameEvent>
+            <FrameEvent Type="EffectPreset" StartTime="0" Key="LaserLoopFollow"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Idle"/>
+    </TEST_LaserLong_Shot>
+<!-- ================================================================ -->
+    
     
     
 
