@@ -69,8 +69,6 @@ public abstract class AIEventBase
 
 public class AIEvent_DetachRotateSlot : AIEventBase
 {
-    private SetRotateSlotType _rotateSlotType = SetRotateSlotType.None;
-
     public override AIEventType getFrameEventType() {return AIEventType.AIEvent_DetachRotateSlot;}
     public override void onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {

@@ -157,12 +157,14 @@
                     
                     <FrameEvent Type="StopUpdate" Time="0.07"/>
                     
-                    <FrameEvent Type="SetTimeScale" Condition="Kill == false" Scale="0.7" Time="0.05" BlendTime="0.07"/>
+                    <FrameEvent Type="SetTimeScale" Condition="Kill == false" Scale="0.4" Time="0.08" BlendTime="0.02"/>
                     <FrameEvent Type="ShakeEffect" Condition="Kill == false" Scale="0.1" Speed="35.0" Time="0.15"/>
 
                     <FrameEvent Type="SetAction" Condition="Kill" Action="AttackSuccessFar"/>
                     <FrameEvent Type="SetTimeScale" Condition="Kill" Scale="0.1" Time="0.1" BlendTime="0.07"/>
                     <FrameEvent Type="ShakeEffect" Condition="Kill" Scale="0.15" Speed="35.0" Time="0.15"/>
+
+                    <FrameEvent Type="ApplyPostProcessProfile" Condition="Kill" Path="PostProcessProfile/KillEnemy" BlendTime="0.4" ApplyType="Additional"/>
                 </OnHit>
                 <OnGuard>
                     <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="DashPointConsumption"/>
@@ -228,6 +230,8 @@
                     <FrameEvent Type="SetAction" Condition="Kill" Action="AttackSuccessFar"/>
                     <FrameEvent Type="SetTimeScale" Scale="0.1" Time="0.1" BlendTime="0.07"/>
                     <FrameEvent Type="ShakeEffect" Condition="Kill" Scale="0.15" Speed="35.0" Time="0.25"/>
+
+                    <FrameEvent Type="ApplyPostProcessProfile" Condition="Kill" Path="PostProcessProfile/KillEnemy" BlendTime="0.4" ApplyType="Additional"/>
                 </OnHit>
                 <OnGuard>
                     <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="DashPointConsumption"/>
@@ -279,8 +283,8 @@
                     <FrameEvent Type="TeleportToTarget" DistanceOffset="0"/>
                     <FrameEvent Type="StopUpdate" Time="0.07"/>
 
-                    <FrameEvent Type="SetTimeScale" Scale="0.1" Time="0.02" BlendTime="0.01"/>
-                    <FrameEvent Type="ShakeEffect" Scale="0.1" Speed="35.0" Time="0.07"/>
+                    <FrameEvent Type="SetTimeScale" Scale="0.1" Time="0.05" BlendTime="0.01"/>
+                    <FrameEvent Type="ShakeEffect" Scale="0.1" Speed="35.0" Time="0.15"/>
                 </OnGuardBreak>
 
                 <OnGuardBreakFail>

@@ -180,6 +180,11 @@ public class MasterManager : MessageHub<ManagerBase>
         if(Input.GetKeyDown(KeyCode.Escape))
         {
             _stageProcessor.stopStage(true);
+
+            HPSphereUIManager.Instance().setActive(true);
+            GameUI.Instance.SetActiveCrossHair(true);
+            ScreenDirector._instance.setActiveMainHud(true);
+        
             ScreenDirector._instance._screenFader.clear();
             LetterBox._instance.clear();
         }
