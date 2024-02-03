@@ -12,6 +12,8 @@ public class CharacterEntityBase : GameEntityBase
 {
     private string _qteEffectPath = "Sprites/UI/QTEHit/";
     private EffectItem _qteEffectItem = null;
+
+    private bool _useCameraBoundLock = true;
     private bool _isInCameraBound = false;
     private int _stagePointIndex = 0;
     private float _targetSearchTime = 0f;
@@ -35,6 +37,8 @@ public class CharacterEntityBase : GameEntityBase
     {
         base.initializeCharacter(characterInfo,direction);
 
+        _useCameraBoundLock = characterInfo._useCameraBoundLock;
+
         RegisterRequest(QueryUniqueID("SceneCharacterManager"));
         targetSearchQuick();
 
@@ -45,6 +49,7 @@ public class CharacterEntityBase : GameEntityBase
         _isInCameraBound = MasterManager.instance._stageProcessor.isInCameraBound(_stagePointIndex, transform.position, out Vector3 resultPosition);
 
         _targetSearchTime = 1f;
+
     }
 
     public override void progress(float deltaTime)
@@ -106,15 +111,18 @@ public class CharacterEntityBase : GameEntityBase
         if(isActiveSelf() == false)
             return;
 
-        MasterManager.instance._stageProcessor.updatePointIndex(transform.position, ref _stagePointIndex);
-        if(_isInCameraBound == false)
-            _isInCameraBound = MasterManager.instance._stageProcessor.isInCameraBound(_stagePointIndex, transform.position, out Vector3 resultPosition);
-        
-        if(_isInCameraBound)
+        if(_useCameraBoundLock)
         {
-            bool inCameraBound = MasterManager.instance._stageProcessor.isInCameraBound(_stagePointIndex, transform.position, out Vector3 resultPosition);
-            if(inCameraBound == false)
-                transform.position = resultPosition;
+            MasterManager.instance._stageProcessor.updatePointIndex(transform.position, ref _stagePointIndex);
+            if(_isInCameraBound == false)
+                _isInCameraBound = MasterManager.instance._stageProcessor.isInCameraBound(_stagePointIndex, transform.position, out Vector3 resultPosition);
+            
+            if(_isInCameraBound)
+            {
+                bool inCameraBound = MasterManager.instance._stageProcessor.isInCameraBound(_stagePointIndex, transform.position, out Vector3 resultPosition);
+                if(inCameraBound == false)
+                    transform.position = resultPosition;
+            }
         }
     }
 

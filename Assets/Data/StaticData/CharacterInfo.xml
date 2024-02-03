@@ -575,6 +575,21 @@
         SearchIdentifier="Enemy"
     />
 
+    <DecoSportClubStudent
+        DisplayName="데코 운동부 움직임"
+        ActionGraph="Assets/Data/Character/Deco/DecoSportClubStudent.xml"
+        AIGraph="Assets/Data/AILibrary/Graph/EmptyAIGraph.xml"
+        StatusInfoName="CommonEnemyStatus"
+
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+        IndicatorVisible="False"
+        UseCameraBoundLock="False"
+
+        SearchIdentifier="Enemy"
+    />
+
     <YakisobaChan
         DisplayName="야끼소바쨩"
         ActionGraph="Assets/Data/Character/Deco/YakisobaChan.xml"

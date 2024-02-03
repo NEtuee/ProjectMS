@@ -1,0 +1,39 @@
+<ActionGraph Name="PlaygroundStudent" DefaultAction="Move" DefaultFramePerSecond="12">
+
+    <GlobalVariable Name="gv_movementSpeed" Value="5.0"/>
+    <GlobalVariable Name="gv_lifeTime" Value="10.0"/>
+
+    <Move MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Deco/DecoSportClubStudent/"/>
+        <Animation Preset="Move" XFlip="true" Duration="1">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" Velocity="gv_movementSpeed" MaxVelocity="gv_movementSpeed" Speed="gv_movementSpeed"/>
+        </Animation>
+
+        <Branch Condition="ActionExecutedTime >= gv_lifeTime" Execute="ImmediatlyKill"/>
+        <Branch Condition="End == true" Execute="Move"/>
+    </Move>
+
+    <ImmediatlyKill MovementType="Empty" DirectionType="Keep" ActiveCollision="False">
+        <AnimationHeader MasterPath="Sprites/Deco/DecoSportClubStudent/"/>
+        <Animation Preset="Dead" XFlip="true" Duration="1">
+            <FrameEvent Type="KillEntity" StartTime="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="ImmediatlyKill"/>
+    </ImmediatlyKill>
+
+    <Dead MovementType="Empty" DirectionType="MoveInput">
+        <AnimationHeader MasterPath="Sprites/Deco/DecoSportClubStudent/"/>
+        <Animation Preset="Dead" XFlip="true" Duration="1">
+
+            <FrameEvent Type="Effect" StartTime="0" Path="Sprites/Deco/DecoSportClubStudent/Dead" FramePerSecond="1.0" CastShadow="True">
+                <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
+            </FrameEvent>
+            <FrameEvent Type="KillEntity" StartTime="0"/>
+
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Dead"/>
+    </Dead>
+
+</ActionGraph>
