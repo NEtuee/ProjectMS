@@ -590,12 +590,22 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
                 {
                     AnimationScalePreset scalePreset = ResourceContainerEx.Instance().GetScriptableObject("Preset\\AnimationScalePreset") as AnimationScalePreset;
                     playData._scalePresetData = scalePreset.getPresetData(animationCustomPreset._scalePresetName);
+
+                    if(playData._scalePresetData == null)
+                    {
+                        DebugUtil.assert_fileOpen(false,"스케일 프리셋 로드 실패 [Preset: {0}] [FilePath: {0}]",filePath,XMLScriptConverter.getLineNumberFromXMLNode(node),path,filePath);
+                    }
                 }
 
                 if(animationCustomPreset._translationPresetName != "")
                 {
                     AnimationTranslationPreset scalePreset = ResourceContainerEx.Instance().GetScriptableObject("Preset\\AnimationTranslationPreset") as AnimationTranslationPreset;
                     playData._translationPresetData = scalePreset.getPresetData(animationCustomPreset._translationPresetName);
+
+                    if(playData._translationPresetData == null)
+                    {
+                        DebugUtil.assert_fileOpen(false,"트렌슬레이션 프리셋 로드 실패 [Preset: {0}] [FilePath: {0}]",filePath,XMLScriptConverter.getLineNumberFromXMLNode(node),path,filePath);
+                    }
                 }
                 
                 playData._frameEventDataCount = playData._frameEventData == null ? 0 : playData._frameEventData.Length;
