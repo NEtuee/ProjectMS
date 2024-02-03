@@ -274,7 +274,7 @@ public class CameraControlEx : Singleton<CameraControlEx>
             return;
 
         updateCameraMode(deltaTime);
-        _postProcessProfileControl.processBlend(Time.deltaTime);
+        _postProcessProfileControl.processBlend(deltaTime);
 
         if(MathEx.equals(_currentCamera.orthographicSize,_currentMainCamSize,float.Epsilon) == true)
 			_currentCamera.orthographicSize = _currentMainCamSize;
