@@ -191,4 +191,19 @@
         CastShadow="False"
     /> 
 
+    <ParticleEffect Key="AttackReady" 
+        AttackMaterial="" 
+        DefenceMaterial=""
+        Path="Prefab/Effect/Ready"
+        AngleOffset="0.0"
+        Offset="0.0 0.0 0.0"
+        ToTarget="true"
+        UpdateType="ScaledDeltaTime"
+        Attach="true"
+        AngleType="AttackPoint"
+        LifeTime="0.0"
+        FollowDirection="False"
+        CastShadow="False"
+    /> 
+
 </EffectInfo>

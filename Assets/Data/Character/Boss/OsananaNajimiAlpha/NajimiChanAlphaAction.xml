@@ -221,7 +221,7 @@
 
     <AC_Away MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/1_rushPattern/4_away/"/>
-        <Animation Preset="1_awaySpin" XFlip="true" RotationPreset="NajimiAway" Duration="1.0">
+        <Animation Preset="1_awaySpin" XFlip="true" RotationPreset="Away" Duration="1.0">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2108" Attach="true"/>
 
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Velocity="-6" Speed="0"/>

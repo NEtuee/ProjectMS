@@ -159,7 +159,7 @@
 
     <AC_Away MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/Gauntlet/1_rush/"/>
-        <Animation Preset="6_awaySpin" XFlip="true" RotationPreset="NajimiAway" Duration="1.0">
+        <Animation Preset="6_awaySpin" XFlip="true" RotationPreset="Away" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Velocity="-6" Speed="0"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>

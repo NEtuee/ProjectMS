@@ -13,61 +13,36 @@ MonoBehaviour:
   m_Name: AnimationRotationPreset
   m_EditorClassIdentifier: 
   _presetData:
-  - _name: SpinLinear
+  - _name: Away
     _rotationCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
         time: 0
         value: 0
-        inSlope: 467.11716
-        outSlope: 467.11716
-        tangentMode: 34
+        inSlope: 547.6556
+        outSlope: 547.6556
+        tangentMode: 0
         weightedMode: 0
         inWeight: 0
-        outWeight: 0.33333334
+        outWeight: 0.07748745
       - serializedVersion: 3
-        time: 0.6317935
-        value: 295.12158
-        inSlope: 321.65918
-        outSlope: 321.65918
-        tangentMode: 34
+        time: 0.6540395
+        value: 284.50937
+        inSlope: 284.34677
+        outSlope: 284.34677
+        tangentMode: 0
         weightedMode: 0
         inWeight: 0.33333334
-        outWeight: 0.33333334
+        outWeight: 0.16200867
       - serializedVersion: 3
-        time: 1
+        time: 1.0012207
         value: 360
-        inSlope: 176.20117
-        outSlope: 176.20117
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 0
-  - _name: NajimiAway
-    _rotationCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 3970.4512
-        outSlope: 3970.4512
+        inSlope: 129.24551
+        outSlope: 129.24551
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0
-        outWeight: 0.04120976
-      - serializedVersion: 3
-        time: 0.6
-        value: 1200
-        inSlope: -141.38344
-        outSlope: -141.38344
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.14488775
+        inWeight: 0.1637328
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
@@ -192,7 +167,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 0
-  - _name: NajimiGrab
+  - _name: Grab
     _rotationCurve:
       serializedVersion: 2
       m_Curve:
@@ -262,7 +237,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  - _name: RealLinearSpin
+  - _name: SpinLinear
     _rotationCurve:
       serializedVersion: 2
       m_Curve:
@@ -283,6 +258,31 @@ MonoBehaviour:
         tangentMode: 0
         weightedMode: 0
         inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  - _name: Sway
+    _rotationCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 107.28214
+        outSlope: 107.28214
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.051915947
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 105.777
+        outSlope: 105.777
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.030902326
         outWeight: 0.33333334
       m_PreInfinity: 2
       m_PostInfinity: 2
