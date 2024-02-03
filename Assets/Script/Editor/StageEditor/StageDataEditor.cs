@@ -18,6 +18,14 @@ public class StageDataEditor : EditorWindow
         public List<SpriteRenderer> _characterObjectList = new List<SpriteRenderer>();
         public List<StagePointCharacterSpawnData> _characterSpawnDataList = new List<StagePointCharacterSpawnData>();
 
+        public void setCharacterActive(bool value)
+        {
+            foreach(var item in _characterObjectList)
+            {
+                item.gameObject.SetActive(value);
+            }
+        }
+
         public bool syncPosition(bool isMiniStage)
         {
             if(_stagePointData == null || _gizmoItem == null)
@@ -570,6 +578,7 @@ public class StageDataEditor : EditorWindow
     private bool _drawScreenToMousePoint = false;
     private bool _drawTriggerBound = false;
     private bool _enableBackground = true;
+    private bool _hideCharacterAll = false;
     float _prevTime = 0f;
 
     [MenuItem("Tools/StageDataEditor", priority = 0)]
@@ -720,6 +729,18 @@ public class StageDataEditor : EditorWindow
                 if(GUILayout.Button("Trigger Bound"))
                 {
                     _drawTriggerBound = !_drawTriggerBound;
+                    SceneView.RepaintAll();
+                }
+                GUI.color = _hideCharacterAll ? Color.green : Color.red;
+                if(GUILayout.Button("Hide Character"))
+                {
+                    _hideCharacterAll = ! _hideCharacterAll;
+
+                    foreach(var item in _editingStagePointList)
+                    {
+                        item.setCharacterActive(_hideCharacterAll == false);
+                    }
+
                     SceneView.RepaintAll();
                 }
                 GUI.color = currentColor;
@@ -1645,6 +1666,7 @@ public class StageDataEditor : EditorWindow
         characterEditItem.sortingLayerName = "Character";
         characterEditItem.sortingOrder = 10;
         characterEditItem.transform.position = stagePointData._stagePoint;
+        characterEditItem.gameObject.SetActive(_hideCharacterAll == false);
 
         stagePointDataEdit._characterSpawnDataList.Add(spawnData);
         stagePointDataEdit._characterObjectList.Add(characterEditItem);
@@ -1685,6 +1707,7 @@ public class StageDataEditor : EditorWindow
                 characterEditItem.sortingOrder = 10;
                 characterEditItem.transform.position = editObject._gizmoItem.transform.position + spawnData._localPosition;
                 characterEditItem.flipX = spawnData._flip;
+                characterEditItem.gameObject.SetActive(_hideCharacterAll == false);
 
                 editObject._characterObjectList.Add(characterEditItem);
             }
@@ -1954,7 +1977,7 @@ public class StageDataEditor : EditorWindow
 
             Color currentColor = Handles.color;
             
-            if(stagePointData._characterSpawnData != null)
+            if(stagePointData._characterSpawnData != null && _hideCharacterAll == false)
             {
                 for(int index = 0; index < stagePointData._characterSpawnData.Length; ++index)
                 {
@@ -2527,6 +2550,7 @@ public class StageDataEditor : EditorWindow
                 characterEditItem.sortingOrder = 10;
                 characterEditItem.transform.position = item._stagePoint + editObject._characterSpawnDataList[index]._localPosition;
                 characterEditItem.flipX = editObject._characterSpawnDataList[index]._flip;
+                characterEditItem.gameObject.SetActive(_hideCharacterAll == false);
 
                 editObject._characterObjectList.Add(characterEditItem);
             }
@@ -2555,6 +2579,7 @@ public class StageDataEditor : EditorWindow
                     characterEditItem.sortingOrder = 10;
                     characterEditItem.transform.position = editObject._gizmoItem.transform.position + spawnData._localPosition;
                     characterEditItem.flipX = spawnData._flip;
+                    characterEditItem.gameObject.SetActive(_hideCharacterAll == false);
     
                     editObject._characterObjectList.Add(characterEditItem);
                 }
