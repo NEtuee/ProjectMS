@@ -448,6 +448,10 @@
 
     <Dead DirectionType="Keep" FlipType="Direction">
         <Animation Preset="Sprites/NewPlayer/empty/" XFlip="true" Duration="10.0">
+            <FrameEvent Type="ApplyPostProcessProfile" StartTime="0" Path="PostProcessProfile/KillPlayer" BlendTime="1.0" ApplyType="Additional"/>
+            <FrameEvent Type="ZoomEffect" StartTime="0" Scale="-0.7"/>
+            <FrameEvent Type="SetTimeScale" StartTime="0" Scale="0.1" Time="1.0" BlendTime="1.0"/>
+
             <FrameEvent Type="Effect" StartTime="0" Path="Sprites/NewPlayer/Hit" FramePerSecond="0.5" Offset="0.0 0.0 0.0" Angle="Random_0^360" UseFlip="True" CastShadow="True">
                 <Physics UseGravity="True" Velocity="2 2" Friction="2.0" Torque="Random_25^30" AngularFriction="15.0"/>
             </FrameEvent>
@@ -456,7 +460,6 @@
             <FrameEvent Type="AudioPlay" StartTime="0" ID="1008" Attach="true"/>
         </Animation>
 
-        <Branch Condition="End == true" Execute="Dead"/>
     </Dead>
 
     <Catched MovementType="FrameEvent" DirectionType="CatchTargetFace" FlipType="Direction" ApplyBuff="CatchedEscape" Flags="Catched">
