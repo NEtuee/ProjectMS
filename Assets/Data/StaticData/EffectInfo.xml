@@ -13,7 +13,7 @@
     - CastShadow (Boolean) : 이펙트의 그림자가 그려질지 여부
     - Attach (Boolean) : 이펙트 생성 대상에게 이펙트를 붙일지 여부 (이펙트가 대상을 따라다니게 된다)
     - DependentAction (Boolean) : 이펙트 생성 대상이 캐릭터일 경우, 대상이 현재 실행중인 액션이 종료되면 이펙트도 같이 정지된다.
-    - LifeTime (Float) : 이펙트 LifeTime. 이펙트가 생성된 후 해당 시간이 흐르면 파티클 Emit이 정지된다.
+    - LifeTime (Float) : 이펙트 LifeTime. 이펙트가 생성된 후 해당 시간이 흐르면 파티클 Emit이 정지된다. 0이면 사용하지 않음
     - AngleOffset (Float) : 이펙트 생성 시 회전 Offset
     - UpdateType (Enum) : 이펙트가 업데이트 될 타입을 설정한다 (지금은 의미 없음)
         - ScaledDeltaTime : 이펙트 업데이트가 게임 시간에 종속된다. (일시 정지 시 이펙트도 멈춤)
@@ -262,6 +262,20 @@
         DependentAction="False"
     />
 
-    
+    <ParticleEffect Key="SpreadYakisobaPan" 
+        AttackMaterial="" 
+        DefenceMaterial=""
+        Path="Prefab/Effect/SpreadYakisobaPan"
+        AngleOffset="0.0"
+        Offset="0.0 0.0 0.0"
+        ToTarget="False"
+        UpdateType="ScaledDeltaTime"
+        Attach="False"
+        AngleType="identity"
+        LifeTime="0.0"
+        FollowDirection="False"
+        CastShadow="True"
+        DependentAction="False"
+    />
 
 </EffectInfo>

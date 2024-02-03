@@ -234,5 +234,13 @@
     </AC_GuardBroken>
 <!-- Defense Action -->
 
+<!-- Sequencer Action -->
+    <SQ_Move MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="Keep" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/2_move" XFlip="true" Duration="0.5">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="SQ_Move"/>
+    </SQ_Move>
 
 </ActionGraph>

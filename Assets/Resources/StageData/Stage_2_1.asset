@@ -35,6 +35,8 @@ MonoBehaviour:
       _uniqueGroupKey: 
       _startAction: Spawn
       _flip: 0
+      _setDirection: 0
+      _directionAngle: 0
       _hideWhenDeactive: 0
       _keepAlive: 0
       _sortingOrder: 0
@@ -46,6 +48,8 @@ MonoBehaviour:
       _uniqueGroupKey: 
       _startAction: Idle
       _flip: 0
+      _setDirection: 0
+      _directionAngle: 0
       _hideWhenDeactive: 0
       _keepAlive: 0
       _sortingOrder: 0
@@ -57,6 +61,8 @@ MonoBehaviour:
       _uniqueGroupKey: EnemyGroup
       _startAction: AC_Entry
       _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
       _hideWhenDeactive: 0
       _keepAlive: 0
       _sortingOrder: 0
@@ -68,6 +74,8 @@ MonoBehaviour:
       _uniqueGroupKey: EnemyGroup
       _startAction: AC_Entry
       _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
       _hideWhenDeactive: 0
       _keepAlive: 0
       _sortingOrder: 0
@@ -79,6 +87,8 @@ MonoBehaviour:
       _uniqueGroupKey: 
       _startAction: AC_Entry
       _flip: 0
+      _setDirection: 0
+      _directionAngle: 0
       _hideWhenDeactive: 0
       _keepAlive: 0
       _sortingOrder: 0
@@ -90,6 +100,8 @@ MonoBehaviour:
       _uniqueGroupKey: 
       _startAction: AC_Idle
       _flip: 0
+      _setDirection: 0
+      _directionAngle: 0
       _hideWhenDeactive: 0
       _keepAlive: 0
       _sortingOrder: 0
@@ -101,6 +113,8 @@ MonoBehaviour:
       _uniqueGroupKey: 
       _startAction: AC_Idle
       _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
       _hideWhenDeactive: 0
       _keepAlive: 0
       _sortingOrder: 0
@@ -112,6 +126,8 @@ MonoBehaviour:
       _uniqueGroupKey: 
       _startAction: AC_Idle
       _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
       _hideWhenDeactive: 0
       _keepAlive: 0
       _sortingOrder: 0
@@ -123,6 +139,8 @@ MonoBehaviour:
       _uniqueGroupKey: 
       _startAction: AC_Idle
       _flip: 0
+      _setDirection: 0
+      _directionAngle: 0
       _hideWhenDeactive: 0
       _keepAlive: 0
       _sortingOrder: 0
@@ -134,6 +152,8 @@ MonoBehaviour:
       _uniqueGroupKey: 
       _startAction: AC_Idle
       _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
       _hideWhenDeactive: 0
       _keepAlive: 0
       _sortingOrder: 0
@@ -145,6 +165,8 @@ MonoBehaviour:
       _uniqueGroupKey: 
       _startAction: AC_Idle
       _flip: 0
+      _setDirection: 0
+      _directionAngle: 0
       _hideWhenDeactive: 0
       _keepAlive: 0
       _sortingOrder: 0
@@ -156,6 +178,8 @@ MonoBehaviour:
       _uniqueGroupKey: 
       _startAction: AC_Idle
       _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
       _hideWhenDeactive: 0
       _keepAlive: 0
       _sortingOrder: 0
@@ -167,6 +191,8 @@ MonoBehaviour:
       _uniqueGroupKey: 
       _startAction: AC_Idle
       _flip: 0
+      _setDirection: 0
+      _directionAngle: 0
       _hideWhenDeactive: 0
       _keepAlive: 0
       _sortingOrder: 0
@@ -197,6 +223,8 @@ MonoBehaviour:
       _uniqueGroupKey: 
       _startAction: AC_Entry
       _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
       _hideWhenDeactive: 0
       _keepAlive: 0
       _sortingOrder: 0
@@ -205,9 +233,11 @@ MonoBehaviour:
       _localPosition: {x: 2.92, y: 0.45, z: 0}
     - _characterKey: SukebanKatanaChan
       _uniqueKey: 
-      _uniqueGroupKey: 
+      _uniqueGroupKey: EnemyGroup
       _startAction: AC_Entry
       _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
       _hideWhenDeactive: 0
       _keepAlive: 0
       _sortingOrder: 0
@@ -216,36 +246,29 @@ MonoBehaviour:
       _localPosition: {x: 12.21, y: -0.39, z: 0}
     - _characterKey: SukebanUziChan
       _uniqueKey: 
-      _uniqueGroupKey: 
+      _uniqueGroupKey: EnemyGroup
       _startAction: AC_Entry
       _flip: 0
+      _setDirection: 0
+      _directionAngle: 0
       _hideWhenDeactive: 0
       _keepAlive: 0
       _sortingOrder: 0
       _searchIdentifier: 1
       _activeType: 1
       _localPosition: {x: 10.25, y: -1.12, z: 0}
-    - _characterKey: DumbellChan
-      _uniqueKey: 
-      _uniqueGroupKey: 
-      _startAction: AC_Entry
-      _flip: 1
-      _hideWhenDeactive: 0
-      _keepAlive: 0
-      _sortingOrder: 0
-      _searchIdentifier: 1
-      _activeType: 0
-      _localPosition: {x: 17.62, y: 0.58, z: 0}
     - _characterKey: SukebanUziChan
       _uniqueKey: 
-      _uniqueGroupKey: 
+      _uniqueGroupKey: EnemyGroup
       _startAction: AC_Entry
       _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
       _hideWhenDeactive: 0
       _keepAlive: 0
       _sortingOrder: 0
       _searchIdentifier: 1
-      _activeType: 0
+      _activeType: 1
       _localPosition: {x: 13.01, y: 0.8, z: 0}
     _useTriggerBound: 0
     _targetSearchIdentifier: 1
@@ -253,7 +276,7 @@ MonoBehaviour:
     _triggerHeight: 1
     _triggerOffset: {x: 0, y: 0, z: 0}
   - _pointName: New Point 2
-    _stagePoint: {x: 29.11, y: 0, z: 0}
+    _stagePoint: {x: 21.68, y: 0, z: 0}
     _maxLimitedDistance: 0
     _verticalLimitedDistance: 0
     _horizontalLimitedDistance: 0
@@ -270,6 +293,38 @@ MonoBehaviour:
     _triggerWidth: 1
     _triggerHeight: 1
     _triggerOffset: {x: 0, y: 0, z: 0}
+  - _pointName: New Point 3
+    _stagePoint: {x: 29.6, y: 0, z: 0}
+    _maxLimitedDistance: 0
+    _verticalLimitedDistance: 0
+    _horizontalLimitedDistance: 0
+    _cameraZoomSize: 3
+    _cameraZoomSpeed: 4
+    _lerpCameraZoom: 0
+    _lockCameraInBound: 0
+    _cameraBoundToTrigger: 0
+    _onEnterSequencerPath:
+    - Stage_2_1_2.xml
+    _onExitSequencerPath: []
+    _characterSpawnData:
+    - _characterKey: DumbellChan
+      _uniqueKey: Talk
+      _uniqueGroupKey: 
+      _startAction: AC_Entry
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 0
+      _localPosition: {x: 1.19, y: 0, z: 0}
+    _useTriggerBound: 1
+    _targetSearchIdentifier: 0
+    _triggerWidth: 1
+    _triggerHeight: 7.31
+    _triggerOffset: {x: -3.17, y: 0, z: 0}
   _miniStageData: []
   _markerData:
   - _name: TargetMarker

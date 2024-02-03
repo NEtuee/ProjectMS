@@ -169,6 +169,8 @@ public class SequencrGraphLoader : LoaderBase<SequencerGraphBaseData>
             spawnEvent = new SequencerGraphEvent_BlockPointExit();
         else if(node.Name == "IsTrackEnd")
             spawnEvent = new SequencerGraphEvent_CameraTrackFence();
+        else if(node.Name == "EffectPreset")
+            spawnEvent = new SequencerGraphEvent_EffectPreset();
 
         if(spawnEvent == null)
         {

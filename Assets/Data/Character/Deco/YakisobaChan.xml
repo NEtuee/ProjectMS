@@ -18,7 +18,7 @@
         <Animation Preset="Sprites/Deco/YakisobaChan" XFlip="true" Duration="1">
         </Animation>
 
-        <Branch Condition="End == true" Execute="Move"/>
+        <Branch Condition="End == true" Execute="MoveFast"/>
     </MoveFast>
 
     <ImmediatlyKill MovementType="Empty" DirectionType="Keep" ActiveCollision="False">

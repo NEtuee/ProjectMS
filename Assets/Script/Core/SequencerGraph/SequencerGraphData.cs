@@ -43,6 +43,7 @@ public enum SequencerGraphEventType
     TaskFence,
     SetDirection,
     BlockPointExit,
+    EffectPreset,
 
     Count,
 }
@@ -1071,6 +1072,50 @@ public class SequencerGraphEvent_PlayAnimation : SequencerGraphEventBase
     }
 }
 
+public class SequencerGraphEvent_EffectPreset : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.EffectPreset;
+
+    private string _effectPresetName;
+    private string _uniqueKey = "";
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        if(_uniqueKey != "")
+        {
+            GameEntityBase uniqueEntity = processor.getUniqueEntity(_uniqueKey);
+            if(uniqueEntity == null)
+            {
+                DebugUtil.assert(false,"대상 Unique Entity가 존재하지 않습니다 : {0}",_uniqueKey);
+                return true;
+            }
+
+            EffectInfoManager.Instance().requestEffect(_effectPresetName,uniqueEntity, null, CommonMaterial.Empty);
+        }
+
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "UniqueKey")
+                _uniqueKey = attrValue;
+            else if(attrName == "EffectPreset")
+                _effectPresetName = attrValue;
+        }
+    }
+}
 
 public class SequencerGraphEvent_SetAction : SequencerGraphEventBase
 {

@@ -438,9 +438,8 @@
         <!-- <Branch Condition="getStat_IsStun == 1.0" Execute="Stun"/> -->
         <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="IsCatchTarget" Execute="Catched"/>
-        <Branch Condition="End" Execute="Idle"/>
         <Branch Key="(getKey_Guard == false) && ((getKey_AttackCharge == true) || (getKey_NormalMove == true))" Condition="End" Execute="MoveAll"/>
-        <Branch Key="(getKey_Guard == false) && (getKey_AttackCharge == false)" Condition="End" Execute="Idle"/>
+        <Branch Condition="End" Execute="Idle"/>
     </Hit>
 
     <Dead DirectionType="Keep" FlipType="Direction">
