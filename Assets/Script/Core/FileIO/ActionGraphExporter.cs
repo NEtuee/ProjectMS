@@ -580,6 +580,10 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
                 {
                     AnimationRotationPreset rotationPreset = ResourceContainerEx.Instance().GetScriptableObject("Preset\\AnimationRotationPreset") as AnimationRotationPreset;
                     playData._rotationPresetData = rotationPreset.getPresetData(animationCustomPreset._rotationPresetName);
+                    if(playData._rotationPresetData == null)
+                    {
+                        DebugUtil.assert_fileOpen(false,"로테이션 프리셋 로드 실패 [Preset: {0}] [FilePath: {0}]",filePath,XMLScriptConverter.getLineNumberFromXMLNode(node),path,filePath);
+                    }
                 }
                 
                 if(animationCustomPreset._scalePresetName != "")
