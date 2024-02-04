@@ -278,18 +278,33 @@
         DependentAction="False"
     />
 
+    <ParticleEffect Key="AttackIndicator" 
+        AttackMaterial="" 
+        DefenceMaterial=""
+        Path="Prefab/Effect/AttackIndicator"
+        AngleOffset="0.0"
+        Offset="0.0 0.0 0.0"
+        ToTarget="False"
+        UpdateType="ScaledDeltaTime"
+        Attach="True"
+        AngleType="Direction"
+        LifeTime="0.0"
+        FollowDirection="True"
+        CastShadow="False"
+    /> 
+
     <ParticleEffect Key="AttackReady" 
         AttackMaterial="" 
         DefenceMaterial=""
         Path="Prefab/Effect/Ready"
         AngleOffset="0.0"
         Offset="0.0 0.0 0.0"
-        ToTarget="true"
+        ToTarget="False"
         UpdateType="ScaledDeltaTime"
-        Attach="true"
-        AngleType="AttackPoint"
+        Attach="True"
+        AngleType="Direction"
         LifeTime="0.0"
-        FollowDirection="False"
+        FollowDirection="True"
         CastShadow="False"
     /> 
 
