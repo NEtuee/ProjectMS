@@ -341,11 +341,6 @@
         <UseBranchSet Name="BattlePackageEndSet"/>
     </InvisibleDodge>
     
-    <ExplosionDodge Package="SisterDodgePackage" EntryNode="AI_ExplosionDodge">
-        <UseBranchSet Name="HitReactionSet"/>
-        <UseBranchSet Name="BattlePackageEndSet"/>
-    </ExplosionDodge>
-    
     <Guard Package="CommonGuardPackage">
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="(GraphExecutedTime  >= gv_GuardTime)" Execute="Entry_Battle"/>
