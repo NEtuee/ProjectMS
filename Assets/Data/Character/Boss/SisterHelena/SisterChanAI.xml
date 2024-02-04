@@ -18,7 +18,7 @@
         <!-- TODO: 커스텀의 영역으로 남겨두는 선택지 있음. -->
     <!-- 공격 거리 설정 -->
     <GlobalVariable Name="gv_MeleeAttackRangeMin"           Value="0.0"/>       <!-- 최소 공격 사거리 : Value보다 PC가 가까우면 공격하지 않는다. -->
-    <GlobalVariable Name="gv_MeleeAttackRangeMax"           Value="3.5"/>       <!-- 최대 공격 사거리 : Value보다 PC가 멀면 원거리 공격으로 이행한다. -->
+    <GlobalVariable Name="gv_MeleeAttackRangeMax"           Value="7.0"/>       <!-- 최대 사거리 : Value보다 PC가 멀면 추격이동으로 이행한다. -->
     <!-- 공격 딜레이 설정 -->
         <!-- TODO: 공격별 쿨타임 등록해서 관리할 것 -->
     <GlobalVariable Name="gv_MeleeAttackCoolTime"           Value="2.0"/>       <!-- 쿨타임 : 공격 발동 후 공격 실행이 제한되는 시간 -->
@@ -153,7 +153,7 @@
     <BranchSet Name="BattleEntrySet">
         <Branch Condition="(TargetDistance >= gv_MeleeAttackRangeMin)"  Execute="Battle_Attack"/>
         <!-- TODO: 보스전의 이동은 별도 설정 필요 -->
-        <Branch Condition="true"                                        Execute="Battle_Move"/>
+        <Branch Condition="(TargetDistance >= gv_MeleeAttackRangeMin)" Execute="Battle_Move"/>
     </BranchSet>
     <!-- 전투 공격 분기 브랜치 셋 -->
     <BranchSet Name="BattleAttackJudgeSet">
@@ -161,6 +161,7 @@
         <Branch Condition="(TargetDistance > gv_MeleeAttackRangeMax)" Execute="JudgeRangedAttack"/>
         <Branch Condition="(TargetDistance <= gv_MeleeAttackRangeMax)" Execute="JudgeMeleeAttack"/>
     </BranchSet>
+    <!-- NOTUSE -->
     <BranchSet Name="AttackTriggerSet">
         <Branch Condition="(TargetDistance >= gv_MeleeAttackRangeMin)"  Execute="Battle_Attack"/>
     </BranchSet>
@@ -202,9 +203,9 @@
         <UseBranchSet Name="BattleEntrySet"/>
     </Entry_Battle>
     
-    <Battle_Move Package="CommonIdlePackage">
-        <!-- TODO: 보스전의 이동은 별도 설정 필요-->
-        <UseBranchSet Name="BattleMovementJudgeSet"/>
+    <Battle_Move Package="SisterDodgePackage" EntryNode="AI_InvisibleDodge_Invisible">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
     </Battle_Move>
 
     <Battle_Attack Package="CommonIdlePackage">
@@ -227,23 +228,25 @@
     <!-- AI 스테이트 : 전투 분기 -->
 
     <JudgeMeleeAttack Package="CommonIdlePackage">
-        <!-- 방전 -->
-        <Branch Weight="RandBoolean^False" Condition="aiGraphCoolTime_Discharge" Execute="Discharge"/>
-        <!-- 낙뢰 -->
-        <Branch Weight="RandBoolean^True" Condition="aiGraphCoolTime_ThunderStroke" Execute="ThunderStroke"/>
+        <!-- 방전 2.2s Cool 8.0 -->
+        <Branch Weight="RandBoolean^True" Condition="aiGraphCoolTime_Discharge" Execute="Discharge"/>
+        <!-- 낙뢰 3.15s + 1.2s Cool 5.0 -->
+        <Branch Condition="aiGraphCoolTime_ThunderStroke" Execute="ThunderStroke"/>
+
         <!-- 닷지 : 원거리 분기용 -->
         <Branch Condition="true" Execute="Dodge"/>
     </JudgeMeleeAttack>
     <JudgeRangedAttack Package="CommonIdlePackage">
-        <!-- 마도서: 레이저 스핀 -->
+
+        <!-- 배리어 Cool 12.0s-->
+        <Branch Weight="RandBoolean^True" Condition="aiGraphCoolTime_ActivateBarrior" Execute="ActivateBarrior"/>
+        <!-- 마도서 소환  1.0s Cool 5.0s-->
+        <Branch Condition="(customValue_CountCrimson <= 5.0) && aiGraphCoolTime_SpawnBook_Crimson" Execute="SpawnBook_Crimson"/>
+
+        <!-- 마도서: 레이저 스핀 3.0S -->
         <Branch Condition="(customValue_CountCrimson >= 3.0) && aiGraphCoolTime_SpawnBook" Execute="ThunderStorm"/>
         <!-- 필드장악: 번개폭풍 -->
         <Branch Condition="aiGraphCoolTime_ThunderStorm" Execute="ThunderStorm"/>
-        <!-- 마도서 소환 -->
-        <Branch Condition="(customValue_CountCrimson >= 3.0) && (customValue_CountCrimson <= 5.0) && aiGraphCoolTime_SpawnBook_Crimson" Execute="SpawnBook_Crimson"/>
-        <Branch Condition="(customValue_CountCrimson < 3.0) && aiGraphCoolTime_SpawnBook_Crimson" Execute="SpawnBook_Crimson_Set"/>
-        <!-- 배리어 -->
-        <Branch Condition="aiGraphCoolTime_ActivateBarrior" Execute="ActivateBarrior"/>
         <!-- 낙뢰 -->
         <Branch Condition="aiGraphCoolTime_ThunderStroke" Execute="ThunderStroke"/>
         <!-- 마도서: 레이저 -->
@@ -269,22 +272,23 @@
     <!-- AI 스테이트 : 전투 상태 : 공격 -->
 
     <!-- 근거리 공격: 낙뢰  -->
-    <ThunderStroke Package="SisterThunderStrokePackage" CoolTime="7.0">
+    <ThunderStroke Package="SisterThunderStrokePackage" CoolTime="5.0">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </ThunderStroke>
     <!-- 근거리 공격: 방전 -->
-    <Discharge Package="SisterDischargePackage" CoolTime="7.0">
+    <Discharge Package="SisterDischargePackage" CoolTime="8.0">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </Discharge>
 
     <!-- 소환: 마도서 소환 -->
-    <SpawnBook_Crimson Package="SisterSpawnBookPackage" EntryNode="AI_Crimson" CoolTime="7.0">
+    <SpawnBook_Crimson Package="SisterSpawnBookPackage" EntryNode="AI_Crimson" CoolTime="5.0">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
+        <Branch Condition="(customValue_CountCrimson < 3.0)" Execute="SpawnBook_Crimson_Set"/>
     </SpawnBook_Crimson>
-    <SpawnBook_Crimson_Set Package="SisterSpawnBookPackage" EntryNode="AI_CrimsonSet" CoolTime="7.0">
+    <SpawnBook_Crimson_Set Package="SisterSpawnBookPackage" EntryNode="AI_CrimsonSet">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </SpawnBook_Crimson_Set>
