@@ -28,6 +28,11 @@ public class GameUI : MonoBehaviour
         CheckValidUI();
     }
 
+    public void InitializeBySceneStart()
+    {
+        _enemyIndicator.InitValue(Camera.main);
+    }
+
     public void SetEntity(GameEntityBase targetEntity)
     {
         if (targetEntity == null)
@@ -39,7 +44,6 @@ public class GameUI : MonoBehaviour
         _hpBpGageUI.InitValue(_targetEntity.getStatusPercentage("HP"), _targetEntity.getStatusPercentage("Blood"));
         _dashPointUI.InitValue(_targetEntity.getStatus("DashPoint"));
         _crossHairUI.InitValue(_targetEntity, _targetEntity.transform.position);
-        _enemyIndicator.InitValue(Camera.main);
     }
 
     public void SetActiveCrossHair(bool active)

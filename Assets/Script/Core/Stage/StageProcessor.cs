@@ -127,6 +127,8 @@ public class StageProcessor
             LetterBox._instance.clear();
             UIRepeater.Instance().initialize();
         }
+        
+        GameUI.Instance.InitializeBySceneStart();
 
         for(int index = 0; index < _stageData._stagePointData.Count; ++index)
         {
