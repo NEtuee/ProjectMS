@@ -7,7 +7,12 @@ using UnityEngine.UI;
 public class DashPointUIBinder : UIObjectBinder
 {
     public Image[] DashPointImages;
-    
+
+    public Color _color1;
+    public Color _color2;
+    public Color _color3;
+    public Color _color4;
+
     public override bool CheckValidLink(out string reason)
     {
         if (DashPointImages == null || DashPointImages.Length != 4)

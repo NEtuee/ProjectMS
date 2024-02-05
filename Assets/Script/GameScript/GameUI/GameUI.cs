@@ -12,12 +12,14 @@ public class GameUI : MonoBehaviour
     public DashPointUIBinder DashPointBinder;
     public CrosshairUIBinder CrosshairBinder;
     public EnemyIndicatorBinder EnemyIndicatorBinder;
+    public TargetFollowerBinder FollowerBinder;
 
     //Overlay UI
     private HpBpGageUI _hpBpGageUI;
     private DashPointUI _dashPointUI;
     private CrosshairUI _crossHairUI;
     private EnemyIndicator _enemyIndicator;
+    private TargetFollower _targetFollower;
 
     private GameEntityBase _targetEntity;
 
@@ -64,6 +66,7 @@ public class GameUI : MonoBehaviour
         _dashPointUI.UpdateByManager(deltaTime, _targetEntity.getStatus("DashPoint"), _targetEntity.getStatus("Blood"));
         _crossHairUI.UpdateByManager(_targetEntity, _targetEntity.isDead(), _targetEntity.transform.position);
         _enemyIndicator.UpdateByManager();
+        _targetFollower.UpdateByManager(_targetEntity.transform.position);
     }
 
     private void SetBinder()
@@ -95,11 +98,13 @@ public class GameUI : MonoBehaviour
         _dashPointUI = new DashPointUI();
         _crossHairUI = new CrosshairUI();
         _enemyIndicator = new EnemyIndicator();
+        _targetFollower = new TargetFollower();
 
         _hpBpGageUI.SetBinder(HpBpGageUIBinder);
         _dashPointUI.SetBinder(DashPointBinder);
         _crossHairUI.SetBinder(CrosshairBinder);
         _enemyIndicator.SetBinder(EnemyIndicatorBinder);
+        _targetFollower.SetBinder(FollowerBinder);
     }
 
     private void CheckValidUI()
@@ -109,6 +114,7 @@ public class GameUI : MonoBehaviour
         uiElementList.Add(_dashPointUI);
         uiElementList.Add(_crossHairUI);
         uiElementList.Add(_enemyIndicator);
+        uiElementList.Add(_targetFollower);
 
         foreach (var uiElement in uiElementList)
         {
