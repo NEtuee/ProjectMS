@@ -78,6 +78,13 @@ public class EnemyIndicator : IUIElement
         
         foreach(var item in _enabledCharacters)
         {
+            if(item.Key.isActiveSelf() == false)
+            {
+                item.Value.gameObject.SetActive(false);
+                item.Value._state = EnemyIndicatorElement.State.Inactive;
+                continue;
+            }
+            
             bool isInCamera = IsInCameraSector(center, item.Key.transform.position);
             var isAppear = _active && isInCamera == false;
 
