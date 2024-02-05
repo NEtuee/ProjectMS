@@ -91,13 +91,15 @@ public static class FrameEventLoader
             outFrameEvent = new ActionFrameEvent_SetRotateSlotValue();
         else if(type == "FollowAttack")
             outFrameEvent = new ActionFrameEvent_FollowAttack();
+        else if(type == "SetHideUIAll")
+            outFrameEvent = new ActionFrameEvent_SetHideUIAll();
         else
         {
             DebugUtil.assert(false, "invalid frameEvent type: {0}",type);
             return null;
         }
 
-        DebugUtil.assert((int)FrameEventType.Count == 39, "check here");
+        DebugUtil.assert((int)FrameEventType.Count == 40, "check here");
 
 
         if(outFrameEvent == null)

@@ -51,6 +51,7 @@ public class PostProcessProfileControl
     private Material                    _targetMaterial;
 
     private bool                        _isBlending = false;
+    private int                         _currentAdditionalBlendingOrder = 0;
 
     static public Material getPostProcessMaterial(bool editMode)
     {
@@ -110,9 +111,13 @@ public class PostProcessProfileControl
         _isBlending = _baseBlendingProfileList.Count > 1 || _additionalEffectProfile.isEnd() == false;
     }
 
-    public void setAdditionalEffectProfile(PostProcessProfile profile, float blendTime)
+    public void setAdditionalEffectProfile(PostProcessProfile profile, int order, float blendTime)
     {
+        if(_additionalEffectProfile.isEnd() == false && _currentAdditionalBlendingOrder > order)
+            return;
+
         _additionalEffectProfile.setProfileData(profile,blendTime);
+        _currentAdditionalBlendingOrder = order;
         _isBlending = true;
     }
 

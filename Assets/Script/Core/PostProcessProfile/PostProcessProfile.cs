@@ -412,19 +412,20 @@ public class PostProcessProfileEditor : Editor
     {
         GUILayout.BeginHorizontal();
         bool activeDiff = EditorGUILayout.Toggle(active,GUILayout.Width(20f));
-        GUI.enabled = active;
+        GUI.enabled = activeDiff;
         Color beforeColor = EditorGUILayout.ColorField(title, color);
         GUI.enabled = true;
         GUILayout.EndHorizontal();
-        if(MathEx.equals(beforeColor,color,0f) == false)
-        {
-            color = beforeColor;
-            return true;
-        }
-
+        
         if(activeDiff != active)
         {
             active = activeDiff;
+            return true;
+        }
+        
+        if(MathEx.equals(beforeColor,color,0f) == false)
+        {
+            color = beforeColor;
             return true;
         }
 
