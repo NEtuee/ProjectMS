@@ -5,6 +5,7 @@ using System.Numerics;
 using System.Drawing;
 using UnityEngine.UIElements;
 using System;
+using Newtonsoft.Json.Converters;
 
 public enum FrameEventType
 {
@@ -47,6 +48,7 @@ public enum FrameEventType
     FrameEvent_EffectPreset,
     FrameEvent_SetRotateSlotValue,
     FrameEvent_FollowAttack,
+    FrameEvent_SetHideUIAll,
 
     Count,
 }
@@ -263,6 +265,7 @@ public class ActionFrameEvent_ApplyPostProcessProfile : ActionFrameEventBase
 
     private string _path = "";
     private float _blendTime = 0f;
+    private int _blendOrder = 0;
     private PostProcessProfileApplyType _applyType = PostProcessProfileApplyType.BaseBlend;
 
     public override void initialize(ObjectBase executeEntity)
@@ -281,7 +284,7 @@ public class ActionFrameEvent_ApplyPostProcessProfile : ActionFrameEventBase
                 CameraControlEx.Instance().getPostProcessProfileControl().addBaseBlendProfile(profile as PostProcessProfile,_blendTime);
             break;
             case PostProcessProfileApplyType.Additional:
-                CameraControlEx.Instance().getPostProcessProfileControl().setAdditionalEffectProfile(profile as PostProcessProfile,_blendTime);
+                CameraControlEx.Instance().getPostProcessProfileControl().setAdditionalEffectProfile(profile as PostProcessProfile,_blendOrder,_blendTime);
             break;
         }
         
@@ -303,6 +306,14 @@ public class ActionFrameEvent_ApplyPostProcessProfile : ActionFrameEventBase
                 _blendTime = XMLScriptConverter.valueToFloatExtend(attrValue);
             else if(attrName == "ApplyType")
                 _applyType = (PostProcessProfileApplyType)System.Enum.Parse(typeof(PostProcessProfileApplyType), attrValue);
+            else if(attrName == "Order")
+                _blendOrder = int.Parse(attrValue);
+        }
+
+        if(_blendOrder >= 999)
+        {
+            DebugUtil.assert_fileOpen(false,"Order는 999미만이어야 합니다.",node.BaseURI,XMLScriptConverter.getLineNumberFromXMLNode(node));
+            _blendOrder = 0;
         }
     }
 }
@@ -865,6 +876,43 @@ public class ActionFrameEvent_ShakeEffect : ActionFrameEventBase
                 _shakeTime = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
             else if(attributes[i].Name == "Speed")
                 _shakeSpeed = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
+        }
+    }
+}
+
+public class ActionFrameEvent_SetHideUIAll : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_SetHideUIAll;}
+
+    public bool _value;
+
+    public override void initialize(ObjectBase executeEntity)
+    {
+    }
+
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        HPSphereUIManager.Instance().setActive(_value == false);
+        GameUI.Instance.SetActiveCrossHair(_value == false);
+        ScreenDirector._instance.setActiveMainHud(_value == false);
+
+        if(executeEntity is GameEntityBase)
+            (executeEntity as GameEntityBase).setGraphicInterfaceActive(_value == false);
+
+        return true;
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "Hide")
+                _value = bool.Parse(attrValue);
         }
     }
 }

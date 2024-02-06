@@ -10,15 +10,15 @@
 <GlobalVariable Name="gv_MovementFriction"          Value="0.0"/>
 
 <!-- AttackReady Movement Speed Option Variant Set-->
-<GlobalVariable Name="gv_AtkRdMovementSpeed"        Value="15.0"/>  <!-- Speed는 Velocity = 0 과 병행 사용 불가-->
+<GlobalVariable Name="gv_AtkRdMovementSpeed"        Value="5.0"/>  <!-- Speed는 Velocity = 0 과 병행 사용 불가-->
 <GlobalVariable Name="gv_AtkRdMovementVelocity"     Value="0.0"/>   
 <GlobalVariable Name="gv_AtkRdMovementMaxVelocity"  Value="5.0"/>
-<GlobalVariable Name="gv_AtkRdMovementFriction"     Value="0.0"/>
+<GlobalVariable Name="gv_AtkRdMovementFriction"     Value="10.0"/>
 
 <!-- Attack Movement Speed Option Variant Set-->
 <GlobalVariable Name="gv_AtkMovementSpeed"          Value="0.0"/>   <!-- Speed는 Velocity = 0 과 병행 사용 불가-->
-<GlobalVariable Name="gv_AtkMovementVelocity"       Value="12.0"/>  
-<GlobalVariable Name="gv_AtkMovementMaxVelocity"    Value="12.0"/>
+<GlobalVariable Name="gv_AtkMovementVelocity"       Value="14.0"/>  
+<GlobalVariable Name="gv_AtkMovementMaxVelocity"    Value="14.0"/>
 <GlobalVariable Name="gv_AtkMovementFriction"       Value="24.0"/>
 
 <!-- AttackSuccess Movement Speed Option Variant Set-->

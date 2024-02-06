@@ -303,5 +303,12 @@ public class CrosshairUI : IUIElement
         {
             _binder.SubMarker.transform.position = ownerPosition;
         }
+        else 
+        {
+            if (_state == State.Idle)
+            {
+                _binder.SubMarker.transform.localPosition = new Vector3(_startPosition, 0, 0);
+            }
+        }
     }
 }

@@ -8,7 +8,6 @@
     <Include Path="Assets/Data/AILibrary/Package/CommonIdlePackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonGuardBrokenPackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonRunawayPackage.xml"/>
-    <Include Path="Assets/Data/AILibrary/Package/CommonGroggyPackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonDashPackage.xml"/>
 
     <Include Path="Assets/Data/Character/Boss/OsananaNajimiAlpha/NajimiRushPackage.xml"/>
@@ -16,6 +15,7 @@
     <Include Path="Assets/Data/Character/Boss/OsananaNajimiAlpha/NajimiAttackReadyPackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/OsananaNajimiAlpha/NajimiPitchingPackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/OsananaNajimiAlpha/NajimiStunChasePackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/OsananaNajimiAlpha/NajimiSpawnPitchingMachinePackage.xml"/>
     
     <Include Path="Assets/Data/AILibrary/Package/CommonTestPackage.xml"/>
     <Test Package="CommonTestPackage">
@@ -37,9 +37,6 @@
     <GlobalVariable Name="gv_najimiRushRange" Value="2.0"/>             <!-- 나지미 돌진 사거리 -->
     <GlobalVariable Name="gv_najimiRushTrasitionTime" Value="0.8"/>     <!-- 나지미 돌진 최소 텀 -->
 
-    <!-- Groggy Pattern -->
-    <GlobalVariable Name="gv_najimiStdBattle" Value="20.0"/>     <!-- 나지미 그로기 기준 배틀 포인트 -->
-
 
     <BranchSet Name="IsPlayerDead">
         <Branch Condition="Dead" Execute="Dead"/>
@@ -48,7 +45,6 @@
 
     <BranchSet Name="HitReactionSet">
         <Branch Condition="Dead" Execute="Dead"/>
-        <Branch Condition="(getStat_Battle >= gv_najimiStdBattle)" Execute="Groggy"/>
         <Branch Weight="NajimiJudgeDodge^Fast" Condition="(Hit || GuardBreakFail || GuardBroken) && (getStat_HitCount >= gv_najimiHitCountFast)" Execute="JudgeHitReaction"/> <!-- Attack 프레임 태그로 바꿀까.-->
         <Branch Weight="NajimiJudgeDodge^Normal" Condition="(Hit || GuardBreakFail || GuardBroken) && (getStat_HitCount >= gv_najimiHitCountNormal)" Execute="JudgeHitReaction"/>
         <Branch Weight="NajimiJudgeDodge^Slow" Condition="(Hit || GuardBreakFail || GuardBroken) && (getStat_HitCount >= gv_najimiHitCountSlow)" Execute="JudgeHitReaction"/>
@@ -72,7 +68,8 @@
         <Branch Condition="(TargetDistance >= gv_StdPassiveAttitude)" Execute="Chase"/>
         
         <!-- 1페이즈 근거리/원거리 -->
-        <Branch Condition="(TargetDistance >= gv_StdDistance)" Execute="Pitching"/>
+        <Branch Weight="RandBoolean^True" Condition="(TargetDistance >= gv_StdDistance)" Execute="Pitching"/>
+        <Branch Weight="RandBoolean^False" Condition="(TargetDistance >= gv_StdDistance) && aiGraphCoolTime_Call" Execute="Call"/>
         <Branch Condition="true" Execute="Chase"/>
         
     </JudgeDistance>
@@ -146,6 +143,12 @@
         <Branch Condition="TargetExists && (1.5 >= TargetDistance)" Execute="Rush"/>
     </StunChase>
     
+    <Call Package="NajimiSpawnPitchingMachinePackage" CoolTime="20">
+        <UseBranchSet Name="IsPlayerDead"/>
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+    </Call>
+
     <GuardBroken Package="CommonGuardBrokenPackage">
         <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
@@ -157,12 +160,6 @@
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </Hit>
-
-    <Groggy Package="CommonGroggyPackage">
-        <UseBranchSet Name="IsPlayerDead"/>
-        <!-- <UseBranchSet Name="HitReactionSet"/> -->
-        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
-    </Groggy>
 
     <Dead Package="CommonDeadPackage">
     </Dead>

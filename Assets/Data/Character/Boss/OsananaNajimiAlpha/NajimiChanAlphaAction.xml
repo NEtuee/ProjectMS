@@ -13,10 +13,9 @@
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/0_default/"/>
         <Animation Preset="1_idle" XFlip="true" Duration="1">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
-            <!-- 바톤 슬래시 카운트 리셋 (pistol 이름 바꿔야함.)-->
-            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="NajimiResetPistolCount"/>
-            <!-- <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountClear"/> -->
             <FrameEvent Type="ReleaseCatch" StartTime="0" Push="0 0 0" Condition="getTargetFrameTag_Dead"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
@@ -27,8 +26,8 @@
         <Animation Preset="2_move" XFlip="true" Duration="0.5">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="5" Speed="15"/>
 
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Move"/>
@@ -52,7 +51,7 @@
             <FrameEvent Type="Test" Log="HitCount 2" Condition="getStat_HitCount == 2.0"/>
             <FrameEvent Type="Test" Log="HitCount 3" Condition="getStat_HitCount == 3.0"/>
             <FrameEvent Type="Test" Log="HitCount 4" Condition="getStat_HitCount == 4.0"/>
-            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountClear"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Dash"/>
@@ -64,14 +63,11 @@
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2108" Attach="true"/>
 
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
-            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountIncrease"/>
-            <!--
-            <FrameEvent Type="ZoomEffect" Scale="-0.4"/>
-            -->
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountIncrease"/>
             <FrameEvent Type="StopUpdate" Time="0.15"/>
 
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
@@ -83,35 +79,17 @@
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2108" Attach="true"/>
 
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
-            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountIncrease"/>
-            <!--
-            <FrameEvent Type="ZoomEffect" Scale="-0.4"/>
-            -->
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountIncrease"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
             <FrameEvent Type="StopUpdate" Time="0.15"/>
             
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_GuardBroken>
 
-    <AC_Groggy MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/0_default/"/>
-        <Animation Preset="4_hit" XFlip="true" Duration="1.25">
-            <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
-            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BattleClear"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="Groggy"/>
-
-            <!--
-            <FrameEvent Type="ZoomEffect" Scale="-0.4"/>
-            -->
-            <FrameEvent Type="StopUpdate" Time="0.15"/>
-        </Animation>
-
-        <Branch Condition="End == true" Execute="AC_Idle"/>
-    </AC_Groggy>
-    
     <Dead_Loop DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/0_default/"/>
         <Animation Preset="5_dead" XFlip="true" Duration="1">
@@ -123,10 +101,7 @@
     <Dead DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/0_default/"/>
         <Animation Preset="5_dead" XFlip="true" Duration="1">
-            <!--
-            <FrameEvent Type="SetTimeScale" Scale="0.1" Time="1.0" BlendTime="1.0"/>
-            <FrameEvent Type="ZoomEffect" Scale="-0.9"/>
-            -->
+
         </Animation>
 
         <Branch Condition="End == true" Execute="Dead_Loop"/>
@@ -139,7 +114,7 @@
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2101" Attach="true"/>
 
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
-            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountClear"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
         </Animation>
     
         <Branch Condition="End" Execute="AC_Idle"/>
@@ -152,6 +127,7 @@
         <Animation Preset="1_rushMain" XFlip="true" Duration="0.35">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2100" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="24" MaxVelocity="12" Velocity="12" Speed="0"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="NajimiAddRushCount"/>
             <FrameEvent Type="Attack" StartTime="0" EndTime="0.2" AttackPreset="Najimi_Rush" AttackType="Catch" CatchOffset="0.1 0 0">
                 <OnCatch>
@@ -167,12 +143,12 @@
             </FrameEvent>
         </Animation>
         <Animation Preset="2_rushRoll" XFlip="true" Duration="0.25">
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
         <Animation Preset="3_rushRecover" XFlip="true" Duration="1.47">
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>
@@ -225,12 +201,12 @@
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2108" Attach="true"/>
 
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Velocity="-6" Speed="0"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
         <Animation Preset="2_awayStand" XFlip="true" Duration="1.0">
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>
@@ -244,8 +220,8 @@
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
             <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/NajimiPitchingBeam_TimeLine" Attach="true" AngleType="Direction" LifeTime="0.82" FollowDirection="True"/>
 
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>
@@ -286,10 +262,26 @@
             </FrameEvent>
         </Animation>
         <Animation Preset="2_pitchingRecovery" XFlip="true" Duration="0.3">
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_Pitch>
+
+    <AC_Call MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/2_pitchingPattern/"/>
+        <Animation Preset="1_spawnPitchingMachine" XFlip="true" Duration="1.0">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2208" Attach="true"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0.5" CharacterKey="DumbellChan" Offset="Random_-4^4 Random_8^12 0"     SearchIdentifier="Enemy" InheritDirection="false" AINode="Entry_Battle"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0.5" CharacterKey="DumbellChan" Offset="Random_-5^5 Random_-8^-12 0"     SearchIdentifier="Enemy" InheritDirection="false" AINode="Entry_Battle"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0.5" CharacterKey="BarbellChan" Offset="Random_-10^-15 Random_-3^3 0"  SearchIdentifier="Enemy" InheritDirection="false" AINode="Entry_Battle"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0.5" CharacterKey="BarbellChan" Offset="Random_10^15 Random_-3^3 0"    SearchIdentifier="Enemy" InheritDirection="false" AINode="Entry_Battle"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_Call>
 </ActionGraph>

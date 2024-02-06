@@ -101,7 +101,7 @@
             </FrameEvent>
             <FrameEvent Type="Movement" StartTime="0.06" Friction="18" MaxVelocity="10" Velocity="-7" Speed="0"/>
         </Animation>
-        <Animation Preset="1_attack/3_attackRecover" XFlip="true" Duration="2.0">
+        <Animation Preset="1_attack/3_attackRecover" XFlip="true" Duration="0.2">
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle_WithHelena"/>
@@ -129,7 +129,7 @@
                 </OnHit>
             </FrameEvent>
         </Animation>
-        <Animation Preset="1_attack/3_attackRecover" XFlip="true" Duration="2.0">
+        <Animation Preset="1_attack/3_attackRecover" XFlip="true" Duration="0.2">
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle_WithHelena"/>
@@ -159,14 +159,14 @@
             </FrameEvent>
             <FrameEvent Type="Movement" StartTime="0.06" Friction="18" MaxVelocity="10" Velocity="-7" Speed="0"/>
         </Animation>
-        <Animation Preset="1_attack/3_attackRecover" XFlip="true" Duration="2.0">
+        <Animation Preset="1_attack/3_attackRecover" XFlip="true" Duration="0.2">
         </Animation>
         <Branch Condition="End == true" Execute="AC_Idle_WithHelena"/>
     </AC_Shoot_in>
     
     <AC_ExplosionStart MovementType="Empty" DirectionType="Keep" DefenceType="Evade" DefenceAngle="360">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="0_default/1_idle" XFlip="true" Duration="1.5">
+        <Animation Preset="1_attack/4_explosion" XFlip="true" Duration="1.5">
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>

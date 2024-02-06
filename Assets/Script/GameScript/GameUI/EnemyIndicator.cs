@@ -80,7 +80,8 @@ public class EnemyIndicator : IUIElement
         {
             if(item.Key.isActiveSelf() == false)
             {
-                item.Value.Disappear(null);
+                item.Value.gameObject.SetActive(false);
+                item.Value._state = EnemyIndicatorElement.State.Inactive;
                 continue;
             }
             
@@ -122,14 +123,14 @@ public class EnemyIndicator : IUIElement
 
         Vector3 center = _mainCamera.transform.position;
         CalculateScreenSectors(center);
-        if(IsInCameraSector(center, indicator.transform.position) == false)
+        if(IsInCameraSector(center, character.transform.position) == false)
         {
             indicator.Appear();
-            Vector3 sectorPosition = GetSectorPosition(center,character.transform.position);
+            Vector3 sectorPosition = GetSectorPosition(center, character.transform.position);
             indicator.transform.position = sectorPosition;
         }
 
-        _enabledCharacters.Add(character,indicator);    
+        _enabledCharacters.Add(character, indicator);    
     }
     
     private void DisableCharacter(CharacterEntityBase character)

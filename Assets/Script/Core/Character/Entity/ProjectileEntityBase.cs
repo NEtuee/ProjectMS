@@ -101,6 +101,10 @@ public class ProjectileEntityBase : ObjectBase
         Vector3 movementOfFrame = _projectileGraph.getMovementOfFrame();
         transform.position += movementOfFrame;
 
+        Vector3 direction = movementOfFrame.normalized;
+        if(direction.sqrMagnitude == 0f)
+            direction = Vector3.right;
+
         _gravityAccumulate += _gravity * deltaTime;
         transform.position += Vector3.up * _gravityAccumulate * deltaTime;
 
@@ -118,12 +122,14 @@ public class ProjectileEntityBase : ObjectBase
         _projectileGraph.getCurrentAnimationTranslation(out outTranslation);
         _spriteRenderer.transform.localPosition = outTranslation;
 
+        setDirection(direction);
+
         CollisionRequestData requestData;
         requestData._collision = _collisionInfo;
         requestData._collisionDelegate = _collisionDelegate;
         requestData._collisionEndEvent = null;
         requestData._position = transform.position;
-        requestData._direction = Vector3.right;
+        requestData._direction = direction;
         requestData._requestObject = this;
         CollisionManager.Instance().collisionRequest(requestData);
         

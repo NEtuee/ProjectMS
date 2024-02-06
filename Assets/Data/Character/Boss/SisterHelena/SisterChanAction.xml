@@ -148,7 +148,8 @@
         <!-- 기도, 오라, 폭발 차징 표현 -->
         <Animation Preset="2_skill/2_discharge/1_attackReady" XFlip="true" Duration="0.7">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
-            <!-- TODO: 제자리에서 기도, 강인도 상승 -->
+                <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+                <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
@@ -330,7 +331,7 @@
     </AC_CommandBook_LaserWith>
     <AC_CommandBook_LaserOut MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="2_skill/5_command/2_laserSpin" XFlip="true" Duration="1.5">
+        <Animation Preset="2_skill/5_command/2_laserSpin" XFlip="true" Duration="3.0">
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="LaserOut" EventTargetType="Range" Range="10.0" SearchIdentifier="Enemy"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
@@ -343,14 +344,14 @@
     </AC_CommandBook_LaserOut>
     <AC_CommandBook_LaserIn MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="2_skill/5_command/3_laserSurround" XFlip="true" Duration="5.0">
+        <Animation Preset="2_skill/5_command/3_laserSurround" XFlip="true" Duration="2.5">
             <FrameEvent Type="SetRotateSlotValue" StartTime="0" Speed="25" Radius="5.0"/>
 
             <FrameEvent Type="CallAIEvent" StartTime="1.0" EventName="LaserIn" EventTargetType="Range" Range="10.0" SearchIdentifier="Enemy"/>
             <FrameEvent Type="SetRotateSlotValue" StartTime="1.6" Speed="0" Radius="5.0"/>
             <FrameEvent Type="SetRotateSlotValue" StartTime="2.0" Speed="25" Radius="5.0"/>
 
-            <FrameEvent Type="SetRotateSlotValue" StartTime="5.0" Speed="18" Radius="1.0"/>
+            <FrameEvent Type="SetRotateSlotValue" StartTime="2.1" Speed="18" Radius="1.0"/>
 
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
@@ -465,7 +466,7 @@
             </FrameEvent>
             <FrameEvent Type="Movement" StartTime="0.06" Friction="18" MaxVelocity="10" Velocity="-7" Speed="0"/>
         </Animation>
-        <Animation Preset="2_skill/6_barrior/6_counter/3_attackRecover" XFlip="true" Duration="2.0">
+        <Animation Preset="2_skill/6_barrior/6_counter/3_attackRecover" XFlip="true" Duration="1.2">
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
@@ -476,6 +477,7 @@
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/7_invisibleDodge/1_disappear" XFlip="true" Duration="0.3">
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="Detach" EventTargetType="Range" SearchIdentifier="Enemy" Range="100.0"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="DetachExplosion" EventTargetType="SummonTargetRange" Range="100.0" SearchIdentifier="Enemy"/> 
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
         </Animation>
@@ -522,7 +524,6 @@
         <Animation Preset="1_defense/1_dodge" XFlip="true" Duration="0.7">
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
-            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="DetachExplosion" EventTargetType="SummonTargetRange" Range="100.0" SearchIdentifier="Enemy"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>
