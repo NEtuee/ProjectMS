@@ -62,6 +62,7 @@ Shader "Custom/Stencil"
                     float4 vertex   : POSITION;
                     float4 color    : COLOR;
                     float2 texcoord : TEXCOORD0;
+                    float4 tint : TEXCOORD1;
                     UNITY_VERTEX_INPUT_INSTANCE_ID
                 };
  
