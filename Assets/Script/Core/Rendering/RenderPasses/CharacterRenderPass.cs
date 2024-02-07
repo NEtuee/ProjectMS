@@ -6,7 +6,9 @@ using UnityEngine;
 public class CharacterRenderPass : AkaneRenderPass
 {
     public override RenderTexture RenderTexture { get { return characterRenderTexture; } }
-    [SerializeField] private RenderTexture characterRenderTexture;
+    private RenderTexture characterRenderTexture;
+
+    private string _renderTexturePath = "RenderTexture/CharacterRenderLayer";
 
     private static int characterLayer;
     public override int layerMasks => characterLayer;
@@ -15,8 +17,10 @@ public class CharacterRenderPass : AkaneRenderPass
     public void Awake()
     {
         characterLayer = (1 << LayerMask.NameToLayer(layerName));
-        characterRenderTexture = new RenderTexture(1024, 1024, 1, RenderTextureFormat.ARGBHalf, 1);
-        characterRenderTexture.filterMode = FilterMode.Point;
+
+        characterRenderTexture = Resources.Load(_renderTexturePath, typeof(RenderTexture)) as RenderTexture;
+        if(characterRenderTexture == null)
+            DebugUtil.assert(false,$"RenderTexture [{_renderTexturePath}]가 없습니다. 확인 필요");
     }
     public override void Draw(Camera renderCamera)
     {
