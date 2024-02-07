@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c858e63344676f34a93a8306d92a1f7d, type: 3}
   m_Name: AudioInfo
   m_EditorClassIdentifier: 
-  csvData: {fileID: 4900000, guid: 8783bed0fe563d74884adcc965285795, type: 3}
+  csvData: {fileID: 4900000, guid: 4965ee190e4bbfa4d8eacfd2b8e91867, type: 3}
   audioData:
   - name: global data
     id: 0
@@ -331,6 +331,20 @@ MonoBehaviour:
         Data3: -1815273832
         Data4: -1326897453
       Path: event:/SFX/Enemy/Najimi/Hit
+    parameters: []
+  - name: Whistle
+    id: 2109
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: -1785641405
+        Data2: 1305671255
+        Data3: 483115182
+        Data4: 522640708
+      Path: event:/SFX/Enemy/Najimi/Whistle
     parameters: []
   - name: Dash
     id: 2201

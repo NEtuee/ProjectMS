@@ -213,6 +213,12 @@ public class FMODAudioManager : Singleton<FMODAudioManager>
             CreateAudioCacheItem(id,1);
         }
 
+        if(_cacheMap.ContainsKey(id) == false)
+        {
+            DebugUtil.assert(false,"존재하지 않는 Sound ID {0}",id);
+            return null;
+        }
+
         return _cacheMap[id].Dequeue();
     }
 
