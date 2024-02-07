@@ -60,6 +60,7 @@
     <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/0_default/"/>
         <Animation Preset="4_hit" XFlip="true" Duration="1.25">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2109" Attach="true"/>
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2108" Attach="true"/>
 
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
@@ -272,12 +273,16 @@
     <AC_Call MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/2_pitchingPattern/"/>
         <Animation Preset="1_spawnPitchingMachine" XFlip="true" Duration="1.0">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2208" Attach="true"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2109" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0.5" CharacterKey="DumbellChan" Offset="Random_-4^4 Random_8^12 0"     SearchIdentifier="Enemy" InheritDirection="false" AINode="Entry_Battle"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0.65" CharacterKey="DumbellChan" Offset="Random_-5^5 Random_8^12 0"     SearchIdentifier="Enemy" InheritDirection="false" AINode="Entry_Battle"/>
             <FrameEvent Type="SpawnCharacter" StartTime="0.5" CharacterKey="DumbellChan" Offset="Random_-5^5 Random_-8^-12 0"     SearchIdentifier="Enemy" InheritDirection="false" AINode="Entry_Battle"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0.5" CharacterKey="BarbellChan" Offset="Random_-10^-15 Random_-3^3 0"  SearchIdentifier="Enemy" InheritDirection="false" AINode="Entry_Battle"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0.55" CharacterKey="BarbellChan" Offset="Random_-10^-15 Random_-3^3 0"  SearchIdentifier="Enemy" InheritDirection="false" AINode="Entry_Battle"/>
             <FrameEvent Type="SpawnCharacter" StartTime="0.5" CharacterKey="BarbellChan" Offset="Random_10^15 Random_-3^3 0"    SearchIdentifier="Enemy" InheritDirection="false" AINode="Entry_Battle"/>
+           
+            <FrameEvent Type="Projectile" Condition="getWeight_RandBoolean^True"   StartTime="0" GraphName="RunnerSpawner" DirectionType="AITarget" SpawnTargetType="Self" Offset="-10 Random_-3^3 0"/>
+            <FrameEvent Type="Projectile" Condition="getWeight_RandBoolean^False"  StartTime="0" GraphName="RunnerSpawner" DirectionType="AITarget" SpawnTargetType="Self" Offset="10 Random_-3^3 0"/>
+
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>

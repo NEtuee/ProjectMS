@@ -1,0 +1,75 @@
+<AIGraph Name="RunnerChanAI" DefaultState="Entry">
+
+    <Include Path="Assets/Data/AILibrary/Package/CommonDeadPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonIdlePackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonHitPackage.xml"/>
+    
+    <AIPackage Name="RunnerSpeedPackage" DefaultState="AI_Normal">
+        <AIState>
+            <AI_Slow UpdateTime="0.2" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+                <Event_OnExecute>
+                    <AIEvent Type="SetDirectionToTarget"/>
+                    <AIEvent Type="SetAction" Action="AC_Move_Slow"/>
+                </Event_OnExecute>
+                
+                <Branch Condition="false" Execute="TerminatePackage"/>
+            </AI_Slow>
+            <AI_Normal UpdateTime="0.2" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+                <Event_OnExecute>
+                    <AIEvent Type="SetDirectionToTarget"/>
+                    <AIEvent Type="SetAction" Action="AC_Move_Normal"/>
+                </Event_OnExecute>
+                
+                <Branch Condition="false" Execute="TerminatePackage"/>
+            </AI_Normal>
+            <AI_Fast UpdateTime="0.2" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+                <Event_OnExecute>
+                    <AIEvent Type="SetDirectionToTarget"/>
+                    <AIEvent Type="SetAction" Action="AC_Move_Fast"/>
+                </Event_OnExecute>
+                
+                <Branch Condition="false" Execute="TerminatePackage"/>
+            </AI_Fast>
+            
+            <TerminatePackage>
+                <Event_OnExecute>
+                    <AIEvent Type="TerminatePackage"/>
+                </Event_OnExecute>
+            </TerminatePackage>
+        </AIState>
+    </AIPackage>
+
+    <BranchSet Name="HitReactionSet">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="Hit && getFrameTag_HitAvail" Execute="Hit"/>
+        <Branch Condition="(GuardBreakFail || GuardBroken) && getFrameTag_GbAvail" Execute="Hit"/>
+    </BranchSet>
+
+    <Entry Package="CommonIdlePackage">
+        <Branch Weight="RandVector3^x" Condition="true" Execute="Slow"/>
+        <Branch Weight="RandVector3^y" Condition="true" Execute="Normal"/>
+        <Branch Weight="RandVector3^z" Condition="true" Execute="Fast"/>
+    </Entry>
+
+    <Slow Package="RunnerSpeedPackage" EntryNode="AI_Slow">
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="(GraphExecutedTime > 3.0) && (TargetDistance >= 15.0)" Execute="Dead"/>
+    </Slow>
+    <Normal Package="RunnerSpeedPackage" EntryNode="AI_Normal">
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="(GraphExecutedTime > 3.0) && (TargetDistance >= 15.0)" Execute="Dead"/>
+    </Normal>
+    <Fast Package="RunnerSpeedPackage" EntryNode="AI_Fast">
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="(GraphExecutedTime > 3.0) && (TargetDistance >= 15.0)" Execute="Dead"/>
+    </Fast>
+
+    <Hit Package="CommonHitPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+    </Hit>
+
+    <Dead Package="CommonDeadPackage">
+    </Dead>
+
+</AIGraph>

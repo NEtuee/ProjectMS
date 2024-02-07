@@ -314,6 +314,17 @@
 
         SearchIdentifier="Enemy"
     />
+    <RunnerChan
+        DisplayName="운동부 러너쨩"
+        ActionGraph="Assets/Data/Character/Enemy/03_RunnerChan/RunnerChanAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/03_RunnerChan/RunnerChanAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        ProjectileCollisionRadius=""
+
+        SearchIdentifier="Enemy"
+    />
 
     <SisterStaffChan
         DisplayName="시스터 스태프쨩"
