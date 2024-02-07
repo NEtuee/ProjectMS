@@ -208,7 +208,10 @@ public abstract class ObjectBase : MessageReceiver, IProgress
     //최초 업데이트
     public virtual void firstUpdate(){}
     //Update
-    public virtual void progress(float deltaTime){}
+    public virtual void progress(float deltaTime)
+    {
+        WeightRandomManager.Instance().updateRandom();
+    }
     //LateUpdate
     public virtual void afterProgress(float deltaTime){}
     //FixedUpdate
