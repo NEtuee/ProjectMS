@@ -251,7 +251,8 @@ public class CameraControlEx : Singleton<CameraControlEx>
 
             _debugModeInput = debugModeInput;
 
-            updateDebugCamera();
+            if(_debugCameraMode)
+                updateDebugCamera();
         }
         else
         {
@@ -314,7 +315,6 @@ public class CameraControlEx : Singleton<CameraControlEx>
             _debugCameraPosition += Vector3.right * debugCameraMoveSpeed * Time.deltaTime;
 
         _currentCamera.transform.position = _debugCameraPosition;
-        _currentCameraMode.setCameraPosition(_debugCameraPosition);
     }
 
     public void setShake(float scale, float speed, float time)

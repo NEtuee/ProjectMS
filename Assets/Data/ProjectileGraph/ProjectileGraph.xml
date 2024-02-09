@@ -300,6 +300,9 @@
                         <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
                         <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
                     </OnHit>
+                    <OnGuard>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+                    </OnGuard>
                 </FrameEvent>
             </OnHit>
         </Event>
@@ -319,6 +322,9 @@
                         <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
                         <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
                     </OnHit>
+                    <OnGuard>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+                    </OnGuard>
                 </FrameEvent>
             </OnHit>
         </Event>
@@ -485,8 +491,16 @@
                         </FrameEvent>
 
                         <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
-                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
                     </OnHit>
+
+                    <OnGuard>
+                        <FrameEvent Type="Effect" Path="Sprites/Projectile/Dumbell" FramePerSecond="0.2" CastShadow="True" Offset="0.0 0.1 0.0" ToTarget="true" AngleType="AttackPoint">
+                            <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
+                        </FrameEvent>
+
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+                    </OnGuard>
                 </FrameEvent>
             </OnHit>
     
@@ -517,14 +531,18 @@
                         </FrameEvent>
 
                         <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
-                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
                     </OnHit>
+
+                    <OnGuard>
+                        <FrameEvent Type="Effect" Path="Sprites/Projectile/Liner" FramePerSecond="0.2" CastShadow="True" Offset="0.0 0.1 0.0" ToTarget="true" AngleType="AttackPoint">
+                            <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
+                        </FrameEvent>
+
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+                    </OnGuard>
                 </FrameEvent>
             </OnHit>
-    
-            <OnHitEnd>
-                
-            </OnHitEnd>
     
             <OnEnd>
                 <FrameEvent Type="Effect" Path="Sprites/Projectile/Liner" FramePerSecond="0.2" CastShadow="True" Offset="0 0 0" Attach="false" ToTarget="false" AngleType="Keep">
