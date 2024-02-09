@@ -44,6 +44,7 @@ public enum SequencerGraphEventType
     SetDirection,
     BlockPointExit,
     EffectPreset,
+    TalkBubble,
 
     Count,
 }
@@ -305,6 +306,55 @@ public class SequencerGraphEvent_TalkBalloon : SequencerGraphEventBase
 
         if(_key == "")
             DebugUtil.assert(false,"SimpleTalk Key가 존재하지 않습니다. 이거 필수임");
+    }
+}
+
+public class SequencerGraphEvent_TalkBubble : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.TalkBubble;
+
+    private string _key = "";
+    private bool _endFlag = false;
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+        var commandList = DialogTextManager.Instance().GetDialogCommand(_key);
+        if (commandList == null)
+        {
+            DebugUtil.assert(false, "존재하지 않는 Dialog 커맨드 입니다. 데이터를 확인 해 주세요. [Key: {0}]", _key);
+        }
+
+        _endFlag = false;
+        GameUI.Instance.TextBubble.PlayCommand(commandList, () => _endFlag = true);
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        if (_endFlag == false)
+        {
+            return false;
+        }
+        
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attributes[i].Name == "Key")
+                _key = attributes[i].Value;
+        }
+
+        if (_key == "")
+        {
+            DebugUtil.assert(false, "DialogText Key가 존재하지 않습니다. 이거 필수임");
+        }
     }
 }
 
