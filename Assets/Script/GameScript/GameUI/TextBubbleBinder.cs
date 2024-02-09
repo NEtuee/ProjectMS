@@ -8,8 +8,8 @@ public class TextBubbleBinder : UIObjectBinder
 {
     public Image BackGroundImage;
     public Text TextComp;
-    public float WidthScale = 1.1f;
-    public float HeightScale = 1.1f;
+    public float WidthPadding = 10f;
+    public float HeightPadding = 10f;
 
     public override bool CheckValidLink(out string reason)
     {

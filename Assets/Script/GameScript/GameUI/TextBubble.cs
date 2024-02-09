@@ -187,7 +187,7 @@ public class TextPresenter
     {
         _binder.TextComp.text = text;
         _textCompRect.sizeDelta = new Vector2(_binder.TextComp.preferredWidth, _binder.TextComp.preferredHeight);
-        _backgroundRect.sizeDelta = new Vector2(_binder.TextComp.preferredWidth * _binder.WidthScale, _binder.TextComp.preferredHeight * _binder.HeightScale);
+        _backgroundRect.sizeDelta = new Vector2(_binder.TextComp.preferredWidth + _binder.WidthPadding * 2.0f, _binder.TextComp.preferredHeight + _binder.HeightPadding * 2.0f);
     }
 }
 
