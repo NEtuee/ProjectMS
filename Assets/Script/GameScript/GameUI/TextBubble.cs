@@ -4,23 +4,24 @@ using System.Collections.Generic;
 using System.Text;
 using TMPro;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 public class TextBubble : IUIElement
 {
-    private TextBubbleBinder _binder;
-    private TextPresenter _textPresenter;
-    private readonly Queue<BubbleCommend> _commendQueue = new Queue<BubbleCommend>();
-    private BubbleCommend _currentCommand;
-
-    private Transform _followTargetTransform;
-    private bool _isPlay = false;
-    private Action _onEnd;
+    private TextBubblePoolBinder _binder;
+    // private readonly Queue<BubbleCommend> _commendQueue = new Queue<BubbleCommend>();
+    // private BubbleCommend _currentCommand;
+    //
+    // private Transform _followTargetTransform;
+    // private bool _isPlay = false;
+    // private Action _onEnd;
+    private Queue<TextBubbleObject> _pool = new Queue<TextBubbleObject>();
 
     public bool CheckValidBinderLink(out string reason)
     {
         if (_binder == null)
         {
-            reason = "말풍선 바인더가 없습니다.";
+            reason = "말풍선 풀 바인더가 없습니다.";
             return false;
         }
 
@@ -30,21 +31,33 @@ public class TextBubble : IUIElement
 
     public void SetBinder<T>(T binder) where T : UIObjectBinder
     {
-        _binder = binder as TextBubbleBinder;
+        _binder = binder as TextBubblePoolBinder;
     }
 
     public void Initialize()
     {
-        _textPresenter = new TextPresenter(_binder);
-        _binder.gameObject.SetActive(false);
+        // _textPresenter = new TextPresenter(_binder);
+        // _binder.gameObject.SetActive(false);
+        
+        _binder.TextBubblePrefab.SetActive(false);
     }
 
+    public void ReturnPool(TextBubbleObject disableObject)
+    {
+        _binder.StartCoroutine(DeferredReturnPool(disableObject));
+    }
+
+    private IEnumerator DeferredReturnPool(TextBubbleObject disableObject)
+    {
+        yield return null;
+        _pool.Enqueue(disableObject);
+    }
+    
     public void SetActive(bool active)
     {
         if (active == false)
         {
             _binder.gameObject.SetActive(false);
-            _isPlay = false;
         }
         else
         {
@@ -52,86 +65,34 @@ public class TextBubble : IUIElement
         }
     }
 
-    public void PlayCommand(List<BubbleCommend> commandList, Transform followTarget, Action onEnd)
+    public void PlayCommand(List<BubbleCommend> commandList, GameEntityBase followTarget, Action onEnd)
     {
-        if (commandList == null || commandList.Count <= 0)
+        var instance = GetInstance();
+        if (instance != null)
         {
-            _onEnd?.Invoke();
-            return;
+            instance.PlayCommand(commandList, followTarget, onEnd);
         }
+    }
 
-        if (_isPlay == true)
+    private TextBubbleObject GetInstance()
+    {
+        if (_pool.Count <= 0)
         {
-            _binder.TextComp.text = string.Empty;
+            return CreateInstance();
         }
-
-        _followTargetTransform = followTarget;
         
-        _commendQueue.Clear();
-
-        foreach (var commend in commandList)
-        {
-            _commendQueue.Enqueue(commend);
-        }
-
-        SetActive(true);
-        _isPlay = true;
-        _onEnd = onEnd;
+        return _pool.Dequeue();
+    }
+    
+    private TextBubbleObject CreateInstance()
+    {
+        var newInstance = Object.Instantiate(_binder.TextBubblePrefab, _binder.transform);
+        newInstance.Init(this);
+        return newInstance;
     }
     
     public void UpdateByManager()
     {
-        if (_isPlay == false)
-        {
-            return;
-        }
-
-        UpdateFollowPosition();
-        UpdateCommand();
-    }
-
-    private void UpdateCommand()
-    {
-        if (_currentCommand == null)
-        {
-            if (_commendQueue.Count <= 0)
-            {
-                return;
-            }
-            
-            _currentCommand = _commendQueue.Dequeue();
-            _currentCommand.Start(_textPresenter, GlobalTimer.Instance().getScaledGlobalTime());
-        }
-
-        if (_currentCommand.Update(_textPresenter, GlobalTimer.Instance().getSclaedDeltaTime()) == false)
-        {
-            _currentCommand.End();
-            
-            if (_commendQueue.Count <= 0)
-            {
-                _currentCommand = null;
-                _isPlay = false;
-                SetActive(false);
-                _onEnd?.Invoke();
-            }
-            else
-            {
-                _currentCommand = _commendQueue.Dequeue();
-                _currentCommand.Start(_textPresenter, GlobalTimer.Instance().getScaledGlobalTime());
-            }
-        }
-    }
-
-    private void UpdateFollowPosition()
-    {
-        if (_followTargetTransform == null)
-        {
-            return;
-        }
-
-        var followScreenPos = Camera.main.WorldToScreenPoint(_followTargetTransform.position + _binder.FollowOffset);
-        followScreenPos.z = 0;
-        _binder.transform.position = followScreenPos;
     }
 }
 
@@ -153,6 +114,12 @@ public class TextPresenter
         _textCompRect = _binder.TextComp.transform as RectTransform;
         _backgroundRect = binder.BackGroundImage.rectTransform;
         _stringBuilder = new StringBuilder();
+    }
+
+    public void Clear()
+    {
+        _stringBuilder.Clear();
+        UpdateText(_stringBuilder.ToString());
     }
 
     public void InitTextLength(int length)
@@ -240,6 +207,7 @@ public class ShowText : BubbleCommend
     
     public void Start(TextPresenter presenter, float startTime)
     {
+        _current = 0;
         _currentTime = startTime;
         _prevShowTime = _currentTime;
         presenter.AddCharacter(_chArray[_current]);
@@ -390,6 +358,7 @@ public class Wait : BubbleCommend
     
     public void Start(TextPresenter presenter, float startTime)
     {
+        _currentTime = 0;
     }
 
     public bool Update(TextPresenter presenter, float deltaTime)
@@ -400,6 +369,34 @@ public class Wait : BubbleCommend
         }
         
         _currentTime += deltaTime;
+        return true;
+    }
+
+    public void End()
+    {
+    }
+}
+
+public class WaitInput : BubbleCommend
+{
+    private string _input;
+    
+    public WaitInput(string input)
+    {
+        _input = input;
+    }
+    
+    public void Start(TextPresenter presenter, float startTime)
+    {
+    }
+
+    public bool Update(TextPresenter presenter, float deltaTime)
+    {
+        if (ActionKeyInputManager.Instance().keyCheck(_input))
+        {
+            return false;
+        }
+        
         return true;
     }
 

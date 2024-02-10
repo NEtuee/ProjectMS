@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class GameUI : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class GameUI : MonoBehaviour
     public CrosshairUIBinder CrosshairBinder;
     public EnemyIndicatorBinder EnemyIndicatorBinder;
     public TargetFollowerBinder FollowerBinder;
-    public TextBubbleBinder TextBubbleBinder;
+    public TextBubblePoolBinder TextBubblePoolBinder;
 
     public TextBubble TextBubble { get; private set; }
     
@@ -82,7 +83,7 @@ public class GameUI : MonoBehaviour
         binderList.Add(CrosshairBinder);
         binderList.Add(EnemyIndicatorBinder);
         binderList.Add(FollowerBinder);
-        binderList.Add(TextBubbleBinder);
+        binderList.Add(TextBubblePoolBinder);
 
         foreach (var binder in binderList)
         {
@@ -114,7 +115,7 @@ public class GameUI : MonoBehaviour
         _crossHairUI.SetBinder(CrosshairBinder);
         _enemyIndicator.SetBinder(EnemyIndicatorBinder);
         _targetFollower.SetBinder(FollowerBinder);
-        _textBubble.SetBinder(TextBubbleBinder);
+        _textBubble.SetBinder(TextBubblePoolBinder);
     }
 
     private void CheckValidUI()

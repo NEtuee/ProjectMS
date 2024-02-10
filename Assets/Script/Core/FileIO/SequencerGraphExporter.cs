@@ -171,8 +171,6 @@ public class SequencrGraphLoader : LoaderBase<SequencerGraphBaseData>
             spawnEvent = new SequencerGraphEvent_CameraTrackFence();
         else if(node.Name == "EffectPreset")
             spawnEvent = new SequencerGraphEvent_EffectPreset();
-        else if (node.Name == "TalkBubble")
-            spawnEvent = new SequencerGraphEvent_TalkBubble();
 
         if(spawnEvent == null)
         {

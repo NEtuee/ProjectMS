@@ -129,6 +129,7 @@ public static class DialogDataLoader
         }
 
         float time = 0.0f;
+        string input = string.Empty;
         
         for(int index = 0; index < node.Attributes.Count; ++index)
         {
@@ -139,10 +140,22 @@ public static class DialogDataLoader
             {
                 time = float.Parse(attrValue);
             }
+            else if (attrName == "Input")
+            {
+                input = attrValue;
+            }
         }
         
         var result = new List<BubbleCommend>();
-        result.Add(new Wait(time));
+        if (input != string.Empty)
+        {
+            result.Add(new WaitInput(input));
+        }
+        else
+        {
+            result.Add(new Wait(time));
+        }
+
         return result;
     }
     

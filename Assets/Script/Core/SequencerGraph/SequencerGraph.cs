@@ -211,7 +211,7 @@ public class SequencerGraphProcessor
             return;
 
         _isSequencerEventEnd = true;
-        for(int index = _currentIndex; index < _currentSequencer._sequencerGraphPhase[1]._sequencerGraphEventCount;)
+        for (int index = _currentIndex; index < _currentSequencer._sequencerGraphPhase[1]._sequencerGraphEventCount;)
         {
             SequencerGraphEventType eventType = _currentSequencer._sequencerGraphPhase[1]._sequencerGraphEventList[index].getSequencerGraphEventType();
             if(eventType == SequencerGraphEventType.ForceQuit)
