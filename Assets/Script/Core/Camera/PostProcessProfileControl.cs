@@ -75,7 +75,6 @@ public class PostProcessProfileControl
         }
     }
 
-
     public void updateMaterial(bool editMode)
     {
         _targetMaterial = getPostProcessMaterial(editMode);
@@ -115,6 +114,12 @@ public class PostProcessProfileControl
     {
         if(_additionalEffectProfile.isEnd() == false && _currentAdditionalBlendingOrder > order)
             return;
+        
+        if(_baseBlendingProfileList.Count == 0)
+        {
+            DebugUtil.assert(false,"Base Blend PPP가 없습니다. 스테이지 시작 시퀀스에 추가해 주세요");
+            return;
+        }
 
         _additionalEffectProfile.setProfileData(profile,blendTime);
         _currentAdditionalBlendingOrder = order;
