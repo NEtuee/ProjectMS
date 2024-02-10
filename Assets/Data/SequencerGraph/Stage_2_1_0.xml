@@ -1,6 +1,8 @@
 <SequencerGraph Name="Stage_2_1_0">
 
     <InitializePhase>
+        <ApplyPostProcessProfile Path="PostProcessProfile/PostProcessProfile_Default"/>
+        
         <FadeIn Lambda="5.0"/>
 
         <SetCameraTarget UniqueKey="Player" CameraMode="TargetCenterMode"/>

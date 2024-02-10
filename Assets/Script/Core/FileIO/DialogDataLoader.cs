@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
@@ -46,7 +47,7 @@ public static class DialogDataLoader
                     continue;
                 }
                     
-                commandList.Add(command);
+                commandList.AddRange(command);
             }
             
             dataDic[textNodes[nodeIndex].Name] = commandList;
@@ -55,7 +56,7 @@ public static class DialogDataLoader
         return dataDic;
     }
 
-    private static BubbleCommend ReadCommend(XmlNode node)
+    private static IList<BubbleCommend> ReadCommend(XmlNode node)
     {
         if (node == null)
         {
@@ -68,8 +69,6 @@ public static class DialogDataLoader
                 return CreateShowText(node);
             case "Wait":
                 return CreateWait(node);
-            case "Line":
-                return CreateLine(node);
             case "SetColor":
                 return CreateSetColor(node);
             case "EndColor":
@@ -83,7 +82,7 @@ public static class DialogDataLoader
         return null;
     }
 
-    private static BubbleCommend CreateShowText(XmlNode node)
+    private static IList<BubbleCommend> CreateShowText(XmlNode node)
     {
         if (node == null)
         {
@@ -92,22 +91,37 @@ public static class DialogDataLoader
 
         string text = string.Empty;
         float interval = 0.01f;
+        bool isEndLine = true;
         
         for(int index = 0; index < node.Attributes.Count; ++index)
         {
             string attrName = node.Attributes[index].Name;
             string attrValue = node.Attributes[index].Value;
 
-            if(attrName == "Text")
+            if (attrName == "Text")
+            {
                 text = attrValue;
-            else if(attrName == "Interval")
+            }
+            else if (attrName == "Interval")
+            {
                 interval = float.Parse(attrValue);
+            }
+            else if (attrName == "EndLine")
+            {
+                isEndLine = Boolean.Parse(attrValue);
+            }
         }
 
-        return new ShowText(interval, text);
+        var result = new List<BubbleCommend>();
+        result.Add(new ShowText(interval, text));
+        if (isEndLine == true)
+        {
+            result.Add(new AddLineAlignment());
+        }
+        return result;
     }
     
-    private static BubbleCommend CreateWait(XmlNode node)
+    private static IList<BubbleCommend> CreateWait(XmlNode node)
     {
         if (node == null)
         {
@@ -115,6 +129,7 @@ public static class DialogDataLoader
         }
 
         float time = 0.0f;
+        string input = string.Empty;
         
         for(int index = 0; index < node.Attributes.Count; ++index)
         {
@@ -125,9 +140,23 @@ public static class DialogDataLoader
             {
                 time = float.Parse(attrValue);
             }
+            else if (attrName == "Input")
+            {
+                input = attrValue;
+            }
+        }
+        
+        var result = new List<BubbleCommend>();
+        if (input != string.Empty)
+        {
+            result.Add(new WaitInput(input));
+        }
+        else
+        {
+            result.Add(new Wait(time));
         }
 
-        return new Wait(time);
+        return result;
     }
     
     private static BubbleCommend CreateLine(XmlNode node)
@@ -140,7 +169,7 @@ public static class DialogDataLoader
         return new AddLineAlignment();
     }
     
-    private static BubbleCommend CreateSetColor(XmlNode node)
+    private static  IList<BubbleCommend> CreateSetColor(XmlNode node)
     {
         if (node == null)
         {
@@ -157,37 +186,45 @@ public static class DialogDataLoader
             if(attrName == "Color")
                 colorHex = attrValue;
         }
-
-        return new SetTextColor(colorHex);
+        
+        var result = new List<BubbleCommend>();
+        result.Add(new SetTextColor(colorHex));
+        return result;
     }
     
-    private static BubbleCommend CreateEndColor(XmlNode node)
+    private static IList<BubbleCommend> CreateEndColor(XmlNode node)
+    {
+        if (node == null)
+        {
+            return null;
+        }
+        
+        var result = new List<BubbleCommend>();
+        result.Add(new EndTextColor());
+        return result;
+    }
+    
+    private static IList<BubbleCommend> CreateSetBold(XmlNode node)
     {
         if (node == null)
         {
             return null;
         }
 
-        return new EndTextColor();
+        var result = new List<BubbleCommend>();
+        result.Add(new SetBold());
+        return result;
     }
     
-    private static BubbleCommend CreateSetBold(XmlNode node)
+    private static IList<BubbleCommend> CreateEndBold(XmlNode node)
     {
         if (node == null)
         {
             return null;
         }
 
-        return new SetBold();
-    }
-    
-    private static BubbleCommend CreateEndBold(XmlNode node)
-    {
-        if (node == null)
-        {
-            return null;
-        }
-
-        return new EndBold();
+        var result = new List<BubbleCommend>();
+        result.Add(new EndBold());
+        return result;
     }
 }

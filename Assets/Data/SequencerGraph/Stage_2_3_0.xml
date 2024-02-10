@@ -1,4 +1,4 @@
-<SequencerGraph Name="Stage_2_2_0">
+<SequencerGraph Name="Stage_2_3_0">
 
     <InitializePhase>
         <ApplyPostProcessProfile Path="PostProcessProfile/PostProcessProfile_Default"/>
@@ -7,15 +7,11 @@
 
         <SetCameraTarget UniqueKey="Player" CameraMode="TargetCenterMode"/>
         <SetCrossHair UniqueKey="Player"/>
-
     </InitializePhase>
 
     <UpdatePhase>
-        <AIMove UniqueKey="YakisobaChan" LoopAction="MoveFast" EndPositionMarker="TargetMarker"/>
-        <SetAction UniqueKey="YakisobaChan" Action="ImmediatlyKill"/>
-
         <WaitSecond Time="1.0"/>
-        <WaitSignal Signal="NeverEnd"/>
-    </UpdatePhase>
 
+    </UpdatePhase>
+    
 </SequencerGraph>

@@ -1,6 +1,6 @@
 <ActionGraph Name="ProjectileShotCharacter" DefaultAction="Idle" DefaultFramePerSecond="12">
 
-    <Idle MovementType="Empty" DirectionType="Keep">
+    <Idle MovementType="Empty" DirectionType="Keep" ActiveCollision="False">
         <AnimationHeader MasterPath="Sprites/DummyPlayer/"/>
         <Animation Preset="idle" XFlip="true" Duration="1">
         </Animation>
@@ -8,7 +8,7 @@
         <Branch Condition="End == true" Execute="Idle"/>
     </Idle>
 
-    <BaseBallRepeat MovementType="Empty" DirectionType="Keep">
+    <BaseBallRepeat MovementType="Empty" DirectionType="Keep" ActiveCollision="False">
         <AnimationHeader MasterPath="Sprites/DummyPlayer/"/>
         <Animation Preset="idle" XFlip="true" Duration="2.5">
             <FrameEvent Type="Projectile" StartTime="0" GraphName="BaseBall" DirectionType="Keep" SpawnTargetType="Self"/>
@@ -18,7 +18,7 @@
         <Branch Condition="End == true" Execute="BaseBallRepeat"/>
     </BaseBallRepeat>
 
-    <BaseBallRepeatFast MovementType="Empty" DirectionType="Keep">
+    <BaseBallRepeatFast MovementType="Empty" DirectionType="Keep" ActiveCollision="False">
         <AnimationHeader MasterPath="Sprites/DummyPlayer/"/>
         <Animation Preset="idle" XFlip="true" Duration="1.5">
             <FrameEvent Type="Projectile" StartTime="0" GraphName="BaseBall" DirectionType="Keep" SpawnTargetType="Self"/>
@@ -28,7 +28,7 @@
         <Branch Condition="End == true" Execute="BaseBallRepeat"/>
     </BaseBallRepeatFast>
 
-    <DumbellRepeat MovementType="Empty" DirectionType="Keep">
+    <DumbellRepeat MovementType="Empty" DirectionType="Keep" ActiveCollision="False">
         <AnimationHeader MasterPath="Sprites/DummyPlayer/"/>
         <Animation Preset="idle" XFlip="true" Duration="2.5">
             <FrameEvent Type="Projectile" StartTime="0" GraphName="Dumbell" DirectionType="Keep" SpawnTargetType="Self"/>
@@ -38,7 +38,7 @@
         <Branch Condition="End == true" Execute="DumbellRepeat"/>
     </DumbellRepeat>
 
-    <DumbellRepeatFast MovementType="Empty" DirectionType="Keep">
+    <DumbellRepeatFast MovementType="Empty" DirectionType="Keep" ActiveCollision="False">
         <AnimationHeader MasterPath="Sprites/DummyPlayer/"/>
         <Animation Preset="idle" XFlip="true" Duration="1.5">
             <FrameEvent Type="Projectile" StartTime="0" GraphName="Dumbell" DirectionType="Keep" SpawnTargetType="Self"/>
@@ -48,7 +48,27 @@
         <Branch Condition="End == true" Execute="DumbellRepeat"/>
     </DumbellRepeatFast>
 
-    <Dead MovementType="Empty" DirectionType="Keep">
+    <SoccerBallRepeat MovementType="Empty" DirectionType="Keep" ActiveCollision="False">
+        <AnimationHeader MasterPath="Sprites/DummyPlayer/"/>
+        <Animation Preset="idle" XFlip="true" Duration="2.5">
+            <FrameEvent Type="Projectile" StartTime="0" GraphName="SoccerBall" DirectionType="Keep" SpawnTargetType="Self"/>
+
+        </Animation>
+
+        <Branch Condition="End == true" Execute="SoccerBallRepeat"/>
+    </SoccerBallRepeat>
+
+    <LinerRepeat MovementType="Empty" DirectionType="Keep" ActiveCollision="False">
+        <AnimationHeader MasterPath="Sprites/DummyPlayer/"/>
+        <Animation Preset="idle" XFlip="true" Duration="2.5">
+            <FrameEvent Type="Projectile" StartTime="0" GraphName="Liner" DirectionType="Keep" SpawnTargetType="Self"/>
+
+        </Animation>
+
+        <Branch Condition="End == true" Execute="LinerRepeat"/>
+    </LinerRepeat>
+
+    <Dead MovementType="Empty" DirectionType="Keep" ActiveCollision="False">
         <AnimationHeader MasterPath="Sprites/"/>
         <Animation Preset="" XFlip="true" Duration="1">
             <FrameEvent Type="KillEntity" StartTime="0"/>
