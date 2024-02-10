@@ -45,6 +45,7 @@ public enum SequencerGraphEventType
     BlockPointExit,
     EffectPreset,
     TalkBubble,
+    InactiveTalkBubble,
 
     Count,
 }
@@ -355,6 +356,25 @@ public class SequencerGraphEvent_TalkBubble : SequencerGraphEventBase
         {
             DebugUtil.assert(false, "DialogText Key가 존재하지 않습니다. 이거 필수임");
         }
+    }
+}
+
+public class SequencerGraphEvent_InactiveTalkBubble : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.InactiveTalkBubble;
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+        GameUI.Instance.TextBubble.SetActive(false);
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
     }
 }
 
