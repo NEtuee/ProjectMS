@@ -562,9 +562,12 @@ public class ActionFrameEvent_TalkBalloon : ActionFrameEventBase
 
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
-        if(executeEntity is GameEntityBase gameEntityBase == false)
+        var entity = executeEntity as GameEntityBase;
+        if (entity == null)
+        {
             return true;
-
+        }
+        
         var commandList = DialogTextManager.Instance().GetDialogCommand(_key);
         if (commandList == null)
         {
@@ -572,7 +575,7 @@ public class ActionFrameEvent_TalkBalloon : ActionFrameEventBase
             return true;
         }
         
-        GameUI.Instance.TextBubble.PlayCommand(commandList, gameEntityBase, null);
+        GameUI.Instance.TextBubble.PlayCommand(commandList, entity, null);
         return true;
     }
 
