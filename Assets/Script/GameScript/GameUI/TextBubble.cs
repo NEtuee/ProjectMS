@@ -12,6 +12,7 @@ public class TextBubble : IUIElement
     private readonly Queue<BubbleCommend> _commendQueue = new Queue<BubbleCommend>();
     private BubbleCommend _currentCommand;
 
+    private Transform _followTargetTransform;
     private bool _isPlay = false;
     private Action _onEnd;
 
@@ -51,7 +52,7 @@ public class TextBubble : IUIElement
         }
     }
 
-    public void PlayCommand(List<BubbleCommend> commandList, Action onEnd)
+    public void PlayCommand(List<BubbleCommend> commandList, Transform followTarget, Action onEnd)
     {
         if (commandList == null || commandList.Count <= 0)
         {
@@ -59,6 +60,13 @@ public class TextBubble : IUIElement
             return;
         }
 
+        if (_isPlay == true)
+        {
+            _binder.TextComp.text = string.Empty;
+        }
+
+        _followTargetTransform = followTarget;
+        
         _commendQueue.Clear();
 
         foreach (var commend in commandList)
@@ -77,7 +85,13 @@ public class TextBubble : IUIElement
         {
             return;
         }
-        
+
+        UpdateFollowPosition();
+        UpdateCommand();
+    }
+
+    private void UpdateCommand()
+    {
         if (_currentCommand == null)
         {
             if (_commendQueue.Count <= 0)
@@ -106,6 +120,18 @@ public class TextBubble : IUIElement
                 _currentCommand.Start(_textPresenter, GlobalTimer.Instance().getScaledGlobalTime());
             }
         }
+    }
+
+    private void UpdateFollowPosition()
+    {
+        if (_followTargetTransform == null)
+        {
+            return;
+        }
+
+        var followScreenPos = Camera.main.WorldToScreenPoint(_followTargetTransform.position + _binder.FollowOffset);
+        followScreenPos.z = 0;
+        _binder.transform.position = followScreenPos;
     }
 }
 

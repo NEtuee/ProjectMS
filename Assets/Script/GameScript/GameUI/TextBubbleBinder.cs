@@ -10,6 +10,7 @@ public class TextBubbleBinder : UIObjectBinder
     public Text TextComp;
     public float WidthPadding = 10f;
     public float HeightPadding = 10f;
+    public Vector3 FollowOffset;
 
     public override bool CheckValidLink(out string reason)
     {

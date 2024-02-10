@@ -29,11 +29,11 @@ public class TargetFollower : IUIElement
 
     public void UpdateByManager(Vector3 characterPosition)
     {
-        var characterScreenPos = Camera.main.WorldToScreenPoint(characterPosition);
+        var characterScreenPos = Camera.main.WorldToScreenPoint(characterPosition + _binder.Offset);
         characterScreenPos.z = 0.0f;
         //Debug.Log(characterScreenPos);
-        
-        var targetPosition = characterScreenPos + _binder.Offset;
+
+        var targetPosition = characterScreenPos;
 
         var deltaTime = GlobalTimer.Instance().getSclaedDeltaTime();
 

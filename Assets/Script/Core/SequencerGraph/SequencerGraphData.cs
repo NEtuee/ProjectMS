@@ -315,6 +315,7 @@ public class SequencerGraphEvent_TalkBubble : SequencerGraphEventBase
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.TalkBubble;
 
     private string _key = "";
+    private string _uniqueKey = "Player";
     private bool _endFlag = false;
 
     public override void Initialize(SequencerGraphProcessor processor)
@@ -324,9 +325,16 @@ public class SequencerGraphEvent_TalkBubble : SequencerGraphEventBase
         {
             DebugUtil.assert(false, "존재하지 않는 Dialog 커맨드 입니다. 데이터를 확인 해 주세요. [Key: {0}]", _key);
         }
+        
+        GameEntityBase uniqueEntity = processor.getUniqueEntity(_uniqueKey);
+        Transform targetTransform = null;
+        if (uniqueEntity != null)
+        {
+            targetTransform = uniqueEntity.transform;
+        }
 
         _endFlag = false;
-        GameUI.Instance.TextBubble.PlayCommand(commandList, () => _endFlag = true);
+        GameUI.Instance.TextBubble.PlayCommand(commandList, targetTransform, () => _endFlag = true);
     }
 
     public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
@@ -350,6 +358,8 @@ public class SequencerGraphEvent_TalkBubble : SequencerGraphEventBase
 
             if(attributes[i].Name == "Key")
                 _key = attributes[i].Value;
+            if(attrName == "UniqueKey")
+                _uniqueKey = attrValue;
         }
 
         if (_key == "")
@@ -1645,14 +1655,14 @@ public class SequencerGraphEvent_SetCrossHair : SequencerGraphEventBase
 
     public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
     {
-        GameEntityBase unqueEntity = processor.getUniqueEntity(_uniqueKey);
-        if(unqueEntity == null)
+        GameEntityBase uniqueEntity = processor.getUniqueEntity(_uniqueKey);
+        if(uniqueEntity == null)
         {
-            DebugUtil.assert(false,"대상 Unique Entity가 존재하지 않습니다 : {0}",_uniqueKey);
+            DebugUtil.assert(false, "대상 Unique Entity가 존재하지 않습니다 : {0}", _uniqueKey);
             return true;
         }
         
-        GameUI.Instance.SetEntity(unqueEntity);
+        GameUI.Instance.SetEntity(uniqueEntity);
         GameUI.Instance.SetActiveCrossHair(true);
 
         return true;
