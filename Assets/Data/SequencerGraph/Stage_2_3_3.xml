@@ -1,0 +1,13 @@
+<SequencerGraph Name="Stage_2_3_3">
+
+    <InitializePhase>
+        <UnlockStageLimit Enable="True"/>
+        <ApplyPostProcessProfile Path="PostProcessProfile/PostProcessProfile_Translated" ApplyType="BaseBlend" BlendTime="12.5"/>
+    </InitializePhase>
+
+    <UpdatePhase>
+        <WaitSecond Time="1.0"/>
+
+    </UpdatePhase>
+    
+</SequencerGraph>

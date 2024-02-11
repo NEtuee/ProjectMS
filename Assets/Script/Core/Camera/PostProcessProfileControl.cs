@@ -110,6 +110,11 @@ public class PostProcessProfileControl
         _isBlending = _baseBlendingProfileList.Count > 1 || _additionalEffectProfile.isEnd() == false;
     }
 
+    public void applyCenterUVPosition(Vector2 centerUV)
+    {
+        _targetMaterial.SetVector("_CenterUV", centerUV);
+    }
+
     public void setAdditionalEffectProfile(PostProcessProfile profile, int order, float blendTime)
     {
         if(_additionalEffectProfile.isEnd() == false && _currentAdditionalBlendingOrder > order)

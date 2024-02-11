@@ -8,6 +8,7 @@ public enum SequencerGraphEventType
     SpawnCharacter,
     WaitSecond,
     SetCameraTarget,
+    SetCameraUVTarget,
     SetCameraPosition,
     SetAudioListner,
     SetCrossHair,
@@ -1870,6 +1871,38 @@ public class SequencerGraphEvent_SetAudioListner : SequencerGraphEventBase
         }
     }
 }
+
+public class SequencerGraphEvent_SetCameraUVTarget : SequencerGraphEventBase
+{
+    private string _uniqueKey = "";
+
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SetCameraUVTarget;
+    
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        CameraControlEx.Instance().setCameraUVTarget(processor.getUniqueEntity(_uniqueKey));
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "UniqueKey")
+                _uniqueKey = attrValue;
+        }
+    }
+}
+
 
 public class SequencerGraphEvent_SetCameraTarget : SequencerGraphEventBase
 {

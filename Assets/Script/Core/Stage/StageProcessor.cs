@@ -761,6 +761,8 @@ public class StageProcessor
     public void unlockLimit(bool value)
     {
         _unlockLimit = value;
+        if(_unlockLimit)
+            killAllCharacterWithoutKeepAliveCharacter();
     }
 }
 

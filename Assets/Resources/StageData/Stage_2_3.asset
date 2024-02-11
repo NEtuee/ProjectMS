@@ -38,7 +38,7 @@ MonoBehaviour:
       _setDirection: 0
       _directionAngle: 0
       _hideWhenDeactive: 0
-      _keepAlive: 0
+      _keepAlive: 1
       _sortingOrder: 0
       _searchIdentifier: 0
       _activeType: 0
@@ -129,9 +129,9 @@ MonoBehaviour:
       _localPosition: {x: 0.59, y: 0.04, z: 0}
     _useTriggerBound: 1
     _targetSearchIdentifier: 1
-    _triggerWidth: 1
+    _triggerWidth: 8.03
     _triggerHeight: 13.89
-    _triggerOffset: {x: -3.97, y: 0, z: 0}
+    _triggerOffset: {x: 0.59, y: 0, z: 0}
   - _pointName: New Point 2
     _stagePoint: {x: 16.45, y: 2.8, z: 0}
     _maxLimitedDistance: 1
@@ -185,19 +185,6 @@ MonoBehaviour:
       _searchIdentifier: 1
       _activeType: 1
       _localPosition: {x: 6.56, y: 3.78, z: 0}
-    - _characterKey: BarbellChan
-      _uniqueKey: 
-      _uniqueGroupKey: 
-      _startAction: AC_Entry
-      _flip: 1
-      _setDirection: 0
-      _directionAngle: 0
-      _hideWhenDeactive: 0
-      _keepAlive: 0
-      _sortingOrder: 0
-      _searchIdentifier: 1
-      _activeType: 1
-      _localPosition: {x: 5.15, y: 4.26, z: 0}
     - _characterKey: BarbellChan
       _uniqueKey: 
       _uniqueGroupKey: 
@@ -1246,14 +1233,15 @@ MonoBehaviour:
     _lerpCameraZoom: 0
     _lockCameraInBound: 0
     _cameraBoundToTrigger: 0
-    _onEnterSequencerPath: []
+    _onEnterSequencerPath:
+    - Stage_2_3_3.xml
     _onExitSequencerPath: []
     _characterSpawnData: []
     _useTriggerBound: 1
     _targetSearchIdentifier: 1
-    _triggerWidth: 1
+    _triggerWidth: 5.03
     _triggerHeight: 10.03
-    _triggerOffset: {x: -3.19, y: 0, z: 0}
+    _triggerOffset: {x: -0.96, y: 0, z: 0}
   _miniStageData: []
   _markerData: []
   _trackData: []

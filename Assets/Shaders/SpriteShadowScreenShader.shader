@@ -226,11 +226,12 @@ Shader "Custom/SpriteShadowScreenShader"
 					}
 					
 					{
-						float2 tileIndex = floor((texcoord + 0.5 * _CrossTileSize) / _CrossTileSize);
+						float2 offset = -_CenterUV.xy + float2(_CrossTileSize,_CrossTileSize) * 0.5 + float2(0.5, 0.5);
+						float2 tileIndex = floor((texcoord + offset ) / _CrossTileSize);
 						float2 tileCenter = (tileIndex * _CrossTileSize);
 
-						float distance = length(tileCenter - _CenterUV);
-						float2 tilePos = fmod(abs(texcoord) + float2(_CrossTileSize,_CrossTileSize) * 0.5, _CrossTileSize) - 0.5 * _CrossTileSize;
+						float distance = length(tileCenter - float2(0.5, 0.5));
+						float2 tilePos = fmod(abs(texcoord) + offset, _CrossTileSize) - 0.5 * _CrossTileSize;
 	
 						tilePos.x /= _CrossWidth;
     					tilePos.y /= _CrossHeight;

@@ -97,6 +97,8 @@ public class SequencrGraphLoader : LoaderBase<SequencerGraphBaseData>
             spawnEvent = new SequencerGraphEvent_WaitSecond(); 
         else if(node.Name == "SetCameraTarget")
             spawnEvent = new SequencerGraphEvent_SetCameraTarget();
+        else if(node.Name == "SetCameraUVTarget")
+            spawnEvent = new SequencerGraphEvent_SetCameraUVTarget();
         else if(node.Name == "SetCameraPosition")
             spawnEvent = new SequencerGraphEvent_SetCameraPosition();
         else if(node.Name == "SetAudioListner")
