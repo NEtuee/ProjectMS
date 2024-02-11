@@ -50,6 +50,7 @@ public class StageProcessor
     private float           _cameraTrackPositionErrorReduceTime = 1f;
 
     private bool            _blockPointExit = false;
+    private bool            _unlockLimit = false;
 
     public StageProcessor()
     {
@@ -104,6 +105,7 @@ public class StageProcessor
         _currentPoint = 0;
         _isEnd = false;
         _blockPointExit = false;
+        _unlockLimit = false;
 
         if(_stageData._stagePointData.Count == 0)
             return;
@@ -268,7 +270,6 @@ public class StageProcessor
     public void playMiniStage(MiniStageListItem miniStage)
     {
 
-
     }
 
     public void stopStage(bool forceStop)
@@ -287,6 +288,7 @@ public class StageProcessor
         _currentPoint = 0;
         _isEnd = false;
         _blockPointExit = false;
+        _unlockLimit = false;
 
         _offsetPosition = Vector3.zero;
         if(_stageBackgroundOjbect != null)
@@ -566,6 +568,28 @@ public class StageProcessor
         }
     }
 
+    public void setActiveBackground(bool value)
+    {
+        _stageBackgroundOjbect?.SetActive(value);
+    }
+
+    public void killAllCharacterWithoutKeepAliveCharacter()
+    {
+        foreach(var item in _spawnedCharacterEntityDictionary.Values)
+        {
+            foreach(var characterInfo in item)
+            {
+                if(characterInfo._characterEntity == null || characterInfo._characterEntity.isDead())
+                    continue;
+                
+                if(characterInfo._characterEntity.isKeepAliveEntity())
+                    continue;
+
+                characterInfo._characterEntity.getStatusInfo().setDead(true);
+            }
+        }
+    }
+
     public void startEnterSequencers(StagePointData pointData, int pointIndex, bool includePlayer)
     {
         if(pointData == null || pointData._onEnterSequencerPath == null)
@@ -683,6 +707,9 @@ public class StageProcessor
         if(_stageData._stagePointData.Count == 0 || targetPointIndex >= _stageData._stagePointData.Count)
             return 0f;
 
+        if(_unlockLimit)
+            return 0f;
+
         bool isEndPoint = targetPointIndex == _stageData._stagePointData.Count - 1;
         StagePointData startPoint = _stageData._stagePointData[targetPointIndex];
         StagePointData nextPoint = isEndPoint ? startPoint : _stageData._stagePointData[targetPointIndex + 1];
@@ -731,5 +758,9 @@ public class StageProcessor
         return resultFraction;
     }
 
+    public void unlockLimit(bool value)
+    {
+        _unlockLimit = value;
+    }
 }
 

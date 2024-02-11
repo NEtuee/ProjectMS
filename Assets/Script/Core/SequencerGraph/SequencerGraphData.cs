@@ -45,6 +45,7 @@ public enum SequencerGraphEventType
     SetDirection,
     BlockPointExit,
     EffectPreset,
+    UnlockStageLimit,
     
     Count,
 }
@@ -1110,6 +1111,37 @@ public class SequencerGraphEvent_PlayAnimation : SequencerGraphEventBase
                 _uniqueKey = attrValue;
             else if(attrName == "Path")
                 _animationPath = attrValue;
+        }
+    }
+}
+
+public class SequencerGraphEvent_UnlockStageLimit : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.UnlockStageLimit;
+
+    private bool _enable = false;
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        MasterManager.instance._stageProcessor.unlockLimit(_enable);
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "Enable")
+                _enable = bool.Parse(attrValue);
         }
     }
 }

@@ -171,6 +171,8 @@ public class SequencrGraphLoader : LoaderBase<SequencerGraphBaseData>
             spawnEvent = new SequencerGraphEvent_CameraTrackFence();
         else if(node.Name == "EffectPreset")
             spawnEvent = new SequencerGraphEvent_EffectPreset();
+        else if(node.Name == "UnlockStageLimit")
+            spawnEvent = new SequencerGraphEvent_UnlockStageLimit();
 
         if(spawnEvent == null)
         {
