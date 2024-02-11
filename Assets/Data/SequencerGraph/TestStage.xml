@@ -9,17 +9,14 @@
         <SetCrossHair UniqueKey="Player"/>
 
         <SetCameraZoom Size="0.0"/>
-        <SetCameraUVTarget UniqueKey="Player"/>
         
         <UnlockStageLimit Enable="True"/>
         
     </InitializePhase>
 
     <UpdatePhase>
-        <WaitSecond Time="2.0"/>
+        <WaitSecond Time="1.0"/>
 
-        <ApplyPostProcessProfile Path="PostProcessProfile/PostProcessProfile_Translated" ApplyType="BaseBlend" BlendTime="8.0"/>
-        <SetCameraUVTarget UniqueKey="NULL"/>
         <!-- 스테이지 시퀀서는 스테이지 진행중에 절대 꺼지면 안된다 -->
         <WaitSignal Signal="NeverEnd"/>
     </UpdatePhase>
