@@ -268,7 +268,7 @@ public class SequencerGraphEvent_TalkBalloon : SequencerGraphEventBase
                 GameEntityBase uniqueEntity = processor.getUniqueEntity(_uniqueKey);
                 if (uniqueEntity == null)
                 {
-                    DebugUtil.assert(false,"대상 Unique Entity가 존재하지 않습니다 : {0}",_uniqueKey);
+                    return true;
                 }
                 else
                 {

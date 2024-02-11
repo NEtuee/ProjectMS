@@ -79,6 +79,7 @@ public class MasterManager : MessageHub<ManagerBase>
         }
 
         FMODAudioManager.Instance().initialize();
+        CollisionManager.Instance().initialize();
         CameraControlEx.Instance().initialize();
         DanmakuManager.Instance().initialize();
         UIRepeater.Instance().clear();

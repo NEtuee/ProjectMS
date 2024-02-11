@@ -272,10 +272,7 @@ public class SequencerGraphProcessor
     public GameEntityBase getUniqueEntity(string uniqueKey, bool validCheck = true)
     {
         if(_uniqueEntityDictionary.ContainsKey(uniqueKey) == false)
-        {
-            DebugUtil.assert(validCheck == false,"존재하지 않는 유니크 엔티티 입니다. 오타는 아닌가요? [Key: {0}]",uniqueKey);
             return null;
-        }
 
         return _uniqueEntityDictionary[uniqueKey];
     }
