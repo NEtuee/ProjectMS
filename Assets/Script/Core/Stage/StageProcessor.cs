@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 using System;
+using UnityEngine.UIElements;
 
 public class StageProcessor
 {
@@ -204,11 +205,15 @@ public class StageProcessor
 
                 _spawnedCharacterEntityDictionary[index].Add(entityInfo);
 
+                if(characterSpawnData._startAIState != "")
+                    createdCharacter.setAINode(characterSpawnData._startAIState);
+
                 if(characterSpawnData._startAction != "")
                 {
                     createdCharacter.setAction(characterSpawnData._startAction);
                     createdCharacter.progress(0f);
                 }
+
 
                 createdCharacter.updateFlipState(FlipType.Direction);
             }
@@ -428,6 +433,15 @@ public class StageProcessor
                     _cameraPositionBlendTimeLeft = 1f;
                 }
             }
+
+            if(Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.P))
+            {
+                fraction = 1f;
+                _playerEntity.transform.position = stagePoint._stagePoint + _offsetPosition;
+                CameraControlEx.Instance().setCameraPosition(stagePoint._stagePoint + _offsetPosition);
+
+                killAllCharacterWithoutKeepAliveCharacter();
+            }
         }
 
         if(_isEnd == false && _blockPointExit == false && fraction >= 1f)
@@ -590,6 +604,11 @@ public class StageProcessor
         }
     }
 
+    public void addSequencerSignal(string signal)
+    {
+        _sequencerProcessManager.addSequencerSignal(signal);
+    }
+
     public void startEnterSequencers(StagePointData pointData, int pointIndex, bool includePlayer)
     {
         if(pointData == null || pointData._onEnterSequencerPath == null)
@@ -719,6 +738,7 @@ public class StageProcessor
         float limitedDistance = 0f;
         float verticalLimitedDistance = 0f;
         float horizontalLimitedDistance = 0f;
+        float cameraSize = startPoint._cameraZoomSize;
 
         if(startPoint._lockCameraInBound)
         {
@@ -734,10 +754,18 @@ public class StageProcessor
             limitedDistance = Mathf.Lerp(startPoint._maxLimitedDistance, nextPoint._maxLimitedDistance, resultFraction);
             verticalLimitedDistance = Mathf.Lerp(startPoint._verticalLimitedDistance, nextPoint._verticalLimitedDistance, resultFraction);
             horizontalLimitedDistance = Mathf.Lerp(startPoint._horizontalLimitedDistance, nextPoint._horizontalLimitedDistance, resultFraction);
+            cameraSize = Mathf.Lerp(cameraSize, nextPoint._cameraZoomSize, resultFraction);
         }
 
-        verticalLimitedDistance += limitedDistance;
-        horizontalLimitedDistance += limitedDistance;
+        float mainCamSize = Camera.main.orthographicSize;
+        float currentCamHeight = mainCamSize * 2f;
+        float currentcamWidth = currentCamHeight * (800f / 600f);
+
+        float targetCamHeight = (cameraSize) * 2f;
+		float targetCamWidth = targetCamHeight * (800f / 600f);
+
+        verticalLimitedDistance += limitedDistance + (targetCamHeight - currentCamHeight) * 0.5f;
+        horizontalLimitedDistance += limitedDistance + (targetCamWidth - currentcamWidth) * 0.5f;
 
         resultPoint = targetPositionWithoutZ;
         if(MathEx.distancef(targetPositionWithoutZ.y,onLinePosition.y) > verticalLimitedDistance)

@@ -15,6 +15,7 @@ public class StagePointCharacterSpawnData
     public string   _uniqueKey = "";
     public string   _uniqueGroupKey = "";
     public string   _startAction = "";
+    public string   _startAIState = "";
     public bool     _flip = false;
     public bool     _setDirection = false;
     public float    _directionAngle = 0f;

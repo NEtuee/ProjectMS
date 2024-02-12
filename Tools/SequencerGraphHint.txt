@@ -72,7 +72,7 @@ InQuote,ProcessType=,"StepByStep,AllAtOnce"
 ShortCut,__LetterBoxShow,<LetterBoxShow/>
 ShortCut,__LetterBoxHide,<LetterBoxHide/>
 ShortCut,__TalkBalloon,<TalkBalloon UniqueKey=~~ SimpleTalkKey=~~/>
-LineStart,<TalkBalloon,"UniqueKey=~~,UniqueGroupKey=~~,SimpleTalkKey=~~"
+LineStart,<TalkBalloon,"UniqueKey=~~,UniqueGroupKey=~~,SimpleTalkKey=~~,Wait=~~"
 ShortCut,__CameraTrack,<CameraTrack TrackName=~~/>
 LineStart,<CameraTrack,TrackName=~~
 ShortCut,__TaskFence,<TaskFence TaskName=~~/>
@@ -89,7 +89,7 @@ LineStart,<UnlockStageLimit,Enable=~~
 ShortCut,__UnlockStageLimit,<UnlockStageLimit Enable=~~/>
 LineStart,<SetCameraUVTarget,UniqueKey=~~
 ShortCut,__SetCameraUVTarget,<SetCameraUVTarget UniqueKey=~~/>
-,,
+InQuote,Wait=,"True,False"
 ,,
 ,,
 ,,

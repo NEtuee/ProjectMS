@@ -52,6 +52,10 @@
         <Branch Condition="(GuardBreakFail || GuardBroken) && getFrameTag_GbAvail" Execute="GuardBroken"/>
     </BranchSet>
 
+    <Event_OnAttacked>
+        <AIEvent Type="SequencerSignal" Signal="BossStart"/>
+    </Event_OnAttacked>
+
     <Entry Package="CommonIdlePackage">
         <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
