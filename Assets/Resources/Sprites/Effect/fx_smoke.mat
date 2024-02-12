@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: fx_smoke
-  m_Shader: {fileID: -6465566751694194690, guid: 676de3dea2e803943a3329d6ac9e936c, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 69f7cedb35ccc7043a142d235f6acf95, type: 3}
   m_ShaderKeywords: UNITY_UI_ALPHACLIP _ALPHATEST_ON
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
@@ -52,7 +52,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: f285f532b5772a44aace09253a4ea49e, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -85,12 +85,13 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - PixelSnap: 0
+    - Vector1_378438B4: 2
     - Vector1_5B9FB3FC: 1
     - Vector1_B42F4EB5: 25
     - Vector1_B452457E: 1
     - Vector1_D7B88F10: 1
     - Vector1_c7aa227e54d443e49a1a4c14ff55f7e6: 1
-    - _Alpha: 0.4
+    - _Alpha: 0.2
     - _BlendOp: 0
     - _BumpScale: 1
     - _CameraFadingEnabled: 0
@@ -109,7 +110,7 @@ Material:
     - _EmissionEnabled: 0
     - _EnableExternalAlpha: 0
     - _FlipbookMode: 0
-    - _Fracture: 6
+    - _Fracture: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
@@ -119,7 +120,7 @@ Material:
     - _Mode: 1
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _Scatter: 0.81
+    - _Scatter: 0.1
     - _SmoothnessTextureChannel: 0
     - _SoftParticlesEnabled: 0
     - _SoftParticlesFarFadeDistance: 1
@@ -135,9 +136,12 @@ Material:
     - _UseUIAlphaClip: 1
     - _ZWrite: 1
     m_Colors:
+    - Color_6EC6902D: {r: 0.1375662, g: 0.5, b: 0, a: 0}
+    - Color_ADFFCAF8: {r: 0.4616265, g: 1, b: 0.259434, a: 0}
     - Color_D0409D15: {r: 0.6431373, g: 0, b: 0.3507267, a: 0}
     - Vector2_782cbd977ac74462b4fea5219cb0fcfb: {r: 1, g: 1, b: 0, a: 0}
     - Vector2_9129a4507a674ab19e5a3cfde5a37fe8: {r: 0, g: 0, b: 0, a: 0}
+    - Vector2_FE267E1D: {r: 0.5, g: 0.5, b: 0, a: 0}
     - _BackgroundColor: {r: 1, g: 1, b: 1, a: 1}
     - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
     - _Color: {r: 0, g: 0, b: 0, a: 0.5176471}

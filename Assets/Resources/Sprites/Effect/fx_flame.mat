@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: fx_flame
-  m_Shader: {fileID: -6465566751694194690, guid: 676de3dea2e803943a3329d6ac9e936c, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 69f7cedb35ccc7043a142d235f6acf95, type: 3}
   m_ShaderKeywords: UNITY_UI_ALPHACLIP _ALPHATEST_ON
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
@@ -52,7 +52,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: f285f532b5772a44aace09253a4ea49e, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -90,7 +90,7 @@ Material:
     - Vector1_B452457E: 1
     - Vector1_D7B88F10: 1
     - Vector1_c7aa227e54d443e49a1a4c14ff55f7e6: 1
-    - _Alpha: -1
+    - _Alpha: 0.8
     - _BlendOp: 0
     - _BumpScale: 1
     - _CameraFadingEnabled: 0
@@ -109,7 +109,7 @@ Material:
     - _EmissionEnabled: 0
     - _EnableExternalAlpha: 0
     - _FlipbookMode: 0
-    - _Fracture: 10
+    - _Fracture: 8
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
@@ -119,7 +119,7 @@ Material:
     - _Mode: 1
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _Scatter: 1
+    - _Scatter: 0.5
     - _SmoothnessTextureChannel: 0
     - _SoftParticlesEnabled: 0
     - _SoftParticlesFarFadeDistance: 1
