@@ -76,6 +76,10 @@ public abstract class MessageReceiver : UniqueIDBase
         {
             MessagePool.ReturnMessage(msg);
         }
+        _receiveQueue.Clear();
+        _sendQueue.Clear();
+        _msgProcActions.Clear();
+
         _recentlySender = null;
     }
     public Message DequeueSendMessage()

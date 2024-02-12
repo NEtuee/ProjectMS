@@ -211,7 +211,7 @@ public class SequencerGraphProcessor
             return;
 
         _isSequencerEventEnd = true;
-        for(int index = _currentIndex; index < _currentSequencer._sequencerGraphPhase[1]._sequencerGraphEventCount;)
+        for (int index = _currentIndex; index < _currentSequencer._sequencerGraphPhase[1]._sequencerGraphEventCount;)
         {
             SequencerGraphEventType eventType = _currentSequencer._sequencerGraphPhase[1]._sequencerGraphEventList[index].getSequencerGraphEventType();
             if(eventType == SequencerGraphEventType.ForceQuit)
@@ -272,10 +272,7 @@ public class SequencerGraphProcessor
     public GameEntityBase getUniqueEntity(string uniqueKey, bool validCheck = true)
     {
         if(_uniqueEntityDictionary.ContainsKey(uniqueKey) == false)
-        {
-            DebugUtil.assert(validCheck == false,"존재하지 않는 유니크 엔티티 입니다. 오타는 아닌가요? [Key: {0}]",uniqueKey);
             return null;
-        }
 
         return _uniqueEntityDictionary[uniqueKey];
     }

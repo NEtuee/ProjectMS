@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using System.Xml;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ public enum SequencerGraphEventType
     SpawnCharacter,
     WaitSecond,
     SetCameraTarget,
+    SetCameraUVTarget,
     SetCameraPosition,
     SetAudioListner,
     SetCrossHair,
@@ -44,7 +46,8 @@ public enum SequencerGraphEventType
     SetDirection,
     BlockPointExit,
     EffectPreset,
-
+    UnlockStageLimit,
+    
     Count,
 }
 
@@ -238,51 +241,80 @@ public class SequencerGraphEvent_TalkBalloon : SequencerGraphEventBase
 {
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.TalkBalloon;
 
+    private string _key = "";
     private string _uniqueKey = "";
     private string _uniqueGroupKey = "";
+    private bool _wait = false;
 
-    private string _key = "";
+    private bool _executed = false;
+    private bool _endFlag = false;
 
     public override void Initialize(SequencerGraphProcessor processor)
     {
+        _executed = false;
+        _endFlag = false;
     }
 
     public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
     {
-        SubtitleData_SimpleTalk simpleTalkData = SubtitleManager.Instance().getSimpleTalkData(_key);
-        if(simpleTalkData == null)
+        if (_executed == false)
         {
-            DebugUtil.assert(false,"존재하지 않는 SimpleTalk Key 입니다. 데이터를 확인 해 주세요. [Key: {0}]",_key);
+            var commandList = DialogTextManager.Instance().GetDialogCommand(_key);
+            if (commandList == null)
+            {
+                DebugUtil.assert(false, "존재하지 않는 Dialog 커맨드 입니다. 데이터를 확인 해 주세요. [Key: {0}]", _key);
+            }
+        
+            if (_uniqueKey != string.Empty)
+            {
+                GameEntityBase uniqueEntity = processor.getUniqueEntity(_uniqueKey);
+                if (uniqueEntity == null)
+                {
+                    return true;
+                }
+                else
+                {
+                    if (_wait == false)
+                    {
+                        GameUI.Instance.TextBubble.PlayCommand(commandList, uniqueEntity, null);
+                    }
+                    else
+                    {
+                        GameUI.Instance.TextBubble.PlayCommand(commandList, uniqueEntity, () => _endFlag = true);
+                    }
+                }
+            }
+        
+            if (_uniqueGroupKey != string.Empty)
+            {
+                var uniqueGroup = processor.getUniqueGroup(_uniqueGroupKey);
+                if (uniqueGroup == null)
+                {
+                    DebugUtil.assert(false, "대상 Unique Group이 존재하지 않습니다 : {0}", _uniqueGroupKey);
+                }
+                else
+                {
+                    foreach (var item in uniqueGroup)
+                    {
+                        GameUI.Instance.TextBubble.PlayCommand(commandList, item, null);
+                    }
+                }
+            }
+
+            _endFlag = false;
+            _executed = true;
+        }
+        
+        if (_wait == false)
+        {
             return true;
         }
 
-        if(_uniqueKey != "")
+        if (_endFlag == false)
         {
-            GameEntityBase uniqueEntity = processor.getUniqueEntity(_uniqueKey);
-            if(uniqueEntity == null)
-            {
-                DebugUtil.assert(false,"대상 Unique Entity가 존재하지 않습니다 : {0}",_uniqueKey);
-                return true;
-            }
-
-            TalkBalloonManager.Instance().activeTalkBalloon(uniqueEntity.transform,new UnityEngine.Vector3(0f, uniqueEntity.getHeadUpOffset(),0f),simpleTalkData._text,simpleTalkData._time);
+            return false;
         }
-
-        if(_uniqueGroupKey != "")
-        {
-            var uniqueGroup = processor.getUniqueGroup(_uniqueGroupKey);
-            if(uniqueGroup == null)
-            {
-                DebugUtil.assert(false,"대상 Unique Group이 존재하지 않습니다 : {0}",_uniqueGroupKey);
-                return true;
-            }
-
-            foreach(var item in uniqueGroup)
-            {
-                TalkBalloonManager.Instance().activeTalkBalloon(item.transform,new UnityEngine.Vector3(0f, item.getHeadUpOffset(),0f),simpleTalkData._text,simpleTalkData._time);
-            }
-        }
-
+        
         return true;
     }
 
@@ -295,16 +327,28 @@ public class SequencerGraphEvent_TalkBalloon : SequencerGraphEventBase
             string attrName = attributes[i].Name;
             string attrValue = attributes[i].Value;
 
-            if(attributes[i].Name == "SimpleTalkKey")
+            if (attributes[i].Name == "SimpleTalkKey")
+            {
                 _key = attributes[i].Value;
-            else if(attrName == "UniqueKey")
+            }
+            else if (attrName == "UniqueKey")
+            {
                 _uniqueKey = attrValue;
-            else if(attrName == "UniqueGroupKey")
+            }
+            else if (attrName == "UniqueGroupKey")
+            {
                 _uniqueGroupKey = attrValue;
+            }
+            else if (attrName == "Wait")
+            {
+                _wait = Boolean.Parse(attrValue);
+            }
         }
 
-        if(_key == "")
-            DebugUtil.assert(false,"SimpleTalk Key가 존재하지 않습니다. 이거 필수임");
+        if (_key == "")
+        {
+            DebugUtil.assert(false, "Dialog Text Key가 존재하지 않습니다. 이거 필수임");
+        }
     }
 }
 
@@ -1072,6 +1116,37 @@ public class SequencerGraphEvent_PlayAnimation : SequencerGraphEventBase
     }
 }
 
+public class SequencerGraphEvent_UnlockStageLimit : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.UnlockStageLimit;
+
+    private bool _enable = false;
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        MasterManager.instance._stageProcessor.unlockLimit(_enable);
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "Enable")
+                _enable = bool.Parse(attrValue);
+        }
+    }
+}
+
 public class SequencerGraphEvent_EffectPreset : SequencerGraphEventBase
 {
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.EffectPreset;
@@ -1575,14 +1650,14 @@ public class SequencerGraphEvent_SetCrossHair : SequencerGraphEventBase
 
     public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
     {
-        GameEntityBase unqueEntity = processor.getUniqueEntity(_uniqueKey);
-        if(unqueEntity == null)
+        GameEntityBase uniqueEntity = processor.getUniqueEntity(_uniqueKey);
+        if(uniqueEntity == null)
         {
-            DebugUtil.assert(false,"대상 Unique Entity가 존재하지 않습니다 : {0}",_uniqueKey);
+            DebugUtil.assert(false, "대상 Unique Entity가 존재하지 않습니다 : {0}", _uniqueKey);
             return true;
         }
         
-        GameUI.Instance.SetEntity(unqueEntity);
+        GameUI.Instance.SetEntity(uniqueEntity);
         GameUI.Instance.SetActiveCrossHair(true);
 
         return true;
@@ -1796,6 +1871,38 @@ public class SequencerGraphEvent_SetAudioListner : SequencerGraphEventBase
         }
     }
 }
+
+public class SequencerGraphEvent_SetCameraUVTarget : SequencerGraphEventBase
+{
+    private string _uniqueKey = "";
+
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SetCameraUVTarget;
+    
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        CameraControlEx.Instance().setCameraUVTarget(processor.getUniqueEntity(_uniqueKey));
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "UniqueKey")
+                _uniqueKey = attrValue;
+        }
+    }
+}
+
 
 public class SequencerGraphEvent_SetCameraTarget : SequencerGraphEventBase
 {

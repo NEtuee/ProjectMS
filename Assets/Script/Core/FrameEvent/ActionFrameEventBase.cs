@@ -329,11 +329,7 @@ public class ActionFrameEvent_SequencerSignal : ActionFrameEventBase
 
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
-        if(executeEntity is GameEntityBase == false)
-            return true;
-
-        GameEntityBase targetGameEntity = targetEntity as GameEntityBase;
-        (executeEntity as GameEntityBase).addSequencerSignal(_signal);
+        MasterManager.instance._stageProcessor.addSequencerSignal(_signal);
         return true;
     }
 
@@ -562,17 +558,20 @@ public class ActionFrameEvent_TalkBalloon : ActionFrameEventBase
 
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
-        if(executeEntity is GameEntityBase == false)
-            return true;
-
-        SubtitleData_SimpleTalk simpleTalkData = SubtitleManager.Instance().getSimpleTalkData(_key);
-        if(simpleTalkData == null)
+        var entity = executeEntity as GameEntityBase;
+        if (entity == null)
         {
-            DebugUtil.assert(false,"존재하지 않는 SimpleTalk Key 입니다. 데이터를 확인 해 주세요. [Key: {0}]",_key);
             return true;
         }
-
-        TalkBalloonManager.Instance().activeTalkBalloon(executeEntity.transform,new UnityEngine.Vector3(0f, (executeEntity as GameEntityBase).getHeadUpOffset(),0f),simpleTalkData._text,simpleTalkData._time);
+        
+        var commandList = DialogTextManager.Instance().GetDialogCommand(_key);
+        if (commandList == null)
+        {
+            DebugUtil.assert(false, "존재하지 않는 Dialog 커맨드 입니다. 데이터를 확인 해 주세요. [Key: {0}]", _key);
+            return true;
+        }
+        
+        GameUI.Instance.TextBubble.PlayCommand(commandList, entity, null);
         return true;
     }
 
@@ -582,15 +581,14 @@ public class ActionFrameEvent_TalkBalloon : ActionFrameEventBase
         
         for(int i = 0; i < attributes.Count; ++i)
         {
-            string attrName = attributes[i].Name;
-            string attrValue = attributes[i].Value;
-
             if(attributes[i].Name == "SimpleTalkKey")
                 _key = attributes[i].Value;
         }
 
-        if(_key == "")
-            DebugUtil.assert(false,"SimpleTalk Key가 존재하지 않습니다. 이거 필수임");
+        if (_key == "")
+        {
+            DebugUtil.assert(false, "SimpleTalk Key가 존재하지 않습니다. 이거 필수임");
+        }
     }
 }
 

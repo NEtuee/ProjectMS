@@ -69,6 +69,9 @@ public class PostProcessProfileData
     public bool _useFogColor = true;
     public Color _fogColor = Color.white;
 
+    public float _backgroundTransitionRate = 0f;
+    public bool _useBackgroundTransitionRate = false;
+
     public bool _pixelSnap = false;
 
     public void syncValueToMaterial(Material targetMaterial)
@@ -113,6 +116,8 @@ public class PostProcessProfileData
             targetMaterial.SetFloat("_FogStrength",_fogStrength);
         if(_useFogColor)
             targetMaterial.SetColor("_FogColor",_fogColor);
+        if(_useBackgroundTransitionRate)
+            targetMaterial.SetFloat("_CrossFillFactor", _backgroundTransitionRate);
 
         targetMaterial.SetFloat("PixelSnap",_pixelSnap ? 1f : 0f);
     }
@@ -182,6 +187,9 @@ public class PostProcessProfileData
             _fogStrength                = Mathf.Lerp(_fogStrength, destination._profileData._fogStrength, ratio);
         if(destination._profileData._useFogColor)
             _fogColor                   = Color.Lerp(_fogColor, destination._profileData._fogColor, ratio);
+        if(destination._profileData._useBackgroundTransitionRate)
+            _backgroundTransitionRate   = Mathf.Lerp(_backgroundTransitionRate, destination._profileData._backgroundTransitionRate, ratio);
+
         _pixelSnap                  = ratio >= 0.5f ? destination._profileData._pixelSnap : _pixelSnap;
     }
 
@@ -223,6 +231,9 @@ public class PostProcessProfileData
             _fogStrength                = Mathf.Lerp(source._fogStrength, destination._fogStrength, ratio);
         if(destination._useFogColor)
             _fogColor                   = Color.Lerp(source._fogColor, destination._fogColor, ratio);
+        if(destination._useBackgroundTransitionRate)
+            _backgroundTransitionRate   = Mathf.Lerp(source._backgroundTransitionRate, destination._backgroundTransitionRate, ratio);
+
         _pixelSnap                      = ratio >= 0.5f ? destination._pixelSnap : source._pixelSnap;
     }
 
@@ -246,6 +257,7 @@ public class PostProcessProfileData
         _useFogRate                     = profile._profileData._useFogRate;
         _useFogStrength                 = profile._profileData._useFogStrength;
         _useFogColor                    = profile._profileData._useFogColor;
+        _useBackgroundTransitionRate    = profile._profileData._useBackgroundTransitionRate;
 
         if(_useSunAngle)
             _sunAngle                   = profile._profileData._sunAngle;
@@ -283,6 +295,8 @@ public class PostProcessProfileData
             _fogStrength                = profile._profileData._fogStrength;
         if(_useFogColor)
             _fogColor                   = profile._profileData._fogColor;
+        if(_useBackgroundTransitionRate)
+            _backgroundTransitionRate   = profile._profileData._backgroundTransitionRate;
         _pixelSnap                  = profile._profileData._pixelSnap;
     }
 }
@@ -338,6 +352,9 @@ public class PostProcessProfileEditor : Editor
         isChange |= floatSlider("Fog Strength",ref controll._profileData._fogStrength, 0f, 1f,ref controll._profileData._useFogStrength);
         isChange |= colorPicker("Fog Color",ref controll._profileData._fogColor,ref controll._profileData._useFogColor);
 
+        GUILayout.Space(20f);
+        isChange |= floatField("Background Transition Rate", ref controll._profileData._backgroundTransitionRate, ref controll._profileData._useBackgroundTransitionRate);
+
         if(isChange)
         {
             syncValueToMaterial();
@@ -368,6 +385,29 @@ public class PostProcessProfileEditor : Editor
         bool activeDiff = EditorGUILayout.Toggle(active,GUILayout.Width(20f));
         GUI.enabled = active;
         float beforeValue = EditorGUILayout.Slider(title, value,min,max);
+        GUI.enabled = true;
+        GUILayout.EndHorizontal();
+        if(beforeValue != value)
+        {
+            value = beforeValue;
+            return true;
+        }
+
+        if(activeDiff != active)
+        {
+            active = activeDiff;
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool floatField(string title, ref float value, ref bool active)
+    {
+        GUILayout.BeginHorizontal();
+        bool activeDiff = EditorGUILayout.Toggle(active,GUILayout.Width(20f));
+        GUI.enabled = active;
+        float beforeValue = EditorGUILayout.FloatField(title, value);
         GUI.enabled = true;
         GUILayout.EndHorizontal();
         if(beforeValue != value)

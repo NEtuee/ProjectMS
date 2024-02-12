@@ -1230,28 +1230,54 @@ public class StageDataEditor : EditorWindow
         }
 
         CharacterInfoData characterInfoData = characterInfo[characterSpawnData._characterKey];
-        ActionGraphBaseData baseData = ResourceContainerEx.Instance().GetActionGraph(characterInfoData._actionGraphPath);
-        if(baseData == null)
         {
-            DebugUtil.assert(false,"말이 안되는 상황");
-            return;
+            ActionGraphBaseData baseData = ResourceContainerEx.Instance().GetActionGraph(characterInfoData._actionGraphPath);
+            if(baseData == null)
+            {
+                DebugUtil.assert(false,"말이 안되는 상황");
+                return;
+            }
+
+            List<string> actionNameList = new List<string>();
+            for(int index = 1; index < baseData._actionNodeCount; ++index)
+            {
+                actionNameList.Add(baseData._actionNodeData[index]._nodeName);
+            }
+
+            int currentIndex = actionNameList.FindIndex((x)=>{return x == characterSpawnData._startAction;});
+            if(currentIndex == -1)
+                currentIndex = baseData._defaultActionIndex - 1;
+
+            string newStartAction = actionNameList[EditorGUILayout.Popup("Start Action", currentIndex,actionNameList.ToArray())];
+            if(newStartAction != characterSpawnData._startAction)
+            {
+                stagePointDataEditObject._characterObjectList[_characterSelectedIndex].sprite = getActionSpriteFromCharacter(characterInfoData, newStartAction);
+                characterSpawnData._startAction = newStartAction;
+            }
         }
 
-        List<string> actionNameList = new List<string>();
-        for(int index = 1; index < baseData._actionNodeCount; ++index)
-        {
-            actionNameList.Add(baseData._actionNodeData[index]._nodeName);
-        }
 
-        int currentIndex = actionNameList.FindIndex((x)=>{return x == characterSpawnData._startAction;});
-        if(currentIndex == -1)
-            currentIndex = baseData._defaultActionIndex - 1;
-
-        string newStartAction = actionNameList[EditorGUILayout.Popup("Start Action", currentIndex,actionNameList.ToArray())];
-        if(newStartAction != characterSpawnData._startAction)
         {
-            stagePointDataEditObject._characterObjectList[_characterSelectedIndex].sprite = getActionSpriteFromCharacter(characterInfoData, newStartAction);
-            characterSpawnData._startAction = newStartAction;
+            AIGraphBaseData baseData = ResourceContainerEx.Instance().GetAIGraph(characterInfoData._aiGraphPath);
+            if(baseData == null)
+            {
+                DebugUtil.assert(false,"말이 안되는 상황");
+                return;
+            }
+
+            List<string> aiNodeNameList = new List<string>();
+            for(int index = 1; index < baseData._aiNodeCount; ++index)
+            {
+                aiNodeNameList.Add(baseData._aiGraphNodeData[index]._nodeName);
+            }
+
+            int currentIndex = aiNodeNameList.FindIndex((x)=>{return x == characterSpawnData._startAIState;});
+            if(currentIndex == -1)
+                currentIndex = baseData._defaultAIIndex - 1;
+
+            string newStartAI = aiNodeNameList[EditorGUILayout.Popup("Start AI State", currentIndex,aiNodeNameList.ToArray())];
+            if(newStartAI != characterSpawnData._startAIState)
+                characterSpawnData._startAIState = newStartAI;
         }
 
         if(characterSpawnData._hideWhenDeactive)
@@ -2851,47 +2877,88 @@ public class StageDataEditor : EditorWindow
 
     private void drawScreenSectionConnectLine(Vector3 one, float oneZoomSize,float oneWidth, float oneHeight, Vector3 two, float twoZoomSize, float twoWidth, float twoHeight)
     {
-        Side side = Side.Count;
-        if(one.x > two.x && one.y > two.y)
-            side = Side.RightTop;
-        else if(one.x > two.x && one.y < two.y)
-            side = Side.RightBottom;
-        else if(one.x < two.x && one.y > two.y)
-            side = Side.LeftTop;
-        else// if(one.x < two.x && one.y < two.y)
-            side = Side.LeftBottom;
-        
         Rect oneRect = getInGameScreenSection(one,oneZoomSize,oneWidth,oneHeight);
         Rect twoRect = getInGameScreenSection(two,twoZoomSize,twoWidth,twoHeight);
 
         Color currentColor = Handles.color;
         Handles.color = Color.blue;
-        switch(side)
+        
+        if(twoRect.yMin > oneRect.yMin)
         {
-            case Side.LeftTop:
+            if(twoRect.xMin <= oneRect.xMin)
             {
-                Handles.DrawLine(new Vector3(oneRect.xMin,oneRect.yMin),new Vector3(twoRect.xMin,twoRect.yMin));
-                Handles.DrawLine(new Vector3(oneRect.xMax,oneRect.yMax),new Vector3(twoRect.xMax,twoRect.yMax));
+                Handles.DrawLine(new Vector3(twoRect.xMin,twoRect.yMin),new Vector3(oneRect.xMin,oneRect.yMin));
+
+                if(twoRect.yMax > oneRect.yMax)
+                {
+                    if(twoRect.xMax < oneRect.xMax)
+                        Handles.DrawLine(new Vector3(twoRect.xMax,twoRect.yMax),new Vector3(oneRect.xMax,oneRect.yMax));
+                    else
+                        Handles.DrawLine(new Vector3(twoRect.xMax,twoRect.yMin),new Vector3(oneRect.xMax,oneRect.yMin));
+                }
+                else
+                {
+                    Handles.DrawLine(new Vector3(twoRect.xMin,twoRect.yMax),new Vector3(oneRect.xMin,oneRect.yMax));
+                }
             }
-            break;
-            case Side.LeftBottom:
+            else if(twoRect.xMin >= oneRect.xMin)
             {
-                Handles.DrawLine(new Vector3(oneRect.xMin,oneRect.yMax),new Vector3(twoRect.xMin,twoRect.yMax));
-                Handles.DrawLine(new Vector3(oneRect.xMax,oneRect.yMin),new Vector3(twoRect.xMax,twoRect.yMin));
+                if(twoRect.xMax < oneRect.xMax)
+                    Handles.DrawLine(new Vector3(twoRect.xMax,twoRect.yMax),new Vector3(oneRect.xMax,oneRect.yMax));
+                else
+                {
+                    if(oneRect.yMin < twoRect.yMin)
+                        Handles.DrawLine(new Vector3(twoRect.xMax,twoRect.yMin),new Vector3(oneRect.xMax,oneRect.yMin));
+                    else
+                        Handles.DrawLine(new Vector3(twoRect.xMin,twoRect.yMin),new Vector3(oneRect.xMin,oneRect.yMin));
+                }
+
+                if(twoRect.yMax < oneRect.yMax)
+                    Handles.DrawLine(new Vector3(twoRect.xMax,twoRect.yMax),new Vector3(oneRect.xMax,oneRect.yMax));
+                else
+                    Handles.DrawLine(new Vector3(twoRect.xMin,twoRect.yMax),new Vector3(oneRect.xMin,oneRect.yMax));
             }
-            break;
-            case Side.RightTop:
+
+            // else
+            //     Handles.DrawLine(new Vector3(twoRect.xMax,twoRect.yMin),new Vector3(oneRect.xMax,oneRect.yMin));
+        }
+        else
+        {
+            if(twoRect.xMin <= oneRect.xMin)
             {
-                Handles.DrawLine(new Vector3(oneRect.xMin,oneRect.yMax),new Vector3(twoRect.xMin,twoRect.yMax));
-                Handles.DrawLine(new Vector3(oneRect.xMax,oneRect.yMin),new Vector3(twoRect.xMax,twoRect.yMin));
+                if(twoRect.yMax > oneRect.yMax)
+                    Handles.DrawLine(new Vector3(twoRect.xMax,twoRect.yMax),new Vector3(oneRect.xMax,oneRect.yMax));
+                else
+                    Handles.DrawLine(new Vector3(twoRect.xMin,twoRect.yMax),new Vector3(oneRect.xMin,oneRect.yMax));
+
+                if(twoRect.yMin > oneRect.yMin)
+                    Handles.DrawLine(new Vector3(twoRect.xMin,twoRect.yMin),new Vector3(oneRect.xMin,oneRect.yMin));
+                else
+                {
+                    if(twoRect.xMax < oneRect.xMax)
+                        Handles.DrawLine(new Vector3(twoRect.xMax,twoRect.yMin),new Vector3(oneRect.xMax,oneRect.yMin));
+                    else
+                        Handles.DrawLine(new Vector3(twoRect.xMax,twoRect.yMax),new Vector3(oneRect.xMax,oneRect.yMax));
+                }
+
             }
-            break;
-            case Side.RightBottom:
+            else if(twoRect.xMin >= oneRect.xMin)
             {
-                Handles.DrawLine(new Vector3(oneRect.xMin,oneRect.yMin),new Vector3(twoRect.xMin,twoRect.yMin));
-                Handles.DrawLine(new Vector3(oneRect.xMax,oneRect.yMax),new Vector3(twoRect.xMax,twoRect.yMax));
+                Handles.DrawLine(new Vector3(twoRect.xMin,twoRect.yMin),new Vector3(oneRect.xMin,oneRect.yMin));
+
+                if(twoRect.yMax > oneRect.yMax)
+                {
+                    Handles.DrawLine(new Vector3(twoRect.xMin,twoRect.yMax),new Vector3(oneRect.xMin,oneRect.yMax));
+                }
+                else
+                {
+                    if(twoRect.xMax > oneRect.xMax)
+                        Handles.DrawLine(new Vector3(twoRect.xMax,twoRect.yMax),new Vector3(oneRect.xMax,oneRect.yMax));
+                    else
+                        Handles.DrawLine(new Vector3(twoRect.xMax,twoRect.yMin),new Vector3(oneRect.xMax,oneRect.yMin));
+                }
             }
-            break;
+
         }
 
         Handles.color = currentColor;

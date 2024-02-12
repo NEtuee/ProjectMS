@@ -142,10 +142,7 @@ public class AIEvent_SequencerSignal : AIEventBase
     public override AIEventType getFrameEventType() {return AIEventType.AIEvent_SequencerSignal;}
     public override void onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
-        if(executeEntity is GameEntityBase == false)
-            return;
-
-        (executeEntity as GameEntityBase).addSequencerSignal(_signal);
+        MasterManager.instance._stageProcessor.addSequencerSignal(_signal);
     }
 
     public override void loadFromXML(XmlNode node) 

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class GameUI : MonoBehaviour
 {
@@ -13,13 +14,17 @@ public class GameUI : MonoBehaviour
     public CrosshairUIBinder CrosshairBinder;
     public EnemyIndicatorBinder EnemyIndicatorBinder;
     public TargetFollowerBinder FollowerBinder;
+    public TextBubblePoolBinder TextBubblePoolBinder;
 
+    public TextBubble TextBubble { get; private set; }
+    
     //Overlay UI
     private HpBpGageUI _hpBpGageUI;
     private DashPointUI _dashPointUI;
     private CrosshairUI _crossHairUI;
     private EnemyIndicator _enemyIndicator;
     private TargetFollower _targetFollower;
+    private TextBubble _textBubble;
 
     private GameEntityBase _targetEntity;
 
@@ -35,7 +40,7 @@ public class GameUI : MonoBehaviour
         _enemyIndicator.InitValue(Camera.main);
     }
 
-    public void SetEntity(GameEntityBase targetEntity)
+    public void SetEntity(GameEntityBase targetEntity) 
     {
         if (targetEntity == null)
         {
@@ -45,7 +50,7 @@ public class GameUI : MonoBehaviour
         
         _hpBpGageUI.InitValue(_targetEntity.getStatusPercentage("HP"), _targetEntity.getStatusPercentage("Blood"));
         _dashPointUI.InitValue(_targetEntity.getStatus("DashPoint"));
-        _crossHairUI.InitValue(_targetEntity, _targetEntity.transform.position);
+        _crossHairUI.InitValue(_targetEntity, _targetEntity.transform.position, _targetEntity.getStatus("DashPoint"));
     }
 
     public void SetActiveCrossHair(bool active)
@@ -59,14 +64,15 @@ public class GameUI : MonoBehaviour
         {
             return;
         }
-        
+
         var deltaTime = GlobalTimer.Instance().getSclaedDeltaTime();
 
         _hpBpGageUI.UpdateByManager(_targetEntity.getStatusPercentage("HP"), _targetEntity.getStatusPercentage("Blood"));
         _dashPointUI.UpdateByManager(deltaTime, _targetEntity.getStatus("DashPoint"), _targetEntity.getStatus("Blood"));
-        _crossHairUI.UpdateByManager(_targetEntity, _targetEntity.isDead(), _targetEntity.transform.position);
+        _crossHairUI.UpdateByManager(_targetEntity, _targetEntity.isDead(), _targetEntity.transform.position, _targetEntity.getStatus("DashPoint"));
         _enemyIndicator.UpdateByManager();
         _targetFollower.UpdateByManager(_targetEntity.transform.position);
+        _textBubble.UpdateByManager();
     }
 
     private void SetBinder()
@@ -76,6 +82,8 @@ public class GameUI : MonoBehaviour
         binderList.Add(DashPointBinder);
         binderList.Add(CrosshairBinder);
         binderList.Add(EnemyIndicatorBinder);
+        binderList.Add(FollowerBinder);
+        binderList.Add(TextBubblePoolBinder);
 
         foreach (var binder in binderList)
         {
@@ -99,12 +107,15 @@ public class GameUI : MonoBehaviour
         _crossHairUI = new CrosshairUI();
         _enemyIndicator = new EnemyIndicator();
         _targetFollower = new TargetFollower();
+        _textBubble = new TextBubble();
+        TextBubble = _textBubble;
 
         _hpBpGageUI.SetBinder(HpBpGageUIBinder);
         _dashPointUI.SetBinder(DashPointBinder);
         _crossHairUI.SetBinder(CrosshairBinder);
         _enemyIndicator.SetBinder(EnemyIndicatorBinder);
         _targetFollower.SetBinder(FollowerBinder);
+        _textBubble.SetBinder(TextBubblePoolBinder);
     }
 
     private void CheckValidUI()
@@ -115,6 +126,7 @@ public class GameUI : MonoBehaviour
         uiElementList.Add(_crossHairUI);
         uiElementList.Add(_enemyIndicator);
         uiElementList.Add(_targetFollower);
+        uiElementList.Add(_textBubble);
 
         foreach (var uiElement in uiElementList)
         {

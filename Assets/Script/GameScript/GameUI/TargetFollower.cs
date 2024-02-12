@@ -5,6 +5,10 @@ using UnityEngine;
 public class TargetFollower : IUIElement
 {
     private TargetFollowerBinder _binder;
+
+    private float _clampWidth;
+    private float _clampHeight;
+    private float _fadeDist;
     
     public bool CheckValidBinderLink(out string reason)
     {
@@ -25,20 +29,36 @@ public class TargetFollower : IUIElement
 
     public void Initialize()
     {
+        _clampWidth = Screen.width;
+        _clampHeight = Screen.height;
+        _fadeDist = _binder.HeightAdjust * _binder.HeightAdjust;
     }
 
     public void UpdateByManager(Vector3 characterPosition)
     {
+        
         var characterScreenPos = Camera.main.WorldToScreenPoint(characterPosition);
         characterScreenPos.z = 0.0f;
-        //Debug.Log(characterScreenPos);
-        
-        var targetPosition = characterScreenPos + _binder.Offset;
+
+        var targetPosition = Camera.main.WorldToScreenPoint(characterPosition + _binder.Offset);
+        targetPosition.z = 0.0f;
 
         var deltaTime = GlobalTimer.Instance().getSclaedDeltaTime();
 
         Vector3 velocity = Vector3.zero;
         var currentPosition = _binder.FollowObject.transform.position;
-        _binder.FollowObject.transform.position = Vector3.SmoothDamp(currentPosition, targetPosition, ref velocity, _binder.Smooth, Mathf.Infinity, deltaTime);
+        var dampingPos =  Vector3.SmoothDamp(currentPosition, targetPosition, ref velocity, _binder.Smooth, Mathf.Infinity, deltaTime);
+        dampingPos = new Vector3(Mathf.Clamp(dampingPos.x, _binder.WidthAdjust, _clampWidth - _binder.WidthAdjust), Mathf.Clamp(dampingPos.y, _binder.HeightAdjust, _clampHeight - _binder.HeightAdjust), 0.0f);
+        _binder.FollowObject.transform.position = dampingPos;
+
+        if ((characterScreenPos - dampingPos).sqrMagnitude <= _fadeDist)
+        {
+            _binder.Group.alpha = 0.3f;
+        }
+        else
+        {
+            _binder.Group.alpha = 1.0f;
+        }
+        //Debug.Log(dampingPos);
     }
 }
