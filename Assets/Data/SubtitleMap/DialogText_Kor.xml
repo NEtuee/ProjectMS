@@ -23,7 +23,8 @@
         </Test1>>
     
     <Test2><ShowText Text = "이거 인풋 테스트임" Interval = "0.03"/><Wait Input = "PassTalkBalloon"/></Test2>
-    
+    <Test3><ShowText Text = "이거 말풍선 갱신 테스트임" Interval = "0.03"/><Wait Time = "3.0"/><ShowText Text = "이렇게 새로 쓰임" Interval = "0.03" Clear = "true"/><Wait Input = "PassTalkBalloon"/></Test3>
+
     <Talk_SleepEffect><ShowText Text = "ZZZZZZ" Interval = "0.03"/><Wait Time = "2.0"/></Talk_SleepEffect>
 
     <Talk_TutorialTeacher_0><ShowText Text = "뭐지? 자기과시?" Interval = "0.03"/><Wait Time = "2.0"/></Talk_TutorialTeacher_0>
