@@ -47,7 +47,11 @@ public class CrosshairUI : IUIElement
     private Color _subCursorTargetColor;
     private float _colorCompleteTime;
 
+    private int _currentDashPoint;
+
     private Coroutine _idleToDetectColorCoroutine;
+
+    private List<CounterDotIcon> _counterDotIcons = new List<CounterDotIcon>();
     
     public bool CheckValidBinderLink(out string reason)
     {
@@ -91,14 +95,19 @@ public class CrosshairUI : IUIElement
         _subCursorTargetColor = _binder.SubCusor.color = _binder.SubIdleColor;
 
         _colorCompleteTime = Time.time;
+
+        foreach (var spriteRenderer in _binder.CounterDot)
+        {
+            _counterDotIcons.Add(new CounterDotIcon(spriteRenderer, "Sprites/UI/CrossHair/counter"));
+        }
     }
 
-    public void InitValue(GameEntityBase ownerEntity, Vector3 targetPosition)
+    public void InitValue(GameEntityBase ownerEntity, Vector3 targetPosition, float dashPoint)
     {
-        UpdateByManager(ownerEntity,false, targetPosition);
+        UpdateByManager(ownerEntity,false, targetPosition, dashPoint);
     }
 
-    public void UpdateByManager(GameEntityBase ownerEntity, bool isDead, Vector3 targetPosition)
+    public void UpdateByManager(GameEntityBase ownerEntity, bool isDead, Vector3 targetPosition, float dashPoint)
     {
         var mainCamera = Camera.main;
 
@@ -139,6 +148,52 @@ public class CrosshairUI : IUIElement
         TweenColor();
 
         CheckCloseToOwner(worldMousePosition, targetPosition);
+
+        UpdateDotLine(targetPosition, _binder.SubCusor.transform.position, dashPoint);
+    }
+
+    private void UpdateDotLine(Vector3 characterPosition, Vector3 subCursorPosition, float dashPoint)
+    {
+        var endPosition = _binder.MainCusor.transform.TransformPoint(new Vector3(_startPosition, 0, 0));
+        var originalCharacterPosition = characterPosition;
+        var toVector = endPosition - characterPosition;
+        characterPosition += toVector.normalized * _binder.PlayerRadius;
+        toVector = endPosition - characterPosition;
+        var dist = toVector.magnitude;
+        toVector.Normalize();
+        var unit = dist / _binder.DottedLine.Length;
+        unit = Mathf.Clamp(unit, _binder.LimitSpace, Mathf.Infinity);
+
+        var characterToSubCursor = subCursorPosition - characterPosition;
+        var isCloseToCharacter = (subCursorPosition - originalCharacterPosition).sqrMagnitude <= _binder.PlayerRadius * _binder.PlayerRadius;
+
+        for (int i = 0; i < _binder.DottedLine.Length; i++)
+        {
+            var curDist = unit * i;
+            _binder.DottedLine[i].transform.position = characterPosition + (toVector * curDist);
+            _binder.DottedLine[i].gameObject.SetActive(isCloseToCharacter == false &&
+                                                       characterToSubCursor.sqrMagnitude >= curDist * curDist);
+        }
+
+        var dashPointInt = (int)dashPoint;
+        if (_currentDashPoint != dashPointInt)
+        {
+            foreach (var counterDot in _counterDotIcons)
+            {
+                counterDot.Play();
+            }
+            
+            for (int i = 0; i < _binder.CounterDot.Length; i++)
+            {
+                _binder.CounterDot[i].gameObject.SetActive(i < dashPoint);
+            }
+        }
+        _currentDashPoint = dashPointInt;
+
+        foreach (var counterDot in _counterDotIcons)
+        {
+            counterDot.AnimationProgress(GlobalTimer.Instance().getSclaedDeltaTime());
+        }
     }
 
     private void OnDetectEnemy(CollisionSuccessData collisionSuccessData)
@@ -309,6 +364,43 @@ public class CrosshairUI : IUIElement
             {
                 _binder.SubMarker.transform.localPosition = new Vector3(_startPosition, 0, 0);
             }
+        }
+    }
+    
+    private struct AnimationPresetInfo
+    {
+        public AnimationCustomPreset _customPreset;
+        public string _path;
+
+        public AnimationPresetInfo(AnimationCustomPreset customPreset, string path)
+        {
+            _customPreset = customPreset;
+            _path = path;
+        }
+    }
+
+    private class CounterDotIcon
+    {
+        private SpriteRenderer _renderer;
+        private AnimationPlayer _animationPlayer;
+        private AnimationPresetInfo _animationPreset;
+
+        public CounterDotIcon(SpriteRenderer renderer, string aniPath)
+        {
+            _renderer = renderer;
+            _animationPlayer = new AnimationPlayer();
+            _animationPreset = new AnimationPresetInfo(ResourceContainerEx.Instance().GetAnimationCustomPreset($"{aniPath}/"), aniPath);
+        }
+
+        public void AnimationProgress(float deltaTime)
+        {
+            _animationPlayer.progress(deltaTime, null);
+            _renderer.sprite = _animationPlayer.getCurrentSprite();
+        }
+
+        public void Play()
+        {
+            _animationPlayer.changeAnimationByCustomPreset(_animationPreset._path, _animationPreset._customPreset);
         }
     }
 }

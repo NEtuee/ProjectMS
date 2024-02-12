@@ -50,7 +50,7 @@ public class GameUI : MonoBehaviour
         
         _hpBpGageUI.InitValue(_targetEntity.getStatusPercentage("HP"), _targetEntity.getStatusPercentage("Blood"));
         _dashPointUI.InitValue(_targetEntity.getStatus("DashPoint"));
-        _crossHairUI.InitValue(_targetEntity, _targetEntity.transform.position);
+        _crossHairUI.InitValue(_targetEntity, _targetEntity.transform.position, _targetEntity.getStatus("DashPoint"));
     }
 
     public void SetActiveCrossHair(bool active)
@@ -69,7 +69,7 @@ public class GameUI : MonoBehaviour
 
         _hpBpGageUI.UpdateByManager(_targetEntity.getStatusPercentage("HP"), _targetEntity.getStatusPercentage("Blood"));
         _dashPointUI.UpdateByManager(deltaTime, _targetEntity.getStatus("DashPoint"), _targetEntity.getStatus("Blood"));
-        _crossHairUI.UpdateByManager(_targetEntity, _targetEntity.isDead(), _targetEntity.transform.position);
+        _crossHairUI.UpdateByManager(_targetEntity, _targetEntity.isDead(), _targetEntity.transform.position, _targetEntity.getStatus("DashPoint"));
         _enemyIndicator.UpdateByManager();
         _targetFollower.UpdateByManager(_targetEntity.transform.position);
         _textBubble.UpdateByManager();
