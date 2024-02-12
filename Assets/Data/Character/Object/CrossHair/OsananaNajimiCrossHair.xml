@@ -1,0 +1,11 @@
+<ActionGraph Name="OsananaNajimiCrossHair" DefaultAction="Idle" DefaultFramePerSecond="12">
+
+    <Idle MovementType="Empty" DirectionType="Keep" IgnoreAttackType="Default Catch">
+        <AnimationHeader MasterPath="Sprites/Object/CrossHair/"/>
+        <Animation Preset="OsananaNajimi" XFlip="true" Duration="0.82">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Idle"/>
+    </Idle>
+
+</ActionGraph>

@@ -13,6 +13,14 @@ Shader "Custom/SpriteShadowScreenShader"
 		_PerspectiveTexture("Perspective Texture", 2D) = "white" {}
 		_PerspectiveDepthTexture("Perspective Depth Texture", 2D) = "white" {}
 
+		_otherBackgroundTexture("Other Background Texture", 2D) = "white" {}
+
+		_CrossFillFactor("Cross Fill Factor Test",Range(0.0, 2.0)) = 0.0
+		_CrossWidth("Cross Width", Range(0.0, 2.0)) = 0.15
+		_CrossHeight("Cross Height", Range(0.0, 2.0)) = 0.15
+		_CrossTileSize("Cross Tile Size", Range(0.0, 1.0)) = 0.025
+		_CenterUV("Center UV", Vector) = (0.5, 0.5, 0, 0)
+		
 		_SunAngle("Sun Angle Degree", Range(0.0, 360.0)) = 0.0
 		_ShadowDistance("Shadow Distance", Range(0.1, 3.0)) = 0.1
 		_ShadowDistanceRatio("Shadow Distance Ratio", Range(0.0, 10.0)) = 0.0
@@ -105,7 +113,13 @@ Shader "Custom/SpriteShadowScreenShader"
 				sampler2D _InterfaceTexture;
 				sampler2D _AlphaTex;
 				sampler2D _PerspectiveDepthTexture;
+				sampler2D _otherBackgroundTexture;
 
+				float _CrossFillFactor;
+				float _CrossWidth;
+				float _CrossHeight;
+				float _CrossTileSize;
+				float4 _CenterUV;
 
 				float _SunAngle;
 				float _ShadowDistance;
@@ -154,6 +168,18 @@ Shader "Custom/SpriteShadowScreenShader"
 
 				static const float2 resolution = float2(1024, 1024);
 
+				float easeOutCubic(float start, float end, float value)
+				{
+					end -= start;
+					return start + (end * (1.0 - pow(1.0 - value, 3.0)));
+				}
+
+				float easeOutQuint(float start, float end, float value)
+				{
+					end -= start;
+					return start + (end * (1 - pow(1 - value, 5)));
+				}
+
 				/*
 				1. �׸��ڴ� ������ ������ �ִ�.
 				2. � ���� ���ø� ���� ���� �������� �����Ѵ�.
@@ -182,11 +208,43 @@ Shader "Custom/SpriteShadowScreenShader"
 
 				fixed4 sampleBackground(float2 texcoord)
 				{
-					fixed4 backgroundSample = SampleSpriteTexture(_MainTex, texcoord) * _BackgroundColorTint;
+					{
+						float2 directionVector = texcoord - _CenterUV.xy;
+						float crossLength = _CrossFillFactor * 2.5;
+						float cosAngle = cos(_CrossFillFactor * 0.3);
+    					float sinAngle = sin(_CrossFillFactor * 0.3);
+    					float2 rotatedPos = float2(cosAngle * directionVector.x - sinAngle * directionVector.y, sinAngle * directionVector.x + cosAngle * directionVector.y) * 2.5;
 
-					return backgroundSample;
+						float distanceFromCenterX = abs(rotatedPos.x);
+						float distanceFromCenterY = abs(rotatedPos.y);
+						float widthX = max(0.01 - distanceFromCenterY / crossLength * 0.01, 0);
+						float widthY = max(0.01 - distanceFromCenterX / crossLength * 0.01, 0);
+
+						bool isInCross = (distanceFromCenterX < widthX && distanceFromCenterY < crossLength) || (distanceFromCenterY < widthY && distanceFromCenterX < crossLength);
+						if(isInCross)
+							return SampleSpriteTexture(_otherBackgroundTexture,texcoord); 
+					}
+					
+					{
+						float2 offset = -_CenterUV.xy + float2(_CrossTileSize,_CrossTileSize) * 0.5 + float2(0.5, 0.5);
+						float2 tileIndex = floor((texcoord + offset ) / _CrossTileSize);
+						float2 tileCenter = (tileIndex * _CrossTileSize);
+
+						float distance = length(tileCenter - float2(0.5, 0.5));
+						float2 tilePos = fmod(abs(texcoord + offset), _CrossTileSize) - 0.5 * _CrossTileSize;
+	
+						tilePos.x /= _CrossWidth;
+    					tilePos.y /= _CrossHeight;
+
+						float fillFactor = _CrossFillFactor - distance * 2;
+    					float value = pow(abs(tilePos.x), fillFactor) + pow(abs(tilePos.y), fillFactor);
+
+    					if (value <= 1.0)
+    					    return SampleSpriteTexture(_otherBackgroundTexture,texcoord); 
+					}
+
+					return SampleSpriteTexture(_MainTex, texcoord) * _BackgroundColorTint;
 				}
-
 
 				fixed4 drawCharacterShadow(float4 backgroundSample, float2 texcoord)
 				{

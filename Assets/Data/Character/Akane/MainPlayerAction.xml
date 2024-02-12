@@ -446,7 +446,7 @@
         <Branch Condition="End" Execute="Idle"/>
     </Hit>
 
-    <Dead DirectionType="Keep" FlipType="Direction" ActiveCollision="False">
+    <Dead DirectionType="Keep" FlipType="Direction" ActiveCollision="False" Flags="ClearPush">
         <Animation Preset="Sprites/NewPlayer/empty/" XFlip="true" Duration="10.0">
             <FrameEvent Type="SetHideUIAll" StartTime="0" Hide="True"/>
 

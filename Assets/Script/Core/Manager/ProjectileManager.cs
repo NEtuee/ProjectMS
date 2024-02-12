@@ -57,6 +57,17 @@ public class ProjectileManager : PoolingManagerBase<ProjectileEntityBase>
         
     }
 
+    public override void initialize()
+    {
+        _projectilePool.Clear();
+        for(int index = 0; index < _currentUpdateList.Count; ++index)
+        {
+            _delayedProjectileItemPool.enqueue(_currentUpdateList[index]);
+        }
+
+        _currentUpdateList.Clear();
+    }
+
     public override void progress(float deltaTime)
     {
         base.progress(deltaTime);

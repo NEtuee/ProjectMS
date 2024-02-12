@@ -92,6 +92,7 @@ public static class DialogDataLoader
         string text = string.Empty;
         float interval = 0.01f;
         bool isEndLine = true;
+        bool isClear = false;
         
         for(int index = 0; index < node.Attributes.Count; ++index)
         {
@@ -110,14 +111,26 @@ public static class DialogDataLoader
             {
                 isEndLine = Boolean.Parse(attrValue);
             }
+            else if (attrName == "Clear")
+            {
+                isClear = Boolean.Parse(attrValue);
+            }
         }
 
         var result = new List<BubbleCommend>();
+
+        if (isClear == true)
+        {
+            result.Add(new Clear());
+        }
+        
         result.Add(new ShowText(interval, text));
+        
         if (isEndLine == true)
         {
             result.Add(new AddLineAlignment());
         }
+        
         return result;
     }
     

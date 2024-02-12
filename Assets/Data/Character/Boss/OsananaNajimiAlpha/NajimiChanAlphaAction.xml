@@ -9,7 +9,7 @@
         <Branch Condition="End == true" Execute="AC_Entry"/>
     </AC_Entry>
 
-    <AC_Idle MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+    <AC_Idle MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/0_default/"/>
         <Animation Preset="1_idle" XFlip="true" Duration="1">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
@@ -216,10 +216,41 @@
     <AC_PitcherReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="LaserEffect">
         <!-- 투구 준비 모션, 탄막 경로 활성화 -->
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/2_pitchingPattern/"/>
-        <Animation Preset="2_pitcherReady" XFlip="true" Duration="0.65">
+        <Animation Preset="2_pitcherReady" XFlip="true" Duration="0.82">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2105" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/NajimiPitchingBeam_TimeLine" Attach="true" AngleType="Direction" LifeTime="0.82" FollowDirection="True"/>
+            <FrameEvent Type="FollowAttack" StartTime="0" EndTime="0.82" FollowType="Movement" Radius="0.7" MoveTime="999" CharacterKey="OsananaNajimiCrossHair" ToTarget="true">
+                <OnBegin>
+                    <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="3" Speed="10"/>
+                </OnBegin>
+            
+                <OnEnter>
+                </OnEnter>
+            
+                <OnExit>
+                </OnExit>
+            
+                <OnEnd>
+                    <FrameEvent Type="Attack" StartTime="0.0" AttackPreset="Najimi_Pitching">
+                        <OnHit>
+                            <FrameEvent Type="AudioPlay" StartTime="0.1" ID="2107"/>
+                            <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
+                            <FrameEvent Type="ApplyBuffTarget" ApplyBuff="StunSet"/>
+
+                            <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+                            <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
+
+                            <FrameEvent Type="Effect" Path="Sprites/Projectile/BaseBall" FramePerSecond="0.2" CastShadow="True" Offset="0.0 0.1 0.0" Attach="true" ToTarget="true" AngleType="AttackPoint">
+                                <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
+                            </FrameEvent>
+                        
+                            <FrameEvent Type="StopUpdate" Time="0.07"/>
+                        </OnHit>
+                    </FrameEvent>
+                </OnEnd>
+            </FrameEvent>
+
+            <!-- <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/NajimiPitchingBeam_TimeLine" Attach="true" AngleType="Direction" LifeTime="0.82" FollowDirection="True"/> -->
 
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
@@ -236,6 +267,7 @@
             <!-- TODO: 투구 이펙트 추가해야함. 해당 이펙트 지속시간에 따라 Main 모션 시간과 Attack 지속 시간 조정 -->
             
             <FrameEvent Type="AudioPlay" StartTime="0.17" ID="2106" Attach="true"/>
+            <!--
             <FrameEvent Type="Attack" StartTime="0.17" AttackPreset="Najimi_Pitching">
                 <OnHit>
                     <FrameEvent Type="AudioPlay" StartTime="0.1" ID="2107"/>
@@ -251,18 +283,12 @@
                 
                     <FrameEvent Type="StopUpdate" Time="0.07"/>
                 </OnHit>
-            
-                <OnGuard>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="StunSet"/>
-
-                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Slash" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
-                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Blood" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
-                    <FrameEvent Type="StopUpdate" Time="0.07"/>
-                </OnGuard>
             </FrameEvent>
+            -->
+           
         </Animation>
         <Animation Preset="2_pitchingRecovery" XFlip="true" Duration="0.3">
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="Cancel"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
@@ -289,4 +315,20 @@
 
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_Call>
+
+
+    <!-- 여기서부터 시퀀서 액션 -->
+    <AIMove_Loop MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="AI" ActiveCollision="False" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/0_default/"/>
+        <Animation Preset="2_move" XFlip="true" Duration="1.0">
+        </Animation>
+
+        <Branch Condition="End" Execute="AIMove_Loop"/>
+    </AIMove_Loop>
+
+    <SQ_Angry MovementType="Empty" DirectionType="Keep" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/1_rushPattern/1_rush/"/>
+        <Animation Preset="4_rushReady" XFlip="true" Duration="0.7">  <!-- TODO: 임시 모션이므로 바꿔줘야함. -->
+        </Animation>
+    </SQ_Angry>
 </ActionGraph>

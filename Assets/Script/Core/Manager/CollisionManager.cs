@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public delegate void CollisionDelegate(CollisionSuccessData collisionData);
 
@@ -46,6 +47,15 @@ public class CollisionManager : Singleton<CollisionManager>
 
         buildCollisionMatrix();
         buildCollisionInfoList();
+    }
+
+    public void initialize()
+    {
+        foreach(var item in _collisionObjectList.Values)
+        {
+            item.Clear();
+        }
+        _collisionRequestStack.Clear();
     }
 
     private void buildCollisionMatrix()

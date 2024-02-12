@@ -128,11 +128,17 @@ public class SceneCharacterManager : ManagerBase
             }
         });
     }
-
     public override void initialize()
     {
         base.initialize();
 
+        _enableCharacterPoolCacheMap.Clear();
+        _disableCharacterPoolCacheMap.Clear();
+        _targetSearchRequestList.Clear();
+        _characterIDCacheMap.Clear();
+
+        _onCharacterEnabled = (character)=>{};
+        _onCharacterDisabled = (character)=>{};
     }
 
     public override void progress(float deltaTime)

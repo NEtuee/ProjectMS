@@ -1,0 +1,60 @@
+<SequencerGraph Name="Stage_2_3_3">
+
+    <InitializePhase>
+        <SetHideUI Hide="True"/>
+        <BlockInput Enable="True"/>
+
+        <BlockAI UniqueKey="Boss" Enable="True"/>
+
+        <LetterBoxShow/>
+    </InitializePhase>
+
+    <UpdatePhase>
+        <WaitSecond Time="1.0"/>
+
+        <AIMove UniqueKey="Boss" LoopAction="AIMove_Loop" EndPositionMarker="NajimiAppearPoint"/>
+        <WaitSecond Time="0.5"/>
+
+        <TalkBalloon UniqueKey="Boss" SimpleTalkKey="Talk_Stage02_Boss_0" Wait="True"/>
+
+        <SetHideUI Hide="False"/>
+        <BlockInput Enable="False"/>
+        <BlockAI UniqueKey="Boss" Enable="False"/>
+        <LetterBoxHide/>
+
+        <WaitSignal Signal="BossStart"/>
+
+        <SetHideUI Hide="True"/>
+        <BlockInput Enable="True"/>
+        <BlockAI UniqueKey="Boss" Enable="True"/>
+        <LetterBoxShow/>
+
+        <TalkBalloon UniqueKey="Boss" SimpleTalkKey="Talk_Stage02_Boss_1" Wait="True"/>
+        <SetCameraTarget UniqueKey="Boss" CameraMode="TargetCenterMode"/>
+        <SetCameraZoom Size="2.5" Speed="5"/>
+        <TalkBalloon UniqueKey="Boss" SimpleTalkKey="Talk_Stage02_Boss_2" Wait="True"/>
+        <SetAction UniqueKey="Boss" Action="SQ_Angry"/>
+        <SetCameraZoom Size="2.25" Speed="5"/>
+        <TalkBalloon UniqueKey="Boss" SimpleTalkKey="Talk_Stage02_Boss_3" Wait="True"/>
+        <SetCameraZoom Size="2.0" Speed="5"/>
+        <TalkBalloon UniqueKey="Boss" SimpleTalkKey="Talk_Stage02_Boss_4" Wait="True"/>
+        <SetCameraZoom Size="0" Speed="5"/>
+        <SetCameraTarget UniqueKey="Player" CameraMode="TargetCenterMode"/>
+
+        <UnlockStageLimit Enable="True"/>
+        <SetCameraUVTarget UniqueKey="Boss"/>
+        <ApplyPostProcessProfile Path="PostProcessProfile/PostProcessProfile_Translated" ApplyType="BaseBlend" BlendTime="6.0"/>
+        <SetCameraUVTarget UniqueKey="NULL"/>
+
+        <SetAction UniqueKey="Boss" Action="SQ_Angry"/>
+
+        <SetHideUI Hide="False"/>
+        <BlockInput Enable="False"/>
+        <LetterBoxHide/>
+
+        <WaitSecond Time="2.0"/>
+        <BlockAI UniqueKey="Boss" Enable="False"/>
+
+    </UpdatePhase>
+    
+</SequencerGraph>

@@ -1230,28 +1230,54 @@ public class StageDataEditor : EditorWindow
         }
 
         CharacterInfoData characterInfoData = characterInfo[characterSpawnData._characterKey];
-        ActionGraphBaseData baseData = ResourceContainerEx.Instance().GetActionGraph(characterInfoData._actionGraphPath);
-        if(baseData == null)
         {
-            DebugUtil.assert(false,"말이 안되는 상황");
-            return;
+            ActionGraphBaseData baseData = ResourceContainerEx.Instance().GetActionGraph(characterInfoData._actionGraphPath);
+            if(baseData == null)
+            {
+                DebugUtil.assert(false,"말이 안되는 상황");
+                return;
+            }
+
+            List<string> actionNameList = new List<string>();
+            for(int index = 1; index < baseData._actionNodeCount; ++index)
+            {
+                actionNameList.Add(baseData._actionNodeData[index]._nodeName);
+            }
+
+            int currentIndex = actionNameList.FindIndex((x)=>{return x == characterSpawnData._startAction;});
+            if(currentIndex == -1)
+                currentIndex = baseData._defaultActionIndex - 1;
+
+            string newStartAction = actionNameList[EditorGUILayout.Popup("Start Action", currentIndex,actionNameList.ToArray())];
+            if(newStartAction != characterSpawnData._startAction)
+            {
+                stagePointDataEditObject._characterObjectList[_characterSelectedIndex].sprite = getActionSpriteFromCharacter(characterInfoData, newStartAction);
+                characterSpawnData._startAction = newStartAction;
+            }
         }
 
-        List<string> actionNameList = new List<string>();
-        for(int index = 1; index < baseData._actionNodeCount; ++index)
-        {
-            actionNameList.Add(baseData._actionNodeData[index]._nodeName);
-        }
 
-        int currentIndex = actionNameList.FindIndex((x)=>{return x == characterSpawnData._startAction;});
-        if(currentIndex == -1)
-            currentIndex = baseData._defaultActionIndex - 1;
-
-        string newStartAction = actionNameList[EditorGUILayout.Popup("Start Action", currentIndex,actionNameList.ToArray())];
-        if(newStartAction != characterSpawnData._startAction)
         {
-            stagePointDataEditObject._characterObjectList[_characterSelectedIndex].sprite = getActionSpriteFromCharacter(characterInfoData, newStartAction);
-            characterSpawnData._startAction = newStartAction;
+            AIGraphBaseData baseData = ResourceContainerEx.Instance().GetAIGraph(characterInfoData._aiGraphPath);
+            if(baseData == null)
+            {
+                DebugUtil.assert(false,"말이 안되는 상황");
+                return;
+            }
+
+            List<string> aiNodeNameList = new List<string>();
+            for(int index = 1; index < baseData._aiNodeCount; ++index)
+            {
+                aiNodeNameList.Add(baseData._aiGraphNodeData[index]._nodeName);
+            }
+
+            int currentIndex = aiNodeNameList.FindIndex((x)=>{return x == characterSpawnData._startAIState;});
+            if(currentIndex == -1)
+                currentIndex = baseData._defaultAIIndex - 1;
+
+            string newStartAI = aiNodeNameList[EditorGUILayout.Popup("Start AI State", currentIndex,aiNodeNameList.ToArray())];
+            if(newStartAI != characterSpawnData._startAIState)
+                characterSpawnData._startAIState = newStartAI;
         }
 
         if(characterSpawnData._hideWhenDeactive)

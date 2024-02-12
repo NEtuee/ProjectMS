@@ -11,8 +11,6 @@ public class DashPointUI : IUIElement
     
     private bool[] _dashPointGen;
     private DashPointIcon[] _dashPointIcon;
-    private float _prevBlood = 0f;
-    private float _prevDashPoint = 0f;
 
     public bool CheckValidBinderLink(out string reason)
     {
@@ -81,7 +79,6 @@ public class DashPointUI : IUIElement
         UpdateDashPoint(_prevDashPointInt);
     }
 
-    private bool _absorbingFlag = false;
     public void UpdateByManager(float deltaTime, float dashPoint, float blood)
     {
         // _absorbingFlag = _absorbingFlag == false ? _prevBlood < blood : _absorbingFlag;

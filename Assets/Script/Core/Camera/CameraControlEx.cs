@@ -184,9 +184,12 @@ public class CameraTargetCenterMode : CameraModeBase
 
 public class CameraControlEx : Singleton<CameraControlEx>
 {
+    private const float _backgroundTextureSize = 1024f;
+
     public float _cameraBoundRate = 0.9f;
     private Camera _currentCamera;
     private ObjectBase _currentTarget;
+    private ObjectBase _currentUVTarget;
 
     private CameraModeBase _currentCameraMode;
     private Vector3 _cameraTargetPosition;
@@ -209,6 +212,7 @@ public class CameraControlEx : Singleton<CameraControlEx>
     private float _shakeSpeed = 0f;
 
     private Vector3 _shakePosition = Vector3.zero;
+    private Vector3 _uvTargetWorldPosition = Vector3.zero;
 
     private Vector2 _cameraBoundHalf = Vector2.zero;
 
@@ -234,6 +238,8 @@ public class CameraControlEx : Singleton<CameraControlEx>
 
         _postProcessProfileControl = new PostProcessProfileControl();
         _postProcessProfileControl.updateMaterial(false);
+
+        _currentUVTarget = null;
 
         setCameraMode(CameraModeType.TargetCenterMode);
     }
@@ -296,7 +302,17 @@ public class CameraControlEx : Singleton<CameraControlEx>
             _shakePosition = MathEx.lemniscate(_shakeTimer * _shakeSpeed) * shakeScale;
         }
 
+        updateCameraUVTarget();
+
         GizmoHelper.instance.drawRectangle(_currentCamera.transform.position,_cameraBoundHalf,Color.green);
+    }
+
+    public Vector2 worldToBackgroundUV(Vector3 worldPosition)
+    {
+        float convertedByPPU = _backgroundTextureSize * 0.01f;
+        Vector2 position = worldPosition - _currentCamera.transform.position;
+
+        return position * (1f / convertedByPPU) + Vector2.one * 0.5f;
     }
 
     private void updateDebugCamera()
@@ -360,6 +376,7 @@ public class CameraControlEx : Singleton<CameraControlEx>
     {
         _currentCameraMode = null;
         _currentTarget = null;
+        _currentUVTarget = null;
 
         setDefaultZoomSize();
 
@@ -369,6 +386,20 @@ public class CameraControlEx : Singleton<CameraControlEx>
 
         CameraControlEx.Instance().setCameraMode(CameraModeType.PositionMode);
         CameraControlEx.Instance().setCameraTargetPosition(_currentCamera.transform.position);
+    }
+
+    public void updateCameraUVTarget()
+    {
+        if(_currentUVTarget != null)
+            _uvTargetWorldPosition = _currentUVTarget.transform.position;
+
+        _postProcessProfileControl.applyCenterUVPosition(worldToBackgroundUV(_uvTargetWorldPosition));
+    }
+
+    public void setCameraUVTarget(ObjectBase uvTarget)
+    {
+        _currentUVTarget = uvTarget;
+        updateCameraUVTarget();
     }
 
     public void setCameraMode(CameraModeType mode)

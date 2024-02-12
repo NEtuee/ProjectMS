@@ -8,6 +8,7 @@ public enum SequencerGraphEventType
     SpawnCharacter,
     WaitSecond,
     SetCameraTarget,
+    SetCameraUVTarget,
     SetCameraPosition,
     SetAudioListner,
     SetCrossHair,
@@ -45,6 +46,7 @@ public enum SequencerGraphEventType
     SetDirection,
     BlockPointExit,
     EffectPreset,
+    UnlockStageLimit,
     
     Count,
 }
@@ -268,7 +270,7 @@ public class SequencerGraphEvent_TalkBalloon : SequencerGraphEventBase
                 GameEntityBase uniqueEntity = processor.getUniqueEntity(_uniqueKey);
                 if (uniqueEntity == null)
                 {
-                    DebugUtil.assert(false,"대상 Unique Entity가 존재하지 않습니다 : {0}",_uniqueKey);
+                    return true;
                 }
                 else
                 {
@@ -1114,6 +1116,37 @@ public class SequencerGraphEvent_PlayAnimation : SequencerGraphEventBase
     }
 }
 
+public class SequencerGraphEvent_UnlockStageLimit : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.UnlockStageLimit;
+
+    private bool _enable = false;
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        MasterManager.instance._stageProcessor.unlockLimit(_enable);
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "Enable")
+                _enable = bool.Parse(attrValue);
+        }
+    }
+}
+
 public class SequencerGraphEvent_EffectPreset : SequencerGraphEventBase
 {
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.EffectPreset;
@@ -1838,6 +1871,38 @@ public class SequencerGraphEvent_SetAudioListner : SequencerGraphEventBase
         }
     }
 }
+
+public class SequencerGraphEvent_SetCameraUVTarget : SequencerGraphEventBase
+{
+    private string _uniqueKey = "";
+
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SetCameraUVTarget;
+    
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        CameraControlEx.Instance().setCameraUVTarget(processor.getUniqueEntity(_uniqueKey));
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "UniqueKey")
+                _uniqueKey = attrValue;
+        }
+    }
+}
+
 
 public class SequencerGraphEvent_SetCameraTarget : SequencerGraphEventBase
 {

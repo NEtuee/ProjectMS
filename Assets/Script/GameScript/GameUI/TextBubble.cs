@@ -405,3 +405,25 @@ public class WaitInput : BubbleCommend
     }
 }
 
+public class Clear : BubbleCommend
+{
+    public Clear()
+    {
+    }
+
+
+    public void Start(TextPresenter presenter, float startTime)
+    {
+        presenter.Clear();
+    }
+
+    public bool Update(TextPresenter presenter, float deltaTime)
+    {
+        return false;
+    }
+
+    public void End()
+    {
+    }
+}
+
