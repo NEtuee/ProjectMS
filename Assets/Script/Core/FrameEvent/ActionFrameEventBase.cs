@@ -329,11 +329,7 @@ public class ActionFrameEvent_SequencerSignal : ActionFrameEventBase
 
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
-        if(executeEntity is GameEntityBase == false)
-            return true;
-
-        GameEntityBase targetGameEntity = targetEntity as GameEntityBase;
-        (executeEntity as GameEntityBase).addSequencerSignal(_signal);
+        MasterManager.instance._stageProcessor.addSequencerSignal(_signal);
         return true;
     }
 

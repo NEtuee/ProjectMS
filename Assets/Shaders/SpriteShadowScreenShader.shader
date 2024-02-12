@@ -231,7 +231,7 @@ Shader "Custom/SpriteShadowScreenShader"
 						float2 tileCenter = (tileIndex * _CrossTileSize);
 
 						float distance = length(tileCenter - float2(0.5, 0.5));
-						float2 tilePos = fmod(abs(texcoord) + offset, _CrossTileSize) - 0.5 * _CrossTileSize;
+						float2 tilePos = fmod(abs(texcoord + offset), _CrossTileSize) - 0.5 * _CrossTileSize;
 	
 						tilePos.x /= _CrossWidth;
     					tilePos.y /= _CrossHeight;
