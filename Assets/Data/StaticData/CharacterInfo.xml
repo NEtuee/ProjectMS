@@ -74,6 +74,18 @@
         SearchIdentifier="Enemy"
     />
 
+    <OsananaNajimiCrossHair
+        DisplayName="나지미 크로스헤어"
+        ActionGraph="Assets/Data/Character/Object/CrossHair/OsananaNajimiCrossHair.xml"
+        AIGraph="Assets/Data/AILibrary/Graph/CommonEnemyAI.xml"
+        StatusInfoName="CommonEnemyStatusNoUI"
+
+        CollisionRadius="0.7"
+        ProjectileCollisionRadius=""
+
+        SearchIdentifier="Enemy"
+    />
+
     <TutorialTeacher
         DisplayName="튜토리얼 선생"
         ActionGraph="Assets/Data/Character/TutorialTeacher/TurorialTeacherAction.xml"

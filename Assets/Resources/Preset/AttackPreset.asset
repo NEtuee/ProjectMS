@@ -34,30 +34,9 @@ MonoBehaviour:
     _attackRayRadius: 0
     _pushVector: {x: 0, y: 0, z: 0}
     _attackMaterial: 0
-  - _name: ATK_F_ChargeAttack
-    _attackRadius: 5
-    _attackAngle: 8
-    _attackStartDistance: 0
-    _attackRayRadius: 0
-    _pushVector: {x: 0, y: 0, z: 0}
-    _attackMaterial: 0
-  - _name: ATK_C_Thrust
-    _attackRadius: 2
-    _attackAngle: 8
-    _attackStartDistance: 0
-    _attackRayRadius: 0
-    _pushVector: {x: 0, y: 0, z: 0}
-    _attackMaterial: 0
   - _name: Player_JustGuardBreak
     _attackRadius: 1
     _attackAngle: 140
-    _attackStartDistance: 0
-    _attackRayRadius: 0
-    _pushVector: {x: 0, y: 0, z: 0}
-    _attackMaterial: 0
-  - _name: ATK_C_ComboAttack
-    _attackRadius: 1
-    _attackAngle: 45
     _attackStartDistance: 0
     _attackRayRadius: 0
     _pushVector: {x: 0, y: 0, z: 0}
@@ -68,13 +47,6 @@ MonoBehaviour:
     _attackStartDistance: 0
     _attackRayRadius: 0
     _pushVector: {x: 1, y: 0, z: 0}
-    _attackMaterial: 0
-  - _name: ATK_N_DefenseWave
-    _attackRadius: 3
-    _attackAngle: 360
-    _attackStartDistance: 0
-    _attackRayRadius: 0
-    _pushVector: {x: 3, y: 0, z: 0}
     _attackMaterial: 0
   - _name: tutorial_spear
     _attackRadius: 0.2
@@ -111,13 +83,6 @@ MonoBehaviour:
     _attackRayRadius: 0
     _pushVector: {x: 5, y: 0, z: 0}
     _attackMaterial: 0
-  - _name: Sister_Kick
-    _attackRadius: 2
-    _attackAngle: 8
-    _attackStartDistance: 0
-    _attackRayRadius: 0
-    _pushVector: {x: 3, y: 0, z: 0}
-    _attackMaterial: 0
   - _name: Najimi_Catch
     _attackRadius: 0.2
     _attackAngle: 360
@@ -140,10 +105,10 @@ MonoBehaviour:
     _pushVector: {x: 3, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Najimi_Pitching
-    _attackRadius: 100
+    _attackRadius: 0.7
     _attackAngle: 0
-    _attackStartDistance: 0.1
-    _attackRayRadius: 0.4
+    _attackStartDistance: 0
+    _attackRayRadius: 0
     _pushVector: {x: 3, y: 0, z: 0}
     _attackMaterial: 0
   - _name: BaseBall
