@@ -137,7 +137,7 @@
     <Pitching Package="NajimiPitchingPackage">
         <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
-        <Branch Condition="getTargetFrameTag_Stun" Execute="StunChase"/>
+        <Branch Condition="getTargetFrameTag_Stun && getFrameTag_Cancel" Execute="StunChase"/>
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </Pitching>
 
