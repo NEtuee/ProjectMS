@@ -82,7 +82,19 @@
         <Branch Condition="End == true" Execute="Idle"/>
     </TEST_LaserLong_Shot>
 <!-- ================================================================ -->
-    
+
+    <TEST_AudioSwitch DirectionType="AI" FlipType="Direction"  Flags="LaserEffect">
+        <Animation Preset="Sprites/DummyPlayer/idle/" Duration="2.0" XFlip="true">
+            <!-- Switch Attribute가 true면 명시적으로 꺼줄 수 있다. 한번에 하나만 실행할 수 있다. -->
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="1008" Attach="true" Switch="True"/>
+
+            <!-- 재생한 ID를 Key로 사용해 끈다 -->
+            <FrameEvent Type="StopSwitch" StartTime="0.3" Switch="Audio" Key="1008"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Idle"/>
+    </TEST_AudioSwitch>
+
     
     
 

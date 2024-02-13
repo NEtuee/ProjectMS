@@ -49,6 +49,7 @@ public enum FrameEventType
     FrameEvent_SetRotateSlotValue,
     FrameEvent_FollowAttack,
     FrameEvent_SetHideUIAll,
+    FrameEvent_StopSwitch,
 
     Count,
 }
@@ -390,6 +391,7 @@ public class ActionFrameEvent_AudioPlay : ActionFrameEventBase
     public bool _toTarget = false;
     public bool _attach = false;
     public bool _useFlip = false;
+    public bool _isSwitch = false;
 
     public int[] _parameterID = null;
     public float[] _parameterValue = null;
@@ -421,9 +423,19 @@ public class ActionFrameEvent_AudioPlay : ActionFrameEventBase
         FMODUnity.StudioEventEmitter eventEmitter = null;
 
         if(_attach)
-            eventEmitter = FMODAudioManager.Instance().Play(_audioID,offset,_toTarget ? targetEntity.transform : executeEntity.transform);
+        {
+            if(_isSwitch)
+                eventEmitter = FMODAudioManager.Instance().playSwitch(executeEntity,_audioID,offset,_toTarget ? targetEntity.transform : executeEntity.transform);
+            else
+                eventEmitter = FMODAudioManager.Instance().Play(_audioID,offset,_toTarget ? targetEntity.transform : executeEntity.transform);
+        }
         else
-            eventEmitter = FMODAudioManager.Instance().Play(_audioID, centerPosition + offset);
+        {
+            if(_isSwitch)
+                eventEmitter = FMODAudioManager.Instance().playSwitch(executeEntity, _audioID, centerPosition + offset, null);
+            else
+                eventEmitter = FMODAudioManager.Instance().Play(_audioID, centerPosition + offset);
+        }
 
         if(eventEmitter != null && isValidParameter())
             FMODAudioManager.Instance().setParam(ref eventEmitter,_audioID,_parameterID,_parameterValue);
@@ -502,6 +514,10 @@ public class ActionFrameEvent_AudioPlay : ActionFrameEventBase
                 }
 
                 _parameterValue = valueList.ToArray();
+            }
+            else if(attributes[i].Name == "Switch")
+            {
+                _isSwitch = bool.Parse(attributes[i].Value);
             }
         }
     }
@@ -874,6 +890,55 @@ public class ActionFrameEvent_ShakeEffect : ActionFrameEventBase
                 _shakeTime = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
             else if(attributes[i].Name == "Speed")
                 _shakeSpeed = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
+        }
+    }
+}
+
+public class ActionFrameEvent_StopSwitch : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_StopSwitch;}
+
+    public enum StopSwitchType
+    {
+        None,
+        Audio,
+        Effect
+    }
+
+    public int _key;
+    public StopSwitchType _stopSwitchType = StopSwitchType.None;
+
+    public override void initialize(ObjectBase executeEntity)
+    {
+    }
+
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        switch(_stopSwitchType)
+        {
+            case StopSwitchType.Audio:
+                FMODAudioManager.Instance().stopSwitch(executeEntity, _key);
+            break;
+            case StopSwitchType.Effect:
+            break;
+        }
+
+        return true;
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "Switch")
+                _stopSwitchType = (StopSwitchType)System.Enum.Parse(typeof(StopSwitchType), attrValue);
+            else if(attrName == "Key")
+                _key = int.Parse(attrValue);
         }
     }
 }
