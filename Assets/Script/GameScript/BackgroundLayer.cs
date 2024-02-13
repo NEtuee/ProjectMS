@@ -11,6 +11,9 @@ public class BackgroundLayer : MonoBehaviour
         if(Camera.main == null)
             return;
         
-        transform.position = Camera.main.transform.position * -_movementRate;
+        Vector3 position = Camera.main.transform.position * -_movementRate;
+        position.z = 0f;
+
+        transform.position = position;
     }
 }
