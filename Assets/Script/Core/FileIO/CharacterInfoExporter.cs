@@ -75,6 +75,8 @@ public class CharacterInfoLoader : LoaderBase<Dictionary<string,CharacterInfoDat
                 characterInfoData._indicatorVisible = bool.Parse(attrValue);
             else if(attrName == "UseCameraBoundLock")
                 characterInfoData._useCameraBoundLock = bool.Parse(attrValue);
+            else if(attrName == "UseHPInterface")
+                characterInfoData._useHpInterface = bool.Parse(attrValue);
         }
 
         return characterInfoData;
