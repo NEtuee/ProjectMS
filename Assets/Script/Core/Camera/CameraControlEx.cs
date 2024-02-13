@@ -66,7 +66,7 @@ public class CameraTwoTargetMode : CameraModeBase
     public override CameraModeType getCameraModeType() => CameraModeType.TargetCenterMode;
     public override void initialize(Vector3 position)
     {
-        _cameraPosition = position;
+        //_cameraPosition = position;
         _targetEntity = null;
         updateCameraCenter();
     }
