@@ -12,6 +12,7 @@ public class CharacterInfoData
 
     public bool         _indicatorVisible = true;
     public bool         _useCameraBoundLock = true;
+    public bool         _useHpInterface = false;
     
     public SearchIdentifier _searchIdentifer = SearchIdentifier.Enemy;
     public CommonMaterial   _defaultMaterial = CommonMaterial.Skin;
