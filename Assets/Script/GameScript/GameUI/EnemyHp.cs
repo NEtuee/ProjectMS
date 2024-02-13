@@ -87,11 +87,8 @@ public class EnemyHp : IUIElement
     
     private void AddCharacter(CharacterEntityBase character)
     {
-        if (character.getStatusInfo().getStatusInfoData()._useHPEffect == false ||
-            (int)character.getStatusInfo().getMaxStatus("HP") <= 1)
-        {
+        if (character.getUseHPInterface() == false || (int)character.getStatusInfo().getMaxStatus("HP") <= 1)
             return;
-        }
 
         var offset = character.getHeadUpOffset();
         var enemyHpObj = GetObject();

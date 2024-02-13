@@ -1315,6 +1315,7 @@ public class GameEntityBase : SequencerObjectBase
 
     public void blockInput(bool value) {_blockInput = value; _actionGraph.blockInput(value);}
     public float getHeadUpOffset() {return _headUpOffset;}
+    public bool getUseHPInterface() {return _characterInfo._useHpInterface;}
 
     public float getCustomValue(string customValueName) {return _actionGraph.getCustomValue(customValueName);}
     public void setCustomValue(string customValueName, float value) {_actionGraph.setCustomValue(customValueName, value);}
