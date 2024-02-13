@@ -6,6 +6,12 @@ using Debug = UnityEngine.Debug;
 
 public class FMODAudioManager : Singleton<FMODAudioManager>
 {
+    public struct AudioSwitchItem
+    {
+        public int _id;
+        public FMODUnity.StudioEventEmitter _emitter;
+    }
+    
     private AudioInfoItem                                           _infoItem;
 
     private Dictionary<int, AudioInfoItem.AudioInfo>                _audioMap;
@@ -13,6 +19,8 @@ public class FMODAudioManager : Singleton<FMODAudioManager>
 
     private Dictionary<int, List<FMODUnity.StudioEventEmitter>>     _activeMap;
     private Dictionary<int, FMOD.Studio.PARAMETER_DESCRIPTION>      _globalCache;
+
+    private Dictionary<ObjectBase, List<AudioSwitchItem>>           _audioSwitchMap;
 
     private GameObject                                              _audioObject;
     private GameObject                                              _listener;
@@ -37,6 +45,7 @@ public class FMODAudioManager : Singleton<FMODAudioManager>
         _cacheMap = new Dictionary<int, Queue<FMODUnity.StudioEventEmitter>>();
         _activeMap = new Dictionary<int, List<FMODUnity.StudioEventEmitter>>();
         _globalCache = new Dictionary<int, FMOD.Studio.PARAMETER_DESCRIPTION>();
+        _audioSwitchMap = new Dictionary<ObjectBase, List<AudioSwitchItem>>();
 
         CreateCachedGlobalParams();
     }
@@ -68,6 +77,52 @@ public class FMODAudioManager : Singleton<FMODAudioManager>
         _listener.transform.localPosition = Vector3.zero;
     }
 
+    public FMODUnity.StudioEventEmitter playSwitch(ObjectBase playObject, int id, Vector3 position, Transform parent)
+    {
+        if(_audioSwitchMap.ContainsKey(playObject) == false)
+            _audioSwitchMap.Add(playObject, new List<AudioSwitchItem>());
+
+        List<AudioSwitchItem> audioSwitchList = _audioSwitchMap[playObject];
+
+        for(int index = 0; index < audioSwitchList.Count; ++index)
+        {
+            if(audioSwitchList[index]._id != id)
+                continue;
+
+            audioSwitchList[index]._emitter.Stop();
+            ReturnCache(audioSwitchList[index]._id, audioSwitchList[index]._emitter);
+
+            audioSwitchList.RemoveAt(index);
+            break;
+        }
+
+        AudioSwitchItem item = new AudioSwitchItem();
+        item._emitter = Play(id,position,parent);
+        item._id = id;
+
+        audioSwitchList.Add(item);
+        return item._emitter;
+    }
+
+    public void stopSwitch(ObjectBase playObject, int id)
+    {
+        if(_audioSwitchMap.ContainsKey(playObject) == false)
+            return;
+
+        List<AudioSwitchItem> audioSwitchList = _audioSwitchMap[playObject];
+        for(int index = 0; index < audioSwitchList.Count; ++index)
+        {
+            if(audioSwitchList[index]._id != id)
+                continue;
+
+            audioSwitchList[index]._emitter.Stop();
+            ReturnCache(audioSwitchList[index]._id, audioSwitchList[index]._emitter);
+
+            audioSwitchList.RemoveAt(index);
+            break;
+        }
+    }
+
     public FMODUnity.StudioEventEmitter Play(int id, Vector3 localPosition,Transform parent)
     {
         var emitter = GetCache(id);
@@ -81,6 +136,20 @@ public class FMODAudioManager : Singleton<FMODAudioManager>
         AddActiveMap(id,emitter);
         
         return emitter;
+    }
+
+    public void killSwitchAll(ObjectBase playObject)
+    {
+        if(_audioSwitchMap.ContainsKey(playObject) == false)
+            return;
+        
+        List<AudioSwitchItem> audioSwitchList = _audioSwitchMap[playObject];
+        for(int index = 0; index < audioSwitchList.Count; ++index)
+        {
+            audioSwitchList[index]._emitter.Stop();
+        }
+
+        audioSwitchList.Clear();
     }
 
     public void ReturnAllCache()
