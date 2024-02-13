@@ -8,24 +8,24 @@ public class GameUI : MonoBehaviour
 {
     public static GameUI Instance;
     
-    //Overlay UI Binder
     public HpBpGageUIBinder HpBpGageUIBinder;
     public DashPointUIBinder DashPointBinder;
     public CrosshairUIBinder CrosshairBinder;
     public EnemyIndicatorBinder EnemyIndicatorBinder;
     public TargetFollowerBinder FollowerBinder;
     public TextBubblePoolBinder TextBubblePoolBinder;
+    public EnemyHpBinder EnemyHpBinder;
 
     public TextBubble TextBubble { get; private set; }
     
-    //Overlay UI
     private HpBpGageUI _hpBpGageUI;
     private DashPointUI _dashPointUI;
     private CrosshairUI _crossHairUI;
     private EnemyIndicator _enemyIndicator;
     private TargetFollower _targetFollower;
     private TextBubble _textBubble;
-
+    private EnemyHp _enemyHp;
+    
     private GameEntityBase _targetEntity;
 
     private void Awake()
@@ -38,6 +38,12 @@ public class GameUI : MonoBehaviour
     public void InitializeBySceneStart()
     {
         _enemyIndicator.InitValue(Camera.main);
+        _enemyHp.InitValue();
+    }
+
+    public void StopByScene()
+    {
+        
     }
 
     public void SetEntity(GameEntityBase targetEntity) 
@@ -73,6 +79,7 @@ public class GameUI : MonoBehaviour
         _enemyIndicator.UpdateByManager();
         _targetFollower.UpdateByManager(_targetEntity.transform.position);
         _textBubble.UpdateByManager();
+        _enemyHp.UpdateByManager(deltaTime);
     }
 
     private void SetBinder()
@@ -84,6 +91,7 @@ public class GameUI : MonoBehaviour
         binderList.Add(EnemyIndicatorBinder);
         binderList.Add(FollowerBinder);
         binderList.Add(TextBubblePoolBinder);
+        binderList.Add(EnemyHpBinder);
 
         foreach (var binder in binderList)
         {
@@ -108,6 +116,8 @@ public class GameUI : MonoBehaviour
         _enemyIndicator = new EnemyIndicator();
         _targetFollower = new TargetFollower();
         _textBubble = new TextBubble();
+        _enemyHp = new EnemyHp();
+        
         TextBubble = _textBubble;
 
         _hpBpGageUI.SetBinder(HpBpGageUIBinder);
@@ -116,6 +126,7 @@ public class GameUI : MonoBehaviour
         _enemyIndicator.SetBinder(EnemyIndicatorBinder);
         _targetFollower.SetBinder(FollowerBinder);
         _textBubble.SetBinder(TextBubblePoolBinder);
+        _enemyHp.SetBinder(EnemyHpBinder);
     }
 
     private void CheckValidUI()
@@ -127,6 +138,7 @@ public class GameUI : MonoBehaviour
         uiElementList.Add(_enemyIndicator);
         uiElementList.Add(_targetFollower);
         uiElementList.Add(_textBubble);
+        uiElementList.Add(_enemyHp);
 
         foreach (var uiElement in uiElementList)
         {

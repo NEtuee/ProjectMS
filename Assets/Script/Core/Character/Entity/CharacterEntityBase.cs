@@ -24,7 +24,7 @@ public class CharacterEntityBase : GameEntityBase
 
         _spriteRenderer.gameObject.layer = LayerMask.NameToLayer("Character");
 
-        GameObject debugText = Instantiate(ResourceContainerEx.Instance().GetPrefab("Prefab/DebugTextManager"),Vector3.zero,Quaternion.identity);
+        GameObject debugText = Instantiate(ResourceContainerEx.Instance().GetPrefab("Prefab/DebugTextManager"), Vector3.zero,Quaternion.identity);
         debugTextManager = debugText.GetComponent<DebugTextManager>();
         debugTextManager.padding = -0.1f;
         debugTextManager.stayTime = 0.3f;
