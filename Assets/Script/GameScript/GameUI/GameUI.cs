@@ -7,6 +7,8 @@ using UnityEngine.Serialization;
 public class GameUI : MonoBehaviour
 {
     public static GameUI Instance;
+
+    public GameObject MainHUDRoot;
     
     public HpBpGageUIBinder HpBpGageUIBinder;
     public DashPointUIBinder DashPointBinder;
@@ -37,6 +39,7 @@ public class GameUI : MonoBehaviour
 
     public void InitializeBySceneStart()
     {
+        MainHUDRoot.SetActive(true);
         _enemyIndicator.InitValue(Camera.main);
         _enemyHp.InitValue();
     }
