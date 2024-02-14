@@ -141,7 +141,7 @@ public enum ActionFlags : ulong
 {
     ClearPush = 1,
     LaserEffect = 1 << 1,
-    Catched = 1 << 2,
+    QTE = 1 << 2,
 };
 
 public enum ConditionCompareType

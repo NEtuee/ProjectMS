@@ -86,7 +86,7 @@ public class CharacterEntityBase : GameEntityBase
 
     public void updateByActionFlag()
     {
-        if(checkCurrentActionFlag(ActionFlags.Catched) && _qteEffectItem == null)
+        if(checkCurrentActionFlag(ActionFlags.QTE) && _qteEffectItem == null)
         {
             EffectRequestData requestData = MessageDataPooling.GetMessageData<EffectRequestData>();
             requestData.clearRequestData();
@@ -97,7 +97,7 @@ public class CharacterEntityBase : GameEntityBase
             _qteEffectItem = EffectManager._instance.createEffect(requestData) as EffectItem;
             requestData.isUsing = true;
         }
-        else if(checkCurrentActionFlag(ActionFlags.Catched) == false && _qteEffectItem != null)
+        else if(checkCurrentActionFlag(ActionFlags.QTE) == false && _qteEffectItem != null)
         {
             _qteEffectItem.stopEffect();
             _qteEffectItem = null;

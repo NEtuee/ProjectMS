@@ -464,7 +464,7 @@
 
     </Dead>
 
-    <Catched MovementType="FrameEvent" DirectionType="CatchTargetFace" FlipType="Direction" ApplyBuff="CatchedEscape" Flags="Catched">
+    <Catched MovementType="FrameEvent" DirectionType="CatchTargetFace" FlipType="Direction" ApplyBuff="CatchedEscape" Flags="QTE">
         <Animation Preset="Sprites/NewPlayer/empty" XFlip="true" Duration="0.01">
             <FrameEvent Type="Test" StartTime="0" Log="Akane Catched"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Velocity="0" Speed="0"/>
@@ -510,7 +510,7 @@
         <Branch Condition="End" Execute="Idle"/>
     </AC_AobaTsuba_Fail>
 
-    <Stun MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" ApplyBuff="StunEscape">
+    <Stun MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" ApplyBuff="StunEscape" Flags="QTE">
         <Animation Preset="Sprites/NewPlayer/stun" XFlip="true" Duration="3.0">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="1004" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="3" Speed="0"/>
