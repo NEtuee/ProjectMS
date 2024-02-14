@@ -448,6 +448,9 @@
 
     <Dead DirectionType="Keep" FlipType="Direction" ActiveCollision="False" Flags="ClearPush">
         <Animation Preset="Sprites/NewPlayer/empty/" XFlip="true" Duration="10.0">
+
+            <FrameEvent Type="DeleteBuff" StartTime="0" BuffList="BattleDecrementKeep DashPointRegenDelayed BloodAlertEffect DecreaseBloodPointDelayed BloodPointToHP ClearOutlineXXX"/>
+
             <FrameEvent Type="SetHideUIAll" StartTime="0" Hide="True"/>
 
             <FrameEvent Type="ApplyPostProcessProfile" StartTime="0" Path="PostProcessProfile/KillPlayer" BlendTime="3.0" Order="100" ApplyType="Additional"/>
