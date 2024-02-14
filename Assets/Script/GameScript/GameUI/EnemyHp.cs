@@ -7,7 +7,9 @@ public class EnemyHp : IUIElement
     private EnemyHpBinder _binder;
 
     private Queue<EnemyHpObject> _pool = new Queue<EnemyHpObject>();
+    private Queue<EnemyHpObjectMax3> _max3Pool = new Queue<EnemyHpObjectMax3>();
     private List<EnemyHpObject> _allObjects = new List<EnemyHpObject>();
+    private List<EnemyHpObjectMax3> _allMax3Objects = new List<EnemyHpObjectMax3>();
 
     private SceneCharacterManager.OnCharacterEnabled _onCharacterEnabled;
     private SceneCharacterManager.OnCharacterDisabled _onCharacterDisabled;
@@ -54,6 +56,11 @@ public class EnemyHp : IUIElement
         {
             enemyHp.UpdateByManager(deltaTime);
         }
+
+        foreach (var enemyHp in _allMax3Objects)
+        {
+            enemyHp.UpdateByManager(deltaTime);
+        }
     }
 
     private void InitPool()
@@ -61,6 +68,7 @@ public class EnemyHp : IUIElement
         for (int i = 0; i < 10; i++)
         {
             _pool.Enqueue(NewObject());
+            _max3Pool.Enqueue(NewObjectForMax3());
         }
     }
 
@@ -85,15 +93,46 @@ public class EnemyHp : IUIElement
         return newInstance;
     }
     
+    private EnemyHpObjectMax3 GetObjectForMax3()
+    {
+        if (_pool.Count <= 0)
+        {
+            return NewObjectForMax3();
+        }
+
+        return _max3Pool.Dequeue();
+    }
+
+    private EnemyHpObjectMax3 NewObjectForMax3()
+    {
+        var newInstance = Object.Instantiate(_binder.PrefabMax3, _binder.transform);
+        newInstance.Init();
+        newInstance.gameObject.SetActive(false);
+        
+        _allMax3Objects.Add(newInstance);
+
+        return newInstance;
+    }
+    
     private void AddCharacter(CharacterEntityBase character)
     {
-        if (character.getUseHPInterface() == false || (int)character.getStatusInfo().getMaxStatus("HP") <= 1)
+        var maxHp = (int) character.getStatusInfo().getMaxStatus("HP");
+        if (character.getUseHPInterface() == false || maxHp <= 1)
+        {
             return;
+        }
 
         var offset = character.getHeadUpOffset();
-        var enemyHpObj = GetObject();
         
-        enemyHpObj.Active(character, new Vector3(0.0f, offset, 0.0f), (returnEnemyHp) => _pool.Enqueue(returnEnemyHp));
+        if (maxHp == 2)
+        {
+            var enemyHpObj = GetObject();
+            enemyHpObj.Active(character, new Vector3(0.0f, offset, 0.0f), (returnEnemyHp) => _pool.Enqueue(returnEnemyHp));
+            return;
+        }
+        
+        var enemyHpMax3Obj = GetObjectForMax3();
+        enemyHpMax3Obj.Active(character, new Vector3(0.0f, offset, 0.0f), (returnEnemyHp) => _max3Pool.Enqueue(returnEnemyHp));
     }
     
     private void DisableCharacter(CharacterEntityBase character)
