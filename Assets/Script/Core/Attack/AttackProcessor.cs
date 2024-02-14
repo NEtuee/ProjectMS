@@ -71,6 +71,7 @@ public class FollowAttackProcessor : AttackProcessorBase
 
             CharacterInfoData characterInfoData = CharacterInfoManager.Instance().GetCharacterInfoData(_attackFrameEvent._characterKey);
             _crossHairEntity = (SceneCharacterManager._managerInstance as SceneCharacterManager).createCharacterFromPool(characterInfoData,desc);
+            _crossHairEntity._isDummyEntity = true;
         }
 
         if(_isFirst)
@@ -323,7 +324,12 @@ public class AttackProcessor : AttackProcessorBase
 
         if(_attackFrameEvent._pushVector.sqrMagnitude > float.Epsilon)
         {
-            UnityEngine.Vector3 attackPointDirection = (target.transform.position - successData._startPoint).normalized;
+            UnityEngine.Vector3 attackPointDirection;
+            if(requester is GameEntityBase && ((GameEntityBase)requester)._isDummyEntity)
+                attackPointDirection = requester.getDirection();
+            else
+                attackPointDirection = (target.transform.position - successData._startPoint).normalized;
+
             target.setVelocity(UnityEngine.Quaternion.Euler(0f,0f,UnityEngine.Mathf.Atan2(attackPointDirection.y,attackPointDirection.x) * UnityEngine.Mathf.Rad2Deg) * _attackFrameEvent._pushVector);
         }
 

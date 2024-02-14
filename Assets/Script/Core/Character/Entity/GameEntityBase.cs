@@ -24,7 +24,8 @@ public class GameEntityBase : SequencerObjectBase
     public bool                 _aiDebug = false;
     public bool                 _animationDebug = false;
     public bool                 _soundDebug = false;
-    public bool                 _keepAliveEntity = false;    
+    public bool                 _keepAliveEntity = false;
+    public bool                 _isDummyEntity = false;    
 
     
     private ActionGraph         _actionGraph;
@@ -154,6 +155,7 @@ public class GameEntityBase : SequencerObjectBase
 #endif
         _blockAI = false;
         _blockInput = false;
+        _isDummyEntity = false;
 
         _currentVelocity = Vector3.zero;
         _currentTarget = null;
@@ -775,6 +777,7 @@ public class GameEntityBase : SequencerObjectBase
         _blockAIByEditor = false;
         _blockAI = false;
         _blockInput = false;
+        _isDummyEntity = false;
 
         _currentVelocity = Vector3.zero;
         _currentTarget = null;
