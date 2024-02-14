@@ -19,7 +19,7 @@ public class EnemyHpObject : MonoBehaviour
     
     public SpriteRenderer Renderer;
 
-    private GameEntityBase _target;
+    [SerializeField] private GameEntityBase _target;
     private bool _follow;
     private bool _dead;
 
@@ -61,6 +61,14 @@ public class EnemyHpObject : MonoBehaviour
     {
         if (_target == null)
         {
+            return;
+        }
+
+        if (_target.gameObject.activeSelf == false)
+        {
+            gameObject.SetActive(false);
+            _target = null;
+            _onDead?.Invoke(this);
             return;
         }
 

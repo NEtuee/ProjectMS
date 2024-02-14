@@ -20,7 +20,7 @@ public class EnemyHpObjectMax3 : MonoBehaviour
     public SpriteRenderer Blood1;
     public SpriteRenderer Blood2;
     public SpriteRenderer Last;
-    
+
     private AnimationPlayer _animationPlayerForBlood1 = new AnimationPlayer();
     private AnimationPlayer _animationPlayerForBlood2 = new AnimationPlayer();
     private AnimationPlayer _animationPlayerForLast = new AnimationPlayer();
@@ -31,7 +31,7 @@ public class EnemyHpObjectMax3 : MonoBehaviour
     private AnimationPresetInfo _blood1AppearInfo;
     private AnimationPresetInfo _blood2AppearInfo;
     
-    private GameEntityBase _target;
+    [SerializeField] private GameEntityBase _target;
     private bool _follow;
     private bool _dead;
     private Action<EnemyHpObjectMax3> _onDead;
@@ -69,6 +69,19 @@ public class EnemyHpObjectMax3 : MonoBehaviour
         _onDead = onDead;
         _offset = offset;
         _dead = false;
+        
+        gameObject.SetActive(false);
+        Blood1.gameObject.SetActive(false);
+        Blood2.gameObject.SetActive(false);
+        Last.gameObject.SetActive(false);
+
+        var color1 = Blood1.color;
+        color1.a = 1f;
+        Blood1.color = color1;
+
+        var color2 = Blood2.color;
+        color2.a = 1f;
+        Blood2.color = color2;
     }
     
     public void UpdateByManager(float deltaTime)
@@ -104,6 +117,7 @@ public class EnemyHpObjectMax3 : MonoBehaviour
         _prevHp = hp;
         if (hp <= 2)
         {
+            gameObject.SetActive(true);
             Blood1.gameObject.SetActive(true);
             _animationPlayerForBlood1.changeAnimationByCustomPreset(_blood1AppearInfo._path, _blood2AppearInfo._customPreset);
         }
@@ -149,6 +163,14 @@ public class EnemyHpObjectMax3 : MonoBehaviour
         
         if (_dead == true)
         {
+            // var color1 = Blood1.color;
+            // color1.a = 0f;
+            // Blood1.color = color1;
+            //
+            // var color2 = Blood2.color;
+            // color2.a = 0f;
+            // Blood2.color = color2;
+            
             if (_animationPlayerForLast.isEnd() == true)
             {
                 gameObject.SetActive(false);
