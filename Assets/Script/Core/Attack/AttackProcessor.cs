@@ -108,7 +108,7 @@ public class FollowAttackProcessor : AttackProcessorBase
         _crossHairEntity.updatePosition(_position);
 
         gameEntityBase.setDirection((_position - gameEntityBase.transform.position).normalized);
-        _crossHairEntity.setDirection(_direction);
+        _crossHairEntity.setDirection(gameEntityBase.getDirection());
 
         _collisionData.Clear();
         bool collision = false;
