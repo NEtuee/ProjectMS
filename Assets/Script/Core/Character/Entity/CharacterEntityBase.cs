@@ -33,6 +33,11 @@ public class CharacterEntityBase : GameEntityBase
         debugText.transform.localPosition = Vector3.zero;
     }
 
+    public void clearCharacter()
+    {
+        _stagePointIndex = 0;
+    }
+
     public override void initializeCharacter(CharacterInfoData characterInfo, Vector3 direction)
     {
         base.initializeCharacter(characterInfo,direction);
@@ -44,7 +49,7 @@ public class CharacterEntityBase : GameEntityBase
 
         setSortingOrder(0);
 
-        _stagePointIndex = 0;
+        clearCharacter();
         MasterManager.instance._stageProcessor.updatePointIndex(transform.position, ref _stagePointIndex);
         _isInCameraBound = MasterManager.instance._stageProcessor.isInCameraBound(_stagePointIndex, transform.position, out Vector3 resultPosition);
 
@@ -116,11 +121,11 @@ public class CharacterEntityBase : GameEntityBase
             MasterManager.instance._stageProcessor.updatePointIndex(transform.position, ref _stagePointIndex);
             if(_isInCameraBound == false)
                 _isInCameraBound = MasterManager.instance._stageProcessor.isInCameraBound(_stagePointIndex, transform.position, out Vector3 resultPosition);
-            
-            if(_isInCameraBound)
+
+            if (_isInCameraBound)
             {
                 bool inCameraBound = MasterManager.instance._stageProcessor.isInCameraBound(_stagePointIndex, transform.position, out Vector3 resultPosition);
-                if(inCameraBound == false)
+                if (inCameraBound == false)
                     transform.position = resultPosition;
             }
         }

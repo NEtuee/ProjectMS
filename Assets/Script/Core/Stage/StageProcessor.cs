@@ -144,7 +144,8 @@ public class StageProcessor
                 if(_keepAliveMap.ContainsKey(characterSpawnData._uniqueKey))
                 {
                     CharacterEntityBase characterEntity = _keepAliveMap[characterSpawnData._uniqueKey];
-                    characterEntity.updatePosition(keepEntityPosition);
+                    characterEntity.clearCharacter();
+                    characterEntity.updatePosition((stagePointData._stagePoint + _offsetPosition) + characterSpawnData._localPosition);
 
                     SequencerGraphProcessor.SpawnedCharacterEntityInfo keepEntityInfo = new SequencerGraphProcessor.SpawnedCharacterEntityInfo();
                     characterEntity.setKeepAliveEntity(characterSpawnData._keepAlive);

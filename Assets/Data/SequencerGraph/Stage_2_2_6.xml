@@ -1,19 +1,16 @@
-<SequencerGraph Name="Stage_2_1_2">
+<SequencerGraph Name="Stage_2_2_6">
 
     <InitializePhase>
     </InitializePhase>
 
     <UpdatePhase>
-        <TalkBalloon UniqueKey="Talk" SimpleTalkKey="Talk_Stage02_1_4"/>
-
-        <DeadFence UniqueGroupKey="EnemyGroup"/>
-
         <WaitSecond Time="1.0"/>
 
         <FadeOut Lambda="5.0"/>
         <WaitSecond Time="1.5"/>
         
-        <NextStage Path="StageData/Stage_2_2"/>
+        <NextStage Path="StageData/Stage_2_3"/>
+
     </UpdatePhase>
     
 </SequencerGraph>

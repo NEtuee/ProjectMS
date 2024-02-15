@@ -382,7 +382,7 @@ public class CameraControlEx : Singleton<CameraControlEx>
 
         Vector3 currentPosition = position;
         currentPosition.z = -10f;
-        _currentCamera.transform.position = currentPosition + _shakePosition;
+        setCameraPosition(currentPosition);
 
         CameraControlEx.Instance().setCameraMode(CameraModeType.PositionMode);
         CameraControlEx.Instance().setCameraTargetPosition(_currentCamera.transform.position);
