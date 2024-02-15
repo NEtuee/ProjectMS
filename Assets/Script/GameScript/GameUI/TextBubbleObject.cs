@@ -44,8 +44,18 @@ public class TextBubbleObject : TextBubbleBinder
             _owner.ReturnPool(this);
             return;
         }
+
+        var add1 = GetRandomAdd(randomRange);
+        var add2 = GetRandomAdd(randomRange);
+        var add3 = GetRandomAdd(randomRange);
+        var add4 = GetRandomAdd(randomRange);
+        BubblePolygonMain.InitRandomAdd(add1, add2, add3, add4);
         
-        BubblePolygonMain.InitRandomAdd(GetRandomAdd(randomRange), GetRandomAdd(randomRange), GetRandomAdd(randomRange), GetRandomAdd(randomRange));
+         add1 = GetRandomAdd(randomRange);
+         add2 = GetRandomAdd(randomRange);
+         add3 = GetRandomAdd(randomRange);
+         add4 = GetRandomAdd(randomRange);
+        BubblePolygonBack.InitRandomAdd(add1, add2, add3, add4);
 
         _textPresenter.Clear();
 
