@@ -1273,7 +1273,7 @@ public class StageDataEditor : EditorWindow
 
             int currentIndex = aiNodeNameList.FindIndex((x)=>{return x == characterSpawnData._startAIState;});
             if(currentIndex == -1)
-                currentIndex = baseData._defaultAIIndex - 1;
+                currentIndex = baseData._defaultAIIndex;
 
             string newStartAI = aiNodeNameList[EditorGUILayout.Popup("Start AI State", currentIndex,aiNodeNameList.ToArray())];
             if(newStartAI != characterSpawnData._startAIState)

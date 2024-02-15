@@ -34,6 +34,7 @@ MonoBehaviour:
       _uniqueKey: Player
       _uniqueGroupKey: 
       _startAction: Spawn
+      _startAIState: 
       _flip: 0
       _setDirection: 0
       _directionAngle: 0
@@ -47,6 +48,7 @@ MonoBehaviour:
       _uniqueKey: YakisobaChan
       _uniqueGroupKey: 
       _startAction: Idle
+      _startAIState: 
       _flip: 0
       _setDirection: 0
       _directionAngle: 0
@@ -60,6 +62,7 @@ MonoBehaviour:
       _uniqueKey: SukebanAsk
       _uniqueGroupKey: EnemyGroup
       _startAction: AC_Entry
+      _startAIState: 
       _flip: 1
       _setDirection: 0
       _directionAngle: 0
@@ -73,6 +76,7 @@ MonoBehaviour:
       _uniqueKey: SukebanHit
       _uniqueGroupKey: EnemyGroup
       _startAction: AC_Entry
+      _startAIState: 
       _flip: 1
       _setDirection: 0
       _directionAngle: 0
@@ -86,6 +90,7 @@ MonoBehaviour:
       _uniqueKey: SukebanChoco
       _uniqueGroupKey: 
       _startAction: AC_Entry
+      _startAIState: 
       _flip: 0
       _setDirection: 0
       _directionAngle: 0
@@ -99,6 +104,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: 
       _startAction: AC_Idle
+      _startAIState: 
       _flip: 0
       _setDirection: 0
       _directionAngle: 0
@@ -112,6 +118,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: 
       _startAction: AC_Idle
+      _startAIState: 
       _flip: 1
       _setDirection: 0
       _directionAngle: 0
@@ -125,6 +132,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: 
       _startAction: AC_Idle
+      _startAIState: 
       _flip: 1
       _setDirection: 0
       _directionAngle: 0
@@ -138,6 +146,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: 
       _startAction: AC_Idle
+      _startAIState: 
       _flip: 0
       _setDirection: 0
       _directionAngle: 0
@@ -151,6 +160,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: 
       _startAction: AC_Idle
+      _startAIState: 
       _flip: 1
       _setDirection: 0
       _directionAngle: 0
@@ -164,6 +174,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: 
       _startAction: AC_Idle
+      _startAIState: 
       _flip: 0
       _setDirection: 0
       _directionAngle: 0
@@ -177,6 +188,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: 
       _startAction: AC_Idle
+      _startAIState: 
       _flip: 1
       _setDirection: 0
       _directionAngle: 0
@@ -190,6 +202,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: 
       _startAction: AC_Idle
+      _startAIState: 
       _flip: 0
       _setDirection: 0
       _directionAngle: 0
@@ -222,6 +235,7 @@ MonoBehaviour:
       _uniqueKey: Sukeban
       _uniqueGroupKey: 
       _startAction: AC_Entry
+      _startAIState: 
       _flip: 1
       _setDirection: 0
       _directionAngle: 0
@@ -235,6 +249,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: EnemyGroup
       _startAction: AC_Entry
+      _startAIState: 
       _flip: 1
       _setDirection: 0
       _directionAngle: 0
@@ -248,6 +263,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: EnemyGroup
       _startAction: AC_Entry
+      _startAIState: 
       _flip: 0
       _setDirection: 0
       _directionAngle: 0
@@ -261,6 +277,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: EnemyGroup
       _startAction: AC_Entry
+      _startAIState: 
       _flip: 1
       _setDirection: 0
       _directionAngle: 0
@@ -309,8 +326,9 @@ MonoBehaviour:
     _characterSpawnData:
     - _characterKey: DumbellChan
       _uniqueKey: Talk
-      _uniqueGroupKey: 
+      _uniqueGroupKey: EnemyGroup
       _startAction: AC_Entry
+      _startAIState: Entry_Peace
       _flip: 1
       _setDirection: 0
       _directionAngle: 0
