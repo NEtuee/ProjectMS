@@ -70,7 +70,7 @@ public class TextBubble : IUIElement
         var instance = GetInstance();
         if (instance != null)
         {
-            instance.PlayCommand(commandList, followTarget, onEnd);
+            instance.PlayCommand(commandList, followTarget, _binder.RandomRange, onEnd);
         }
     }
 
@@ -100,7 +100,8 @@ public class TextPresenter
 {
     private TextBubbleBinder _binder;
     private RectTransform _textCompRect;
-    private RectTransform _backgroundRect;
+    private RectTransform _bubbleRect;
+    private RectTransform _backRect;
     private StringBuilder _stringBuilder;
 
     private bool _chagneColor = false;
@@ -112,7 +113,8 @@ public class TextPresenter
     {
         _binder = binder;
         _textCompRect = _binder.TextComp.transform as RectTransform;
-        _backgroundRect = binder.BackGroundImage.rectTransform;
+        _bubbleRect = binder.BubblePolygonMain.rectTransform;
+        _backRect = binder.BubblePolygonBack.rectTransform;
         _stringBuilder = new StringBuilder();
     }
 
@@ -180,7 +182,8 @@ public class TextPresenter
     {
         _binder.TextComp.text = text;
         _textCompRect.sizeDelta = new Vector2(_binder.TextComp.preferredWidth, _binder.TextComp.preferredHeight);
-        _backgroundRect.sizeDelta = new Vector2(_binder.TextComp.preferredWidth + _binder.WidthPadding * 2.0f, _binder.TextComp.preferredHeight + _binder.HeightPadding * 2.0f);
+        _bubbleRect.sizeDelta = new Vector2(_binder.TextComp.preferredWidth + _binder.WidthPadding * 2.0f, _binder.TextComp.preferredHeight + _binder.HeightPadding * 2.0f);
+        _backRect.sizeDelta = _bubbleRect.sizeDelta;
     }
 }
 

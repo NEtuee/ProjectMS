@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class TextBubbleObject : TextBubbleBinder
 {
@@ -35,7 +36,7 @@ public class TextBubbleObject : TextBubbleBinder
         }
     }
     
-    public void PlayCommand(List<BubbleCommend> commandList, GameEntityBase followTarget, Action onEnd)
+    public void PlayCommand(List<BubbleCommend> commandList, GameEntityBase followTarget, Vector2 randomRange, Action onEnd)
     {
         if (commandList == null || commandList.Count <= 0)
         {
@@ -43,6 +44,8 @@ public class TextBubbleObject : TextBubbleBinder
             _owner.ReturnPool(this);
             return;
         }
+        
+        BubblePolygonMain.InitRandomAdd(GetRandomAdd(randomRange), GetRandomAdd(randomRange), GetRandomAdd(randomRange), GetRandomAdd(randomRange));
 
         _textPresenter.Clear();
 
@@ -140,5 +143,10 @@ public class TextBubbleObject : TextBubbleBinder
         {
             SetActive(false);
         }
+    }
+
+    private Vector2 GetRandomAdd(Vector2 randomRange)
+    {
+        return new Vector2(Random.Range(-randomRange.x, randomRange.x + 1), Random.Range(-randomRange.y, randomRange.y + 1));
     }
 }

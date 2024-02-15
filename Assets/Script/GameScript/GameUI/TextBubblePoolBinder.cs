@@ -5,6 +5,7 @@ using UnityEngine;
 public class TextBubblePoolBinder : UIObjectBinder
 {
     public TextBubbleObject TextBubblePrefab;
+    public Vector2 RandomRange = new Vector2(8f, 8f);
     
     public override bool CheckValidLink(out string reason)
     {
