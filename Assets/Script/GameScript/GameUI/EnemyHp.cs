@@ -95,7 +95,7 @@ public class EnemyHp : IUIElement
     
     private EnemyHpObjectMax3 GetObjectForMax3()
     {
-        if (_pool.Count <= 0)
+        if (_max3Pool.Count <= 0)
         {
             return NewObjectForMax3();
         }
