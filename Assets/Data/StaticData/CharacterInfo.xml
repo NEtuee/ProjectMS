@@ -337,6 +337,32 @@
 
         SearchIdentifier="Enemy"
     />
+    <BarbellChan_najimi
+        DisplayName="운동부 바벨쨩"
+        ActionGraph="Assets/Data/Character/Enemy/03_BarbellMelee/BarbellMeleeAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/03_BarbellMelee/BarbellMeleeAI.xml"
+        StatusInfoName="CommonHpTwoEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+        UseHPInterface="True"
+
+        SearchIdentifier="Enemy"
+    />    
+    <DumbellChan_najimi
+        DisplayName="운동부 덤벨쨩"
+        ActionGraph="Assets/Data/Character/Enemy/03_DumbellRanged/DumbellRangedAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/03_DumbellRanged/DumbellRangedAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+        UseHPInterface="True"
+
+        SearchIdentifier="Enemy"
+    />
     <RunnerChan
         DisplayName="운동부 러너쨩"
         ActionGraph="Assets/Data/Character/Enemy/03_RunnerChan/RunnerChanAction.xml"
