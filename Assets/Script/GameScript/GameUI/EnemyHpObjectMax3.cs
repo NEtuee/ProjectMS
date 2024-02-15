@@ -5,6 +5,12 @@ using UnityEngine;
 
 public class EnemyHpObjectMax3 : MonoBehaviour
 {
+    public enum Type
+    {
+        Max2,
+        Max3
+    }
+    
     struct AnimationPresetInfo
     {
         public AnimationCustomPreset _customPreset;
@@ -36,6 +42,7 @@ public class EnemyHpObjectMax3 : MonoBehaviour
     private bool _dead;
     private Action<EnemyHpObjectMax3> _onDead;
     private Vector3 _offset;
+    private Type _type = Type.Max3;
     
     private int _prevHp = -1;
     
@@ -57,7 +64,7 @@ public class EnemyHpObjectMax3 : MonoBehaviour
         _animationPlayerForBlood2.changeAnimationByCustomPreset(_blood2AppearInfo._path, _blood2AppearInfo._customPreset);
     }
     
-    public void Active(GameEntityBase target, Vector3 offset, Action<EnemyHpObjectMax3> onDead)
+    public void Active(GameEntityBase target, Vector3 offset, Type type, Action<EnemyHpObjectMax3> onDead)
     {
         if (target == null)
         {
@@ -82,6 +89,8 @@ public class EnemyHpObjectMax3 : MonoBehaviour
         var color2 = Blood2.color;
         color2.a = 1f;
         Blood2.color = color2;
+
+        _type = type;
     }
     
     public void UpdateByManager(float deltaTime)
@@ -115,7 +124,8 @@ public class EnemyHpObjectMax3 : MonoBehaviour
         }
 
         _prevHp = hp;
-        if (hp <= 2)
+        
+        if (_type == Type.Max3 && hp <= 2)
         {
             gameObject.SetActive(true);
             Blood1.gameObject.SetActive(true);
@@ -127,8 +137,17 @@ public class EnemyHpObjectMax3 : MonoBehaviour
             Last.gameObject.SetActive(true);
             _animationPlayerForLast.changeAnimationByCustomPreset(_lastAppearInfo._path, _lastAppearInfo._customPreset);
 
-            Blood2.gameObject.SetActive(true);
-            _animationPlayerForBlood2.changeAnimationByCustomPreset(_blood2AppearInfo._path, _blood2AppearInfo._customPreset);
+            if (_type == Type.Max2)
+            {
+                gameObject.SetActive(true);
+                Blood1.gameObject.SetActive(true);
+                _animationPlayerForBlood1.changeAnimationByCustomPreset(_blood1AppearInfo._path, _blood2AppearInfo._customPreset);
+            }
+            else if (_type == Type.Max3)
+            {
+                Blood2.gameObject.SetActive(true);
+                _animationPlayerForBlood2.changeAnimationByCustomPreset(_blood2AppearInfo._path, _blood2AppearInfo._customPreset);
+            }
         }
 
         if (hp <= 0)

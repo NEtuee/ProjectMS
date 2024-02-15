@@ -123,16 +123,10 @@ public class EnemyHp : IUIElement
         }
 
         var offset = character.getHeadUpOffset();
-        
-        if (maxHp == 2)
-        {
-            var enemyHpObj = GetObject();
-            enemyHpObj.Active(character, new Vector3(0.0f, offset, 0.0f), (returnEnemyHp) => _pool.Enqueue(returnEnemyHp));
-            return;
-        }
-        
+
+        var type = maxHp == 2 ? EnemyHpObjectMax3.Type.Max2 : EnemyHpObjectMax3.Type.Max3;
         var enemyHpMax3Obj = GetObjectForMax3();
-        enemyHpMax3Obj.Active(character, new Vector3(0.0f, offset, 0.0f), (returnEnemyHp) => _max3Pool.Enqueue(returnEnemyHp));
+        enemyHpMax3Obj.Active(character, new Vector3(0.0f, offset, 0.0f), type, (returnEnemyHp) => _max3Pool.Enqueue(returnEnemyHp));
     }
     
     private void DisableCharacter(CharacterEntityBase character)
