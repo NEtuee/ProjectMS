@@ -41,6 +41,16 @@ public class EnemyHp : IUIElement
 
     public void InitValue()
     {
+        foreach (var obj in _allObjects)
+        {
+            obj.Stop();
+        }
+        
+        foreach (var obj in _allMax3Objects)
+        {
+            obj.Stop();
+        }
+        
         var characterManager = SceneCharacterManager._managerInstance as SceneCharacterManager;
 
         characterManager.deleteCharacterEnableDelegate(_onCharacterEnabled);

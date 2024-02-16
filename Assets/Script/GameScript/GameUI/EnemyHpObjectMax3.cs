@@ -104,6 +104,20 @@ public class EnemyHpObjectMax3 : MonoBehaviour
         ChangeAnimation();
         UpdateAnimation(deltaTime);
     }
+
+    public void Stop()
+    {
+        _follow = false;
+        gameObject.SetActive(false);
+        
+        if (_target == null)
+        {
+            return;
+        }
+
+        _target = null;
+        _onDead?.Invoke(this);
+    }
     
     private void Follow()
     {

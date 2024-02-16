@@ -130,10 +130,17 @@ public class EnemyHpObject : MonoBehaviour
         }
     }
 
-    private void Stop()
+    public void Stop()
     {
-        _target = null;
+        gameObject.SetActive(false);
         _follow = false;
-        _dead = false;
+
+        if (_target == null)
+        {
+            return;
+        }
+        
+        _target = null;
+        _onDead?.Invoke(this);
     }
 }
