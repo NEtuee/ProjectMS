@@ -1,29 +1,24 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class CrosshairUIBinder : UIObjectBinder
 {
     public GameObject HeadObject;
     public GameObject SubMarker;
+    public GameObject MainBaisc;
+    public GameObject MainKick;
+    public GameObject MainSuper;
+    public GameObject[] SubCursorDashPointObjects;
+    public GameObject SubCursorDashPointRoot;
+    public GameObject SubCursorDashPointKick;
 
     public float PlayerRadius = 5f;
-    public float LimitSpace = 0.9f;
-    public GameObject[] DottedLine = new GameObject[4];
-    public SpriteRenderer[] CounterDot = new SpriteRenderer[4];
-
-    public SpriteRenderer MainCusor;
-    public SpriteRenderer SubCusor;
+    
+    public SpriteRenderer MainCursor;
 
     public Color IdleColor;
-    public Color SubIdleColor;
     public Color DetectColor;
     public Color DetectIdleColor;
-
-    [Range(0f, 1f)]
-    public float LerpTime = 1f;
-    [Range(0f, 1f)]
-    public float ColorLerpTime = 0.5f;
-    [Range(0f, 0.5f)]
-    public float DetectHighlightTime = 0.1f;
 
     [Header("Debug")]
     public bool DebugDetect;
@@ -42,27 +37,45 @@ public class CrosshairUIBinder : UIObjectBinder
             return false;
         }
         
-        if (MainCusor == null)
+        if (MainCursor == null)
         {
             reason = "크로스헤어 스프라이트 컴포넌트가 연결되어 있지 않습니다";
             return false;
         }
         
-        if (SubCusor == null)
+        if (MainBaisc == null)
         {
-            reason = "크로스헤어 스프라이트 컴포넌트가 연결되어 있지 않습니다";
+            reason = "크로스헤어 베이직 오브젝트 가 연결되어 있지 않습니다";
+            return false;
+        }
+        
+        if (MainKick == null)
+        {
+            reason = "크로스헤어 킥 오브젝트가 연결되어 있지 않습니다";
+            return false;
+        }
+        
+        if (MainSuper == null)
+        {
+            reason = "크로스헤어 슈퍼 오브젝트가 연결되어 있지 않습니다";
+            return false;
+        }
+        
+        if (SubCursorDashPointRoot == null)
+        {
+            reason = "크로스헤어 킥 오브젝트가 연결되어 있지 않습니다";
+            return false;
+        }
+        
+        if (SubCursorDashPointKick == null)
+        {
+            reason = "크로스헤어 슈퍼 오브젝트가 연결되어 있지 않습니다";
             return false;
         }
 
-        if (DottedLine == null || DottedLine.Length != 4)
+        if (SubCursorDashPointObjects == null || SubCursorDashPointObjects.Length != 4)
         {
-            reason = "크로스헤어 절취선 오브젝트가 연결되어 있지 않습니다";
-            return false;
-        }
-        
-        if (CounterDot == null || CounterDot.Length != 4)
-        {
-            reason = "크로스헤어 카운팅 점 오브젝트가 연결되어 있지 않습니다";
+            reason = "크로스헤어 서브 커서 대쉬 포인트 오브젝트가 연결되어 있지 않음";
             return false;
         }
 
