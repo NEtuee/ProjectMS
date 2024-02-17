@@ -23,7 +23,6 @@
     </Test>
 
     <!-- Std Values -->
-    <GlobalVariable Name="gv_najimiReadyTime" Value="1.5"/>     <!-- 보스전 대기 시간 (나중에 보스전 시작 트리거를 받아야 함)-->
     <GlobalVariable Name="gv_najimiSystemChaseRange" Value="9.75"/>     <!-- 카메라 범위 값. 카메라 바깥으로 사라지지 않게 추격 -->
     <GlobalVariable Name="gv_StdDistance" Value="2.0"/>     <!-- 원거리 공격 기준 값 -->
     <GlobalVariable Name="gv_StdPassiveAttitude" Value="4.0"/>     <!-- 장외 기준 값 -->
@@ -37,6 +36,11 @@
     <GlobalVariable Name="gv_najimiRushRange" Value="2.0"/>             <!-- 나지미 돌진 사거리 -->
     <GlobalVariable Name="gv_najimiRushTrasitionTime" Value="0.8"/>     <!-- 나지미 돌진 최소 텀 -->
 
+    <!-- Introduce -->
+    <CustomValue Name="IsHitten" Value="0.0"/>
+    
+    <!-- 패시브 방어 실행 지연 시간 설정 -->
+    <GlobalVariable Name="gv_PassiveDef_Hit_DelayTime" Value="0.2"/>            <!-- 누적 피격 반응 지연 시간-->
 
     <BranchSet Name="IsPlayerDead">
         <Branch Condition="Dead" Execute="Dead"/>
@@ -45,15 +49,16 @@
 
     <BranchSet Name="HitReactionSet">
         <Branch Condition="Dead" Execute="Dead"/>
-        <Branch Weight="NajimiJudgeDodge^Fast" Condition="(Hit || GuardBreakFail || GuardBroken) && (getStat_HitCount >= gv_najimiHitCountFast)" Execute="JudgeHitReaction"/> <!-- Attack 프레임 태그로 바꿀까.-->
-        <Branch Weight="NajimiJudgeDodge^Normal" Condition="(Hit || GuardBreakFail || GuardBroken) && (getStat_HitCount >= gv_najimiHitCountNormal)" Execute="JudgeHitReaction"/>
-        <Branch Weight="NajimiJudgeDodge^Slow" Condition="(Hit || GuardBreakFail || GuardBroken) && (getStat_HitCount >= gv_najimiHitCountSlow)" Execute="JudgeHitReaction"/>
+        <Branch Weight="NajimiJudgeDodge^Fast"      Condition="(Hit || GuardBreakFail || GuardBroken) && (getStat_HitCount >= gv_najimiHitCountFast)    && (gv_PassiveDef_Hit_DelayTime <= GraphExecutedTime)" Execute="JudgeHitReaction"/> <!-- Attack 프레임 태그로 바꿀까.-->
+        <Branch Weight="NajimiJudgeDodge^Normal"    Condition="(Hit || GuardBreakFail || GuardBroken) && (getStat_HitCount >= gv_najimiHitCountNormal)  && (gv_PassiveDef_Hit_DelayTime <= GraphExecutedTime)" Execute="JudgeHitReaction"/>
+        <Branch Weight="NajimiJudgeDodge^Slow"      Condition="(Hit || GuardBreakFail || GuardBroken) && (getStat_HitCount >= gv_najimiHitCountSlow)    && (gv_PassiveDef_Hit_DelayTime <= GraphExecutedTime)" Execute="JudgeHitReaction"/>
         <Branch Condition="Hit && getFrameTag_HitAvail" Execute="Hit"/>
         <Branch Condition="(GuardBreakFail || GuardBroken) && getFrameTag_GbAvail" Execute="GuardBroken"/>
     </BranchSet>
 
     <Event_OnAttacked>
         <AIEvent Type="SequencerSignal" Signal="BossStart"/>
+        <AIEvent Type="AddCustomValue" Name="IsHitten" Value="1.0"/>
     </Event_OnAttacked>
 
     <Entry Package="CommonIdlePackage">
@@ -71,9 +76,14 @@
         <!-- 장외 거리 분기 -->
         <Branch Condition="(TargetDistance >= gv_StdPassiveAttitude)" Execute="Chase"/>
         
-        <!-- 1페이즈 근거리/원거리 -->
-        <Branch Weight="RandBoolean^True" Condition="(TargetDistance >= gv_StdDistance)" Execute="Pitching"/>
-        <Branch Weight="RandBoolean^False" Condition="(TargetDistance >= gv_StdDistance) && aiGraphCoolTime_Call" Execute="Call"/>
+        <!-- 원거리 분기 -->
+        <Branch Weight="RandBoolean^True" Condition="(TargetDistance >= gv_StdDistance) && (customValue_IsHitten >= 1.0)" Execute="Pitching"/>
+        <Branch Weight="RandBoolean^False" Condition="(TargetDistance >= gv_StdDistance) && aiGraphCoolTime_Call && (customValue_IsHitten >= 1.0)" Execute="Call"/>
+        <!-- 근거리 분기 -->
+        <Branch Weight="RandBoolean^True" Condition="(TargetDistance < gv_StdDistance)" Execute="Chase"/>
+        <!-- <Branch Condition="(TargetDistance < gv_StdDistance)" Execute="Rush"/> --> <!-- 난이도 문제 -->
+
+        <!-- 예외 처리 -->
         <Branch Condition="true" Execute="Chase"/>
         
     </JudgeDistance>
