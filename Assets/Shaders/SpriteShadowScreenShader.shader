@@ -1,3 +1,5 @@
+// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
 
 Shader "Custom/SpriteShadowScreenShader"
 {
@@ -32,6 +34,7 @@ Shader "Custom/SpriteShadowScreenShader"
 		_ImpactFrame("Impact Frame", Range(0.0, 1.0)) = 1.0
 		_Brightness("Brightness", Range(0.0, 5.0)) = 1.0
 		_Saturation("Saturation", Range(0.0, 1.0)) = 1.0
+		_Bloom("Bloom", Range(0.0, 2.0)) = 0.0
 		_Contrast("Background Contrast", Range(0.0, 1.0)) = 1.0
 		_ContrastTarget("Background Contrast Target", Range(0.0, 1.0)) = 0.5
 		_ColorTint("Color Tint", Color) = (1,1,1,1)
@@ -129,6 +132,7 @@ Shader "Custom/SpriteShadowScreenShader"
 				float _ImpactFrame;
 				float _Brightness;
 				float _Saturation;
+				float _Bloom;
 				float _Contrast;
 				float _ContrastTarget;
 				fixed4 _ColorTint;
@@ -317,10 +321,31 @@ Shader "Custom/SpriteShadowScreenShader"
 						}
 					}
 					Color /= Quality * Directions - backgroundBrightnessFactor;
-					Color += fixed4(_ImpactFrame, _ImpactFrame, _ImpactFrame, _ImpactFrame);
+
+					float brightness = dot(Color.xyz, float3(0.2126f, 0.7152f, 0.0722));
+					if (brightness > 0.5)
+					{
+						float4 bloom = Color;
+						float bloomBlurRadius = (brightness * 8.0f * _Bloom) / resolution;
+						for (float d = 0.0; d < Pi; d += Pi / Directions)
+						{
+							for (float i = 1.0 / Quality; i <= 1.0; i += 1.0 / Quality)
+							{
+								bloom += sampleBackground(texcoord + float2(cos(d), sin(d)) * bloomBlurRadius * i);
+							}
+						}
+						bloom /= Quality * Directions - backgroundBrightnessFactor;
+
+						Color += bloom;
+						Color *= 0.5f;
+					}
 
 					// contrast
 					Color.xyz = ((Color.xyz - _ContrastTarget) * max(_Contrast, 0.0)) + _ContrastTarget;
+
+					//impact frame
+					Color += fixed4(_ImpactFrame, _ImpactFrame, _ImpactFrame, _ImpactFrame);
+
 					return Color;
 				}
 
@@ -360,5 +385,6 @@ Shader "Custom/SpriteShadowScreenShader"
 				}
 				ENDCG
 			}
+
 	}
 }
