@@ -41,6 +41,12 @@ public class PostProcessProfileData
     public bool _useSaturation = true;
     public float _saturation = 0f;
 
+    public bool _useContrast = true;
+    public float _contrast = 1f;
+
+    public bool _useContrastTarget = true;
+    public float _contrastTarget = 0.5f;
+
     public bool _useColorTint = true;
     public Color _colorTint = Color.white;
 
@@ -96,7 +102,11 @@ public class PostProcessProfileData
             targetMaterial.SetFloat("_Brightness",_brightness);
         if(_useSaturation)
             targetMaterial.SetFloat("_Saturation",_saturation);
-        if(_useColorTint)
+        if (_useContrast)
+            targetMaterial.SetFloat("_Contrast", _contrast);
+        if (_useContrastTarget)
+            targetMaterial.SetFloat("_ContrastTarget", _contrastTarget);
+        if (_useColorTint)
             targetMaterial.SetColor("_ColorTint",_colorTint);
         if(_useBackgroundColorTint)
             targetMaterial.SetColor("_BackgroundColorTint",_backgroundColorTint);
@@ -134,6 +144,8 @@ public class PostProcessProfileData
 
         _brightness = targetMaterial.GetFloat("_Brightness");
         _saturation = targetMaterial.GetFloat("_Saturation");
+        _contrast = targetMaterial.GetFloat("_contrast");
+        _contrastTarget = targetMaterial.GetFloat("_ContrastTarget");
         _colorTint = targetMaterial.GetColor("_ColorTint");
         _backgroundColorTint = targetMaterial.GetColor("_BackgroundColorTint");
 
@@ -169,7 +181,11 @@ public class PostProcessProfileData
             _brightness                 = Mathf.Lerp(_brightness, destination._profileData._brightness, ratio);
         if(destination._profileData._useSaturation)
             _saturation                 = Mathf.Lerp(_saturation, destination._profileData._saturation, ratio);
-        if(destination._profileData._useColorTint)
+        if (destination._profileData._useContrast)
+            _contrast = Mathf.Lerp(_contrast, destination._profileData._contrast, ratio);
+        if (destination._profileData._useContrastTarget)
+            _contrastTarget = Mathf.Lerp(_contrastTarget, destination._profileData._contrastTarget, ratio);
+        if (destination._profileData._useColorTint)
             _colorTint                  = Color.Lerp(_colorTint, destination._profileData._colorTint, ratio);
         if(destination._profileData._useBackgroundColorTint)
             _backgroundColorTint        = Color.Lerp(_backgroundColorTint, destination._profileData._backgroundColorTint, ratio);
@@ -213,7 +229,11 @@ public class PostProcessProfileData
             _brightness                 = Mathf.Lerp(source._brightness, destination._brightness, ratio);
         if(destination._useSaturation)
             _saturation                 = Mathf.Lerp(source._saturation, destination._saturation, ratio);
-        if(destination._useColorTint)
+        if (destination._useContrast)
+            _contrast = Mathf.Lerp(source._contrast, destination._contrast, ratio);
+        if (destination._useContrastTarget)
+            _contrastTarget = Mathf.Lerp(source._contrastTarget, destination._contrastTarget, ratio);
+        if (destination._useColorTint)
             _colorTint                  = Color.Lerp(source._colorTint, destination._colorTint, ratio);
         if(destination._useBackgroundColorTint)
             _backgroundColorTint        = Color.Lerp(source._backgroundColorTint, destination._backgroundColorTint, ratio);
@@ -277,7 +297,11 @@ public class PostProcessProfileData
             _brightness                 = profile._profileData._brightness;
         if(_useSaturation)
             _saturation                 = profile._profileData._saturation;
-        if(_useColorTint)
+        if (_useContrast)
+            _contrast = profile._profileData._contrast;
+        if (_useContrastTarget)
+            _contrastTarget = profile._profileData._contrastTarget;
+        if (_useColorTint)
             _colorTint                  = profile._profileData._colorTint;
         if(_useBackgroundColorTint)
             _backgroundColorTint        = profile._profileData._backgroundColorTint;
@@ -331,13 +355,15 @@ public class PostProcessProfileEditor : Editor
 
         GUILayout.Space(20f);
         isChange |= vector2Field("Screen Size",ref controll._profileData._screenSize,ref controll._profileData._useScreenSize);
-        isChange |= floatSlider("Shadow Distance Offset",ref controll._profileData._shadowDistanceOffset, 0f, 10f,ref controll._profileData._useShadowDistanceOffset);
+        isChange |= floatSlider("Shadow Distance Offset",ref controll._profileData._shadowDistanceOffset, -100f, 100f,ref controll._profileData._useShadowDistanceOffset);
         isChange |= colorPicker("Shadow Color",ref controll._profileData._shadowColor,ref controll._profileData._useShadowColor);
 
         GUILayout.Space(20f);
         isChange |= floatSlider("ImpactFrame",ref controll._profileData._impactFrame, 0f, 1f,ref controll._profileData._useImpactFrame);
         isChange |= floatSlider("Brightness",ref controll._profileData._brightness, 0f, 5f,ref controll._profileData._useBrightness);
         isChange |= floatSlider("Saturation",ref controll._profileData._saturation, 0f, 1f,ref controll._profileData._useSaturation);
+        isChange |= floatSlider("Background Contrast", ref controll._profileData._contrast, 0f, 1f, ref controll._profileData._useContrast);
+        isChange |= floatSlider("Background Contrast Target", ref controll._profileData._contrastTarget, 0f, 1f, ref controll._profileData._useContrastTarget);
         isChange |= colorPicker("Color Tint",ref controll._profileData._colorTint,ref controll._profileData._useColorTint);
         isChange |= colorPicker("Background Color Tint",ref controll._profileData._backgroundColorTint,ref controll._profileData._useBackgroundColorTint);
 
