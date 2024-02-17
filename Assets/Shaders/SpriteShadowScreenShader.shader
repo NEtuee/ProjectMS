@@ -5,7 +5,6 @@ Shader "Custom/SpriteShadowScreenShader"
 	{
 		_CharacterTexture("Character Texture", 2D) = "white" {}
 		_MainTex("Background Texture", 2D) = "white" {}
-		_ShadowMapTexture("ShadowMap Texture", 2D) = "white" {}
 
 		//[HideInInspector]
 		_InterfaceTexture("Interface Texture", 2D) = "white" {}
@@ -109,7 +108,6 @@ Shader "Custom/SpriteShadowScreenShader"
 
 				sampler2D _CharacterTexture;
 				sampler2D _MainTex;
-				sampler2D _ShadowMapTexture;
 				sampler2D _InterfaceTexture;
 				sampler2D _AlphaTex;
 				sampler2D _PerspectiveDepthTexture;
@@ -161,11 +159,6 @@ Shader "Custom/SpriteShadowScreenShader"
 	#endif //UNITY_TEXTURE_ALPHASPLIT_ALLOWED
 
 					return color;
-				}
-
-				fixed4 gatherShadows(float2 texcoord)
-				{
-					return SampleSpriteTexture(_ShadowMapTexture, texcoord);
 				}
 
 				static const float2 resolution = float2(1024, 1024);
@@ -342,26 +335,6 @@ Shader "Custom/SpriteShadowScreenShader"
 					fixed4 mixed2 = lerp(shadowdedBackground, characterSample, characterSample.a);
 					fixed4 mixed3 = lerp(mixed2, interfaceSample, interfaceSample.a);
 					return mixed3;
-				}
-
-				fixed4 onlyShadow(v2f IN)
-				{
-					fixed4 characterColor = SampleSpriteTexture(_CharacterTexture, IN.texcoord);
-					fixed4 backgroundSample = SampleSpriteTexture(_MainTex, IN.texcoord);
-					fixed4 shadowMap = SampleSpriteTexture(_ShadowMapTexture, IN.texcoord);
-
-					float sunAngle = _SunAngle * 0.0174532925 + 3.141592;
-					float additionalShadowDistance = _ShadowDistance * ((1.0 - shadowMap.r) * _ShadowDistanceRatio);
-					float2 toUV = (1.0 / _ScreenSize.xy);
-
-					float2 shadowDirection = float2(cos(sunAngle),sin(sunAngle));
-
-					float2 shadowSampleTarget = toUV * (shadowDirection * (_ShadowDistance + additionalShadowDistance));
-					float2 shadowOffset = toUV * shadowDirection * _ShadowDistanceOffset;
-
-					float characterShadowSample = SampleSpriteTexture(_CharacterTexture, IN.texcoord + shadowOffset + shadowSampleTarget).a;
-
-					return _ShadowColor * characterShadowSample;
 				}
 
 				fixed4 frag(v2f IN) : SV_Target
