@@ -65,6 +65,7 @@ public class GameUI : MonoBehaviour
     public void SetActiveCrossHair(bool active)
     {
         CrosshairBinder.HeadObject.SetActive(active);
+        CrosshairBinder.SubMarker.SetActive(active);
     }
 
     private void Update()
