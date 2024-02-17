@@ -21,7 +21,7 @@ public class BackgroundRenderPass : AkaneRenderPass
     {
         Vector3 positionOrigin = renderCamera.transform.position;
 
-        // renderCamera.transform.position = MathEx.floorNoSign(renderCamera.transform.position,2);
+        renderCamera.transform.position = MathEx.floorNoSign(renderCamera.transform.position,2);
         renderCamera.targetTexture = RenderTexture;
         renderCamera.cullingMask = layerMasks;
 
