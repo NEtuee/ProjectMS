@@ -13,7 +13,7 @@
                         <FrameEvent Type="ApplyBuffTarget" ApplyBuff="13"/>
                         <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
     
-                        <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="SmashSmall"/>
                     </OnHit>
     
                     <OnGuard>
@@ -27,7 +27,7 @@
             </OnHit>
     
             <OnHitEnd>
-                <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0"/>
+                <!-- <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0"/> -->
             </OnHitEnd>
     
             <OnEnd>
@@ -48,7 +48,7 @@
                         <FrameEvent Type="ApplyBuffTarget" ApplyBuff="13"/>
                         <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
     
-                        <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="SmashSmall"/>
                         <FrameEvent Type="ZoomEffect" StartFrame="0" Scale="3.0"/>
 
                     </OnHit>
@@ -56,7 +56,7 @@
             </OnHit>
     
             <OnHitEnd>
-                <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0"/>
+                <!-- <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0"/> -->
                 <FrameEvent Type="TeleportToTarget"/>
 
             </OnHitEnd>
@@ -80,7 +80,7 @@
                         <FrameEvent Type="ApplyBuffTarget" ApplyBuff="13"/>
                         <FrameEvent Type="ApplyBuff" ApplyBuff="6 7"/>
     
-                        <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="SmashSmall"/>
                     </OnHit>
     
                     <OnGuard>
@@ -94,7 +94,7 @@
             </OnHit>
     
             <OnHitEnd>
-                <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0"/>
+                <!-- <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0"/> -->
             </OnHitEnd>
     
             <OnEnd>
@@ -114,7 +114,7 @@
                     <OnHit>
                         <FrameEvent Type="Test" Log="MagicalBullet OnHit"/>
                         <FrameEvent Type="ApplyBuffTarget" ApplyBuff="TestProjectileAttack"/>
-                        <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="SmashSmall"/>
                     </OnHit>
 
                     <OnGuard>
@@ -124,7 +124,7 @@
             </OnHit>
     
             <OnHitEnd>
-                <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0"/>
+                <!-- <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0"/> -->
             </OnHitEnd>
     
             <OnEnd>
@@ -143,7 +143,7 @@
             <OnHit>
                 <!-- <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="FireworkBullet" Offset="0 0 0" SearchIdentifier="Enemy"/> -->
                 <FrameEvent Type="Danmaku" Path="Enemy/Firecracker.xml"/>
-                <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0"/>
+                <!-- <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0"/> -->
             </OnHit>
     
             <OnHitEnd>
@@ -169,7 +169,7 @@
                     <OnHit>
                         <FrameEvent Type="Test" Log="Firecracker OnHit"/>
                         <FrameEvent Type="ApplyBuffTarget" ApplyBuff="TestProjectileAttack"/>
-                        <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="SmashSmall"/>
                     </OnHit>
 
                     <OnGuard>
@@ -179,7 +179,7 @@
             </OnHit>
     
             <OnHitEnd>
-                <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0"/>
+                <!-- <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0"/> -->
             </OnHitEnd>
     
             <OnEnd>
@@ -196,11 +196,11 @@
         <DefaultShotInfo Velocity="7" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="5"/>
         <Event>
             <OnHit>
-                <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
+                <FrameEvent Type="EffectPreset" StartTime="0" Key="SmashSmall"/>
             </OnHit>
     
             <OnHitEnd>
-                <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0"/>
+                <!-- <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0"/> -->
             </OnHitEnd>
     
             <OnEnd>
@@ -221,13 +221,13 @@
                     <OnHit>
                         <FrameEvent Type="Test" Log="MagicalBullet OnHit"/>
                         <FrameEvent Type="ApplyBuffTarget" ApplyBuff="TestProjectileAttack"/>
-                        <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="SmashSmall"/>
                     </OnHit>
                 </FrameEvent>
             </OnHit>
     
             <OnHitEnd>
-                <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0"/>
+                <!-- <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0"/> -->
             </OnHitEnd>
     
             <OnEnd>
@@ -248,7 +248,7 @@
                 <FrameEvent Type="Attack" StartFrame="0" AttackPreset="BaseBall">
                     <OnHit>
                         <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="PitchingMachine" Offset="0 0 0" SearchIdentifier="Enemy" Inherit="true"/>
-                        <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="SmashSmall"/>
                     </OnHit>
                 </FrameEvent>
             </OnHit>
@@ -297,11 +297,11 @@
                     <OnHit>
                         <!-- TODO: 야구공 버프 설정 -->
                         <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
-                        <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="SmashSmall"/>
                         <FrameEvent Type="EffectPreset" StartTime="0" Key="BloodSmallSmall"/>
                     </OnHit>
                     <OnGuard>
-                        <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="SmashSmall"/>
                     </OnGuard>
                 </FrameEvent>
             </OnHit>
@@ -319,11 +319,11 @@
                     <OnHit>
                         <!-- TODO: 야구공 버프 설정 -->
                         <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
-                        <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="SmashSmall"/>
                         <FrameEvent Type="EffectPreset" StartTime="0" Key="BloodSmall"/>
                     </OnHit>
                     <OnGuard>
-                        <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="SmashSmall"/>
                     </OnGuard>
                 </FrameEvent>
             </OnHit>
@@ -341,7 +341,7 @@
                 <FrameEvent Type="Attack" StartFrame="0" AttackPreset="BaseBall">
                     <OnHit>
                         <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
-                        <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="SmashSmall"/>
                     </OnHit>
 
                     <OnGuard>
@@ -354,7 +354,7 @@
             </OnHit>
     
             <OnHitEnd>
-                <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0"/>
+                <!-- <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0"/> -->
                 <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Effect/ChairDummy" FramePerSecond="0.2" CastShadow="True">
                     <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
                 </FrameEvent>
@@ -439,15 +439,15 @@
                 <FrameEvent Type="Attack" NotifyAttackSuccess="False" StartFrame="0" AttackPreset="CommonProjectile">
                     <OnHit>
                         <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonQuarterAttack"/>
-                        <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="SmashSmall"/>
                         <FrameEvent Type="EffectPreset" StartTime="0" Key="BloodSmall"/>
                     </OnHit>
                 </FrameEvent>
-                <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
+                <FrameEvent Type="EffectPreset" StartTime="0" Key="SmashSmall"/>
             </OnHit>
     
             <OnHitEnd>
-                <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0"/>
+                <!-- <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0"/> -->
             </OnHitEnd>
     
             <OnEnd>
@@ -499,7 +499,7 @@
                             <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
                         </FrameEvent>
 
-                        <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="SmashSmall"/>
                     </OnGuard>
                 </FrameEvent>
             </OnHit>
@@ -530,7 +530,7 @@
                             <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
                         </FrameEvent>
 
-                        <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="SmashSmall"/>
                         <FrameEvent Type="EffectPreset" StartTime="0" Key="BloodSmall"/>
                     </OnHit>
 
@@ -539,7 +539,7 @@
                             <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
                         </FrameEvent>
 
-                        <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="SmashSmall"/>
                     </OnGuard>
                 </FrameEvent>
             </OnHit>

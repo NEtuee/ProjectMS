@@ -38,7 +38,7 @@
             <FrameEvent Type="Attack" StartFrame="0" EndFrame="0.4" AttackPreset="AtrariRush">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
-                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
+                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
                     <FrameEvent Type="TeleportToTarget"/>
 
                     <FrameEvent Type="ZoomEffect" StartFrame="0" Scale="2.8"/>
