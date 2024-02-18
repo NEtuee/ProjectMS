@@ -14,7 +14,7 @@ public class TargetFollower : IUIElement
     {
         if (_binder == null)
         {
-            reason = "크로스헤어 UI에 바인더가 셋팅되지 않았습니다.";
+            reason = "팔로우 바인더가 셋팅되지 않았습니다.";
             return false;
         }
         
@@ -45,13 +45,13 @@ public class TargetFollower : IUIElement
 
         var deltaTime = GlobalTimer.Instance().getSclaedDeltaTime();
 
-        Vector3 velocity = Vector3.zero;
-        var currentPosition = _binder.FollowObject.transform.position;
-        var dampingPos =  Vector3.SmoothDamp(currentPosition, targetPosition, ref velocity, _binder.Smooth, Mathf.Infinity, deltaTime);
-        dampingPos = new Vector3(Mathf.Clamp(dampingPos.x, _binder.WidthAdjust, _clampWidth - _binder.WidthAdjust), Mathf.Clamp(dampingPos.y, _binder.HeightAdjust, _clampHeight - _binder.HeightAdjust), 0.0f);
-        _binder.FollowObject.transform.position = dampingPos;
+        // Vector3 velocity = Vector3.zero;
+        // var currentPosition = _binder.FollowObject.transform.position;
+        // var dampingPos =  Vector3.SmoothDamp(currentPosition, targetPosition, ref velocity, _binder.Smooth, Mathf.Infinity, deltaTime);
+        // dampingPos = new Vector3(Mathf.Clamp(dampingPos.x, _binder.WidthAdjust, _clampWidth - _binder.WidthAdjust), Mathf.Clamp(dampingPos.y, _binder.HeightAdjust, _clampHeight - _binder.HeightAdjust), 0.0f);
+        // _binder.FollowObject.transform.position = dampingPos;
 
-        if ((characterScreenPos - dampingPos).sqrMagnitude <= _fadeDist)
+        if ((characterScreenPos - _binder.FollowObject.transform.position).sqrMagnitude <= _fadeDist)
         {
             _binder.Group.alpha = 0.3f;
         }

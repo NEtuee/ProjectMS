@@ -9,6 +9,7 @@ public class CrosshairUIBinder : UIObjectBinder
     public GameObject MainKick;
     public GameObject MainSuper;
     public GameObject[] SubCursorDashPointObjects;
+    public SpriteRenderer[] SubCursorDashPointObjectsSpriteRenderers;
     public GameObject SubCursorDashPointRoot;
     public GameObject SubCursorDashPointKick;
 
@@ -19,6 +20,12 @@ public class CrosshairUIBinder : UIObjectBinder
     public Color IdleColor;
     public Color DetectHighlightColor;
     public Color DetectIdleColor;
+
+    public Color SubCursorDashColor;
+    public Color SubCursorHitEnemyColor;
+
+    [Header("DashPointColor")] 
+    public Color[] DashPointColors;
 
     [Header("Debug")]
     public bool DebugDetect;
@@ -76,6 +83,24 @@ public class CrosshairUIBinder : UIObjectBinder
         if (SubCursorDashPointObjects == null || SubCursorDashPointObjects.Length != 4)
         {
             reason = "크로스헤어 서브 커서 대쉬 포인트 오브젝트가 연결되어 있지 않음";
+            return false;
+        }
+
+        SubCursorDashPointObjectsSpriteRenderers = new SpriteRenderer[SubCursorDashPointObjects.Length];
+        for (int i = 0; i < SubCursorDashPointObjectsSpriteRenderers.Length; i++)
+        {
+            if (SubCursorDashPointObjects[i].TryGetComponent<SpriteRenderer>(out var spriteRenderer) == false)
+            {
+                reason = "크로스헤어 서브 커서 대쉬 포인트 오브젝트에 스프라이트 렌더러가 없음";
+                return false;
+            }
+
+            SubCursorDashPointObjectsSpriteRenderers[i] = spriteRenderer;
+        }
+        
+        if (DashPointColors.Length != 4)
+        {
+            reason = "대쉬 포인트 색상이 4개가 아님";
             return false;
         }
 

@@ -37,6 +37,7 @@ public class GameUI : MonoBehaviour
         Instance = this;
         SetBinder();
         CheckValidUI();
+        BindNotifySubscriber();
     }
 
     public void InitializeBySceneStart()
@@ -170,6 +171,15 @@ public class GameUI : MonoBehaviour
             
             uiElement.Initialize();
         }
+    }
+
+    private void BindNotifySubscriber()
+    {
+        _notifySubscriber.Add("Dash", new List<Action>());
+        _notifySubscriber.Add("HitEnemy", new List<Action>());
+        
+        _notifySubscriber["Dash"].Add(_crossHairUI.OnDash);
+        _notifySubscriber["HitEnemy"].Add(_crossHairUI.OnHitEnemy);
     }
 
     private void OnInitError()
