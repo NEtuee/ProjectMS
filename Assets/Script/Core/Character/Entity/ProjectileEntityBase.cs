@@ -52,6 +52,7 @@ public class ProjectileEntityBase : ObjectBase
     {
         transform.position = startPosition;
         _projectileGraph.initialize();
+        _spriteRenderer.sprite = _projectileGraph.getCurrentSprite();
 
         RegisterRequest(QueryUniqueID("ProjectileManager"));
         CollisionManager.Instance().registerObject(_collisionInfo, this);
@@ -70,6 +71,7 @@ public class ProjectileEntityBase : ObjectBase
         _spriteRenderer.transform.localPosition = Vector3.zero;
 
         _projectileGraph.initialize(shotInfoData);
+        _spriteRenderer.sprite = _projectileGraph.getCurrentSprite();
 
         RegisterRequest(QueryUniqueID("ProjectileManager"));
         CollisionManager.Instance().registerObject(_collisionInfo, this);
