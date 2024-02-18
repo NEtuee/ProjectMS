@@ -298,6 +298,7 @@ Shader "Custom/SpriteShadowScreenShader"
 					}
 
 					Color /= (Quality * Directions);
+					Color *= (1.0 - _ImpactFrame);
 
 					return Color;
 				}

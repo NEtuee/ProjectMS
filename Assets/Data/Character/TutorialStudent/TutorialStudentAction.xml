@@ -9,14 +9,14 @@
 
     <AC_Floating MovementType="FrameEvent" DirectionType="AlwaysUp" RotationType="Torque">
         <Animation Preset="Sprites/Enemy/TutorialStudent/1_floating" XFlip="true" Duration="1">
-            <FrameEvent Type="Movement" StartTime="0" Friction="20" MaxVelocity="20" Velocity="Random_7^16" Speed="0"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="20" MaxVelocity="20" Velocity="Random_7^15" Speed="0"/>
             <FrameEvent Type="Torque" StartTime="0" Add="Random_-10^10"/>
             
             <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Effect/Weapon/Chair" FramePerSecond="0.2" CastShadow="True">
-                <Physics UseGravity="True" Velocity="Random_-0.5^0.5 Random_5.5^11.0" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
+                <Physics UseGravity="True" Velocity="Random_-1.5^1.5 Random_5.5^11.0" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
             </FrameEvent>
             <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Effect/Weapon/Desk" FramePerSecond="0.2" CastShadow="True">
-                <Physics UseGravity="True" Velocity="Random_-0.5^0.5 Random_5.5^11.0" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
+                <Physics UseGravity="True" Velocity="Random_-1.5^1.5 Random_5.5^11.0" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
             </FrameEvent>
 
             <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/MaterialHit_Timeline" Offset="0.0 0.0 0.0" Attach="true"/>
