@@ -8,9 +8,16 @@
     </AC_Idle>
 
     <AC_Floating MovementType="FrameEvent" DirectionType="AlwaysUp" RotationType="Torque">
-        <Animation Preset="Sprites/Enemy/TutorialStudent/0_idle" XFlip="true" Duration="1">
-            <FrameEvent Type="Movement" StartTime="0" Friction="15" MaxVelocity="10" Velocity="Random_7^10" Speed="0"/>
+        <Animation Preset="Sprites/Enemy/TutorialStudent/1_floating" XFlip="true" Duration="1">
+            <FrameEvent Type="Movement" StartTime="0" Friction="20" MaxVelocity="20" Velocity="Random_7^16" Speed="0"/>
             <FrameEvent Type="Torque" StartTime="0" Add="Random_-10^10"/>
+            
+            <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Effect/Weapon/Chair" FramePerSecond="0.2" CastShadow="True">
+                <Physics UseGravity="True" Velocity="Random_-0.5^0.5 Random_5.5^11.0" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
+            </FrameEvent>
+            <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Effect/Weapon/Desk" FramePerSecond="0.2" CastShadow="True">
+                <Physics UseGravity="True" Velocity="Random_-0.5^0.5 Random_5.5^11.0" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
+            </FrameEvent>
 
             <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/MaterialHit_Timeline" Offset="0.0 0.0 0.0" Attach="true"/>
         </Animation>
@@ -19,24 +26,22 @@
     </AC_Floating>
 
     <AC_FloatingLoop MovementType="FrameEvent" DirectionType="Keep" RotationType="Torque">
-        <Animation Preset="Sprites/Enemy/TutorialStudent/0_idle" XFlip="true" Duration="1">
+        <Animation Preset="Sprites/Enemy/TutorialStudent/1_floating" XFlip="true" Duration="1">
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_FloatingLoop"/>
     </AC_FloatingLoop>
 
-    <Dead MovementType="Empty" DirectionType="MoveInput">
+    <Dead DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/TutorialStudent/"/>
-        <Animation Preset="0_idle" XFlip="true" Duration="1">
-
-            <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Enemy/TutorialStudent/0_idle" FramePerSecond="0.2" CastShadow="True">
+        <Animation Preset="1_floating" XFlip="true" Duration="1">
+            <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Enemy/TutorialStudent/1_floating" FramePerSecond="0.2" CastShadow="True">
                 <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
             </FrameEvent>
             <!--
-            <FrameEvent Type="ZoomEffect" Scale="-0.3"/>
+            <FrameEvent Type="ZoomEffect" Scale="-0.9"/>
             -->
             <FrameEvent Type="KillEntity" StartTime="0"/>
-
         </Animation>
 
         <Branch Condition="End == true" Execute="Dead"/>
