@@ -429,7 +429,9 @@
 
     <!-- 스케반 원거리 (기관단총) -->
     <MiniBullet DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">
-        <Animation Preset="Sprites/Projectile/MuzzleFlash" XFlip="true" Duration="5.0">        
+        <Animation Preset="Sprites/Projectile/MuzzleFlash" XFlip="true" Duration="5.0">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="4904" Attach="false"/>    
+                
         </Animation>
 
         <CollisionInfo Radius="0.1" Angle="0"/>
@@ -438,6 +440,7 @@
             <OnHit>
                 <FrameEvent Type="Attack" NotifyAttackSuccess="False" StartFrame="0" AttackPreset="CommonProjectile">
                     <OnHit>
+                        <FrameEvent Type="AudioPlay" StartTime="0" ID="4906" Attach="true"/>
                         <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonQuarterAttack"/>
                         <FrameEvent Type="EffectPreset" StartTime="0" Key="SmashSmall"/>
                         <FrameEvent Type="EffectPreset" StartTime="0" Key="BloodSmall"/>
@@ -456,7 +459,8 @@
     </MiniBullet>
     <!-- 스케반 원거리 (기관단총) / 사운드 분리용 -->
     <MiniBullet_tail DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">
-        <Animation Preset="Sprites/Projectile/MuzzleFlash" XFlip="true" Duration="5.0">        
+        <Animation Preset="Sprites/Projectile/MuzzleFlash" XFlip="true" Duration="5.0">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="4905" Attach="false"/>
         </Animation>
 
         <CollisionInfo Radius="0.1" Angle="0"/>
@@ -465,6 +469,7 @@
             <OnHit>
                 <FrameEvent Type="Attack" NotifyAttackSuccess="False" StartFrame="0" AttackPreset="CommonProjectile">
                     <OnHit>
+                        <FrameEvent Type="AudioPlay" StartTime="0" ID="4906" Attach="true"/>
                         <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonQuarterAttack"/>
                         <FrameEvent Type="EffectPreset" StartTime="0" Key="SmashSmall"/>
                         <FrameEvent Type="EffectPreset" StartTime="0" Key="BloodSmall"/>
@@ -512,6 +517,7 @@
             <OnHit>
                 <FrameEvent Type="Attack" StartTime="0" AttackPreset="Dumbell">
                     <OnHit>
+                        <FrameEvent Type="AudioPlay" StartTime="0" ID="4902" Attach="true"/>
                         <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
                         <FrameEvent Type="Effect" Path="Sprites/Projectile/Dumbell" FramePerSecond="0.2" CastShadow="True" Offset="0.0 0.1 0.0" ToTarget="true" AngleType="AttackPoint">
                             <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c858e63344676f34a93a8306d92a1f7d, type: 3}
   m_Name: AudioInfo
   m_EditorClassIdentifier: 
-  csvData: {fileID: 4900000, guid: 4965ee190e4bbfa4d8eacfd2b8e91867, type: 3}
+  csvData: {fileID: 4900000, guid: efb42b7a256648d49b54a4e4cfb8328e, type: 3}
   audioData:
   - name: global data
     id: 0
@@ -766,6 +766,132 @@ MonoBehaviour:
         Data4: -1220890036
       Path: event:/SFX/Enemy/Aoba/UnwaverRaisenActivate
     parameters: []
+  - name: BluntAttack
+    id: 4901
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: -175057283
+        Data2: 1278575593
+        Data3: -1492973914
+        Data4: 1201608102
+      Path: event:/SFX/Common/Blunt/BluntAttack
+    parameters: []
+  - name: BluntHit
+    id: 4902
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: 331894573
+        Data2: 1217037928
+        Data3: 769636245
+        Data4: -528621289
+      Path: event:/SFX/Common/Blunt/BluntHit
+    parameters: []
+  - name: GunReady
+    id: 4903
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: -92929616
+        Data2: 1306939433
+        Data3: -1520293236
+        Data4: -1577846144
+      Path: event:/SFX/Common/Gun/GunReady
+    parameters: []
+  - name: GunFire
+    id: 4904
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: 452109296
+        Data2: 1154528058
+        Data3: -265076572
+        Data4: -2104479398
+      Path: event:/SFX/Common/Gun/GunFire
+    parameters: []
+  - name: GunFire_Tail
+    id: 4905
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: -1435434097
+        Data2: 1162585024
+        Data3: 840320687
+        Data4: -1619166901
+      Path: event:/SFX/Common/Gun/GunFire_Tail
+    parameters: []
+  - name: BulletHit
+    id: 4906
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: 607523217
+        Data2: 1088581282
+        Data3: 713753247
+        Data4: 224256638
+      Path: event:/SFX/Common/Gun/BulletHit
+    parameters: []
+  - name: SwordAttack
+    id: 4907
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: -1192192583
+        Data2: 1092641552
+        Data3: -1060049226
+        Data4: -391092852
+      Path: event:/SFX/Common/Sword/SwordAttack
+    parameters: []
+  - name: SwordHit
+    id: 4908
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: 2047259733
+        Data2: 1300166986
+        Data3: -669254518
+        Data4: -1278868365
+      Path: event:/SFX/Common/Sword/SwordHit
+    parameters: []
+  - name: Throw
+    id: 4909
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: 69257270
+        Data2: 1237483500
+        Data3: -1713349709
+        Data4: -472226363
+      Path: event:/SFX/Common/Throw/Throw
+    parameters: []
   - name: MainTitle
     id: 5000
     defaultVolume: 1
@@ -882,3 +1008,49 @@ MonoBehaviour:
         Data4: 122038239
       Path: event:/BGM/Battle_EZ
     parameters: []
+  - name: Intro
+    id: 9002
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: BGM
+    eventReference:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: event:/BGM/Title/Intro
+    parameters: []
+  - name: Main
+    id: 9003
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: BGM
+    eventReference:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: event:/BGM/Title/Main
+    parameters: []
+  - name: School
+    id: 9004
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: BGM
+    eventReference:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: event:/BGM/School
+    parameters:
+    - name: BgmProgress
+      id: 90001
+      min: 0
+      max: 1

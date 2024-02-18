@@ -116,13 +116,13 @@
     <AC_AttackMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="1_attack/2_attackMain" XFlip="true" Duration="0.3">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2204" Attach="true"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="4901" Attach="true"/>
             <FrameEvent Type="Movement" Condition="gv_AtkMovementVelocity == 0.0" StartTime="0" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Speed="gv_AtkMovementSpeed"/>
             <FrameEvent Type="Movement" Condition="gv_AtkMovementVelocity > 0.0" StartTime="0" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Velocity="gv_AtkMovementVelocity" Speed="gv_AtkMovementSpeed"/>
             
             <FrameEvent Type="Attack" StartTime="0" EndTime="0.12" AttackPreset="Barbell_Normal">
                 <OnHit>
-                    <FrameEvent Type="AudioPlay" StartTime="0" ID="2205" Attach="true"/>
+                    <FrameEvent Type="AudioPlay" StartTime="0" ID="4902" Attach="true"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
 
                     <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
@@ -138,8 +138,6 @@
 
         <Animation Preset="1_attack/1_attackReady" XFlip="true" Duration="0.3">
             <FrameEvent Type="SetDirectionType" StartTime="0" DirectionType="AI"/>
-
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2203" Attach="true"/>
             
             <FrameEvent Type="Movement" Condition="gv_AtkRdMovementVelocity == 0.0" StartTime="0" Friction="gv_AtkRdMovementFriction" MaxVelocity="gv_AtkRdMovementMaxVelocity" Speed="gv_AtkRdMovementSpeed"/>
             <FrameEvent Type="Movement" Condition="gv_AtkRdMovementVelocity > 0.0" StartTime="0" Friction="gv_AtkRdMovementFriction" MaxVelocity="gv_AtkRdMovementMaxVelocity" Velocity="gv_AtkRdMovementVelocity" Speed="gv_AtkRdMovementSpeed"/>
@@ -151,13 +149,13 @@
         <Animation Preset="1_attack/2_attackMain" XFlip="true" Duration="0.7">
             <FrameEvent Type="SetDirectionType" StartTime="0" DirectionType="Keep"/>
 
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2204" Attach="true"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="4901" Attach="true"/>
             <FrameEvent Type="Movement" Condition="gv_AtkMovementVelocity == 0.0" StartTime="0" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Speed="gv_AtkMovementSpeed"/>
             <FrameEvent Type="Movement" Condition="gv_AtkMovementVelocity > 0.0" StartTime="0" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Velocity="gv_AtkMovementVelocity" Speed="gv_AtkMovementSpeed"/>
             
             <FrameEvent Type="Attack" StartTime="0" EndTime="0.12" AttackPreset="Barbell_Normal">
                 <OnHit>
-                    <FrameEvent Type="AudioPlay" StartTime="0" ID="2205" Attach="true"/>
+                    <FrameEvent Type="AudioPlay" StartTime="0" ID="4902" Attach="true"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
                     
                     <FrameEvent Type="StopUpdate" Time="0.1"/>

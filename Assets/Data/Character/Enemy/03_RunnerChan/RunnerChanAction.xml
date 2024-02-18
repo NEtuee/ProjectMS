@@ -15,6 +15,7 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
             <FrameEvent Type="Attack" StartTime="0" EndTime="4.0" AttackPreset="Runner_Normal">
                 <OnHit>
+                    <FrameEvent Type="AudioPlay" StartTime="0" ID="4902" Attach="true"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonQuarterAttack"/>
                     <FrameEvent Type="StopUpdate" Time="0.1"/>
                     <FrameEvent Type="SetTimeScale" Scale="0.1" Time="0.1" BlendTime="0.1"/>
@@ -33,6 +34,7 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
             <FrameEvent Type="Attack" StartTime="0" EndTime="4.0" AttackPreset="Runner_Normal">
                 <OnHit>
+                    <FrameEvent Type="AudioPlay" StartTime="0" ID="4902" Attach="true"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonQuarterAttack"/>
                     <FrameEvent Type="StopUpdate" Time="0.1"/>
                     <FrameEvent Type="SetTimeScale" Scale="0.1" Time="0.1" BlendTime="0.1"/>
@@ -51,6 +53,7 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
             <FrameEvent Type="Attack" StartTime="0" EndTime="4.0" AttackPreset="Runner_Normal">
                 <OnHit>
+                    <FrameEvent Type="AudioPlay" StartTime="0" ID="4902" Attach="true"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonQuarterAttack"/>
                     <FrameEvent Type="StopUpdate" Time="0.1"/>
                     <FrameEvent Type="SetTimeScale" Scale="0.1" Time="0.1" BlendTime="0.1"/>
