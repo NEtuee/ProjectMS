@@ -22,6 +22,20 @@ public class CrosshairUI : IUIElement
     private bool _prevDetect = false;
 
     private int _currentDashPoint;
+
+    private UIActionTimer _detectColorTimer;
+
+    private float _highlightDuration = 0.1f;
+
+    public CrosshairUI()
+    {
+        _detectColorTimer = new UIActionTimer(ChangeToIdleColor);
+    }
+
+    private void ChangeToIdleColor()
+    {
+        _binder.MainCursor.color = _binder.DetectIdleColor;
+    }
     
     public bool CheckValidBinderLink(out string reason)
     {
@@ -99,7 +113,9 @@ public class CrosshairUI : IUIElement
         var isGuardBreak = ActionKeyInputManager.Instance().keyCheck("GuardBreak2");
         
         UpdateMainCursor(isStunShot, isGuardBreak);
-        UpdateSubCursor(targetPosition, rotation, dashPoint, isGuardBreak);
+        UpdateSubCursor(targetPosition, rotation, dashPoint, isStunShot, isGuardBreak);
+        
+        _detectColorTimer.Update();
     }
 
     private void UpdateMainCursor(bool isStunShot, bool isGuardBreak)
@@ -122,7 +138,7 @@ public class CrosshairUI : IUIElement
         }
     }
 
-    private void UpdateSubCursor(Vector3 characterPosition, Quaternion rotation, float dashPoint, bool isGuardBreak)
+    private void UpdateSubCursor(Vector3 characterPosition, Quaternion rotation, float dashPoint, bool isStunShot, bool isGuardBreak)
     {
         var toVector = _binder.MainCursor.transform.position - characterPosition;
         characterPosition += toVector.normalized * _binder.PlayerRadius;
@@ -139,9 +155,15 @@ public class CrosshairUI : IUIElement
             }
         }
         _currentDashPoint = dashPointInt;
+
+        _binder.SubCursorDashPointRoot.SetActive(true);
+        _binder.SubCursorDashPointKick.SetActive(false);
         
-        _binder.SubCursorDashPointRoot.SetActive(isGuardBreak == false);
-        _binder.SubCursorDashPointKick.SetActive(isGuardBreak == true);
+        if (isStunShot == false)
+        {
+            _binder.SubCursorDashPointRoot.SetActive(isGuardBreak == false);
+            _binder.SubCursorDashPointKick.SetActive(isGuardBreak == true);
+        }
     }
 
     private void OnDetectEnemy(CollisionSuccessData collisionSuccessData)
@@ -171,14 +193,16 @@ public class CrosshairUI : IUIElement
 
     private void UpdateMainCursorColor()
     {
-        if (_enemyDetect == true)
+        if (_prevDetect == false && _enemyDetect == true)
         {
-            _binder.MainCursor.color = _binder.DetectIdleColor;
+            _binder.MainCursor.color = _binder.DetectHighlightColor;
+            _detectColorTimer.Play(_highlightDuration);
             return;
         }
 
         if (_enemyDetect == false)
         {
+            _detectColorTimer.Stop();
             _binder.MainCursor.color = _binder.IdleColor;
             return;
         }

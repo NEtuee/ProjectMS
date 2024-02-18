@@ -30,6 +30,8 @@ public class GameUI : MonoBehaviour
     
     private GameEntityBase _targetEntity;
 
+    private Dictionary<string, List<Action>> _notifySubscriber = new Dictionary<string, List<Action>>();
+
     private void Awake()
     {
         Instance = this;
@@ -66,6 +68,19 @@ public class GameUI : MonoBehaviour
     {
         CrosshairBinder.HeadObject.SetActive(active);
         CrosshairBinder.SubMarker.SetActive(active);
+    }
+
+    public void NotifyToUI(string key)
+    {
+        if (_notifySubscriber.TryGetValue(key, out var subscriberList) == false)
+        {
+            return;
+        }
+
+        foreach (var action in subscriberList)
+        {
+            action?.Invoke();
+        }
     }
 
     private void Update()

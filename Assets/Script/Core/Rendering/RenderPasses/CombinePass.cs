@@ -52,6 +52,17 @@ public class CombinePass : AkaneRenderPass
         renderMaterial?.SetTexture("_InterfaceTexture", interfaceRenderPass?.RenderTexture);
         renderMaterial?.SetTexture("_PerspectiveDepthTexture", perspectiveDepthRenderPass?.RenderTexture);
 
+        float orthoSize = Camera.main.orthographicSize;
+        float aspectRatio = Camera.main.aspect;
+        float height = orthoSize * 2f;
+        float width = height * aspectRatio;
+
+        Vector4 cameraSize = Vector4.zero;
+        cameraSize.x = width;
+        cameraSize.y = height;
+        
+        renderMaterial?.SetVector("_RealCameraSize",cameraSize * 100.0f);
+
         renderCamera.cullingMask = layerMasks;
 
         renderCamera.Render();
