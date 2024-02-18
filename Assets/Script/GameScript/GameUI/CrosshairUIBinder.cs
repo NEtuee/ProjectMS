@@ -17,7 +17,7 @@ public class CrosshairUIBinder : UIObjectBinder
     public SpriteRenderer MainCursor;
 
     public Color IdleColor;
-    public Color DetectColor;
+    public Color DetectHighlightColor;
     public Color DetectIdleColor;
 
     [Header("Debug")]
