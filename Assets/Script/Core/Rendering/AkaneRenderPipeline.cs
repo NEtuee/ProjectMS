@@ -18,21 +18,16 @@ public class AkaneRenderPipeline : MonoBehaviour
         backgroundPass.Awake();
         CharacterRenderPass characterPass = ScriptableObject.CreateInstance<CharacterRenderPass>();
         characterPass.Awake();
-        ShadowRenderPass shadowPass = ScriptableObject.CreateInstance<ShadowRenderPass>();
-        shadowPass.Awake();
         EffectRenderPass effectPass = ScriptableObject.CreateInstance<EffectRenderPass>();
         effectPass.Awake();
 
         InterfaceRenderPass interfacePass = ScriptableObject.CreateInstance<InterfaceRenderPass>();
         interfacePass.Awake();
 
-        PerspectiveRenderPass perspectivePass = ScriptableObject.CreateInstance<PerspectiveRenderPass>();
-        perspectivePass.Awake();
-
         PerspectiveDepthRenderPass perspectiveDepthPass = ScriptableObject.CreateInstance<PerspectiveDepthRenderPass>();
         perspectiveDepthPass.Awake();
 
-        CombinePass combinePass = CombinePass.CreateInstance(backgroundPass, characterPass, shadowPass, perspectivePass, interfacePass, perspectiveDepthPass);
+        CombinePass combinePass = CombinePass.CreateInstance(backgroundPass, characterPass, interfacePass, perspectiveDepthPass);
         combinePass.Awake();
 
         EmptyRenderPass emptyPass = ScriptableObject.CreateInstance<EmptyRenderPass>();
@@ -40,14 +35,11 @@ public class AkaneRenderPipeline : MonoBehaviour
 
         combinePass.AddPass(backgroundPass);
         combinePass.AddPass(characterPass);
-        combinePass.AddPass(shadowPass);
         combinePass.AddPass(effectPass);
 
         renderPasses.Add(backgroundPass);
-        renderPasses.Add(perspectivePass);
         renderPasses.Add(perspectiveDepthPass);
         renderPasses.Add(characterPass);
-        renderPasses.Add(shadowPass);
         renderPasses.Add(effectPass);
         renderPasses.Add(combinePass);
         renderPasses.Add(interfacePass);

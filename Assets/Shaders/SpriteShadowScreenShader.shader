@@ -1,3 +1,5 @@
+// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
 
 Shader "Custom/SpriteShadowScreenShader"
 {
@@ -5,12 +7,10 @@ Shader "Custom/SpriteShadowScreenShader"
 	{
 		_CharacterTexture("Character Texture", 2D) = "white" {}
 		_MainTex("Background Texture", 2D) = "white" {}
-		_ShadowMapTexture("ShadowMap Texture", 2D) = "white" {}
 
 		//[HideInInspector]
 		_InterfaceTexture("Interface Texture", 2D) = "white" {}
 		//[HideInInspector]
-		_PerspectiveTexture("Perspective Texture", 2D) = "white" {}
 		_PerspectiveDepthTexture("Perspective Depth Texture", 2D) = "white" {}
 
 		_otherBackgroundTexture("Other Background Texture", 2D) = "white" {}
@@ -22,11 +22,11 @@ Shader "Custom/SpriteShadowScreenShader"
 		_CenterUV("Center UV", Vector) = (0.5, 0.5, 0, 0)
 		
 		_SunAngle("Sun Angle Degree", Range(0.0, 360.0)) = 0.0
-		_ShadowDistance("Shadow Distance", Range(0.1, 3.0)) = 0.1
-		_ShadowDistanceRatio("Shadow Distance Ratio", Range(0.0, 10.0)) = 0.0
+		_ShadowDistance("Shadow Distance", Range(0.1, 3.0)) = 1.07
+		_ShadowDistanceRatio("Shadow Distance Ratio", Range(0.0, 10.0)) = 2.58
 
 		_ScreenSize("Screen Size", Vector) = (1024, 1024, 0, 0)
-		_ShadowDistanceOffset("Shadow Distance Offset", Range(0.0, 100.0)) = 0.0
+		_ShadowDistanceOffset("Shadow Distance Offset", Range(-100.0, 100.0)) = -33.2
 
 		_ShadowColor("ShadowColor", Color) = (0,0,0,1)
 
@@ -34,6 +34,9 @@ Shader "Custom/SpriteShadowScreenShader"
 		_ImpactFrame("Impact Frame", Range(0.0, 1.0)) = 1.0
 		_Brightness("Brightness", Range(0.0, 5.0)) = 1.0
 		_Saturation("Saturation", Range(0.0, 1.0)) = 1.0
+		_Bloom("Bloom", Range(0.0, 2.0)) = 0.0
+		_Contrast("Background Contrast", Range(0.0, 1.0)) = 1.0
+		_ContrastTarget("Background Contrast Target", Range(0.0, 1.0)) = 0.5
 		_ColorTint("Color Tint", Color) = (1,1,1,1)
 		_BackgroundColorTint("BackgroundColor", Color) = (1,1,1,1)
 
@@ -108,8 +111,6 @@ Shader "Custom/SpriteShadowScreenShader"
 
 				sampler2D _CharacterTexture;
 				sampler2D _MainTex;
-				sampler2D _ShadowMapTexture;
-				sampler2D _PerspectiveTexture;
 				sampler2D _InterfaceTexture;
 				sampler2D _AlphaTex;
 				sampler2D _PerspectiveDepthTexture;
@@ -131,6 +132,9 @@ Shader "Custom/SpriteShadowScreenShader"
 				float _ImpactFrame;
 				float _Brightness;
 				float _Saturation;
+				float _Bloom;
+				float _Contrast;
+				float _ContrastTarget;
 				fixed4 _ColorTint;
 				fixed4 _BackgroundColorTint;
 
@@ -161,11 +165,6 @@ Shader "Custom/SpriteShadowScreenShader"
 					return color;
 				}
 
-				fixed4 gatherShadows(float2 texcoord)
-				{
-					return SampleSpriteTexture(_ShadowMapTexture, texcoord);
-				}
-
 				static const float2 resolution = float2(1024, 1024);
 
 				float easeOutCubic(float start, float end, float value)
@@ -190,13 +189,6 @@ Shader "Custom/SpriteShadowScreenShader"
 					fixed4 characterSample = SampleSpriteTexture(_CharacterTexture, texcoord);
 
 					return fixed4(characterSample.xyz * (1.0 - _ImpactFrame), characterSample.w);
-				}
-
-				fixed4 drawPerspective(float2 texcoord)
-				{
-					fixed4 perspectiveSample = SampleSpriteTexture(_PerspectiveTexture, texcoord);
-
-					return perspectiveSample;
 				}
 
 				fixed4 drawInterface(float2 texcoord)
@@ -246,18 +238,18 @@ Shader "Custom/SpriteShadowScreenShader"
 					return SampleSpriteTexture(_MainTex, texcoord) * _BackgroundColorTint;
 				}
 
-				fixed4 drawCharacterShadow(float4 backgroundSample, float2 texcoord)
+				fixed4 drawCharacterShadow(float2 texcoord)
 				{
-					float shadowSample = SampleSpriteTexture(_PerspectiveDepthTexture, texcoord);
+					float shadowSample = 1.0 - SampleSpriteTexture(_PerspectiveDepthTexture, texcoord);
 
-					float sunAngle = _SunAngle;
+					float sunAngle = _SunAngle * 0.0174532925 + 3.141592;
 
 					float near = 0.3f;
-					float far = 1.0f;
+					float far = 1000.0f;
 
 					float clipDistance = far - near;
 					float shadowDistance = (shadowSample * clipDistance);
-					float additionalShadowDistance = _ShadowDistance * ((clipDistance / shadowDistance) * _ShadowDistanceRatio);
+					float additionalShadowDistance = _ShadowDistance * ((shadowDistance) * _ShadowDistanceRatio);
 					float2 toUV = (1.0 / _ScreenSize.xy);
 
 					float2 shadowDirection = float2(cos(sunAngle), sin(sunAngle));
@@ -265,15 +257,19 @@ Shader "Custom/SpriteShadowScreenShader"
 					float2 shadowSampleTarget = toUV * (shadowDirection * (_ShadowDistance + additionalShadowDistance * _ShadowDistance));
 					float2 shadowOffset = toUV * shadowDirection * _ShadowDistanceOffset;
 
+					float2 uv = texcoord + shadowOffset + shadowSampleTarget;
+					if (uv.x < 0.0f || uv.x > 1.0f || uv.y < 0.0f || uv.y > 1.0f)
+						return 0.0f;
+
 					fixed4 shadowReSample = SampleSpriteTexture(_CharacterTexture, texcoord + shadowOffset + shadowSampleTarget);
 						
-					return shadowReSample * _ShadowColor;
+					return shadowReSample* _ShadowColor;
 				}
 
 				fixed4 bluredShadowSample(float2 texcoord)
 				{
 					float near = 0.3f;
-					float far = 100.0f;
+					float far = 1000.0f;
 					float Pi = 6.28318530718; // Pi*2
 					float shadowSample = SampleSpriteTexture(_PerspectiveDepthTexture, texcoord);
 					float clipDistance = far - near;
@@ -286,7 +282,7 @@ Shader "Custom/SpriteShadowScreenShader"
 
 					float2 Radius = Size / resolution;
 
-					fixed4 shadow = drawCharacterShadow(sampleBackground(texcoord), texcoord);
+					fixed4 shadow = drawCharacterShadow(texcoord);
 
 					float4 Color = shadow;
 					// Blur calculations
@@ -294,7 +290,7 @@ Shader "Custom/SpriteShadowScreenShader"
 					{
 						for (float i = 1.0 / Quality; i <= 1.0; i += 1.0 / Quality)
 						{
-							Color += drawCharacterShadow(sampleBackground(texcoord + float2(cos(d), sin(d)) * Radius * i), texcoord + float2(cos(d), sin(d)) * Radius * i);
+							Color += drawCharacterShadow(texcoord + float2(cos(d), sin(d)) * Radius * i);
 						}
 					}
 
@@ -325,7 +321,32 @@ Shader "Custom/SpriteShadowScreenShader"
 						}
 					}
 					Color /= Quality * Directions - backgroundBrightnessFactor;
-					return Color + fixed4(_ImpactFrame,_ImpactFrame,_ImpactFrame,_ImpactFrame);
+
+					float brightness = dot(Color.xyz, float3(0.2126f, 0.7152f, 0.0722));
+					if (brightness > 0.5)
+					{
+						float4 bloom = Color;
+						float bloomBlurRadius = (brightness * 8.0f * _Bloom) / resolution;
+						for (float d = 0.0; d < Pi; d += Pi / Directions)
+						{
+							for (float i = 1.0 / Quality; i <= 1.0; i += 1.0 / Quality)
+							{
+								bloom += sampleBackground(texcoord + float2(cos(d), sin(d)) * bloomBlurRadius * i);
+							}
+						}
+						bloom /= Quality * Directions - backgroundBrightnessFactor;
+
+						Color += bloom;
+						Color *= 0.5f;
+					}
+
+					// contrast
+					Color.xyz = ((Color.xyz - _ContrastTarget) * max(_Contrast, 0.0)) + _ContrastTarget;
+
+					//impact frame
+					Color += fixed4(_ImpactFrame, _ImpactFrame, _ImpactFrame, _ImpactFrame);
+
+					return Color;
 				}
 
 				fixed4 allTogether(float2 texcoord)
@@ -333,34 +354,12 @@ Shader "Custom/SpriteShadowScreenShader"
 					fixed4 backgroundSample = bluredBackgroundSample(texcoord);
 					fixed4 characterSample = drawCharacter(texcoord);
 					fixed4 characterShadow = bluredShadowSample(texcoord);
-					fixed4 perspectiveSample = drawPerspective(texcoord);
 					fixed4 interfaceSample = drawInterface(texcoord);
 
-					fixed4 shadowdedBackground = lerp(perspectiveSample, characterShadow, characterShadow.a);
-					fixed4 mixed = lerp(backgroundSample, shadowdedBackground, perspectiveSample.a);
-					fixed4 mixed2 = lerp(mixed, characterSample, characterSample.a);
+					fixed4 shadowdedBackground = lerp(backgroundSample, characterShadow, characterShadow.a);
+					fixed4 mixed2 = lerp(shadowdedBackground, characterSample, characterSample.a);
 					fixed4 mixed3 = lerp(mixed2, interfaceSample, interfaceSample.a);
 					return mixed3;
-				}
-
-				fixed4 onlyShadow(v2f IN)
-				{
-					fixed4 characterColor = SampleSpriteTexture(_CharacterTexture, IN.texcoord);
-					fixed4 backgroundSample = SampleSpriteTexture(_MainTex, IN.texcoord);
-					fixed4 shadowMap = SampleSpriteTexture(_ShadowMapTexture, IN.texcoord);
-
-					float sunAngle = _SunAngle * 0.0174532925 + 3.141592;
-					float additionalShadowDistance = _ShadowDistance * ((1.0 - shadowMap.r) * _ShadowDistanceRatio);
-					float2 toUV = (1.0 / _ScreenSize.xy);
-
-					float2 shadowDirection = float2(cos(sunAngle),sin(sunAngle));
-
-					float2 shadowSampleTarget = toUV * (shadowDirection * (_ShadowDistance + additionalShadowDistance));
-					float2 shadowOffset = toUV * shadowDirection * _ShadowDistanceOffset;
-
-					float characterShadowSample = SampleSpriteTexture(_CharacterTexture, IN.texcoord + shadowOffset + shadowSampleTarget).a;
-
-					return _ShadowColor * characterShadowSample;
 				}
 
 				fixed4 frag(v2f IN) : SV_Target
@@ -386,5 +385,6 @@ Shader "Custom/SpriteShadowScreenShader"
 				}
 				ENDCG
 			}
+
 	}
 }

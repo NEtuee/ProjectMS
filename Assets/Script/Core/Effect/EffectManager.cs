@@ -477,6 +477,8 @@ public class ParticleEffectItem : EffectItemBase
 
         _lifeTime = effectData._lifeTime;
 
+        _effectObject.layer = effectData._castShadow ? LayerMask.NameToLayer("Character") : effectData._behindCharacter ? LayerMask.NameToLayer("Background") : LayerMask.NameToLayer("EffectEtc");
+
         _stopEffect = false;
         _skipFirstFrame = true;
 

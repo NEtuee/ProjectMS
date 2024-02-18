@@ -141,10 +141,13 @@
         <Animation Preset="1_attack/2_attackMain" XFlip="true" Duration="0.2">
             <FrameEvent Type="SetDirectionType" Condition="gv_bIsLaserAttack == false" StartTime="0" DirectionType="AI"/>
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2204" Attach="true"/>
-            <FrameEvent Type="Movement" Condition="gv_AtkMovementVelocity == 0.0" StartTime="gv_RangedAttackMovementDelay" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Speed="gv_AtkMovementSpeed"/>
-            <FrameEvent Type="Movement" Condition="gv_AtkMovementVelocity > 0.0" StartTime="gv_RangedAttackMovementDelay" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Velocity="gv_AtkMovementVelocity" Speed="gv_AtkMovementSpeed"/>
-            <FrameEvent Type="Movement" Condition="gv_AtkMovementVelocity < 0.0" StartTime="gv_RangedAttackMovementDelay" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Velocity="gv_AtkMovementVelocity" Speed="gv_AtkMovementSpeed"/>
-
+            
+            <FrameEvent Type="Movement" Condition="(gv_AtkMovementVelocity == 0.0) && (TargetDistance > 1.7)" StartTime="gv_RangedAttackMovementDelay" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Speed="gv_AtkMovementSpeed"/>
+            <FrameEvent Type="Movement" Condition="(gv_AtkMovementVelocity > 0.0)  && (TargetDistance > 1.7)" StartTime="gv_RangedAttackMovementDelay" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Velocity="gv_AtkMovementVelocity" Speed="gv_AtkMovementSpeed"/>
+            <FrameEvent Type="Movement" Condition="(gv_AtkMovementVelocity < 0.0)  && (TargetDistance > 1.7)" StartTime="gv_RangedAttackMovementDelay" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Velocity="gv_AtkMovementVelocity" Speed="gv_AtkMovementSpeed"/>
+            
+            <FrameEvent Type="Movement" Condition="(TargetDistance <= 1.7)" StartTime="gv_RangedAttackMovementDelay" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Velocity="2" Speed="0"/>
+            
             <!-- Laser Attack -->
             <FrameEvent Type="Attack" Condition="gv_bIsLaserAttack" StartTime="0" EndTime="0.1" AttackPreset="gv_LaserAttackPreset">
                 <OnHit>
