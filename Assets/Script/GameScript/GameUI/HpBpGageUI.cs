@@ -32,12 +32,13 @@ public class HpBpGageUI : IUIElement
 
     public void InitValue(float hpPercentage, float bpPercentage)
     {
-        UpdateByManager(hpPercentage, bpPercentage);
+        UpdateByManager(hpPercentage, bpPercentage, 0.0f);
     }
 
-    public void UpdateByManager(float hpPercentage, float bpPercentage)
+    public void UpdateByManager(float hpPercentage, float bpPercentage, float catchPercentage)
     {
         _binder.HpGageImage.fillAmount = hpPercentage;
         _binder.BpGageImgae.fillAmount = bpPercentage;
+        _binder.QteImage.fillAmount = catchPercentage;
     }
 }

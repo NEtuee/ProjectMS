@@ -109,20 +109,27 @@ public class CrosshairUI : IUIElement
 
         _binder.DebugDetect = _enemyDetect;
 
+        var isQte = ownerEntity.checkCurrentActionFlag(ActionFlags.QTE);
         var isStunShot = ActionKeyInputManager.Instance().keyCheck("StunShot");
         var isGuardBreak = ActionKeyInputManager.Instance().keyCheck("GuardBreak2");
         
-        UpdateMainCursor(isStunShot, isGuardBreak);
-        UpdateSubCursor(targetPosition, rotation, dashPoint, isStunShot, isGuardBreak);
+        UpdateMainCursor(isQte, isStunShot, isGuardBreak);
+        UpdateSubCursor(targetPosition, rotation, dashPoint, isQte, isStunShot, isGuardBreak);
         
         _detectColorTimer.Update();
     }
 
-    private void UpdateMainCursor(bool isStunShot, bool isGuardBreak)
+    private void UpdateMainCursor(bool isQte, bool isStunShot, bool isGuardBreak)
     {
         _binder.MainSuper.SetActive(false);
         _binder.MainKick.SetActive(false);
         _binder.MainBaisc.SetActive(false);
+
+        if (isQte == true)
+        {
+            _binder.MainBaisc.SetActive(true);
+            return;
+        }
 
         if (isStunShot == true)
         {
@@ -138,7 +145,7 @@ public class CrosshairUI : IUIElement
         }
     }
 
-    private void UpdateSubCursor(Vector3 characterPosition, Quaternion rotation, float dashPoint, bool isStunShot, bool isGuardBreak)
+    private void UpdateSubCursor(Vector3 characterPosition, Quaternion rotation, float dashPoint, bool isQte, bool isStunShot, bool isGuardBreak)
     {
         var toVector = _binder.MainCursor.transform.position - characterPosition;
         characterPosition += toVector.normalized * _binder.PlayerRadius;
@@ -158,6 +165,11 @@ public class CrosshairUI : IUIElement
 
         _binder.SubCursorDashPointRoot.SetActive(true);
         _binder.SubCursorDashPointKick.SetActive(false);
+
+        if (isQte == true)
+        {
+            return;
+        }
         
         if (isStunShot == false)
         {
