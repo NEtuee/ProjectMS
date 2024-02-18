@@ -582,7 +582,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
                     playData._rotationPresetData = rotationPreset.getPresetData(animationCustomPreset._rotationPresetName);
                     if(playData._rotationPresetData == null)
                     {
-                        DebugUtil.assert_fileOpen(false,"로테이션 프리셋 로드 실패 [Preset: {0}] [FilePath: {0}]",filePath,XMLScriptConverter.getLineNumberFromXMLNode(node),path,filePath);
+                        DebugUtil.assert_fileOpen(false,"로테이션 프리셋 로드 실패 [Preset: {0}] [FilePath: {0}]",filePath,XMLScriptConverter.getLineNumberFromXMLNode(node),animationCustomPreset._rotationPresetName,filePath);
                     }
                 }
                 
@@ -593,7 +593,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
 
                     if(playData._scalePresetData == null)
                     {
-                        DebugUtil.assert_fileOpen(false,"스케일 프리셋 로드 실패 [Preset: {0}] [FilePath: {0}]",filePath,XMLScriptConverter.getLineNumberFromXMLNode(node),path,filePath);
+                        DebugUtil.assert_fileOpen(false,"스케일 프리셋 로드 실패 [Preset: {0}] [FilePath: {0}]",filePath,XMLScriptConverter.getLineNumberFromXMLNode(node),animationCustomPreset._scalePresetName,filePath);
                     }
                 }
 
@@ -604,7 +604,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
 
                     if(playData._translationPresetData == null)
                     {
-                        DebugUtil.assert_fileOpen(false,"트렌슬레이션 프리셋 로드 실패 [Preset: {0}] [FilePath: {0}]",filePath,XMLScriptConverter.getLineNumberFromXMLNode(node),path,filePath);
+                        DebugUtil.assert_fileOpen(false,"트렌슬레이션 프리셋 로드 실패 [Preset: {0}] [FilePath: {0}]",filePath,XMLScriptConverter.getLineNumberFromXMLNode(node),animationCustomPreset._translationPresetName,filePath);
                     }
                 }
                 
