@@ -149,6 +149,8 @@
                     <FrameEvent Type="EffectPreset" StartTime="0" Key="Slash"/>
                     <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
 
+                    <FrameEvent Type="UIEvent" StartTime="0" Key="HitEnemy"/>
+
                     <!-- 마테리얼 히트 이펙트 -->
                     <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/MaterialHit_Timeline" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true"/>
 
@@ -181,6 +183,8 @@
                     <FrameEvent Type="TeleportToTarget"/>
                 </OnEvade>
             </FrameEvent>
+
+            <FrameEvent Type="UIEvent" StartTime="0" Condition="AttackSuccess == false" Key="Dash"/>
 
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="Fear" EventTargetType="Range" SearchIdentifier="Enemy" Range="2.5"/>
 
@@ -216,6 +220,8 @@
                     <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
                     <FrameEvent Type="EffectPreset" StartTime="0" Key="Crosslight"/>
 
+                    <FrameEvent Type="UIEvent" StartTime="0" Key="HitEnemy"/>
+
                     <!-- 마테리얼 히트 이펙트 -->
                     <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/MaterialHit_Timeline" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true"/>
 
@@ -249,6 +255,9 @@
                 </OnEvade>
 
             </FrameEvent>
+
+            <FrameEvent Type="UIEvent" StartTime="0" Condition="AttackSuccess == false" Key="Dash"/>
+
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_LongDashFriction" MaxVelocity="gv_LongDashVelocity" Speed="0" Velocity="gv_LongDashVelocity" Condition="(getStat_DashPoint >= 1.0) && (getStat_HP > 1.0)"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="ClearBloodPoint" Condition="(getStat_DashPoint >= 1.0) && (getStat_HP > 1.0)"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="CommonAttack" Condition="(getStat_DashPoint >= 1.0) && (getStat_HP > 1.0)"/>
