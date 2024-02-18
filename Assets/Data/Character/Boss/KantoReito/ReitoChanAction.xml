@@ -88,7 +88,6 @@
             <!--
             <FrameEvent Type="ZoomEffect" Scale="-0.4"/>
             -->
-            <FrameEvent Type="StopUpdate" Time="0.15"/>
 
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
@@ -106,7 +105,6 @@
             <!--
             <FrameEvent Type="ZoomEffect" Scale="-0.4"/>
             -->
-            <FrameEvent Type="StopUpdate" Time="0.15"/>
             
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
@@ -126,7 +124,6 @@
             <!--
             <FrameEvent Type="ZoomEffect" Scale="-0.4"/>
             -->
-            <FrameEvent Type="StopUpdate" Time="0.15"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>

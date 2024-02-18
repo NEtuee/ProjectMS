@@ -50,7 +50,6 @@
             <!--
             <FrameEvent Type="ZoomEffect" Scale="-3.2"/>
             -->
-            <FrameEvent Type="StopUpdate" Time="0.15"/>
 
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="ResetRaisen" EventTargetType="Self"/>
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="ResetStorm" EventTargetType="Self"/>
@@ -72,7 +71,6 @@
             <!--
             <FrameEvent Type="ZoomEffect" Scale="-3.2"/>
             -->
-            <FrameEvent Type="StopUpdate" Time="0.15"/>
 
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="ResetRaisen" EventTargetType="Self"/>
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="ResetStorm" EventTargetType="Self"/>
@@ -95,7 +93,6 @@
             <!--
             <FrameEvent Type="ZoomEffect" Scale="-3.2"/>
             -->
-            <FrameEvent Type="StopUpdate" Time="0.15"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>

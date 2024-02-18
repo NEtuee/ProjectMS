@@ -59,7 +59,6 @@
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountIncrease"/>
 
-            <FrameEvent Type="StopUpdate" Time="0.15"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
         </Animation>
@@ -421,7 +420,6 @@
             <FrameEvent Type="ReleaseCatch" StartTime="0" Push="5 0 0" TargetAction="AC_AobaTsuba_Fail"/>
 
             <FrameEvent Type="ZoomEffect" Scale="-1.7"/>
-            <FrameEvent Type="StopUpdate" Time="0.07"/>
             <FrameEvent Type="SetTimeScale" Scale="0.7" Time="0.1" BlendTime="0.1"/>
             <FrameEvent Type="ShakeEffect" Scale="0.15" Speed="35.0" Time="0.1"/>
         </Animation>
@@ -536,8 +534,6 @@
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountIncrease"/>
 
-            <FrameEvent Type="StopUpdate" Time="0.15"/>
-            
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
         </Animation>

@@ -54,7 +54,7 @@
     </BranchSet>
     <Spawn MovementType="FrameEvent" DirectionType="Keep" FlipType="Keep">
         <Animation Preset="Sprites/NewPlayer/idle/" XFlip="true" Duration="0.1">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="1007" Attach="true"/>
+            <!-- <FrameEvent Type="AudioPlay" StartTime="0" ID="1007" Attach="true"/> -->
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_IdleFriction" Speed="0"/>
         </Animation>
 
