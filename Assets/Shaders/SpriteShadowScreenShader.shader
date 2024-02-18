@@ -35,6 +35,7 @@ Shader "Custom/SpriteShadowScreenShader"
 		_Brightness("Brightness", Range(0.0, 5.0)) = 1.0
 		_Saturation("Saturation", Range(0.0, 1.0)) = 1.0
 		_Bloom("Bloom", Range(0.0, 2.0)) = 0.0
+		_Vignette("Vignette", Range(0.0, 1.0)) = 0.0
 		_Contrast("Background Contrast", Range(0.0, 1.0)) = 1.0
 		_ContrastTarget("Background Contrast Target", Range(0.0, 1.0)) = 0.5
 		_ColorTint("Color Tint", Color) = (1,1,1,1)
@@ -133,6 +134,7 @@ Shader "Custom/SpriteShadowScreenShader"
 				float _Brightness;
 				float _Saturation;
 				float _Bloom;
+				float _Vignette;
 				float _Contrast;
 				float _ContrastTarget;
 				fixed4 _ColorTint;
@@ -144,6 +146,7 @@ Shader "Custom/SpriteShadowScreenShader"
 				fixed4 _MultiSampleColorTintRight;
 				fixed4 _MultiSampleColorTintLeft;
 
+				float4 _RealCameraSize;
 
 				float _FogRate;
 				float _FogStrength;
@@ -381,7 +384,17 @@ Shader "Custom/SpriteShadowScreenShader"
 					resultColor.rgb *= (fogRate + ((1.0 - fogRate) * (1.0 - _FogColor.a)));
 					resultColor.rgb += _FogColor.rgb * (1.0 - fogRate) * _FogColor.a;
 
-					return resultColor;
+					//vignette
+					float2 offset = float2(5.0f, 5.0f);
+					float2 vignetteRatio = 1.0 - ((_RealCameraSize.xy + offset) / resolution);
+					float2 uv = IN.texcoord.xy - vignetteRatio * 0.5f;
+					uv /= 1.0f - vignetteRatio;
+    				uv *=  1.0 - uv.yx;
+    				float vig = uv.x*uv.y * 15.0;
+    				vig = pow(vig, _Vignette);
+    				resultColor.xyz *= vig; 
+
+					return resultColor;// * vignette;
 				}
 				ENDCG
 			}
