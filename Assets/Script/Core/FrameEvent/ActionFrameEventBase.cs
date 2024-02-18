@@ -50,6 +50,7 @@ public enum FrameEventType
     FrameEvent_FollowAttack,
     FrameEvent_SetHideUIAll,
     FrameEvent_StopSwitch,
+    FrameEvent_UIEvent,
 
     Count,
 }
@@ -890,6 +891,37 @@ public class ActionFrameEvent_ShakeEffect : ActionFrameEventBase
                 _shakeTime = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
             else if(attributes[i].Name == "Speed")
                 _shakeSpeed = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
+        }
+    }
+}
+
+public class ActionFrameEvent_UIEvent : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_UIEvent;}
+
+    public string _key;
+
+    public override void initialize(ObjectBase executeEntity)
+    {
+    }
+
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        GameUI.Instance.NotifyToUI(_key);
+        return true;
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "Key")
+                _key = attrValue;
         }
     }
 }

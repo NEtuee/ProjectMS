@@ -95,13 +95,15 @@ public static class FrameEventLoader
             outFrameEvent = new ActionFrameEvent_SetHideUIAll();
         else if(type == "StopSwitch")
             outFrameEvent = new ActionFrameEvent_StopSwitch();
+        else if(type == "UIEvent")
+            outFrameEvent = new ActionFrameEvent_UIEvent();
         else
         {
             DebugUtil.assert(false, "invalid frameEvent type: {0}",type);
             return null;
         }
 
-        DebugUtil.assert((int)FrameEventType.Count == 41, "check here");
+        DebugUtil.assert((int)FrameEventType.Count == 42, "check here");
 
 
         if(outFrameEvent == null)

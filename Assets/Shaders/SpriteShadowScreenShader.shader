@@ -394,7 +394,7 @@ Shader "Custom/SpriteShadowScreenShader"
     				vig = pow(vig, _Vignette);
     				resultColor.xyz *= vig; 
 
-					return resultColor;// * vignette;
+					return resultColor;
 				}
 				ENDCG
 			}

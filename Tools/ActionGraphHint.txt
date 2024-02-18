@@ -132,8 +132,8 @@ InQuote,Switch=,"True,False"
 FrameEventAndInQuote,StopSwitch Switch=,"Effect,Audio"
 FrameEvent,StopSwitch,"Switch=~~,Key=~~"
 ShortCut,__FrameEvent_StopSwitch,<FrameEvent Type=~StopSwitch~ StartTime=~0~ Switch=~~ Key=~~/>
-,,
-,,
+FrameEvent,UIEvent,Key=~~
+ShortCut,__FrameEvent_UIEvent,<FrameEvent Type=~UIEvent~ StartTime=~0~ Key=~~/>
 ,,
 ,,
 ,,
