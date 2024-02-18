@@ -298,7 +298,7 @@
                         <!-- TODO: 야구공 버프 설정 -->
                         <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
                         <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
-                        <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="BloodSmallSmall"/>
                     </OnHit>
                     <OnGuard>
                         <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
@@ -320,7 +320,7 @@
                         <!-- TODO: 야구공 버프 설정 -->
                         <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
                         <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
-                        <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="BloodSmall"/>
                     </OnHit>
                     <OnGuard>
                         <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
@@ -440,7 +440,7 @@
                     <OnHit>
                         <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonQuarterAttack"/>
                         <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
-                        <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="BloodSmall"/>
                     </OnHit>
                 </FrameEvent>
                 <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/AttackHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" Angle="Random_0^360" ToTarget="true"/>
@@ -491,7 +491,7 @@
                         </FrameEvent>
 
                         <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
-                        <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="BloodSmall"/>
                     </OnHit>
 
                     <OnGuard>
@@ -531,7 +531,7 @@
                         </FrameEvent>
 
                         <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
-                        <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="BloodSmall"/>
                     </OnHit>
 
                     <OnGuard>
