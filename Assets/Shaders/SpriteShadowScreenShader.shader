@@ -391,7 +391,7 @@ Shader "Custom/SpriteShadowScreenShader"
 					float2 uv = IN.texcoord.xy - vignetteRatio * 0.5f;
 					uv /= 1.0f - vignetteRatio;
     				uv *=  1.0 - uv.yx;
-    				float vig = uv.x*uv.y * 15.0;
+    				float vig = uv.x*uv.y * 8.0;
     				vig = pow(vig, _Vignette);
     				resultColor.xyz *= vig; 
 
