@@ -466,6 +466,9 @@ public class StageProcessor
                             _spawnedCharacterEntityDictionary[_currentPoint][index]._characterEntity?.setActiveSelf(true,false);
                     }
                 }
+
+                _cameraPositionBlendStartPosition = resultPoint;
+                _cameraPositionBlendTimeLeft = 1f;
             }
         }
 
@@ -791,7 +794,12 @@ public class StageProcessor
     {
         _unlockLimit = value;
         if(_unlockLimit)
+        {
+            _cameraPositionBlendStartPosition = Camera.main.transform.position;
+            _cameraPositionBlendStartPosition.z = 0f;
+            _cameraPositionBlendTimeLeft = 1f;
             killAllCharacterWithoutKeepAliveCharacter();
+        }
     }
 }
 
