@@ -342,7 +342,8 @@ public class GameEntityBase : SequencerObjectBase
         if(_isActionChangeFrame)
             _isActionChangeFrame = false;
 
-        _characterLifeTime += deltaTime;
+        if(_activeSelf)
+            _characterLifeTime += deltaTime;
 
         if(_sequencerProcessManager != null)
             _sequencerProcessManager.progress(deltaTime);

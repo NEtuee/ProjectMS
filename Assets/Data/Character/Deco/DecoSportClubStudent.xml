@@ -9,7 +9,7 @@
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Velocity="gv_movementSpeed" MaxVelocity="gv_movementSpeed" Speed="gv_movementSpeed"/>
         </Animation>
 
-        <Branch Condition="ActionExecutedTime >= gv_lifeTime" Execute="ImmediatlyKill"/>
+        <Branch Condition="LifeTime >= gv_lifeTime" Execute="ImmediatlyKill"/>
         <Branch Condition="End == true" Execute="Move"/>
     </Move>
 

@@ -12,7 +12,15 @@
         <AnimationHeader MasterPath="Sprites/Deco/Student_4/"/>
         <Animation Path="Fear" XFlip="true">
         </Animation>
+
+        <Branch Condition="End" Execute="AC_FearLoop"/>
     </AC_Fear>
+
+    <AC_FearLoop MovementType="Empty" DirectionType="AITarget" FlipType="Direction" ActiveCollision="False">
+        <AnimationHeader MasterPath="Sprites/Deco/Student_4/"/>
+        <Animation Preset="FearLoop" XFlip="true">
+        </Animation>
+    </AC_FearLoop>
 
     <Dead MovementType="Empty" DirectionType="MoveInput">
         <AnimationHeader MasterPath="Sprites/Deco/Student_4/"/>
