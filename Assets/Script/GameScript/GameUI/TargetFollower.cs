@@ -67,8 +67,6 @@ public class TargetFollower : IUIElement
         Vector3 min = rectTransform.TransformPoint(rectTransform.rect.min);
         Vector3 max = rectTransform.TransformPoint(rectTransform.rect.max);
 
-        Debug.Log($"{min} {max} {position}");
-
         if (min.x <= position.x && 
             min.y <= position.y && 
             max.x >= position.x &&
