@@ -705,7 +705,7 @@ public class StageProcessor
                 continue;
             }
 
-            if(pointIndex > _currentPoint && _blockPointExit)
+            if(pointIndex > _currentPoint)
                 pointIndex = _currentPoint;
 
             break;

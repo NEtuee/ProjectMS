@@ -501,7 +501,7 @@ public class CameraControlEx : Singleton<CameraControlEx>
 
     public bool IsInCameraBound(Vector3 position, Vector3 cameraPosition, out Vector3 cameraInPosition)
 	{
-		var bound = GetCamBounds(cameraPosition);
+		var bound = GetCamBounds(cameraPosition, 0.75f);
         cameraInPosition = position;
         
         if(position.x < bound.x)
@@ -522,10 +522,10 @@ public class CameraControlEx : Singleton<CameraControlEx>
         return new Vector3(Random.Range(-_camWidth * 0.5f,_camWidth * 0.5f),Random.Range(-_camHeight * 0.5f,_camHeight * 0.5f));
     }
 
-    public Vector4 GetCamBounds(in Vector3 position) //x min x max y min y max
+    public Vector4 GetCamBounds(in Vector3 position, float scale) //x min x max y min y max
 	{
-		return new Vector4(position.x - _cameraBoundHalf.x, position.x + _cameraBoundHalf.x,
-							position.y - _cameraBoundHalf.y, position.y + _cameraBoundHalf.y);
+		return new Vector4(position.x - _cameraBoundHalf.x * scale, position.x + _cameraBoundHalf.x * scale,
+							position.y - _cameraBoundHalf.y * scale, position.y + _cameraBoundHalf.y * scale);
 	}
 
     public PostProcessProfileControl getPostProcessProfileControl()
