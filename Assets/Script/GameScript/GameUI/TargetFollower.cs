@@ -36,7 +36,6 @@ public class TargetFollower : IUIElement
 
     public void UpdateByManager(Vector3 characterPosition)
     {
-        
         var characterScreenPos = Camera.main.WorldToScreenPoint(characterPosition);
         characterScreenPos.z = 0.0f;
 
@@ -51,7 +50,8 @@ public class TargetFollower : IUIElement
         // dampingPos = new Vector3(Mathf.Clamp(dampingPos.x, _binder.WidthAdjust, _clampWidth - _binder.WidthAdjust), Mathf.Clamp(dampingPos.y, _binder.HeightAdjust, _clampHeight - _binder.HeightAdjust), 0.0f);
         // _binder.FollowObject.transform.position = dampingPos;
 
-        if ((characterScreenPos - _binder.FollowObject.transform.position).sqrMagnitude <= _fadeDist)
+
+        if (InRect(_binder.FollowObject, characterScreenPos) == true)
         {
             _binder.Group.alpha = 0.3f;
         }
@@ -60,5 +60,23 @@ public class TargetFollower : IUIElement
             _binder.Group.alpha = 1.0f;
         }
         //Debug.Log(dampingPos);
+    }
+
+    private bool InRect(RectTransform rectTransform, Vector3 position)
+    {
+        Vector3 min = rectTransform.TransformPoint(rectTransform.rect.min);
+        Vector3 max = rectTransform.TransformPoint(rectTransform.rect.max);
+
+        Debug.Log($"{min} {max} {position}");
+
+        if (min.x <= position.x && 
+            min.y <= position.y && 
+            max.x >= position.x &&
+            max.y >= position.y)
+        {
+            return true;
+        }
+
+        return false;
     }
 }
