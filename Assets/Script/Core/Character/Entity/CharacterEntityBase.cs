@@ -118,7 +118,14 @@ public class CharacterEntityBase : GameEntityBase
 
         if(_useCameraBoundLock)
         {
-            MasterManager.instance._stageProcessor.updatePointIndex(transform.position, ref _stagePointIndex);
+            int pointIndex = _stagePointIndex;
+            MasterManager.instance._stageProcessor.updatePointIndex(transform.position, ref pointIndex);
+            if(pointIndex != _stagePointIndex)
+            {
+                _stagePointIndex = pointIndex;
+                _isInCameraBound = false;
+            }
+
             if(_isInCameraBound == false)
                 _isInCameraBound = MasterManager.instance._stageProcessor.isInCameraBound(_stagePointIndex, transform.position, out Vector3 resultPosition);
 

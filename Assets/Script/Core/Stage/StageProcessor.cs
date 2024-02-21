@@ -697,7 +697,7 @@ public class StageProcessor
         while(true)
         {
             float fraction = getLimitedFractionOnLine(pointIndex, position, out Vector3 resultPosition);
-            if(fraction >= 1f)
+            if(fraction >= 1f && _blockPointExit == false)
             {
                 if(getNextPointIndex(ref pointIndex) == false)
                     break;
@@ -705,7 +705,7 @@ public class StageProcessor
                 continue;
             }
 
-            if(pointIndex > _currentPoint)
+            if(pointIndex < _currentPoint)
                 pointIndex = _currentPoint;
 
             break;
