@@ -98,7 +98,7 @@ public class TextBubble : IUIElement
 
 public class TextPresenter
 {
-    private TextBubbleBinder _binder;
+    private TextBubbleObject _binder;
     private RectTransform _textCompRect;
     private RectTransform _bubbleRect;
     private RectTransform _backRect;
@@ -109,7 +109,7 @@ public class TextPresenter
 
     private bool _bold = false;
     
-    public TextPresenter(TextBubbleBinder binder)
+    public TextPresenter(TextBubbleObject binder)
     {
         _binder = binder;
         _textCompRect = _binder.TextComp.transform as RectTransform;
@@ -177,6 +177,11 @@ public class TextPresenter
     {
         _bold = false;
     }
+
+    public void ActiveInputWaitIcon()
+    {
+        _binder.PlayIconAnimation();
+    }
     
     private void UpdateText(string text)
     {
@@ -201,11 +206,19 @@ public class ShowText : BubbleCommend
     private float _currentTime;
     private int _current = 0;
     private char[] _chArray;
+    private bool _activeInputIcon = false;
+    
+    private const int _activeInputIconRemainLength = 3;
 
-    public ShowText(float interval, string text)
+    public ShowText(float interval, string text, bool activeInputIcon = false)
     {
         _interval = interval;
         _chArray = text.ToCharArray();
+    }
+
+    public void SetActiveInputIcon()
+    {
+        _activeInputIcon = true;
     }
     
     public void Start(TextPresenter presenter, float startTime)
@@ -215,6 +228,12 @@ public class ShowText : BubbleCommend
         _prevShowTime = _currentTime;
         presenter.AddCharacter(_chArray[_current]);
         _current++;
+
+        if (_activeInputIcon == true &&
+            _chArray.Length <= _activeInputIconRemainLength)
+        {
+            presenter.ActiveInputWaitIcon();
+        }
     }
 
     public bool Update(TextPresenter presenter, float deltaTime)
@@ -231,6 +250,12 @@ public class ShowText : BubbleCommend
             _prevShowTime = _currentTime;
             presenter.AddCharacter(_chArray[_current]);
             _current++;
+        }
+
+        if (_activeInputIcon == true &&
+            _chArray.Length - _current == _activeInputIconRemainLength)
+        {
+            presenter.ActiveInputWaitIcon();
         }
         
         return true;

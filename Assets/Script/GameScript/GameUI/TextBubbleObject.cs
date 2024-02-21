@@ -16,11 +16,30 @@ public class TextBubbleObject : TextBubbleBinder
 
     private TextBubble _owner;
 
+    private AnimationPlayer _animationPlayer = new AnimationPlayer();
+    private AnimationPresetInfo _iconWaitIcon;
+    
+    private struct AnimationPresetInfo
+    {
+        public AnimationCustomPreset _customPreset;
+        public string _path;
+
+        public AnimationPresetInfo(AnimationCustomPreset customPreset, string path)
+        {
+            _customPreset = customPreset;
+            _path = path;
+        }
+    }
+
     public void Init(TextBubble owner)
     {
         _textPresenter = new TextPresenter(this);
         gameObject.SetActive(false);
         _owner = owner;
+        
+        _iconWaitIcon = new AnimationPresetInfo(ResourceContainerEx.Instance().GetAnimationCustomPreset("Sprites/UI/talkballoon/dialogsticker/opening/"), "Sprites/UI/talkballoon/dialogsticker/opening");
+        _animationPlayer.initialize();
+        _animationPlayer.changeAnimationByCustomPreset(_iconWaitIcon._path, _iconWaitIcon._customPreset);
     }
     
     public void SetActive(bool active)
@@ -29,6 +48,7 @@ public class TextBubbleObject : TextBubbleBinder
         {
             gameObject.SetActive(false);
             _isPlay = false;
+            IconWaitInput.gameObject.SetActive(false);
         }
         else
         {
@@ -85,6 +105,7 @@ public class TextBubbleObject : TextBubbleBinder
         UpdateCommand();
         UpdateFollowPosition();
         CheckDead();
+        UpdateInputWaitIcon();
     }
 
     public void FixedUpdate()
@@ -95,6 +116,23 @@ public class TextBubbleObject : TextBubbleBinder
         }
         
         //UpdateFollowPosition();
+    }
+
+    public void PlayIconAnimation()
+    {
+        IconWaitInput.gameObject.SetActive(true);
+        _animationPlayer.changeAnimationByCustomPreset(_iconWaitIcon._path, _iconWaitIcon._customPreset);
+    }
+
+    private void UpdateInputWaitIcon()
+    {
+        if (_animationPlayer.isEnd() == true)
+        {
+            return;
+        }
+
+        _animationPlayer.progress(GlobalTimer.Instance().getSclaedDeltaTime(), null);
+        IconWaitInput.sprite = _animationPlayer.getCurrentSprite();
     }
 
     private void UpdateCommand()
