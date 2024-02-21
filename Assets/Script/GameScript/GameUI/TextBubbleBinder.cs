@@ -11,6 +11,7 @@ public class TextBubbleBinder : UIObjectBinder
     public UIPolygon BubblePolygonMain;
     public UIPolygon BubblePolygonBack;
     public Text TextComp;
+    public Image IconWaitInput;
     public float WidthPadding = 10f;
     public float HeightPadding = 10f;
     public Vector3 FollowOffset;

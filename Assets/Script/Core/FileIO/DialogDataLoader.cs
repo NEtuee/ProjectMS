@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml;
 using UnityEngine;
 using ICSharpCode.WpfDesign.XamlDom;
@@ -46,8 +47,23 @@ public static class DialogDataLoader
                 {
                     continue;
                 }
-                    
+
                 commandList.AddRange(command);
+            }
+            
+            ShowText lastShowText = null;
+            foreach (var c in commandList)
+            {
+                if (c is ShowText showTextCommand)
+                {
+                    lastShowText = showTextCommand;
+                }
+            }
+
+            var lastCommand = commandList.LastOrDefault();
+            if (lastShowText != null && lastCommand is WaitInput waitInput)
+            {
+                lastShowText.SetActiveInputIcon();
             }
             
             dataDic[textNodes[nodeIndex].Name] = commandList;
