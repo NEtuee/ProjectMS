@@ -17,6 +17,7 @@ public class GameUI : MonoBehaviour
     public TargetFollowerBinder FollowerBinder;
     public TextBubblePoolBinder TextBubblePoolBinder;
     public EnemyHpBinder EnemyHpBinder;
+    public BossHpUIBinder BossHpBinder;
 
     public TextBubble TextBubble { get; private set; }
     
@@ -27,6 +28,7 @@ public class GameUI : MonoBehaviour
     private TargetFollower _targetFollower;
     private TextBubble _textBubble;
     private EnemyHp _enemyHp;
+    private BossHpUI _bossHp;
     
     private GameEntityBase _targetEntity;
 
@@ -71,6 +73,21 @@ public class GameUI : MonoBehaviour
         CrosshairBinder.SubMarker.SetActive(active);
     }
 
+    public void SetBossHpEntity(GameEntityBase targetEntity)
+    {
+        if (targetEntity == null)
+        {
+            return;
+        }
+        
+        _bossHp.Active(targetEntity);
+    }
+
+    public void DisableBossHp()
+    {
+        _bossHp.Disable();
+    }
+    
     public void NotifyToUI(string key)
     {
         if (_notifySubscriber.TryGetValue(key, out var subscriberList) == false)
@@ -100,6 +117,7 @@ public class GameUI : MonoBehaviour
         _targetFollower.UpdateByManager(_targetEntity.transform.position);
         _textBubble.UpdateByManager();
         _enemyHp.UpdateByManager(deltaTime);
+        _bossHp.UpdateByManager();
     }
 
     private void SetBinder()
@@ -112,6 +130,7 @@ public class GameUI : MonoBehaviour
         binderList.Add(FollowerBinder);
         binderList.Add(TextBubblePoolBinder);
         binderList.Add(EnemyHpBinder);
+        binderList.Add(BossHpBinder);
 
         foreach (var binder in binderList)
         {
@@ -137,6 +156,7 @@ public class GameUI : MonoBehaviour
         _targetFollower = new TargetFollower();
         _textBubble = new TextBubble();
         _enemyHp = new EnemyHp();
+        _bossHp = new BossHpUI();
         
         TextBubble = _textBubble;
 
@@ -147,6 +167,7 @@ public class GameUI : MonoBehaviour
         _targetFollower.SetBinder(FollowerBinder);
         _textBubble.SetBinder(TextBubblePoolBinder);
         _enemyHp.SetBinder(EnemyHpBinder);
+        _bossHp.SetBinder(BossHpBinder);
     }
 
     private void CheckValidUI()
@@ -159,6 +180,7 @@ public class GameUI : MonoBehaviour
         uiElementList.Add(_targetFollower);
         uiElementList.Add(_textBubble);
         uiElementList.Add(_enemyHp);
+        uiElementList.Add(_bossHp);
 
         foreach (var uiElement in uiElementList)
         {

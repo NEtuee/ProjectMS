@@ -48,16 +48,19 @@ public class UIActionTimer
 public class UIActionLerpTimer
 {
     private Action<float> _updateAction;
+    private Action _endAction;
 
     private float _startTime;
     private float _endTime;
     private float _diff;
 
+    public bool IsPlay => _isPlay;
     private bool _isPlay = false;
 
-    public UIActionLerpTimer(Action<float> action)
+    public UIActionLerpTimer(Action<float> action, Action endAction = null)
     {
         _updateAction = action;
+        _endAction = endAction;
     }
 
     public void Play(float duration)
@@ -84,11 +87,14 @@ public class UIActionLerpTimer
         var curDiff = _endTime - curTime;
 
         var t = curDiff / _diff;
+        t = 1.0f - t;
 
         if (t >= 1.0f)
         {
             t = 1.0f;
             _isPlay = false;
+            _endAction?.Invoke();
+            return;
         }
         
         _updateAction?.Invoke(t);

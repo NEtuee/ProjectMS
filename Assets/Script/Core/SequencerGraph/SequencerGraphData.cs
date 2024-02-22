@@ -47,6 +47,8 @@ public enum SequencerGraphEventType
     BlockPointExit,
     EffectPreset,
     UnlockStageLimit,
+    ActiveBossHp,
+    DisableBossHp,
     
     Count,
 }
@@ -1675,6 +1677,66 @@ public class SequencerGraphEvent_SetCrossHair : SequencerGraphEventBase
             if(attrName == "UniqueKey")
                 _uniqueKey = attrValue;
         }
+    }
+}
+
+public class SequencerGraphEvent_ActiveBossHp : SequencerGraphEventBase
+{
+    private string _uniqueKey = "";
+
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.ActiveBossHp;
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor, float deltaTime)
+    {
+        GameEntityBase uniqueEntity = processor.getUniqueEntity(_uniqueKey);
+        if(uniqueEntity == null)
+        {
+            DebugUtil.assert(false, "대상 Unique Entity가 존재하지 않습니다 : {0}", _uniqueKey);
+            return true;
+        }
+        
+        GameUI.Instance.SetBossHpEntity(uniqueEntity);
+
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "UniqueKey")
+                _uniqueKey = attrValue;
+        }
+    }
+}
+
+public class SequencerGraphEvent_DisableBossHp : SequencerGraphEventBase
+{
+
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.DisableBossHp;
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor, float deltaTime)
+    {
+        GameUI.Instance.DisableBossHp();
+
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
     }
 }
 

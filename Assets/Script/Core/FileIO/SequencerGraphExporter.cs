@@ -175,7 +175,11 @@ public class SequencrGraphLoader : LoaderBase<SequencerGraphBaseData>
             spawnEvent = new SequencerGraphEvent_EffectPreset();
         else if(node.Name == "UnlockStageLimit")
             spawnEvent = new SequencerGraphEvent_UnlockStageLimit();
-
+        else if(node.Name == "ActiveBossHp")
+            spawnEvent = new SequencerGraphEvent_ActiveBossHp();
+        else if(node.Name == "DisableBossHp")
+            spawnEvent = new SequencerGraphEvent_DisableBossHp();
+        
         if(spawnEvent == null)
         {
             DebugUtil.assert(false,"invalid sequencer graph event type: {0} [Line: {1}] [FileName: {2}]", node.Name, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
