@@ -1,0 +1,64 @@
+<DialogMap>
+    
+    <Test2><ShowText Text = "(JP)이거 인풋 테스트임" Interval = "0.03"/><Wait Input = "PassTalkBalloon"/></Test2>
+    <Test3><ShowText Text = "(JP)이거 말풍선 갱신 테스트임" Interval = "0.03"/><Wait Time = "3.0"/><ShowText Text = "이렇게 새로 쓰임" Interval = "0.03" Clear = "true"/><Wait Input = "PassTalkBalloon"/></Test3>
+
+    <Talk_SleepEffect><ShowText Text = "ZZZZZZ" Interval = "0.03"/><Wait Time = "2.0"/></Talk_SleepEffect>
+
+    <Talk_TutorialTeacher_0><ShowText Text = "(JP)뭐지? 자기과시?" Interval = "0.03"/><Wait Time = "2.0"/></Talk_TutorialTeacher_0>
+    <Talk_TutorialTeacher_1><ShowText Text = "(JP)죽고 싶은 것인가?" Interval = "0.03"/><Wait Time = "2.0"/></Talk_TutorialTeacher_1>
+    <Talk_TutorialTeacher_2><ShowText Text = "(JP)수업중에 무슨 짓이지?" Interval = "0.03"/><Wait Time = "2.0"/></Talk_TutorialTeacher_2>
+    
+    <Talk_Stage01_1><ShowText Text = "(JP)줄이 길어지기 전에 빨리 가야겠어" Interval = "0.03"/><Wait Time = "3.0"/></Talk_Stage01_1>
+    <Talk_Stage01_2><ShowText Text = "(JP)아앙? 너는 뭐야!" Interval = "0.03"/><Wait Time = "3.0"/></Talk_Stage01_2>
+    <Talk_Stage01_3><ShowText Text = "(JP)젠장, 이러다 늦겠어" Interval = "0.03"/><Wait Time = "3.0"/></Talk_Stage01_3>
+    <Talk_Stage01_4><ShowText Text = "(JP)다 비켜!" Interval = "0.03"/><Wait Time = "3.0"/></Talk_Stage01_4>
+    <Talk_Stage01_5><ShowText Text = "(JP)건방지게 어딜!" Interval = "0.03"/><Wait Time = "3.0"/></Talk_Stage01_5>
+    <Talk_Stage01_6><ShowText Text = "(JP)후우...늦지 않아야 할텐데" Interval = "0.03"/><Wait Time = "3.0"/></Talk_Stage01_6>
+
+    <Talk_Stage02_1_0><ShowText Text = "(JP)살려줘!!" Interval = "0.03"/><Wait Time = "3.0"/></Talk_Stage02_1_0>
+    <Talk_Stage02_1_1><ShowText Text = "(JP)우왓" Interval = "0.03"/><Wait Time = "1.0"/></Talk_Stage02_1_1>
+    <Talk_Stage02_1_1_1><ShowText Text = "(JP)너무하잖아" Interval = "0.03"/><Wait Time = "3.0"/></Talk_Stage02_1_1_1>
+    <Talk_Stage02_1_1_2><ShowText Text = "(JP)괜찮아?" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Stage02_1_1_2>
+    <Talk_Stage02_1_1_3><ShowText Text = "(JP)초코 맛있당" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Stage02_1_1_3>
+    <Talk_Stage02_1_2><ShowText Text = "(JP)이 새끼 어디갔어" Interval = "0.03"/><Wait Time = "3.0"/></Talk_Stage02_1_2>
+    <Talk_Stage02_1_3><ShowText Text = "(JP)아카네다! 죽여!" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Stage02_1_3>
+    <Talk_Stage02_1_4><ShowText Text = "(JP)아카네다!!" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Stage02_1_4>
+
+    <Talk_Stage02_2_0><ShowText Text = "(JP)운동장 너무 위험한거 아니야?" Interval = "0.03"/><Wait Time = "3.0"/></Talk_Stage02_2_0>
+    <Talk_Stage02_2_1><ShowText Text = "(JP)운동장은 원래 위험해" Interval = "0.03"/><Wait Time = "3.0"/></Talk_Stage02_2_1>
+    <Talk_Stage02_2_2><ShowText Text = "(JP)살려줘!" Interval = "0.03"/><Wait Time = "4.0"/></Talk_Stage02_2_2>
+    <Talk_Stage02_2_3><ShowText Text = "(JP)빵 뿌립니다!!!" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Stage02_2_3>
+    <Talk_Stage02_2_4><ShowText Text = "(JP)오예" Interval = "0.03"/><Wait Time = "3.0"/></Talk_Stage02_2_4>
+    <Talk_Stage02_2_5><ShowText Text = "(JP)아싸" Interval = "0.03"/><Wait Time = "3.0"/></Talk_Stage02_2_5>
+
+    <Talk_Stage02_3_0><ShowText Text = "(JP)이번만큼은 임시동맹이다!" Interval = "0.03"/><Wait Time = "3.0"/></Talk_Stage02_3_0>
+
+    <Talk_Stage02_Boss_0>
+        <ShowText Text="(JP)앗!!" Interval="0.03"/>
+        <Wait Input="PassTalkBalloon"/>
+
+        <ShowText Text="(JP)아카네다!!!!" Interval="0.03" Clear="True"/>
+        <Wait Input="PassTalkBalloon"/>
+    </Talk_Stage02_Boss_0>
+
+    <Talk_Stage02_Boss_1>
+        <ShowText Text="(JP)아!!" Interval="0.03"/>
+        <Wait Input="PassTalkBalloon"/>
+    </Talk_Stage02_Boss_1>
+
+    <Talk_Stage02_Boss_2>
+        <ShowText Text="(JP)아아앗!!!" Interval="0.03"/>
+        <Wait Input="PassTalkBalloon"/>
+    </Talk_Stage02_Boss_2>
+
+    <Talk_Stage02_Boss_3>
+        <ShowText Text="(JP)너무해에에에엣!!!!" Interval="0.03"/>
+        <Wait Input="PassTalkBalloon"/>
+    </Talk_Stage02_Boss_3>
+
+    <Talk_Stage02_Boss_4>
+        <ShowText Text="(JP)우아아아아아아앙!!!!!!!" Interval="0.03"/>
+        <Wait Input="PassTalkBalloon"/>
+    </Talk_Stage02_Boss_4>
+</DialogMap>
