@@ -1266,7 +1266,7 @@ public class StageDataEditor : EditorWindow
             }
 
             List<string> aiNodeNameList = new List<string>();
-            for(int index = 1; index < baseData._aiNodeCount; ++index)
+            for(int index = 0; index < baseData._aiNodeCount; ++index)
             {
                 aiNodeNameList.Add(baseData._aiGraphNodeData[index]._nodeName);
             }
@@ -1284,6 +1284,12 @@ public class StageDataEditor : EditorWindow
         {
             Color alphaClor = Color.white;
             alphaClor.a = 0.5f;
+            stagePointDataEditObject._characterObjectList[_characterSelectedIndex].color = alphaClor;
+        }
+        else
+        {
+            Color alphaClor = Color.white;
+            alphaClor.a = 1.0f;
             stagePointDataEditObject._characterObjectList[_characterSelectedIndex].color = alphaClor;
         }
 

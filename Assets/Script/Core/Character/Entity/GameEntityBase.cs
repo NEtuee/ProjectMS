@@ -161,7 +161,6 @@ public class GameEntityBase : SequencerObjectBase
         _currentTarget = null;
 
         _characterLifeTime = 0f;
-        _leftHP = 0f;
         _deadEventDelegate = null;
 
         _updateDirection = true;
@@ -197,6 +196,8 @@ public class GameEntityBase : SequencerObjectBase
         _statusInfo.initialize(this,characterInfo._statusName);
         _graphicInterface.initialize(this,_statusInfo,new Vector3(0f, _headUpOffset, 0f), true);
         _useHPEffect = getStatusInfo().isUseHPEffect();
+        
+        _leftHP = _statusInfo.getCurrentStatus("HP");
 
         applyActionBuffList(_actionGraph.getDefaultBuffList());
         applyActionBuffList();
@@ -277,7 +278,6 @@ public class GameEntityBase : SequencerObjectBase
         if(_initializeFromCharacter)
             return;
         _characterLifeTime = 0f;
-        _leftHP = 0f;
 
         base.initialize();
 
@@ -316,6 +316,8 @@ public class GameEntityBase : SequencerObjectBase
 
         _graphicInterface.initialize(this,_statusInfo,new Vector3(0f, _collisionInfo.getRadius(), 0f), true);
         _useHPEffect = getStatusInfo().isUseHPEffect();
+
+        _leftHP = _statusInfo.getCurrentStatus("HP");
 
         CollisionManager.Instance().registerObject(_collisionInfo, this);
         _collisionInfo.setActiveCollision(_actionGraph.isActiveCollision());
@@ -784,7 +786,6 @@ public class GameEntityBase : SequencerObjectBase
         _currentTarget = null;
 
         _characterLifeTime = 0f;
-        _leftHP = 0f;
         _deadEventDelegate = null;
 
         _updateDirection = true;
@@ -812,6 +813,8 @@ public class GameEntityBase : SequencerObjectBase
         _statusInfo.initialize(this,_characterInfo._statusName);
         _graphicInterface.initialize(this,_statusInfo,new Vector3(0f, _headUpOffset, 0f), true);
         _useHPEffect = getStatusInfo().isUseHPEffect();
+
+        _leftHP = _statusInfo.getCurrentStatus("HP");
 
         applyActionBuffList(_actionGraph.getDefaultBuffList());
 
@@ -1435,6 +1438,7 @@ public class GameEntityBaseEditor : Editor
     private float _aiPackageRepeatTimer = 0f;
 
     private int _repeatPackageIndex = -1;
+    private bool _showConditionState = false;
 
     public void OnEnable()
     {
@@ -1603,6 +1607,16 @@ public class GameEntityBaseEditor : Editor
 
 
         EditorGUILayout.Space(10f);
+
+        _showConditionState = EditorGUILayout.Toggle("Condition State",_showConditionState);
+        if(_showConditionState)
+        {
+            EditorGUILayout.BeginVertical("box");
+
+            GUILayout.Label("Dead : " + control.getActionGraph_Debug().getActionConditionData_Bool(ConditionNodeUpdateType.Entity_Dead));
+
+            EditorGUILayout.EndVertical();
+        }
 
         GUILayout.Label("State Execution Log");
 

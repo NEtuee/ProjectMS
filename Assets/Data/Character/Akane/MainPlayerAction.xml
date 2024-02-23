@@ -229,7 +229,7 @@
                     <FrameEvent Type="TeleportToTargetBack" Condition="(getTargetFrameTag_Groggy == false) && (Kill == false)" DistanceOffset="-0.0"/>
                     <FrameEvent Type="TeleportToTargetBack" Condition="getTargetFrameTag_Groggy || Kill" DistanceOffset="0.4"/>
 
-                    <FrameEvent Type="StopUpdate" Time="0.07"/>
+                    <FrameEvent Type="StopUpdate" Time="0.15"/>
                     
                     <FrameEvent Type="ShakeEffect" Condition="Kill == false" Scale="0.1" Speed="35.0" Time="0.2"/>
 
