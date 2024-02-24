@@ -36,6 +36,8 @@ public class CharacterEntityBase : GameEntityBase
     public void clearCharacter()
     {
         _stagePointIndex = 0;
+        MasterManager.instance._stageProcessor.updatePointIndex(transform.position, ref _stagePointIndex);
+        _isInCameraBound = MasterManager.instance._stageProcessor.isInCameraBound(_stagePointIndex, transform.position, out Vector3 resultPosition);
     }
 
     public override void initializeCharacter(CharacterInfoData characterInfo, Vector3 direction)
@@ -50,8 +52,6 @@ public class CharacterEntityBase : GameEntityBase
         setSortingOrder(0);
 
         clearCharacter();
-        MasterManager.instance._stageProcessor.updatePointIndex(transform.position, ref _stagePointIndex);
-        _isInCameraBound = MasterManager.instance._stageProcessor.isInCameraBound(_stagePointIndex, transform.position, out Vector3 resultPosition);
 
         _targetSearchTime = 1f;
 

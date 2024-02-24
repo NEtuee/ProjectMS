@@ -1,0 +1,74 @@
+<SequencerGraph Name="Stage_1_2_2">
+
+    <InitializePhase>
+        <SetHideUI Hide="True"/>
+        <BlockInput Enable="True"/>
+
+        <BlockAI UniqueGroupKey="EnemyGroup" Enable="True"/>
+
+        <LetterBoxShow/>
+    </InitializePhase>
+
+    <UpdatePhase>
+        <WaitSecond Time="1.0"/>
+        <AIMove UniqueKey="Player" StartAction="AIMove_Loop" LoopAction="AIMove_Loop" EndAction="AIMove_End" EndPositionMarker="AkanePosition"/>
+
+        <Task ProcessType="StepByStep">
+            <WaitSecond Time="1.0"/>
+            <TalkBalloon UniqueKey="YakisobaChan" SimpleTalkKey="Talk_Stage01_6_1"/>
+        </Task>
+        <CameraTrack TrackName="EndTrack"/>
+        <IsTrackEnd/>
+
+        <WaitSecond Time="0.2"/>
+        <TalkBalloon UniqueKey="Player" SimpleTalkKey="Talk_Stage01_6" Wait="True"/>
+
+        <QTEFence KeyName="HyperAttack"/>
+        <SetDirection UniqueKey="Player" DirectionType="AlwaysRight"/>
+        <BlockAI UniqueGroupKey="EnemyGroup" Enable="False"/>
+        
+        <ApplyBuff UniqueKey="Player" Buff="BossHpReset"/>
+        <SetAction UniqueKey="Player" Action="SQ_AttackLong"/>
+
+        <WaitSecond Time="0.1"/>
+        <SetTimeScale Scale="0.1" Time="1.0" BlendTime="2.0"/>
+
+        <WaitSecond Time="3.0"/>
+        <AIMove UniqueKey="Player" StartAction="AIMove_Loop" LoopAction="AIMove_Loop" EndAction="AIMove_End" EndPositionMarker="AkanePosition2"/>
+
+        <SetDirection UniqueKey="Player" DirectionType="AlwaysRight"/>
+        <SetAction UniqueKey="Player" Action="SQ_Idle"/>
+
+        <WaitSecond Time="0.1"/>
+        <TalkBalloon UniqueKey="Player" SimpleTalkKey="Talk_Stage01_7" Wait="True"/>
+
+        <WaitSecond Time="1.5"/>
+        <SetCameraTarget UniqueKey="YakisobaChan" CameraMode="TargetCenterMode"/>
+        <SetCameraZoom Size="2.5" Speed="5"/>
+
+        <TalkBalloon UniqueKey="YakisobaChan" SimpleTalkKey="Talk_Stage01_8" Wait="True"/>
+
+        <SetCameraTarget UniqueKey="Player" CameraMode="TargetCenterMode"/>
+        <TalkBalloon UniqueKey="Player" SimpleTalkKey="Talk_Stage01_9" Wait="True"/>
+
+        <SetCameraZoom Size="0.0" Speed="5"/>
+        <TalkBalloon UniqueKey="YakisobaChan" SimpleTalkKey="Talk_Stage01_10"/>
+        <Task ProcessType="StepByStep">
+            <AIMove UniqueKey="YakisobaChan" LoopAction="Move" EndPositionMarker="YakisobaChanPosition"/>
+        </Task>
+
+        <WaitSecond Time="3.0"/>
+        <TalkBalloon UniqueKey="Player" SimpleTalkKey="Talk_Stage01_11"/>
+        <Task ProcessType="StepByStep">
+            <AIMove UniqueKey="Player" LoopAction="AIMove_Loop" EndPositionMarker="YakisobaChanPosition"/>
+        </Task>
+        <WaitSecond Time="0.3"/>
+        
+        <FadeOut Lambda="5.0"/>
+        <WaitSecond Time="1.5"/>
+        
+        <NextStage Path="StageData/Stage_2_1"/>
+
+    </UpdatePhase>
+    
+</SequencerGraph>

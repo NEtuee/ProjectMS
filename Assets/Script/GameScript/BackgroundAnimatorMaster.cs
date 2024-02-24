@@ -8,7 +8,6 @@ public class BackgroundAnimatorMaster : MonoBehaviour
 
     public void setTrigger(string key, string trigger)
     {
-        Debug.Log(key);
         foreach(var item in _animatorRelay)
         {
             if(item._key != key)

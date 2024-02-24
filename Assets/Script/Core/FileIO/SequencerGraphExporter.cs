@@ -183,6 +183,8 @@ public class SequencrGraphLoader : LoaderBase<SequencerGraphBaseData>
             spawnEvent = new SequencerGraphEvent_SetBackgroundAnimationTrigger();
         else if(node.Name == "SetHideCharacter")
             spawnEvent = new SequencerGraphEvent_SetHideCharacter();
+        else if(node.Name == "ApplyBuff")
+            spawnEvent = new SequencerGraphEvent_ApplyBuff();
         
         if(spawnEvent == null)
         {

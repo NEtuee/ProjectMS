@@ -51,6 +51,7 @@ public enum SequencerGraphEventType
     DisableBossHp,
     SetBackgroundAnimationTrigger,
     SetHideCharacter,
+    ApplyBuff,
     
     Count,
 }
@@ -1717,6 +1718,81 @@ public class SequencerGraphEvent_ActiveBossHp : SequencerGraphEventBase
 
             if(attrName == "UniqueKey")
                 _uniqueKey = attrValue;
+        }
+    }
+}
+
+public class SequencerGraphEvent_ApplyBuff : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.ApplyBuff;
+
+    public string _uniqueKey = "";
+    public string _uniqueGroupKey = "";
+
+    private int[] buffKeyList = null;
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor, float deltaTime)
+    {
+        if(_uniqueKey != "")
+        {
+            GameEntityBase uniqueEntity = processor.getUniqueEntity(_uniqueKey);
+            if(uniqueEntity == null)
+            {
+                DebugUtil.assert(false,"대상 Unique Entity가 존재하지 않습니다 : {0}",_uniqueKey);
+                return true;
+            }
+
+            uniqueEntity.applyActionBuffList(buffKeyList);
+        }
+
+        if(_uniqueGroupKey != "")
+        {
+            var uniqueGroup = processor.getUniqueGroup(_uniqueGroupKey);
+            if(uniqueGroup == null)
+            {
+                DebugUtil.assert(false,"대상 Unique Group이 존재하지 않습니다 : {0}",_uniqueGroupKey);
+                return true;
+            }
+
+            foreach(var item in uniqueGroup)
+            {
+                item.applyActionBuffList(buffKeyList);
+            }
+        }
+
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            if(attributes[i].Name == "Buff")
+            {
+                string[] buffList = attributes[i].Value.Split(' ');
+
+                buffKeyList = new int[buffList.Length];
+                for(int j = 0; j < buffList.Length; ++j)
+                {
+                    bool parse = int.TryParse(buffList[j],out int buffKey);
+                    if(parse == false)
+                        buffKey = StatusInfo.getBuffKeyFromName(buffList[j]);
+
+                    if(buffKey == -1)
+                    {
+                        DebugUtil.assert(false, "invalidBuff : {0}", buffList[j]);
+                        continue;
+                    }
+
+                    buffKeyList[j] = buffKey;
+                }
+
+            }
         }
     }
 }

@@ -141,7 +141,6 @@ public class ActionKeyInputManager : Singleton<ActionKeyInputManager>
 
                 inputData._thresholdTime = presetData._multiInputThreshold;
 
-                Debug.Log("222");
                 return true;
             }
             case ActionKeyPressType.KeyUp:
