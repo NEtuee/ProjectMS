@@ -122,7 +122,7 @@ public class PostProcessProfileControl
         
         if(_baseBlendingProfileList.Count == 0)
         {
-            DebugUtil.assert(false,"Base Blend PPP가 없습니다. 스테이지 시작 시퀀스에 추가해 주세요");
+            DebugUtil.assert(false,"Base Blend PPP가 없습니다. 스테이지 시작 시퀀스에 추가해 주세요 [Stage: ]" + MasterManager.instance._stageProcessor._stageData._stageName);
             return;
         }
 

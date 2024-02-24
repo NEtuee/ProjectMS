@@ -1,0 +1,35 @@
+<SequencerGraph Name="Stage_1_2_0">
+
+    <InitializePhase>
+        <ApplyPostProcessProfile Path="PostProcessProfile/PostProcessProfile_Default"/>
+        
+        <FadeIn Lambda="5.0"/>
+
+        <SetCameraTarget UniqueKey="Player" CameraMode="TargetCenterMode"/>
+        <SetCrossHair UniqueKey="Player"/>
+        <SetHideUI Hide="True"/>
+        <BlockInput Enable="True"/>
+
+        <LetterBoxShow/>
+        <SetHideCharacter UniqueKey="Player" Hide="True"/>
+
+    </InitializePhase>
+
+    <UpdatePhase>
+        <WaitSecond Time="1.0"/>
+        
+        <EffectPreset UniqueKey="Player" EffectPreset="ExplodeBig"/>
+        <WaitSecond Time="1.0"/>
+
+        <SetBackgroundAnimationTrigger Key="Door_1" Trigger="Open"/>
+
+        <SetHideUI Hide="False"/>
+        <BlockInput Enable="False"/>
+
+        <LetterBoxHide/>
+        <SetHideCharacter UniqueKey="Player" Hide="False"/>
+
+
+    </UpdatePhase>
+    
+</SequencerGraph>

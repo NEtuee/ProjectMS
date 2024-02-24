@@ -1,0 +1,201 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eebfbc6ece9cebc4cbd3e126679ce50a, type: 3}
+  m_Name: Stage_1_2
+  m_EditorClassIdentifier: 
+  _stageName: Stage_1_2
+  _backgroundPrefabPath: {fileID: 6809939274598719794, guid: 46c266ed19d2d17468aa8309c1ea10e8, type: 3}
+  _isMiniStage: 0
+  _stagePointData:
+  - _pointName: New Point 0
+    _stagePoint: {x: 0, y: 0, z: 0}
+    _maxLimitedDistance: 0
+    _verticalLimitedDistance: 0
+    _horizontalLimitedDistance: 0
+    _cameraZoomSize: 3
+    _cameraZoomSpeed: 4
+    _lerpCameraZoom: 0
+    _lockCameraInBound: 0
+    _cameraBoundToTrigger: 0
+    _onEnterSequencerPath:
+    - Stage_1_2_0.xml
+    _onExitSequencerPath: []
+    _characterSpawnData:
+    - _characterKey: Akane
+      _uniqueKey: Player
+      _uniqueGroupKey: 
+      _startAction: Spawn
+      _startAIState: Entry
+      _flip: 0
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 1
+      _sortingOrder: 0
+      _searchIdentifier: 0
+      _activeType: 0
+      _localPosition: {x: 0, y: -0.4, z: 0}
+    _useTriggerBound: 0
+    _targetSearchIdentifier: 1
+    _triggerWidth: 1
+    _triggerHeight: 1
+    _triggerOffset: {x: 0, y: 0, z: 0}
+  - _pointName: New Point 1
+    _stagePoint: {x: 12.4, y: 0, z: 0}
+    _maxLimitedDistance: 0
+    _verticalLimitedDistance: 0
+    _horizontalLimitedDistance: 0
+    _cameraZoomSize: 3
+    _cameraZoomSpeed: 4
+    _lerpCameraZoom: 0
+    _lockCameraInBound: 0
+    _cameraBoundToTrigger: 0
+    _onEnterSequencerPath: []
+    _onExitSequencerPath: []
+    _characterSpawnData:
+    - _characterKey: SukebanKatanaChan
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: AC_Entry
+      _startAIState: Entry_Peace
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 0
+      _localPosition: {x: 2.25, y: -0.4, z: 0}
+    - _characterKey: SukebanKatanaChan
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: AC_Entry
+      _startAIState: Entry_Peace
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 0
+      _localPosition: {x: 3.23, y: 0.76, z: 0}
+    - _characterKey: SukebanUziChan
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: AC_Entry
+      _startAIState: Entry_Peace
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 0
+      _localPosition: {x: 3.97, y: -0.7, z: 0}
+    _useTriggerBound: 1
+    _targetSearchIdentifier: 1
+    _triggerWidth: 7.6
+    _triggerHeight: 6.37
+    _triggerOffset: {x: 0.16, y: 0, z: 0}
+  - _pointName: New Point 2
+    _stagePoint: {x: 17.23, y: 0, z: 0}
+    _maxLimitedDistance: 0
+    _verticalLimitedDistance: 0
+    _horizontalLimitedDistance: 0
+    _cameraZoomSize: 3
+    _cameraZoomSpeed: 4
+    _lerpCameraZoom: 0
+    _lockCameraInBound: 0
+    _cameraBoundToTrigger: 0
+    _onEnterSequencerPath: []
+    _onExitSequencerPath: []
+    _characterSpawnData: []
+    _useTriggerBound: 0
+    _targetSearchIdentifier: 1
+    _triggerWidth: 1
+    _triggerHeight: 1
+    _triggerOffset: {x: 0, y: 0, z: 0}
+  - _pointName: New Point 3
+    _stagePoint: {x: 27.04, y: 0, z: 0}
+    _maxLimitedDistance: 0
+    _verticalLimitedDistance: 0
+    _horizontalLimitedDistance: 0
+    _cameraZoomSize: 3
+    _cameraZoomSpeed: 4
+    _lerpCameraZoom: 0
+    _lockCameraInBound: 0
+    _cameraBoundToTrigger: 0
+    _onEnterSequencerPath: []
+    _onExitSequencerPath: []
+    _characterSpawnData: []
+    _useTriggerBound: 0
+    _targetSearchIdentifier: 1
+    _triggerWidth: 1
+    _triggerHeight: 1
+    _triggerOffset: {x: 0, y: 0, z: 0}
+  - _pointName: New Point 3
+    _stagePoint: {x: 40.27, y: 0, z: 0}
+    _maxLimitedDistance: 0
+    _verticalLimitedDistance: 0
+    _horizontalLimitedDistance: 0
+    _cameraZoomSize: 3
+    _cameraZoomSpeed: 4
+    _lerpCameraZoom: 0
+    _lockCameraInBound: 0
+    _cameraBoundToTrigger: 0
+    _onEnterSequencerPath: []
+    _onExitSequencerPath: []
+    _characterSpawnData: []
+    _useTriggerBound: 0
+    _targetSearchIdentifier: 1
+    _triggerWidth: 1
+    _triggerHeight: 1
+    _triggerOffset: {x: 0, y: 0, z: 0}
+  _miniStageData: []
+  _markerData: []
+  _trackData:
+  - _name: MainTrack
+    _trackPointData:
+    - _easeType: 6
+      _point: {x: 0, y: 0}
+      _bezierPoint: {x: 1, y: 0}
+      _speedToNextPoint: 7
+      _waitSecond: 0
+      _isLinearPath: 1
+    - _easeType: 6
+      _point: {x: 14.48, y: 0}
+      _bezierPoint: {x: 15.48, y: 0}
+      _speedToNextPoint: 7
+      _waitSecond: 1
+      _isLinearPath: 1
+    - _easeType: 6
+      _point: {x: 24.92, y: 0}
+      _bezierPoint: {x: 25.92, y: 0}
+      _speedToNextPoint: 7
+      _waitSecond: 1
+      _isLinearPath: 1
+    - _easeType: 5
+      _point: {x: 40.06, y: 0}
+      _bezierPoint: {x: 41.060005, y: 0}
+      _speedToNextPoint: 7
+      _waitSecond: 1
+      _isLinearPath: 1
+    _pointLengthArray:
+    - 14.5779705
+    - 10.573616
+    - 15.234484
+    _trackTotalLength: 40.38607
+    _startBlend: 1
+    _endBlend: 1

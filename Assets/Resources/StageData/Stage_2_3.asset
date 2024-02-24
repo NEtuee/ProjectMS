@@ -156,7 +156,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: 
       _startAction: AC_Entry
-      _startAIState: 
+      _startAIState: Entry_Peace
       _flip: 1
       _setDirection: 0
       _directionAngle: 0
@@ -170,7 +170,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: 
       _startAction: AC_Entry
-      _startAIState: 
+      _startAIState: Entry_Peace
       _flip: 1
       _setDirection: 0
       _directionAngle: 0
@@ -240,7 +240,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: 
       _startAction: AC_Entry
-      _startAIState: 
+      _startAIState: Entry_Peace
       _flip: 1
       _setDirection: 0
       _directionAngle: 0
@@ -254,7 +254,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: 
       _startAction: AC_Entry
-      _startAIState: 
+      _startAIState: Entry_Peace
       _flip: 1
       _setDirection: 0
       _directionAngle: 0
@@ -264,20 +264,6 @@ MonoBehaviour:
       _searchIdentifier: 1
       _activeType: 1
       _localPosition: {x: 11.07, y: 6.95, z: 0}
-    - _characterKey: SukebanUziChan
-      _uniqueKey: 
-      _uniqueGroupKey: 
-      _startAction: AC_Entry
-      _startAIState: 
-      _flip: 1
-      _setDirection: 0
-      _directionAngle: 0
-      _hideWhenDeactive: 0
-      _keepAlive: 0
-      _sortingOrder: 0
-      _searchIdentifier: 1
-      _activeType: 1
-      _localPosition: {x: 11.98, y: 8.86, z: 0}
     - _characterKey: SukebanUziChan
       _uniqueKey: 
       _uniqueGroupKey: 
@@ -361,7 +347,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: 
       _startAction: Move
-      _startAIState: 
+      _startAIState: Entry
       _flip: 0
       _setDirection: 1
       _directionAngle: 23.58
@@ -375,7 +361,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: 
       _startAction: Move
-      _startAIState: 
+      _startAIState: Entry
       _flip: 0
       _setDirection: 1
       _directionAngle: 23.58
@@ -389,7 +375,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: 
       _startAction: Move
-      _startAIState: 
+      _startAIState: Entry
       _flip: 0
       _setDirection: 1
       _directionAngle: 23.58
@@ -403,7 +389,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: 
       _startAction: Move
-      _startAIState: 
+      _startAIState: Entry
       _flip: 0
       _setDirection: 1
       _directionAngle: 298.12
@@ -417,7 +403,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: 
       _startAction: Move
-      _startAIState: 
+      _startAIState: Entry
       _flip: 0
       _setDirection: 1
       _directionAngle: 298.12
@@ -431,7 +417,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: 
       _startAction: Move
-      _startAIState: 
+      _startAIState: Entry
       _flip: 0
       _setDirection: 1
       _directionAngle: 298.12
@@ -445,7 +431,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: 
       _startAction: Move
-      _startAIState: 
+      _startAIState: Entry
       _flip: 0
       _setDirection: 1
       _directionAngle: 23.58
@@ -459,7 +445,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: 
       _startAction: BaseBallRepeat
-      _startAIState: 
+      _startAIState: Entry
       _flip: 0
       _setDirection: 1
       _directionAngle: 308.11
@@ -473,7 +459,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: 
       _startAction: LinerRepeat
-      _startAIState: 
+      _startAIState: Entry
       _flip: 0
       _setDirection: 1
       _directionAngle: 180.6
@@ -487,7 +473,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: 
       _startAction: BaseBallRepeatFast
-      _startAIState: 
+      _startAIState: Entry
       _flip: 0
       _setDirection: 1
       _directionAngle: 16.51
@@ -500,22 +486,8 @@ MonoBehaviour:
     - _characterKey: ProjectileShotCharacter
       _uniqueKey: 
       _uniqueGroupKey: 
-      _startAction: DumbellRepeat
-      _startAIState: 
-      _flip: 1
-      _setDirection: 1
-      _directionAngle: 104.99
-      _hideWhenDeactive: 0
-      _keepAlive: 0
-      _sortingOrder: 0
-      _searchIdentifier: 1
-      _activeType: 1
-      _localPosition: {x: 8.97, y: -11.71, z: 0}
-    - _characterKey: ProjectileShotCharacter
-      _uniqueKey: 
-      _uniqueGroupKey: 
       _startAction: SoccerBallRepeat
-      _startAIState: 
+      _startAIState: Entry
       _flip: 0
       _setDirection: 1
       _directionAngle: 293.62
@@ -528,22 +500,8 @@ MonoBehaviour:
     - _characterKey: ProjectileShotCharacter
       _uniqueKey: 
       _uniqueGroupKey: 
-      _startAction: BaseBallRepeat
-      _startAIState: 
-      _flip: 0
-      _setDirection: 1
-      _directionAngle: 22.32
-      _hideWhenDeactive: 0
-      _keepAlive: 0
-      _sortingOrder: 0
-      _searchIdentifier: 1
-      _activeType: 1
-      _localPosition: {x: 2.84, y: -9.68, z: 0}
-    - _characterKey: ProjectileShotCharacter
-      _uniqueKey: 
-      _uniqueGroupKey: 
       _startAction: LinerRepeat
-      _startAIState: 
+      _startAIState: Entry
       _flip: 0
       _setDirection: 1
       _directionAngle: 64.97
@@ -552,21 +510,7 @@ MonoBehaviour:
       _sortingOrder: 0
       _searchIdentifier: 1
       _activeType: 1
-      _localPosition: {x: 12.31, y: -12.97, z: 0}
-    - _characterKey: ProjectileShotCharacter
-      _uniqueKey: 
-      _uniqueGroupKey: 
-      _startAction: DumbellRepeatFast
-      _startAIState: 
-      _flip: 0
-      _setDirection: 1
-      _directionAngle: 299.96
-      _hideWhenDeactive: 0
-      _keepAlive: 0
-      _sortingOrder: 0
-      _searchIdentifier: 1
-      _activeType: 1
-      _localPosition: {x: 12.32, y: 0.7, z: 0}
+      _localPosition: {x: 10.76, y: -13.06, z: 0}
     - _characterKey: ProjectileShotCharacter
       _uniqueKey: 
       _uniqueGroupKey: 
@@ -599,7 +543,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: EnemyGroup
       _startAction: AC_Entry
-      _startAIState: 
+      _startAIState: Entry_Peace
       _flip: 1
       _setDirection: 0
       _directionAngle: 0
@@ -608,12 +552,12 @@ MonoBehaviour:
       _sortingOrder: 0
       _searchIdentifier: 1
       _activeType: 1
-      _localPosition: {x: 5.09, y: -4.45, z: 0}
+      _localPosition: {x: 7.6, y: -6.4, z: 0}
     - _characterKey: SukebanUziChan
       _uniqueKey: 
       _uniqueGroupKey: EnemyGroup
       _startAction: AC_Entry
-      _startAIState: 
+      _startAIState: Entry_Peace
       _flip: 1
       _setDirection: 0
       _directionAngle: 0
@@ -622,12 +566,12 @@ MonoBehaviour:
       _sortingOrder: 0
       _searchIdentifier: 1
       _activeType: 1
-      _localPosition: {x: 6.33, y: -3.94, z: 0}
+      _localPosition: {x: 9.28, y: -5.83, z: 0}
     - _characterKey: DumbellChan
       _uniqueKey: 
       _uniqueGroupKey: EnemyGroup
       _startAction: AC_Entry
-      _startAIState: 
+      _startAIState: Entry_Peace
       _flip: 1
       _setDirection: 0
       _directionAngle: 0
@@ -636,12 +580,12 @@ MonoBehaviour:
       _sortingOrder: 0
       _searchIdentifier: 1
       _activeType: 1
-      _localPosition: {x: 6.13, y: -1.84, z: 0}
+      _localPosition: {x: 9.36, y: -3.99, z: 0}
     - _characterKey: SukebanKatanaChan
       _uniqueKey: 
       _uniqueGroupKey: EnemyGroup
       _startAction: AC_Entry
-      _startAIState: 
+      _startAIState: Entry_Peace
       _flip: 1
       _setDirection: 0
       _directionAngle: 0
@@ -655,7 +599,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: EnemyGroup
       _startAction: AC_Entry
-      _startAIState: 
+      _startAIState: Entry_Peace
       _flip: 1
       _setDirection: 0
       _directionAngle: 0
@@ -889,7 +833,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: 
       _startAction: BaseBallRepeat
-      _startAIState: 
+      _startAIState: Entry
       _flip: 0
       _setDirection: 1
       _directionAngle: 272.56
@@ -902,36 +846,8 @@ MonoBehaviour:
     - _characterKey: ProjectileShotCharacter
       _uniqueKey: 
       _uniqueGroupKey: 
-      _startAction: DumbellRepeatFast
-      _startAIState: 
-      _flip: 0
-      _setDirection: 1
-      _directionAngle: 195.15
-      _hideWhenDeactive: 0
-      _keepAlive: 0
-      _sortingOrder: 0
-      _searchIdentifier: 1
-      _activeType: 1
-      _localPosition: {x: 16.72, y: -5.25, z: 0}
-    - _characterKey: ProjectileShotCharacter
-      _uniqueKey: 
-      _uniqueGroupKey: 
-      _startAction: SoccerBallRepeat
-      _startAIState: 
-      _flip: 0
-      _setDirection: 1
-      _directionAngle: 70.94
-      _hideWhenDeactive: 0
-      _keepAlive: 0
-      _sortingOrder: 0
-      _searchIdentifier: 1
-      _activeType: 1
-      _localPosition: {x: 7.86, y: -15.79, z: 0}
-    - _characterKey: ProjectileShotCharacter
-      _uniqueKey: 
-      _uniqueGroupKey: 
       _startAction: LinerRepeat
-      _startAIState: 
+      _startAIState: Entry
       _flip: 0
       _setDirection: 1
       _directionAngle: 168.84
@@ -945,7 +861,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: 
       _startAction: DumbellRepeat
-      _startAIState: 
+      _startAIState: Entry
       _flip: 0
       _setDirection: 1
       _directionAngle: 28
@@ -959,7 +875,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: 
       _startAction: BaseBallRepeatFast
-      _startAIState: 
+      _startAIState: Entry
       _flip: 0
       _setDirection: 1
       _directionAngle: 20.75
@@ -973,7 +889,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: 
       _startAction: DumbellRepeatFast
-      _startAIState: 
+      _startAIState: Entry
       _flip: 0
       _setDirection: 1
       _directionAngle: 245.4
@@ -987,7 +903,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: 
       _startAction: LinerRepeat
-      _startAIState: 
+      _startAIState: Entry
       _flip: 0
       _setDirection: 1
       _directionAngle: 43.3
@@ -1001,7 +917,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: 
       _startAction: SoccerBallRepeat
-      _startAIState: 
+      _startAIState: Entry
       _flip: 0
       _setDirection: 1
       _directionAngle: 185.89
@@ -1015,7 +931,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: 
       _startAction: SoccerBallRepeat
-      _startAIState: 
+      _startAIState: Entry
       _flip: 0
       _setDirection: 1
       _directionAngle: 24.4
@@ -1029,7 +945,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: EnemyGroup
       _startAction: AC_Entry
-      _startAIState: 
+      _startAIState: Entry_Peace
       _flip: 1
       _setDirection: 0
       _directionAngle: 0
@@ -1043,7 +959,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: EnemyGroup
       _startAction: AC_Entry
-      _startAIState: 
+      _startAIState: Entry_Peace
       _flip: 1
       _setDirection: 0
       _directionAngle: 0

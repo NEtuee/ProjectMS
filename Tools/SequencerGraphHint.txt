@@ -83,7 +83,7 @@ InQuote,DirectionType=,"AlwaysRight,AlwaysLeft,AlwaysUp,AlwaysDown,Keep,MoveInpu
 LineStart,<BlockPointExit,Enable=~~
 ShortCut,__BlockPointExit,<BlockPointExit Enable=~~/>
 ShortCut,__IsTrackEnd,<IsTrackEnd/>
-LineStart,<EffectPreset,"UniqueKey=~~,EffectPreset=~~"
+LineStart,<EffectPreset,"UniqueKey=~~,EffectPreset=~~,PositionMarker=~~"
 ShortCut,__EffectPreset,<EffectPreset UniqueKey=~~ EffectPreset=~~/>
 LineStart,<UnlockStageLimit,Enable=~~
 ShortCut,__UnlockStageLimit,<UnlockStageLimit Enable=~~/>
@@ -93,9 +93,9 @@ InQuote,Wait=,"True,False"
 LineStart,<ActiveBossHp,UniqueKey=~~
 ShortCut,__ActiveBossHp,<ActiveBossHp UniqueKey=~~/>
 ShortCut,__DisableBossHp,<DisableBossHp/>
-,,
-,,
-,,
-,,
-,,
+LineStart,<SetBackgroundAnimationTrigger,"Trigger=~~,Key=~~"
+ShortCut,__SetBackgroundAnimationTrigger,<SetBackgroundAnimationTrigger Key=~~ Trigger=~~/>
+LineStart,<SetHideCharacter,"UniqueKey=~~,UniqueGroupKey=~~,Hide~~"
+ShortCut,__SetHideCharacter,<SetHideCharacter UniqueKey=~~ Hide=~~/>
+InQuote,Hide=,"True,False"
 ,,

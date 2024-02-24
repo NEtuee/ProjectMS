@@ -49,6 +49,8 @@ public enum SequencerGraphEventType
     UnlockStageLimit,
     ActiveBossHp,
     DisableBossHp,
+    SetBackgroundAnimationTrigger,
+    SetHideCharacter,
     
     Count,
 }
@@ -1719,9 +1721,107 @@ public class SequencerGraphEvent_ActiveBossHp : SequencerGraphEventBase
     }
 }
 
+public class SequencerGraphEvent_SetHideCharacter : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SetHideCharacter;
+
+    public string _uniqueKey = "";
+    public string _uniqueGroupKey = "";
+
+    public bool _hide = false;
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor, float deltaTime)
+    {
+        if(_uniqueKey != "")
+        {
+            GameEntityBase uniqueEntity = processor.getUniqueEntity(_uniqueKey);
+            if(uniqueEntity == null)
+            {
+                DebugUtil.assert(false,"대상 Unique Entity가 존재하지 않습니다 : {0}",_uniqueKey);
+                return true;
+            }
+
+            uniqueEntity.setActiveSelf(_hide == false, _hide);
+        }
+
+        if(_uniqueGroupKey != "")
+        {
+            var uniqueGroup = processor.getUniqueGroup(_uniqueGroupKey);
+            if(uniqueGroup == null)
+            {
+                DebugUtil.assert(false,"대상 Unique Group이 존재하지 않습니다 : {0}",_uniqueGroupKey);
+                return true;
+            }
+
+            foreach(var item in uniqueGroup)
+            {
+                item.setActiveSelf(_hide == false, _hide);
+            }
+        }
+
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "UniqueKey")
+                _uniqueKey = attrValue;
+            else if(attrName == "UniqueGroupKey")
+                _uniqueGroupKey = attrValue;
+            else if(attrName == "Hide")
+                _hide = bool.Parse(attrValue);
+        }
+    }
+}
+
+
+public class SequencerGraphEvent_SetBackgroundAnimationTrigger : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SetBackgroundAnimationTrigger;
+
+    public string _animationTrigger = "";
+    public string _key = "";
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor, float deltaTime)
+    {
+        MasterManager.instance._stageProcessor.setBackgroundAnimationTrigger(_key,_animationTrigger);
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "Trigger")
+                _animationTrigger = attrValue;
+            else if(attrName == "Key")
+                _key = attrValue;
+        }
+    }
+}
+
 public class SequencerGraphEvent_DisableBossHp : SequencerGraphEventBase
 {
-
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.DisableBossHp;
 
     public override void Initialize(SequencerGraphProcessor processor)

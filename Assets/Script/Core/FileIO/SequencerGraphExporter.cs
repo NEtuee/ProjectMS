@@ -179,6 +179,10 @@ public class SequencrGraphLoader : LoaderBase<SequencerGraphBaseData>
             spawnEvent = new SequencerGraphEvent_ActiveBossHp();
         else if(node.Name == "DisableBossHp")
             spawnEvent = new SequencerGraphEvent_DisableBossHp();
+        else if(node.Name == "SetBackgroundAnimationTrigger")
+            spawnEvent = new SequencerGraphEvent_SetBackgroundAnimationTrigger();
+        else if(node.Name == "SetHideCharacter")
+            spawnEvent = new SequencerGraphEvent_SetHideCharacter();
         
         if(spawnEvent == null)
         {

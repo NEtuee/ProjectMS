@@ -32,6 +32,7 @@ public class StageProcessor
 
     private GameEntityBase _playerEntity = null;
     private GameObject _stageBackgroundOjbect = null;
+    private BackgroundAnimatorMaster _stageBackgroundAnimatorMaster = null;
 
     private MiniStageListItem   _miniStageInfo = null;
 
@@ -132,6 +133,15 @@ public class StageProcessor
         }
         
         GameUI.Instance.InitializeBySceneStart();
+
+        if(_stageData._backgroundPrefabPath != null)
+        {
+            _stageBackgroundOjbect = GameObject.Instantiate(_stageData._backgroundPrefabPath);
+            _stageBackgroundOjbect.TryGetComponent<BackgroundAnimatorMaster>(out _stageBackgroundAnimatorMaster);
+
+            _stageBackgroundOjbect.SetActive(true);
+            _stageBackgroundOjbect.transform.position = startPosition;
+        }
 
         for(int index = 0; index < _stageData._stagePointData.Count; ++index)
         {
@@ -257,14 +267,6 @@ public class StageProcessor
                 processor.setPlayEntity(_playerEntity);
                 _miniStageProcessor.Add(processor);
             }
-        }
-
-        if(_stageData._backgroundPrefabPath != null)
-        {
-            _stageBackgroundOjbect = GameObject.Instantiate(_stageData._backgroundPrefabPath);
-
-            _stageBackgroundOjbect.SetActive(true);
-            _stageBackgroundOjbect.transform.position = startPosition;
         }
     }
 
@@ -589,6 +591,11 @@ public class StageProcessor
     public void setActiveBackground(bool value)
     {
         _stageBackgroundOjbect?.SetActive(value);
+    }
+
+    public void setBackgroundAnimationTrigger(string key, string trigger)
+    {
+        _stageBackgroundAnimatorMaster?.setTrigger(key,trigger);
     }
 
     public void killAllCharacterWithoutKeepAliveCharacter()
