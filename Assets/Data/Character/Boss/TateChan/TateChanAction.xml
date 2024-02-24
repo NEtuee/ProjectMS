@@ -89,7 +89,6 @@
             <FrameEvent Type="Attack" StartTime="0" EndTime="0.3" AttackPreset="Tate_Normal">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
-                    <!-- <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" ToTarget="true"/>-->
                     
                     <FrameEvent Type="ZoomEffect" StartTime="0" Scale="-0.4"/>
                     <FrameEvent Type="StopUpdate" StartTime="0" Time="0.15"/>
@@ -101,7 +100,6 @@
                 </OnHit>
             
                 <OnGuard>
-                    <!-- <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" ToTarget="true"/>-->
                     
                     <FrameEvent Type="ZoomEffect" StartTime="0" Scale="-0.1"/>
                     <FrameEvent Type="StopUpdate" StartTime="0" Time="0.05"/>

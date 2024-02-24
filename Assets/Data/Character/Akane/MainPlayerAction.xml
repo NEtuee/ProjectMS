@@ -171,7 +171,6 @@
                 <OnGuard>
                     <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="DashPointConsumption"/>
                     <FrameEvent Type="ApplyBuffTarget" StartTime="0" ApplyBuff="GuardCountIncrease"/>
-                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" ToTarget="True"/>
 
                     <FrameEvent Type="TeleportToTarget"/>
                     <FrameEvent Type="StopUpdate" Time="0.01"/>
@@ -242,7 +241,6 @@
                 <OnGuard>
                     <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="DashPointConsumption"/>
                     <FrameEvent Type="ApplyBuffTarget" StartTime="0" ApplyBuff="GuardCountIncrease"/>
-                    <FrameEvent Type="Effect" Path="Resources/Sprites/Effect/ProjectileHit" FramePerSecond="18.0" Offset="0.0 0.0 0.0" ToTarget="True"/>
 
                     <FrameEvent Type="TeleportToTarget"/>
                     <FrameEvent Type="StopUpdate" Time="0.01"/>
