@@ -14,6 +14,31 @@
     <Talk_Stage01_3><ShowText Text = "(EN)배고파" Interval = "0.03"/><Wait Time = "3.0"/></Talk_Stage01_3>
     <Talk_Stage01_4><ShowText Text = "(EN)이번에야 말로 죽여주마!" Interval = "0.03"/><Wait Time = "3.0"/></Talk_Stage01_4>
     <Talk_Stage01_5><ShowText Text = "(EN)꺼져!" Interval = "0.03"/><Wait Time = "3.0"/></Talk_Stage01_5>
+    <Talk_Stage01_6>
+        <ShowText Text="(EN)앞이 막혔잖아" Interval="0.03"/>
+        <Wait Input="PassTalkBalloon"/>
+
+        <ShowText Text="(EN)어쩔수 없나" Interval="0.03" Clear="True"/>
+        <Wait Input="PassTalkBalloon"/>
+    </Talk_Stage01_6>
+    <Talk_Stage01_6_1><ShowText Text = "(EN)빵 팔아용" Interval = "0.03"/><Wait Time = "3.0"/></Talk_Stage01_6_1>
+    <Talk_Stage01_7><ShowText Text = "(EN)야끼소바빵 하나 내놔" Interval = "0.03"/><Wait Input="PassTalkBalloon"/></Talk_Stage01_7>
+    <Talk_Stage01_8>
+        <ShowText Text=".." Interval="0.03"/>
+        <Wait Input="PassTalkBalloon"/>
+
+        <ShowText Text="(EN)...나 관둘래" Interval="0.03" Clear="True"/>
+        <Wait Input="PassTalkBalloon"/>
+
+        <ShowText Text="(EN)..." Interval="0.03"/>
+        <Wait Input="PassTalkBalloon"/>
+
+        <ShowText Text="(EN)..새로운 꿈을 찾아 떠날거야" Interval="0.03" Clear="True"/>
+        <Wait Input="PassTalkBalloon"/>
+    </Talk_Stage01_8>
+    <Talk_Stage01_9><ShowText Text = "(EN)그.. 그게 무슨" Interval = "0.03"/><Wait Input="PassTalkBalloon"/></Talk_Stage01_9>
+    <Talk_Stage01_10><ShowText Text = "(EN)죽어 이 쓰레기야-!!!" Interval = "0.03"/><Wait Time = "3.0"/></Talk_Stage01_10>
+    <Talk_Stage01_11><ShowText Text = "(EN)넌 뒤졌다" Interval = "0.03"/><Wait Time = "3.0"/></Talk_Stage01_11>
 
     <Talk_Stage02_1_0><ShowText Text = "Help me!!" Interval = "0.03"/><Wait Time = "3.0"/></Talk_Stage02_1_0>
     <Talk_Stage02_1_1><ShowText Text = "Oh my gosh" Interval = "0.03"/><Wait Time = "1.0"/></Talk_Stage02_1_1>
