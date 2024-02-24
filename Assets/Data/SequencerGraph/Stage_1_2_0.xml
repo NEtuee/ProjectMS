@@ -21,14 +21,26 @@
         <EffectPreset UniqueKey="Player" EffectPreset="ExplodeBig"/>
         <WaitSecond Time="1.0"/>
 
+        <CallAIEvent EventName="Fear" UniqueKey="Player" EventTargetType="Range" SearchIdentifier="Enemy" Range="10.0"/>
         <SetBackgroundAnimationTrigger Key="Door_1" Trigger="Open"/>
+        <SetHideCharacter UniqueKey="Player" Hide="False"/>
+
+        <Task ProcessType="StepByStep">
+            <TalkBalloon UniqueKey="Talk_1" SimpleTalkKey="Talk_Stage01_1"/>
+            <WaitSecond Time="0.2"/>
+            <TalkBalloon UniqueKey="Talk_2" SimpleTalkKey="Talk_Stage01_2"/>
+        </Task>
+
+        <WaitSecond Time="1.5"/>
+
+        <CameraTrack TrackName="MainTrack"/>
+        <IsTrackEnd/>
 
         <SetHideUI Hide="False"/>
         <BlockInput Enable="False"/>
 
         <LetterBoxHide/>
-        <SetHideCharacter UniqueKey="Player" Hide="False"/>
-
+        <TalkBalloon UniqueKey="Player" SimpleTalkKey="Talk_Stage01_3"/>
 
     </UpdatePhase>
     

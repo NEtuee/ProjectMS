@@ -44,13 +44,97 @@ MonoBehaviour:
       _searchIdentifier: 0
       _activeType: 0
       _localPosition: {x: 0, y: -0.4, z: 0}
+    - _characterKey: DecoStudent_6
+      _uniqueKey: Talk_1
+      _uniqueGroupKey: 
+      _startAction: AC_Idle
+      _startAIState: Entry
+      _flip: 0
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 0
+      _localPosition: {x: -2.53, y: -0.62, z: 0}
+    - _characterKey: DecoStudent_5
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: AC_Idle
+      _startAIState: Entry
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 0
+      _localPosition: {x: -1.59, y: -0.62, z: 0}
+    - _characterKey: DecoStudent_4
+      _uniqueKey: Talk_2
+      _uniqueGroupKey: 
+      _startAction: AC_Idle
+      _startAIState: Entry
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 0
+      _localPosition: {x: 2.02, y: 1.13, z: 0}
+    - _characterKey: DecoStudent_3
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: AC_Idle
+      _startAIState: Entry
+      _flip: 0
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 0
+      _localPosition: {x: 1.89, y: -1.72, z: 0}
+    - _characterKey: DecoStudent_2
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: AC_Idle
+      _startAIState: Entry
+      _flip: 0
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 0
+      _localPosition: {x: -2.17, y: 1.1, z: 0}
+    - _characterKey: DecoStudent_1
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: AC_Idle
+      _startAIState: Entry
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 0
+      _localPosition: {x: 2.7, y: -1.26, z: 0}
     _useTriggerBound: 0
     _targetSearchIdentifier: 1
     _triggerWidth: 1
     _triggerHeight: 1
     _triggerOffset: {x: 0, y: 0, z: 0}
   - _pointName: New Point 1
-    _stagePoint: {x: 12.4, y: 0, z: 0}
+    _stagePoint: {x: 13.1, y: 0, z: 0}
     _maxLimitedDistance: 0
     _verticalLimitedDistance: 0
     _horizontalLimitedDistance: 0
@@ -59,26 +143,28 @@ MonoBehaviour:
     _lerpCameraZoom: 0
     _lockCameraInBound: 0
     _cameraBoundToTrigger: 0
-    _onEnterSequencerPath: []
+    _onEnterSequencerPath:
+    - Stage_1_2_1.xml
+    - BlockPointByEnemyGroup.xml
     _onExitSequencerPath: []
     _characterSpawnData:
     - _characterKey: SukebanKatanaChan
-      _uniqueKey: 
-      _uniqueGroupKey: 
+      _uniqueKey: HideEnemy
+      _uniqueGroupKey: EnemyGroup
       _startAction: AC_Entry
       _startAIState: Entry_Peace
       _flip: 1
       _setDirection: 0
       _directionAngle: 0
-      _hideWhenDeactive: 0
+      _hideWhenDeactive: 1
       _keepAlive: 0
       _sortingOrder: 0
       _searchIdentifier: 1
-      _activeType: 0
-      _localPosition: {x: 2.25, y: -0.4, z: 0}
+      _activeType: 1
+      _localPosition: {x: 1.59, y: -0.4, z: 0}
     - _characterKey: SukebanKatanaChan
       _uniqueKey: 
-      _uniqueGroupKey: 
+      _uniqueGroupKey: EnemyGroup
       _startAction: AC_Entry
       _startAIState: Entry_Peace
       _flip: 1
@@ -88,11 +174,11 @@ MonoBehaviour:
       _keepAlive: 0
       _sortingOrder: 0
       _searchIdentifier: 1
-      _activeType: 0
-      _localPosition: {x: 3.23, y: 0.76, z: 0}
+      _activeType: 1
+      _localPosition: {x: 0.77, y: 0.76, z: 0}
     - _characterKey: SukebanUziChan
       _uniqueKey: 
-      _uniqueGroupKey: 
+      _uniqueGroupKey: EnemyGroup
       _startAction: AC_Entry
       _startAIState: Entry_Peace
       _flip: 1
@@ -102,8 +188,8 @@ MonoBehaviour:
       _keepAlive: 0
       _sortingOrder: 0
       _searchIdentifier: 1
-      _activeType: 0
-      _localPosition: {x: 3.97, y: -0.7, z: 0}
+      _activeType: 1
+      _localPosition: {x: 2.99, y: -0.7, z: 0}
     _useTriggerBound: 1
     _targetSearchIdentifier: 1
     _triggerWidth: 7.6
@@ -119,9 +205,52 @@ MonoBehaviour:
     _lerpCameraZoom: 0
     _lockCameraInBound: 0
     _cameraBoundToTrigger: 0
-    _onEnterSequencerPath: []
+    _onEnterSequencerPath:
+    - BlockPointByEnemyGroup.xml
     _onExitSequencerPath: []
-    _characterSpawnData: []
+    _characterSpawnData:
+    - _characterKey: SukebanKatanaChan
+      _uniqueKey: 
+      _uniqueGroupKey: EnemyGroup
+      _startAction: AC_Entry
+      _startAIState: Entry_Peace
+      _flip: 0
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 1
+      _localPosition: {x: 8.44, y: -0.63, z: 0}
+    - _characterKey: SukebanKatanaChan
+      _uniqueKey: 
+      _uniqueGroupKey: EnemyGroup
+      _startAction: AC_Entry
+      _startAIState: Entry_Peace
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 1
+      _localPosition: {x: 9.79, y: 0.74, z: 0}
+    - _characterKey: SukebanUziChan
+      _uniqueKey: 
+      _uniqueGroupKey: EnemyGroup
+      _startAction: AC_Entry
+      _startAIState: Entry_Peace
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 1
+      _localPosition: {x: 10.94, y: -0.32, z: 0}
     _useTriggerBound: 0
     _targetSearchIdentifier: 1
     _triggerWidth: 1
@@ -146,10 +275,10 @@ MonoBehaviour:
     _triggerHeight: 1
     _triggerOffset: {x: 0, y: 0, z: 0}
   - _pointName: New Point 3
-    _stagePoint: {x: 40.27, y: 0, z: 0}
+    _stagePoint: {x: 38.28, y: 0, z: 0}
     _maxLimitedDistance: 0
     _verticalLimitedDistance: 0
-    _horizontalLimitedDistance: 0
+    _horizontalLimitedDistance: 2
     _cameraZoomSize: 3
     _cameraZoomSpeed: 4
     _lerpCameraZoom: 0
@@ -157,12 +286,166 @@ MonoBehaviour:
     _cameraBoundToTrigger: 0
     _onEnterSequencerPath: []
     _onExitSequencerPath: []
-    _characterSpawnData: []
-    _useTriggerBound: 0
+    _characterSpawnData:
+    - _characterKey: YakisobaChan
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: Idle
+      _startAIState: Entry
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 0
+      _localPosition: {x: 4.26, y: 0, z: 0}
+    - _characterKey: SukebanKatanaChan
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: AC_Entry
+      _startAIState: Entry_Peace
+      _flip: 0
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 0
+      _localPosition: {x: 2.52, y: -0.05, z: 0}
+    - _characterKey: SukebanKatanaChan
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: AC_Entry
+      _startAIState: Entry_Peace
+      _flip: 0
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 1
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 1
+      _localPosition: {x: -0.91, y: 0.01, z: 0}
+    - _characterKey: SukebanKatanaChan
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: AC_Entry
+      _startAIState: Entry_Peace
+      _flip: 0
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 1
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 1
+      _localPosition: {x: 1.61, y: 0, z: 0}
+    - _characterKey: SukebanKatanaChan
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: AC_Entry
+      _startAIState: Entry_Peace
+      _flip: 0
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 1
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 1
+      _localPosition: {x: -0.47, y: -0.11, z: 0}
+    - _characterKey: SukebanKatanaChan
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: AC_Entry
+      _startAIState: Entry_Peace
+      _flip: 0
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 1
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 1
+      _localPosition: {x: 0.63, y: -0.04, z: 0}
+    - _characterKey: SukebanKatanaChan
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: AC_Entry
+      _startAIState: Entry_Peace
+      _flip: 0
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 1
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 1
+      _localPosition: {x: -0.02, y: -0.01, z: 0}
+    - _characterKey: SukebanUziChan
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: AC_Entry
+      _startAIState: Entry_Peace
+      _flip: 0
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 1
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 1
+      _localPosition: {x: 1.25, y: 0, z: 0}
+    - _characterKey: SukebanUziChan
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: AC_Entry
+      _startAIState: Entry_Peace
+      _flip: 0
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 1
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 1
+      _localPosition: {x: -1.44, y: 0, z: 0}
+    - _characterKey: SukebanUziChan
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: AC_Entry
+      _startAIState: Entry_Peace
+      _flip: 0
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 1
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 1
+      _localPosition: {x: 2.04, y: -0.11, z: 0}
+    - _characterKey: SukebanUziChan
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: AC_Entry
+      _startAIState: Entry_Peace
+      _flip: 0
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 1
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 1
+      _localPosition: {x: -2.01, y: -0.04, z: 0}
+    _useTriggerBound: 1
     _targetSearchIdentifier: 1
-    _triggerWidth: 1
-    _triggerHeight: 1
-    _triggerOffset: {x: 0, y: 0, z: 0}
+    _triggerWidth: 9.97
+    _triggerHeight: 7.77
+    _triggerOffset: {x: -1.64, y: 0, z: 0}
   _miniStageData: []
   _markerData: []
   _trackData:
@@ -178,24 +461,24 @@ MonoBehaviour:
       _point: {x: 14.48, y: 0}
       _bezierPoint: {x: 15.48, y: 0}
       _speedToNextPoint: 7
-      _waitSecond: 1
+      _waitSecond: 0.5
       _isLinearPath: 1
     - _easeType: 6
-      _point: {x: 24.92, y: 0}
-      _bezierPoint: {x: 25.92, y: 0}
+      _point: {x: 27.11, y: 0}
+      _bezierPoint: {x: 28.11, y: 0}
       _speedToNextPoint: 7
-      _waitSecond: 1
+      _waitSecond: 0.5
       _isLinearPath: 1
     - _easeType: 5
       _point: {x: 40.06, y: 0}
       _bezierPoint: {x: 41.060005, y: 0}
       _speedToNextPoint: 7
-      _waitSecond: 1
+      _waitSecond: 2
       _isLinearPath: 1
     _pointLengthArray:
     - 14.5779705
-    - 10.573616
-    - 15.234484
-    _trackTotalLength: 40.38607
+    - 12.742384
+    - 13.059391
+    _trackTotalLength: 40.379745
     _startBlend: 1
-    _endBlend: 1
+    _endBlend: 0

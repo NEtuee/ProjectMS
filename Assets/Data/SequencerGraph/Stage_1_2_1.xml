@@ -1,0 +1,34 @@
+<SequencerGraph Name="Stage_1_2_1">
+
+    <InitializePhase>
+        <SetHideUI Hide="True"/>
+        <BlockInput Enable="True"/>
+
+        <BlockAI UniqueGroupKey="EnemyGroup" Enable="True"/>
+
+        <LetterBoxShow/>
+    </InitializePhase>
+
+    <UpdatePhase>
+        <SetHideCharacter UniqueKey="HideEnemy" Hide="True"/>
+
+        <EffectPreset UniqueKey="HideEnemy" EffectPreset="ExplodeBig"/>
+        <WaitSecond Time="1.0"/>
+
+        <SetBackgroundAnimationTrigger Key="Door_2" Trigger="Open"/>
+        <SetHideCharacter UniqueKey="HideEnemy" Hide="False"/>
+        
+        <WaitSecond Time="0.4"/>
+        <TalkBalloon UniqueKey="HideEnemy" SimpleTalkKey="Talk_Stage01_4"/>
+
+        <WaitSecond Time="2.0"/>
+        <SetHideUI Hide="False"/>
+        <BlockInput Enable="False"/>
+
+        <LetterBoxHide/>
+
+        <BlockAI UniqueGroupKey="EnemyGroup" Enable="False"/>
+        <TalkBalloon UniqueKey="Player" SimpleTalkKey="Talk_Stage01_5"/>
+    </UpdatePhase>
+    
+</SequencerGraph>

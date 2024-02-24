@@ -1,34 +1,34 @@
 <ActionGraph Name="YakisobaChan" DefaultAction="Idle" DefaultFramePerSecond="12">
 
-    <Idle MovementType="Empty" DirectionType="AI" ActiveCollision="False">
+    <Idle MovementType="Empty" DirectionType="Keep" FlipType="Direction" ActiveCollision="False">
         <Animation Preset="Sprites/Deco/YakisobaChan/0_default/1_idle" XFlip="true" Duration="1">
         </Animation>
 
         <Branch Condition="End == true" Execute="Idle"/>
     </Idle>
 
-    <Move MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="AI" ActiveCollision="False">
+    <Move MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="AI" FlipType="Direction" ActiveCollision="False">
         <Animation Preset="Sprites/Deco/YakisobaChan/0_default/2_move" XFlip="true" Duration="1">
         </Animation>
 
         <Branch Condition="End == true" Execute="Move"/>
     </Move>
 
-    <MoveFast MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="AI" ActiveCollision="False" MoveScale="3.0">
+    <MoveFast MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="AI" FlipType="Direction" ActiveCollision="False" MoveScale="3.0">
         <Animation Preset="Sprites/Deco/YakisobaChan/0_default/2_move" XFlip="true" Duration="1">
         </Animation>
 
         <Branch Condition="End == true" Execute="MoveFast"/>
     </MoveFast>
 
-    <Attack MovementType="Empty" DirectionType="AI" ActiveCollision="False">
+    <Attack MovementType="Empty" DirectionType="AI" ActiveCollision="False" FlipType="Direction">
         <Animation Preset="Sprites/Deco/YakisobaChan/1_attack" XFlip="true" Duration="1">
         </Animation>
 
         <Branch Condition="End == true" Execute="Attack"/>
     </Attack>
 
-    <ImmediatlyKill MovementType="Empty" DirectionType="Keep" ActiveCollision="False">
+    <ImmediatlyKill MovementType="Empty" DirectionType="Keep" ActiveCollision="False" FlipType="Direction"> 
         <Animation Preset="Sprites/Deco/YakisobaChan" XFlip="true" Duration="1">
             <FrameEvent Type="KillEntity" StartTime="0"/>
         </Animation>

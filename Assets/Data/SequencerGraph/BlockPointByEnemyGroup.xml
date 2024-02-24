@@ -1,0 +1,13 @@
+<SequencerGraph Name="BlockPointByEnemyGroup">
+
+    <InitializePhase>
+        <BlockPointExit Enable="True"/>
+    </InitializePhase>
+
+    <UpdatePhase>
+        <DeadFence UniqueGroupKey="EnemyGroup"/>
+        <BlockPointExit Enable="False"/>
+
+    </UpdatePhase>
+    
+</SequencerGraph>
