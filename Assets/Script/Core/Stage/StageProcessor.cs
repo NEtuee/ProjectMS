@@ -154,8 +154,20 @@ public class StageProcessor
                 if(_keepAliveMap.ContainsKey(characterSpawnData._uniqueKey))
                 {
                     CharacterEntityBase characterEntity = _keepAliveMap[characterSpawnData._uniqueKey];
-                    characterEntity.clearCharacter();
                     characterEntity.updatePosition((stagePointData._stagePoint + _offsetPosition) + characterSpawnData._localPosition);
+                    characterEntity.clearCharacter();
+                    if (characterSpawnData._startAIState != "")
+                        characterEntity.setAINode(characterSpawnData._startAIState);
+
+                    if (characterSpawnData._startAction != "")
+                    {
+                        characterEntity.setAction(characterSpawnData._startAction);
+                        characterEntity.progress(0f);
+                    }
+                    else
+                    {
+                        characterEntity.setDefaultAction();
+                    }
 
                     SequencerGraphProcessor.SpawnedCharacterEntityInfo keepEntityInfo = new SequencerGraphProcessor.SpawnedCharacterEntityInfo();
                     characterEntity.setKeepAliveEntity(characterSpawnData._keepAlive);
