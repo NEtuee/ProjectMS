@@ -215,18 +215,17 @@
                     <FrameEvent Type="ApplyBuff" ApplyBuff="BattleIncrement"/>
                     <FrameEvent Type="ApplyBuff" ApplyBuff="IncreaseBloodPoint"/>
 
-                    <FrameEvent Type="EffectPreset" StartTime="0" Key="SlashSuper"/>
-                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
-                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Crosslight"/>
-
                     <FrameEvent Type="UIEvent" StartTime="0" Key="HitEnemy"/>
 
                     <!-- 마테리얼 히트 이펙트 -->
                     <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/MaterialHit_Timeline" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true"/>
 
+                    <FrameEvent Type="TeleportToTargetBack" Condition="Kill == false" DistanceOffset="-0.0"/>
+                    <FrameEvent Type="TeleportToTargetBack" Condition="Kill" DistanceOffset="0.4"/>
 
-                    <FrameEvent Type="TeleportToTargetBack" Condition="(getTargetFrameTag_Groggy == false) && (Kill == false)" DistanceOffset="-0.0"/>
-                    <FrameEvent Type="TeleportToTargetBack" Condition="getTargetFrameTag_Groggy || Kill" DistanceOffset="0.4"/>
+                    <FrameEvent Type="EffectPreset" Key="SlashSuper"/>
+                    <FrameEvent Type="EffectPreset" Key="Blood"/>
+                    <FrameEvent Type="EffectPreset" Key="Crosslight"/>
 
                     <FrameEvent Type="StopUpdate" Time="0.15"/>
                     
@@ -264,9 +263,8 @@
             <FrameEvent Type="FrameTag" StartTime="0.156" EndTime="999" Tag="MoveCancel"/>
             <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="0.016" Tag="Attack"/>
 
-            <FrameEvent Type="AudioPlay" Condition="AttackSuccess == false" StartTime="0.05" ID="1009" Attach="true"/>
-
-            <FrameEvent Type="EffectPreset" Condition="AttackSuccess == false" StartTime="0.05" Key="DashTrail"/>
+            <FrameEvent Type="AudioPlay" Condition="AttackSuccess == false" ID="1009" Attach="true"/>
+            <FrameEvent Type="EffectPreset" Condition="AttackSuccess == false" Key="DashTrail"/>
         </Animation>
 
         <Branch Condition="AttackSuccess" Execute="AttackSuccess_Long"/>
