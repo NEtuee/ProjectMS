@@ -1,27 +1,5 @@
 <DialogMap>
-        <Test1>
-            <ShowText Text = "언더테일 아시는구나!" Interval = "0.03"/>
-            <Wait Time = "1.0"/>
-            <ShowText Text = "혹시 모르시는 분들에 대해 설명해 드립니다." Interval = "0.03"/>
-            <ShowText Text = "샌즈랑 언더테일의 세가지 엔딩루트 중" Interval = "0.03"/>
-            <ShowText Text = "몰살 엔딩의 최종보스로" Interval = "0.03"/>
-            <SetColor Color = "FF0000"/>
-            <SetBold/>
-            <ShowText Text = "진.짜.겁.나.어.렵.습.니.다" Interval = "0.2"/>
-            <EndColor/>
-            <EndBold/>
-            <Wait Time = "1.0"/>
-            <ShowText Text = "공격은 전부다 회피하고 만피가 92인데" Interval = "0.03"/>
-            <ShowText Text = "샌즈의 공격은 1초당 60이다는데다가 독뎀까지" Interval = "0.03"/>
-            <ShowText Text = "추가로 붙어있습니다." Interval = "0.03"/>
-            <ShowText Text = "하지만 이러면 절대로 게임을 깰 수 가없으니 제작진이 치명적인 약점을 만들었죠." Interval = "0.03"/>
-            <ShowText Text = "샌즈의 치명적인 약점이 바로 지친다는것입니다." Interval = "0.03"/>
-            <ShowText Text = "패턴들을 다 견디고나면 지쳐서 자신의 턴을 유지한태로 잠에듭니다." Interval = "0.03"/> 
-            <ShowText Text = "하지만 잠이들었을때 창을옮겨서 공격을 시도하고." Interval = "0.03"/>  
-            <ShowText Text = "샌즈는 1차공격은 피하지만 그후에 바로날아노는 2차 공격을 맞고 죽습니다." Interval = "0.03"/>
-            <Wait Time = "5.0"/>
-        </Test1>
-    
+
     <Test2><ShowText Text = "이거 인풋 테스트임" Interval = "0.03"/><Wait Input = "PassTalkBalloon"/></Test2>
     <Test3><ShowText Text = "이거 말풍선 갱신 테스트임" Interval = "0.03"/><Wait Time = "3.0"/><ShowText Text = "이렇게 새로 쓰임" Interval = "0.03" Clear = "true"/><Wait Input = "PassTalkBalloon"/></Test3>
 
