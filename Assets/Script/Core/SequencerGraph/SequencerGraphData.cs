@@ -1050,6 +1050,22 @@ public class SequencerGraphEvent_AIMove : SequencerGraphEventBase
         return false;
     }
 
+    public override void Exit(SequencerGraphProcessor processor)
+    {
+        base.Exit(processor);
+
+        if(_processTimer < _totalAnimationPlayTime)
+        {
+            GameEntityBase uniqueEntity = processor.getUniqueEntity(_uniqueKey);
+            if (uniqueEntity == null)
+                return;
+
+            uniqueEntity.resetAdditionalMoveScale();
+            uniqueEntity.blockAI(_aiBlockState);
+            uniqueEntity.setDefaultAction();
+        }
+    }
+
     public override void loadXml(XmlNode node)
     {
         XmlAttributeCollection attributes = node.Attributes;
