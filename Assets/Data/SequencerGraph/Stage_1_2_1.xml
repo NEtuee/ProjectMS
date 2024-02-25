@@ -15,6 +15,7 @@
         <EffectPreset UniqueKey="HideEnemy" EffectPreset="ExplodeBig"/>
         <WaitSecond Time="1.0"/>
 
+        <CallAIEvent EventName="Fear" UniqueKey="HideEnemy" EventTargetType="Range" SearchIdentifier="Enemy" Range="4.0"/>
         <SetBackgroundAnimationTrigger Key="Door_2" Trigger="Open"/>
         <SetHideCharacter UniqueKey="HideEnemy" Hide="False"/>
         <ShakeEffect Scale="0.35" Speed="20.0" Time="0.5"/>

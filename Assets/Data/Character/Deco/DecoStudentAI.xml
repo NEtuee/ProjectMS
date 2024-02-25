@@ -4,12 +4,11 @@
     <Include Path="Assets/Data/AILibrary/Package/CommonDeadPackage.xml"/>
     
     <AIPackage Name="FearPackage" DefaultState="Entry">
-        <CustomEvent_Fear>
-            <AIEvent Type="ExecuteState" Execute="Fear"/>
-        </CustomEvent_Fear>
-        
         <AIState>
             <Entry UpdateTime="999.0">
+                <CustomEvent_Fear>
+                    <AIEvent Type="ExecuteState" Execute="Fear"/>
+                </CustomEvent_Fear>
             </Entry>
 
             <Fear UpdateTime="999.0" TargetSearchType="Near" TargetSearchRange="10.0" SearchIdentifier="Player">

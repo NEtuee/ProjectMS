@@ -128,6 +128,48 @@ MonoBehaviour:
       _searchIdentifier: 1
       _activeType: 0
       _localPosition: {x: 2.7, y: -1.26, z: 0}
+    - _characterKey: DecoStudent_4
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: AC_Idle
+      _startAIState: Entry
+      _flip: 0
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 0
+      _localPosition: {x: 6.86, y: 0.86, z: 0}
+    - _characterKey: DecoStudent_5
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: AC_Idle
+      _startAIState: Entry
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 0
+      _localPosition: {x: 5.64, y: -0.55, z: 0}
+    - _characterKey: DecoStudent_3
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: AC_Idle
+      _startAIState: Entry
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 0
+      _localPosition: {x: 10.65, y: -0.51, z: 0}
     _useTriggerBound: 0
     _targetSearchIdentifier: 1
     _triggerWidth: 1
@@ -176,7 +218,7 @@ MonoBehaviour:
       _searchIdentifier: 1
       _activeType: 1
       _localPosition: {x: 0.77, y: 0.76, z: 0}
-    - _characterKey: SukebanUziChan
+    - _characterKey: SukebanKatanaChan
       _uniqueKey: 
       _uniqueGroupKey: EnemyGroup
       _startAction: AC_Entry
@@ -189,7 +231,63 @@ MonoBehaviour:
       _sortingOrder: 0
       _searchIdentifier: 1
       _activeType: 1
-      _localPosition: {x: 2.99, y: -0.7, z: 0}
+      _localPosition: {x: 2.84, y: -0.57, z: 0}
+    - _characterKey: DecoStudent_1
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: AC_Idle
+      _startAIState: Entry
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 0
+      _localPosition: {x: 0.41, y: -1.63, z: 0}
+    - _characterKey: DecoStudent_2
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: AC_Idle
+      _startAIState: Entry
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 0
+      _localPosition: {x: 6.92, y: 2.75, z: 0}
+    - _characterKey: DecoStudent_3
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: AC_Idle
+      _startAIState: Entry
+      _flip: 0
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 0
+      _localPosition: {x: -1.54, y: 1.23, z: 0}
+    - _characterKey: DecoStudent_8
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: AC_Idle
+      _startAIState: Entry
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 0
+      _localPosition: {x: 8.52, y: -0.8, z: 0}
     _useTriggerBound: 1
     _targetSearchIdentifier: 1
     _triggerWidth: 7.6
@@ -251,6 +349,34 @@ MonoBehaviour:
       _searchIdentifier: 1
       _activeType: 1
       _localPosition: {x: 10.94, y: -0.32, z: 0}
+    - _characterKey: DecoStudent_7
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: AC_Idle
+      _startAIState: Entry
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 0
+      _localPosition: {x: 7.89, y: -2.29, z: 0}
+    - _characterKey: DecoStudent_6
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: AC_Idle
+      _startAIState: Entry
+      _flip: 0
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 0
+      _localPosition: {x: 7.28, y: 1.17, z: 0}
     _useTriggerBound: 0
     _targetSearchIdentifier: 1
     _triggerWidth: 1
@@ -266,9 +392,24 @@ MonoBehaviour:
     _lerpCameraZoom: 0
     _lockCameraInBound: 0
     _cameraBoundToTrigger: 0
-    _onEnterSequencerPath: []
+    _onEnterSequencerPath:
+    - Stage_1_2_1_1.xml
     _onExitSequencerPath: []
-    _characterSpawnData: []
+    _characterSpawnData:
+    - _characterKey: DecoStudent_0
+      _uniqueKey: Student
+      _uniqueGroupKey: 
+      _startAction: AC_Idle
+      _startAIState: Entry
+      _flip: 0
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 0
+      _localPosition: {x: 4.68, y: 0, z: 0}
     _useTriggerBound: 0
     _targetSearchIdentifier: 1
     _triggerWidth: 1
@@ -317,7 +458,7 @@ MonoBehaviour:
       _activeType: 1
       _localPosition: {x: 2.52, y: -0.05, z: 0}
     - _characterKey: SukebanKatanaChan
-      _uniqueKey: 
+      _uniqueKey: Talk_1
       _uniqueGroupKey: EnemyGroup
       _startAction: AC_Entry
       _startAIState: Entry_Peace
@@ -387,7 +528,7 @@ MonoBehaviour:
       _activeType: 1
       _localPosition: {x: -0.02, y: -0.01, z: 0}
     - _characterKey: SukebanUziChan
-      _uniqueKey: 
+      _uniqueKey: Talk_2
       _uniqueGroupKey: EnemyGroup
       _startAction: AC_Entry
       _startAIState: Entry_Peace

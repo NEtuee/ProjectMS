@@ -17,6 +17,13 @@
             <WaitSecond Time="1.0"/>
             <TalkBalloon UniqueKey="YakisobaChan" SimpleTalkKey="Talk_Stage01_6_1"/>
         </Task>
+
+        <Task ProcessType="StepByStep">
+            <TalkBalloon UniqueKey="Talk_1" SimpleTalkKey="Talk_Stage01_5_2"/>
+            <WaitSecond Time="0.3"/>
+            <TalkBalloon UniqueKey="Talk_2" SimpleTalkKey="Talk_Stage01_5_3"/>
+        </Task>
+
         <CameraTrack TrackName="EndTrack"/>
         <IsTrackEnd/>
 

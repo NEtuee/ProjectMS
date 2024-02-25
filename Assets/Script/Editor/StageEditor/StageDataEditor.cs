@@ -1741,6 +1741,19 @@ public class StageDataEditor : EditorWindow
                 characterEditItem.flipX = spawnData._flip;
                 characterEditItem.gameObject.SetActive(_hideCharacterAll == false);
 
+                if(spawnData._hideWhenDeactive)
+                {
+                    Color alphaClor = Color.white;
+                    alphaClor.a = 0.5f;
+                    characterEditItem.color = alphaClor;
+                }
+                else
+                {
+                    Color alphaClor = Color.white;
+                    alphaClor.a = 1.0f;
+                    characterEditItem.color = alphaClor;
+                }
+
                 editObject._characterObjectList.Add(characterEditItem);
             }
         }
@@ -2583,6 +2596,19 @@ public class StageDataEditor : EditorWindow
                 characterEditItem.transform.position = item._stagePoint + editObject._characterSpawnDataList[index]._localPosition;
                 characterEditItem.flipX = editObject._characterSpawnDataList[index]._flip;
                 characterEditItem.gameObject.SetActive(_hideCharacterAll == false);
+
+                if(editObject._characterSpawnDataList[index]._hideWhenDeactive)
+                {
+                    Color alphaClor = Color.white;
+                    alphaClor.a = 0.5f;
+                    characterEditItem.color = alphaClor;
+                }
+                else
+                {
+                    Color alphaClor = Color.white;
+                    alphaClor.a = 1.0f;
+                    characterEditItem.color = alphaClor;
+                }
 
                 editObject._characterObjectList.Add(characterEditItem);
             }
