@@ -52,11 +52,8 @@
         <TalkBalloon UniqueKey="Player" SimpleTalkKey="Talk_Stage01_7" Wait="True"/>
 
         <WaitSecond Time="1.5"/>
-        <SetCameraTarget UniqueKey="YakisobaChan" CameraMode="TargetCenterMode"/>
 
         <TalkBalloon UniqueKey="YakisobaChan" SimpleTalkKey="Talk_Stage01_8" Wait="True"/>
-
-        <SetCameraTarget UniqueKey="Player" CameraMode="TargetCenterMode"/>
         <TalkBalloon UniqueKey="Player" SimpleTalkKey="Talk_Stage01_9" Wait="True"/>
 
         <SetCameraZoom Size="0.0" Speed="5"/>
@@ -70,7 +67,6 @@
         <Task ProcessType="StepByStep">
             <AIMove UniqueKey="Player" LoopAction="AIMove_Loop" EndPositionMarker="YakisobaChanPosition"/>
         </Task>
-        <WaitSecond Time="0.3"/>
         
         <FadeOut Lambda="5.0"/>
         <WaitSecond Time="1.5"/>

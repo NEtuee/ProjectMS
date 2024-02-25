@@ -288,7 +288,7 @@
                 <FrameEvent Type="Attack" StartFrame="0" AttackPreset="BaseBall">
                     <OnHit>
                         <!-- TODO: 야구공 버프 설정 -->
-                        <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
+                        <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
                         <FrameEvent Type="EffectPreset" StartTime="0" Key="SmashSmall"/>
                         <FrameEvent Type="EffectPreset" StartTime="0" Key="BloodSmallSmall"/>
                     </OnHit>
@@ -310,7 +310,7 @@
                 <FrameEvent Type="Attack" StartFrame="0" AttackPreset="BaseBall">
                     <OnHit>
                         <!-- TODO: 야구공 버프 설정 -->
-                        <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
+                        <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
                         <FrameEvent Type="EffectPreset" StartTime="0" Key="SmashSmall"/>
                         <FrameEvent Type="EffectPreset" StartTime="0" Key="BloodSmall"/>
                     </OnHit>
