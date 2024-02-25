@@ -40,6 +40,9 @@
         <ShowText Text="앞이 막혔잖아" Interval="0.03"/>
         <Wait Input="PassTalkBalloon"/>
 
+        <ShowText Text="흠" Interval="0.03" Clear="True"/>
+        <Wait Input="PassTalkBalloon"/>
+
         <ShowText Text="어쩔수 없나" Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
     </Talk_Stage01_6>
@@ -52,7 +55,7 @@
         <ShowText Text="...나 관둘래" Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text="..." Interval="0.03"/>
+        <ShowText Text="..." Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
 
         <ShowText Text="..새로운 꿈을 찾아 떠날거야" Interval="0.03" Clear="True"/>

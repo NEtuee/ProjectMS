@@ -17,6 +17,7 @@
 
         <SetBackgroundAnimationTrigger Key="Door_2" Trigger="Open"/>
         <SetHideCharacter UniqueKey="HideEnemy" Hide="False"/>
+        <ShakeEffect Scale="0.35" Speed="20.0" Time="0.5"/>
         
         <WaitSecond Time="0.4"/>
         <TalkBalloon UniqueKey="HideEnemy" SimpleTalkKey="Talk_Stage01_4"/>

@@ -30,6 +30,8 @@
         <ApplyBuff UniqueKey="Player" Buff="BossHpReset"/>
         <SetAction UniqueKey="Player" Action="SQ_AttackLong"/>
 
+        <SetCameraZoom Size="2.5" Speed="5"/>
+
         <WaitSecond Time="0.1"/>
         <SetTimeScale Scale="0.1" Time="1.0" BlendTime="2.0"/>
 
@@ -44,7 +46,6 @@
 
         <WaitSecond Time="1.5"/>
         <SetCameraTarget UniqueKey="YakisobaChan" CameraMode="TargetCenterMode"/>
-        <SetCameraZoom Size="2.5" Speed="5"/>
 
         <TalkBalloon UniqueKey="YakisobaChan" SimpleTalkKey="Talk_Stage01_8" Wait="True"/>
 

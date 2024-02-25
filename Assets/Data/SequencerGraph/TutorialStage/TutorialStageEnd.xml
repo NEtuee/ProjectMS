@@ -6,8 +6,9 @@
         <BlockInput Enable="True"/>
         <SetHideUI Hide="True"/>
 
-        <SetTimeScale Scale="0.2" Time="1.0" BlendTime="0.5"/>
-        <ApplyPostProcessProfile Path="PostProcessProfile/ImpactFrame" ApplyType="Additional" BlendTime="0.6"/>
+        <ZoomEffect Factor="-0.5"/>
+        <SetTimeScale Scale="0.1" Time="1.5" BlendTime="2.0"/>
+        <ApplyPostProcessProfile Path="PostProcessProfile/ImpactFrame" ApplyType="Additional" BlendTime="1.5"/>
 
         <WaitSecond Time="2.5"/>
 
