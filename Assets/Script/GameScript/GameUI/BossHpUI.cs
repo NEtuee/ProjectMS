@@ -97,6 +97,7 @@ public class BossHpUI : IUIElement
     public void Disable()
     {
         _active = false;
+        _target = null;
         _binder.Root.gameObject.SetActive(false);
         
         _appearTimer.Stop();

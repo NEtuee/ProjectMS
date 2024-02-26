@@ -47,6 +47,7 @@ public class GameUI : MonoBehaviour
         MainHUDRoot.SetActive(true);
         _enemyIndicator.InitValue(Camera.main);
         _enemyHp.InitValue();
+        _bossHp.Disable();
     }
 
     public void StopByScene()
