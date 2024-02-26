@@ -92,6 +92,7 @@ Shader "Custom/SpriteShadowScreenShader"
 					float4 vertex   : SV_POSITION;
 					fixed4 color : COLOR;
 					float2 texcoord  : TEXCOORD0;
+					float3 worldPosition : TEXCOORD1;
 				};
 
 				fixed4 _Color;
@@ -103,6 +104,7 @@ Shader "Custom/SpriteShadowScreenShader"
 					OUT.vertex = UnityObjectToClipPos(IN.vertex);
 					OUT.texcoord = IN.texcoord;
 					OUT.color = IN.color * _Color;
+					OUT.worldPosition = mul(unity_ObjectToWorld, IN.vertex).xyz;
 					#ifdef PIXELSNAP_ON
 					OUT.vertex = UnityPixelSnap(OUT.vertex);
 					#endif
@@ -201,7 +203,46 @@ Shader "Custom/SpriteShadowScreenShader"
 					return interfaceSample;
 				}
 
-				fixed4 sampleBackground(float2 texcoord)
+				fixed4 sampleOtherBackground(float2 texcoord, float3 worldPosition)
+				{
+					fixed4 resultColor = fixed4(0.4,0.4,0.5,1.0);
+
+					{
+						float squareSize = 0.1f;
+						float gapSize = 2.0;
+
+						float3 worldPos = worldPosition;
+                		worldPos = abs(fmod(worldPos, squareSize + gapSize));
+                		bool inSquare = (worldPos.x < squareSize) && (worldPos.y < squareSize);
+						if(inSquare)
+							resultColor = fixed4(0.7,0.7,0.7,1.0);
+					}
+
+					{
+						float squareSize = 0.07f;
+						float gapSize = 2.5f;
+
+						float3 worldPos = worldPosition + _WorldSpaceCameraPos * -0.3f;
+                		worldPos = abs(fmod(worldPos, squareSize + gapSize));
+                		bool inSquare = (worldPos.x < squareSize) && (worldPos.y < squareSize);
+						if(inSquare)
+							resultColor = fixed4(0.5,0.5,0.5,1.0);
+					}
+
+					float2 offset = float2(5.0f, 5.0f);
+					float2 vignetteRatio = 1.0 - ((_RealCameraSize.xy + offset) / resolution);
+					float2 uv = texcoord.xy - vignetteRatio * 0.5f;
+					uv /= 1.0f - vignetteRatio;
+    				uv *=  1.0 - uv.yx;
+    				float vig = uv.x*uv.y * 4.0;
+    				vig = pow(vig, 0.27);
+
+    				resultColor.xyz *= vig;
+
+					return resultColor;
+				}
+
+				fixed4 sampleBackground(float2 texcoord, float3 worldPosition)
 				{
 					{
 						float2 directionVector = texcoord - _CenterUV.xy;
@@ -217,7 +258,7 @@ Shader "Custom/SpriteShadowScreenShader"
 
 						bool isInCross = (distanceFromCenterX < widthX && distanceFromCenterY < crossLength) || (distanceFromCenterY < widthY && distanceFromCenterX < crossLength);
 						if(isInCross)
-							return SampleSpriteTexture(_otherBackgroundTexture,texcoord); 
+							return sampleOtherBackground(texcoord, worldPosition); 
 					}
 					
 					{
@@ -235,7 +276,7 @@ Shader "Custom/SpriteShadowScreenShader"
     					float value = pow(abs(tilePos.x), fillFactor) + pow(abs(tilePos.y), fillFactor);
 
     					if (value <= 1.0)
-    					    return SampleSpriteTexture(_otherBackgroundTexture,texcoord); 
+    					    return sampleOtherBackground(texcoord, worldPosition); 
 					}
 
 					return SampleSpriteTexture(_MainTex, texcoord) * _BackgroundColorTint;
@@ -304,7 +345,7 @@ Shader "Custom/SpriteShadowScreenShader"
 				}
 
 
-				fixed4 bluredBackgroundSample(float2 texcoord)
+				fixed4 bluredBackgroundSample(float2 texcoord, float3 worldPosition)
 				{
 					float Pi = 6.28318530718; // Pi*2
 
@@ -315,13 +356,13 @@ Shader "Custom/SpriteShadowScreenShader"
 					// GAUSSIAN BLUR SETTINGS }}}
 
 					float2 Radius = Size / resolution;
-					float4 Color = sampleBackground(texcoord);
+					float4 Color = sampleBackground(texcoord, worldPosition);
 					// Blur calculations
 					for (float d = 0.0; d < Pi; d += Pi / Directions)
 					{
 						for (float i = 1.0 / Quality; i <= 1.0; i += 1.0 / Quality)
 						{
-							Color += sampleBackground(texcoord + float2(cos(d), sin(d)) * Radius * i);
+							Color += sampleBackground(texcoord + float2(cos(d), sin(d)) * Radius * i, worldPosition);
 						}
 					}
 					Color /= Quality * Directions - backgroundBrightnessFactor;
@@ -335,7 +376,7 @@ Shader "Custom/SpriteShadowScreenShader"
 						{
 							for (float i = 1.0 / Quality; i <= 1.0; i += 1.0 / Quality)
 							{
-								bloom += sampleBackground(texcoord + float2(cos(d), sin(d)) * bloomBlurRadius * i);
+								bloom += sampleBackground(texcoord + float2(cos(d), sin(d)) * bloomBlurRadius * i, worldPosition);
 							}
 						}
 						bloom /= Quality * Directions - backgroundBrightnessFactor;
@@ -353,9 +394,9 @@ Shader "Custom/SpriteShadowScreenShader"
 					return Color;
 				}
 
-				fixed4 allTogether(float2 texcoord)
+				fixed4 allTogether(float2 texcoord, float3 worldPosition)
 				{
-					fixed4 backgroundSample = bluredBackgroundSample(texcoord);
+					fixed4 backgroundSample = bluredBackgroundSample(texcoord, worldPosition);
 					fixed4 characterSample = drawCharacter(texcoord);
 					fixed4 characterShadow = bluredShadowSample(texcoord);
 					fixed4 interfaceSample = drawInterface(texcoord);
@@ -368,7 +409,7 @@ Shader "Custom/SpriteShadowScreenShader"
 
 				fixed4 frag(v2f IN) : SV_Target
 				{
-					fixed4 resultColor = allTogether(IN.texcoord);
+					fixed4 resultColor = allTogether(IN.texcoord,IN.worldPosition);
 
 					//brigtness
 					resultColor.rgb *= _Brightness;

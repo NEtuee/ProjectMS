@@ -655,6 +655,9 @@ public class GameEntityBase : SequencerObjectBase
 
     private void gameEntityCollisionEvent(CollisionSuccessData data)
     {
+        if(_characterInfo._selfCollision == false)
+            return;
+            
         _debugColor = Color.green;
 
         if(data._target == null || data._target is GameEntityBase == false)

@@ -77,6 +77,8 @@ public class CharacterInfoLoader : LoaderBase<Dictionary<string,CharacterInfoDat
                 characterInfoData._useCameraBoundLock = bool.Parse(attrValue);
             else if(attrName == "UseHPInterface")
                 characterInfoData._useHpInterface = bool.Parse(attrValue);
+            else if(attrName == "SelfCollision")
+                characterInfoData._selfCollision = bool.Parse(attrValue);
         }
 
         return characterInfoData;
