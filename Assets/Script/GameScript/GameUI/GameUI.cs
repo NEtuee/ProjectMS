@@ -18,6 +18,7 @@ public class GameUI : MonoBehaviour
     public TextBubblePoolBinder TextBubblePoolBinder;
     public EnemyHpBinder EnemyHpBinder;
     public BossHpUIBinder BossHpBinder;
+    public TitleMenuUIBinder TitleMenuUIBinder;
 
     public TextBubble TextBubble { get; private set; }
     
@@ -29,6 +30,7 @@ public class GameUI : MonoBehaviour
     private TextBubble _textBubble;
     private EnemyHp _enemyHp;
     private BossHpUI _bossHp;
+    private TitleMenuUI _titleMenuUI;
     
     private GameEntityBase _targetEntity;
 
@@ -72,6 +74,11 @@ public class GameUI : MonoBehaviour
     {
         CrosshairBinder.HeadObject.SetActive(active);
         CrosshairBinder.SubMarker.SetActive(active);
+    }
+
+    public void ActiveTitleMenuUI(bool active)
+    {
+        _titleMenuUI.ActiveTitleMenu(active);
     }
 
     public void SetBossHpEntity(GameEntityBase targetEntity)
@@ -132,6 +139,7 @@ public class GameUI : MonoBehaviour
         binderList.Add(TextBubblePoolBinder);
         binderList.Add(EnemyHpBinder);
         binderList.Add(BossHpBinder);
+        binderList.Add(TitleMenuUIBinder);
 
         foreach (var binder in binderList)
         {
@@ -158,6 +166,7 @@ public class GameUI : MonoBehaviour
         _textBubble = new TextBubble();
         _enemyHp = new EnemyHp();
         _bossHp = new BossHpUI();
+        _titleMenuUI = new TitleMenuUI();
         
         TextBubble = _textBubble;
 
@@ -169,6 +178,7 @@ public class GameUI : MonoBehaviour
         _textBubble.SetBinder(TextBubblePoolBinder);
         _enemyHp.SetBinder(EnemyHpBinder);
         _bossHp.SetBinder(BossHpBinder);
+        _titleMenuUI.SetBinder(TitleMenuUIBinder);
     }
 
     private void CheckValidUI()
@@ -182,6 +192,7 @@ public class GameUI : MonoBehaviour
         uiElementList.Add(_textBubble);
         uiElementList.Add(_enemyHp);
         uiElementList.Add(_bossHp);
+        uiElementList.Add(_titleMenuUI);
 
         foreach (var uiElement in uiElementList)
         {

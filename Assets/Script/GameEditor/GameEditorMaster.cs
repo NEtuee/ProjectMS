@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -130,9 +131,10 @@ public class GameEditorMaster : MonoBehaviour
 
         int offsetIndex = 0;
 
-        for(int index = 0; index < stageData.Length; ++index)
+        int index = 0;
+        for (index = 0; index < stageData.Length; ++index)
         {
-            if(stageData[index]._isMiniStage)
+            if (stageData[index]._isMiniStage)
             {
                 ++offsetIndex;
                 continue;
@@ -157,7 +159,28 @@ public class GameEditorMaster : MonoBehaviour
                 
             });
         }
+
+        {
+            GameObject uiTitleStageButton = Instantiate(_stageSelectorButtonItemPrefab);
+            RectTransform rectTransform = uiTitleStageButton.GetComponent<RectTransform>();
+            rectTransform.SetParent(_stageSelectorContent, false);
+            rectTransform.anchoredPosition = new Vector3(0f, -(40f + 45f * (float) (index - offsetIndex)));
+
+            uiTitleStageButton.GetComponentInChildren<Text>().text = "TitleMenu";
+            uiTitleStageButton.GetComponent<Button>().onClick.AddListener(() =>
+            {
+                if (_activeEditor)
+                    editorOff();
+
+                LetterBox._instance.clear();
+                ScreenDirector._instance._screenFader.clear();
+                GameUI.Instance.ActiveTitleMenuUI(true);
+                stageSelectorOnOff();
+                Cursor.visible = true;
+            });
+        }
     }
+    
 #if UNITY_EDITOR
     public void updateCharacterPick()
     {
