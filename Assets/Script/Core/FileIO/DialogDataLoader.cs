@@ -51,20 +51,29 @@ public static class DialogDataLoader
                 commandList.AddRange(command);
             }
             
-            ShowText lastShowText = null;
+            ShowText prevShowText = null;
             foreach (var c in commandList)
             {
                 if (c is ShowText showTextCommand)
                 {
-                    lastShowText = showTextCommand;
+                    prevShowText = showTextCommand;
+                }
+
+                if (c is WaitInput waitInput)
+                {
+                    if (prevShowText != null)
+                    {
+                        prevShowText.SetActiveInputIcon();
+                        prevShowText = null;
+                    }
                 }
             }
 
-            var lastCommand = commandList.LastOrDefault();
-            if (lastShowText != null && lastCommand is WaitInput waitInput)
-            {
-                lastShowText.SetActiveInputIcon();
-            }
+            // var lastCommand = commandList.LastOrDefault();
+            // if (prevShowText != null && lastCommand is WaitInput waitInput)
+            // {
+            //     prevShowText.SetActiveInputIcon();
+            // }
             
             dataDic[textNodes[nodeIndex].Name] = commandList;
         }

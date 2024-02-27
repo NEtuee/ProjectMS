@@ -122,11 +122,18 @@ public class TextPresenter
     {
         _stringBuilder.Clear();
         UpdateText(_stringBuilder.ToString());
+        _binder.BubblePolygonBack.ForceUpdate();
+        _binder.BubblePolygonMain.ForceUpdate();
     }
 
     public void InitTextLength(int length)
     {
         _stringBuilder.Capacity = length + 100;
+    }
+
+    public void Active(bool active)
+    {
+        _binder.SetActive(active);
     }
 
     public void AddCharacter(char ch)
@@ -197,6 +204,23 @@ public interface BubbleCommend
     public void Start(TextPresenter presenter, float startTime);
     public bool Update(TextPresenter presenter, float deltaTime);
     public void End();
+}
+
+public class DeferredActive : BubbleCommend
+{
+    public void Start(TextPresenter presenter, float startTime)
+    {
+    }
+
+    public bool Update(TextPresenter presenter, float deltaTime)
+    {
+        presenter.Active(true);
+        return true;
+    }
+
+    public void End()
+    {
+    }
 }
 
 public class ShowText : BubbleCommend

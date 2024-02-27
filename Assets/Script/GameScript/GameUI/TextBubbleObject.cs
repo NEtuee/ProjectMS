@@ -64,6 +64,8 @@ public class TextBubbleObject : TextBubbleBinder
             _owner.ReturnPool(this);
             return;
         }
+        
+        _textPresenter.Clear();
 
         var add1 = GetRandomAdd(randomRange);
         var add2 = GetRandomAdd(randomRange);
@@ -76,12 +78,9 @@ public class TextBubbleObject : TextBubbleBinder
          add3 = GetRandomAdd(randomRange);
          add4 = GetRandomAdd(randomRange);
         BubblePolygonBack.InitRandomAdd(add1, add2, add3, add4);
-
-        _textPresenter.Clear();
-
+        
         _followTarget = followTarget;
         UpdateFollowPosition();
-        _textPresenter.Clear();
         
         _commendQueue.Clear();
 

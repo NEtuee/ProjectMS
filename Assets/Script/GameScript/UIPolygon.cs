@@ -23,6 +23,11 @@ namespace UnityEngine.UI.Extensions
             _add3 = add3;
             _add4 = add4;
         }
+
+        public void ForceUpdate()
+        {
+            _size = rectTransform.rect.size;
+        }
         
         private void Update()
         {
