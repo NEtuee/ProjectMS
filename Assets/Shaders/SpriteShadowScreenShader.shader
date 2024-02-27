@@ -201,8 +201,11 @@ Shader "Custom/SpriteShadowScreenShader"
 					return interfaceSample;
 				}
 
-				fixed4 sampleOtherBackground(float2 texcoord, float3 worldPosition)
+				fixed4 sampleOtherBackground(float2 texcoord, float3 worldPosition, bool ignoreOtherBackground)
 				{
+					if(ignoreOtherBackground)
+						return fixed4(0.0,0.0,0.0,0.0);
+
 					fixed4 resultColor = fixed4(0.4,0.4,0.5,1.0);
 
 					{
@@ -232,7 +235,7 @@ Shader "Custom/SpriteShadowScreenShader"
 					float2 uv = texcoord.xy - vignetteRatio * 0.5f;
 					uv /= 1.0f - vignetteRatio;
     				uv *=  1.0 - uv.yx;
-    				float vig = uv.x*uv.y * 4.0;
+    				float vig = uv.x*uv.y * 7.0;
     				vig = pow(vig, 0.27);
 
     				resultColor.xyz *= vig;
@@ -240,7 +243,7 @@ Shader "Custom/SpriteShadowScreenShader"
 					return resultColor;
 				}
 
-				fixed4 sampleBackground(sampler2D backgroundTexture, float2 texcoord, float3 worldPosition)
+				fixed4 sampleBackground(sampler2D backgroundTexture, float2 texcoord, float3 worldPosition, bool ignoreOtherBackground)
 				{
 					{
 						float2 directionVector = texcoord - _CenterUV.xy;
@@ -256,7 +259,7 @@ Shader "Custom/SpriteShadowScreenShader"
 
 						bool isInCross = (distanceFromCenterX < widthX && distanceFromCenterY < crossLength) || (distanceFromCenterY < widthY && distanceFromCenterX < crossLength);
 						if(isInCross)
-							return sampleOtherBackground(texcoord, worldPosition); 
+							return sampleOtherBackground(texcoord, worldPosition,ignoreOtherBackground); 
 					}
 					
 					{
@@ -274,7 +277,7 @@ Shader "Custom/SpriteShadowScreenShader"
     					float value = pow(abs(tilePos.x), fillFactor) + pow(abs(tilePos.y), fillFactor);
 
     					if (value <= 1.0)
-    					    return sampleOtherBackground(texcoord, worldPosition); 
+    					    return sampleOtherBackground(texcoord, worldPosition,ignoreOtherBackground); 
 					}
 
 					return SampleSpriteTexture(backgroundTexture, texcoord) * _BackgroundColorTint;
@@ -343,7 +346,7 @@ Shader "Custom/SpriteShadowScreenShader"
 				}
 
 
-				fixed4 bluredBackgroundSample(sampler2D backgroundTexture, float2 texcoord, float3 worldPosition, bool impactAlpha)
+				fixed4 bluredBackgroundSample(sampler2D backgroundTexture, float2 texcoord, float3 worldPosition, bool firstBackground)
 				{
 					float Pi = 6.28318530718; // Pi*2
 
@@ -354,13 +357,13 @@ Shader "Custom/SpriteShadowScreenShader"
 					// GAUSSIAN BLUR SETTINGS }}}
 
 					float2 Radius = Size / resolution;
-					float4 Color = sampleBackground(backgroundTexture, texcoord, worldPosition);
+					float4 Color = sampleBackground(backgroundTexture, texcoord, worldPosition, firstBackground == false);
 					// Blur calculations
 					for (float d = 0.0; d < Pi; d += Pi / Directions)
 					{
 						for (float i = 1.0 / Quality; i <= 1.0; i += 1.0 / Quality)
 						{
-							Color += sampleBackground(backgroundTexture, texcoord + float2(cos(d), sin(d)) * Radius * i, worldPosition);
+							Color += sampleBackground(backgroundTexture, texcoord + float2(cos(d), sin(d)) * Radius * i, worldPosition, firstBackground == false);
 						}
 					}
 					Color /= Quality * Directions - backgroundBrightnessFactor;
@@ -374,7 +377,7 @@ Shader "Custom/SpriteShadowScreenShader"
 						{
 							for (float i = 1.0 / Quality; i <= 1.0; i += 1.0 / Quality)
 							{
-								bloom += sampleBackground(backgroundTexture, texcoord + float2(cos(d), sin(d)) * bloomBlurRadius * i, worldPosition);
+								bloom += sampleBackground(backgroundTexture, texcoord + float2(cos(d), sin(d)) * bloomBlurRadius * i, worldPosition, firstBackground == false);
 							}
 						}
 						bloom /= Quality * Directions - backgroundBrightnessFactor;
@@ -388,7 +391,7 @@ Shader "Custom/SpriteShadowScreenShader"
 
 					//impact frame
 					Color += fixed4(_ImpactFrame, _ImpactFrame, _ImpactFrame, _ImpactFrame);
-					Color.a *= impactAlpha ? _ImpactFrame : 1.0f - _ImpactFrame;
+					Color.a *= firstBackground ? _ImpactFrame : 1.0f - _ImpactFrame;
 
 					return Color;
 				}

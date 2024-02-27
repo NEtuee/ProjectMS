@@ -56,6 +56,9 @@
         <WaitSecond Time="2.0"/>
         <BlockAI UniqueKey="Boss" Enable="False"/>
 
+        <WaitSecond Time="3.0"/>
+        <SetCameraUVTarget UniqueKey="Player"/>
+
     </UpdatePhase>
     
 </SequencerGraph>

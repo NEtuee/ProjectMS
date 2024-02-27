@@ -79,16 +79,20 @@ public static class DebugUtil
 
     public static void sendDiscordMessage_chat(string message)
     {
+#if UNITY_EDITOR
         GameObject coroutineObject = new GameObject("DiscordWebHookSender");
         UnityWebRequestHelper helepr = coroutineObject.AddComponent<UnityWebRequestHelper>();
         helepr.sendWebHook(UnityWebRequestHelper._webHookCHAT, message);
+#endif
     }
 
     public static void sendDiscordMessage_dev(string message)
     {
+#if UNITY_EDITOR
         GameObject coroutineObject = new GameObject("DiscordWebHookSender");
         UnityWebRequestHelper helepr = coroutineObject.AddComponent<UnityWebRequestHelper>();
         helepr.sendWebHook(UnityWebRequestHelper._webHookDEV, message);
+#endif
     }
 
 }
