@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1465009443996005477}
   - component: {fileID: 1465009443996005475}
   - component: {fileID: 1465009443996005472}
-  m_Layer: 10
+  m_Layer: 13
   m_Name: Indicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -153,7 +153,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7414756efac31b41ba80a5f6ba534c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _targetAttackPreset: LaserTest
   _targetLine: {fileID: 1465009443996005477}
   _placeholder: {fileID: 2267773523579009189}
 --- !u!95 &1465009443996005472
@@ -186,7 +185,7 @@ GameObject:
   - component: {fileID: 278211517461608690}
   - component: {fileID: 6181859165543707234}
   - component: {fileID: 1128711194046233908}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: LaserTest_Timeline
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -244,6 +243,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playableDirector: {fileID: 6181859165543707234}
+  _rayEffect: {fileID: 0}
   _isCharacterMaterialEffect: 0
   _isLaserEffect: 1
   _isOutlineEffect: 0
@@ -257,7 +257,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2225329790384166779}
   - component: {fileID: 2267773523579009189}
-  m_Layer: 10
+  m_Layer: 13
   m_Name: Placeholder
   m_TagString: Untagged
   m_Icon: {fileID: 0}

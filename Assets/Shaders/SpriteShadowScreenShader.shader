@@ -13,8 +13,6 @@ Shader "Custom/SpriteShadowScreenShader"
 		//[HideInInspector]
 		_PerspectiveDepthTexture("Perspective Depth Texture", 2D) = "white" {}
 
-		_otherBackgroundTexture("Other Background Texture", 2D) = "white" {}
-
 		_CrossFillFactor("Cross Fill Factor Test",Range(0.0, 2.0)) = 0.0
 		_CrossWidth("Cross Width", Range(0.0, 2.0)) = 0.15
 		_CrossHeight("Cross Height", Range(0.0, 2.0)) = 0.15
@@ -117,7 +115,7 @@ Shader "Custom/SpriteShadowScreenShader"
 				sampler2D _InterfaceTexture;
 				sampler2D _AlphaTex;
 				sampler2D _PerspectiveDepthTexture;
-				sampler2D _otherBackgroundTexture;
+				sampler2D _ForwardScreenTexture;
 
 				float _CrossFillFactor;
 				float _CrossWidth;
@@ -242,7 +240,7 @@ Shader "Custom/SpriteShadowScreenShader"
 					return resultColor;
 				}
 
-				fixed4 sampleBackground(float2 texcoord, float3 worldPosition)
+				fixed4 sampleBackground(sampler2D backgroundTexture, float2 texcoord, float3 worldPosition)
 				{
 					{
 						float2 directionVector = texcoord - _CenterUV.xy;
@@ -279,7 +277,7 @@ Shader "Custom/SpriteShadowScreenShader"
     					    return sampleOtherBackground(texcoord, worldPosition); 
 					}
 
-					return SampleSpriteTexture(_MainTex, texcoord) * _BackgroundColorTint;
+					return SampleSpriteTexture(backgroundTexture, texcoord) * _BackgroundColorTint;
 				}
 
 				fixed4 drawCharacterShadow(float2 texcoord)
@@ -345,7 +343,7 @@ Shader "Custom/SpriteShadowScreenShader"
 				}
 
 
-				fixed4 bluredBackgroundSample(float2 texcoord, float3 worldPosition)
+				fixed4 bluredBackgroundSample(sampler2D backgroundTexture, float2 texcoord, float3 worldPosition, bool impactAlpha)
 				{
 					float Pi = 6.28318530718; // Pi*2
 
@@ -356,13 +354,13 @@ Shader "Custom/SpriteShadowScreenShader"
 					// GAUSSIAN BLUR SETTINGS }}}
 
 					float2 Radius = Size / resolution;
-					float4 Color = sampleBackground(texcoord, worldPosition);
+					float4 Color = sampleBackground(backgroundTexture, texcoord, worldPosition);
 					// Blur calculations
 					for (float d = 0.0; d < Pi; d += Pi / Directions)
 					{
 						for (float i = 1.0 / Quality; i <= 1.0; i += 1.0 / Quality)
 						{
-							Color += sampleBackground(texcoord + float2(cos(d), sin(d)) * Radius * i, worldPosition);
+							Color += sampleBackground(backgroundTexture, texcoord + float2(cos(d), sin(d)) * Radius * i, worldPosition);
 						}
 					}
 					Color /= Quality * Directions - backgroundBrightnessFactor;
@@ -376,7 +374,7 @@ Shader "Custom/SpriteShadowScreenShader"
 						{
 							for (float i = 1.0 / Quality; i <= 1.0; i += 1.0 / Quality)
 							{
-								bloom += sampleBackground(texcoord + float2(cos(d), sin(d)) * bloomBlurRadius * i, worldPosition);
+								bloom += sampleBackground(backgroundTexture, texcoord + float2(cos(d), sin(d)) * bloomBlurRadius * i, worldPosition);
 							}
 						}
 						bloom /= Quality * Directions - backgroundBrightnessFactor;
@@ -390,21 +388,24 @@ Shader "Custom/SpriteShadowScreenShader"
 
 					//impact frame
 					Color += fixed4(_ImpactFrame, _ImpactFrame, _ImpactFrame, _ImpactFrame);
+					Color.a *= impactAlpha ? _ImpactFrame : 1.0f - _ImpactFrame;
 
 					return Color;
 				}
 
 				fixed4 allTogether(float2 texcoord, float3 worldPosition)
 				{
-					fixed4 backgroundSample = bluredBackgroundSample(texcoord, worldPosition);
+					fixed4 backgroundSample = bluredBackgroundSample(_MainTex, texcoord, worldPosition, true);
 					fixed4 characterSample = drawCharacter(texcoord);
 					fixed4 characterShadow = bluredShadowSample(texcoord);
+					fixed4 forwardScreenSample = bluredBackgroundSample(_ForwardScreenTexture, texcoord, worldPosition, false);
 					fixed4 interfaceSample = drawInterface(texcoord);
 
 					fixed4 shadowdedBackground = lerp(backgroundSample, characterShadow, characterShadow.a);
 					fixed4 mixed2 = lerp(shadowdedBackground, characterSample, characterSample.a);
-					fixed4 mixed3 = lerp(mixed2, interfaceSample, interfaceSample.a);
-					return mixed3;
+					fixed4 mixed3 = lerp(mixed2, forwardScreenSample, forwardScreenSample.a);
+					fixed4 mixed4 = lerp(mixed3, interfaceSample, interfaceSample.a);
+					return mixed4;
 				}
 
 				fixed4 frag(v2f IN) : SV_Target

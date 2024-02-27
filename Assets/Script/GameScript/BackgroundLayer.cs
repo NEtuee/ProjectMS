@@ -27,7 +27,7 @@ public class BackgroundLayer : MonoBehaviour
             if(_lockY)
                 resultPosition.y = position.y;
 
-            transform.position = resultPosition;
+            transform.position = MathEx.floorNoSign(resultPosition,2);
         }
         else
         {
@@ -39,7 +39,7 @@ public class BackgroundLayer : MonoBehaviour
             if(_lockY)
                 position.y = 0f;
 
-            transform.position = position;
+            transform.position = MathEx.floorNoSign(position,2);
         }
     }
 }

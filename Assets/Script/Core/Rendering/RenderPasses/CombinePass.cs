@@ -10,18 +10,12 @@ public class CombinePass : AkaneRenderPass
     BackgroundRenderPass backgroundRenderPass;
     CharacterRenderPass characterRenderPass;
     PerspectiveDepthRenderPass perspectiveDepthRenderPass;
+    ForwardScreenRenderPass forwardScreenRenderPass;
     InterfaceRenderPass interfaceRenderPass;
-
-    Dictionary<string, AkaneRenderPass> renderPasses = new Dictionary<string, AkaneRenderPass>();
 
     private static int shadowScreenLayer;
     public override int layerMasks => shadowScreenLayer;
     public override string layerName => "ShadowScreen";
-
-    public void AddPass<T>(T renderPass) where T : AkaneRenderPass
-    {
-        renderPasses.Add(renderPass.layerName, renderPass);
-    }
 
     public void Awake()
     {
@@ -36,13 +30,14 @@ public class CombinePass : AkaneRenderPass
         }
     }
 
-    public static CombinePass CreateInstance(BackgroundRenderPass backgroundPass, CharacterRenderPass characterPass, InterfaceRenderPass interfacePass, PerspectiveDepthRenderPass perspectiveDepthPass)
+    public static CombinePass CreateInstance(BackgroundRenderPass backgroundPass, CharacterRenderPass characterPass, InterfaceRenderPass interfacePass, PerspectiveDepthRenderPass perspectiveDepthPass, ForwardScreenRenderPass forwardScreenPass)
     {
         var pass = ScriptableObject.CreateInstance<CombinePass>();
         pass.backgroundRenderPass = backgroundPass;
         pass.characterRenderPass = characterPass;
         pass.interfaceRenderPass = interfacePass;
         pass.perspectiveDepthRenderPass = perspectiveDepthPass;
+        pass.forwardScreenRenderPass = forwardScreenPass;
         return pass;
     }
     public override void Draw(Camera renderCamera)
@@ -51,6 +46,7 @@ public class CombinePass : AkaneRenderPass
         renderMaterial?.SetTexture("_MainTex", backgroundRenderPass?.RenderTexture);
         renderMaterial?.SetTexture("_InterfaceTexture", interfaceRenderPass?.RenderTexture);
         renderMaterial?.SetTexture("_PerspectiveDepthTexture", perspectiveDepthRenderPass?.RenderTexture);
+        renderMaterial?.SetTexture("_ForwardScreenTexture", forwardScreenRenderPass?.RenderTexture);
 
         float orthoSize = Camera.main.orthographicSize;
         float aspectRatio = Camera.main.aspect;

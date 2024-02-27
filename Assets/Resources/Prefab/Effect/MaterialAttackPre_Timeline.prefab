@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1914037373981192391}
   - component: {fileID: 4446458690802757082}
   - component: {fileID: 7999337946685403157}
-  m_Layer: 10
+  m_Layer: 13
   m_Name: Crosslight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -51,7 +51,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 2edb818b30766bc48bcf518a937e8c98, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -113,7 +113,7 @@ GameObject:
   - component: {fileID: 7881482869928373661}
   - component: {fileID: 4284789285949351693}
   - component: {fileID: 6995565589497473115}
-  m_Layer: 10
+  m_Layer: 13
   m_Name: MaterialAttackPre_Timeline
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -169,4 +169,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playableDirector: {fileID: 4284789285949351693}
+  _rayEffect: {fileID: 0}
   _isCharacterMaterialEffect: 1
+  _isLaserEffect: 0
+  _isOutlineEffect: 0
