@@ -34,6 +34,9 @@ public class TitleMenuUI : IUIElement
         InitLanguageButton();
         InitResolution();
         ActiveTitleMenu(false);
+
+        _binder.OptionRoot.SetActive(false);
+        _binder.CuttingLine.gameObject.SetActive(true);
     }
 
     public void ActiveTitleMenu(bool active)
@@ -113,6 +116,22 @@ public class TitleMenuUI : IUIElement
         }
 
         updageLanguge();
+    }
+
+    private Vector2 _scrollOffset = Vector2.zero;
+    public void UpdateByManager()
+    {
+        if(_binder.OptionRoot.activeInHierarchy || _binder.Root.activeInHierarchy == false)
+            return;
+
+        _scrollOffset.x += 0.04f * Time.deltaTime;
+        _binder.CuttingLine.material.mainTextureOffset = _scrollOffset;
+
+        if(Input.anyKeyDown)
+        {
+            _binder.OptionRoot.SetActive(true);
+            _binder.CuttingLine.gameObject.SetActive(false);
+        }
     }
 
     private void languageButtonLeft()

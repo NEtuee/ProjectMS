@@ -6,7 +6,8 @@ using UnityEngine.UI;
 public class TitleMenuUIBinder : UIObjectBinder
 {
     public GameObject Root;
-    
+    public GameObject OptionRoot;
+
     [Header("Title Menu")]
     public Button StartButton;
 
@@ -20,6 +21,7 @@ public class TitleMenuUIBinder : UIObjectBinder
     public Button LanguageRightButton;
 
     public Image ResolutionImage;
+    public Image CuttingLine;
     public Text LanguageText;
 
     public Sprite resolution800;
@@ -34,6 +36,12 @@ public class TitleMenuUIBinder : UIObjectBinder
     public override bool CheckValidLink(out string reason)
     {
         if (Root == null)
+        {
+            reason = "메인메뉴 ui 루트 오브젝트가 없음";
+            return false;
+        }
+
+        if (OptionRoot == null)
         {
             reason = "메인메뉴 ui 루트 오브젝트가 없음";
             return false;
@@ -78,6 +86,12 @@ public class TitleMenuUIBinder : UIObjectBinder
         if (ResolutionImage == null)
         {
             reason = "메인메뉴 ui에 ResolutionImage 없음";
+            return false;
+        }
+
+        if (CuttingLine == null)
+        {
+            reason = "메인메뉴 ui에 CuttingLine 없음";
             return false;
         }
 

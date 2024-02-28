@@ -109,6 +109,8 @@ public class GameUI : MonoBehaviour
 
     private void Update()
     {
+        _titleMenuUI.UpdateByManager();
+
         if (_targetEntity == null)
         {
             return;
