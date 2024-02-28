@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c858e63344676f34a93a8306d92a1f7d, type: 3}
   m_Name: AudioInfo
   m_EditorClassIdentifier: 
-  csvData: {fileID: 4900000, guid: 614ff1e182f9dae49976b42a780a0479, type: 3}
+  csvData: {fileID: 4900000, guid: ab02c864fe140f2489a17df9ae84dab6, type: 3}
   audioData:
   - name: global data
     id: 0
@@ -997,6 +997,20 @@ MonoBehaviour:
         Data3: -683613281
         Data4: -1742954626
       Path: event:/UI/SystemVoice
+    parameters: []
+  - name: SystemText_Large
+    id: 5007
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: -377667302
+        Data2: 1222742127
+        Data3: 1842895763
+        Data4: 891972815
+      Path: event:/UI/SystemText_Large
     parameters: []
   - name: 00_Explosion_Large
     id: 6001
