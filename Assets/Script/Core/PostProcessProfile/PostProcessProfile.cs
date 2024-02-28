@@ -59,6 +59,9 @@ public class PostProcessProfileData
     public bool _useBackgroundColorTint = true;
     public Color _backgroundColorTint = Color.white;
 
+    public bool _useForwardScreenColorTint = true;
+    public Color _forwardScreenColorTint = Color.white;
+
     public bool _useBlurSize = true;
     public float _blurSize = 0f;
 
@@ -120,6 +123,8 @@ public class PostProcessProfileData
             targetMaterial.SetColor("_ColorTint",_colorTint);
         if(_useBackgroundColorTint)
             targetMaterial.SetColor("_BackgroundColorTint",_backgroundColorTint);
+        if(_useForwardScreenColorTint)
+            targetMaterial.SetColor("_ForwardScreenColorTint",_forwardScreenColorTint);
         
         if(_useBlurSize)
             targetMaterial.SetFloat("_BlurSize",_blurSize);
@@ -160,6 +165,7 @@ public class PostProcessProfileData
         _contrastTarget = targetMaterial.GetFloat("_ContrastTarget");
         _colorTint = targetMaterial.GetColor("_ColorTint");
         _backgroundColorTint = targetMaterial.GetColor("_BackgroundColorTint");
+        _forwardScreenColorTint = targetMaterial.GetColor("_ForwardScreenColorTint");
 
         _blurSize = targetMaterial.GetFloat("_BlurSize");
         _multiSampleDistance = targetMaterial.GetFloat("_MultiSampleDistance");
@@ -205,6 +211,8 @@ public class PostProcessProfileData
             _colorTint                  = Color.Lerp(_colorTint, destination._profileData._colorTint, ratio);
         if(destination._profileData._useBackgroundColorTint)
             _backgroundColorTint        = Color.Lerp(_backgroundColorTint, destination._profileData._backgroundColorTint, ratio);
+        if(destination._profileData._useForwardScreenColorTint)
+            _forwardScreenColorTint     = Color.Lerp(_forwardScreenColorTint, destination._profileData._forwardScreenColorTint, ratio);
         if(destination._profileData._useBlurSize)
             _blurSize                   = Mathf.Lerp(_blurSize, destination._profileData._blurSize, ratio);
         if(destination._profileData._useMultiSampleDistance)
@@ -257,6 +265,8 @@ public class PostProcessProfileData
             _colorTint                  = Color.Lerp(source._colorTint, destination._colorTint, ratio);
         if(destination._useBackgroundColorTint)
             _backgroundColorTint        = Color.Lerp(source._backgroundColorTint, destination._backgroundColorTint, ratio);
+        if(destination._useForwardScreenColorTint)
+            _forwardScreenColorTint     = Color.Lerp(source._forwardScreenColorTint, destination._forwardScreenColorTint, ratio);
         if(destination._useBlurSize)
             _blurSize                   = Mathf.Lerp(source._blurSize, destination._blurSize, ratio);
         if(destination._useMultiSampleDistance)
@@ -290,6 +300,7 @@ public class PostProcessProfileData
         _useSaturation                  = profile._profileData._useSaturation;
         _useColorTint                   = profile._profileData._useColorTint;
         _useBackgroundColorTint         = profile._profileData._useBackgroundColorTint;
+        _useForwardScreenColorTint      = profile._profileData._useForwardScreenColorTint;
         _useBlurSize                    = profile._profileData._useBlurSize;
         _useMultiSampleDistance         = profile._profileData._useMultiSampleDistance;
         _useMultiSampleColorTintRight   = profile._profileData._useMultiSampleColorTintRight;
@@ -329,6 +340,8 @@ public class PostProcessProfileData
             _colorTint                  = profile._profileData._colorTint;
         if(_useBackgroundColorTint)
             _backgroundColorTint        = profile._profileData._backgroundColorTint;
+        if(_useForwardScreenColorTint)
+            _forwardScreenColorTint     = profile._profileData._forwardScreenColorTint;
         if(_useBlurSize)
             _blurSize                   = profile._profileData._blurSize;
         if(_useMultiSampleDistance)
@@ -392,6 +405,7 @@ public class PostProcessProfileEditor : Editor
         isChange |= floatSlider("Background Contrast Target", ref controll._profileData._contrastTarget, 0f, 1f, ref controll._profileData._useContrastTarget);
         isChange |= colorPicker("Color Tint",ref controll._profileData._colorTint,ref controll._profileData._useColorTint);
         isChange |= colorPicker("Background Color Tint",ref controll._profileData._backgroundColorTint,ref controll._profileData._useBackgroundColorTint);
+        isChange |= colorPicker("Forward Screen Color Tint",ref controll._profileData._forwardScreenColorTint,ref controll._profileData._useForwardScreenColorTint);
 
         GUILayout.Space(20f);
         isChange |= floatSlider("Blur Size",ref controll._profileData._blurSize, 0f, 2f,ref controll._profileData._useBlurSize);

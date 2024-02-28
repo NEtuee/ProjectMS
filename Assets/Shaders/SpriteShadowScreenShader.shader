@@ -38,6 +38,7 @@ Shader "Custom/SpriteShadowScreenShader"
 		_ContrastTarget("Background Contrast Target", Range(0.0, 1.0)) = 0.5
 		_ColorTint("Color Tint", Color) = (1,1,1,1)
 		_BackgroundColorTint("BackgroundColor", Color) = (1,1,1,1)
+		_ForwardScreenColorTint("ForwardScreenColor", Color) = (1,1,1,1)
 
 		[Space][Space][Space]
 		_ShadowBlurExponential("Shadow Blur Exp", Range(0.0, 1.0)) = 0.0
@@ -139,6 +140,7 @@ Shader "Custom/SpriteShadowScreenShader"
 				float _ContrastTarget;
 				fixed4 _ColorTint;
 				fixed4 _BackgroundColorTint;
+				fixed4 _ForwardScreenColorTint;
 
 				float _BlurSize;
 				float _ShadowBlurExponential;
@@ -280,7 +282,7 @@ Shader "Custom/SpriteShadowScreenShader"
     					    return sampleOtherBackground(texcoord, worldPosition,ignoreOtherBackground); 
 					}
 
-					return SampleSpriteTexture(backgroundTexture, texcoord) * _BackgroundColorTint;
+					return SampleSpriteTexture(backgroundTexture, texcoord) * (ignoreOtherBackground ? _ForwardScreenColorTint : _BackgroundColorTint);
 				}
 
 				fixed4 drawCharacterShadow(float2 texcoord)
