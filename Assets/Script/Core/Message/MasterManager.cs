@@ -1,5 +1,3 @@
-//#define DEVBUILD
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -112,10 +110,8 @@ public class MasterManager : MessageHub<ManagerBase>
 
         float deltaTimeMultiflier = 1f;
 
-#if DEVBUILD
         if(Input.GetKey(KeyCode.LeftBracket))
             deltaTimeMultiflier = 10f;
-#endif
 
         float deltaTime = Time.deltaTime * deltaTimeMultiflier;
         ActionKeyInputManager.Instance().progress(deltaTime);
@@ -178,7 +174,6 @@ public class MasterManager : MessageHub<ManagerBase>
 
         FMODAudioManager.Instance().updateAudio();
 
-#if DEVBUILD
         if(Input.GetKeyDown(KeyCode.Escape))
         {
             _stageProcessor.stopStage(true);
@@ -191,7 +186,6 @@ public class MasterManager : MessageHub<ManagerBase>
             ScreenDirector._instance._screenFader.clear();
             LetterBox._instance.clear();
         }
-#endif
 
     }
 
