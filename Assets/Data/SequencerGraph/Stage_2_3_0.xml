@@ -2,15 +2,16 @@
 
     <InitializePhase>
         <ApplyPostProcessProfile Path="PostProcessProfile/Stage/Stage_2_3"/>
-        
-        <FadeIn Lambda="5.0"/>
 
         <SetCameraTarget UniqueKey="Player" CameraMode="TargetCenterMode"/>
         <SetCrossHair UniqueKey="Player"/>
+
+        <Fade/>
     </InitializePhase>
 
     <UpdatePhase>
         <WaitSecond Time="1.0"/>
+        <FadeIn Lambda="4.0"/>
 
     </UpdatePhase>
     

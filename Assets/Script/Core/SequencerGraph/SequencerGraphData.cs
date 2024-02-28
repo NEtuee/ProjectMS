@@ -23,6 +23,7 @@ public enum SequencerGraphEventType
     ZoomEffect,
     FadeIn,
     FadeOut,
+    Fade,
     ForceQuit,
     BlockInput,
     BlockAI,
@@ -1410,6 +1411,26 @@ public class SequencerGraphEvent_ForceQuit : SequencerGraphEventBase
 
     public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
     {
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+
+    }
+}
+
+public class SequencerGraphEvent_Fade : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.Fade;
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        ScreenDirector._instance.ScreenFade();
         return true;
     }
 

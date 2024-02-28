@@ -13,6 +13,7 @@ public class ScreenDirector : MonoBehaviour
             None,
             FadeIn,
             FadeOut,
+            Fade,
         }
 
         public Image   _faderImage = null;
@@ -50,6 +51,7 @@ public class ScreenDirector : MonoBehaviour
             _alpha = 0f;
             _targetAlpha = 1f;
 
+            updateAlpha();
             _faderImage.gameObject.SetActive(true);
         }
 
@@ -61,6 +63,19 @@ public class ScreenDirector : MonoBehaviour
             _alpha = 1f;
             _targetAlpha = 0f;
 
+            updateAlpha();
+            _faderImage.gameObject.SetActive(true);
+        }
+
+        public void fade()
+        {
+            _state = FadeState.Fade;
+            _isEnd = true;
+            _lambda = 0f;
+            _alpha = 1f;
+            _targetAlpha = 0f;
+
+            updateAlpha();
             _faderImage.gameObject.SetActive(true);
         }
 
@@ -134,6 +149,11 @@ public class ScreenDirector : MonoBehaviour
     public void ScreenFadeOut(float lambda)
     {
         _screenFader.fadeOut(lambda);
+    }
+
+    public void ScreenFade()
+    {
+        _screenFader.fade();
     }
 
     public void setActiveMainHud(bool active)
