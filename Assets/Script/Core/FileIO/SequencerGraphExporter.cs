@@ -191,6 +191,12 @@ public class SequencrGraphLoader : LoaderBase<SequencerGraphBaseData>
             spawnEvent = new SequencerGraphEvent_SpawnPrefab();
         else if(node.Name == "DeletePrefab")
             spawnEvent = new SequencerGraphEvent_DeletePrefab();
+        else if(node.Name == "AudioPlay")
+            spawnEvent = new SequencerGraphEvent_AudioPlay();
+        else if(node.Name == "StopSwitch")
+            spawnEvent = new SequencerGraphEvent_StopSwitch();
+        else if(node.Name == "AudioParameter")
+            spawnEvent = new SequencerGraphEvent_AudioParameter();
         
         if(spawnEvent == null)
         {

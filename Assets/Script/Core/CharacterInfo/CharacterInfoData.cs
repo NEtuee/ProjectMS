@@ -14,6 +14,7 @@ public class CharacterInfoData
     public bool         _useCameraBoundLock = true;
     public bool         _useHpInterface = false;
     public bool         _selfCollision = true;
+    public bool         _immortalCharacter = false;
     
     public SearchIdentifier _searchIdentifer = SearchIdentifier.Enemy;
     public CommonMaterial   _defaultMaterial = CommonMaterial.Skin;

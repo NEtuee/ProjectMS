@@ -42,6 +42,9 @@
         <WaitSecond Time="0.1"/>
         <SetTimeScale Scale="0.1" Time="1.0" BlendTime="2.0"/>
 
+        <AudioPlay ID="6001"/>
+        <AudioPlay ID="6002"/>
+
         <WaitSecond Time="3.0"/>
         <AIMove UniqueKey="Player" StartAction="AIMove_Loop" LoopAction="AIMove_Loop" EndAction="AIMove_End" EndPositionMarker="AkanePosition2"/>
 

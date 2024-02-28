@@ -173,6 +173,9 @@ public class SequencerGraphProcessor
         {
             foreach(var item in _uniqueEntityDictionary)
             {
+                if(item.Key == "Owner")
+                    continue;
+
                 if(item.Value.isDead())
                     _deleteUniqueTargetList.Add(item.Key);
             }

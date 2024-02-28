@@ -12,6 +12,8 @@
         <SetHideCharacter UniqueKey="Player" Hide="True"/>
 
         <Fade/>
+ 
+        <AudioPlay ID="9004" Switch="True"/>
 
     </InitializePhase>
 
@@ -24,6 +26,7 @@
         <EffectPreset UniqueKey="Player" EffectPreset="ExplodeBig"/>
         <WaitSecond Time="1.0"/>
 
+        <AudioPlay ID="6001"/>
         <CallAIEvent EventName="Fear" UniqueKey="Player" EventTargetType="Range" SearchIdentifier="Enemy" Range="3.0"/>
         <SetBackgroundAnimationTrigger Key="Door_1" Trigger="Open"/>
         <ShakeEffect Scale="0.35" Speed="20.0" Time="0.5"/>

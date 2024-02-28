@@ -79,6 +79,8 @@ public class CharacterInfoLoader : LoaderBase<Dictionary<string,CharacterInfoDat
                 characterInfoData._useHpInterface = bool.Parse(attrValue);
             else if(attrName == "SelfCollision")
                 characterInfoData._selfCollision = bool.Parse(attrValue);
+            else if(attrName == "ImmortalCharacter")
+                characterInfoData._immortalCharacter = bool.Parse(attrValue);
         }
 
         return characterInfoData;

@@ -184,6 +184,7 @@ public class MasterManager : MessageHub<ManagerBase>
 
             HPSphereUIManager.Instance().setActive(true);
             GameUI.Instance.SetActiveCrossHair(true);
+            GameUI.Instance.SetEntity(null);
             ScreenDirector._instance.setActiveMainHud(true);
         
             ScreenDirector._instance._screenFader.clear();
