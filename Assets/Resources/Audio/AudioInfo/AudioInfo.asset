@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c858e63344676f34a93a8306d92a1f7d, type: 3}
   m_Name: AudioInfo
   m_EditorClassIdentifier: 
-  csvData: {fileID: 4900000, guid: efb42b7a256648d49b54a4e4cfb8328e, type: 3}
+  csvData: {fileID: 4900000, guid: 614ff1e182f9dae49976b42a780a0479, type: 3}
   audioData:
   - name: global data
     id: 0
@@ -38,6 +38,10 @@ MonoBehaviour:
       max: 1
     - name: BgmVolumeController
       id: 3
+      min: 0
+      max: 1
+    - name: IsCut
+      id: 11
       min: 0
       max: 1
   - name: Ketsusen
@@ -952,6 +956,146 @@ MonoBehaviour:
         Data4: 0
       Path: snapshot:/SfxVolumeControl
     parameters: []
+  - name: Letterbox
+    id: 5004
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: Snapshot
+    eventReference:
+      Guid:
+        Data1: -751039734
+        Data2: 1138201045
+        Data3: 449619362
+        Data4: -1738785689
+      Path: snapshot:/Letterbox
+    parameters: []
+  - name: Btn
+    id: 5005
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: 1831544151
+        Data2: 1102974977
+        Data3: 1661344131
+        Data4: -709196326
+      Path: event:/UI/Btn
+    parameters: []
+  - name: SystemVoice
+    id: 5006
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: 1072015931
+        Data2: 1274664054
+        Data3: -683613281
+        Data4: -1742954626
+      Path: event:/UI/SystemVoice
+    parameters: []
+  - name: 00_Explosion_Large
+    id: 6001
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: 651402824
+        Data2: 1281680502
+        Data3: -3313777
+        Data4: 474934579
+      Path: event:/SFX/CutScene/00_Explosion_Large
+    parameters: []
+  - name: 00_Explosion_Medium
+    id: 6002
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: -1054704878
+        Data2: 1183729120
+        Data3: 494225035
+        Data4: -339669942
+      Path: event:/SFX/CutScene/00_Explosion_Medium
+    parameters: []
+  - name: 01_BreakTheClass
+    id: 6003
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: -1396185067
+        Data2: 1270361775
+        Data3: -333122632
+        Data4: 1401870413
+      Path: event:/SFX/CutScene/01_BreakTheClass
+    parameters: []
+  - name: 03_FreeYakisobaPan
+    id: 6004
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: 95399748
+        Data2: 1250976336
+        Data3: -2107045711
+        Data4: 1053699777
+      Path: event:/SFX/CutScene/03_FreeYakisobaPan
+    parameters: []
+  - name: 03_YakisobaGirlVoice
+    id: 6005
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: 2043148328
+        Data2: 1191057578
+        Data3: 1062054287
+        Data4: -266411758
+      Path: event:/SFX/CutScene/03_YakisobaGirlVoice
+    parameters: []
+  - name: 03_EnemyReaction
+    id: 6006
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: -616227020
+        Data2: 1299856336
+        Data3: 1914297526
+        Data4: -81136278
+      Path: event:/SFX/CutScene/03_EnemyReaction
+    parameters: []
+  - name: 04_ExpandTheZone
+    id: 6007
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: 750552514
+        Data2: 1076050461
+        Data3: -3468870
+        Data4: -953716360
+      Path: event:/SFX/CutScene/04_ExpandTheZone
+    parameters: []
   - name: Zone
     id: 8001
     defaultVolume: 1
@@ -994,6 +1138,48 @@ MonoBehaviour:
         Data4: -962318787
       Path: event:/Amb/Rain
     parameters: []
+  - name: 01_School_Class
+    id: 8004
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: Amb
+    eventReference:
+      Guid:
+        Data1: -1126333353
+        Data2: 1137595179
+        Data3: 128903613
+        Data4: -1553871079
+      Path: event:/Amb/01_School_Class
+    parameters: []
+  - name: 01_School_Corridor
+    id: 8005
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: Amb
+    eventReference:
+      Guid:
+        Data1: -969357220
+        Data2: 1164943661
+        Data3: 1061883284
+        Data4: 1102028694
+      Path: event:/Amb/01_School_Corridor
+    parameters: []
+  - name: 01_School_Ground
+    id: 8006
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: Amb
+    eventReference:
+      Guid:
+        Data1: 414455658
+        Data2: 1187918135
+        Data3: -278029666
+        Data4: -1738720904
+      Path: event:/Amb/01_School_Ground
+    parameters: []
   - name: Battle_EZ
     id: 9001
     defaultVolume: 1
@@ -1016,10 +1202,10 @@ MonoBehaviour:
     type: BGM
     eventReference:
       Guid:
-        Data1: 0
-        Data2: 0
-        Data3: 0
-        Data4: 0
+        Data1: -1365150349
+        Data2: 1306709272
+        Data3: 1847415998
+        Data4: -472158931
       Path: event:/BGM/Title/Intro
     parameters: []
   - name: Main
@@ -1030,10 +1216,10 @@ MonoBehaviour:
     type: BGM
     eventReference:
       Guid:
-        Data1: 0
-        Data2: 0
-        Data3: 0
-        Data4: 0
+        Data1: 1221600710
+        Data2: 1311558023
+        Data3: 440925829
+        Data4: -770238622
       Path: event:/BGM/Title/Main
     parameters: []
   - name: School
@@ -1044,13 +1230,27 @@ MonoBehaviour:
     type: BGM
     eventReference:
       Guid:
-        Data1: 0
-        Data2: 0
-        Data3: 0
-        Data4: 0
+        Data1: 1117288207
+        Data2: 1130936695
+        Data3: 1111224218
+        Data4: 668509445
       Path: event:/BGM/School
     parameters:
     - name: BgmProgress
-      id: 90001
+      id: 90041
       min: 0
       max: 1
+  - name: School_Boss
+    id: 9005
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: BGM
+    eventReference:
+      Guid:
+        Data1: 1802244933
+        Data2: 1161013862
+        Data3: -278812748
+        Data4: 1017683269
+      Path: event:/BGM/School_Boss
+    parameters: []
