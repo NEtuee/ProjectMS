@@ -179,6 +179,7 @@
     </Dead>
 
     <NajimiWin Package="CommonIdlePackage">
+        <Branch Condition="getTargetFrameTag_Dead == false" Execute="Entry"/>
     </NajimiWin>
 
 </AIGraph>
