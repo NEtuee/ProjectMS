@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c858e63344676f34a93a8306d92a1f7d, type: 3}
   m_Name: AudioInfo
   m_EditorClassIdentifier: 
-  csvData: {fileID: 4900000, guid: 7eaf81717a80f0840b9218b4422a5691, type: 3}
+  csvData: {fileID: 4900000, guid: 15e3e93bad8563d4b982db22b118f1fe, type: 3}
   audioData:
   - name: global data
     id: 0
@@ -210,6 +210,24 @@ MonoBehaviour:
       id: 10101
       min: 0
       max: 2
+  - name: AmpDead
+    id: 1011
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: event:/SFX/Akane/AmpDead
+    parameters:
+    - name: SfxProgress
+      id: 10111
+      min: 0
+      max: 1
   - name: Dash
     id: 2100
     defaultVolume: 1
@@ -1025,6 +1043,20 @@ MonoBehaviour:
         Data3: -1159787868
         Data4: -641108845
       Path: snapshot:/BossReverbCut
+    parameters: []
+  - name: AkaneDead
+    id: 5009
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: Snapshot
+    eventReference:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: snapshot:/AkaneDead
     parameters: []
   - name: 00_Explosion_Large
     id: 6001
