@@ -14,6 +14,7 @@
     </Stun>
 
     <Dead Package="CommonDeadPackage">
+        <Branch Condition="Dead == false" Execute="Entry"/>
     </Dead>
 
     <CustomEvent_MeleeFightStart>

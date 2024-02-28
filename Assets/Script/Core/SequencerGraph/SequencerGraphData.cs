@@ -55,6 +55,9 @@ public enum SequencerGraphEventType
     ApplyBuff,
     SpawnPrefab,
     DeletePrefab,
+    AudioPlay,
+    AudioParameter,
+    StopSwitch,
     
     Count,
 }
@@ -1256,7 +1259,6 @@ public class SequencerGraphEvent_SetAction : SequencerGraphEventBase
                 item.setAction(_actionName);
             }
         }
-        
 
         return true;
     }
@@ -1757,6 +1759,196 @@ public class SequencerGraphEvent_ActiveBossHp : SequencerGraphEventBase
 
             if(attrName == "UniqueKey")
                 _uniqueKey = attrValue;
+        }
+    }
+}
+
+public class SequencerGraphEvent_StopSwitch : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.StopSwitch;
+   
+    public enum StopSwitchType
+    {
+        None,
+        Audio,
+        Effect
+    }
+
+    public int _key;
+    public StopSwitchType _stopSwitchType = StopSwitchType.None;
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor, float deltaTime)
+    {
+        switch(_stopSwitchType)
+        {
+            case StopSwitchType.Audio:
+                FMODAudioManager.Instance().stopSwitch(processor.getUniqueEntity("Player"), _key);
+            break;
+            case StopSwitchType.Effect:
+            break;
+        }
+
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "Switch")
+                _stopSwitchType = (StopSwitchType)System.Enum.Parse(typeof(StopSwitchType), attrValue);
+            else if(attrName == "Key")
+                _key = int.Parse(attrValue);
+        }
+    }
+}
+
+public class SequencerGraphEvent_AudioParameter : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.AudioParameter;
+
+    public int[] _parameterID = null;
+    public float[] _parameterValue = null;
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor, float deltaTime)
+    {
+        if(isValidParameter() == false)
+            return true;
+
+        for(int i = 0; i < _parameterID.Length; ++i)
+        {
+            FMODAudioManager.Instance().SetGlobalParam(_parameterID[i],_parameterValue[i]);
+        }
+
+        return true;
+    }
+
+    public bool isValidParameter()
+    {
+        return _parameterID != null && _parameterValue != null && _parameterID.Length == _parameterValue.Length;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attributes[i].Name == "ParameterID")
+            {
+                string[] paramIDArray = attributes[i].Value.Split(' ');
+                List<int> idList = new List<int>();
+                foreach(var item in paramIDArray)
+                {
+                    idList.Add(int.Parse(item));
+                }
+
+                _parameterID = idList.ToArray();
+            }
+            else if(attributes[i].Name == "ParameterValue")
+            {
+                string[] paramValueArray = attributes[i].Value.Split(' ');
+                List<float> valueList = new List<float>();
+                foreach(var item in paramValueArray)
+                {
+                    valueList.Add(float.Parse(item));
+                }
+
+                _parameterValue = valueList.ToArray();
+            }
+        }
+    }
+}
+
+public class SequencerGraphEvent_AudioPlay : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.AudioPlay;
+
+    public int _audioID = 0;
+    public bool _isSwitch = false;
+
+    public int[] _parameterID = null;
+    public float[] _parameterValue = null;
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor, float deltaTime)
+    {
+        FMODUnity.StudioEventEmitter eventEmitter = null;
+
+        if(_isSwitch)
+            eventEmitter = FMODAudioManager.Instance().playSwitch(processor.getUniqueEntity("Player"), _audioID, Vector3.zero, null);
+        else
+            eventEmitter = FMODAudioManager.Instance().Play(_audioID, Vector3.zero);
+
+        if(eventEmitter != null && isValidParameter())
+            FMODAudioManager.Instance().setParam(ref eventEmitter,_audioID,_parameterID,_parameterValue);
+
+        return true;
+    }
+
+    public bool isValidParameter()
+    {
+        return _parameterID != null && _parameterValue != null && _parameterID.Length == _parameterValue.Length;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attributes[i].Name == "ID")
+            {
+                _audioID = int.Parse(attributes[i].Value);
+            }
+            else if(attributes[i].Name == "ParameterID")
+            {
+                string[] paramIDArray = attributes[i].Value.Split(' ');
+                List<int> idList = new List<int>();
+                foreach(var item in paramIDArray)
+                {
+                    idList.Add(int.Parse(item));
+                }
+
+                _parameterID = idList.ToArray();
+            }
+            else if(attributes[i].Name == "ParameterValue")
+            {
+                string[] paramValueArray = attributes[i].Value.Split(' ');
+                List<float> valueList = new List<float>();
+                foreach(var item in paramValueArray)
+                {
+                    valueList.Add(float.Parse(item));
+                }
+
+                _parameterValue = valueList.ToArray();
+            }
+            else if(attributes[i].Name == "Switch")
+            {
+                _isSwitch = bool.Parse(attributes[i].Value);
+            }
         }
     }
 }

@@ -105,14 +105,14 @@ LineStart,<SpawnPrefab,"UniqueKey=~~,Path=~~,LifeTime=~~,Key=~~"
 ShortCut,__SpawnPrefab,<SpawnPrefab UniqueKey=~~ Path=~~/>
 LineStart,<DeletePrefab,Key=~~
 ShortCut,__DeletePrefab,<DeletePrefab Key=~~/>
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
+ShortCut,__AudioPlay,<AudioPlay ID=~~/>
+LineStart,<AudioPlay,"ID=~~,ParameterID=~~,ParameterValue=~~,Switch=~~"
+LineStartAndInQuote,<StopSwitch Switch=,"Effect,Audio"
+LineStart,<StopSwitch,"Switch=~~,Key=~~"
+ShortCut,__StopSwitch,<StopSwitch Switch=~~ Key=~~/>
+LineStart,<AudioParameter,"ParameterID=~~,ParameterValue=~~"
+ShortCut,__AudioParameter,<AudioParameter ParameterID=~~ ParameterValue=~~/>
+InQuote,Switch=,"True,False"
 ,,
 ,,
 ,,

@@ -59,11 +59,9 @@ public class GameUI : MonoBehaviour
 
     public void SetEntity(GameEntityBase targetEntity) 
     {
-        if (targetEntity == null)
-        {
-            return;
-        }
         _targetEntity = targetEntity;
+        if (targetEntity == null)
+            return;
         
         _hpBpGageUI.InitValue(_targetEntity.getStatusPercentage("HP"), _targetEntity.getStatusPercentage("Blood"));
         _dashPointUI.InitValue(_targetEntity.getStatus("DashPoint"));

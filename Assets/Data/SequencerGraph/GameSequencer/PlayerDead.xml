@@ -1,12 +1,18 @@
 <SequencerGraph Name="Text_Dead">
     <UpdatePhase>
-        <WaitSecond Time="3.0"/>
+        <SetHideUI Hide="True"/>
+        <ApplyPostProcessProfile Path="PostProcessProfile/KillPlayer" BlendTime="3.0" ApplyType="Additional"/>
+        <ZoomEffect Factor="-1.0"/>
+        <SetTimeScale Scale="0.1" Time="3.0" BlendTime="2.0"/>
+
+        <WaitSecond Time="1.5"/>
         <SpawnPrefab Path="Prefab/TextEffect/Text_Dead" Key="DeadText"/>
 
-        <WaitSecond Time="4.0"/>
+        <WaitSecond Time="2.0"/>
 
         <QTEFence KeyName="DashMove"/>
 
+        <SetHideUI Hide="False"/>
         <DeletePrefab Key="DeadText"/>
         <SetAction UniqueKey="Owner" Action="Resurrection"/>
 

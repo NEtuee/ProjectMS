@@ -15,6 +15,7 @@
         <EffectPreset UniqueKey="HideEnemy" EffectPreset="ExplodeBig"/>
         <WaitSecond Time="1.0"/>
 
+        <AudioPlay ID="6001"/>
         <CallAIEvent EventName="Fear" UniqueKey="HideEnemy" EventTargetType="Range" SearchIdentifier="Enemy" Range="4.0"/>
         <SetBackgroundAnimationTrigger Key="Door_2" Trigger="Open"/>
         <SetHideCharacter UniqueKey="HideEnemy" Hide="False"/>
