@@ -59,6 +59,16 @@
         <WaitSecond Time="3.0"/>
         <SetCameraUVTarget UniqueKey="Player"/>
 
+
+        <DeadFence UniqueKey="Boss"/>
+
+        <BlockInput Enable="True"/>
+        <SetHideUI Hide="True"/>
+
+        <ZoomEffect Factor="-0.5"/>
+        <SetTimeScale Scale="0.1" Time="1.5" BlendTime="2.0"/>
+        <ApplyPostProcessProfile Path="PostProcessProfile/ImpactFrame" ApplyType="Additional" BlendTime="1.5"/>
+
     </UpdatePhase>
     
 </SequencerGraph>

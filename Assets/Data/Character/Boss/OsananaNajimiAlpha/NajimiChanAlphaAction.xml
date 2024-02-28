@@ -89,21 +89,17 @@
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_GuardBroken>
 
-    <Dead_Loop DirectionType="Keep" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/0_default/"/>
-        <Animation Preset="5_dead" XFlip="true" Duration="1">
-        </Animation>
-
-        <Branch Condition="End == true" Execute="Dead_Loop"/>
-    </Dead_Loop>
-
     <Dead DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/0_default/"/>
         <Animation Preset="5_dead" XFlip="true" Duration="1">
+            <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Enemy/OsananaNajimi/0_default/5_dead" FramePerSecond="0.2" CastShadow="True">
+                <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_3.5^4.5" Friction="1" Torque="Random_-50^50" AngularFriction="10.0"/>
+            </FrameEvent>
 
+            <FrameEvent Type="KillEntity" StartTime="0"/>
         </Animation>
 
-        <Branch Condition="End == true" Execute="Dead_Loop"/>
+        <Branch Condition="End == true" Execute="Dead"/>
     </Dead>
 
     <!-- 피격 리액션으로 러시 공격 시 준비 모션 -->
