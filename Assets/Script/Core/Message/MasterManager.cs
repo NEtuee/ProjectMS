@@ -1,7 +1,8 @@
+//#define DEVBUILD
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 
 public class MasterManager : MessageHub<ManagerBase>
 {
@@ -97,25 +98,24 @@ public class MasterManager : MessageHub<ManagerBase>
     {
         if(Input.GetKey(KeyCode.F1))
         {
-            Screen.SetResolution(960,640,FullScreenMode.Windowed);
+            Screen.SetResolution(800,600,FullScreenMode.Windowed);
         }
         else if(Input.GetKey(KeyCode.F2))
         {
-            Screen.SetResolution(1440,960,FullScreenMode.Windowed);
+            Screen.SetResolution(1600,1200,FullScreenMode.Windowed);
         }
         else if(Input.GetKey(KeyCode.F3))
-        {
-            Screen.SetResolution(2160,1440,FullScreenMode.Windowed);
-        }
-        else if(Input.GetKey(KeyCode.F4))
         {
             Resolution currentResolution = Screen.currentResolution;
             Screen.SetResolution(currentResolution.width, currentResolution.height,FullScreenMode.FullScreenWindow);
         }
 
         float deltaTimeMultiflier = 1f;
+
+#if DEVBUILD
         if(Input.GetKey(KeyCode.LeftBracket))
             deltaTimeMultiflier = 10f;
+#endif
 
         float deltaTime = Time.deltaTime * deltaTimeMultiflier;
         ActionKeyInputManager.Instance().progress(deltaTime);
@@ -178,6 +178,7 @@ public class MasterManager : MessageHub<ManagerBase>
 
         FMODAudioManager.Instance().updateAudio();
 
+#if DEVBUILD
         if(Input.GetKeyDown(KeyCode.Escape))
         {
             _stageProcessor.stopStage(true);
@@ -190,6 +191,8 @@ public class MasterManager : MessageHub<ManagerBase>
             ScreenDirector._instance._screenFader.clear();
             LetterBox._instance.clear();
         }
+#endif
+
     }
 
     public void LateUpdate()

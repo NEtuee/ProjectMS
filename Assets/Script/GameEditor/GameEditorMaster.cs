@@ -58,6 +58,7 @@ public class GameEditorMaster : MonoBehaviour
 
     private void Update()
     {
+#if DEVBUILD
         updateHotkeysAlways();
 
         if(_activeEditor == false)
@@ -87,6 +88,7 @@ public class GameEditorMaster : MonoBehaviour
 
 #if UNITY_EDITOR
         updateCharacterPick();
+#endif
 #endif
     }
 

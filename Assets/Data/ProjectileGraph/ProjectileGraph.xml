@@ -287,6 +287,7 @@
             <OnHit>
                 <FrameEvent Type="Attack" StartFrame="0" AttackPreset="BaseBall">
                     <OnHit>
+                        <FrameEvent Type="AudioPlay" StartTime="0" ID="4902" Attach="true"/>
                         <!-- TODO: 야구공 버프 설정 -->
                         <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
                         <FrameEvent Type="EffectPreset" StartTime="0" Key="SmashSmall"/>
@@ -309,6 +310,7 @@
             <OnHit>
                 <FrameEvent Type="Attack" StartFrame="0" AttackPreset="BaseBall">
                     <OnHit>
+                        <FrameEvent Type="AudioPlay" StartTime="0" ID="4902" Attach="true"/>
                         <!-- TODO: 야구공 버프 설정 -->
                         <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
                         <FrameEvent Type="EffectPreset" StartTime="0" Key="SmashSmall"/>
@@ -547,6 +549,7 @@
             <OnHit>
                 <FrameEvent Type="Attack" StartTime="0" AttackPreset="Dumbell">
                     <OnHit>
+                        <FrameEvent Type="AudioPlay" StartTime="0" ID="4902" Attach="true"/>
                         <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
                         <FrameEvent Type="Effect" Path="Sprites/Projectile/Liner" FramePerSecond="0.2" CastShadow="True" Offset="0.0 0.1 0.0" ToTarget="true" AngleType="AttackPoint">
                             <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>

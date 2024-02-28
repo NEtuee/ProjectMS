@@ -77,6 +77,8 @@ public class TitleMenuUI : IUIElement
         MasterManager.instance._stageProcessor.stopStage(true);
         MasterManager.instance._stageProcessor.startStage(introStageData,Vector3.zero,Vector3.zero);
         
+        FMODAudioManager.Instance().Play(5005 ,Vector3.zero);
+
         _binder.Root.SetActive(false);
         Cursor.visible = false;
     }
@@ -136,12 +138,14 @@ public class TitleMenuUI : IUIElement
 
     private void languageButtonLeft()
     {
+        FMODAudioManager.Instance().Play(5005 ,Vector3.zero);
         _language = _language - 1 < 0 ? 2 : _language - 1;
         updageLanguge();
     }
 
     private void languageButtonRight()
     {
+        FMODAudioManager.Instance().Play(5005 ,Vector3.zero);
         _language = _language + 1 > 2 ? 0 : _language + 1;
         updageLanguge();
     }
@@ -152,15 +156,15 @@ public class TitleMenuUI : IUIElement
         {
             case 0:
                 LanguageManager.SetLanguage(SystemLanguage.Japanese);
-                _binder.LanguageText.text="JPN";
+                _binder.LanguageText.text="<b>JPN</b>";
                 break;
             case 1:
                 LanguageManager.SetLanguage(SystemLanguage.English);
-                _binder.LanguageText.text="ENG";
+                _binder.LanguageText.text="<b>ENG</b>";
                 break;
             case 2:
                 LanguageManager.SetLanguage(SystemLanguage.Korean);
-                _binder.LanguageText.text="KOR";
+                _binder.LanguageText.text="<b>KOR</b>";
                 break;
         }
     }
@@ -173,12 +177,14 @@ public class TitleMenuUI : IUIElement
 
     private void resoulutionButtonLeft()
     {
+        FMODAudioManager.Instance().Play(5005 ,Vector3.zero);
         _resolution = _resolution == TitleMenuUIBinder.ResolutionOption.res800x600 ? TitleMenuUIBinder.ResolutionOption.res1600x1200 : TitleMenuUIBinder.ResolutionOption.res800x600;
         OnResolutionValueChanged();
     }
 
     private void resoulutionButtonRight()
     {
+        FMODAudioManager.Instance().Play(5005 ,Vector3.zero);
         _resolution = _resolution == TitleMenuUIBinder.ResolutionOption.res800x600 ? TitleMenuUIBinder.ResolutionOption.res1600x1200 : TitleMenuUIBinder.ResolutionOption.res800x600;
         OnResolutionValueChanged();
     }
