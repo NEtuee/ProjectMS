@@ -8,7 +8,7 @@
 
         <LetterBoxShow/>
 
-        <AudioPlay ID="9004" Switch="True"/>
+        <AudioPlay ID="5004" Switch="True"/>
     </InitializePhase>
 
     <UpdatePhase>
@@ -22,16 +22,25 @@
         <SetHideUI Hide="False"/>
         <BlockInput Enable="False"/>
         <BlockAI UniqueKey="Boss" Enable="False"/>
+
         <LetterBoxHide/>
+        <StopSwitch Switch="Audio" Key="5004"/>
 
         <WaitSignal Signal="BossStart"/>
+
+        <AudioParameter ParameterID="11" ParameterValue="1"/>
+        <StopSwitch Switch="Audio" Key="9006"/>
+
+        <Task ProcessType="StepByStep">
+            <WaitSecond Time="1.0"/>
+            <AudioParameter ParameterID="11" ParameterValue="0"/>
+        </Task>
 
         <SetHideUI Hide="True"/>
         <BlockInput Enable="True"/>
         <BlockAI UniqueKey="Boss" Enable="True"/>
 
         <AudioParameter ParameterID="11" ParameterValue="1"/>
-        <StopSwitch Switch="Audio" Key="9004"/>
 
         <Task ProcessType="StepByStep">
             <WaitSecond Time="1.0"/>
@@ -86,7 +95,8 @@
 
         <DeadFence UniqueKey="Boss"/>
 
-        <StopSwitch Switch="Audio" Key="9005"/>
+        <AudioParameter Key="9005" ParameterID="90051" ParameterValue="1" ParameterType="Local"/>
+        <AudioPlay ID="9007"/>
 
         <BlockInput Enable="True"/>
         <SetHideUI Hide="True"/>

@@ -110,10 +110,10 @@ LineStart,<AudioPlay,"ID=~~,ParameterID=~~,ParameterValue=~~,Switch=~~"
 LineStartAndInQuote,<StopSwitch Switch=,"Effect,Audio"
 LineStart,<StopSwitch,"Switch=~~,Key=~~"
 ShortCut,__StopSwitch,<StopSwitch Switch=~~ Key=~~/>
-LineStart,<AudioParameter,"ParameterID=~~,ParameterValue=~~"
+LineStart,<AudioParameter,"ParameterID=~~,ParameterValue=~~,Key=~~,ParameterType=~~"
 ShortCut,__AudioParameter,<AudioParameter ParameterID=~~ ParameterValue=~~/>
 InQuote,Switch=,"True,False"
-,,
+InQuote,ParameterType=,"Global,Local"
 ,,
 ,,
 ,,

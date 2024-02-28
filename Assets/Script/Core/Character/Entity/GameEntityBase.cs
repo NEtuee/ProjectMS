@@ -537,7 +537,8 @@ public class GameEntityBase : SequencerObjectBase
         }
         _rotateSlotList.Clear();
 
-        FMODAudioManager.Instance().killSwitchAll(this);
+        if(_keepAliveEntity == false)
+            FMODAudioManager.Instance().killSwitchAll(this);
 
         base.deactive();
     }
@@ -556,7 +557,8 @@ public class GameEntityBase : SequencerObjectBase
         }
         _hpEffect.Clear();
 
-        FMODAudioManager.Instance().killSwitchAll(this);
+        if(disposeFromMaster || _keepAliveEntity == false)
+            FMODAudioManager.Instance().killSwitchAll(this);
 
         base.dispose(disposeFromMaster);
     }

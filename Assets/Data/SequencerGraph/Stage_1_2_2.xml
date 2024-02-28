@@ -5,12 +5,13 @@
         <BlockInput Enable="True"/>
 
         <BlockAI UniqueGroupKey="EnemyGroup" Enable="True"/>
-
+        
         <LetterBoxShow/>
     </InitializePhase>
 
     <UpdatePhase>
         <WaitSecond Time="1.0"/>
+
         <AIMove UniqueKey="Player" StartAction="AIMove_Loop" LoopAction="AIMove_Loop" EndAction="AIMove_End" EndPositionMarker="AkanePosition"/>
 
         <Task ProcessType="StepByStep">
@@ -30,7 +31,17 @@
         <WaitSecond Time="0.2"/>
         <TalkBalloon UniqueKey="Player" SimpleTalkKey="Talk_Stage01_6" Wait="True"/>
 
+
         <QTEFence KeyName="HyperAttack"/>
+        <AudioParameter ParameterID="11" ParameterValue="1"/>
+        <StopSwitch Switch="Audio" Key="9004"/>
+
+        <Task ProcessType="StepByStep">
+            <WaitSecond Time="1.0"/>
+            <AudioParameter ParameterID="11" ParameterValue="0"/>
+        </Task>
+
+
         <SetDirection UniqueKey="Player" DirectionType="AlwaysRight"/>
         <BlockAI UniqueGroupKey="EnemyGroup" Enable="False"/>
         
@@ -61,6 +72,9 @@
 
         <SetCameraZoom Size="0.0" Speed="5"/>
         <TalkBalloon UniqueKey="YakisobaChan" SimpleTalkKey="Talk_Stage01_10"/>
+
+        <AudioPlay ID="9006" Switch="True" ParameterID="90061" ParameterValue="0"/>
+
         <Task ProcessType="StepByStep">
             <AIMove UniqueKey="YakisobaChan" LoopAction="Move" EndPositionMarker="YakisobaChanPosition"/>
         </Task>

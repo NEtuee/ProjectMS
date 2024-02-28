@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using System.Xml;
 using System.Collections.Generic;
+using FMODUnity;
 
 public enum SequencerGraphEventType
 {
@@ -1814,7 +1815,18 @@ public class SequencerGraphEvent_StopSwitch : SequencerGraphEventBase
 
 public class SequencerGraphEvent_AudioParameter : SequencerGraphEventBase
 {
+    enum ParameterType
+    {
+        Global,
+        Local,
+        Count
+    }
+
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.AudioParameter;
+
+    ParameterType _parameterType = ParameterType.Global;
+
+    int _key;
 
     public int[] _parameterID = null;
     public float[] _parameterValue = null;
@@ -1830,7 +1842,16 @@ public class SequencerGraphEvent_AudioParameter : SequencerGraphEventBase
 
         for(int i = 0; i < _parameterID.Length; ++i)
         {
-            FMODAudioManager.Instance().SetGlobalParam(_parameterID[i],_parameterValue[i]);
+            switch(_parameterType)
+            {
+                case ParameterType.Global:
+                    FMODAudioManager.Instance().SetGlobalParam(_parameterID[i],_parameterValue[i]);
+                break;
+                case ParameterType.Local:
+                    FMODAudioManager.Instance().SetParam(_key,_parameterID[i],_parameterValue[i]);
+                break;
+            }
+            
         }
 
         return true;
@@ -1871,6 +1892,14 @@ public class SequencerGraphEvent_AudioParameter : SequencerGraphEventBase
                 }
 
                 _parameterValue = valueList.ToArray();
+            }
+            else if(attributes[i].Name == "ParameterType")
+            {
+                _parameterType = (ParameterType)System.Enum.Parse(typeof(ParameterType), attrValue);
+            }
+            else if(attributes[i].Name == "Key")
+            {
+                _key = int.Parse(attrValue);
             }
         }
     }

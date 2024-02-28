@@ -9,23 +9,21 @@ public class TitleMenuUIBinder : UIObjectBinder
     
     [Header("Title Menu")]
     public Button StartButton;
-    public Button OptionButton;
-    public Button ExitButton;
 
     [Header("Option")]
-    public GameObject OptionPanel;
-    public Button ExitOptionButton;
-    public Slider BgmSlider;
-    public Slider SfxSlider;
-    public Dropdown LanguageDropdown;
-    public Dropdown ResolutionDropdown;
-    
-    public enum LanguageOption
-    {
-        Korea = 0,
-        Japan = 1,
-        English = 2,
-    }
+    public Slider VolumeSlider;
+
+    public Button ResolutionLeftButton;
+    public Button ResolutionRightButton;
+
+    public Button LanguageLeftButton;
+    public Button LanguageRightButton;
+
+    public Image ResolutionImage;
+    public Text LanguageText;
+
+    public Sprite resolution800;
+    public Sprite resolution1600;
     
     public enum ResolutionOption
     {
@@ -47,39 +45,45 @@ public class TitleMenuUIBinder : UIObjectBinder
             return false;
         }
         
-        if (OptionButton == null)
+        if (VolumeSlider == null)
         {
-            reason = "메인메뉴 ui에 옵션 버튼이 없음";
+            reason = "메인메뉴 ui에 VolumeSlider 없음";
             return false;
         }
         
-        if (ExitButton == null)
+        if (ResolutionLeftButton == null)
         {
-            reason = "메인메뉴 ui에 끝내기 버튼이 없음";
+            reason = "메인메뉴 ui에 ResolutionLeftButton 없음";
             return false;
         }
         
-        if (BgmSlider == null)
+        if (ResolutionRightButton == null)
         {
-            reason = "메인메뉴 ui에 bgm슬라이더가 없음";
+            reason = "메인메뉴 ui에 ResolutionRightButton 없음";
             return false;
         }
         
-        if (SfxSlider == null)
+        if (LanguageLeftButton == null)
         {
-            reason = "메인메뉴 ui에 sfx슬라이더가 없음";
+            reason = "메인메뉴 ui에 LanguageLeftButton 없음";
             return false;
         }
         
-        if (LanguageDropdown == null)
+        if (LanguageRightButton == null)
         {
-            reason = "메인메뉴 ui에 언어 드롭다운이 없음";
+            reason = "메인메뉴 ui에 LanguageRightButton 없음";
             return false;
         }
-        
-        if (ResolutionDropdown == null)
+
+        if (ResolutionImage == null)
         {
-            reason = "메인메뉴 ui에 해상도 드롭다운이 없음";
+            reason = "메인메뉴 ui에 ResolutionImage 없음";
+            return false;
+        }
+
+        if (LanguageText == null)
+        {
+            reason = "메인메뉴 ui에 LanguageText 없음";
             return false;
         }
         

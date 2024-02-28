@@ -7,6 +7,9 @@ public class TitleMenuUI : IUIElement
 {
     private TitleMenuUIBinder _binder;
     
+    private TitleMenuUIBinder.ResolutionOption _resolution = TitleMenuUIBinder.ResolutionOption.res800x600;
+    private int _language = 0; // jpn, eng, kor
+
     public bool CheckValidBinderLink(out string reason)
     {
         if (_binder == null)
@@ -28,8 +31,8 @@ public class TitleMenuUI : IUIElement
     {
         BindButtonsAction();
         InitSlider();
-        InitLanguageDropdown();
-        InitResolutionDropdown();
+        InitLanguageButton();
+        InitResolution();
         ActiveTitleMenu(false);
     }
 
@@ -37,54 +40,42 @@ public class TitleMenuUI : IUIElement
     {
         _binder.Root.SetActive(active);
         if (active == true)
-        {
-            ActiveButtons();
-            _binder.OptionPanel.SetActive(false);
-        }
+            ActiveButtons(true);
     }
 
-    private void ActiveButtons()
+    private void ActiveButtons(bool value)
     {
-        _binder.StartButton.interactable = true;
-        _binder.OptionButton.interactable = true;
-        _binder.ExitButton.interactable = true;
+        _binder.StartButton.interactable = value;
+        _binder.LanguageLeftButton.interactable = value;
+        _binder.LanguageRightButton.interactable = value;
+        _binder.ResolutionLeftButton.interactable = value;
+        _binder.ResolutionRightButton.interactable = value;
     }
 
     private void BindButtonsAction()
     {
         _binder.StartButton.onClick.AddListener(OnClickStart);
-        _binder.OptionButton.onClick.AddListener(OnClickOption);
-        _binder.ExitButton.onClick.AddListener(OnClickExit);
-        _binder.ExitOptionButton.onClick.AddListener(OnClickExitOption);
+
+        _binder.LanguageLeftButton.onClick.AddListener(languageButtonLeft);
+        _binder.LanguageRightButton.onClick.AddListener(languageButtonRight);
+
+        _binder.ResolutionLeftButton.onClick.AddListener(resoulutionButtonLeft);
+        _binder.ResolutionRightButton.onClick.AddListener(resoulutionButtonRight);
     }
 
     private void OnClickStart()
     {
-        _binder.StartButton.interactable = false;
-        _binder.OptionButton.interactable = false;
-        _binder.ExitButton.interactable = false;
+        ActiveButtons(false);
         
         var introStageData = ResourceContainerEx.Instance().GetStageData("StageData/Stage_1_1");
         if (introStageData == null)
-        {
             return;
-        }
         
         MasterManager.instance._stageProcessor.stopStage(true);
         MasterManager.instance._stageProcessor.startStage(introStageData,Vector3.zero,Vector3.zero);
         
         _binder.Root.SetActive(false);
         Cursor.visible = false;
-    }
-    
-    private void OnClickOption()
-    {
-        _binder.OptionPanel.SetActive(true);
-    }
-
-    private void OnClickExitOption()
-    {
-        _binder.OptionPanel.SetActive(false);
     }
 
     private void OnClickExit()
@@ -94,13 +85,10 @@ public class TitleMenuUI : IUIElement
 
     private void InitSlider()
     {
-        _binder.BgmSlider.onValueChanged.AddListener(OnBgmValueChanged);
-        _binder.SfxSlider.onValueChanged.AddListener(OnSfxValueChanged);
     }
 
-    private void OnBgmValueChanged(float value)
+    private void OnVolumeChanged(float value)
     {
-        
     }
 
     private void OnSfxValueChanged(float value)
@@ -108,72 +96,86 @@ public class TitleMenuUI : IUIElement
         
     }
 
-    private void InitLanguageDropdown()
+    private void InitLanguageButton()
     {
-        var optionDataList = new List<Dropdown.OptionData>();
-        optionDataList.Add(new Dropdown.OptionData(TitleMenuUIBinder.LanguageOption.Korea.ToString()));
-        optionDataList.Add(new Dropdown.OptionData(TitleMenuUIBinder.LanguageOption.Japan.ToString()));
-        optionDataList.Add(new Dropdown.OptionData(TitleMenuUIBinder.LanguageOption.English.ToString()));
-
-        _binder.LanguageDropdown.options = optionDataList;
-        _binder.LanguageDropdown.onValueChanged.AddListener(OnLanguageValueChanged);
-
         var curLanguage = LanguageManager.GetLanguage();
         switch (curLanguage)
         {
-            case SystemLanguage.Korean:
-                _binder.LanguageDropdown.value = 0;
-                break;
             case SystemLanguage.Japanese:
-                _binder.LanguageDropdown.value = 1;
+                _language = 0;
                 break;
             case SystemLanguage.English:
-                _binder.LanguageDropdown.value = 2;
+                _language = 1;
+                break;
+            case SystemLanguage.Korean:
+                _language = 2;
                 break;
         }
+
+        updageLanguge();
     }
 
-    private void OnLanguageValueChanged(int value)
+    private void languageButtonLeft()
     {
-        switch (value)
+        _language = _language - 1 < 0 ? 2 : _language - 1;
+        updageLanguge();
+    }
+
+    private void languageButtonRight()
+    {
+        _language = _language + 1 > 2 ? 0 : _language + 1;
+        updageLanguge();
+    }
+
+    private void updageLanguge()
+    {
+        switch (_language)
         {
             case 0:
-                LanguageManager.SetLanguage(SystemLanguage.Korean);
+                LanguageManager.SetLanguage(SystemLanguage.Japanese);
+                _binder.LanguageText.text="JPN";
                 break;
             case 1:
-                LanguageManager.SetLanguage(SystemLanguage.Japanese);
-                break;
-            default:
                 LanguageManager.SetLanguage(SystemLanguage.English);
+                _binder.LanguageText.text="ENG";
+                break;
+            case 2:
+                LanguageManager.SetLanguage(SystemLanguage.Korean);
+                _binder.LanguageText.text="KOR";
                 break;
         }
     }
 
-    private void InitResolutionDropdown()
+    private void InitResolution()
     {
-        var optionDataList = new List<Dropdown.OptionData>();
-        optionDataList.Add(new Dropdown.OptionData("800 X 600"));
-        optionDataList.Add(new Dropdown.OptionData("1600 X 1200"));
+        _resolution = TitleMenuUIBinder.ResolutionOption.res800x600;
+        OnResolutionValueChanged();
+    }
 
-        _binder.ResolutionDropdown.options = optionDataList;
-        _binder.ResolutionDropdown.onValueChanged.AddListener(OnResolutionValueChanged);
+    private void resoulutionButtonLeft()
+    {
+        _resolution = _resolution == TitleMenuUIBinder.ResolutionOption.res800x600 ? TitleMenuUIBinder.ResolutionOption.res1600x1200 : TitleMenuUIBinder.ResolutionOption.res800x600;
+        OnResolutionValueChanged();
+    }
 
-        _binder.ResolutionDropdown.value = 0;
+    private void resoulutionButtonRight()
+    {
+        _resolution = _resolution == TitleMenuUIBinder.ResolutionOption.res800x600 ? TitleMenuUIBinder.ResolutionOption.res1600x1200 : TitleMenuUIBinder.ResolutionOption.res800x600;
+        OnResolutionValueChanged();
     }
     
-    private void OnResolutionValueChanged(int value)
+    private void OnResolutionValueChanged()
     {
-        switch (value)
+        switch(_resolution)
         {
-            case 0:
-                LanguageManager.SetLanguage(SystemLanguage.Korean);
-                break;
-            case 1:
-                LanguageManager.SetLanguage(SystemLanguage.Japanese);
-                break;
-            default:
-                LanguageManager.SetLanguage(SystemLanguage.English);
-                break;
+            case TitleMenuUIBinder.ResolutionOption.res800x600:
+                Screen.SetResolution(800,600,FullScreenMode.Windowed);
+                _binder.ResolutionImage.sprite = _binder.resolution800;
+            break;
+            case TitleMenuUIBinder.ResolutionOption.res1600x1200:
+                Screen.SetResolution(1600,1200,FullScreenMode.Windowed);
+                _binder.ResolutionImage.sprite = _binder.resolution1600;
+            break;
         }
     }
 }

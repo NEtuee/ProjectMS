@@ -4,6 +4,10 @@
         <BlockInput Enable="True"/>
         <SetHideUI Hide="True"/>
         <LetterBoxShow/>
+
+        <AudioPlay ID="5004" Switch="True"/>
+        <AudioParameter Key="9006" ParameterID="90061" ParameterValue="2" ParameterType="Local"/>
+
         <BlockAI UniqueGroupKey="EnemyGroup" Enable="True"/>
         <BlockPointExit Enable="True"/>
     </InitializePhase>
@@ -59,6 +63,13 @@
         <TaskFence TaskName="MainTask"/>
 
         <LetterBoxHide/>
+        <StopSwitch Switch="Audio" Key="5004"/>
+
+        <Task ProcessType="StepByStep">
+            <WaitSecond Time="1.0"/>
+            <AudioParameter Key="9006" ParameterID="90061" ParameterValue="1" ParameterType="Local"/>
+        </Task>
+
         <BlockInput Enable="False"/>
         <SetHideUI Hide="False"/>
 
