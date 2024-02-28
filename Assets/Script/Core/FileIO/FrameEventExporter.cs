@@ -97,13 +97,15 @@ public static class FrameEventLoader
             outFrameEvent = new ActionFrameEvent_StopSwitch();
         else if(type == "UIEvent")
             outFrameEvent = new ActionFrameEvent_UIEvent();
+        else if(type == "SpawnPrefab")
+            outFrameEvent = new ActionFrameEvent_SpawnPrefab();
         else
         {
             DebugUtil.assert(false, "invalid frameEvent type: {0}",type);
             return null;
         }
 
-        DebugUtil.assert((int)FrameEventType.Count == 42, "check here");
+        DebugUtil.assert((int)FrameEventType.Count == 43, "check here");
 
 
         if(outFrameEvent == null)

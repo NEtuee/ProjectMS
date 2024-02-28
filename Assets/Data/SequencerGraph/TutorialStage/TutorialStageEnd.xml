@@ -15,9 +15,11 @@
         <SetAction UniqueKey="Player" Action="SQ_Intro_KillTeacher"/>
 
         <WaitSecond Time="1.5"/>
-
-        <FadeOut Lambda="5.0"/>
+        <SpawnPrefab Path="Prefab/TextEffect/Text_Title"/>
         <WaitSecond Time="1.5"/>
+
+        <FadeOut Lambda="2.0"/>
+        <WaitSecond Time="7.0"/>
 
         <NextStage Path="StageData/Stage_1_2"/>
     </UpdatePhase>

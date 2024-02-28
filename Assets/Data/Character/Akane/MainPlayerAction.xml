@@ -468,6 +468,8 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="Dead"/>
             <FrameEvent Type="KillEntity" StartTime="10.0"/>
             <FrameEvent Type="AudioPlay" StartTime="0" ID="1008" Attach="true"/>
+
+            <FrameEvent Type="PlaySequencer" StartTime="0" Path="GameSequencer/Text_Dead.xml"/>
         </Animation>
 
     </Dead>

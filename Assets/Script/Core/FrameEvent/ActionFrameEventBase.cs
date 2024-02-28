@@ -6,6 +6,8 @@ using System.Drawing;
 using UnityEngine.UIElements;
 using System;
 using Newtonsoft.Json.Converters;
+using UnityEngine;
+using UnityEditor;
 
 public enum FrameEventType
 {
@@ -51,6 +53,7 @@ public enum FrameEventType
     FrameEvent_SetHideUIAll,
     FrameEvent_StopSwitch,
     FrameEvent_UIEvent,
+    FrameEvent_SpawnPrefab,
 
     Count,
 }
@@ -895,10 +898,54 @@ public class ActionFrameEvent_ShakeEffect : ActionFrameEventBase
     }
 }
 
+public class ActionFrameEvent_SpawnPrefab : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_SpawnPrefab;}
+
+    public float _lifeTime;
+
+    private GameObject _prefab;
+
+    public override void initialize(ObjectBase executeEntity)
+    {
+    }
+
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        if(_prefab == null)
+            return true;
+            
+        GameObject prefab = GameObject.Instantiate(_prefab, executeEntity.transform.position,UnityEngine.Quaternion.identity);
+        if(prefab == null)
+            return true;
+        
+        if(_lifeTime > 0f)
+            GameObject.Destroy(prefab, _lifeTime);
+
+        prefab.transform.SetParent( MasterManager.instance._stageProcessor.getBackgroundObject()?.transform );
+        return true;
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "Path")
+                _prefab = ResourceContainerEx.Instance().GetPrefab(attrValue);
+            if(attrName == "LifeTime")
+                _lifeTime = float.Parse(attrValue);
+        }
+    }
+}
+
 public class ActionFrameEvent_UIEvent : ActionFrameEventBase
 {
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_UIEvent;}
-
     public string _key;
 
     public override void initialize(ObjectBase executeEntity)

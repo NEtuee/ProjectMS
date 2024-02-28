@@ -187,6 +187,8 @@ public class SequencrGraphLoader : LoaderBase<SequencerGraphBaseData>
             spawnEvent = new SequencerGraphEvent_SetHideCharacter();
         else if(node.Name == "ApplyBuff")
             spawnEvent = new SequencerGraphEvent_ApplyBuff();
+        else if(node.Name == "SpawnPrefab")
+            spawnEvent = new SequencerGraphEvent_SpawnPrefab();
         
         if(spawnEvent == null)
         {

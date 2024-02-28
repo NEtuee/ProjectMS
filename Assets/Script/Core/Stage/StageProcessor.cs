@@ -600,6 +600,11 @@ public class StageProcessor
         }
     }
 
+    public GameObject getBackgroundObject()
+    {
+        return _stageBackgroundOjbect;
+    }
+
     public void setActiveBackground(bool value)
     {
         _stageBackgroundOjbect?.SetActive(value);
