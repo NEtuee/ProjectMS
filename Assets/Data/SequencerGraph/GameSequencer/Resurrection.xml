@@ -1,0 +1,10 @@
+<SequencerGraph Name="Resurrection">
+
+    <UpdatePhase>
+        <WaitSecond Time="5.0"/>
+
+        <QTEFence KeyName="DashMove"/>
+        <SetAction UniqueKey="Owner" Action="Resurrection"/>
+    </UpdatePhase>
+    
+</SequencerGraph>

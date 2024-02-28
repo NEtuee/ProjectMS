@@ -189,6 +189,8 @@ public class SequencrGraphLoader : LoaderBase<SequencerGraphBaseData>
             spawnEvent = new SequencerGraphEvent_ApplyBuff();
         else if(node.Name == "SpawnPrefab")
             spawnEvent = new SequencerGraphEvent_SpawnPrefab();
+        else if(node.Name == "DeletePrefab")
+            spawnEvent = new SequencerGraphEvent_DeletePrefab();
         
         if(spawnEvent == null)
         {

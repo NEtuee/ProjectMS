@@ -452,7 +452,7 @@
     </Hit>
 
     <Dead DirectionType="Keep" FlipType="Direction" ActiveCollision="False" Flags="ClearPush">
-        <Animation Preset="Sprites/NewPlayer/empty/" XFlip="true" Duration="10.0">
+        <Animation Preset="Sprites/NewPlayer/empty/" XFlip="true" Duration="1.0">
 
             <FrameEvent Type="DeleteBuff" StartTime="0" BuffList="BattleDecrementKeep DashPointRegenDelayed BloodAlertEffect DecreaseBloodPointDelayed BloodPointToHP ClearOutlineXXX"/>
 
@@ -466,13 +466,31 @@
                 <Physics UseGravity="True" Velocity="2 2" Friction="2.0" Torque="Random_25^30" AngularFriction="15.0"/>
             </FrameEvent>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="Dead"/>
-            <FrameEvent Type="KillEntity" StartTime="10.0"/>
             <FrameEvent Type="AudioPlay" StartTime="0" ID="1008" Attach="true"/>
 
-            <FrameEvent Type="PlaySequencer" StartTime="0" Path="GameSequencer/Text_Dead.xml"/>
+            <FrameEvent Type="PlaySequencer" StartTime="0" Path="GameSequencer/PlayerDead.xml"/>
         </Animation>
 
+        <Branch Condition="End" Execute="DeadLoop"/>
     </Dead>
+
+    <DeadLoop DirectionType="Keep" FlipType="Direction" ActiveCollision="False" Flags="ClearPush">
+        <Animation Preset="Sprites/NewPlayer/empty/" XFlip="true" Duration="10.0">
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="Dead"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="DeadLoop"/>
+    </DeadLoop>
+
+    <Resurrection>
+        <Animation Preset="Sprites/NewPlayer/empty/" XFlip="true" Duration="1.0">
+            <FrameEvent Type="ClearStatus" StartTime="0"/>
+            <FrameEvent Type="EffectPreset" StartTime="0" Key="ExplodeBig"/>
+            <FrameEvent Type="SetHideUIAll" StartTime="0" Hide="True"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="Spawn"/>
+    </Resurrection>
 
     <Catched MovementType="FrameEvent" DirectionType="CatchTargetFace" FlipType="Direction" ApplyBuff="CatchedEscape" Flags="QTE">
         <Animation Preset="Sprites/NewPlayer/empty" XFlip="true" Duration="0.01">

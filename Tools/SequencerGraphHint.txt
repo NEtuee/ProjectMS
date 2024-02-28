@@ -101,10 +101,10 @@ InQuote,Hide=,"True,False"
 LineStart,<ApplyBuff,Buff=~~
 ShortCut,__ApplyBuff,<ApplyBuff UniqueKey=~~ Buff=~~/>
 ShortCut,__Fade,<Fade/>
-LineStart,<SpawnPrefab,"UniqueKey=~~,Path=~~,LifeTime=~~"
+LineStart,<SpawnPrefab,"UniqueKey=~~,Path=~~,LifeTime=~~,Key=~~"
 ShortCut,__SpawnPrefab,<SpawnPrefab UniqueKey=~~ Path=~~/>
-,,
-,,
+LineStart,<DeletePrefab,Key=~~
+ShortCut,__DeletePrefab,<DeletePrefab Key=~~/>
 ,,
 ,,
 ,,

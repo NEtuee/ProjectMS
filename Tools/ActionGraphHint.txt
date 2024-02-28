@@ -134,11 +134,11 @@ FrameEvent,StopSwitch,"Switch=~~,Key=~~"
 ShortCut,__FrameEvent_StopSwitch,<FrameEvent Type=~StopSwitch~ StartTime=~0~ Switch=~~ Key=~~/>
 FrameEvent,UIEvent,Key=~~
 ShortCut,__FrameEvent_UIEvent,<FrameEvent Type=~UIEvent~ StartTime=~0~ Key=~~/>
-FrameEvent,SpawnPrefab,"Path=~~,LifeTime=~~"
+FrameEvent,SpawnPrefab,"Path=~~,LifeTime=~~,Key=~~"
 ShortCut,__FrameEvent_SpawnPrefab,<FrameEvent Type=~SpawnPrefab~ StartTime=~0~ Path=~~/>
-,,
-,,
-,,
+ShortCut,__FrameEvent_ClearStatus,<FrameEvent Type=~ClearStatus~ StartTime=~0~/>
+FrameEvent,DeletePrefab,Key=~~
+ShortCut,__FrameEvent_DeletePrefab,<FrameEvent Type=~DeletePrefab~ StartTime=~0~ Key=~~/>
 ,,
 ,,
 ,,
