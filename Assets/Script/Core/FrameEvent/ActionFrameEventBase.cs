@@ -54,6 +54,8 @@ public enum FrameEventType
     FrameEvent_StopSwitch,
     FrameEvent_UIEvent,
     FrameEvent_SpawnPrefab,
+    FrameEvent_DeletePrefab,
+    FrameEvent_ClearStatus,
 
     Count,
 }
@@ -898,11 +900,65 @@ public class ActionFrameEvent_ShakeEffect : ActionFrameEventBase
     }
 }
 
+public class ActionFrameEvent_ClearStatus : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_ClearStatus;}
+
+    public override void initialize(ObjectBase executeEntity)
+    {
+    }
+
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        if(executeEntity is GameEntityBase == false)
+            return true;
+
+        (executeEntity as GameEntityBase).getStatusInfo().initialize();
+        return true;
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
+    }
+}
+
+public class ActionFrameEvent_DeletePrefab : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_DeletePrefab;}
+
+    public string _key = "";
+
+    public override void initialize(ObjectBase executeEntity)
+    {
+    }
+
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        MasterManager.instance._stageProcessor.removeSpawnPrefab(_key);
+        return true;
+    }
+
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "Key")
+                _key = attrValue;
+        }
+    }
+}
+
 public class ActionFrameEvent_SpawnPrefab : ActionFrameEventBase
 {
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_SpawnPrefab;}
 
     public float _lifeTime;
+    public string _key = "";
 
     private GameObject _prefab;
 
@@ -921,6 +977,8 @@ public class ActionFrameEvent_SpawnPrefab : ActionFrameEventBase
         
         if(_lifeTime > 0f)
             GameObject.Destroy(prefab, _lifeTime);
+        if(_key != "")
+            MasterManager.instance._stageProcessor.addSpawnPrefab(_key,prefab);
 
         prefab.transform.SetParent( MasterManager.instance._stageProcessor.getBackgroundObject()?.transform );
         return true;
@@ -937,8 +995,10 @@ public class ActionFrameEvent_SpawnPrefab : ActionFrameEventBase
 
             if(attrName == "Path")
                 _prefab = ResourceContainerEx.Instance().GetPrefab(attrValue);
-            if(attrName == "LifeTime")
+            else if(attrName == "LifeTime")
                 _lifeTime = float.Parse(attrValue);
+            else if(attrName == "Key")
+                _key = attrValue;
         }
     }
 }

@@ -54,6 +54,7 @@ public enum SequencerGraphEventType
     SetHideCharacter,
     ApplyBuff,
     SpawnPrefab,
+    DeletePrefab,
     
     Count,
 }
@@ -1760,11 +1761,43 @@ public class SequencerGraphEvent_ActiveBossHp : SequencerGraphEventBase
     }
 }
 
+public class SequencerGraphEvent_DeletePrefab : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.DeletePrefab;
+
+    public string _key = "";
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor, float deltaTime)
+    {
+        MasterManager.instance._stageProcessor.removeSpawnPrefab(_key);
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "Key")
+                _key = attrValue;
+        }
+    }
+}
+
 public class SequencerGraphEvent_SpawnPrefab : SequencerGraphEventBase
 {
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SpawnPrefab;
 
     public string _uniqueKey = "";
+    public string _key = "";
     public float _lifeTime;
 
     private GameObject _prefab;
@@ -1797,6 +1830,9 @@ public class SequencerGraphEvent_SpawnPrefab : SequencerGraphEventBase
         
         if(_lifeTime > 0f)
             GameObject.Destroy(prefab, _lifeTime);
+        
+        if(_key != "")
+            MasterManager.instance._stageProcessor.addSpawnPrefab(_key,prefab);
 
         prefab.transform.SetParent( MasterManager.instance._stageProcessor.getBackgroundObject()?.transform );
         return true;
@@ -1817,6 +1853,8 @@ public class SequencerGraphEvent_SpawnPrefab : SequencerGraphEventBase
                 _lifeTime = float.Parse(attrValue);
             else if(attrName == "UniqueKey")
                 _uniqueKey = attrValue;
+            else if(attrName == "Key")
+                _key = attrValue;
         }
     }
 }

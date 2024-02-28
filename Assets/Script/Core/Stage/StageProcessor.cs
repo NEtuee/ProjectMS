@@ -32,6 +32,8 @@ public class StageProcessor
 
     private GameEntityBase _playerEntity = null;
     private GameObject _stageBackgroundOjbect = null;
+    private Dictionary<string, GameObject> _spawnPrefabMap = new Dictionary<string, GameObject>();
+    
     private BackgroundAnimatorMaster _stageBackgroundAnimatorMaster = null;
 
     private MiniStageListItem   _miniStageInfo = null;
@@ -142,6 +144,8 @@ public class StageProcessor
             _stageBackgroundOjbect.SetActive(true);
             _stageBackgroundOjbect.transform.position = startPosition;
         }
+
+        _spawnPrefabMap.Clear();
 
         for(int index = 0; index < _stageData._stagePointData.Count; ++index)
         {
@@ -316,6 +320,8 @@ public class StageProcessor
             GameObject.Destroy(_stageBackgroundOjbect);
             _stageBackgroundOjbect = null;
         }
+
+        _spawnPrefabMap.Clear();
 
         _keepAliveMap.Clear();
         foreach(var item in _spawnedCharacterEntityDictionary.Values)
@@ -608,6 +614,26 @@ public class StageProcessor
     public void setActiveBackground(bool value)
     {
         _stageBackgroundOjbect?.SetActive(value);
+    }
+
+    public void addSpawnPrefab(string key, GameObject prefab)
+    {
+        if(_spawnPrefabMap.ContainsKey(key))
+        {
+            DebugUtil.assert(false, "대상 Prefab이 이미 존재합니다. [Key: {0}]",key);
+            return;
+        }
+
+        _spawnPrefabMap.Add(key,prefab);
+    }
+
+    public void removeSpawnPrefab(string key)
+    {
+        if(_spawnPrefabMap.ContainsKey(key))
+        {
+            GameObject.Destroy(_spawnPrefabMap[key]);
+            _spawnPrefabMap.Remove(key);
+        }
     }
 
     public void setBackgroundAnimationTrigger(string key, string trigger)
