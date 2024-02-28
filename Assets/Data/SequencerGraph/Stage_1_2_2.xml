@@ -31,8 +31,12 @@
         <WaitSecond Time="0.2"/>
         <TalkBalloon UniqueKey="Player" SimpleTalkKey="Talk_Stage01_6" Wait="True"/>
 
+        <WaitSecond Time="0.2"/>
+        <SetBackgroundAnimationTrigger Key="Tutorial" Trigger="Appear"/>
 
         <QTEFence KeyName="HyperAttack"/>
+
+        <SetBackgroundAnimationTrigger Key="Tutorial" Trigger="Disappear"/>
         <AudioParameter ParameterID="11" ParameterValue="1"/>
         <StopSwitch Switch="Audio" Key="9004"/>
 
