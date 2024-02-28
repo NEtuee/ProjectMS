@@ -91,7 +91,7 @@ public class MasterManager : MessageHub<ManagerBase>
     {
         ReceiveMessageProcessing();
 
-        Cursor.visible = false;
+        ActiveTitleMenu();
     }
     public void Update()
     {
@@ -200,6 +200,14 @@ public class MasterManager : MessageHub<ManagerBase>
     public void FixedUpdate()
     {
         ManagersFixedUpdate(Time.fixedDeltaTime);
+    }
+
+    public void ActiveTitleMenu()
+    {
+        LetterBox._instance.clear();
+        ScreenDirector._instance._screenFader.clear();
+        GameUI.Instance.ActiveTitleMenuUI(true);
+        Cursor.visible = true;
     }
 
     public void StopUpdateSecond(float time)

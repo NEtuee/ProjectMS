@@ -171,12 +171,9 @@ public class GameEditorMaster : MonoBehaviour
             {
                 if (_activeEditor)
                     editorOff();
-
-                LetterBox._instance.clear();
-                ScreenDirector._instance._screenFader.clear();
-                GameUI.Instance.ActiveTitleMenuUI(true);
+                
                 stageSelectorOnOff();
-                Cursor.visible = true;
+                MasterManager.instance.ActiveTitleMenu();
             });
         }
     }
