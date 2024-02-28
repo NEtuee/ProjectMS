@@ -125,6 +125,8 @@ public class SequencrGraphLoader : LoaderBase<SequencerGraphBaseData>
             spawnEvent = new SequencerGraphEvent_FadeIn();
         else if(node.Name == "FadeIn")
             spawnEvent = new SequencerGraphEvent_FadeOut();
+        else if(node.Name == "Fade")
+            spawnEvent = new SequencerGraphEvent_Fade();
         else if(node.Name == "ForceQuit")
             spawnEvent = new SequencerGraphEvent_ForceQuit();
         else if(node.Name == "BlockInput")

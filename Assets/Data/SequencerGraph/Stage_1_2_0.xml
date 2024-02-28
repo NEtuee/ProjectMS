@@ -3,8 +3,6 @@
     <InitializePhase>
         <ApplyPostProcessProfile Path="PostProcessProfile/Stage/Stage_1_2"/>
         
-        <FadeIn Lambda="5.0"/>
-
         <SetCameraTarget UniqueKey="Player" CameraMode="TargetCenterMode"/>
         <SetCrossHair UniqueKey="Player"/>
         <SetHideUI Hide="True"/>
@@ -13,9 +11,14 @@
         <LetterBoxShow/>
         <SetHideCharacter UniqueKey="Player" Hide="True"/>
 
+        <Fade/>
+
     </InitializePhase>
 
     <UpdatePhase>
+        <WaitSecond Time="1.0"/>
+        <FadeIn Lambda="4.0"/>
+
         <WaitSecond Time="1.0"/>
         
         <EffectPreset UniqueKey="Player" EffectPreset="ExplodeBig"/>

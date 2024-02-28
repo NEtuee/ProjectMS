@@ -3,8 +3,6 @@
     <InitializePhase>
         <ApplyPostProcessProfile Path="PostProcessProfile/Stage/Stage_2_1"/>
         
-        <FadeIn Lambda="5.0"/>
-
         <SetCameraTarget UniqueKey="Player" CameraMode="TargetCenterMode"/>
         <SetCrossHair UniqueKey="Player"/>
         <SetHideUI Hide="True"/>
@@ -12,10 +10,13 @@
 
         <BlockAI UniqueGroupKey="EnemyGroup" Enable="True"/>
         
+        <Fade/>
         <LetterBoxShow/>
     </InitializePhase>
 
     <UpdatePhase>
+        <WaitSecond Time="1.0"/>
+        <FadeIn Lambda="4.0"/>
 
         <Task ProcessType="StepByStep">
             <AIMove UniqueKey="YakisobaChan" LoopAction="Move" EndPositionMarker="TargetMarker"/>

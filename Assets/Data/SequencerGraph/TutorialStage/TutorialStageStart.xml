@@ -9,11 +9,13 @@
         <SetHideUI Hide="True"/>
         <BlockInput Enable="True"/>
 
-        <FadeIn Lambda="4.0"/>
+        <Fade/>
+
     </InitializePhase>
 
     <UpdatePhase>
-        <WaitSecond Time="1.0"/>
+        <WaitSecond Time="1.5"/>
+        <FadeIn Lambda="4.0"/>
 
         <QTEFence KeyName="AttackCharge"/>
 
