@@ -90,7 +90,7 @@ public class MasterManager : MessageHub<ManagerBase>
     {
         ReceiveMessageProcessing();
 
-        ActiveTitleMenu();
+        // ActiveTitleMenu();
     }
     public void Update()
     {

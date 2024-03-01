@@ -63,6 +63,7 @@ public class SequencerGraphProcessor
         public abstract TaskProcessType getTaskType();
 
         public abstract bool runTask(float deltaTime);
+        public abstract void quitTask();
         public string getTaskName() {return _taskName;}
     }
 
@@ -105,11 +106,29 @@ public class SequencerGraphProcessor
                     continue;
                 
                 item._isEventEnd = item._event.Execute(_sequencerGraphProessor,deltaTime);
-                if(item._isEventEnd == false)
+                if (item._isEventEnd == false)
                     _taskProcessing = true;
+                else
+                    item._event.Exit(_sequencerGraphProessor);
             }
 
             return _taskProcessing;
+        }
+
+        public override void quitTask()
+        {
+            if (_taskProcessing == false)
+                return;
+
+            for (int index = 0; index < _eventList.Count; ++index)
+            {
+                var item = _eventList[index];
+                if (item._isEventEnd)
+                    continue;
+
+                item._event.Exit(_sequencerGraphProessor);
+                item._isEventEnd = true;
+            }
         }
     }
 
@@ -129,10 +148,23 @@ public class SequencerGraphProcessor
                 _currentEventIndex = index;
                 if(_sequencerGraphEventList[index].Execute(_sequencerGraphProessor, deltaTime) == false)
                     return true;
+
+                _sequencerGraphEventList[index].Exit(_sequencerGraphProessor);
             }
 
             _taskProcessing = false;
             return _taskProcessing;
+        }
+
+        public override void quitTask()
+        {
+            if (_taskProcessing == false)
+                return;
+
+            for (int index = _currentEventIndex; index < _eventCount; ++index)
+            {
+                _sequencerGraphEventList[index].Exit(_sequencerGraphProessor);
+            }
         }
     }
 
@@ -314,10 +346,28 @@ public class SequencerGraphProcessor
 
     public void stopSequencer()
     {
-        for(int index = 0; index < _currentSequencer._sequencerGraphPhase[2]._sequencerGraphEventCount; ++index)
+        clearTask();
+
+        if (_isSequencerEventEnd == false)
+        {
+            for (int index = _currentIndex; index < _currentSequencer._sequencerGraphPhase[1]._sequencerGraphEventCount; ++index)
+            {
+                SequencerGraphEventType eventType = _currentSequencer._sequencerGraphPhase[1]._sequencerGraphEventList[index].getSequencerGraphEventType();
+                if (eventType == SequencerGraphEventType.ForceQuit)
+                {
+                    _isSequencerEventEnd = true;
+                    break;
+                }
+
+                _currentSequencer._sequencerGraphPhase[1]._sequencerGraphEventList[index].Exit(this);
+            }
+        }
+
+        for (int index = 0; index < _currentSequencer._sequencerGraphPhase[2]._sequencerGraphEventCount; ++index)
         {
             _currentSequencer._sequencerGraphPhase[2]._sequencerGraphEventList[index].Initialize(this);
             _currentSequencer._sequencerGraphPhase[2]._sequencerGraphEventList[index].Execute(this, 0f);
+            _currentSequencer._sequencerGraphPhase[2]._sequencerGraphEventList[index].Exit(this);
         }
     }
 
@@ -393,9 +443,19 @@ public class SequencerGraphProcessor
         }
     }
 
+    public void quitTask()
+    {
+        foreach (var item in _processingTaskList)
+        {
+            item.quitTask();
+        }
+    }
+
     public void clearTask()
     {
-        foreach(var item in _processingTaskList)
+        quitTask();
+
+        foreach (var item in _processingTaskList)
         {
             returnTaskToPool(item);
         }
@@ -443,6 +503,7 @@ public class SequencerGraphProcessor
         {
             _currentSequencer._sequencerGraphPhase[0]._sequencerGraphEventList[index].Initialize(this);
             _currentSequencer._sequencerGraphPhase[0]._sequencerGraphEventList[index].Execute(this, 0f);
+            _currentSequencer._sequencerGraphPhase[0]._sequencerGraphEventList[index].Exit(this);
         }
 
         for(int index = _currentIndex; index < _currentSequencer._sequencerGraphPhase[1]._sequencerGraphEventCount; ++index)
@@ -483,6 +544,7 @@ public class SequencerGraphProcessor
         {
             _currentSequencer._sequencerGraphPhase[0]._sequencerGraphEventList[index].Initialize(this);
             _currentSequencer._sequencerGraphPhase[0]._sequencerGraphEventList[index].Execute(this, 0f);
+            _currentSequencer._sequencerGraphPhase[0]._sequencerGraphEventList[index].Exit(this);
         }
 
         for(int index = _currentIndex; index < _currentSequencer._sequencerGraphPhase[1]._sequencerGraphEventCount; ++index)
