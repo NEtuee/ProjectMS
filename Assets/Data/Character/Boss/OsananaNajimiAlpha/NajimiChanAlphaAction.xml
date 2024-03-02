@@ -230,11 +230,11 @@
                             <FrameEvent Type="AudioPlay" StartTime="0.1" ID="2107"/>
                             <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
                             <FrameEvent Type="ApplyBuffTarget" ApplyBuff="StunSet"/>
-
+                            <FrameEvent Type="EffectPreset" StartTime="0" Key="SmokeBig"/>
                             <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
                             <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
 
-                            <FrameEvent Type="Effect" Path="Sprites/Projectile/BaseBall" FramePerSecond="0.2" CastShadow="True" Offset="0.0 0.1 0.0" Attach="true" ToTarget="true" AngleType="AttackPoint">
+                            <FrameEvent Type="Effect" Path="Sprites/Projectile/BaseBall" FramePerSecond="0.2" CastShadow="True" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true" AngleType="AttackPoint">
                                 <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
                             </FrameEvent>
                         
@@ -259,26 +259,10 @@
         <Animation Preset="1_pitchingMain" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
             <!-- TODO: 투구 이펙트 추가해야함. 해당 이펙트 지속시간에 따라 Main 모션 시간과 Attack 지속 시간 조정 -->
-            
-            <FrameEvent Type="AudioPlay" StartTime="0.17" ID="2106" Attach="true"/>
-            <!--
-            <FrameEvent Type="Attack" StartTime="0.17" AttackPreset="Najimi_Pitching">
-                <OnHit>
-                    <FrameEvent Type="AudioPlay" StartTime="0.1" ID="2107"/>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonDoubleAttack"/>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="StunSet"/>
+            <FrameEvent Type="EffectPreset" StartTime="0" Key="WindTrail"/>
+            <FrameEvent Type="ShakeEffect" StartTime="0.1" Scale="0.2" Speed="35.0" Time="0.15"/>
+            <FrameEvent Type="AudioPlay" StartTime="0.0" ID="2106" Attach="true"/>
 
-                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
-                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
-
-                    <FrameEvent Type="Effect" Path="Sprites/Projectile/BaseBall" FramePerSecond="0.2" CastShadow="True" Offset="0.0 0.1 0.0" Attach="true" ToTarget="true" AngleType="AttackPoint">
-                        <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
-                    </FrameEvent>
-                
-                    <FrameEvent Type="StopUpdate" Time="0.07"/>
-                </OnHit>
-            </FrameEvent>
-            -->
            
         </Animation>
         <Animation Preset="2_pitchingRecovery" XFlip="true" Duration="0.3">
