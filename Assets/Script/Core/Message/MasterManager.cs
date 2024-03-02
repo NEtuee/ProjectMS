@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class MasterManager : MessageHub<ManagerBase>
 {
     public static MasterManager     instance;
@@ -91,29 +90,26 @@ public class MasterManager : MessageHub<ManagerBase>
     {
         ReceiveMessageProcessing();
 
-        ActiveTitleMenu();
+        // ActiveTitleMenu();
     }
     public void Update()
     {
         if(Input.GetKey(KeyCode.F1))
         {
-            Screen.SetResolution(960,640,FullScreenMode.Windowed);
+            Screen.SetResolution(800,600,FullScreenMode.Windowed);
         }
         else if(Input.GetKey(KeyCode.F2))
         {
-            Screen.SetResolution(1440,960,FullScreenMode.Windowed);
+            Screen.SetResolution(1600,1200,FullScreenMode.Windowed);
         }
         else if(Input.GetKey(KeyCode.F3))
-        {
-            Screen.SetResolution(2160,1440,FullScreenMode.Windowed);
-        }
-        else if(Input.GetKey(KeyCode.F4))
         {
             Resolution currentResolution = Screen.currentResolution;
             Screen.SetResolution(currentResolution.width, currentResolution.height,FullScreenMode.FullScreenWindow);
         }
 
         float deltaTimeMultiflier = 1f;
+
         if(Input.GetKey(KeyCode.LeftBracket))
             deltaTimeMultiflier = 10f;
 
@@ -184,11 +180,13 @@ public class MasterManager : MessageHub<ManagerBase>
 
             HPSphereUIManager.Instance().setActive(true);
             GameUI.Instance.SetActiveCrossHair(true);
+            GameUI.Instance.SetEntity(null);
             ScreenDirector._instance.setActiveMainHud(true);
         
             ScreenDirector._instance._screenFader.clear();
             LetterBox._instance.clear();
         }
+
     }
 
     public void LateUpdate()

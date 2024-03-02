@@ -7,6 +7,8 @@
         <BlockAI UniqueKey="Boss" Enable="True"/>
 
         <LetterBoxShow/>
+
+        <AudioPlay ID="5004" Switch="True"/>
     </InitializePhase>
 
     <UpdatePhase>
@@ -20,13 +22,31 @@
         <SetHideUI Hide="False"/>
         <BlockInput Enable="False"/>
         <BlockAI UniqueKey="Boss" Enable="False"/>
+
         <LetterBoxHide/>
+        <StopSwitch Switch="Audio" Key="5004"/>
 
         <WaitSignal Signal="BossStart"/>
+
+        <AudioParameter ParameterID="11" ParameterValue="1"/>
+        <StopSwitch Switch="Audio" Key="9006"/>
+
+        <Task ProcessType="StepByStep">
+            <WaitSecond Time="1.0"/>
+            <AudioParameter ParameterID="11" ParameterValue="0"/>
+        </Task>
 
         <SetHideUI Hide="True"/>
         <BlockInput Enable="True"/>
         <BlockAI UniqueKey="Boss" Enable="True"/>
+
+        <AudioParameter ParameterID="11" ParameterValue="1"/>
+
+        <Task ProcessType="StepByStep">
+            <WaitSecond Time="1.0"/>
+            <AudioParameter ParameterID="11" ParameterValue="0"/>
+        </Task>
+
         <LetterBoxShow/>
 
         <TalkBalloon UniqueKey="Boss" SimpleTalkKey="Talk_Stage02_Boss_1" Wait="True"/>
@@ -37,12 +57,18 @@
         <SetCameraZoom Size="2.25" Speed="5"/>
         <TalkBalloon UniqueKey="Boss" SimpleTalkKey="Talk_Stage02_Boss_3" Wait="True"/>
         <SetCameraZoom Size="2.0" Speed="5"/>
+
+        <AudioPlay ID="2101"/>
         <TalkBalloon UniqueKey="Boss" SimpleTalkKey="Talk_Stage02_Boss_4" Wait="True"/>
         <SetCameraZoom Size="0" Speed="5"/>
         <SetCameraTarget UniqueKey="Player" CameraMode="TargetCenterMode"/>
 
         <UnlockStageLimit Enable="True"/>
         <SetCameraUVTarget UniqueKey="Boss"/>
+
+        <AudioPlay ID="6007"/>
+        <AudioPlay ID="8001" Switch="True"/>
+        <StopSwitch Switch="Audio" Key="8006"/>
         <ApplyPostProcessProfile Path="PostProcessProfile/PostProcessProfile_Translated" ApplyType="BaseBlend" BlendTime="6.0"/>
         <SetCameraUVTarget UniqueKey="NULL"/>
 
@@ -53,7 +79,14 @@
         <LetterBoxHide/>
 
         <ActiveBossHp UniqueKey="Boss"/>
+
+        <Task ProcessType="StepByStep">
+            <WaitSecond Time="1.0"/>
+            <AudioPlay ID="9005" Switch="True"/>
+        </Task>
+        
         <WaitSecond Time="2.0"/>
+
         <BlockAI UniqueKey="Boss" Enable="False"/>
 
         <WaitSecond Time="3.0"/>
@@ -62,12 +95,19 @@
 
         <DeadFence UniqueKey="Boss"/>
 
+        <AudioParameter Key="9005" ParameterID="90051" ParameterValue="1" ParameterType="Local"/>
+        <AudioPlay ID="9007"/>
+
         <BlockInput Enable="True"/>
         <SetHideUI Hide="True"/>
 
         <ZoomEffect Factor="-0.5"/>
         <SetTimeScale Scale="0.1" Time="1.5" BlendTime="2.0"/>
         <ApplyPostProcessProfile Path="PostProcessProfile/ImpactFrame" ApplyType="Additional" BlendTime="1.5"/>
+
+        <WaitSecond Time="4.0"/>
+        <NextStage Path="StageData/DemoEnd"/>
+
 
     </UpdatePhase>
     

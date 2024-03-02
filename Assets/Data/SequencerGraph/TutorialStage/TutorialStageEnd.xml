@@ -8,6 +8,7 @@
 
         <ZoomEffect Factor="-0.5"/>
         <SetTimeScale Scale="0.1" Time="1.5" BlendTime="2.0"/>
+        <AudioPlay ID="9002"/>
         <ApplyPostProcessProfile Path="PostProcessProfile/ImpactFrame" ApplyType="Additional" BlendTime="1.5"/>
 
         <WaitSecond Time="2.5"/>
@@ -19,7 +20,11 @@
         <WaitSecond Time="1.5"/>
 
         <FadeOut Lambda="2.0"/>
-        <WaitSecond Time="7.0"/>
+
+        <WaitSecond Time="3.0"/>
+        <AudioPlay ID="9004" Switch="True" ParamterID="90041" ParameterValue="0"/>
+
+        <WaitSecond Time="4.0"/>
 
         <NextStage Path="StageData/Stage_1_2"/>
     </UpdatePhase>

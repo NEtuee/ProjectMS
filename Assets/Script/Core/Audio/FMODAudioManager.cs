@@ -249,7 +249,7 @@ public class FMODAudioManager : Singleton<FMODAudioManager>
         var desc = FindGlobalParamDesc(id);
         var result = FMODUnity.RuntimeManager.StudioSystem.setParameterByID(desc.id, value);
         if(result != FMOD.RESULT.OK)
-            Debug.Log("global parameter not found");
+            Debug.Log("global parameter not found : " + id + ", value:" + value);
         
     }
     
@@ -328,7 +328,7 @@ public class FMODAudioManager : Singleton<FMODAudioManager>
         }
         else
         {
-            Debug.Log("global parameter does not exists");
+            Debug.Log("global parameter does not exists : " + id);
             return default(FMOD.Studio.PARAMETER_DESCRIPTION);
         }
     }

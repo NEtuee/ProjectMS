@@ -4,6 +4,10 @@
         <BlockInput Enable="True"/>
         <SetHideUI Hide="True"/>
         <LetterBoxShow/>
+
+        <AudioPlay ID="5004" Switch="True"/>
+        <AudioParameter Key="9006" ParameterID="90061" ParameterValue="2" ParameterType="Local"/>
+
         <BlockAI UniqueGroupKey="EnemyGroup" Enable="True"/>
         <BlockPointExit Enable="True"/>
     </InitializePhase>
@@ -19,11 +23,16 @@
         
         <WaitSecond Time="0.2"/>
 
+        <AudioPlay ID="6004"/>
         <SetAction UniqueKey="YakisobaChan" Action="Attack"/>
         <EffectPreset UniqueKey="YakisobaChan" EffectPreset="SpreadYakisobaPan"/>
+
+        <AudioPlay ID="6005"/>
         <TalkBalloon UniqueKey="YakisobaChan" SimpleTalkKey="Talk_Stage02_2_3"/>
 
         <WaitSecond Time="0.5"/>
+
+        <AudioPlay ID="6004"/>
         <SetAction UniqueKey="YakisobaChan" Action="Attack"/>
         <EffectPreset UniqueKey="YakisobaChan" EffectPreset="SpreadYakisobaPan"/>
 
@@ -33,7 +42,11 @@
             <AIMove UniqueKey="YakisobaChan" LoopAction="Move" EndPositionMarker="TargetMarker3"/>
         </Task>
 
-        <Task ProcessType="AllAtOnce">
+        <Task ProcessType="StepByStep">
+            <WaitSecond Time="0.5"/>
+            <AudioPlay ID="6006"/>
+        </Task>
+        <Task ProcessType="AllAtOnce">            
             <AIMove UniqueKey="Yakisoba_0" LoopAction="SQ_Move" EndPositionMarker="Yakisoba_0"/>
             <AIMove UniqueKey="Yakisoba_1" LoopAction="SQ_Move" EndPositionMarker="Yakisoba_1"/>
             <AIMove UniqueKey="Yakisoba_2" LoopAction="SQ_Move" EndPositionMarker="Yakisoba_2"/>
@@ -50,6 +63,13 @@
         <TaskFence TaskName="MainTask"/>
 
         <LetterBoxHide/>
+        <StopSwitch Switch="Audio" Key="5004"/>
+
+        <Task ProcessType="StepByStep">
+            <WaitSecond Time="1.0"/>
+            <AudioParameter Key="9006" ParameterID="90061" ParameterValue="1" ParameterType="Local"/>
+        </Task>
+
         <BlockInput Enable="False"/>
         <SetHideUI Hide="False"/>
 

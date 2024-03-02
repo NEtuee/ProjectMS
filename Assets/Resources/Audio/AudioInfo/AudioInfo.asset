@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c858e63344676f34a93a8306d92a1f7d, type: 3}
   m_Name: AudioInfo
   m_EditorClassIdentifier: 
-  csvData: {fileID: 4900000, guid: ab02c864fe140f2489a17df9ae84dab6, type: 3}
+  csvData: {fileID: 4900000, guid: 15e3e93bad8563d4b982db22b118f1fe, type: 3}
   audioData:
   - name: global data
     id: 0
@@ -210,6 +210,24 @@ MonoBehaviour:
       id: 10101
       min: 0
       max: 2
+  - name: AmpDead
+    id: 1011
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: 1057191141
+        Data2: 1203292835
+        Data3: -1902202989
+        Data4: 1659921158
+      Path: event:/SFX/Akane/AmpDead
+    parameters:
+    - name: SfxProgress
+      id: 10111
+      min: 0
+      max: 1
   - name: Dash
     id: 2100
     defaultVolume: 1
@@ -1012,6 +1030,34 @@ MonoBehaviour:
         Data4: 891972815
       Path: event:/UI/SystemText_Large
     parameters: []
+  - name: BossReverbCut
+    id: 5008
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: Snapshot
+    eventReference:
+      Guid:
+        Data1: -1700083885
+        Data2: 1154619498
+        Data3: -1159787868
+        Data4: -641108845
+      Path: snapshot:/BossReverbCut
+    parameters: []
+  - name: AkaneDead
+    id: 5009
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: Snapshot
+    eventReference:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: snapshot:/AkaneDead
+    parameters: []
   - name: 00_Explosion_Large
     id: 6001
     defaultVolume: 1
@@ -1236,7 +1282,7 @@ MonoBehaviour:
         Data4: -770238622
       Path: event:/BGM/Title/Main
     parameters: []
-  - name: School
+  - name: 1
     id: 9004
     defaultVolume: 1
     overrideAttenuation: 0
@@ -1244,17 +1290,17 @@ MonoBehaviour:
     type: BGM
     eventReference:
       Guid:
-        Data1: 1117288207
-        Data2: 1130936695
-        Data3: 1111224218
-        Data4: 668509445
-      Path: event:/BGM/School
+        Data1: -1893936465
+        Data2: 1261993909
+        Data3: -1695006050
+        Data4: -1878525481
+      Path: event:/BGM/School/1
     parameters:
     - name: BgmProgress
       id: 90041
       min: 0
-      max: 1
-  - name: School_Boss
+      max: 2
+  - name: Boss
     id: 9005
     defaultVolume: 1
     overrideAttenuation: 0
@@ -1266,5 +1312,41 @@ MonoBehaviour:
         Data2: 1161013862
         Data3: -278812748
         Data4: 1017683269
-      Path: event:/BGM/School_Boss
+      Path: event:/BGM/School/Boss
+    parameters:
+    - name: BgmProgress
+      id: 90051
+      min: 0
+      max: 2
+  - name: 2
+    id: 9006
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: BGM
+    eventReference:
+      Guid:
+        Data1: 803872512
+        Data2: 1076419176
+        Data3: -1468906058
+        Data4: -1671731284
+      Path: event:/BGM/School/2
+    parameters:
+    - name: BgmProgress
+      id: 90061
+      min: 0
+      max: 2
+  - name: BossKill
+    id: 9007
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: BGM
+    eventReference:
+      Guid:
+        Data1: -1790688366
+        Data2: 1289703378
+        Data3: -1457738858
+        Data4: 990899657
+      Path: event:/BGM/School/BossKill
     parameters: []

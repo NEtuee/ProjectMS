@@ -537,7 +537,8 @@ public class GameEntityBase : SequencerObjectBase
         }
         _rotateSlotList.Clear();
 
-        FMODAudioManager.Instance().killSwitchAll(this);
+        if(_keepAliveEntity == false)
+            FMODAudioManager.Instance().killSwitchAll(this);
 
         base.deactive();
     }
@@ -556,7 +557,8 @@ public class GameEntityBase : SequencerObjectBase
         }
         _hpEffect.Clear();
 
-        FMODAudioManager.Instance().killSwitchAll(this);
+        if(disposeFromMaster || _keepAliveEntity == false)
+            FMODAudioManager.Instance().killSwitchAll(this);
 
         base.dispose(disposeFromMaster);
     }
@@ -928,8 +930,8 @@ public class GameEntityBase : SequencerObjectBase
 
         // if(_actionGraph.getActionConditionData_Bool(ConditionNodeUpdateType.Entity_Dead) && _statusInfo.isDead() == false)
         //     DebugUtil.assert(false, "이미 죽었는데 다시 살아났습니다. 통보 요망");
-            
-        _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Entity_Dead, _statusInfo.isDead());
+        
+        _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Entity_Dead, isDead());
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Entity_Kill, false);
         _actionGraph.setActionConditionData_Float(ConditionNodeUpdateType.Entity_LifeTime, _characterLifeTime);
 
@@ -1271,7 +1273,7 @@ public class GameEntityBase : SequencerObjectBase
     public void addDeadEvent(DeadEventDelegate deadEvent) {_deadEventDelegate += deadEvent;} 
     public void deleteDeadEvent(DeadEventDelegate deadEvent) {_deadEventDelegate -= deadEvent;}
 
-    public bool isDead() {return _statusInfo.isDead();}
+    public bool isDead() {return _characterInfo._immortalCharacter ? false : _statusInfo.isDead();}
 
     public void setActionCondition_Bool(ConditionNodeUpdateType updateType, bool value) {_actionGraph.setActionConditionData_Bool(updateType, value);}
 

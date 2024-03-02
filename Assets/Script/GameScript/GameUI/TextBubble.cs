@@ -152,6 +152,7 @@ public class TextPresenter
         }
         else
         {
+            FMODAudioManager.Instance().Play(5006,Vector3.zero);
             _stringBuilder.Append(ch);
         }
         

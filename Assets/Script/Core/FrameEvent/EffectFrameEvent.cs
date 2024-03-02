@@ -426,6 +426,7 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
     public bool _toTarget = false;
 
     public bool _attach = false;
+    public bool _useDirectionOffset = true;
 
     public Vector3 _spawnOffset = Vector3.zero;
 
@@ -452,7 +453,7 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
         requestData._startFrame = 0f;
         requestData._endFrame = -1f;
         requestData._framePerSecond = _framePerSecond;
-        requestData._position = centerPosition + (directionAngle  * _spawnOffset);
+        requestData._position = centerPosition + (_useDirectionOffset ? (directionAngle  * _spawnOffset) : _spawnOffset);
         requestData._usePhysics = _usePhysics;
         requestData._rotation = directionAngle;
         requestData._effectType = EffectType.SpriteEffect;
@@ -532,6 +533,10 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
                 _spawnOffset.x = XMLScriptConverter.valueToFloatExtend(vector[0]);
                 _spawnOffset.y = XMLScriptConverter.valueToFloatExtend(vector[1]);
                 _spawnOffset.z = XMLScriptConverter.valueToFloatExtend(vector[2]);
+            }
+            else if(attributes[i].Name == "DirectionOffset")
+            {
+                _useDirectionOffset = bool.Parse(attributes[i].Value);
             }
             else if(attributes[i].Name == "Angle")
             {

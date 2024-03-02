@@ -410,7 +410,10 @@ public class AIGraph
 
     private void processAIEvent(AIChildEventType aiEventType, GameEntityBase targetEntity)
     {
-        if(processAIEvent(aiEventType,targetEntity, getCurrentAIPackageNode()._aiEvents))
+        AIGraphNodeData graphNode = getCurrentAINode();
+        AIPackageBaseData packageNodeData = getCurrentAIPackage();
+
+        if (processAIEvent(aiEventType,targetEntity, getCurrentAIPackageNode()._aiEvents))
             return;
         else if(processAIEvent(aiEventType,targetEntity, getCurrentAIPackage()._aiEvents))
             return;

@@ -366,6 +366,8 @@ public class StatusInfo
         Status hpStatus = getStatus("HP");
         if(_isImmortal == false && _isDead == false && hpStatus != null && hpStatus._value <= 0f)
             setDead(true);
+        else if(_isDead && hpStatus != null && hpStatus._value > 0.0)
+            setDead(false);
     }
 
     public void setImmortal(bool immortal)

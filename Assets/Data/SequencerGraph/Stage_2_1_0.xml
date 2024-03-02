@@ -12,6 +12,9 @@
         
         <Fade/>
         <LetterBoxShow/>
+
+        <AudioParameter Key="9006" ParameterID="90061" ParameterValue="1" ParameterType="Local"/>
+        <AudioPlay ID="8005" Switch="True"/>
     </InitializePhase>
 
     <UpdatePhase>
@@ -27,6 +30,8 @@
             <TalkBalloon UniqueKey="YakisobaChan" SimpleTalkKey="Talk_Stage02_1_0"/>
 
             <WaitSecond Time="1.5"/>
+
+            <AudioPlay ID="4902"/>
             <TalkBalloon UniqueKey="SukebanHit" SimpleTalkKey="Talk_Stage02_1_1"/>
             <AIMove UniqueKey="SukebanHit" LoopAction="SQ_Hit" EndPositionMarker="SukebanHit"/>
             

@@ -7,12 +7,12 @@
         <SetCrossHair UniqueKey="Player"/>
         <SetHideUI Hide="True"/>
         <BlockInput Enable="True"/>
-
+        
         <LetterBoxShow/>
         <SetHideCharacter UniqueKey="Player" Hide="True"/>
 
         <Fade/>
-
+ 
     </InitializePhase>
 
     <UpdatePhase>
@@ -23,6 +23,8 @@
         
         <EffectPreset UniqueKey="Player" EffectPreset="ExplodeBig"/>
         <WaitSecond Time="1.0"/>
+
+        <AudioPlay ID="6001"/>
 
         <CallAIEvent EventName="Fear" UniqueKey="Player" EventTargetType="Range" SearchIdentifier="Enemy" Range="3.0"/>
         <SetBackgroundAnimationTrigger Key="Door_1" Trigger="Open"/>
