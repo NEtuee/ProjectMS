@@ -290,11 +290,22 @@
                         <FrameEvent Type="AudioPlay" StartTime="0" ID="4902" Attach="true"/>
                         <!-- TODO: 야구공 버프 설정 -->
                         <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
-                        <FrameEvent Type="EffectPreset" StartTime="0" Key="SmashSmall"/>
-                        <FrameEvent Type="EffectPreset" StartTime="0" Key="BloodSmallSmall"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
+
+                        <FrameEvent Type="ApplyBuffTarget" ApplyBuff="StunSet"/>
+                        <FrameEvent Type="ShakeEffect" Scale="0.1" Speed="35.0" Time="0.15"/>
+
+                        <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Projectile/BaseBall" FramePerSecond="0.1" CastShadow="True">
+                            <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
+                        </FrameEvent>
                     </OnHit>
                     <OnGuard>
-                        <FrameEvent Type="EffectPreset" StartTime="0" Key="SmashSmall"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+
+                        <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Projectile/BaseBall" FramePerSecond="0.1" CastShadow="True">
+                            <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
+                        </FrameEvent>
                     </OnGuard>
                 </FrameEvent>
             </OnHit>
@@ -313,11 +324,22 @@
                         <FrameEvent Type="AudioPlay" StartTime="0" ID="4902" Attach="true"/>
                         <!-- TODO: 야구공 버프 설정 -->
                         <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
-                        <FrameEvent Type="EffectPreset" StartTime="0" Key="SmashSmall"/>
-                        <FrameEvent Type="EffectPreset" StartTime="0" Key="BloodSmall"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
+
+                        <FrameEvent Type="ApplyBuffTarget" ApplyBuff="StunSet"/>
+                        <FrameEvent Type="ShakeEffect" Scale="0.1" Speed="35.0" Time="0.15"/>
+
+                        <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Projectile/SoccerBall" FramePerSecond="0.1" CastShadow="True">
+                            <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
+                        </FrameEvent>
                     </OnHit>
                     <OnGuard>
-                        <FrameEvent Type="EffectPreset" StartTime="0" Key="SmashSmall"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+
+                        <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Projectile/SoccerBall" FramePerSecond="0.1" CastShadow="True">
+                            <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
+                        </FrameEvent>
                     </OnGuard>
                 </FrameEvent>
             </OnHit>
@@ -515,7 +537,7 @@
                         </FrameEvent>
 
                         <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
-                        <FrameEvent Type="EffectPreset" StartTime="0" Key="BloodSmall"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
                     </OnHit>
 
                     <OnGuard>
@@ -523,7 +545,7 @@
                             <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
                         </FrameEvent>
 
-                        <FrameEvent Type="EffectPreset" StartTime="0" Key="SmashSmall"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
                     </OnGuard>
                 </FrameEvent>
             </OnHit>
@@ -555,8 +577,11 @@
                             <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
                         </FrameEvent>
 
-                        <FrameEvent Type="EffectPreset" StartTime="0" Key="SmashSmall"/>
-                        <FrameEvent Type="EffectPreset" StartTime="0" Key="BloodSmall"/>
+                        <FrameEvent Type="ApplyBuffTarget" ApplyBuff="StunSet"/>
+                        <FrameEvent Type="ShakeEffect" Scale="0.1" Speed="35.0" Time="0.15"/>
+
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
                     </OnHit>
 
                     <OnGuard>
@@ -564,7 +589,7 @@
                             <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
                         </FrameEvent>
 
-                        <FrameEvent Type="EffectPreset" StartTime="0" Key="SmashSmall"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
                     </OnGuard>
                 </FrameEvent>
             </OnHit>
