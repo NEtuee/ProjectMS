@@ -115,7 +115,13 @@ public class CrosshairUI : IUIElement
             return;
         }
 
-        Vector3 worldMousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        var screenHeight = Screen.height;
+        var screenWidth = Screen.width;
+
+        var mousePosition = Input.mousePosition;
+        var clampMousePosition = new Vector3(Mathf.Clamp(mousePosition.x, 0.0f, screenWidth), Mathf.Clamp(mousePosition.y, 0.0f, screenHeight), 0.0f);
+        
+        Vector3 worldMousePosition = mainCamera.ScreenToWorldPoint(clampMousePosition);
         worldMousePosition.z = 0.0f;
 
         Vector3 toMouseVector = worldMousePosition - targetPosition;
