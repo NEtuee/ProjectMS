@@ -244,7 +244,7 @@ public class CameraControlEx : Singleton<CameraControlEx>
 
     public void updateCameraSize()
     {
-        _camHeight = _currentMainCamSize * 2f;
+        _camHeight = _currentCamera.orthographicSize * 2f;
         _camWidth = _camHeight * (800f / 600f);
         _cameraBoundHalf = new Vector2(_camWidth, _camHeight) * 0.5f * _cameraBoundRate;
     }
