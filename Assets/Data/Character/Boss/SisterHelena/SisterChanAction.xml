@@ -36,8 +36,8 @@
         <Animation Preset="0_default/2_move" XFlip="true" Duration="0.5">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="5" Speed="15"/>
 
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Move"/>
@@ -57,10 +57,11 @@
         <Animation Preset="0_default/3_hit" XFlip="true" Duration="1.25">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
-            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountIncrease"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountIncrease"/>
 
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
@@ -147,7 +148,6 @@
         <!-- 기도, 오라, 폭발 차징 표현 -->
         <Animation Preset="2_skill/2_discharge/1_attackReady" XFlip="true" Duration="0.7">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
-                <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
                 <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
@@ -182,8 +182,8 @@
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/3_thunderStorm/1_attackReady" XFlip="true" Duration="0.7">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
         <Animation Preset="2_skill/3_thunderStorm/2_attackMain" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
@@ -195,8 +195,8 @@
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="Left" EventTargetType="SummonTargetRange" Range="100.0" SearchIdentifier="Enemy"/>
         </Animation>
         <Animation Preset="2_skill/3_thunderStorm/3_attackRecover" XFlip="true" Duration="0.3">
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>
@@ -205,8 +205,8 @@
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/3_thunderStorm/1_attackReady" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
         <Animation Preset="2_skill/3_thunderStorm/2_attackMain" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
@@ -218,8 +218,8 @@
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="Right" EventTargetType="SummonTargetRange" Range="100.0" SearchIdentifier="Enemy"/>
         </Animation>
         <Animation Preset="2_skill/3_thunderStorm/3_attackRecover" XFlip="true" Duration="0.3">
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>
@@ -228,8 +228,8 @@
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/3_thunderStorm/1_attackReady" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
         <Animation Preset="2_skill/3_thunderStorm/2_attackMain" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
@@ -241,8 +241,8 @@
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="Up" EventTargetType="SummonTargetRange" Range="100.0" SearchIdentifier="Enemy"/>
         </Animation>
         <Animation Preset="2_skill/3_thunderStorm/3_attackRecover" XFlip="true" Duration="0.3">
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>
@@ -251,8 +251,8 @@
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/3_thunderStorm/1_attackReady" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
         <Animation Preset="2_skill/3_thunderStorm/2_attackMain" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
@@ -264,8 +264,8 @@
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="Down" EventTargetType="SummonTargetRange" Range="100.0" SearchIdentifier="Enemy"/>
         </Animation>
         <Animation Preset="2_skill/3_thunderStorm/3_attackRecover" XFlip="true" Duration="0.3">
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>
@@ -278,9 +278,9 @@
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2208" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
             <FrameEvent Type="Projectile" StartTime="0.3" GraphName="Helena_CrimsonGrimoire" DirectionType="AI" SpawnTargetType="Self"/>
-            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="AddCrimson" EventTargetType="Self"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0.3" EventName="AddCrimson" EventTargetType="Self"/>
+            
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>
@@ -293,9 +293,9 @@
             <FrameEvent Type="Projectile" StartTime="0.3" GraphName="Helena_CrimsonGrimoire" DirectionType="AI" DirectionAngle="0.0" SpawnTargetType="Self"/>
             <FrameEvent Type="Projectile" StartTime="0.3" GraphName="Helena_CrimsonGrimoire" DirectionType="AI" DirectionAngle="120.0" SpawnTargetType="Self"/>
             <FrameEvent Type="Projectile" StartTime="0.3" GraphName="Helena_CrimsonGrimoire" DirectionType="AI" DirectionAngle="2400.0" SpawnTargetType="Self"/>
-            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="SetCrimson" EventTargetType="Self"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0.3" EventName="SetCrimson" EventTargetType="Self"/>
+            
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>
@@ -368,6 +368,7 @@
         <Animation Preset="2_skill/6_barrior/1_pray" XFlip="true" Duration="1.5">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="1" ApplyBuff="HelenaBarriorOn"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="BarriorActivated" EventTargetType="Self"/>
 
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
@@ -432,6 +433,7 @@
         <!-- 밀리기 -->
             <FrameEvent Type="Movement" StartTime="0" Friction="4" MaxVelocity="9" Velocity="-4" Speed="0"/>
             <FrameEvent Type="DeleteBuff" StartTime="0" BuffList="HelenaBarriorOn"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="BarriorBroken" EventTargetType="Self"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
@@ -532,10 +534,10 @@
         <Animation Preset="1_defense/2_guardBroken" XFlip="true" Duration="1.25">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
-            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountIncrease"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountIncrease"/>
 
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
