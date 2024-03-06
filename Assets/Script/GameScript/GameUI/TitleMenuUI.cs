@@ -8,7 +8,10 @@ public class TitleMenuUI : IUIElement
     private TitleMenuUIBinder _binder;
     
     private TitleMenuUIBinder.ResolutionOption _resolution = TitleMenuUIBinder.ResolutionOption.res800x600;
+
+    private FMODUnity.StudioEventEmitter _bgmEmitter = null;
     private int _language = 0; // jpn, eng, kor
+    private float _titleMusicTerm = 0f;
 
     public bool CheckValidBinderLink(out string reason)
     {
@@ -37,6 +40,8 @@ public class TitleMenuUI : IUIElement
         InitResolution();
         ActiveTitleMenu(false);
 
+        _bgmEmitter?.Stop();
+
         _binder.OptionRoot.SetActive(false);
         _binder.CuttingLine.gameObject.SetActive(true);
     }
@@ -53,6 +58,12 @@ public class TitleMenuUI : IUIElement
         _binder.Root.SetActive(active);
         if (active == true)
             ActiveButtons(true);
+
+        _bgmEmitter?.Stop();
+        _bgmEmitter = null;
+        
+        _titleMusicTerm = 4f;
+        FMODAudioManager.Instance().Play(5000, Vector3.zero);
     }
 
     private void ActiveButtons(bool value)
@@ -78,7 +89,8 @@ public class TitleMenuUI : IUIElement
     private void OnClickStart()
     {
         ActiveButtons(false);
-        
+        _bgmEmitter?.Stop();
+
         var introStageData = ResourceContainerEx.Instance().GetStageData("StageData/Stage_1_1");
         if (introStageData == null)
             return;
@@ -140,6 +152,16 @@ public class TitleMenuUI : IUIElement
     {
         if(_binder.OptionRoot.activeInHierarchy || _binder.Root.activeInHierarchy == false)
             return;
+
+        if(_titleMusicTerm > 0f)
+        {
+            _titleMusicTerm -= Time.deltaTime;
+            if(_titleMusicTerm <= 0f)
+            {
+                _titleMusicTerm = 0f;
+                _bgmEmitter = FMODAudioManager.Instance().Play(9003, Vector3.zero);
+            }
+        }
 
         _scrollOffset.x += 0.04f * Time.deltaTime;
         _binder.CuttingLine.material.mainTextureOffset = _scrollOffset;
