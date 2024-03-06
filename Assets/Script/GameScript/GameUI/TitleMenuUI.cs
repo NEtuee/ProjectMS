@@ -29,6 +29,8 @@ public class TitleMenuUI : IUIElement
 
     public void Initialize()
     {
+        PlaySoundEmitter();
+        
         BindButtonsAction();
         InitSlider();
         InitLanguageButton();
@@ -37,6 +39,13 @@ public class TitleMenuUI : IUIElement
 
         _binder.OptionRoot.SetActive(false);
         _binder.CuttingLine.gameObject.SetActive(true);
+    }
+
+    private void PlaySoundEmitter()
+    {
+        FMODAudioManager.Instance().Play(5001, Vector3.zero);
+        FMODAudioManager.Instance().Play(5002, Vector3.zero);
+        FMODAudioManager.Instance().Play(5003, Vector3.zero);
     }
 
     public void ActiveTitleMenu(bool active)
@@ -90,12 +99,18 @@ public class TitleMenuUI : IUIElement
 
     private void InitSlider()
     {
+        var initValue = FMODAudioManager.Instance().GetGlobalParam(1);
+        
+        _binder.VolumeSlider.onValueChanged.AddListener(OnVolumeChanged);
+        _binder.VolumeSlider.value = initValue;
     }
 
     private void OnVolumeChanged(float value)
     {
+        FMODAudioManager.Instance().SetGlobalParam(1, value);
+        FMODAudioManager.Instance().SetGlobalParam(2, value);
+        FMODAudioManager.Instance().SetGlobalParam(3, value);
     }
-
     private void OnSfxValueChanged(float value)
     {
         
