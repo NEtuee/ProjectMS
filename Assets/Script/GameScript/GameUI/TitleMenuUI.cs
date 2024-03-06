@@ -57,13 +57,14 @@ public class TitleMenuUI : IUIElement
     {
         _binder.Root.SetActive(active);
         if (active == true)
+        {
             ActiveButtons(true);
+            _titleMusicTerm = 4f;
+            FMODAudioManager.Instance().Play(5000, Vector3.zero);
+        }
 
         _bgmEmitter?.Stop();
         _bgmEmitter = null;
-        
-        _titleMusicTerm = 4f;
-        FMODAudioManager.Instance().Play(5000, Vector3.zero);
     }
 
     private void ActiveButtons(bool value)

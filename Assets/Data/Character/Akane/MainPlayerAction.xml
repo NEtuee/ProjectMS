@@ -577,7 +577,7 @@
 
     <SQ_Intro_Sleep MovementType="Empty" DirectionType="AlwaysRight" FlipType="AlwaysTurnOff" RotationType="AlwaysRight" HeadUpOffset="0.2">
         <Animation Preset="Sprites/NewPlayer/Sequencer/Intro_0" XFlip="true" Duration="7.0">
-            <FrameEvent Type="TalkBalloon" StartTime="0" SimpleTalkKey="Talk_SleepEffect"/>
+            <FrameEvent Type="TalkBalloon" StartTime="5" SimpleTalkKey="Talk_SleepEffect"/>
         </Animation>
 
         <Branch Condition="End" Execute="SQ_Intro_Sleep"/>
