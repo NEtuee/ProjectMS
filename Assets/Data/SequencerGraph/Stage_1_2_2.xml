@@ -45,6 +45,16 @@
             <AudioParameter ParameterID="11" ParameterValue="0"/>
         </Task>
 
+        <Task ProcessType="StepByStep">
+            <EffectPreset PositionMarker="StoreExplosion_0" EffectPreset="ExplodeBig"/>
+            <EffectPreset PositionMarker="StoreExplosion_1" EffectPreset="ExplodeBig"/>
+
+            <WaitSecond Time="0.17"/>
+            <SetBackgroundAnimationTrigger Key="Store" Trigger="Break"/>
+
+            <AudioPlay ID="6001"/>
+            <AudioPlay ID="6002"/>
+        </Task>
 
         <SetDirection UniqueKey="Player" DirectionType="AlwaysRight"/>
         <BlockAI UniqueGroupKey="EnemyGroup" Enable="False"/>
@@ -56,9 +66,6 @@
 
         <WaitSecond Time="0.1"/>
         <SetTimeScale Scale="0.1" Time="1.0" BlendTime="2.0"/>
-
-        <AudioPlay ID="6001"/>
-        <AudioPlay ID="6002"/>
 
         <WaitSecond Time="3.0"/>
         <AIMove UniqueKey="Player" StartAction="AIMove_Loop" LoopAction="AIMove_Loop" EndAction="AIMove_End" EndPositionMarker="AkanePosition2"/>

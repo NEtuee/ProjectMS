@@ -1181,6 +1181,7 @@ public class SequencerGraphEvent_EffectPreset : SequencerGraphEventBase
 
     private string _effectPresetName;
     private string _uniqueKey = "";
+    private string _markerName = "";
 
     public override void Initialize(SequencerGraphProcessor processor)
     {
@@ -1199,6 +1200,12 @@ public class SequencerGraphEvent_EffectPreset : SequencerGraphEventBase
 
             EffectInfoManager.Instance().requestEffect(_effectPresetName,uniqueEntity, null, CommonMaterial.Empty);
         }
+        else if(_markerName != "")
+        {
+            MarkerItem item = processor.getMarker(_markerName);
+            if(item != null)
+                EffectInfoManager.Instance().requestEffect(_effectPresetName,item._position);
+        }
 
         return true;
     }
@@ -1216,6 +1223,8 @@ public class SequencerGraphEvent_EffectPreset : SequencerGraphEventBase
                 _uniqueKey = attrValue;
             else if(attrName == "EffectPreset")
                 _effectPresetName = attrValue;
+            else if(attrName == "PositionMarker")
+                _markerName = attrValue;
         }
     }
 }
