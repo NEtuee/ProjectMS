@@ -380,6 +380,12 @@ public class StatusInfo
         return _isImmortal;
     }
 
+    public void kill()
+    {
+        variStat("HP", -99999f);
+        setDead(true);
+    }
+
     public void setDead(bool value)
     {
         _isDead = value;

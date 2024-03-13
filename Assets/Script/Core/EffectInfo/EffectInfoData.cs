@@ -55,22 +55,22 @@ public class ParticleEffectInfoData : EffectInfoDataBase
 
     public override EffectRequestData createEffectRequestData(ObjectBase executeEntity, ObjectBase targetEntity)
     {
-        Vector3 centerPosition;
+        Vector3 centerPosition = Vector3.zero;
         if(_toTarget && targetEntity == null)
         {
             DebugUtil.assert(false,"대상이 존재하는 상황에서만 사용할 수 있는 이펙트 입니다. [EffectInfo: {0}] [ToTarget: {1}]",_key,_toTarget);
             return null;
         }
 
-        if(_toTarget)
+        if(_toTarget && targetEntity != null)
             centerPosition = targetEntity.transform.position;
-        else
+        else if(executeEntity != null)
             centerPosition = executeEntity.transform.position;
 
         EffectRequestData requestData = MessageDataPooling.GetMessageData<EffectRequestData>();
         requestData.clearRequestData();
         requestData._effectPath = _effectPath;
-        requestData._rotation = getAngleByType(executeEntity, requestData._position, _angleDirectionType);
+        requestData._rotation = executeEntity == null ? Quaternion.identity : getAngleByType(executeEntity, requestData._position, _angleDirectionType);
         requestData._position = centerPosition + requestData._rotation * _spawnOffset;
         requestData._rotationOffset = Quaternion.Euler(0f,0f,_angleOffset);
         requestData._rotation *= requestData._rotationOffset;

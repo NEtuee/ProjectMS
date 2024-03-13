@@ -52,20 +52,23 @@ public class FMODAudioManager : Singleton<FMODAudioManager>
 
     public void updateAudio()
     {
-        foreach(var pair in _activeMap)
+        if(_activeMap != null)
         {
-            var value = pair.Value;
-            for(int i = 0; i < value.Count;)
+            foreach(var pair in _activeMap)
             {
-                if(!value[i].IsPlaying())
+                var value = pair.Value;
+                for(int i = 0; i < value.Count;)
                 {
-                    //_cacheMap[value[i].DataCode].Enqueue(value[i]);
-                    ReturnCache(pair.Key,value[i]);
-                    value.RemoveAt(i);
-                }
-                else
-                {
-                    ++i;
+                    if(!value[i].IsPlaying())
+                    {
+                        //_cacheMap[value[i].DataCode].Enqueue(value[i]);
+                        ReturnCache(pair.Key,value[i]);
+                        value.RemoveAt(i);
+                    }
+                    else
+                    {
+                        ++i;
+                    }
                 }
             }
         }
@@ -154,18 +157,21 @@ public class FMODAudioManager : Singleton<FMODAudioManager>
 
     public void ReturnAllCache()
     {
-        foreach(var pair in _activeMap)
+        if(_activeMap != null)
         {
-            var value = pair.Value;
-            for(int i = 0; i < value.Count; ++i)
+            foreach(var pair in _activeMap)
             {
-                value[i].Stop();
-                value[i].transform.SetParent(_audioObject.transform);
-                ReturnCache(pair.Key,value[i]);
+                var value = pair.Value;
+                for(int i = 0; i < value.Count; ++i)
+                {
+                    value[i].Stop();
+                    value[i].transform.SetParent(_audioObject.transform);
+                    ReturnCache(pair.Key,value[i]);
 
+                }
+                
+                value.Clear();
             }
-            
-            value.Clear();
         }
     }
 
@@ -233,14 +239,20 @@ public class FMODAudioManager : Singleton<FMODAudioManager>
         var n = FindAudioInfo(audioID).FindParameter(parameterID);
         value = Mathf.Clamp(value,n.min,n.max);
 
-        foreach(var list in _activeMap[audioID])
+        if(_activeMap != null && _activeMap.ContainsKey(audioID))
         {
-            list.SetParameter(n.name,value);
+            foreach(var list in _activeMap[audioID])
+            {
+                list.SetParameter(n.name,value);
+            }
         }
 
-        foreach(var list in _cacheMap[audioID])
+        if(_cacheMap != null && _cacheMap.ContainsKey(audioID))
         {
-            list.SetParameter(n.name,value);
+            foreach(var list in _cacheMap[audioID])
+            {
+                list.SetParameter(n.name,value);
+            }
         }
     }
 
@@ -265,6 +277,11 @@ public class FMODAudioManager : Singleton<FMODAudioManager>
 
     private void ReturnCache(int id, FMODUnity.StudioEventEmitter emitter)
     {
+        if(_cacheMap == null)
+        {
+            initialize();
+        }
+
         emitter.gameObject.SetActive(false);
         emitter.transform.SetParent(_audioObject.transform);
         _cacheMap[id].Enqueue(emitter);

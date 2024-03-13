@@ -152,7 +152,8 @@ public class TextPresenter
         }
         else
         {
-            FMODAudioManager.Instance().Play(5006,Vector3.zero);
+            if(_binder != null && _binder.isFollowTargetInsideCamera())
+                FMODAudioManager.Instance().Play(5006,Vector3.zero);
             _stringBuilder.Append(ch);
         }
         

@@ -656,7 +656,7 @@ public class StageProcessor
                 if(characterInfo._characterEntity.isActiveSelf() == false)
                     continue;
 
-                characterInfo._characterEntity.getStatusInfo().setDead(true);
+                characterInfo._characterEntity.getStatusInfo().kill();
             }
         }
     }

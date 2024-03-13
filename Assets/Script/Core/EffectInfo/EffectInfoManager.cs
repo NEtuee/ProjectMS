@@ -26,6 +26,20 @@ public class EffectInfoManager : Singleton<EffectInfoManager>
         return _effectInfoData[key];
     }
 
+    public EffectItemBase requestEffect(string effectInfoKey, Vector3 position)
+    {
+        EffectRequestData requestData = createRequestData(effectInfoKey,null,null,CommonMaterial.Empty, CommonMaterial.Empty);
+        if(requestData == null)
+            return null;
+
+        requestData._position += position;
+
+        EffectItemBase itemBase = EffectManager._instance.createEffect(requestData);
+        requestData.isUsing = true;
+
+        return itemBase;
+    }
+
     public EffectItemBase requestEffect(string effectInfoKey, ObjectBase executeEntity, ObjectBase targetEntity, CommonMaterial attackMaterial)
     {
         CommonMaterial defenceMaterial = CommonMaterial.Empty;

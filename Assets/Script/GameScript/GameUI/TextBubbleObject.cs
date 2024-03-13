@@ -166,6 +166,15 @@ public class TextBubbleObject : TextBubbleBinder
             }
         }
     }
+
+    public bool isFollowTargetInsideCamera()
+    {
+        if (_followTarget == null)
+            return false;
+
+        Vector3 cameraInPosition;
+        return CameraControlEx.Instance().IsInCameraBound(_followTarget.transform.position, Camera.main.transform.position, out cameraInPosition);
+    }
     
     private void UpdateFollowPosition()
     {

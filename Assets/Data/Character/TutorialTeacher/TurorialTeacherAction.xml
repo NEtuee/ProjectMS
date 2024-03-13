@@ -1,8 +1,8 @@
 <ActionGraph Name="TurorialTeacherAction" DefaultAction="Idle" DefaultFramePerSecond="12">
 
-    <Idle MovementType="Empty" DirectionType="MoveInput">
+    <Idle MovementType="Empty" DirectionType="AITarget" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/TutorialTeacher/"/>
-        <Animation Preset="idle_0" XFlip="true" Duration="3">
+        <Animation Preset="idle_0" XFlip="true" Duration="3" >
             <FrameEvent Type="TalkBalloon" Condition="getWeight_RandVector4^x" StartTime="0" SimpleTalkKey="Talk_TutorialTeacher_0"/>
             <FrameEvent Type="TalkBalloon" Condition="getWeight_RandVector4^y" StartTime="0" SimpleTalkKey="Talk_TutorialTeacher_1"/>
             <FrameEvent Type="TalkBalloon" Condition="getWeight_RandVector4^z" StartTime="0" SimpleTalkKey="Talk_TutorialTeacher_2"/>
