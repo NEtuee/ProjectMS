@@ -37,10 +37,11 @@
     </AC_Idle_WithHelena>
     <AC_Move MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="0_default/2_move" XFlip="true" Duration="0.1">
-            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="20" Velocity="0" Speed="65"/>
-            
-            <FrameEvent Type="Projectile" StartTime="0.05" GraphName="Thunder" DirectionType="AI" SpawnTargetType="Self" SearchIdentifier="Enemy"/>
+        <Animation Preset="0_default/2_move" XFlip="true" Duration="0.5">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="5" Speed="15"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Move"/>
@@ -164,21 +165,31 @@
         <Branch Condition="End == true" Execute="AC_Idle_WithHelena"/>
     </AC_Shoot_in>
     
-    <AC_ExplosionStart MovementType="Empty" DirectionType="Keep" DefenceType="Evade" DefenceAngle="360">
+    <AC_ExplosionChase MovementType="FrameEvent" DirectionType="AI">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="1_attack/4_explosion" XFlip="true" Duration="1.5">
-            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
-            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
+        <Animation Preset="1_attack/4_explosion" XFlip="true" Duration="0.5">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="5" Speed="15"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndFrame="999" Tag="GbAvail"/>
+        </Animation>
+        <Branch Condition="TargetDistance <= 0.5" Execute="AC_ExplosionStart"/>
+        <Branch Condition="End" Execute="AC_ExplosionChase"/>
+    </AC_ExplosionChase>
+
+    <AC_ExplosionStart MovementType="Empty" DirectionType="Keep">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="1_attack/4_explosion" XFlip="true" Duration="0.2">
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
         <Branch Condition="End" Execute="AC_Explosion"/>
     </AC_ExplosionStart>
-    <AC_Explosion MovementType="Empty" DirectionType="Keep" DefenceType="Evade" DefenceAngle="360">
+
+    <AC_Explosion MovementType="Empty" DirectionType="Keep">
         <Animation Preset="Sprites/Projectile/empty" Duration="0.3">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2415" Attach="true"/>
             <!-- TODO: 폭발 이펙트  -->
-            <FrameEvent Type="Attack" StartTime="0" EndTime="0.3" AttackPreset="Common_Radius10">
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.3" AttackPreset="Common_Radius20">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
                 </OnHit>

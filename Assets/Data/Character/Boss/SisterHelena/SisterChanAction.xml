@@ -477,7 +477,7 @@
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/7_invisibleDodge/1_disappear" XFlip="true" Duration="0.3">
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="Detach" EventTargetType="Range" SearchIdentifier="Enemy" Range="100.0"/>
-            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="DetachExplosion" EventTargetType="SummonTargetRange" Range="100.0" SearchIdentifier="Enemy"/> 
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="DetachExplosion" EventTargetType="Range" Range="100.0" SearchIdentifier="Enemy"/> 
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
         </Animation>
