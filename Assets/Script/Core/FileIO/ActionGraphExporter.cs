@@ -641,9 +641,9 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
                     if(frameEvent == null)
                         continue;
                     
-                    if(frameEvent._isTimeBase)
+                    if(frameEvent._executeTimingType == FrameEventExecuteTimingType.TimeBase)
                         timeEventList.Add(frameEvent);
-                    else
+                    else if(frameEvent._executeTimingType == FrameEventExecuteTimingType.FrameBase)
                         frameEventList.Add(frameEvent);
                 }
                 else if(nodeList[i].Name == "MultiSelectAnimation")
