@@ -272,6 +272,20 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_ThunderStorm_Down>
 
+    <!-- 원거리 공격: 유도 장판 -->
+    <AC_SpawnThunderBall MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="2_skill/4_spawnBook" XFlip="true" Duration="1.0">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2208" Attach="true"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
+            <FrameEvent Type="Projectile" StartTime="0.3" GraphName="Helena_CrimsonGrimoire" DirectionType="AI" SpawnTargetType="Self"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0.3" EventName="AddCrimson" EventTargetType="Self"/>
+            
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_SpawnThunderBall>
     <!-- 소환: 마도서 소환 -->
     <AC_SpawnCrimsonMain MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
@@ -447,7 +461,7 @@
         <Animation Preset="2_skill/6_barrior/6_counter/1_attackReady" XFlip="true" Duration="0.8">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="LaserToTarget" EventTargetType="Range" Range="10.0" SearchIdentifier="Enemy"/>
-            <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/CommonBeam_TimeLine" Attach="true" AngleType="Direction" LifeTime="0.85" FollowDirection="True" AttackPreset="Luger_Normal"/>
+            <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/CommonBeam_TimeLine" Attach="true" AngleType="Direction" LifeTime="0.85" FollowDirection="True" AttackPreset="Helena_Laser"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
             
@@ -455,7 +469,7 @@
         <Animation Preset="2_skill/6_barrior/6_counter/2_attackMain" XFlip="true" Duration="0.1">
             <FrameEvent Type="SetDirectionType" StartTime="0.0" DirectionType="Keep"/>
             <FrameEvent Type="EffectPreset" StartTime="0" Key="Helena_LaserShot"/>
-            <FrameEvent Type="Attack" StartTime="0.05" EndTime="0.1" AttackPreset="Luger_Normal">
+            <FrameEvent Type="Attack" StartTime="0.05" EndTime="0.1" AttackPreset="Helena_Laser">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
                     
@@ -499,7 +513,7 @@
         <Animation Preset="2_skill/7_invisibleDodge/2_invisible" XFlip="true" Duration="0.1">
             <FrameEvent Type="SetDirectionType" StartTime="0.016" DirectionType="Keep"/>
         </Animation>
-        <Animation Preset="2_skill/7_invisibleDodge/3_appear" XFlip="true" Duration="0.7">
+        <Animation Preset="2_skill/7_invisibleDodge/3_appear" XFlip="true" Duration="0.4">
             <FrameEvent Type="SetDirectionType" StartTime="0" DirectionType="AITarget"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>

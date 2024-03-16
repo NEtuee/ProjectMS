@@ -221,6 +221,7 @@
         <Branch Condition="Dead" Execute="Dead"/>
         <UseBranchSet Name="PassiveExplosionSet"/>
         <UseBranchSet Name="LaserBranchSet"/>
+        <Branch Condition="(customValue_Laser == -1.0)" Execute="Idle_ToTarget"/>
     </LaserToTarget>
     <LaserWith Package="HelenaBookLaserPackage" EntryNode="AI_With">
         <Branch Condition="Dead" Execute="Dead"/>
