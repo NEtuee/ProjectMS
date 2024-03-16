@@ -93,12 +93,19 @@ public class ChildFrameEventItem
 
 }
 
+public enum FrameEventExecuteTimingType
+{
+    None,
+    TimeBase,
+    FrameBase,
+}
+
 public abstract class ActionFrameEventBase
 {
     public float                                _startFrame;
     public float                                _endFrame;
 
-    public bool                                 _isTimeBase = true;
+    public FrameEventExecuteTimingType          _executeTimingType = FrameEventExecuteTimingType.None;
 
     public ActionGraphConditionCompareData      _conditionCompareData = null;
 

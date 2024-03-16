@@ -248,7 +248,7 @@
     <JudgeRangedAttack Package="CommonIdlePackage">
 
         <!-- 필드장악: 번개폭풍 20.0s-->
-        <Branch Condition="aiGraphCoolTime_ThunderStorm" Execute="ThunderStorm"/>
+        <!-- <Branch Condition="aiGraphCoolTime_ThunderStorm" Execute="ThunderStorm"/> -->
        
         <!-- 마도서 소환 1.0s Cool 5.0s-->
         <Branch Condition="(customValue_CountCrimson <= 5.0) && aiGraphCoolTime_SpawnBook_Crimson" Execute="SpawnBook_Crimson"/>

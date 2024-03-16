@@ -508,8 +508,17 @@
         SearchIdentifier="Enemy"
     />
 
+    <ScriptTester
+        DisplayName="스크립트 테스터"
+        ActionGraph="Assets/Data/Character/TestCharacter/TestAction.xml"
+        AIGraph="Assets/Data/Character/TestCharacter/TestAIGraph.xml"
+        StatusInfoName="CommonEnemyStatus"
 
+        CollisionRadius="0.2"
+        ProjectileCollisionRadius=""
 
+        SearchIdentifier="Enemy"
+    />
 
 
 

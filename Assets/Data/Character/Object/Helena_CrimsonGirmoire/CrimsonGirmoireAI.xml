@@ -22,28 +22,47 @@
 
     <AIPackage Name="HelenaBookStarePackage" DefaultState="AI_Keep">
         <AIState>
-            <AI_WithHelena TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+            <AI_WithHelena UpdateTime="2.0" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
                 <Event_OnExecute>
                     <AIEvent Type="SetAction" Action="AC_Idle_WithHelena"/>
                 </Event_OnExecute>
-
+                <Branch Weight="RandVector4^x" Condition="PackageExecutedTime >= 0.0" Execute="AI_RandomLaser"/>
+                <Branch Weight="RandVector4^r" Condition="PackageExecutedTime >= 0.0" Execute="AI_RandomExplo"/>
                 <Branch Condition="false" Execute="TerminatePackage"/>
             </AI_WithHelena>
-            <AI_ToTarget TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+            <AI_ToTarget UpdateTime="2.0" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
                 <Event_OnExecute>
                     <AIEvent Type="SetDirectionToTarget"/>
                     <AIEvent Type="SetAction" Action="AC_Idle"/>
                 </Event_OnExecute>
-
+                <Branch Weight="RandVector4^x" Condition="PackageExecutedTime >= 0.0" Execute="AI_RandomLaser"/>
+                <Branch Weight="RandVector4^r" Condition="PackageExecutedTime >= 0.0" Execute="AI_RandomExplo"/>
                 <Branch Condition="false" Execute="TerminatePackage"/>
             </AI_ToTarget>
-            <AI_Keep TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+            <AI_Keep UpdateTime="2.0" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
                 <Event_OnExecute>
                     <AIEvent Type="SetAction" Action="AC_Idle_Keep"/>
                 </Event_OnExecute>
-
+                <Branch Weight="RandVector4^x" Condition="PackageExecutedTime >= 0.0" Execute="AI_RandomLaser"/>
+                <Branch Weight="RandVector4^r" Condition="PackageExecutedTime >= 0.0" Execute="AI_RandomExplo"/>
                 <Branch Condition="false" Execute="TerminatePackage"/>
             </AI_Keep>
+
+            <AI_RandomLaser TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+                <Event_OnExecute>
+                    <AIEvent Type="CallAIEvent" EventName="LaserToTarget" TargetType="Self"/>
+                </Event_OnExecute>
+
+                <Branch Condition="false" Execute="TerminatePackage"/>
+            </AI_RandomLaser>
+            <AI_RandomExplo TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+                <Event_OnExecute>
+                    <AIEvent Type="CallAIEvent" EventName="Detach" TargetType="Self"/>
+                    <AIEvent Type="CallAIEvent" EventName="DetachExplosion" TargetType="Self"/>
+                </Event_OnExecute>
+
+                <Branch Condition="false" Execute="TerminatePackage"/>
+            </AI_RandomExplo>
             
             <TerminatePackage>
                 <Event_OnExecute>
@@ -195,13 +214,14 @@
         <Branch Condition="(customValue_Laser == 1.0)" Execute="LaserWith"/>
         <Branch Condition="(customValue_Laser == 2.0)" Execute="LaserOut"/>
         <Branch Condition="(customValue_Laser == 3.0)" Execute="LaserIn"/>
-        <Branch Condition="(customValue_Laser == -1.0)" Execute="Idle_ToTarget"/>
+        <!-- <Branch Condition="(customValue_Laser == -1.0)" Execute="Idle_ToTarget"/> -->
     </Idle_ToTarget>
 
     <LaserToTarget Package="HelenaBookLaserPackage" EntryNode="AI_ToTarget">
         <Branch Condition="Dead" Execute="Dead"/>
         <UseBranchSet Name="PassiveExplosionSet"/>
         <UseBranchSet Name="LaserBranchSet"/>
+        <Branch Condition="(customValue_Laser == -1.0)" Execute="Idle_ToTarget"/>
     </LaserToTarget>
     <LaserWith Package="HelenaBookLaserPackage" EntryNode="AI_With">
         <Branch Condition="Dead" Execute="Dead"/>

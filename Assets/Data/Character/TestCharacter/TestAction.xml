@@ -1,0 +1,21 @@
+<ActionGraph Name="TestAction" DefaultAction="AC_Idle" DefaultFramePerSecond="12">
+<GlobalVariable Name="gv_MasterPath" Value="Sprites/Enemy/_Preset/_EmptyPreset/_EnemyPreset/0_default/"/>
+
+    <AC_Idle MovementType="Empty" DirectionType="MoveInput">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="1_idle" XFlip="true" Duration="1">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_Idle>
+
+    <AC_Test MovementType="Empty" DirectionType="MoveInput">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="2_move" XFlip="true" Duration="1">
+            <FrameEvent Type="Test" StartTime="0" Log="AC_Test Executed"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_Test>
+
+</ActionGraph>
