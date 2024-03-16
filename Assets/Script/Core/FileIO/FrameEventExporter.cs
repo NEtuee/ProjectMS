@@ -125,13 +125,25 @@ public static class FrameEventLoader
             
             if(targetName == "StartFrame")
             {
-                outFrameEvent._isTimeBase = false;
+                if(outFrameEvent._executeTimingType == FrameEventExecuteTimingType.TimeBase)
+                {
+                    DebugUtil.assert_fileOpen(false,"Start/EndFrame 과 Start/EndTime은 같이 쓰일 수 없습니다. [filePath: {0}] [nodeName: {1}] [lineNumber: {2}]",filePath, XMLScriptConverter.getLineNumberFromXMLNode(node),filePath,node.Name,XMLScriptConverter.getLineNumberFromXMLNode(node));
+                    return null;
+                }
+
+                outFrameEvent._executeTimingType = FrameEventExecuteTimingType.FrameBase;
                 outFrameEvent._startFrame = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
                 outFrameEvent._endFrame = outFrameEvent._startFrame;
             }
             else if(targetName == "EndFrame")
             {
-                outFrameEvent._isTimeBase = false;
+                if(outFrameEvent._executeTimingType == FrameEventExecuteTimingType.TimeBase)
+                {
+                    DebugUtil.assert_fileOpen(false,"Start/EndFrame 과 Start/EndTime은 같이 쓰일 수 없습니다. [filePath: {0}] [nodeName: {1}] [lineNumber: {2}]",filePath, XMLScriptConverter.getLineNumberFromXMLNode(node),filePath,node.Name,XMLScriptConverter.getLineNumberFromXMLNode(node));
+                    return null;
+                }
+
+                outFrameEvent._executeTimingType = FrameEventExecuteTimingType.FrameBase;
                 outFrameEvent._endFrame = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
 
                 if(outFrameEvent._startFrame > outFrameEvent._endFrame)
@@ -142,13 +154,24 @@ public static class FrameEventLoader
             }
             else if(targetName == "StartTime")
             {
-                outFrameEvent._isTimeBase = true;
+                if(outFrameEvent._executeTimingType == FrameEventExecuteTimingType.FrameBase)
+                {
+                    DebugUtil.assert_fileOpen(false,"Start/EndFrame 과 Start/EndTime은 같이 쓰일 수 없습니다. [filePath: {0}] [nodeName: {1}] [lineNumber: {2}]",filePath, XMLScriptConverter.getLineNumberFromXMLNode(node),filePath,node.Name,XMLScriptConverter.getLineNumberFromXMLNode(node));                    return null;
+                }
+
+                outFrameEvent._executeTimingType = FrameEventExecuteTimingType.TimeBase;
                 outFrameEvent._startFrame = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
                 outFrameEvent._endFrame = outFrameEvent._startFrame;
             }
             else if(targetName == "EndTime")
             {
-                outFrameEvent._isTimeBase = true;
+                if(outFrameEvent._executeTimingType == FrameEventExecuteTimingType.FrameBase)
+                {
+                    DebugUtil.assert_fileOpen(false,"Start/EndFrame 과 Start/EndTime은 같이 쓰일 수 없습니다. [filePath: {0}] [nodeName: {1}] [lineNumber: {2}]",filePath, XMLScriptConverter.getLineNumberFromXMLNode(node),filePath,node.Name,XMLScriptConverter.getLineNumberFromXMLNode(node));
+                    return null;
+                }
+
+                outFrameEvent._executeTimingType = FrameEventExecuteTimingType.TimeBase;
                 outFrameEvent._endFrame = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
 
                 if(outFrameEvent._startFrame > outFrameEvent._endFrame)
