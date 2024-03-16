@@ -17,7 +17,7 @@
             </Event_OnExecute>
 
             <Branch Weight="RandVector3^x" Condition="AttackCatchTarget" Execute="AI_Barrior_Entry_Short"/>
-            <Branch Weight="RandVector3^y" Condition="AttackCatchTarget" Execute="AI_Barrior_Entry_Long"/>
+            <Branch Weight="RandVector3^y" Condition="AttackCatchTarget" Execute="AI_Barrior_Entry_Normal"/>
             <Branch Weight="RandVector3^z" Condition="AttackCatchTarget" Execute="AI_Barrior_Entry_Long"/>
             <Branch Condition="End" Execute="TerminatePackage"/>
         </AI_Barrior>
@@ -31,12 +31,21 @@
             <Branch Condition="IsCatcher == false" Execute="AI_Barrior_Broken"/>
         </AI_Barrior_Entry_Short>
 
+        <AI_Barrior_Entry_Normal UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <Event_OnExecute>
+                <AIEvent Type="SetAction" Action="AC_Barrior_Entry"/>
+            </Event_OnExecute>
+
+            <Branch Condition="(PackageExecutedTime >= 0.93)" Execute="AI_Barrior_Defense"/>
+            <Branch Condition="IsCatcher == false" Execute="AI_Barrior_Broken"/>
+        </AI_Barrior_Entry_Normal>
+
         <AI_Barrior_Entry_Long UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_Barrior_Entry"/>
             </Event_OnExecute>
 
-            <Branch Condition="(PackageExecutedTime >= 0.9)" Execute="AI_Barrior_Defense"/>
+            <Branch Condition="(PackageExecutedTime >= 1.0)" Execute="AI_Barrior_Defense"/>
             <Branch Condition="IsCatcher == false" Execute="AI_Barrior_Broken"/>
         </AI_Barrior_Entry_Long>
 
