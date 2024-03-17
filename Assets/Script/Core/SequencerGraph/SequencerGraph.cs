@@ -170,7 +170,6 @@ public class SequencerGraphProcessor
 
     private SequencerGraphBaseData              _currentSequencer = null;
     public Dictionary<string, GameEntityBase>   _uniqueEntityDictionary = new Dictionary<string, GameEntityBase>();
-    public Dictionary<string, GameEntityBase>   _sustainEntityDictionary = new Dictionary<string, GameEntityBase>();
     public Dictionary<string, List<GameEntityBase>> _uniqueGroupEntityDictionary = new Dictionary<string, List<GameEntityBase>>();
 
     public Dictionary<string, MarkerItem>       _markerDicionary = new Dictionary<string, MarkerItem>();
@@ -193,7 +192,6 @@ public class SequencerGraphProcessor
         _isSequencerEventEnd = false;
 
         _uniqueEntityDictionary.Clear();
-        _sustainEntityDictionary.Clear();
         _uniqueGroupEntityDictionary.Clear();
         _markerDicionary.Clear();
         _deleteUniqueTargetList.Clear();
@@ -205,7 +203,7 @@ public class SequencerGraphProcessor
         {
             foreach(var item in _uniqueEntityDictionary)
             {
-                if(item.Key == "Owner")
+                if(item.Key == "Owner" || item.Key == "Player")
                     continue;
 
                 if(item.Value.isDead())
@@ -225,19 +223,6 @@ public class SequencerGraphProcessor
                         ++index;
                 }
             }
-
-            _deleteUniqueTargetList.Clear();
-        }
-
-        {
-            foreach(var item in _sustainEntityDictionary)
-            {
-                if(item.Value.isDead())
-                    _deleteUniqueTargetList.Add(item.Key);
-            }
-
-            foreach(var item in _deleteUniqueTargetList)
-                _sustainEntityDictionary.Remove(item);
 
             _deleteUniqueTargetList.Clear();
         }
