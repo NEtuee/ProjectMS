@@ -50,19 +50,6 @@
     <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterDodgePackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterDischargePackage.xml"/>
 
-    
-    <!-- 보스전 대기 시간 (나중에 보스전 시작 트리거를 받아야 함)-->
-    <GlobalVariable Name="gv_sisterReadyTime" Value="3.0"/>
-    <!-- 시스터 발차기 사거리 -->
-    <GlobalVariable Name="gv_sisterKickRange" Value="2.0"/>
-    <!-- 시스터 행동 전환 시간 -->
-    <GlobalVariable Name="gv_sisterTrasitionTime" Value="0.3"/>
-
-    <!-- Std Values -->
-    <GlobalVariable Name="gv_MaxCrimson" Value="3.0"/>      <!-- 헬레나의 붉은 마도서 최대 개수 -->
-    <GlobalVariable Name="gv_MaxOlive" Value="2.0"/>        <!-- 헬레나의 갈록 마도서 최대 개수 -->
-    <GlobalVariable Name="gv_MaxBlue" Value="1.0"/>         <!-- 헬레나의 푸른 마도서 최대 개수 -->
-
     <!-- Custom Value -->
     <CustomValue Name="CountCrimson" Value="0.0"/>
     <CustomValue Name="IsCatching" Value="0.0"/>
@@ -95,9 +82,6 @@
     <BranchSet Name="IsPlayerDead">
         <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="getTargetFrameTag_Dead" Execute="EnemyWin"/>
-    </BranchSet>
-    <BranchSet Name="WarpChaseSet">
-        <Branch Condition="TargetDistance >= gv_SystemChaseThreshold" Execute="WarpChase"/>
     </BranchSet>
 
     <!-- 피격 리액션 브랜치 셋 -->
@@ -139,15 +123,9 @@
         <Branch Condition="(TargetDistance > gv_MeleeAttackRangeMax)" Execute="JudgeRangedAttack"/>
         <Branch Condition="(TargetDistance <= gv_MeleeAttackRangeMax)" Execute="JudgeMeleeAttack"/>
     </BranchSet>
-    <!-- NOTUSE -->
-    <BranchSet Name="AttackTriggerSet">
-        <Branch Condition="(TargetDistance >= gv_MeleeAttackRangeMin)"  Execute="Battle_Attack"/>
-    </BranchSet>
     <!-- 전투 이동 분기 브랜치 셋 -->
     <BranchSet Name="BattleMovementJudgeSet">
-        <!-- TODO: 보스전의 이동은 별도 설정 필요 -->
         <Branch Condition="gv_bIsSystemChase && (TargetDistance >= gv_SystemChaseThreshold)" Execute="WarpChase"/>
-        <Branch Condition="true" Execute="Entry_Battle"/>
     </BranchSet>
 
     <!-- 전투 행동 초기화 브랜치 셋 -->
@@ -178,6 +156,7 @@
 
     <!-- Preset State -->
     <Entry_Battle Package="CommonIdlePackage">
+        <UseBranchSet Name="BattleMovementJudgeSet"/>
         <UseBranchSet Name="BattleEntrySet"/>
     </Entry_Battle>
     
@@ -275,11 +254,6 @@
     </SpawnBook_Crimson_Set>
 
     <!-- 명령: 마도서 공격 -->
-    <!-- Not Use -->
-    <CommandBook_LaserToTarget Package="SisterCommandBookPackage" EntryNode="AI_LaserToTarget" CoolTime="0.0">
-        <UseBranchSet Name="HitReactionSet"/>
-        <UseBranchSet Name="BattlePackageEndSet"/>
-    </CommandBook_LaserToTarget>
     <!-- 원거리 통상 공격 : 레이저 발사 -->
     <CommandBook_LaserWith Package="SisterCommandBookPackage" EntryNode="AI_LaserWith" CoolTime="0.0">
         <UseBranchSet Name="HitReactionSet"/>
@@ -302,7 +276,9 @@
         <UseBranchSet Name="BattlePackageEndSet"/>        
     </BarriorActivated>
 
+
     <!-- 필드 장악: 라이트닝볼트 (광역장판) -->
+    <!-- NOTUSE -->
     <ThunderStorm Package="SisterThunderStormPackage" CoolTime="20.0">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
