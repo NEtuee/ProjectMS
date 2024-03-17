@@ -183,6 +183,8 @@ public class GameEntityBase : SequencerObjectBase
 
         _actionGraph.initializeCustomValue(_aiGraph.getCustomValueData());
 
+        _sequencerProcessManager.clearSequencerGraphProcessManager();
+
         _movementControl.changeMovement(this,_actionGraph.getCurrentMovement());
         _movementControl.setMoveScale(_actionGraph.getCurrentMoveScale());
         _additionalMoveScale = 1f;
