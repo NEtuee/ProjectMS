@@ -157,6 +157,8 @@
     <AC_DischargeMain MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/2_discharge/2_attackMain" XFlip="true" Duration="0.5">
+            <!-- 헬레나 방전 이펙트 -->
+            <FrameEvent Type="EffectPreset" StartTime="0" Key="Helena_Discharge"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
             <FrameEvent Type="Attack" StartTime="0" EndTime="0.1" AttackPreset="Helena_Discharge">
                 <OnHit>
