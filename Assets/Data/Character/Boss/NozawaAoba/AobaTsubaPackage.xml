@@ -8,7 +8,7 @@
             </Event_OnExecute>
 
             <Branch Weight="RandVector3^x" Condition="AttackCatchTarget" Execute="AI_Tsuba_Entry_Short"/>
-            <Branch Weight="RandVector3^y" Condition="AttackCatchTarget" Execute="AI_Tsuba_Entry_Short"/>
+            <Branch Weight="RandVector3^y" Condition="AttackCatchTarget" Execute="AI_Tsuba_Entry_Normal"/>
             <Branch Weight="RandVector3^z" Condition="AttackCatchTarget" Execute="AI_Tsuba_Entry_Long"/>
             <Branch Condition="End" Execute="TerminatePackage"/>
         </AI_Tsuba>
@@ -23,13 +23,23 @@
             <Branch Condition="IsCatcher == false" Execute="AI_Away"/>
         </AI_Tsuba_Entry_Short>
 
+        <AI_Tsuba_Entry_Normal UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <Event_OnExecute>
+                <AIEvent Type="Test" Log="AI Rush Success"/>
+                <AIEvent Type="SetAction" Action="AC_Tsuba_Entry"/>
+            </Event_OnExecute>
+
+            <Branch Condition="(PackageExecutedTime >= 0.93)" Execute="AI_Tsuba_Attack"/>
+            <Branch Condition="IsCatcher == false" Execute="AI_Away"/>
+        </AI_Tsuba_Entry_Normal>
+
         <AI_Tsuba_Entry_Long UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
             <Event_OnExecute>
                 <AIEvent Type="Test" Log="AI Rush Success"/>
                 <AIEvent Type="SetAction" Action="AC_Tsuba_Entry"/>
             </Event_OnExecute>
 
-            <Branch Condition="(PackageExecutedTime >= 0.9)" Execute="AI_Tsuba_Attack"/>
+            <Branch Condition="(PackageExecutedTime >= 1.0)" Execute="AI_Tsuba_Attack"/>
             <Branch Condition="IsCatcher == false" Execute="AI_Away"/>
         </AI_Tsuba_Entry_Long>
 

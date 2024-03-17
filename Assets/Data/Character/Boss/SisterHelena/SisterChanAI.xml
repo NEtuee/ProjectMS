@@ -1,34 +1,13 @@
 <AIGraph Name="SisterChanAI" DefaultState="SpawnBook_Crimson"> <!--Entry_Battle-->
     <!-- 옵션 설정 -->
-    <!-- 인지 옵션값 설정 -->
-    <GlobalVariable Name="gv_CognitiveRange"    Value="4.0"/>   <!-- PC 인지 거리 : 해당 거리 내 PC 존재 시 인지한다. -->
-    <GlobalVariable Name="gv_CognitiveDelay"    Value="0.5"/>   <!-- 인지 지연 시간 : 해당 거리 내 PC 존재 시 인지까지 이루어지는 지연 시간. -->
-    <GlobalVariable Name="gv_OvlivionRange"     Value="7.0"/>   <!-- [보류] 인지 망각 거리 : 해당 거리 밖 PC 존재 시 망각 시간을 카운트한다. -->
-    <GlobalVariable Name="gv_OvlivionTime"      Value="5.0"/>   <!-- [보류] 인지 망각 시간 : 카운트 된 시간이 망각 시간을 초과하면 평화 상태로 돌아간다. -->
-    <!-- TODO: 위의 옵션값을 기준으로 TargetExist, TargetDistance 비교 연산. 이를 위해 CommonPackage에서의 Search 범위는 최대값으로 설정 통일할 것. -->
-
-    <!-- 평화 상태 행동 타입 설정 -->
-    <GlobalVariable Name="gv_bIsIdleType"       Value="True"/>  <!-- 대기형 -->
-    <GlobalVariable Name="gv_bIsRandMoveType"   Value="False"/> <!-- 랜덤이동형 -->
-    <GlobalVariable Name="gv_bIsMoveType"       Value="False"/> <!-- [보류] 지정이동형 -->
-
-    <!-- 전투 상태 행동 타입 설정 -->
-    <!-- 공격 타입 설정 -->
-        <!-- TODO: 보스 AI에 있어서 공격 타입 설정 방법 필요 -->
-        <!-- TODO: 커스텀의 영역으로 남겨두는 선택지 있음. -->
     <!-- 공격 거리 설정 -->
     <GlobalVariable Name="gv_MeleeAttackRangeMin"           Value="0.0"/>       <!-- 최소 공격 사거리 : Value보다 PC가 가까우면 공격하지 않는다. -->
     <GlobalVariable Name="gv_MeleeAttackRangeMax"           Value="2.0"/>       <!-- 최대 사거리 : Value보다 PC가 멀면 추격이동으로 이행한다. -->
-    <!-- 공격 딜레이 설정 -->
-        <!-- TODO: 공격별 쿨타임 등록해서 관리할 것 -->
-    <GlobalVariable Name="gv_MeleeAttackCoolTime"           Value="2.0"/>       <!-- 쿨타임 : 공격 발동 후 공격 실행이 제한되는 시간 -->
+
     <!-- 가드 옵션 설정 -->
     <GlobalVariable Name="gv_GuardTime"                     Value="3.0"/>       <!-- 방어 지속 시간 -->
     <GlobalVariable Name="gv_GuardBrokenThreshold"          Value="3.0"/>       <!-- 가드 브레이크 공격을 막을 수 있는 횟수 -->
     <!-- 이동 타입 설정 -->
-        <!-- TODO: 보스 AI에 있어서 이동 타입 설정 방법 필요 -->
-        <!-- TODO: 기존 이동은 공격을 겸하는 방식으로 이루어졌었음. 개선 필요. -->
-        <!-- TODO: 일단은 스킬 이동을 고려해 커스텀으로 돌려야 함. -->
     <GlobalVariable Name="gv_bIsSystemChase"                Value="True"/>     <!-- 시스템 추격: 일정 거리 이상일 시 PC로 워프한다. (카메라 밖에서 동작) -->
     <GlobalVariable Name="gv_bIsDash"                       Value="True"/>     <!-- 시스템 추격: 일정 거리 이상일 시 PC로 워프한다. (카메라 밖에서 동작) -->
     <!-- 이동 거리 설정 -->
@@ -50,10 +29,6 @@
     <!-- 패시브 방어 실행 지연 시간 설정 -->
     <GlobalVariable Name="gv_PassiveDef_Hit_DelayTime" Value="0.0"/>            <!-- 누적 피격 반응 지연 시간-->
     <GlobalVariable Name="gv_PassiveDef_Guard_DelayTime" Value="0.1"/>            <!-- 누적 가드 반응 지연 시간-->
-
-    <!-- 행동 옵션값 설정 -->
-    <GlobalVariable Name="gv_TransitionDelay"   Value="0.2"/>                   <!-- [보류] State 전환 지연시간 (State 최소 실행 시간) -->
-    
 
     <Include Path="Assets/Data/AILibrary/Package/CommonDeadPackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonHitPackage.xml"/>
@@ -84,14 +59,9 @@
     <GlobalVariable Name="gv_sisterTrasitionTime" Value="0.3"/>
 
     <!-- Std Values -->
-    <GlobalVariable Name="gv_AobaStdDistance" Value="3.5"/>     <!-- 아오바 거리 판단 기준 (구 2.0) -->
-
     <GlobalVariable Name="gv_MaxCrimson" Value="3.0"/>      <!-- 헬레나의 붉은 마도서 최대 개수 -->
     <GlobalVariable Name="gv_MaxOlive" Value="2.0"/>        <!-- 헬레나의 갈록 마도서 최대 개수 -->
     <GlobalVariable Name="gv_MaxBlue" Value="1.0"/>         <!-- 헬레나의 푸른 마도서 최대 개수 -->
-    
-    <!-- Groggy Pattern -->
-    <GlobalVariable Name="gv_sisterStdBattle" Value="20.0"/>
 
     <!-- Custom Value -->
     <CustomValue Name="CountCrimson" Value="0.0"/>
@@ -375,6 +345,7 @@
     </Dead>
 
     <EnemyWin Package="CommonIdlePackage">
+        <Branch Condition="getTargetFrameTag_Dead == false" Execute="Entry_Battle"/>
     </EnemyWin>
 
 </AIGraph>
