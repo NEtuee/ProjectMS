@@ -1,7 +1,36 @@
 <AIGraph Name="ReitoChanAI" DefaultState="Entry">
+    <!-- 옵션 설정 -->
+    <!-- 공격 거리 설정 -->
+    <GlobalVariable Name="gv_MeleeAttackRangeMin"           Value="0.0"/>       <!-- 최소 공격 사거리 : Value보다 PC가 가까우면 공격하지 않는다. -->
+    <GlobalVariable Name="gv_MeleeAttackRangeMax"           Value="2.0"/>       <!-- 최대 사거리 : Value보다 PC가 멀면 추격이동으로 이행한다. -->
+
+    <!-- 가드 옵션 설정 -->
+    <GlobalVariable Name="gv_GuardTime"                     Value="3.0"/>       <!-- 방어 지속 시간 -->
+    <GlobalVariable Name="gv_GuardBrokenThreshold"          Value="3.0"/>       <!-- 가드 브레이크 공격을 막을 수 있는 횟수 -->
+    <!-- 이동 타입 설정 -->
+    <GlobalVariable Name="gv_bIsSystemChase"                Value="True"/>     <!-- 시스템 추격: 일정 거리 이상일 시 PC로 워프한다. (카메라 밖에서 동작) -->
+    <GlobalVariable Name="gv_bIsDash"                       Value="True"/>     <!-- 시스템 추격: 일정 거리 이상일 시 PC로 워프한다. (카메라 밖에서 동작) -->
+    <!-- 이동 거리 설정 -->
+    <GlobalVariable Name="gv_SystemChaseThreshold"          Value="9.75"/>     <!-- 시스템 추격 거리: 카메라 범위 값. 카메라 바깥으로 사라지지 않게 추격 -->
+    <GlobalVariable Name="gv_MoveThreshold"                 Value="3.0"/>       <!-- 최대 거리 : PC와 Value 이상 거리가 벌어진 경우 이동한다. -->
+    <GlobalVariable Name="gv_StopThreshold"                 Value="2.7"/>       <!-- 최소 거리 : PC와 Value 이상 거리가 가까워진 경우 정지 또는 경계한다. -->
+    <GlobalVariable Name="gv_AwayThreshold"                 Value="1.5"/>       <!-- 최소 거리 : PC와 Value 이상 거리가 가까워진 경우 거리를 벌린다. -->
+    <!-- 패시브 방어 반응 임계치 설정 -->
+    <GlobalVariable Name="gv_HitCountThreshold"             Value="5.0"/>       <!-- 누적 피격 횟수 트리거 : 해당 횟수 충족 시 패시브 방어 동작 (가드를 제외한 모든 피격 카운트) -->
+    <GlobalVariable Name="gv_GuardCountThreshold"           Value="2.0"/>       <!-- 누적 가드 횟수 트리거 : 해당 횟수 충족 시 패시브 방어 동작 (가드 중 모든 피격 시 카운트) -->
+    <!-- 패시브 방어(누적 피격) 반응 타입 설정 -->
+        <!-- TODO: 피격 리액션이 상황에 따라 다른 것으로 실행될 수 있음. 복수 선택 가능하게. -->
+    <GlobalVariable Name="gv_bIsDodgeToPassiveDef_Hit"      Value="True"/>      <!-- 누적 피격 시 패시브 방어 : 회피 타입 -->
+    <GlobalVariable Name="gv_bIsCounterToPassiveDef_Hit"    Value="False"/>      <!-- 누적 피격 시 패시브 방어 : 반격 타입 -->
+    <GlobalVariable Name="gv_bIsGuardToPassiveDef_Hit"      Value="False"/>      <!-- 누적 피격 시 패시브 방어 : 방어 타입 -->
+    <!-- 패시브 방어(누적 가드) 반응 타입 설정 -->
+    <GlobalVariable Name="gv_bIsDodgeToPassiveDef_Guard"    Value="False"/>      <!-- 누적 피격 시 패시브 방어 : 회피 타입 -->
+    <GlobalVariable Name="gv_bIsCounterToPassiveDef_Guard"  Value="False"/>     <!-- 누적 피격 시 패시브 방어 : 반격 타입 -->
+    <!-- 패시브 방어 실행 지연 시간 설정 -->
+    <GlobalVariable Name="gv_PassiveDef_Hit_DelayTime" Value="0.0"/>            <!-- 누적 피격 반응 지연 시간-->
+    <GlobalVariable Name="gv_PassiveDef_Guard_DelayTime" Value="0.1"/>            <!-- 누적 가드 반응 지연 시간-->
 
     <Include Path="Assets/Data/AILibrary/Package/CommonTestPackage.xml"/>
-   
 
     <Include Path="Assets/Data/AILibrary/Package/CommonDeadPackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonHitPackage.xml"/>
@@ -26,21 +55,18 @@
         <Branch Condition="CurrentPackageEnd" Execute="Test"/>
     </Test>
 
+    <!-- Std Values -->
+    <GlobalVariable Name="gv_StdDistance" Value="2.0"/>     <!-- 원거리 공격 기준 값 -->
+    <GlobalVariable Name="gv_StdPassiveAttitude" Value="4.0"/>     <!-- 장외 기준 값 -->
+    <!-- Custom Value -->
     <CustomValue Name="CurrentGauntletCount" Value="0.0"/>
 
     <CustomEvent_CountGauntlet>
         <AIEvent Type="AddCustomValue" Name="CurrentGauntletCount" Value="1.0"/>
     </CustomEvent_CountGauntlet>
-
     <CustomEvent_DiscountGauntlet>
         <AIEvent Type="AddCustomValue" Name="CurrentGauntletCount" Value="-1.0"/>
     </CustomEvent_DiscountGauntlet>
-
-    <!-- Std Values -->
-    <GlobalVariable Name="gv_najimiReadyTime" Value="1.5"/>     <!-- 보스전 대기 시간 (나중에 보스전 시작 트리거를 받아야 함)-->
-    <GlobalVariable Name="gv_najimiSystemChaseRange" Value="9.75"/>     <!-- 카메라 범위 값. 카메라 바깥으로 사라지지 않게 추격 -->
-    <GlobalVariable Name="gv_StdDistance" Value="2.0"/>     <!-- 원거리 공격 기준 값 -->
-    <GlobalVariable Name="gv_StdPassiveAttitude" Value="4.0"/>     <!-- 장외 기준 값 -->
 
     <!-- Dodge Pattern -->
     <GlobalVariable Name="gv_najimiHitCountFast" Value="1.0"/>      <!-- 나지미 피격 허용 횟수 (빠름)-->
@@ -57,12 +83,13 @@
     <!-- Groggy Pattern -->
     <GlobalVariable Name="gv_najimiStdBattle" Value="20.0"/>     <!-- 나지미 그로기 기준 배틀 포인트 -->
 
-
+    <!-- BranchSet -->
     <BranchSet Name="IsPlayerDead">
         <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="getTargetFrameTag_Dead" Execute="EnemyWin"/>
     </BranchSet>
 
+    <!-- 피격 리액션 브랜치 셋 -->
     <BranchSet Name="HitReactionSet">
         <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="(getStat_Battle >= gv_najimiStdBattle)" Execute="Groggy"/>
@@ -76,14 +103,14 @@
     <Entry Package="CommonIdlePackage">
         <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
-        <Branch Condition="TargetDistance >= gv_najimiSystemChaseRange" Execute="SystemChase"/>
+        <Branch Condition="TargetDistance >= gv_SystemChaseThreshold" Execute="SystemChase"/>
         <Branch Condition="true" Execute="JudgeDistance"/>
     </Entry>
 
     <!-- 거리 판단 -->
     <JudgeDistance Package="CommonIdlePackage">
         <UseBranchSet Name="IsPlayerDead"/>
-        <Branch Condition="TargetDistance >= gv_najimiSystemChaseRange" Execute="SystemChase"/>
+        <Branch Condition="TargetDistance >= gv_SystemChaseThreshold" Execute="SystemChase"/>
         
         <!-- 장외 거리 분기 -->
         <Branch Condition="(TargetDistance >= gv_StdPassiveAttitude) && (customValue_CurrentGauntletCount <= gv_GuntletLimit)" Execute="SpawnPitchingMachine"/>
@@ -123,7 +150,7 @@
     <Chase Package="CommonChasePackage">
         <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
-        <Branch Condition="TargetDistance >= gv_najimiSystemChaseRange" Execute="SystemChase"/>
+        <Branch Condition="TargetDistance >= gv_SystemChaseThreshold" Execute="SystemChase"/>
 
         <!-- 추격 러시 -->
         <Branch Condition="TargetExists && 
@@ -197,6 +224,7 @@
     </Dead>
 
     <EnemyWin Package="CommonIdlePackage">
+        <Branch Condition="getTargetFrameTag_Dead == false" Execute="Entry_Battle"/>
     </EnemyWin>
 
 </AIGraph>
