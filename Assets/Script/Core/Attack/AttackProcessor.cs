@@ -67,7 +67,6 @@ public class FollowAttackProcessor : AttackProcessorBase
             SpawnCharacterOptionDesc desc = new SpawnCharacterOptionDesc();
             desc._position = _position;
             desc._searchIdentifier = gameEntityBase._searchIdentifier;
-            DebugUtil.log(desc._searchIdentifier.ToString());
 
             CharacterInfoData characterInfoData = CharacterInfoManager.Instance().GetCharacterInfoData(_attackFrameEvent._characterKey);
             _crossHairEntity = (SceneCharacterManager._managerInstance as SceneCharacterManager).createCharacterFromPool(characterInfoData,desc);

@@ -186,6 +186,13 @@ public static class FrameEventLoader
             }
         }
 
+        if(outFrameEvent._executeTimingType == FrameEventExecuteTimingType.None)
+        {
+            outFrameEvent._executeTimingType = FrameEventExecuteTimingType.TimeBase;
+            outFrameEvent._startFrame = 0f;
+            outFrameEvent._endFrame = 0f;
+        }
+
         outFrameEvent.loadFromXML(node);
         readChildFrameEvent(node,ref outFrameEvent, filePath);
         
