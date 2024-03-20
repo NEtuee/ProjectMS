@@ -1,8 +1,10 @@
 <ActionGraph Name="ReitoChanAction" DefaultAction="AC_Idle" DefaultFramePerSecond="12" DefaultBuff="NajimiBattleDecrementKeep">
+<GlobalVariable Name="gv_MasterPath" Value="Sprites/Enemy/KantoReito/"/>
 
+<!-- Default Action -->
     <AC_Entry MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/KantoReito/0_default/"/>
-        <Animation Preset="1_idle" XFlip="true" Duration="1">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/1_idle" XFlip="true" Duration="1">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
         </Animation>
 
@@ -10,8 +12,8 @@
     </AC_Entry>
 
     <AC_Idle MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/KantoReito/0_default/"/>
-        <Animation Preset="1_idle" XFlip="true" Duration="1">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/1_idle" XFlip="true" Duration="1">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
         </Animation>
 
@@ -19,8 +21,8 @@
     </AC_Idle>
 
     <AC_Move MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/KantoReito/0_default/"/>
-        <Animation Preset="2_move" XFlip="true" Duration="0.5">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/2_move" XFlip="true" Duration="0.5">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="5" Speed="15"/>
 
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
@@ -31,158 +33,107 @@
     </AC_Move>
 
     <AC_SystemChase MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/KantoReito/0_default/"/>
-        <Animation Preset="2_move" XFlip="true" Duration="0.1">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/2_move" XFlip="true" Duration="0.1">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="20" Speed="40"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_SystemChase"/>
     </AC_SystemChase>
-    
-    <AC_Dash MovementType="GraphPreset" MovementGraphPreset="Reito_Dash" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/KantoReito/0_default/"/>
-        <Animation Preset="3_dash" XFlip="true" Duration="0.7">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2201" Attach="true"/>
-            <FrameEvent Type="Test" Log="HitCount 2" Condition="getStat_HitCount == 2.0"/>
-            <FrameEvent Type="Test" Log="HitCount 3" Condition="getStat_HitCount == 3.0"/>
-            <FrameEvent Type="Test" Log="HitCount 4" Condition="getStat_HitCount == 4.0"/>
-            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountClear"/>
-        </Animation>
-
-        <Branch Condition="End" Execute="AC_Dash"/>
-    </AC_Dash>
-
-    <!-- Dash Rush Chase -->
-    <AC_LinearDash MovementType="GraphPreset" MovementGraphPreset="Reito_LinearDash" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/KantoReito/0_default/"/>
-        <Animation Preset="3_dash" XFlip="true" Duration="0.7">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2201" Attach="true"/>
-            <FrameEvent Type="Test" Log="HitCount 2" Condition="getStat_HitCount == 2.0"/>
-            <FrameEvent Type="Test" Log="HitCount 3" Condition="getStat_HitCount == 3.0"/>
-            <FrameEvent Type="Test" Log="HitCount 4" Condition="getStat_HitCount == 4.0"/>
-            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountClear"/>
-        </Animation>
-
-        <Branch Condition="End" Execute="AC_LinearDash"/>
-    </AC_LinearDash>
-
-    <AC_Dodge MovementType="GraphPreset" MovementGraphPreset="Reito_Dodge" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/KantoReito/0_default/"/>
-        <Animation Preset="6_dodge" XFlip="true" Duration="0.7">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2201" Attach="true"/>
-            <FrameEvent Type="Test" Log="HitCount 2" Condition="getStat_HitCount == 2.0"/>
-            <FrameEvent Type="Test" Log="HitCount 3" Condition="getStat_HitCount == 3.0"/>
-            <FrameEvent Type="Test" Log="HitCount 4" Condition="getStat_HitCount == 4.0"/>
-            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountClear"/>
-        </Animation>
-
-        <Branch Condition="End" Execute="AC_Dodge"/>
-    </AC_Dodge>
 
     <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/KantoReito/0_default/"/>
-        <Animation Preset="4_hit" XFlip="true" Duration="1.25">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/3_hit" XFlip="true" Duration="1.25">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountIncrease"/>
-            <!--
-            <FrameEvent Type="ZoomEffect" Scale="-0.4"/>
-            -->
-
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_Hit>
-
-    <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/KantoReito/0_default/"/>
-        <Animation Preset="4_hit" XFlip="true" Duration="1.25">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
-            <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
-            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountIncrease"/>
-            <!--
-            <FrameEvent Type="ZoomEffect" Scale="-0.4"/>
-            -->
-            
-            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
-        </Animation>
-
-        <Branch Condition="End == true" Execute="AC_Idle"/>
-    </AC_GuardBroken>
-
-    <AC_Groggy MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/KantoReito/0_default/"/>
-        <Animation Preset="4_hit" XFlip="true" Duration="1.25">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
-            <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
-            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BattleClear"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="Groggy"/>
-
-            <!--
-            <FrameEvent Type="ZoomEffect" Scale="-0.4"/>
-            -->
-        </Animation>
-
-        <Branch Condition="End == true" Execute="AC_Idle"/>
-    </AC_Groggy>
     
     <Dead_Loop DirectionType="Keep" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/KantoReito/0_default/"/>
-        <Animation Preset="5_dead" XFlip="true" Duration="1">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/4_dead" XFlip="true" Duration="1">
         </Animation>
 
         <Branch Condition="End == true" Execute="Dead_Loop"/>
     </Dead_Loop>
 
     <Dead DirectionType="Keep" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/KantoReito/0_default/"/>
-        <Animation Preset="5_dead" XFlip="true" Duration="1">
-            <!--
-            <FrameEvent Type="SetTimeScale" Scale="0.1" Time="1.0" BlendTime="1.0"/>
-            <FrameEvent Type="ZoomEffect" Scale="-0.9"/>
-            -->
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/4_dead" XFlip="true" Duration="1">
         </Animation>
 
         <Branch Condition="End == true" Execute="Dead_Loop"/>
     </Dead>
-
-    <!-- 피격 리액션으로 공격 시 준비 모션 -->
-    <AC_PunchReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/KantoReito/1_punch/"/>
-        <Animation Preset="1_punchReady" XFlip="true" Duration="0.7">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2203" Attach="true"/>
-            <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+<!-- Default Action -->
+<!-- Defense Action -->
+    <AC_Dodge MovementType="GraphPreset" MovementGraphPreset="Reito_Dodge" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="1_defense/1_dodge" XFlip="true" Duration="0.7">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2201" Attach="true"/>
+            <FrameEvent Type="Test" Log="HitCount 2" Condition="getStat_HitCount == 2.0"/>
+            <FrameEvent Type="Test" Log="HitCount 3" Condition="getStat_HitCount == 3.0"/>
+            <FrameEvent Type="Test" Log="HitCount 4" Condition="getStat_HitCount == 4.0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountClear"/>
-            <FrameEvent Type="SetDirectionType" StartTime="0.55" DirectionType="Keep"/>
         </Animation>
-    
-        <Branch Condition="End" Execute="AC_Idle"/>
-    </AC_PunchReady>
 
-    <AC_ChasePunchReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/KantoReito/1_punch/"/>
-        <Animation Preset="1_punchReady" XFlip="true" Duration="0.3">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2203" Attach="true"/>
-            
-            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="5" Speed="15"/>
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_Dodge>
+
+    <AC_Guard MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" DefenceType="Guard" DefenceDirectionType="Direction" DefenceAngle="180">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="1_defense/2_guard" XFlip="true" Duration="0.5">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="5" Speed="4"/>
 
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
-            <FrameEvent Type="SetDirectionType" StartTime="0.15" DirectionType="Keep"/>
         </Animation>
-    
-        <Branch Condition="End" Execute="AC_Idle"/>
-    </AC_ChasePunchReady>
 
-    <!-- 아카네에게 이동하며 주먹 휘두르기 ~ 헛스윙 후 회복 애니메이션 -->
-    <AC_Punch MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/KantoReito/1_punch/"/>
-        <Animation Preset="2_punchMain" XFlip="true" Duration="0.35">
+        <Branch Condition="End == true" Execute="AC_Guard"/>
+    </AC_Guard>
+    <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="1_defense/3_guardBroken" XFlip="true" Duration="1.25">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountIncrease"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_GuardBroken>
+<!-- Defense Action -->
+
+<!-- SKill Action -->
+    <!-- 근거리 공격 : 펀치 -->
+    <AC_PunchReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="2_skill/1_punch/1_punchReady" XFlip="true" Duration="0.4">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2203" Attach="true"/>
+            <FrameEvent Type="Movement" Condition="TargetDistance >= 1.5" StartTime="0" Friction="0" MaxVelocity="5" Speed="15"/>
+            <FrameEvent Type="Movement" Condition="TargetDistance < 1.5" StartTime="0" Friction="12" Speed="0"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountClear"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.35" EndTime="999" Tag="CancelAvail"/>
+        </Animation>
+        
+        <Branch Condition="(TargetDistance < 1.0) && getFrameTag_CancelAvail" Execute="AC_PunchMain"/>
+        <Branch Condition="End" Execute="AC_PunchMain"/>
+    </AC_PunchReady>
+
+        <!-- TODO: 그래프 이동으로 모션감 조정 -->
+    <AC_PunchMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="2_skill/1_punch/3_punchSuccess" XFlip="true" Duration="0.38">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2204" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="48" MaxVelocity="18" Velocity="18" Speed="0"/>
+
             <FrameEvent Type="Attack" StartTime="0" EndTime="0.2" AttackPreset="Reito_Punch">
                 <OnHit>
                     <FrameEvent Type="AudioPlay" StartTime="0" ID="2205" Attach="true"/>
@@ -204,31 +155,53 @@
         </Animation>
 
         <Branch Condition="End" Execute="AC_PunchRecover"/>
-    </AC_Punch>
+    </AC_PunchMain>
 
-    <AC_PunchRecover MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/KantoReito/1_punch/"/>
-        <Animation Preset="4_punchRecovery" XFlip="true" Duration="1.47">
+    <AC_PunchRecover MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="2_skill/1_punch/4_punchRecovery" XFlip="true" Duration="0.3">
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
-        <Branch Condition="End" Execute="AC_Idle"/>
+        <!-- TODO: Test Code -->
+        <Branch Condition="End" Execute="AC_StepPunchReady"/>
     </AC_PunchRecover>
 
+    <!-- 원거리 공격 : 스텝 펀치 -->
+    <AC_StepPunchReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="2_skill/1_punch/1_punchReady" XFlip="true" Duration="0.3">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2203" Attach="true"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountClear"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+        
+        <Branch Condition="(TargetDistance < 1.0)" Execute="AC_PunchMain"/>
+        <Branch Condition="End" Execute="AC_StepPunchMove"/>
+    </AC_StepPunchReady>
 
-    <!-- 아카네 펀치 성공 후 회복 애니메이션 -->
-    <AC_PunchSuccess MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/KantoReito/1_punch/"/>
-        <Animation Preset="3_punchSuccess" XFlip="true" Duration="1.0">
-            <FrameEvent Type="Movement" StartTime="0" Friction="24" Velocity="0" Speed="0"/>
+    <AC_StepPunchMove MovementType="GraphPreset" MovementGraphPreset="Reito_ForwardStep" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="2_skill/1_punch/2_punchMain" XFlip="true" Duration="0.6">
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountClear"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.15" EndTime="999" Tag="CancelAvail"/>
         </Animation>
 
-        <Branch Condition="End" Execute="AC_Idle"/>
-    </AC_PunchSuccess>
+        <Branch Condition="(TargetDistance < 1.5) && getFrameTag_CancelAvail" Execute="AC_PunchMain"/>
+        <Branch Condition="End" Execute="AC_PunchMain"/>
+    </AC_StepPunchMove>
 
+    <!-- 회피 기동 : 백스텝 (회피 상태 유지하다가 공격 이벤트 들어오면 이동)-->
+    <!-- 공격 기동 : 회전 스텝 (공격 전 크게 돌아 측면을 공격한다)-->    
+    <!-- 방어 기동 : 직전 가드 (AC_Guard를 AI에서 응용)-->
+
+    <!-- 소환 : 건틀렛 소환 -->
     <AC_SpawnGauntlet MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <Animation Preset="Sprites/Enemy/KantoReito/3_spawnGauntlet" XFlip="true" Duration="1.0">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="2_skill/3_spawnGauntlet" XFlip="true" Duration="1.0">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2208" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
             <FrameEvent Type="Danmaku" StartTime="0.5" Path="Enemy\ReitoGauntlet.xml"/>
@@ -239,14 +212,16 @@
 
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_SpawnGauntlet>
-
+    
+    <!-- 원거리 공격 : 화장포 -->
     <AC_CremationBeamReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="LaserEffect">
-        <AnimationHeader MasterPath="Sprites/Enemy/KantoReito/2_cremationBeam/"/>
-        <Animation Preset="1_cremationBeamReady" XFlip="true" Duration="0.85">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="2_skill/2_cremationBeam/1_cremationBeamReady" XFlip="true" Duration="0.85">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2206" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
             <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/CommonBeam_TimeLine" Attach="true" AngleType="Direction" LifeTime="1.05" FollowDirection="True" AttackPreset="Reito_Beam"/>
-
+            
+            <!-- 건틀렛 레이저 명령 (CALL AI EVENT) -->
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
@@ -255,8 +230,8 @@
     </AC_CremationBeamReady>
 
     <AC_CremationBeamShot MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" Flags="LaserEffect">
-        <AnimationHeader MasterPath="Sprites/Enemy/KantoReito/2_cremationBeam/"/>
-        <Animation Preset="2_cremationBeamShot" XFlip="true" Duration="1.0">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="2_skill/2_cremationBeam/2_cremationBeamShot" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
             <!-- TODO: 화장포 이펙트 추가해야함. 해당 이펙트 지속시간에 따라 Main 모션 시간과 Attack 지속 시간 조정 -->
             <FrameEvent Type="AudioPlay" StartTime="0.2" ID="2207" Attach="true"/>
@@ -292,5 +267,5 @@
 
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_CremationBeamShot>
-
+<!-- SKill Action -->
 </ActionGraph>

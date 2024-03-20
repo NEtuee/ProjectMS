@@ -1,0 +1,47 @@
+<AIPackage Name="ReitoStepPackage" DefaultState="AI_Forward">
+
+    <AIState>
+        <AI_Forward UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <Event_OnExecute>    
+                <AIEvent Type="SetAction" Action="AC_Punch"/>
+            </Event_OnExecute>
+            
+            <Branch Condition="End" Execute="TerminatePackage"/>
+        </AI_Forward>
+        <AI_Back UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <Event_OnExecute>    
+                <AIEvent Type="SetAction" Action="AC_Punch"/>
+            </Event_OnExecute>
+            
+            <Branch Condition="End" Execute="TerminatePackage"/>
+        </AI_Back>
+
+        <AI_RotateRand UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">           
+            <Branch Weight="RandBoolean^True" Condition="true" Execute="AI_RotateLeft"/>
+            <Branch Weight="RandBoolean^False" Condition="true" Execute="AI_RotateRight"/>
+        </AI_RotateRand>
+        <AI_RotateLeft UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <Event_OnExecute>    
+                <AIEvent Type="SetAction" Action="AC_Punch"/>
+            </Event_OnExecute>
+            
+            <Branch Condition="End" Execute="TerminatePackage"/>
+        </AI_RotateLeft>
+        <AI_RotateRight UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <Event_OnExecute>    
+                <AIEvent Type="SetAction" Action="AC_Punch"/>
+            </Event_OnExecute>
+            
+            <Branch Condition="End" Execute="TerminatePackage"/>
+        </AI_RotateRight>
+
+
+        <TerminatePackage>
+            <Event_OnExecute>
+                <AIEvent Type="TerminatePackage"/>
+            </Event_OnExecute>
+        </TerminatePackage>
+
+    </AIState>
+
+</AIPackage>
