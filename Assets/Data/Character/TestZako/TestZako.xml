@@ -95,7 +95,19 @@
         <Branch Condition="End == true" Execute="Idle"/>
     </TEST_AudioSwitch>
 
-    
+<!-- 탄막 테스트 -->
+
+    <TEST_Danmaku DirectionType="AITarget" FlipType="Direction">
+        <Animation Preset="Sprites/DummyPlayer/idle/" Duration="3.0" XFlip="true">
+            
+            <!-- 현재 내 방향으로 탄막을 날린다 -->
+            <FrameEvent Type="Danmaku" StartTime="0" Path="DanmakuTest.xml" UseDirection="True"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="TEST_Danmaku"/>
+    </TEST_Danmaku>
+
+
     
 
 </ActionGraph>

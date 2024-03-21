@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Numerics;
 
 public enum ProjectileChildFrameEventType
 {
@@ -12,7 +13,6 @@ public enum ProjectileChildFrameEventType
 public class ProjectileGraphBaseData
 {
     public string                       _name;
-    public ProjectileType               _projectileType;
     public ProjectileGraphShotInfoData  _defaultProjectileShotInfoData;
     public AnimationPlayDataInfo[]      _animationPlayData;
 
@@ -39,11 +39,12 @@ public struct ProjectileGraphShotInfoData
     public float                    _defaultAngle;
     public float                    _angularAcceleration;
     public float                    _lifeTime;
+    public UnityEngine.Vector3      _offset;
 
     public bool                     _useRandomAngle;
-    public Vector2                  _randomAngle;
+    public UnityEngine.Vector2      _randomAngle;
 
-    public ProjectileGraphShotInfoData(float defaultVelocity, float acceleration, float friction, float defaultAngle, float angularAcceleration, float lifeTime, bool useRandomAngle, Vector2 randomAngle)
+    public ProjectileGraphShotInfoData(float defaultVelocity, float acceleration, float friction, float defaultAngle, float angularAcceleration, float lifeTime, UnityEngine.Vector3 offset, bool useRandomAngle, UnityEngine.Vector2 randomAngle)
     {
         _deafaultVelocity = defaultVelocity;
         _acceleration = acceleration;
@@ -51,6 +52,7 @@ public struct ProjectileGraphShotInfoData
         _defaultAngle = defaultAngle;
         _angularAcceleration = angularAcceleration;
         _lifeTime = lifeTime;
+        _offset = offset;
 
         _useRandomAngle = useRandomAngle;
         _randomAngle = randomAngle;
@@ -65,6 +67,7 @@ public struct ProjectileGraphShotInfoData
             , _defaultAngle = a._defaultAngle + b._defaultAngle
             , _friction = a._friction + b._friction
             , _lifeTime = a._lifeTime + b._lifeTime
+            , _offset = a._offset + b._offset
             , _useRandomAngle = a._useRandomAngle | b._useRandomAngle
             , _randomAngle = a._randomAngle + b._randomAngle};
     }
@@ -77,15 +80,11 @@ public struct ProjectileGraphShotInfoData
         _defaultAngle = 0f;
         _angularAcceleration = 0f;
         _lifeTime = 0f;
+        _offset = UnityEngine.Vector3.zero;
 
         _useRandomAngle = false;
-        _randomAngle = Vector2.zero;
+        _randomAngle = UnityEngine.Vector2.zero;
     }
 
 }
 
-
-public enum ProjectileType
-{
-    Count,
-}

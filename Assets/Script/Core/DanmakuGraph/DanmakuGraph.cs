@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class DanmakuGraph
@@ -15,6 +16,8 @@ public class DanmakuGraph
         public SearchIdentifier _forceSearchIdentifier = SearchIdentifier.Count;
         public Vector3 _forcePosition = Vector3.zero;
         public Vector3 _offsetPosition = Vector3.zero;
+
+        public Quaternion _offsetRotation = Quaternion.identity;
 
         public bool _isEnd = false;
         public bool _eventEnd = false;
@@ -49,6 +52,9 @@ public class DanmakuGraph
             shotInfoData._friction = _danmakuVariables[(int)DanmakuVariableType.Friction];
             shotInfoData._lifeTime = _danmakuVariables[(int)DanmakuVariableType.LifeTime];
             shotInfoData._deafaultVelocity = _danmakuVariables[(int)DanmakuVariableType.Velocity];
+            shotInfoData._offset.x = _danmakuVariables[(int)DanmakuVariableType.OffsetX];
+            shotInfoData._offset.y = _danmakuVariables[(int)DanmakuVariableType.OffsetY];
+            shotInfoData._offset.z = _danmakuVariables[(int)DanmakuVariableType.OffsetZ];
             shotInfoData._useRandomAngle = false;
             shotInfoData._randomAngle = Vector2.zero;
 
@@ -248,9 +254,10 @@ public class DanmakuGraph
                 ObjectBase targetEntity = null;
                 if(gameEntityOwner != null)
                     targetEntity = (_ownerEntity as GameEntityBase).getCurrentTargetEntity();
-
+                
                 float angle = MathEx.directionToAngle(direction);
 
+                shotInfo._defaultAngle += playItem._offsetRotation.eulerAngles.z;
                 shotInfo._defaultAngle += angle;
                 Vector3 spawnPosition = _ownerEntity == null ? playItem._forcePosition : ActionFrameEvent_Projectile.getSpawnPosition(eventData._setTargetType,_ownerEntity,targetEntity);
 
@@ -261,7 +268,7 @@ public class DanmakuGraph
                 Quaternion rotateByQuat = Quaternion.Euler(0f,0f,angle);
                 offset = rotateByQuat * offset;
 
-                spawnPosition += offset;
+                spawnPosition += offset + (playItem._offsetRotation * shotInfo._offset);
 
                 if(eventData._startTerm != 0f && gameEntityOwner != null)
                 {
@@ -333,7 +340,7 @@ public class DanmakuGraph
         }
     }
 
-    public void addDanmakuGraph(string graphPath, Vector3 forcePosition, Vector3 offset, bool useFlip, SearchIdentifier searchIdentifier)
+    public void addDanmakuGraph(string graphPath, Vector3 forcePosition, Vector3 offset, bool useFlip, float offsetAngle, SearchIdentifier searchIdentifier)
     {
         DanmakuGraphBaseData graphData = ResourceContainerEx.Instance().GetDanmakuGraph(graphPath);
         if(graphData == null)
@@ -345,6 +352,7 @@ public class DanmakuGraph
         playItem._forceSearchIdentifier = searchIdentifier;
         playItem._offsetPosition = offset;
         playItem._useFlip = useFlip;
+        playItem._offsetRotation = Quaternion.Euler(0f,0f,offsetAngle);
 
         _currentPlayList.Add(playItem);
     }

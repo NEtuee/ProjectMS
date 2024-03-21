@@ -17,6 +17,9 @@ public enum DanmakuVariableType
     Angle,
     AngularAccel,
     LifeTime,
+    OffsetX,
+    OffsetY,
+    OffsetZ,
     Count
 };
 

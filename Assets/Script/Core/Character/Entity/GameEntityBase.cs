@@ -1270,7 +1270,7 @@ public class GameEntityBase : SequencerObjectBase
 
     public void setSpriteRotation(Quaternion rotation) {_spriteObject.transform.rotation = rotation;}
 
-    public void addDanmaku(string path, Vector3 offset, bool useFlip) {_danmakuGraph.addDanmakuGraph(path, transform.position, offset, useFlip, _searchIdentifier);}
+    public void addDanmaku(string path, Vector3 offset, bool useFlip, float offsetAngle) {_danmakuGraph.addDanmakuGraph(path, transform.position, offset, useFlip, offsetAngle, _searchIdentifier);}
     
     public void addDeadEvent(DeadEventDelegate deadEvent) {_deadEventDelegate += deadEvent;} 
     public void deleteDeadEvent(DeadEventDelegate deadEvent) {_deadEventDelegate -= deadEvent;}
