@@ -1,4 +1,4 @@
-<AIGraph Name="ReitoChanAI" DefaultState="Test">
+<AIGraph Name="ReitoChanAI" DefaultState="Entry_Battle">
     <!-- 옵션 설정 -->
     <!-- 공격 거리 설정 -->
     <GlobalVariable Name="gv_MeleeAttackRangeMin"           Value="0.0"/>       <!-- 최소 공격 사거리 : Value보다 PC가 가까우면 공격하지 않는다. -->
@@ -17,18 +17,18 @@
     <GlobalVariable Name="gv_AwayThreshold"                 Value="1.5"/>       <!-- 최소 거리 : PC와 Value 이상 거리가 가까워진 경우 거리를 벌린다. -->
     <!-- 패시브 방어 반응 임계치 설정 -->
     <GlobalVariable Name="gv_HitCountThreshold"             Value="3.0"/>       <!-- 누적 피격 횟수 트리거 : 해당 횟수 충족 시 패시브 방어 동작 (가드를 제외한 모든 피격 카운트) -->
-    <GlobalVariable Name="gv_GuardCountThreshold"           Value="1.0"/>       <!-- 누적 가드 횟수 트리거 : 해당 횟수 충족 시 패시브 방어 동작 (가드 중 모든 피격 시 카운트) -->
+    <GlobalVariable Name="gv_GuardCountThreshold"           Value="2.0"/>       <!-- 누적 가드 횟수 트리거 : 해당 횟수 충족 시 패시브 방어 동작 (가드 중 모든 피격 시 카운트) -->
     <!-- 패시브 방어(누적 피격) 반응 타입 설정 -->
         <!-- TODO: 피격 리액션이 상황에 따라 다른 것으로 실행될 수 있음. 복수 선택 가능하게. -->
     <GlobalVariable Name="gv_bIsDodgeToPassiveDef_Hit"      Value="True"/>      <!-- 누적 피격 시 패시브 방어 : 회피 타입 -->
-    <GlobalVariable Name="gv_bIsCounterToPassiveDef_Hit"    Value="False"/>      <!-- 누적 피격 시 패시브 방어 : 반격 타입 -->
-    <GlobalVariable Name="gv_bIsGuardToPassiveDef_Hit"      Value="False"/>      <!-- 누적 피격 시 패시브 방어 : 방어 타입 -->
+    <GlobalVariable Name="gv_bIsCounterToPassiveDef_Hit"    Value="True"/>      <!-- 누적 피격 시 패시브 방어 : 반격 타입 -->
+    <GlobalVariable Name="gv_bIsGuardToPassiveDef_Hit"      Value="True"/>      <!-- 누적 피격 시 패시브 방어 : 방어 타입 -->
     <!-- 패시브 방어(누적 가드) 반응 타입 설정 -->
     <GlobalVariable Name="gv_bIsDodgeToPassiveDef_Guard"    Value="False"/>      <!-- 누적 피격 시 패시브 방어 : 회피 타입 -->
     <GlobalVariable Name="gv_bIsCounterToPassiveDef_Guard"  Value="True"/>     <!-- 누적 피격 시 패시브 방어 : 반격 타입 -->
     <!-- 패시브 방어 실행 지연 시간 설정 -->
     <GlobalVariable Name="gv_PassiveDef_Hit_DelayTime" Value="0.0"/>            <!-- 누적 피격 반응 지연 시간-->
-    <GlobalVariable Name="gv_PassiveDef_Guard_DelayTime" Value="0.1"/>            <!-- 누적 가드 반응 지연 시간-->
+    <GlobalVariable Name="gv_PassiveDef_Guard_DelayTime" Value="0.2"/>            <!-- 누적 가드 반응 지연 시간-->
 
     <Include Path="Assets/Data/AILibrary/Package/CommonTestPackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonDeadPackage.xml"/>
@@ -69,9 +69,9 @@
     </CustomEvent_DiscountGauntlet>
 
     <!-- Dodge Pattern -->
-    <GlobalVariable Name="gv_HitCountFast" Value="1.0"/>      <!-- 나지미 피격 허용 횟수 (빠름)-->
-    <GlobalVariable Name="gv_HitCountNormal" Value="2.0"/>    <!-- 나지미 피격 허용 횟수 (보통)-->
-    <GlobalVariable Name="gv_HitCountSlow" Value="3.0"/>      <!-- 나지미 피격 허용 횟수 (느림)-->
+    <GlobalVariable Name="gv_HitCountFast" Value="3.0"/>      <!-- 나지미 피격 허용 횟수 (빠름)-->
+    <GlobalVariable Name="gv_HitCountNormal" Value="4.0"/>    <!-- 나지미 피격 허용 횟수 (보통)-->
+    <GlobalVariable Name="gv_HitCountSlow" Value="5.0"/>      <!-- 나지미 피격 허용 횟수 (느림)-->
 
     <!-- Rush Pattern -->
     <GlobalVariable Name="gv_najimiRushRange" Value="2.0"/>             <!-- 나지미 돌진 사거리 -->
@@ -113,31 +113,27 @@
     </BranchSet>
     <!-- 전투 패시브 방어 분기 브랜치 셋 -->
     <BranchSet Name="BattleDefenseByHitJudgeSet">
-        <Branch Weight="RandBoolean^true"   Condition="gv_bIsDodgeToPassiveDef_Hit"      Execute="Dodge"/>
-        <Branch Weight="RandBoolean^false"  Condition="gv_bIsGuardToPassiveDef_Hit"      Execute="Guard"/>
-        <!-- 반격은 사용 예정 없음 -->
-        <Branch Condition="gv_bIsCounterToPassiveDef_Hit"    Execute="Battle_CounterAttack"/>
+        <Branch Weight="RandBoolean^True"   Condition="gv_bIsDodgeToPassiveDef_Hit"      Execute="BackStep"/>
+        <Branch Weight="RandBoolean^False" Condition="gv_bIsCounterToPassiveDef_Hit"    Execute="Battle_CounterAttack"/>
+        <Branch Condition="gv_bIsGuardToPassiveDef_Hit"      Execute="Guard"/>
     </BranchSet>
     <BranchSet Name="BattleDefenseByGuardJudgeSet">
-        <Branch Condition="gv_bIsDodgeToPassiveDef_Guard"    Execute="Dodge"/>
+        <Branch Condition="gv_bIsDodgeToPassiveDef_Guard"    Execute="BackStep"/>
         <Branch Condition="gv_bIsCounterToPassiveDef_Guard"  Execute="Battle_CounterAttack"/>
     </BranchSet>
 
     <!-- 전투 행동 분기 브랜치 셋-->
     <BranchSet Name="BattleEntrySet">
         <Branch Condition="(TargetDistance >= gv_MeleeAttackRangeMin)"  Execute="Battle_Attack"/>
-        <!-- TODO: 보스전의 이동은 별도 설정 필요 -->
         <Branch Condition="(TargetDistance >= gv_MeleeAttackRangeMin)" Execute="Battle_Move"/>
     </BranchSet>
     <!-- 전투 공격 분기 브랜치 셋 -->
     <BranchSet Name="BattleAttackJudgeSet">
-        <!-- TODO: 일단 기존 방식대로 분기 -->
         <Branch Condition="(TargetDistance > gv_MeleeAttackRangeMax)" Execute="JudgeRangedAttack"/>
         <Branch Condition="(TargetDistance <= gv_MeleeAttackRangeMax)" Execute="JudgeMeleeAttack"/>
     </BranchSet>
     <!-- 전투 이동 분기 브랜치 셋 -->
     <BranchSet Name="BattleMovementJudgeSet">
-        <!-- TODO: 보스전의 이동은 별도 설정 필요 -->
         <Branch Condition="gv_bIsSystemChase && (TargetDistance >= gv_SystemChaseThreshold)" Execute="SystemChase"/>
         <Branch Condition="true" Execute="Entry_Battle"/>
     </BranchSet>
@@ -171,121 +167,87 @@
     </Battle_DefenseByGuard>
 
     <Battle_CounterAttack Package="CommonIdlePackage">
-        <UseBranchSet Name="BattleAttackJudgeSet"/>
-        <!-- TODO: 반격용 스킬 지정 여부 판단 필요 -->
+        <Branch Condition="true" Execute="BackRotateStepPunch"/>
     </Battle_CounterAttack>
     <!-- Preset State -->
 
     <!-- AI 스테이트 : 전투 분기 -->
     <JudgeMeleeAttack Package="CommonIdlePackage">
         <!-- 근거리 -->
-        <!-- TODO: 근거리 스킬 패턴 정리 필요 & 근거리 스킬 조립 먼저 -->
-        <Branch Weight="RandBoolean^True" Condition="(TargetDistance < gv_MeleeAttackRangeMax)" Execute="RushReady"/>
-        <Branch Weight="RandBoolean^False" Condition="(TargetDistance < gv_MeleeAttackRangeMax) && (customValue_CurrentGauntletCount <= gv_GuntletLimit)" Execute="SpawnGauntlet"/>
-        <Branch Weight="RandBoolean^False" Condition="(TargetDistance < gv_MeleeAttackRangeMax)" Execute="RushReady"/>
-        
-        <!-- Sample -->
-        <!-- 닷지 : 원거리 분기용 -->
-        <!-- 통상 공격 : 낙뢰 3.15s + 1.2s Cool 0.0 -->
-        <!--
-        <Branch Weight="RandVector3^x" Condition="true" Execute="Dodge"/>
-        <Branch Condition="aiGraphCoolTime_ThunderStroke" Execute="ThunderStroke"/> 
-        -->
+        <!-- 펀치 : Cool 5.0 -->
+        <Branch Weight="RandBoolean^True" Condition="aiGraphCoolTime_Punch" Execute="Punch"/>
+        <!-- 건틀렛 소환 : Cool 15.0 -->
+        <Branch Weight="RandBoolean^False" Condition="(customValue_CurrentGauntletCount <= gv_GuntletLimit) && aiGraphCoolTime_SpawnGauntlet" Execute="SpawnGauntlet"/>
+        <!-- 각도 교란용 : Cool 5.0 -->
+        <Branch Condition="(TargetDistance >= 1.5) && aiGraphCoolTime_RotateStep" Execute="RotateStep"/>
+        <!-- 거리 벌리기용 : Cool 0.0 -->
+        <Branch Condition="true" Execute="BackStep"/>
 
     </JudgeMeleeAttack>
     <JudgeRangedAttack Package="CommonIdlePackage">
         <!-- 원거리 -->
-        <!-- TODO: 원거리 스킬 패턴 정리 필요 & 원거리 스킬 조립 먼저 -->
-        <Branch Weight="Najimi2PhaseDistAtk^ChaseRush" Condition="(TargetDistance >= gv_MeleeAttackRangeMax)" Execute="Chase"/>
-        <Branch Weight="Najimi2PhaseDistAtk^PitchingMachine" Condition="(TargetDistance >= gv_MeleeAttackRangeMax) && (customValue_CurrentGauntletCount <= gv_GuntletLimit)" Execute="SpawnGauntlet"/>
-        <Branch Weight="Najimi2PhaseDistAtk^PitchingMachine" Condition="(TargetDistance >= gv_MeleeAttackRangeMax)" Execute="DashRush"/>
-        <Branch Weight="Najimi2PhaseDistAtk^Pitching" Condition="(TargetDistance >= gv_MeleeAttackRangeMax)" Execute="CremationBeam"/>
-        <Branch Weight="Najimi2PhaseDistAtk^DashRush" Condition="(TargetDistance >= gv_MeleeAttackRangeMax)" Execute="DashRush"/>
-
-        <!-- Sample -->
-        <!-- 접근 : 근거리 분기용 -->
-        <!-- 마도서: 레이저 0.0s -->
-        <!--
-        <Branch Weight="RandVector3^x" Condition="true" Execute="InvisibleDodge"/>
-        <Branch Condition="aiGraphCoolTime_CommandBook_LaserWith" Execute="CommandBook_LaserWith"/>
-        -->
+        <!-- 건틀렛 소환 : Cool 15.0 -->
+        <Branch Condition="(customValue_CurrentGauntletCount <= gv_GuntletLimit) && aiGraphCoolTime_SpawnGauntlet" Execute="SpawnGauntlet"/>
+        <!-- 화장포 : Cool 10.0 -->
+        <Branch Condition="aiGraphCoolTime_CremationBeam" Execute="CremationBeam"/>
+        <!-- 스텝 펀치 : Cool 3.0 -->
+        <Branch Condition="true" Execute="StepPunch"/>
 
     </JudgeRangedAttack>
 
     <!-- AI 스테이트 : 전투 상태 : 이동 -->
     <!-- 시스템 추격 -->
     <SystemChase Package="CommonSystemChasePackage">
-        <UseBranchSet Name="BattleEntrySet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
     </SystemChase>
-    <!-- 추격 (NOTUSE) -->
-    <Chase Package="CommonChasePackage">
+
+    <!-- 스텝(회전이동) -->
+    <RotateStep Package="ReitoStepPackage" EntryNode="AI_RotateRand" CoolTime="5.0">
         <UseBranchSet Name="HitReactionSet"/>
-        <UseBranchSet Name="SystemChaseSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </RotateStep>
 
-        <!-- 추격 러시 -->
-        <Branch Condition="TargetExists && 
-                           (gv_najimiRushRange >= TargetDistance) && 
-                           (GraphExecutedTime > gv_najimiRushTrasitionTime)" Execute="ChaseRushReady"/>
-    </Chase>
-    <!-- 닷지 (NOTUSE) -->
-    <Dodge Package="ReitoDodgePackage">      
-        <!-- 대시 공격 -->
-        <Branch Weight="NajimiDodgeAtk^DashAttack" Condition="CurrentPackageEnd" Execute="DashRush"/>
-        <UseBranchSet Name="BattleEntrySet"/>
-    </Dodge>
-    <!-- 백스텝 -->
-    <!-- 스텝(빠른접근) -->
-    <!-- 스텝(경계회전이동) -->
-    <!-- TODO: 이동 스킬과 공격 스킬을 조합해서 복서 컨셉을 살린건데, 설계가 필요함. -->
-
-    <!-- 근거리 통상 공격: 펀치-->
-    <!-- 근거리 공격: 회전 스텝 펀치 -->
-    <!-- 근거리 방어: 가드 -->
-    <!-- 근거리 방어: 패시브 백스텝 (공격을 기다리고 있다가 백스텝) -->
-    <DashRushReady Package="ReitoAttackReadyPackage">
-        <Branch Condition="CurrentPackageEnd" Execute="DashRush"/>
-    </DashRushReady>
-    
-    <DashRush Package="ReitoLinearDashPackage">
-        <Branch Condition="(gv_najimiRushRange >= TargetDistance)" Execute="ChaseRushReady"/>
-        <Branch Condition="CurrentPackageEnd" Execute="ChaseRushReady"/>
-    </DashRush>
-
-    <RushReady Package="ReitoAttackReadyPackage">
-        <Branch Condition="CurrentPackageEnd" Execute="Rush"/>
-    </RushReady>
-    
-    <ChaseRushReady Package="ReitoChaseAttackReadyPackage">
-        <Branch Condition="CurrentPackageEnd" Execute="Rush"/>
-    </ChaseRushReady>
-
-    <Rush Package="ReitoPunchPackage">
+    <!-- 근거리 공격: 펀치-->
+    <Punch Package="ReitoPunchPackage" EntryNode="AI_PunchReady" CoolTime="5.0">
         <UseBranchSet Name="HitReactionSet"/>
-        <UseBranchSet Name="BattleEntrySet"/>
-    </Rush>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </Punch>
+
+    <!-- 원거리 공격: 스텝 펀치 -->
+    <StepPunch Package="ReitoPunchPackage" EntryNode="AI_StepPunchReady" CoolTime="3.0">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </StepPunch>
 
     <!-- 소환: 건틀렛 소환-->
-    <SpawnGauntlet Package="ReitoSpwanGauntletPackage">
+    <SpawnGauntlet Package="ReitoSpwanGauntletPackage" CoolTime="15.0">
         <UseBranchSet Name="HitReactionSet"/>
-        <UseBranchSet Name="BattleEntrySet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
     </SpawnGauntlet>
-    <!-- 원거리 통상 공격: 스텝(빠른접근) 펀치 -->
-    <!-- 원거리 공격: 스텝(빠른접근+회전스텝) 펀치 -->
+
     <!-- 원거리 공격: 화장포 -->
-    <CremationBeam Package="ReitoCremationBeamPackage">
+    <CremationBeam Package="ReitoCremationBeamPackage" CoolTime="10.0">
         <UseBranchSet Name="HitReactionSet"/>
-        <UseBranchSet Name="BattleEntrySet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
     </CremationBeam>
-    
+
+
+    <!-- 스텝 공격: 회전스텝 펀치 -->
+    <RotateStepPunch Package="ReitoPunchPackage" EntryNode="AI_RotateRand">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </RotateStepPunch>
+
+
     <!-- AI 스테이트 : 전투 상태 : 피격 상태 -->
     <GuardBroken Package="CommonGuardBrokenPackage">
         <UseBranchSet Name="HitReactionSet"/>
-        <UseBranchSet Name="BattleEntrySet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
     </GuardBroken>
 
     <Hit Package="CommonHitPackage">
         <UseBranchSet Name="HitReactionSet"/>
-        <UseBranchSet Name="BattleEntrySet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
     </Hit>
 
     <Dead Package="CommonDeadPackage">
@@ -294,8 +256,32 @@
     <!-- AI 스테이트 : 전투 상태 : 패시브 방어 -->
     <Guard Package="CommonGuardPackage">
         <UseBranchSet Name="HitReactionSet"/>
-        <Branch Condition="(GraphExecutedTime  >= gv_GuardTime)" Execute="Entry_Battle"/>
+        <Branch Condition="(GraphExecutedTime >= gv_GuardTime)" Execute="Entry_Battle"/>
     </Guard>
+
+    <!-- AI 스테이트 : 전투 상태 : 패시브 방어 -->
+    <BackStep Package="ReitoStepPackage" EntryNode="AI_Back">
+        <UseBranchSet Name="HitReactionSet"/>
+        <!-- 후속 패턴 -->
+        <!-- 스텝 공격: 회전스텝 펀치 -->
+        <Branch Weight="RandVector3^x" Condition="CurrentPackageEnd" Execute="RotateStepPunch"/>
+        <!-- 스텝 공격: 빔 -->
+        <Branch Weight="RandVector3^y" Condition="CurrentPackageEnd && (TargetDistance >= gv_MeleeAttackRangeMax)" Execute="CremationBeam"/>
+        <!-- 스텝 공격: 가드 -->
+        <Branch Weight="RandVector3^z" Condition="CurrentPackageEnd" Execute="Guard"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </BackStep>
+
+    <!-- AI 스테이트 : 전투 상태 : 패시브 방어 (반격) -->
+    <BackRotateStepPunch Package="ReitoPunchPackage" EntryNode="AI_Back">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </BackRotateStepPunch>
+    <!-- 닷지 (NOTUSE) -->
+    <Dodge Package="ReitoDodgePackage">      
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </Dodge>
 
     <EnemyWin Package="CommonIdlePackage">
         <Branch Condition="getTargetFrameTag_Dead == false" Execute="Entry_Battle"/>

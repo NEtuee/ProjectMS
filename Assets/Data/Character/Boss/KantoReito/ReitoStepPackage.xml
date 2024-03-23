@@ -1,16 +1,9 @@
-<AIPackage Name="ReitoStepPackage" DefaultState="AI_Forward">
+<AIPackage Name="ReitoStepPackage" DefaultState="AI_Back">
 
     <AIState>
-        <AI_Forward UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
-            <Event_OnExecute>    
-                <AIEvent Type="SetAction" Action="AC_Punch"/>
-            </Event_OnExecute>
-            
-            <Branch Condition="End" Execute="TerminatePackage"/>
-        </AI_Forward>
         <AI_Back UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
             <Event_OnExecute>    
-                <AIEvent Type="SetAction" Action="AC_Punch"/>
+                <AIEvent Type="SetAction" Action="AC_BackStep"/>
             </Event_OnExecute>
             
             <Branch Condition="End" Execute="TerminatePackage"/>
@@ -21,16 +14,24 @@
             <Branch Weight="RandBoolean^False" Condition="true" Execute="AI_RotateRight"/>
         </AI_RotateRand>
         <AI_RotateLeft UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
-            <Event_OnExecute>    
-                <AIEvent Type="SetAction" Action="AC_Punch"/>
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="AC_RotateStep_L"/>
             </Event_OnExecute>
+            <Event_OnUpdate>
+                <AIEvent Type="SetDirectionToTarget"/>
+            </Event_OnUpdate>
             
             <Branch Condition="End" Execute="TerminatePackage"/>
         </AI_RotateLeft>
         <AI_RotateRight UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
-            <Event_OnExecute>    
-                <AIEvent Type="SetAction" Action="AC_Punch"/>
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="AC_RotateStep_R"/>
             </Event_OnExecute>
+            <Event_OnUpdate>
+                <AIEvent Type="SetDirectionToTarget"/>
+            </Event_OnUpdate>
             
             <Branch Condition="End" Execute="TerminatePackage"/>
         </AI_RotateRight>

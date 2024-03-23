@@ -123,8 +123,7 @@
             <FrameEvent Type="FrameTag" StartTime="0.35" EndTime="999" Tag="CancelAvail"/>
         </Animation>
         
-        <Branch Condition="(TargetDistance < 1.0) && getFrameTag_CancelAvail" Execute="AC_PunchMain"/>
-        <Branch Condition="End" Execute="AC_PunchMain"/>
+        <Branch Condition="End" Execute="AC_Idle"/>
     </AC_PunchReady>
 
         <!-- TODO: 그래프 이동으로 모션감 조정 -->
@@ -154,7 +153,7 @@
             </FrameEvent>
         </Animation>
 
-        <Branch Condition="End" Execute="AC_PunchRecover"/>
+        <Branch Condition="End" Execute="AC_Idle"/>
     </AC_PunchMain>
 
     <AC_PunchRecover MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
@@ -164,8 +163,7 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
-        <!-- TODO: Test Code -->
-        <Branch Condition="End" Execute="AC_StepPunchReady"/>
+        <Branch Condition="End" Execute="AC_Idle"/>
     </AC_PunchRecover>
 
     <!-- 원거리 공격 : 스텝 펀치 -->
@@ -176,10 +174,10 @@
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountClear"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.35" EndTime="999" Tag="CancelAvail"/>
         </Animation>
         
-        <Branch Condition="(TargetDistance < 1.0)" Execute="AC_PunchMain"/>
-        <Branch Condition="End" Execute="AC_StepPunchMove"/>
+        <Branch Condition="End" Execute="AC_Idle"/>
     </AC_StepPunchReady>
 
     <AC_StepPunchMove MovementType="GraphPreset" MovementGraphPreset="Reito_ForwardStep" DirectionType="AI" FlipType="Direction">
@@ -190,8 +188,7 @@
             <FrameEvent Type="FrameTag" StartTime="0.15" EndTime="999" Tag="CancelAvail"/>
         </Animation>
 
-        <Branch Condition="(TargetDistance < 1.5) && getFrameTag_CancelAvail" Execute="AC_PunchMain"/>
-        <Branch Condition="End" Execute="AC_PunchMain"/>
+        <Branch Condition="End" Execute="AC_Idle"/>
     </AC_StepPunchMove>
 
     <!-- 회피 기동 : 백스텝 (회피 상태 유지하다가 공격 이벤트 들어오면 이동)-->
@@ -202,8 +199,7 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
-        <Branch Condition="(TargetDistance >= 1.5) && getFrameTag_CancelAvail" Execute="AC_StepPunchReady"/>
-        <Branch Condition="End" Execute="AC_StepPunchReady"/>
+        <Branch Condition="End" Execute="AC_Idle"/>
     </AC_BackStep>
     <!-- 공격 기동 : 회전 스텝 (공격 전 크게 돌아 측면을 공격한다)-->    
     <AC_RotateStep_L MovementType="GraphPreset" MovementGraphPreset="Reito_RotateStep_L" DirectionType="AI" FlipType="Direction">
@@ -213,7 +209,7 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
-        <Branch Condition="End" Execute="AC_StepPunchReady"/>
+        <Branch Condition="End" Execute="AC_Idle"/>
     </AC_RotateStep_L>
     <AC_RotateStep_R MovementType="GraphPreset" MovementGraphPreset="Reito_RotateStep_R" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
@@ -222,7 +218,7 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
-        <Branch Condition="End" Execute="AC_StepPunchReady"/>
+        <Branch Condition="End" Execute="AC_Idle"/>
     </AC_RotateStep_R>
     <!-- 방어 기동 : 직전 가드 (AC_Guard를 AI에서 응용)-->
 

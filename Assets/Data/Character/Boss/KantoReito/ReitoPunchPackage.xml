@@ -1,38 +1,112 @@
-<AIPackage Name="ReitoPunchPackage" DefaultState="AI_Punch">
+<AIPackage Name="ReitoPunchPackage" DefaultState="AI_PunchReady">
 
     <AIState>
-        <AI_Punch UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
-            <Event_OnExecute>    
-                <AIEvent Type="SetAction" Action="AC_Punch"/>
+        <!-- 근거리 -->
+        <AI_PunchReady UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="AC_PunchReady"/>
             </Event_OnExecute>
-            
-            <Branch Condition="AttackSuccess" Execute="AI_PunchSuccess"/>
+            <Branch Condition="(TargetDistance < 1.0) && getFrameTag_CancelAvail" Execute="AI_PunchMain"/>
+            <Branch Condition="End" Execute="AI_PunchMain"/>
+        </AI_PunchReady>
+
+        <!-- 원거리 -->
+        <AI_StepPunchReady UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget"/>    
+                <AIEvent Type="SetAction" Action="AC_StepPunchReady"/>
+            </Event_OnExecute>
+            <Branch Condition="(TargetDistance < 1.0) && getFrameTag_CancelAvail" Execute="AI_PunchMain"/>
+            <Branch Condition="End" Execute="AI_StepPunchMove"/>
+        </AI_StepPunchReady>
+        <AI_StepPunchMove UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="AC_StepPunchMove"/>
+            </Event_OnExecute>
+            <Event_OnUpdate>
+                <AIEvent Type="SetDirectionToTarget"/>
+            </Event_OnUpdate>
+
+            <Branch Weight="RandVector3^x" Condition="true" Execute="AI_Rotate"/>
+            <Branch Condition="true" Execute="AI_NotRotate"/>
+            <Branch Condition="End" Execute="AI_PunchMain"/>
+        </AI_StepPunchMove>
+        <AI_Rotate UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <Event_OnUpdate>
+                <AIEvent Type="SetDirectionToTarget"/>
+            </Event_OnUpdate>           
+            <Branch Condition="(TargetDistance > 2.5) && getFrameTag_CancelAvail" Execute="AI_RotateRand"/>
+            <Branch Condition="End" Execute="AI_PunchMain"/>
+        </AI_Rotate>
+        <AI_NotRotate UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <Event_OnUpdate>
+                <AIEvent Type="SetDirectionToTarget"/>
+            </Event_OnUpdate>           
+            <Branch Weight="RandBoolean^True" Condition="(TargetDistance < 1.5) && getFrameTag_CancelAvail" Execute="AI_Back"/>
+            <Branch Weight="RandBoolean^False" Condition="(TargetDistance < 1.5) && getFrameTag_CancelAvail" Execute="AI_PunchMain"/>
+            <Branch Condition="End" Execute="AI_PunchMain"/>
+        </AI_NotRotate>
+
+        <!-- 공격 -->
+        <AI_PunchMain UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <Event_OnExecute>    
+                <AIEvent Type="SetAction" Action="AC_PunchMain"/>
+            </Event_OnExecute>
             <Branch Condition="End" Execute="AI_PunchRecover"/>
-        </AI_Punch>
+        </AI_PunchMain>
+
         <AI_PunchRecover UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
             <Event_OnExecute>    
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_PunchRecover"/>
             </Event_OnExecute>
-            
             <Branch Condition="End" Execute="TerminatePackage"/>
         </AI_PunchRecover>
 
-        <AI_PunchSuccess UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <!-- 백-회전 스텝 펀치 -->
+        <AI_Back UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
             <Event_OnExecute>
-                <AIEvent Type="Test" Log="AI Rush Success"/>
-                <AIEvent Type="SetAction" Action="AC_PunchSuccess"/>
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="AC_BackStep"/>
             </Event_OnExecute>
+            
+            <Branch Condition="(TargetDistance > 2.5) && getFrameTag_CancelAvail" Execute="AI_RotateRand"/>
+            <Branch Condition="End" Execute="AI_StepPunchReady"/>
+        </AI_Back>
 
-            <Branch Condition="End" Execute="TerminatePackage"/>
-        </AI_PunchSuccess>
+        <!-- 회전 스텝 펀치 -->
+        <AI_RotateRand UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">           
+            <Branch Weight="RandBoolean^True" Condition="true" Execute="AI_RotateLeft"/>
+            <Branch Weight="RandBoolean^False" Condition="true" Execute="AI_RotateRight"/>
+        </AI_RotateRand>
+        <AI_RotateLeft UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="AC_RotateStep_L"/>
+            </Event_OnExecute>
+            <Event_OnUpdate>
+                <AIEvent Type="SetDirectionToTarget"/>
+            </Event_OnUpdate>
+            <Branch Condition="End" Execute="AI_PunchMain"/>
+        </AI_RotateLeft>
+        <AI_RotateRight UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <Event_OnExecute>    
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="AC_RotateStep_R"/>
+            </Event_OnExecute>
+            <Event_OnUpdate>
+                <AIEvent Type="SetDirectionToTarget"/>
+            </Event_OnUpdate>
+            <Branch Condition="End" Execute="AI_PunchMain"/>
+        </AI_RotateRight>
 
         <TerminatePackage>
             <Event_OnExecute>
                 <AIEvent Type="TerminatePackage"/>
             </Event_OnExecute>
         </TerminatePackage>
-
     </AIState>
 
 </AIPackage>
