@@ -28,6 +28,24 @@
         <Branch Condition="End == true" Execute="Attack"/>
     </Attack>
 
+    <Throw MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="AI" FlipType="Direction" ActiveCollision="False" MoveScale="3.0">
+        <Animation Preset="Sprites/Deco/YakisobaChan/1_attack" XFlip="true" Duration="1" RotationPreset="SpinLinear">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Throw"/>
+    </Throw>
+
+    <CurseAkane MovementType="Empty" DirectionType="Keep" FlipType="Keep" ActiveCollision="False" MoveScale="3.0">
+        <Animation Preset="Sprites/Deco/YakisobaChan/1_attack" XFlip="true" Duration="4">
+            <FrameEvent Type="TalkBalloon" Condition="getWeight_RandVector4^x" StartTime="0" SimpleTalkKey="Talk_Stage03_1_8_1"/>
+            <FrameEvent Type="TalkBalloon" Condition="getWeight_RandVector4^y" StartTime="0" SimpleTalkKey="Talk_Stage03_1_8_2"/>
+            <FrameEvent Type="TalkBalloon" Condition="getWeight_RandVector4^z" StartTime="0" SimpleTalkKey="Talk_Stage03_1_8_3"/>
+            <FrameEvent Type="TalkBalloon" Condition="getWeight_RandVector4^r" StartTime="0" SimpleTalkKey="Talk_Stage03_1_8_4"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="CurseAkane"/>
+    </CurseAkane>
+
     <ImmediatlyKill MovementType="Empty" DirectionType="Keep" ActiveCollision="False" FlipType="Direction"> 
         <Animation Preset="Sprites/Deco/YakisobaChan" XFlip="true" Duration="1">
             <FrameEvent Type="KillEntity" StartTime="0"/>

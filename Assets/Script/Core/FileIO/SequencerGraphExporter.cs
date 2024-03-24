@@ -197,7 +197,11 @@ public class SequencrGraphLoader : LoaderBase<SequencerGraphBaseData>
             spawnEvent = new SequencerGraphEvent_StopSwitch();
         else if(node.Name == "AudioParameter")
             spawnEvent = new SequencerGraphEvent_AudioParameter();
-        
+        else if(node.Name == "SetCameraBoundLock")
+            spawnEvent = new SequencerGraphEvent_SetCameraBoundLock();
+        else if(node.Name == "KillEntity")
+            spawnEvent = new SequencerGraphEvent_KillEntity();
+            
         if(spawnEvent == null)
         {
             DebugUtil.assert(false,"invalid sequencer graph event type: {0} [Line: {1}] [FileName: {2}]", node.Name, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);

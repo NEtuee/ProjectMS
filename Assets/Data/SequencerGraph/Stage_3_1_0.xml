@@ -1,0 +1,64 @@
+<SequencerGraph Name="Stage_3_1_1">
+
+    <InitializePhase>
+        <ApplyPostProcessProfile Path="PostProcessProfile/Stage/Stage_3_1"/>
+        
+        <SetCameraTarget UniqueKey="Player" CameraMode="TargetCenterMode"/>
+        <SetCrossHair UniqueKey="Player"/>
+        <SetHideUI Hide="True"/>
+        <BlockInput Enable="True"/>
+        
+        <SetHideCharacter UniqueKey="YakisobaChan" Hide="True"/>
+        <SetHideCharacter UniqueKey="Player" Hide="True"/>
+
+        <LetterBoxShow/>
+        <Fade/>
+
+        <BlockAI UniqueKey="YakisobaChan" Enable="True"/>
+        <BlockAI UniqueKey="TateChan" Enable="True"/>
+
+        <SetCameraBoundLock UniqueKey="YakisobaChan" Enable="False"/>
+    </InitializePhase>
+
+    <UpdatePhase>
+        <WaitSecond Time="1.0"/>
+        <FadeIn Lambda="4.0"/>
+
+        <WaitSecond Time="3.0"/>
+
+        <EffectPreset UniqueKey="Player" EffectPreset="ExplodeBig"/>
+        <WaitSecond Time="1.0"/>
+        <SetBackgroundAnimationTrigger Key="Door_1" Trigger="Open"/>
+        <AudioPlay ID="6001"/>
+        <ShakeEffect Scale="0.35" Speed="20.0" Time="0.5"/>
+        <SetHideCharacter UniqueKey="YakisobaChan" Hide="False"/>
+
+        <TalkBalloon UniqueKey="YakisobaChan" SimpleTalkKey="Talk_Stage03_1_0"/>
+        <Task ProcessType="StepByStep">
+            <AIMove UniqueKey="YakisobaChan" LoopAction="Throw" EndPositionMarker="YakisobaChanEnd"/>
+        </Task>
+
+        <SetAction UniqueKey="TateChan" Action="AC_GuardBroken"/>
+        <TalkBalloon UniqueKey="TateChan" SimpleTalkKey="Talk_Stage03_1_1"/>
+
+        <WaitSecond Time="2.0"/>
+        <TalkBalloon UniqueKey="TateChan" SimpleTalkKey="Talk_Stage03_1_2"/>
+        <AIMove UniqueKey="TateChan" LoopAction="SQ_Move" EndPositionMarker="YakisobaChanEnd"/>
+
+        <KillEntity UniqueKey="TateChan"/>
+        <KillEntity UniqueKey="YakisobaChan"/>
+
+        <WaitSecond Time="0.5"/>
+
+        <SetHideCharacter UniqueKey="Player" Hide="False"/>
+
+        <WaitSecond Time="0.5"/>
+        <SetHideUI Hide="False"/>
+        <BlockInput Enable="False"/>
+        <TalkBalloon UniqueKey="Player" SimpleTalkKey="Talk_Stage03_1_3"/>
+
+        <LetterBoxHide/>
+
+    </UpdatePhase>
+    
+</SequencerGraph>

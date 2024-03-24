@@ -1,0 +1,137 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eebfbc6ece9cebc4cbd3e126679ce50a, type: 3}
+  m_Name: Stage_3_1
+  m_EditorClassIdentifier: 
+  _stageName: Stage_3_1
+  _backgroundPrefabPath: {fileID: 6826675542183793830, guid: 323c104350f15d747920dd3676db80c8, type: 3}
+  _isMiniStage: 0
+  _stagePointData:
+  - _pointName: New Point 0
+    _stagePoint: {x: 0, y: 0, z: 0}
+    _maxLimitedDistance: 0
+    _verticalLimitedDistance: 0
+    _horizontalLimitedDistance: 0
+    _cameraZoomSize: 3
+    _cameraZoomSpeed: 4
+    _lerpCameraZoom: 0
+    _lockCameraInBound: 0
+    _cameraBoundToTrigger: 0
+    _onEnterSequencerPath:
+    - Stage_3_1_0.xml
+    _onExitSequencerPath: []
+    _characterSpawnData:
+    - _characterKey: TateChan
+      _uniqueKey: TateChan
+      _uniqueGroupKey: 
+      _startAction: AC_Idle
+      _startAIState: Entry
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 0
+      _localPosition: {x: 1.64, y: 0, z: 0}
+    - _characterKey: YakisobaChan
+      _uniqueKey: YakisobaChan
+      _uniqueGroupKey: 
+      _startAction: Idle
+      _startAIState: Entry
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 0
+      _activeType: 0
+      _localPosition: {x: -2.06, y: 0, z: 0}
+    - _characterKey: Akane
+      _uniqueKey: Player
+      _uniqueGroupKey: 
+      _startAction: Spawn
+      _startAIState: Entry
+      _flip: 0
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 0
+      _activeType: 0
+      _localPosition: {x: -2.04, y: 0, z: 0}
+    _useTriggerBound: 0
+    _targetSearchIdentifier: 1
+    _triggerWidth: 1
+    _triggerHeight: 1
+    _triggerOffset: {x: 0, y: 0, z: 0}
+  - _pointName: New Point 1
+    _stagePoint: {x: 10.89, y: 0, z: 0}
+    _maxLimitedDistance: 0
+    _verticalLimitedDistance: 0
+    _horizontalLimitedDistance: 0
+    _cameraZoomSize: 3
+    _cameraZoomSpeed: 4
+    _lerpCameraZoom: 0
+    _lockCameraInBound: 0
+    _cameraBoundToTrigger: 0
+    _onEnterSequencerPath:
+    - Stage_3_1_1.xml
+    _onExitSequencerPath: []
+    _characterSpawnData:
+    - _characterKey: TateChan
+      _uniqueKey: TateChan
+      _uniqueGroupKey: 
+      _startAction: AC_Idle
+      _startAIState: Entry
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 1
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 1
+      _localPosition: {x: 2.62, y: 0, z: 0}
+    - _characterKey: YakisobaChan
+      _uniqueKey: YakisobaChan
+      _uniqueGroupKey: 
+      _startAction: Idle
+      _startAIState: Entry
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 1
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 1
+      _localPosition: {x: 3.28, y: -0.5, z: 0}
+    _useTriggerBound: 1
+    _targetSearchIdentifier: 1
+    _triggerWidth: 9.14
+    _triggerHeight: 7.43
+    _triggerOffset: {x: 0.96, y: 0, z: 0}
+  _miniStageData: []
+  _markerData:
+  - _name: YakisobaChanEnd
+    _position: {x: 5.62, y: 0, z: 0}
+  - _name: Akane
+    _position: {x: 10.25, y: 0, z: 0}
+  - _name: Yakisoba
+    _position: {x: 11.56, y: 0, z: 0}
+  - _name: End
+    _position: {x: 16.14, y: 0, z: 0}
+  _trackData: []

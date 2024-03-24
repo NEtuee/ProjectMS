@@ -138,6 +138,14 @@ public class CharacterEntityBase : GameEntityBase
         }
     }
 
+    public void setCameraBoundLock(bool value)
+    {
+        _useCameraBoundLock = value ? _characterInfo._useCameraBoundLock : false;
+
+        if(_useCameraBoundLock)
+            _isInCameraBound = MasterManager.instance._stageProcessor.isInCameraBound(_stagePointIndex, transform.position, out Vector3 resultPosition);
+    }
+
     private void targetSearchQuick()
     {
         if(isAIGraphValid() && getCurrentTargetSearchType() != TargetSearchType.None)

@@ -59,6 +59,8 @@ public enum SequencerGraphEventType
     AudioPlay,
     AudioParameter,
     StopSwitch,
+    SetCameraBoundLock,
+    KillEntity,
     
     Count,
 }
@@ -2160,6 +2162,132 @@ public class SequencerGraphEvent_ApplyBuff : SequencerGraphEventBase
                 }
 
             }
+        }
+    }
+}
+
+public class SequencerGraphEvent_KillEntity : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.KillEntity;
+
+    public string _uniqueKey = "";
+    public string _uniqueGroupKey = "";
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor, float deltaTime)
+    {
+        if(_uniqueKey != "")
+        {
+            GameEntityBase uniqueEntity = processor.getUniqueEntity(_uniqueKey) as GameEntityBase;
+            if(uniqueEntity == null)
+            {
+                DebugUtil.assert(false,"대상 Unique Entity가 존재하지 않습니다 : {0}",_uniqueKey);
+                return true;
+            }
+
+            uniqueEntity.deactive();
+            uniqueEntity.DeregisterRequest();
+        }
+
+        if(_uniqueGroupKey != "")
+        {
+            var uniqueGroup = processor.getUniqueGroup(_uniqueGroupKey);
+            if(uniqueGroup == null)
+            {
+                DebugUtil.assert(false,"대상 Unique Group이 존재하지 않습니다 : {0}",_uniqueGroupKey);
+                return true;
+            }
+
+            foreach(var item in uniqueGroup)
+            {
+                item.deactive();
+                item.DeregisterRequest();
+            }
+        }
+
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "UniqueKey")
+                _uniqueKey = attrValue;
+            else if(attrName == "UniqueGroupKey")
+                _uniqueGroupKey = attrValue;
+        }
+    }
+}
+
+public class SequencerGraphEvent_SetCameraBoundLock : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SetCameraBoundLock;
+
+    public string _uniqueKey = "";
+    public string _uniqueGroupKey = "";
+
+    public bool _enable = false;
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor, float deltaTime)
+    {
+        if(_uniqueKey != "")
+        {
+            CharacterEntityBase uniqueEntity = processor.getUniqueEntity(_uniqueKey) as CharacterEntityBase;
+            if(uniqueEntity == null)
+            {
+                DebugUtil.assert(false,"대상 Unique Entity가 존재하지 않습니다 : {0}",_uniqueKey);
+                return true;
+            }
+
+            uniqueEntity.setCameraBoundLock(_enable);
+        }
+
+        if(_uniqueGroupKey != "")
+        {
+            var uniqueGroup = processor.getUniqueGroup(_uniqueGroupKey);
+            if(uniqueGroup == null)
+            {
+                DebugUtil.assert(false,"대상 Unique Group이 존재하지 않습니다 : {0}",_uniqueGroupKey);
+                return true;
+            }
+
+            foreach(var item in uniqueGroup)
+            {
+                (item as CharacterEntityBase).setCameraBoundLock(_enable);
+            }
+        }
+
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "UniqueKey")
+                _uniqueKey = attrValue;
+            else if(attrName == "UniqueGroupKey")
+                _uniqueGroupKey = attrValue;
+            else if(attrName == "Enable")
+                _enable = bool.Parse(attrValue);
         }
     }
 }

@@ -36,7 +36,7 @@ public class GameEntityBase : SequencerObjectBase
     private SequencerGraphProcessManager _sequencerProcessManager;
 
     private CollisionInfo       _collisionInfo;
-    private CharacterInfoData   _characterInfo;
+    protected CharacterInfoData   _characterInfo;
 
     private DeadEventDelegate   _deadEventDelegate = null;
 

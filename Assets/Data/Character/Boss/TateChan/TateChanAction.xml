@@ -142,4 +142,14 @@
         <Branch Condition="End == true" Execute="Dead"/>
     </Dead>
 
+
+<!-- Sequencer Action -->
+    <SQ_Move MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="Keep" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/TateChan/0_default/"/>
+        <Animation Preset="2_move" XFlip="true" Duration="1.0">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="SQ_Move"/>
+    </SQ_Move>
+
 </ActionGraph>
