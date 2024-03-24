@@ -78,7 +78,7 @@
             <FrameEvent Type="Test" Log="HitCount 2" Condition="getStat_HitCount == 2.0"/>
             <FrameEvent Type="Test" Log="HitCount 3" Condition="getStat_HitCount == 3.0"/>
             <FrameEvent Type="Test" Log="HitCount 4" Condition="getStat_HitCount == 4.0"/>
-            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountClear"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>
@@ -87,7 +87,7 @@
     <AC_Guard MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" DefenceType="Guard" DefenceDirectionType="Direction" DefenceAngle="180">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="1_defense/2_guard" XFlip="true" Duration="0.5">
-            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="5" Speed="4"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="3" Speed="-4"/>
 
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
@@ -118,7 +118,7 @@
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2203" Attach="true"/>
             <FrameEvent Type="Movement" Condition="TargetDistance >= 1.5" StartTime="0" Friction="0" MaxVelocity="5" Speed="15"/>
             <FrameEvent Type="Movement" Condition="TargetDistance < 1.5" StartTime="0" Friction="12" Speed="0"/>
-            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountClear"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0.35" EndTime="999" Tag="CancelAvail"/>
         </Animation>
@@ -137,7 +137,6 @@
                 <OnHit>
                     <FrameEvent Type="AudioPlay" StartTime="0" ID="2205" Attach="true"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonTenthsAttack"/>
 
                     <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
                     <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
@@ -172,7 +171,7 @@
         <Animation Preset="2_skill/1_punch/1_punchReady" XFlip="true" Duration="0.3">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2203" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
-            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountClear"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0.35" EndTime="999" Tag="CancelAvail"/>
         </Animation>
@@ -183,9 +182,9 @@
     <AC_StepPunchMove MovementType="GraphPreset" MovementGraphPreset="Reito_ForwardStep" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/1_punch/2_punchMain" XFlip="true" Duration="0.6">
-            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountClear"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0.15" EndTime="999" Tag="CancelAvail"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
+            <!-- <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/> -->
+            <FrameEvent Type="FrameTag" StartTime="0.05" EndTime="999" Tag="CancelAvail"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>
@@ -195,7 +194,8 @@
     <AC_BackStep MovementType="GraphPreset" MovementGraphPreset="Reito_BackStep" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/4_backStep" XFlip="true" Duration="0.6">
-            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountClear"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
@@ -205,7 +205,7 @@
     <AC_RotateStep_L MovementType="GraphPreset" MovementGraphPreset="Reito_RotateStep_L" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/5_rotateStep" XFlip="true" Duration="0.4">
-            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountClear"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
@@ -214,7 +214,7 @@
     <AC_RotateStep_R MovementType="GraphPreset" MovementGraphPreset="Reito_RotateStep_R" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/5_rotateStep" XFlip="true" Duration="0.4">
-            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountClear"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
@@ -261,7 +261,8 @@
             <FrameEvent Type="AudioPlay" StartTime="0.2" ID="2207" Attach="true"/>
             <FrameEvent Type="Attack" StartTime="0.2" AttackPreset="Reito_Beam">
                 <OnHit>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
                     <!-- <FrameEvent Type="ApplyBuffTarget" ApplyBuff="StunSet"/> -->
 
                     <FrameEvent Type="StopUpdate" Time="0.07"/>

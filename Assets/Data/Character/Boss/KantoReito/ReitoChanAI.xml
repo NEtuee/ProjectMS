@@ -47,9 +47,7 @@
     <Include Path="Assets/Data/Character/Boss/KantoReito/ReitoSpwanGauntletPackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/KantoReito/ReitoCremationBeamPackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/KantoReito/ReitoDodgePackage.xml"/>
-    <Include Path="Assets/Data/Character/Boss/KantoReito/ReitoAttackReadyPackage.xml"/>
-    <Include Path="Assets/Data/Character/Boss/KantoReito/ReitoChaseAttackReadyPackage.xml"/>
-    <Include Path="Assets/Data/Character/Boss/KantoReito/ReitoLinearDashPackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/KantoReito/ReitoGuardPackage.xml"/>
 
     <Test Package="CommonTestPackage">
         <Branch Condition="CurrentPackageEnd" Execute="Test"/>
@@ -186,7 +184,7 @@
     </JudgeMeleeAttack>
     <JudgeRangedAttack Package="CommonIdlePackage">
         <!-- 원거리 -->
-        <!-- 건틀렛 소환 : Cool 15.0 -->
+        <!-- 건틀렛 소환 : Cool 10.0 -->
         <Branch Condition="(customValue_CurrentGauntletCount <= gv_GuntletLimit) && aiGraphCoolTime_SpawnGauntlet" Execute="SpawnGauntlet"/>
         <!-- 화장포 : Cool 10.0 -->
         <Branch Condition="aiGraphCoolTime_CremationBeam" Execute="CremationBeam"/>
@@ -220,7 +218,7 @@
     </StepPunch>
 
     <!-- 소환: 건틀렛 소환-->
-    <SpawnGauntlet Package="ReitoSpwanGauntletPackage" CoolTime="15.0">
+    <SpawnGauntlet Package="ReitoSpwanGauntletPackage" CoolTime="10.0">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </SpawnGauntlet>
