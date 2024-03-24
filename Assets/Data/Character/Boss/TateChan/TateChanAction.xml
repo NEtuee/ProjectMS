@@ -5,8 +5,9 @@
         <AnimationHeader MasterPath="Sprites/Enemy/TateChan/0_default/"/>
         <Animation Preset="1_idle" XFlip="true" Duration="0.5">
             <FrameEvent Type="Movement" StartTime="0" Friction="12"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
-
+        
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_Idle>
 
@@ -14,6 +15,7 @@
         <AnimationHeader MasterPath="Sprites/Enemy/TateChan/0_default/"/>
         <Animation Preset="2_move" XFlip="true" Duration="0.5">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="2" Speed="15"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Move"/>
@@ -30,7 +32,8 @@
     <AC_GuardForward MovementType="FrameEvent" DirectionType="AI" DefenceType="Guard" DefenceAngle="270.0" DefenceDirectionType="Direction" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/TateChan/0_default/5_guard/"/>
         <Animation Preset="1_forward" XFlip="true" Duration="1">
-            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="0.2" Speed="1"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="0.4" Speed="3"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_GuardForward"/>
@@ -39,7 +42,8 @@
     <AC_GuardBack MovementType="FrameEvent" DirectionType="AI" DefenceType="Guard" DefenceAngle="270.0" DefenceDirectionType="Direction" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/TateChan/0_default/5_guard/"/>
         <Animation Preset="2_backward" XFlip="true" Duration="1">
-            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="0.2" Speed="-1"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="0.4" Speed="-3"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_GuardBack"/>
@@ -49,6 +53,7 @@
         <AnimationHeader MasterPath="Sprites/Enemy/TateChan/0_default/5_guard/"/>
         <Animation Preset="3_guardSuccess" XFlip="true" Duration="1">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
@@ -59,6 +64,8 @@
         <AnimationHeader MasterPath="Sprites/Enemy/TateChan/0_default/6_guardBreak/"/>
         <Animation Preset="1_guardBreakHit" XFlip="true" Duration="1">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0" Velocity="-3.0"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardPointDecrease"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
@@ -69,6 +76,7 @@
         <AnimationHeader MasterPath="Sprites/Enemy/TateChan/0_default/6_guardBreak/"/>
         <Animation Preset="2_guardBroken" XFlip="true" Duration="1.25">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="3"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
@@ -107,6 +115,7 @@
             </FrameEvent>
 
             <FrameEvent Type="Movement" StartTime="0" Friction="24" MaxVelocity="13" Velocity="13" Speed="0"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="CancelAvail"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
@@ -116,19 +125,33 @@
         <AnimationHeader MasterPath="Sprites/Enemy/TateChan/1_attack/"/>
         <Animation Preset="3_attackSuccess" XFlip="true" Duration="1">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0" Velocity="-3.0"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_AttackSuccess>
 
-    <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction" DefenceType="Guard" DefenceAngle="360.0" DefenceDirectionType="Direction" ApplyBuff="22">
+    <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction" ApplyBuff="22">
         <AnimationHeader MasterPath="Sprites/Enemy/TateChan/0_default/"/>
         <Animation Preset="3_hit" XFlip="true" Duration="1">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountIncrease"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_Hit>
+    <AC_HitGuard MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction" DefenceType="Guard" DefenceAngle="360.0" DefenceDirectionType="Direction" ApplyBuff="22">
+        <AnimationHeader MasterPath="Sprites/Enemy/TateChan/0_default/"/>
+        <Animation Preset="3_hit" XFlip="true" Duration="1">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
+
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_HitGuard>
 
     <Dead DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/TateChan/0_default/"/>
