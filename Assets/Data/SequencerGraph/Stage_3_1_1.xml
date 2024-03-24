@@ -51,6 +51,7 @@
         <WaitSecond Time="3.0"/>
 
         <AIMove UniqueKey="Player" LoopAction="AIMove_Loop" EndPositionMarker="Akane"/>
+        <SetAction UniqueKey="Player" Action="SQ_Idle"/>
         <SetDirection UniqueKey="Player" DirectionType="AlwaysRight"/>
 
         <AIMove UniqueKey="YakisobaChan" LoopAction="Move" EndPositionMarker="Yakisoba"/>
