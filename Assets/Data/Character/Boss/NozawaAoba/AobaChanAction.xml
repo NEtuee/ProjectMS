@@ -443,6 +443,7 @@
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2413" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
             <FrameEvent Type="TimelineEffect" StartTime="0.35" Path="Prefab/Effect/MaterialAttackPre_Timeline" Offset="0.0 0.0 0.0" Attach="true"/>
+            <FrameEvent Type="SetTimeScale" StartTime="0" Scale="0.1" Time="0.4" BlendTime="0.4"/>
         </Animation>
         <!-- 영역 전개 -->
         <Animation Preset="2_unwaverActivate" XFlip="true" Duration="1.0">

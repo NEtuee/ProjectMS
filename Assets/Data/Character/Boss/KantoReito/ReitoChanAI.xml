@@ -9,14 +9,15 @@
     <GlobalVariable Name="gv_GuardBrokenThreshold"          Value="0.0"/>       <!-- 가드 브레이크 공격을 막을 수 있는 횟수 -->
     <!-- 이동 타입 설정 -->
     <GlobalVariable Name="gv_bIsSystemChase"                Value="True"/>     <!-- 시스템 추격: 일정 거리 이상일 시 PC로 워프한다. (카메라 밖에서 동작) -->
-    <GlobalVariable Name="gv_bIsDash"                       Value="True"/>     <!-- 시스템 추격: 일정 거리 이상일 시 PC로 워프한다. (카메라 밖에서 동작) -->
     <!-- 이동 거리 설정 -->
     <GlobalVariable Name="gv_SystemChaseThreshold"          Value="9.75"/>     <!-- 시스템 추격 거리: 카메라 범위 값. 카메라 바깥으로 사라지지 않게 추격 -->
     <GlobalVariable Name="gv_MoveThreshold"                 Value="3.0"/>       <!-- 최대 거리 : PC와 Value 이상 거리가 벌어진 경우 이동한다. -->
     <GlobalVariable Name="gv_StopThreshold"                 Value="2.7"/>       <!-- 최소 거리 : PC와 Value 이상 거리가 가까워진 경우 정지 또는 경계한다. -->
     <GlobalVariable Name="gv_AwayThreshold"                 Value="1.5"/>       <!-- 최소 거리 : PC와 Value 이상 거리가 가까워진 경우 거리를 벌린다. -->
     <!-- 패시브 방어 반응 임계치 설정 -->
-    <GlobalVariable Name="gv_HitCountThreshold"             Value="3.0"/>       <!-- 누적 피격 횟수 트리거 : 해당 횟수 충족 시 패시브 방어 동작 (가드를 제외한 모든 피격 카운트) -->
+    <GlobalVariable Name="gv_HitCountFast"                  Value="3.0"/>       <!-- 누적 피격 허용 횟수 (빠름)-->
+    <GlobalVariable Name="gv_HitCountNormal"                Value="4.0"/>       <!-- 누적 피격 허용 횟수 (보통)-->
+    <GlobalVariable Name="gv_HitCountSlow"                  Value="5.0"/>       <!-- 누적 피격 허용 횟수 (느림)-->
     <GlobalVariable Name="gv_GuardCountThreshold"           Value="2.0"/>       <!-- 누적 가드 횟수 트리거 : 해당 횟수 충족 시 패시브 방어 동작 (가드 중 모든 피격 시 카운트) -->
     <!-- 패시브 방어(누적 피격) 반응 타입 설정 -->
         <!-- TODO: 피격 리액션이 상황에 따라 다른 것으로 실행될 수 있음. 복수 선택 가능하게. -->
@@ -54,7 +55,6 @@
     </Test>
 
     <!-- Std Values -->
-    <GlobalVariable Name="gv_StdPassiveAttitude" Value="4.0"/>     <!-- 장외 기준 값 -->
     <GlobalVariable Name="gv_GuntletLimit" Value="0.0"/>        <!-- 건틀렛 소환 기준값 -->
     <!-- Custom Value -->
     <CustomValue Name="CurrentGauntletCount" Value="0.0"/>
@@ -66,15 +66,6 @@
         <AIEvent Type="AddCustomValue" Name="CurrentGauntletCount" Value="-1.0"/>
     </CustomEvent_DiscountGauntlet>
 
-    <!-- Dodge Pattern -->
-    <GlobalVariable Name="gv_HitCountFast" Value="3.0"/>      <!-- 나지미 피격 허용 횟수 (빠름)-->
-    <GlobalVariable Name="gv_HitCountNormal" Value="4.0"/>    <!-- 나지미 피격 허용 횟수 (보통)-->
-    <GlobalVariable Name="gv_HitCountSlow" Value="5.0"/>      <!-- 나지미 피격 허용 횟수 (느림)-->
-
-    <!-- Rush Pattern -->
-    <GlobalVariable Name="gv_najimiRushRange" Value="2.0"/>             <!-- 나지미 돌진 사거리 -->
-    <GlobalVariable Name="gv_najimiRushTrasitionTime" Value="0.8"/>     <!-- 나지미 돌진 최소 텀 -->
-
     <!-- BranchSet -->
     <BranchSet Name="SystemChaseSet">
         <Branch Condition="TargetDistance >= gv_SystemChaseThreshold" Execute="SystemChase"/>
@@ -83,7 +74,7 @@
     <!-- 피격 리액션 브랜치 셋 -->
     <BranchSet Name="HitReactionSet">
         <Branch Condition="Dead" Execute="Dead"/>
-        <Branch Condition="getTargetFrameTag_Dead" Execute="EnemyWin"/>      
+        <Branch Condition="getTargetFrameTag_Dead" Execute="EnemyWin"/>
         <Branch Condition="Hit && getFrameTag_HitAvail" Execute="Hit"/>
         <Branch Condition="GuardBreakFail && getFrameTag_GbAvail" Execute="GuardBroken"/>
         <Branch Condition="GuardBroken && (getStat_GuardCount >= gv_GuardBrokenThreshold) && getFrameTag_GbAvail" Execute="GuardBroken"/>
@@ -107,7 +98,8 @@
 
         <Branch Condition="(gv_bIsDodgeToPassiveDef_Guard || gv_bIsCounterToPassiveDef_Guard)
                         && (gv_GuardCountThreshold <= getStat_GuardCount)
-                        && (gv_PassiveDef_Guard_DelayTime <= GraphExecutedTime)" Execute="Battle_DefenseByGuard"/>
+                        && (gv_PassiveDef_Guard_DelayTime <= GraphExecutedTime)" 
+                Execute="Battle_DefenseByGuard"/>
     </BranchSet>
     <!-- 전투 패시브 방어 분기 브랜치 셋 -->
     <BranchSet Name="BattleDefenseByHitJudgeSet">
@@ -275,11 +267,6 @@
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </BackRotateStepPunch>
-    <!-- 닷지 (NOTUSE) -->
-    <Dodge Package="ReitoDodgePackage">      
-        <UseBranchSet Name="HitReactionSet"/>
-        <UseBranchSet Name="BattlePackageEndSet"/>
-    </Dodge>
 
     <EnemyWin Package="CommonIdlePackage">
         <Branch Condition="getTargetFrameTag_Dead == false" Execute="Entry_Battle"/>
