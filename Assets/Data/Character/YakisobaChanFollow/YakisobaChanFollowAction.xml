@@ -1,0 +1,45 @@
+<ActionGraph Name="YakisobaChanFollow" DefaultAction="AC_Idle" DefaultFramePerSecond="12">
+
+    <GlobalVariable Name="gv_MoveSpeed" Value="45"/>
+    <GlobalVariable Name="gv_MoveVelocityMax" Value="3"/>
+    <GlobalVariable Name="gv_FastMoveVelocityMax" Value="5"/>
+    <GlobalVariable Name="gv_IdleFriction" Value="8"/>
+
+    <AC_Idle MovementType="FrameEvent" DirectionType="AITarget" FlipType="Direction" ActiveCollision="False">
+        <Animation Preset="Sprites/Deco/YakisobaChan/0_default/1_idle" XFlip="true" Duration="1">
+            <FrameEvent Type="Movement" StartTime="0" Friction="gv_IdleFriction" Speed="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_Idle>
+
+    <AC_Move MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" ActiveCollision="False">
+        <Animation Preset="Sprites/Deco/YakisobaChan/0_default/2_move" XFlip="true" Duration="1">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="gv_MoveVelocityMax" Speed="gv_MoveSpeed"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Move"/>
+    </AC_Move>
+
+    <AC_MoveFast MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" ActiveCollision="False">
+        <Animation Preset="Sprites/Deco/YakisobaChan/0_default/2_move" XFlip="true" Duration="1">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="gv_FastMoveVelocityMax" Speed="gv_MoveSpeed"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_MoveFast"/>
+    </AC_MoveFast>
+
+    <Dead MovementType="Empty" DirectionType="Keep" ActiveCollision="False">
+        <Animation Preset="Sprites/Deco/YakisobaChan" XFlip="true" Duration="1">
+
+            <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Deco/YakisobaChan" FramePerSecond="1.0" CastShadow="True">
+                <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
+            </FrameEvent>
+            <FrameEvent Type="KillEntity" StartTime="0"/>
+
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Dead"/>
+    </Dead>
+
+</ActionGraph>

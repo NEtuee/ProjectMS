@@ -680,6 +680,21 @@
         SearchIdentifier="Enemy"
     />
 
+    <YakisobaChanFollow
+        DisplayName="따라오는 야끼소바쨩"
+        ActionGraph="Assets/Data/Character/YakisobaChanFollow/YakisobaChanFollowAction.xml"
+        AIGraph="Assets/Data/Character/YakisobaChanFollow/YakisobaChanFollowAI.xml"
+        StatusInfoName="CommonEnemyStatus"
+
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        IndicatorVisible="False"
+        ProjectileCollisionRadius=""
+        UseCameraBoundLock="False"
+
+        SearchIdentifier="Deco"
+    />
+
     <ProjectileShotCharacter
         DisplayName="프로젝타일 생성용 캐릭터"
         ActionGraph="Assets/Data/Character/Object/ProjectileShot/ProjectileShotCharacter.xml"

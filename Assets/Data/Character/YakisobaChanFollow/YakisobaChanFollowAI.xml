@@ -1,0 +1,56 @@
+<AIGraph Name="YakisobaChanFollowAI" DefaultState="Entry">
+
+    <Include Path="Assets/Data/AILibrary/Package/EmptyPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonDeadPackage.xml"/>
+    
+    <AIPackage Name="ChaseAkanePackage" DefaultState="Entry">
+        <AIState>
+            <Entry UpdateTime="0.2" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+                <Event_OnExecute>
+                    <AIEvent Type="SetAction" Action="AC_Idle"/>
+                </Event_OnExecute>
+
+                <Branch Condition="(TargetDistance > 3.5) && TargetExists" Execute="ChaseFast"/>
+                <Branch Condition="(TargetDistance > 1.0) && TargetExists" Execute="Chase"/>
+            </Entry>
+
+            <Chase UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+                <Event_OnExecute>
+                    <AIEvent Type="SetDirectionToTarget"/>
+                    <AIEvent Type="SetAction" Action="AC_Move"/>
+                </Event_OnExecute>
+
+                <Branch Condition="(TargetDistance < 0.8)" Execute="Entry"/>
+
+                <Event_OnUpdate>
+                    <AIEvent Type="SetDirectionToTarget"/>
+                </Event_OnUpdate>
+
+                <Branch Condition="TargetExists == false" Execute="Entry"/>
+                <Branch Condition="(TargetDistance > 3.5) && TargetExists" Execute="ChaseFast"/>
+            </Chase>
+
+            <ChaseFast UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+                <Event_OnExecute>
+                    <AIEvent Type="SetDirectionToTarget"/>
+                    <AIEvent Type="SetAction" Action="AC_MoveFast"/>
+                </Event_OnExecute>
+
+                <Event_OnUpdate>
+                    <AIEvent Type="SetDirectionToTarget"/>
+                </Event_OnUpdate>
+
+                <Branch Condition="TargetExists == false" Execute="Entry"/>
+                <Branch Condition="(TargetDistance <= 1.0) && TargetExists" Execute="Chase"/>
+            </ChaseFast>
+        </AIState>
+    </AIPackage>
+
+    <Entry Package="ChaseAkanePackage">
+        <Branch Condition="Dead" Execute="Dead"/>
+    </Entry>
+
+    <Dead Package="CommonDeadPackage">
+    </Dead>
+
+</AIGraph>
