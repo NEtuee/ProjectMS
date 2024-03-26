@@ -106,7 +106,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         {
             if(actionIndexDic.ContainsKey(item.Value) == false)
             {
-                DebugUtil.assert_fileOpen(false,"target action is not exists : {0} [FileName: {1}]", _currentFileName, XMLScriptConverter.getLineNumberFromXMLNode(node),item.Value, _currentFileName);
+                DebugUtil.assert_fileOpen(false,"target action is not exists : {0} [FileName: {1}]", _currentFileName == "" ? "NULL" : _currentFileName, XMLScriptConverter.getLineNumberFromXMLNode(node),item.Value, _currentFileName);
                 return null;
             }
             else if(actionBaseData._defaultActionIndex == -1 && item.Value == defaultActionName)

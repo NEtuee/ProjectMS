@@ -64,6 +64,18 @@
         SearchIdentifier="Enemy"
     />
 
+    <IinchoChan
+        DisplayName="반장쨩"
+        ActionGraph="Assets/Data/Character/IinchoChan/IinchoChanAction.xml"
+        AIGraph="Assets/Data/AILibrary/Graph/EmptyAIGraph.xml"
+        StatusInfoName="CommonEnemyStatus"
+
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+
+        SearchIdentifier="Enemy"
+    />
+
     <Chair
         DisplayName="의자"
         ActionGraph="Assets/Data/Character/Object/Chair/ChairObject.xml"
