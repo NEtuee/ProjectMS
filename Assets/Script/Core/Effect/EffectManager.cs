@@ -116,6 +116,7 @@ public abstract class EffectItemBase
     public abstract void    release();
 
     public abstract bool    isValid();
+    public abstract void    setVisible(bool value);
 
     public virtual bool     isActivated() {return true;}
 
@@ -214,7 +215,7 @@ public class EffectItem : EffectItemBase
         _spriteRenderer.transform.localRotation = Quaternion.Euler(0f,0f,effectData._angle);
         _spriteRenderer.transform.localScale = effectData._scale;
         _spriteRenderer.sprite = _animationPlayer.getCurrentSprite();
-        _spriteRenderer.gameObject.SetActive(true);
+        setVisible(true);
 
         _localPosition = _spriteRenderer.transform.position;
         if(_parentTransform != null)
@@ -290,6 +291,11 @@ public class EffectItem : EffectItemBase
     public void setEndTime(float time)
     {
         _endTimer = time;
+    }
+
+    public override void setVisible(bool value)
+    {
+        _spriteRenderer.gameObject.SetActive(value);
     }
 
     public override void release()
@@ -403,6 +409,11 @@ public class AnimationEffectItem : EffectItemBase
         disableEffect();
     }
 
+    public override void setVisible(bool value)
+    {
+        _effectObject.SetActive(value);
+    }
+
     public void disableEffect()
     {
         _effectObject.transform.SetParent(null);
@@ -494,6 +505,11 @@ public class ParticleEffectItem : EffectItemBase
             item.Stop();
             item.Play();
         }
+    }
+
+    public override void setVisible(bool value)
+    {
+        _effectObject.SetActive(value);
     }
 
     public bool isAllParticleEnd()
@@ -672,6 +688,11 @@ public class TrailEffectItem : EffectItemBase
         return _lifeTime <= 0f;
     }
 
+    public override void setVisible(bool value)
+    {
+        _effectObject.SetActive(value);
+    }
+
     public override void release()
     {
         _effectObject.transform.SetParent(null);
@@ -790,6 +811,11 @@ public class TimelineEffectItem : EffectItemBase
     {
         _playableDirector.Stop();
         disableEffect();
+    }
+
+    public override void setVisible(bool value)
+    {
+        _effectObject.SetActive(value);
     }
 
     public void disableEffect()

@@ -59,6 +59,7 @@ public class StatusInfo
 
         public FMODUnity.StudioEventEmitter _audioEmitter;
         public bool _audioPlay = false;
+        public bool _effectVisible = true;
 
         public bool _spawnStartEffect = false;
         public bool _spawnEndEffect = false;
@@ -266,6 +267,7 @@ public class StatusInfo
         buffItem._animationEffect = null;
         buffItem._audioEmitter = null;
         buffItem._audioPlay = false;
+        buffItem._effectVisible = true;
         buffItem._spawnStartEffect = false;
         buffItem._spawnEndEffect = false;
         
@@ -284,6 +286,23 @@ public class StatusInfo
     //         _currentlyAppliedBuffList.Remove(buffKey);
     // }
 
+    public void setBuffEffectVisible(bool value)
+    {
+        for(int i = 0; i < _currentlyAppliedBuffList.Count; ++i)
+        {
+            BuffItem buffItem = _currentlyAppliedBuffList[i];
+            BuffData buffData = buffItem._buffData;
+
+            buffItem._effectVisible = value;
+
+            if(value)
+                createBuffEffect(ref buffData, ref buffItem);
+            else
+                resetImmediatelyBuffEffect(ref buffItem);
+        }
+        
+    }
+
     public void clearBuff()
     {
         for(int i = 0; i < _currentlyAppliedBuffList.Count; ++i)
@@ -297,6 +316,7 @@ public class StatusInfo
             _currentlyAppliedBuffList[i]._audioEmitter?.Stop();
 
             _currentlyAppliedBuffList[i]._audioPlay = false;
+            _currentlyAppliedBuffList[i]._effectVisible = true;
             _currentlyAppliedBuffList[i]._spawnStartEffect = false;
             _currentlyAppliedBuffList[i]._spawnEndEffect = false;
 
@@ -335,6 +355,7 @@ public class StatusInfo
         buffItem._animationEffect?.release();
         buffItem._audioEmitter?.Stop();
         buffItem._audioPlay = false;
+        buffItem._effectVisible = true;
         buffItem._spawnStartEffect = false;
         buffItem._spawnEndEffect = false;
 
@@ -473,47 +494,7 @@ public class StatusInfo
                         EffectInfoManager.Instance().requestEffect(buffData._buffStartEffectPreset, _ownerObject, null, CommonMaterial.Empty);
                     }
                     
-                    if(buffData._particleEffect != "" && buffItem._particleEffect == null && _ownerObject != null)
-                    {
-                        EffectRequestData requestData = MessageDataPooling.GetMessageData<EffectRequestData>();
-                        requestData.clearRequestData();
-                        requestData._parentTransform = _ownerObject.transform;
-                        requestData._position = _ownerObject.transform.position;
-                        requestData._effectPath = buffData._particleEffect;
-                        requestData._effectType = EffectType.ParticleEffect;
-                        buffItem._particleEffect = EffectManager._instance.createEffect(requestData) as ParticleEffectItem;
-                        requestData.isUsing = true;
-                    }
-                    
-                    if(buffData._timelineEffect != "" && buffItem._timelineEffect == null && _ownerObject != null)
-                    {
-                        EffectRequestData requestData = MessageDataPooling.GetMessageData<EffectRequestData>();
-                        requestData.clearRequestData();
-                        requestData._executeEntity = _ownerObject;
-                        requestData._timelineAnimator = _ownerObject.getAnimator();
-                        requestData._parentTransform = _ownerObject.transform;
-                        requestData._position = _ownerObject.transform.position;
-                        requestData._effectPath = buffData._timelineEffect;
-                        requestData._effectType = EffectType.TimelineEffect;
-                        buffItem._timelineEffect = EffectManager._instance.createEffect(requestData) as TimelineEffectItem;
-
-                        requestData.isUsing = true;
-                    }
-
-                    if(buffData._animationEffect != "" && buffItem._animationEffect == null && _ownerObject != null)
-                    {
-                        EffectRequestData requestData = MessageDataPooling.GetMessageData<EffectRequestData>();
-                        requestData.clearRequestData();
-                        requestData._executeEntity = _ownerObject;
-                        requestData._timelineAnimator = _ownerObject.getAnimator();
-                        requestData._parentTransform = _ownerObject.transform;
-                        requestData._position = _ownerObject.transform.position;
-                        requestData._effectPath = buffData._animationEffect;
-                        requestData._effectType = EffectType.AnimationEffect;
-                        buffItem._animationEffect = EffectManager._instance.createEffect(requestData) as AnimationEffectItem;
-
-                        requestData.isUsing = true;
-                    }
+                    createBuffEffect(ref buffData, ref buffItem);
 
                     if(buffData._audioID >= 0 && buffItem._audioPlay == false && _ownerObject != null)
                     {
@@ -540,14 +521,7 @@ public class StatusInfo
                     EffectInfoManager.Instance().requestEffect(buffData._buffEndEffectPreset, _ownerObject, null, CommonMaterial.Empty);
                 }
 
-                buffItem._particleEffect?.stopEffect();
-                buffItem._particleEffect = null;
-
-                buffItem._timelineEffect?.stopEffect();
-                buffItem._timelineEffect = null;
-
-                buffItem._animationEffect?.stopEffect();
-                buffItem._animationEffect = null;
+                resetBuffEffect(ref buffItem);
 
                 buffItem._audioEmitter?.Stop();
                 buffItem._audioEmitter = null;
@@ -565,6 +539,78 @@ public class StatusInfo
                 ++i;
             }
 
+        }
+    }
+
+    public void resetBuffEffect(ref BuffItem buffItem)
+    {
+        buffItem._particleEffect?.stopEffect();
+        buffItem._particleEffect = null;
+
+        buffItem._timelineEffect?.stopEffect();
+        buffItem._timelineEffect = null;
+
+        buffItem._animationEffect?.stopEffect();
+        buffItem._animationEffect = null;
+    }
+
+    public void resetImmediatelyBuffEffect(ref BuffItem buffItem)
+    {
+        buffItem._particleEffect?.release();
+        buffItem._particleEffect = null;
+
+        buffItem._timelineEffect?.release();
+        buffItem._timelineEffect = null;
+
+        buffItem._animationEffect?.release();
+        buffItem._animationEffect = null;
+    }
+
+    public void createBuffEffect(ref BuffData buffData, ref BuffItem buffItem)
+    {
+        if(buffItem._effectVisible == false)
+            return;
+
+        if(buffData._particleEffect != "" && buffItem._particleEffect == null && _ownerObject != null)
+        {
+            EffectRequestData requestData = MessageDataPooling.GetMessageData<EffectRequestData>();
+            requestData.clearRequestData();
+            requestData._parentTransform = _ownerObject.transform;
+            requestData._position = _ownerObject.transform.position;
+            requestData._effectPath = buffData._particleEffect;
+            requestData._effectType = EffectType.ParticleEffect;
+            buffItem._particleEffect = EffectManager._instance.createEffect(requestData) as ParticleEffectItem;
+            requestData.isUsing = true;
+        }
+        
+        if(buffData._timelineEffect != "" && buffItem._timelineEffect == null && _ownerObject != null)
+        {
+            EffectRequestData requestData = MessageDataPooling.GetMessageData<EffectRequestData>();
+            requestData.clearRequestData();
+            requestData._executeEntity = _ownerObject;
+            requestData._timelineAnimator = _ownerObject.getAnimator();
+            requestData._parentTransform = _ownerObject.transform;
+            requestData._position = _ownerObject.transform.position;
+            requestData._effectPath = buffData._timelineEffect;
+            requestData._effectType = EffectType.TimelineEffect;
+            buffItem._timelineEffect = EffectManager._instance.createEffect(requestData) as TimelineEffectItem;
+
+            requestData.isUsing = true;
+        }
+
+        if(buffData._animationEffect != "" && buffItem._animationEffect == null && _ownerObject != null)
+        {
+            EffectRequestData requestData = MessageDataPooling.GetMessageData<EffectRequestData>();
+            requestData.clearRequestData();
+            requestData._executeEntity = _ownerObject;
+            requestData._timelineAnimator = _ownerObject.getAnimator();
+            requestData._parentTransform = _ownerObject.transform;
+            requestData._position = _ownerObject.transform.position;
+            requestData._effectPath = buffData._animationEffect;
+            requestData._effectType = EffectType.AnimationEffect;
+            buffItem._animationEffect = EffectManager._instance.createEffect(requestData) as AnimationEffectItem;
+
+            requestData.isUsing = true;
         }
     }
 

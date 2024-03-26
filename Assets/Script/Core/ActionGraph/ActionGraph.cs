@@ -751,6 +751,15 @@ public class ActionGraph
         return (getCurrentAction()._actionFlag & (ulong)flag) != 0;
     }
 
+    public bool checkPrevActionFlag(ActionFlags flag)
+    {
+        ActionGraphNodeData prevAction = getPrevAction();
+        if(prevAction == null)
+            return false;
+
+        return (prevAction._actionFlag & (ulong)flag) != 0;
+    }
+
     public MoveValuePerFrameFromTimeDesc getMoveValuePerFrameFromTimeDesc()
     {
         if(getCurrentAction()._animationInfoCount == 1)
@@ -807,6 +816,7 @@ public class ActionGraph
     public MovementGraphPresetData getMovementGraphPresetByIndex(int index) {return _actionGraphBaseData._actionNodeData[index]._movementGraphPresetData;}
     public MovementGraphPresetData getCurrentMovementGraphPreset() {return getCurrentAction()._movementGraphPresetData;}
     private ActionGraphNodeData getCurrentAction() {return _actionGraphBaseData._actionNodeData[_currentActionNodeIndex];}
+    public ActionGraphNodeData getPrevAction() {return _prevActionNodeIndex == -1 ? null : _actionGraphBaseData._actionNodeData[_prevActionNodeIndex];}
 
 #if UNITY_EDITOR
     public ActionGraphNodeData getCurrentAction_Debug() {return _actionGraphBaseData._actionNodeData[_currentActionNodeIndex];}

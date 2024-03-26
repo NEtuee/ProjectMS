@@ -412,49 +412,7 @@ public class GameEntityBase : SequencerObjectBase
             //action,movementGraph 바뀌는 시점
             if(_actionGraph.progress(deltaTime) == true)
             {
-                _isActionChangeFrame = true;
-
-                _currentDefenceType = _actionGraph.getCurrentDefenceType();
-                _currentDirectionType = _actionGraph.getDirectionType();
-
-                _collisionInfo.setActiveCollision(_actionGraph.isActiveCollision());
-
-                if(_currentRotationType == RotationType.Torque && _currentRotationType != _actionGraph.getCurrentRotationType())
-                    _physicsBody.setTorque(0f);
-
-                _currentRotationType = _actionGraph.getCurrentRotationType();
-#if UNITY_EDITOR
-                addActionChangeLog(_actionGraph.getCurrentAction_Debug());
-#endif
-                if(_actionGraph.isActionLoop() == false)
-                {
-                    applyActionBuffList();
-                    _movementControl.changeMovement(this,_actionGraph.getCurrentMovement());
-                    _movementControl.setMoveScale(_actionGraph.getCurrentMoveScale() * _additionalMoveScale);
-
-                    _updateDirection = true;
-                    _updateFlipState = true;
-
-                    updateDirection();
-                    updateRotation();
-
-                    _angleBaseRotation = _spriteRotation;
-                    _actionStartRotation = _spriteRotation;
-                    _actionStartRotation = Quaternion.Inverse(_actionStartRotation);
-                }
-
-                float headUpOffset = _actionGraph.getCurrentHeadUpOffset();
-                if(headUpOffset >= 0f)
-                    _headUpOffset = headUpOffset;
-                else if(_characterInfo != null)
-                    _headUpOffset = _characterInfo._headUpOffset;
-                else
-                    _headUpOffset = 0f;
-
-                _graphicInterface.setInterfaceOffset(Vector3.up * _headUpOffset);
-
-                if(_actionGraph.checkCurrentActionFlag(ActionFlags.ClearPush))
-                    _currentVelocity = Vector3.zero;
+                onActionChanged();
             }
 
             updateDirection();
@@ -494,6 +452,57 @@ public class GameEntityBase : SequencerObjectBase
         _collisionInfo.updateCollisionInfo(transform.position,getDirection());
 
         updateDebug();
+    }
+
+    public void onActionChanged()
+    {
+        _isActionChangeFrame = true;
+
+        _currentDefenceType = _actionGraph.getCurrentDefenceType();
+        _currentDirectionType = _actionGraph.getDirectionType();
+
+        _collisionInfo.setActiveCollision(_actionGraph.isActiveCollision());
+
+        if(_currentRotationType == RotationType.Torque && _currentRotationType != _actionGraph.getCurrentRotationType())
+            _physicsBody.setTorque(0f);
+
+        _currentRotationType = _actionGraph.getCurrentRotationType();
+#if UNITY_EDITOR
+        addActionChangeLog(_actionGraph.getCurrentAction_Debug());
+#endif
+        if(_actionGraph.isActionLoop() == false)
+        {
+            applyActionBuffList();
+            _movementControl.changeMovement(this,_actionGraph.getCurrentMovement());
+            _movementControl.setMoveScale(_actionGraph.getCurrentMoveScale() * _additionalMoveScale);
+
+            _updateDirection = true;
+            _updateFlipState = true;
+
+            updateDirection();
+            updateRotation();
+
+            _angleBaseRotation = _spriteRotation;
+            _actionStartRotation = _spriteRotation;
+            _actionStartRotation = Quaternion.Inverse(_actionStartRotation);
+        }
+
+        float headUpOffset = _actionGraph.getCurrentHeadUpOffset();
+        if(headUpOffset >= 0f)
+            _headUpOffset = headUpOffset;
+        else if(_characterInfo != null)
+            _headUpOffset = _characterInfo._headUpOffset;
+        else
+            _headUpOffset = 0f;
+
+        _graphicInterface.setInterfaceOffset(Vector3.up * _headUpOffset);
+
+        if(_actionGraph.checkCurrentActionFlag(ActionFlags.ClearPush))
+            _currentVelocity = Vector3.zero;
+
+        bool hideBuffEffect = _actionGraph.checkCurrentActionFlag(ActionFlags.HideBuffEffect);
+        if(hideBuffEffect || _actionGraph.checkPrevActionFlag(ActionFlags.HideBuffEffect))
+            _statusInfo.setBuffEffectVisible(hideBuffEffect == false);
     }
 
     public override void afterProgress(float deltaTime)
