@@ -1,0 +1,95 @@
+<SequencerGraph Name="Stage_3_2_0">
+
+    <InitializePhase>
+        <ApplyPostProcessProfile Path="PostProcessProfile/Stage/Stage_3_1"/>
+        
+        <SetCameraTarget UniqueKey="Player" CameraMode="TargetCenterMode"/>
+        <SetCrossHair UniqueKey="Player"/>
+        <SetHideUI Hide="True"/>
+        <BlockInput Enable="True"/>
+
+        <LetterBoxShow/>
+        <Fade/>
+
+        <BlockAI UniqueKey="YakisobaChan" Enable="True"/>
+        <BlockAI UniqueKey="TateChan" Enable="True"/>
+        <BlockAI UniqueGroupKey="EnemyGroup" Enable="True"/>
+        <SetAction UniqueGroupKey="EnemyGroup" Action="AC_Entry"/>
+
+        <BlockPointExit Enable="True"/>
+    </InitializePhase>
+
+    <UpdatePhase>
+        <WaitSecond Time="1.0"/>
+        <FadeIn Lambda="5.0"/>
+
+        <Task Name="AIMove" ProcessType="AllAtOnce">
+            <AIMove UniqueKey="Player" LoopAction="AIMove" EndPositionMarker="AkaneMovePoint"/>
+            <AIMove UniqueKey="YakisobaChan" LoopAction="AIMove" EndPositionMarker="YakisobaChanMovePoint"/>
+        </Task>
+
+        <WaitSecond Time="1.0"/>
+        <TalkBalloon UniqueKey="Player" SimpleTalkKey="Talk_Stage03_2_1"/>
+        <WaitSecond Time="3.0"/>
+        <TalkBalloon UniqueKey="YakisobaChan" SimpleTalkKey="Talk_Stage03_2_2"/>
+
+        <TaskFence TaskName="AIMove"/>
+
+        <WaitSecond Time="2.0"/>
+        <SetCameraZoom Size="2.0" Speed="5"/>
+        <SetCameraTarget UniqueKey="Staff" CameraMode="TargetCenterMode"/>
+        <TalkBalloon UniqueKey="Staff" SimpleTalkKey="Talk_Stage03_2_3" Wait="True"/>
+
+        <SetCameraZoom Size="1.5" Speed="5"/>
+        <TalkBalloon UniqueKey="Staff" SimpleTalkKey="Talk_Stage03_2_4" Wait="True"/>
+
+        <SetCameraZoom Size="2.0" Speed="5"/>
+        <SetCameraTarget UniqueKey="Wand" CameraMode="TargetCenterMode"/>
+        <TalkBalloon UniqueKey="Wand" SimpleTalkKey="Talk_Stage03_2_5" Wait="True"/>
+
+        <!-- AiMove넣어야함 -->
+        <WaitSecond Time="2.0"/>
+
+        <SetCameraTarget UniqueKey="Staff" CameraMode="TargetCenterMode"/>
+        <TalkBalloon UniqueKey="Staff" SimpleTalkKey="Talk_Stage03_2_6" Wait="True"/>
+
+        <SetCameraTarget UniqueKey="Player" CameraMode="TargetCenterMode"/>
+        <TalkBalloon UniqueKey="Player" SimpleTalkKey="Talk_Stage03_2_7" Wait="True"/>
+
+        <SetCameraTarget UniqueKey="Wand" CameraMode="TargetCenterMode"/>
+        <TalkBalloon UniqueKey="Wand" SimpleTalkKey="Talk_Stage03_2_8" Wait="True"/>
+
+        <SetCameraTarget UniqueKey="Player" CameraMode="TargetCenterMode"/>
+        <SetCameraZoom Size="0.0" Speed="5"/>
+
+
+
+        <SetHideUI Hide="False"/>
+        <BlockInput Enable="False"/>
+
+        <LetterBoxHide/>
+
+        <BlockAI UniqueKey="YakisobaChan" Enable="False"/>
+        <BlockAI UniqueKey="TateChan" Enable="False"/>
+        <BlockAI UniqueGroupKey="EnemyGroup" Enable="False"/>
+
+        <DeadFence UniqueGroupKey="EnemyGroup"/>
+        
+        <SetHideUI Hide="True"/>
+        <BlockInput Enable="True"/>
+        <LetterBoxShow/>
+
+        <TalkBalloon UniqueKey="Player" SimpleTalkKey="Talk_Stage03_2_9" Wait="True"/>
+        <TalkBalloon UniqueKey="YakisobaChan" SimpleTalkKey="Talk_Stage03_2_10" Wait="True"/>
+
+        <LetterBoxHide/>
+        <SetHideUI Hide="False"/>
+        <BlockInput Enable="False"/>
+        <TalkBalloon UniqueKey="Player" SimpleTalkKey="Talk_Stage03_2_11"/>
+
+        <BlockPointExit Enable="False"/>
+        <WaitSignal Signal="NeverEnd"/>
+
+    </UpdatePhase>
+    
+</SequencerGraph>

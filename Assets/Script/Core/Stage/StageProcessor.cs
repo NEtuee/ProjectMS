@@ -673,7 +673,15 @@ public class StageProcessor
 
         foreach(var path in pointData._onEnterSequencerPath)
         {
-            _sequencerProcessManager.startSequencerFromStage(path,pointData,_spawnedCharacterEntityDictionary[pointIndex],null,_stageData._markerData,includePlayer);
+            SequencerGraphProcessor sequencerGraphProcessor = _sequencerProcessManager.startSequencerFromStage(path,pointData,_spawnedCharacterEntityDictionary[pointIndex],null,_stageData._markerData,includePlayer);
+
+            foreach(var item in _keepAliveMap)
+            {
+                if(sequencerGraphProcessor.getUniqueEntity(item.Key) != null)
+                    continue;
+
+                sequencerGraphProcessor.addUniqueEntity(item.Key,item.Value);
+            }
         }
     }
 
