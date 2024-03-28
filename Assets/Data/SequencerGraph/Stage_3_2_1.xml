@@ -1,0 +1,19 @@
+<SequencerGraph Name="Stage_3_2_1">
+
+    <InitializePhase>
+        <BlockPointExit Enable="True"/>
+
+    </InitializePhase>
+
+    <UpdatePhase>
+        <TalkBalloon UniqueKey="Player" SimpleTalkKey="Talk_Stage03_2_12"/>
+        <WaitSecond Time="2.0"/>
+
+        <TalkBalloon UniqueKey="YakisobaChan" SimpleTalkKey="Talk_Stage03_2_13"/>
+
+        <DeadFence UniqueGroupKey="EnemyGroup"/>
+        <BlockPointExit Enable="False"/>
+
+    </UpdatePhase>
+    
+</SequencerGraph>

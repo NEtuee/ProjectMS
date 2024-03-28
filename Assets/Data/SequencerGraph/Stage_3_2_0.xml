@@ -44,11 +44,11 @@
         <TalkBalloon UniqueKey="Staff" SimpleTalkKey="Talk_Stage03_2_4" Wait="True"/>
 
         <SetCameraZoom Size="2.0" Speed="5"/>
-        <SetCameraTarget UniqueKey="Wand" CameraMode="TargetCenterMode"/>
+
+        <AIMove UniqueKey="Wand" LoopAction="AIMove" EndPositionMarker="WandMovePoint"/>
         <TalkBalloon UniqueKey="Wand" SimpleTalkKey="Talk_Stage03_2_5" Wait="True"/>
 
-        <!-- AiMove넣어야함 -->
-        <WaitSecond Time="2.0"/>
+        <SetCameraTarget UniqueKey="Wand" CameraMode="TargetCenterMode"/>
 
         <SetCameraTarget UniqueKey="Staff" CameraMode="TargetCenterMode"/>
         <TalkBalloon UniqueKey="Staff" SimpleTalkKey="Talk_Stage03_2_6" Wait="True"/>

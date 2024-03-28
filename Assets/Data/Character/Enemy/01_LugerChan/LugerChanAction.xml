@@ -144,4 +144,13 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_AttackRecover>
 
+
+    <AIMove MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="AI" FlipType="Direction" ActiveCollision="False" MoveScale="3.0">
+        <AnimationHeader MasterPath="Sprites/Enemy/LugerChan/0_default/"/>
+        <Animation Preset="2_move" XFlip="true" Duration="1.0">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AIMove"/>
+    </AIMove>
+
 </ActionGraph>

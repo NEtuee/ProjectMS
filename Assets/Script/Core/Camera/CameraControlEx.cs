@@ -156,7 +156,10 @@ public class CameraTargetCenterMode : CameraModeBase
     public override CameraModeType getCameraModeType() => CameraModeType.TargetCenterMode;
     public override void initialize(Vector3 position)
     {
-        _currentCenterPosition = position;
+        if(_currentTarget != null)
+            _currentCenterPosition = position;
+        else            
+            _cameraPosition = position;
         _targetEntity = null;
         updateCameraCenter();
     }
