@@ -448,7 +448,7 @@ public class SequencerGraphProcessor
         _processingTaskList.Clear();
     }
 
-    public void startSequencerFromStage(string sequencerGraphPath, StagePointData currentPoint, List<SequencerGraphProcessor.SpawnedCharacterEntityInfo> pointCharacters, GameEntityBase ownerEntity, GameEntityBase targetEntity, List<MarkerItem> markerList, bool includePlayer = false)
+    public void startSequencerFromStage(string sequencerGraphPath, StagePointData currentPoint, ref Dictionary<string, CharacterEntityBase> keepUnique, List<SequencerGraphProcessor.SpawnedCharacterEntityInfo> pointCharacters, GameEntityBase ownerEntity, GameEntityBase targetEntity, List<MarkerItem> markerList, bool includePlayer = false)
     {
         _currentSequencer = ResourceContainerEx.Instance().GetSequencerGraph(sequencerGraphPath);
         if(_currentSequencer == null)
@@ -483,6 +483,14 @@ public class SequencerGraphProcessor
             addUniqueEntity("Target",targetEntity);
         if(includePlayer)
             addUniqueEntity("Player",MasterManager.instance._stageProcessor.getPlayerEntity());
+
+        foreach(var item in keepUnique)
+        {
+            if(getUniqueEntity(item.Key) != null)
+                continue;
+
+            addUniqueEntity(item.Key,item.Value);
+        }
 
         for(int index = _currentIndex; index < _currentSequencer._sequencerGraphPhase[0]._sequencerGraphEventCount; ++index)
         {

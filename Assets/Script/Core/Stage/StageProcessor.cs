@@ -44,6 +44,8 @@ public class StageProcessor
     Dictionary<int,List<SequencerGraphProcessor.SpawnedCharacterEntityInfo>> _spawnedCharacterEntityDictionary = new Dictionary<int, List<SequencerGraphProcessor.SpawnedCharacterEntityInfo>>();
     Dictionary<string, CharacterEntityBase> _keepAliveMap = new Dictionary<string, CharacterEntityBase>();
 
+    Dictionary<string, CharacterEntityBase> _keepUniqueMap = new Dictionary<string, CharacterEntityBase>();
+
     private Queue<StageProcessor> _miniStagePool = new Queue<StageProcessor>();
     private List<StageProcessor> _miniStageProcessor = new List<StageProcessor>();
 
@@ -146,6 +148,7 @@ public class StageProcessor
         }
 
         _spawnPrefabMap.Clear();
+        _keepUniqueMap.Clear();
 
         for(int index = 0; index < _stageData._stagePointData.Count; ++index)
         {
@@ -179,6 +182,10 @@ public class StageProcessor
                     keepEntityInfo._characterEntity = characterEntity;
 
                     _spawnedCharacterEntityDictionary[index].Add(keepEntityInfo);
+
+                    if(characterSpawnData._keepAlive)
+                        _keepUniqueMap.Add(keepEntityInfo._uniqueKey, keepEntityInfo._characterEntity);
+
                     continue;
                 }
 
@@ -232,6 +239,9 @@ public class StageProcessor
 
                 _spawnedCharacterEntityDictionary[index].Add(entityInfo);
 
+                if(characterSpawnData._keepAlive)
+                    _keepUniqueMap.Add(entityInfo._uniqueKey, entityInfo._characterEntity);
+
                 if(characterSpawnData._startAIState != "")
                     createdCharacter.setAINode(characterSpawnData._startAIState);
 
@@ -253,7 +263,7 @@ public class StageProcessor
             {
                 for(int index = 0; index < _stageData._stagePointData[0]._onEnterSequencerPath.Length; ++index)
                 {
-                    SequencerGraphProcessor processor = _sequencerProcessManager.startSequencerFromStage(_stageData._stagePointData[0]._onEnterSequencerPath[index],_stageData._stagePointData[0],_spawnedCharacterEntityDictionary[0],null,_stageData._markerData,false);
+                    SequencerGraphProcessor processor = _sequencerProcessManager.startSequencerFromStage(_stageData._stagePointData[0]._onEnterSequencerPath[index],_stageData._stagePointData[0], ref _keepUniqueMap,_spawnedCharacterEntityDictionary[0],null,_stageData._markerData,false);
 
                     // if(_playerEntity != null && playerEntity != null)
                     // {
@@ -324,6 +334,7 @@ public class StageProcessor
         _spawnPrefabMap.Clear();
 
         _keepAliveMap.Clear();
+        _keepUniqueMap.Clear();
         foreach(var item in _spawnedCharacterEntityDictionary.Values)
         {
             for(int i = 0; i < item.Count;)
@@ -410,7 +421,7 @@ public class StageProcessor
                     {
                         for(int index = 0; index < _stageData._stagePointData[0]._onEnterSequencerPath.Length; ++index)
                         {
-                            SequencerGraphProcessor processor = _sequencerProcessManager.startSequencerFromStage(_stageData._stagePointData[0]._onEnterSequencerPath[index],_stageData._stagePointData[0],_spawnedCharacterEntityDictionary[0],null,_stageData._markerData,false);
+                            SequencerGraphProcessor processor = _sequencerProcessManager.startSequencerFromStage(_stageData._stagePointData[0]._onEnterSequencerPath[index],_stageData._stagePointData[0], ref _keepUniqueMap,_spawnedCharacterEntityDictionary[0],null,_stageData._markerData,false);
                         }
                     }
 
@@ -673,15 +684,7 @@ public class StageProcessor
 
         foreach(var path in pointData._onEnterSequencerPath)
         {
-            SequencerGraphProcessor sequencerGraphProcessor = _sequencerProcessManager.startSequencerFromStage(path,pointData,_spawnedCharacterEntityDictionary[pointIndex],null,_stageData._markerData,includePlayer);
-
-            foreach(var item in _keepAliveMap)
-            {
-                if(sequencerGraphProcessor.getUniqueEntity(item.Key) != null)
-                    continue;
-
-                sequencerGraphProcessor.addUniqueEntity(item.Key,item.Value);
-            }
+            SequencerGraphProcessor sequencerGraphProcessor = _sequencerProcessManager.startSequencerFromStage(path,pointData, ref _keepUniqueMap,_spawnedCharacterEntityDictionary[pointIndex],null,_stageData._markerData,includePlayer);
         }
     }
 
@@ -692,7 +695,7 @@ public class StageProcessor
 
         foreach(var path in pointData._onExitSequencerPath)
         {
-            _sequencerProcessManager.startSequencerFromStage(path,pointData,_spawnedCharacterEntityDictionary[pointIndex],null,_stageData._markerData,includePlayer);
+            _sequencerProcessManager.startSequencerFromStage(path,pointData, ref _keepUniqueMap,_spawnedCharacterEntityDictionary[pointIndex],null,_stageData._markerData,includePlayer);
         }
     }
 
