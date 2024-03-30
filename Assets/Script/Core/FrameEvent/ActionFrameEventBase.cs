@@ -8,6 +8,7 @@ using System;
 using Newtonsoft.Json.Converters;
 using UnityEngine;
 using UnityEditor;
+using Unity.Mathematics;
 
 public enum FrameEventType
 {
@@ -1422,14 +1423,17 @@ public class ActionFrameEvent_Danmaku : ActionFrameEventBase
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
         float offsetAngle = _useDirection ? MathEx.directionToAngle(executeEntity.getDirection()) : 0f;
+        UnityEngine.Quaternion eulerAngle = UnityEngine.Quaternion.Euler(0f,0f,offsetAngle);
+        UnityEngine.Vector3 offsetPosition = eulerAngle * _offsetPosition;
+        
         if(executeEntity is GameEntityBase )
         {
             GameEntityBase requester = (GameEntityBase)executeEntity;
-            requester.addDanmaku(_path,_offsetPosition,_useFlip,offsetAngle);
+            requester.addDanmaku(_path,offsetPosition,_useFlip,offsetAngle);
         }
         else if(executeEntity is ProjectileEntityBase)
         {
-            DanmakuManager.Instance().addDanmaku(_path,executeEntity.transform.position,_offsetPosition,_useFlip,offsetAngle,executeEntity._searchIdentifier);
+            DanmakuManager.Instance().addDanmaku(_path,executeEntity.transform.position,offsetPosition,_useFlip,offsetAngle,executeEntity._searchIdentifier);
         }
 
         return true;
