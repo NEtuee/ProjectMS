@@ -1,0 +1,73 @@
+<ActionGraph Name="AobaDroneAction" DefaultAction="AC_Idle" DefaultFramePerSecond="12">
+    <GlobalVariable Name="gv_MasterPath" Value="Sprites/Enemy/NozawaAoba_Drone/"/>
+
+    <AC_Idle MovementType="Empty" DirectionType="AI">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/1_idle" XFlip="true" Duration="0.5">
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_Idle>
+
+    <AC_Move MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/2_move" XFlip="true" Duration="0.5">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="5" Speed="13"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Move"/>
+    </AC_Move>
+
+    <AC_ExplosionChase MovementType="FrameEvent" DirectionType="AI">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="1_attack/4_explosion" XFlip="true" Duration="0.5">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="9" Speed="15"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+        <Branch Condition="TargetDistance <= 0.5" Execute="AC_ExplosionStart"/>
+        <Branch Condition="End" Execute="AC_ExplosionChase"/>
+    </AC_ExplosionChase>
+
+    <AC_ExplosionStart MovementType="Empty" DirectionType="Keep">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="1_attack/4_explosion" XFlip="true" Duration="0.4">
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+        <Branch Condition="End" Execute="AC_Explosion"/>
+    </AC_ExplosionStart>
+
+    <AC_Explosion MovementType="Empty" DirectionType="Keep">
+        <Animation Preset="Sprites/Projectile/empty" Duration="0.3">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2415" Attach="true"/>
+            <!-- TODO: 폭발 이펙트  -->
+            <FrameEvent Type="EffectPreset" StartTime="0" Key="Helena_ExplodeBig"/>
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.3" AttackPreset="Common_Radius20">
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
+                </OnHit>
+            </FrameEvent>
+        </Animation>
+        <Branch Condition="End" Execute="Dead"/>
+    </AC_Explosion>
+
+    <Dead MovementType="Empty" DirectionType="AI">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/4_dead" XFlip="true" Duration="0.5">
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="DeleteCrimson" EventTargetType="Range" SearchIdentifier="Enemy" Range="100.0"/>
+            <FrameEvent Type="KillEntity" StartTime="0"/>
+            
+        </Animation>
+        <Branch Condition="End == true" Execute="Dead"/>
+    </Dead>
+
+
+</ActionGraph>

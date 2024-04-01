@@ -49,6 +49,8 @@
     <Include Path="Assets/Data/Character/Boss/NozawaAoba/AobaTsubaPackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/NozawaAoba/AobaTsubaReadyPackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/NozawaAoba/AobaDodgePackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/NozawaAoba/AobaSpawnDronePackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/NozawaAoba/AobaThrustPackage.xml"/>
 
     <CustomValue Name="CurrentRaisenCount" Value="0.0"/>
     <CustomValue Name="CurrentStormCount" Value="0.0"/>
@@ -183,17 +185,20 @@
         <!-- 부동 뢰섬 : Cool 20.0s -->
         <Branch Condition="aiGraphCoolTime_UnwaverRaisen" Execute="UnwaverRaisen"/>
         <!-- 약진 뢰섬 : Cool 5.0s -->
-        <Branch Condition="aiGraphCoolTime_ChargeRaisen" Execute="ChargeRaisen"/>
+        <!-- <Branch Condition="aiGraphCoolTime_ChargeRaisen" Execute="ChargeRaisen"/> -->
+        <!-- 자루찌르기 : Cool 5.0s -->
+        <Branch Condition="aiGraphCoolTime_Thrust" Execute="Thrust"/>
         <!-- 수직회피 패턴 : Cool 0.0s (검토 필) -->
         <Branch Condition="aiGraphCoolTime_Dodge" Execute="Dodge"/>
-        <!-- 발차기 : Cool 5.0s -->
     </JudgeMeleeAttack>
 
     <JudgeRangedAttack Package="CommonIdlePackage">
         <!-- 원거리 -->
-        <!-- EMP 약진 뢰섬 : Cool 10.0s -->
+        <!-- 드론 소환 : Cool 15.0s -->
+        <Branch Condition="aiGraphCoolTime_SpawnDrones" Execute="SpawnDrones"/>
+        <!-- EMP 약진 뢰섬 : Cool 12.0s -->
         <Branch Condition="aiGraphCoolTime_EmpGrenadeToCharge" Execute="EmpGrenadeToCharge"/>
-        <!-- 츠바(공격) : Cool 5.0s -->
+        <!-- 츠바(공격) : Cool 8.0s -->
         <Branch Condition="aiGraphCoolTime_TsubaReady" Execute="TsubaReady"/>
         <!-- 폭풍 뢰섬 : Cool 0.0s -->
         <Branch Condition="aiGraphCoolTime_StormRaisen" Execute="StormRaisen"/>
@@ -211,6 +216,12 @@
         <UseBranchSet Name="BattlePackageEndSet"/>
     </StormRaisen>
 
+    <!-- 원거리 공격: 드론 소환 -->
+    <SpawnDrones Package="AobaSpawnDronePackage" CoolTime="15.0">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </SpawnDrones>
+
     <!-- 원거리 공격: EMP 약진 뢰섬 -->
     <EmpGrenadeToCharge Package="AobaEmpPackage" CoolTime="10.0">
         <UseBranchSet Name="HitReactionSet"/>
@@ -220,6 +231,17 @@
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </ChargeRaisen>
+
+    <!-- 근거리 공격 : 자루찌르기 -->
+    <Thrust Package="AobaThrustPackage" CoolTime="4.0">
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="AttackSuccess && aiGraphCoolTime_Shotgun" Execute="Shotgun"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </Thrust>
+    <Shotgun Package="AobaThrustPackage" EntryNode="AI_ShotgunReady" CoolTime="10.0">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </Shotgun>
 
     <!-- AI 스테이트 : 전투 상태 : 패시브 방어 -->
     <!-- 피격 반격: 부동뢰섬 -->

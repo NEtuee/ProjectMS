@@ -1,0 +1,59 @@
+<AIGraph Name="AobaDroneAI" DefaultState="Chase">
+
+    <Include Path="Assets/Data/AILibrary/Package/CommonDeadPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonIdlePackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonChasePackage.xml"/>
+
+    <AIPackage Name="DroneExplosionPackage" DefaultState="AI_ExploChase">
+        <AIState>
+            <AI_ExploChase UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+                <Event_OnExecute>
+                    <AIEvent Type="SetAction" Action="AC_ExplosionChase"/>
+                </Event_OnExecute>
+                <Event_OnUpdate>
+                    <AIEvent Type="SetDirectionToTarget"/>
+                </Event_OnUpdate>
+
+                <Branch Condition="PackageExecutedTime >= 1.5" Execute="AI_ExploStart"/>
+            </AI_ExploChase>
+            <AI_ExploStart UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+                <Event_OnExecute>
+                    <AIEvent Type="SetAction" Action="AC_ExplosionStart"/>
+                </Event_OnExecute>
+
+                <Branch Condition="End" Execute="TerminatePackage"/>
+            </AI_ExploStart>
+            <TerminatePackage>
+                <Event_OnExecute>
+                    <AIEvent Type="TerminatePackage"/>
+                </Event_OnExecute>
+            </TerminatePackage>
+        </AIState>
+    </AIPackage>
+    <AIPackage Name="AobaDroneChasePackage" DefaultState="AI_Chase">
+        <AIState>
+            <AI_Chase UpdateTime="0.1" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+                <Event_OnExecute>
+                    <AIEvent Type="SetDirectionToTarget"/>
+                    <AIEvent Type="SetAction" Action="AC_Move"/>
+                </Event_OnExecute>
+                
+                <Branch Condition="true" Execute="AI_Chase"/>
+            </AI_Chase>
+        </AIState>
+    </AIPackage>
+
+    <Chase Package="AobaDroneChasePackage">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="TargetDistance <= 0.8" Execute="Explosion"/>
+    </Chase>
+
+    <Explosion Package="DroneExplosionPackage">
+        <Branch Condition="Dead" Execute="Dead"/>
+    </Explosion>
+
+    <Dead Package="CommonDeadPackage">
+    </Dead>
+
+
+</AIGraph>

@@ -560,4 +560,101 @@
         <Branch Condition="End" Execute="AC_Entry"/>
     </AC_Warpped>
 
+    <AC_SpawnDrones MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/7_spawnDrone/"/>
+        <Animation Preset="1_attackReady" XFlip="true" Duration="0.2">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+        <Animation Preset="2_attackMain" XFlip="true" Duration="0.3">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2414" Attach="true"/>
+            <FrameEvent Type="Danmaku" StartTime="0" Path="Enemy\AobaDrone.xml"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+    
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_SpawnDrones>
+
+    <AC_ThrustReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/8_thrust/"/>
+        <Animation Preset="1_attackReady" XFlip="true" Duration="0.3">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2203" Attach="true"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="0" Speed="0"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+            
+        </Animation>
+    
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_ThrustReady>
+
+    <AC_ThrustMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/8_thrust/"/>
+        <Animation Preset="2_attackMain" XFlip="true" Duration="0.45">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2204" Attach="true"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="24" MaxVelocity="15" Velocity="15" Speed="0"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.25" AttackPreset="Aoba_Thrust">
+                <OnHit>
+                    <FrameEvent Type="AudioPlay" StartTime="0" ID="2205" Attach="true"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
+                    
+                    <FrameEvent Type="StopUpdate" Time="0.1"/>
+                    <FrameEvent Type="SetTimeScale" Scale="0.1" Time="0.1" BlendTime="0.1"/>
+                    <FrameEvent Type="ShakeEffect" Scale="0.1" Speed="10.0" Time="0.1"/>
+                    
+                    <!-- visual -->
+                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+                </OnHit>
+            </FrameEvent>
+            
+        </Animation>
+        <Animation Preset="3_attackRecover" XFlip="true" Duration="0.65">
+            <FrameEvent Type="SetDirectionType" StartTime="0" DirectionType="Keep"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="AttackSuccess" Execute="AC_ThrustSuccess"/>
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_ThrustMain>
+
+    <AC_ThrustSuccess MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/8_thrust/"/>
+        <Animation Preset="3_attackRecover" XFlip="true" Duration="0.65">
+            <FrameEvent Type="Movement" StartTime="0" Friction="24" MaxVelocity="0" Velocity="0" Speed="0"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_ThrustSuccess>
+
+    <AC_ShotgunReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/9_shotgun/"/>
+        <Animation Preset="1_attackReady" XFlip="true" Duration="0.3">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="4903" Attach="true"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="0" Speed="0"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+    
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_ShotgunReady>
+
+    <AC_ShotgunMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/9_shotgun/"/>
+        <Animation Preset="2_attackMain" XFlip="true" Duration="0.45">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="0" Speed="0"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+            <FrameEvent Type="Danmaku" StartTime="0" Path="Enemy/AobaShotgun.xml"/>
+            
+        </Animation>
+        <Animation Preset="3_attackRecover" XFlip="true" Duration="0.65">
+            <FrameEvent Type="SetDirectionType" StartTime="0" DirectionType="Keep"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_ShotgunMain>
 </ActionGraph>

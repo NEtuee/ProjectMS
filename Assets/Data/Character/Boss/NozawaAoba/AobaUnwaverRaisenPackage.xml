@@ -30,7 +30,7 @@
             </Event_OnUpdate>
 
             <Branch Condition="AttackSuccess" Execute="AI_UnwaverRaisenSuccess"/>
-            <Branch Condition="End" Execute="AI_ChoraisenPre"/>
+            <Branch Condition="End" Execute="TerminatePackage"/>
         </AI_UnwaverRaisen>
 
         <AI_UnwaverRaisenSuccess UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
@@ -41,7 +41,7 @@
             <Branch Condition="End" Execute="TerminatePackage"/>    
         </AI_UnwaverRaisenSuccess>
 
-        <!-- 초뢰섬 -->
+        <!-- 초뢰섬 :: 2024.04.02 보류 처리 -->
         <AI_ChoraisenPre UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
