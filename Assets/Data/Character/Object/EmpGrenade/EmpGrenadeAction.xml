@@ -13,6 +13,7 @@
         <Animation Preset="Sprites/Projectile/empty" Duration="0.3">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2415" Attach="true"/>
             <!-- TODO: 폭발 이펙트  -->
+            <FrameEvent Type="Projectile" StartTime="0" GraphName="Emp" DirectionType="AI" SpawnTargetType="Self"/>
             <FrameEvent Type="Attack" StartTime="0" EndTime="0.3" AttackPreset="Aoba_EmpGrenade">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>

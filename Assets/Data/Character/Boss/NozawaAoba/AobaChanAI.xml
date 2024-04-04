@@ -70,11 +70,11 @@
 
     
     <!-- Test -->
-        <Test Package="AobaTsubaReadyPackage">
-            <Branch Condition="Hit" Execute="Test2"/>
+        <Test Package="AobaUnwaverRaisenPackage">
             <Branch Condition="Hit && getFrameTag_HitAvail" Execute="TestHit"/>
             <Branch Condition="(GuardBreakFail || GuardBroken) && getFrameTag_GbAvail" Execute="TestGuardBroken"/>
-            <Branch Condition="CurrentPackageEnd" Execute="Test2"/>
+            <Branch Condition="CurrentPackageEnd" Execute="Test"/>
+
         </Test>
 
         <Test2 Package="AobaTsubaPackage">
@@ -194,14 +194,16 @@
 
     <JudgeRangedAttack Package="CommonIdlePackage">
         <!-- 원거리 -->
+        <!-- 폭풍 뢰섬 : Cool 10.0s -->
+        <Branch Condition="aiGraphCoolTime_StormRaisen" Execute="StormRaisen"/>
         <!-- 드론 소환 : Cool 15.0s -->
         <Branch Condition="aiGraphCoolTime_SpawnDrones" Execute="SpawnDrones"/>
         <!-- EMP 약진 뢰섬 : Cool 12.0s -->
         <Branch Condition="aiGraphCoolTime_EmpGrenadeToCharge" Execute="EmpGrenadeToCharge"/>
         <!-- 츠바(공격) : Cool 8.0s -->
         <Branch Condition="aiGraphCoolTime_TsubaReady" Execute="TsubaReady"/>
-        <!-- 폭풍 뢰섬 : Cool 0.0s -->
-        <Branch Condition="aiGraphCoolTime_StormRaisen" Execute="StormRaisen"/>
+        <!-- 폭풍 뢰섬 : No Cool -->
+        <Branch Condition="true" Execute="StormRaisen"/>
 
     </JudgeRangedAttack>
 
@@ -211,7 +213,7 @@
     </Dodge>
 
     <!-- 원거리 공격: 폭풍 뢰섬 -->
-    <StormRaisen Package="AobaStormRaisenPackage" CoolTime="0.0">
+    <StormRaisen Package="AobaStormRaisenPackage" CoolTime="10.0">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </StormRaisen>

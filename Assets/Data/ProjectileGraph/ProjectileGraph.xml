@@ -616,24 +616,24 @@
         </Event>
     </RunnerSpawner>
 
-    <SwordSlash DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">
-        <Animation Preset="Sprites/Projectile/SwordSlash" XFlip="true" Duration="2.0">  <!-- TODO: FADE OUT -->    
+    <UnwaverRaisen DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">
+        <Animation Preset="Sprites/Projectile/UnwaverRaisenVisualizer" XFlip="true" Duration="2.0">  
         </Animation>
 
-        <CollisionInfo Radius="2.0" Angle="180"/>
-        <DefaultShotInfo Velocity="12" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="2.0"/>
+        <CollisionInfo Radius="0.1" Angle="360"/>
+        <DefaultShotInfo Velocity="0" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="1.0"/>
         <Event>
-            <OnHit>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
-
-                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Slash" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
-                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Blood" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
-
-                    <FrameEvent Type="StopUpdate" Time="0.07"/>
-            </OnHit>
         </Event>
-    </SwordSlash>
-    
+    </UnwaverRaisen>
+    <Emp DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">
+        <Animation Preset="Sprites/Projectile/EmpVisualizer" XFlip="true" Duration="2.0">  
+        </Animation>
+
+        <CollisionInfo Radius="0.1" Angle="360"/>
+        <DefaultShotInfo Velocity="0" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="0.3"/>
+        <Event>
+        </Event>
+    </Emp>
     <!-- 아오바의 자폭 드론 -->
     <Aoba_Drone DefaultFramePerSecond="4" UseSpriteRotation="false" PenetrateCount="1">
         <Animation Preset="Sprites/Enemy/NozawaAoba_Drone/0_default/2_move" XFlip="true" Duration="0.8">
@@ -680,4 +680,5 @@
             </OnEnd>
         </Event>
     </AobaShotgunBullet>
+
 </ProjectileGraph>

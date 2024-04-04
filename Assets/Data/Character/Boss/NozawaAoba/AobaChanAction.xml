@@ -426,10 +426,6 @@
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2401" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountIncrease"/>
-            <!--
-            <FrameEvent Type="ZoomEffect" Scale="-3.2"/>
-            -->
-            <FrameEvent Type="StopUpdate" Time="0.15"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
@@ -438,17 +434,17 @@
     <AC_UnwaverRaisen MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/5_unwaverRaisen/"/>
         <!-- 준비 자세 -->
-        <Animation Preset="1_unwaverReady" XFlip="true" Duration="0.7">
+        <Animation Preset="1_unwaverReady" XFlip="true" Duration="0.2">
             <FrameEvent Type="SetDirectionType" StartTime="0.016" DirectionType="Keep"/>
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2413" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <FrameEvent Type="TimelineEffect" StartTime="0.35" Path="Prefab/Effect/MaterialAttackPre_Timeline" Offset="0.0 0.0 0.0" Attach="true"/>
-            <FrameEvent Type="SetTimeScale" StartTime="0" Scale="0.1" Time="0.4" BlendTime="0.4"/>
+            <FrameEvent Type="SetTimeScale" StartTime="0" Scale="0.05" Time="0.6" BlendTime="0.17"/>
+            <FrameEvent Type="Projectile" StartTime="0" GraphName="UnwaverRaisen" DirectionType="AI" SpawnTargetType="Self"/>
         </Animation>
         <!-- 영역 전개 -->
-        <Animation Preset="2_unwaverActivate" XFlip="true" Duration="1.0">
+        <Animation Preset="2_unwaverActivate" XFlip="true" Duration="0.4">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2417" Attach="true"/>
-            <FrameEvent Type="Attack" StartTime="0" EndTime="0.4" AttackPreset="Aoba_UnwaverRaisen">
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.2" AttackPreset="Aoba_UnwaverRaisen">
                 <OnHit>
                     <FrameEvent Type="SetDirectionType" StartTime="0" DirectionType="AI"/>
                     <FrameEvent Type="AudioPlay" StartTime="0" ID="2407" Attach="true"/>
@@ -459,11 +455,9 @@
                     
                     <FrameEvent Type="TeleportToTargetBack" DistanceOffset="2.0"/>
 
-                    <FrameEvent Type="StopUpdate" Time="0.07"/>
+                    <FrameEvent Type="StopUpdate" Time="0.14"/>
                     <FrameEvent Type="SetTimeScale" Scale="0.2" Time="0.2" BlendTime="0.2"/>
                     <FrameEvent Type="ShakeEffect" Scale="0.15" Speed="35.0" Time="0.2"/>
-
-                    <FrameEvent Type="StopUpdate" Time="0.07"/>
                 </OnHit>
             </FrameEvent>
             
