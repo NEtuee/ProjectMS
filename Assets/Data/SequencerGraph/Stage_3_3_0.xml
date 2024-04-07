@@ -1,0 +1,18 @@
+<SequencerGraph Name="Stage_3_3_0">
+
+    <InitializePhase>
+        <ApplyPostProcessProfile Path="PostProcessProfile/Stage/Stage_3_4"/>
+        
+        <SetCameraTarget UniqueKey="Player" CameraMode="TargetCenterMode"/>
+        <SetCrossHair UniqueKey="Player"/>
+
+        <Fade/>
+
+    </InitializePhase>
+
+    <UpdatePhase>
+        <FadeIn Lambda="5.0"/>
+
+    </UpdatePhase>
+    
+</SequencerGraph>

@@ -1,0 +1,80 @@
+<SequencerGraph Name="Stage_3_4_0">
+
+    <InitializePhase>
+        <ApplyPostProcessProfile Path="PostProcessProfile/Stage/Stage_3_4"/>
+        
+        <SetCameraTarget UniqueKey="Player" CameraMode="TargetCenterMode"/>
+        <SetCrossHair UniqueKey="Player"/>
+        <SetHideUI Hide="True"/>
+        <BlockInput Enable="True"/>
+
+        <LetterBoxShow/>
+        <Fade/>
+
+        <BlockAI UniqueKey="YakisobaChan" Enable="True"/>
+        <BlockAI UniqueGroupKey="EnemyGroup" Enable="True"/>
+
+        <SetCameraBoundLock UniqueGruopKey="EnemyGroup" Enable="False"/>
+        <SetAction UniqueGroupKey="EnemyGroup" Action="AC_Idle"/>
+
+    </InitializePhase>
+
+    <UpdatePhase>
+        <WaitSecond Time="1.0"/>
+
+        <FadeIn Lambda="5.0"/>
+        <WaitSecond Time="1.5"/>
+
+        <Task ProcessType="AllAtOnce" Name="AIMove">
+            <AIMove UniqueKey="Player" LoopAction="AIMove_Loop" EndPositionMarker="PlayerEntry"/>
+            <AIMove UniqueKey="YakisobaChan" LoopAction="AIMove" EndPositionMarker="YakisobaEntry"/>
+        </Task>
+
+        <WaitSecond Time="2.0"/>
+
+        <Task ProcessType="AllAtOnce">
+            <AIMove UniqueKey="Wand1" LoopAction="AIMove" EndPositionMarker="Enemy1"/>
+            <AIMove UniqueKey="Wand2" LoopAction="AIMove" EndPositionMarker="Enemy2"/>
+            <AIMove UniqueKey="Wand3" LoopAction="AIMove" EndPositionMarker="Enemy3"/>
+        </Task>
+
+        <WaitSecond Time="1.0"/>
+        <TalkBalloon UniqueKey="Wand1" SimpleTalkKey="Talk_Stage03_4_1"/>
+        <WaitSecond Time="0.6"/>
+        <TalkBalloon UniqueKey="Wand2" SimpleTalkKey="Talk_Stage03_4_2"/>
+        <WaitSecond Time="0.4"/>
+        <TalkBalloon UniqueKey="Wand3" SimpleTalkKey="Talk_Stage03_4_3"/>
+
+        <WaitSecond Time="1.0"/>
+        <SetCameraZoom Size="2.0" Speed="5"/>
+        <TalkBalloon UniqueKey="Player" SimpleTalkKey="Talk_Stage03_4_4" Wait="True"/>
+
+        <SetCameraTarget UniqueKey="YakisobaChan" CameraMode="TargetCenterMode"/>
+        <TalkBalloon UniqueKey="YakisobaChan" SimpleTalkKey="Talk_Stage03_4_5" Wait="True"/>
+
+        <SetCameraZoom Size="0.0" Speed="5"/>
+        <SetCameraTarget UniqueKey="Player" CameraMode="TargetCenterMode"/>
+        <TalkBalloon UniqueKey="YakisobaChan" SimpleTalkKey="Talk_Stage03_4_6"/>
+        <AIMove UniqueKey="YakisobaChan" LoopAction="AIMove" EndPositionMarker="YakisobaRun"/>
+
+        <KillEntity UniqueKey="YakisobaChan"/>
+        <TalkBalloon UniqueKey="Player" SimpleTalkKey="Talk_Stage03_4_7"/>
+
+        <WaitSecond Time="1.0"/>
+        <SetCameraBoundLock UniqueGruopKey="EnemyGroup" Enable="true"/>
+        
+        <SetHideUI Hide="False"/>
+        <BlockInput Enable="False"/>
+        <BlockAI UniqueGroupKey="EnemyGroup" Enable="False"/>
+
+        <LetterBoxHide/>
+
+        <BlockPointExit Enable="True"/>
+        <DeadFence UniqueGroupKey="EnemyGroup"/>
+        <BlockPointExit Enable="False"/>
+
+        <WaitSignal Signal="NeverEnd"/>
+
+    </UpdatePhase>
+    
+</SequencerGraph>
