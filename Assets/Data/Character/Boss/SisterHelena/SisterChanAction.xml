@@ -71,18 +71,14 @@
     <Dead DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="0_default/4_dead" XFlip="true" Duration="1">
+            <FrameEvent Type="Effect" StartTime="0" Path="Sprites/Enemy/SisterHelena/0_default/4_dead" FramePerSecond="0.2" CastShadow="True">
+                <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
+            </FrameEvent>
+            <FrameEvent Type="KillEntity" StartTime="0"/>
         </Animation>
 
-        <Branch Condition="End == true" Execute="Dead_Loop"/>
+        <Branch Condition="End == true" Execute="Dead"/>
     </Dead>
-
-    <Dead_Loop DirectionType="Keep" FlipType="Direction">
-        <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="0_default/4_dead" XFlip="true" Duration="1">
-        </Animation>
-
-        <Branch Condition="End == true" Execute="Dead_Loop"/>
-    </Dead_Loop>
 
     <AC_Dash MovementType="GraphPreset" MovementGraphPreset="Preset_Dodge" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
