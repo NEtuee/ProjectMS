@@ -39,7 +39,7 @@ MonoBehaviour:
       _setDirection: 0
       _directionAngle: 0
       _hideWhenDeactive: 0
-      _keepAlive: 0
+      _keepAlive: 1
       _sortingOrder: 0
       _searchIdentifier: 0
       _activeType: 0
@@ -124,7 +124,7 @@ MonoBehaviour:
     _triggerHeight: 1
     _triggerOffset: {x: 0, y: 0, z: 0}
   - _pointName: New Point 2
-    _stagePoint: {x: 31.42, y: 0, z: 0}
+    _stagePoint: {x: 21.59, y: 0, z: 0}
     _maxLimitedDistance: 0
     _verticalLimitedDistance: 0
     _horizontalLimitedDistance: 0
@@ -142,7 +142,7 @@ MonoBehaviour:
     _triggerHeight: 1
     _triggerOffset: {x: 0, y: 0, z: 0}
   - _pointName: New Point 3
-    _stagePoint: {x: 44.29, y: 0, z: 0}
+    _stagePoint: {x: 34.89, y: 0, z: 0}
     _maxLimitedDistance: 0
     _verticalLimitedDistance: 0
     _horizontalLimitedDistance: 0
@@ -151,14 +151,43 @@ MonoBehaviour:
     _lerpCameraZoom: 0
     _lockCameraInBound: 0
     _cameraBoundToTrigger: 0
-    _onEnterSequencerPath: []
+    _onEnterSequencerPath:
+    - Stage_3_4_1.xml
     _onExitSequencerPath: []
-    _characterSpawnData: []
-    _useTriggerBound: 0
+    _characterSpawnData:
+    - _characterKey: SisterHelena
+      _uniqueKey: Boss
+      _uniqueGroupKey: 
+      _startAction: AC_Idle
+      _startAIState: SpawnBook_Crimson
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 1
+      _keepAlive: 1
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 1
+      _localPosition: {x: 2.03, y: -1.08, z: 0}
+    - _characterKey: YakisobaChan
+      _uniqueKey: Yakisoba
+      _uniqueGroupKey: 
+      _startAction: Idle
+      _startAIState: Entry
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 1
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 3
+      _activeType: 1
+      _localPosition: {x: 2.58, y: -1.21, z: 0}
+    _useTriggerBound: 1
     _targetSearchIdentifier: 1
-    _triggerWidth: 1
-    _triggerHeight: 1
-    _triggerOffset: {x: 0, y: 0, z: 0}
+    _triggerWidth: 7
+    _triggerHeight: 8
+    _triggerOffset: {x: -0.06, y: 0, z: 0}
   _miniStageData: []
   _markerData:
   - _name: PlayerEntry
@@ -173,4 +202,10 @@ MonoBehaviour:
     _position: {x: 1.07, y: -1.69, z: 0}
   - _name: YakisobaRun
     _position: {x: 6.7, y: 0.33, z: 0}
+  - _name: AkaneBossPosition
+    _position: {x: 32.26, y: -0.02, z: 0}
+  - _name: BossPosition
+    _position: {x: 36.91, y: -0.01, z: 0}
+  - _name: YakisobaBoss
+    _position: {x: 39.44, y: -0.04, z: 0}
   _trackData: []

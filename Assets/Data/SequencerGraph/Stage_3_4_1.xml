@@ -1,0 +1,73 @@
+<SequencerGraph Name="Stage_3_4_1">
+
+    <InitializePhase>
+        <LetterBoxShow/>
+
+        <SetHideUI Hide="True"/>
+        <BlockInput Enable="True"/>
+
+        <BlockAI UniqueKey="YakisobaChan" Enable="True"/>
+        <BlockAI UniqueKey="Boss" Enable="True"/>
+    </InitializePhase>
+
+    <UpdatePhase>
+        <AIMove UniqueKey="Player" LoopAction="AIMove_Loop" EndPositionMarker="AkaneBossPosition"/>
+
+        <WaitSecond Time="1.0"/>
+        <AIMove UniqueKey="Boss" LoopAction="AIMove" EndPositionMarker="BossPosition"/>
+
+        <WaitSecond Time="0.3"/>
+
+        <SetCameraZoom Size="2.0" Speed="5.0"/>
+        <SetCameraTarget UniqueKey="Boss" CameraMode="TargetCenterMode"/>
+        <TalkBalloon UniqueKey="Boss" SimpleTalkKey="Talk_Stage03_4_8" Wait="True"/>
+
+        <SetCameraZoom Size="0.0" Speed="5.0"/>
+        <SetCameraTarget UniqueKey="Player" CameraMode="TargetCenterMode"/>
+        <TalkBalloon UniqueKey="Player" SimpleTalkKey="Talk_Stage03_4_9" Wait="True"/>
+
+        <Task ProcessType="StepByStep">
+            <AIMove UniqueKey="Yakisoba" LoopAction="MoveFast" EndPositionMarker="YakisobaBoss"/>
+            <KillEntity UniqueKey="Yakisoba"/>
+        </Task>
+
+        <SetAction UniqueKey="Boss" Action="AC_Hit"/>
+        <TalkBalloon UniqueKey="Boss" SimpleTalkKey="Talk_Stage03_4_10" Wait="True"/>
+        <SetCameraZoom Size="2.0" Speed="5.0"/>
+        <SetCameraTarget UniqueKey="Boss" CameraMode="TargetCenterMode"/>
+        <TalkBalloon UniqueKey="Boss" SimpleTalkKey="Talk_Stage03_4_11" Wait="True"/>
+
+        <SetCameraTarget UniqueKey="Player" CameraMode="TargetCenterMode"/>
+        <SetCameraZoom Size="0.0" Speed="5.0"/>
+        <SetCameraUVTarget UniqueKey="Boss"/>
+
+        <ApplyPostProcessProfile Path="PostProcessProfile/PostProcessProfile_Translated" ApplyType="BaseBlend" BlendTime="6.0"/>
+        <SetCameraUVTarget UniqueKey="NULL"/>
+
+        <SetHideUI Hide="False"/>
+        <BlockInput Enable="False"/>
+        <LetterBoxHide/>
+
+        <ActiveBossHp UniqueKey="Boss"/>
+        <UnlockStageLimit Enable="True"/>
+
+        <WaitSecond Time="2.0"/>
+        <BlockAI UniqueKey="Boss" Enable="False"/>
+
+        <WaitSecond Time="3.0"/>
+        <SetCameraUVTarget UniqueKey="Player"/>
+
+        <DeadFence UniqueKey="Boss"/>
+
+        <BlockInput Enable="True"/>
+        <SetHideUI Hide="True"/>
+
+        <ZoomEffect Factor="-0.5"/>
+        <SetTimeScale Scale="0.1" Time="1.5" BlendTime="2.0"/>
+        <ApplyPostProcessProfile Path="PostProcessProfile/ImpactFrame" ApplyType="Additional" BlendTime="1.5"/>
+
+        <WaitSecond Time="4.0"/>
+
+    </UpdatePhase>
+    
+</SequencerGraph>
