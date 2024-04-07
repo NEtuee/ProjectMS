@@ -1,0 +1,59 @@
+<SequencerGraph Name="Stage_4_1_0">
+
+    <InitializePhase>
+        <ApplyPostProcessProfile Path="PostProcessProfile/Stage/Stage_4_1"/>
+        
+        <SetCameraTarget UniqueKey="Player" CameraMode="TargetCenterMode"/>
+        <SetCrossHair UniqueKey="Player"/>
+        <SetHideUI Hide="True"/>
+        <BlockInput Enable="True"/>
+
+        <BlockAI UniqueGroupKey="EnemyGroup" Enable="True"/>
+        <BlockAI UniqueKey="YakisobaChan" Enable="True"/>
+        <SetCameraBoundLock UniqueGroupKey="EnemyGroup" Enable="False"/>
+
+        <LetterBoxShow/>
+        <Fade/>
+    </InitializePhase>
+
+    <UpdatePhase>
+        <WaitSecond Time="2.0"/>
+        <FadeIn Lambda="5.0"/>
+
+        <Task ProcessType="StepByStep">
+            <AIMove UniqueKey="Sukeban1" LoopAction="AIMoveFast" EndPositionMarker="Melee"/>
+            <KillEntity UniqueKey="Sukeban1"/>
+        </Task>
+
+        <Task ProcessType="StepByStep">
+            <AIMove UniqueKey="Sukeban2" LoopAction="AIMoveFast" EndPositionMarker="Range"/>
+            <KillEntity UniqueKey="Sukeban2"/>
+        </Task>
+
+        <WaitSecond Time="0.5"/>
+        <TalkBalloon UniqueKey="Sukeban1" SimpleTalkKey="Talk_Stage04_1_0"/>
+
+        <WaitSecond Time="0.5"/>
+        <TalkBalloon UniqueKey="Sukeban2" SimpleTalkKey="Talk_Stage04_1_1"/>
+
+        <WaitSecond Time="1.5"/>
+        <Task ProcessType="AllAtOnce" Name="AIMove">
+            <AIMove UniqueKey="Player" LoopAction="AIMove_Loop" EndPositionMarker="Player"/>
+            <AIMove UniqueKey="YakisobaChan" LoopAction="AIMove" EndPositionMarker="Yakisoba"/>
+        </Task>
+
+        <TaskFence TaskName="AIMove"/>
+        <TalkBalloon UniqueKey="Player" SimpleTalkKey="Talk_Stage04_1_2" Wait="True"/>
+
+        <SetHideUI Hide="False"/>
+        <BlockInput Enable="False"/>
+
+        <BlockAI UniqueKey="YakisobaChan" Enable="False"/>
+        <BlockAI UniqueGroupKey="EnemyGroup" Enable="False"/>
+
+        <LetterBoxHide/>
+
+        <WaitSignal Signal="NeverEnd"/>
+    </UpdatePhase>
+    
+</SequencerGraph>

@@ -198,5 +198,21 @@
     </AC_GuardBroken>
 <!-- Defense Action -->
 
+    <AIMove MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="AI" FlipType="Direction" ActiveCollision="False">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/2_move" XFlip="true" Duration="1.0">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AIMove"/>
+    </AIMove>
+
+    <AIMoveFast MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="AI" FlipType="Direction" ActiveCollision="False">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/2_move" XFlip="true" Duration="0.5">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AIMove"/>
+    </AIMoveFast>
+
 
 </ActionGraph>

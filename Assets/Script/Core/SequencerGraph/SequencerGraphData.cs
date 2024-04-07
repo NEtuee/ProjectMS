@@ -888,7 +888,13 @@ public class SequencerGraphEvent_AIMove : SequencerGraphEventBase
         {
             MarkerItem item = processor.getMarker(_markerName);
             if(item != null)
+            {
                 _endPosition = item._position;
+            }
+            else
+            {
+                DebugUtil.assert(false,"대상 Marker가 존재하지 않습니다 : {0}",_markerName);
+            }
         }
 
         _aiBlockState = uniqueEntity.isAIBlocked();

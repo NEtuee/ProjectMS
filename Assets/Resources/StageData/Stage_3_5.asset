@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eebfbc6ece9cebc4cbd3e126679ce50a, type: 3}
+  m_Name: Stage_3_5
+  m_EditorClassIdentifier: 
+  _stageName: Stage_3_5
+  _backgroundPrefabPath: {fileID: 1846966006277497008, guid: 421b4680bfb5ba04e8d8ab6d717a869a, type: 3}
+  _isMiniStage: 0
+  _stagePointData:
+  - _pointName: New Point 0
+    _stagePoint: {x: 0, y: 0, z: 0}
+    _maxLimitedDistance: 0
+    _verticalLimitedDistance: 0
+    _horizontalLimitedDistance: 0
+    _cameraZoomSize: 3
+    _cameraZoomSpeed: 4
+    _lerpCameraZoom: 0
+    _lockCameraInBound: 0
+    _cameraBoundToTrigger: 0
+    _onEnterSequencerPath:
+    - Stage_3_5_0.xml
+    _onExitSequencerPath: []
+    _characterSpawnData:
+    - _characterKey: YakisobaChan
+      _uniqueKey: YakisobaChan
+      _uniqueGroupKey: 
+      _startAction: Idle
+      _startAIState: Entry
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 0
+      _localPosition: {x: 1.69, y: 0, z: 0}
+    - _characterKey: Akane
+      _uniqueKey: Player
+      _uniqueGroupKey: 
+      _startAction: Spawn
+      _startAIState: Entry
+      _flip: 0
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 1
+      _sortingOrder: 0
+      _searchIdentifier: 0
+      _activeType: 0
+      _localPosition: {x: -2.03, y: 0, z: 0}
+    _useTriggerBound: 0
+    _targetSearchIdentifier: 1
+    _triggerWidth: 1
+    _triggerHeight: 1
+    _triggerOffset: {x: 0, y: 0, z: 0}
+  _miniStageData: []
+  _markerData:
+  - _name: Player
+    _position: {x: 0.806, y: 0, z: 0}
+  _trackData: []

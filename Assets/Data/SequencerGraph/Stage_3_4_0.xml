@@ -14,7 +14,7 @@
         <BlockAI UniqueKey="YakisobaChan" Enable="True"/>
         <BlockAI UniqueGroupKey="EnemyGroup" Enable="True"/>
 
-        <SetCameraBoundLock UniqueGruopKey="EnemyGroup" Enable="False"/>
+        <SetCameraBoundLock UniqueGroupKey="EnemyGroup" Enable="False"/>
         <SetAction UniqueGroupKey="EnemyGroup" Action="AC_Idle"/>
 
     </InitializePhase>
@@ -61,7 +61,7 @@
         <TalkBalloon UniqueKey="Player" SimpleTalkKey="Talk_Stage03_4_7"/>
 
         <WaitSecond Time="1.0"/>
-        <SetCameraBoundLock UniqueGruopKey="EnemyGroup" Enable="true"/>
+        <SetCameraBoundLock UniqueGroupKey="EnemyGroup" Enable="true"/>
         
         <SetHideUI Hide="False"/>
         <BlockInput Enable="False"/>

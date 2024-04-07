@@ -1,0 +1,105 @@
+<SequencerGraph Name="Stage_4_3_1">
+
+    <InitializePhase>
+
+        <SetHideUI Hide="True"/>
+        <BlockInput Enable="True"/>
+
+        <BlockAI UniqueKey="Sukeban" Enable="True"/>
+        <BlockAI UniqueKey="Boss" Enable="True"/>
+        <BlockAI UniqueKey="YakisobaChan" Enable="True"/>
+        <SetAction UniqueKey="YakisobaChan" Action="AC_Idle"/>
+
+        <SetCameraTarget UniqueKey="Sukeban" CameraMode="TargetCenterMode"/>
+        <LetterBoxShow/>
+
+    </InitializePhase>
+
+    <UpdatePhase>
+        <SetHideCharacter UniqueKey="Sukeban" Hide="True"/>
+
+        <WaitSecond Time="2.0"/>
+        <TalkBalloon UniqueKey="Sukeban" SimpleTalkKey="Talk_Stage04_3_0" Wait="True"/>
+
+        <WaitSecond Time="1.0"/>
+
+        <SetHideCharacter UniqueKey="Sukeban" Hide="False"/>
+
+        <WaitSecond Time="1.0"/>
+        <TalkBalloon UniqueKey="Sukeban" SimpleTalkKey="Talk_Stage04_3_1" Wait="True"/>
+
+        <TeleportTargetTo UniqueKey="Player" PositionMarker="AkanePosition"/>
+        <SetDirection UniqueKey="Player" DirectionType="AlwaysRight"/>
+        <BlockAI UniqueKey="Sukeban" Enable="False"/>
+        
+        <SetAction UniqueKey="Player" Action="SQ_AttackLong"/>
+        <SetCameraZoom Size="2.5" Speed="5"/>
+
+        <WaitSecond Time="0.1"/>
+        <SetTimeScale Scale="0.1" Time="1.0" BlendTime="2.0"/>
+
+        <WaitSecond Time="2.0"/>
+
+        <SetCameraTarget UniqueKey="Player" CameraMode="TargetCenterMode"/>
+        <SetDirection UniqueKey="Player" DirectionType="AlwaysLeft"/>
+
+        <TalkBalloon UniqueKey="Player" SimpleTalkKey="Talk_Stage04_3_2" Wait="True"/>
+
+        <TeleportTargetTo UniqueKey="YakisobaChan" PositionMarker="AkanePosition"/>
+        <AIMove UniqueKey="YakisobaChan" LoopAction="AIMoveFast" EndPositionMarker="YakisobaPosition"/>
+
+        <TalkBalloon UniqueKey="YakisobaChan" SimpleTalkKey="Talk_Stage04_3_3" Wait="True"/>
+        <TalkBalloon UniqueKey="Player" SimpleTalkKey="Talk_Stage04_3_4" Wait="True"/>
+
+        <SetDirection UniqueKey="Boss" DirectionType="AlwaysLeft"/>
+        <SetAction UniqueKey="Boss" Action="SQ_CremationBeamReady"/>
+
+        <WaitSecond Time="2.0"/>
+        <AIMove UniqueKey="Boss" LoopAction="AIMove" EndPositionMarker="ReitoPosition"/>
+        <WaitSecond Time="1.0"/>
+
+        <SetCameraTarget UniqueKey="Boss" CameraMode="TargetCenterMode"/>
+        <TalkBalloon UniqueKey="Boss" SimpleTalkKey="Talk_Stage04_3_5" Wait="True"/>
+
+        <SetCameraTarget UniqueKey="YakisobaChan" CameraMode="TargetCenterMode"/>
+        <TalkBalloon UniqueKey="YakisobaChan" SimpleTalkKey="Talk_Stage04_3_6" Wait="True"/>
+
+        <SetCameraTarget UniqueKey="Player" CameraMode="TargetCenterMode"/>
+        <TalkBalloon UniqueKey="Player" SimpleTalkKey="Talk_Stage04_3_7" Wait="True"/>
+        <TalkBalloon UniqueKey="Boss" SimpleTalkKey="Talk_Stage04_3_8" Wait="True"/>
+
+        <SetCameraZoom Size="0.0" Speed="5.0"/>
+        <SetCameraUVTarget UniqueKey="Player"/>
+
+        <ApplyPostProcessProfile Path="PostProcessProfile/PostProcessProfile_Translated" ApplyType="BaseBlend" BlendTime="6.0"/>
+        <SetCameraUVTarget UniqueKey="NULL"/>
+
+        <SetHideUI Hide="False"/>
+        <BlockInput Enable="False"/>
+        <LetterBoxHide/>
+
+        <ActiveBossHp UniqueKey="Boss"/>
+        <UnlockStageLimit Enable="True"/>
+
+        <BlockAI UniqueKey="YakisobaChan" Enable="False"/>
+        <TalkBalloon UniqueKey="Boss" SimpleTalkKey="Talk_Stage04_3_9" Wait="True"/>
+        <WaitSecond Time="2.0"/>
+        <BlockAI UniqueKey="Boss" Enable="False"/>
+
+        <WaitSecond Time="3.0"/>
+        <SetCameraUVTarget UniqueKey="Player"/>
+
+        <DeadFence UniqueKey="Boss"/>
+
+        <BlockInput Enable="True"/>
+        <SetHideUI Hide="True"/>
+
+        <ZoomEffect Factor="-0.5"/>
+        <SetTimeScale Scale="0.1" Time="1.5" BlendTime="2.0"/>
+        <ApplyPostProcessProfile Path="PostProcessProfile/ImpactFrame" ApplyType="Additional" BlendTime="1.5"/>
+
+        <WaitSecond Time="4.0"/>
+
+    </UpdatePhase>
+    
+</SequencerGraph>

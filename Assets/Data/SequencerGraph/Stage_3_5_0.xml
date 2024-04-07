@@ -1,0 +1,72 @@
+<SequencerGraph Name="Stage_3_5_0">
+
+    <InitializePhase>
+        <ApplyPostProcessProfile Path="PostProcessProfile/Stage/Stage_3_5"/>
+        
+        <SetCameraTarget UniqueKey="Player" CameraMode="TargetCenterMode"/>
+        <SetCrossHair UniqueKey="Player"/>
+        <SetHideUI Hide="True"/>
+        <BlockInput Enable="True"/>
+
+        <LetterBoxShow/>
+        <Fade/>
+
+        <SetHideCharacter UniqueKey="Player" Hide="True"/>
+    </InitializePhase>
+
+    <UpdatePhase>
+        <WaitSecond Time="1.0"/>
+        <FadeIn Lambda="5.0"/>
+        <WaitSecond Time="1.0"/>
+
+        <TalkBalloon UniqueKey="YakisobaChan" SimpleTalkKey="Talk_Stage03_5_0"/>
+
+        <WaitSecond Time="1.0"/>
+        
+        <EffectPreset UniqueKey="Player" EffectPreset="ExplodeBig"/>
+        <WaitSecond Time="1.0"/>
+
+        <AudioPlay ID="6001"/>
+        <SetBackgroundAnimationTrigger Key="Door_1" Trigger="Open"/>
+
+        <ShakeEffect Scale="0.35" Speed="20.0" Time="0.5"/>
+        <SetHideCharacter UniqueKey="Player" Hide="False"/>
+
+        <TalkBalloon UniqueKey="YakisobaChan" SimpleTalkKey="Talk_Stage03_5_1"/>
+        <SetDirection UniqueKey="YakisobaChan" DirectionType="AlwaysLeft"/>
+        <SetAction UniqueKey="YakisobaChan" Action="Attack"/>
+
+        <WaitSecond Time="1.0"/>
+        <TalkBalloon UniqueKey="Player" SimpleTalkKey="Talk_Stage03_5_2" Wait="True"/>
+        <TalkBalloon UniqueKey="YakisobaChan" SimpleTalkKey="Talk_Stage03_5_3" Wait="True"/>
+
+        <TalkBalloon UniqueKey="Player" SimpleTalkKey="Talk_Stage03_5_4" Wait="True"/>
+
+        <Task ProcessType="StepByStep">
+            <WaitSecond Time="0.2"/>
+            <TalkBalloon UniqueKey="YakisobaChan" SimpleTalkKey="Talk_Stage03_5_5"/>
+        </Task>
+
+        <SetCameraZoom Size="2.0" Speed="5.0"/>
+        <AIMove UniqueKey="Player" LoopAction="AIMove_Loop" EndPositionMarker="Player"/>
+        <WaitSecond Time="2.0"/>
+
+        <TalkBalloon UniqueKey="YakisobaChan" SimpleTalkKey="Talk_Stage03_5_6" Wait="True"/>
+        <TalkBalloon UniqueKey="Player" SimpleTalkKey="Talk_Stage03_5_7" Wait="True"/>
+
+        <SetAction UniqueKey="YakisobaChan" Action="Idle"/>
+        <TalkBalloon UniqueKey="YakisobaChan" SimpleTalkKey="Talk_Stage03_5_8" Wait="True"/>
+        <TalkBalloon UniqueKey="Player" SimpleTalkKey="Talk_Stage03_5_9" Wait="True"/>
+
+        <WaitSecond Time="1.0"/>
+        <TalkBalloon UniqueKey="YakisobaChan" SimpleTalkKey="Talk_Stage03_5_10" Wait="True"/>
+
+        <WaitSecond Time="0.5"/>
+        <FadeOut Lambda="5.0"/>
+        
+        <WaitSecond Time="1.5"/>
+
+
+    </UpdatePhase>
+    
+</SequencerGraph>

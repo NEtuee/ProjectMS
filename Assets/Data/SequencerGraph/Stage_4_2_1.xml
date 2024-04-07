@@ -1,0 +1,45 @@
+<SequencerGraph Name="Stage_4_2_1">
+
+    <InitializePhase>
+        <SetHideUI Hide="True"/>
+        <BlockInput Enable="True"/>
+
+        <BlockAI UniqueGroupKey="DirectGroup" Enable="True"/>
+        <BlockAI UniqueGroupKey="EnemyGroup" Enable="True"/>
+        <BlockAI UniqueKey="YakisobaChan" Enable="True"/>
+
+        <LetterBoxShow/>
+    </InitializePhase>
+
+    <UpdatePhase>
+        <CameraTrack TrackName="Track1"/>
+        <SetHideCharacter UniqueGroupKey="EnemyGroup" Hide="True"/>
+
+        <Task ProcessType="AllAtOnce">
+            <AIMove UniqueKey="Direct1" LoopAction="AIMove" EndPositionMarker="Arrive"/>
+            <AIMove UniqueKey="Direct2" LoopAction="AIMove" EndPositionMarker="Arrive"/>
+            <AIMove UniqueKey="Direct3" LoopAction="AIMove" EndPositionMarker="Arrive"/>
+            <AIMove UniqueKey="Direct4" LoopAction="AIMove" EndPositionMarker="Arrive"/>
+            <AIMove UniqueKey="Direct5" LoopAction="AIMove" EndPositionMarker="Arrive"/>
+        </Task>
+
+        <WaitSecond Time="0.5"/>
+        <TalkBalloon UniqueKey="Direct1" SimpleTalkKey="Talk_Stage04_1_7"/>
+        <WaitSecond Time="0.2"/>
+        <TalkBalloon UniqueKey="Direct4" SimpleTalkKey="Talk_Stage04_1_8"/>
+
+        <IsTrackEnd/>
+        
+        <LetterBoxHide/>
+        <KillEntity UniqueGroupKey="DirectGroup"/>
+        <SetHideCharacter UniqueGroupKey="EnemyGroup" Hide="False"/>
+
+        <SetHideUI Hide="False"/>
+        <BlockInput Enable="False"/>
+
+        <BlockAI UniqueGroupKey="EnemyGroup" Enable="False"/>
+        <BlockAI UniqueKey="YakisobaChan" Enable="False"/>
+
+    </UpdatePhase>
+    
+</SequencerGraph>

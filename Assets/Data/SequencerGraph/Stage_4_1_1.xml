@@ -1,0 +1,37 @@
+<SequencerGraph Name="Stage_4_1_1">
+
+    <InitializePhase>
+        <SetHideUI Hide="True"/>
+        <BlockInput Enable="True"/>
+
+        <BlockAI UniqueGroupKey="EnemyGroup" Enable="True"/>
+        <BlockAI UniqueKey="YakisobaChan" Enable="True"/>
+
+        <LetterBoxShow/>
+    </InitializePhase>
+
+    <UpdatePhase>
+        <Task ProcessType="AllAtOnce" Name="AIMove">
+            <AIMove UniqueKey="Player" LoopAction="AIMove_Loop" EndPositionMarker="PlayerPoint"/>
+            <AIMove UniqueKey="YakisobaChan" LoopAction="AIMove" EndPositionMarker="YakisobaPoint"/>
+        </Task>
+        
+        <WaitSecond Time="1.0"/>
+
+        <TalkBalloon UniqueKey="Judge" SimpleTalkKey="Talk_Stage04_1_4" Wait="True"/>
+        <WaitSecond Time="1.0"/>
+
+        <TalkBalloon UniqueKey="YakisobaChan" SimpleTalkKey="Talk_Stage04_1_5" Wait="True"/>
+        <TalkBalloon UniqueKey="Player" SimpleTalkKey="Talk_Stage04_1_6" Wait="True"/>
+        <WaitSecond Time="1.0"/>
+
+        <LetterBoxHide/>
+
+        <SetHideUI Hide="False"/>
+        <BlockInput Enable="False"/>
+
+        <BlockAI UniqueGroupKey="EnemyGroup" Enable="False"/>
+        <BlockAI UniqueKey="YakisobaChan" Enable="False"/>
+    </UpdatePhase>
+    
+</SequencerGraph>

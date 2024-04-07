@@ -26,6 +26,361 @@ MonoBehaviour:
     _lerpCameraZoom: 0
     _lockCameraInBound: 0
     _cameraBoundToTrigger: 0
+    _onEnterSequencerPath:
+    - Stage_4_3_0.xml
+    _onExitSequencerPath: []
+    _characterSpawnData:
+    - _characterKey: YakisobaChanFollow
+      _uniqueKey: YakisobaChan
+      _uniqueGroupKey: 
+      _startAction: AC_Idle
+      _startAIState: Entry
+      _flip: 0
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 1
+      _sortingOrder: 0
+      _searchIdentifier: 3
+      _activeType: 0
+      _localPosition: {x: -1.04, y: 0, z: 0}
+    - _characterKey: Akane
+      _uniqueKey: Player
+      _uniqueGroupKey: 
+      _startAction: Spawn
+      _startAIState: Entry
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 1
+      _sortingOrder: 0
+      _searchIdentifier: 0
+      _activeType: 0
+      _localPosition: {x: 0, y: 0, z: 0}
+    _useTriggerBound: 0
+    _targetSearchIdentifier: 1
+    _triggerWidth: 1
+    _triggerHeight: 1
+    _triggerOffset: {x: 0, y: 0, z: 0}
+  - _pointName: New Point 1
+    _stagePoint: {x: 8.47, y: 0, z: 0}
+    _maxLimitedDistance: 0
+    _verticalLimitedDistance: 1
+    _horizontalLimitedDistance: 1
+    _cameraZoomSize: 3
+    _cameraZoomSpeed: 4
+    _lerpCameraZoom: 0
+    _lockCameraInBound: 0
+    _cameraBoundToTrigger: 0
+    _onEnterSequencerPath: []
+    _onExitSequencerPath: []
+    _characterSpawnData:
+    - _characterKey: LugerChan
+      _uniqueKey: 
+      _uniqueGroupKey: EnemyGroup
+      _startAction: AC_Idle
+      _startAIState: Entry
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 1
+      _localPosition: {x: 10.6, y: -1.45, z: 0}
+    - _characterKey: LugerChan
+      _uniqueKey: 
+      _uniqueGroupKey: EnemyGroup
+      _startAction: AC_Idle
+      _startAIState: Entry
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 1
+      _localPosition: {x: 10.42, y: 0.97, z: 0}
+    - _characterKey: RapierChan
+      _uniqueKey: 
+      _uniqueGroupKey: EnemyGroup
+      _startAction: AC_Idle
+      _startAIState: Entry
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 1
+      _localPosition: {x: 8.15, y: 0.58, z: 0}
+    - _characterKey: BarricadeChan
+      _uniqueKey: 
+      _uniqueGroupKey: EnemyGroup
+      _startAction: AC_Idle
+      _startAIState: Entry
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 1
+      _localPosition: {x: 7.18, y: -0.36, z: 0}
+    _useTriggerBound: 0
+    _targetSearchIdentifier: 1
+    _triggerWidth: 1
+    _triggerHeight: 1
+    _triggerOffset: {x: 0, y: 0, z: 0}
+  - _pointName: New Point 2
+    _stagePoint: {x: 18.8, y: 0, z: 0}
+    _maxLimitedDistance: 0
+    _verticalLimitedDistance: 1
+    _horizontalLimitedDistance: 1
+    _cameraZoomSize: 3
+    _cameraZoomSpeed: 4
+    _lerpCameraZoom: 0
+    _lockCameraInBound: 0
+    _cameraBoundToTrigger: 0
+    _onEnterSequencerPath:
+    - BlockPointByEnemyGroup.xml
+    _onExitSequencerPath: []
+    _characterSpawnData:
+    - _characterKey: BarricadeChan
+      _uniqueKey: 
+      _uniqueGroupKey: EnemyGroup
+      _startAction: AC_Idle
+      _startAIState: Entry
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 1
+      _localPosition: {x: 9.27, y: -0.73, z: 0}
+    - _characterKey: BarricadeChan
+      _uniqueKey: 
+      _uniqueGroupKey: EnemyGroup
+      _startAction: AC_Idle
+      _startAIState: Entry
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 1
+      _localPosition: {x: 7.61, y: 0.48, z: 0}
+    _useTriggerBound: 0
+    _targetSearchIdentifier: 1
+    _triggerWidth: 1
+    _triggerHeight: 1
+    _triggerOffset: {x: 0, y: 0, z: 0}
+  - _pointName: New Point 3
+    _stagePoint: {x: 33.13, y: 0, z: 0}
+    _maxLimitedDistance: 0
+    _verticalLimitedDistance: 1
+    _horizontalLimitedDistance: 1
+    _cameraZoomSize: 3
+    _cameraZoomSpeed: 4
+    _lerpCameraZoom: 0
+    _lockCameraInBound: 0
+    _cameraBoundToTrigger: 0
+    _onEnterSequencerPath:
+    - BlockPointByEnemyGroup.xml
+    _onExitSequencerPath: []
+    _characterSpawnData:
+    - _characterKey: BarricadeChan
+      _uniqueKey: 
+      _uniqueGroupKey: EnemyGroup
+      _startAction: AC_Idle
+      _startAIState: Entry
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 1
+      _localPosition: {x: 1.51, y: -6.76, z: 0}
+    - _characterKey: BarricadeChan
+      _uniqueKey: 
+      _uniqueGroupKey: EnemyGroup
+      _startAction: AC_Idle
+      _startAIState: Entry
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 1
+      _localPosition: {x: -2.16, y: -6.79, z: 0}
+    - _characterKey: RapierChan
+      _uniqueKey: 
+      _uniqueGroupKey: EnemyGroup
+      _startAction: AC_Idle
+      _startAIState: Entry
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 1
+      _localPosition: {x: 0, y: -8.16, z: 0}
+    - _characterKey: LugerChan
+      _uniqueKey: 
+      _uniqueGroupKey: EnemyGroup
+      _startAction: AC_Idle
+      _startAIState: Entry
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 1
+      _localPosition: {x: 1.58, y: -10.94, z: 0}
+    - _characterKey: LugerChan
+      _uniqueKey: 
+      _uniqueGroupKey: EnemyGroup
+      _startAction: AC_Idle
+      _startAIState: Entry
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 1
+      _localPosition: {x: -2.71, y: -10.7, z: 0}
+    _useTriggerBound: 0
+    _targetSearchIdentifier: 1
+    _triggerWidth: 1
+    _triggerHeight: 1
+    _triggerOffset: {x: 0, y: 0, z: 0}
+  - _pointName: New Point 4
+    _stagePoint: {x: 33.13, y: -8.58, z: 0}
+    _maxLimitedDistance: 0
+    _verticalLimitedDistance: 1
+    _horizontalLimitedDistance: 1
+    _cameraZoomSize: 3
+    _cameraZoomSpeed: 4
+    _lerpCameraZoom: 0
+    _lockCameraInBound: 0
+    _cameraBoundToTrigger: 0
+    _onEnterSequencerPath:
+    - BlockPointByEnemyGroup.xml
+    _onExitSequencerPath: []
+    _characterSpawnData:
+    - _characterKey: RapierChan
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: AC_Idle
+      _startAIState: Entry
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 1
+      _localPosition: {x: 8.81, y: 0, z: 0}
+    _useTriggerBound: 0
+    _targetSearchIdentifier: 1
+    _triggerWidth: 1
+    _triggerHeight: 1
+    _triggerOffset: {x: 0, y: 0, z: 0}
+  - _pointName: New Point 5
+    _stagePoint: {x: 45.72, y: -8.58, z: 0}
+    _maxLimitedDistance: 0
+    _verticalLimitedDistance: 1
+    _horizontalLimitedDistance: 1
+    _cameraZoomSize: 3
+    _cameraZoomSpeed: 4
+    _lerpCameraZoom: 0
+    _lockCameraInBound: 0
+    _cameraBoundToTrigger: 0
+    _onEnterSequencerPath: []
+    _onExitSequencerPath: []
+    _characterSpawnData: []
+    _useTriggerBound: 0
+    _targetSearchIdentifier: 1
+    _triggerWidth: 1
+    _triggerHeight: 1
+    _triggerOffset: {x: 0, y: 0, z: 0}
+  - _pointName: New Point 6
+    _stagePoint: {x: 54.88, y: -8.58, z: 0}
+    _maxLimitedDistance: 0
+    _verticalLimitedDistance: 0
+    _horizontalLimitedDistance: 0
+    _cameraZoomSize: 3
+    _cameraZoomSpeed: 4
+    _lerpCameraZoom: 0
+    _lockCameraInBound: 0
+    _cameraBoundToTrigger: 0
+    _onEnterSequencerPath:
+    - Stage_4_3_1.xml
+    _onExitSequencerPath: []
+    _characterSpawnData:
+    - _characterKey: SukebanKatanaChan
+      _uniqueKey: Sukeban
+      _uniqueGroupKey: 
+      _startAction: AC_Entry
+      _startAIState: Entry_Peace
+      _flip: 0
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 1
+      _localPosition: {x: 9.52, y: -0.63, z: 0}
+    - _characterKey: KantoReito
+      _uniqueKey: Boss
+      _uniqueGroupKey: 
+      _startAction: AC_Idle
+      _startAIState: Entry_Battle
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 1
+      _keepAlive: 1
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 1
+      _localPosition: {x: 15.64, y: -0.67, z: 0}
+    _useTriggerBound: 1
+    _targetSearchIdentifier: 1
+    _triggerWidth: 6.9
+    _triggerHeight: 9.26
+    _triggerOffset: {x: 0, y: 0, z: 0}
+  - _pointName: New Point 7
+    _stagePoint: {x: 77.29, y: -8.58, z: 0}
+    _maxLimitedDistance: 0
+    _verticalLimitedDistance: 0
+    _horizontalLimitedDistance: 0
+    _cameraZoomSize: 3
+    _cameraZoomSpeed: 4
+    _lerpCameraZoom: 0
+    _lockCameraInBound: 0
+    _cameraBoundToTrigger: 0
     _onEnterSequencerPath: []
     _onExitSequencerPath: []
     _characterSpawnData: []
@@ -35,5 +390,11 @@ MonoBehaviour:
     _triggerHeight: 1
     _triggerOffset: {x: 0, y: 0, z: 0}
   _miniStageData: []
-  _markerData: []
+  _markerData:
+  - _name: AkanePosition
+    _position: {x: 59.308, y: -9.17, z: 0}
+  - _name: YakisobaPosition
+    _position: {x: 64.792, y: -9.174, z: 0}
+  - _name: ReitoPosition
+    _position: {x: 63.915, y: -9.138, z: 0}
   _trackData: []

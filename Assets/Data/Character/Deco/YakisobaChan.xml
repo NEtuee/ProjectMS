@@ -21,7 +21,7 @@
         <Branch Condition="End == true" Execute="MoveFast"/>
     </MoveFast>
 
-    <Attack MovementType="Empty" DirectionType="AI" ActiveCollision="False" FlipType="Direction">
+    <Attack MovementType="Empty" DirectionType="Keep" ActiveCollision="False" FlipType="Direction">
         <Animation Preset="Sprites/Deco/YakisobaChan/1_attack" XFlip="true" Duration="1">
         </Animation>
 
