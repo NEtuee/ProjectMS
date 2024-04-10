@@ -184,7 +184,7 @@
                 </OnHit>
             
             </FrameEvent>
-            <FrameEvent Type="AudioPlay" StartTime="0.01" ID="2404" Attach="true" Condition="AttackSuccess == false"/>
+            <FrameEvent Type="AudioPlay" StartTime="0.016" ID="2404" Attach="true" Condition="AttackSuccess == false"/>
             <FrameEvent Type="FrameTag" StartTime="0.2" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0.2" EndTime="999" Tag="GbAvail"/>
         </Animation>
@@ -398,7 +398,7 @@
                     <FrameEvent Type="StopUpdate" Time="0.07"/>
                 </OnHit>
             </FrameEvent>
-            <FrameEvent Type="AudioPlay" StartTime="0.01" ID="2406" Attach="true" Condition="AttackSuccess == false"/>
+            <FrameEvent Type="AudioPlay" StartTime="0.016" ID="2406" Attach="true" Condition="AttackSuccess == false"/>
             <FrameEvent Type="FrameTag" StartTime="0.2" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0.2" EndTime="999" Tag="GbAvail"/>
         </Animation>
@@ -554,6 +554,7 @@
         <Branch Condition="End" Execute="AC_Entry"/>
     </AC_Warpped>
 
+    <!-- 드론 소환-->
     <AC_SpawnDrones MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/7_spawnDrone/"/>
         <Animation Preset="1_attackReady" XFlip="true" Duration="0.2">
@@ -570,6 +571,7 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_SpawnDrones>
 
+    <!-- 찌르기 -->
     <AC_ThrustReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/8_thrust/"/>
         <Animation Preset="1_attackReady" XFlip="true" Duration="0.3">
@@ -624,6 +626,7 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_ThrustSuccess>
 
+    <!-- 샷것 발사 -->
     <AC_ShotgunReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/9_shotgun/"/>
         <Animation Preset="1_attackReady" XFlip="true" Duration="0.3">
@@ -651,4 +654,40 @@
 
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_ShotgunMain>
+
+    <!-- 발차기 -->
+    <AC_KickReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/0_default/"/>
+        <Animation Preset="1_idle" XFlip="true" Duration="0.2">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="0" Speed="0"/>
+            <FrameEvent Type="Attack" StartTime="0" AttackPreset="Aoba_Kick" IgnoreDefenceType="Guard" AttackCount="1">
+                <OnHit>
+                    <FrameEvent Type="TeleportToTarget" DistanceOffset="0"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="GuardCountIncrease"/>
+
+                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/ParrySucc" Offset="0.0 0.0 0.0" Attach="false" ToTarget="true" AngleType="identity"/>
+                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+                </OnHit>
+            </FrameEvent>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_KickReady>
+    <AC_Kick MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/10_kick/"/>
+        <Animation Preset="2_attackMain" XFlip="true" ScalePreset="YSpring" Duration="0.44">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="1001" Attach="true"/>
+            <FrameEvent Type="StopUpdate" Time="0.14"/>
+            <FrameEvent Type="SetTimeScale" StartTime="0" Scale="0.1" Time="0.3" BlendTime="0.1"/>
+            <FrameEvent Type="ShakeEffect" Scale="0.15" Speed="35.0" Time="0.15"/>
+            <FrameEvent Type="Movement" Condition="AttackSuccess" StartTime="0" Friction="3" Speed="0" Velocity="-1.5 "/>
+            <FrameEvent Type="FrameTag" StartTime="0.198" EndTime="999" Tag="MoveCancel"/>
+        </Animation>
+        <Animation Preset="3_attackRecover" XFlip="true" Duration="0.5">
+            <FrameEvent Type="Movement" StartTime="0" Friction="8" Speed="0" Velocity="0"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_Kick>
+
 </ActionGraph>

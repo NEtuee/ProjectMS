@@ -635,7 +635,7 @@
         </Event>
     </Emp>
     <!-- 아오바의 자폭 드론 -->
-    <Aoba_Drone DefaultFramePerSecond="4" UseSpriteRotation="false" PenetrateCount="1">
+    <Aoba_Drone DefaultFramePerSecond="4" UseSpriteRotation="false" PenetrateCount="-1">
         <Animation Preset="Sprites/Enemy/NozawaAoba_Drone/0_default/2_move" XFlip="true" Duration="0.8">
         </Animation>
 
@@ -643,9 +643,6 @@
         <DefaultShotInfo Velocity="9" Acceleration="0" Friction="14" Angle="0" AngularAcceleration="0" LifeTime="0.5"/>
         
         <Event>
-            <OnHit>
-            </OnHit>
-    
             <OnEnd>
                 <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="NozawaAoba_Drone" Offset="0 0 0" SearchIdentifier="Enemy" Inherit="true"/>
             </OnEnd>

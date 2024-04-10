@@ -51,6 +51,7 @@
     <Include Path="Assets/Data/Character/Boss/NozawaAoba/AobaDodgePackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/NozawaAoba/AobaSpawnDronePackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/NozawaAoba/AobaThrustPackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/NozawaAoba/AobaKickPackage.xml"/>
 
     <CustomValue Name="CurrentRaisenCount" Value="0.0"/>
     <CustomValue Name="CurrentStormCount" Value="0.0"/>
@@ -100,7 +101,8 @@
     <BranchSet Name="HitReactionSet">
         <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="getTargetFrameTag_Dead" Execute="EnemyWin"/>
-        <Branch Weight="AobaDodge^True" Condition="Hit && getFrameTag_HitAvail && aiGraphCoolTime_UnwaverRaisen" Execute="UnwaverRaisen"/> <!-- 확정 회피 패턴 (수평회피 부동뢰섬)-->
+        <Branch Weight="AobaDodge^True" Condition="Hit && getFrameTag_HitAvail && aiGraphCoolTime_UnwaverRaisenDodge" Execute="UnwaverRaisenDodge"/> <!-- 확정 회피 패턴 (수평회피 부동뢰섬)-->
+        <Branch Weight="AobaDodge^True" Condition="Hit && getFrameTag_HitAvail && aiGraphCoolTime_Kick" Execute="Kick"/> <!-- 확정 회피 패턴 (발차기)-->
         <Branch Condition="Hit && getFrameTag_HitAvail" Execute="Hit"/>
         <Branch Condition="(GuardBreakFail || GuardBroken) && getFrameTag_GbAvail" Execute="GuardBroken"/>
         <Branch Weight="NajimiJudgeDodge^Fast" 
@@ -182,12 +184,12 @@
     <!-- AI 스테이트 : 전투 분기 -->
     <JudgeMeleeAttack Package="CommonIdlePackage">
         <!-- 근거리 -->
-        <!-- 부동 뢰섬 : Cool 20.0s -->
-        <Branch Condition="aiGraphCoolTime_UnwaverRaisen" Execute="UnwaverRaisen"/>
-        <!-- 약진 뢰섬 : Cool 5.0s -->
-        <!-- <Branch Condition="aiGraphCoolTime_ChargeRaisen" Execute="ChargeRaisen"/> -->
-        <!-- 자루찌르기 : Cool 5.0s -->
+        <!-- 부동 뢰섬 : Cool 20.0s && 20.0s -->
+        <Branch Condition="(aiGraphCoolTime_UnwaverRaisen && aiGraphCoolTime_UnwaverRaisenDodge)" Execute="UnwaverRaisen"/>
+        <!-- 자루찌르기 : Cool 4.0s -->
         <Branch Condition="aiGraphCoolTime_Thrust" Execute="Thrust"/>
+        <!-- 발차기 : Cool 4.0s -->
+        <Branch Condition="aiGraphCoolTime_Kick" Execute="Kick"/>
         <!-- 수직회피 패턴 : Cool 0.0s (검토 필) -->
         <Branch Condition="aiGraphCoolTime_Dodge" Execute="Dodge"/>
     </JudgeMeleeAttack>
@@ -245,12 +247,23 @@
         <UseBranchSet Name="BattlePackageEndSet"/>
     </Shotgun>
 
+
     <!-- AI 스테이트 : 전투 상태 : 패시브 방어 -->
     <!-- 피격 반격: 부동뢰섬 -->
-    <UnwaverRaisen Package="AobaUnwaverRaisenPackage" CoolTime="20.0">
+    <UnwaverRaisenDodge Package="AobaUnwaverRaisenPackage" CoolTime="20.0">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </UnwaverRaisenDodge>
+    <UnwaverRaisen Package="AobaUnwaverRaisenPackage" CoolTime="20.0" EntryNode="AI_UnwaverRaisen">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </UnwaverRaisen>
+
+    <!-- 피격 반격 : 발차기 -->
+    <Kick Package="AobaKickPackage" CoolTime="12.0">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </Kick>
 
     <!-- 잡기: 츠바(코등이 싸움) -->
     <TsubaReady Package="AobaTsubaReadyPackage" CoolTime="5.0">

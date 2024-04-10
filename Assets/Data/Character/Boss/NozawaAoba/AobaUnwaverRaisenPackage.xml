@@ -6,8 +6,8 @@
                 <AIEvent Type="SetAction" Action="AC_HitToDodge"/>
             </Event_OnExecute>
         
-            <Branch Condition="getTargetFrameTag_Attack && (TargetDistance <= 1.5)" Execute="AI_HorizontalDodge"/>
-            <Branch Condition="End" Execute="TerminatePackage"/>
+            <Branch Condition="EvadeSuccess" Execute="AI_HorizontalDodge"/>
+            <Branch Condition="End && (TargetDistance <= 1.5)" Execute="AI_UnwaverRaisen"/>
         </AI_HitToDodge>
 
         <AI_HorizontalDodge UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
