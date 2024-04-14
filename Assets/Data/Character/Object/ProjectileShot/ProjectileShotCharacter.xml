@@ -61,6 +61,29 @@
         <Branch Condition="End == true" Execute="LinerRepeat"/>
     </LinerRepeat>
 
+    <SisterLaserShot MovementType="Empty" DirectionType="AI" ActiveCollision="False" FlipType="Direction" Flags="LaserEffect">
+        <Animation Preset="Sprites/Projectile/SisterLaser/LaserReady" XFlip="true" Duration="0.8">
+            <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/CommonBeam_TimeLine" Attach="true" AngleType="Direction" LifeTime="0.85" FollowDirection="True" AttackPreset="Helena_Laser"/>
+        </Animation>
+        <Animation Preset="Sprites/Projectile/SisterLaser/LaserShot" XFlip="true" Duration="0.8">
+            <FrameEvent Type="SetDirectionType" StartTime="0.0" DirectionType="Keep"/>
+            <FrameEvent Type="EffectPreset" StartTime="0" Key="Helena_LaserShot"/>
+            <FrameEvent Type="Attack" StartTime="0.05" EndTime="0.1" AttackPreset="Helena_Laser">
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
+                    
+                    <FrameEvent Type="StopUpdate" Time="0.1"/>
+                    <FrameEvent Type="SetTimeScale" Scale="0.1" Time="0.1" BlendTime="0.1"/>
+                    <FrameEvent Type="ShakeEffect" Scale="0.1" Speed="10.0" Time="0.1"/>
+                    
+                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+                </OnHit>
+            </FrameEvent>
+        </Animation>
+        <Branch Condition="End == true" Execute="Dead"/>
+    </SisterLaserShot>
+
+
     <Dead MovementType="Empty" DirectionType="Keep" ActiveCollision="False">
         <Animation Preset="Sprites/NewPlayer/empty" XFlip="true" Duration="1">
             <FrameEvent Type="KillEntity" StartTime="0"/>

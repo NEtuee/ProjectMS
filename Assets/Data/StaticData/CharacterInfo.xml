@@ -389,8 +389,8 @@
 
     <SisterStaffChan
         DisplayName="시스터 스태프쨩"
-        ActionGraph="Assets/Data/Character/Enemy/01_LugerChan/LugerChanAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/01_LugerChan/LugerChanAI.xml"
+        ActionGraph="Assets/Data/Character/Enemy/04_SisterStaff/SisterStaffAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/04_SisterStaff/SisterStaffAI.xml"
         StatusInfoName="CommonHpOneEnemyStatusNoUI"
         
         CollisionRadius="0.2"
@@ -403,8 +403,8 @@
     
     <SisterWandChan
         DisplayName="시스터 완드쨩"
-        ActionGraph="Assets/Data/Character/Enemy/01_LugerChan/LugerChanAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/01_LugerChan/LugerChanAI.xml"
+        ActionGraph="Assets/Data/Character/Enemy/04_SisterStaff/SisterStaffAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/04_SisterStaff/SisterStaffAI.xml"
         StatusInfoName="CommonHpOneEnemyStatusNoUI"
         
         CollisionRadius="0.2"
@@ -723,6 +723,20 @@
         DisplayName="프로젝타일 생성용 캐릭터"
         ActionGraph="Assets/Data/Character/Object/ProjectileShot/ProjectileShotCharacter.xml"
         AIGraph="Assets/Data/AILibrary/Graph/EmptyAIGraph.xml"
+        StatusInfoName="CommonEnemyStatus"
+
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        IndicatorVisible="False"
+        ProjectileCollisionRadius=""
+
+        SearchIdentifier="Enemy"
+    />
+    
+    <LaserShotCharacter
+        DisplayName="레이저 생성용 캐릭터"
+        ActionGraph="Assets/Data/Character/Object/ProjectileShot/ProjectileShotCharacter.xml"
+        AIGraph="Assets/Data/AILibrary/Graph/LaserAIGraph.xml"
         StatusInfoName="CommonEnemyStatus"
 
         CollisionRadius="0.2"
