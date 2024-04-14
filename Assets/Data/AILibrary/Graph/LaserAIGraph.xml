@@ -1,0 +1,58 @@
+<AIGraph Name="LaserAIGraph" DefaultState="LaserToTarget">
+
+    <Include Path="Assets/Data/AILibrary/Package/EmptyPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonDeadPackage.xml"/>
+    
+    <AIPackage Name="LaserPackage" DefaultState="AI_ToTarget">
+        <AIState>
+            <AI_ToTarget UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+                <Event_OnExecute>
+                    <AIEvent Type="SetDirectionToTarget"/>
+                    <AIEvent Type="SetAction" Action="SisterLaserShot"/>
+                </Event_OnExecute>
+
+                <Event_OnFrame>
+                    <AIEvent Type="SetDirectionToTarget" Speed="60"/>
+                </Event_OnFrame>
+
+                <Event_OnExit>
+                    <AIEvent Type="SetCustomValue" Name="Laser" Value="-1.0"/>
+                </Event_OnExit>
+                <Branch Condition="End" Execute="TerminatePackage"/>
+            </AI_ToTarget>
+            <TerminatePackage>
+                <Event_OnExecute>
+                    <AIEvent Type="TerminatePackage"/>
+                </Event_OnExecute>
+            </TerminatePackage>
+        </AIState>
+    </AIPackage>
+
+    <CustomValue Name="Laser" Value="0.0"/> 
+    <!-- 캔슬 커맨드 -->
+    <CustomEvent_CancelLaser>
+        <AIEvent Type="SetCustomValue" Name="Laser" Value="-1.0"/>
+    </CustomEvent_CancelLaser>
+    
+    <BranchSet Name="LaserBranchSet">
+        <Branch Condition="(customValue_Laser == 0.0) && CurrentPackageEnd" Execute="LaserToTarget"/>
+        <Branch Condition="(customValue_Laser == -1.0)" Execute="Dead"/>
+    </BranchSet>
+    
+    <Entry Package="EmptyPackage">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <UseBranchSet Name="LaserBranchSet"/>
+    </Entry>
+
+    <LaserToTarget Package="LaserPackage" EntryNode="AI_ToTarget">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <UseBranchSet Name="LaserBranchSet"/>
+    </LaserToTarget>
+
+
+    
+
+    <Dead Package="CommonDeadPackage">
+    </Dead>
+
+</AIGraph>
