@@ -81,14 +81,11 @@ public class ProjectileEntityBase : ObjectBase
     {
         if(_projectileGraph.isEnd() == true)
         {
-            if(_projectileGraph.isPenetrateEnd() == false)
-            {
-                ObjectBase executeTargetEntity = this;
-                if(_projectileGraph.isEventExecuteBySummoner())
-                    executeTargetEntity = getSummonObject() == null ? this : getSummonObject();
+            ObjectBase executeTargetEntity = this;
+            if(_projectileGraph.isEventExecuteBySummoner())
+                executeTargetEntity = getSummonObject() == null ? this : getSummonObject();
 
-                _projectileGraph.executeChildFrameEvent(ProjectileChildFrameEventType.ChildFrameEvent_OnEnd,executeTargetEntity,null);
-            }
+            _projectileGraph.executeChildFrameEvent(ProjectileChildFrameEventType.ChildFrameEvent_OnEnd,executeTargetEntity,null);
 
             DeregisterRequest();
             CollisionManager.Instance().deregisterObject(_collisionInfo.getCollisionInfoData(),this);
