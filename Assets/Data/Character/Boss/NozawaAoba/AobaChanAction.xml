@@ -430,6 +430,16 @@
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_HitToDodge>
+    <AC_IdleToDodge MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction" DefenceType="Evade" DefenceAngle="360">
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/0_default/"/>
+        <Animation Preset="1_idle" XFlip="true" Duration="1.25">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2401" Attach="true"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountIncrease"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_IdleToDodge>
 
     <AC_UnwaverRaisen MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/5_unwaverRaisen/"/>
@@ -561,7 +571,7 @@
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
-        <Animation Preset="2_attackMain" XFlip="true" Duration="0.3">
+        <Animation Preset="2_attackMain" XFlip="true" Duration="0.4">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2414" Attach="true"/>
             <FrameEvent Type="Danmaku" StartTime="0" Path="Enemy\AobaDrone.xml"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>

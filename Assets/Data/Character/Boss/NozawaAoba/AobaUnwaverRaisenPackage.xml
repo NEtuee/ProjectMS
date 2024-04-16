@@ -10,6 +10,15 @@
             <Branch Condition="End && (TargetDistance <= 1.5)" Execute="AI_UnwaverRaisen"/>
         </AI_HitToDodge>
 
+        <AI_IdleToDodge UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <Event_OnExecute>
+                <AIEvent Type="SetAction" Action="AC_IdleToDodge"/>
+            </Event_OnExecute>
+        
+            <Branch Condition="EvadeSuccess" Execute="AI_HorizontalDodge"/>
+            <Branch Condition="End && (TargetDistance <= 1.5)" Execute="AI_UnwaverRaisen"/>
+        </AI_IdleToDodge>
+
         <AI_HorizontalDodge UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget" Angle="0"/>

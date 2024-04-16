@@ -184,7 +184,7 @@
     <!-- AI 스테이트 : 전투 분기 -->
     <JudgeMeleeAttack Package="CommonIdlePackage">
         <!-- 근거리 -->
-        <!-- 부동 뢰섬 : Cool 20.0s && 20.0s -->
+        <!-- 부동 뢰섬 : Cool 10.0s && 20.0s -->
         <Branch Condition="(aiGraphCoolTime_UnwaverRaisen && aiGraphCoolTime_UnwaverRaisenDodge)" Execute="UnwaverRaisen"/>
         <!-- 자루찌르기 : Cool 4.0s -->
         <Branch Condition="aiGraphCoolTime_Thrust" Execute="Thrust"/>
@@ -199,11 +199,11 @@
         <!-- 폭풍 뢰섬 : Cool 10.0s -->
         <Branch Condition="aiGraphCoolTime_StormRaisen" Execute="StormRaisen"/>
         <!-- 드론 소환 : Cool 15.0s -->
-        <Branch Condition="aiGraphCoolTime_SpawnDrones" Execute="SpawnDrones"/>
+        <Branch Condition="aiGraphCoolTime_SpawnDronesMain" Execute="SpawnDrones_Start"/>
         <!-- EMP 약진 뢰섬 : Cool 12.0s -->
         <Branch Condition="aiGraphCoolTime_EmpGrenadeToCharge" Execute="EmpGrenadeToCharge"/>
         <!-- 츠바(공격) : Cool 8.0s -->
-        <Branch Condition="aiGraphCoolTime_TsubaReady" Execute="TsubaReady"/>
+        <Branch Condition="aiGraphCoolTime_TsubaReady && aiGraphCoolTime_SpawnDrones_Start" Execute="TsubaReady"/>
         <!-- 폭풍 뢰섬 : No Cool -->
         <Branch Condition="true" Execute="StormRaisen"/>
 
@@ -221,10 +221,13 @@
     </StormRaisen>
 
     <!-- 원거리 공격: 드론 소환 -->
-    <SpawnDrones Package="AobaSpawnDronePackage" CoolTime="15.0">
+    <SpawnDrones_Start Package="CommonIdlePackage" CoolTime="2.0">
+        <Branch Condition="true" Execute="SpawnDronesMain"/>
+    </SpawnDrones_Start>
+    <SpawnDronesMain Package="AobaSpawnDronePackage" CoolTime="15.0">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
-    </SpawnDrones>
+    </SpawnDronesMain>
 
     <!-- 원거리 공격: EMP 약진 뢰섬 -->
     <EmpGrenadeToCharge Package="AobaEmpPackage" CoolTime="10.0">
@@ -254,7 +257,7 @@
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </UnwaverRaisenDodge>
-    <UnwaverRaisen Package="AobaUnwaverRaisenPackage" CoolTime="20.0" EntryNode="AI_UnwaverRaisen">
+    <UnwaverRaisen Package="AobaUnwaverRaisenPackage" CoolTime="10.0" EntryNode="AI_IdleToDodge">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </UnwaverRaisen>
