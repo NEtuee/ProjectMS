@@ -61,6 +61,7 @@ public enum SequencerGraphEventType
     StopSwitch,
     SetCameraBoundLock,
     KillEntity,
+    KillAllStageEntity,
     
     Count,
 }
@@ -2169,6 +2170,25 @@ public class SequencerGraphEvent_ApplyBuff : SequencerGraphEventBase
 
             }
         }
+    }
+}
+
+public class SequencerGraphEvent_KillAllStageEntity : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.KillAllStageEntity;
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor, float deltaTime)
+    {
+        MasterManager.instance._stageProcessor.killAllCharacterWithoutKeepAliveCharacter();
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
     }
 }
 

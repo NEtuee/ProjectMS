@@ -201,6 +201,8 @@ public class SequencrGraphLoader : LoaderBase<SequencerGraphBaseData>
             spawnEvent = new SequencerGraphEvent_SetCameraBoundLock();
         else if(node.Name == "KillEntity")
             spawnEvent = new SequencerGraphEvent_KillEntity();
+        else if(node.Name == "KillAllStageEntity")
+            spawnEvent = new SequencerGraphEvent_KillAllStageEntity();
             
         if(spawnEvent == null)
         {
