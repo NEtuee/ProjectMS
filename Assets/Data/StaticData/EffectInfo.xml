@@ -529,6 +529,37 @@
         LifeTime="0.0"
         FollowDirection="True"
         CastShadow="False"
+    />
+
+    <ParticleEffect Key="BarrierBroken" 
+        AttackMaterial="" 
+        DefenceMaterial=""
+        Path="Prefab/Effect/ShieldBroken"
+        AngleOffset="0.0"
+        Offset="0.0 0.0 0.0"
+        ToTarget="False"
+        UpdateType="ScaledDeltaTime"
+        Attach="False"
+        AngleType="identity"
+        LifeTime="0.0"
+        FollowDirection="False"
+        CastShadow="False"
+    />
+
+<!-- =============================================================== SpriteEffects -->
+    <SpriteEffect Key="Barrier" 
+        AttackMaterial="" 
+        DefenceMaterial=""
+        Path="Sprites/Effect/SisterBarrier"
+        AngleOffset="0.0"
+        Offset="0.0 0.0 0.0"
+        ToTarget="False"
+        UpdateType="ScaledDeltaTime"
+        Attach="True"
+        AngleType="identity"
+        LifeTime="0.0"
+        FollowDirection="False"
+        CastShadow="True"
     /> 
 
 </EffectInfo>

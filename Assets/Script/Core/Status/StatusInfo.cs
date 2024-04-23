@@ -55,7 +55,7 @@ public class StatusInfo
 
         public ParticleEffectItem _particleEffect;
         public TimelineEffectItem _timelineEffect;
-        public AnimationEffectItem _animationEffect;
+        public EffectItemBase _effectItem;
 
         public FMODUnity.StudioEventEmitter _audioEmitter;
         public bool _audioPlay = false;
@@ -264,7 +264,7 @@ public class StatusInfo
         buffItem._startedTime = startedTime;
         buffItem._particleEffect = null;
         buffItem._timelineEffect = null;
-        buffItem._animationEffect = null;
+        buffItem._effectItem = null;
         buffItem._audioEmitter = null;
         buffItem._audioPlay = false;
         buffItem._effectVisible = true;
@@ -312,7 +312,7 @@ public class StatusInfo
             
             _currentlyAppliedBuffList[i]._particleEffect?.disableEffect();
             _currentlyAppliedBuffList[i]._timelineEffect?.release();
-            _currentlyAppliedBuffList[i]._animationEffect?.release();
+            _currentlyAppliedBuffList[i]._effectItem?.release();
             _currentlyAppliedBuffList[i]._audioEmitter?.Stop();
 
             _currentlyAppliedBuffList[i]._audioPlay = false;
@@ -352,7 +352,7 @@ public class StatusInfo
 
         buffItem._particleEffect?.disableEffect();
         buffItem._timelineEffect?.release();
-        buffItem._animationEffect?.release();
+        buffItem._effectItem?.release();
         buffItem._audioEmitter?.Stop();
         buffItem._audioPlay = false;
         buffItem._effectVisible = true;
@@ -550,8 +550,8 @@ public class StatusInfo
         buffItem._timelineEffect?.stopEffect();
         buffItem._timelineEffect = null;
 
-        buffItem._animationEffect?.stopEffect();
-        buffItem._animationEffect = null;
+        buffItem._effectItem?.stopEffect();
+        buffItem._effectItem = null;
     }
 
     public void resetImmediatelyBuffEffect(ref BuffItem buffItem)
@@ -562,8 +562,8 @@ public class StatusInfo
         buffItem._timelineEffect?.release();
         buffItem._timelineEffect = null;
 
-        buffItem._animationEffect?.release();
-        buffItem._animationEffect = null;
+        buffItem._effectItem?.release();
+        buffItem._effectItem = null;
     }
 
     public void createBuffEffect(ref BuffData buffData, ref BuffItem buffItem)
@@ -598,20 +598,8 @@ public class StatusInfo
             requestData.isUsing = true;
         }
 
-        if(buffData._animationEffect != "" && buffItem._animationEffect == null && _ownerObject != null)
-        {
-            EffectRequestData requestData = MessageDataPooling.GetMessageData<EffectRequestData>();
-            requestData.clearRequestData();
-            requestData._executeEntity = _ownerObject;
-            requestData._timelineAnimator = _ownerObject.getAnimator();
-            requestData._parentTransform = _ownerObject.transform;
-            requestData._position = _ownerObject.transform.position;
-            requestData._effectPath = buffData._animationEffect;
-            requestData._effectType = EffectType.AnimationEffect;
-            buffItem._animationEffect = EffectManager._instance.createEffect(requestData) as AnimationEffectItem;
-
-            requestData.isUsing = true;
-        }
+        if(buffData._effectPreset != "" && buffItem._effectItem == null && _ownerObject != null)
+            buffItem._effectItem = EffectInfoManager.Instance().requestEffect(buffData._effectPreset,_ownerObject,null, CommonMaterial.Empty);
     }
 
     public float getCurrentStatusPercentage(string targetName)
