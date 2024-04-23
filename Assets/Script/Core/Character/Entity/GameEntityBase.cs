@@ -591,6 +591,12 @@ public class GameEntityBase : SequencerObjectBase
             debugTextManager.updateDebugText("FrameTag","FrameTag: " + frameTag, UnityEngine.Color.white);
             debugTextManager.updateDebugText("SearchIdentifier","SearchIdentifier: " + _searchIdentifier, UnityEngine.Color.white);
             debugTextManager.updateDebugText("ActiveCollision","ActiveCollision: " + _collisionInfo.isActiveCollision(), UnityEngine.Color.white);
+            
+            List<SequencerGraphProcessor> activeProcessorList = _sequencerProcessManager.getActiveProcessorList();
+            foreach(var item in activeProcessorList)
+            {
+                debugTextManager.updateDebugText(item.getSequencerName(),"  [Sequencer] : " + item.getSequencerName(), UnityEngine.Color.white);
+            }
         }
     
         if(getDefenceAngle() != 0f)

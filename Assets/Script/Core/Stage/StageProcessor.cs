@@ -129,7 +129,7 @@ public class StageProcessor
                 return;
 
             CameraControlEx.Instance().clearCamera(_stageData._stagePointData[0]._stagePoint);
-            CameraControlEx.Instance().setZoomSizeForce(_stageData._stagePointData[0]._cameraZoomSize);
+            CameraControlEx.Instance().setZoomSizeForce(_stageData._stagePointData[0]._cameraZoomSize,4.0f);
 
             ScreenDirector._instance.initialize();
             LetterBox._instance.clear();

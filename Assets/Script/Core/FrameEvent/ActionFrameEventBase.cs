@@ -345,6 +345,11 @@ public class ActionFrameEvent_SequencerSignal : ActionFrameEventBase
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
         MasterManager.instance._stageProcessor.addSequencerSignal(_signal);
+
+        if(executeEntity is GameEntityBase == false)
+            return true;
+
+        (executeEntity as GameEntityBase).addSequencerSignal(_signal);
         return true;
     }
 

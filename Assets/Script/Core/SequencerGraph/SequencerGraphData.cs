@@ -1535,7 +1535,7 @@ public class SequencerGraphEvent_SetCameraZoom : SequencerGraphEventBase
         else
         {
             if(_force)
-                CameraControlEx.Instance().setZoomSizeForce(_zoom);
+                CameraControlEx.Instance().setZoomSizeForce(_zoom,_zoomSpeed);
             else 
                 CameraControlEx.Instance().setZoomSize(_zoom,_zoomSpeed);
         }

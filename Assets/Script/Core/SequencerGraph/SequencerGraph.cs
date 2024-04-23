@@ -448,6 +448,12 @@ public class SequencerGraphProcessor
         _processingTaskList.Clear();
     }
 
+
+    public string getSequencerName()
+    {
+        return _currentSequencer._sequencerName;
+    }
+
     public void startSequencerFromStage(string sequencerGraphPath, StagePointData currentPoint, ref Dictionary<string, CharacterEntityBase> keepUnique, List<SequencerGraphProcessor.SpawnedCharacterEntityInfo> pointCharacters, GameEntityBase ownerEntity, GameEntityBase targetEntity, List<MarkerItem> markerList, bool includePlayer = false)
     {
         _currentSequencer = ResourceContainerEx.Instance().GetSequencerGraph(sequencerGraphPath);

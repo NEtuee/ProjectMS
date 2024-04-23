@@ -376,9 +376,9 @@ public class CameraControlEx : Singleton<CameraControlEx>
         _currentZoomSpeed = 4f;
     }
 
-    public void setZoomSizeForce(float zoomSize)
+    public void setZoomSizeForce(float zoomSize, float speed)
     {
-        setZoomSize(zoomSize, 4f);
+        setZoomSize(zoomSize, speed);
         _currentCamera.orthographicSize = zoomSize;
     }
 
