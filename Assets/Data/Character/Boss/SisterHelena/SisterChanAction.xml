@@ -147,6 +147,7 @@
         <Animation Preset="2_skill/2_discharge/1_attackReady" XFlip="true" Duration="0.7">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
                 <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+                <FrameEvent Type="EffectPreset" StartTime="0" Key="Helena_DischargeBoundery"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
