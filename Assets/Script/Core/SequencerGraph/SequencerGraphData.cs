@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Xml;
 using System.Collections.Generic;
 using FMODUnity;
+using YamlDotNet.Core;
 
 public enum SequencerGraphEventType
 {
@@ -1191,6 +1192,7 @@ public class SequencerGraphEvent_EffectPreset : SequencerGraphEventBase
     private string _effectPresetName;
     private string _uniqueKey = "";
     private string _markerName = "";
+    private bool _isSwitch = false;
 
     public override void Initialize(SequencerGraphProcessor processor)
     {
@@ -1207,13 +1209,26 @@ public class SequencerGraphEvent_EffectPreset : SequencerGraphEventBase
                 return true;
             }
 
-            EffectInfoManager.Instance().requestEffect(_effectPresetName,uniqueEntity, null, CommonMaterial.Empty);
+            if(_isSwitch)
+            {
+                EffectManager._instance.playEffectSwitch(uniqueEntity,null,_effectPresetName);
+            }
+            else
+            {
+                EffectInfoManager.Instance().requestEffect(_effectPresetName,uniqueEntity, null,CommonMaterial.Empty);
+            }
+
         }
         else if(_markerName != "")
         {
             MarkerItem item = processor.getMarker(_markerName);
             if(item != null)
+            {
+                if(_isSwitch)
+                    DebugUtil.assert(false, "실행 주체가 없기 때문에 Switch로 실행 불가");
+
                 EffectInfoManager.Instance().requestEffect(_effectPresetName,item._position);
+            }
         }
 
         return true;
@@ -1234,6 +1249,8 @@ public class SequencerGraphEvent_EffectPreset : SequencerGraphEventBase
                 _effectPresetName = attrValue;
             else if(attrName == "PositionMarker")
                 _markerName = attrValue;
+            else if(attrName == "Switch")
+                _isSwitch = bool.Parse(attrValue);
         }
     }
 }
@@ -1793,7 +1810,9 @@ public class SequencerGraphEvent_StopSwitch : SequencerGraphEventBase
         Effect
     }
 
-    public int _key;
+    public int _audioKey;
+    public string _effectKey;
+    public string _uniqueKey = "Player";
     public StopSwitchType _stopSwitchType = StopSwitchType.None;
 
     public override void Initialize(SequencerGraphProcessor processor)
@@ -1805,9 +1824,10 @@ public class SequencerGraphEvent_StopSwitch : SequencerGraphEventBase
         switch(_stopSwitchType)
         {
             case StopSwitchType.Audio:
-                FMODAudioManager.Instance().stopSwitch(processor.getUniqueEntity("Player"), _key);
+                FMODAudioManager.Instance().stopSwitch(processor.getUniqueEntity(_uniqueKey), _audioKey);
             break;
             case StopSwitchType.Effect:
+                EffectManager._instance.stopEffectswitch(processor.getUniqueEntity(_uniqueKey), _effectKey);
             break;
         }
 
@@ -1824,9 +1844,28 @@ public class SequencerGraphEvent_StopSwitch : SequencerGraphEventBase
             string attrValue = attributes[i].Value;
 
             if(attrName == "Switch")
+            {
                 _stopSwitchType = (StopSwitchType)System.Enum.Parse(typeof(StopSwitchType), attrValue);
+            }
             else if(attrName == "Key")
-                _key = int.Parse(attrValue);
+            {
+                switch(_stopSwitchType)
+                {
+                    case StopSwitchType.Audio:
+                        _audioKey = int.Parse(attrValue);
+                    break;
+                    case StopSwitchType.Effect:
+                        _effectKey = attrValue;
+                    break;
+                    default:
+                        DebugUtil.assert_fileOpen(false, "Switch Type이 먼저 결정되어야 합니다.", node.BaseURI, XMLScriptConverter.getLineNumberFromXMLNode(node));
+                    return;
+                }
+            }
+            else if(attrName == "UniqueKey")
+            {
+                _uniqueKey = attrValue;
+            }
         }
     }
 }

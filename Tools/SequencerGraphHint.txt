@@ -83,7 +83,7 @@ InQuote,DirectionType=,"AlwaysRight,AlwaysLeft,AlwaysUp,AlwaysDown,Keep,MoveInpu
 LineStart,<BlockPointExit,Enable=~~
 ShortCut,__BlockPointExit,<BlockPointExit Enable=~~/>
 ShortCut,__IsTrackEnd,<IsTrackEnd/>
-LineStart,<EffectPreset,"UniqueKey=~~,EffectPreset=~~,PositionMarker=~~"
+LineStart,<EffectPreset,"UniqueKey=~~,EffectPreset=~~,PositionMarker=~~,Switch=~~"
 ShortCut,__EffectPreset,<EffectPreset UniqueKey=~~ EffectPreset=~~/>
 LineStart,<UnlockStageLimit,Enable=~~
 ShortCut,__UnlockStageLimit,<UnlockStageLimit Enable=~~/>
@@ -108,8 +108,8 @@ ShortCut,__DeletePrefab,<DeletePrefab Key=~~/>
 ShortCut,__AudioPlay,<AudioPlay ID=~~/>
 LineStart,<AudioPlay,"ID=~~,ParameterID=~~,ParameterValue=~~,Switch=~~"
 LineStartAndInQuote,<StopSwitch Switch=,"Effect,Audio"
-LineStart,<StopSwitch,"Switch=~~,Key=~~"
-ShortCut,__StopSwitch,<StopSwitch Switch=~~ Key=~~/>
+LineStart,<StopSwitch,"Switch=~~,Key=~~,UniqueKey=~~"
+ShortCut,__StopSwitch,<StopSwitch Switch=~~ UniqueKey=~~ Key=~~/>
 LineStart,<AudioParameter,"ParameterID=~~,ParameterValue=~~,Key=~~,ParameterType=~~"
 ShortCut,__AudioParameter,<AudioParameter ParameterID=~~ ParameterValue=~~/>
 InQuote,Switch=,"True,False"

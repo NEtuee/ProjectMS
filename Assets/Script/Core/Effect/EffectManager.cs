@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
@@ -846,12 +847,19 @@ public class TimelineEffectItem : EffectItemBase
     public override bool isActivated() {return _effectObject.activeInHierarchy;}
 }
 
+public struct EffectSwitchItem
+{
+    public string _key;
+    public EffectItemBase _effect;
+}
 
 public class EffectManager : ManagerBase
 {
     public static EffectManager _instance;
 
     private List<EffectItemBase> _processingItems = new List<EffectItemBase>();
+
+    private Dictionary<ObjectBase, List<EffectSwitchItem>> _effectSwitchMap = new Dictionary<ObjectBase, List<EffectSwitchItem>>();
 
     private SimplePool<EffectItem> _effectItemPool = new SimplePool<EffectItem>();
     private Dictionary<string, SimplePool<TimelineEffectItem>> _timelineEffectPool = new Dictionary<string, SimplePool<TimelineEffectItem>>();
@@ -911,6 +919,62 @@ public class EffectManager : ManagerBase
             break;
         }
         
+    }
+
+    public EffectItemBase playEffectSwitch(ObjectBase ownerObject, ObjectBase targetObject, string effectPresetKey)
+    {
+        if(_effectSwitchMap.ContainsKey(ownerObject) == false)
+            _effectSwitchMap.Add(ownerObject, new List<EffectSwitchItem>());
+
+        List<EffectSwitchItem> effectItemList = _effectSwitchMap[ownerObject];
+
+        foreach(var item in effectItemList)
+        {
+            if(item._key == effectPresetKey)
+                return item._effect;
+        }
+
+        EffectRequestData requestData = EffectInfoManager.Instance().createRequestData(effectPresetKey,ownerObject,targetObject,CommonMaterial.Empty,CommonMaterial.Empty);
+        EffectItemBase effect = createEffect(requestData);
+        if(effect == null)
+            return null;
+
+        effectItemList.Add(new EffectSwitchItem{_key = effectPresetKey, _effect = effect});
+        return effect;
+    }
+
+    public void stopEffectswitch(ObjectBase ownerObject, string effectPresetKey)
+    {
+        if(_effectSwitchMap.ContainsKey(ownerObject) == false)
+            return;
+
+        List<EffectSwitchItem> effectItemList = _effectSwitchMap[ownerObject];
+
+        for(int index = 0; index < effectItemList.Count; ++index)
+        {
+            if(effectItemList[index]._key == effectPresetKey)
+            {
+                effectItemList[index]._effect.release();
+                effectItemList.RemoveAt(index);
+                return;
+            }
+        }
+    }
+
+    public void killSwitchAll(ObjectBase ownerObject)
+    {
+        if(_effectSwitchMap.ContainsKey(ownerObject) == false)
+            return;
+
+        List<EffectSwitchItem> effectItemList = _effectSwitchMap[ownerObject];
+
+        for(int index = 0; index < effectItemList.Count; ++index)
+        {
+            effectItemList[index]._effect.release();
+            effectItemList.RemoveAt(index);
+        }
+
+        effectItemList.Clear();
     }
 
     public EffectItemBase createEffect(EffectRequestData requestData)

@@ -2,6 +2,7 @@
 
     <InitializePhase>
         <SetCameraZoom Size="2.2" Speed="3.0"/>
+        <EffectPreset UniqueKey="Player" EffectPreset="SparkLoop" Switch="True"/>
     </InitializePhase>
 
     <UpdatePhase>
@@ -10,6 +11,7 @@
 
     <EndPhase>
         <SetCameraZoom Size="0.0" Speed="4.0"/>
+        <StopSwitch Switch="Effect" UniqueKey="Player" Key="SparkLoop"/>
     </EndPhase>
     
 </SequencerGraph>

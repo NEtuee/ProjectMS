@@ -1057,7 +1057,8 @@ public class ActionFrameEvent_StopSwitch : ActionFrameEventBase
         Effect
     }
 
-    public int _key;
+    public int _audioKey;
+    public string _effectKey;
     public StopSwitchType _stopSwitchType = StopSwitchType.None;
 
     public override void initialize(ObjectBase executeEntity)
@@ -1069,9 +1070,10 @@ public class ActionFrameEvent_StopSwitch : ActionFrameEventBase
         switch(_stopSwitchType)
         {
             case StopSwitchType.Audio:
-                FMODAudioManager.Instance().stopSwitch(executeEntity, _key);
+                FMODAudioManager.Instance().stopSwitch(executeEntity, _audioKey);
             break;
             case StopSwitchType.Effect:
+                EffectManager._instance.stopEffectswitch(executeEntity,_effectKey);
             break;
         }
 
@@ -1088,9 +1090,24 @@ public class ActionFrameEvent_StopSwitch : ActionFrameEventBase
             string attrValue = attributes[i].Value;
 
             if(attrName == "Switch")
+            {
                 _stopSwitchType = (StopSwitchType)System.Enum.Parse(typeof(StopSwitchType), attrValue);
+            }
             else if(attrName == "Key")
-                _key = int.Parse(attrValue);
+            {
+                switch(_stopSwitchType)
+                {
+                    case StopSwitchType.Audio:
+                        _audioKey = int.Parse(attrValue);
+                    break;
+                    case StopSwitchType.Effect:
+                        _effectKey = attrValue;
+                    break;
+                    default:
+                        DebugUtil.assert_fileOpen(false, "Switch Type이 먼저 결정되어야 합니다.", node.BaseURI, XMLScriptConverter.getLineNumberFromXMLNode(node));
+                    return;
+                }
+            }
         }
     }
 }
@@ -1239,10 +1256,19 @@ public class ActionFrameEvent_EffectPreset : ActionFrameEventBase
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_EffectPreset;}
 
     private string _effectInfoKey = "";
+    private bool _isSwitch = false;
     private CommonMaterial _attackMaterial;
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
-        EffectInfoManager.Instance().requestEffect(_effectInfoKey,executeEntity, targetEntity,_attackMaterial);
+        if(_isSwitch)
+        {
+            EffectManager._instance.playEffectSwitch(executeEntity,targetEntity,_effectInfoKey);
+        }
+        else
+        {
+            EffectInfoManager.Instance().requestEffect(_effectInfoKey,executeEntity, targetEntity,_attackMaterial);
+        }
+        
         return true;
     }
 
@@ -1259,6 +1285,8 @@ public class ActionFrameEvent_EffectPreset : ActionFrameEventBase
         {
             if(attributes[i].Name == "Key")
                 _effectInfoKey = attributes[i].Value;
+            else if(attributes[i].Name == "Switch")
+                _isSwitch = bool.Parse(attributes[i].Value);
         }
     }
 }
