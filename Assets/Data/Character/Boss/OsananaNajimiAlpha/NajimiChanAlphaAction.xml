@@ -68,6 +68,8 @@
 
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+
+            <FrameEvent Type="ReleaseCatch" StartTime="0" Push="1 0 0"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>

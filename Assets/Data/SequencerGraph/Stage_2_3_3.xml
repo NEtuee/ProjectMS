@@ -40,6 +40,8 @@
         <BlockInput Enable="True"/>
         <BlockAI UniqueKey="Boss" Enable="True"/>
 
+        <SetAction UniqueKey="Boss" Action="AC_Hit"/>
+
         <AudioParameter ParameterID="11" ParameterValue="1"/>
 
         <Task ProcessType="StepByStep">

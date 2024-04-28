@@ -164,6 +164,17 @@ public class CollisionManager : Singleton<CollisionManager>
         _collisionRequestStack.Push(request);
     }
 
+    public void processCollision(ref CollisionRequestData request)
+    {
+        for(int i = 0; i < _collisionTypeCount; ++i)
+        {
+            request._collision.updateCollisionInfo(request._position, request._direction);
+            collisionCheck(i,request);
+        }
+
+        request._collisionEndEvent?.Invoke();
+    }
+
     public void collisionUpdate()
     {
         if(_collisionRequestCount == 0)
@@ -172,14 +183,7 @@ public class CollisionManager : Singleton<CollisionManager>
         while(_collisionRequestStack.Count != 0)
         {
             CollisionRequestData request = _collisionRequestStack.Pop();
-
-            for(int i = 0; i < _collisionTypeCount; ++i)
-            {
-                request._collision.updateCollisionInfo(request._position, request._direction);
-                collisionCheck(i,request);
-            }
-
-            request._collisionEndEvent?.Invoke();
+            processCollision(ref request);
         }
 
         _collisionRequestCount = 0;
