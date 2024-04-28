@@ -1,0 +1,15 @@
+<SequencerGraph Name="CatchProcess">
+
+    <InitializePhase>
+        <SetCameraZoom Size="2.2" Speed="3.0"/>
+    </InitializePhase>
+
+    <UpdatePhase>
+        <WaitSignal Signal="CatchEnd"/>
+    </UpdatePhase>
+
+    <EndPhase>
+        <SetCameraZoom Size="0.0" Speed="4.0"/>
+    </EndPhase>
+    
+</SequencerGraph>

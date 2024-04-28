@@ -131,13 +131,12 @@ public static class BuffDataLoader
 
                 buffData._timelineEffect = attrValue;
             }
-            else if(attrName == "AnimationEffect")
+            else if(attrName == "EffectPreset")
             {
-                GameObject prefab = ResourceContainerEx.Instance().GetPrefab(attrValue);
-                if(prefab == null)
-                    DebugUtil.assert(false,"대상 AnimationEffect가 존재하지 않습니다. [BuffInfo: {0}] [AnimationEffect: {1}] [Line: {2}] [FileName: {3}]",node.Name,attrValue, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
+                if(EffectInfoManager.Instance().getEffectInfoData(attrValue) == null)
+                    DebugUtil.assert(false,"대상 EffectPreset이 존재하지 않습니다. [BuffInfo: {0}] [AnimationEffect: {1}] [Line: {2}] [FileName: {3}]",node.Name,attrValue, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
 
-                buffData._animationEffect = attrValue;
+                buffData._effectPreset = attrValue;
             }
             else if(attrName == "AudioID")
             {

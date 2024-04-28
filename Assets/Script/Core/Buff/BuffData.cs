@@ -26,7 +26,7 @@ public class BuffData
 
     public string              _particleEffect = "";
     public string              _timelineEffect = "";
-    public string              _animationEffect = "";
+    public string              _effectPreset = "";
 
     public int                 _audioID = -1;
     public int[]               _audioParameter = null;
@@ -52,7 +52,7 @@ public class BuffData
 
         _particleEffect = "";
         _timelineEffect = "";
-        _animationEffect = "";
+        _effectPreset = "";
         _audioID = -1;
         _audioParameter = null;
     }
@@ -74,7 +74,7 @@ public class BuffData
         _buffEndEffectPreset = target._buffEndEffectPreset;
         _particleEffect = target._particleEffect;
         _timelineEffect = target._timelineEffect;
-        _animationEffect = target._animationEffect;
+        _effectPreset = target._effectPreset;
         _audioID = target._audioID;
         _audioParameter = target._audioParameter;
     }

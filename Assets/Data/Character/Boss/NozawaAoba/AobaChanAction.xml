@@ -448,7 +448,11 @@
             <FrameEvent Type="SetDirectionType" StartTime="0.016" DirectionType="Keep"/>
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2413" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <FrameEvent Type="SetTimeScale" StartTime="0" Scale="0.05" Time="0.6" BlendTime="0.17"/>
+            <FrameEvent Type="Attack" StartTime="0" AttackPreset="Aoba_UnwaverRaisen" NotifyAttackSuccess="False">
+                <OnHit>
+                    <FrameEvent Type="SetTimeScale" StartTime="0" Scale="0.05" Time="0.6" BlendTime="0.17"/>
+                </OnHit>
+            </FrameEvent>
             <FrameEvent Type="Projectile" StartTime="0" GraphName="UnwaverRaisen" DirectionType="AI" SpawnTargetType="Self"/>
         </Animation>
         <!-- 영역 전개 -->

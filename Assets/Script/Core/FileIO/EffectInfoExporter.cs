@@ -36,29 +36,31 @@ public static class EffectInfoExporter
         XmlNodeList effectInfoNodes = xmlDoc.FirstChild.ChildNodes;
         for(int index = 0; index < effectInfoNodes.Count; ++index)
         {
+            EffectInfoDataBase effectInfoData = null;
             if(effectInfoNodes[index].Name == "ParticleEffect")
-            {
-                ParticleEffectInfoData effectInfoData = readParticleEffectInfoData(effectInfoNodes[index], path);
-                if(effectInfoData == null)
-                    return null;
-
-                if(effectInfoDataDictionary.ContainsKey(effectInfoData._key) == false)
-                    effectInfoDataDictionary.Add(effectInfoData._key, new List<EffectInfoDataBase>());
+                effectInfoData = readParticleEffectInfoData(effectInfoNodes[index], path);
+            else if(effectInfoNodes[index].Name == "SpriteEffect")
+                effectInfoData = readSpriteEffectInfoData(effectInfoNodes[index], path);
                 
-                foreach(var item in effectInfoDataDictionary[effectInfoData._key])
-                {
-                    if(item.compareMaterialExactly(effectInfoData._attackMaterial,effectInfoData._defenceMaterial))
-                    {
-                        DebugUtil.assert_fileOpen(false, "ParticleEffect는 서로 다른 AttackMaterial, DefenceMaterial을 가지고 있어야 같은 이름으로 선언할 수 있습니다. [EffectInfo Key: {0}]",path,XMLScriptConverter.getLineNumberFromXMLNode(effectInfoNodes[index]), effectInfoData._key);
-                        return null;
-                    }
-                }
+            if(effectInfoData == null)
+                return null;
 
-                if(effectInfoData.compareMaterialExactly(CommonMaterial.Empty,CommonMaterial.Empty))
-                    effectInfoDataDictionary[effectInfoData._key].Add(effectInfoData);
-                else
-                    effectInfoDataDictionary[effectInfoData._key].Insert(0,effectInfoData);
+            if(effectInfoDataDictionary.ContainsKey(effectInfoData._key) == false)
+                effectInfoDataDictionary.Add(effectInfoData._key, new List<EffectInfoDataBase>());
+            
+            foreach(var item in effectInfoDataDictionary[effectInfoData._key])
+            {
+                if(item.compareMaterialExactly(effectInfoData._attackMaterial,effectInfoData._defenceMaterial))
+                {
+                    DebugUtil.assert_fileOpen(false, "ParticleEffect는 서로 다른 AttackMaterial, DefenceMaterial을 가지고 있어야 같은 이름으로 선언할 수 있습니다. [EffectInfo Key: {0}]",path,XMLScriptConverter.getLineNumberFromXMLNode(effectInfoNodes[index]), effectInfoData._key);
+                    return null;
+                }
             }
+
+            if(effectInfoData.compareMaterialExactly(CommonMaterial.Empty,CommonMaterial.Empty))
+                effectInfoDataDictionary[effectInfoData._key].Add(effectInfoData);
+            else
+                effectInfoDataDictionary[effectInfoData._key].Insert(0,effectInfoData);
         }
 
         Dictionary<string,EffectInfoDataBase[]> resultEffectInfoDataDictionary = new Dictionary<string,EffectInfoDataBase[]>();
@@ -70,12 +72,11 @@ public static class EffectInfoExporter
         return resultEffectInfoDataDictionary;
     }
 
-    private static ParticleEffectInfoData readParticleEffectInfoData(XmlNode node, string filePath)
+    private static bool readEffectInfoBaseData(XmlNode node, string filePath, EffectInfoDataBase effectInfoDataBase)
     {
         if(node == null)
-            return null;
+            return false;
 
-        ParticleEffectInfoData effectInfoData = new ParticleEffectInfoData();
         for(int index = 0; index < node.Attributes.Count; ++index)
         {
             string attrName = node.Attributes[index].Name;
@@ -86,11 +87,11 @@ public static class EffectInfoExporter
 
             if(attrName == "Path")
             {
-                effectInfoData._effectPath = attrValue;
+                effectInfoDataBase._effectPath = attrValue;
             }
             else if(attrName == "Key")
             {
-                effectInfoData._key = attrValue;
+                effectInfoDataBase._key = attrValue;
             }
             else if(attrName == "Offset")
             {
@@ -98,69 +99,88 @@ public static class EffectInfoExporter
                 if(vector == null || vector.Length != 3)
                 {
                     DebugUtil.assert_fileOpen(false, "invalid vector3 data: {0}", node.BaseURI, XMLScriptConverter.getLineNumberFromXMLNode(node),attrValue);
-                    return null;
+                    return false;
                 }
 
-                effectInfoData._spawnOffset.x = XMLScriptConverter.valueToFloatExtend(vector[0]);
-                effectInfoData._spawnOffset.y = XMLScriptConverter.valueToFloatExtend(vector[1]);
-                effectInfoData._spawnOffset.z = XMLScriptConverter.valueToFloatExtend(vector[2]);
+                effectInfoDataBase._spawnOffset.x = XMLScriptConverter.valueToFloatExtend(vector[0]);
+                effectInfoDataBase._spawnOffset.y = XMLScriptConverter.valueToFloatExtend(vector[1]);
+                effectInfoDataBase._spawnOffset.z = XMLScriptConverter.valueToFloatExtend(vector[2]);
             }
             else if(attrName == "ToTarget")
             {
-                effectInfoData._toTarget = bool.Parse(attrValue);
+                effectInfoDataBase._toTarget = bool.Parse(attrValue);
             }
             else if(attrName == "UpdateType")
             {
-                effectInfoData._effectUpdateType = (EffectUpdateType)System.Enum.Parse(typeof(EffectUpdateType), attrValue);
+                effectInfoDataBase._effectUpdateType = (EffectUpdateType)System.Enum.Parse(typeof(EffectUpdateType), attrValue);
             }
             else if(attrName == "Attach")
             {
-                effectInfoData._attach = bool.Parse(attrValue);
+                effectInfoDataBase._attach = bool.Parse(attrValue);
             }
             else if(attrName == "AngleType")
             {
-                effectInfoData._angleDirectionType = (AngleDirectionType)System.Enum.Parse(typeof(AngleDirectionType), attrValue);
+                effectInfoDataBase._angleDirectionType = (AngleDirectionType)System.Enum.Parse(typeof(AngleDirectionType), attrValue);
             }
             else if(attrName == "AngleOffset")
             {
-                effectInfoData._angleOffset = XMLScriptConverter.valueToFloatExtend(attrValue);
+                effectInfoDataBase._angleOffset = XMLScriptConverter.valueToFloatExtend(attrValue);
             }
             else if(attrName == "LifeTime")
             {
-                effectInfoData._lifeTime = XMLScriptConverter.valueToFloatExtend(attrValue);
+                effectInfoDataBase._lifeTime = XMLScriptConverter.valueToFloatExtend(attrValue);
             }
             else if(attrName == "FollowDirection")
             {
-                effectInfoData._followDirection = bool.Parse(attrValue);
+                effectInfoDataBase._followDirection = bool.Parse(attrValue);
             }
             else if(attrName == "CastShadow")
             {
-                effectInfoData._castShadow = bool.Parse(attrValue);
+                effectInfoDataBase._castShadow = bool.Parse(attrValue);
             }
             else if(attrName == "AttackMaterial")
             {
-                effectInfoData._attackMaterial = (CommonMaterial)System.Enum.Parse(typeof(CommonMaterial), attrValue);
+                effectInfoDataBase._attackMaterial = (CommonMaterial)System.Enum.Parse(typeof(CommonMaterial), attrValue);
             }
             else if(attrName == "DefenceMaterial")
             {
-                effectInfoData._defenceMaterial = (CommonMaterial)System.Enum.Parse(typeof(CommonMaterial), attrValue);
+                effectInfoDataBase._defenceMaterial = (CommonMaterial)System.Enum.Parse(typeof(CommonMaterial), attrValue);
             }
             else if(attrName == "DependentAction")
             {
-                effectInfoData._dependentAction = bool.Parse(attrValue);
+                effectInfoDataBase._dependentAction = bool.Parse(attrValue);
             }
             else
             {
                 DebugUtil.assert_fileOpen(false, "알 수 없는 EffectInfo Attribute", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node));    
+                return false;
             }
         }
 
-        if(effectInfoData._key == "")
+        if(effectInfoDataBase._key == "")
             DebugUtil.assert_fileOpen(false, "key is essential", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node));
 
-        if(effectInfoData._effectPath == "")
+        if(effectInfoDataBase._effectPath == "")
             DebugUtil.assert_fileOpen(false, "effect path is essential", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node));
 
-        return effectInfoData;
+        return true;
+    }
+
+    private static ParticleEffectInfoData readParticleEffectInfoData(XmlNode node, string filePath)
+    {
+        ParticleEffectInfoData particleEffectInfoData = new ParticleEffectInfoData();
+        if( readEffectInfoBaseData(node, filePath, particleEffectInfoData) == false)
+            return null;
+
+        return particleEffectInfoData;
+    }
+
+    private static SpriteEffectInfoData readSpriteEffectInfoData(XmlNode node, string filePath)
+    {
+        SpriteEffectInfoData spriteEffectInfoData = new SpriteEffectInfoData();
+        if( readEffectInfoBaseData(node, filePath, spriteEffectInfoData) == false)
+            return null;
+
+        return spriteEffectInfoData;
     }
 }

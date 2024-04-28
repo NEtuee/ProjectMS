@@ -55,6 +55,11 @@ public class SequencerGraphProcessManager
         return processor;
     }
 
+    public List<SequencerGraphProcessor> getActiveProcessorList()
+    {
+        return _activeProcessorList;
+    }
+
     public SequencerGraphProcessor startSequencerClean(string sequencerKey, GameEntityBase targetEntity,bool includePlayer)
     {
         SequencerGraphProcessor processor = _sequencerGrpahProcessorPool.dequeue();

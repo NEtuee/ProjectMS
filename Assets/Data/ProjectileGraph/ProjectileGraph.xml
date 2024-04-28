@@ -264,12 +264,7 @@
         <DefaultShotInfo Velocity="7" Acceleration="0" Friction="14" Angle="0" AngularAcceleration="0" LifeTime="0.8"/>
         
         <Event>
-            <OnHit>
-                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="Gauntlet" Offset="0 0 0" SearchIdentifier="Enemy" Inherit="true"/>
-            </OnHit>
-    
             <OnHitEnd>
-
             </OnHitEnd>
     
             <OnEnd>
