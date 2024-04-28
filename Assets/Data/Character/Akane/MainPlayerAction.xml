@@ -165,6 +165,7 @@
                     <FrameEvent Type="SetAction" Condition="Kill" Action="AttackSuccessFar"/>
                     <FrameEvent Type="SetTimeScale" Condition="Kill" Scale="0.1" Time="0.1" BlendTime="0.07"/>
                     <FrameEvent Type="ShakeEffect" Condition="Kill" Scale="0.15" Speed="35.0" Time="0.15"/>
+                    <FrameEvent Type="ZoomEffect" Condition="Kill" Scale="-0.1"/>
 
                     <FrameEvent Type="ApplyPostProcessProfile" Condition="Kill" Path="PostProcessProfile/KillEnemy" BlendTime="0.4" ApplyType="Additional"/>
                 </OnHit>
@@ -290,6 +291,8 @@
 
                     <FrameEvent Type="SetTimeScale" Scale="0.1" Time="0.05" BlendTime="0.01"/>
                     <FrameEvent Type="ShakeEffect" Scale="0.1" Speed="35.0" Time="0.15"/>
+
+                    <FrameEvent Type="ZoomEffect" StartTime="0" Scale="-0.2"/>
                 </OnGuardBreak>
 
                 <OnGuardBreakFail>
@@ -299,6 +302,8 @@
 
                     <FrameEvent Type="TeleportToTarget" DistanceOffset="0"/>
                     <FrameEvent Type="StopUpdate" Time="0.07"/>
+
+                    <FrameEvent Type="ZoomEffect" StartTime="0" Scale="-0.1"/>
 
                 </OnGuardBreakFail>
                 
