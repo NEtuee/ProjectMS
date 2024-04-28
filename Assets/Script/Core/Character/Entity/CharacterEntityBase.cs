@@ -132,8 +132,15 @@ public class CharacterEntityBase : GameEntityBase
             if (_isInCameraBound)
             {
                 bool inCameraBound = MasterManager.instance._stageProcessor.isInCameraBound(_stagePointIndex, transform.position, out Vector3 resultPosition);
+                
                 if (inCameraBound == false)
-                    transform.position = resultPosition;
+                {
+                    Vector3 pushDirection = resultPosition - transform.position;
+                    float length = pushDirection.magnitude;
+                    pushDirection.Normalize();
+
+                    setVelocity(pushDirection * length * 10f);
+                }
             }
         }
     }
