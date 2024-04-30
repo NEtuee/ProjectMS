@@ -153,8 +153,7 @@ public class MasterManager : MessageHub<ManagerBase>
         GlobalTimer.Instance().updateGlobalTime(deltaTime);
 
         deltaTime = GlobalTimer.Instance().getSclaedDeltaTime();
-
-        CameraControlEx.Instance().SyncPosition();
+        
         _stageProcessor.processStage(deltaTime);
 
         DanmakuManager.Instance().process(deltaTime);
@@ -170,6 +169,7 @@ public class MasterManager : MessageHub<ManagerBase>
         UIRepeater.Instance().updateUIRepeater();
         HPSphereUIManager.Instance().progress(deltaTime);
         TalkBalloonManager.Instance().updateTalkBalloonManager(deltaTime);
+
         CameraControlEx.Instance().progress(deltaTime);
 
         FMODAudioManager.Instance().updateAudio();
@@ -193,6 +193,10 @@ public class MasterManager : MessageHub<ManagerBase>
     {
         CollisionManager.Instance().collisionUpdate();
         WeightRandomManager.Instance().updateRandom();
+
+        CameraControlEx.Instance().SyncPosition();
+
+        _stageProcessor.cameraProcess(GlobalTimer.Instance().getSclaedDeltaTime());
     }
 
     public void FixedUpdate()

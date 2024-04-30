@@ -65,14 +65,14 @@ public abstract class ObjectBase : MessageReceiver, IProgress
         gameObject.SetActive(false);
     }
 
-    public void updatePosition(Vector3 position, bool forceIgnoreTrim = false)
+    public void updatePosition(Vector3 position)
     {
         if(hasParentObject())
             return;
 
         transform.position = position;
 
-        if(forceIgnoreTrim || CameraControlEx.Instance().isCameraTargetObject(this))
+        if(CameraControlEx.Instance().isCameraTargetObject(this))
             _spriteObject.transform.localPosition = Vector3.zero;
         else
             _spriteObject.transform.position = MathEx.floorNoSign(transform.position,2);
