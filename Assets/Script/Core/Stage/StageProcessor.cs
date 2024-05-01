@@ -444,6 +444,9 @@ public class StageProcessor
 
     public void cameraProcess(float deltaTime)
     {
+        if(isValid() == false)
+            return;
+            
         Vector3 resultPoint;
         float fraction = getLimitedFractionOnLine(_currentPoint, _targetCameraControl.getCameraPosition(), out resultPoint);
         if(_stageData._stagePointData.Count - 1 > _currentPoint && _stageData._stagePointData[_currentPoint]._lerpCameraZoom)
