@@ -136,11 +136,6 @@
         <CollisionInfo Radius="1.5" Angle="360"/>
         <DefaultShotInfo Velocity="12" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="1.0"/>
         <Event>
-            <OnHit>
-                <!-- <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="FireworkBullet" Offset="0 0 0" SearchIdentifier="Enemy"/> -->
-                <FrameEvent Type="Danmaku" Path="Enemy/Firecracker.xml"/>
-            </OnHit>
-    
             <OnHitEnd>
             </OnHitEnd>
     
@@ -239,7 +234,6 @@
             <OnHit>
                 <FrameEvent Type="Attack" StartFrame="0" AttackPreset="BaseBall">
                     <OnHit>
-                        <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="PitchingMachine" Offset="0 0 0" SearchIdentifier="Enemy" Inherit="true"/>
                         <FrameEvent Type="EffectPreset" StartTime="0" Key="SmashSmall"/>
                     </OnHit>
                 </FrameEvent>
@@ -504,10 +498,6 @@
         <DefaultShotInfo Velocity="7" Acceleration="0" Friction="14" Angle="0" AngularAcceleration="0" LifeTime="0.3"/>
         
         <Event>
-            <OnHit>
-                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="Helena_CrimsonGrimoire" Offset="0 0 0" SearchIdentifier="Enemy" Inherit="true"/>
-            </OnHit>
-    
             <OnEnd>
                 <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="Helena_CrimsonGrimoire" Offset="0 0 0" SearchIdentifier="Enemy" Inherit="true"/>
             </OnEnd>
