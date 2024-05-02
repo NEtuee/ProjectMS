@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Mathematics;
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -717,7 +719,7 @@ public class GameEntityBase : SequencerObjectBase
         {
             Quaternion rotation = Quaternion.Euler(0f,0f,_currentRotateSlotAngle + angle * (float)(index + 1));
 
-            Vector3 learpedPosition = Vector3.Lerp(_rotateSlotList[index].transform.position,transform.position + rotation * (Vector3.right * _rotateSlotRadius), 0.2f);
+            Vector3 learpedPosition = Vector3.Lerp(_rotateSlotList[index].transform.position,transform.position + rotation * (Vector3.right * _rotateSlotRadius), deltaTime * 6f);
             _rotateSlotList[index].updatePosition(learpedPosition);
         }
     }
@@ -737,9 +739,29 @@ public class GameEntityBase : SequencerObjectBase
     {
         if(_rotateSlotParent != null)
             detachToSlot();
-
-        parentEntity._rotateSlotList.Add(this);
         _rotateSlotParent = parentEntity;
+
+        float targetAngle = MathEx.directionToAngle((transform.position - parentEntity.transform.position).normalized);
+
+        int inputIndex = parentEntity._rotateSlotList.Count;
+        float nearestAngle = 360f;
+
+        float angle = 360f * (1f / (float)parentEntity._rotateSlotList.Count);
+        for(int index = 0; index < parentEntity._rotateSlotList.Count; ++index)
+        {
+            float currentAngle = MathEx.directionToAngle((parentEntity._rotateSlotList[index].transform.position - parentEntity.transform.position).normalized);
+
+            if(currentAngle > targetAngle && nearestAngle > currentAngle)
+            {
+                nearestAngle = currentAngle;
+                inputIndex = index;
+            }
+        }
+
+        parentEntity._rotateSlotList.Insert(inputIndex, this);
+        angle = 360f * (1f / (float)parentEntity._rotateSlotList.Count);
+
+        _rotateSlotParent._currentRotateSlotAngle = MathEx.clamp360Degree(targetAngle - (angle * (float)(inputIndex + 1)));
     }
 
     public void detachToSlot()
@@ -751,6 +773,9 @@ public class GameEntityBase : SequencerObjectBase
         {
             if(_rotateSlotParent._rotateSlotList[index] == this)
             {
+                if (_rotateSlotParent._rotateSlotList.Count == 2 && index != 0)
+                    _rotateSlotParent._currentRotateSlotAngle -= 180f;
+
                 _rotateSlotParent._rotateSlotList.RemoveAt(index);
                 break;
             }
