@@ -389,7 +389,8 @@
     </ThunderStroke>
     
     <ThunderStorm DefaultFramePerSecond="10" UseSpriteRotation="true" PenetrateCount="999">
-        <Animation Preset="Sprites/Projectile/ThunderBase" XFlip="true" Duration="1.0">
+        <Animation Preset="Sprites/Projectile/empty" XFlip="true" Duration="1.0">
+            <FrameEvent Type="EffectPreset" StartTime="0.0" Key="Helena_ExplodeBoundery"/>
         </Animation>
 
         <CollisionInfo Radius="0.4" Angle="0"/>
@@ -397,7 +398,7 @@
         <DefaultShotInfo Velocity="0" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="0.4"/>
         <Event>
             <OnEnd>
-                <FrameEvent Type="EffectPreset" StartTime="0.0" Key="Thunder"/>
+                <FrameEvent Type="EffectPreset" StartTime="0.0" Key="Helena_Explode"/>
                 <FrameEvent Type="Attack" StartFrame="0.0" AttackPreset="Helena_ThunderStorm">
                     <OnHit>
                         <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
