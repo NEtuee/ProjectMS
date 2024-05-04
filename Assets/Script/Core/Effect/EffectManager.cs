@@ -568,7 +568,7 @@ public class ParticleEffectItem : EffectItemBase
     {
         foreach(var item in _allParticleSystems)
         {
-            item.Stop();
+            item?.Stop();
         }
     }
 

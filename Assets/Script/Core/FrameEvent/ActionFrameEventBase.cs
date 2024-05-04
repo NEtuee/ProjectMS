@@ -640,7 +640,7 @@ public class ActionFrameEvent_DeactiveTalkBalloon : ActionFrameEventBase
         if(executeEntity is GameEntityBase == false)
             return true;
 
-        TalkBalloonManager.Instance().deactiveTalkBalloon(executeEntity.transform);
+        GameUI.Instance.TextBubble.ForceEnd(executeEntity as GameEntityBase);
         return true;
     }
 

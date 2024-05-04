@@ -1,6 +1,6 @@
 <ActionGraph Name="TurorialTeacherAction" DefaultAction="Idle" DefaultFramePerSecond="12">
 
-    <Idle MovementType="Empty" DirectionType="AITarget" FlipType="Direction">
+    <Idle MovementType="Empty" DirectionType="AITarget" FlipType="Direction" DefenceType="Guard" DefenceAngle="360">
         <AnimationHeader MasterPath="Sprites/Enemy/TutorialTeacher/"/>
         <Animation Preset="idle_0" XFlip="true" Duration="3" >
             <FrameEvent Type="TalkBalloon" Condition="getWeight_RandVector4^x" StartTime="0" SimpleTalkKey="Talk_TutorialTeacher_0"/>
@@ -10,8 +10,60 @@
             <FrameEvent Type="Effect" StartTime="0" Path="Sprites/UI/Indicator/EnemyHead" FramePerSecond="2" Offset="0 0.2 0" DirectionOffset="False"/>
         </Animation>
 
+        <Branch Condition="GuardBroken || DefenceSuccess" Execute="CatchProcess"/>
         <Branch Condition="End == true" Execute="Idle"/>
     </Idle>
+
+    <CatchProcess MovementType="Empty" DirectionType="Keep" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/TutorialTeacher/"/>
+        <Animation Preset="idle_0" XFlip="true">
+            <FrameEvent Type="DeactiveTalkBalloon" StartTime="0"/>
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.2" AttackPreset="Aoba_Tsuba" AttackType="Catch" CatchOffset="0.3 0 0">
+                <OnCatch>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CatchedSet"/>
+                    <FrameEvent Type="AudioPlay" StartTime="0" ID="2410" Attach="true"/>
+                    <FrameEvent Type="ZoomEffect" Scale="-0.4"/>
+                    <FrameEvent Type="StopUpdate" Time="0.15"/>
+                </OnCatch>
+            </FrameEvent>
+        </Animation>
+
+        <Branch Condition="IsCatcher" Execute="Catched"/>
+        <Branch Condition="End" Execute="Idle"/>
+    </CatchProcess>
+
+    <Catched MovementType="Empty" DirectionType="Keep" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/TutorialTeacher/"/>
+        <Animation Preset="1_grab/2_grabMain" XFlip="true">
+            <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Effect/Weapon/TutorialTeacherCap" FramePerSecond="0.2" CastShadow="True" Offset="-0.5 0.0 0.0">
+                <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_2.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
+            </FrameEvent>
+
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2411" Attach="true"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="CatchedLoop"/>
+        <Branch Condition="IsCatcher == false" Execute="HitIdle"/>
+    </Catched>
+
+    <CatchedLoop MovementType="Empty" DirectionType="Keep" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/TutorialTeacher/"/>
+        <Animation Preset="1_grab/1_grabPre" XFlip="true" Duration="0.56">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2411" Attach="true"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="CatchedLoop"/>
+        <Branch Condition="IsCatcher == false" Execute="HitIdle"/>
+    </CatchedLoop>
+
+    <HitIdle MovementType="Empty" DirectionType="Keep" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/TutorialTeacher/"/>
+        <Animation Preset="idle_0" XFlip="true" Duration="3">
+            <FrameEvent Type="Effect" StartTime="0" Path="Sprites/UI/Indicator/EnemyHead" FramePerSecond="2" Offset="0 0.2 0" DirectionOffset="False" Attach="true"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="HitIdle"/>
+    </HitIdle>
 
     <Dead MovementType="Empty" DirectionType="MoveInput">
         <AnimationHeader MasterPath="Sprites/Enemy/TutorialTeacher/"/>

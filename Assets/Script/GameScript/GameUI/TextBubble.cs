@@ -76,12 +76,17 @@ public class TextBubble : IUIElement
         }
     }
 
-    public void PlayCommand(List<BubbleCommend> commandList, GameEntityBase followTarget, Action onEnd)
+    public void ForceEnd(GameEntityBase followTarget)
     {
         if (_liveBubbleObjectDictionary.TryGetValue(followTarget, out var liveTextBubble) == true)
         {
             liveTextBubble.ForceEnd();
         }
+    }
+
+    public void PlayCommand(List<BubbleCommend> commandList, GameEntityBase followTarget, Action onEnd)
+    {
+        ForceEnd(followTarget);
         
         var instance = GetInstance();
         if (instance != null)
