@@ -97,7 +97,14 @@ public abstract class ObjectBase : MessageReceiver, IProgress
         if(hasChildObject() == false)
             return;
 
-        _childObject.transform.position = transform.position + (_spriteRenderer.transform.rotation * _childPivot);
+        float angle = _spriteRenderer.transform.rotation.eulerAngles.z;
+        if(_spriteRenderer.flipX)
+        {
+            angle -= 180f;
+            angle *= -1f;
+        }
+
+        _childObject.transform.position = transform.position + (Quaternion.Euler(0f,0f,angle) * _childPivot);
     }
 
     public bool attachChildObject(AttachChildDescription childDescription)
