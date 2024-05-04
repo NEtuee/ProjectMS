@@ -107,7 +107,7 @@ public class GameUI : MonoBehaviour
         }
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         _titleMenuUI.UpdateByManager();
 
