@@ -169,6 +169,10 @@ public class TextBubbleObject : TextBubbleBinder
 
     public void ForceEnd()
     {
+        _commendQueue.Clear();
+        _currentCommand?.End();
+        _currentCommand = null;
+
         _isPlay = false;
         SetActive(false);
         _onEnd?.Invoke();
