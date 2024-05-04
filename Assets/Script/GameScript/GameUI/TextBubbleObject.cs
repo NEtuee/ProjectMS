@@ -10,7 +10,7 @@ public class TextBubbleObject : TextBubbleBinder
     private readonly Queue<BubbleCommend> _commendQueue = new Queue<BubbleCommend>();
     private BubbleCommend _currentCommand;
 
-    private GameEntityBase _followTarget;
+    public GameEntityBase FollowTarget { get; private set; }
     private bool _isPlay = false;
     private Action _onEnd;
 
@@ -79,7 +79,7 @@ public class TextBubbleObject : TextBubbleBinder
          add4 = GetRandomAdd(randomRange);
         BubblePolygonBack.InitRandomAdd(add1, add2, add3, add4);
         
-        _followTarget = followTarget;
+        FollowTarget = followTarget;
         UpdateFollowPosition();
         
         _commendQueue.Clear();
@@ -167,35 +167,43 @@ public class TextBubbleObject : TextBubbleBinder
         }
     }
 
+    public void ForceEnd()
+    {
+        _isPlay = false;
+        SetActive(false);
+        _onEnd?.Invoke();
+        _owner.ReturnPool(this);
+    }
+
     public bool isFollowTargetInsideCamera()
     {
-        if (_followTarget == null)
+        if (FollowTarget == null)
             return false;
 
         Vector3 cameraInPosition;
-        return CameraControlEx.Instance().IsInCameraBound(_followTarget.transform.position, Camera.main.transform.position, out cameraInPosition);
+        return CameraControlEx.Instance().IsInCameraBound(FollowTarget.transform.position, Camera.main.transform.position, out cameraInPosition);
     }
     
     private void UpdateFollowPosition()
     {
-        if (_followTarget == null)
+        if (FollowTarget == null)
         {
             return;
         }
 
-        var followScreenPos = Camera.main.WorldToScreenPoint(_followTarget.transform.position + FollowOffset);
+        var followScreenPos = Camera.main.WorldToScreenPoint(FollowTarget.transform.position + FollowOffset);
         followScreenPos.z = 0;
         transform.position = followScreenPos;
     }
 
     private void CheckDead()
     {
-        if (_followTarget == null)
+        if (FollowTarget == null)
         {
             return;
         }
 
-        if (_followTarget.isDead() == true)
+        if (FollowTarget.isDead() == true)
         {
             SetActive(false);
         }

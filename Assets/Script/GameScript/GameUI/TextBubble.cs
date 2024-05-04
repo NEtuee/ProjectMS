@@ -15,7 +15,8 @@ public class TextBubble : IUIElement
     // private Transform _followTargetTransform;
     // private bool _isPlay = false;
     // private Action _onEnd;
-    private Queue<TextBubbleObject> _pool = new Queue<TextBubbleObject>();
+    private readonly Queue<TextBubbleObject> _pool = new Queue<TextBubbleObject>();
+    private readonly Dictionary<GameEntityBase, TextBubbleObject> _liveBubbleObjectDictionary = new Dictionary<GameEntityBase, TextBubbleObject>();
 
     public bool CheckValidBinderLink(out string reason)
     {
@@ -44,12 +45,22 @@ public class TextBubble : IUIElement
 
     public void ReturnPool(TextBubbleObject disableObject)
     {
+        var followTarget = disableObject.FollowTarget;
+        if (followTarget != null)
+        {
+            if (_liveBubbleObjectDictionary.ContainsKey(followTarget) == true)
+            {
+                _liveBubbleObjectDictionary.Remove(followTarget);
+            }
+        }
+        
         _binder.StartCoroutine(DeferredReturnPool(disableObject));
     }
 
     private IEnumerator DeferredReturnPool(TextBubbleObject disableObject)
     {
         yield return null;
+
         _pool.Enqueue(disableObject);
     }
     
@@ -67,10 +78,16 @@ public class TextBubble : IUIElement
 
     public void PlayCommand(List<BubbleCommend> commandList, GameEntityBase followTarget, Action onEnd)
     {
+        if (_liveBubbleObjectDictionary.TryGetValue(followTarget, out var liveTextBubble) == true)
+        {
+            liveTextBubble.ForceEnd();
+        }
+        
         var instance = GetInstance();
         if (instance != null)
         {
             instance.PlayCommand(commandList, followTarget, _binder.RandomRange, onEnd);
+            _liveBubbleObjectDictionary[followTarget] = instance;
         }
     }
 
