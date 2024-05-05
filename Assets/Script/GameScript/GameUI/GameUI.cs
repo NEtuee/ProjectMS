@@ -19,6 +19,7 @@ public class GameUI : MonoBehaviour
     public EnemyHpBinder EnemyHpBinder;
     public BossHpUIBinder BossHpBinder;
     public TitleMenuUIBinder TitleMenuUIBinder;
+    public PauseUIBinder PauseUIBinder;
 
     public TextBubble TextBubble { get; private set; }
     
@@ -31,6 +32,7 @@ public class GameUI : MonoBehaviour
     private EnemyHp _enemyHp;
     private BossHpUI _bossHp;
     private TitleMenuUI _titleMenuUI;
+    private PauseUI _pauseUI;
     
     private GameEntityBase _targetEntity;
 
@@ -79,6 +81,11 @@ public class GameUI : MonoBehaviour
         _titleMenuUI.ActiveTitleMenu(active);
     }
 
+    public void ActivePauseUI(bool active)
+    {
+        _pauseUI.ActivePauseUI(active);
+    }
+
     public void SetBossHpEntity(GameEntityBase targetEntity)
     {
         if (targetEntity == null)
@@ -116,6 +123,11 @@ public class GameUI : MonoBehaviour
             return;
         }
 
+        if (_pauseUI.IsActive() == true)
+        {
+            return;
+        }
+
         var deltaTime = GlobalTimer.Instance().getSclaedDeltaTime();
 
         _hpBpGageUI.UpdateByManager(_targetEntity.getStatusPercentage("HP"), _targetEntity.getStatusPercentage("Blood"), _targetEntity.getStatusPercentage("IsCatched"), _targetEntity.getStatusPercentage("IsStun"));
@@ -140,6 +152,7 @@ public class GameUI : MonoBehaviour
         binderList.Add(EnemyHpBinder);
         binderList.Add(BossHpBinder);
         binderList.Add(TitleMenuUIBinder);
+        binderList.Add(PauseUIBinder);
 
         foreach (var binder in binderList)
         {
@@ -167,6 +180,7 @@ public class GameUI : MonoBehaviour
         _enemyHp = new EnemyHp();
         _bossHp = new BossHpUI();
         _titleMenuUI = new TitleMenuUI();
+        _pauseUI = new PauseUI();
         
         TextBubble = _textBubble;
 
@@ -179,6 +193,7 @@ public class GameUI : MonoBehaviour
         _enemyHp.SetBinder(EnemyHpBinder);
         _bossHp.SetBinder(BossHpBinder);
         _titleMenuUI.SetBinder(TitleMenuUIBinder);
+        _pauseUI.SetBinder(PauseUIBinder);
     }
 
     private void CheckValidUI()
@@ -193,6 +208,7 @@ public class GameUI : MonoBehaviour
         uiElementList.Add(_enemyHp);
         uiElementList.Add(_bossHp);
         uiElementList.Add(_titleMenuUI);
+        uiElementList.Add(_pauseUI);
 
         foreach (var uiElement in uiElementList)
         {
