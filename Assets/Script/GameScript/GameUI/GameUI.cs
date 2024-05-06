@@ -79,6 +79,14 @@ public class GameUI : MonoBehaviour
         CrosshairBinder.SubMarker.SetActive(active);
     }
 
+    public void SetActiveStageArrow(bool active)
+    {
+        if(active)
+            _arrowUI.ActiveArrow();
+        else
+            _arrowUI.DisableArrow();
+    }
+
     public void ActiveTitleMenuUI(bool active)
     {
         _titleMenuUI.ActiveTitleMenu(active);

@@ -28,19 +28,36 @@ public class ArrowUI : IUIElement
         _mainCamera = Camera.main;
     }
 
-    public void ActiveArrow(Vector3 direction)
+    public void ActiveArrow()
     {
         _active = true;
-        _direction = direction;
     }
 
     public void UpdateByManager()
     {
         if (_active == false)
+            return;
+
+        if(MasterManager.instance._stageProcessor.isValid() == false)
         {
+            _binder.Arrow.SetActive(false);
             return;
         }
-        
+
+        if(MasterManager.instance._stageProcessor.getNextPointDirection(ref _direction) == false)
+        {
+            _binder.Arrow.SetActive(false);
+            return;
+        }
+
+        Vector3 nextPoint = new Vector3();
+        MasterManager.instance._stageProcessor.getNextPoint(ref nextPoint);
+        if(CameraControlEx.Instance().IsInCameraBound(nextPoint))
+        {
+            _binder.Arrow.SetActive(false);
+            return;
+        }
+
         UpdateCameraSize();
         var center = _mainCamera.transform.position;
         

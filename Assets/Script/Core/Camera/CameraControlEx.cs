@@ -509,6 +509,12 @@ public class CameraControlEx : Singleton<CameraControlEx>
         return _currentTarget == targetObject;
     }
 
+    public bool IsInCameraBound(Vector3 position)
+    {
+        Vector3 inPosition = new Vector3();
+        return IsInCameraBound(position, Camera.main.transform.position, out inPosition);
+    }
+
     public bool IsInCameraBound(Vector3 position, Vector3 cameraPosition, out Vector3 cameraInPosition)
 	{
 		var bound = GetCamBounds(cameraPosition);

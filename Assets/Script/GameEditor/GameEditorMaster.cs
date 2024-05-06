@@ -52,12 +52,15 @@ public class GameEditorMaster : MonoBehaviour
 
     private void Start()
     {
+#if UNITY_EDITOR
         _editorParent = transform.Find("Editors").gameObject;
         _stageSelectorParent = transform.Find("StageSelector").gameObject;
+#endif
     }
 
     private void Update()
     {
+#if UNITY_EDITOR
         updateHotkeysAlways();
 
         if(_activeEditor == false)
@@ -85,7 +88,7 @@ public class GameEditorMaster : MonoBehaviour
             window.mainUpdate(Time.deltaTime);
         }
 
-#if UNITY_EDITOR
+
         updateCharacterPick();
 #endif
     }

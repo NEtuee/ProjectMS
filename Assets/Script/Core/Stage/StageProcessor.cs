@@ -782,6 +782,12 @@ public class StageProcessor
         }
     }
 
+    public bool isInCameraBound(Vector3 position)
+    {
+        Vector3 result;
+        return isInCameraBound(_currentPoint, position, out result);
+    }
+
     public bool isInCameraBound(int pointIndex, Vector3 position, out Vector3 resultPosition)
     {
         resultPosition = position;
@@ -858,6 +864,42 @@ public class StageProcessor
         }
 
         return resultFraction;
+    }
+
+    public bool canTowardNext()
+    {
+        int nextPointIndex = 0;
+        return _isEnd == false && _currentPoint >= 0 && _stageData._stagePointData.Count -1 > _currentPoint && _blockPointExit == false &&  _unlockLimit == false && getNextPointIndex(ref nextPointIndex);
+    }
+
+    public Vector3 getStagePoint(int index)
+    {
+        return _stageData._stagePointData[index]._stagePoint + _offsetPosition;
+    }
+
+    public bool getNextPoint(ref Vector3 point)
+    {
+        int nextPointIndex = _currentPoint;
+        if(getNextPointIndex(ref nextPointIndex) == false)
+            return false;
+
+        point = getStagePoint(nextPointIndex);
+        return true;
+    }
+
+    public bool getNextPointDirection(ref Vector3 direction )
+    {
+        if(canTowardNext() == false)
+            return false;
+
+        int nextPointIndex = _currentPoint;
+        if(getNextPointIndex(ref nextPointIndex) == false)
+            return false;
+
+        direction = getStagePoint(nextPointIndex) - getStagePoint(_currentPoint);
+        direction.Normalize();
+        
+        return true;
     }
 
     public void unlockLimit(bool value)
