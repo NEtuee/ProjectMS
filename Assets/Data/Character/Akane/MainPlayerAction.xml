@@ -447,6 +447,8 @@
 
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_IdleFriction" MaxVelocity="0" Velocity="0" Speed="0"/>
             <FrameEvent Type="ApplyBuff" ApplyBuff="ClearBloodPoint"/>
+
+            <FrameEvent Type="SequencerSignal" StartTime="0" Signal="CatchEnd"/>
         </Animation>
 
         <!-- <Branch Condition="getStat_IsStun == 1.0" Execute="Stun"/> -->
