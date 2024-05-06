@@ -90,7 +90,10 @@ public class MasterManager : MessageHub<ManagerBase>
     {
         ReceiveMessageProcessing();
 
-        // ActiveTitleMenu();
+#if UNITY_EDITOR
+#else
+        ActiveTitleMenu();
+#endif
     }
     public void Update()
     {
@@ -126,8 +129,10 @@ public class MasterManager : MessageHub<ManagerBase>
 
         float deltaTimeMultiflier = 1f;
 
+#if UNITY_EDITOR
         if(Input.GetKey(KeyCode.LeftBracket))
             deltaTimeMultiflier = 10f;
+#endif
 
         float deltaTime = Time.deltaTime * deltaTimeMultiflier;
         ActionKeyInputManager.Instance().progress(deltaTime);
