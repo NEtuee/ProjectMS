@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -20,6 +21,7 @@ public class GameUI : MonoBehaviour
     public BossHpUIBinder BossHpBinder;
     public TitleMenuUIBinder TitleMenuUIBinder;
     public PauseUIBinder PauseUIBinder;
+    public ArrowUIBinder ArrowUIBinder;
 
     public TextBubble TextBubble { get; private set; }
     
@@ -33,6 +35,7 @@ public class GameUI : MonoBehaviour
     private BossHpUI _bossHp;
     private TitleMenuUI _titleMenuUI;
     private PauseUI _pauseUI;
+    private ArrowUI _arrowUI;
     
     private GameEntityBase _targetEntity;
 
@@ -138,6 +141,7 @@ public class GameUI : MonoBehaviour
         _textBubble.UpdateByManager();
         _enemyHp.UpdateByManager(deltaTime);
         _bossHp.UpdateByManager();
+        _arrowUI.UpdateByManager();
     }
 
     private void SetBinder()
@@ -181,6 +185,7 @@ public class GameUI : MonoBehaviour
         _bossHp = new BossHpUI();
         _titleMenuUI = new TitleMenuUI();
         _pauseUI = new PauseUI();
+        _arrowUI = new ArrowUI();
         
         TextBubble = _textBubble;
 
@@ -194,6 +199,7 @@ public class GameUI : MonoBehaviour
         _bossHp.SetBinder(BossHpBinder);
         _titleMenuUI.SetBinder(TitleMenuUIBinder);
         _pauseUI.SetBinder(PauseUIBinder);
+        _arrowUI.SetBinder(ArrowUIBinder);
     }
 
     private void CheckValidUI()
@@ -209,6 +215,7 @@ public class GameUI : MonoBehaviour
         uiElementList.Add(_bossHp);
         uiElementList.Add(_titleMenuUI);
         uiElementList.Add(_pauseUI);
+        uiElementList.Add(_arrowUI);
 
         foreach (var uiElement in uiElementList)
         {
