@@ -177,6 +177,39 @@ MonoBehaviour:
     _lerpCameraZoom: 0
     _lockCameraInBound: 0
     _cameraBoundToTrigger: 0
+    _onEnterSequencerPath:
+    - BlockPointByEnemyGroup.xml
+    _onExitSequencerPath: []
+    _characterSpawnData:
+    - _characterKey: IinchoChan
+      _uniqueKey: 
+      _uniqueGroupKey: EnemyGroup
+      _startAction: Idle
+      _startAIState: Entry
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _searchIdentifier: 1
+      _activeType: 1
+      _localPosition: {x: 6.72, y: 0, z: 0}
+    _useTriggerBound: 0
+    _targetSearchIdentifier: 1
+    _triggerWidth: 1
+    _triggerHeight: 1
+    _triggerOffset: {x: 0, y: 0, z: 0}
+  - _pointName: New Point 3
+    _stagePoint: {x: 15.56, y: 2.02, z: 0}
+    _maxLimitedDistance: 0
+    _verticalLimitedDistance: 0
+    _horizontalLimitedDistance: 0
+    _cameraZoomSize: 3
+    _cameraZoomSpeed: 4
+    _lerpCameraZoom: 0
+    _lockCameraInBound: 0
+    _cameraBoundToTrigger: 0
     _onEnterSequencerPath: []
     _onExitSequencerPath: []
     _characterSpawnData: []
@@ -204,7 +237,7 @@ MonoBehaviour:
       _uniqueGroupKey: 
       _startAction: Idle
       _startAIState: Entry
-      _flip: 0
+      _flip: 1
       _setDirection: 0
       _directionAngle: 0
       _hideWhenDeactive: 0

@@ -5,15 +5,18 @@ using UnityEngine;
 public class TutorialUI : MonoBehaviour
 {
     public SpriteRenderer _tutorialMouseLeft;
-    public SpriteRenderer _tutorialMouseLeftDrag;
-    public SpriteRenderer _tutorialMouseRightDrag;
+    public SpriteRenderer[] _tutorialMouseLeftDrag = null;
+    public SpriteRenderer[] _tutorialMouseRightDrag = null;
+    public SpriteRenderer[] _tutorialW = null;
     
     private AnimationPlayer _leftClickPlayer = new AnimationPlayer();
     private AnimationPlayer _leftPlayer = new AnimationPlayer();
     private AnimationPlayer _rightPlayer = new AnimationPlayer();
+    private AnimationPlayer _wPlayer = new AnimationPlayer();
 
     private bool _leftInput = false;
     private bool _rightInput = false;
+    private bool _wInput = false;
 
     void Start()
     {
@@ -25,6 +28,9 @@ public class TutorialUI : MonoBehaviour
 
         _leftClickPlayer.initialize();
         _leftClickPlayer.changeAnimationByCustomPreset("Sprites/UI/KeyInput/WaitingLMB/");
+
+        _wPlayer.initialize();
+        _wPlayer.changeAnimationByCustomPreset("Sprites/UI/KeyInput/WaitingW/");
     }
 
     void Update()
@@ -63,12 +69,44 @@ public class TutorialUI : MonoBehaviour
             }
         }
 
+        if(ActionKeyInputManager.Instance().keyCheck("GuardBreak2"))
+        {
+            if(_wInput == false)
+            {
+                _wPlayer.changeAnimationByCustomPreset("Sprites/UI/KeyInput/InputW/");
+                _wInput = true;
+            }
+        }
+        else
+        {
+            if(_wInput)
+            {
+                _wPlayer.changeAnimationByCustomPreset("Sprites/UI/KeyInput/WaitingW/");
+                _wInput = false;
+            }
+        }
+
         _leftPlayer.progress(Time.deltaTime,null);
         _rightPlayer.progress(Time.deltaTime,null);
         _leftClickPlayer.progress(Time.deltaTime,null);
 
-        _tutorialMouseLeftDrag.sprite = _leftPlayer.getCurrentSprite();
-        _tutorialMouseRightDrag.sprite = _rightPlayer.getCurrentSprite();
+        if(_tutorialMouseLeftDrag != null)
+        {
+            foreach(var item in _tutorialMouseLeftDrag)
+                item.sprite = _leftPlayer.getCurrentSprite();
+        }
+
+        if(_tutorialMouseRightDrag != null)
+        {
+            foreach(var item in _tutorialMouseRightDrag)
+                item.sprite = _rightPlayer.getCurrentSprite();
+        }
+
+        if(_tutorialW != null)
+        {
+            foreach(var item in _tutorialW)
+                item.sprite = _wPlayer.getCurrentSprite();
+        }
 
         _tutorialMouseLeft.sprite = _leftClickPlayer.getCurrentSprite();
     }

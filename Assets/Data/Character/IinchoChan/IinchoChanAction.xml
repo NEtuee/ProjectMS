@@ -9,6 +9,8 @@
             <FrameEvent Type="TalkBalloon" Condition="getWeight_RandVector4^y" StartTime="0" SimpleTalkKey="Talk_IinchoChan_1"/>
             <FrameEvent Type="TalkBalloon" Condition="getWeight_RandVector4^z" StartTime="0" SimpleTalkKey="Talk_IinchoChan_2"/>
             <FrameEvent Type="TalkBalloon" Condition="getWeight_RandVector4^r" StartTime="0" SimpleTalkKey="Talk_IinchoChan_3"/>
+
+            <FrameEvent Type="Effect" StartTime="0" Path="Sprites/UI/Indicator/EnemyHead" FramePerSecond="2" Offset="0 0.2 0" DirectionOffset="False" Attach="true"/>
         </Animation>
 
         <Branch Condition="GuardBroken" Execute="GuardBroken"/>

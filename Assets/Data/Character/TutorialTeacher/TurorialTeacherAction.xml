@@ -71,7 +71,7 @@
 
     <HitIdle MovementType="Empty" DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/TutorialTeacher/"/>
-        <Animation Preset="idle_0" XFlip="true" Duration="3">
+        <Animation Preset="4_dead" XFlip="true" Duration="3">
             <FrameEvent Type="Effect" StartTime="0" Path="Sprites/UI/Indicator/EnemyHead" FramePerSecond="2" Offset="0 0.2 0" DirectionOffset="False" Attach="true"/>
         </Animation>
 
@@ -80,9 +80,9 @@
 
     <Dead MovementType="Empty" DirectionType="MoveInput">
         <AnimationHeader MasterPath="Sprites/Enemy/TutorialTeacher/"/>
-        <Animation Preset="idle_0" XFlip="true" Duration="1">
+        <Animation Preset="4_dead" XFlip="true" Duration="1">
 
-            <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Enemy/TutorialTeacher/idle_0" FramePerSecond="0.2" CastShadow="True">
+            <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Enemy/TutorialTeacher/4_dead" FramePerSecond="0.2" CastShadow="True">
                 <Physics UseGravity="True" Velocity="0.0 0.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
             </FrameEvent>
 
