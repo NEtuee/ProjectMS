@@ -8,15 +8,18 @@ public class TutorialUI : MonoBehaviour
     public SpriteRenderer[] _tutorialMouseLeftDrag = null;
     public SpriteRenderer[] _tutorialMouseRightDrag = null;
     public SpriteRenderer[] _tutorialW = null;
+    public SpriteRenderer[] _tutorialQ = null;
     
     private AnimationPlayer _leftClickPlayer = new AnimationPlayer();
     private AnimationPlayer _leftPlayer = new AnimationPlayer();
     private AnimationPlayer _rightPlayer = new AnimationPlayer();
     private AnimationPlayer _wPlayer = new AnimationPlayer();
+    private AnimationPlayer _qPlayer = new AnimationPlayer();
 
     private bool _leftInput = false;
     private bool _rightInput = false;
     private bool _wInput = false;
+    private bool _qInput = false;
 
     void Start()
     {
@@ -31,6 +34,9 @@ public class TutorialUI : MonoBehaviour
 
         _wPlayer.initialize();
         _wPlayer.changeAnimationByCustomPreset("Sprites/UI/KeyInput/WaitingW/");
+
+        _qPlayer.initialize();
+        _qPlayer.changeAnimationByCustomPreset("Sprites/UI/KeyInput/WaitingQ/");
     }
 
     void Update()
@@ -86,9 +92,29 @@ public class TutorialUI : MonoBehaviour
             }
         }
 
+        if(ActionKeyInputManager.Instance().keyCheck("StunShot"))
+        {
+            if(_qInput == false)
+            {
+                _qPlayer.changeAnimationByCustomPreset("Sprites/UI/KeyInput/InputQ/");
+                _qInput = true;
+            }
+        }
+        else
+        {
+            if(_qInput)
+            {
+                _qPlayer.changeAnimationByCustomPreset("Sprites/UI/KeyInput/WaitingQ/");
+                _qInput = false;
+            }
+        }
+
+
         _leftPlayer.progress(Time.deltaTime,null);
         _rightPlayer.progress(Time.deltaTime,null);
         _leftClickPlayer.progress(Time.deltaTime,null);
+        _wPlayer.progress(Time.deltaTime,null);
+        _qPlayer.progress(Time.deltaTime,null);
 
         if(_tutorialMouseLeftDrag != null)
         {
@@ -108,6 +134,13 @@ public class TutorialUI : MonoBehaviour
                 item.sprite = _wPlayer.getCurrentSprite();
         }
 
-        _tutorialMouseLeft.sprite = _leftClickPlayer.getCurrentSprite();
+        if(_tutorialQ != null)
+        {
+            foreach(var item in _tutorialQ)
+                item.sprite = _qPlayer.getCurrentSprite();
+        }
+
+        if(_tutorialMouseLeft != null)
+            _tutorialMouseLeft.sprite = _leftClickPlayer.getCurrentSprite();
     }
 }
