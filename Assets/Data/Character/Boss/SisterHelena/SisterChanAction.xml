@@ -47,7 +47,8 @@
     <AC_SystemChase MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="0_default/2_move" XFlip="true" Duration="0.1">
-            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="20" Speed="40"/>
+            <FrameEvent Type="Movement" Condition="TargetDistance >= 10.0" StartTime="0" Friction="0" MaxVelocity="20" Speed="40"/>
+            <FrameEvent Type="Movement" Condition="TargetDistance < 10.0" StartTime="0" Friction="12" Velocity="0" MaxVelocity="5" Speed="15"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_SystemChase"/>
@@ -56,7 +57,15 @@
     <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="0_default/3_hit" XFlip="true" Duration="1.25">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
+            <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2501"/>
+            <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2502"/>
+            <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2505"/>
+            <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2506"/>
+            <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2508"/>
+            <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2509"/>
+            <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2517"/>
+
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2515" Attach="true" Switch="True"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountIncrease"/>
 
@@ -71,6 +80,12 @@
     <Dead DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="0_default/4_dead" XFlip="true" Duration="1">
+            <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2501"/>
+            <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2502"/>
+            <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2505"/>
+            <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2506"/>
+            <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2508"/>
+            <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2509"/>    
             <FrameEvent Type="Effect" StartTime="0" Path="Sprites/Enemy/SisterHelena/0_default/4_dead" FramePerSecond="0.2" CastShadow="True">
                 <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
             </FrameEvent>
@@ -93,6 +108,17 @@
 
 <!-- Skill Action -->
     <!-- 근거리 공격: 낙뢰 -->
+    <AC_ThunderStrokeReady_Idle MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/1_idle" XFlip="true" Duration="0.013">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2501" Attach="true" Switch="True"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+    
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_ThunderStrokeReady_Idle>
+
     <AC_ThunderStrokeReady_Stay MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/1_thunderStroke/1_attackReady" XFlip="true" Duration="0.7">
@@ -119,6 +145,7 @@
     <AC_ThunderStrokeMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/1_thunderStroke/2_attackMain" XFlip="true" Duration="0.35">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2502" Attach="true" Switch="True"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="24" MaxVelocity="12" Velocity="0" Speed="0"/>
             <!-- 낙뢰 -->
             <FrameEvent Type="Danmaku" StartTime="0" Path="Enemy/ThunderStorm.xml" Offset="0.5 0 0" UseDirection="True"/>
@@ -148,6 +175,7 @@
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
                 <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
                 <FrameEvent Type="EffectPreset" StartTime="0" Key="Helena_DischargeBoundery"/>
+                <FrameEvent Type="AudioPlay" StartTime="0" ID="2505" Attach="true" Switch="True"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
@@ -276,7 +304,7 @@
     <AC_SpawnThunderBall MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/4_spawnBook" XFlip="true" Duration="1.0">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2208" Attach="true"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2208" Attach="true" Switch="True"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
             <FrameEvent Type="Projectile" StartTime="0.3" GraphName="Helena_CrimsonGrimoire" DirectionType="AI" SpawnTargetType="Self"/>
             <FrameEvent Type="CallAIEvent" StartTime="0.3" EventName="AddCrimson" EventTargetType="Self"/>
@@ -290,7 +318,7 @@
     <AC_SpawnCrimsonMain MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/4_spawnBook" XFlip="true" Duration="1.0">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2208" Attach="true"/>
+            <FrameEvent Type="AudioPlay" StartTime="0.013" ID="2506" Attach="true" Switch="True"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
             <FrameEvent Type="Projectile" StartTime="0.3" GraphName="Helena_CrimsonGrimoire" DirectionType="AI" SpawnTargetType="Self"/>
             <FrameEvent Type="CallAIEvent" StartTime="0.3" EventName="AddCrimson" EventTargetType="Self"/>
@@ -303,7 +331,7 @@
     <AC_SpawnCrimsonMainSet MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/4_spawnBook" XFlip="true" Duration="1.0">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2208" Attach="true"/>
+            <FrameEvent Type="AudioPlay" StartTime="0.013" ID="2506" Attach="true" Switch="True"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
             <FrameEvent Type="Projectile" StartTime="0.3" GraphName="Helena_CrimsonGrimoire" DirectionType="AI" DirectionAngle="0.0" SpawnTargetType="Self"/>
             <FrameEvent Type="Projectile" StartTime="0.3" GraphName="Helena_CrimsonGrimoire" DirectionType="AI" DirectionAngle="120.0" SpawnTargetType="Self"/>
@@ -320,6 +348,7 @@
     <AC_CommandBook_LaserToTarget MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/5_command/1_laser" XFlip="true" Duration="1.5">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2517" Attach="true" Switch="True"/>
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="LaserToTarget" EventTargetType="Range" Range="10.0" SearchIdentifier="Enemy"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
@@ -333,6 +362,7 @@
     <AC_CommandBook_LaserWith MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/5_command/1_laser" XFlip="true" Duration="1.5">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2517" Attach="true" Switch="True"/>
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="LaserWith" EventTargetType="Range" Range="10.0" SearchIdentifier="Enemy"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
@@ -346,6 +376,7 @@
     <AC_CommandBook_LaserOut MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/5_command/2_laserSpin" XFlip="true" Duration="3.0">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2517" Attach="true" Switch="True"/>
             <FrameEvent Type="SetRotateSlotValue" StartTime="0" Speed="100" Radius="1.0"/>
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="LaserOut" EventTargetType="Range" Range="10.0" SearchIdentifier="Enemy"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
@@ -360,6 +391,7 @@
     <AC_CommandBook_LaserIn MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/5_command/3_laserSurround" XFlip="true" Duration="2.5">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2517" Attach="true" Switch="True"/>
             <FrameEvent Type="SetRotateSlotValue" StartTime="0" Speed="25" Radius="5.0"/>
 
             <FrameEvent Type="CallAIEvent" StartTime="1.0" EventName="LaserIn" EventTargetType="Range" Range="10.0" SearchIdentifier="Enemy"/>
@@ -382,9 +414,11 @@
     <AC_Pray MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/6_barrior/1_pray" XFlip="true" Duration="1.5">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2509" Attach="true" Switch="True"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="1" ApplyBuff="HelenaBarriorOn"/>
-            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="BarriorActivated" EventTargetType="Self"/>
+            <FrameEvent Type="CallAIEvent" StartTime="1" EventName="BarriorActivated" EventTargetType="Self"/>
+            <FrameEvent Type="AudioPlay" StartTime="1" ID="2510" Attach="true" Switch="True"/>
 
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
@@ -392,12 +426,13 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
-        <Branch Condition="End == true" Execute="AC_Pray"/>
+        <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_Pray>
     <AC_Barrior MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/6_barrior/2_entry" XFlip="true" Duration="0.2">
             <!-- TODO: 캐치용 스크립트, 모션X -->
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2510" Attach="true" Switch="True"/>
             <FrameEvent Type="Attack" StartTime="0" EndTime="0.2" AttackPreset="Aoba_Tsuba" AttackType="Catch" CatchOffset="0.1 0 0">
                 <OnCatch>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CatchedSet"/>
@@ -413,7 +448,15 @@
     <AC_Barrior_Entry MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/6_barrior/2_entry" XFlip="true" Duration="0.3">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2411" Attach="true"/>
+            <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2501"/>
+            <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2502"/>
+            <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2505"/>
+            <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2506"/>
+            <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2508"/>
+            <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2509"/>    
+            <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2517"/>
+
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2511" Attach="true" Switch="True"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12"/>
         </Animation>
 
@@ -422,7 +465,7 @@
     <AC_Barrior_Struggle MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/6_barrior/3_struggle" XFlip="true" Duration="0.3">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2411" Attach="true"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2511" Attach="true" Switch="True"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12"/>
         </Animation>
 
@@ -432,7 +475,7 @@
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/6_barrior/4_attack" XFlip="true" Duration="0.5">
         <!-- 밀치기, 아카네 딜레이 0.7s-->
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2412" Attach="true"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2412" Attach="true" Switch="True"/> <!-- TODO -->
             <FrameEvent Type="Movement" StartTime="0" Friction="12"/>
             <FrameEvent Type="ReleaseCatch" StartTime="0" Push="5 0 0" TargetAction="AC_AobaTsuba_Fail"/>
 
@@ -447,6 +490,7 @@
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/6_barrior/5_away" XFlip="true" Duration="0.9">
         <!-- 밀리기 -->
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2512" Attach="true" Switch="True"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="4" MaxVelocity="9" Velocity="-4" Speed="0"/>
             <FrameEvent Type="DeleteBuff" StartTime="0" BuffList="HelenaBarriorOn"/>
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="BarriorBroken" EventTargetType="Self"/>
@@ -459,12 +503,13 @@
     <AC_BarriorCounter MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="LaserEffect">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/6_barrior/6_counter/1_attackReady" XFlip="true" Duration="0.8">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2508" Attach="true" Switch="True"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="LaserToTarget" EventTargetType="Range" Range="10.0" SearchIdentifier="Enemy"/>
             <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/CommonBeam_TimeLine" Attach="true" AngleType="Direction" LifeTime="0.85" FollowDirection="True" AttackPreset="Helena_Laser"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
-            
+
         </Animation>
         <Animation Preset="2_skill/6_barrior/6_counter/2_attackMain" XFlip="true" Duration="0.1">
             <FrameEvent Type="SetDirectionType" StartTime="0.0" DirectionType="Keep"/>
@@ -492,6 +537,7 @@
     <AC_Disappear MovementType="GraphPreset" MovementGraphPreset="Helena_BackStep" DirectionType="AI" FlipType="Direction" DefenceType="Evade" Flags="HideBuffEffect">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/7_invisibleDodge/1_disappear" XFlip="true" Duration="0.3">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2513" Attach="true" Switch="True"/>
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="Detach" EventTargetType="Range" SearchIdentifier="Enemy" Range="100.0"/>
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="DetachExplosion" EventTargetType="Range" Range="100.0" SearchIdentifier="Enemy"/> 
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
@@ -514,6 +560,7 @@
             <FrameEvent Type="SetDirectionType" StartTime="0.016" DirectionType="Keep"/>
         </Animation>
         <Animation Preset="2_skill/7_invisibleDodge/3_appear" XFlip="true" Duration="0.4">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2514" Attach="true" Switch="True"/>
             <FrameEvent Type="SetDirectionType" StartTime="0" DirectionType="AITarget"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
@@ -548,7 +595,15 @@
     <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="1_defense/2_guardBroken" XFlip="true" Duration="1.25">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
+            <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2501"/>
+            <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2502"/>
+            <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2505"/>
+            <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2506"/>
+            <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2508"/>
+            <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2509"/>    
+            <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2517"/>
+
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2515" Attach="true" Switch="True"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountIncrease"/>
 

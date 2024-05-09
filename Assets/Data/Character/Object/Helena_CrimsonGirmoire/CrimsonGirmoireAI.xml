@@ -133,8 +133,18 @@
         </AIState>
     </AIPackage>
 
-    <AIPackage Name="HelenaBookExplosionPackage" DefaultState="AI_ExploChase">
+    <AIPackage Name="HelenaBookExplosionPackage" DefaultState="AI_Entry">
         <AIState>
+            <AI_Entry UpdateTime="0.013" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+                <Event_OnExecute>
+                    <AIEvent Type="SetAction" Action="AC_ExplosionChase_Entry"/>
+                </Event_OnExecute>
+                <Event_OnUpdate>
+                    <AIEvent Type="SetDirectionToTarget"/>
+                </Event_OnUpdate>
+
+                <Branch Condition="true" Execute="AI_ExploChase"/>
+            </AI_Entry>
             <AI_ExploChase UpdateTime="0.1" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
                 <Event_OnExecute>
                     <AIEvent Type="SetAction" Action="AC_ExplosionChase"/>

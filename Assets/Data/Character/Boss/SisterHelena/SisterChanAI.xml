@@ -1,4 +1,4 @@
-<AIGraph Name="SisterChanAI" DefaultState="SpawnBook_Crimson"> <!--Entry_Battle-->
+<AIGraph Name="SisterChanAI" DefaultState="JudgeRangedAttack"> <!--Entry_Battle-->
     <!-- 옵션 설정 -->
     <!-- 공격 거리 설정 -->
     <GlobalVariable Name="gv_MeleeAttackRangeMin"           Value="0.0"/>       <!-- 최소 공격 사거리 : Value보다 PC가 가까우면 공격하지 않는다. -->
@@ -201,6 +201,7 @@
        
         <!-- 마도서 소환 1.0s Cool 5.0s-->
         <Branch Condition="(customValue_CountCrimson <= 5.0) && aiGraphCoolTime_SpawnBook_Crimson" Execute="SpawnBook_Crimson"/>
+
         <!-- 배리어 Cool 15.0s-->
         <Branch Condition="aiGraphCoolTime_ActivateBarrior && (customValue_IsBarriorOn == 0.0)" Execute="ActivateBarrior"/>
        
@@ -214,7 +215,9 @@
         <Branch Weight="RandVector3^x" Condition="true" Execute="InvisibleDodge"/>
 
         <!-- 마도서: 레이저 0.0s -->
-        <Branch Condition="aiGraphCoolTime_CommandBook_LaserWith" Execute="CommandBook_LaserWith"/>
+        <Branch Weight="RandBoolean^true" Condition="(customValue_CountCrimson >= 1.0) && aiGraphCoolTime_CommandBook_LaserWith" Execute="CommandBook_LaserWith"/>
+        <Branch Weight="RandBoolean^true" Condition="aiGraphCoolTime_HelenaLaser" Execute="HelenaLaser"/>
+        <Branch Condition="aiGraphCoolTime_ThunderStroke" Execute="ThunderStroke"/>
 
     </JudgeRangedAttack>
 
@@ -241,17 +244,26 @@
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </Discharge>
+    <!-- 원거리 통상 공격: 레이저 -->
+    <HelenaLaser Package="SisterBarriorPackage" EntryNode="AI_Counter" CoolTime="0.0">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>        
+    </HelenaLaser>
 
     <!-- 소환: 마도서 소환 -->
-    <SpawnBook_Crimson Package="SisterSpawnBookPackage" EntryNode="AI_Crimson" CoolTime="5.0">
+    <SpawnBook_Crimson Package="SisterSpawnBookPackage" EntryNode="AI_Crimson" CoolTime="8.0">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
         <Branch Condition="(customValue_CountCrimson < 3.0)" Execute="SpawnBook_Crimson_Set"/>
     </SpawnBook_Crimson>
-    <SpawnBook_Crimson_Set Package="SisterSpawnBookPackage" EntryNode="AI_CrimsonSet">
+    <SpawnBook_Crimson_Set Package="SisterSpawnBookPackage" EntryNode="AI_CrimsonSet" CoolTime="8.0">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </SpawnBook_Crimson_Set>
+    <!-- 소환: 마도서 소환 (전투 개시용) -->
+    <SpawnBook_Entry Package="CommonIdlePackage">
+        <Branch Condition="true" Execute="SpawnBook_Crimson_Set"/>
+    </SpawnBook_Entry>
 
     <!-- 명령: 마도서 공격 -->
     <!-- 원거리 통상 공격 : 레이저 발사 -->
@@ -296,7 +308,7 @@
         <UseBranchSet Name="BattlePackageEndSet"/>
     </Dodge>
 
-    <InvisibleDodge Package="SisterDodgePackage" EntryNode="AI_InvisibleDodge_Disapper">
+    <InvisibleDodge Package="SisterDodgePackage" EntryNode="AI_InvisibleDodge_Disapper" CoolTime="10.0">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </InvisibleDodge>
