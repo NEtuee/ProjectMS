@@ -23,7 +23,7 @@
     <AC_Move MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/LugerChan/0_default/"/>
         <Animation Preset="2_move" XFlip="true" Duration="0.5">
-            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="5" Speed="15"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="5" Speed="10"/>
 
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
@@ -35,7 +35,7 @@
     <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/LugerChan/0_default/"/>
         <Animation Preset="3_hit" XFlip="true" Duration="1.25">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="4921" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <!--
             <FrameEvent Type="ZoomEffect" Scale="-0.4"/>
@@ -50,7 +50,7 @@
     <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/LugerChan/0_default/"/>
         <Animation Preset="3_hit" XFlip="true" Duration="1.25">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="4921" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <!--
             <FrameEvent Type="ZoomEffect" Scale="-0.4"/>
@@ -98,7 +98,8 @@
     <AC_AttackReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction" Flags="LaserEffect">
         <AnimationHeader MasterPath="Sprites/Enemy/LugerChan/1_attack/"/>
         <Animation Preset="1_attackReady" XFlip="true" Duration="0.8">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2203" Attach="true"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2519" Attach="true"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="4924" Attach="true" Switch="True"/>
             
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
             <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/CommonBeam_TimeLine" Attach="true" AngleType="Direction" LifeTime="0.85" FollowDirection="True" AttackPreset="Luger_Normal"/>
@@ -114,7 +115,7 @@
     <AC_AttackMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/LugerChan/1_attack/"/>
         <Animation Preset="2_attackMain" XFlip="true" Duration="0.35">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2204" Attach="true"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="4917" Attach="true"/>
             <FrameEvent Type="Attack" StartTime="0.05" EndTime="0.1" AttackPreset="Luger_Normal">
                 <OnHit>
                     <FrameEvent Type="AudioPlay" StartTime="0" ID="2205" Attach="true"/>

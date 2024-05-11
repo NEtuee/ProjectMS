@@ -12,8 +12,9 @@
     <AC_Idle MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" DefenceType="Guard" DefenceDirectionType="Direction" DefenceAngle="180">
         <AnimationHeader MasterPath="Sprites/Enemy/BarricadeChan/0_default/"/>
         <Animation Preset="1_idle" XFlip="true" Duration="1">
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
+            <FrameEvent Type="AudioPlay" Condition="DefenceSuccess" StartTime="0" ID="4913" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
-
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
@@ -25,7 +26,7 @@
         <AnimationHeader MasterPath="Sprites/Enemy/BarricadeChan/0_default/"/>
         <Animation Preset="2_move" XFlip="true" Duration="0.5">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="5" Speed="4"/>
-
+            <FrameEvent Type="AudioPlay" Condition="DefenceSuccess" StartTime="0" ID="4913" Attach="true"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
@@ -36,7 +37,7 @@
     <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/BarricadeChan/0_default/"/>
         <Animation Preset="3_hit" XFlip="true" Duration="1.25">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="4921" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <!--
             <FrameEvent Type="ZoomEffect" Scale="-0.4"/>
@@ -51,7 +52,7 @@
     <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/BarricadeChan/0_default/"/>
         <Animation Preset="3_hit" XFlip="true" Duration="1.25">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
+            <FrameEvent Type="AudioPlay" Condition="GuardBroken" StartTime="0" ID="4913" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <!--
             <FrameEvent Type="ZoomEffect" Scale="-0.4"/>
@@ -94,8 +95,8 @@
     <AC_AttackReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" DefenceType="Guard" DefenceDirectionType="Direction" DefenceAngle="180">
         <AnimationHeader MasterPath="Sprites/Enemy/BarricadeChan/1_attack/"/>
         <Animation Preset="1_attackReady" XFlip="true" Duration="0.4">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2203" Attach="true"/>
-            
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="4922" Attach="true"/>
+            <FrameEvent Type="AudioPlay" Condition="DefenceSuccess" StartTime="0" ID="4913" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="5" Speed="15"/>
 
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
@@ -109,11 +110,12 @@
     <AC_AttackMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction" DefenceType="Guard" DefenceDirectionType="Direction" DefenceAngle="180">
         <AnimationHeader MasterPath="Sprites/Enemy/BarricadeChan/1_attack/"/>
         <Animation Preset="2_attackMain" XFlip="true" Duration="0.35">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2204" Attach="true"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="4912" Attach="true"/>
+            <FrameEvent Type="AudioPlay" Condition="DefenceSuccess" StartTime="0" ID="4913" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="24" MaxVelocity="10" Velocity="10" Speed="0"/>
             <FrameEvent Type="Attack" StartTime="0" EndTime="0.1" AttackPreset="Barricade_Normal">
                 <OnHit>
-                    <FrameEvent Type="AudioPlay" StartTime="0" ID="2205" Attach="true"/>
+                    <FrameEvent Type="AudioPlay" StartTime="0" ID="4914" Attach="true"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
                     
                     <FrameEvent Type="StopUpdate" Time="0.1"/>
@@ -132,6 +134,7 @@
     <AC_AttackRecover MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" DefenceType="Guard" DefenceDirectionType="Direction" DefenceAngle="180">
         <AnimationHeader MasterPath="Sprites/Enemy/BarricadeChan/1_attack/"/>
         <Animation Preset="3_attackRecover" XFlip="true" Duration="1.47">
+            <FrameEvent Type="AudioPlay" Condition="DefenceSuccess" StartTime="0" ID="4913" Attach="true"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>

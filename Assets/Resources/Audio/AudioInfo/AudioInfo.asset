@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c858e63344676f34a93a8306d92a1f7d, type: 3}
   m_Name: AudioInfo
   m_EditorClassIdentifier: 
-  csvData: {fileID: 4900000, guid: d02c5561511d7364cafcbc8661f8610e, type: 3}
+  csvData: {fileID: 4900000, guid: db66d34b7cbeed84b9ba98e9d0256041, type: 3}
   audioData:
   - name: global data
     id: 0
@@ -1040,6 +1040,20 @@ MonoBehaviour:
         Data4: 416459810
       Path: event:/SFX/Enemy/Helena/CrimsonBurning
     parameters: []
+  - name: SisterAttackVoice
+    id: 2519
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: -1820757161
+        Data2: 1195064191
+        Data3: 334396343
+        Data4: 163789372
+      Path: event:/SFX/Enemy/Helena/SisterAttackVoice
+    parameters: []
   - name: BluntAttack
     id: 4901
     defaultVolume: 1
@@ -1361,6 +1375,34 @@ MonoBehaviour:
         Data3: 492841136
         Data4: -738021045
       Path: event:/SFX/Common/Sword/RapierHit
+    parameters: []
+  - name: BeamCharge_Sister
+    id: 4924
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: 12793619
+        Data2: 1170150564
+        Data3: 702271403
+        Data4: 940078229
+      Path: event:/SFX/Common/Laser/BeamCharge_Sister
+    parameters: []
+  - name: BeamShot_Sister
+    id: 4925
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: 223578223
+        Data2: 1216984639
+        Data3: -472045666
+        Data4: 1162941001
+      Path: event:/SFX/Common/Laser/BeamShot_Sister
     parameters: []
   - name: MainTitle
     id: 5000
