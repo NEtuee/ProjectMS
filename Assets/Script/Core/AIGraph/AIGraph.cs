@@ -146,6 +146,9 @@ public class AIGraph
         _aiStateChanged = processAINode(deltaTime, getCurrentAINode(), targetEntity);
         _aiPackageStateChanged = processAIPackage(deltaTime, getCurrentAIPackageNode(), targetEntity);
 
+        if(_aiStateChanged)
+            _aiPackageStateChanged = true;
+
         processRotate(deltaTime);
 
         if(_actionGraph != null)
