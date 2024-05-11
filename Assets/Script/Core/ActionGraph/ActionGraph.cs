@@ -343,6 +343,17 @@ public class ActionGraph
         return _actionConditionNodeData[updateType][0] == 1;
     }
 
+    public float getActionConditionData_Float(ConditionNodeUpdateType updateType)
+    {
+        if((int)updateType <= (int)ConditionNodeUpdateType.ConditionResult )
+        {
+            DebugUtil.assert(false,"잘못된 타입 입니다. 통보 요망 : {0}",updateType);
+            return 0f;
+        }
+
+        return System.BitConverter.ToSingle(_actionConditionNodeData[updateType],0);
+    }
+
     public bool setActionConditionData_Bool(ConditionNodeUpdateType updateType, bool value)
     {
         if((int)updateType <= (int)ConditionNodeUpdateType.ConditionResult )

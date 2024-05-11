@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Mathematics;
+using TreeEditor;
+using System;
+
+
 
 
 #if UNITY_EDITOR
@@ -97,15 +101,36 @@ public class GameEntityBase : SequencerObjectBase
     private GameEntityBase      _rotateSlotParent = null;
 
 #if UNITY_EDITOR
-    [HideInInspector] public bool _blockAIByEditor = false;
-    [HideInInspector] public List<ActionGraphNodeData> _actionGraphChangeLog = new List<ActionGraphNodeData>();
-    [HideInInspector] public List<AIGraphNodeData> _aiGraphChangeLog = new List<AIGraphNodeData>();
+
+    public enum LogType
+    {
+        AIGraph,
+        AIPackage,
+        Action,
+    }
 
     public struct AIPackageChangeLogItem
     {
         public AIPackageNodeData _nodeData;
         public string _packageName;
     };
+
+    public struct EntityLogData
+    {
+        public LogType _logType;
+        public float _executeGameTime;
+        public ActionGraphNodeData _actionChangeData;
+        public AIGraphNodeData _aiGraphChangeData;
+        public AIPackageChangeLogItem _aiPackageChangeData;
+    }
+
+    [HideInInspector] public List<EntityLogData> _entityTotalLog = new List<EntityLogData>();
+
+    [HideInInspector] public bool _blockAIByEditor = false;
+    [HideInInspector] public List<ActionGraphNodeData> _actionGraphChangeLog = new List<ActionGraphNodeData>();
+    [HideInInspector] public List<AIGraphNodeData> _aiGraphChangeLog = new List<AIGraphNodeData>();
+
+    
 
     [HideInInspector] public List<AIPackageChangeLogItem> _aiPackageChangeLog = new List<AIPackageChangeLogItem>();
 #endif
@@ -230,6 +255,7 @@ public class GameEntityBase : SequencerObjectBase
         _hpEffect.Clear();
 
 #if UNITY_EDITOR
+        _entityTotalLog.Clear();
         _actionGraphChangeLog.Clear();
         _aiGraphChangeLog.Clear();
         _aiPackageChangeLog.Clear();
@@ -252,12 +278,30 @@ public class GameEntityBase : SequencerObjectBase
 #if UNITY_EDITOR
 
     private static int _changeLogCount = 8;
+    private static int _totalLogCount = 40;
+    
+    public void addEntityLog(LogType logType, ActionGraphNodeData actionChangeData, AIGraphNodeData aiChangeData, AIPackageChangeLogItem pacakgeChangeData)
+    {
+        if(_entityTotalLog.Count >= _totalLogCount)
+            _entityTotalLog.RemoveAt(0);
+
+        EntityLogData logData = new EntityLogData();
+        logData._logType = logType;
+        logData._executeGameTime = GlobalTimer.Instance().getScaledGlobalTime();
+        logData._actionChangeData = actionChangeData;
+        logData._aiGraphChangeData = aiChangeData;
+        logData._aiPackageChangeData = pacakgeChangeData;
+        _entityTotalLog.Add(logData);
+    }
+    
     public void addActionChangeLog(ActionGraphNodeData data)
     {
         if(_actionGraphChangeLog.Count >= _changeLogCount)
             _actionGraphChangeLog.RemoveAt(0);
         
         _actionGraphChangeLog.Add(data);
+
+        addEntityLog(LogType.Action, data,null,default);
     }
 
     public void addAIChangeLog(AIGraphNodeData data)
@@ -266,6 +310,8 @@ public class GameEntityBase : SequencerObjectBase
             _aiGraphChangeLog.RemoveAt(0);
         
         _aiGraphChangeLog.Add(data);
+
+        addEntityLog(LogType.AIGraph, null,data,default);
     }
 
     public void addAIPackageChangeLog(AIPackageChangeLogItem data)
@@ -274,6 +320,8 @@ public class GameEntityBase : SequencerObjectBase
             _aiPackageChangeLog.RemoveAt(0);
         
         _aiPackageChangeLog.Add(data);
+
+        addEntityLog(LogType.AIPackage, null,null,data);
     }
 #endif
 
@@ -1492,6 +1540,8 @@ public class GameEntityBaseEditor : Editor
 
     private int _repeatPackageIndex = -1;
     private bool _showConditionState = false;
+    
+    private bool _showTotalLog = true;
 
     public void OnEnable()
     {
@@ -1666,79 +1716,155 @@ public class GameEntityBaseEditor : Editor
         {
             EditorGUILayout.BeginVertical("box");
 
-            GUILayout.Label("Dead : " + control.getActionGraph_Debug().getActionConditionData_Bool(ConditionNodeUpdateType.Entity_Dead));
+            foreach(var item in ConditionNodeInfoPreset._nodePreset)
+            {
+                if(item.Value._updateType == ConditionNodeUpdateType.Literal || 
+                    item.Value._updateType == ConditionNodeUpdateType.ConditionResult ||
+                    item.Value._updateType == ConditionNodeUpdateType.Status || 
+                    item.Value._updateType == ConditionNodeUpdateType.Key || 
+                    item.Value._updateType == ConditionNodeUpdateType.FrameTag || 
+                    item.Value._updateType == ConditionNodeUpdateType.TargetFrameTag || 
+                    item.Value._updateType == ConditionNodeUpdateType.Weight || 
+                    item.Value._updateType == ConditionNodeUpdateType.AngleSector ||
+                    item.Value._updateType == ConditionNodeUpdateType.AICustomValue ||
+                    item.Value._updateType == ConditionNodeUpdateType.AI_GraphCoolTime )
+                    continue;
+
+                if(item.Value._nodeType == ConditionNodeType.Bool)
+                    GUILayout.Label(item.Key + " : " + control.getActionGraph_Debug().getActionConditionData_Bool(item.Value._updateType));
+                else if(item.Value._nodeType == ConditionNodeType.Float)
+                    GUILayout.Label(item.Key + " : " + control.getActionGraph_Debug().getActionConditionData_Float(item.Value._updateType));
+            }
+
 
             EditorGUILayout.EndVertical();
         }
 
+        EditorGUILayout.BeginHorizontal();
         GUILayout.Label("State Execution Log");
 
-        EditorGUILayout.BeginVertical("box");
+        Color prevColor = GUI.color;
+        GUI.color = _showTotalLog ? Color.green : Color.red;
+        if(GUILayout.Button("Show Timeline", GUILayout.Width(100f)))
+            _showTotalLog = !_showTotalLog;
+        GUI.color = prevColor;
+
+        EditorGUILayout.EndHorizontal();
+
+        if(_showTotalLog)
         {
-            GUILayout.Label("Action");
-            for(int index = control._actionGraphChangeLog.Count - 1; index >= 0; --index)
+            EditorGUILayout.BeginVertical("box");
+            GUILayout.Label("Timeline Log");
+            for(int index = control._entityTotalLog.Count - 1; index >= 0; --index)
             {
+                GameEntityBase.EntityLogData item = control._entityTotalLog[index]; 
                 EditorGUILayout.BeginHorizontal();
 
-                ActionGraph actionGraph = control.getActionGraph_Debug();
-
-                if(GUILayout.Button(control._actionGraphChangeLog[index]._nodeName,buttonStyle,GUILayout.Width(EditorGUIUtility.currentViewWidth * 0.5f)))
-                    FileDebugger.OpenFileWithCursor(actionGraph.getActionGraphBaseData_Debug()._fullPath,control._actionGraphChangeLog[index]._lineNumber);
-
-
-                if (control._actionGraphChangeLog[index]._isDummyAction == false)
+                switch(item._logType)
                 {
-                    int targetAnimationIndex = control._actionGraphChangeLog[index]._animationInfoIndex;
-                    AnimationPlayDataInfo[] playDataInfoArray = control.getActionGraph_Debug().getActionGraphBaseData_Debug()._animationPlayData[targetAnimationIndex];
-
-                    if (playDataInfoArray != null)
-                    {
-                        // float widthInterval = (EditorGUIUtility.currentViewWidth * 0.5f) * (1f / playDataInfoArray.Length);
-                        // float width = widthInterval;
-                        for (int i = 0; i < playDataInfoArray.Length; ++i)
-                        {
-                            AnimationPlayDataInfo animationPlayDataInfo = playDataInfoArray[i];
-
-                            if (GUILayout.Button(animationPlayDataInfo._path, buttonStyle))
-                                PingTarget(animationPlayDataInfo._customPreset);
-                        }
-
-                    }
+                    case GameEntityBase.LogType.AIGraph:
+                        GUILayout.Label(item._executeGameTime.ToString(),GUILayout.Width(100f));
+                        GUILayout.Label("AIGraph",GUILayout.Width(70f));
+                        showAIGraphChangeLog(item._aiGraphChangeData);
+                    break;
+                    case GameEntityBase.LogType.Action:
+                        GUILayout.Label(item._executeGameTime.ToString(),GUILayout.Width(100f));
+                        GUILayout.Label("Action",GUILayout.Width(70f));
+                        showActionChangeLog(item._actionChangeData);
+                    break;
+                    case GameEntityBase.LogType.AIPackage:
+                        GUILayout.Label(item._executeGameTime.ToString(),GUILayout.Width(100f));
+                        GUILayout.Label("AIPackage",GUILayout.Width(70f));
+                        showAIPackageChangeLog(item._aiPackageChangeData);
+                    break;
                 }
 
                 EditorGUILayout.EndHorizontal();
             }
+
+            EditorGUILayout.EndVertical();
         }
-        EditorGUILayout.EndVertical();
-
-        EditorGUILayout.Space(10f);
-
-        EditorGUILayout.BeginVertical("box");
+        else
         {
-            GUILayout.Label("AIGraph");
-            for(int index = control._aiGraphChangeLog.Count - 1; index >= 0; --index)
+            EditorGUILayout.BeginVertical("box");
             {
-                if(GUILayout.Button(control._aiGraphChangeLog[index]._nodeName,buttonStyle))
-                    FileDebugger.OpenFileWithCursor(control.getAIGraph_Debug().getAIGraphBaseData_Debug()._fullPath,control._aiGraphChangeLog[index]._lineNumber);
+                GUILayout.Label("Action");
+                for(int index = control._actionGraphChangeLog.Count - 1; index >= 0; --index)
+                {
+                    showActionChangeLog(control._actionGraphChangeLog[index]);
+                }
             }
-        }
-        EditorGUILayout.EndVertical();
+            EditorGUILayout.EndVertical();
 
-        EditorGUILayout.Space(10f);
+            EditorGUILayout.Space(10f);
 
-        EditorGUILayout.BeginVertical("box");
-        {
-            GUILayout.Label("AIPackage");
-            for(int index = control._aiPackageChangeLog.Count - 1; index >= 0; --index)
+            EditorGUILayout.BeginVertical("box");
             {
-                if(GUILayout.Button(control._aiPackageChangeLog[index]._packageName + ": " + control._aiPackageChangeLog[index]._nodeData._nodeName,buttonStyle))
-                    FileDebugger.OpenFileWithCursor(control.getAIGraph_Debug().getCurrentPackageBaseData_Debug()._fullPath,control._aiPackageChangeLog[index]._nodeData._lineNumber);
+                GUILayout.Label("AIGraph");
+                for(int index = control._aiGraphChangeLog.Count - 1; index >= 0; --index)
+                {
+                    showAIGraphChangeLog(control._aiGraphChangeLog[index]);
+                }
             }
-        }
-        EditorGUILayout.EndVertical();
+            EditorGUILayout.EndVertical();
 
+            EditorGUILayout.Space(10f);
+
+            EditorGUILayout.BeginVertical("box");
+            {
+                GUILayout.Label("AIPackage");
+                for(int index = control._aiPackageChangeLog.Count - 1; index >= 0; --index)
+                {
+                    showAIPackageChangeLog(control._aiPackageChangeLog[index]);
+                }
+            }
+            EditorGUILayout.EndVertical();
+        }
     }
 
+    public void showAIGraphChangeLog(AIGraphNodeData data)
+    {
+        if(GUILayout.Button(data._nodeName,buttonStyle))
+            FileDebugger.OpenFileWithCursor(control.getAIGraph_Debug().getAIGraphBaseData_Debug()._fullPath,data._lineNumber);
+    }
+
+    public void showAIPackageChangeLog(GameEntityBase.AIPackageChangeLogItem data)
+    {
+        if(GUILayout.Button(data._packageName + ": " + data._nodeData._nodeName,buttonStyle))
+            FileDebugger.OpenFileWithCursor(control.getAIGraph_Debug().getCurrentPackageBaseData_Debug()._fullPath,data._nodeData._lineNumber);
+    }
+
+    public void showActionChangeLog(ActionGraphNodeData data)
+    {
+        EditorGUILayout.BeginHorizontal();
+
+        ActionGraph actionGraph = control.getActionGraph_Debug();
+
+        if(GUILayout.Button(data._nodeName,buttonStyle,GUILayout.Width(EditorGUIUtility.currentViewWidth * 0.3f)))
+            FileDebugger.OpenFileWithCursor(actionGraph.getActionGraphBaseData_Debug()._fullPath,data._lineNumber);
+
+
+        if (data._isDummyAction == false)
+        {
+            int targetAnimationIndex = data._animationInfoIndex;
+            AnimationPlayDataInfo[] playDataInfoArray = control.getActionGraph_Debug().getActionGraphBaseData_Debug()._animationPlayData[targetAnimationIndex];
+
+            if (playDataInfoArray != null)
+            {
+                // float widthInterval = (EditorGUIUtility.currentViewWidth * 0.5f) * (1f / playDataInfoArray.Length);
+                // float width = widthInterval;
+                for (int i = 0; i < playDataInfoArray.Length; ++i)
+                {
+                    AnimationPlayDataInfo animationPlayDataInfo = playDataInfoArray[i];
+
+                    if (GUILayout.Button(animationPlayDataInfo._path, buttonStyle, GUILayout.ExpandWidth(true)))
+                        PingTarget(animationPlayDataInfo._customPreset);
+                }
+            }
+        }
+
+        EditorGUILayout.EndHorizontal();
+    }
 
     void Update()
     {
