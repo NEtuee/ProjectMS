@@ -232,6 +232,8 @@ public class ActionGraph
         }
 
         _actionExecutedTime = 0f;
+        setActionConditionData_Bool(ConditionNodeUpdateType.Action_AnimationEnd, false);
+        setActionConditionData_Float(ConditionNodeUpdateType.Action_ActionExecutedTime, 0f);
         
         return true;
     }

@@ -261,6 +261,9 @@ public class AIGraph
 
             processAIEvent(AIChildEventType.AIChildEvent_OnExit, targetEntity, getPrevAINode()._aiEvents);
             processAIEvent(AIChildEventType.AIChildEvent_OnExecute, targetEntity, getCurrentAINode()._aiEvents);
+
+            _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.AI_CurrentPackageEnd, false);
+            _actionGraph.setActionConditionData_Float(ConditionNodeUpdateType.AI_GraphStateExecutedTime, 0f);
         }
 
         return nodeChanged;
@@ -390,6 +393,7 @@ public class AIGraph
         _currentPackageStateIndex = aiPackageStateIndex;
 
         _aiPackageExecutedTimer = 0f;
+        _actionGraph.setActionConditionData_Float(ConditionNodeUpdateType.AI_PackageStateExecutedTime, 0f);
 
         _arrived = false;
         _arriveThreshold = getCurrentAIPackageNode()._arriveThreshold;
