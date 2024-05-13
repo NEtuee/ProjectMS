@@ -100,6 +100,18 @@
         SearchIdentifier="Enemy"
     />
 
+    <PoliceTacticalStaffCrossHair
+        DisplayName="폴리스 택티컬 스태프 크로스헤어"
+        ActionGraph="Assets/Data/Character/Object/CrossHair/PoliceTacticalStaffCrossHair.xml"
+        AIGraph="Assets/Data/AILibrary/Graph/CommonEnemyAI.xml"
+        StatusInfoName="CommonEnemyStatusNoUI"
+
+        CollisionRadius="0.7"
+        ProjectileCollisionRadius=""
+
+        SearchIdentifier="Enemy"
+    />
+
     <TutorialTeacher
         DisplayName="튜토리얼 선생"
         ActionGraph="Assets/Data/Character/TutorialTeacher/TurorialTeacherAction.xml"
@@ -455,9 +467,9 @@
     />
 
     <PoliceTaihoChan
-        DisplayName="폴리스 타이호쨩"
-        ActionGraph="Assets/Data/Character/Enemy/01_LugerChan/LugerChanAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/01_LugerChan/LugerChanAI.xml"
+        DisplayName="폴리스 택티컬 스태프쨩"
+        ActionGraph="Assets/Data/Character/Enemy/05_PoliceTaticalStaff/PoliceTacticalStaffAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/05_PoliceTaticalStaff/PoliceTacticalStaffAI.xml"
         StatusInfoName="CommonHpOneEnemyStatusNoUI"
         
         CollisionRadius="0.2"
