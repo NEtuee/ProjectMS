@@ -81,5 +81,6 @@ public class DebugTextManager : MonoBehaviour
 
         _debugTextList[targetName]._textMesh.text = text;
         _debugTextList[targetName]._timer = time;
+        _debugTextList[targetName]._textMesh.color = color;
     }
 }

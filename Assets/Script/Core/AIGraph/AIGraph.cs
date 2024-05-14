@@ -9,7 +9,7 @@ public class AIGraph
         public Dictionary<AIChildEventType,AIChildFrameEventItem> _eventDic;
     }
 
-    struct AIGraphStateCoolDownSet
+    public struct AIGraphStateCoolDownSet
     {
         public float _checkStartTime;
         public float _coolTime;
@@ -538,6 +538,8 @@ public class AIGraph
         AIGraphStateCoolDownSet coolDownSet = _graphStateCoolTimeMap[aiGraphStateName];
         return GlobalTimer.Instance().getScaledGlobalTime() - coolDownSet._checkStartTime >= coolDownSet._coolTime; 
     }
+
+    public Dictionary<string, AIGraphStateCoolDownSet> getCoolTimeMap() {return _graphStateCoolTimeMap;}
 
     public AIGraphCustomValue[] getCustomValueData() {return _aiGraphBaseData._customValueData;}
 

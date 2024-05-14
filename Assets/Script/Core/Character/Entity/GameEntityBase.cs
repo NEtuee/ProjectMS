@@ -677,6 +677,17 @@ public class GameEntityBase : SequencerObjectBase
                 debugTextManager.updateDebugText("AI","   AIPackageState: " + getCurrentAIPackageStateName(), UnityEngine.Color.white);
             }
 
+            foreach(var item in _aiGraph.getCoolTimeMap())
+            {
+                float currentTime = (GlobalTimer.Instance().getScaledGlobalTime() - item.Value._checkStartTime);
+                if(currentTime >= item.Value._coolTime)
+                    currentTime = item.Value._coolTime;
+
+                debugTextManager.updateDebugText(item.Key, "[CoolTime] " + item.Key + ": " + 
+                currentTime + " / " + item.Value._coolTime, 
+                item.Value._coolTime <= currentTime ? UnityEngine.Color.green : UnityEngine.Color.red);
+            }
+
             if(_aiGraph.hasTargetPosition() == true)
             {
                 Color targetColor = _aiGraph.isAIArrivedTarget() ? Color.green : Color.red;
