@@ -496,6 +496,9 @@
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="BarriorBroken" EventTargetType="Self"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+
+            <FrameEvent Type="EffectPreset" StartTime="0" Key="WindAttached"/>
+            <FrameEvent Type="EffectPreset" StartTime="0.1" Key="WindAttached"/>
         </Animation>
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_Barrior_Broken>

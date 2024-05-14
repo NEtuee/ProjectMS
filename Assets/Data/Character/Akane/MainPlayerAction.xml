@@ -542,6 +542,10 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="1.3" Tag="CatchReleased"/>
             <FrameEvent Type="FrameTag" StartTime="0.4" EndTime="1.3" Tag="MoveCancel"/>
 
+            <FrameEvent Type="StopUpdate" Time="0.1"/>
+            <FrameEvent Type="SetTimeScale" Scale="0.1" Time="0.05" BlendTime="0.01"/>
+            <FrameEvent Type="ShakeEffect" Scale="0.1" Speed="35.0" Time="0.15"/>
+
             <FrameEvent Type="SequencerSignal" StartTime="0" Signal="CatchEnd"/>
         </Animation>
         
@@ -673,18 +677,13 @@
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="TargetBattleIncrement" Condition="getTargetFrameTag_Groggy == false"/>
-                    <FrameEvent Type="ApplyBuff" ApplyBuff="BattleIncrement"/>
-                    <FrameEvent Type="ApplyBuff" ApplyBuff="IncreaseBloodPoint"/>
 
                     <FrameEvent Type="EffectPreset" StartTime="0" Key="SlashSuper"/>
                     <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
                     <FrameEvent Type="EffectPreset" StartTime="0" Key="Crosslight"/>
 
-                    <FrameEvent Type="UIEvent" StartTime="0" Key="HitEnemy"/>
-
                     <!-- 마테리얼 히트 이펙트 -->
                     <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/MaterialHit_Timeline" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true"/>
-
 
                     <FrameEvent Type="TeleportToTargetBack" Condition="(getTargetFrameTag_Groggy == false) && (Kill == false)" DistanceOffset="-0.0"/>
                     <FrameEvent Type="TeleportToTargetBack" Condition="getTargetFrameTag_Groggy || Kill" DistanceOffset="0.4"/>
@@ -699,35 +698,13 @@
 
                     <FrameEvent Type="ApplyPostProcessProfile" Condition="Kill" Path="PostProcessProfile/KillEnemy" BlendTime="0.4" ApplyType="Additional"/>
                 </OnHit>
-                <OnGuard>
-                    <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="DashPointConsumption"/>
-                    <FrameEvent Type="ApplyBuffTarget" StartTime="0" ApplyBuff="GuardCountIncrease"/>
-
-                    <FrameEvent Type="TeleportToTarget"/>
-                    <FrameEvent Type="StopUpdate" Time="0.01"/>
-                </OnGuard>
-                <OnParry>
-                    <FrameEvent Type="TeleportToTarget"/>
-                </OnParry>
-                <OnEvade>
-                    <FrameEvent Type="TeleportToTarget"/>
-                </OnEvade>
 
             </FrameEvent>
 
-            <FrameEvent Type="UIEvent" StartTime="0" Condition="AttackSuccess == false" Key="Dash"/>
-
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_LongDashFriction" MaxVelocity="gv_LongDashVelocity" Speed="0" Velocity="gv_LongDashVelocity" Condition="(getStat_DashPoint >= 1.0) && (getStat_HP > 1.0)"/>
-            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="ClearBloodPoint" Condition="(getStat_DashPoint >= 1.0) && (getStat_HP > 1.0)"/>
-            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="CommonAttack" Condition="(getStat_DashPoint >= 1.0) && (getStat_HP > 1.0)"/>
-            <FrameEvent Type="ApplyBuff" StartTime="0.031" ApplyBuff="DashPointConsumption" Condition="(getStat_DashPoint >= 1.0)"/>
 
-            <FrameEvent Type="FrameTag" StartTime="0.156" EndTime="999" Tag="MoveCancel"/>
-            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="0.016" Tag="Attack"/>
-
-            <FrameEvent Type="AudioPlay" Condition="AttackSuccess == false" StartTime="0.05" ID="1009" Attach="true"/>
-
-            <FrameEvent Type="EffectPreset" Condition="AttackSuccess == false" StartTime="0.05" Key="DashTrail"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="1009" Attach="true"/>
+            <FrameEvent Type="EffectPreset" StartTime="0" Key="DashTrail"/>
         </Animation>
 
     </SQ_AttackLong>

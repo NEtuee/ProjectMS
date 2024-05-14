@@ -200,6 +200,9 @@
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Velocity="-6" Speed="0"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+
+            <FrameEvent Type="EffectPreset" StartTime="0" Key="WindAttached"/>
+            <FrameEvent Type="EffectPreset" StartTime="0.1" Key="WindAttached"/>
         </Animation>
         <Animation Preset="2_awayStand" XFlip="true" Duration="1.0">
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>

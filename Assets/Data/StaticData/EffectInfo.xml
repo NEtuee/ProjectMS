@@ -317,6 +317,21 @@
         CastShadow="False"
     />
 
+    <ParticleEffect Key="WindAttached" 
+        AttackMaterial="" 
+        DefenceMaterial=""
+        Path="Prefab/Effect/Wind"
+        AngleOffset="0.0"
+        Offset="0.0 0.0 0.0"
+        ToTarget="false"
+        UpdateType="ScaledDeltaTime"
+        Attach="True"
+        AngleType="Direction"
+        LifeTime="0.0"
+        FollowDirection="False"
+        CastShadow="False"
+    />
+
     <!-- 중점 아카네에 맞추면 됨 -->
     <ParticleEffect Key="WindTrail" 
         AttackMaterial="" 
