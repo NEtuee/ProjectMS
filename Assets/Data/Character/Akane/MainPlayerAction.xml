@@ -619,7 +619,6 @@
 
     <SQ_Intro_Sleep MovementType="Empty" DirectionType="AlwaysRight" FlipType="AlwaysTurnOff" RotationType="AlwaysRight" HeadUpOffset="0.2">
         <Animation Preset="Sprites/NewPlayer/Sequencer/Intro_0" XFlip="true" Duration="7.0">
-            <FrameEvent Type="TalkBalloon" StartTime="5" SimpleTalkKey="Talk_SleepEffect"/>
         </Animation>
 
         <Branch Condition="End" Execute="SQ_Intro_Sleep"/>
@@ -628,7 +627,6 @@
     <SQ_Intro_ToIdle MovementType="FrameEvent" DirectionType="AlwaysUp" FlipType="Keep">
         <Animation Preset="Sprites/NewPlayer/idle/" XFlip="true" Duration="0.3">
             <FrameEvent Type="Movement" StartTime="0" Friction="25" MaxVelocity="10" Velocity="10" Speed="0"/>
-            <FrameEvent Type="DeactiveTalkBalloon" StartTime="0"/>
 
             <FrameEvent Type="AudioPlay" StartTime="0" ID="6003"/>
         </Animation>
