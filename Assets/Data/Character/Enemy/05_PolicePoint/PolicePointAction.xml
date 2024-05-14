@@ -22,28 +22,28 @@
 <GlobalVariable Name="gv_RangedAttackMovementDelay" Value="0.0"/>  
 
 <!-- Movement Speed Option Variant Set -->
-<GlobalVariable Name="gv_MovementSpeed"             Value="10.0"/>  <!-- Speed는 Velocity = 0 과 병행 사용 불가-->
+<GlobalVariable Name="gv_MovementSpeed"             Value="5.0"/>  <!-- Speed는 Velocity = 0 과 병행 사용 불가-->
 <GlobalVariable Name="gv_MovementVelocity"          Value="0.0"/>   
-<GlobalVariable Name="gv_MovementMaxVelocity"       Value="5.0"/>
-<GlobalVariable Name="gv_MovementFriction"          Value="0.0"/>
+<GlobalVariable Name="gv_MovementMaxVelocity"       Value="3.0"/>
+<GlobalVariable Name="gv_MovementFriction"          Value="2.0"/>
 
 <!-- AttackReady Movement Speed Option Variant Set-->
 <GlobalVariable Name="gv_AtkRdMovementSpeed"        Value="0.0"/>  <!-- Speed는 Velocity = 0 과 병행 사용 불가-->
 <GlobalVariable Name="gv_AtkRdMovementVelocity"     Value="0.0"/>   
 <GlobalVariable Name="gv_AtkRdMovementMaxVelocity"  Value="0.0"/>
-<GlobalVariable Name="gv_AtkRdMovementFriction"     Value="0.0"/>
+<GlobalVariable Name="gv_AtkRdMovementFriction"     Value="12.0"/>
 
 <!-- Attack Movement Speed Option Variant Set-->
 <GlobalVariable Name="gv_AtkMovementSpeed"          Value="0.0"/>   <!-- Speed는 Velocity = 0 과 병행 사용 불가-->
 <GlobalVariable Name="gv_AtkMovementVelocity"       Value="0.0"/>  <!-- 반동으로 인한 후방이동은 음수값 사용 -->
-<GlobalVariable Name="gv_AtkMovementMaxVelocity"    Value="10.0"/>
-<GlobalVariable Name="gv_AtkMovementFriction"       Value="18.0"/>
+<GlobalVariable Name="gv_AtkMovementMaxVelocity"    Value="0.0"/>
+<GlobalVariable Name="gv_AtkMovementFriction"       Value="12.0"/>
 
 <!-- AttackSuccess Movement Speed Option Variant Set-->
 <GlobalVariable Name="gv_AtkSucMovementSpeed"          Value="0.0"/> 
-<GlobalVariable Name="gv_AtkSucMovementVelocity"       Value="6.5"/>
-<GlobalVariable Name="gv_AtkSucMovementMaxVelocity"    Value="6.5"/>
-<GlobalVariable Name="gv_AtkSucMovementFriction"       Value="15.0"/>
+<GlobalVariable Name="gv_AtkSucMovementVelocity"       Value="0.0"/>
+<GlobalVariable Name="gv_AtkSucMovementMaxVelocity"    Value="0.0"/>
+<GlobalVariable Name="gv_AtkSucMovementFriction"       Value="0.0"/>
 
 <!-- Defualt Action -->
     <AC_Entry MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
@@ -55,18 +55,16 @@
         <Branch Condition="End == true" Execute="AC_Entry"/>
     </AC_Entry>
 
-    <AC_Idle MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+    <AC_Idle MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" DefenceType="Guard" DefenceDirectionType="Direction" DefenceAngle="180">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="0_default/1_idle" XFlip="true" Duration="1">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
             
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
-            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
             
         </Animation>
-
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_Idle>
@@ -91,6 +89,7 @@
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountIncrease"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
 
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
