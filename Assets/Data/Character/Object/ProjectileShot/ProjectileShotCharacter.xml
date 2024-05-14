@@ -64,8 +64,10 @@
     <SisterLaserShot MovementType="Empty" DirectionType="AI" ActiveCollision="False" FlipType="Direction" Flags="LaserEffect">
         <Animation Preset="Sprites/Projectile/SisterLaser/LaserReady" XFlip="true" Duration="0.8">
             <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/CommonBeam_TimeLine" Attach="true" AngleType="Direction" LifeTime="0.85" FollowDirection="True" AttackPreset="Sister_Laser"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="4924" Attach="true" Switch="True"/>
         </Animation>
         <Animation Preset="Sprites/Projectile/SisterLaser/LaserShot" XFlip="true" Duration="0.8">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="4925" Attach="true"/>
             <FrameEvent Type="SetDirectionType" StartTime="0.0" DirectionType="Keep"/>
             <FrameEvent Type="EffectPreset" StartTime="0" Key="Helena_LaserShot"/>
             <FrameEvent Type="Attack" StartTime="0.05" EndTime="0.1" AttackPreset="Sister_Laser">
@@ -79,6 +81,8 @@
                     <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
                 </OnHit>
             </FrameEvent>
+        </Animation>
+        <Animation Preset="Sprites/Projectile/empty" XFlip="true" Duration="1.4">
         </Animation>
         <Branch Condition="End == true" Execute="Dead"/>
     </SisterLaserShot>

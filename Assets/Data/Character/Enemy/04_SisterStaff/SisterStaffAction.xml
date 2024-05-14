@@ -86,7 +86,7 @@
         <Animation Preset="0_default/3_hit" XFlip="true" Duration="1.25">
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="CancelLaser" EventTargetType="SummonTargetRange" Range="999.0" SearchIdentifier="Enemy"/>
 
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="4921" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountIncrease"/>
 
@@ -118,6 +118,7 @@
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="1_attack/1_attackReady" XFlip="true" Duration="0.8">
             <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="LaserShotCharacter" Offset="-0.3 0.3 0" SearchIdentifier="Enemy" InheritDirection="true"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2519" Attach="true"/>
 
             <FrameEvent Type="Movement" Condition="gv_AtkRdMovementVelocity == 0.0" StartTime="0" Friction="gv_AtkRdMovementFriction" MaxVelocity="gv_AtkRdMovementMaxVelocity" Speed="gv_AtkRdMovementSpeed"/>
             <FrameEvent Type="Movement" Condition="gv_AtkRdMovementVelocity > 0.0" StartTime="0" Friction="gv_AtkRdMovementFriction" MaxVelocity="gv_AtkRdMovementMaxVelocity" Velocity="gv_AtkRdMovementVelocity" Speed="gv_AtkRdMovementSpeed"/>
@@ -137,7 +138,6 @@
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="1_attack/2_attackMain" XFlip="true" Duration="0.35">
             <FrameEvent Type="SetDirectionType" Condition="gv_bIsLaserAttack == false" StartTime="0" DirectionType="AI"/>
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2204" Attach="true"/>
             <FrameEvent Type="Movement" Condition="gv_AtkMovementVelocity == 0.0" StartTime="gv_RangedAttackMovementDelay" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Speed="gv_AtkMovementSpeed"/>
             <FrameEvent Type="Movement" Condition="gv_AtkMovementVelocity > 0.0" StartTime="gv_RangedAttackMovementDelay" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Velocity="gv_AtkMovementVelocity" Speed="gv_AtkMovementSpeed"/>
             <FrameEvent Type="Movement" Condition="gv_AtkMovementVelocity < 0.0" StartTime="gv_RangedAttackMovementDelay" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Velocity="gv_AtkMovementVelocity" Speed="gv_AtkMovementSpeed"/>
@@ -216,10 +216,11 @@
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_defense/3_guardBroken" XFlip="true" Duration="1.25">
             <FrameEvent Type="DeleteBuff" StartTime="0" BuffList="HelenaBarriorOn"/>
+            <FrameEvent Type="AudioPlay" Condition="customValue_IsBarriorOn == 1.0" StartTime="0" ID="2512" Attach="true" Switch="True"/>
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="CancelLaser" EventTargetType="SummonTargetRange" Range="999.0" SearchIdentifier="Enemy"/>
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="BarriorBroken" EventTargetType="Self"/>
 
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="4921" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountIncrease"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
@@ -236,9 +237,11 @@
     <AC_Pray MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="3_skill/1_pray" XFlip="true" Duration="1.5">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2509" Attach="true" Switch="True"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="1.5"/>
             <FrameEvent Type="ApplyBuff" StartTime="1" ApplyBuff="HelenaBarriorOn"/>
-            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="BarriorActivated" EventTargetType="Self"/>
+            <FrameEvent Type="CallAIEvent" StartTime="1" EventName="BarriorActivated" EventTargetType="Self"/>
+            <FrameEvent Type="AudioPlay" StartTime="1" ID="2510" Attach="true" Switch="True"/>
 
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>

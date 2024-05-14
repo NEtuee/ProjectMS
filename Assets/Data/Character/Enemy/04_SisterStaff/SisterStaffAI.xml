@@ -189,7 +189,7 @@
 
     <!-- 전투 공격 분기 브랜치 셋 -->
     <BranchSet Name="BattleAttackJudgeSet">
-        <Branch Condition="gv_bIsSkillAttack && aiGraphCoolTime_Skill && (customValue_IsBarriorOn == 0.0)"     Execute="Skill"/>
+        <Branch Weight="RandBoolean^True" Condition="gv_bIsSkillAttack && aiGraphCoolTime_Skill && (customValue_IsBarriorOn == 0.0)"     Execute="Skill"/>
         <Branch Condition="gv_bIsNormalAttack"     Execute="MeleeAttack"/>
         <Branch Condition="gv_bIsLockOnlAttack"    Execute="MeleeLockOnAttack"/>
         <Branch Condition="gv_bIsBumpAttack"       Execute="MeleeBumpAttack"/>

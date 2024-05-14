@@ -1,0 +1,11 @@
+<ActionGraph Name="PoliceTacticalStaffCrossHair" DefaultAction="Idle" DefaultFramePerSecond="12">
+
+    <Idle MovementType="Empty" DirectionType="Keep" IgnoreAttackType="Default Catch" ActiveCollision="False">
+        <AnimationHeader MasterPath="Sprites/UI/Indicator/"/>
+        <Animation Preset="PoliceTacticalStaff" XFlip="true" Duration="1.6">
+        </Animation>
+
+        <!-- <Branch Condition="End == true" Execute="Idle"/> -->
+    </Idle>
+
+</ActionGraph>

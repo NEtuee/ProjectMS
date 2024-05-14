@@ -158,7 +158,7 @@
 
     <!-- 전투 행동 분기 브랜치 셋-->
     <BranchSet Name="BattleEntrySet">
-        <Branch Condition="(aiGraphCoolTime_Battle_Attack || (aiGraphCoolTime_Skill && (customValue_IsBarriorOn == 0.0)))
+        <Branch Condition="(aiGraphCoolTime_Battle_Attack || (gv_bIsSkillAttack && aiGraphCoolTime_Skill && (customValue_IsBarriorOn == 0.0)))
                         && (TargetDistance >= gv_MeleeAttackRangeMin)
                         && (TargetDistance <= gv_MeleeAttackRangeMax)"  Execute="Battle_Attack"/>
         <Branch Condition="true"                                        Execute="Battle_Move"/>

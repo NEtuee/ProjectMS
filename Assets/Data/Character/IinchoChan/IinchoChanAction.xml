@@ -21,6 +21,8 @@
     <GuardBroken MovementType="Empty" DirectionType="AttackedPoint" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="0_default/2_guardbreak" XFlip="true" Duration="1">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="4921" Attach="true"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="4913" Attach="true"/>
             <FrameEvent Type="TalkBalloon" StartTime="0" SimpleTalkKey="Talk_IinchoChan_4"/>
             <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Effect/Weapon/Desk" FramePerSecond="0.2" CastShadow="True">
                 <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
