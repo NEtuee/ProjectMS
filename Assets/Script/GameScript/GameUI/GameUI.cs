@@ -95,6 +95,7 @@ public class GameUI : MonoBehaviour
     public void ActivePauseUI(bool active)
     {
         _pauseUI.ActivePauseUI(active);
+        Cursor.visible = active == false;
     }
 
     public void SetBossHpEntity(GameEntityBase targetEntity)

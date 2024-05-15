@@ -266,7 +266,7 @@
             </OnEnd>
         </Event>
     </Gauntlet>
-    <BaseBall DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">
+    <BaseBall DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1" CastShadow="True">
         <Animation Preset="Sprites/Projectile/BaseBall" XFlip="true" Duration="10.0">        
         </Animation>
 
@@ -300,7 +300,7 @@
             </OnHit>
         </Event>
     </BaseBall>
-    <SoccerBall DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">
+    <SoccerBall DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1" CastShadow="True">
         <Animation Preset="Sprites/Projectile/SoccerBall" XFlip="true" Duration="10.0">        
         </Animation>
 
@@ -335,7 +335,7 @@
         </Event>
     </SoccerBall>
 
-    <ChairProjectile DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">
+    <ChairProjectile DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1" CastShadow="True">
         <Animation Preset="Sprites/Projectile/ChairProjectile" XFlip="true" Duration="0.5">        
         </Animation>
 
@@ -439,7 +439,7 @@
     </Thunder_Small>
 
     <!-- 스케반 원거리 (기관단총) -->
-    <MiniBullet DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">
+    <MiniBullet DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1" CastShadow="True">
         <Animation Preset="Sprites/Projectile/MuzzleFlash" XFlip="true" Duration="5.0">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="4904" Attach="false"/>    
                 
@@ -511,7 +511,7 @@
         </Event>
     </Helena_CrimsonGrimoire>
 
-    <Dumbell DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1" Gravity="-9.8">
+    <Dumbell DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1" Gravity="-9.8" CastShadow="True">
         <Animation Preset="Sprites/Projectile/Dumbell" XFlip="true" Duration="5.0">        
         </Animation>
 
@@ -552,7 +552,7 @@
             </OnEnd>
         </Event>
     </Dumbell>
-    <Liner DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1" Gravity="-9.8">
+    <Liner DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1" Gravity="-9.8" CastShadow="True">
         <Animation Preset="Sprites/Projectile/Liner" XFlip="true" Duration="5.0">        
         </Animation>
 

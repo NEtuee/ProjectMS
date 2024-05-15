@@ -489,6 +489,7 @@
     <Resurrection ActiveCollision="False">
         <Animation Preset="Sprites/NewPlayer/empty/" XFlip="true" Duration="1.0">
             <FrameEvent Type="EffectPreset" StartTime="0" Key="ExplodeBig"/>
+            <FrameEvent Type="AudioPlay" StartTime="1.0" ID="6001"/>
             <FrameEvent Type="ReleaseCatch" StartTime="0"/>
 
             <FrameEvent Type="ApplyBuff" StartTime="0.0" ApplyBuff="CatchedClear StunClear"/>

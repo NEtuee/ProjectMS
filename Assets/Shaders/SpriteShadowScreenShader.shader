@@ -365,27 +365,27 @@ Shader "Custom/SpriteShadowScreenShader"
 					{
 						for (float i = 1.0 / Quality; i <= 1.0; i += 1.0 / Quality)
 						{
-							Color += sampleBackground(backgroundTexture, texcoord + float2(cos(d), sin(d)) * Radius * i, worldPosition, firstBackground == false);
+							Color.rgb += sampleBackground(backgroundTexture, texcoord + float2(cos(d), sin(d)) * Radius * i, worldPosition, firstBackground == false).rgb;
 						}
 					}
-					Color /= Quality * Directions - backgroundBrightnessFactor;
+					Color.rgb /= (Quality) * Directions - backgroundBrightnessFactor;
 
 					float brightness = dot(Color.xyz, float3(0.2126f, 0.7152f, 0.0722));
 					if (brightness > 0.5)
 					{
-						float4 bloom = Color;
+						float3 bloom = Color.rgb;
 						float bloomBlurRadius = (brightness * 8.0f * _Bloom) / resolution;
 						for (float d = 0.0; d < Pi; d += Pi / Directions)
 						{
 							for (float i = 1.0 / Quality; i <= 1.0; i += 1.0 / Quality)
 							{
-								bloom += sampleBackground(backgroundTexture, texcoord + float2(cos(d), sin(d)) * bloomBlurRadius * i, worldPosition, firstBackground == false);
+								bloom += sampleBackground(backgroundTexture, texcoord + float2(cos(d), sin(d)) * bloomBlurRadius * i, worldPosition, firstBackground == false).rgb;
 							}
 						}
 						bloom /= Quality * Directions - backgroundBrightnessFactor;
 
-						Color += bloom;
-						Color *= 0.5f;
+						Color.rgb += bloom;
+						Color.rgb *= 0.5f;
 					}
 
 					// contrast
@@ -403,6 +403,11 @@ Shader "Custom/SpriteShadowScreenShader"
 					fixed4 backgroundSample = bluredBackgroundSample(_MainTex, texcoord, worldPosition, true);
 					fixed4 characterSample = drawCharacter(texcoord);
 					fixed4 characterShadow = bluredShadowSample(texcoord);
+
+					float2 directionVector = texcoord - _CenterUV.xy;
+					if(length(directionVector) < _CrossFillFactor * 0.4)
+						characterShadow.a = 0.0;
+
 					fixed4 forwardScreenSample = bluredBackgroundSample(_ForwardScreenTexture, texcoord, worldPosition, false);
 					fixed4 interfaceSample = drawInterface(texcoord);
 
