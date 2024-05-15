@@ -13,6 +13,8 @@
     <UpdatePhase>
         <AIMove UniqueKey="Player" LoopAction="AIMove_Loop" EndPositionMarker="AkaneBossPosition"/>
 
+        <SetDirection UniqueKey="Boss" DirectionType="AlwaysLeft"/>
+
         <WaitSecond Time="1.0"/>
         <AIMove UniqueKey="Boss" LoopAction="AIMove" EndPositionMarker="BossPosition"/>
 
@@ -68,6 +70,7 @@
         <ApplyPostProcessProfile Path="PostProcessProfile/ImpactFrame" ApplyType="Additional" BlendTime="1.5"/>
 
         <WaitSecond Time="4.0"/>
+        <NextStage Path="StageData/DemoEnd"/>
 
     </UpdatePhase>
     

@@ -33,6 +33,9 @@
         <WaitSecond Time="3.0"/>
         <TalkBalloon UniqueKey="YakisobaChan" SimpleTalkKey="Talk_Stage03_2_2"/>
 
+
+        <SetDirection UniqueKey="Staff" DirectionType="AlwaysLeft"/>
+        <SetDirection UniqueKey="Wand" DirectionType="AlwaysLeft"/>
         <TaskFence TaskName="AIMove"/>
 
         <WaitSecond Time="2.0"/>
@@ -41,6 +44,7 @@
         <TalkBalloon UniqueKey="Staff" SimpleTalkKey="Talk_Stage03_2_3" Wait="True"/>
 
         <SetCameraZoom Size="1.5" Speed="5"/>
+        <SetAction UniqueKey="Staff" Action="AC_Hit"/>
         <TalkBalloon UniqueKey="Staff" SimpleTalkKey="Talk_Stage03_2_4" Wait="True"/>
 
         <SetCameraZoom Size="2.0" Speed="5"/>

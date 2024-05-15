@@ -26,7 +26,7 @@
         <WaitSecond Time="1.5"/>
 
         <Task ProcessType="AllAtOnce" Name="AIMove">
-            <AIMove UniqueKey="Player" LoopAction="AIMove_Loop" EndPositionMarker="PlayerEntry"/>
+            <AIMove UniqueKey="Player" StartAction="AIMove_Start" LoopAction="AIMove_Loop" EndAction="AIMove_End" EndPositionMarker="PlayerEntry"/>
             <AIMove UniqueKey="YakisobaChan" LoopAction="AIMove" EndPositionMarker="YakisobaEntry"/>
         </Task>
 

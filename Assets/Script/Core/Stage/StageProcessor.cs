@@ -676,6 +676,8 @@ public class StageProcessor
                 characterInfo._characterEntity.getStatusInfo().kill();
             }
         }
+
+        (SceneCharacterManager._managerInstance as SceneCharacterManager).killAllCharacterWithoutKeepAliveCharacter();
     }
 
     public void addSequencerSignal(string signal)

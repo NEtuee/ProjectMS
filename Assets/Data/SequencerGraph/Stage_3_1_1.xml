@@ -95,6 +95,9 @@
         <SetCameraBoundLock UniqueKey="YakisobaChan" Enable="True"/>
 
         <FadeOut Lambda="5.0"/>
+
+        <WaitSecond Time="2.0"/>
+        <NextStage Path="StageData/Stage_3_2"/>
     </UpdatePhase>
     
 </SequencerGraph>

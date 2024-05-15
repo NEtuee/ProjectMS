@@ -291,6 +291,23 @@ public class SceneCharacterManager : ManagerBase
         return true;
     }
 
+    public void killAllCharacterWithoutKeepAliveCharacter()
+    {
+        foreach(var item in _enableCharacterPoolCacheMap.Values)
+        {
+            if(item == null || item.isDead())
+                continue;
+            
+            if(item.isKeepAliveEntity())
+                continue;
+            
+            if(item.isActiveSelf() == false)
+                continue;
+
+            item.getStatusInfo().kill();
+        }
+    }
+
     public bool targetIsValid(GameEntityBase currentCharacter, GameEntityBase targetCharacter, TargetSearchDescription searchDesc)
     {
         if(targetCharacter == null || targetCharacter.gameObject.activeInHierarchy == false)

@@ -62,7 +62,7 @@ MonoBehaviour:
       _uniqueKey: Staff
       _uniqueGroupKey: EnemyGroup
       _startAction: AC_Entry
-      _startAIState: Entry
+      _startAIState: Entry_Peace
       _flip: 1
       _setDirection: 0
       _directionAngle: 0
@@ -76,7 +76,7 @@ MonoBehaviour:
       _uniqueKey: Wand
       _uniqueGroupKey: EnemyGroup
       _startAction: AC_Entry
-      _startAIState: Entry
+      _startAIState: Entry_Peace
       _flip: 1
       _setDirection: 0
       _directionAngle: 0
@@ -127,7 +127,7 @@ MonoBehaviour:
       _uniqueKey: Talk
       _uniqueGroupKey: EnemyGroup
       _startAction: AC_Idle
-      _startAIState: Entry
+      _startAIState: Entry_Peace
       _flip: 1
       _setDirection: 0
       _directionAngle: 0
@@ -141,7 +141,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: EnemyGroup
       _startAction: AC_Idle
-      _startAIState: Entry
+      _startAIState: Entry_Peace
       _flip: 1
       _setDirection: 0
       _directionAngle: 0
@@ -174,7 +174,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: EnemyGroup
       _startAction: AC_Idle
-      _startAIState: Entry
+      _startAIState: Entry_Peace
       _flip: 1
       _setDirection: 0
       _directionAngle: 0
@@ -188,7 +188,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: EnemyGroup
       _startAction: AC_Idle
-      _startAIState: Entry
+      _startAIState: Entry_Peace
       _flip: 1
       _setDirection: 0
       _directionAngle: 0
@@ -202,7 +202,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: EnemyGroup
       _startAction: AC_Idle
-      _startAIState: Entry
+      _startAIState: Entry_Peace
       _flip: 1
       _setDirection: 0
       _directionAngle: 0
@@ -216,7 +216,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: EnemyGroup
       _startAction: AC_Idle
-      _startAIState: Entry
+      _startAIState: Entry_Peace
       _flip: 1
       _setDirection: 0
       _directionAngle: 0
@@ -263,7 +263,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: EnemyGroup
       _startAction: AC_Idle
-      _startAIState: Entry
+      _startAIState: Entry_Peace
       _flip: 1
       _setDirection: 0
       _directionAngle: 0
@@ -277,7 +277,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: EnemyGroup
       _startAction: AC_Idle
-      _startAIState: Entry
+      _startAIState: Entry_Peace
       _flip: 1
       _setDirection: 0
       _directionAngle: 0
@@ -291,7 +291,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: EnemyGroup
       _startAction: AC_Idle
-      _startAIState: Entry
+      _startAIState: Entry_Peace
       _flip: 1
       _setDirection: 0
       _directionAngle: 0
@@ -324,7 +324,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: EnemyGroup
       _startAction: AC_Idle
-      _startAIState: Entry
+      _startAIState: Entry_Peace
       _flip: 1
       _setDirection: 0
       _directionAngle: 0
@@ -349,7 +349,8 @@ MonoBehaviour:
     _lerpCameraZoom: 0
     _lockCameraInBound: 0
     _cameraBoundToTrigger: 0
-    _onEnterSequencerPath: []
+    _onEnterSequencerPath:
+    - Stage_3_2_3.xml
     _onExitSequencerPath: []
     _characterSpawnData: []
     _useTriggerBound: 0

@@ -282,7 +282,6 @@
                         <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
                         <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
 
-                        <FrameEvent Type="ApplyBuffTarget" ApplyBuff="StunSet"/>
                         <FrameEvent Type="ShakeEffect" Scale="0.1" Speed="35.0" Time="0.15"/>
 
                         <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Projectile/BaseBall" FramePerSecond="0.1" CastShadow="True">
@@ -316,7 +315,6 @@
                         <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
                         <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
 
-                        <FrameEvent Type="ApplyBuffTarget" ApplyBuff="StunSet"/>
                         <FrameEvent Type="ShakeEffect" Scale="0.1" Speed="35.0" Time="0.15"/>
 
                         <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Projectile/SoccerBall" FramePerSecond="0.1" CastShadow="True">
@@ -568,7 +566,6 @@
                             <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
                         </FrameEvent>
 
-                        <FrameEvent Type="ApplyBuffTarget" ApplyBuff="StunSet"/>
                         <FrameEvent Type="ShakeEffect" Scale="0.1" Speed="35.0" Time="0.15"/>
 
                         <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>

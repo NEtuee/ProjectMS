@@ -1,0 +1,13 @@
+<SequencerGraph Name="Stage_3_2_3">
+
+    <InitializePhase>
+    </InitializePhase>
+
+    <UpdatePhase>
+        <FadeOut Lambda="5.0"/>
+        <WaitSecond Time="1.5"/>
+        <NextStage Path="StageData/Stage_3_4"/>
+
+    </UpdatePhase>
+    
+</SequencerGraph>

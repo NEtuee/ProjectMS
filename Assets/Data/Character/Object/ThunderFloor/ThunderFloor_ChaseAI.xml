@@ -32,6 +32,9 @@
         <AIEvent Type="AddCustomValue" Name="IsPlayerHit" Value="1.0"/>
     </CustomEvent_PlayerHit>
 
+    <CustomEvent_CancelLaser>
+        <AIEvent Type="KillEntity"/>
+    </CustomEvent_CancelLaser>
 
     <Move Package="ThunderFloor_ChasePackage">
         <Branch Condition="GraphExecutedTime > 5.0" Execute="Dead"/>
