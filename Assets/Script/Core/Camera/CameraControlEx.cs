@@ -478,6 +478,11 @@ public class CameraControlEx : Singleton<CameraControlEx>
         _currentCameraMode.progress(deltaTime,_currentTarget == null ? _cameraTargetPosition : _currentTarget.transform.position);
     }
 
+    public Vector3 getRealCameraPosition()
+    {
+        return getCameraPosition() + _shakePosition;
+    }
+
     public Vector3 getCameraPosition()
     {
         Vector3 currentPosition = _currentCameraMode == null ? _currentCamera.transform.position : _currentCameraMode.getCameraPosition();
