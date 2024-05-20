@@ -22,8 +22,8 @@
 
     <BranchSet Name="HitReactionSet">
         <Branch Condition="Dead" Execute="Dead"/>
-        <Branch Condition="Hit" Execute="Hit"/> 
-        <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
+        <Branch Condition="Hit && getFrameTag_HitAvail" Execute="Hit"/> 
+        <Branch Condition="(GuardBreakFail || GuardBroken) && getFrameTag_GbAvail" Execute="GuardBroken"/>
     </BranchSet>
 
     <BranchSet Name="WaitForRush">

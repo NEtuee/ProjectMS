@@ -74,6 +74,7 @@
     <Dead DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/Gauntlet/0_default/"/>
         <Animation Preset="3_dead" XFlip="true" Duration="1">
+            <FrameEvent Type="ReleaseCatch" StartTime="0" Push="0 0 0"/>
             <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Enemy/Gauntlet/0_default/3_dead" FramePerSecond="0.2" CastShadow="True">
                 <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
             </FrameEvent>
