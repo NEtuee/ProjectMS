@@ -279,6 +279,34 @@
 
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_CremationBeamShot>
+    <!-- 미사일 발사 -->
+    <AC_MissileLaunchReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="2_skill/2_cremationBeam/1_cremationBeamReady" XFlip="true" Duration="0.2">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2206" Attach="true"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
+            
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_MissileLaunchReady>
+
+    <AC_MissileLaunch MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="2_skill/2_cremationBeam/2_cremationBeamShot" XFlip="true" Duration="0.4">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2208" Attach="true"/>
+            <FrameEvent Type="Danmaku" StartTime="0" Path="Enemy\ReitoMissile.xml" UseDirection="True"/>
+        </Animation>
+        <Animation Preset="2_skill/2_cremationBeam/3_cremationBeamRecovery" XFlip="true" Duration="0.3">
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_MissileLaunch>
 <!-- SKill Action -->
 
 

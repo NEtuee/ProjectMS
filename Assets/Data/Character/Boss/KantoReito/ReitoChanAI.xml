@@ -46,6 +46,7 @@
     <Include Path="Assets/Data/Character/Boss/KantoReito/ReitoPunchPackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/KantoReito/ReitoStepPackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/KantoReito/ReitoSpwanGauntletPackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/KantoReito/ReitoSpawnMissilePackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/KantoReito/ReitoCremationBeamPackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/KantoReito/ReitoDodgePackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/KantoReito/ReitoGuardPackage.xml"/>
@@ -181,6 +182,10 @@
         <!-- 화장포 : Cool 10.0 -->
         <Branch Condition="aiGraphCoolTime_CremationBeam" Execute="CremationBeam"/>
         <!-- 스텝 펀치 : Cool 3.0 -->
+        <Branch Weight="RandBoolean^True" Condition="aiGraphCoolTime_StepPunch" Execute="StepPunch"/>
+        <!-- 미사일 : Cool 10.0 -->
+        <Branch Condition="aiGraphCoolTime_Missile" Execute="Missile"/>
+        <!-- 스텝 펀치 : Cool 3.0 -->
         <Branch Condition="true" Execute="StepPunch"/>
 
     </JudgeRangedAttack>
@@ -221,6 +226,11 @@
         <UseBranchSet Name="BattlePackageEndSet"/>
     </CremationBeam>
 
+    <!-- 원거리 공격: 미사일 -->
+    <Missile Package="ReitoSpawnMissilePackage" CoolTime="10.0">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </Missile>
 
     <!-- 스텝 공격: 회전스텝 펀치 -->
     <RotateStepPunch Package="ReitoPunchPackage" EntryNode="AI_RotateRand">

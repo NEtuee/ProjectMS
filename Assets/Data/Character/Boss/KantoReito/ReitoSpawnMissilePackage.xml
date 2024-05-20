@@ -1,0 +1,25 @@
+<AIPackage Name="ReitoSpawnMissilePackage" DefaultState="AI_MissileLaunchReady">
+
+    <AIState>
+        <AI_MissileLaunchReady UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="AC_MissileLaunchReady"/>
+            </Event_OnExecute>
+            <Branch Condition="End" Execute="AI_MissileLaunch"/>
+        </AI_MissileLaunchReady>
+        <AI_MissileLaunch UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <Event_OnExecute>
+                <AIEvent Type="SetAction" Action="AC_MissileLaunch"/>
+            </Event_OnExecute>
+
+            <Branch Condition="End" Execute="TerminatePackage"/>
+        </AI_MissileLaunch>
+        <TerminatePackage>
+            <Event_OnExecute>
+                <AIEvent Type="TerminatePackage"/>
+            </Event_OnExecute>
+        </TerminatePackage>
+    </AIState>
+
+</AIPackage>
