@@ -993,12 +993,17 @@ public class GameEntityBase : SequencerObjectBase
         float angleBetweenStick = MathEx.clampDegree(Vector3.SignedAngle(input, inputDirection,Vector3.forward));
         float angleDirection = MathEx.clampDegree(Vector3.SignedAngle(Vector3.right, _direction, Vector3.forward));
         float angleDirectionToStick = MathEx.clampDegree(Vector3.Angle(getFlipState().xFlip ? -Vector3.right : Vector3.right, inputDirection));
-
+        float angleDirectionToTarget = 0f;
+        var targetEntity = getCurrentTargetEntity();
+        if(targetEntity)
+            angleDirectionToTarget = Vector3.SignedAngle(_direction, (targetEntity.transform.position - transform.position).normalized, Vector3.forward);
+        
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Action_Test, MathEx.equals(input.sqrMagnitude,0f,float.Epsilon) == false);
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Action_Dash, Input.GetKey(KeyCode.Space));
         _actionGraph.setActionConditionData_Float(ConditionNodeUpdateType.Action_AngleBetweenStick, angleBetweenStick);
         _actionGraph.setActionConditionData_Float(ConditionNodeUpdateType.Action_AngleDirection, angleDirection);
         _actionGraph.setActionConditionData_Float(ConditionNodeUpdateType.Action_AngleFlipDirectionToStick, angleDirectionToStick);
+        _actionGraph.setActionConditionData_Float(ConditionNodeUpdateType.Action_AngleDirectionToTarget, angleDirectionToTarget);
 
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Action_IsXFlip, _flipState.xFlip);
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Action_IsYFlip, _flipState.yFlip);
@@ -1008,8 +1013,8 @@ public class GameEntityBase : SequencerObjectBase
         _actionGraph.setActionConditionData_Float(ConditionNodeUpdateType.Action_ActionExecutedTime, _actionGraph.getActionExecutedTime());
 
         float toTargetAngle = 0f;
-        if(getCurrentTargetEntity() != null)
-            toTargetAngle = MathEx.clampDegree(Vector3.SignedAngle(Vector3.right, (getCurrentTargetEntity().transform.position - transform.position).normalized, Vector3.forward));
+        if(targetEntity != null)
+            toTargetAngle = MathEx.clampDegree(Vector3.SignedAngle(Vector3.right, (targetEntity.transform.position - transform.position).normalized, Vector3.forward));
         _actionGraph.setActionConditionData_Float(ConditionNodeUpdateType.Action_AngleToTarget, toTargetAngle);
 
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Input_AttackCharge, Input.GetMouseButton(0));
