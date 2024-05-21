@@ -28,8 +28,7 @@
             <!-- 뒤에 불꽃 붙어서 이동-->
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="15" Speed="15"/>
             <!-- TODO : 타겟이 반대 방향에 위치하면 감속하여 회전하도록-->
-            <!-- <FrameEvent Type="Movement" StartTime="0" Friction="5" MaxVelocity="5" Speed="2"/> -->
-            <FrameEvent Type="Attack" StartTime="0" EndTime="0.5" AttackPreset="Common_Radius01">
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.5" AttackPreset="Common_Radius01" NotifyAttackSuccess="False">
                 <OnHit>
                 </OnHit>
             </FrameEvent>
@@ -45,7 +44,7 @@
         <Animation Preset="1_attack/4_explosion" XFlip="true" Duration="0.5">
             <!-- 타임아웃 되어서 시한폭탄된 상태 -->
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="15"/>
-            <FrameEvent Type="Attack" StartTime="0" EndTime="0.5" AttackPreset="Common_Radius01">
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.5" AttackPreset="Common_Radius01" NotifyAttackSuccess="False">
                 <OnHit>
                 </OnHit>
             </FrameEvent>

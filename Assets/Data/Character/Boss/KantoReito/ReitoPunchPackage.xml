@@ -20,7 +20,6 @@
                 <AIEvent Type="SetDirectionToTarget"/>    
                 <AIEvent Type="SetAction" Action="AC_StepPunchReady"/>
             </Event_OnExecute>
-            <Branch Condition="(TargetDistance < 1.0) && getFrameTag_CancelAvail" Execute="AI_PunchMain"/>
             <Branch Condition="End" Execute="AI_StepPunchMove"/>
         </AI_StepPunchReady>
         <AI_StepPunchMove UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
@@ -32,10 +31,12 @@
                 <AIEvent Type="SetDirectionToTarget"/>
             </Event_OnUpdate>
 
-            <Branch Weight="RandVector3^x" Condition="true" Execute="AI_Rotate"/>
-            <Branch Condition="true" Execute="AI_NotRotate"/>
+            <!-- <Branch Weight="RandVector3^x" Condition="true" Execute="AI_Rotate"/> -->
+            <!-- <Branch Condition="true" Execute="AI_NotRotate"/> -->
             <Branch Condition="End" Execute="AI_PunchMain"/>
         </AI_StepPunchMove>
+
+        <!-- 보류 : 페이크 무빙 -->
         <AI_Rotate UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
             <Event_OnUpdate>
                 <AIEvent Type="SetDirectionToTarget"/>
@@ -105,7 +106,6 @@
             </Event_OnUpdate>
             <Branch Condition="End" Execute="AI_PunchMain"/>
         </AI_RotateRight>
-
         <TerminatePackage>
             <Event_OnExecute>
                 <AIEvent Type="TerminatePackage"/>

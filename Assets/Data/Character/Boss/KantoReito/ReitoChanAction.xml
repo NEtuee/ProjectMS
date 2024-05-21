@@ -164,12 +164,11 @@
     <!-- 원거리 공격 : 스텝 펀치 -->
     <AC_StepPunchReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="2_skill/1_punch/1_punchReady" XFlip="true" Duration="0.3">
+        <Animation Preset="2_skill/1_punch/1_punchReady" XFlip="true" Duration="0.013">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2203" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0.35" EndTime="999" Tag="CancelAvail"/>
         </Animation>
         
         <Branch Condition="End" Execute="AC_Idle"/>
@@ -179,6 +178,8 @@
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/1_punch/2_punchMain" XFlip="true" Duration="0.6">
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
+            <FrameEvent Type="EffectPreset" StartTime="0.3" Key="AttackReady"/>
+
             <!-- <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/> -->
             <FrameEvent Type="FrameTag" StartTime="0.05" EndTime="999" Tag="CancelAvail"/>
         </Animation>

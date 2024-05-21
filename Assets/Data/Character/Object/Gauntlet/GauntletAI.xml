@@ -85,6 +85,6 @@
     </Dead>
 
     <EnemyWin Package="CommonIdlePackage">
-        
+        <Branch Condition="getTargetFrameTag_Dead == false" Execute="Entry"/>
     </EnemyWin>
 </AIGraph>
