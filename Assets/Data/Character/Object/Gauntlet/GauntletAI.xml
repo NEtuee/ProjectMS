@@ -8,12 +8,18 @@
     <Include Path="Assets/Data/AILibrary/Package/CommonSystemChasePackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonAlertMovePackage.xml"/>
     <Include Path="Assets/Data/Character/Object/Gauntlet/GauntletRushPackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/KantoReito/ReitoCremationBeamPackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/KantoReito/ReitoSpawnMissilePackage.xml"/>
     
     
     <GlobalVariable Name="gv_najimiSystemChaseRange" Value="9.75"/>     <!-- 카메라 범위 값. 카메라 바깥으로 사라지지 않게 추격 -->
     <!-- Rush Pattern -->
     <GlobalVariable Name="gv_najimiRushRange" Value="2.0"/>             <!-- 나지미 돌진 사거리 -->
-    <GlobalVariable Name="gv_najimiRushTrasitionTime" Value="0.8"/>     <!-- 나지미 돌진 최소 텀 -->    
+    <GlobalVariable Name="gv_najimiRushTrasitionTime" Value="0.8"/>     <!-- 나지미 돌진 최소 텀 -->
+    <CustomValue Name="Attack" Value="0.0"/>
+    <CustomEvent_Attack>
+        <AIEvent Type="AddCustomValue" Name="Attack" Value="1.0"/>
+    </CustomEvent_Attack>
 
     <BranchSet Name="IsPlayerDead">
         <Branch Condition="Dead" Execute="Dead"/>
@@ -35,6 +41,7 @@
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="TargetDistance >= gv_najimiSystemChaseRange" Execute="SystemChase"/>
         <UseBranchSet Name="WaitForRush"/>
+        <Branch Weight="RandBoolean^True" Condition="aiGraphCoolTime_JudgeRangedAttack && (customValue_Attack >= 1.0)" Execute="JudgeRangedAttack"/>
         <Branch Condition="GraphExecutedTime >= 0.3" Execute="Chase"/>
     </Entry>
 
@@ -80,6 +87,30 @@
         <UseBranchSet Name="WaitForRush"/>
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </Rush>
+
+    <JudgeRangedAttack Package="CommonIdlePackage" CoolTime="8.0">
+        <!-- 원거리 -->
+        <Branch Weight="RandBoolean^True" Condition="true" Execute="CremationBeam"/>
+        <Branch Weight="RandBoolean^False" Condition="true" Execute="Missile"/>
+
+    </JudgeRangedAttack>
+    
+    <!-- 원거리 공격: 화장포 -->
+    <CremationBeam Package="ReitoCremationBeamPackage">
+        <UseBranchSet Name="IsPlayerDead"/>
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="WaitForRush"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+    </CremationBeam>
+
+    <!-- 원거리 공격: 미사일 -->
+    <Missile Package="ReitoSpawnMissilePackage">
+        <UseBranchSet Name="IsPlayerDead"/>
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="WaitForRush"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+    </Missile>
+
 
     <Dead Package="CommonDeadPackage">
     </Dead>

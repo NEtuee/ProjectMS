@@ -89,6 +89,7 @@
     <AC_Rush MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/Gauntlet/1_rush/"/>
         <Animation Preset="1_rushMain" XFlip="true" Duration="0.6">
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="Attack" EventTargetType="Self"/>
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2302" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="30" MaxVelocity="12" Velocity="11" Speed="0"/>
             <FrameEvent Type="Attack" StartTime="0" EndTime="0.2" AttackPreset="Najimi_Rush" AttackType="Catch" CatchOffset="0.1 0 0">
@@ -184,6 +185,7 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_Away>
     
+    <!-- 화장포 -->
     <AC_CremationBeamReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="LaserEffect">
         <AnimationHeader MasterPath="Sprites/Enemy/Gauntlet/"/>
         <Animation Preset="2_cremationBeam/1_cremationBeamReady" XFlip="true" Duration="0.85">
@@ -225,4 +227,32 @@
 
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_CremationBeamShot>
+    <!-- 미사일 -->
+    <AC_MissileLaunchReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/Gauntlet/"/>
+        <Animation Preset="2_cremationBeam/1_cremationBeamReady" XFlip="true" Duration="0.2">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2206" Attach="true"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
+            
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_MissileLaunchReady>
+
+    <AC_MissileLaunch MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/Gauntlet/"/>
+        <Animation Preset="2_cremationBeam/2_cremationBeamShot" XFlip="true" Duration="0.4">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2208" Attach="true"/>
+            <FrameEvent Type="Danmaku" StartTime="0" Path="Enemy\ReitoMissile.xml" UseDirection="True"/>
+        </Animation>
+        <Animation Preset="2_cremationBeam/3_cremationBeamRecovery" XFlip="true" Duration="0.3">
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_MissileLaunch>
 </ActionGraph>
