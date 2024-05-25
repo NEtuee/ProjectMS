@@ -228,8 +228,11 @@ public class SceneCharacterManager : ManagerBase
         GameEntityBase currentTarget = requester.getCurrentTargetEntity();
         float toNewDistanceSq = receiverCharacter.getDistanceSq(requester);
 
-        if(targetIsValid(requester,currentTarget,desc) == false)
+        if(currentTarget != null && targetIsValid(requester,currentTarget,desc) == false)
+        {
             requester.setTargetEntity(null);
+            currentTarget = null;
+        }
 
         switch(desc._searchType)
         {
@@ -311,6 +314,9 @@ public class SceneCharacterManager : ManagerBase
     public bool targetIsValid(GameEntityBase currentCharacter, GameEntityBase targetCharacter, TargetSearchDescription searchDesc)
     {
         if(targetCharacter == null || targetCharacter.gameObject.activeInHierarchy == false)
+            return false;
+
+        if(targetCharacter._searchIdentifier != searchDesc._searchIdentifier)
             return false;
 
         float range = searchDesc._searchRange * searchDesc._searchRange;
