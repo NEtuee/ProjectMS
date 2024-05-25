@@ -96,7 +96,7 @@
                 <OnCatch>
                     <FrameEvent Type="AudioPlay" StartTime="0" ID="2303" Attach="true"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CatchedSet"/>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonQuarterAttack"/>
                     
                     <FrameEvent Type="ZoomEffect" Scale="-0.4"/>
                     <FrameEvent Type="StopUpdate" Time="0.15"/>
@@ -146,7 +146,7 @@
             <FrameEvent Type="Attack" StartTime="0" AttackPreset="Najimi_Catch">
                 <OnHit>
                     <FrameEvent Type="AudioPlay" StartTime="0" ID="2305" Attach="true"/>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
                     <FrameEvent Type="ZoomEffect" Scale="-0.4"/>
                     <FrameEvent Type="StopUpdate" Time="0.15"/>
 
@@ -208,7 +208,7 @@
             <FrameEvent Type="AudioPlay" StartTime="0.2" ID="2207" Attach="true"/>
             <FrameEvent Type="Attack" StartTime="0.2" AttackPreset="Gauntlet_Beam">
                 <OnHit>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="1"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
                     <FrameEvent Type="StopUpdate" Time="0.07"/>
                     <FrameEvent Type="SetTimeScale" Scale="0.2" Time="0.2" BlendTime="0.2"/>
                     <FrameEvent Type="ShakeEffect" Scale="0.15" Speed="35.0" Time="0.2"/>
@@ -246,7 +246,7 @@
         <Animation Preset="2_cremationBeam/2_cremationBeamShot" XFlip="true" Duration="0.4">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2208" Attach="true"/>
-            <FrameEvent Type="Danmaku" StartTime="0" Path="Enemy\ReitoMissile.xml" UseDirection="True"/>
+            <FrameEvent Type="Danmaku" StartTime="0" Path="Enemy\GauntletMissile.xml" UseDirection="True"/>
         </Animation>
         <Animation Preset="2_cremationBeam/3_cremationBeamRecovery" XFlip="true" Duration="0.3">
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>

@@ -8,7 +8,7 @@
                 <AIEvent Type="SetAction" Action="AC_PunchReady"/>
             </Event_OnExecute>
             <Event_OnUpdate>
-                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetDirectionToTarget" Speed="180"/>
             </Event_OnUpdate>
             <Branch Condition="(TargetDistance < 1.0) && getFrameTag_CancelAvail" Execute="AI_PunchMain"/>
             <Branch Condition="End" Execute="AI_PunchMain"/>
@@ -77,7 +77,7 @@
                 <AIEvent Type="SetAction" Action="AC_BackStep"/>
             </Event_OnExecute>
             
-            <Branch Condition="(TargetDistance > 2.5) && getFrameTag_CancelAvail" Execute="AI_RotateRand"/>
+            <Branch Condition="(TargetDistance > 2.0) && getFrameTag_CancelAvail" Execute="AI_RotateRand"/>
             <Branch Condition="End" Execute="AI_StepPunchReady"/>
         </AI_Back>
 

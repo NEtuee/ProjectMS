@@ -55,13 +55,13 @@
         <Branch Condition="End" Execute="AC_ExplosionChase"/>
     </AC_ExplosionChase>
 
-    <AC_Explosion MovementType="Empty" DirectionType="Keep">
+    <AC_Explosion MovementType="Empty" DirectionType="Keep" ActiveCollision="False">
         <Animation Preset="Sprites/Projectile/empty" Duration="0.3">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2415" Attach="true"/>
             <FrameEvent Type="EffectPreset" StartTime="0" Key="Explode"/>
-            <FrameEvent Type="Attack" StartTime="0" EndTime="0.3" AttackPreset="Common_Radius05">
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.3" AttackPreset="Common_Radius05" NotifyAttackSuccess="False">
                 <OnHit>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
                 </OnHit>
             </FrameEvent>
         </Animation>

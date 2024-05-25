@@ -8,7 +8,7 @@
             </Event_OnExecute>
 
             <Event_OnFrame>
-                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetDirectionToTarget" Speed="100"/>
             </Event_OnFrame>
 
             <Branch Condition="End" Execute="AI_CremationBeamShot"/>

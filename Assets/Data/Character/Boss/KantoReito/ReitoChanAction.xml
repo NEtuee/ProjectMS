@@ -83,7 +83,7 @@
     <AC_Guard MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" DefenceType="Guard" DefenceDirectionType="Direction" DefenceAngle="180">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="1_defense/2_guard" XFlip="true" Duration="0.5">
-            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="3" Speed="-4"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="3" Speed="-1"/>
 
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
@@ -181,6 +181,7 @@
             <FrameEvent Type="EffectPreset" StartTime="0.3" Key="AttackReady"/>
 
             <!-- <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/> -->
+            <FrameEvent Type="SetDirectionType" StartTime="0.5" DirectionType="Keep"/>
             <FrameEvent Type="FrameTag" StartTime="0.05" EndTime="999" Tag="CancelAvail"/>
         </Animation>
 
@@ -201,7 +202,8 @@
     <!-- 공격 기동 : 회전 스텝 (공격 전 크게 돌아 측면을 공격한다)-->    
     <AC_RotateStep_L MovementType="GraphPreset" MovementGraphPreset="Reito_RotateStep_L" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="2_skill/5_rotateStep" XFlip="true" Duration="0.4">
+        <Animation Preset="2_skill/5_rotateStep" XFlip="true" Duration="0.5">
+            <FrameEvent Type="EffectPreset" StartTime="0.3" Key="AttackReady"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
@@ -210,7 +212,8 @@
     </AC_RotateStep_L>
     <AC_RotateStep_R MovementType="GraphPreset" MovementGraphPreset="Reito_RotateStep_R" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="2_skill/5_rotateStep" XFlip="true" Duration="0.4">
+        <Animation Preset="2_skill/5_rotateStep" XFlip="true" Duration="0.5">
+            <FrameEvent Type="EffectPreset" StartTime="0.3" Key="AttackReady"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
@@ -259,7 +262,7 @@
             <FrameEvent Type="Attack" StartTime="0.2" AttackPreset="Reito_Beam">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonQuarterAttack"/>
                     <!-- <FrameEvent Type="ApplyBuffTarget" ApplyBuff="StunSet"/> -->
 
                     <FrameEvent Type="StopUpdate" Time="0.07"/>
