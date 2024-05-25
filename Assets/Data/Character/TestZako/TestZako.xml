@@ -5,6 +5,10 @@
         <Animation Path="Resources/Sprites/DummyPlayer/Idle/" StartFrame="0" EndFrame="1" FramePerSecond="0.5" XFlip="true">
         </Animation>
 
+        <Trigger Condition="DefenceSuccess">
+            <FrameEvent Type="AudioPlay" ID="2205"/>
+        </Trigger>
+
         <Branch Condition="Catched" Execute="Catched"/>
         <Branch Condition="End == true" Execute="Idle"/>
         <Branch Condition="GuardBroken" Execute="GuardBroken"/>

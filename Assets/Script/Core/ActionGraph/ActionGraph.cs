@@ -1,10 +1,14 @@
 
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+
 
 [System.Serializable]
 public class ActionGraph
 {
+    public const int kTriggerMaxCount = 16;
+
     private int _currentActionNodeIndex = -1;
     private int _prevActionNodeIndex = -1;
 
@@ -22,6 +26,8 @@ public class ActionGraph
 
     private HashSet<string>                     _currentFrameTag = new HashSet<string>();
     private List<byte[]>                        _conditionResultList = new List<byte[]>();
+
+    private bool[]                              _triggerExecuteCondition = new bool[kTriggerMaxCount];
 
     private Dictionary<string, bool>            _graphStateCoolTimeMap = new Dictionary<string, bool>();
 
@@ -58,6 +64,9 @@ public class ActionGraph
         _blockInput = false;
 
         _graphStateCoolTimeMap.Clear();
+
+        for(int i = 0; i < kTriggerMaxCount; ++i)
+            _triggerExecuteCondition[i] = false;
 
         setDefaultAction();
     }
@@ -101,6 +110,43 @@ public class ActionGraph
             _currentAnimationIndex = getCurrentAction()._animationInfoCount - 1;
 
         setActionConditionData_Bool(ConditionNodeUpdateType.Action_AnimationEnd,isEnd);
+    }
+
+    public void updateTriggerEvent(GameEntityBase targetEntity)
+    {
+        ActionGraphNodeData currentAction = getCurrentAction();
+        if(currentAction._triggerCount <= 0)
+            return;
+
+        for(int i = 0; i < currentAction._triggerCount; ++i)
+        {
+            if(_triggerExecuteCondition[i])
+                continue;
+
+            _triggerExecuteCondition[i] = processTriggerEvent(_actionGraphBaseData._triggerEventData[currentAction._triggerIndexStart + i], targetEntity);
+        }
+    }
+
+    public bool processTriggerEvent(ActionGraphTriggerEventData triggerEventData, GameEntityBase targetEntity)
+    {
+        if(triggerEventData == null)
+            return false;
+
+        if(triggerEventData._conditionCompareDataIndex >= 0)
+        {
+            if(processActionCondition(_actionGraphBaseData._conditionCompareData[triggerEventData._conditionCompareDataIndex]) == false)
+                return false;
+        }
+
+        for(int index = 0; index < triggerEventData._frameEventData.Length; ++index)
+        {
+            ActionFrameEventBase frameEvent = triggerEventData._frameEventData[index];
+            frameEvent.initialize(targetEntity);
+            frameEvent.onExecute(targetEntity);
+            frameEvent.onExit(targetEntity, false);
+        }
+
+        return true;
     }
 
     public void release()
@@ -209,7 +255,6 @@ public class ActionGraph
 
         _prevActionNodeIndex = _currentActionNodeIndex;
         _currentActionNodeIndex = actionIndex;
-
         _currentAnimationIndex = 0;
 
         int animationInfoIndex = getCurrentAction()._animationInfoIndex;
@@ -228,6 +273,9 @@ public class ActionGraph
                 return false;
             }
         }
+
+        for(int i = 0; i < getCurrentAction()._triggerCount; ++i)
+            _triggerExecuteCondition[i] = false;
 
         _actionExecutedTime = 0f;
         setActionConditionData_Bool(ConditionNodeUpdateType.Action_AnimationEnd, false);

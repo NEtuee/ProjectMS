@@ -8,6 +8,7 @@ public class ActionGraphBaseData
     public ActionGraphBranchData[]              _branchData = null;
     public ActionGraphConditionCompareData[]    _conditionCompareData = null;
     public AnimationPlayDataInfo[][]            _animationPlayData = null;
+    public ActionGraphTriggerEventData[]        _triggerEventData = null;
 
     public Dictionary<string, int>             _actionIndexMap = new Dictionary<string, int>();
 
@@ -36,6 +37,13 @@ public class ActionGraphBaseData
 }
 
 [System.Serializable]
+public class ActionGraphTriggerEventData
+{
+    public ActionFrameEventBase[]   _frameEventData = null;
+    public int                      _conditionCompareDataIndex = -1;
+}
+
+[System.Serializable]
 public class ActionGraphNodeData
 {
     public ActionGraphNodeData()
@@ -49,6 +57,8 @@ public class ActionGraphNodeData
         _index = -1;
         _branchIndexStart = 0;
         _branchCount = 0;
+        _triggerIndexStart = 0;
+        _triggerCount = 0;
     }
 
     public string                       _nodeName;
@@ -91,6 +101,9 @@ public class ActionGraphNodeData
     public int                          _index;
     public int                          _branchIndexStart;
     public int                          _branchCount;
+
+    public int                          _triggerIndexStart;
+    public int                          _triggerCount;
 
 #if UNITY_EDITOR
     public int _lineNumber;

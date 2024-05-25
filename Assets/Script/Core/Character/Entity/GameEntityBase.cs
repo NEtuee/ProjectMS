@@ -473,6 +473,7 @@ public class GameEntityBase : SequencerObjectBase
 
             //animation 바뀌는 시점
             _actionGraph.updateAnimation(deltaTime, this);
+            _actionGraph.updateTriggerEvent(this);
             _movementControl?.progress(deltaTime, _direction);
             
             updatePhysics(deltaTime);

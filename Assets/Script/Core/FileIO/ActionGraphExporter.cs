@@ -61,6 +61,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         List<ActionGraphBranchData> branchDataList = new List<ActionGraphBranchData>();
         List<ActionGraphConditionCompareData> compareDataList = new List<ActionGraphConditionCompareData>();
         List<AnimationPlayDataInfo[]> animationDataList = new List<AnimationPlayDataInfo[]>();
+        List<ActionGraphTriggerEventData> triggerEventDataList = new List<ActionGraphTriggerEventData>();
 
         _globalVariables.Clear();
         Dictionary<ActionGraphBranchData, string> actionCompareDic = new Dictionary<ActionGraphBranchData, string>();
@@ -85,7 +86,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
                 continue;
             }
             
-            ActionGraphNodeData nodeData = ReadAction(nodeList[i],defaultFramePerSecond, ref animationDataList, ref actionCompareDic, ref branchDataList,ref compareDataList, in branchSetDic, path);
+            ActionGraphNodeData nodeData = ReadAction(nodeList[i],defaultFramePerSecond, ref animationDataList, ref actionCompareDic, ref branchDataList,ref compareDataList,ref triggerEventDataList, in branchSetDic, path);
             if(nodeData == null)
             {
                 DebugUtil.assert_fileOpen(false,"node data is null : [NodeName: {0}] [Line: {1}] [FileName: {2}]", _currentFileName, XMLScriptConverter.getLineNumberFromXMLNode(node),nodeList[i].Name, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
@@ -137,6 +138,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         actionBaseData._branchData = branchDataList.ToArray();
         actionBaseData._conditionCompareData = compareDataList.ToArray();
         actionBaseData._animationPlayData = animationDataList.ToArray();
+        actionBaseData._triggerEventData = triggerEventDataList.ToArray();
 
         actionBaseData._actionIndexMap = actionIndexDic;
 
@@ -216,7 +218,13 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         targetDic.Add(branchSetName,branchSetParent.ChildNodes);
     }
 
-    private static ActionGraphNodeData ReadAction(XmlNode node, float defaultFPS, ref List<AnimationPlayDataInfo[]> animationDataList,  ref Dictionary<ActionGraphBranchData, string> actionCompareDic,ref List<ActionGraphBranchData> branchDataList, ref List<ActionGraphConditionCompareData> compareDataList, in Dictionary<string, XmlNodeList> branchSetDic, string filePath)
+    private static ActionGraphNodeData ReadAction(XmlNode node, float defaultFPS, 
+            ref List<AnimationPlayDataInfo[]> animationDataList,  
+            ref Dictionary<ActionGraphBranchData, string> actionCompareDic,
+            ref List<ActionGraphBranchData> branchDataList, 
+            ref List<ActionGraphConditionCompareData> compareDataList, 
+            ref List<ActionGraphTriggerEventData> triggerEventDataList, 
+            in Dictionary<string, XmlNodeList> branchSetDic, string filePath)
     {
         ActionGraphNodeData nodeData = new ActionGraphNodeData();
         nodeData._nodeName = node.Name;
@@ -372,6 +380,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
 
         XmlNodeList nodeList = node.ChildNodes;
         int branchStartIndex = branchDataList.Count;
+        int triggerStartIndex = triggerEventDataList.Count;
 
         List<AnimationPlayDataInfo> animationPlayDataInfoList = new List<AnimationPlayDataInfo>();
 
@@ -419,6 +428,23 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
                 branchData._lineNumber = XMLScriptConverter.getLineNumberFromXMLNode(nodeList[i]);
 #endif
                 branchDataList.Add(branchData);
+            }
+            else if(nodeList[i].Name == "Trigger")
+            {
+                if(triggerEventDataList.Count >= ActionGraph.kTriggerMaxCount)
+                {
+                    DebugUtil.assert_fileOpen(false,"Trigger는 최대 {0}개까지 선언할 수 있습니다. [Line: {1}] [FileName: {2}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node), ActionGraph.kTriggerMaxCount, XMLScriptConverter.getLineFromXMLNode(node), filePath);
+                    continue;
+                }
+
+                ActionGraphTriggerEventData triggerEventData = readTriggerEvent(nodeList[i],ref compareDataList, ref _globalVariables, filePath);
+                if(triggerEventData == null)
+                {
+                    DebugUtil.assert_fileOpen(false,"invalid trigger Event Data [Line: {0}] [FileName: {1}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node), XMLScriptConverter.getLineFromXMLNode(node), filePath);
+                    return null;
+                }
+                
+                triggerEventDataList.Add(triggerEventData);
             }
             else if(nodeList[i].Name == "UseBranchSet")
             {
@@ -479,6 +505,9 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         nodeData._animationInfoCount = animationPlayDataInfoList.Count;
         nodeData._branchIndexStart = branchStartIndex;
         nodeData._branchCount = branchDataList.Count - branchStartIndex;
+
+        nodeData._triggerIndexStart = triggerStartIndex;
+        nodeData._triggerCount = triggerEventDataList.Count - triggerStartIndex;
 
         return nodeData;
     }
@@ -743,11 +772,56 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         nodeData._branchCount = 0;
         nodeData._branchIndexStart = -1;
 
+        nodeData._triggerCount = 0;
+        nodeData._triggerIndexStart = -1;
+
         nodeData._isDummyAction = true;
 
         animationPlayDataInfo._hasMovementGraph = false;
 
         return nodeData;
+    }
+
+    public static ActionGraphTriggerEventData readTriggerEvent(XmlNode node, ref List<ActionGraphConditionCompareData> compareDataList, ref Dictionary<string, string> globalVariableContainer, string filePath)
+    {
+        if(node.HasChildNodes == false)
+            return null;
+
+        ActionGraphTriggerEventData triggerEventData = new ActionGraphTriggerEventData();
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int attrIndex = 0; attrIndex < attributes.Count; ++attrIndex)
+        {
+            string targetName = attributes[attrIndex].Name;
+            string targetValue = getGlobalVariable(attributes[attrIndex].Value, globalVariableContainer);
+
+            if(targetName == "Condition")
+            {
+                ActionGraphConditionCompareData conditionCompareData = ReadConditionCompareData(targetValue,globalVariableContainer,node,filePath);
+                if(conditionCompareData == null)
+                    return null;
+
+                triggerEventData._conditionCompareDataIndex = compareDataList.Count;
+                compareDataList.Add(conditionCompareData);
+            }
+        }
+
+        List<ActionFrameEventBase> frameEvents = new List<ActionFrameEventBase>();
+
+        XmlNodeList nodeList = node.ChildNodes;
+        for(int index = 0; index < nodeList.Count; ++index)
+        {
+            if(nodeList[index].Name == "FrameEvent")
+            {
+                ActionFrameEventBase frameEvent = FrameEventLoader.readFromXMLNode(nodeList[index], filePath);
+                if(frameEvent == null)
+                    continue;
+                
+                frameEvents.Add(frameEvent);
+            }
+        }
+
+        triggerEventData._frameEventData = frameEvents.ToArray();
+        return triggerEventData;
     }
 
     public static ActionGraphBranchData ReadActionBranch(XmlNode node, ref Dictionary<ActionGraphBranchData, string> actionCompareDic,  ref List<ActionGraphConditionCompareData> compareDataList, ref Dictionary<string, string> globalVariableContainer, string filePath)
