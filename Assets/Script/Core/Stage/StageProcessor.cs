@@ -205,7 +205,7 @@ public class StageProcessor
                 else
                     spawnDesc._direction = characterSpawnData._flip ? Vector3.left : Vector3.right;
                 spawnDesc._rotation = Quaternion.identity;
-                spawnDesc._searchIdentifier = characterSpawnData._searchIdentifier;
+                spawnDesc._allyInfo = characterSpawnData._allyInfoKey == "" ? (infoData._allyInfoKey == "" ? null : AllyInfoManager.Instance().GetAllyInfoData(infoData._allyInfoKey)) : AllyInfoManager.Instance().GetAllyInfoData(characterSpawnData._allyInfoKey);
                 spawnDesc._sortingOrder = characterSpawnData._sortingOrder;
 
                 CharacterEntityBase createdCharacter = sceneCharacterManager.createCharacterFromPool(infoData,spawnDesc);

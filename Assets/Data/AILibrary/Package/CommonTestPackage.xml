@@ -8,7 +8,7 @@
             <Branch Condition="true" Execute="AI_Test"/>
         </AI_Entry>
 
-        <AI_Test UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_Test UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
             </Event_OnExecute>

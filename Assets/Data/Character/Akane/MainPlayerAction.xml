@@ -186,7 +186,7 @@
 
             <FrameEvent Type="UIEvent" StartTime="0" Condition="AttackSuccess == false" Key="Dash"/>
 
-            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="Fear" EventTargetType="Range" SearchIdentifier="Enemy" Range="2.5"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="Fear" EventTargetType="Range" AllyTarget="Neutral" Range="2.5"/>
 
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_DashFriction" MaxVelocity="gv_DashVelocity" Speed="0" Velocity="gv_DashVelocity" Condition="(getStat_DashPoint >= 1.0)"/>
             <FrameEvent Type="ApplyBuff" StartTime="0.031" ApplyBuff="DashPointConsumption" Condition="(getStat_DashPoint >= 1.0)"/>

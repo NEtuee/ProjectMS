@@ -86,7 +86,7 @@
     <!-- 패키지 인클루드 : 커스텀 스킬 -->
     <AIPackage Name="SkillPackage" DefaultState="AI_Pray">
         <AIState>
-            <AI_Pray UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <AI_Pray UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
                 <Event_OnExecute>    
                     <AIEvent Type="SetDirectionToTarget"/>
                     <AIEvent Type="SetAction" Action="AC_Emp"/>

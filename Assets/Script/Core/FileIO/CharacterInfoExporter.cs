@@ -67,8 +67,8 @@ public class CharacterInfoLoader : LoaderBase<Dictionary<string,CharacterInfoDat
                 characterInfoData._characterRadius = float.Parse(attrValue);
             else if(attrName == "HeadUpOffset")
                 characterInfoData._headUpOffset = float.Parse(attrValue);
-            else if(attrName == "SearchIdentifier")
-                characterInfoData._searchIdentifer = (SearchIdentifier)System.Enum.Parse(typeof(SearchIdentifier), attrValue);
+            else if(attrName == "AllyInfo")
+                characterInfoData._allyInfoKey = attrValue;
             else if(attrName == "DefaultMaterial")
                 characterInfoData._defaultMaterial = (CommonMaterial)System.Enum.Parse(typeof(CommonMaterial), attrValue);
             else if(attrName == "IndicatorVisible")

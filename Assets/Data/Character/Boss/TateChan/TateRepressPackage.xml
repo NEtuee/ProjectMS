@@ -1,7 +1,7 @@
 <AIPackage Name="TateRepressPackage" DefaultState="AI_GuardForward">
 
     <AIState>
-        <AI_GuardForward UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="10.0" SearchIdentifier="Player">
+        <AI_GuardForward UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="10.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_GuardForward"/>
                 <AIEvent Type="SetDirectionToTarget"/>
@@ -14,7 +14,7 @@
             <Branch Condition="DefenceSuccess" Execute="AI_GuardSuccess"/>
         </AI_GuardForward>
 
-        <AI_GuardSuccess UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="10.0" SearchIdentifier="Player">
+        <AI_GuardSuccess UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="10.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_GuardSuccess"/>
             </Event_OnExecute>

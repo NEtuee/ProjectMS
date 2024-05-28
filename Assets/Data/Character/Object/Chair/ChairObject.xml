@@ -17,7 +17,7 @@
             -->
             <FrameEvent Type="KillEntity" StartTime="0"/>
 
-            <FrameEvent Type="Projectile" StartTime="0" GraphName="ChairProjectile" DirectionType="AttackedPoint" SpawnTargetType="Self" SearchIdentifier="Projectile" DirectionAngle="180.0"/>
+            <FrameEvent Type="Projectile" StartTime="0" GraphName="ChairProjectile" DirectionType="AttackedPoint" SpawnTargetType="Self" DirectionAngle="180.0"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="Dead_Kicked"/>

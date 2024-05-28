@@ -1,12 +1,12 @@
 <AIPackage Name="AobaStormRaisenPackage" DefaultState="AI_StormPreToUp">
 
     <AIState>
-        <AI_StormEntry UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_StormEntry UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Branch Weight="RandBoolean^True" Condition="true" Execute="AI_StormPreToUp"/>
             <Branch Weight="RandBoolean^False" Condition="true" Execute="AI_StormPreToDown"/>
         </AI_StormEntry>
 
-        <AI_StormPreToUp UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_StormPreToUp UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_StormPre"/>
@@ -15,7 +15,7 @@
             <Branch Condition="End" Execute="AI_StormUp"/>
         </AI_StormPreToUp>
 
-        <AI_StormPreToDown UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_StormPreToDown UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_StormPre"/>
@@ -25,7 +25,7 @@
         </AI_StormPreToDown>
 
         <!-- StormRaisen Charge -->
-        <AI_StormUp UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_StormUp UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget" Angle="45"/>
                 <AIEvent Type="SetAction" Action="AC_Storm"/>
@@ -35,7 +35,7 @@
             <Branch Condition="End" Execute="AI_StormPost"/>
         </AI_StormUp>
 
-        <AI_StormDown UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_StormDown UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget" Angle="-45"/>
                 <AIEvent Type="SetAction" Action="AC_Storm"/>
@@ -45,7 +45,7 @@
             <Branch Condition="End" Execute="AI_StormPost"/>
         </AI_StormDown>
 
-        <AI_StormPost UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_StormPost UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_StormPost"/>
@@ -59,7 +59,7 @@
         </AI_StormPost>
 
         <!-- StormRaisenPre -->
-        <AI_StormRaisenPre UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_StormRaisenPre UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_StormRaisenPre"/>
@@ -70,7 +70,7 @@
         </AI_StormRaisenPre>
 
         <!-- StormRaisenSlash -->
-        <AI_StormRaisenSlash UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_StormRaisenSlash UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_StormRaisenSlash"/>
             </Event_OnExecute>
@@ -80,7 +80,7 @@
         </AI_StormRaisenSlash>
 
         <!-- StormRaisenSuccess -->
-        <AI_StormRaisenSuccess UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_StormRaisenSuccess UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_StormRaisenSuccess"/>
             </Event_OnExecute>

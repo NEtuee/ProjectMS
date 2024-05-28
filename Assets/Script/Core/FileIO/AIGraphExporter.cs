@@ -634,9 +634,9 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
             {
                 nodeData._targetSearchSphereRadius = XMLScriptConverter.valueToFloatExtend(targetValue);
             }
-            else if(targetName == "SearchIdentifier")
+            else if(targetName == "AllyTarget")
             {
-                nodeData._searchIdentifier = (SearchIdentifier)System.Enum.Parse(typeof(SearchIdentifier), targetValue);
+                nodeData._searchAllyTargetType = (AllyTargetType)System.Enum.Parse(typeof(AllyTargetType), targetValue);
             }
             else if(targetName == "TargetPosition")
             {

@@ -11,7 +11,7 @@
     <GlobalVariable Name="gv_movingTime" Value="0.5"/>
 
     <AIState>
-        <AI_Entry UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="gv_TargetSearchRange" SearchIdentifier="Player">
+        <AI_Entry UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="gv_TargetSearchRange" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_Idle"/>
             </Event_OnExecute>
@@ -21,7 +21,7 @@
             <Branch Condition="TargetExists && (PackageExecutedTime >= gv_standTime)" Execute="AI_MoveAll"/>
         </AI_Entry>
 
-        <AI_MoveAll UpdateTime="0.2" TargetSearchType="Near" TargetSearchRange="gv_TargetSearchRange" SearchIdentifier="Player">
+        <AI_MoveAll UpdateTime="0.2" TargetSearchType="Near" TargetSearchRange="gv_TargetSearchRange" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_Move"/>
                 <AIEvent Type="SetDirectionToTarget"/>
@@ -41,7 +41,7 @@
             <Branch Condition="PackageExecutedTime >= gv_movingTime" Execute="AI_Entry"/>
         </AI_MoveAll>
 
-        <AI_GuardForward UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="gv_TargetSearchRange" SearchIdentifier="Player">
+        <AI_GuardForward UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="gv_TargetSearchRange" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_GuardForward"/>
                 <AIEvent Type="SetDirectionToTarget"/>
@@ -62,7 +62,7 @@
             <Branch Condition="(TargetDistance <= gv_guardAttackDistance) && (getStat_AttackDelay >= 1.0)" Execute="AI_GuardAttackCharge"/>
         </AI_GuardForward>
 
-        <AI_GuardBack UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="gv_TargetSearchRange" SearchIdentifier="Player">
+        <AI_GuardBack UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="gv_TargetSearchRange" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_GuardBack"/>
                 <AIEvent Type="SetDirectionToTarget"/>
@@ -83,7 +83,7 @@
             <Branch Condition="(TargetDistance <= gv_guardAttackDistance) && (getStat_AttackDelay >= 1.0)" Execute="AI_GuardAttackCharge"/>
         </AI_GuardBack>
 
-        <AI_GuardSuccess UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="gv_TargetSearchRange" SearchIdentifier="Player">
+        <AI_GuardSuccess UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="gv_TargetSearchRange" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_GuardSuccess"/>
             </Event_OnExecute>
@@ -99,7 +99,7 @@
             <Branch Condition="TargetDistance >= gv_guardOffDistance" Execute="AI_Entry"/>
         </AI_GuardSuccess>
 
-        <AI_GuardBreakAttackSuccess UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="gv_TargetSearchRange" SearchIdentifier="Player">
+        <AI_GuardBreakAttackSuccess UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="gv_TargetSearchRange" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_GuardBreakHit"/>
             </Event_OnExecute>
@@ -113,7 +113,7 @@
             <Branch Condition="End" Execute="AI_GuardBack"/>
         </AI_GuardBreakAttackSuccess>
 
-        <AI_GuardAttackCharge UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="gv_TargetSearchRange" SearchIdentifier="Player">
+        <AI_GuardAttackCharge UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="gv_TargetSearchRange" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_AttackReady"/>
             </Event_OnExecute>
@@ -131,7 +131,7 @@
             <Branch Condition="End" Execute="AI_GuardAttack"/>
         </AI_GuardAttackCharge>
 
-        <AI_GuardAttack UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="gv_TargetSearchRange" SearchIdentifier="Player">
+        <AI_GuardAttack UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="gv_TargetSearchRange" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_AttackMain"/>
             </Event_OnExecute>
@@ -144,7 +144,7 @@
             <Branch Condition="End" Execute="AI_Entry"/>
         </AI_GuardAttack>
 
-        <AI_GuardAttackSuccess UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="gv_TargetSearchRange" SearchIdentifier="Player">
+        <AI_GuardAttackSuccess UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="gv_TargetSearchRange" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_AttackSuccess"/>
             </Event_OnExecute>
@@ -155,7 +155,7 @@
             <Branch Condition="End" Execute="AI_Entry"/>
         </AI_GuardAttackSuccess>
 
-        <AI_Hit UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="gv_TargetSearchRange" SearchIdentifier="Player">
+        <AI_Hit UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="gv_TargetSearchRange" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_Hit"/>
             </Event_OnExecute>
@@ -169,7 +169,7 @@
             <Branch Condition="End" Execute="AI_Entry"/>
         </AI_Hit>
 
-        <AI_GuardBroken UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="gv_TargetSearchRange" SearchIdentifier="Player">
+        <AI_GuardBroken UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="gv_TargetSearchRange" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_GuardBroken"/>
             </Event_OnExecute>

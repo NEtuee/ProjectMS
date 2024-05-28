@@ -14,7 +14,7 @@
         <Animation Preset="empty" XFlip="true" Duration="0.026">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="100" Velocity="25" Speed="0"/>
             
-            <FrameEvent Type="Projectile" StartTime="0.013" GraphName="ThunderStorm" DirectionType="AI" SpawnTargetType="Self" SearchIdentifier="Enemy"/>
+            <FrameEvent Type="Projectile" StartTime="0.013" GraphName="ThunderStorm" DirectionType="AI" SpawnTargetType="Self"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Move"/>
@@ -25,7 +25,7 @@
         <Animation Preset="empty" XFlip="true" Duration="0.026">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="100" Velocity="25" Speed="0"/>
             
-            <FrameEvent Type="Projectile" StartTime="0.013" GraphName="ThunderStroke" DirectionType="AI" SpawnTargetType="Self" SearchIdentifier="Enemy"/>
+            <FrameEvent Type="Projectile" StartTime="0.013" GraphName="ThunderStroke" DirectionType="AI" SpawnTargetType="Self"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Move_with"/>

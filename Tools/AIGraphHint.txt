@@ -45,7 +45,7 @@ ShortCut,__AIEvent_SetDirectionToTarget,<AIEvent Type=~SetDirectionToTarget~/>
 ShortCut,__AIEvent_TerminatePackage,<AIEvent Type=~TerminatePackage~/>
 ShortCut,__AIEvent_Test,<AIEvent Type=~Test~ Log=~~/>
 ShortCut,__AIStateSection,<AIState>#n#n</AIState>
-InQuote,SearchIdentifier,"Player,Enemy"
+InQuote,AllyTarget=,"Ally,Enemy,Neutral"
 InQuote,TargetSearchType=,"Near,NearDirection,NearMousePointDirection"
 InQuote,Type=,"Test,SetAngleDirection,SetDirectionToTarget,SetAction,ClearTarget,ExecuteState,TerminatePackage,KillEntity"
 ShortCut,__AIEvent_CallAIEvent,<AIEvent Type=~CallAIEvent~ EventName=~~ TargetType=~~/>

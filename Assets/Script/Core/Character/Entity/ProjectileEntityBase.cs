@@ -143,7 +143,7 @@ public class ProjectileEntityBase : ObjectBase
         ProjectileEntityBase requester = successData._requester as ProjectileEntityBase;
         GameEntityBase target = successData._target as GameEntityBase;
 
-        if(requester._searchIdentifier == target._searchIdentifier)
+        if(AllyInfoManager.compareAllyTargetType(requester, target) == AllyTargetType.Ally)
             return;
 
         if(_collisionUniqueIDList.Contains(target.GetUniqueID()))

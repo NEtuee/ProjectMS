@@ -1,7 +1,7 @@
 <AIPackage Name="TateDodgePackage" DefaultState="AI_Dodge">
 
     <AIState>
-        <AI_Dodge UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+        <AI_Dodge UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget" Angle="0"/>
                 <AIEvent Type="SetAction" Action="AC_Dodge"/>

@@ -724,7 +724,7 @@ public class SequencerGraphEvent_CallAIEvent : SequencerGraphEventBase
     private SequencerCallAIEventTargetType _eventTargetType = SequencerCallAIEventTargetType.UniqueTarget;
 
     private List<CharacterEntityBase> _rangeSearchEntityList = new List<CharacterEntityBase>();
-    private SearchIdentifier _searchIdentifier = SearchIdentifier.Count;
+    private AllyTargetType _allyTarget = AllyTargetType.Count;
 
     private float _range = 0f;
 
@@ -749,7 +749,7 @@ public class SequencerGraphEvent_CallAIEvent : SequencerGraphEventBase
             {
                 SceneCharacterManager sceneCharacterManager = SceneCharacterManager._managerInstance as SceneCharacterManager;
                 _rangeSearchEntityList.Clear();
-                sceneCharacterManager.targetSearchRange(executeTargetEntity.transform.position,_range,_searchIdentifier,ref _rangeSearchEntityList);
+                sceneCharacterManager.targetSearchRange(executeTargetEntity.transform.position,_range,_allyTarget, executeTargetEntity.getAllyInfo(),ref _rangeSearchEntityList);
 
                 foreach(var item in _rangeSearchEntityList)
                 {
@@ -790,9 +790,9 @@ public class SequencerGraphEvent_CallAIEvent : SequencerGraphEventBase
             {
                 _range = float.Parse(attrValue);
             }
-            else if(attrName == "SearchIdentifier")
+            else if(attrName == "AllyTarget")
             {
-                _searchIdentifier = (SearchIdentifier)System.Enum.Parse(typeof(SearchIdentifier), attrValue);
+                _allyTarget = (AllyTargetType)System.Enum.Parse(typeof(AllyTargetType), attrValue);
             }
         }
     }
@@ -1633,9 +1633,9 @@ public class SequencerGraphEvent_SpawnCharacter : SequencerGraphEventBase
             {
                 _markerName = attrValue;
             }
-            else if(attrName == "SearchIdentifier")
+            else if(attrName == "AllyInfo")
             {
-                _spawnDesc._searchIdentifier = (SearchIdentifier)System.Enum.Parse(typeof(SearchIdentifier), attrValue);
+                _spawnDesc._allyInfo = AllyInfoManager.Instance().GetAllyInfoData(attrValue);
             }
             else if(attrName == "UniqueKey")
             {

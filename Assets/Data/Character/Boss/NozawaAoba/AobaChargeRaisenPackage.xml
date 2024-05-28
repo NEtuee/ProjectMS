@@ -1,7 +1,7 @@
 <AIPackage Name="AobaChargeRaisenPackage" DefaultState="AI_Charge">
 
     <AIState>
-        <AI_Charge UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_Charge UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_ChargeRaisenReady"/>
@@ -10,7 +10,7 @@
             <Branch Condition="End" Execute="AI_ChargeRaisenPre"/>
         </AI_Charge>
 
-        <AI_ChargeRaisenPre UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_ChargeRaisenPre UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_ChargeRaisenPre"/>
@@ -19,7 +19,7 @@
             <Branch Condition="End" Execute="AI_ChargeRaisenSlash"/>          
         </AI_ChargeRaisenPre>
 
-        <AI_ChargeRaisenSlash UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_ChargeRaisenSlash UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_ChargeRaisenSlash"/>
             </Event_OnExecute>
@@ -28,7 +28,7 @@
             <Branch Condition="End" Execute="TerminatePackage"/>          
         </AI_ChargeRaisenSlash>
 
-        <AI_ChargeRaisenSuccess UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_ChargeRaisenSuccess UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_ChargeRaisenSuccess"/>
             </Event_OnExecute>

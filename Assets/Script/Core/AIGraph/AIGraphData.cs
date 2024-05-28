@@ -95,7 +95,7 @@ public class AIPackageNodeData
 
     public float                        _updateTime = 1f;
     public TargetSearchType             _targetSearchType = TargetSearchType.None;
-    public SearchIdentifier             _searchIdentifier = SearchIdentifier.Count;
+    public AllyTargetType               _searchAllyTargetType = AllyTargetType.Count;
     public float                        _targetSearchRange = 999f;
     public float                        _targetSearchStartRange = 0f;
     public float                        _targetSearchSphereRadius = 0f;

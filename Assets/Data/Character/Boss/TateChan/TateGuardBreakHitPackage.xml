@@ -1,7 +1,7 @@
 <AIPackage Name="TateGuardBreakHitPackage" DefaultState="AI_GuardBreakHit">
 
     <AIState>
-        <AI_GuardBreakHit UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="10.0" SearchIdentifier="Player">
+        <AI_GuardBreakHit UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="10.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_GuardBreakHit"/>
             </Event_OnExecute>

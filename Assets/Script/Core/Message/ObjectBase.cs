@@ -11,8 +11,6 @@ public abstract class ObjectBase : MessageReceiver, IProgress
 {
     public System.Action            whenDeactive = ()=>{};
 
-    public SearchIdentifier         _searchIdentifier = SearchIdentifier.Enemy;
-
     public AttackProcessorManager   _attackProcessorManager = new AttackProcessorManager();
 
     protected int                   _currentManagerNumber = -1;
@@ -28,6 +26,8 @@ public abstract class ObjectBase : MessageReceiver, IProgress
     protected ObjectBase            _parentObject = null;
     protected ObjectBase            _childObject = null;
     private Vector3                 _childPivot = Vector3.zero;
+
+    protected AllyInfoData          _allyInfo = null;
 
     protected ObjectBase            _summonObject = null;
 
@@ -128,6 +128,8 @@ public abstract class ObjectBase : MessageReceiver, IProgress
         _childObject.setParentObject(null);
         _childObject = null;
     }
+
+    public void setAllyInfo(AllyInfoData allyInfo) {_allyInfo = allyInfo;}
 
     public void setSummonObject(ObjectBase summonObject)
     {
@@ -285,6 +287,17 @@ public abstract class ObjectBase : MessageReceiver, IProgress
 
         return _spriteRenderer.transform;
     }
+
+    public int getAllyInfoKey()
+    {
+        return _allyInfo == null ? -1 : _allyInfo._index;
+    }
+
+    public AllyInfoData getAllyInfo()
+    {
+        return _allyInfo;
+    }
+
     public Vector3 getDirection() {return _direction;}
     public void setDirection(Vector3 direction) {_direction = direction;}
 

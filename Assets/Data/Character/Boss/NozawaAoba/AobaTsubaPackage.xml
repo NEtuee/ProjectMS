@@ -1,7 +1,7 @@
 <AIPackage Name="AobaTsubaPackage" DefaultState="AI_Tsuba">
 
     <AIState>
-        <AI_Tsuba UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_Tsuba UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>    
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_Tsuba"/>
@@ -13,7 +13,7 @@
             <Branch Condition="End" Execute="TerminatePackage"/>
         </AI_Tsuba>
 
-        <AI_Tsuba_Entry_Short UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_Tsuba_Entry_Short UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="Test" Log="AI Rush Success"/>
                 <AIEvent Type="SetAction" Action="AC_Tsuba_Entry"/>
@@ -23,7 +23,7 @@
             <Branch Condition="IsCatcher == false" Execute="AI_Away"/>
         </AI_Tsuba_Entry_Short>
 
-        <AI_Tsuba_Entry_Normal UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_Tsuba_Entry_Normal UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="Test" Log="AI Rush Success"/>
                 <AIEvent Type="SetAction" Action="AC_Tsuba_Entry"/>
@@ -33,7 +33,7 @@
             <Branch Condition="IsCatcher == false" Execute="AI_Away"/>
         </AI_Tsuba_Entry_Normal>
 
-        <AI_Tsuba_Entry_Long UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_Tsuba_Entry_Long UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="Test" Log="AI Rush Success"/>
                 <AIEvent Type="SetAction" Action="AC_Tsuba_Entry"/>
@@ -43,7 +43,7 @@
             <Branch Condition="IsCatcher == false" Execute="AI_Away"/>
         </AI_Tsuba_Entry_Long>
 
-        <AI_Tsuba_Attack UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_Tsuba_Attack UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_Tsuba_Attack"/>
             </Event_OnExecute>
@@ -51,7 +51,7 @@
             <Branch Condition="End" Execute="AI_RaisenPre"/> <!-- 공격 성공 후 바로 뢰섬 -->
         </AI_Tsuba_Attack>
     
-        <AI_Away UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_Away UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_Away"/>
             </Event_OnExecute>
@@ -60,7 +60,7 @@
         </AI_Away>
 
         <!-- 뢰섬 -->
-        <AI_RaisenPre UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_RaisenPre UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_RaisenPre"/>
@@ -69,7 +69,7 @@
             <Branch Condition="End" Execute="AI_RaisenSlash"/>
         </AI_RaisenPre>
 
-        <AI_RaisenSlash UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_RaisenSlash UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_RaisenSlash"/>
             </Event_OnExecute>
@@ -78,7 +78,7 @@
             <Branch Condition="End" Execute="TerminatePackage"/>
         </AI_RaisenSlash>
         
-        <AI_RaisenSuccess UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_RaisenSuccess UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_RaisenSuccess"/>
             </Event_OnExecute>

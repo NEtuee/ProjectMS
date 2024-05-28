@@ -137,7 +137,7 @@ public class ActionFrameEvent_CallAIEvent : ActionFrameEventBase
     public CallAIEventTargetType _eventTargetType = CallAIEventTargetType.Self;
 
     public List<CharacterEntityBase> _rangeSearchEntityList = new List<CharacterEntityBase>();
-    public SearchIdentifier _searchIdentifier = SearchIdentifier.Count;
+    public AllyTargetType _allyTarget = AllyTargetType.Count;
 
     public float _range = 0f;
 
@@ -169,11 +169,10 @@ public class ActionFrameEvent_CallAIEvent : ActionFrameEventBase
             {
                 SceneCharacterManager sceneCharacterManager = SceneCharacterManager._managerInstance as SceneCharacterManager;
                 _rangeSearchEntityList.Clear();
-                sceneCharacterManager.targetSearchRange(executeEntity.transform.position,_range,_searchIdentifier,ref _rangeSearchEntityList);
-
+                sceneCharacterManager.targetSearchRange(executeEntity.transform.position,_range,_allyTarget,executeEntity.getAllyInfo(),ref _rangeSearchEntityList);
                 foreach(var item in _rangeSearchEntityList)
                 {
-                    if(item == null || item is GameEntityBase == false)
+                    if(item == null || item is GameEntityBase == false || item == executeEntity)
                         continue;
                         
                     (item as GameEntityBase).executeCustomAIEvent(_customAiEventName);
@@ -184,7 +183,7 @@ public class ActionFrameEvent_CallAIEvent : ActionFrameEventBase
             {
                 SceneCharacterManager sceneCharacterManager = SceneCharacterManager._managerInstance as SceneCharacterManager;
                 _rangeSearchEntityList.Clear();
-                sceneCharacterManager.targetSearchRange(executeEntity.transform.position,_range,_searchIdentifier,ref _rangeSearchEntityList);
+                sceneCharacterManager.targetSearchRange(executeEntity.transform.position,_range,_allyTarget,executeEntity.getAllyInfo(),ref _rangeSearchEntityList);
 
                 foreach(var item in _rangeSearchEntityList)
                 {
@@ -228,9 +227,9 @@ public class ActionFrameEvent_CallAIEvent : ActionFrameEventBase
             {
                 _range = float.Parse(attrValue);
             }
-            else if(attrName == "SearchIdentifier")
+            else if(attrName == "AllyTarget")
             {
-                _searchIdentifier = (SearchIdentifier)System.Enum.Parse(typeof(SearchIdentifier), attrValue);
+                _allyTarget = (AllyTargetType)System.Enum.Parse(typeof(AllyTargetType), attrValue);
             }
         }
 
@@ -773,9 +772,9 @@ public class ActionFrameEvent_SpawnCharacter : ActionFrameEventBase
             {
                 _spawnOffset = XMLScriptConverter.valueToVector3(attrValue);
             }
-            else if(attrName == "SearchIdentifier")
+            else if(attrName == "AllyInfo")
             {
-                _spawnDesc._searchIdentifier = (SearchIdentifier)System.Enum.Parse(typeof(SearchIdentifier), attrValue);
+                _spawnDesc._allyInfo = AllyInfoManager.Instance().GetAllyInfoData(attrValue);
             }
             else if(attrName == "Inherit")
             {
@@ -1466,7 +1465,7 @@ public class ActionFrameEvent_Danmaku : ActionFrameEventBase
         }
         else if(executeEntity is ProjectileEntityBase)
         {
-            DanmakuManager.Instance().addDanmaku(_path,executeEntity.transform.position,offsetPosition,_useFlip,offsetAngle,executeEntity._searchIdentifier);
+            DanmakuManager.Instance().addDanmaku(_path,executeEntity.transform.position,offsetPosition,_useFlip,offsetAngle,executeEntity.getAllyInfo());
         }
 
         return true;

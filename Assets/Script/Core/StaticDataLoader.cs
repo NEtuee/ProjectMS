@@ -10,9 +10,11 @@ public static class StaticDataLoader
     public static string weightRandomPath = "Assets/Data/StaticData/WeightRandom.xml";
     public static string characterInfoPath = "Assets/Data/StaticData/CharacterInfo.xml";
     public static string effectInfoPath = "Assets/Data/StaticData/EffectInfo.xml";
+    public static string allyInfoPath = "Assets/Data/StaticData/AllyInfo.xml";
 
     public static void loadStaticData()
     {
+        AllyInfoManager.Instance().SetAllyInfo(ResourceContainerEx.Instance().getAllyInfo(allyInfoPath));
         EffectInfoManager.Instance().setEffectInfoData(EffectInfoExporter.readFromXML(effectInfoPath));
         StatusInfo.setStatusInfoDataDictionary(StatusInfoLoader.readFromXML(statusInfoPath));
         StatusInfo.setBuffDataDictionary(BuffDataLoader.readFromXML(buffInfoPath));

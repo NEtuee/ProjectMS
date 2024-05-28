@@ -1,7 +1,7 @@
 <AIPackage Name="CommonSystemChasePackage" DefaultState="AI_Entry">
     <GlobalVariable Name="gv_najimiSystemChaseRange" Value="9.75"/>     <!-- 카메라 범위 값. 카메라 바깥으로 사라지지 않게 추격 -->
     <AIState>
-        <AI_Entry UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+        <AI_Entry UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_Idle"/>
                 <AIEvent Type="Test" Log="AI System Chase Entry"/>
@@ -10,7 +10,7 @@
             <Branch Condition="true" Execute="AI_Chase"/>
         </AI_Entry>
 
-        <AI_Chase UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+        <AI_Chase UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_SystemChase"/>

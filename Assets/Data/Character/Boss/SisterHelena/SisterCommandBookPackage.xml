@@ -8,7 +8,7 @@
             <Branch Condition="true" Execute="TerminatePackage"/>
         </AI_Entry>
 
-        <AI_LaserToTarget UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" SearchIdentifier="Player">
+        <AI_LaserToTarget UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_CommandBook_LaserToTarget"/>
@@ -17,7 +17,7 @@
             <Branch Condition="End" Execute="TerminatePackage"/>
         </AI_LaserToTarget>
         
-        <AI_LaserWith UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" SearchIdentifier="Player">
+        <AI_LaserWith UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_CommandBook_LaserWith"/>
@@ -30,7 +30,7 @@
             <Branch Condition="End" Execute="TerminatePackage"/>
         </AI_LaserWith>
         
-        <AI_LaserOut UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" SearchIdentifier="Player">
+        <AI_LaserOut UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_CommandBook_LaserOut"/>
@@ -39,7 +39,7 @@
             <Branch Condition="End" Execute="TerminatePackage"/>
         </AI_LaserOut>
         
-        <AI_LaserIn UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" SearchIdentifier="Player">
+        <AI_LaserIn UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_CommandBook_LaserIn"/>

@@ -1,7 +1,7 @@
 <AIPackage Name="SisterBarriorPackage" DefaultState="AI_Barrior">
 
     <AIState>
-        <AI_Pray UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_Pray UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>    
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_Pray"/>
@@ -10,7 +10,7 @@
             <Branch Condition="End" Execute="TerminatePackage"/>
         </AI_Pray>
 
-        <AI_Barrior UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_Barrior UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>    
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_Barrior"/>
@@ -22,7 +22,7 @@
             <Branch Condition="End" Execute="TerminatePackage"/>
         </AI_Barrior>
 
-        <AI_Barrior_Entry_Short UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_Barrior_Entry_Short UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_Barrior_Entry"/>
             </Event_OnExecute>
@@ -31,7 +31,7 @@
             <Branch Condition="IsCatcher == false" Execute="AI_Barrior_Broken"/>
         </AI_Barrior_Entry_Short>
 
-        <AI_Barrior_Entry_Normal UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_Barrior_Entry_Normal UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_Barrior_Entry"/>
             </Event_OnExecute>
@@ -40,7 +40,7 @@
             <Branch Condition="IsCatcher == false" Execute="AI_Barrior_Broken"/>
         </AI_Barrior_Entry_Normal>
 
-        <AI_Barrior_Entry_Long UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_Barrior_Entry_Long UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_Barrior_Entry"/>
             </Event_OnExecute>
@@ -49,7 +49,7 @@
             <Branch Condition="IsCatcher == false" Execute="AI_Barrior_Broken"/>
         </AI_Barrior_Entry_Long>
 
-        <AI_Barrior_Defense UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_Barrior_Defense UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_Barrior_Defense"/>
             </Event_OnExecute>
@@ -57,7 +57,7 @@
             <Branch Condition="End" Execute="AI_Counter"/> <!-- 방어 성공 후 바로 공격 -->
         </AI_Barrior_Defense>
 
-        <AI_Barrior_Broken UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_Barrior_Broken UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_Barrior_Broken"/>
             </Event_OnExecute>
@@ -66,7 +66,7 @@
         </AI_Barrior_Broken>
         
         <!-- 카운터 -->
-        <AI_Counter UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_Counter UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_BarriorCounter"/>

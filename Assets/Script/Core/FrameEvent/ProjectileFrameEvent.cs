@@ -29,7 +29,7 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
 
     private Vector3                         _positionOffset = Vector3.zero;
 
-    private SearchIdentifier                _targetSearchIdentifier = SearchIdentifier.Count;
+    private AllyInfoData                    _targetAllyInfo = null;
     private PredictionType                  _predictionType = PredictionType.Path;
     private Vector3[]                       _pathPredictionArray = null;
     private int                             _predictionAccuracy = 0;
@@ -111,11 +111,11 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
                 
             }
             
-            ProjectileManager._instance.spawnProjectileDelayed(_projectileGraphName, _startTerm,executeEntity,targetEntity,_setTargetType,ref shotInfo,executeEntity,_targetSearchIdentifier == SearchIdentifier.Count ? executeEntity._searchIdentifier : _targetSearchIdentifier);
+            ProjectileManager._instance.spawnProjectileDelayed(_projectileGraphName, _startTerm,executeEntity,targetEntity,_setTargetType,ref shotInfo,executeEntity,_targetAllyInfo == null ? executeEntity.getAllyInfo() : _targetAllyInfo);
         }
         else
         {
-            ProjectileManager._instance.spawnProjectile(_projectileGraphName,ref shotInfo,spawnPosition,executeEntity,_targetSearchIdentifier == SearchIdentifier.Count ? executeEntity._searchIdentifier : _targetSearchIdentifier);
+            ProjectileManager._instance.spawnProjectile(_projectileGraphName,ref shotInfo,spawnPosition,executeEntity,_targetAllyInfo == null ? executeEntity.getAllyInfo() : _targetAllyInfo);
         }
         
         return true;
@@ -303,9 +303,9 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
             {
                 _useFlip = bool.Parse(attrValue);
             }
-            else if(attrName == "SearchIdentifier")
+            else if(attrName == "AllyInfo")
             {
-                _targetSearchIdentifier = (SearchIdentifier)System.Enum.Parse(typeof(SearchIdentifier), attrValue);
+                _targetAllyInfo = AllyInfoManager.Instance().GetAllyInfoData(attrValue);
             }
             else if(attrName == "DirectionAngle")
             {

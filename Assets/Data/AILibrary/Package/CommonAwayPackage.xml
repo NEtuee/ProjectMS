@@ -1,7 +1,7 @@
 <AIPackage Name="CommonAwayPackage" DefaultState="AI_Away">
 
     <AIState>
-        <AI_Away UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+        <AI_Away UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget" Angle="180"/>
                 <AIEvent Type="SetAction" Action="AC_Move"/>

@@ -1,5 +1,5 @@
 HintType,Symbol,TextList
-LineStart,<SpawnCharacter,"CharacterKey=~~,Position=~~,SearchIdentifier=~~,UniqueKey=~~,PositionMarker=~~"
+LineStart,<SpawnCharacter,"CharacterKey=~~,Position=~~,AllyInfo=~~,UniqueKey=~~,PositionMarker=~~"
 LineStart,<WaitSecond,Time=~~
 LineStart,<SetCameraTarget,"UniqueKey=~~,CameraMode=~~"
 LineStart,<SetAudioListner,UniqueKey=~~
@@ -8,13 +8,13 @@ LineStart,<SetHPSphere,UniqueKey=~~
 LineStart,<WaitTargetDead,UniqueKey=~~
 LineStart,<TeleportTargetTo,"UniqueKey=~~,Position=~~,PositionMarker=~~"
 LineStart,<ApplyPostProcessProfile,"Path=~~,BlendTime=~~,ApplyType=~~"
-LineStart,<CallAIEvent,"EventName=~~,UniqueKey=~~,Range=~~,SearchIdentifier=~~,EventTargetType=~~"
+LineStart,<CallAIEvent,"EventName=~~,UniqueKey=~~,Range=~~,AllyTarget=~~,EventTargetType=~~"
 LineStart,<WaitSignal,Signal=~~
 LineStart,<SetCameraZoom,"Size=~~,Speed=~~,Force=~~"
 InQuote,SearchIdentifier=,"Player,Enemy,Projectile"
 InQuote,ApplyType=,"BaseBlend,Additional"
 InQuote,CameraMode=,"TargetCenterMode,TwoTargetMode"
-ShortCut,_SpawnCharacter,<SpawnCharacter CharacterKey=~~ Position=~0 0 0~ SearchIdentifier=~~/>
+ShortCut,_SpawnCharacter,<SpawnCharacter CharacterKey=~~ Position=~0 0 0~ AllyInfo=~~/>
 ShortCut,__WaitSecond,<WaitSecond Time=~1.0~/>
 ShortCut,__SetCameraTarget,<SetCameraTarget UniqueKey=~~ CameraMode=~TargetCenterMode~/>
 ShortCut,__SetAudioListner,<SetAudioListner UniqueKey=~~/>
@@ -119,7 +119,7 @@ LineStart,<SetCameraBoundLock,"UniqueKey=~~,UniqueGruopKey=~~,Enable=~~"
 ShortCut,__KillEntity,<KillEntity UniqueKey=~~/>
 LineStart,<KillEntity,"UniqueKey=~~,UniqueGruopKey=~~"
 ShortCut,__KillAllStageEntity,<KillAllStageEntity/>
-,,
+InQuote,AllyTarget=,"Ally,Enemy,Neutral"
 ,,
 ,,
 ,,

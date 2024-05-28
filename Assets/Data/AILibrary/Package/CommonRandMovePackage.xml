@@ -9,7 +9,7 @@
             <Branch Weight="RandDirection^Right" Execute="AI_MoveRight"/>
     </BranchSet>
     <AIState>
-        <AI_Entry UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="gv_randMoveTargetSearchRange" SearchIdentifier="Player">
+        <AI_Entry UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="gv_randMoveTargetSearchRange" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_Idle"/>
                 <AIEvent Type="Test" Log="RandMove Entry"/>
@@ -17,7 +17,7 @@
             <UseBranchSet Name="RandMoveWeightBranchSet"/>
         </AI_Entry>
 
-        <AI_Idle UpdateTime="gv_randMoveCycleTime" TargetSearchType="Near" TargetSearchRange="gv_randMoveTargetSearchRange" SearchIdentifier="Player">
+        <AI_Idle UpdateTime="gv_randMoveCycleTime" TargetSearchType="Near" TargetSearchRange="gv_randMoveTargetSearchRange" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_Idle"/>
                 <AIEvent Type="Test" Log="RandMove Idle"/>
@@ -27,7 +27,7 @@
 
         </AI_Idle>
 
-        <AI_MoveUp UpdateTime="0.2" TargetSearchType="Near" TargetSearchRange="gv_randMoveTargetSearchRange" SearchIdentifier="Player">
+        <AI_MoveUp UpdateTime="0.2" TargetSearchType="Near" TargetSearchRange="gv_randMoveTargetSearchRange" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAngleDirection" Angle="135.0"/>
                 <AIEvent Type="SetAction" Action="AC_Move"/>
@@ -37,7 +37,7 @@
             <Branch Condition="true" Execute="AI_Idle"/>
             
         </AI_MoveUp>
-        <AI_MoveDown UpdateTime="0.2" TargetSearchType="Near" TargetSearchRange="gv_randMoveTargetSearchRange" SearchIdentifier="Player">
+        <AI_MoveDown UpdateTime="0.2" TargetSearchType="Near" TargetSearchRange="gv_randMoveTargetSearchRange" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAngleDirection" Angle="315.0"/>
                 <AIEvent Type="SetAction" Action="AC_Move"/>
@@ -47,7 +47,7 @@
             <Branch Condition="true" Execute="AI_Idle"/>
             
         </AI_MoveDown>
-        <AI_MoveLeft UpdateTime="0.2" TargetSearchType="Near" TargetSearchRange="gv_randMoveTargetSearchRange" SearchIdentifier="Player">
+        <AI_MoveLeft UpdateTime="0.2" TargetSearchType="Near" TargetSearchRange="gv_randMoveTargetSearchRange" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAngleDirection" Angle="225.0"/>
                 <AIEvent Type="SetAction" Action="AC_Move"/>
@@ -57,7 +57,7 @@
             <Branch Condition="true" Execute="AI_Idle"/>
             
         </AI_MoveLeft>
-        <AI_MoveRight UpdateTime="0.2" TargetSearchType="Near" TargetSearchRange="gv_randMoveTargetSearchRange" SearchIdentifier="Player">
+        <AI_MoveRight UpdateTime="0.2" TargetSearchType="Near" TargetSearchRange="gv_randMoveTargetSearchRange" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAngleDirection" Angle="45.0"/>   
                 <AIEvent Type="SetAction" Action="AC_Move"/>

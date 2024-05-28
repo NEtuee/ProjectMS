@@ -1,6 +1,13 @@
 
 using UnityEngine;
 
+public enum AllyTargetType
+{
+    Ally,
+    Enemy,
+    Neutral,
+    Count,
+}
 
 public enum SearchIdentifier
 {

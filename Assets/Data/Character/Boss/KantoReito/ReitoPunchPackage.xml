@@ -2,7 +2,7 @@
 
     <AIState>
         <!-- 근거리 -->
-        <AI_PunchReady UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_PunchReady UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_PunchReady"/>
@@ -15,14 +15,14 @@
         </AI_PunchReady>
 
         <!-- 원거리 -->
-        <AI_StepPunchReady UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_StepPunchReady UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>    
                 <AIEvent Type="SetAction" Action="AC_StepPunchReady"/>
             </Event_OnExecute>
             <Branch Condition="End" Execute="AI_StepPunchMove"/>
         </AI_StepPunchReady>
-        <AI_StepPunchMove UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_StepPunchMove UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_StepPunchMove"/>
@@ -37,7 +37,7 @@
         </AI_StepPunchMove>
 
         <!-- 보류 : 페이크 무빙 -->
-        <AI_Rotate UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_Rotate UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnUpdate>
                 <AIEvent Type="SetDirectionToTarget"/>
             </Event_OnUpdate>           
@@ -45,7 +45,7 @@
             <Branch Condition="(TargetDistance < 1.5) && getFrameTag_CancelAvail" Execute="AI_PunchMain"/>
             <Branch Condition="End" Execute="AI_PunchMain"/>
         </AI_Rotate>
-        <AI_NotRotate UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_NotRotate UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnUpdate>
                 <AIEvent Type="SetDirectionToTarget"/>
             </Event_OnUpdate>           
@@ -55,14 +55,14 @@
         </AI_NotRotate>
 
         <!-- 공격 -->
-        <AI_PunchMain UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_PunchMain UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_PunchMain"/>
             </Event_OnExecute>
             <Branch Condition="End" Execute="AI_PunchRecover"/>
         </AI_PunchMain>
 
-        <AI_PunchRecover UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_PunchRecover UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>    
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_PunchRecover"/>
@@ -71,7 +71,7 @@
         </AI_PunchRecover>
 
         <!-- 백-회전 스텝 펀치 -->
-        <AI_Back UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_Back UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_BackStep"/>
@@ -82,11 +82,11 @@
         </AI_Back>
 
         <!-- 회전 스텝 펀치 -->
-        <AI_RotateRand UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">           
+        <AI_RotateRand UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">           
             <Branch Weight="RandBoolean^True" Condition="true" Execute="AI_RotateLeft"/>
             <Branch Weight="RandBoolean^False" Condition="true" Execute="AI_RotateRight"/>
         </AI_RotateRand>
-        <AI_RotateLeft UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_RotateLeft UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_RotateStep_L"/>
@@ -96,7 +96,7 @@
             </Event_OnUpdate>
             <Branch Condition="End" Execute="AI_PunchMain"/>
         </AI_RotateLeft>
-        <AI_RotateRight UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_RotateRight UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>    
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_RotateStep_R"/>

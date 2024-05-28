@@ -1213,7 +1213,7 @@ public class StageDataEditor : EditorWindow
 
         characterSpawnData._hideWhenDeactive = EditorGUILayout.Toggle("Hide When Deactive", characterSpawnData._hideWhenDeactive);
         characterSpawnData._keepAlive = EditorGUILayout.Toggle("Keep Alive", characterSpawnData._keepAlive);
-        characterSpawnData._searchIdentifier = (SearchIdentifier)EditorGUILayout.EnumPopup("Search Identifier", characterSpawnData._searchIdentifier);
+        characterSpawnData._allyInfoKey = EditorGUILayout.TextField("AllyInfo Key",characterSpawnData._allyInfoKey);// (SearchIdentifier)EditorGUILayout.EnumPopup("Search Identifier", characterSpawnData._searchIdentifier);
         characterSpawnData._activeType = (StageSpawnCharacterActiveType)EditorGUILayout.EnumPopup("Active Type", characterSpawnData._activeType);
 
         characterSpawnData._uniqueKey = EditorGUILayout.TextField("Unique Key",characterSpawnData._uniqueKey);
@@ -1691,7 +1691,7 @@ public class StageDataEditor : EditorWindow
         spawnData._characterKey = characterKey;
         spawnData._flip = true;
         spawnData._localPosition = Vector3.zero;
-        spawnData._searchIdentifier = characterInfo[characterKey]._searchIdentifer;
+        spawnData._allyInfoKey = characterInfo[characterKey]._allyInfoKey;
 
         SpriteRenderer characterEditItem = getCharacterItem();
         characterEditItem.sprite = getFirstActionSpriteFromCharacter(characterInfo[characterKey]);
@@ -3268,7 +3268,7 @@ public class CharacterInfoView
             EditorGUILayout.LabelField("Status: " + _selectedData._statusName);
             EditorGUILayout.LabelField("Radius: " + _selectedData._characterRadius);
             EditorGUILayout.LabelField("HeadUpOffset: " + _selectedData._headUpOffset);
-            EditorGUILayout.LabelField("SearchIdentifier: " + _selectedData._searchIdentifer);
+            EditorGUILayout.LabelField("AllyInfo: " + _selectedData._allyInfoKey);
 
             GUILayout.EndScrollView();
 

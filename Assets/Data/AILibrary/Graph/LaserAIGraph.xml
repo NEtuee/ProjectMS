@@ -5,7 +5,7 @@
     
     <AIPackage Name="LaserPackage" DefaultState="AI_ToTarget">
         <AIState>
-            <AI_ToTarget UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+            <AI_ToTarget UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
                 <Event_OnExecute>
                     <AIEvent Type="SetDirectionToTarget"/>
                     <AIEvent Type="SetAction" Action="SisterLaserShot"/>

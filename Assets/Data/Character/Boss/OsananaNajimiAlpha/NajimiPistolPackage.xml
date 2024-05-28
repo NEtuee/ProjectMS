@@ -1,7 +1,7 @@
 <AIPackage Name="NajimiPistolPackage" DefaultState="AI_PistolReady">
 
     <AIState>        
-        <AI_PistolReady UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_PistolReady UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="Test" Log="AI Pistol Ready Entry"/>
                 <AIEvent Type="SetDirectionToTarget"/>
@@ -15,7 +15,7 @@
             <Branch Condition="End" Execute="AI_PistolShot"/>
         </AI_PistolReady>
 
-        <AI_PistolShot UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_PistolShot UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_PistolShot"/>
             </Event_OnExecute>
@@ -24,7 +24,7 @@
         </AI_PistolShot>
 
         <!-- 사용 안함 -->
-        <AI_BackStep UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_BackStep UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget" Angle="15"/>
                 <AIEvent Type="SetAction" Action="AC_Dash"/>

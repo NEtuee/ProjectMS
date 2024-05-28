@@ -150,7 +150,7 @@
             <!-- 낙뢰 -->
             <FrameEvent Type="Danmaku" StartTime="0" Path="Enemy/ThunderStorm.xml" Offset="0.5 0 0" UseDirection="True"/>
 
-            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="With" EventTargetType="SummonTargetRange" Range="100.0" SearchIdentifier="Enemy"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="With" EventTargetType="SummonTargetRange" Range="100.0" AllyTarget="Ally"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>
@@ -216,12 +216,12 @@
         </Animation>
         <Animation Preset="2_skill/3_thunderStorm/2_attackMain" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="8 4 0" SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="8 2 0" SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="8 0 0" SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="8 -2 0" SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="8 -4 0" SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
-            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="Left" EventTargetType="SummonTargetRange" Range="100.0" SearchIdentifier="Enemy"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="8 4 0" InheritDirection="False" UseFlip="false"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="8 2 0" InheritDirection="False" UseFlip="false"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="8 0 0" InheritDirection="False" UseFlip="false"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="8 -2 0" InheritDirection="False" UseFlip="false"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="8 -4 0" InheritDirection="False" UseFlip="false"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="Left" EventTargetType="SummonTargetRange" Range="100.0" AllyTarget="Ally"/>
         </Animation>
         <Animation Preset="2_skill/3_thunderStorm/3_attackRecover" XFlip="true" Duration="0.3">
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
@@ -239,12 +239,12 @@
         </Animation>
         <Animation Preset="2_skill/3_thunderStorm/2_attackMain" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="-8 4 0" SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="-8 2 0" SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="-8 0 0" SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="-8 -2 0" SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="-8 -4 0" SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
-            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="Right" EventTargetType="SummonTargetRange" Range="100.0" SearchIdentifier="Enemy"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="-8 4 0" InheritDirection="False" UseFlip="false"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="-8 2 0" InheritDirection="False" UseFlip="false"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="-8 0 0" InheritDirection="False" UseFlip="false"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="-8 -2 0" InheritDirection="False" UseFlip="false"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="-8 -4 0" InheritDirection="False" UseFlip="false"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="Right" EventTargetType="SummonTargetRange" Range="100.0" AllyTarget="Ally"/>
         </Animation>
         <Animation Preset="2_skill/3_thunderStorm/3_attackRecover" XFlip="true" Duration="0.3">
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
@@ -262,12 +262,12 @@
         </Animation>
         <Animation Preset="2_skill/3_thunderStorm/2_attackMain" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="4 -4 0"   SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="2 -4 0"   SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="0 -4 0"   SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="-2 -4 0"  SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="-4 -4 0"  SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
-            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="Up" EventTargetType="SummonTargetRange" Range="100.0" SearchIdentifier="Enemy"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="4 -4 0"   InheritDirection="False" UseFlip="false"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="2 -4 0"   InheritDirection="False" UseFlip="false"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="0 -4 0"   InheritDirection="False" UseFlip="false"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="-2 -4 0"  InheritDirection="False" UseFlip="false"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="-4 -4 0"  InheritDirection="False" UseFlip="false"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="Up" EventTargetType="SummonTargetRange" Range="100.0" AllyTarget="Ally"/>
         </Animation>
         <Animation Preset="2_skill/3_thunderStorm/3_attackRecover" XFlip="true" Duration="0.3">
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
@@ -285,12 +285,12 @@
         </Animation>
         <Animation Preset="2_skill/3_thunderStorm/2_attackMain" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="4 4 0"   SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="2 4 0"   SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="0 4 0"   SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="-2 4 0"  SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="-4 4 0"  SearchIdentifier="Enemy" InheritDirection="False" UseFlip="false"/>
-            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="Down" EventTargetType="SummonTargetRange" Range="100.0" SearchIdentifier="Enemy"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="4 4 0"   InheritDirection="False" UseFlip="false"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="2 4 0"   InheritDirection="False" UseFlip="false"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="0 4 0"   InheritDirection="False" UseFlip="false"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="-2 4 0"  InheritDirection="False" UseFlip="false"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Shoot" Offset="-4 4 0"  InheritDirection="False" UseFlip="false"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="Down" EventTargetType="SummonTargetRange" Range="100.0" AllyTarget="Ally"/>
         </Animation>
         <Animation Preset="2_skill/3_thunderStorm/3_attackRecover" XFlip="true" Duration="0.3">
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
@@ -349,7 +349,7 @@
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/5_command/1_laser" XFlip="true" Duration="1.5">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2517" Attach="true" Switch="True"/>
-            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="LaserToTarget" EventTargetType="Range" Range="10.0" SearchIdentifier="Enemy"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="LaserToTarget" EventTargetType="Range" Range="10.0" AllyTarget="Ally"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
@@ -363,7 +363,7 @@
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/5_command/1_laser" XFlip="true" Duration="1.5">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2517" Attach="true" Switch="True"/>
-            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="LaserWith" EventTargetType="Range" Range="10.0" SearchIdentifier="Enemy"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="LaserWith" EventTargetType="Range" Range="10.0" AllyTarget="Ally"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
@@ -378,7 +378,7 @@
         <Animation Preset="2_skill/5_command/2_laserSpin" XFlip="true" Duration="3.0">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2517" Attach="true" Switch="True"/>
             <FrameEvent Type="SetRotateSlotValue" StartTime="0" Speed="100" Radius="1.0"/>
-            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="LaserOut" EventTargetType="Range" Range="10.0" SearchIdentifier="Enemy"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="LaserOut" EventTargetType="Range" Range="10.0" AllyTarget="Ally"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
@@ -394,7 +394,7 @@
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2517" Attach="true" Switch="True"/>
             <FrameEvent Type="SetRotateSlotValue" StartTime="0" Speed="25" Radius="5.0"/>
 
-            <FrameEvent Type="CallAIEvent" StartTime="1.0" EventName="LaserIn" EventTargetType="Range" Range="10.0" SearchIdentifier="Enemy"/>
+            <FrameEvent Type="CallAIEvent" StartTime="1.0" EventName="LaserIn" EventTargetType="Range" Range="10.0" AllyTarget="Ally"/>
             <FrameEvent Type="SetRotateSlotValue" StartTime="1.6" Speed="0" Radius="5.0"/>
             <FrameEvent Type="SetRotateSlotValue" StartTime="2.0" Speed="25" Radius="5.0"/>
 
@@ -508,7 +508,7 @@
         <Animation Preset="2_skill/6_barrior/6_counter/1_attackReady" XFlip="true" Duration="0.8">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2508" Attach="true" Switch="True"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
-            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="LaserToTarget" EventTargetType="Range" Range="10.0" SearchIdentifier="Enemy"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="LaserToTarget" EventTargetType="Range" Range="10.0" AllyTarget="Ally"/>
             <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/CommonBeam_TimeLine" Attach="true" AngleType="Direction" LifeTime="0.85" FollowDirection="True" AttackPreset="Helena_Laser"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
@@ -541,8 +541,8 @@
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/7_invisibleDodge/1_disappear" XFlip="true" Duration="0.3">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2513" Attach="true" Switch="True"/>
-            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="Detach" EventTargetType="Range" SearchIdentifier="Enemy" Range="100.0"/>
-            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="DetachExplosion" EventTargetType="Range" Range="100.0" SearchIdentifier="Enemy"/> 
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="Detach" EventTargetType="Range" AllyTarget="Ally" Range="100.0"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="DetachExplosion" EventTargetType="Range" Range="100.0" AllyTarget="Ally"/> 
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
         </Animation>

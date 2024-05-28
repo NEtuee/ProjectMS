@@ -15,7 +15,8 @@ public class CharacterInfoData
     public bool         _useHpInterface = false;
     public bool         _selfCollision = true;
     public bool         _immortalCharacter = false;
+
+    public string       _allyInfoKey = "";
     
-    public SearchIdentifier _searchIdentifer = SearchIdentifier.Enemy;
     public CommonMaterial   _defaultMaterial = CommonMaterial.Skin;
 }

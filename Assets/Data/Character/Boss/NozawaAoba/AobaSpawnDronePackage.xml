@@ -1,7 +1,7 @@
 <AIPackage Name="AobaSpawnDronePackage" DefaultState="AI_SpawnDrone">
 
     <AIState>
-        <AI_SpawnDrone UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_SpawnDrone UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_SpawnDrones"/>
             </Event_OnExecute>

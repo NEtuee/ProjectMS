@@ -1,4 +1,18 @@
-
+<!-- 캐릭터 Code 명
+    DisplayName="" : 보여질 이름
+    ActionGraph="" : ActionGraph 경로 
+    AIGraph="" : AIGraph 경로
+    StatusInfoName="" : 사용할 StatusInfo 이름
+    CollisionRadius="0" : 충돌체 반지름
+    HeadUpOffset="0" : 머리 위 위치 설정용 Offset
+    IndicatorVisible="True False" : 화면 밖으로 나가면 Indicator로 표시할지 여부
+    ProjectileCollisionRadius="" : 아직 의미 없음
+    UseCameraBoundLock="True False" : Camera 영역 밖으로 못나가게 막을지 여부 (기본값 True)
+    AllyInfo=""  : AllyInfo 설정
+    UseHPInterface="True False" : Hp 잔량 표시 여부
+    SelfCollision="True False" : 같은 팀끼리 충돌 처리 여부 (밀어내기) (기본값 True)
+    ImmortalCharacter="True False" : 무적 캐릭터인지 여부
+-->
 
 <CharacterInfo>
     <Akane
@@ -11,7 +25,7 @@
         HeadUpOffset="0.5"
         ProjectileCollisionRadius=""
 
-        SearchIdentifier="Player"
+        AllyInfo="Player"
     />
     
     <TateChan
@@ -24,7 +38,7 @@
         CollisionRadius="0.2"
         ProjectileCollisionRadius=""
 
-        SearchIdentifier="Enemy"
+        AllyInfo="CommonBattle"
     />
 
     <TestZako
@@ -36,7 +50,7 @@
         CollisionRadius="0.2"
         ProjectileCollisionRadius=""
 
-        SearchIdentifier="Enemy"
+        AllyInfo="CommonBattle"
     />
     <TutorialStudentTest
         DisplayName="튜토리얼 더미 체력 개많음"
@@ -48,7 +62,7 @@
         ProjectileCollisionRadius=""
         UseHPInterface="True"
 
-        SearchIdentifier="Enemy"
+        AllyInfo="CommonBattle"
     />
 
     <TutorialStudent
@@ -61,7 +75,7 @@
         ProjectileCollisionRadius=""
         SelfCollision="False"
 
-        SearchIdentifier="Enemy"
+        AllyInfo="CommonBattle"
     />
 
     <IinchoChan
@@ -73,7 +87,7 @@
         CollisionRadius="0.2"
         HeadUpOffset="0.5"
 
-        SearchIdentifier="Enemy"
+        AllyInfo="CommonBattle"
     />
 
     <Chair
@@ -85,7 +99,7 @@
         CollisionRadius="0.35"
         ProjectileCollisionRadius=""
 
-        SearchIdentifier="Enemy"
+        AllyInfo="InteractObject"
     />
 
     <OsananaNajimiCrossHair
@@ -97,7 +111,7 @@
         CollisionRadius="0.7"
         ProjectileCollisionRadius=""
 
-        SearchIdentifier="Enemy"
+        AllyInfo="EnemyAllNeutral"
     />
 
     <PoliceTacticalStaffCrossHair
@@ -109,7 +123,7 @@
         CollisionRadius="0.7"
         ProjectileCollisionRadius=""
 
-        SearchIdentifier="Enemy"
+        AllyInfo="EnemyAllNeutral"
     />
 
     <TutorialTeacher
@@ -121,6 +135,8 @@
         CollisionRadius="0.35"
         HeadUpOffset="0.5"
         ProjectileCollisionRadius=""
+
+        AllyInfo="CommonBattle"
     />
 
     <OsananaNajimiAlpha
@@ -133,7 +149,7 @@
         HeadUpOffset="0.5"
         ProjectileCollisionRadius=""
 
-        SearchIdentifier="Enemy"
+        AllyInfo="SportsClub"
     />
 
     <KantoReito
@@ -146,7 +162,7 @@
         HeadUpOffset="0.5"
         ProjectileCollisionRadius=""
 
-        SearchIdentifier="Enemy"
+        AllyInfo="CommonBattle"
     />
 
     <NozawaAoba
@@ -159,7 +175,7 @@
         HeadUpOffset="0.5"
         ProjectileCollisionRadius=""
 
-        SearchIdentifier="Enemy"
+        AllyInfo="Police"
     />
 
     <Gauntlet
@@ -172,7 +188,7 @@
         HeadUpOffset="0.5"
         ProjectileCollisionRadius=""
 
-        SearchIdentifier="Enemy"
+        AllyInfo="CommonBattle"
     />
     <Missile
         DisplayName="미사일"
@@ -184,7 +200,7 @@
         HeadUpOffset="0.5"
         ProjectileCollisionRadius=""
 
-        SearchIdentifier="Projectile"
+        AllyInfo="CommonBattle"
     />
 
     <FireworkBullet
@@ -196,7 +212,7 @@
         CollisionRadius="0.2"
         ProjectileCollisionRadius=""
 
-        SearchIdentifier="Enemy"
+        AllyInfo="CommonBattle"
     />
 
     <EmpGrenade
@@ -208,7 +224,7 @@
         CollisionRadius="0.2"
         ProjectileCollisionRadius=""
 
-        SearchIdentifier="Enemy"
+        AllyInfo="CommonBattle"
     />
     
     <RapierChan
@@ -222,7 +238,7 @@
         ProjectileCollisionRadius=""
         UseHPInterface="True"
 
-        SearchIdentifier="Enemy"
+        AllyInfo="PerfectTeam"
     />
 
     <LugerChan
@@ -236,7 +252,7 @@
         ProjectileCollisionRadius=""
         UseHPInterface="True"
 
-        SearchIdentifier="Enemy"
+        AllyInfo="PerfectTeam"
     />
 
     <BarricadeChan
@@ -250,7 +266,7 @@
         ProjectileCollisionRadius=""
         UseHPInterface="True"
 
-        SearchIdentifier="Enemy"
+        AllyInfo="PerfectTeam"
     />
 
     <SisterHelena
@@ -263,7 +279,7 @@
         HeadUpOffset="0.5"
         ProjectileCollisionRadius=""
 
-        SearchIdentifier="Enemy"
+        AllyInfo="Sister"
     />
 
     <MeleePreset
@@ -276,7 +292,7 @@
         HeadUpOffset="0.5"
         ProjectileCollisionRadius=""
 
-        SearchIdentifier="Enemy"
+        AllyInfo="CommonBattle"
     />
 
     <RangedPreset
@@ -289,7 +305,7 @@
         HeadUpOffset="0.5"
         ProjectileCollisionRadius=""
 
-        SearchIdentifier="Enemy"
+        AllyInfo="CommonBattle"
     />
 
     <SchoolDoor
@@ -301,7 +317,7 @@
         CollisionRadius="0.35"
         ProjectileCollisionRadius=""
 
-        SearchIdentifier="Enemy"
+        AllyInfo="InteractObject"
     />
 
     <SukebanKatanaChan
@@ -315,7 +331,7 @@
         ProjectileCollisionRadius=""
         UseHPInterface="True"
 
-        SearchIdentifier="Enemy"
+        AllyInfo="Sukeban"
     />
 
     <SukebanUziChan
@@ -329,7 +345,7 @@
         ProjectileCollisionRadius=""
         UseHPInterface="True"
 
-        SearchIdentifier="Enemy"
+        AllyInfo="Sukeban"
     />
 
     <PitcherChan
@@ -343,7 +359,7 @@
         ProjectileCollisionRadius=""
         UseHPInterface="True"
 
-        SearchIdentifier="Enemy"
+        AllyInfo="SportsClub"
     />
 
     <BarbellChan
@@ -357,7 +373,7 @@
         ProjectileCollisionRadius=""
         UseHPInterface="True"
 
-        SearchIdentifier="Enemy"
+        AllyInfo="SportsClub"
     />    
     <DumbellChan
         DisplayName="운동부 덤벨쨩"
@@ -370,7 +386,7 @@
         ProjectileCollisionRadius=""
         UseHPInterface="True"
 
-        SearchIdentifier="Enemy"
+        AllyInfo="SportsClub"
     />
     <BarbellChan_najimi
         DisplayName="운동부 바벨쨩"
@@ -383,7 +399,7 @@
         ProjectileCollisionRadius=""
         UseHPInterface="True"
 
-        SearchIdentifier="Enemy"
+        AllyInfo="SportsClub"
     />    
     <DumbellChan_najimi
         DisplayName="운동부 덤벨쨩"
@@ -396,7 +412,7 @@
         ProjectileCollisionRadius=""
         UseHPInterface="True"
 
-        SearchIdentifier="Enemy"
+        AllyInfo="SportsClub"
     />
     <RunnerChan
         DisplayName="운동부 러너쨩"
@@ -408,7 +424,7 @@
         ProjectileCollisionRadius=""
         UseHPInterface="True"
 
-        SearchIdentifier="Enemy"
+        AllyInfo="SportsClub"
     />
 
     <SisterStaffChan
@@ -422,7 +438,7 @@
         ProjectileCollisionRadius=""
         UseHPInterface="True"
 
-        SearchIdentifier="Enemy"
+        AllyInfo="Sister"
     />
     
     <SisterWandChan
@@ -436,7 +452,7 @@
         ProjectileCollisionRadius=""
         UseHPInterface="True"
 
-        SearchIdentifier="Enemy"
+        AllyInfo="Sister"
     />
     
     <ThunderFloor_Chase
@@ -449,7 +465,7 @@
         HeadUpOffset="0.5"
         ProjectileCollisionRadius=""
 
-        SearchIdentifier="Enemy"
+        AllyInfo="Sister"
     />
     <ThunderFloor_Shoot
         DisplayName="헬레나 전기장판 (발사)"
@@ -461,7 +477,7 @@
         HeadUpOffset="0.5"
         ProjectileCollisionRadius=""
 
-        SearchIdentifier="Enemy"
+        AllyInfo="Sister"
     />
 
     <PoliceOmawariChan
@@ -475,7 +491,7 @@
         ProjectileCollisionRadius=""
         UseHPInterface="True"
 
-        SearchIdentifier="Enemy"
+        AllyInfo="Police"
     />
 
     <PoliceTaihoChan
@@ -489,7 +505,7 @@
         ProjectileCollisionRadius=""
         UseHPInterface="True"
 
-        SearchIdentifier="Enemy"
+        AllyInfo="Police"
     />
 
     <PolicePointChan
@@ -503,7 +519,7 @@
         ProjectileCollisionRadius=""
         UseHPInterface="True"
 
-        SearchIdentifier="Enemy"
+        AllyInfo="Police"
     />
 
     <StudentAlphaChan
@@ -516,7 +532,7 @@
         ProjectileCollisionRadius=""
         UseHPInterface="True"
 
-        SearchIdentifier="Enemy"
+        AllyInfo="CommonBattle"
     />
 
     <StudentBetaChan
@@ -528,7 +544,7 @@
         CollisionRadius="0.2"
         ProjectileCollisionRadius=""
 
-        SearchIdentifier="Enemy"
+        AllyInfo="CommonBattle"
     />
 
     <Helena_CrimsonGrimoire
@@ -540,7 +556,7 @@
         CollisionRadius="0.2"
         ProjectileCollisionRadius=""
 
-        SearchIdentifier="Enemy"
+        AllyInfo="Sister"
     />
 
     <NozawaAoba_Drone
@@ -552,7 +568,7 @@
         CollisionRadius="0.2"
         ProjectileCollisionRadius=""
 
-        SearchIdentifier="Enemy"
+        AllyInfo="Police"
     />
 
     <ScriptTester
@@ -564,7 +580,7 @@
         CollisionRadius="0.2"
         ProjectileCollisionRadius=""
 
-        SearchIdentifier="Enemy"
+        AllyInfo="CommonBattle"
     />
 
 
@@ -583,7 +599,7 @@
         ProjectileCollisionRadius=""
         IndicatorVisible="False"
 
-        SearchIdentifier="Enemy"
+        AllyInfo="Deco"
     />
 
     <DecoStudent_1
@@ -597,7 +613,7 @@
         ProjectileCollisionRadius=""
         IndicatorVisible="False"
 
-        SearchIdentifier="Enemy"
+        AllyInfo="Deco"
     />
 
     <DecoStudent_2
@@ -611,7 +627,7 @@
         ProjectileCollisionRadius=""
         IndicatorVisible="False"
 
-        SearchIdentifier="Enemy"
+        AllyInfo="Deco"
     />
 
     <DecoStudent_3
@@ -625,7 +641,7 @@
         ProjectileCollisionRadius=""
         IndicatorVisible="False"
 
-        SearchIdentifier="Enemy"
+        AllyInfo="Deco"
     />
 
     <DecoStudent_4
@@ -639,7 +655,7 @@
         ProjectileCollisionRadius=""
         IndicatorVisible="False"
 
-        SearchIdentifier="Enemy"
+        AllyInfo="Deco"
     />
 
     <DecoStudent_5
@@ -653,7 +669,7 @@
         ProjectileCollisionRadius=""
         IndicatorVisible="False"
 
-        SearchIdentifier="Enemy"
+        AllyInfo="Deco"
     />
 
     <DecoStudent_6
@@ -667,7 +683,7 @@
         ProjectileCollisionRadius=""
         IndicatorVisible="False"
 
-        SearchIdentifier="Enemy"
+        AllyInfo="Deco"
     />
 
     <DecoStudent_7
@@ -681,7 +697,7 @@
         ProjectileCollisionRadius=""
         IndicatorVisible="False"
 
-        SearchIdentifier="Enemy"
+        AllyInfo="Deco"
     />
 
     <DecoStudent_8
@@ -695,7 +711,7 @@
         ProjectileCollisionRadius=""
         IndicatorVisible="False"
 
-        SearchIdentifier="Enemy"
+        AllyInfo="Deco"
     />
 
     <DecoSportClubStudent
@@ -710,7 +726,7 @@
         IndicatorVisible="False"
         UseCameraBoundLock="False"
 
-        SearchIdentifier="Enemy"
+        AllyInfo="Deco"
     />
 
     <YakisobaChan
@@ -725,7 +741,7 @@
         ProjectileCollisionRadius=""
         UseCameraBoundLock="False"
 
-        SearchIdentifier="Enemy"
+        AllyInfo="Deco"
     />
 
     <YakisobaChanFollow
@@ -740,7 +756,7 @@
         ProjectileCollisionRadius=""
         UseCameraBoundLock="False"
 
-        SearchIdentifier="Deco"
+        AllyInfo="Deco"
     />
 
     <ProjectileShotCharacter
@@ -754,7 +770,7 @@
         IndicatorVisible="False"
         ProjectileCollisionRadius=""
 
-        SearchIdentifier="Enemy"
+        AllyInfo="EnemyAllNeutral"
     />
     
     <LaserShotCharacter
@@ -768,6 +784,6 @@
         IndicatorVisible="False"
         ProjectileCollisionRadius=""
 
-        SearchIdentifier="Enemy"
+        AllyInfo="EnemyAllNeutral"
     />
 </CharacterInfo>

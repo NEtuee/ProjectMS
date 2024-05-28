@@ -1,7 +1,7 @@
 <AIPackage Name="NajimiStunChasePackage" DefaultState="AI_Entry">
 
     <AIState>
-        <AI_Entry UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+        <AI_Entry UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_Idle"/>
                 <AIEvent Type="Test" Log="AI Chase Entry"/>
@@ -10,7 +10,7 @@
             <Branch Condition="true" Execute="AI_Chase"/>
         </AI_Entry>
 
-        <AI_Chase UpdateTime="0.45" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+        <AI_Chase UpdateTime="0.45" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_Dash"/>

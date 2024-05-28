@@ -6,7 +6,7 @@
     
     <AIPackage Name="ThunderFloor_ChasePackage" DefaultState="AI_Chase">
         <AIState>
-            <AI_Chase TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+            <AI_Chase TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
                 <Event_OnExecute>
                     <AIEvent Type="SetDirectionToTarget"/>
                     <AIEvent Type="SetAction" Action="AC_Move"/>

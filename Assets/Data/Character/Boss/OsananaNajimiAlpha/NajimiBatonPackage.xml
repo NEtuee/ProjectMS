@@ -1,7 +1,7 @@
 <AIPackage Name="NajimiBatonPackage" DefaultState="AI_BatonReady">
 
     <AIState>
-        <AI_BatonReady UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_BatonReady UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="Test" Log="AI Baton Entry"/>
                 <AIEvent Type="SetDirectionToTarget"/>
@@ -15,7 +15,7 @@
             <Branch Condition="End" Execute="AI_BatonPre"/>
         </AI_BatonReady>
 
-        <AI_BatonPre UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_BatonPre UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_BatonPre"/>
@@ -24,7 +24,7 @@
             <Branch Condition="End" Execute="AI_BatonSlash"/>
         </AI_BatonPre>
 
-        <AI_BatonSlash UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_BatonSlash UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_BatonSlash"/>
             </Event_OnExecute>
@@ -33,7 +33,7 @@
             <Branch Condition="End" Execute="TerminatePackage"/>
         </AI_BatonSlash>
 
-        <AI_BatonSuccess UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_BatonSuccess UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_BatonSuccess"/>
             </Event_OnExecute>

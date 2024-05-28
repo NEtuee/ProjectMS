@@ -26,7 +26,7 @@
 
         <AudioPlay ID="6001"/>
 
-        <CallAIEvent EventName="Fear" UniqueKey="Player" EventTargetType="Range" SearchIdentifier="Enemy" Range="3.0"/>
+        <CallAIEvent EventName="Fear" UniqueKey="Player" EventTargetType="Range" AllyTarget="Neutral" Range="3.0"/>
         <SetBackgroundAnimationTrigger Key="Door_1" Trigger="Open"/>
         <ShakeEffect Scale="0.35" Speed="20.0" Time="0.5"/>
         <SetHideCharacter UniqueKey="Player" Hide="False"/>

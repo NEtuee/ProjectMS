@@ -13,7 +13,7 @@ public class DanmakuGraph
         public List<DanmakuLoopPlayItem> _currentLoopProcess = new List<DanmakuLoopPlayItem>();
         public SimplePool<DanmakuLoopPlayItem> _loopEventPool = new SimplePool<DanmakuLoopPlayItem>();
 
-        public SearchIdentifier _forceSearchIdentifier = SearchIdentifier.Count;
+        public AllyInfoData _forceAllyInfoData = null;
         public Vector3 _forcePosition = Vector3.zero;
         public Vector3 _offsetPosition = Vector3.zero;
 
@@ -317,11 +317,11 @@ public class DanmakuGraph
                         }
                     }
 
-                    ProjectileManager._instance.spawnProjectileDelayed(eventData._projectileName, eventData._startTerm,_ownerEntity,targetEntity,eventData._setTargetType,ref shotInfo,_ownerEntity,_ownerEntity == null ? playItem._forceSearchIdentifier : _ownerEntity._searchIdentifier);
+                    ProjectileManager._instance.spawnProjectileDelayed(eventData._projectileName, eventData._startTerm,_ownerEntity,targetEntity,eventData._setTargetType,ref shotInfo,_ownerEntity,_ownerEntity == null ? playItem._forceAllyInfoData : _ownerEntity.getAllyInfo());
                 }
                 else
                 {
-                    ProjectileManager._instance.spawnProjectile(eventData._projectileName,ref shotInfo,spawnPosition,_ownerEntity,_ownerEntity == null ? playItem._forceSearchIdentifier : _ownerEntity._searchIdentifier);
+                    ProjectileManager._instance.spawnProjectile(eventData._projectileName,ref shotInfo,spawnPosition,_ownerEntity,_ownerEntity == null ? playItem._forceAllyInfoData : _ownerEntity.getAllyInfo());
                 }
             }
             break;
@@ -340,7 +340,7 @@ public class DanmakuGraph
         }
     }
 
-    public void addDanmakuGraph(string graphPath, Vector3 forcePosition, Vector3 offset, bool useFlip, float offsetAngle, SearchIdentifier searchIdentifier)
+    public void addDanmakuGraph(string graphPath, Vector3 forcePosition, Vector3 offset, bool useFlip, float offsetAngle, AllyInfoData allyInfoData)
     {
         DanmakuGraphBaseData graphData = ResourceContainerEx.Instance().GetDanmakuGraph(graphPath);
         if(graphData == null)
@@ -349,7 +349,7 @@ public class DanmakuGraph
         DanmakuPlayItem playItem = _danmakuPlayItemPool.dequeue();
         playItem.initialize(graphData);
         playItem._forcePosition = forcePosition;
-        playItem._forceSearchIdentifier = searchIdentifier;
+        playItem._forceAllyInfoData = allyInfoData;
         playItem._offsetPosition = offset;
         playItem._useFlip = useFlip;
         playItem._offsetRotation = Quaternion.Euler(0f,0f,offsetAngle);

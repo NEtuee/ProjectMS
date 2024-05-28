@@ -1,0 +1,67 @@
+<!-- Ally Code 명
+    AllyGroup="" : 동맹 그룹 (키1 키2 키3 ....)
+    EnemyGroup="" : 적 그룹
+    NeutralGroup="" : 중립 그룹
+-->
+
+<AllyInfo>
+
+    <Player
+        EnemyGroup="InteractObject CommonBattle Sukeban SportsClub Sister PerfectTeam Police"
+    />
+
+    <!-- 장식용 캐릭터 -->
+    <Deco
+        AllyGroup="Player"
+        NeutralGroup="Deco"
+    />
+
+    <!-- 전체 적 판정 -->
+    <EnemyAllNeutral
+        EnemyGroup="Player Sukeban SportsClub PerfectTeam Police"
+    />
+
+    <!-- 전체 동맹 판정 -->
+    <AllyAllNeutral
+        AllyGroup="Player Sukeban SportsClub PerfectTeam Police"
+    />
+
+    <!-- 전체 중립 판정 -->
+    <NeutralAllNeutral
+        NeutralGroup="Player Sukeban SportsClub PerfectTeam Police"
+    />
+
+    <!-- 때릴 수 있는 오브젝트 -->
+    <InteractObject/>
+
+    <!-- 전투 가능 학생 -->
+    <CommonBattle
+        EnemyGroup="Player"
+    />
+
+    <!-- 스케반 -->
+    <Sukeban
+        EnemyGroup="Player"
+    />
+
+    <!-- 수녀 -->
+    <Sister
+        EnemyGroup="Player"
+    />  
+
+    <!-- 운동부 -->
+    <SportsClub
+        EnemyGroup="Player"
+    />
+
+    <!-- 풍기 위원회 -->
+    <PerfectTeam
+        EnemyGroup="Player"
+    />
+
+    <!-- 경찰 -->
+    <Police
+        EnemyGroup="Player"
+    />
+
+</AllyInfo>

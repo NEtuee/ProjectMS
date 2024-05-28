@@ -8,7 +8,7 @@
             <Branch Condition="true" Execute="TerminatePackage"/>
         </AI_Entry>
 
-        <AI_InvisibleDodge_Disapper UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" SearchIdentifier="Player">
+        <AI_InvisibleDodge_Disapper UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_Disappear"/>
@@ -16,7 +16,7 @@
             
             <Branch Condition="End" Execute="AI_InvisibleDodge_Invisible"/>
         </AI_InvisibleDodge_Disapper>
-        <AI_InvisibleDodge_Invisible UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" SearchIdentifier="Player">
+        <AI_InvisibleDodge_Invisible UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_Invisible"/>
@@ -24,7 +24,7 @@
             
             <Branch Condition="End" Execute="AI_InvisibleDodge_Appear"/>
         </AI_InvisibleDodge_Invisible>
-        <AI_InvisibleDodge_Appear UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" SearchIdentifier="Player">
+        <AI_InvisibleDodge_Appear UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_Appear"/>

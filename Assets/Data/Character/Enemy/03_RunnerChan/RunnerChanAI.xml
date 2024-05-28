@@ -6,7 +6,7 @@
     
     <AIPackage Name="RunnerSpeedPackage" DefaultState="AI_Normal">
         <AIState>
-            <AI_Slow UpdateTime="0.2" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+            <AI_Slow UpdateTime="0.2" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
                 <Event_OnExecute>
                     <AIEvent Type="SetDirectionToTarget"/>
                     <AIEvent Type="SetAction" Action="AC_Move_Slow"/>
@@ -14,7 +14,7 @@
                 
                 <Branch Condition="false" Execute="TerminatePackage"/>
             </AI_Slow>
-            <AI_Normal UpdateTime="0.2" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+            <AI_Normal UpdateTime="0.2" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
                 <Event_OnExecute>
                     <AIEvent Type="SetDirectionToTarget"/>
                     <AIEvent Type="SetAction" Action="AC_Move_Normal"/>
@@ -22,7 +22,7 @@
                 
                 <Branch Condition="false" Execute="TerminatePackage"/>
             </AI_Normal>
-            <AI_Fast UpdateTime="0.2" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+            <AI_Fast UpdateTime="0.2" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
                 <Event_OnExecute>
                     <AIEvent Type="SetDirectionToTarget"/>
                     <AIEvent Type="SetAction" Action="AC_Move_Fast"/>

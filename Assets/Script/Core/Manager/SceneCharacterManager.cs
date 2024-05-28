@@ -6,7 +6,8 @@ public class TargetSearchDescription : MessageData
 {
     public ObjectBase              _requester;
     public TargetSearchType        _searchType;
-    public SearchIdentifier        _searchIdentifier;
+    public AllyTargetType          _allyTargetType;
+    public AllyInfoData            _allyInfo;
     public float                   _searchRange;
     public float                   _searchStartRange;
     public float                   _searchSphereRadius;
@@ -18,7 +19,7 @@ public struct SpawnCharacterOptionDesc
 
     public Vector3          _direction;
     public Quaternion       _rotation;
-    public SearchIdentifier _searchIdentifier;
+    public AllyInfoData     _allyInfo;
     public int              _sortingOrder;
 
     public static SpawnCharacterOptionDesc defaultValue = new SpawnCharacterOptionDesc
@@ -26,7 +27,7 @@ public struct SpawnCharacterOptionDesc
         _position = Vector3.zero, 
         _direction = Vector3.right, 
         _rotation = Quaternion.identity, 
-        _searchIdentifier = SearchIdentifier.Count,
+        _allyInfo = null,
         _sortingOrder = 0,
     };
 }
@@ -184,17 +185,17 @@ public class SceneCharacterManager : ManagerBase
         MessageDataPooling.ReturnData(desc);
     }
 
-    public bool targetSearchRange(Vector3 centerPosition, float searchRange, SearchIdentifier searchIdentifier, ref List<CharacterEntityBase> outCharacterList)
+    public bool targetSearchRange(Vector3 centerPosition, float searchRange, AllyTargetType targetType, AllyInfoData allyInfo, ref List<CharacterEntityBase> outCharacterList)
     {
-        if(searchIdentifier == SearchIdentifier.Count)
+        if(allyInfo == null)
         {
-            DebugUtil.assert(false,"invalid search identifier: Count");
+            DebugUtil.assert(false,"invalid AllyInfo");
             return false;
         }
 
         foreach(var character in _enableCharacterPoolCacheMap.Values)
         {
-            if(character._searchIdentifier != searchIdentifier || character.gameObject.activeInHierarchy == false || character.enabled == false || character.isDead())
+            if( AllyInfoManager.compareAllyTargetType(allyInfo, character.getAllyInfo()) != targetType || character.gameObject.activeInHierarchy == false || character.enabled == false || character.isDead())
                 continue;
             
             if(Vector3.Distance(centerPosition, character.transform.position) > searchRange)
@@ -216,9 +217,9 @@ public class SceneCharacterManager : ManagerBase
             DebugUtil.assert(false,"must be character entity, code error");
             return false;
         }
-        else if(desc._searchIdentifier == SearchIdentifier.Count)
+        else if(desc._allyTargetType == AllyTargetType.Count)
         {
-            DebugUtil.assert(false,"invalid search identifier: Count");
+            DebugUtil.assert(false,"invalid AllyTargetType: Count");
             return false;
         }
 
@@ -238,7 +239,7 @@ public class SceneCharacterManager : ManagerBase
         {
             case TargetSearchType.Near:
             {
-                if(requester == receiverCharacter || desc._searchIdentifier != receiverCharacter._searchIdentifier || receiverCharacter.isDead())
+                if(requester == receiverCharacter || AllyInfoManager.compareAllyTargetType(desc._allyInfo, receiverCharacter.getAllyInfo()) != desc._allyTargetType || receiverCharacter.isDead())
                     return true;
 
                 if(currentTarget == null)
@@ -256,7 +257,7 @@ public class SceneCharacterManager : ManagerBase
             case TargetSearchType.NearDirection:
             case TargetSearchType.NearMousePointDirection:
             {
-                if(requester == receiverCharacter || desc._searchIdentifier != receiverCharacter._searchIdentifier || receiverCharacter.isDead())
+                if(requester == receiverCharacter || AllyInfoManager.compareAllyTargetType(desc._allyInfo, receiverCharacter.getAllyInfo()) != desc._allyTargetType || receiverCharacter.isDead())
                     return true;
 
                 Vector3 direction = Vector3.right;
@@ -316,7 +317,7 @@ public class SceneCharacterManager : ManagerBase
         if(targetCharacter == null || targetCharacter.gameObject.activeInHierarchy == false)
             return false;
 
-        if(targetCharacter._searchIdentifier != searchDesc._searchIdentifier)
+        if(AllyInfoManager.compareAllyTargetType(currentCharacter, targetCharacter) != searchDesc._allyTargetType)
             return false;
 
         float range = searchDesc._searchRange * searchDesc._searchRange;
@@ -367,11 +368,12 @@ public class SceneCharacterManager : ManagerBase
 
         _enableCharacterPoolCacheMap.Add(characterEntity.GetUniqueID(), characterEntity);
 
-        characterEntity._searchIdentifier = spawnDesc._searchIdentifier;
         characterEntity.transform.position = spawnDesc._position;
         characterEntity.transform.rotation = spawnDesc._rotation;
 
-        characterEntity.initializeCharacter(characterData,spawnDesc._direction);
+        AllyInfoData allyInfoData = spawnDesc._allyInfo == null ? (characterData._allyInfoKey == "" ? null : AllyInfoManager.Instance().GetAllyInfoData(characterData._allyInfoKey)) : spawnDesc._allyInfo;
+
+        characterEntity.initializeCharacter(characterData, allyInfoData,spawnDesc._direction);
         characterEntity.setSortingOrder(spawnDesc._sortingOrder);
         
         _onCharacterEnabled(characterEntity);

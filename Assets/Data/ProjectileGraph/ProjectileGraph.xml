@@ -140,7 +140,6 @@
             </OnHitEnd>
     
             <OnEnd>
-                <!-- <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="FireworkBullet" Offset="0 0 0" SearchIdentifier="Enemy"/> -->
                 <FrameEvent Type="Danmaku" Path="Enemy/Firecracker.xml"/>
             </OnEnd>
         </Event>
@@ -239,12 +238,8 @@
                 </FrameEvent>
             </OnHit>
     
-            <OnHitEnd>
-                <!--<FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="PitchingMachine" Offset="0 0 0" SearchIdentifier="Enemy"/>-->
-            </OnHitEnd>
-    
             <OnEnd>
-                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="PitchingMachine" Offset="0 0 0" SearchIdentifier="Enemy" Inherit="true"/>
+                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="PitchingMachine" Offset="0 0 0" Inherit="true"/>
             </OnEnd>
         </Event>
     </PitchingMachine>
@@ -262,7 +257,7 @@
             </OnHitEnd>
     
             <OnEnd>
-                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="Gauntlet" Offset="0 0 0" SearchIdentifier="Enemy" Inherit="true"/>
+                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="Gauntlet" Offset="0 0 0" Inherit="true"/>
             </OnEnd>
         </Event>
     </Gauntlet>
@@ -276,7 +271,7 @@
         
         <Event>
             <OnEnd>
-                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="Missile" Offset="0 0 0" SearchIdentifier="Enemy" Inherit="true"/>
+                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="Missile" Offset="0 0 0" Inherit="true"/>
             </OnEnd>
         </Event>
     </Gauntlet_Missile>
@@ -518,7 +513,7 @@
         
         <Event>
             <OnEnd>
-                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="Helena_CrimsonGrimoire" Offset="0 0 0" SearchIdentifier="Enemy" Inherit="true"/>
+                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="Helena_CrimsonGrimoire" Offset="0 0 0" Inherit="true"/>
             </OnEnd>
         </Event>
     </Helena_CrimsonGrimoire>
@@ -612,9 +607,9 @@
         <DefaultShotInfo Velocity="0" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="0.02"/>
         <Event>
             <OnEnd>
-                <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="RunnerChan" Offset="0 -1.5 0"     SearchIdentifier="Enemy" InheritDirection="true" AINode="Entry"/>
-                <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="RunnerChan" Offset="0 0 0"        SearchIdentifier="Enemy" InheritDirection="true" AINode="Entry"/>
-                <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="RunnerChan" Offset="0 1.5 0"      SearchIdentifier="Enemy" InheritDirection="true" AINode="Entry"/>
+                <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="RunnerChan" Offset="0 -1.5 0"     InheritDirection="true" AINode="Entry"/>
+                <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="RunnerChan" Offset="0 0 0"        InheritDirection="true" AINode="Entry"/>
+                <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="RunnerChan" Offset="0 1.5 0"      InheritDirection="true" AINode="Entry"/>
             </OnEnd>
         </Event>
     </RunnerSpawner>
@@ -647,7 +642,7 @@
         
         <Event>
             <OnEnd>
-                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="NozawaAoba_Drone" Offset="0 0 0" SearchIdentifier="Enemy" Inherit="true"/>
+                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="NozawaAoba_Drone" Offset="0 0 0" Inherit="true"/>
             </OnEnd>
         </Event>
     </Aoba_Drone>

@@ -66,7 +66,7 @@ public class FollowAttackProcessor : AttackProcessorBase
 
             SpawnCharacterOptionDesc desc = new SpawnCharacterOptionDesc();
             desc._position = _position;
-            desc._searchIdentifier = gameEntityBase._searchIdentifier;
+            desc._allyInfo = gameEntityBase.getAllyInfo();
 
             CharacterInfoData characterInfoData = CharacterInfoManager.Instance().GetCharacterInfoData(_attackFrameEvent._characterKey);
             _crossHairEntity = (SceneCharacterManager._managerInstance as SceneCharacterManager).createCharacterFromPool(characterInfoData,desc);
@@ -115,7 +115,7 @@ public class FollowAttackProcessor : AttackProcessorBase
         CollisionManager.Instance().queryRangeAll(CollisionType.Attack,_position,_attackFrameEvent._radius, ref _collisionData);
         foreach(var item in _collisionData)
         {
-            if((item._collisionObject as GameEntityBase)._searchIdentifier != gameEntityBase._searchIdentifier)
+            if(AllyInfoManager.compareAllyTargetType(gameEntityBase, (item._collisionObject as GameEntityBase)) == AllyTargetType.Enemy)
             {
                 collision = true;
                 break;
@@ -272,7 +272,7 @@ public class AttackProcessor : AttackProcessorBase
         ObjectBase requester = (ObjectBase)successData._requester;
         GameEntityBase targetEntity = (GameEntityBase)successData._target;
 
-        if(targetEntity._searchIdentifier == requester._searchIdentifier)
+        if(AllyInfoManager.compareAllyTargetType(requester, targetEntity) != AllyTargetType.Enemy)
             return;
         
         if((targetEntity.getCurrentIgnoreAttackType() & _attackFrameEvent._attackType) != 0)

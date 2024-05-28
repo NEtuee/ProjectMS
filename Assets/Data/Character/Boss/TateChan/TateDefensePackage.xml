@@ -1,7 +1,7 @@
 <AIPackage Name="TateDefensePackage" DefaultState="AI_GuardBack">
 
     <AIState>
-        <AI_GuardBack UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="10.0" SearchIdentifier="Player">
+        <AI_GuardBack UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="10.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_GuardBack"/>
                 <AIEvent Type="SetDirectionToTarget"/>
@@ -14,7 +14,7 @@
             <Branch Condition="DefenceSuccess" Execute="AI_GuardSuccess"/>
         </AI_GuardBack>
 
-        <AI_GuardSuccess UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="10.0" SearchIdentifier="Player">
+        <AI_GuardSuccess UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="10.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_GuardSuccess"/>
             </Event_OnExecute>
@@ -22,7 +22,7 @@
             <Branch Condition="End" Execute="AI_GuardBack"/>
         </AI_GuardSuccess>
 
-        <AI_HitGuard UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="10.0" SearchIdentifier="Player">
+        <AI_HitGuard UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="10.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_HitGuard"/>
             </Event_OnExecute>

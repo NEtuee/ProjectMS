@@ -1,7 +1,7 @@
 <AIPackage Name="AobaWarpChasePackage" DefaultState="AI_Warp">
 
     <AIState>
-        <AI_Warp UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+        <AI_Warp UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_Warp"/>
@@ -14,7 +14,7 @@
             <Branch Condition="AttackSuccess" Execute="AI_Warpped"/>
         </AI_Warp>
         
-        <AI_Warpped UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+        <AI_Warpped UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_Warpped"/>

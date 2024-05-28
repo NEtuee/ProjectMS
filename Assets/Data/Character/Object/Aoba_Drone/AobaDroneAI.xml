@@ -6,7 +6,7 @@
 
     <AIPackage Name="DroneExplosionPackage" DefaultState="AI_ExploChase">
         <AIState>
-            <AI_ExploChase UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+            <AI_ExploChase UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
                 <Event_OnExecute>
                     <AIEvent Type="SetAction" Action="AC_ExplosionChase"/>
                 </Event_OnExecute>
@@ -16,7 +16,7 @@
 
                 <Branch Condition="PackageExecutedTime >= 1.5" Execute="AI_ExploStart"/>
             </AI_ExploChase>
-            <AI_ExploStart UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+            <AI_ExploStart UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
                 <Event_OnExecute>
                     <AIEvent Type="SetAction" Action="AC_ExplosionStart"/>
                 </Event_OnExecute>
@@ -32,7 +32,7 @@
     </AIPackage>
     <AIPackage Name="AobaDroneChasePackage" DefaultState="AI_Chase">
         <AIState>
-            <AI_Chase UpdateTime="0.1" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+            <AI_Chase UpdateTime="0.1" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
                 <Event_OnExecute>
                     <AIEvent Type="SetDirectionToTarget"/>
                     <AIEvent Type="SetAction" Action="AC_Move"/>

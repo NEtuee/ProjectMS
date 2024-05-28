@@ -74,7 +74,7 @@ public class CharacterInfoViewer : EditorWindow
                 spawnDesc._direction = Vector3.right;
                 spawnDesc._position = MasterManager.instance._stageProcessor.getPlayerEntity().transform.position + Vector3.right * 0.5f;
                 spawnDesc._rotation = Quaternion.identity;
-                spawnDesc._searchIdentifier = SearchIdentifier.Enemy;
+                spawnDesc._allyInfo = item.Value._allyInfoKey != "" ? AllyInfoManager.Instance().GetAllyInfoData(item.Value._allyInfoKey) : null;
                 
                 CharacterEntityBase createdCharacter = sceneCharacterManager.createCharacterFromPool(item.Value,spawnDesc);
             }
@@ -86,7 +86,7 @@ public class CharacterInfoViewer : EditorWindow
                 spawnDesc._direction = Vector3.right;
                 spawnDesc._position = MasterManager.instance._stageProcessor.getPlayerEntity().transform.position + CameraControlEx.Instance().getRandomPositionInCamera();
                 spawnDesc._rotation = Quaternion.identity;
-                spawnDesc._searchIdentifier = SearchIdentifier.Enemy;
+                spawnDesc._allyInfo = item.Value._allyInfoKey != "" ? AllyInfoManager.Instance().GetAllyInfoData(item.Value._allyInfoKey) : null;
                 
                 CharacterEntityBase createdCharacter = sceneCharacterManager.createCharacterFromPool(item.Value,spawnDesc);
             }

@@ -5,7 +5,7 @@
 
     <AIPackage Name="HelenaBookEntryPackage" DefaultState="AI_Attach">
         <AIState>
-            <AI_Attach UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+            <AI_Attach UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
                 <Event_OnExecute>
                     <AIEvent Type="AttachRotateSlot" TargetType="Summoner"/>
                 </Event_OnExecute>
@@ -22,7 +22,7 @@
 
     <AIPackage Name="HelenaBookStarePackage" DefaultState="AI_Keep">
         <AIState>
-            <AI_WithHelena UpdateTime="2.0" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+            <AI_WithHelena UpdateTime="2.0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
                 <Event_OnExecute>
                     <AIEvent Type="SetAction" Action="AC_Idle_WithHelena"/>
                 </Event_OnExecute>
@@ -30,7 +30,7 @@
                 <Branch Weight="RandVector4^r" Condition="PackageExecutedTime >= 0.0" Execute="AI_RandomExplo"/>
                 <Branch Condition="false" Execute="TerminatePackage"/>
             </AI_WithHelena>
-            <AI_ToTarget UpdateTime="2.0" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+            <AI_ToTarget UpdateTime="2.0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
                 <Event_OnExecute>
                     <AIEvent Type="SetDirectionToTarget"/>
                     <AIEvent Type="SetAction" Action="AC_Idle"/>
@@ -39,7 +39,7 @@
                 <Branch Weight="RandVector4^r" Condition="PackageExecutedTime >= 0.0" Execute="AI_RandomExplo"/>
                 <Branch Condition="false" Execute="TerminatePackage"/>
             </AI_ToTarget>
-            <AI_Keep UpdateTime="2.0" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+            <AI_Keep UpdateTime="2.0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
                 <Event_OnExecute>
                     <AIEvent Type="SetAction" Action="AC_Idle_Keep"/>
                 </Event_OnExecute>
@@ -48,14 +48,14 @@
                 <Branch Condition="false" Execute="TerminatePackage"/>
             </AI_Keep>
 
-            <AI_RandomLaser TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+            <AI_RandomLaser TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
                 <Event_OnExecute>
                     <AIEvent Type="CallAIEvent" EventName="LaserToTarget" TargetType="Self"/>
                 </Event_OnExecute>
 
                 <Branch Condition="false" Execute="TerminatePackage"/>
             </AI_RandomLaser>
-            <AI_RandomExplo TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+            <AI_RandomExplo TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
                 <Event_OnExecute>
                     <AIEvent Type="CallAIEvent" EventName="Detach" TargetType="Self"/>
                     <AIEvent Type="CallAIEvent" EventName="DetachExplosion" TargetType="Self"/>
@@ -73,7 +73,7 @@
     </AIPackage>
     <AIPackage Name="HelenaBookLaserPackage" DefaultState="AI_ToTarget">
         <AIState>
-            <AI_ToTarget UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+            <AI_ToTarget UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
                 <Event_OnExecute>
                     <AIEvent Type="SetDirectionToTarget"/>
                     <AIEvent Type="SetAction" Action="AC_Shoot"/>
@@ -88,7 +88,7 @@
                 </Event_OnExit>
                 <Branch Condition="End" Execute="TerminatePackage"/>
             </AI_ToTarget>
-            <AI_With UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+            <AI_With UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
                 <Event_OnExecute>
                     <AIEvent Type="SetAction" Action="AC_Shoot_with"/>
                 </Event_OnExecute>
@@ -98,7 +98,7 @@
 
                 <Branch Condition="End" Execute="TerminatePackage"/>
             </AI_With>
-            <AI_Out UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+            <AI_Out UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
                 <Event_OnExecute>
                     <AIEvent Type="SetAction" Action="AC_Shoot_out"/>
                 </Event_OnExecute>
@@ -108,7 +108,7 @@
 
                 <Branch Condition="End" Execute="TerminatePackage"/>
             </AI_Out>
-            <AI_In UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+            <AI_In UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
                 <Event_OnExecute>
                     <AIEvent Type="SetDirectionToTarget"/>
                     <AIEvent Type="SetAction" Action="AC_Shoot_in"/>
@@ -135,7 +135,7 @@
 
     <AIPackage Name="HelenaBookExplosionPackage" DefaultState="AI_Entry">
         <AIState>
-            <AI_Entry UpdateTime="0.013" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+            <AI_Entry UpdateTime="0.013" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
                 <Event_OnExecute>
                     <AIEvent Type="SetAction" Action="AC_ExplosionChase_Entry"/>
                 </Event_OnExecute>
@@ -145,7 +145,7 @@
 
                 <Branch Condition="true" Execute="AI_ExploChase"/>
             </AI_Entry>
-            <AI_ExploChase UpdateTime="0.1" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+            <AI_ExploChase UpdateTime="0.1" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
                 <Event_OnExecute>
                     <AIEvent Type="SetAction" Action="AC_ExplosionChase"/>
                 </Event_OnExecute>
@@ -155,7 +155,7 @@
 
                 <Branch Condition="PackageExecutedTime >= 1.5" Execute="AI_ExploStart"/>
             </AI_ExploChase>
-            <AI_ExploStart UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+            <AI_ExploStart UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
                 <Event_OnExecute>
                     <AIEvent Type="SetAction" Action="AC_ExplosionStart"/>
                 </Event_OnExecute>

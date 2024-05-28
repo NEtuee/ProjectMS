@@ -85,7 +85,7 @@
     <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="0_default/3_hit" XFlip="true" Duration="1.25">
-            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="CancelLaser" EventTargetType="SummonTargetRange" Range="999.0" SearchIdentifier="Enemy"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="CancelLaser" EventTargetType="SummonTargetRange" Range="999.0" AllyTarget="Ally"/>
 
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
@@ -101,7 +101,7 @@
     <Dead DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="0_default/4_dead" XFlip="true" Duration="1">
-            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="CancelLaser" EventTargetType="SummonTargetRange" Range="999.0" SearchIdentifier="Enemy"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="CancelLaser" EventTargetType="SummonTargetRange" Range="999.0" AllyTarget="Ally"/>
 
             <FrameEvent Type="Effect" StartTime="0" Path="gv_DeadPath" FramePerSecond="0.2" CastShadow="True">
                 <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
@@ -158,7 +158,7 @@
             <!-- Danmaku Attack -->
             <FrameEvent Type="Danmaku" Condition="gv_bIsDanmakuAttack" StartTime="0" Path="gv_DanmakuPath" Offset="0 0 0" UseFlip="true"/>
             <!-- Object Attack -->
-            <FrameEvent Type="SpawnCharacter" Condition="gv_bIsObjectAttack" StartTime="0" CharacterKey="gv_ObjectKey" Offset="0 0 0" SearchIdentifier="Enemy" UseFlip="true"/>
+            <FrameEvent Type="SpawnCharacter" Condition="gv_bIsObjectAttack" StartTime="0" CharacterKey="gv_ObjectKey" Offset="0 0 0" UseFlip="true"/>
             <!-- Melee Attack -->
             <FrameEvent Type="Attack" Condition="gv_bIsMeleeAttack" StartTime="0" AttackPreset="Aoba_Raisen">
                 <OnHit>
@@ -246,7 +246,7 @@
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_defense/3_guardBroken" XFlip="true" Duration="1.25">
             <FrameEvent Type="DeleteBuff" StartTime="0" BuffList="HelenaBarriorOn"/>
-            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="CancelLaser" EventTargetType="SummonTargetRange" Range="999.0" SearchIdentifier="Enemy"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="CancelLaser" EventTargetType="SummonTargetRange" Range="999.0" AllyTarget="Ally"/>
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="BarriorBroken" EventTargetType="Self"/>
 
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
@@ -270,7 +270,7 @@
         </Animation>
         <Animation Preset="3_skill/1_emp/2_attackMain" XFlip="true" Duration="0.3">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2414" Attach="true"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="EmpGrenade" Offset="0 0 0" SearchIdentifier="Enemy" UseFlip="True"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="EmpGrenade" Offset="0 0 0" UseFlip="True"/>
 
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>

@@ -544,7 +544,7 @@ public class AIGraph
     public AIGraphCustomValue[] getCustomValueData() {return _aiGraphBaseData._customValueData;}
 
     public TargetSearchType getCurrentTargetSearchType() {return getCurrentAIPackageNode()._targetSearchType;}
-    public SearchIdentifier getCurrentSearchIdentifier() {return getCurrentAIPackageNode()._searchIdentifier;}
+    public AllyTargetType getCurrentAllyTargetType() {return getCurrentAIPackageNode()._searchAllyTargetType;}
 
     public void terminatePackage() {_packageEnd = true;}
     public bool isCurrentPackageEnd() {return _packageEnd;}

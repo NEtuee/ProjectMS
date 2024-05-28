@@ -17,7 +17,7 @@
     </Event_OnParried>
 
     <AIState>
-        <Entry UpdateTime="1.0" TargetSearchType="Near" TargetSearchRange="1.0" SearchIdentifier="Player">
+        <Entry UpdateTime="1.0" TargetSearchType="Near" TargetSearchRange="1.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="Idle"/>
             </Event_OnExecute>

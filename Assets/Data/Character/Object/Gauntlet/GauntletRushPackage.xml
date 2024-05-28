@@ -1,7 +1,7 @@
 <AIPackage Name="GauntletRushPackage" DefaultState="AI_Rush">
 
     <AIState>
-        <AI_Rush UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_Rush UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>    
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_Rush"/>
@@ -12,7 +12,7 @@
             <Branch Condition="End" Execute="TerminatePackage"/>
         </AI_Rush>
 
-        <AI_RushSuccess UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_RushSuccess UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="Test" Log="AI Rush Success"/>
                 <AIEvent Type="SetAction" Action="AC_RushSuccess_Entry"/>
@@ -24,7 +24,7 @@
             <Branch Condition="IsCatcher == false" Execute="AI_Away"/>
         </AI_RushSuccess>
 
-        <AI_RushSuccess_Attack UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_RushSuccess_Attack UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_RushSuccess_Attack"/>
             </Event_OnExecute>
@@ -35,7 +35,7 @@
             <Branch Condition="End" Execute="AI_Away"/>
         </AI_RushSuccess_Attack>
 
-        <AI_Idle UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_Idle UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_Idle"/>
             </Event_OnExecute>
@@ -43,7 +43,7 @@
             <Branch Condition="End" Execute="TerminatePackage"/>
         </AI_Idle>
 
-        <AI_Away UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_Away UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_Away"/>
             </Event_OnExecute>

@@ -6,14 +6,14 @@
 
     <AIPackage Name="MissileChasePackage" DefaultState="AI_Chase">
         <AIState>
-            <AI_Launch UpdateTime="0" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+            <AI_Launch UpdateTime="0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
                 <Event_OnExecute>
                     <AIEvent Type="SetAction" Action="AC_Launch"/>
                 </Event_OnExecute>
                 
                 <Branch Condition="End" Execute="AI_Chase"/>
             </AI_Launch>
-            <AI_Chase UpdateTime="0" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+            <AI_Chase UpdateTime="0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
                 <Event_OnExecute>
                     <AIEvent Type="SetDirectionToTarget"/>
                     <AIEvent Type="SetAction" Action="AC_Move"/>
@@ -25,7 +25,7 @@
                 
                 <Branch Condition="End" Execute="AI_Chase"/>
             </AI_Chase>
-            <AI_ExploChase UpdateTime="0.1" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+            <AI_ExploChase UpdateTime="0.1" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
                 <Event_OnExecute>
                     <AIEvent Type="SetAction" Action="AC_ExplosionChase"/>
                 </Event_OnExecute>
@@ -36,14 +36,14 @@
                 
                 <Branch Condition="End" Execute="AI_ExploChase"/>
             </AI_ExploChase>
-            <AI_Explosion UpdateTime="0.1" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+            <AI_Explosion UpdateTime="0.1" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
                 <Event_OnExecute>
                     <AIEvent Type="SetAction" Action="AC_Explosion"/>
                 </Event_OnExecute>
                 
                 <Branch Condition="End" Execute="TerminatePackage"/>
             </AI_Explosion>
-            <AI_ReverseChase TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Enemy">
+            <AI_ReverseChase TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
                 <Event_OnExecute>
                     <AIEvent Type="SetDirectionToTarget"/>
                     <AIEvent Type="SetAction" Action="AC_Move"/>
@@ -55,7 +55,7 @@
                 
                 <Branch Condition="End" Execute="AI_ReverseChase"/>
             </AI_ReverseChase>
-            <AI_ExploReverseChase UpdateTime="0.1" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Enemy">
+            <AI_ExploReverseChase UpdateTime="0.1" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
                 <Event_OnExecute>
                     <AIEvent Type="SetAction" Action="AC_ExplosionChase"/>
                 </Event_OnExecute>

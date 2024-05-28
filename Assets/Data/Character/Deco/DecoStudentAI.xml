@@ -11,7 +11,7 @@
                 </CustomEvent_Fear>
             </Entry>
 
-            <Fear UpdateTime="999.0" TargetSearchType="Near" TargetSearchRange="10.0" SearchIdentifier="Player">
+            <Fear UpdateTime="999.0" TargetSearchType="Near" TargetSearchRange="10.0" AllyTarget="Enemy">
                 <Event_OnExecute>
                     <AIEvent Type="SetAction" Action="AC_Fear"/>
                 </Event_OnExecute>

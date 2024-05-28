@@ -5,7 +5,7 @@
     
     <AIPackage Name="ChaseAkanePackage" DefaultState="Entry">
         <AIState>
-            <Entry UpdateTime="0.2" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <Entry UpdateTime="0.2" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Ally">
                 <Event_OnExecute>
                     <AIEvent Type="SetAction" Action="AC_Idle"/>
                 </Event_OnExecute>
@@ -14,7 +14,7 @@
                 <Branch Condition="(TargetDistance > 1.0) && TargetExists" Execute="Chase"/>
             </Entry>
 
-            <Chase UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <Chase UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Ally">
                 <Event_OnExecute>
                     <AIEvent Type="SetDirectionToTarget"/>
                     <AIEvent Type="SetAction" Action="AC_Move"/>
@@ -30,7 +30,7 @@
                 <Branch Condition="(TargetDistance > 3.5) && TargetExists" Execute="ChaseFast"/>
             </Chase>
 
-            <ChaseFast UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <ChaseFast UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Ally">
                 <Event_OnExecute>
                     <AIEvent Type="SetDirectionToTarget"/>
                     <AIEvent Type="SetAction" Action="AC_MoveFast"/>

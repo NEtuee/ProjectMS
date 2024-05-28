@@ -1,7 +1,7 @@
 <AIPackage Name="CommonDashPackage" DefaultState="AI_Dash">
 
     <AIState>
-        <AI_Dash UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" SearchIdentifier="Player">
+        <AI_Dash UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_Dash"/>

@@ -8,7 +8,7 @@
             <Branch Condition="true" Execute="AI_AttackReady"/>
         </AI_Entry>
 
-        <AI_AttackReady UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_AttackReady UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_ThrustReady"/>
@@ -21,7 +21,7 @@
             <Branch Condition="End" Execute="AI_AttackMain"/>
         </AI_AttackReady>
 
-        <AI_AttackMain UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_AttackMain UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_ThrustMain"/>
@@ -30,7 +30,7 @@
             <Branch Condition="End" Execute="TerminatePackage"/>
         </AI_AttackMain>
 
-        <AI_ShotgunReady UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_ShotgunReady UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_ShotgunReady"/>
@@ -38,7 +38,7 @@
             
             <Branch Condition="End" Execute="AI_ShotgunMain"/>
         </AI_ShotgunReady>
-        <AI_ShotgunMain UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_ShotgunMain UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_ShotgunMain"/>

@@ -91,7 +91,7 @@
     <!-- 패키지 인클루드 : 커스텀 스킬 -->
     <AIPackage Name="SkillPackage" DefaultState="AI_Skill">
         <AIState>
-            <AI_Skill UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+            <AI_Skill UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
                 <Event_OnExecute>    
                     <AIEvent Type="SetDirectionToTarget"/>
                     <AIEvent Type="SetAction" Action="AC_SKill"/>

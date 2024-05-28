@@ -162,11 +162,12 @@ public class GameEntityBase : SequencerObjectBase
         createSpriteRenderObject();
     }
 
-    public virtual void initializeCharacter(CharacterInfoData characterInfo, Vector3 direction)
+    public virtual void initializeCharacter(CharacterInfoData characterInfo, AllyInfoData allyInfo, Vector3 direction)
     {
         _initializeFromCharacter = true;
         _activeSelf = true;
         _characterInfo = characterInfo;
+        setAllyInfo(allyInfo);
 
         base.initialize();
         initializeObject();
@@ -645,7 +646,7 @@ public class GameEntityBase : SequencerObjectBase
             }
 
             debugTextManager.updateDebugText("FrameTag","FrameTag: " + frameTag, UnityEngine.Color.white);
-            debugTextManager.updateDebugText("SearchIdentifier","SearchIdentifier: " + _searchIdentifier, UnityEngine.Color.white);
+            debugTextManager.updateDebugText("AllyType","AllyType: " + (_allyInfo == null ? "AllyInfo Not Exists" : _allyInfo._key), UnityEngine.Color.white);
             debugTextManager.updateDebugText("ActiveCollision","ActiveCollision: " + _collisionInfo.isActiveCollision(), UnityEngine.Color.white);
             
             List<SequencerGraphProcessor> activeProcessorList = _sequencerProcessManager.getActiveProcessorList();
@@ -750,7 +751,7 @@ public class GameEntityBase : SequencerObjectBase
             return;
         
         GameEntityBase targetEntity = data._target as GameEntityBase;
-        if (targetEntity._searchIdentifier != _searchIdentifier)
+        if( AllyInfoManager.compareAllyTargetType(this, targetEntity) != AllyTargetType.Ally)
             return;
 
         float totalRadius = targetEntity.getCollisionInfo().getRadius() + getCollisionInfo().getRadius();
@@ -1380,7 +1381,7 @@ public class GameEntityBase : SequencerObjectBase
 
     public void setSpriteRotation(Quaternion rotation) {_spriteObject.transform.rotation = rotation;}
 
-    public void addDanmaku(string path, Vector3 offset, bool useFlip, float offsetAngle) {_danmakuGraph.addDanmakuGraph(path, transform.position, offset, useFlip, offsetAngle, _searchIdentifier);}
+    public void addDanmaku(string path, Vector3 offset, bool useFlip, float offsetAngle) {_danmakuGraph.addDanmakuGraph(path, transform.position, offset, useFlip, offsetAngle, getAllyInfo());}
     
     public void addDeadEvent(DeadEventDelegate deadEvent) {_deadEventDelegate += deadEvent;} 
     public void deleteDeadEvent(DeadEventDelegate deadEvent) {_deadEventDelegate -= deadEvent;}
@@ -1427,7 +1428,7 @@ public class GameEntityBase : SequencerObjectBase
         _additionalMoveScale = 1f;
         _movementControl?.setMoveScale(_actionGraph.getCurrentMoveScale());
     }
-    
+
     public bool isIndicatorVisible()
     {
         return _characterInfo._indicatorVisible;
@@ -1470,7 +1471,7 @@ public class GameEntityBase : SequencerObjectBase
 
     public bool isAIGraphValid() {return _aiGraph != null && _aiGraph.isValid();}
     public TargetSearchType getCurrentTargetSearchType() {return _aiGraph.getCurrentTargetSearchType();}
-    public SearchIdentifier getCurrentAISearchIdentifier() {return _aiGraph.getCurrentSearchIdentifier();}
+    public AllyTargetType getCurrentAISearchAllyTargetType() {return _aiGraph.getCurrentAllyTargetType();}
     public float getCurrentTargetSearchRange() {return _aiGraph.getCurrentTargetSearchRange();}
     public float getCurrentTargetSearchStartRange() {return _aiGraph.getCurrentTargetSearchStartRange();}
     public float getCurrentTargetSearchSphereRadius() {return _aiGraph.getCurrentTargetSearchSphereRadius();}

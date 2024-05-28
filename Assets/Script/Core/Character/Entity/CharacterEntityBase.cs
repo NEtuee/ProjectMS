@@ -40,9 +40,9 @@ public class CharacterEntityBase : GameEntityBase
         _isInCameraBound = MasterManager.instance._stageProcessor.isInCameraBound(_stagePointIndex, transform.position, out Vector3 resultPosition);
     }
 
-    public override void initializeCharacter(CharacterInfoData characterInfo, Vector3 direction)
+    public override void initializeCharacter(CharacterInfoData characterInfo, AllyInfoData allyInfoData, Vector3 direction)
     {
-        base.initializeCharacter(characterInfo,direction);
+        base.initializeCharacter(characterInfo,allyInfoData,direction);
 
         _useCameraBoundLock = characterInfo._useCameraBoundLock;
 
@@ -79,7 +79,8 @@ public class CharacterEntityBase : GameEntityBase
         {
             TargetSearchDescription desc = MessageDataPooling.GetMessageData<TargetSearchDescription>();
             desc._requester = this;
-            desc._searchIdentifier = getCurrentAISearchIdentifier();
+            desc._allyTargetType = getCurrentAISearchAllyTargetType();
+            desc._allyInfo = getAllyInfo();
             desc._searchRange = getCurrentTargetSearchRange();
             desc._searchStartRange = getCurrentTargetSearchStartRange();
             desc._searchSphereRadius = getCurrentTargetSearchSphereRadius();
@@ -159,7 +160,8 @@ public class CharacterEntityBase : GameEntityBase
         {
             TargetSearchDescription desc = MessageDataPooling.GetMessageData<TargetSearchDescription>();
             desc._requester = this;
-            desc._searchIdentifier = getCurrentAISearchIdentifier();
+            desc._allyTargetType = getCurrentAISearchAllyTargetType();
+            desc._allyInfo = getAllyInfo();
             desc._searchRange = getCurrentTargetSearchRange();
             desc._searchStartRange = getCurrentTargetSearchStartRange();
             desc._searchSphereRadius = getCurrentTargetSearchSphereRadius();

@@ -8,7 +8,7 @@
             <Branch Condition="true" Execute="AI_HitToDodge"/>
         </AI_Entry>
 
-        <AI_HitToDodge UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_HitToDodge UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_HitToDodge"/>
             </Event_OnExecute>
@@ -17,7 +17,7 @@
             <Branch Condition="End" Execute="TerminatePackage"/>
         </AI_HitToDodge>
 
-        <AI_AttackReady UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_AttackReady UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_KickReady"/>
@@ -31,7 +31,7 @@
             <Branch Condition="End" Execute="TerminatePackage"/>
         </AI_AttackReady>
 
-        <AI_AttackMain UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_AttackMain UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_Kick"/>

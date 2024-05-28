@@ -62,7 +62,7 @@
     <Dead MovementType="Empty" DirectionType="AI">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="0_default/4_dead" XFlip="true" Duration="0.5">
-            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="DeleteCrimson" EventTargetType="Range" SearchIdentifier="Enemy" Range="100.0"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="DeleteCrimson" EventTargetType="Range" AllyTarget="Ally" Range="100.0"/>
             <FrameEvent Type="KillEntity" StartTime="0"/>
             
         </Animation>

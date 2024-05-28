@@ -14,7 +14,7 @@
         <Animation Preset="empty" XFlip="true" Duration="0.1">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="20" Velocity="0" Speed="65"/>
             
-            <FrameEvent Type="Projectile" StartTime="0.05" GraphName="Thunder_Small" DirectionType="AI" SpawnTargetType="Self" SearchIdentifier="Enemy"/>
+            <FrameEvent Type="Projectile" StartTime="0.05" GraphName="Thunder_Small" DirectionType="AI" SpawnTargetType="Self"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Move"/>

@@ -1,7 +1,7 @@
 <AIPackage Name="NajimiAttackReadyPackage" DefaultState="AI_RushReady">
 
     <AIState>
-        <AI_RushReady UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_RushReady UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>    
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_RushReady"/>

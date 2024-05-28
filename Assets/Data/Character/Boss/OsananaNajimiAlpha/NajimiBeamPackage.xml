@@ -1,7 +1,7 @@
 <AIPackage Name="NajimiBeamPackage" DefaultState="AI_PistolReady">
 
     <AIState>
-        <AI_PistolReady UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_PistolReady UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="Test" Log="AI Beam Ready Entry"/>
                 <AIEvent Type="SetDirectionToTarget"/>
@@ -15,7 +15,7 @@
             <Branch Condition="End" Execute="AI_BeamShot"/>
         </AI_PistolReady>
 
-        <AI_BeamShot UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_BeamShot UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_BeamShot"/>
             </Event_OnExecute>

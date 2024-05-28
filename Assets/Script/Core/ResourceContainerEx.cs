@@ -141,6 +141,7 @@ public class ResourceContainerEx : Singleton<ResourceContainerEx>
 	private DataResourceItem<DanmakuGraphBaseData,DanmakuGraphLoader>			_danmakuGraphResource = new DataResourceItem<DanmakuGraphBaseData,DanmakuGraphLoader>();
 	private DataResourceItem<SequencerGraphBaseData,SequencrGraphLoader>		_sequencerGraphResource = new DataResourceItem<SequencerGraphBaseData,SequencrGraphLoader>();
 	private DataResourceItem<Dictionary<string, CharacterInfoData>,CharacterInfoLoader>	_characterInfoResource = new DataResourceItem<Dictionary<string, CharacterInfoData>,CharacterInfoLoader>();
+	private DataResourceItem<Dictionary<string, AllyInfoData>,AllyInfoLoader>	_allyInfoResource = new DataResourceItem<Dictionary<string, AllyInfoData>,AllyInfoLoader>();
 
 	public MovementGraph getMovementgraph(string folderName, bool ignorePreload = false)
 	{
@@ -226,6 +227,11 @@ public class ResourceContainerEx : Singleton<ResourceContainerEx>
 	public Dictionary<string, CharacterInfoData> getCharacterInfo(string path)
 	{
 		return _characterInfoResource.GetOrLoadResource(path);
+	}
+
+	public Dictionary<string,AllyInfoData> getAllyInfo(string path)
+	{
+		return _allyInfoResource.GetOrLoadResource(path);
 	}
 
 	public void UnLoadUnused()

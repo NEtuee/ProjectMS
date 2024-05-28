@@ -167,7 +167,7 @@
             <!-- Projectile Attack -->
             <FrameEvent Type="Projectile" Condition="gv_bIsProjectileAttack" StartTime="0" GraphName="gv_ProjectileName" Offset="0.5 0.12 0" UseFlip="true" DirectionType="AI" SpawnTargetType="Self"/>
             <!-- Object Attack -->
-            <FrameEvent Type="SpawnCharacter" Condition="gv_bIsObjectAttack" StartTime="0" CharacterKey="gv_ObjectKey" Offset="0 0 0" SearchIdentifier="Enemy" UseFlip="true"/>
+            <FrameEvent Type="SpawnCharacter" Condition="gv_bIsObjectAttack" StartTime="0" CharacterKey="gv_ObjectKey" Offset="0 0 0" UseFlip="true"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_AttackRecover"/>

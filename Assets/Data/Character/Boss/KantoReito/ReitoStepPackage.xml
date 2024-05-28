@@ -1,7 +1,7 @@
 <AIPackage Name="ReitoStepPackage" DefaultState="AI_Back">
 
     <AIState>
-        <AI_Back UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_Back UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>    
                 <AIEvent Type="SetAction" Action="AC_BackStep"/>
             </Event_OnExecute>
@@ -9,11 +9,11 @@
             <Branch Condition="End" Execute="TerminatePackage"/>
         </AI_Back>
 
-        <AI_RotateRand UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">           
+        <AI_RotateRand UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">           
             <Branch Weight="RandBoolean^True" Condition="true" Execute="AI_RotateLeft"/>
             <Branch Weight="RandBoolean^False" Condition="true" Execute="AI_RotateRight"/>
         </AI_RotateRand>
-        <AI_RotateLeft UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_RotateLeft UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_RotateStep_L"/>
@@ -24,7 +24,7 @@
             
             <Branch Condition="End" Execute="TerminatePackage"/>
         </AI_RotateLeft>
-        <AI_RotateRight UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_RotateRight UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_RotateStep_R"/>

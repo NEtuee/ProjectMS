@@ -1,7 +1,7 @@
 <AIPackage Name="NajimiPitchingPackage" DefaultState="AI_PitcherReady">
 
     <AIState>
-        <AI_PitcherReady UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_PitcherReady UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_PitcherReady"/>
@@ -14,7 +14,7 @@
             <Branch Condition="End" Execute="AI_Pitch"/>
         </AI_PitcherReady>
 
-        <AI_Pitch UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" SearchIdentifier="Player">
+        <AI_Pitch UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_Pitch"/>
             </Event_OnExecute>
