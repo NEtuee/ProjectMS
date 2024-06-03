@@ -675,7 +675,7 @@ public class ActionFrameEvent_ReleaseCatch : ActionFrameEventBase
             if(_catchTargetAction != "")
                 target.setAction(_catchTargetAction);
             
-            if(_pushVector.sqrMagnitude > float.Epsilon)
+            if(target.checkCurrentActionFlag(ActionFlags.IgnorePush) == false && _pushVector.sqrMagnitude > float.Epsilon)
             {
                 UnityEngine.Vector3 attackPointDirection = executeEntity.getDirection();
                 target.setVelocity(UnityEngine.Quaternion.Euler(0f,0f,UnityEngine.Mathf.Atan2(attackPointDirection.y,attackPointDirection.x) * UnityEngine.Mathf.Rad2Deg) * _pushVector);

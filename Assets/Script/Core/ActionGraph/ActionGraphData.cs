@@ -156,6 +156,7 @@ public enum ActionFlags : ulong
     LaserEffect = 1 << 1,
     QTE = 1 << 2,
     HideBuffEffect = 1 << 3,
+    IgnorePush = 1 << 4,
 };
 
 public enum ConditionCompareType

@@ -548,7 +548,7 @@ public class GameEntityBase : SequencerObjectBase
 
         _graphicInterface.setInterfaceOffset(Vector3.up * _headUpOffset);
 
-        if(_actionGraph.checkCurrentActionFlag(ActionFlags.ClearPush))
+        if(_actionGraph.checkCurrentActionFlag(ActionFlags.ClearPush) || _actionGraph.checkCurrentActionFlag(ActionFlags.IgnorePush))
             _currentVelocity = Vector3.zero;
 
         bool hideBuffEffect = _actionGraph.checkCurrentActionFlag(ActionFlags.HideBuffEffect);
