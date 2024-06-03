@@ -52,6 +52,7 @@ public class ProjectileEntityBase : ObjectBase
     {
         transform.position = startPosition;
         _projectileGraph.initialize();
+        setDirection(_projectileGraph.getCurrentDirection());
         _spriteRenderer.sprite = _projectileGraph.getCurrentSprite();
 
         RegisterRequest(QueryUniqueID("ProjectileManager"));
@@ -71,6 +72,7 @@ public class ProjectileEntityBase : ObjectBase
         _spriteRenderer.transform.localPosition = Vector3.zero;
 
         _projectileGraph.initialize(shotInfoData);
+        setDirection(_projectileGraph.getCurrentDirection());
         _spriteRenderer.sprite = _projectileGraph.getCurrentSprite();
 
         RegisterRequest(QueryUniqueID("ProjectileManager"));
@@ -100,10 +102,6 @@ public class ProjectileEntityBase : ObjectBase
         Vector3 movementOfFrame = _projectileGraph.getMovementOfFrame();
         transform.position += movementOfFrame;
 
-        Vector3 direction = movementOfFrame.normalized;
-        if(direction.sqrMagnitude == 0f)
-            direction = Vector3.right;
-
         _gravityAccumulate += _gravity * deltaTime;
         transform.position += Vector3.up * _gravityAccumulate * deltaTime;
 
@@ -121,14 +119,16 @@ public class ProjectileEntityBase : ObjectBase
         _projectileGraph.getCurrentAnimationTranslation(out outTranslation);
         _spriteRenderer.transform.localPosition = outTranslation;
 
-        setDirection(direction);
+        Vector3 direction = movementOfFrame.normalized;
+        if(direction.sqrMagnitude != 0f)
+            setDirection(direction);
 
         CollisionRequestData requestData;
         requestData._collision = _collisionInfo;
         requestData._collisionDelegate = _collisionDelegate;
         requestData._collisionEndEvent = null;
         requestData._position = transform.position;
-        requestData._direction = direction;
+        requestData._direction = getDirection();
         requestData._requestObject = this;
         CollisionManager.Instance().collisionRequest(requestData);
         

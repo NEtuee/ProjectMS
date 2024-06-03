@@ -104,7 +104,7 @@ public class AIGraph
         _rotateAngle = 0f;
 
         _rotateStartDirection = Vector3.right;
-        _recentlyAiDirection = Vector3.zero;
+        _recentlyAiDirection = Vector3.right;
         _recentlyAiTargetPosition = Vector3.zero;
 
         _reservedEvents.Clear();

@@ -207,6 +207,7 @@ public class GameEntityBase : SequencerObjectBase
         _movementControl.initialize();
         _actionGraph.initialize(ResourceContainerEx.Instance().GetActionGraph(characterInfo._actionGraphPath));
         _aiGraph.initialize(this, _actionGraph, ResourceContainerEx.Instance().GetAIGraph(characterInfo._aiGraphPath));
+        _aiGraph.setAIDirection(getDirection());
 
         _actionGraph.initializeCustomValue(_aiGraph.getCustomValueData());
 

@@ -110,8 +110,23 @@
 
         <Branch Condition="End == true" Execute="TEST_Danmaku"/>
     </TEST_Danmaku>
+<!-- ================================================================ -->
 
+    <!-- 미사일 쏘기 테스트 -->
+    <TEST_Missile DirectionType="AITarget" FlipType="Direction">
+        <Animation Preset="Sprites/DummyPlayer/idle/" Duration="3.0" XFlip="true">
+            
+            <FrameEvent Type="Projectile" StartTime="0" GraphName="TestShot" DirectionType="MoveDirection" DirectionAngle="0"/>
+            <FrameEvent Type="Projectile" StartTime="0" GraphName="TestShot" DirectionType="MoveDirection" DirectionAngle="45"/>
+            <FrameEvent Type="Projectile" StartTime="0" GraphName="TestShot" DirectionType="MoveDirection" DirectionAngle="90"/>
+            <FrameEvent Type="Projectile" StartTime="0" GraphName="TestShot" DirectionType="MoveDirection" DirectionAngle="135"/>
+            <FrameEvent Type="Projectile" StartTime="0" GraphName="TestShot" DirectionType="MoveDirection" DirectionAngle="180"/>
+            <FrameEvent Type="Projectile" StartTime="0" GraphName="TestShot" DirectionType="MoveDirection" DirectionAngle="225"/>
+            <FrameEvent Type="Projectile" StartTime="0" GraphName="TestShot" DirectionType="MoveDirection" DirectionAngle="270"/>
+            <FrameEvent Type="Projectile" StartTime="0" GraphName="TestShot" DirectionType="MoveDirection" DirectionAngle="315"/>
+        </Animation>
 
-    
+        <Branch Condition="End == true" Execute="Idle"/>
+    </TEST_Missile>
 
 </ActionGraph>
