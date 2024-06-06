@@ -262,16 +262,16 @@
         </Event>
     </Gauntlet>
 
-    <Gauntlet_Missile DefaultFramePerSecond="4" UseSpriteRotation="false" PenetrateCount="1">
+    <Gauntlet_Missile DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">
         <Animation Preset="Sprites/Enemy/Gauntlet_Missile/0_default/1_idle" XFlip="true" Duration="0.8">
         </Animation>
 
         <CollisionInfo Radius="0.1" Angle="0"/>
-        <DefaultShotInfo Velocity="7" Acceleration="0" Friction="14" Angle="0" AngularAcceleration="0" LifeTime="0.8"/>
+        <DefaultShotInfo Velocity="9" Acceleration="0" Friction="14" Angle="0" AngularAcceleration="0" LifeTime="0.8"/>
         
         <Event>
             <OnEnd>
-                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="Missile" Offset="0 0 0" Inherit="true"/>
+                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="Missile" Offset="0 0 0" SearchIdentifier="Enemy" InheritDirection="True" UseFlip="true"/>
             </OnEnd>
         </Event>
     </Gauntlet_Missile>
@@ -638,7 +638,7 @@
         </Animation>
 
         <CollisionInfo Radius="0.1" Angle="0"/>
-        <DefaultShotInfo Velocity="9" Acceleration="0" Friction="14" Angle="0" AngularAcceleration="0" LifeTime="0.5"/>
+        <DefaultShotInfo Velocity="12" Acceleration="0" Friction="14" Angle="0" AngularAcceleration="0" LifeTime="0.5"/>
         
         <Event>
             <OnEnd>
