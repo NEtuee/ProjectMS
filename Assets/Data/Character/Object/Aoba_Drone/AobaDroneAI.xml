@@ -30,15 +30,31 @@
             </TerminatePackage>
         </AIState>
     </AIPackage>
-    <AIPackage Name="AobaDroneChasePackage" DefaultState="AI_Chase">
+    <AIPackage Name="AobaDroneChasePackage" DefaultState="AI_Launch">
         <AIState>
-            <AI_Chase UpdateTime="0.1" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
+            <AI_Launch UpdateTime="0.1" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
                 <Event_OnExecute>
-                    <AIEvent Type="SetDirectionToTarget"/>
+                    <AIEvent Type="SetDirectionToTarget" Speed="120"/>
                     <AIEvent Type="SetAction" Action="AC_Move"/>
                 </Event_OnExecute>
+
+                <Event_OnFrame>
+                    <AIEvent Type="SetDirectionToTarget" Speed="120"/>
+                </Event_OnFrame>
                 
-                <Branch Condition="true" Execute="AI_Chase"/>
+                <Branch Condition="PackageExecutedTime >= 2.0" Execute="AI_Chase"/>
+            </AI_Launch>
+            <AI_Chase UpdateTime="0.1" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
+                <Event_OnExecute>
+                    <AIEvent Type="SetDirectionToTarget" Speed="360"/>
+                    <AIEvent Type="SetAction" Action="AC_Move"/>
+                </Event_OnExecute>
+
+                <Event_OnFrame>
+                    <AIEvent Type="SetDirectionToTarget" Speed="360"/>
+                </Event_OnFrame>
+                
+                <Branch Condition="End" Execute="AI_Chase"/>
             </AI_Chase>
         </AIState>
     </AIPackage>

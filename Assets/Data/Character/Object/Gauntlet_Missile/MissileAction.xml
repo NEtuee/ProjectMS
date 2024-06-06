@@ -9,18 +9,22 @@
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_Idle>
 
-    <AC_Launch MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
+    <AC_Lanch MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="0_default/1_idle" XFlip="true" Duration="0.5">
-            <!-- 통, 하고 튀어오르는 모션 -->
-            <FrameEvent Type="Movement" StartTime="0" Friction="24" MaxVelocity="15" Velocity="15" Speed="0"/>
-
+        <Animation Preset="0_default/2_move" XFlip="true" Duration="1.5">
+            <!-- 뒤에 불꽃 붙어서 이동-->
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="15" Speed="15"/>
+            <!-- TODO : 타겟이 반대 방향에 위치하면 감속하여 회전하도록-->
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.5" AttackPreset="Common_Radius01" NotifyAttackSuccess="False">
+                <OnHit>
+                </OnHit>
+            </FrameEvent>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
-        <Branch Condition="End == true" Execute="AC_Launch"/>
-    </AC_Launch>
+        <Branch Condition="End == true" Execute="AC_Move"/>
+    </AC_Lanch>
 
     <AC_Move MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>

@@ -4,16 +4,32 @@
     <Include Path="Assets/Data/AILibrary/Package/CommonIdlePackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonChasePackage.xml"/>
 
-    <AIPackage Name="MissileChasePackage" DefaultState="AI_Chase">
+    <AIPackage Name="MissileChasePackage" DefaultState="AI_Launch">
         <AIState>
-            <AI_Launch UpdateTime="0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
+            <AI_Launch UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
                 <Event_OnExecute>
-                    <AIEvent Type="SetAction" Action="AC_Launch"/>
+                    <AIEvent Type="SetDirectionToTarget" Speed="120"/>
+                    <AIEvent Type="SetAction" Action="AC_Lanch"/>
                 </Event_OnExecute>
+                <Event_OnFrame>
+                    <AIEvent Type="SetDirectionToTarget" Speed="120"/>
+                </Event_OnFrame>
                 
-                <Branch Condition="End" Execute="AI_Chase"/>
+                <Branch Condition="PackageExecutedTime >= 2.0" Execute="AI_Chase"/>
             </AI_Launch>
             <AI_Chase UpdateTime="0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
+                <Event_OnExecute>
+                    <AIEvent Type="SetDirectionToTarget" Speed="360"/>
+                    <AIEvent Type="SetAction" Action="AC_Move"/>
+                </Event_OnExecute>
+
+                <Event_OnFrame>
+                    <AIEvent Type="SetDirectionToTarget" Speed="360"/>
+                </Event_OnFrame>
+                
+                <Branch Condition="AngleToTarget <= 1.0" Execute="AI_ChaseLockOn"/>
+            </AI_Chase>
+            <AI_ChaseLockOn UpdateTime="0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
                 <Event_OnExecute>
                     <AIEvent Type="SetDirectionToTarget"/>
                     <AIEvent Type="SetAction" Action="AC_Move"/>
@@ -23,8 +39,8 @@
                     <AIEvent Type="SetDirectionToTarget"/>
                 </Event_OnFrame>
                 
-                <Branch Condition="End" Execute="AI_Chase"/>
-            </AI_Chase>
+                <Branch Condition="End" Execute="AI_ChaseLockOn"/>
+            </AI_ChaseLockOn>
             <AI_ExploChase UpdateTime="0.1" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
                 <Event_OnExecute>
                     <AIEvent Type="SetAction" Action="AC_ExplosionChase"/>

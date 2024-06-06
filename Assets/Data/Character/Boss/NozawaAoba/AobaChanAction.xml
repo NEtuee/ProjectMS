@@ -4,6 +4,7 @@
         <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/0_default/"/>
         <Animation Preset="1_idle" XFlip="true" Duration="1">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+            <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2413"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Entry"/>
@@ -14,6 +15,7 @@
         <Animation Preset="1_idle" XFlip="true" Duration="1">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
 
+            <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2413"/>
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="ResetRaisen" EventTargetType="Self"/>
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="ResetStorm" EventTargetType="Self"/>
         </Animation>
@@ -43,7 +45,7 @@
 
     <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/0_default/"/>
-        <Animation Preset="4_hit" XFlip="true" Duration="1.25">
+        <Animation Preset="4_hit" XFlip="true" Duration="0.45">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2402" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountIncrease"/>
@@ -64,7 +66,7 @@
 
     <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/0_default/"/>
-        <Animation Preset="4_hit" XFlip="true" Duration="1.25">
+        <Animation Preset="5_guardBroken" XFlip="true" Duration="0.45">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2402" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="BossHitCountIncrease"/>
@@ -100,7 +102,7 @@
 
     <Dead_Loop DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/0_default/"/>
-        <Animation Preset="5_dead" XFlip="true" Duration="1">
+        <Animation Preset="6_dead" XFlip="true" Duration="1">
         </Animation>
 
         <Branch Condition="End == true" Execute="Dead_Loop"/>
@@ -108,7 +110,7 @@
 
     <Dead DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/0_default/"/>
-        <Animation Preset="5_dead" XFlip="true" Duration="1">
+        <Animation Preset="6_dead" XFlip="true" Duration="1">
             <!--
             <FrameEvent Type="SetTimeScale" Scale="0.1" Time="1.0" BlendTime="1.0"/>
             <FrameEvent Type="ZoomEffect" Scale="2.3"/>
@@ -441,24 +443,26 @@
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_IdleToDodge>
 
-    <AC_UnwaverRaisen MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+    <AC_UnwaverRaisen MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="IgnorePush">
         <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/5_unwaverRaisen/"/>
         <!-- 준비 자세 -->
-        <Animation Preset="1_unwaverReady" XFlip="true" Duration="0.2">
+        <Animation Preset="1_unwaverReady" XFlip="true" Duration="0.3">
             <FrameEvent Type="SetDirectionType" StartTime="0.016" DirectionType="Keep"/>
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2413" Attach="true"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2413" Attach="true" Switch="True"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
             <FrameEvent Type="Attack" StartTime="0" AttackPreset="Aoba_UnwaverRaisen" NotifyAttackSuccess="False">
                 <OnHit>
                     <FrameEvent Type="SetTimeScale" StartTime="0" Scale="0.05" Time="0.6" BlendTime="0.17"/>
+                    <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="SetTimeScale"/>
                 </OnHit>
             </FrameEvent>
             <FrameEvent Type="Projectile" StartTime="0" GraphName="UnwaverRaisen" DirectionType="AI" SpawnTargetType="Self"/>
+            <FrameEvent Type="FrameTag" StartTime="0.2" EndTime="999" Tag="UnwvaerReadyEnd"/>
         </Animation>
         <!-- 영역 전개 -->
         <Animation Preset="2_unwaverActivate" XFlip="true" Duration="0.4">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2417" Attach="true"/>
-            <FrameEvent Type="Attack" StartTime="0" EndTime="0.2" AttackPreset="Aoba_UnwaverRaisen">
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="RaisenActivated"/>
+            <FrameEvent Type="Attack" StartTime="0" AttackPreset="Aoba_UnwaverRaisen">
                 <OnHit>
                     <FrameEvent Type="SetDirectionType" StartTime="0" DirectionType="AI"/>
                     <FrameEvent Type="AudioPlay" StartTime="0" ID="2407" Attach="true"/>

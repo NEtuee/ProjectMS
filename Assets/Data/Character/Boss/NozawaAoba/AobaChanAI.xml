@@ -101,7 +101,7 @@
     <BranchSet Name="HitReactionSet">
         <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="getTargetFrameTag_Dead" Execute="EnemyWin"/>
-        <Branch Weight="AobaDodge^True" Condition="Hit && getFrameTag_HitAvail && aiGraphCoolTime_UnwaverRaisenDodge" Execute="UnwaverRaisenDodge"/> <!-- 확정 회피 패턴 (수평회피 부동뢰섬)-->
+        <Branch Weight="AobaDodge^True" Condition="Hit && getFrameTag_HitAvail && (aiGraphCoolTime_UnwaverRaisen && aiGraphCoolTime_UnwaverRaisenDodge)" Execute="UnwaverRaisenDodge"/> <!-- 확정 회피 패턴 (수평회피 부동뢰섬)-->
         <Branch Weight="AobaDodge^True" Condition="Hit && getFrameTag_HitAvail && aiGraphCoolTime_Kick" Execute="Kick"/> <!-- 확정 회피 패턴 (발차기)-->
         <Branch Condition="Hit && getFrameTag_HitAvail" Execute="Hit"/>
         <Branch Condition="(GuardBreakFail || GuardBroken) && getFrameTag_GbAvail" Execute="GuardBroken"/>

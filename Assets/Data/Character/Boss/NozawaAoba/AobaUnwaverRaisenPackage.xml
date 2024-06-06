@@ -37,8 +37,9 @@
             <Event_OnUpdate>
                 <AIEvent Type="SetDirectionToTarget"/>
             </Event_OnUpdate>
-
-            <Branch Condition="AttackSuccess" Execute="AI_UnwaverRaisenSuccess"/>
+            
+            <Branch Condition="getFrameTag_UnwvaerReadyEnd && (getFrameTag_SetTimeScale == false)" Execute="TerminatePackage"/>
+            <Branch Condition="getFrameTag_RaisenActivated && AttackSuccess" Execute="AI_UnwaverRaisenSuccess"/>
             <Branch Condition="End" Execute="TerminatePackage"/>
         </AI_UnwaverRaisen>
 
