@@ -207,6 +207,7 @@ public class GameEntityBase : SequencerObjectBase
         _movementControl.initialize();
         _actionGraph.initialize(ResourceContainerEx.Instance().GetActionGraph(characterInfo._actionGraphPath));
         _aiGraph.initialize(this, _actionGraph, ResourceContainerEx.Instance().GetAIGraph(characterInfo._aiGraphPath));
+        _aiGraph.setAIDirection(getDirection());
 
         _actionGraph.initializeCustomValue(_aiGraph.getCustomValueData());
 
@@ -548,7 +549,7 @@ public class GameEntityBase : SequencerObjectBase
 
         _graphicInterface.setInterfaceOffset(Vector3.up * _headUpOffset);
 
-        if(_actionGraph.checkCurrentActionFlag(ActionFlags.ClearPush))
+        if(_actionGraph.checkCurrentActionFlag(ActionFlags.ClearPush) || _actionGraph.checkCurrentActionFlag(ActionFlags.IgnorePush))
             _currentVelocity = Vector3.zero;
 
         bool hideBuffEffect = _actionGraph.checkCurrentActionFlag(ActionFlags.HideBuffEffect);

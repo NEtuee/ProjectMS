@@ -205,6 +205,7 @@
 
     <AC_Explosion MovementType="Empty" DirectionType="Keep">
         <Animation Preset="Sprites/Projectile/empty" Duration="0.3">
+            <FrameEvent Type="EffectPreset" StartTime="0" Key="Paper"/>
             <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2518"/>
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2504" Attach="true"/>
             <!-- TODO: 폭발 이펙트  -->
@@ -221,6 +222,7 @@
     <Dead MovementType="Empty" DirectionType="AI">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="0_default/4_dead" XFlip="true" Duration="0.5">
+            <FrameEvent Type="EffectPreset" StartTime="0" Key="Paper"/>
             <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2507"/>
             <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2516"/>
             <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2518"/>

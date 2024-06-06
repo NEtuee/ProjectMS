@@ -11,7 +11,7 @@ public class BackgroundLayer : MonoBehaviour
     public bool _lockX = false;
     public bool _lockY = false;
     
-    void Update()
+    void LateUpdate()
     {
         if(Camera.main == null)
             return;

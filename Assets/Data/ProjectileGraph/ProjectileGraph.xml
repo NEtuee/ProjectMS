@@ -34,6 +34,18 @@
         </Event>
     </TestProjectile>
 
+    <TestShot DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">
+        <Animation Path="Resources/Sprites/Projectile/stingray_bullet/" StartFrame="0" EndFrame="1" XFlip="true">
+        </Animation>
+        <CollisionInfo Radius="0.1" Angle="0"/>
+        <DefaultShotInfo Velocity="2" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="1"/>
+        <Event>
+            <OnEnd>
+                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="Missile" Offset="0 0 0" Inherit="true" InheritDirection="true"/>
+            </OnEnd>
+        </Event>
+    </TestShot>
+
 
     <StunShot DefaultFramePerSecond="4" PenetrateCount="1" CastShadow="True" ExecuteBySummoner="True">
         <Animation Path="Resources/Sprites/Effect/Sheath" FramePerSecond="5" XFlip="true" RotationPreset="SpinLinear" Loop="True">

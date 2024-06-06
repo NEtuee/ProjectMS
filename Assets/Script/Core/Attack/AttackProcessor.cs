@@ -329,7 +329,8 @@ public class AttackProcessor : AttackProcessorBase
             else
                 attackPointDirection = (target.transform.position - successData._startPoint).normalized;
 
-            target.setVelocity(UnityEngine.Quaternion.Euler(0f,0f,UnityEngine.Mathf.Atan2(attackPointDirection.y,attackPointDirection.x) * UnityEngine.Mathf.Rad2Deg) * _attackFrameEvent._pushVector);
+            if(target.checkCurrentActionFlag(ActionFlags.IgnorePush) == false)
+                target.setVelocity(UnityEngine.Quaternion.Euler(0f,0f,UnityEngine.Mathf.Atan2(attackPointDirection.y,attackPointDirection.x) * UnityEngine.Mathf.Rad2Deg) * _attackFrameEvent._pushVector);
         }
 
         if(((guardSuccess == false || target.getDefenceType() == DefenceType.Empty) && target.getDefenceType() != DefenceType.Evade) || canIgnore)

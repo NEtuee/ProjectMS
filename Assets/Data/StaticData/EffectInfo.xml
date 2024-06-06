@@ -109,6 +109,21 @@
         CastShadow="False"
     />
 
+    <ParticleEffect Key="Paper" 
+        AttackMaterial="" 
+        DefenceMaterial=""
+        Path="Prefab/Effect/Paper"
+        Offset="0.0 0.0 0.0"
+        ToTarget="False"
+        UpdateType="ScaledDeltaTime"
+        Attach="False"
+        AngleType="AttackPoint"
+        LifeTime="0.0"
+        FollowDirection="False"
+        CastShadow="True"
+        AngleOffset="-90"
+    />
+
     <ParticleEffect Key="BloodSmall" 
         AttackMaterial="" 
         DefenceMaterial=""

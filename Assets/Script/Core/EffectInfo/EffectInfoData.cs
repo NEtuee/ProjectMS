@@ -86,8 +86,8 @@ public class ParticleEffectInfoData : EffectInfoDataBase
         EffectRequestData requestData = MessageDataPooling.GetMessageData<EffectRequestData>();
         requestData.clearRequestData();
         requestData._effectPath = _effectPath;
-        requestData._rotation = executeEntity == null ? Quaternion.identity : getAngleByType(executeEntity, requestData._position, _angleDirectionType);
         requestData._position = centerPosition + requestData._rotation * _spawnOffset;
+        requestData._rotation = executeEntity == null ? Quaternion.identity : getAngleByType(executeEntity, requestData._position, _angleDirectionType);
         requestData._rotationOffset = Quaternion.Euler(0f,0f,_angleOffset);
         requestData._rotation *= requestData._rotationOffset;
         requestData._updateType = _effectUpdateType;
@@ -128,8 +128,8 @@ public class SpriteEffectInfoData : EffectInfoDataBase
         EffectRequestData requestData = MessageDataPooling.GetMessageData<EffectRequestData>();
         requestData.clearRequestData();
         requestData._effectPath = _effectPath;
-        requestData._rotation = executeEntity == null ? Quaternion.identity : getAngleByType(executeEntity, requestData._position, _angleDirectionType);
         requestData._position = centerPosition + requestData._rotation * _spawnOffset;
+        requestData._rotation = executeEntity == null ? Quaternion.identity : getAngleByType(executeEntity, requestData._position, _angleDirectionType);
         requestData._rotationOffset = Quaternion.Euler(0f,0f,_angleOffset);
         requestData._rotation *= requestData._rotationOffset;
         requestData._updateType = _effectUpdateType;

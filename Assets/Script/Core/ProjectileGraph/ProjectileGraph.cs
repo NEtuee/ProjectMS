@@ -1,5 +1,6 @@
 
 using System.Collections.Generic;
+using System.Numerics;
 
 //todo : animation start, ed frame, 
 public class ProjectileGraph
@@ -39,6 +40,11 @@ public class ProjectileGraph
         _isEnd = false;
     }
 
+    public UnityEngine.Vector3 getCurrentDirection()
+    {
+        return UnityEngine.Quaternion.Euler(0f,0f,_currentAngle) * UnityEngine.Vector3.right;
+    }
+
     private void setShotInfo(ProjectileGraphShotInfoData shotInfoData)
     {
         _projectileGraphShotInfoData = shotInfoData;
@@ -73,7 +79,7 @@ public class ProjectileGraph
         if(_projectileGraphShotInfoData._angularAcceleration != 0f)
             _currentAngle += _projectileGraphShotInfoData._angularAcceleration * deltaTime;
         
-        _movementOfFrame += (_currentVelocity * deltaTime) * (UnityEngine.Quaternion.Euler(0f,0f,_currentAngle) * UnityEngine.Vector3.right);
+        _movementOfFrame += (_currentVelocity * deltaTime) * getCurrentDirection();
 
         return isEnd();
     }
