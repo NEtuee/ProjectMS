@@ -248,6 +248,7 @@ public class GameEntityBase : SequencerObjectBase
 
         setRotateSlotValue(0f, 0f);
         initializeActionValue();
+        updateRotation();
 
         foreach(var item in _hpEffect)
         {
@@ -377,6 +378,7 @@ public class GameEntityBase : SequencerObjectBase
 
         setRotateSlotValue(0f, 0f);
         initializeActionValue();
+        updateRotation();
 
         foreach(var item in _hpEffect)
         {

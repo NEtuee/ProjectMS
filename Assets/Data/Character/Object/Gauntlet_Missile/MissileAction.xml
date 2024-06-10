@@ -1,7 +1,7 @@
 <ActionGraph Name="MissileAction" DefaultAction="AC_Idle" DefaultFramePerSecond="12">
     <GlobalVariable Name="gv_MasterPath" Value="Sprites/Enemy/Gauntlet_Missile/"/>
 
-    <AC_Idle MovementType="Empty" DirectionType="AI">
+    <AC_Idle MovementType="Empty" DirectionType="AI" RotationType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="0_default/1_idle" XFlip="true" Duration="0.5">
         </Animation>
