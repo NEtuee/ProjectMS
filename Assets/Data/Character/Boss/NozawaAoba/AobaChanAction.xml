@@ -163,6 +163,7 @@
     <AC_StormRaisenPre MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/1_stormRaisen/"/>
         <Animation Preset="4_stormRaisenPre" XFlip="true" Duration="0.15">
+            <FrameEvent Type="EffectPreset" StartTime="0" Key="AttackReady"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_StormRaisenPre"/>
@@ -244,6 +245,7 @@
     <AC_ChargeRaisenPre MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/3_chargeRaisen/"/>
         <Animation Preset="3_chargeRaisenPre" XFlip="true" Duration="0.12">
+            <FrameEvent Type="EffectPreset" StartTime="0" Key="AttackReady"/>
             <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="999" Tag="GbAvail"/>
         </Animation>
@@ -375,6 +377,7 @@
     <AC_RaisenPre MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/4_Tsuba/7_raisen/"/>
         <Animation Preset="1_raisenPre" XFlip="true" Duration="0.1">
+            <FrameEvent Type="EffectPreset" StartTime="0" Key="AttackReady"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_RaisenPre"/>
@@ -500,9 +503,10 @@
     <AC_ChoraisenPre MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/5_unwaverRaisen/4_choraisen/"/>
         <Animation Preset="1_choraisenPre" XFlip="true" Duration="0.15">
+            <FrameEvent Type="EffectPreset" StartTime="0" Key="AttackReady"/>
         </Animation>
 
-        <Branch Condition="End" Execute="AC_RaisenPre"/>
+        <Branch Condition="End" Execute="AC_ChoraisenPre"/>
     </AC_ChoraisenPre>
 
     <AC_ChoraisenSlash MovementType="GraphPreset" MovementGraphPreset="Aoba_Choraisen" DirectionType="AI" FlipType="Direction" RotationType="Direction">

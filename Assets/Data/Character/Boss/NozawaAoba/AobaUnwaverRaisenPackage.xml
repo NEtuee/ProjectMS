@@ -8,6 +8,7 @@
         
             <Branch Condition="EvadeSuccess" Execute="AI_HorizontalDodge"/>
             <Branch Condition="End && (TargetDistance <= 1.5)" Execute="AI_UnwaverRaisen"/>
+            <Branch Condition="End" Execute="AI_ChoraisenPre"/>
         </AI_HitToDodge>
 
         <AI_IdleToDodge UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
@@ -17,6 +18,7 @@
         
             <Branch Condition="EvadeSuccess" Execute="AI_HorizontalDodge"/>
             <Branch Condition="End && (TargetDistance <= 1.5)" Execute="AI_UnwaverRaisen"/>
+            <Branch Condition="End" Execute="AI_ChoraisenPre"/>
         </AI_IdleToDodge>
 
         <AI_HorizontalDodge UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">

@@ -127,12 +127,12 @@
     <!-- 전투 패시브 방어 분기 브랜치 셋 -->
     <BranchSet Name="BattleDefenseByHitJudgeSet">
         <Branch Weight="AobaHitReaction^Dodge"   Condition="gv_bIsDodgeToPassiveDef_Hit"      Execute="Dodge"/>
-        <Branch Weight="AobaHitReaction^Tsuba" Condition="gv_bIsCounterToPassiveDef_Hit"    Execute="TsubaReady"/>
+        <Branch Weight="AobaHitReaction^Tsuba" Condition="gv_bIsCounterToPassiveDef_Hit"    Execute="Tsuba"/>
         <Branch Condition="gv_bIsGuardToPassiveDef_Hit"      Execute="Entry_Battle"/>
     </BranchSet>
     <BranchSet Name="BattleDefenseByGuardJudgeSet">
         <Branch Condition="gv_bIsDodgeToPassiveDef_Guard"    Execute="Dodge"/>
-        <Branch Condition="gv_bIsCounterToPassiveDef_Guard"  Execute="TsubaReady"/>
+        <Branch Condition="gv_bIsCounterToPassiveDef_Guard"  Execute="Tsuba"/>
     </BranchSet>
 
     <!-- 전투 행동 분기 브랜치 셋-->
@@ -190,8 +190,10 @@
         <Branch Condition="aiGraphCoolTime_Thrust" Execute="Thrust"/>
         <!-- 발차기 : Cool 4.0s -->
         <Branch Condition="aiGraphCoolTime_Kick" Execute="Kick"/>
-        <!-- 수직회피 패턴 : Cool 0.0s (검토 필) -->
+        <!-- 닷지 패턴 : Cool 5.0s -->
         <Branch Condition="aiGraphCoolTime_Dodge" Execute="Dodge"/>
+        <!-- 츠바 패턴 : 0.0s (드론 소환 직후 제외) -->
+        <Branch Condition="aiGraphCoolTime_SpawnDrones_Start" Execute="TsubaReady"/>
     </JudgeMeleeAttack>
 
     <JudgeRangedAttack Package="CommonIdlePackage">
@@ -209,7 +211,7 @@
 
     </JudgeRangedAttack>
 
-    <Dodge Package="AobaDodgePackage" CoolTime="0.0">      
+    <Dodge Package="AobaDodgePackage" CoolTime="5.0">      
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </Dodge>
@@ -276,7 +278,6 @@
     </TsubaReady>
     <!-- AI 스테이트 : 전투 상태 : 패시브 방어 -->
     <Tsuba Package="AobaTsubaPackage">
-        <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </Tsuba>
 
