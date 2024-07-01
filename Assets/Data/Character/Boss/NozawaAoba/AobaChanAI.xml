@@ -278,6 +278,8 @@
     </TsubaReady>
     <!-- AI 스테이트 : 전투 상태 : 패시브 방어 -->
     <Tsuba Package="AobaTsubaPackage">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="getTargetFrameTag_Dead" Execute="EnemyWin"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </Tsuba>
 

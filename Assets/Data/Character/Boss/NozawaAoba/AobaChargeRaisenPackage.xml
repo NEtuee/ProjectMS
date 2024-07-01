@@ -1,14 +1,35 @@
-<AIPackage Name="AobaChargeRaisenPackage" DefaultState="AI_Charge">
+<AIPackage Name="AobaChargeRaisenPackage" DefaultState="AI_ChargeReady">
 
     <AIState>
-        <AI_Charge UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+        <AI_ChargeReady UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+            <Branch Weight="RandBoolean^True" Condition="true" Execute="AI_Charge_L"/>
+            <Branch Weight="RandBoolean^False" Condition="true" Execute="AI_Charge_R"/>
+        </AI_ChargeReady>
+
+        <AI_Charge_L UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget" Angle="45"/>
+                <AIEvent Type="SetAction" Action="AC_ChargeRaisenReady"/>
+            </Event_OnExecute>
+            
+            <Branch Condition="End" Execute="AI_ChargeRaisenPre"/>
+        </AI_Charge_L>
+        <AI_Charge_R UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget" Angle="315"/>
+                <AIEvent Type="SetAction" Action="AC_ChargeRaisenReady"/>
+            </Event_OnExecute>
+            
+            <Branch Condition="End" Execute="AI_ChargeRaisenPre"/>
+        </AI_Charge_R>
+        <AI_Charge_F UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_ChargeRaisenReady"/>
             </Event_OnExecute>
             
             <Branch Condition="End" Execute="AI_ChargeRaisenPre"/>
-        </AI_Charge>
+        </AI_Charge_F>
 
         <AI_ChargeRaisenPre UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>

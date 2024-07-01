@@ -214,7 +214,7 @@
         <Animation Preset="1_empReady" XFlip="true" Duration="0.2">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
         </Animation>
-        <Animation Preset="2_empThrow" XFlip="true" Duration="0.3">
+        <Animation Preset="2_empThrow" XFlip="true" Duration="0.1">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2414" Attach="true"/>
             <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="EmpGrenade" Offset="0 0 0" UseFlip="True"/>
 
@@ -228,12 +228,12 @@
     <!-- 약진 뢰섬 -->
     <AC_ChargeRaisenReady MovementType="GraphPreset" MovementGraphPreset="Aoba_Charge" DirectionType="AI" FlipType="Direction" RotationType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/3_chargeRaisen/"/>
-        <Animation Preset="1_chargeReady" XFlip="true" Duration="0.2">
+        <Animation Preset="1_chargeReady" XFlip="true" Duration="0.1">
             <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="999" Tag="GbAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="0.2" Tag="DodgeAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="0.1" Tag="DodgeAvail"/>
         </Animation>
-        <Animation Preset="2_charge" XFlip="true" Duration="0.5">
+        <Animation Preset="2_charge" XFlip="true" Duration="0.6">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2408" Attach="true"/>
             <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="999" Tag="GbAvail"/>

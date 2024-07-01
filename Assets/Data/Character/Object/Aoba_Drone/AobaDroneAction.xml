@@ -50,7 +50,7 @@
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2415" Attach="true"/>
             <!-- TODO: 폭발 이펙트  -->
             <FrameEvent Type="EffectPreset" StartTime="0" Key="Helena_ExplodeBig"/>
-            <FrameEvent Type="Attack" StartTime="0" EndTime="0.3" AttackPreset="Common_Radius20">
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.3" NotifyAttackSuccess="False" AttackPreset="Common_Radius20">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
                 </OnHit>
