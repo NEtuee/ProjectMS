@@ -24,6 +24,15 @@
         <Branch Condition="End" Execute="Exit"/>
     </Explosion>
 
+    <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction" RotationType="Keep">
+        <Animation Preset="Sprites/Projectile/empty" Duration="0.016">
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="EmpGrenade" Offset="0 0 0" AllyInfo="EnemyAllNeutral" UseFlip="true" InheritDirection="False" AINode="Kicked"/>
+            <FrameEvent Type="KillEntity" StartFrame="0"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="Exit"/>
+    </AC_GuardBroken>
+
     <Exit MovementType="Empty" DirectionType="Keep">
         <Animation Preset="Sprites/Projectile/empty" Duration="0.016">
             <FrameEvent Type="KillEntity" StartFrame="0"/>
