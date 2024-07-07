@@ -177,19 +177,19 @@ public class AnimationCustomPresetEditor : Editor
 
         if(animationCustomPreset._rotationPresetName != "")
         {
-            AnimationRotationPreset rotationPreset = ResourceContainerEx.Instance().GetScriptableObject("Preset\\AnimationRotationPreset") as AnimationRotationPreset;
+            AnimationRotationPreset rotationPreset = ResourceContainerEx.Instance().GetScriptableObject("Preset/AnimationRotationPreset") as AnimationRotationPreset;
             playData._rotationPresetData = rotationPreset.getPresetData(animationCustomPreset._rotationPresetName);
         }
         
         if(animationCustomPreset._scalePresetName != "")
         {
-            AnimationScalePreset scalePreset = ResourceContainerEx.Instance().GetScriptableObject("Preset\\AnimationScalePreset") as AnimationScalePreset;
+            AnimationScalePreset scalePreset = ResourceContainerEx.Instance().GetScriptableObject("Preset/AnimationScalePreset") as AnimationScalePreset;
             playData._scalePresetData = scalePreset.getPresetData(animationCustomPreset._scalePresetName);
         }
 
         if (animationCustomPreset._translationPresetName != "")
         {
-            AnimationTranslationPreset translationPreset = ResourceContainerEx.Instance().GetScriptableObject("Preset\\AnimationTranslationPreset") as AnimationTranslationPreset;
+            AnimationTranslationPreset translationPreset = ResourceContainerEx.Instance().GetScriptableObject("Preset/AnimationTranslationPreset") as AnimationTranslationPreset;
             playData._translationPresetData = translationPreset.getPresetData(animationCustomPreset._translationPresetName);
         }
 

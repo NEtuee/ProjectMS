@@ -1,4 +1,9 @@
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
+using UnityEditor;
 
 [System.Serializable]
 public class ActionGraphBaseData
@@ -34,6 +39,14 @@ public class ActionGraphBaseData
             _actionIndexMap.Add(_actionNodeData[i]._nodeName,i);
         }
     }
+
+#if UNITY_EDITOR
+    public void serialize(ref BinaryWriter binaryWriter)
+    {
+        binaryWriter.Write(_name);
+        //binaryWriter.Write(,
+    }
+#endif
 }
 
 [System.Serializable]
@@ -107,7 +120,96 @@ public class ActionGraphNodeData
 
 #if UNITY_EDITOR
     public int _lineNumber;
+
+    public void serialize(ref BinaryWriter binaryWriter)
+    {
+        binaryWriter.Write(_nodeName);
+        binaryWriter.Write(_animationInfoIndex);
+        binaryWriter.Write(_animationInfoCount);
+        binaryWriter.Write((int)_movementType);
+        binaryWriter.Write(_movementGraphPresetData == null ? "NULL" : _movementGraphPresetData.getName());
+        binaryWriter.Write((int)_directionType);
+        binaryWriter.Write((int)_defenceDirectionType);
+        binaryWriter.Write((int)_rotationType);
+        binaryWriter.Write((int)_flipType);
+        binaryWriter.Write((int)_defenceType);
+        binaryWriter.Write((int)_characterMaterial);
+        binaryWriter.Write((int)_applyBuffList.Length);
+        for(int i = 0; i < _applyBuffList.Length; ++i)
+            binaryWriter.Write(_applyBuffList[i]);
+        binaryWriter.Write((int)_ignoreAttackType);
+        binaryWriter.Write(_additionalDirectionAngle);
+        binaryWriter.Write(_defenceAngle);
+        binaryWriter.Write(_moveScale);
+        binaryWriter.Write(_rotateSpeed);
+        binaryWriter.Write(_headUpOffset);
+        binaryWriter.Write(_normalizedSpeed);
+        binaryWriter.Write(_rotateBySpeed);
+        binaryWriter.Write(_isActionSelection);
+        binaryWriter.Write(_directionUpdateOnce);
+        binaryWriter.Write(_flipTypeUpdateOnce);
+        binaryWriter.Write(_activeCollision);
+        binaryWriter.Write(_isDummyAction);
+        binaryWriter.Write(_hasAngleSector);
+        binaryWriter.Write(_angleSectorCount);
+        binaryWriter.Write(_actionFlag);
+        binaryWriter.Write(_index);
+        binaryWriter.Write(_branchIndexStart);
+        binaryWriter.Write(_branchCount);
+        binaryWriter.Write(_triggerIndexStart);
+        binaryWriter.Write(_triggerCount);
+    }
 #endif
+
+    public void deserialize(ref BinaryReader binaryReader)
+    {
+        _nodeName = binaryReader.ReadString();
+        _animationInfoIndex = binaryReader.ReadInt32();
+        _animationInfoCount = binaryReader.ReadInt32();
+        _movementType = (MovementBase.MovementType)binaryReader.ReadInt32();
+        string graphPreset = binaryReader.ReadString();
+        if(graphPreset != "NULL")
+        {
+            MovementGraphPreset preset = ResourceContainerEx.Instance().GetScriptableObject("Preset/MovementGraphPreset") as MovementGraphPreset;
+            _movementGraphPresetData = preset.getPresetData(graphPreset);
+        }
+        else
+        {
+            _movementGraphPresetData = null;
+        }
+
+        _directionType = (DirectionType)binaryReader.ReadInt32();
+        _defenceDirectionType = (DefenceDirectionType)binaryReader.ReadInt32();
+        _rotationType = (RotationType)binaryReader.ReadInt32();
+        _flipType = (FlipType)binaryReader.ReadInt32();
+        _defenceType = (DefenceType)binaryReader.ReadInt32();
+        _characterMaterial = (CommonMaterial)binaryReader.ReadInt32();
+        int applyBuffListCount = binaryReader.ReadInt32();
+        _applyBuffList = applyBuffListCount == 0 ? null : new int[applyBuffListCount];
+        for(int i = 0; i < applyBuffListCount; ++i)
+            _applyBuffList[i] = binaryReader.ReadInt32();
+        _ignoreAttackType = (AttackType)binaryReader.ReadInt32();
+        _additionalDirectionAngle = binaryReader.ReadSingle();
+        _defenceAngle = binaryReader.ReadSingle();
+        _moveScale = binaryReader.ReadSingle();
+        _rotateSpeed = binaryReader.ReadSingle();
+        _headUpOffset = binaryReader.ReadSingle();
+        _normalizedSpeed = binaryReader.ReadBoolean();
+        _rotateBySpeed = binaryReader.ReadBoolean();
+        _isActionSelection = binaryReader.ReadBoolean();
+        _directionUpdateOnce = binaryReader.ReadBoolean();
+        _flipTypeUpdateOnce = binaryReader.ReadBoolean();
+        _activeCollision = binaryReader.ReadBoolean();
+        _isDummyAction = binaryReader.ReadBoolean();
+        _hasAngleSector = binaryReader.ReadBoolean();
+        _angleSectorCount = binaryReader.ReadInt32();
+        _actionFlag = binaryReader.ReadUInt64();
+        _index = binaryReader.ReadInt32();
+        _branchIndexStart = binaryReader.ReadInt32();
+        _branchCount = binaryReader.ReadInt32();
+        _triggerIndexStart = binaryReader.ReadInt32();
+        _triggerCount = binaryReader.ReadInt32();
+    }
 }
 
 public enum DirectionType
@@ -147,7 +249,23 @@ public class ActionGraphBranchData
 
 #if UNITY_EDITOR
     public int _lineNumber;
+
+    public void serialize(ref BinaryWriter binaryWriter)
+    {
+        binaryWriter.Write(_branchActionIndex);
+        binaryWriter.Write(_conditionCompareDataIndex);
+        binaryWriter.Write(_keyConditionCompareDataIndex);
+        binaryWriter.Write(_weightConditionCompareDataIndex);
+    }
 #endif
+
+    public void deserialize(ref BinaryReader binaryReader)
+    {
+        _branchActionIndex = binaryReader.ReadInt32();
+        _conditionCompareDataIndex = binaryReader.ReadInt32();
+        _keyConditionCompareDataIndex = binaryReader.ReadInt32();
+        _weightConditionCompareDataIndex = binaryReader.ReadInt32();
+    }
 }
 
 public enum ActionFlags : ulong
@@ -371,16 +489,46 @@ public static class ConditionNodeInfoPreset
         1, // boolean
     };
 }
+
+public enum ConditionNodeDataType
+{
+    Normal,
+    Literal,
+    ConditionResult,
+    AICustomValue,
+    FrameTag,
+    Weight,
+    Key,
+    Status,
+    AIGraphCoolTime,
+}
+
 [System.Serializable]
 public class ActionGraphConditionNodeData
 {
     public string _symbolName;
+
+    public virtual ConditionNodeDataType getConditionNodeDataType => ConditionNodeDataType.Normal;
+
+#if UNITY_EDITOR
+    public virtual void serialize(ref BinaryWriter binaryWriter)
+    {
+        binaryWriter.Write(_symbolName);
+    }
+#endif
+
+    public virtual void deserialize(ref BinaryReader binaryReader)
+    {
+        _symbolName = binaryReader.ReadString();
+    }
 }
 
 [System.Serializable]
 public class ActionGraphConditionNodeData_AICustomValue : ActionGraphConditionNodeData_Literal
 {
     public string _customValueName = "";
+
+    public override ConditionNodeDataType getConditionNodeDataType => ConditionNodeDataType.AICustomValue;
 
     public ActionGraphConditionNodeData_AICustomValue()
     {
@@ -391,12 +539,27 @@ public class ActionGraphConditionNodeData_AICustomValue : ActionGraphConditionNo
     {
         return _customValueName;
     }
-    
+
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_customValueName);
+    }
+#endif
+
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        base.deserialize(ref binaryReader);
+        _customValueName = binaryReader.ReadString();
+    }
 }
 [System.Serializable]
 public class ActionGraphConditionNodeData_FrameTag : ActionGraphConditionNodeData
 {
     public string _targetFrameTag = "";
+
+    public override ConditionNodeDataType getConditionNodeDataType => ConditionNodeDataType.FrameTag;
 
     public ActionGraphConditionNodeData_FrameTag()
     {
@@ -404,6 +567,20 @@ public class ActionGraphConditionNodeData_FrameTag : ActionGraphConditionNodeDat
     }
     
     public string getFrameTag() {return _targetFrameTag;}
+
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_targetFrameTag);
+    }
+#endif
+
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        base.deserialize(ref binaryReader);
+        _targetFrameTag = binaryReader.ReadString();
+    }
     
 }
 [System.Serializable]
@@ -412,48 +589,107 @@ public class ActionGraphConditionNodeData_Weight : ActionGraphConditionNodeData
     public string _weightGroupKey = "";
     public string _weightName = "";
 
+    public override ConditionNodeDataType getConditionNodeDataType => ConditionNodeDataType.Weight;
     public ActionGraphConditionNodeData_Weight()
     {
         
     }
-    
+
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_weightGroupKey);
+        binaryWriter.Write(_weightName);
+    }
+#endif
+
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        base.deserialize(ref binaryReader);
+        _weightGroupKey = binaryReader.ReadString();
+        _weightName = binaryReader.ReadString();
+    }
 }
 [System.Serializable]
 public class ActionGraphConditionNodeData_Key : ActionGraphConditionNodeData
 {
     public string _targetKeyName = "";
 
+    public override ConditionNodeDataType getConditionNodeDataType => ConditionNodeDataType.Key;
     public ActionGraphConditionNodeData_Key()
     {
         
     }
     
     public string getKeyName() {return _targetKeyName;}
-    
+
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_targetKeyName);
+    }
+#endif
+
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        base.deserialize(ref binaryReader);
+        _targetKeyName = binaryReader.ReadString();
+    }
 }
 [System.Serializable]
 public class ActionGraphConditionNodeData_Status : ActionGraphConditionNodeData
 {
     public string _targetStatus = "";
 
+    public override ConditionNodeDataType getConditionNodeDataType => ConditionNodeDataType.Status;
     public ActionGraphConditionNodeData_Status()
     {
         
     }
     
     public string getStatus() {return _targetStatus;}
-    
+
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_targetStatus);
+    }
+#endif
+
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        base.deserialize(ref binaryReader);
+        _targetStatus = binaryReader.ReadString();
+    }
 }
 [System.Serializable]
 public class ActionGraphConditionNodeData_AIGraphCoolTime : ActionGraphConditionNodeData
 {
     public string _graphNodeName = "";
 
+    public override ConditionNodeDataType getConditionNodeDataType => ConditionNodeDataType.AIGraphCoolTime;
     public ActionGraphConditionNodeData_AIGraphCoolTime()
     {
     }
     
     public string getNodeName() {return _graphNodeName;}
+
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_graphNodeName);
+    }
+#endif
+
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        base.deserialize(ref binaryReader);
+        _graphNodeName = binaryReader.ReadString();
+    }
     
 }
 [System.Serializable]
@@ -461,6 +697,7 @@ public class ActionGraphConditionNodeData_Literal : ActionGraphConditionNodeData
 {
     private byte[]       _data;
 
+    public override ConditionNodeDataType getConditionNodeDataType => ConditionNodeDataType.Literal;
     public ActionGraphConditionNodeData_Literal()
     {
         _data = null;
@@ -477,6 +714,22 @@ public class ActionGraphConditionNodeData_Literal : ActionGraphConditionNodeData
         DebugUtil.assert(data != null, "literal data is null to set");
         _data = data;
     }
+
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_data.Length);
+        binaryWriter.Write(_data);
+    }
+#endif
+
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        base.deserialize(ref binaryReader);
+        int length = binaryReader.ReadInt32();
+        _data = binaryReader.ReadBytes(length);
+    }
     
 }
 [System.Serializable]
@@ -484,6 +737,7 @@ public class ActionGraphConditionNodeData_ConditionResult : ActionGraphCondition
 {
     public int          _resultIndex;
 
+    public override ConditionNodeDataType getConditionNodeDataType => ConditionNodeDataType.ConditionResult;
     public ActionGraphConditionNodeData_ConditionResult()
     {
         _symbolName = "RESULT_";
@@ -500,6 +754,20 @@ public class ActionGraphConditionNodeData_ConditionResult : ActionGraphCondition
     {
         _resultIndex = index;
     }
+
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_resultIndex);
+    }
+#endif
+
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        base.deserialize(ref binaryReader);
+        _resultIndex = binaryReader.ReadInt32();
+    }
 }
 
 [System.Serializable]
@@ -511,4 +779,75 @@ public class ActionGraphConditionCompareData
     public int                              _conditionNodeDataCount;
     public int                              _compareTypeCount;
 
+#if UNITY_EDITOR
+    public void serialize(ref BinaryWriter binaryWriter)
+    {
+        binaryWriter.Write(_conditionNodeDataCount);
+        for(int i = 0; i < _conditionNodeDataCount; ++i)
+        {
+            binaryWriter.Write((int)_conditionNodeDataArray[i].getConditionNodeDataType);
+            _conditionNodeDataArray[i].serialize(ref binaryWriter);
+        }
+
+        binaryWriter.Write(_compareTypeCount);
+        for(int i = 0; i < _compareTypeCount; ++i)
+        {
+            binaryWriter.Write((int)_compareTypeArray[i]);
+        }
+    }
+
+    public void deserialize(ref BinaryReader binaryReader)
+    {
+        _conditionNodeDataCount = binaryReader.ReadInt32();
+        _conditionNodeDataArray = _conditionNodeDataCount == 0 ? null : new ActionGraphConditionNodeData[_conditionNodeDataCount];
+        for(int i = 0; i < _conditionNodeDataCount; ++i)
+        {
+            ConditionNodeDataType dataType = (ConditionNodeDataType)binaryReader.ReadInt32();
+            switch(dataType)
+            {
+                case ConditionNodeDataType.Normal:
+                    _conditionNodeDataArray[i] = new ActionGraphConditionNodeData();
+                break;
+                case ConditionNodeDataType.AICustomValue:
+                    _conditionNodeDataArray[i] = new ActionGraphConditionNodeData_AICustomValue();
+                break;
+                case ConditionNodeDataType.AIGraphCoolTime:
+                    _conditionNodeDataArray[i] = new ActionGraphConditionNodeData_AIGraphCoolTime();
+                break;
+                case ConditionNodeDataType.ConditionResult:
+                    _conditionNodeDataArray[i] = new ActionGraphConditionNodeData_ConditionResult();
+                break;
+                case ConditionNodeDataType.FrameTag:
+                    _conditionNodeDataArray[i] = new ActionGraphConditionNodeData_FrameTag();
+                break;
+                case ConditionNodeDataType.Key:
+                    _conditionNodeDataArray[i] = new ActionGraphConditionNodeData_Key();
+                break;
+                case ConditionNodeDataType.Literal:
+                    _conditionNodeDataArray[i] = new ActionGraphConditionNodeData_Literal();
+                break;
+                case ConditionNodeDataType.Status:
+                    _conditionNodeDataArray[i] = new ActionGraphConditionNodeData_Status();
+                break;
+                case ConditionNodeDataType.Weight:
+                    _conditionNodeDataArray[i] = new ActionGraphConditionNodeData_Weight();
+                break;
+                default:
+                {
+                    DebugUtil.assert(false, "fatal error!!");
+                    return;
+                }
+            }
+
+            _conditionNodeDataArray[i].deserialize(ref binaryReader);
+        }
+
+        _compareTypeCount = binaryReader.ReadInt32();
+        _compareTypeArray = _compareTypeCount <= 0 ? null : new ConditionCompareType[_compareTypeCount];
+        for(int i = 0; i < _compareTypeArray.Length; ++i)
+        {
+            _compareTypeArray[i] = (ConditionCompareType)binaryReader.ReadInt32();
+        }
+    }
+#endif
 }

@@ -260,7 +260,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             }
             else if(targetName == "MovementGraphPreset")
             {
-                MovementGraphPreset preset = ResourceContainerEx.Instance().GetScriptableObject("Preset\\MovementGraphPreset") as MovementGraphPreset;
+                MovementGraphPreset preset = ResourceContainerEx.Instance().GetScriptableObject("Preset/MovementGraphPreset") as MovementGraphPreset;
                 nodeData._movementGraphPresetData = preset.getPresetData(targetValue);
             }
             else if(targetName == "FlipType")
@@ -560,17 +560,17 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             }
             else if(targetName == "RotationPreset")
             {
-                AnimationRotationPreset preset = ResourceContainerEx.Instance().GetScriptableObject("Preset\\AnimationRotationPreset") as AnimationRotationPreset;
+                AnimationRotationPreset preset = ResourceContainerEx.Instance().GetScriptableObject("Preset/AnimationRotationPreset") as AnimationRotationPreset;
                 playData._rotationPresetData = preset.getPresetData(targetValue);
             }
             else if(targetName == "ScalePreset")
             {
-                AnimationScalePreset preset = ResourceContainerEx.Instance().GetScriptableObject("Preset\\AnimationScalePreset") as AnimationScalePreset;
+                AnimationScalePreset preset = ResourceContainerEx.Instance().GetScriptableObject("Preset/AnimationScalePreset") as AnimationScalePreset;
                 playData._scalePresetData = preset.getPresetData(targetValue);
             }
             else if(targetName == "TranslationPreset")
             {
-                AnimationTranslationPreset preset = ResourceContainerEx.Instance().GetScriptableObject("Preset\\AnimationTranslationPreset") as AnimationTranslationPreset;
+                AnimationTranslationPreset preset = ResourceContainerEx.Instance().GetScriptableObject("Preset/AnimationTranslationPreset") as AnimationTranslationPreset;
                 playData._translationPresetData = preset.getPresetData(targetValue);
             }
             else if(targetName == "AngleBaseAnimation")
@@ -607,7 +607,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
 
                 if(animationCustomPreset._rotationPresetName != "")
                 {
-                    AnimationRotationPreset rotationPreset = ResourceContainerEx.Instance().GetScriptableObject("Preset\\AnimationRotationPreset") as AnimationRotationPreset;
+                    AnimationRotationPreset rotationPreset = ResourceContainerEx.Instance().GetScriptableObject("Preset/AnimationRotationPreset") as AnimationRotationPreset;
                     playData._rotationPresetData = rotationPreset.getPresetData(animationCustomPreset._rotationPresetName);
                     if(playData._rotationPresetData == null)
                     {
@@ -617,7 +617,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
                 
                 if(animationCustomPreset._scalePresetName != "")
                 {
-                    AnimationScalePreset scalePreset = ResourceContainerEx.Instance().GetScriptableObject("Preset\\AnimationScalePreset") as AnimationScalePreset;
+                    AnimationScalePreset scalePreset = ResourceContainerEx.Instance().GetScriptableObject("Preset/AnimationScalePreset") as AnimationScalePreset;
                     playData._scalePresetData = scalePreset.getPresetData(animationCustomPreset._scalePresetName);
 
                     if(playData._scalePresetData == null)
@@ -628,7 +628,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
 
                 if(animationCustomPreset._translationPresetName != "")
                 {
-                    AnimationTranslationPreset scalePreset = ResourceContainerEx.Instance().GetScriptableObject("Preset\\AnimationTranslationPreset") as AnimationTranslationPreset;
+                    AnimationTranslationPreset scalePreset = ResourceContainerEx.Instance().GetScriptableObject("Preset/AnimationTranslationPreset") as AnimationTranslationPreset;
                     playData._translationPresetData = scalePreset.getPresetData(animationCustomPreset._translationPresetName);
 
                     if(playData._translationPresetData == null)

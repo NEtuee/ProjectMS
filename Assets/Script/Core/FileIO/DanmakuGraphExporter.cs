@@ -10,7 +10,7 @@ public class DanmakuGraphLoader : LoaderBase<DanmakuGraphBaseData>
     static string _currentFileName = "";
     public override DanmakuGraphBaseData readFromXML(string path)
     {
-        path = "Assets\\Data\\DanmakuGraph\\" + path;
+        path = "Assets/Data/DanmakuGraph/" + path;
         _currentFileName = path;
         PositionXmlDocument xmlDoc = new PositionXmlDocument();
         try

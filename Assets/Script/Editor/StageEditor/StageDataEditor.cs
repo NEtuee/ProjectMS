@@ -1222,7 +1222,7 @@ public class StageDataEditor : EditorWindow
         characterSpawnData._sortingOrder = EditorGUILayout.IntField("Sorting Order", characterSpawnData._sortingOrder);
         stagePointDataEditObject._characterObjectList[_characterSelectedIndex].sortingOrder = 10 + characterSpawnData._sortingOrder;
         
-        var characterInfo = ResourceContainerEx.Instance().getCharacterInfo("Assets\\Data\\StaticData\\CharacterInfo.xml");
+        var characterInfo = ResourceContainerEx.Instance().getCharacterInfo("Assets/Data/StaticData/CharacterInfo.xml");
         if(characterInfo.ContainsKey(characterSpawnData._characterKey) == false)
         {
             DebugUtil.assert(false,"말이 안되는 상황");
@@ -1677,7 +1677,7 @@ public class StageDataEditor : EditorWindow
         if(_editStageData._stagePointData.Count <= index || index < 0)
             return;
 
-        var characterInfo = ResourceContainerEx.Instance().getCharacterInfo("Assets\\Data\\StaticData\\CharacterInfo.xml");
+        var characterInfo = ResourceContainerEx.Instance().getCharacterInfo("Assets/Data/StaticData/CharacterInfo.xml");
         if(characterInfo.ContainsKey(characterKey) == false)
         {
             DebugUtil.assert(false,"말이 안되는 상황");
@@ -1727,7 +1727,7 @@ public class StageDataEditor : EditorWindow
         _editingMiniStageDataList.Add(editObject);
         _editStageData._miniStageData.Add(listItem);
 
-        var characterInfo = ResourceContainerEx.Instance().getCharacterInfo("Assets\\Data\\StaticData\\CharacterInfo.xml");
+        var characterInfo = ResourceContainerEx.Instance().getCharacterInfo("Assets/Data/StaticData/CharacterInfo.xml");
         if(miniStageData._stagePointData[0]._characterSpawnData != null)
         {
             for(int index = 0; index < miniStageData._stagePointData[0]._characterSpawnData.Length; ++index)
@@ -2571,7 +2571,7 @@ public class StageDataEditor : EditorWindow
             return;
         }
 
-        var characterInfo = ResourceContainerEx.Instance().getCharacterInfo("Assets\\Data\\StaticData\\CharacterInfo.xml");
+        var characterInfo = ResourceContainerEx.Instance().getCharacterInfo("Assets/Data/StaticData/CharacterInfo.xml");
         
         foreach(var item in _editStageData._stagePointData)
         {
@@ -3212,7 +3212,7 @@ public class CharacterInfoView
             _searchStringCompare = _searchString;
         }
 
-        const string kCharacterInfoPath = "Assets\\Data\\StaticData\\CharacterInfo.xml";
+        const string kCharacterInfoPath = "Assets/Data/StaticData/CharacterInfo.xml";
         Dictionary<string,CharacterInfoData> characterInfo = ResourceContainerEx.Instance().getCharacterInfo(kCharacterInfoPath);
 
         _scrollPosition = GUILayout.BeginScrollView(_scrollPosition);

@@ -9,7 +9,7 @@ public class AtteckRayEffect : MonoBehaviour
 
     public void setAttackData(string attackPresetName)
     {
-        AttackPreset preset = ResourceContainerEx.Instance().GetScriptableObject("Preset\\AttackPreset") as AttackPreset;
+        AttackPreset preset = ResourceContainerEx.Instance().GetScriptableObject("Preset/AttackPreset") as AttackPreset;
         AttackPresetData presetData = preset.getPresetData(attackPresetName);
         if(presetData == null)
         {

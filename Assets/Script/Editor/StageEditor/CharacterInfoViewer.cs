@@ -46,7 +46,7 @@ public class CharacterInfoViewer : EditorWindow
 
         
 
-        const string kCharacterInfoPath = "Assets\\Data\\StaticData\\CharacterInfo.xml";
+        const string kCharacterInfoPath = "Assets/Data/StaticData/CharacterInfo.xml";
         Dictionary<string,CharacterInfoData> characterInfo = ResourceContainerEx.Instance().getCharacterInfo(kCharacterInfoPath);
 
         _scrollPosition = GUILayout.BeginScrollView(_scrollPosition,"box");
