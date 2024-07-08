@@ -181,19 +181,19 @@ public class EffectItem : EffectItemBase
             _animationPlayData._customPresetData = effectData._animationCustomPreset._animationCustomPresetData;
             if(effectData._animationCustomPreset._rotationPresetName != "")
             {
-                AnimationRotationPreset rotationPreset = ResourceContainerEx.Instance().GetScriptableObject("Preset\\AnimationRotationPreset") as AnimationRotationPreset;
+                AnimationRotationPreset rotationPreset = ResourceContainerEx.Instance().GetScriptableObject("Preset/AnimationRotationPreset") as AnimationRotationPreset;
                 _animationPlayData._rotationPresetData = rotationPreset.getPresetData(effectData._animationCustomPreset._rotationPresetName);
             }
             
             if(effectData._animationCustomPreset._scalePresetName != "")
             {
-                AnimationScalePreset scalePreset = ResourceContainerEx.Instance().GetScriptableObject("Preset\\AnimationScalePreset") as AnimationScalePreset;
+                AnimationScalePreset scalePreset = ResourceContainerEx.Instance().GetScriptableObject("Preset/AnimationScalePreset") as AnimationScalePreset;
                 _animationPlayData._scalePresetData = scalePreset.getPresetData(effectData._animationCustomPreset._scalePresetName);
             }
 
             if(effectData._animationCustomPreset._translationPresetName != "")
             {
-                AnimationTranslationPreset translationPreset = ResourceContainerEx.Instance().GetScriptableObject("Preset\\AnimationTranslationPreset") as AnimationTranslationPreset;
+                AnimationTranslationPreset translationPreset = ResourceContainerEx.Instance().GetScriptableObject("Preset/AnimationTranslationPreset") as AnimationTranslationPreset;
                 _animationPlayData._translationPresetData = translationPreset.getPresetData(effectData._animationCustomPreset._translationPresetName);
             }
         }

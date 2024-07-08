@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using UnityEngine;
 
 
@@ -43,6 +45,121 @@ public class AnimationPlayDataInfo
 
 #if UNITY_EDITOR
     public int                          _lineNumber;
+
+    public void serialize(ref BinaryWriter binaryWriter)
+    {
+        binaryWriter.Write(_multiSelectAnimationDataCount);
+        binaryWriter.Write(_path);
+        binaryWriter.Write(_framePerSec);
+        binaryWriter.Write(_actionTime);
+        binaryWriter.Write(_startFrame);
+        binaryWriter.Write(_endFrame);
+        binaryWriter.Write(_duration);
+        binaryWriter.Write(_animationLoopCount);
+        binaryWriter.Write(_frameEventDataCount);
+        binaryWriter.Write(_timeEventDataCount);
+        binaryWriter.Write(_angleBaseAnimationSpriteCount);
+        binaryWriter.Write(_isLoop);
+        binaryWriter.Write(_hasMovementGraph);
+        binaryWriter.Write(_isAngleBaseAnimation);
+        binaryWriter.Write(_multiSelectConditionUpdateOnce);
+        _flipState.serialize(ref binaryWriter);
+
+        if(_frameEventData != null)
+        {
+            for(int i = 0; i < _frameEventData.Length; ++i)
+            {
+                _frameEventData[i].serialize(ref binaryWriter);
+            }
+        }
+
+        if(_timeEventData != null)
+        {
+            for(int i = 0; i < _timeEventData.Length; ++i)
+            {
+                _timeEventData[i].serialize(ref binaryWriter);
+            }
+        }
+
+        if(_multiSelectAnimationData != null)
+        {
+            for(int i = 0; i < _multiSelectAnimationData.Length; ++i)
+            {
+                _multiSelectAnimationData[i].serialize(ref binaryWriter);
+            }
+        }
+    }
+
+    public void deserialize(ref BinaryReader binaryReader)
+    {
+        _multiSelectAnimationDataCount = binaryReader.ReadInt32();
+        _path = binaryReader.ReadString();
+        _framePerSec = binaryReader.ReadSingle();
+        _actionTime = binaryReader.ReadSingle();
+        _startFrame = binaryReader.ReadSingle();
+        _endFrame = binaryReader.ReadSingle();
+        _duration = binaryReader.ReadSingle();
+        _animationLoopCount = binaryReader.ReadInt32();
+        _frameEventDataCount = binaryReader.ReadInt32();
+        _timeEventDataCount = binaryReader.ReadInt32();
+        _angleBaseAnimationSpriteCount = binaryReader.ReadInt32();
+        _isLoop = binaryReader.ReadBoolean();
+        _hasMovementGraph = binaryReader.ReadBoolean();
+        _isAngleBaseAnimation = binaryReader.ReadBoolean();
+        _multiSelectConditionUpdateOnce = binaryReader.ReadBoolean();
+        _flipState.deserialize(ref binaryReader);
+
+        if(_frameEventDataCount != 0)
+        {
+            _frameEventData = new ActionFrameEventBase[_frameEventDataCount];
+            for(int i = 0; i < _frameEventDataCount; ++i)
+            {
+                _frameEventData[i] = ActionFrameEventBase.buildFrameEvent(ref binaryReader);
+            }
+        }
+
+        if(_timeEventDataCount != 0)
+        {
+            _timeEventData = new ActionFrameEventBase[_timeEventDataCount];
+            for(int i = 0; i < _timeEventDataCount; ++i)
+            {
+                _timeEventData[i] = ActionFrameEventBase.buildFrameEvent(ref binaryReader);
+            }
+        }
+
+        if(_multiSelectAnimationDataCount != 0)
+        {
+            _multiSelectAnimationData = new MultiSelectAnimationData[_multiSelectAnimationDataCount];
+            for(int i = 0; i < _multiSelectAnimationDataCount; ++i)
+            {
+                _multiSelectAnimationData[i] = new MultiSelectAnimationData();
+                _multiSelectAnimationData[i].deserialize(ref binaryReader);
+            }
+        }
+
+        ScriptableObject[] scriptableObjects = ResourceContainerEx.Instance().GetScriptableObjects(_path);
+        AnimationCustomPreset animationCustomPreset = (scriptableObjects[0] as AnimationCustomPreset);
+        _customPresetData = animationCustomPreset._animationCustomPresetData;
+        _customPreset = animationCustomPreset;
+
+        if(animationCustomPreset._rotationPresetName != "")
+        {
+            AnimationRotationPreset rotationPreset = ResourceContainerEx.Instance().GetScriptableObject("Preset/AnimationRotationPreset") as AnimationRotationPreset;
+            _rotationPresetData = rotationPreset.getPresetData(animationCustomPreset._rotationPresetName);
+        }
+        
+        if(animationCustomPreset._scalePresetName != "")
+        {
+            AnimationScalePreset scalePreset = ResourceContainerEx.Instance().GetScriptableObject("Preset/AnimationScalePreset") as AnimationScalePreset;
+            _scalePresetData = scalePreset.getPresetData(animationCustomPreset._scalePresetName);
+        }
+
+        if(animationCustomPreset._translationPresetName != "")
+        {
+            AnimationTranslationPreset scalePreset = ResourceContainerEx.Instance().GetScriptableObject("Preset/AnimationTranslationPreset") as AnimationTranslationPreset;
+            _translationPresetData = scalePreset.getPresetData(animationCustomPreset._translationPresetName);
+        }
+    }
 #endif
 }
 
@@ -50,12 +167,44 @@ public class MultiSelectAnimationData
 {
     public string                           _path = "";
     public ActionGraphConditionCompareData  _actionConditionData = null;
+
+    public void serialize(ref BinaryWriter binaryWriter)
+    {
+        binaryWriter.Write(_path);
+        binaryWriter.Write(_actionConditionData != null);
+        if(_actionConditionData != null)
+            _actionConditionData.serialize(ref binaryWriter);
+    }
+
+    public void deserialize(ref BinaryReader binaryReader)
+    {
+        _path = binaryReader.ReadString();
+        bool needCondition = binaryReader.ReadBoolean();
+        if(needCondition)
+        {
+            _actionConditionData = new ActionGraphConditionCompareData();
+            _actionConditionData.deserialize(ref binaryReader);
+        }
+    }
+
 }
 
 public struct FlipState
 {
     public bool xFlip;
     public bool yFlip;
+
+    public void serialize(ref BinaryWriter binaryWriter)
+    {
+        binaryWriter.Write(xFlip);
+        binaryWriter.Write(yFlip);
+    }
+
+    public void deserialize(ref BinaryReader binaryReader)
+    {
+        xFlip = binaryReader.ReadBoolean();
+        yFlip = binaryReader.ReadBoolean();
+    }
 }
 
 public struct FrameEventProcessDescription

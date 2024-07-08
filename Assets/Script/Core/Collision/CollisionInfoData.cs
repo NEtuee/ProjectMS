@@ -1,4 +1,6 @@
 
+using System.IO;
+
 public class CollisionInfoData
 {
     private BoundBox _boundBox;

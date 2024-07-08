@@ -10,7 +10,7 @@ public class SequencrGraphLoader : LoaderBase<SequencerGraphBaseData>
     static string _currentFileName = "";
     public override SequencerGraphBaseData readFromXML(string path)
     {
-        _currentFileName = "Assets\\Data\\SequencerGraph\\" + path;
+        _currentFileName = "Assets/Data/SequencerGraph/" + path;
         PositionXmlDocument xmlDoc = new PositionXmlDocument();
         try
         {

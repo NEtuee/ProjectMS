@@ -18,8 +18,8 @@ public class GameEntityBase : SequencerObjectBase
 {
     public static float         _defaultFriction = 4f;
 
-    public string               actionGraphPath = "Assets\\Data\\ActionGraph\\ActionGraphTest.xml";
-    public string               aiGraphPath = "Assets\\Data\\AIGraph\\CommonEnemyAI.xml";
+    public string               actionGraphPath = "Assets/Data/ActionGraph/ActionGraphTest.xml";
+    public string               aiGraphPath = "Assets/Data/AIGraph/CommonEnemyAI.xml";
     public string               statusInfoName = "CommonPlayerStatus";
 
 

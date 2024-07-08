@@ -203,6 +203,58 @@ public static class IOControl {
 		}
 	}
 
+	//https://andrewlock.net/why-is-string-gethashcode-different-each-time-i-run-my-program-in-net-core/
+	public static int computeHash(this string str)
+	{
+	    unchecked
+	    {
+	        int hash1 = (5381 << 16) + 5381;
+	        int hash2 = hash1;
+
+	        for (int i = 0; i < str.Length; i += 2)
+	        {
+	            hash1 = ((hash1 << 5) + hash1) ^ str[i];
+	            if (i == str.Length - 1)
+	                break;
+	            hash2 = ((hash2 << 5) + hash2) ^ str[i + 1];
+	        }
+
+	        return hash1 + (hash2 * 1566083941);
+	    }
+	}
+
+	public static void getFileListRecursive(string path, string extension, ref List<string> fileList, ref List<string> fullPathList)
+	{
+		DirectoryInfo di = new DirectoryInfo(PathForDocumentsFile(path));
+		getFileListRecursiveInner(ref di, extension, ref fileList, ref fullPathList);
+
+		string dataPath = IOControl.PathForDocumentsFile("").ToLower() + "/";
+		for(int index = 0; index < fullPathList.Count; ++index)
+		{
+			fullPathList[index] = fullPathList[index].Replace("\\","/");
+			fullPathList[index] = fullPathList[index].Replace(dataPath, "");
+		}
+	}
+
+	private static void getFileListRecursiveInner(ref DirectoryInfo directoryInfo, string extension, ref List<string> fileList, ref List<string> fullPathList)
+	{
+		foreach (FileInfo file in directoryInfo.GetFiles())
+		{
+			if(file.Extension.ToLower() != extension)
+				continue;
+
+			fileList.Add(file.Name.ToLower());
+			fullPathList.Add(file.FullName.ToLower());
+		}
+
+		DirectoryInfo[] directoryInfoArray = directoryInfo.GetDirectories();
+
+		for(int index = 0; index < directoryInfoArray.Length; ++index)
+		{
+			getFileListRecursiveInner(ref directoryInfoArray[index], extension, ref fileList, ref fullPathList);
+		}
+	}
+
 	public static void getDirectoryList(string path, ref List<string> directoryList)
 	{
 		directoryList.Clear();

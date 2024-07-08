@@ -2,6 +2,7 @@ using System.Xml;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 public abstract class ExtendVariable<T>
 {    
@@ -167,5 +168,19 @@ public class FloatEx : ExtendVariable<float>
         _isRandom = true;
     }
 
-    
+    public void serialize(ref BinaryWriter binaryWriter)
+    {
+        binaryWriter.Write(_value);
+        binaryWriter.Write(_randomMin);
+        binaryWriter.Write(_randomMax);
+        binaryWriter.Write(_isRandom);
+    }
+
+    public void deserialize(ref BinaryReader binaryReader)
+    {
+        _value = binaryReader.ReadSingle();
+        _randomMin = binaryReader.ReadSingle();
+        _randomMax = binaryReader.ReadSingle();
+        _isRandom = binaryReader.ReadBoolean();
+    }
 }

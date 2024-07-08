@@ -234,6 +234,11 @@ public class ResourceContainerEx : Singleton<ResourceContainerEx>
 		return _allyInfoResource.GetOrLoadResource(path);
 	}
 
+	public static TextAsset readTextAsset(string path)
+	{
+		return Resources.Load(path) as TextAsset;
+	}
+
 	public void UnLoadUnused()
 	{
 		Resources.UnloadUnusedAssets();

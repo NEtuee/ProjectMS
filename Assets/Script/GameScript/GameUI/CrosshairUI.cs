@@ -85,7 +85,7 @@ public class CrosshairUI : IUIElement
 
     public void Initialize()
     {
-        AttackPreset preset = ResourceContainerEx.Instance().GetScriptableObject("Preset\\AttackPreset") as AttackPreset;
+        AttackPreset preset = ResourceContainerEx.Instance().GetScriptableObject("Preset/AttackPreset") as AttackPreset;
         AttackPresetData presetData = preset.getPresetData("PlayerAttackTest");
 
         if (presetData != null)
