@@ -31,9 +31,9 @@
     <BranchSet Name="HitReactionSet">
         <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="Hit" Execute="Hit"/>
-        <Branch Condition="GuardBroken && getFrameTag_CancelAvail" Execute="GuardBroken"/>
-        <Branch Condition="GuardBroken && (getStat_GuardPoint <= 0.0)" Execute="GuardBroken"/>
-        <Branch Condition="GuardBroken && getFrameTag_GbAvail" Execute="GuardBreakHit"/>
+        <Branch Condition="(GuardBroken || GuardBreakFail) && getFrameTag_CancelAvail" Execute="GuardBroken"/>
+        <Branch Condition="(GuardBroken || GuardBreakFail) && (getStat_GuardPoint <= 0.0)" Execute="GuardBroken"/>
+        <Branch Condition="(GuardBroken || GuardBreakFail) && getFrameTag_GbAvail" Execute="GuardBreakHit"/>
     </BranchSet>
     <!-- Branch Set -->
     
