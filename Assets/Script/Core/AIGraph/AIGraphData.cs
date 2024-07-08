@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using YamlDotNet.Core;
 
 [System.Serializable]
 public class AIGraphBaseData
@@ -52,6 +55,67 @@ public class AIGraphNodeData
 // #if UNITY_EDITOR
     public int _lineNumber = 0;
 // #endif
+
+    public void serialize(ref BinaryWriter binaryWriter)
+    {
+        binaryWriter.Write(_nodeName);
+
+        binaryWriter.Write(_aiEvents == null ? 0 : _aiEvents.Count);
+        if(_aiEvents != null)
+        {
+            foreach(var item in _aiEvents)
+            {
+                binaryWriter.Write((int)item.Key);
+                item.Value.serialize(ref binaryWriter);
+            }
+        }
+
+        binaryWriter.Write(_customAIEvents == null ? 0 : _customAIEvents.Count);
+        if(_customAIEvents != null)
+        {
+            foreach(var item in _customAIEvents)
+            {
+                binaryWriter.Write(item.Key);
+                item.Value.serialize(ref binaryWriter);
+            }
+        }
+
+        binaryWriter.Write(_packageIndex);
+        binaryWriter.Write(_packageEntryNodeIndex);
+        binaryWriter.Write(_branchIndexStart);
+        binaryWriter.Write(_branchCount);
+        binaryWriter.Write(_coolDownTime);
+    }
+
+    public void deserialize(ref BinaryReader binaryReader)
+    {
+        _nodeName = binaryReader.ReadString();
+        int aiEventCount = binaryReader.ReadInt32();
+        for(int i = 0; i < aiEventCount; ++i)
+        {
+            AIChildEventType childEventType = (AIChildEventType)binaryReader.ReadInt32();
+            AIChildFrameEventItem childEventItem = new AIChildFrameEventItem();
+            childEventItem.deserialize(ref binaryReader);
+
+            _aiEvents.Add(childEventType, childEventItem);
+        }
+
+        int customAiEventCount = binaryReader.ReadInt32();
+        for(int i = 0; i < customAiEventCount; ++i)
+        {
+            string key = binaryReader.ReadString();
+            AIChildFrameEventItem childEventItem = new AIChildFrameEventItem();
+            childEventItem.deserialize(ref binaryReader);
+
+            _customAIEvents.Add(key, childEventItem);
+        }
+
+        _packageIndex = binaryReader.ReadInt32();
+        _packageEntryNodeIndex = binaryReader.ReadInt32();
+        _branchIndexStart = binaryReader.ReadInt32();
+        _branchCount = binaryReader.ReadInt32();
+        _coolDownTime = binaryReader.ReadSingle();
+    }
 }
 
 

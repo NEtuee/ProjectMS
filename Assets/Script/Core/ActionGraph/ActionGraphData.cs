@@ -95,6 +95,15 @@ public class ActionGraphBaseData
                 }
             }
         }
+
+        binaryWriter.Write(_triggerEventData == null ? 0 : _triggerEventData.Length);
+        if(_triggerEventData != null)
+        {
+            for(int i = 0; i < _triggerEventData.Length; ++i)
+            {
+                _triggerEventData[i].serialize(ref binaryWriter);
+            }
+        }
     }
 
     public void deserialize(ref BinaryReader binaryReader)
@@ -123,6 +132,7 @@ public class ActionGraphBaseData
             _actionNodeData = new ActionGraphNodeData[_actionNodeCount];
             for(int i = 0; i < _actionNodeCount; ++i)
             {
+                _actionNodeData[i] = new ActionGraphNodeData();
                 _actionNodeData[i].deserialize(ref binaryReader);
             }
         }
@@ -132,6 +142,7 @@ public class ActionGraphBaseData
             _branchData = new ActionGraphBranchData[_branchCount];
             for(int i = 0; i < _branchCount; ++i)
             {
+                _branchData[i] = new ActionGraphBranchData();
                 _branchData[i].deserialize(ref binaryReader);
             }
         }
@@ -141,6 +152,7 @@ public class ActionGraphBaseData
             _conditionCompareData = new ActionGraphConditionCompareData[_conditionCompareDataCount];
             for(int i = 0; i < _conditionCompareDataCount; ++i)
             {
+                _conditionCompareData[i] = new ActionGraphConditionCompareData();
                 _conditionCompareData[i].deserialize(ref binaryReader);
             }
         }
@@ -155,10 +167,24 @@ public class ActionGraphBaseData
 
                 for(int j =0; j < length; ++j)
                 {
+                    _animationPlayData[i][j] = new AnimationPlayDataInfo();
                     _animationPlayData[i][j].deserialize(ref binaryReader);
                 }
             }
         }
+
+        int triggerEventCount = binaryReader.ReadInt32();
+        if(triggerEventCount != 0)
+        {
+            _triggerEventData = new ActionGraphTriggerEventData[triggerEventCount];
+            for(int i = 0; i < triggerEventCount; ++i)
+            {
+                _triggerEventData[i] = new ActionGraphTriggerEventData();
+                _triggerEventData[i].deserialize(ref binaryReader);
+            }
+        }
+
+        buildActionIndexMap();
     }
 #endif
 }
