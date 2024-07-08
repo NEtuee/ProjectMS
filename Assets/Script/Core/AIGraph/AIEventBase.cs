@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Xml;
+using System.IO;
 using UnityEngine;
 
 public enum AIEventType
@@ -65,6 +66,94 @@ public abstract class AIEventBase
     public abstract void onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null);
     public abstract void loadFromXML(XmlNode node);
 
+    public virtual void serialize(ref BinaryWriter binaryWriter)
+    {
+        binaryWriter.Write((int)getFrameEventType());
+    }
+
+    public abstract void deserialize(ref BinaryReader binaryReader);
+
+    public static AIEventBase buildFrameEvent(ref BinaryReader binaryReader)
+    {
+        AIEventType aiEventType = (AIEventType)binaryReader.ReadInt32();
+        AIEventBase aiEvent = getFrameEvent(aiEventType);
+        aiEvent.deserialize(ref binaryReader);
+
+        return aiEvent;
+    }
+
+    public static AIEventBase getFrameEvent(AIEventType aiEventType)
+    {
+        AIEventBase aiEvent = null;
+        if(aiEventType == AIEventType.AIEvent_Test)
+        {
+            aiEvent = new AIEvent_Test();
+        }
+        else if(aiEventType == AIEventType.AIEvent_SetAngleDirection)
+        {
+            aiEvent = new AIEvent_SetAngleDirection();
+        }
+        else if(aiEventType == AIEventType.AIEvent_SetDirectionToTarget)
+        {
+            aiEvent = new AIEvent_SetDirectionToTarget();
+        }
+        else if(aiEventType == AIEventType.AIEvent_SetAction)
+        {
+            aiEvent = new AIEvent_SetAction();
+        }
+        else if(aiEventType == AIEventType.AIEvent_ClearTarget)
+        {
+            aiEvent = new AIEvent_ClearTarget();
+        }
+        else if(aiEventType == AIEventType.AIEvent_ExecuteState)
+        {
+            aiEvent = new AIEvent_ExecuteState();
+        }
+        else if(aiEventType == AIEventType.AIEvent_TerminatePackage)
+        {
+            aiEvent = new AIEvent_TerminatePackage();
+        }
+        else if(aiEventType == AIEventType.AIEvent_KillEntity)
+        {
+            aiEvent = new AIEvent_KillEntity();
+        }
+        else if(aiEventType == AIEventType.AIEvent_RotateDirection)
+        {
+            aiEvent = new AIEvent_RotateDirection();
+        }
+        else if(aiEventType == AIEventType.AIEvent_CallAIEvent)
+        {
+            aiEvent = new AIEvent_CallAIEvent();
+        }
+        else if(aiEventType == AIEventType.AIEvent_SetCustomValue)
+        {
+            aiEvent = new AIEvent_SetCustomValue();
+        }
+        else if(aiEventType == AIEventType.AIEvent_AddCustomValue)
+        {
+            aiEvent = new AIEvent_AddCustomValue();
+        }
+        else if(aiEventType == AIEventType.AIEvent_SequencerSignal)
+        {
+            aiEvent = new AIEvent_SequencerSignal();
+        }
+        else if(aiEventType == AIEventType.AIEvent_AttachRotateSlot)
+        {
+            aiEvent = new AIEvent_AttachRotateSlot();
+        }
+        else if(aiEventType == AIEventType.AIEvent_DetachRotateSlot)
+        {
+            aiEvent = new AIEvent_DetachRotateSlot();
+        }
+        else
+        {
+            DebugUtil.assert(false,"유효하지 않은 AI 이벤트 타입 입니다. 오타는 아닌가요?");
+            return null;
+        }
+
+        return aiEvent;
+    }
+
 }
 
 public class AIEvent_DetachRotateSlot : AIEventBase
@@ -80,6 +169,17 @@ public class AIEvent_DetachRotateSlot : AIEventBase
 
     public override void loadFromXML(XmlNode node) 
     {
+    }
+
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        
+    }
+
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        
     }
 }
 
@@ -132,12 +232,22 @@ public class AIEvent_AttachRotateSlot : AIEventBase
         if(_rotateSlotType == SetRotateSlotType.None)
             DebugUtil.assert(false, "AIEvent_SetRotateSlot의 _rotateSlotType은 필수 입력 해야 합니다.");
     }
+
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write((int)_rotateSlotType);
+    }
+
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _rotateSlotType = (SetRotateSlotType)binaryReader.ReadInt32();
+    }
 }
 
 public class AIEvent_SequencerSignal : AIEventBase
 {
     private string _signal = "";
-    private float _value;
 
     public override AIEventType getFrameEventType() {return AIEventType.AIEvent_SequencerSignal;}
     public override void onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
@@ -156,6 +266,17 @@ public class AIEvent_SequencerSignal : AIEventBase
             if(attrName == "Signal")
                 _signal = attrValue;
         }
+    }
+
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_signal);
+    }
+
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _signal = binaryReader.ReadString();
     }
 }
 
@@ -191,6 +312,19 @@ public class AIEvent_AddCustomValue : AIEventBase
             }
         }
     }
+
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_customValueName);
+        binaryWriter.Write(_value);
+    }
+
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _customValueName = binaryReader.ReadString();
+        _value = binaryReader.ReadSingle();
+    }
 }
 
 public class AIEvent_SetCustomValue : AIEventBase
@@ -225,6 +359,19 @@ public class AIEvent_SetCustomValue : AIEventBase
             }
         }
     }
+
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_customValueName);
+        binaryWriter.Write(_value);
+    }
+
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _customValueName = binaryReader.ReadString();
+        _value = binaryReader.ReadSingle();
+    }
 }
 
 public class AIEvent_CallAIEvent : AIEventBase
@@ -235,7 +382,6 @@ public class AIEvent_CallAIEvent : AIEventBase
     public string _customAiEventName = "";
     
     public CallAIEventTargetType _targetType = CallAIEventTargetType.Self;
-    public float _range = 0f;
 
     public override void initialize()
     {
@@ -289,6 +435,19 @@ public class AIEvent_CallAIEvent : AIEventBase
 
         }
     }
+
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_customAiEventName);
+        binaryWriter.Write((int)_targetType);
+    }
+
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _customAiEventName = binaryReader.ReadString();
+        _targetType = (CallAIEventTargetType)binaryReader.ReadInt32();
+    }
 }
 
 public class AIEvent_RotateDirection : AIEventBase
@@ -323,6 +482,19 @@ public class AIEvent_RotateDirection : AIEventBase
             }
         }
     }
+
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_time);
+        binaryWriter.Write(_rotateAngle);
+    }
+
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _time = binaryReader.ReadSingle();
+        _rotateAngle = binaryReader.ReadSingle();
+    }
 }
 
 public class AIEvent_KillEntity : AIEventBase
@@ -337,6 +509,15 @@ public class AIEvent_KillEntity : AIEventBase
     public override void loadFromXML(XmlNode node) 
     {
         
+    }
+
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+    }
+
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
     }
 }
 
@@ -368,6 +549,17 @@ public class AIEvent_SetAction : AIEventBase
             }
         }
     }
+
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(actionName);
+    }
+
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        actionName = binaryReader.ReadString();
+    }
 }
 
 public class AIEvent_TerminatePackage : AIEventBase
@@ -385,6 +577,15 @@ public class AIEvent_TerminatePackage : AIEventBase
     public override void loadFromXML(XmlNode node) 
     {
 
+    }
+
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+    }
+
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
     }
 }
 
@@ -405,6 +606,17 @@ public class AIEvent_ExecuteState : AIEventBase
     {
 
     }
+
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(targetStateIndex);
+    }
+
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        targetStateIndex = binaryReader.ReadInt32();
+    }
 }
 
 public class AIEvent_ClearTarget : AIEventBase
@@ -420,6 +632,15 @@ public class AIEvent_ClearTarget : AIEventBase
     }
 
     public override void loadFromXML(XmlNode node) {}
+
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+    }
+
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+    }
 }
 
 
@@ -474,6 +695,19 @@ public class AIEvent_SetDirectionToTarget : AIEventBase
             }
         }
     }
+
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_directionAngle);
+        binaryWriter.Write(_rotateSpeed);
+    }
+
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _directionAngle = binaryReader.ReadSingle();
+        _rotateSpeed = binaryReader.ReadSingle();
+    }
 }
 
 public class AIEvent_SetAngleDirection : AIEventBase
@@ -502,7 +736,18 @@ public class AIEvent_SetAngleDirection : AIEventBase
                 angleDirection = XMLScriptConverter.valueToFloatExtend(attrValue);
             }
         }
-    }   
+    }
+
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(angleDirection);
+    }
+
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        angleDirection = binaryReader.ReadSingle();
+    }
 }
 
 public class AIEvent_Test : AIEventBase
@@ -528,6 +773,17 @@ public class AIEvent_Test : AIEventBase
             }
         }
     }
+
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(log);
+    }
+
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        log = binaryReader.ReadString();
+    }
 }
 
 public class AIChildFrameEventItem
@@ -537,6 +793,30 @@ public class AIChildFrameEventItem
     public AIEventBase[] _childFrameEvents;
     public int _childFrameEventCount;
 
+
+    public void serialize(ref BinaryWriter binaryWriter)
+    {
+        binaryWriter.Write(_consume);
+        binaryWriter.Write(_childFrameEventCount);
+        for(int i = 0; i < _childFrameEventCount; ++i)
+        {
+            _childFrameEvents[i].serialize(ref binaryWriter);
+        }
+    }
+
+    public void deserialize(ref BinaryReader binaryReader)
+    {
+        _consume = binaryReader.ReadBoolean();
+        _childFrameEventCount = binaryReader.ReadInt32();
+        if(_childFrameEventCount != 0)
+        {
+            _childFrameEvents = new AIEventBase[_childFrameEventCount];
+            for(int i = 0; i < _childFrameEvents.Length; ++i)
+            {
+                _childFrameEvents[i] = AIEventBase.buildFrameEvent(ref binaryReader);
+            }
+        }
+    }
 }
 
 public class CustomAIChildFrameEventItem : AIChildFrameEventItem

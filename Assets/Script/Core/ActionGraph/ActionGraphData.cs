@@ -44,7 +44,147 @@ public class ActionGraphBaseData
     public void serialize(ref BinaryWriter binaryWriter)
     {
         binaryWriter.Write(_name);
-        //binaryWriter.Write(,
+        binaryWriter.Write(_actionNodeCount);
+        binaryWriter.Write(_defaultBuffList == null ? 0 : _defaultBuffList.Length);
+        if(_defaultBuffList != null)
+        {
+            for(int i = 0; i < _defaultBuffList.Length; ++i)
+            {
+                binaryWriter.Write(_defaultBuffList[i]);
+            }
+        }
+
+        binaryWriter.Write(_defaultActionIndex);
+        binaryWriter.Write(_branchCount);
+        binaryWriter.Write(_conditionCompareDataCount);
+        binaryWriter.Write(_animationPlayDataCount);
+        binaryWriter.Write(_dummyActionIndex);
+
+        if(_actionNodeCount != 0)
+        {
+            for(int i = 0; i < _actionNodeCount; ++i)
+            {
+                _actionNodeData[i].serialize(ref binaryWriter);
+            }
+        }
+
+        if(_branchCount != 0)
+        {
+            for(int i = 0; i < _branchCount; ++i)
+            {
+                _branchData[i].serialize(ref binaryWriter);
+            }
+        }
+
+        if(_conditionCompareDataCount != 0)
+        {
+            for(int i = 0; i < _conditionCompareDataCount; ++i)
+            {
+                _conditionCompareData[i].serialize(ref binaryWriter);
+            }
+        }
+
+        if(_animationPlayDataCount != 0)
+        {
+            for(int i = 0; i < _animationPlayDataCount; ++i)
+            {
+                binaryWriter.Write(_animationPlayData[i].Length);
+                for(int j =0; j < _animationPlayData[i].Length; ++j)
+                {
+                    _animationPlayData[i][j].serialize(ref binaryWriter);
+                }
+            }
+        }
+
+        binaryWriter.Write(_triggerEventData == null ? 0 : _triggerEventData.Length);
+        if(_triggerEventData != null)
+        {
+            for(int i = 0; i < _triggerEventData.Length; ++i)
+            {
+                _triggerEventData[i].serialize(ref binaryWriter);
+            }
+        }
+    }
+
+    public void deserialize(ref BinaryReader binaryReader)
+    {
+        _name = binaryReader.ReadString();
+        _actionNodeCount = binaryReader.ReadInt32();
+        int buffListLength = binaryReader.ReadInt32();
+        if(buffListLength != 0)
+        {
+            _defaultBuffList = new int[buffListLength];
+        }
+
+        for(int i = 0; i < buffListLength; ++i)
+        {
+            _defaultBuffList[i] = binaryReader.ReadInt32();
+        }
+
+        _defaultActionIndex = binaryReader.ReadInt32();
+        _branchCount = binaryReader.ReadInt32();
+        _conditionCompareDataCount = binaryReader.ReadInt32();
+        _animationPlayDataCount = binaryReader.ReadInt32();
+        _dummyActionIndex = binaryReader.ReadInt32();
+
+        if(_actionNodeCount != 0)
+        {
+            _actionNodeData = new ActionGraphNodeData[_actionNodeCount];
+            for(int i = 0; i < _actionNodeCount; ++i)
+            {
+                _actionNodeData[i] = new ActionGraphNodeData();
+                _actionNodeData[i].deserialize(ref binaryReader);
+            }
+        }
+
+        if(_branchCount != 0)
+        {
+            _branchData = new ActionGraphBranchData[_branchCount];
+            for(int i = 0; i < _branchCount; ++i)
+            {
+                _branchData[i] = new ActionGraphBranchData();
+                _branchData[i].deserialize(ref binaryReader);
+            }
+        }
+
+        if(_conditionCompareDataCount != 0)
+        {
+            _conditionCompareData = new ActionGraphConditionCompareData[_conditionCompareDataCount];
+            for(int i = 0; i < _conditionCompareDataCount; ++i)
+            {
+                _conditionCompareData[i] = new ActionGraphConditionCompareData();
+                _conditionCompareData[i].deserialize(ref binaryReader);
+            }
+        }
+
+        if(_animationPlayDataCount != 0)
+        {
+            _animationPlayData = new AnimationPlayDataInfo[_animationPlayDataCount][];
+            for(int i = 0; i < _animationPlayDataCount; ++i)
+            {
+                int length = binaryReader.ReadInt32();
+                _animationPlayData[i] = new AnimationPlayDataInfo[length];
+
+                for(int j =0; j < length; ++j)
+                {
+                    _animationPlayData[i][j] = new AnimationPlayDataInfo();
+                    _animationPlayData[i][j].deserialize(ref binaryReader);
+                }
+            }
+        }
+
+        int triggerEventCount = binaryReader.ReadInt32();
+        if(triggerEventCount != 0)
+        {
+            _triggerEventData = new ActionGraphTriggerEventData[triggerEventCount];
+            for(int i = 0; i < triggerEventCount; ++i)
+            {
+                _triggerEventData[i] = new ActionGraphTriggerEventData();
+                _triggerEventData[i].deserialize(ref binaryReader);
+            }
+        }
+
+        buildActionIndexMap();
     }
 #endif
 }
@@ -54,6 +194,36 @@ public class ActionGraphTriggerEventData
 {
     public ActionFrameEventBase[]   _frameEventData = null;
     public int                      _conditionCompareDataIndex = -1;
+
+    public void serialize(ref BinaryWriter binaryWriter)
+    {
+        binaryWriter.Write(_frameEventData == null ? 0 : _frameEventData.Length);
+        if(_frameEventData != null)
+        {
+            for(int i = 0; i < _frameEventData.Length; ++i)
+            {
+                _frameEventData[i].serialize(ref binaryWriter);
+            }
+        }
+
+        binaryWriter.Write(_conditionCompareDataIndex);
+    }
+
+    public void deserialize(ref BinaryReader binaryReader)
+    {
+        int frameEventCount = binaryReader.ReadInt32();
+        if(frameEventCount != 0)
+        {
+            _frameEventData = new ActionFrameEventBase[frameEventCount];
+            for(int i = 0; i < frameEventCount; ++i)
+            {
+                _frameEventData[i] = ActionFrameEventBase.buildFrameEvent(ref binaryReader);
+            }
+        }
+
+        _conditionCompareDataIndex = binaryReader.ReadInt32();
+
+    }
 }
 
 [System.Serializable]

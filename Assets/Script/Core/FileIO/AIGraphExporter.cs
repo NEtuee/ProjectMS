@@ -885,71 +885,8 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
 
             if(attrName == "Type")
             {
-                if(attrValue == "Test")
-                {
-                    aiEvent = new AIEvent_Test();
-                }
-                else if(attrValue == "SetAngleDirection")
-                {
-                    aiEvent = new AIEvent_SetAngleDirection();
-                }
-                else if(attrValue == "SetDirectionToTarget")
-                {
-                    aiEvent = new AIEvent_SetDirectionToTarget();
-                }
-                else if(attrValue == "SetAction")
-                {
-                    aiEvent = new AIEvent_SetAction();
-                }
-                else if(attrValue == "ClearTarget")
-                {
-                    aiEvent = new AIEvent_ClearTarget();
-                }
-                else if(attrValue == "ExecuteState")
-                {
-                    aiEvent = new AIEvent_ExecuteState();
-                }
-                else if(attrValue == "TerminatePackage")
-                {
-                    aiEvent = new AIEvent_TerminatePackage();
-                }
-                else if(attrValue == "KillEntity")
-                {
-                    aiEvent = new AIEvent_KillEntity();
-                }
-                else if(attrValue == "RotateDirection")
-                {
-                    aiEvent = new AIEvent_RotateDirection();
-                }
-                else if(attrValue == "CallAIEvent")
-                {
-                    aiEvent = new AIEvent_CallAIEvent();
-                }
-                else if(attrValue == "SetCustomValue")
-                {
-                    aiEvent = new AIEvent_SetCustomValue();
-                }
-                else if(attrValue == "AddCustomValue")
-                {
-                    aiEvent = new AIEvent_AddCustomValue();
-                }
-                else if(attrValue == "SequencerSignal")
-                {
-                    aiEvent = new AIEvent_SequencerSignal();
-                }
-                else if(attrValue == "AttachRotateSlot")
-                {
-                    aiEvent = new AIEvent_AttachRotateSlot();
-                }
-                else if(attrValue == "DetachRotateSlot")
-                {
-                    aiEvent = new AIEvent_DetachRotateSlot();
-                }
-                else
-                {
-                    DebugUtil.assert_fileOpen(false,"유효하지 않은 AI 이벤트 타입 입니다. 오타는 아닌가요?: [{0}] [Line: {1}] [FileName: {2}]",_currentPackageFileName,XMLScriptConverter.getLineNumberFromXMLNode(node),attrValue, XMLScriptConverter.getLineFromXMLNode(node), _currentPackageFileName);
-                    return null;
-                }
+                AIEventType aiEventType = (AIEventType)System.Enum.Parse(typeof(AIEventType), "AIEvent_" + attrValue);
+                aiEvent = AIEventBase.getFrameEvent(aiEventType);
             }
         }
 

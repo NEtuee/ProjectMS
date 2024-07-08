@@ -1,4 +1,8 @@
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
+using YamlDotNet.Core;
 
 [System.Serializable]
 public class AIGraphBaseData
@@ -24,6 +28,14 @@ public class AIGraphBaseData
 // #if UNITY_EDITOR
     public string _fullPath = "";
 // #endif
+
+    public void serialize(ref BinaryWriter binaryWriter)
+    {
+    }
+
+    public void deserialize(ref BinaryReader binaryReader)
+    {
+    }
 }
 
 [System.Serializable]
@@ -52,6 +64,67 @@ public class AIGraphNodeData
 // #if UNITY_EDITOR
     public int _lineNumber = 0;
 // #endif
+
+    public void serialize(ref BinaryWriter binaryWriter)
+    {
+        binaryWriter.Write(_nodeName);
+
+        binaryWriter.Write(_aiEvents == null ? 0 : _aiEvents.Count);
+        if(_aiEvents != null)
+        {
+            foreach(var item in _aiEvents)
+            {
+                binaryWriter.Write((int)item.Key);
+                item.Value.serialize(ref binaryWriter);
+            }
+        }
+
+        binaryWriter.Write(_customAIEvents == null ? 0 : _customAIEvents.Count);
+        if(_customAIEvents != null)
+        {
+            foreach(var item in _customAIEvents)
+            {
+                binaryWriter.Write(item.Key);
+                item.Value.serialize(ref binaryWriter);
+            }
+        }
+
+        binaryWriter.Write(_packageIndex);
+        binaryWriter.Write(_packageEntryNodeIndex);
+        binaryWriter.Write(_branchIndexStart);
+        binaryWriter.Write(_branchCount);
+        binaryWriter.Write(_coolDownTime);
+    }
+
+    public void deserialize(ref BinaryReader binaryReader)
+    {
+        _nodeName = binaryReader.ReadString();
+        int aiEventCount = binaryReader.ReadInt32();
+        for(int i = 0; i < aiEventCount; ++i)
+        {
+            AIChildEventType childEventType = (AIChildEventType)binaryReader.ReadInt32();
+            AIChildFrameEventItem childEventItem = new AIChildFrameEventItem();
+            childEventItem.deserialize(ref binaryReader);
+
+            _aiEvents.Add(childEventType, childEventItem);
+        }
+
+        int customAiEventCount = binaryReader.ReadInt32();
+        for(int i = 0; i < customAiEventCount; ++i)
+        {
+            string key = binaryReader.ReadString();
+            AIChildFrameEventItem childEventItem = new AIChildFrameEventItem();
+            childEventItem.deserialize(ref binaryReader);
+
+            _customAIEvents.Add(key, childEventItem);
+        }
+
+        _packageIndex = binaryReader.ReadInt32();
+        _packageEntryNodeIndex = binaryReader.ReadInt32();
+        _branchIndexStart = binaryReader.ReadInt32();
+        _branchCount = binaryReader.ReadInt32();
+        _coolDownTime = binaryReader.ReadSingle();
+    }
 }
 
 
@@ -80,6 +153,141 @@ public class AIPackageBaseData
 // #if UNITY_EDITOR
     public string _fullPath = "";
 // #endif
+
+    public void serialize(ref BinaryWriter binaryWriter)
+    {
+        binaryWriter.Write(_name);
+        binaryWriter.Write(_aiNodeCount);
+        if(_aiPackageNodeData != null)
+        {
+            for(int i = 0; i < _aiNodeCount; ++i)
+            {
+                _aiPackageNodeData[i].serialize(ref binaryWriter);
+            }
+        }
+
+        binaryWriter.Write(_branchCount);
+        if(_branchData != null)
+        {
+            for(int i = 0; i < _branchCount; ++i)
+            {
+                _branchData[i].serialize(ref binaryWriter);
+            }
+        }
+
+        binaryWriter.Write(_conditionCompareDataCount);
+        if(_conditionCompareData != null)
+        {
+            for(int i = 0; i < _conditionCompareDataCount; ++i)
+            {
+                _conditionCompareData[i].serialize(ref binaryWriter);
+            }
+        }
+
+        binaryWriter.Write(_aiEvents == null ? 0 : _aiEvents.Count);
+        if(_aiEvents != null)
+        {
+            foreach(var item in _aiEvents)
+            {
+                binaryWriter.Write((int)item.Key);
+                item.Value.serialize(ref binaryWriter);
+            }
+        }
+
+        binaryWriter.Write(_customAIEvents == null ? 0 : _customAIEvents.Count);
+        if(_customAIEvents != null)
+        {
+            foreach(var item in _customAIEvents)
+            {
+                binaryWriter.Write(item.Key);
+                item.Value.serialize(ref binaryWriter);
+            }
+        }
+
+        binaryWriter.Write(_aiPackageEvents == null ? 0 : _aiPackageEvents.Count);
+        if(_aiPackageEvents != null)
+        {
+            foreach(var item in _aiPackageEvents)
+            {
+                binaryWriter.Write((int)item.Key);
+                item.Value.serialize(ref binaryWriter);
+            }
+        }
+
+        binaryWriter.Write(_defaultAIIndex);
+    }
+
+    public void deserialize(ref BinaryReader binaryReader)
+    {
+        _name = binaryReader.ReadString();
+        _aiNodeCount = binaryReader.ReadInt32();
+        if(_aiNodeCount != 0)
+        {
+            _aiPackageNodeData = new AIPackageNodeData[_aiNodeCount];
+            for(int i = 0; i < _aiNodeCount; ++i)
+            {
+                _aiPackageNodeData[i] = new AIPackageNodeData();
+                _aiPackageNodeData[i].deserialize(ref binaryReader);
+            }
+        }
+
+        _branchCount = binaryReader.ReadInt32();
+        if(_branchCount != 0)
+        {
+            _branchData = new ActionGraphBranchData[_branchCount];
+            for(int i = 0; i < _branchCount; ++i)
+            {
+                _branchData[i] = new ActionGraphBranchData();
+                _branchData[i].deserialize(ref binaryReader);
+            }
+        }
+
+        _conditionCompareDataCount = binaryReader.ReadInt32();
+        if(_conditionCompareDataCount != 0)
+        {
+            _conditionCompareData = new ActionGraphConditionCompareData[_conditionCompareDataCount];
+            for(int i = 0; i < _conditionCompareDataCount; ++i)
+            {
+                _conditionCompareData[i] = new ActionGraphConditionCompareData();
+                _conditionCompareData[i].deserialize(ref binaryReader);
+            }
+        }
+
+        int aiEventCount = binaryReader.ReadInt32();
+        for(int i = 0; i < aiEventCount; ++i)
+        {
+            AIChildEventType childEventType = (AIChildEventType)binaryReader.ReadInt32();
+            AIChildFrameEventItem childEventItem = new AIChildFrameEventItem();
+            childEventItem.deserialize(ref binaryReader);
+
+            _aiEvents.Add(childEventType, childEventItem);
+        }
+
+        int customAiEventCount = binaryReader.ReadInt32();
+        for(int i = 0; i < customAiEventCount; ++i)
+        {
+            string key = binaryReader.ReadString();
+            AIChildFrameEventItem childEventItem = new AIChildFrameEventItem();
+            childEventItem.deserialize(ref binaryReader);
+
+            _customAIEvents.Add(key, childEventItem);
+        }
+
+        int aiPackageEventCount = binaryReader.ReadInt32();
+        if(aiPackageEventCount != 0)
+        {
+            foreach(var item in _aiPackageEvents)
+            {
+                AIPackageEventType packageEventType = (AIPackageEventType)binaryReader.ReadInt32();
+                AIChildFrameEventItem childEventItem = new AIChildFrameEventItem();
+                childEventItem.deserialize(ref binaryReader);
+
+                _aiPackageEvents.Add(packageEventType, childEventItem);
+            }
+        }
+
+        _defaultAIIndex = binaryReader.ReadInt32();
+    }
 }
 
 [System.Serializable]
@@ -113,6 +321,80 @@ public class AIPackageNodeData
 // #if UNITY_EDITOR
     public int _lineNumber = 0;
 // #endif
+
+    public void serialize(ref BinaryWriter binaryWriter)
+    {
+        binaryWriter.Write(_nodeName);
+        binaryWriter.Write(_updateTime);
+        binaryWriter.Write((int)_targetSearchType);
+        binaryWriter.Write((int)_searchAllyTargetType);
+        binaryWriter.Write(_targetSearchRange);
+        binaryWriter.Write(_targetSearchStartRange);
+        binaryWriter.Write(_targetSearchSphereRadius);
+        BinaryHelper.writeVector3(ref binaryWriter, _targetPosition);
+        binaryWriter.Write(_arriveThreshold);
+        binaryWriter.Write(_hasTargetPosition);
+
+        binaryWriter.Write(_aiEvents == null ? 0 : _aiEvents.Count);
+        if(_aiEvents != null)
+        {
+            foreach(var item in _aiEvents)
+            {
+                binaryWriter.Write((int)item.Key);
+                item.Value.serialize(ref binaryWriter);
+            }
+        }
+
+        binaryWriter.Write(_customAIEvents == null ? 0 : _customAIEvents.Count);
+        if(_customAIEvents != null)
+        {
+            foreach(var item in _customAIEvents)
+            {
+                binaryWriter.Write(item.Key);
+                item.Value.serialize(ref binaryWriter);
+            }
+        }
+
+        binaryWriter.Write(_branchIndexStart);
+        binaryWriter.Write(_branchCount);
+    }
+
+    public void deserialize(ref BinaryReader binaryReader)
+    {
+        _nodeName = binaryReader.ReadString();
+        _updateTime = binaryReader.ReadSingle();
+        _targetSearchType = (TargetSearchType)binaryReader.ReadInt32();
+        _searchAllyTargetType = (AllyTargetType)binaryReader.ReadInt32();
+        _targetSearchRange = binaryReader.ReadSingle();
+        _targetSearchStartRange = binaryReader.ReadSingle();
+        _targetSearchSphereRadius = binaryReader.ReadSingle();
+        _targetPosition = BinaryHelper.readVector3(ref binaryReader);
+        _arriveThreshold = binaryReader.ReadSingle();
+        _hasTargetPosition = binaryReader.ReadBoolean();
+
+        int aiEventCount = binaryReader.ReadInt32();
+        for(int i = 0; i < aiEventCount; ++i)
+        {
+            AIChildEventType childEventType = (AIChildEventType)binaryReader.ReadInt32();
+            AIChildFrameEventItem childEventItem = new AIChildFrameEventItem();
+            childEventItem.deserialize(ref binaryReader);
+
+            _aiEvents.Add(childEventType, childEventItem);
+        }
+
+        int customAiEventCount = binaryReader.ReadInt32();
+        for(int i = 0; i < customAiEventCount; ++i)
+        {
+            string key = binaryReader.ReadString();
+            AIChildFrameEventItem childEventItem = new AIChildFrameEventItem();
+            childEventItem.deserialize(ref binaryReader);
+
+            _customAIEvents.Add(key, childEventItem);
+        }
+
+        _branchIndexStart = binaryReader.ReadInt32();
+        _branchCount = binaryReader.ReadInt32();
+    }
 }
 
 [System.Serializable]
@@ -120,4 +402,16 @@ public class AIGraphCustomValue
 {
     public string _name = "";
     public float _customValue = 0f;
+
+    public void serialize(ref BinaryWriter binaryWriter)
+    {
+        binaryWriter.Write(_name);
+        binaryWriter.Write(_customValue);
+    }
+
+    public void deserialize(ref BinaryReader binaryReader)
+    {
+        _name = binaryReader.ReadString();
+        _customValue = binaryReader.ReadSingle();
+    }
 }
