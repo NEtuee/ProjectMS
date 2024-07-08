@@ -127,7 +127,7 @@
             
         </Animation>
         
-        <Branch Condition="TargetDistance <= 2.0" Execute="AC_ThunderStrokeReady"/>
+        <!-- <Branch Condition="TargetDistance <= 2.0" Execute="AC_ThunderStrokeReady"/> -->
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_ThunderStrokeReady_Stay>
 
