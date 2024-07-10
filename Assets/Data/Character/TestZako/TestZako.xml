@@ -14,7 +14,7 @@
         <Branch Condition="GuardBroken" Execute="GuardBroken"/>
     </Idle>
 
-    <GuardBroken DirectionType="Keep" FlipType="Direction" Flags="IgnorePush">
+    <GuardBroken DirectionType="Keep" FlipType="Direction">
         <Animation Path="Resources/Sprites/DummyPlayer/JustGuardBreak/" StartFrame="0" EndFrame="1" XFlip="true">
         </Animation>
 

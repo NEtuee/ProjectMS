@@ -52,6 +52,15 @@
         <Branch Key="getKey_DashMove" Condition="getFrameTag_MoveCancel" Execute="MoveAll"/>
         <Branch Key="getKey_NormalMove == true" Condition="getFrameTag_MoveCancel" Execute="MoveAll"/>
     </BranchSet>
+
+    <BranchSet Name="KickBranch">
+        <Branch Condition="AttackSuccess || AttackGuarded || AttackGuardBreak || AttackGuardBreakFail" Execute="Kicked"/>
+        <Branch Condition="getFrameTag_ZeroApKickFailed" Execute="MoveAll"/>
+        <Branch Key="getKey_AttackCharge == true" Condition="End" Execute="MoveAll"/>
+        <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="MoveStop"/>
+        <Branch Key="getKey_AttackCharge == false" Condition="getFrameTag_MoveCancel" Execute="MoveStop"/>
+    </BranchSet>
+
     <Spawn MovementType="FrameEvent" DirectionType="Keep" FlipType="Keep">
         <Animation Preset="Sprites/NewPlayer/idle/" XFlip="true" Duration="0.1">
             <!-- <FrameEvent Type="AudioPlay" StartTime="0" ID="1007" Attach="true"/> -->
@@ -135,6 +144,8 @@
         <Branch Condition="End == true" Execute="MoveAll"/>
         <Branch Key="(getKey_AttackCharge == false) && (getKey_NormalMove == false)" Execute="MoveStop"/>
         <Branch Key="getKey_DashMove && (getStat_DashPoint >= 1.0)" Execute="DashRoll"/>
+
+        <Branch Key="getKey_GuardBreak2" Execute="KickCharge"/>
         <Branch Key="getKey_StunShot" Execute="DashLongCharge"/>
     </MoveAll>
 
@@ -324,31 +335,102 @@
             <FrameEvent Type="EffectPreset" Condition="AttackSuccess == false" StartTime="0.05" Key="DashTrail"/>
         </Animation>
         
-        <Branch Condition="AttackSuccess || AttackGuarded || AttackGuardBreak || AttackGuardBreakFail" Execute="Kicked"/>
-        <Branch Condition="getFrameTag_ZeroApKickFailed" Execute="MoveAll"/>
-        <Branch Key="getKey_AttackCharge == true" Condition="End" Execute="MoveAll"/>
-        <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="MoveStop"/>
-        <Branch Key="getKey_AttackCharge == false" Condition="getFrameTag_MoveCancel" Execute="MoveStop"/>
+        <UseBranchSet Name="KickBranch"/>
     </DashRoll_Kick>
+
+    <DashRoll_Kick_Hard MovementType="FrameEvent" DirectionType="MousePoint" RotationType="MoveDirection" FlipType="MousePoint" DirectionUpdateOnce="true" Flags="ClearPush">
+        <Animation Preset="Sprites/NewPlayer/DashRoll/" XFlip="true" Duration="0.25">
+            <FrameEvent Type="Attack" StartTime="0" AttackType="GuardBreak" AttackPreset="Akane_Kick_Hard" IgnoreDefenceType="Guard" AttackCount="1">
+                <OnGuardBreak>
+                    <!-- <FrameEvent Type="ApplyBuffTarget" ApplyBuff="GuardPointDecrease"/> -->
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="GuardCountIncrease"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="TargetBattleIncrement" Condition="getTargetFrameTag_Groggy == false"/>
+
+                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/ParrySucc" Offset="0.0 0.0 0.0" Attach="false" ToTarget="true" AngleType="identity"/>
+                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+
+                    <FrameEvent Type="TeleportToTarget" DistanceOffset="0"/>
+                    <FrameEvent Type="StopUpdate" Time="0.15"/>
+
+                    <FrameEvent Type="SetTimeScale" Scale="0.1" Time="0.1" BlendTime="0.07"/>
+                    <FrameEvent Type="ShakeEffect" Scale="0.1" Speed="35.0" Time="0.25"/>
+
+                    <FrameEvent Type="ZoomEffect" StartTime="0" Scale="-0.4"/>
+                </OnGuardBreak>
+
+                <OnGuardBreakFail>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="TargetBattleIncrement" Condition="getTargetFrameTag_Groggy == false"/>
+                    
+                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/ParrySucc" Offset="0.0 0.0 0.0" Attach="false" ToTarget="true" AngleType="identity"/>
+                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+
+                    <FrameEvent Type="TeleportToTarget" DistanceOffset="0"/>
+                    <FrameEvent Type="StopUpdate" Time="0.15"/>
+
+                    <FrameEvent Type="SetTimeScale" Scale="0.1" Time="0.1" BlendTime="0.07"/>
+                    <FrameEvent Type="ShakeEffect" Scale="0.1" Speed="35.0" Time="0.25"/>
+
+                    <FrameEvent Type="ZoomEffect" StartTime="0" Scale="-0.4"/>
+
+                </OnGuardBreakFail>
+                
+                <OnEvade>
+                    <FrameEvent Type="TeleportToTarget"/>
+                </OnEvade>
+            </FrameEvent>
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="999" Tag="ZeroApKickFailed" Condition="(getStat_DashPoint < 1.0)"/>
+
+            <FrameEvent Type="Movement" StartTime="0" Friction="gv_DashFriction" MaxVelocity="gv_DashVelocity" Speed="0" Velocity="gv_DashVelocity" Condition="(getStat_DashPoint >= 1.0)"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0.031" ApplyBuff="DashPointConsumption"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0.156" EndTime="999" Tag="MoveCancel"/>
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="0.016" Tag="Attack"/>
+            <FrameEvent Type="AudioPlay" Condition="AttackSuccess == false" StartTime="0.05" ID="1002" Attach="true"/>
+
+            <FrameEvent Type="EffectPreset" Condition="AttackSuccess == false" StartTime="0.05" Key="DashTrail"/>
+        </Animation>
+        
+        <UseBranchSet Name="KickBranch"/>
+    </DashRoll_Kick_Hard>
 
     <DashLongCharge MovementType="FrameEvent" DirectionType="MousePoint" FlipType="Direction">
         <Animation Preset="Sprites/NewPlayer/HyperCharge/" XFlip="true">
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_IdleFriction" Speed="0"/>
         </Animation>
 
+        <Branch Key="(getKey_StunShot == false) && getKey_AttackCharge" Execute="MoveAll"/>
+        <Branch Key="(getKey_StunShot == false) && getKey_NormalMove" Execute="MoveAll"/>
         <Branch Condition="getKey_StunShot == false" Execute="Idle"/>
+
         <Branch Key="getKey_StunShot && getKey_DashMove" Condition="(getStat_DashPoint >= 1.0) && (getStat_HP > 1.0)" Execute="DashRoll_Long"/>
         <Branch Key="getKey_StunShot && getKey_DashMove" Execute="DashRoll"/>
     </DashLongCharge>
 
     <KickCharge MovementType="FrameEvent" DirectionType="MousePoint" FlipType="Direction">
+        <Animation Preset="Sprites/NewPlayer/HyperCharge/" XFlip="true" Duration="0.5">
+            <FrameEvent Type="Movement" StartTime="0" Friction="gv_IdleFriction" Speed="0"/>
+        </Animation>
+
+        <Branch Key="(getKey_GuardBreak2 == false) && getKey_AttackCharge" Execute="MoveAll"/>
+        <Branch Key="(getKey_GuardBreak2 == false) && getKey_NormalMove" Execute="MoveAll"/>
+        <Branch Condition="getKey_GuardBreak2 == false" Execute="Idle"/>
+        
+        <Branch Key="getKey_GuardBreak2 && getKey_DashMove" Execute="DashRoll_Kick"/>
+        <Branch Condition="End" Execute="KickCharge_Hard"/>
+    </KickCharge>
+
+    <KickCharge_Hard MovementType="FrameEvent" DirectionType="MousePoint" FlipType="Direction">
         <Animation Preset="Sprites/NewPlayer/HyperCharge/" XFlip="true">
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_IdleFriction" Speed="0"/>
         </Animation>
 
+        <Branch Key="(getKey_GuardBreak2 == false) && getKey_AttackCharge" Execute="MoveAll"/>
+        <Branch Key="(getKey_GuardBreak2 == false) && getKey_NormalMove" Execute="MoveAll"/>
         <Branch Condition="getKey_GuardBreak2 == false" Execute="Idle"/>
-        <Branch Key="getKey_GuardBreak2 && getKey_DashMove" Execute="DashRoll_Kick"/>
-    </KickCharge>
+        
+        <Branch Key="getKey_GuardBreak2 && getKey_DashMove" Execute="DashRoll_Kick_Hard"/>
+        <Branch Condition="End" Execute="KickCharge_Hard"/>
+    </KickCharge_Hard>
 
     <StunShot MovementType="FrameEvent" DirectionType="MousePoint" FlipType="Direction" DirectionUpdateOnce="true">
         <Animation Preset="Sprites/NewPlayer/Guard/" AngleBaseAnimation="True" XFlip="true" ScalePreset="XSpring" Duration="0.3">
