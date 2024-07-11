@@ -46,7 +46,7 @@
     <BranchSet Name="CancelBranch">
         <!-- <Branch Key="getKey_Guard && getKey_AttackCharge" Condition="true" Execute="Guard"/> -->
         <!-- <Branch Key="getKey_StunShot && getKey_AttackCharge" Condition="getFrameTag_MoveCancel" Execute="StunShot"/> -->
-        <Branch Key="getKey_GuardBreak2" Condition="getFrameTag_MoveCancel" Execute="KickCharge"/>
+        <Branch Key="getKey_GuardBreak2 && getKey_DashMove" Condition="getFrameTag_MoveCancel" Execute="DashRoll_Kick"/>
         <Branch Key="getKey_StunShot && getKey_DashMove" Condition="getFrameTag_MoveCancel && (getStat_DashPoint >= 1.0) && (getStat_HP > 1.0)" Execute="DashLongCharge"/>
         <Branch Key="getKey_DashMove" Condition="getFrameTag_MoveCancel && (getStat_DashPoint >= 1.0)" Execute="DashRoll"/>
         <Branch Key="getKey_DashMove" Condition="getFrameTag_MoveCancel" Execute="MoveAll"/>
@@ -142,11 +142,16 @@
         <!-- TODO: Delete <Branch Key="getKey_Guard && getKey_AttackCharge" Condition="true" Execute="Guard"/> -->
 
         <Branch Condition="End == true" Execute="MoveAll"/>
+
+        <Branch Key="(getKey_AttackCharge == false) && (getKey_NormalMove == false) && getKey_GuardBreak2" Execute="KickCharge"/>
+        <Branch Key="(getKey_AttackCharge == false) && (getKey_NormalMove == false) && getKey_StunShot" Execute="DashLongCharge"/>
+        <Branch Key="getKey_Escape_2" Execute="KickCharge"/>
+        <Branch Key="getKey_StunShot" Execute="DashLongCharge"/>
+
         <Branch Key="(getKey_AttackCharge == false) && (getKey_NormalMove == false)" Execute="MoveStop"/>
         <Branch Key="getKey_DashMove && (getStat_DashPoint >= 1.0)" Execute="DashRoll"/>
 
-        <Branch Key="getKey_GuardBreak2" Execute="KickCharge"/>
-        <Branch Key="getKey_StunShot" Execute="DashLongCharge"/>
+        
     </MoveAll>
 
     <DashRoll MovementType="FrameEvent" DirectionType="MousePoint" RotationType="MoveDirection" FlipType="MousePoint" DirectionUpdateOnce="true" Flags="ClearPush">
@@ -407,8 +412,8 @@
     </DashLongCharge>
 
     <KickCharge MovementType="FrameEvent" DirectionType="MousePoint" FlipType="Direction">
-        <Animation Preset="Sprites/NewPlayer/HyperCharge/" XFlip="true" Duration="0.5">
-            <FrameEvent Type="Movement" StartTime="0" Friction="gv_IdleFriction" Speed="0"/>
+        <Animation Preset="Sprites/NewPlayer/KickCharge/" XFlip="true" Duration="0.5">
+            <FrameEvent Type="Movement" StartTime="0" Friction="3" Speed="1"/>
         </Animation>
 
         <Branch Key="(getKey_GuardBreak2 == false) && getKey_AttackCharge" Execute="MoveAll"/>
@@ -420,8 +425,8 @@
     </KickCharge>
 
     <KickCharge_Hard MovementType="FrameEvent" DirectionType="MousePoint" FlipType="Direction">
-        <Animation Preset="Sprites/NewPlayer/HyperCharge/" XFlip="true">
-            <FrameEvent Type="Movement" StartTime="0" Friction="gv_IdleFriction" Speed="0"/>
+        <Animation Preset="Sprites/NewPlayer/KickCharge/" XFlip="true">
+            <FrameEvent Type="Movement" StartTime="0" Friction="3" Speed="1"/>
         </Animation>
 
         <Branch Key="(getKey_GuardBreak2 == false) && getKey_AttackCharge" Execute="MoveAll"/>
