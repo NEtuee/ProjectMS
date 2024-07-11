@@ -46,6 +46,9 @@
     <BranchSet Name="CancelBranch">
         <!-- <Branch Key="getKey_Guard && getKey_AttackCharge" Condition="true" Execute="Guard"/> -->
         <!-- <Branch Key="getKey_StunShot && getKey_AttackCharge" Condition="getFrameTag_MoveCancel" Execute="StunShot"/> -->
+        <Branch Key="getKey_GuardBreak2" Condition="getFrameTag_StanceCancel" Execute="KickCharge"/>
+        <Branch Key="getKey_StunShot" Condition="getFrameTag_StanceCancel" Execute="DashLongCharge"/>
+
         <Branch Key="getKey_GuardBreak2 && getKey_DashMove" Condition="getFrameTag_MoveCancel" Execute="DashRoll_Kick"/>
         <Branch Key="getKey_StunShot && getKey_DashMove" Condition="getFrameTag_MoveCancel && (getStat_DashPoint >= 1.0) && (getStat_HP > 1.0)" Execute="DashLongCharge"/>
         <Branch Key="getKey_DashMove" Condition="getFrameTag_MoveCancel && (getStat_DashPoint >= 1.0)" Execute="DashRoll"/>
@@ -413,7 +416,7 @@
 
     <KickCharge MovementType="FrameEvent" DirectionType="MousePoint" FlipType="Direction">
         <Animation Preset="Sprites/NewPlayer/KickCharge/" XFlip="true" Duration="0.5">
-            <FrameEvent Type="Movement" StartTime="0" Friction="3" Speed="1"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="3" MaxVelocity="gv_MoveVelocityMax" Speed="1"/>
         </Animation>
 
         <Branch Key="(getKey_GuardBreak2 == false) && getKey_AttackCharge" Execute="MoveAll"/>
@@ -426,7 +429,7 @@
 
     <KickCharge_Hard MovementType="FrameEvent" DirectionType="MousePoint" FlipType="Direction">
         <Animation Preset="Sprites/NewPlayer/KickCharge/" XFlip="true">
-            <FrameEvent Type="Movement" StartTime="0" Friction="3" Speed="1"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="3" MaxVelocity="gv_MoveVelocityMax" Speed="1"/>
         </Animation>
 
         <Branch Key="(getKey_GuardBreak2 == false) && getKey_AttackCharge" Execute="MoveAll"/>
@@ -480,6 +483,7 @@
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_AttackFriction" MaxVelocity="gv_AttackVelocity" Speed="0" Velocity="gv_AttackVelocity"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="DashPointReset"/>
             <FrameEvent Type="FrameTag" StartTime="0.26" EndTime="999" Tag="MoveCancel"/>
+            <FrameEvent Type="FrameTag" StartTime="0.15" EndTime="999" Tag="StanceCancel"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="AttackSuccess"/>
         </Animation>
 
