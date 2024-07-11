@@ -416,7 +416,7 @@
 
     <KickCharge MovementType="FrameEvent" DirectionType="MousePoint" FlipType="Direction">
         <Animation Preset="Sprites/NewPlayer/KickCharge/" XFlip="true" Duration="0.5">
-            <FrameEvent Type="Movement" StartTime="0" Friction="3" MaxVelocity="gv_MoveVelocityMax" Speed="1"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="gv_IdleFriction" Speed="0"/>
         </Animation>
 
         <Branch Key="(getKey_GuardBreak2 == false) && getKey_AttackCharge" Execute="MoveAll"/>
@@ -429,7 +429,7 @@
 
     <KickCharge_Hard MovementType="FrameEvent" DirectionType="MousePoint" FlipType="Direction">
         <Animation Preset="Sprites/NewPlayer/KickCharge/" XFlip="true">
-            <FrameEvent Type="Movement" StartTime="0" Friction="3" MaxVelocity="gv_MoveVelocityMax" Speed="1"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="gv_IdleFriction" Speed="0"/>
         </Animation>
 
         <Branch Key="(getKey_GuardBreak2 == false) && getKey_AttackCharge" Execute="MoveAll"/>
