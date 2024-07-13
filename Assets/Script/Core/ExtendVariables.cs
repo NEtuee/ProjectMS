@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
-public abstract class ExtendVariable<T>
+public abstract class ExtendVariable<T> : SerializableDataType
 {    
     public abstract T getValue();
     public abstract void setValue(T value);
@@ -48,6 +48,20 @@ public class Vector3Ex : ExtendVariable<Vector3>
         if(splitted.Length == 3)
             _z.loadFromXML(splitted[2]);
     }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        _x.serialize(ref binaryWriter);
+        _y.serialize(ref binaryWriter);
+        _z.serialize(ref binaryWriter);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _x.deserialize(ref binaryReader);
+        _y.deserialize(ref binaryReader);
+        _z.deserialize(ref binaryReader);
+    }
 }
 
 public class Vector2Ex : ExtendVariable<Vector2>
@@ -80,6 +94,19 @@ public class Vector2Ex : ExtendVariable<Vector2>
 
         _x.loadFromXML(splitted[0]);
         _y.loadFromXML(splitted[1]);
+    }
+
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        _x.serialize(ref binaryWriter);
+        _y.serialize(ref binaryWriter);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _x.deserialize(ref binaryReader);
+        _y.deserialize(ref binaryReader);
     }
 }
 
@@ -167,16 +194,16 @@ public class FloatEx : ExtendVariable<float>
         _randomMin = min;
         _isRandom = true;
     }
-
-    public void serialize(ref BinaryWriter binaryWriter)
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
     {
         binaryWriter.Write(_value);
         binaryWriter.Write(_randomMin);
         binaryWriter.Write(_randomMax);
         binaryWriter.Write(_isRandom);
     }
-
-    public void deserialize(ref BinaryReader binaryReader)
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
     {
         _value = binaryReader.ReadSingle();
         _randomMin = binaryReader.ReadSingle();

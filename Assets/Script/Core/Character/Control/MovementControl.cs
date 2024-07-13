@@ -63,8 +63,6 @@ public class MovementControl
         case MovementBase.MovementType.Empty:
             setMovementEmpty();
             break;
-        case MovementBase.MovementType.RootMotion:
-            return changeMovement<GraphMovement>(targetEntity);
         case MovementBase.MovementType.GraphPreset:
             return changeMovement<GraphPresetMovement>(targetEntity);
         case MovementBase.MovementType.FrameEvent:

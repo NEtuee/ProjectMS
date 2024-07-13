@@ -228,7 +228,7 @@
         <Animation Preset="2_skill/3_spawnGauntlet" XFlip="true" Duration="1.0">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2208" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <FrameEvent Type="Danmaku" StartTime="0.5" Path="Enemy\ReitoGauntlet.xml"/>
+            <FrameEvent Type="Danmaku" StartTime="0.5" Path="Assets/Data/DanmakuGraph/Enemy/ReitoGauntlet.xml"/>
             
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
@@ -302,7 +302,7 @@
         <Animation Preset="2_skill/2_cremationBeam/2_cremationBeamShot" XFlip="true" Duration="0.4">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2208" Attach="true"/>
-            <FrameEvent Type="Danmaku" StartTime="0" Path="Enemy\ReitoMissile.xml" UseDirection="True"/>
+            <FrameEvent Type="Danmaku" StartTime="0" Path="Assets/Data/DanmakuGraph/Enemy/ReitoMissile.xml" UseDirection="True"/>
         </Animation>
         <Animation Preset="2_skill/2_cremationBeam/3_cremationBeamRecovery" XFlip="true" Duration="0.3">
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>

@@ -17,6 +17,12 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
 
     private static string _currentFileName = "";
     private static string _currentPackageFileName = "";
+
+    public override AIGraphBaseData createNewDataInstance()
+    {
+        return new AIGraphBaseData();
+    }
+
     public override AIGraphBaseData readFromXML(string path)
     {
         _currentFileName = path;

@@ -1,9 +1,49 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using Unity.Mathematics;
 using UnityEngine;
 
-public abstract class EffectInfoDataBase
+public enum EffectInfoDataType
+{
+    SpriteEffect,
+    ParticleEffect,
+}
+
+public class EffectInfoDataList : SerializableDataType
+{
+    public Dictionary<string,EffectInfoDataBase[]> _effectInfoDataDic = new Dictionary<string, EffectInfoDataBase[]>();
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        binaryWriter.Write(_effectInfoDataDic.Count);
+        foreach(var item in _effectInfoDataDic)
+        {
+            binaryWriter.Write(item.Key);
+            BinaryHelper.writeArray(ref binaryWriter, item.Value);
+        }
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        int count = binaryReader.ReadInt32();
+        for(int i = 0; i < count; ++i)
+        {
+            string key = binaryReader.ReadString();
+            int dataCount = binaryReader.ReadInt32();
+
+            EffectInfoDataBase[] effectInfoDataList = new EffectInfoDataBase[dataCount];
+            for(int j = 0; j < dataCount; ++j)
+            {
+                effectInfoDataList[j] = EffectInfoDataBase.buildEffectInfoData(ref binaryReader);
+            }
+
+            _effectInfoDataDic.Add(key,effectInfoDataList);
+        }
+    }
+}
+
+public abstract class EffectInfoDataBase : SerializableDataType
 {
     public string              _key = "";
     public string              _effectPath = "";
@@ -24,6 +64,8 @@ public abstract class EffectInfoDataBase
 
     public AngleDirectionType  _angleDirectionType = AngleDirectionType.identity;
 
+    public abstract EffectInfoDataType getEffectInfoDataType();
+    
     public abstract EffectRequestData createEffectRequestData(ObjectBase executeEntity, ObjectBase targetEntity);
     
     public virtual bool compareMaterial(CommonMaterial attackMaterial, CommonMaterial defenceMaterial)
@@ -65,10 +107,74 @@ public abstract class EffectInfoDataBase
 
         return Quaternion.identity;
     }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        BinaryHelper.writeEnum<EffectInfoDataType>(ref binaryWriter, getEffectInfoDataType());
+        binaryWriter.Write(_key);
+        binaryWriter.Write(_effectPath);
+        binaryWriter.Write(_toTarget);
+        binaryWriter.Write(_attach);
+        binaryWriter.Write(_followDirection);
+        binaryWriter.Write(_castShadow);
+        binaryWriter.Write(_dependentAction);
+        binaryWriter.Write(_angleOffset);
+        binaryWriter.Write(_lifeTime);
+        BinaryHelper.writeEnum<CommonMaterial>(ref binaryWriter, _attackMaterial);
+        BinaryHelper.writeEnum<CommonMaterial>(ref binaryWriter, _defenceMaterial);
+        BinaryHelper.writeVector3(ref binaryWriter, _spawnOffset);
+        BinaryHelper.writeQuaternion(ref binaryWriter, _effectRotation);
+        BinaryHelper.writeEnum<EffectUpdateType>(ref binaryWriter, _effectUpdateType);
+        BinaryHelper.writeEnum<AngleDirectionType>(ref binaryWriter, _angleDirectionType);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _key = binaryReader.ReadString();
+        _effectPath = binaryReader.ReadString();
+        _toTarget = binaryReader.ReadBoolean();
+        _attach = binaryReader.ReadBoolean();
+        _followDirection = binaryReader.ReadBoolean();
+        _castShadow = binaryReader.ReadBoolean();
+        _dependentAction = binaryReader.ReadBoolean();
+        _angleOffset = binaryReader.ReadSingle();
+        _lifeTime = binaryReader.ReadSingle();
+        _attackMaterial = BinaryHelper.readEnum<CommonMaterial>(ref binaryReader);
+        _defenceMaterial = BinaryHelper.readEnum<CommonMaterial>(ref binaryReader);
+        _spawnOffset = BinaryHelper.readVector3(ref binaryReader);
+        _effectRotation = BinaryHelper.readQuaternion(ref binaryReader);
+        _effectUpdateType = BinaryHelper.readEnum<EffectUpdateType>(ref binaryReader);
+        _angleDirectionType = BinaryHelper.readEnum<AngleDirectionType>(ref binaryReader);
+    }
+
+    public static EffectInfoDataBase buildEffectInfoData(ref BinaryReader binaryReader)
+    {
+        EffectInfoDataType effectInfoDataType = BinaryHelper.readEnum<EffectInfoDataType>(ref binaryReader);
+        EffectInfoDataBase effectInfoDataBase = getEffectInfoDataBase(effectInfoDataType);
+
+        effectInfoDataBase.deserialize(ref binaryReader);
+
+        return effectInfoDataBase;
+    }
+
+    public static EffectInfoDataBase getEffectInfoDataBase(EffectInfoDataType effectInfoDataType)
+    {
+        switch(effectInfoDataType)
+        {
+            case EffectInfoDataType.SpriteEffect:
+                return new SpriteEffectInfoData();
+            case EffectInfoDataType.ParticleEffect:
+                return new ParticleEffectInfoData();
+        }
+
+        return null;
+    }
 }
 
 public class ParticleEffectInfoData : EffectInfoDataBase
 {
+    public override EffectInfoDataType getEffectInfoDataType() => EffectInfoDataType.ParticleEffect;
+
     public override EffectRequestData createEffectRequestData(ObjectBase executeEntity, ObjectBase targetEntity)
     {
         Vector3 centerPosition = Vector3.zero;
@@ -111,6 +217,8 @@ public class ParticleEffectInfoData : EffectInfoDataBase
 
 public class SpriteEffectInfoData : EffectInfoDataBase
 {
+    public override EffectInfoDataType getEffectInfoDataType() => EffectInfoDataType.SpriteEffect;
+
     public override EffectRequestData createEffectRequestData(ObjectBase executeEntity, ObjectBase targetEntity)
     {
         Vector3 centerPosition = Vector3.zero;

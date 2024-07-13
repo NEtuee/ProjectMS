@@ -3,6 +3,46 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.IO;
+using System.Text;
+
+public abstract class SerializableDataType
+{
+#if UNITY_EDITOR
+	public abstract void serialize(ref BinaryWriter binaryWriter);
+
+	public void writeData(string binaryOutputPath)
+	{
+		FileStream fileStream = new FileStream(binaryOutputPath, FileMode.OpenOrCreate, FileAccess.Write);
+        BinaryWriter binaryWriter = new BinaryWriter(fileStream);
+
+        serialize(ref binaryWriter);
+
+        binaryWriter.Close();
+        fileStream.Close();
+	}
+#endif
+
+	public abstract void deserialize(ref BinaryReader binaryReader);
+	public void readData(string path)
+	{
+		FileStream fileStream = new FileStream(path, FileMode.Open, FileAccess.Read);
+        BinaryReader binaryReader = new BinaryReader(fileStream);
+
+        deserialize(ref binaryReader);
+
+        binaryReader.Close();
+        fileStream.Close();
+	}
+
+}
+
+public interface SerializableStructure
+{
+#if UNITY_EDITOR
+	public abstract void serialize(ref BinaryWriter binaryWriter);
+#endif
+	public abstract void deserialize(ref BinaryReader binaryReader);
+}
 
 public class ManagedResourceItem<Value> where Value : class
 {
@@ -65,7 +105,7 @@ public class ManagedResourceItem<Value> where Value : class
 	}
 }
 
-public class DataResourceItem<Value, Loader> where Value : class where Loader : LoaderBase<Value>, new()
+public class DataResourceItem<Value, Loader> where Value : SerializableDataType where Loader : LoaderBase<Value>, new()
 {
 	class ValueWithTimeStamp
 	{
@@ -96,10 +136,14 @@ public class DataResourceItem<Value, Loader> where Value : class where Loader : 
 #endif
 		//try
 		{
-			Value obj = loader.readFromXML(path);
+			string binaryPath = ResourceMap.Instance().findResourcePath(path);
+
+#if UNITY_EDITOR
+			loader.readFromXMLAndExportToBinary(path, binaryPath);
+			Value obj = loader.readFromBinary(binaryPath);
+
 			if(obj == null)
 				return null;
-#if UNITY_EDITOR
 			if(_resourceContainer.ContainsKey(path))
 			{
 				ValueWithTimeStamp item = _resourceContainer[path];
@@ -111,6 +155,7 @@ public class DataResourceItem<Value, Loader> where Value : class where Loader : 
 				_resourceContainer.Add(path,new ValueWithTimeStamp(){_value = obj, _timeStamp = timeStamp});
 			}
 #else
+			Value obj = loader.readFromBinary(binaryPath);
 			_resourceContainer.Add(path,obj);
 #endif
 			return obj;
@@ -137,17 +182,12 @@ public class ResourceContainerEx : Singleton<ResourceContainerEx>
 
 	private DataResourceItem<ActionGraphBaseData,ActionGraphLoader>				_actionGraphResource = new DataResourceItem<ActionGraphBaseData,ActionGraphLoader>();
 	private DataResourceItem<AIGraphBaseData,AIGraphLoader>						_aiGraphResource = new DataResourceItem<AIGraphBaseData,AIGraphLoader>();
-	private DataResourceItem<ProjectileGraphBaseData[],ProjectileGraphLoader>	_projectileGraphResource = new DataResourceItem<ProjectileGraphBaseData[],ProjectileGraphLoader>();
+	private DataResourceItem<ProjectileGraphBaseDataList,ProjectileGraphLoader>	_projectileGraphResource = new DataResourceItem<ProjectileGraphBaseDataList,ProjectileGraphLoader>();
 	private DataResourceItem<DanmakuGraphBaseData,DanmakuGraphLoader>			_danmakuGraphResource = new DataResourceItem<DanmakuGraphBaseData,DanmakuGraphLoader>();
 	private DataResourceItem<SequencerGraphBaseData,SequencrGraphLoader>		_sequencerGraphResource = new DataResourceItem<SequencerGraphBaseData,SequencrGraphLoader>();
-	private DataResourceItem<Dictionary<string, CharacterInfoData>,CharacterInfoLoader>	_characterInfoResource = new DataResourceItem<Dictionary<string, CharacterInfoData>,CharacterInfoLoader>();
-	private DataResourceItem<Dictionary<string, AllyInfoData>,AllyInfoLoader>	_allyInfoResource = new DataResourceItem<Dictionary<string, AllyInfoData>,AllyInfoLoader>();
+	private DataResourceItem<CharacterInfoDataList,CharacterInfoLoader>			_characterInfoResource = new DataResourceItem<CharacterInfoDataList,CharacterInfoLoader>();
+	private DataResourceItem<AllyInfoDataList,AllyInfoLoader>					_allyInfoResource = new DataResourceItem<AllyInfoDataList,AllyInfoLoader>();
 
-	public MovementGraph getMovementgraph(string folderName, bool ignorePreload = false)
-	{
-		DebugUtil.assert(false,"movement graph is unavailable");
-		return null;
-	}
 
 	public AnimationCustomPreset GetAnimationCustomPreset(string filePath)
 	{
@@ -221,15 +261,30 @@ public class ResourceContainerEx : Singleton<ResourceContainerEx>
 
 	public ProjectileGraphBaseData[] GetProjectileGraphBaseData(string path)
 	{
+		return _projectileGraphResource.GetOrLoadResource(path)._projectileGraphBaseDataList;
+	}
+
+	public ProjectileGraphBaseDataList GetProjectileGraphBaseDataList(string path)
+	{
 		return _projectileGraphResource.GetOrLoadResource(path);
 	}
 
 	public Dictionary<string, CharacterInfoData> getCharacterInfo(string path)
 	{
+		return _characterInfoResource.GetOrLoadResource(path)._characterInfoDataDic;
+	}
+
+	public CharacterInfoDataList getCharacterInfoList(string path)
+	{
 		return _characterInfoResource.GetOrLoadResource(path);
 	}
 
 	public Dictionary<string,AllyInfoData> getAllyInfo(string path)
+	{
+		return _allyInfoResource.GetOrLoadResource(path)._allyInfoDataDic;
+	}
+
+	public AllyInfoDataList GetAllyInfoDataList(string path)
 	{
 		return _allyInfoResource.GetOrLoadResource(path);
 	}

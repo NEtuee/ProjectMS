@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class EffectInfoManager : Singleton<EffectInfoManager>
 {
-    public Dictionary<string, EffectInfoDataBase[]> _effectInfoData;
+    public EffectInfoDataList _effectInfoData;
 
-    public void setEffectInfoData(Dictionary<string, EffectInfoDataBase[]> effectInfoData)
+    public void setEffectInfoData(EffectInfoDataList effectInfoData)
     {
         _effectInfoData = effectInfoData;
     }
@@ -20,10 +20,10 @@ public class EffectInfoManager : Singleton<EffectInfoManager>
             return null;
         }
 
-        if(_effectInfoData.ContainsKey(key) == false)
+        if(_effectInfoData._effectInfoDataDic.ContainsKey(key) == false)
             return null;
 
-        return _effectInfoData[key];
+        return _effectInfoData._effectInfoDataDic[key];
     }
 
     public EffectItemBase requestEffect(string effectInfoKey, Vector3 position)

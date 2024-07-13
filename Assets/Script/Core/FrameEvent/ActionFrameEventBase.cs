@@ -1,16 +1,8 @@
 using System.Xml;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Numerics;
-using System.Drawing;
-using UnityEngine.UIElements;
 using System;
 using System.IO;
-using Newtonsoft.Json.Converters;
 using UnityEngine;
-using UnityEditor;
-using Unity.Mathematics;
-using TMPro.EditorUtilities;
 
 public enum FrameEventType
 {
@@ -123,22 +115,21 @@ public enum FrameEventExecuteTimingType
     FrameBase,
 }
 
-public abstract class ActionFrameEventBase
+public abstract class ActionFrameEventBase : SerializableDataType
 {
-    public float                                _startFrame;
-    public float                                _endFrame;
+    public float                                _startFrame = 0f;
+    public float                                _endFrame = 0f;
 
     public FrameEventExecuteTimingType          _executeTimingType = FrameEventExecuteTimingType.None;
 
     public ActionGraphConditionCompareData      _conditionCompareData = null;
 
-    public Dictionary<ChildFrameEventType, ChildFrameEventItem> _childFrameEventItems = null;
+    public Dictionary<ChildFrameEventType, ChildFrameEventItem> _childFrameEventItems = new Dictionary<ChildFrameEventType, ChildFrameEventItem>();
     
     public abstract FrameEventType getFrameEventType();
     public virtual void initialize(ObjectBase executeEntity){}
     public abstract bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null);
     public virtual void onExit(ObjectBase executeEntity, bool isForceEnd){}
-    public abstract void loadFromXML(XmlNode node);
 
     public virtual void initializeFromAttack(CommonMaterial attackMaterial) {}
 
@@ -151,7 +142,9 @@ public abstract class ActionFrameEventBase
     }
 
 #if UNITY_EDITOR
-    public virtual void serialize(ref BinaryWriter binaryWriter)
+    public abstract void loadFromXML(XmlNode node);
+
+    public override void serialize(ref BinaryWriter binaryWriter)
     {
         binaryWriter.Write((int)getFrameEventType());
         binaryWriter.Write(_startFrame);
@@ -178,7 +171,7 @@ public abstract class ActionFrameEventBase
 
 #endif
 
-    public virtual void deserialize(ref BinaryReader binaryReader)
+    public override void deserialize(ref BinaryReader binaryReader)
     {
         _startFrame = binaryReader.ReadSingle();
         _endFrame = binaryReader.ReadSingle();
@@ -196,6 +189,8 @@ public abstract class ActionFrameEventBase
             ChildFrameEventType frameEventType = (ChildFrameEventType)binaryReader.ReadInt32();
             ChildFrameEventItem item = new ChildFrameEventItem();
             item.deserialize(ref binaryReader);
+
+            _childFrameEventItems.Add(frameEventType, item);
         }
     }
 
@@ -303,7 +298,7 @@ public abstract class ActionFrameEventBase
             outFrameEvent = new ActionFrameEvent_ClearStatus();
         else
         {
-            DebugUtil.assert(false, "invalid frameEvent type: {0}",outFrameEvent.ToString());
+            DebugUtil.assert(false, "invalid frameEvent type: {0}",frameEventType.ToString());
             return null;
         }
 
@@ -425,6 +420,7 @@ public class ActionFrameEvent_CallAIEvent : ActionFrameEventBase
     {
         base.serialize(ref binaryWriter);
         binaryWriter.Write(_customAiEventName);
+        BinaryHelper.writeEnum<CallAIEventTargetType>(ref binaryWriter, _eventTargetType);
         binaryWriter.Write((int)_allyTarget);
         binaryWriter.Write(_range);
     }
@@ -434,6 +430,7 @@ public class ActionFrameEvent_CallAIEvent : ActionFrameEventBase
     {
         base.deserialize(ref binaryReader);
         _customAiEventName = binaryReader.ReadString();
+        _eventTargetType = BinaryHelper.readEnum<CallAIEventTargetType>(ref binaryReader);
         _allyTarget = (AllyTargetType)binaryReader.ReadInt32();
         _range = binaryReader.ReadSingle();
     }
@@ -1035,7 +1032,7 @@ public class ActionFrameEvent_ReleaseCatch : ActionFrameEventBase
 {
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_ReleaseCatch;}
 
-    private UnityEngine.Vector3         _pushVector;
+    private UnityEngine.Vector3         _pushVector = UnityEngine.Vector3.zero;
     private string                      _catchTargetAction = "";
 
     public override void initialize(ObjectBase executeEntity)
@@ -1111,13 +1108,13 @@ public class ActionFrameEvent_SpawnCharacter : ActionFrameEventBase
 {
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_SpawnCharacter;}
 
-    private string                      _characterKey;
+    private string                      _characterKey = "";
     private string                      _startAINode = "";
 
     private CharacterInfoData           _characterInfoData;
     private SpawnCharacterOptionDesc    _spawnDesc = SpawnCharacterOptionDesc.defaultValue;
 
-    private UnityEngine.Vector3         _spawnOffset;
+    private UnityEngine.Vector3         _spawnOffset = UnityEngine.Vector3.zero;
 
     private bool                        _inherit = false;
     private bool                        _inheritDirection = false;
@@ -1131,6 +1128,8 @@ public class ActionFrameEvent_SpawnCharacter : ActionFrameEventBase
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
         SceneCharacterManager sceneCharacterManager = SceneCharacterManager._managerInstance as SceneCharacterManager;
+
+        DebugUtil.log("Check");
 
         UnityEngine.Vector3 offset = _spawnOffset;
         if(_useFlip && executeEntity is CharacterEntityBase)
@@ -1214,7 +1213,8 @@ public class ActionFrameEvent_SpawnCharacter : ActionFrameEventBase
         _characterKey = binaryReader.ReadString();
         _startAINode = binaryReader.ReadString();
         string allyInfoKey = binaryReader.ReadString();
-        _spawnDesc._allyInfo = AllyInfoManager.Instance().GetAllyInfoData(allyInfoKey);
+        if(allyInfoKey != "")
+            _spawnDesc._allyInfo = AllyInfoManager.Instance().GetAllyInfoData(allyInfoKey);
 
         _spawnOffset = BinaryHelper.readVector3(ref binaryReader);
         _inherit = binaryReader.ReadBoolean();
@@ -1487,7 +1487,7 @@ public class ActionFrameEvent_SpawnPrefab : ActionFrameEventBase
 {
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_SpawnPrefab;}
 
-    public float _lifeTime;
+    public float _lifeTime = 0f;
     public string _key = "";
 
     private GameObject _prefab;
@@ -1552,7 +1552,7 @@ public class ActionFrameEvent_SpawnPrefab : ActionFrameEventBase
 public class ActionFrameEvent_UIEvent : ActionFrameEventBase
 {
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_UIEvent;}
-    public string _key;
+    public string _key = "";
 
     public override void initialize(ObjectBase executeEntity)
     {
@@ -1604,8 +1604,8 @@ public class ActionFrameEvent_StopSwitch : ActionFrameEventBase
         Effect
     }
 
-    public int _audioKey;
-    public string _effectKey;
+    public int _audioKey = 0;
+    public string _effectKey = "";
     public StopSwitchType _stopSwitchType = StopSwitchType.None;
 
     public override void initialize(ObjectBase executeEntity)
@@ -2018,13 +2018,13 @@ public class ActionFrameEvent_Movement : ActionFrameEventBase
 
             _targetValue = targetValue;
         }
-
+#if UNITY_EDITOR
         public void serialize(ref BinaryWriter binaryWriter)
         {
             _value.serialize(ref binaryWriter);
             binaryWriter.Write(_targetValue);
         }
-
+#endif
         public void deserialize(ref BinaryReader binaryReader)
         {
             _value.deserialize(ref binaryReader);
@@ -2106,6 +2106,8 @@ public class ActionFrameEvent_Movement : ActionFrameEventBase
             _setValueList = new MovementSetValueType[_valueListCount];
         for(int i = 0; i < _valueListCount; ++i)
         {
+            _setValueList[i] = new MovementSetValueType();
+            _setValueList[i]._value = new FloatEx();
             _setValueList[i].deserialize(ref binaryReader);
         }
     }
@@ -2115,7 +2117,6 @@ public class ActionFrameEvent_KillEntity : ActionFrameEventBase
 {
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_KillEntity;}
 
-    private string _path;
 
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
@@ -2133,14 +2134,12 @@ public class ActionFrameEvent_KillEntity : ActionFrameEventBase
     public override void serialize(ref BinaryWriter binaryWriter)
     {
         base.serialize(ref binaryWriter);
-        binaryWriter.Write(_path);
     }
 #endif
 
     public override void deserialize(ref BinaryReader binaryReader)
     {
         base.deserialize(ref binaryReader);
-        _path = binaryReader.ReadString();
     }
 }
 

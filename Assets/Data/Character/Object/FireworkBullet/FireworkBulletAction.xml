@@ -18,7 +18,7 @@
 
     <Explosion MovementType="Empty" DirectionType="Keep" DefenceType="Evade" DefenceAngle="360">
         <Animation Preset="Sprites/Projectile/empty" Duration="1.0">
-            <FrameEvent Type="Danmaku" StartTime="0" Path="Enemy/Firecracker.xml"/>
+            <FrameEvent Type="Danmaku" StartTime="0" Path="Assets/Data/DanmakuGraph/Enemy/Firecracker.xml"/>
         </Animation>
         <Branch Condition="End" Execute="Destroy"/>
     </Explosion>

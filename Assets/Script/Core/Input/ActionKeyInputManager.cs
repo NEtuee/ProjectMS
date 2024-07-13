@@ -23,9 +23,73 @@ public class ActionKeyInputData
 public class ActionKeyInputManager : Singleton<ActionKeyInputManager>
 {
     private Dictionary<string, ActionKeyInputData> _actionKeyInputData;
-    private ActionKeyPresetData[]           _actionKeyPresetData;
+    private ActionKeyPresetDataList           _actionKeyPresetData;
     private int                             _actinoKeyInputDataCount;
     private bool                            _isValid = false;
+
+    private static Dictionary<string, KeyCode> XBoxKeyCodeBind = new Dictionary<string, KeyCode>
+    {
+        {"A", KeyCode.JoystickButton0},
+        {"B", KeyCode.JoystickButton1},
+        {"X", KeyCode.JoystickButton2},
+        {"Y", KeyCode.JoystickButton3},
+        {"LB", KeyCode.JoystickButton4},
+        {"RB", KeyCode.JoystickButton5},
+        {"View", KeyCode.JoystickButton6},
+        {"Menu", KeyCode.JoystickButton7},
+        {"LClick", KeyCode.JoystickButton8},
+        {"RClick", KeyCode.JoystickButton9},
+    };
+
+    private static Dictionary<string, KeyCode> PSKeyCodeBind = new Dictionary<string, KeyCode>
+    {
+        {"X", KeyCode.JoystickButton1},
+        {"O", KeyCode.JoystickButton2},
+        {"Sq", KeyCode.JoystickButton0},
+        {"Tr", KeyCode.JoystickButton3},
+        {"L1", KeyCode.JoystickButton4},
+        {"R1", KeyCode.JoystickButton5},
+        {"Touchpad", KeyCode.JoystickButton13},
+        {"Option", KeyCode.JoystickButton9},
+        {"LClick", KeyCode.JoystickButton10},
+        {"RClick", KeyCode.JoystickButton11},
+    };
+
+    private static Dictionary<string, string> XBoxAxisBind = new Dictionary<string, string>
+    {
+        {"LStickHorizontal","Horizontal"},
+        {"LStickVertical","Vertical"},
+        {"RStickHorizontal","XBoxRightHorizontal"},
+        {"RStickVertical","XBoxRightVertical"},
+        {"LTrigger","XBoxLeftTrigger"},
+        {"RTrigger","XBoxRightTrigger"},
+    };
+
+    private static Dictionary<string, string> XBoxAxisButtonBind = new Dictionary<string, string>
+    {
+        {"DPADLeft","XBoxDPadVertical false"},
+        {"DPADRight","XBoxDPadVertical true"},
+        {"DPADUp","XBoxDPadHorizontal false"},
+        {"DPADDown","XBoxDPadHorizontal true"},
+    };
+
+    private static Dictionary<string, string> PSAxisBind = new Dictionary<string, string>
+    {
+        {"LStickHorizontal","Horizontal"},
+        {"LStickVertical","Vertical"},
+        {"RStickHorizontal","PSRightHorizontal"},
+        {"RStickVertical","PSRightVertical"},
+        {"LTrigger","PSLeftTrigger"},
+        {"RTrigger","PSRightTrigger"},
+    };
+
+    private static Dictionary<string, string> PSAxisButtonBind = new Dictionary<string, string>
+    {
+        {"DPADLeft","PSDPadVertical false"},
+        {"DPADRight","PSDPadVertical true"},
+        {"DPADUp","PSDPadHorizontal false"},
+        {"DPADDown","PSDPadHorizontal true"},
+    };
 
 
     public bool isValid()
@@ -33,10 +97,84 @@ public class ActionKeyInputManager : Singleton<ActionKeyInputManager>
         return _isValid;
     }
 
-    public void setPresetData(ActionKeyPresetData[] presetData) 
+    private static void readPSKeyList(string[] keyListString)
+    {
+        for(int i = 0; i < keyListString.Length; ++i)
+        {
+            if(PSAxisBind.ContainsKey(keyListString[i]))
+                ControllerEx.Instance().addXboxBind(keyListString[i],PSAxisBind[keyListString[i]]);
+            else if(PSKeyCodeBind.ContainsKey(keyListString[i]))
+                ControllerEx.Instance().addXboxBind(keyListString[i],PSKeyCodeBind[keyListString[i]]);
+            else if(PSAxisButtonBind.ContainsKey(keyListString[i]))
+            {
+                string[] split = PSAxisButtonBind[keyListString[i]].Split(' ');
+                ControllerEx.Instance().addXboxBind(keyListString[i],split[0],bool.Parse(split[1]));
+            }
+            else
+            {
+                DebugUtil.assert(false,"invalid PS key name: {0}",keyListString[i]);
+                return;
+            }
+        }
+    }
+
+    private static void readXBOXKeyList(string[] keyListString)
+    {
+        for(int i = 0; i < keyListString.Length; ++i)
+        {
+            if(XBoxAxisBind.ContainsKey(keyListString[i]))
+                ControllerEx.Instance().addXboxBind(keyListString[i],XBoxAxisBind[keyListString[i]]);
+            else if(XBoxKeyCodeBind.ContainsKey(keyListString[i]))
+                ControllerEx.Instance().addXboxBind(keyListString[i],XBoxKeyCodeBind[keyListString[i]]);
+            else if(XBoxAxisButtonBind.ContainsKey(keyListString[i]))
+            {
+                string[] split = XBoxAxisButtonBind[keyListString[i]].Split(' ');
+                ControllerEx.Instance().addXboxBind(keyListString[i],split[0],bool.Parse(split[1]));
+            }
+            else
+            {
+                DebugUtil.assert(false,"invalid XBOX key name: {0}",keyListString[i]);
+                return;
+            }
+        }
+    }
+
+    private void readKeyboardKeyList(string[] keyListString)
+    {
+        for(int i = 0; i < keyListString.Length; ++i)
+        {
+            ControllerEx.Instance().addKeyboardBind(keyListString[i],(KeyCode)System.Enum.Parse(typeof(KeyCode), keyListString[i]));
+        }
+    }
+
+    public void setPresetData(ActionKeyPresetDataList presetData) 
     {
         _actionKeyPresetData = presetData;
-        createKeyInputData(_actionKeyPresetData);
+        foreach(var item in _actionKeyPresetData._actionKeyPresetList)
+        {
+            for(int i = 0; i < (int)ControllerEx.ControllerType.Count; ++i)
+            {
+                ControllerEx.ControllerType controllerType = (ControllerEx.ControllerType)i;
+
+                if(item._keys[i] == null)
+                    continue;
+                
+                switch(controllerType)
+                {
+                    case ControllerEx.ControllerType.KeyboardMouse:
+                        readKeyboardKeyList(item._keys[i]);
+                    break;
+                    case ControllerEx.ControllerType.XboxController:
+                        readXBOXKeyList(item._keys[i]);
+                    break;
+                    case ControllerEx.ControllerType.PSController:
+                        readPSKeyList(item._keys[i]);
+                    break;
+                }
+            }
+        }
+
+        createKeyInputData(_actionKeyPresetData._actionKeyPresetList);
 
         _isValid = _actionKeyPresetData != null;
 
@@ -67,7 +205,7 @@ public class ActionKeyInputManager : Singleton<ActionKeyInputManager>
         {
             bool check = false;
 
-            ActionKeyPresetData presetData = _actionKeyPresetData[item._presetDataIndex];
+            ActionKeyPresetData presetData = _actionKeyPresetData._actionKeyPresetList[item._presetDataIndex];
             switch(presetData._multiInputType)
             {
                 case ActionKeyMultiInputType.Single:
@@ -193,7 +331,8 @@ public class ControllerEx : Singleton<ControllerEx>
     {
         KeyboardMouse = 0,
         XboxController,
-        PSController
+        PSController,
+        Count
     };
 
     public enum KeyType

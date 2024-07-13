@@ -1,5 +1,16 @@
 using UnityEngine;
 
+public struct MoveValuePerFrameFromTimeDesc
+{
+    public float prevNormalizedTime;
+    public float currentNormalizedTime;
+
+    public float prevTime;
+    public float currentTime;
+
+    public int loopCount;
+}
+
 [System.Serializable]
 public class MovementGraphPresetData
 {

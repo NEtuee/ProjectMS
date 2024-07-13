@@ -5,10 +5,16 @@ using System.Text;
 using UnityEngine;
 using ICSharpCode.WpfDesign.XamlDom;
 
-public class ProjectileGraphLoader : LoaderBase<ProjectileGraphBaseData[]>
+public class ProjectileGraphLoader : LoaderBase<ProjectileGraphBaseDataList>
 {
     static string _currentFileName = "";
-    public override ProjectileGraphBaseData[] readFromXML(string path)
+
+    public override ProjectileGraphBaseDataList createNewDataInstance()
+    {
+        return new ProjectileGraphBaseDataList();
+    }
+
+    public override ProjectileGraphBaseDataList readFromXML(string path)
     {
         _currentFileName = path;
         PositionXmlDocument xmlDoc = new PositionXmlDocument();
@@ -51,7 +57,10 @@ public class ProjectileGraphLoader : LoaderBase<ProjectileGraphBaseData[]>
             projectileBaseDataList.Add(baseData);
         }
 
-        return projectileBaseDataList.ToArray();
+        ProjectileGraphBaseDataList projectileGraphBaseDataList = new ProjectileGraphBaseDataList();
+        projectileGraphBaseDataList._projectileGraphBaseDataList = projectileBaseDataList.ToArray();
+
+        return projectileGraphBaseDataList;
     }
 
     private static ProjectileGraphBaseData readProjectile(XmlNode node, string filePath)
@@ -233,7 +242,9 @@ public class ProjectileGraphLoader : LoaderBase<ProjectileGraphBaseData[]>
             XmlNodeList childNodes = childNodeList[i].ChildNodes;
             for(int j = 0; j < childNodes.Count; ++j)
             {
+#if UNITY_EDITOR
                 actionFrameEventList.Add(FrameEventLoader.readFromXMLNode(childNodes[j], filePath));
+#endif
             }
 
             actionFrameEventList.Sort((x,y)=>{

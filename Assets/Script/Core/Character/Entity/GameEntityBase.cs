@@ -1529,7 +1529,6 @@ public class GameEntityBase : SequencerObjectBase
         return _currentDefenceType;
     }
     public MoveValuePerFrameFromTimeDesc getMoveValuePerFrameFromTimeDesc(){return _actionGraph.getMoveValuePerFrameFromTimeDesc();}
-    public MovementGraph getCurrentMovementGraph(){return _actionGraph.getCurrentMovementGraph();}
     public MovementGraphPresetData getCurrentMovementGraphPreset() {return _actionGraph.getCurrentMovementGraphPreset();}
     public MovementBase getCurrentMovement() {return _movementControl.getCurrentMovement();}
     public MovementControl getMovementControl(){return _movementControl;}

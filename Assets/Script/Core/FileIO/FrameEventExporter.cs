@@ -6,6 +6,8 @@ using UnityEngine;
 
 public static class FrameEventLoader
 {
+#if UNITY_EDITOR
+
     public static ActionFrameEventBase readFromXMLNode(XmlNode node, string filePath)
     {
         ActionFrameEventBase outFrameEvent = null;
@@ -105,7 +107,6 @@ public static class FrameEventLoader
         
         return outFrameEvent;
     }
-
     public static void readChildFrameEvent(XmlNode node, ref ActionFrameEventBase frameEvent, string filePath)
     {
         if(frameEvent.getFrameEventType() == FrameEventType.FrameEvent_Effect)
@@ -180,4 +181,6 @@ public static class FrameEventLoader
 
         return true;
     }
+#endif
+
 }

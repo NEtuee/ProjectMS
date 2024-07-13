@@ -1,11 +1,10 @@
+#define INCLUDE_FULLPATH
+
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-using YamlDotNet.Core;
 
 [System.Serializable]
-public class AIGraphBaseData
+public class AIGraphBaseData : SerializableDataType
 {
     public string                               _name;
     public AIGraphNodeData[]                    _aiGraphNodeData = null;
@@ -28,8 +27,8 @@ public class AIGraphBaseData
 // #if UNITY_EDITOR
     public string _fullPath = "";
 // #endif
-
-    public void serialize(ref BinaryWriter binaryWriter)
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
     {
         binaryWriter.Write(_name);
         binaryWriter.Write(_defaultAIIndex);
@@ -83,9 +82,13 @@ public class AIGraphBaseData
                 item.Value.serialize(ref binaryWriter);
             }
         }
-    }
+#if INCLUDE_FULLPATH
+        binaryWriter.Write(_fullPath);
+#endif
 
-    public void deserialize(ref BinaryReader binaryReader)
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
     {
         _name = binaryReader.ReadString();
         _defaultAIIndex = binaryReader.ReadInt32();
@@ -164,6 +167,10 @@ public class AIGraphBaseData
 
             _customAIEvents.Add(key, childEventItem);
         }
+
+#if INCLUDE_FULLPATH
+        _fullPath = binaryReader.ReadString();
+#endif
     }
 }
 
@@ -193,7 +200,7 @@ public class AIGraphNodeData
 // #if UNITY_EDITOR
     public int _lineNumber = 0;
 // #endif
-
+#if UNITY_EDITOR
     public void serialize(ref BinaryWriter binaryWriter)
     {
         binaryWriter.Write(_nodeName);
@@ -223,8 +230,12 @@ public class AIGraphNodeData
         binaryWriter.Write(_branchIndexStart);
         binaryWriter.Write(_branchCount);
         binaryWriter.Write(_coolDownTime);
-    }
 
+#if INCLUDE_FULLPATH
+        binaryWriter.Write(_lineNumber);
+#endif
+    }
+#endif
     public void deserialize(ref BinaryReader binaryReader)
     {
         _nodeName = binaryReader.ReadString();
@@ -253,6 +264,10 @@ public class AIGraphNodeData
         _branchIndexStart = binaryReader.ReadInt32();
         _branchCount = binaryReader.ReadInt32();
         _coolDownTime = binaryReader.ReadSingle();
+
+#if INCLUDE_FULLPATH
+        _lineNumber = binaryReader.ReadInt32();
+#endif
     }
 }
 
@@ -261,7 +276,7 @@ public class AIGraphNodeData
 
 
 [System.Serializable]
-public class AIPackageBaseData
+public class AIPackageBaseData : SerializableDataType
 {
     public string                               _name;
     public AIPackageNodeData[]                  _aiPackageNodeData = null;
@@ -282,8 +297,8 @@ public class AIPackageBaseData
 // #if UNITY_EDITOR
     public string _fullPath = "";
 // #endif
-
-    public void serialize(ref BinaryWriter binaryWriter)
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
     {
         binaryWriter.Write(_name);
         binaryWriter.Write(_aiNodeCount);
@@ -345,8 +360,8 @@ public class AIPackageBaseData
 
         binaryWriter.Write(_defaultAIIndex);
     }
-
-    public void deserialize(ref BinaryReader binaryReader)
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
     {
         _name = binaryReader.ReadString();
         _aiNodeCount = binaryReader.ReadInt32();
@@ -450,7 +465,7 @@ public class AIPackageNodeData
 // #if UNITY_EDITOR
     public int _lineNumber = 0;
 // #endif
-
+#if UNITY_EDITOR
     public void serialize(ref BinaryWriter binaryWriter)
     {
         binaryWriter.Write(_nodeName);
@@ -486,8 +501,12 @@ public class AIPackageNodeData
 
         binaryWriter.Write(_branchIndexStart);
         binaryWriter.Write(_branchCount);
-    }
 
+#if INCLUDE_FULLPATH
+        binaryWriter.Write(_lineNumber);
+#endif
+    }
+#endif
     public void deserialize(ref BinaryReader binaryReader)
     {
         _nodeName = binaryReader.ReadString();
@@ -523,6 +542,10 @@ public class AIPackageNodeData
 
         _branchIndexStart = binaryReader.ReadInt32();
         _branchCount = binaryReader.ReadInt32();
+
+#if INCLUDE_FULLPATH
+        _lineNumber = binaryReader.ReadInt32();
+#endif
     }
 }
 
@@ -531,13 +554,13 @@ public class AIGraphCustomValue
 {
     public string _name = "";
     public float _customValue = 0f;
-
+#if UNITY_EDITOR
     public void serialize(ref BinaryWriter binaryWriter)
     {
         binaryWriter.Write(_name);
         binaryWriter.Write(_customValue);
     }
-
+#endif
     public void deserialize(ref BinaryReader binaryReader)
     {
         _name = binaryReader.ReadString();

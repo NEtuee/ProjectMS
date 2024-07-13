@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using System.Xml;
 using System.Collections.Generic;
+using System.IO;
 using FMODUnity;
 using YamlDotNet.Core;
 
@@ -44,7 +45,7 @@ public enum SequencerGraphEventType
     LetterBoxHide,
     TalkBalloon,
     CameraTrack,
-    CameraTrackFence,
+    IsTrackEnd,
     TaskFence,
     SetDirection,
     BlockPointExit,
@@ -67,13 +68,147 @@ public enum SequencerGraphEventType
     Count,
 }
 
-public abstract class SequencerGraphEventBase
+public abstract class SequencerGraphEventBase : SerializableDataType
 {
     public abstract SequencerGraphEventType getSequencerGraphEventType();
     public abstract void Initialize(SequencerGraphProcessor processor);
     public abstract bool Execute(SequencerGraphProcessor processor, float deltaTime);
     public virtual void Exit(SequencerGraphProcessor processor) {}
     public abstract void loadXml(XmlNode node);
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        BinaryHelper.writeEnum<SequencerGraphEventType>(ref binaryWriter, getSequencerGraphEventType());
+    }
+#endif
+    public static SequencerGraphEventBase buildSequencerGraphEvent(ref BinaryReader binaryReader)
+    {
+        SequencerGraphEventType eventType = BinaryHelper.readEnum<SequencerGraphEventType>(ref binaryReader);
+        SequencerGraphEventBase sequencerGraphEvent = getSequencerGraphEventBase(eventType);
+
+        sequencerGraphEvent.deserialize(ref binaryReader);
+
+        return sequencerGraphEvent;
+    }
+
+    public static SequencerGraphEventBase getSequencerGraphEventBase(SequencerGraphEventType eventType)
+    {
+        SequencerGraphEventBase spawnEvent = null;
+        if(eventType == SequencerGraphEventType.SpawnCharacter)
+            spawnEvent = new SequencerGraphEvent_SpawnCharacter();
+        else if(eventType == SequencerGraphEventType.WaitSecond)
+            spawnEvent = new SequencerGraphEvent_WaitSecond(); 
+        else if(eventType == SequencerGraphEventType.SetCameraTarget)
+            spawnEvent = new SequencerGraphEvent_SetCameraTarget();
+        else if(eventType == SequencerGraphEventType.SetCameraUVTarget)
+            spawnEvent = new SequencerGraphEvent_SetCameraUVTarget();
+        else if(eventType == SequencerGraphEventType.SetCameraPosition)
+            spawnEvent = new SequencerGraphEvent_SetCameraPosition();
+        else if(eventType == SequencerGraphEventType.SetAudioListner)
+            spawnEvent = new SequencerGraphEvent_SetAudioListner();
+        else if(eventType == SequencerGraphEventType.SetCrossHair)
+            spawnEvent = new SequencerGraphEvent_SetCrossHair();
+        else if(eventType == SequencerGraphEventType.SetHPSphere)
+            spawnEvent = new SequencerGraphEvent_SetHPSphere();
+        else if(eventType == SequencerGraphEventType.WaitTargetDead)
+            spawnEvent = new SequencerGraphEvent_WaitTargetDead();
+        else if(eventType == SequencerGraphEventType.TeleportTargetTo)
+            spawnEvent = new SequencerGraphEvent_TeleportTargetTo();
+        else if(eventType == SequencerGraphEventType.ApplyPostProcessProfile)
+            spawnEvent = new SequencerGraphEvent_ApplyPostProcessProfile();
+        else if(eventType == SequencerGraphEventType.SaveEventExecuteIndex)
+            spawnEvent = new SequencerGraphEvent_SaveEventExecuteIndex();
+        else if(eventType == SequencerGraphEventType.CallAIEvent)
+            spawnEvent = new SequencerGraphEvent_CallAIEvent();
+        else if(eventType == SequencerGraphEventType.WaitSignal)
+            spawnEvent = new SequencerGraphEvent_WaitSignal();
+        else if(eventType == SequencerGraphEventType.SetCameraZoom)
+            spawnEvent = new SequencerGraphEvent_SetCameraZoom();
+        else if(eventType == SequencerGraphEventType.FadeOut)
+            spawnEvent = new SequencerGraphEvent_FadeIn();
+        else if(eventType == SequencerGraphEventType.FadeIn)
+            spawnEvent = new SequencerGraphEvent_FadeOut();
+        else if(eventType == SequencerGraphEventType.Fade)
+            spawnEvent = new SequencerGraphEvent_Fade();
+        else if(eventType == SequencerGraphEventType.ForceQuit)
+            spawnEvent = new SequencerGraphEvent_ForceQuit();
+        else if(eventType == SequencerGraphEventType.BlockInput)
+            spawnEvent = new SequencerGraphEvent_BlockInput();
+        else if(eventType == SequencerGraphEventType.BlockAI)
+            spawnEvent = new SequencerGraphEvent_BlockAI();
+        else if(eventType == SequencerGraphEventType.SetAction)
+            spawnEvent = new SequencerGraphEvent_SetAction();
+        else if(eventType == SequencerGraphEventType.PlayAnimation)
+            spawnEvent = new SequencerGraphEvent_PlayAnimation();
+        else if(eventType == SequencerGraphEventType.AIMove)
+            spawnEvent = new SequencerGraphEvent_AIMove();
+        else if(eventType == SequencerGraphEventType.QTEFence)
+            spawnEvent = new SequencerGraphEvent_QTEFence();
+        else if(eventType == SequencerGraphEventType.DeadFence)
+            spawnEvent = new SequencerGraphEvent_DeadFence();
+        else if(eventType == SequencerGraphEventType.SetHideUI)
+            spawnEvent = new SequencerGraphEvent_SetHideUI();
+        else if(eventType == SequencerGraphEventType.SetTimeScale)
+            spawnEvent = new SequencerGraphEvent_SetTimeScale();
+        else if(eventType == SequencerGraphEventType.NextStage)
+            spawnEvent = new SequencerGraphEvent_NextStage();
+        else if(eventType == SequencerGraphEventType.ShakeEffect)
+            spawnEvent = new SequencerGraphEvent_ShakeEffect();
+        else if(eventType == SequencerGraphEventType.ZoomEffect)
+            spawnEvent = new SequencerGraphEvent_ZoomEffect();
+        else if(eventType == SequencerGraphEventType.ToastMessage)
+            spawnEvent = new SequencerGraphEvent_ToastMessage();
+        else if(eventType == SequencerGraphEventType.Task)
+            spawnEvent = new SequencerGraphEvent_Task();
+        else if(eventType == SequencerGraphEventType.LetterBoxShow)
+            spawnEvent = new SequencerGraphEvent_LetterBoxShow();
+        else if(eventType == SequencerGraphEventType.LetterBoxHide)
+            spawnEvent = new SequencerGraphEvent_LetterBoxHide();
+        else if(eventType == SequencerGraphEventType.TalkBalloon)
+            spawnEvent = new SequencerGraphEvent_TalkBalloon();
+        else if(eventType == SequencerGraphEventType.CameraTrack)
+            spawnEvent = new SequencerGraphEvent_CameraTrack();
+        else if(eventType == SequencerGraphEventType.TaskFence)
+            spawnEvent = new SequencerGraphEvent_TaskFence();
+        else if(eventType == SequencerGraphEventType.SetDirection)
+            spawnEvent = new SequencerGraphEvent_SetDirection();
+        else if(eventType == SequencerGraphEventType.BlockPointExit)
+            spawnEvent = new SequencerGraphEvent_BlockPointExit();
+        else if(eventType == SequencerGraphEventType.IsTrackEnd)
+            spawnEvent = new SequencerGraphEvent_CameraTrackFence();
+        else if(eventType == SequencerGraphEventType.EffectPreset)
+            spawnEvent = new SequencerGraphEvent_EffectPreset();
+        else if(eventType == SequencerGraphEventType.UnlockStageLimit)
+            spawnEvent = new SequencerGraphEvent_UnlockStageLimit();
+        else if(eventType == SequencerGraphEventType.ActiveBossHp)
+            spawnEvent = new SequencerGraphEvent_ActiveBossHp();
+        else if(eventType == SequencerGraphEventType.DisableBossHp)
+            spawnEvent = new SequencerGraphEvent_DisableBossHp();
+        else if(eventType == SequencerGraphEventType.SetBackgroundAnimationTrigger)
+            spawnEvent = new SequencerGraphEvent_SetBackgroundAnimationTrigger();
+        else if(eventType == SequencerGraphEventType.SetHideCharacter)
+            spawnEvent = new SequencerGraphEvent_SetHideCharacter();
+        else if(eventType == SequencerGraphEventType.ApplyBuff)
+            spawnEvent = new SequencerGraphEvent_ApplyBuff();
+        else if(eventType == SequencerGraphEventType.SpawnPrefab)
+            spawnEvent = new SequencerGraphEvent_SpawnPrefab();
+        else if(eventType == SequencerGraphEventType.DeletePrefab)
+            spawnEvent = new SequencerGraphEvent_DeletePrefab();
+        else if(eventType == SequencerGraphEventType.AudioPlay)
+            spawnEvent = new SequencerGraphEvent_AudioPlay();
+        else if(eventType == SequencerGraphEventType.StopSwitch)
+            spawnEvent = new SequencerGraphEvent_StopSwitch();
+        else if(eventType == SequencerGraphEventType.AudioParameter)
+            spawnEvent = new SequencerGraphEvent_AudioParameter();
+        else if(eventType == SequencerGraphEventType.SetCameraBoundLock)
+            spawnEvent = new SequencerGraphEvent_SetCameraBoundLock();
+        else if(eventType == SequencerGraphEventType.KillEntity)
+            spawnEvent = new SequencerGraphEvent_KillEntity();
+        else if(eventType == SequencerGraphEventType.KillAllStageEntity)
+            spawnEvent = new SequencerGraphEvent_KillAllStageEntity();
+
+        return spawnEvent;
+    }
 }
 
 public class SequencerGraphEvent_TaskFence : SequencerGraphEventBase
@@ -103,6 +238,17 @@ public class SequencerGraphEvent_TaskFence : SequencerGraphEventBase
             if(attrName == "TaskName")
                 _taskName = attrValue;
         }
+    }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_taskName);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _taskName = binaryReader.ReadString();
     }
 }
 
@@ -134,11 +280,22 @@ public class SequencerGraphEvent_WaitSignal : SequencerGraphEventBase
                 _targetSignal = attrValue;
         }
     }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_targetSignal);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _targetSignal = binaryReader.ReadString();
+    }
 }
 
 public class SequencerGraphEvent_CameraTrackFence : SequencerGraphEventBase
 {
-    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.CameraTrackFence;
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.IsTrackEnd;
 
 
     public override void Initialize(SequencerGraphProcessor processor)
@@ -152,6 +309,16 @@ public class SequencerGraphEvent_CameraTrackFence : SequencerGraphEventBase
 
     public override void loadXml(XmlNode node)
     {
+    }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        
     }
 }
 
@@ -186,6 +353,17 @@ public class SequencerGraphEvent_CameraTrack : SequencerGraphEventBase
 
         if(_trackName == "")
             DebugUtil.assert(false,"Track Name이 존재하지 않습니다. 이거 필수임");
+    }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_trackName);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _trackName = binaryReader.ReadString();
     }
 }
 
@@ -250,6 +428,21 @@ public class SequencerGraphEvent_SetDirection : SequencerGraphEventBase
             else if(attrName == "UniqueGroupKey")
                 _uniqueGroupKey = attrValue;
         }
+    }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        BinaryHelper.writeEnum<DirectionType>(ref binaryWriter,_directionType);
+        binaryWriter.Write(_uniqueKey);
+        binaryWriter.Write(_uniqueGroupKey);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _directionType = BinaryHelper.readEnum<DirectionType>(ref binaryReader);
+        _uniqueKey = binaryReader.ReadString();
+        _uniqueGroupKey = binaryReader.ReadString();
     }
 }
 
@@ -366,6 +559,23 @@ public class SequencerGraphEvent_TalkBalloon : SequencerGraphEventBase
             DebugUtil.assert(false, "Dialog Text Key가 존재하지 않습니다. 이거 필수임");
         }
     }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_key);
+        binaryWriter.Write(_uniqueKey);
+        binaryWriter.Write(_uniqueGroupKey);
+        binaryWriter.Write(_wait);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _key = binaryReader.ReadString();
+        _uniqueKey = binaryReader.ReadString();
+        _uniqueGroupKey = binaryReader.ReadString();
+        _wait = binaryReader.ReadBoolean();
+    }
 }
 
 public class SequencerGraphEvent_LetterBoxHide : SequencerGraphEventBase
@@ -384,6 +594,16 @@ public class SequencerGraphEvent_LetterBoxHide : SequencerGraphEventBase
 
     public override void loadXml(XmlNode node)
     {
+    }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        
     }
 }
 
@@ -404,6 +624,16 @@ public class SequencerGraphEvent_LetterBoxShow : SequencerGraphEventBase
     public override void loadXml(XmlNode node)
     {
     }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        
+    }
 }
 
 public class SequencerGraphEvent_Task : SequencerGraphEventBase
@@ -411,7 +641,7 @@ public class SequencerGraphEvent_Task : SequencerGraphEventBase
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.Task;
 
     public SequencerGraphEventBase[] _eventList = null;
-    public SequencerGraphProcessor.TaskProcessType taskProcessType;
+    public SequencerGraphProcessor.TaskProcessType taskProcessType = SequencerGraphProcessor.TaskProcessType.StepByStep;
     public string _taskName = "";
 
     public override void Initialize(SequencerGraphProcessor processor)
@@ -456,6 +686,26 @@ public class SequencerGraphEvent_Task : SequencerGraphEventBase
         }
         _eventList = eventList.ToArray();
     }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        BinaryHelper.writeArray<SequencerGraphEventBase>(ref binaryWriter, _eventList);
+        BinaryHelper.writeEnum<SequencerGraphProcessor.TaskProcessType>(ref binaryWriter, taskProcessType);
+        binaryWriter.Write(_taskName);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        int count = binaryReader.ReadInt32();
+        _eventList = count == 0 ? null : new SequencerGraphEventBase[count];
+        for(int i = 0; i < count; ++i)
+        {
+            _eventList[i] = SequencerGraphEventBase.buildSequencerGraphEvent(ref binaryReader);
+        }
+        taskProcessType = BinaryHelper.readEnum<SequencerGraphProcessor.TaskProcessType>(ref binaryReader);
+        _taskName = binaryReader.ReadString();
+    }
 }
 
 
@@ -492,6 +742,21 @@ public class SequencerGraphEvent_ToastMessage : SequencerGraphEventBase
             
         }
     }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_text);
+        binaryWriter.Write(_time);
+        BinaryHelper.writeColor(ref binaryWriter, _color);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _text = binaryReader.ReadString();
+        _time = binaryReader.ReadSingle();
+        _color = BinaryHelper.readColor(ref binaryReader);
+    }
 }
 
 public class SequencerGraphEvent_NextStage : SequencerGraphEventBase
@@ -518,6 +783,17 @@ public class SequencerGraphEvent_NextStage : SequencerGraphEventBase
             if(attributes[i].Name == "Path")
                 _stageDataPath = attributes[i].Value;
         }
+    }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_stageDataPath);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _stageDataPath = binaryReader.ReadString();
     }
 }
 
@@ -558,6 +834,21 @@ public class SequencerGraphEvent_SetTimeScale : SequencerGraphEventBase
                 _timeScaleBlendTime = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
         }
     }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_targetTimeScale);
+        binaryWriter.Write(_timeScalingTime);
+        binaryWriter.Write(_timeScaleBlendTime);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _targetTimeScale = binaryReader.ReadSingle();
+        _timeScalingTime = binaryReader.ReadSingle();
+        _timeScaleBlendTime = binaryReader.ReadSingle();
+    }
 }
 
 public class SequencerGraphEvent_ShakeEffect : SequencerGraphEventBase
@@ -591,6 +882,21 @@ public class SequencerGraphEvent_ShakeEffect : SequencerGraphEventBase
                 _shakeSpeed = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
         }
     }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_shakeTime);
+        binaryWriter.Write(_shakeScale);
+        binaryWriter.Write(_shakeSpeed);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _shakeTime = binaryReader.ReadSingle();
+        _shakeScale = binaryReader.ReadSingle();
+        _shakeSpeed = binaryReader.ReadSingle();
+    }
 }
 
 
@@ -598,7 +904,7 @@ public class SequencerGraphEvent_SetHideUI : SequencerGraphEventBase
 {
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SetHideUI;
 
-    public bool _value;
+    public bool _value = false;
 
     public override void Initialize(SequencerGraphProcessor processor)
     {
@@ -627,6 +933,17 @@ public class SequencerGraphEvent_SetHideUI : SequencerGraphEventBase
             if(attrName == "Hide")
                 _value = bool.Parse(attrValue);
         }
+    }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_value);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _value = binaryReader.ReadBoolean();
     }
 }
 
@@ -657,6 +974,17 @@ public class SequencerGraphEvent_QTEFence : SequencerGraphEventBase
             if(attrName == "KeyName")
                 _keyName = attrValue;
         }
+    }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_keyName);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _keyName = binaryReader.ReadString();
     }
 }
 
@@ -704,6 +1032,19 @@ public class SequencerGraphEvent_DeadFence : SequencerGraphEventBase
             else if(attrName == "UniqueGroupKey")
                 _uniqueGroupKey = attrValue;
         }
+    }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_uniqueKey);
+        binaryWriter.Write(_uniqueGroupKey);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _uniqueKey = binaryReader.ReadString();
+        _uniqueGroupKey = binaryReader.ReadString();
     }
 }
 
@@ -796,6 +1137,25 @@ public class SequencerGraphEvent_CallAIEvent : SequencerGraphEventBase
             }
         }
     }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_customAiEventName);
+        binaryWriter.Write(_uniqueKey);
+        BinaryHelper.writeEnum<SequencerCallAIEventTargetType>(ref binaryWriter,_eventTargetType);
+        binaryWriter.Write(_range);
+        BinaryHelper.writeEnum<AllyTargetType>(ref binaryWriter,_allyTarget);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _customAiEventName = binaryReader.ReadString();
+        _uniqueKey = binaryReader.ReadString();
+        _eventTargetType = BinaryHelper.readEnum<SequencerCallAIEventTargetType>(ref binaryReader);
+        _range = binaryReader.ReadSingle();
+        _allyTarget = BinaryHelper.readEnum<AllyTargetType>(ref binaryReader);
+    }
 }
 
 public class SequencerGraphEvent_FadeIn : SequencerGraphEventBase
@@ -823,6 +1183,17 @@ public class SequencerGraphEvent_FadeIn : SequencerGraphEventBase
                 _lambda = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
         }
     }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_lambda);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _lambda = binaryReader.ReadSingle();
+    }
 }
 
 public class SequencerGraphEvent_AIMove : SequencerGraphEventBase
@@ -836,7 +1207,7 @@ public class SequencerGraphEvent_AIMove : SequencerGraphEventBase
 
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.AIMove;
 
-    private string _uniqueKey;
+    private string _uniqueKey = "";
 
     private Vector3 _startPosition;
     private Vector3 _endPosition;
@@ -1108,6 +1479,27 @@ public class SequencerGraphEvent_AIMove : SequencerGraphEventBase
 
         DebugUtil.assert(_loopAction != "", "Loop Action은 필수입니다. [Line: {0}]", XMLScriptConverter.getLineNumberFromXMLNode(node));
     }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_uniqueKey);
+        binaryWriter.Write(_startAction);
+        binaryWriter.Write(_loopAction);
+        binaryWriter.Write(_endAction);
+        BinaryHelper.writeVector3(ref binaryWriter, _endPosition);
+        binaryWriter.Write(_markerName);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _uniqueKey = binaryReader.ReadString();
+        _startAction = binaryReader.ReadString();
+        _loopAction = binaryReader.ReadString();
+        _endAction = binaryReader.ReadString();
+        _endPosition = BinaryHelper.readVector3(ref binaryReader);
+        _markerName = binaryReader.ReadString();
+    }
 }
 
 public class SequencerGraphEvent_PlayAnimation : SequencerGraphEventBase
@@ -1152,6 +1544,19 @@ public class SequencerGraphEvent_PlayAnimation : SequencerGraphEventBase
                 _animationPath = attrValue;
         }
     }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_uniqueKey);
+        binaryWriter.Write(_animationPath);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _uniqueKey = binaryReader.ReadString();
+        _animationPath = binaryReader.ReadString();
+    }
 }
 
 public class SequencerGraphEvent_UnlockStageLimit : SequencerGraphEventBase
@@ -1183,13 +1588,24 @@ public class SequencerGraphEvent_UnlockStageLimit : SequencerGraphEventBase
                 _enable = bool.Parse(attrValue);
         }
     }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_enable);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _enable = binaryReader.ReadBoolean();
+    }
 }
 
 public class SequencerGraphEvent_EffectPreset : SequencerGraphEventBase
 {
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.EffectPreset;
 
-    private string _effectPresetName;
+    private string _effectPresetName = "";
     private string _uniqueKey = "";
     private string _markerName = "";
     private bool _isSwitch = false;
@@ -1252,6 +1668,23 @@ public class SequencerGraphEvent_EffectPreset : SequencerGraphEventBase
             else if(attrName == "Switch")
                 _isSwitch = bool.Parse(attrValue);
         }
+    }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_effectPresetName);
+        binaryWriter.Write(_uniqueKey);
+        binaryWriter.Write(_markerName);
+        binaryWriter.Write(_isSwitch);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _effectPresetName = binaryReader.ReadString();
+        _uniqueKey = binaryReader.ReadString();
+        _markerName = binaryReader.ReadString();
+        _isSwitch = binaryReader.ReadBoolean();
     }
 }
 
@@ -1316,6 +1749,21 @@ public class SequencerGraphEvent_SetAction : SequencerGraphEventBase
                 _actionName = attrValue;
         }
     }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_uniqueKey);
+        binaryWriter.Write(_uniqueGroupKey);
+        binaryWriter.Write(_actionName);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _uniqueKey = binaryReader.ReadString();
+        _uniqueGroupKey = binaryReader.ReadString();
+        _actionName = binaryReader.ReadString();
+    }
 }
 
 public class SequencerGraphEvent_BlockPointExit : SequencerGraphEventBase
@@ -1346,6 +1794,17 @@ public class SequencerGraphEvent_BlockPointExit : SequencerGraphEventBase
             if(attributes[i].Name == "Enable")
                 _value = bool.Parse(attrValue);
         }
+    }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_value);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _value = binaryReader.ReadBoolean();
     }
 }
 
@@ -1405,6 +1864,21 @@ public class SequencerGraphEvent_BlockAI : SequencerGraphEventBase
                 _uniqueGroupKey = attributes[i].Value;
         }
     }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_value);
+        binaryWriter.Write(_uniqueKey);
+        binaryWriter.Write(_uniqueGroupKey);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _value = binaryReader.ReadBoolean();
+        _uniqueKey = binaryReader.ReadString();
+        _uniqueGroupKey = binaryReader.ReadString();
+    }
 }
 
 public class SequencerGraphEvent_BlockInput : SequencerGraphEventBase
@@ -1439,6 +1913,17 @@ public class SequencerGraphEvent_BlockInput : SequencerGraphEventBase
                 _value = bool.Parse(attributes[i].Value);
         }
     }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_value);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _value = binaryReader.ReadBoolean();
+    }
 }
 
 public class SequencerGraphEvent_ForceQuit : SequencerGraphEventBase
@@ -1457,6 +1942,16 @@ public class SequencerGraphEvent_ForceQuit : SequencerGraphEventBase
     public override void loadXml(XmlNode node)
     {
 
+    }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        
     }
 }
 
@@ -1477,6 +1972,16 @@ public class SequencerGraphEvent_Fade : SequencerGraphEventBase
     public override void loadXml(XmlNode node)
     {
 
+    }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        
     }
 }
 
@@ -1505,6 +2010,17 @@ public class SequencerGraphEvent_FadeOut : SequencerGraphEventBase
                 _lambda = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
         }
     }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_lambda);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _lambda = binaryReader.ReadSingle();
+    }
 }
 
 public class SequencerGraphEvent_ZoomEffect : SequencerGraphEventBase
@@ -1531,6 +2047,17 @@ public class SequencerGraphEvent_ZoomEffect : SequencerGraphEventBase
             if(attributes[i].Name == "Factor")
                 _zoom.loadFromXML(attributes[i].Value);
         }
+    }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        _zoom.serialize(ref binaryWriter);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _zoom.deserialize(ref binaryReader);
     }
 }
 
@@ -1573,22 +2100,39 @@ public class SequencerGraphEvent_SetCameraZoom : SequencerGraphEventBase
                 _force = bool.Parse(attributes[i].Value);
         }
     }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        _zoom.serialize(ref binaryWriter);
+        _zoomSpeed.serialize(ref binaryWriter);
+        binaryWriter.Write(_force);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _zoom.deserialize(ref binaryReader);
+        _zoomSpeed.deserialize(ref binaryReader);
+        _force = binaryReader.ReadBoolean();
+    }
 }
 
 public class SequencerGraphEvent_SpawnCharacter : SequencerGraphEventBase
 {
-    private string                      _characterKey;
+    private string                      _characterKey = "";
 
-    private CharacterInfoData           _characterInfoData;
+    private CharacterInfoData           _characterInfoData = null;
     private SpawnCharacterOptionDesc    _spawnDesc = SpawnCharacterOptionDesc.defaultValue;
 
     private string                      _uniqueEntityKey = "";
     private string                      _markerName = "";
+    private string                      _allyInfoKey = "";
 
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SpawnCharacter;
     
     public override void Initialize(SequencerGraphProcessor processor)
     {
+        _spawnDesc._allyInfo = AllyInfoManager.Instance().GetAllyInfoData(_allyInfoKey);
         _characterInfoData = CharacterInfoManager.Instance().GetCharacterInfoData(_characterKey);
         if(_markerName != "")
         {
@@ -1635,7 +2179,7 @@ public class SequencerGraphEvent_SpawnCharacter : SequencerGraphEventBase
             }
             else if(attrName == "AllyInfo")
             {
-                _spawnDesc._allyInfo = AllyInfoManager.Instance().GetAllyInfoData(attrValue);
+                _allyInfoKey = attrValue;
             }
             else if(attrName == "UniqueKey")
             {
@@ -1643,6 +2187,26 @@ public class SequencerGraphEvent_SpawnCharacter : SequencerGraphEventBase
             }
 
         }
+    }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_characterKey);
+        BinaryHelper.writeVector3(ref binaryWriter, _spawnDesc._position);
+        binaryWriter.Write(_markerName);
+        binaryWriter.Write(_allyInfoKey);
+        binaryWriter.Write(_uniqueEntityKey);
+
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _characterKey = binaryReader.ReadString();
+        _spawnDesc._position = BinaryHelper.readVector3(ref binaryReader);
+        _markerName = binaryReader.ReadString();
+        _allyInfoKey = binaryReader.ReadString();
+        _uniqueEntityKey = binaryReader.ReadString();
     }
 }
 
@@ -1676,6 +2240,17 @@ public class SequencerGraphEvent_WaitSecond : SequencerGraphEventBase
             if(attrName == "Time")
                 _waitTime = XMLScriptConverter.valueToFloatExtend(attrValue);
         }
+    }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_waitTime);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _waitTime = binaryReader.ReadSingle();
     }
 }
 
@@ -1716,6 +2291,17 @@ public class SequencerGraphEvent_SetHPSphere : SequencerGraphEventBase
             if(attrName == "UniqueKey")
                 _uniqueKey = attrValue;
         }
+    }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_uniqueKey);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _uniqueKey = binaryReader.ReadString();
     }
 }
 
@@ -1758,6 +2344,17 @@ public class SequencerGraphEvent_SetCrossHair : SequencerGraphEventBase
                 _uniqueKey = attrValue;
         }
     }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_uniqueKey);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _uniqueKey = binaryReader.ReadString();
+    }
 }
 
 public class SequencerGraphEvent_ActiveBossHp : SequencerGraphEventBase
@@ -1797,6 +2394,17 @@ public class SequencerGraphEvent_ActiveBossHp : SequencerGraphEventBase
                 _uniqueKey = attrValue;
         }
     }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_uniqueKey);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _uniqueKey = binaryReader.ReadString();
+    }
 }
 
 public class SequencerGraphEvent_StopSwitch : SequencerGraphEventBase
@@ -1810,8 +2418,8 @@ public class SequencerGraphEvent_StopSwitch : SequencerGraphEventBase
         Effect
     }
 
-    public int _audioKey;
-    public string _effectKey;
+    public int _audioKey = 0;
+    public string _effectKey = "";
     public string _uniqueKey = "Player";
     public StopSwitchType _stopSwitchType = StopSwitchType.None;
 
@@ -1868,6 +2476,23 @@ public class SequencerGraphEvent_StopSwitch : SequencerGraphEventBase
             }
         }
     }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_audioKey);
+        binaryWriter.Write(_effectKey);
+        binaryWriter.Write(_uniqueKey);
+        BinaryHelper.writeEnum<StopSwitchType>(ref binaryWriter,_stopSwitchType);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _audioKey = binaryReader.ReadInt32();
+        _effectKey = binaryReader.ReadString();
+        _uniqueKey = binaryReader.ReadString();
+        _stopSwitchType = BinaryHelper.readEnum<StopSwitchType>(ref binaryReader);
+    }
 }
 
 public class SequencerGraphEvent_AudioParameter : SequencerGraphEventBase
@@ -1883,7 +2508,7 @@ public class SequencerGraphEvent_AudioParameter : SequencerGraphEventBase
 
     ParameterType _parameterType = ParameterType.Global;
 
-    int _key;
+    int _key = 0;
 
     public int[] _parameterID = null;
     public float[] _parameterValue = null;
@@ -1959,6 +2584,23 @@ public class SequencerGraphEvent_AudioParameter : SequencerGraphEventBase
                 _key = int.Parse(attrValue);
             }
         }
+    }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        BinaryHelper.writeEnum<ParameterType>(ref binaryWriter,_parameterType);
+        binaryWriter.Write(_key);
+        BinaryHelper.writeArray(ref binaryWriter, _parameterID);
+        BinaryHelper.writeArray(ref binaryWriter, _parameterValue);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _parameterType = BinaryHelper.readEnum<ParameterType>(ref binaryReader);
+        _key = binaryReader.ReadInt32();
+        _parameterID = BinaryHelper.readArrayInt(ref binaryReader);
+        _parameterValue = BinaryHelper.readArrayFloat(ref binaryReader);
     }
 }
 
@@ -2037,6 +2679,24 @@ public class SequencerGraphEvent_AudioPlay : SequencerGraphEventBase
             }
         }
     }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+
+        binaryWriter.Write(_audioID);
+        binaryWriter.Write(_isSwitch);
+        BinaryHelper.writeArray(ref binaryWriter, _parameterID);
+        BinaryHelper.writeArray(ref binaryWriter, _parameterValue);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _audioID = binaryReader.ReadInt32();
+        _isSwitch = binaryReader.ReadBoolean();
+        _parameterID = BinaryHelper.readArrayInt(ref binaryReader);
+        _parameterValue = BinaryHelper.readArrayFloat(ref binaryReader);
+    }
 }
 
 public class SequencerGraphEvent_DeletePrefab : SequencerGraphEventBase
@@ -2068,6 +2728,17 @@ public class SequencerGraphEvent_DeletePrefab : SequencerGraphEventBase
                 _key = attrValue;
         }
     }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_key);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _key = binaryReader.ReadString();
+    }
 }
 
 public class SequencerGraphEvent_SpawnPrefab : SequencerGraphEventBase
@@ -2076,12 +2747,16 @@ public class SequencerGraphEvent_SpawnPrefab : SequencerGraphEventBase
 
     public string _uniqueKey = "";
     public string _key = "";
-    public float _lifeTime;
+    public float _lifeTime = 0f;
 
-    private GameObject _prefab;
+    public string _prefabPath = "";
+
+    private GameObject _prefab = null;
 
     public override void Initialize(SequencerGraphProcessor processor)
     {
+        if(_prefabPath != "")
+            _prefab = ResourceContainerEx.Instance().GetPrefab(_prefabPath);
     }
 
     public override bool Execute(SequencerGraphProcessor processor, float deltaTime)
@@ -2126,7 +2801,9 @@ public class SequencerGraphEvent_SpawnPrefab : SequencerGraphEventBase
             string attrValue = attributes[i].Value;
 
             if(attrName == "Path")
-                _prefab = ResourceContainerEx.Instance().GetPrefab(attrValue);
+            {
+                _prefabPath = attrValue;
+            }
             else if(attrName == "LifeTime")
                 _lifeTime = float.Parse(attrValue);
             else if(attrName == "UniqueKey")
@@ -2134,6 +2811,25 @@ public class SequencerGraphEvent_SpawnPrefab : SequencerGraphEventBase
             else if(attrName == "Key")
                 _key = attrValue;
         }
+    }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+
+        binaryWriter.Write(_uniqueKey);
+        binaryWriter.Write(_key);
+        binaryWriter.Write(_lifeTime);
+        binaryWriter.Write(_prefabPath);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _uniqueKey = binaryReader.ReadString();
+        _key = binaryReader.ReadString();
+        _lifeTime = binaryReader.ReadSingle();
+        _prefabPath = binaryReader.ReadString();
+            
     }
 }
 
@@ -2208,7 +2904,26 @@ public class SequencerGraphEvent_ApplyBuff : SequencerGraphEventBase
                 }
 
             }
+            else if(attributes[i].Name == "UniqueKey")
+                _uniqueKey = attributes[i].Value;
+            else if(attributes[i].Name == "UniqueGroupKey")
+                _uniqueGroupKey = attributes[i].Value;
         }
+    }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_uniqueKey);
+        binaryWriter.Write(_uniqueGroupKey);
+        BinaryHelper.writeArray(ref binaryWriter, buffKeyList);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _uniqueKey = binaryReader.ReadString();
+        _uniqueGroupKey = binaryReader.ReadString();
+        buffKeyList = BinaryHelper.readArrayInt(ref binaryReader);
     }
 }
 
@@ -2228,6 +2943,16 @@ public class SequencerGraphEvent_KillAllStageEntity : SequencerGraphEventBase
 
     public override void loadXml(XmlNode node)
     {
+    }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        
     }
 }
 
@@ -2290,6 +3015,19 @@ public class SequencerGraphEvent_KillEntity : SequencerGraphEventBase
             else if(attrName == "UniqueGroupKey")
                 _uniqueGroupKey = attrValue;
         }
+    }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_uniqueKey);
+        binaryWriter.Write(_uniqueGroupKey);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _uniqueKey = binaryReader.ReadString();
+        _uniqueGroupKey = binaryReader.ReadString();
     }
 }
 
@@ -2355,6 +3093,21 @@ public class SequencerGraphEvent_SetCameraBoundLock : SequencerGraphEventBase
                 _enable = bool.Parse(attrValue);
         }
     }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_uniqueKey);
+        binaryWriter.Write(_uniqueGroupKey);
+        binaryWriter.Write(_enable);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _uniqueKey = binaryReader.ReadString();
+        _uniqueGroupKey = binaryReader.ReadString();
+        _enable = binaryReader.ReadBoolean();
+    }
 }
 
 public class SequencerGraphEvent_SetHideCharacter : SequencerGraphEventBase
@@ -2419,6 +3172,21 @@ public class SequencerGraphEvent_SetHideCharacter : SequencerGraphEventBase
                 _hide = bool.Parse(attrValue);
         }
     }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_uniqueKey);
+        binaryWriter.Write(_uniqueGroupKey);
+        binaryWriter.Write(_hide);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _uniqueKey = binaryReader.ReadString();
+        _uniqueGroupKey = binaryReader.ReadString();
+        _hide = binaryReader.ReadBoolean();
+    }
 }
 
 
@@ -2454,6 +3222,19 @@ public class SequencerGraphEvent_SetBackgroundAnimationTrigger : SequencerGraphE
                 _key = attrValue;
         }
     }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_animationTrigger);
+        binaryWriter.Write(_key);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _animationTrigger = binaryReader.ReadString();
+        _key = binaryReader.ReadString();
+    }
 }
 
 public class SequencerGraphEvent_DisableBossHp : SequencerGraphEventBase
@@ -2473,6 +3254,16 @@ public class SequencerGraphEvent_DisableBossHp : SequencerGraphEventBase
 
     public override void loadXml(XmlNode node)
     {
+    }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        
     }
 }
 
@@ -2509,6 +3300,17 @@ public class SequencerGraphEvent_WaitTargetDead : SequencerGraphEventBase
                 _uniqueKey = attrValue;
         }
     }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_uniqueKey);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _uniqueKey = binaryReader.ReadString();
+    }
 }
 
 public class SequencerGraphEvent_SaveEventExecuteIndex : SequencerGraphEventBase
@@ -2527,6 +3329,16 @@ public class SequencerGraphEvent_SaveEventExecuteIndex : SequencerGraphEventBase
 
     public override void loadXml(XmlNode node)
     {
+    }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        
     }
 }
 
@@ -2579,6 +3391,21 @@ public class SequencerGraphEvent_ApplyPostProcessProfile : SequencerGraphEventBa
                 _applyType = (PostProcessProfileApplyType)System.Enum.Parse(typeof(PostProcessProfileApplyType), attrValue);
         }
     }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_path);
+        binaryWriter.Write(_blendTime);
+        BinaryHelper.writeEnum<PostProcessProfileApplyType>(ref binaryWriter,_applyType);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _path = binaryReader.ReadString();
+        _blendTime = binaryReader.ReadSingle();
+        _applyType = BinaryHelper.readEnum<PostProcessProfileApplyType>(ref binaryReader);
+    }
 }
 
 public class SequencerGraphEvent_TeleportTargetTo : SequencerGraphEventBase
@@ -2629,6 +3456,21 @@ public class SequencerGraphEvent_TeleportTargetTo : SequencerGraphEventBase
                 _markerName = attrValue;
         }
     }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_uniqueKey);
+        binaryWriter.Write(_markerName);
+        BinaryHelper.writeVector3(ref binaryWriter, _targetPosition);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _uniqueKey = binaryReader.ReadString();
+        _markerName = binaryReader.ReadString();
+        _targetPosition = BinaryHelper.readVector3(ref binaryReader);
+    }
 }
 
 public class SequencerGraphEvent_SetAudioListner : SequencerGraphEventBase
@@ -2668,6 +3510,17 @@ public class SequencerGraphEvent_SetAudioListner : SequencerGraphEventBase
                 _uniqueKey = attrValue;
         }
     }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_uniqueKey);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _uniqueKey = binaryReader.ReadString();
+    }
 }
 
 public class SequencerGraphEvent_SetCameraUVTarget : SequencerGraphEventBase
@@ -2698,6 +3551,17 @@ public class SequencerGraphEvent_SetCameraUVTarget : SequencerGraphEventBase
             if(attrName == "UniqueKey")
                 _uniqueKey = attrValue;
         }
+    }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_uniqueKey);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _uniqueKey = binaryReader.ReadString();
     }
 }
 
@@ -2736,6 +3600,19 @@ public class SequencerGraphEvent_SetCameraTarget : SequencerGraphEventBase
             else if(attrName == "CameraMode")
                 _cameraMode = (CameraModeType)System.Enum.Parse(typeof(CameraModeType), attrValue);
         }
+    }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_uniqueKey);
+        BinaryHelper.writeEnum<CameraModeType>(ref binaryWriter, _cameraMode);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _uniqueKey = binaryReader.ReadString();
+        _cameraMode = BinaryHelper.readEnum<CameraModeType>(ref binaryReader);
     }
 }
 
@@ -2779,6 +3656,20 @@ public class SequencerGraphEvent_SetCameraPosition : SequencerGraphEventBase
                 _markerName = attrValue;
         }
     }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+
+        BinaryHelper.writeVector3(ref binaryWriter, _cameraTargetPosition);
+        binaryWriter.Write(_markerName);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _cameraTargetPosition = BinaryHelper.readVector3(ref binaryReader);
+        _markerName = binaryReader.ReadString();
+    }
 }
 
 public enum SequencerGraphPhaseType
@@ -2789,16 +3680,43 @@ public enum SequencerGraphPhaseType
     Count,
 }
 
-public class SequencerGraphPhaseData
+public class SequencerGraphPhaseData : SerializableDataType
 {
-    public SequencerGraphEventBase[]    _sequencerGraphEventList;
-    public int                          _sequencerGraphEventCount;
+    public SequencerGraphEventBase[]    _sequencerGraphEventList = null;
+    public int                          _sequencerGraphEventCount = 0;
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        BinaryHelper.writeArray<SequencerGraphEventBase>(ref binaryWriter, _sequencerGraphEventList);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _sequencerGraphEventCount = binaryReader.ReadInt32();
+        _sequencerGraphEventList = _sequencerGraphEventCount == 0 ? null : new SequencerGraphEventBase[_sequencerGraphEventCount];
+
+        for(int i = 0; i < _sequencerGraphEventCount; ++i)
+        {
+            _sequencerGraphEventList[i] = SequencerGraphEventBase.buildSequencerGraphEvent(ref binaryReader);
+        }
+    }
 }
 
-public class SequencerGraphBaseData
+public class SequencerGraphBaseData : SerializableDataType
 {
-    public string                       _sequencerName;
+    public string                       _sequencerName = "";
 
     public SequencerGraphPhaseData[]    _sequencerGraphPhase = new SequencerGraphPhaseData[(int)SequencerGraphPhaseType.Count];
-    
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        binaryWriter.Write(_sequencerName);
+        BinaryHelper.writeArray<SequencerGraphPhaseData>(ref binaryWriter, _sequencerGraphPhase);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _sequencerName = binaryReader.ReadString();
+        _sequencerGraphPhase = BinaryHelper.readArray<SequencerGraphPhaseData>(ref binaryReader);
+    }
 }

@@ -9,7 +9,25 @@ using System;
 public static class BuffDataLoader
 {
     static string _currentFileName = "";
-    public static Dictionary<int, BuffData> readFromXML(string path)
+    
+#if UNITY_EDITOR
+    public static BuffDataList readFromXMLAndExportToBinary(string path, string binaryOutputPath)
+    {
+        var data = readFromXML(path);
+        data.writeData(binaryOutputPath);
+
+        return data;
+    }
+#endif
+    public static BuffDataList readData(string binaryPath)
+    {
+        BuffDataList data = new BuffDataList();
+        data.readData(binaryPath);
+
+        return data;
+    }
+
+    public static BuffDataList readFromXML(string path)
     {
         _currentFileName = path;
         PositionXmlDocument xmlDoc = new PositionXmlDocument();
@@ -34,21 +52,21 @@ public static class BuffDataLoader
             return null;
         }
 
-        Dictionary<int, BuffData> buffDataList = new Dictionary<int, BuffData>();
+        BuffDataList buffDataList = new BuffDataList();
 
         XmlNodeList projectileNodes = xmlDoc.FirstChild.ChildNodes;
         for(int nodeIndex = 0; nodeIndex < projectileNodes.Count; ++nodeIndex)
         {
-            BuffData baseData = readBuffData(projectileNodes[nodeIndex], ref buffDataList);
+            BuffData baseData = readBuffData(projectileNodes[nodeIndex], ref buffDataList._buffDataList);
             if(baseData == null)
                 return null;
 
-            if(buffDataList.ContainsKey(baseData._buffKey) == true)
+            if(buffDataList._buffDataList.ContainsKey(baseData._buffKey) == true)
             {
                 DebugUtil.assert(false, "buff key overlap: key {0} [FileName: {1}]", baseData._buffKey, _currentFileName);
                 continue;
             }
-            buffDataList.Add(baseData._buffKey,baseData);
+            buffDataList._buffDataList.Add(baseData._buffKey,baseData);
         }
 
         return buffDataList;

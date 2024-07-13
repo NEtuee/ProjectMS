@@ -585,7 +585,7 @@
         </Animation>
         <Animation Preset="2_attackMain" XFlip="true" Duration="0.4">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2414" Attach="true"/>
-            <FrameEvent Type="Danmaku" StartTime="0" Path="Enemy\AobaDrone.xml"/>
+            <FrameEvent Type="Danmaku" StartTime="0" Path="Assets/Data/DanmakuGraph/Enemy/AobaDrone.xml"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
@@ -665,7 +665,7 @@
         <Animation Preset="2_attackMain" XFlip="true" Duration="0.45">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="0" Speed="0"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
-            <FrameEvent Type="Danmaku" StartTime="0" Path="Enemy/AobaShotgun.xml"/>
+            <FrameEvent Type="Danmaku" StartTime="0" Path="Assets/Data/DanmakuGraph/Enemy/AobaShotgun.xml"/>
             
         </Animation>
         <Animation Preset="3_attackRecover" XFlip="true" Duration="0.65">

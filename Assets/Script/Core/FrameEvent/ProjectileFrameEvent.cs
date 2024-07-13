@@ -1,6 +1,7 @@
 using System.Xml;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 public class ActionFrameEvent_Projectile : ActionFrameEventBase
 {
@@ -29,13 +30,19 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
 
     private Vector3                         _positionOffset = Vector3.zero;
 
+    private string                          _allyInfoKey = "";
     private AllyInfoData                    _targetAllyInfo = null;
     private PredictionType                  _predictionType = PredictionType.Path;
-    private Vector3[]                       _pathPredictionArray = null;
-    private int                             _predictionAccuracy = 0;
     private float                           _startTerm = 0f;
     private float                           _directionAngle = 0f;
     bool                                    _useFlip = false;
+
+    public override void initialize(ObjectBase executeEntity)
+    {
+        base.initialize(executeEntity);
+        if(_allyInfoKey != "")
+            _targetAllyInfo = AllyInfoManager.Instance().GetAllyInfoData(_allyInfoKey);
+    }
 
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
@@ -66,51 +73,6 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
         
         if(_startTerm != 0f)
         {
-            if(_pathPredictionArray != null)
-            {
-                switch(_predictionType)
-                {
-                    case PredictionType.Path:
-                    {
-                        predictionPath(_predictionAccuracy, _pathPredictionArray, ref shotInfo);
-
-                        EffectRequestData requestData = MessageDataPooling.GetMessageData<EffectRequestData>();
-                        requestData.clearRequestData();
-                        requestData._updateType = EffectUpdateType.NoneScaledDeltaTime;
-                        requestData._effectType = EffectType.TrailEffect;
-                        requestData._lifeTime = _startTerm;
-                        requestData._parentTransform = executeEntity.transform;
-                        requestData._trailWidth = ProjectileManager._instance.getProjectileGraphData(_projectileGraphName)._collisionRadius * 2f;
-                        requestData._trailMaterial = ResourceContainerEx.Instance().GetMaterial("Material/Material_TrailBase");
-                        requestData._trailPositionData = _pathPredictionArray;
-
-                        executeEntity.SendMessageEx(MessageTitles.effect_spawnEffect,UniqueIDBase.QueryUniqueID("EffectManager"),requestData);
-                    }
-                    break;
-                    case PredictionType.StartPosition:
-                    {
-                        EffectRequestData requestData = MessageDataPooling.GetMessageData<EffectRequestData>();
-                        requestData.clearRequestData();
-                        requestData._effectPath = "Resources/Sprites/Effect/ProjectilePredictionPosition";
-                        requestData._startFrame = 0f;
-                        requestData._endFrame = -1f;
-                        requestData._framePerSecond = 1.0f / _startTerm;
-                        requestData._position = spawnPosition;
-                        requestData._usePhysics = false;
-                        requestData._rotation = Quaternion.identity;
-                        requestData._effectType = EffectType.SpriteEffect;
-                        requestData._updateType = EffectUpdateType.NoneScaledDeltaTime;
-                        requestData._castShadow = false;
-                        float radius = ProjectileManager._instance.getProjectileGraphData(_projectileGraphName)._collisionRadius * 2f;
-                        requestData._scale = new Vector3(radius,radius,1f);
-
-                        executeEntity.SendMessageEx(MessageTitles.effect_spawnEffect,UniqueIDBase.QueryUniqueID("EffectManager"),requestData);
-                    }
-                    break;
-                }
-                
-            }
-            
             ProjectileManager._instance.spawnProjectileDelayed(_projectileGraphName, _startTerm,executeEntity,targetEntity,_setTargetType,ref shotInfo,executeEntity,_targetAllyInfo == null ? executeEntity.getAllyInfo() : _targetAllyInfo);
         }
         else
@@ -206,7 +168,7 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
         outShotInfo._defaultAngle += defaultAngle;
         return true;
     }
-
+#if UNITY_EDITOR
     public override void loadFromXML(XmlNode node)
     {
         XmlAttributeCollection attributes = node.Attributes;
@@ -224,11 +186,6 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
             else if(attrName == "StartTerm")
             {
                 _startTerm = XMLScriptConverter.valueToFloatExtend(attrValue);
-            }
-            else if(attrName == "PredictionAccuracy")
-            {
-                _predictionAccuracy = int.Parse(attrValue);
-                _pathPredictionArray = new Vector3[_predictionAccuracy];
             }
             else if(attrName == "Velocity")
             {
@@ -305,7 +262,7 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
             }
             else if(attrName == "AllyInfo")
             {
-                _targetAllyInfo = AllyInfoManager.Instance().GetAllyInfoData(attrValue);
+                _allyInfoKey = attrValue;
             }
             else if(attrName == "DirectionAngle")
             {
@@ -315,5 +272,37 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
 
         if(_projectileGraphName == "")
             DebugUtil.assert(false, "projectile graph is essential");
+    }
+
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_projectileGraphName);
+        binaryWriter.Write(_startTerm);
+        _shotInfo.serialize(ref binaryWriter);
+        BinaryHelper.writeEnum<DirectionType>(ref binaryWriter, _directionType);
+        BinaryHelper.writeEnum<ShotInfoUseType>(ref binaryWriter, _useType);
+        BinaryHelper.writeEnum<PredictionType>(ref binaryWriter, _predictionType);
+        BinaryHelper.writeEnum<SetTargetType>(ref binaryWriter, _setTargetType);
+        BinaryHelper.writeVector3(ref binaryWriter, _positionOffset);
+        binaryWriter.Write(_useFlip);
+        binaryWriter.Write(_allyInfoKey);
+        binaryWriter.Write(_directionAngle);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        base.deserialize(ref binaryReader);
+        _projectileGraphName = binaryReader.ReadString();
+        _startTerm = binaryReader.ReadSingle();
+        _shotInfo.deserialize(ref binaryReader);
+        _directionType = BinaryHelper.readEnum<DirectionType>(ref binaryReader);
+        _useType = BinaryHelper.readEnum<ShotInfoUseType>(ref binaryReader);
+        _predictionType = BinaryHelper.readEnum<PredictionType>(ref binaryReader);
+        _setTargetType = BinaryHelper.readEnum<SetTargetType>(ref binaryReader);
+        _positionOffset = BinaryHelper.readVector3(ref binaryReader);
+        _useFlip = binaryReader.ReadBoolean();
+        _allyInfoKey = binaryReader.ReadString();
+        _directionAngle = binaryReader.ReadSingle();
     }
 }

@@ -1,6 +1,7 @@
 using System.Xml;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 public enum AngleDirectionType
 {
@@ -82,6 +83,7 @@ public class ActionFrameEvent_ParticleEffect : ActionFrameEventBase
         return Quaternion.identity;
     }
 
+#if UNITY_EDITOR
     public override void loadFromXML(XmlNode node)
     {
         XmlAttributeCollection attributes = node.Attributes;
@@ -136,6 +138,36 @@ public class ActionFrameEvent_ParticleEffect : ActionFrameEventBase
 
         if(_effectPath == "")
             DebugUtil.assert(false, "effect path is essential");
+    }
+
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_effectPath);
+        binaryWriter.Write(_toTarget);
+        binaryWriter.Write(_attach);
+        binaryWriter.Write(_followDirection);
+        binaryWriter.Write(_castShadow);
+        binaryWriter.Write(_lifeTime);
+        BinaryHelper.writeVector3(ref binaryWriter, _spawnOffset);
+        BinaryHelper.writeQuaternion(ref binaryWriter, _effectRotation);
+        BinaryHelper.writeEnum<EffectUpdateType>(ref binaryWriter, _effectUpdateType);
+        BinaryHelper.writeEnum<AngleDirectionType>(ref binaryWriter, _angleDirectionType);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        base.deserialize(ref binaryReader);
+        _effectPath = binaryReader.ReadString();
+        _toTarget = binaryReader.ReadBoolean();
+        _attach = binaryReader.ReadBoolean();
+        _followDirection = binaryReader.ReadBoolean();
+        _castShadow = binaryReader.ReadBoolean();
+        _lifeTime = binaryReader.ReadSingle();
+        _spawnOffset = BinaryHelper.readVector3(ref binaryReader);
+        _effectRotation = BinaryHelper.readQuaternion(ref binaryReader);
+        _effectUpdateType = BinaryHelper.readEnum<EffectUpdateType>(ref binaryReader);
+        _angleDirectionType = BinaryHelper.readEnum<AngleDirectionType>(ref binaryReader);
     }
 }
 
@@ -212,7 +244,7 @@ public class ActionFrameEvent_TimelineEffect : ActionFrameEventBase
 
         return Quaternion.identity;
     }
-
+#if UNITY_EDITOR
     public override void loadFromXML(XmlNode node)
     {
         XmlAttributeCollection attributes = node.Attributes;
@@ -271,6 +303,36 @@ public class ActionFrameEvent_TimelineEffect : ActionFrameEventBase
 
         if(_effectPath == "")
             DebugUtil.assert(false, "effect path is essential");
+    }
+
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_effectPath);
+        binaryWriter.Write(_attackPresetName);
+        binaryWriter.Write(_toTarget);
+        binaryWriter.Write(_attach);
+        binaryWriter.Write(_followDirection);
+        binaryWriter.Write(_castShadow);
+        binaryWriter.Write(_lifeTime);
+        BinaryHelper.writeVector3(ref binaryWriter, _spawnOffset);
+        BinaryHelper.writeEnum<EffectUpdateType>(ref binaryWriter, _effectUpdateType);
+        BinaryHelper.writeEnum<AngleDirectionType>(ref binaryWriter, _angleDirectionType);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        base.deserialize(ref binaryReader);
+        _effectPath = binaryReader.ReadString();
+        _attackPresetName = binaryReader.ReadString();
+        _toTarget = binaryReader.ReadBoolean();
+        _attach = binaryReader.ReadBoolean();
+        _followDirection = binaryReader.ReadBoolean();
+        _castShadow = binaryReader.ReadBoolean();
+        _lifeTime = binaryReader.ReadSingle();
+        _spawnOffset = BinaryHelper.readVector3(ref binaryReader);
+        _effectUpdateType = BinaryHelper.readEnum<EffectUpdateType>(ref binaryReader);
+        _angleDirectionType = BinaryHelper.readEnum<AngleDirectionType>(ref binaryReader);
     }
 }
 
@@ -345,7 +407,7 @@ public class ActionFrameEvent_AnimationEffect : ActionFrameEventBase
 
         return Quaternion.identity;
     }
-
+#if UNITY_EDITOR
     public override void loadFromXML(XmlNode node)
     {
         XmlAttributeCollection attributes = node.Attributes;
@@ -404,6 +466,36 @@ public class ActionFrameEvent_AnimationEffect : ActionFrameEventBase
 
         if(_effectPath == "")
             DebugUtil.assert(false, "effect path is essential");
+    }
+
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_effectPath);
+        binaryWriter.Write(_toTarget);
+        binaryWriter.Write(_attach);
+        binaryWriter.Write(_attachToSpriteObject);
+        binaryWriter.Write(_followDirection);
+        binaryWriter.Write(_castShadow);
+        binaryWriter.Write(_lifeTime);
+        BinaryHelper.writeVector3(ref binaryWriter, _spawnOffset);
+        BinaryHelper.writeEnum<EffectUpdateType>(ref binaryWriter, _effectUpdateType);
+        BinaryHelper.writeEnum<AngleDirectionType>(ref binaryWriter, _angleDirectionType);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        base.deserialize(ref binaryReader);
+        _effectPath = binaryReader.ReadString();
+        _toTarget = binaryReader.ReadBoolean();
+        _attach = binaryReader.ReadBoolean();
+        _attachToSpriteObject = binaryReader.ReadBoolean();
+        _followDirection = binaryReader.ReadBoolean();
+        _castShadow = binaryReader.ReadBoolean();
+        _lifeTime = binaryReader.ReadSingle();
+        _spawnOffset = BinaryHelper.readVector3(ref binaryReader);
+        _effectUpdateType = BinaryHelper.readEnum<EffectUpdateType>(ref binaryReader);
+        _angleDirectionType = BinaryHelper.readEnum<AngleDirectionType>(ref binaryReader);
     }
 }
 
@@ -507,7 +599,7 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
 
         return true;
     }
-
+#if UNITY_EDITOR
     public override void loadFromXML(XmlNode node)
     {
         XmlAttributeCollection attributes = node.Attributes;
@@ -641,5 +733,47 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
 
         if(_effectPath == "")
             DebugUtil.assert(false, "effect path is essential [Line: {0}]", XMLScriptConverter.getLineFromXMLNode(node));
+    }
+
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_effectPath);
+        binaryWriter.Write(_framePerSecond);
+        binaryWriter.Write(_spawnAngle);
+        binaryWriter.Write(_random);
+        BinaryHelper.writeVector2(ref binaryWriter, _randomValue);
+        binaryWriter.Write(_followEntity);
+        binaryWriter.Write(_toTarget);
+        binaryWriter.Write(_attach);
+        binaryWriter.Write(_useDirectionOffset);
+        BinaryHelper.writeVector3(ref binaryWriter, _spawnOffset);
+        binaryWriter.Write(_usePhysics);
+        binaryWriter.Write(_useFlip);
+        binaryWriter.Write(_castShadow);
+        binaryWriter.Write(_behindCharacter);
+        _physicsBodyDesc.serialize(ref binaryWriter);
+        BinaryHelper.writeEnum<EffectUpdateType>(ref binaryWriter, _effectUpdateType);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        base.deserialize(ref binaryReader);
+        _effectPath = binaryReader.ReadString();
+        _framePerSecond = binaryReader.ReadSingle();
+        _spawnAngle = binaryReader.ReadSingle();
+        _random = binaryReader.ReadBoolean();
+        _randomValue = BinaryHelper.readVector2(ref binaryReader);
+        _followEntity = binaryReader.ReadBoolean();
+        _toTarget = binaryReader.ReadBoolean();
+        _attach = binaryReader.ReadBoolean();
+        _useDirectionOffset = binaryReader.ReadBoolean();
+        _spawnOffset = BinaryHelper.readVector3(ref binaryReader);
+        _usePhysics = binaryReader.ReadBoolean();
+        _useFlip = binaryReader.ReadBoolean();
+        _castShadow = binaryReader.ReadBoolean();
+        _behindCharacter = binaryReader.ReadBoolean();
+        _physicsBodyDesc.deserialize(ref binaryReader);
+        _effectUpdateType = BinaryHelper.readEnum<EffectUpdateType>(ref binaryReader);
     }
 }

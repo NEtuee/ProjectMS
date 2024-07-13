@@ -8,9 +8,16 @@ using ICSharpCode.WpfDesign.XamlDom;
 public class SequencrGraphLoader : LoaderBase<SequencerGraphBaseData>
 {
     static string _currentFileName = "";
+
+    public override SequencerGraphBaseData createNewDataInstance()
+    {
+        return new SequencerGraphBaseData();
+    }
+
     public override SequencerGraphBaseData readFromXML(string path)
     {
-        _currentFileName = "Assets/Data/SequencerGraph/" + path;
+        _currentFileName = path;
+        
         PositionXmlDocument xmlDoc = new PositionXmlDocument();
         try
         {
@@ -23,7 +30,7 @@ public class SequencrGraphLoader : LoaderBase<SequencerGraphBaseData>
         }
         catch(System.Exception ex)
         {
-            DebugUtil.assert(false,"xml load exception : {0}",ex.Message);
+            DebugUtil.assert(false,"xml load exception : {0} \n{1}",path,ex.Message);
             return null;
         }
         
@@ -90,119 +97,8 @@ public class SequencrGraphLoader : LoaderBase<SequencerGraphBaseData>
 
     public static SequencerGraphEventBase readEventData(XmlNode node)
     {
-        SequencerGraphEventBase spawnEvent = null;
-        if(node.Name == "SpawnCharacter")
-            spawnEvent = new SequencerGraphEvent_SpawnCharacter();
-        else if(node.Name == "WaitSecond")
-            spawnEvent = new SequencerGraphEvent_WaitSecond(); 
-        else if(node.Name == "SetCameraTarget")
-            spawnEvent = new SequencerGraphEvent_SetCameraTarget();
-        else if(node.Name == "SetCameraUVTarget")
-            spawnEvent = new SequencerGraphEvent_SetCameraUVTarget();
-        else if(node.Name == "SetCameraPosition")
-            spawnEvent = new SequencerGraphEvent_SetCameraPosition();
-        else if(node.Name == "SetAudioListner")
-            spawnEvent = new SequencerGraphEvent_SetAudioListner();
-        else if(node.Name == "SetCrossHair")
-            spawnEvent = new SequencerGraphEvent_SetCrossHair();
-        else if(node.Name == "SetHPSphere")
-            spawnEvent = new SequencerGraphEvent_SetHPSphere();
-        else if(node.Name == "WaitTargetDead")
-            spawnEvent = new SequencerGraphEvent_WaitTargetDead();
-        else if(node.Name == "TeleportTargetTo")
-            spawnEvent = new SequencerGraphEvent_TeleportTargetTo();
-        else if(node.Name == "ApplyPostProcessProfile")
-            spawnEvent = new SequencerGraphEvent_ApplyPostProcessProfile();
-        else if(node.Name == "SaveEventExecuteIndex")
-            spawnEvent = new SequencerGraphEvent_SaveEventExecuteIndex();
-        else if(node.Name == "CallAIEvent")
-            spawnEvent = new SequencerGraphEvent_CallAIEvent();
-        else if(node.Name == "WaitSignal")
-            spawnEvent = new SequencerGraphEvent_WaitSignal();
-        else if(node.Name == "SetCameraZoom")
-            spawnEvent = new SequencerGraphEvent_SetCameraZoom();
-        else if(node.Name == "FadeOut")
-            spawnEvent = new SequencerGraphEvent_FadeIn();
-        else if(node.Name == "FadeIn")
-            spawnEvent = new SequencerGraphEvent_FadeOut();
-        else if(node.Name == "Fade")
-            spawnEvent = new SequencerGraphEvent_Fade();
-        else if(node.Name == "ForceQuit")
-            spawnEvent = new SequencerGraphEvent_ForceQuit();
-        else if(node.Name == "BlockInput")
-            spawnEvent = new SequencerGraphEvent_BlockInput();
-        else if(node.Name == "BlockAI")
-            spawnEvent = new SequencerGraphEvent_BlockAI();
-        else if(node.Name == "SetAction")
-            spawnEvent = new SequencerGraphEvent_SetAction();
-        else if(node.Name == "PlayAnimation")
-            spawnEvent = new SequencerGraphEvent_PlayAnimation();
-        else if(node.Name == "AIMove")
-            spawnEvent = new SequencerGraphEvent_AIMove();
-        else if(node.Name == "QTEFence")
-            spawnEvent = new SequencerGraphEvent_QTEFence();
-        else if(node.Name == "DeadFence")
-            spawnEvent = new SequencerGraphEvent_DeadFence();
-        else if(node.Name == "SetHideUI")
-            spawnEvent = new SequencerGraphEvent_SetHideUI();
-        else if(node.Name == "SetTimeScale")
-            spawnEvent = new SequencerGraphEvent_SetTimeScale();
-        else if(node.Name == "NextStage")
-            spawnEvent = new SequencerGraphEvent_NextStage();
-        else if(node.Name == "ShakeEffect")
-            spawnEvent = new SequencerGraphEvent_ShakeEffect();
-        else if(node.Name == "ZoomEffect")
-            spawnEvent = new SequencerGraphEvent_ZoomEffect();
-        else if(node.Name == "ToastMessage")
-            spawnEvent = new SequencerGraphEvent_ToastMessage();
-        else if(node.Name == "Task")
-            spawnEvent = new SequencerGraphEvent_Task();
-        else if(node.Name == "LetterBoxShow")
-            spawnEvent = new SequencerGraphEvent_LetterBoxShow();
-        else if(node.Name == "LetterBoxHide")
-            spawnEvent = new SequencerGraphEvent_LetterBoxHide();
-        else if(node.Name == "TalkBalloon")
-            spawnEvent = new SequencerGraphEvent_TalkBalloon();
-        else if(node.Name == "CameraTrack")
-            spawnEvent = new SequencerGraphEvent_CameraTrack();
-        else if(node.Name == "TaskFence")
-            spawnEvent = new SequencerGraphEvent_TaskFence();
-        else if(node.Name == "SetDirection")
-            spawnEvent = new SequencerGraphEvent_SetDirection();
-        else if(node.Name == "BlockPointExit")
-            spawnEvent = new SequencerGraphEvent_BlockPointExit();
-        else if(node.Name == "IsTrackEnd")
-            spawnEvent = new SequencerGraphEvent_CameraTrackFence();
-        else if(node.Name == "EffectPreset")
-            spawnEvent = new SequencerGraphEvent_EffectPreset();
-        else if(node.Name == "UnlockStageLimit")
-            spawnEvent = new SequencerGraphEvent_UnlockStageLimit();
-        else if(node.Name == "ActiveBossHp")
-            spawnEvent = new SequencerGraphEvent_ActiveBossHp();
-        else if(node.Name == "DisableBossHp")
-            spawnEvent = new SequencerGraphEvent_DisableBossHp();
-        else if(node.Name == "SetBackgroundAnimationTrigger")
-            spawnEvent = new SequencerGraphEvent_SetBackgroundAnimationTrigger();
-        else if(node.Name == "SetHideCharacter")
-            spawnEvent = new SequencerGraphEvent_SetHideCharacter();
-        else if(node.Name == "ApplyBuff")
-            spawnEvent = new SequencerGraphEvent_ApplyBuff();
-        else if(node.Name == "SpawnPrefab")
-            spawnEvent = new SequencerGraphEvent_SpawnPrefab();
-        else if(node.Name == "DeletePrefab")
-            spawnEvent = new SequencerGraphEvent_DeletePrefab();
-        else if(node.Name == "AudioPlay")
-            spawnEvent = new SequencerGraphEvent_AudioPlay();
-        else if(node.Name == "StopSwitch")
-            spawnEvent = new SequencerGraphEvent_StopSwitch();
-        else if(node.Name == "AudioParameter")
-            spawnEvent = new SequencerGraphEvent_AudioParameter();
-        else if(node.Name == "SetCameraBoundLock")
-            spawnEvent = new SequencerGraphEvent_SetCameraBoundLock();
-        else if(node.Name == "KillEntity")
-            spawnEvent = new SequencerGraphEvent_KillEntity();
-        else if(node.Name == "KillAllStageEntity")
-            spawnEvent = new SequencerGraphEvent_KillAllStageEntity();
+        SequencerGraphEventType eventType = (SequencerGraphEventType)System.Enum.Parse(typeof(SequencerGraphEventType), node.Name);;
+        SequencerGraphEventBase spawnEvent = SequencerGraphEventBase.getSequencerGraphEventBase(eventType);
             
         if(spawnEvent == null)
         {

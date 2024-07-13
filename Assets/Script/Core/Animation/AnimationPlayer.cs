@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 
 
-public class AnimationPlayDataInfo
+public class AnimationPlayDataInfo : SerializableDataType
 {
     public AnimationPlayDataInfo(){}
 
@@ -36,7 +36,6 @@ public class AnimationPlayDataInfo
     public int                          _angleBaseAnimationSpriteCount = -1;
 
     public bool                         _isLoop = false;
-    public bool                         _hasMovementGraph = false;
     public bool                         _isAngleBaseAnimation = false;
     public bool                         _multiSelectConditionUpdateOnce = false;
 
@@ -46,7 +45,7 @@ public class AnimationPlayDataInfo
 #if UNITY_EDITOR
     public int                          _lineNumber;
 
-    public void serialize(ref BinaryWriter binaryWriter)
+    public override void serialize(ref BinaryWriter binaryWriter)
     {
         binaryWriter.Write(_multiSelectAnimationDataCount);
         binaryWriter.Write(_path);
@@ -60,10 +59,11 @@ public class AnimationPlayDataInfo
         binaryWriter.Write(_timeEventDataCount);
         binaryWriter.Write(_angleBaseAnimationSpriteCount);
         binaryWriter.Write(_isLoop);
-        binaryWriter.Write(_hasMovementGraph);
         binaryWriter.Write(_isAngleBaseAnimation);
         binaryWriter.Write(_multiSelectConditionUpdateOnce);
         _flipState.serialize(ref binaryWriter);
+
+        binaryWriter.Write(_customPreset != null);
 
         if(_frameEventData != null)
         {
@@ -89,8 +89,9 @@ public class AnimationPlayDataInfo
             }
         }
     }
+#endif
 
-    public void deserialize(ref BinaryReader binaryReader)
+    public override void deserialize(ref BinaryReader binaryReader)
     {
         _multiSelectAnimationDataCount = binaryReader.ReadInt32();
         _path = binaryReader.ReadString();
@@ -104,12 +105,13 @@ public class AnimationPlayDataInfo
         _timeEventDataCount = binaryReader.ReadInt32();
         _angleBaseAnimationSpriteCount = binaryReader.ReadInt32();
         _isLoop = binaryReader.ReadBoolean();
-        _hasMovementGraph = binaryReader.ReadBoolean();
         _isAngleBaseAnimation = binaryReader.ReadBoolean();
         _multiSelectConditionUpdateOnce = binaryReader.ReadBoolean();
         _flipState.deserialize(ref binaryReader);
 
-        if(_frameEventDataCount != 0)
+        bool hasPreset = binaryReader.ReadBoolean();
+
+        if(_frameEventDataCount != -1)
         {
             _frameEventData = new ActionFrameEventBase[_frameEventDataCount];
             for(int i = 0; i < _frameEventDataCount; ++i)
@@ -118,7 +120,7 @@ public class AnimationPlayDataInfo
             }
         }
 
-        if(_timeEventDataCount != 0)
+        if(_timeEventDataCount != -1)
         {
             _timeEventData = new ActionFrameEventBase[_timeEventDataCount];
             for(int i = 0; i < _timeEventDataCount; ++i)
@@ -127,7 +129,7 @@ public class AnimationPlayDataInfo
             }
         }
 
-        if(_multiSelectAnimationDataCount != 0)
+        if(_multiSelectAnimationDataCount != -1)
         {
             _multiSelectAnimationData = new MultiSelectAnimationData[_multiSelectAnimationDataCount];
             for(int i = 0; i < _multiSelectAnimationDataCount; ++i)
@@ -137,37 +139,41 @@ public class AnimationPlayDataInfo
             }
         }
 
-        ScriptableObject[] scriptableObjects = ResourceContainerEx.Instance().GetScriptableObjects(_path);
-        AnimationCustomPreset animationCustomPreset = (scriptableObjects[0] as AnimationCustomPreset);
-        _customPresetData = animationCustomPreset._animationCustomPresetData;
-        _customPreset = animationCustomPreset;
-
-        if(animationCustomPreset._rotationPresetName != "")
+        if(hasPreset)
         {
-            AnimationRotationPreset rotationPreset = ResourceContainerEx.Instance().GetScriptableObject("Preset/AnimationRotationPreset") as AnimationRotationPreset;
-            _rotationPresetData = rotationPreset.getPresetData(animationCustomPreset._rotationPresetName);
+            ScriptableObject[] scriptableObjects = ResourceContainerEx.Instance().GetScriptableObjects(_path);
+            AnimationCustomPreset animationCustomPreset = (scriptableObjects[0] as AnimationCustomPreset);
+            _customPresetData = animationCustomPreset._animationCustomPresetData;
+            _customPreset = animationCustomPreset;
+
+            if(animationCustomPreset._rotationPresetName != "")
+            {
+                AnimationRotationPreset rotationPreset = ResourceContainerEx.Instance().GetScriptableObject("Preset/AnimationRotationPreset") as AnimationRotationPreset;
+                _rotationPresetData = rotationPreset.getPresetData(animationCustomPreset._rotationPresetName);
+            }
+
+            if(animationCustomPreset._scalePresetName != "")
+            {
+                AnimationScalePreset scalePreset = ResourceContainerEx.Instance().GetScriptableObject("Preset/AnimationScalePreset") as AnimationScalePreset;
+                _scalePresetData = scalePreset.getPresetData(animationCustomPreset._scalePresetName);
+            }
+
+            if(animationCustomPreset._translationPresetName != "")
+            {
+                AnimationTranslationPreset scalePreset = ResourceContainerEx.Instance().GetScriptableObject("Preset/AnimationTranslationPreset") as AnimationTranslationPreset;
+                _translationPresetData = scalePreset.getPresetData(animationCustomPreset._translationPresetName);
+            }
         }
+
         
-        if(animationCustomPreset._scalePresetName != "")
-        {
-            AnimationScalePreset scalePreset = ResourceContainerEx.Instance().GetScriptableObject("Preset/AnimationScalePreset") as AnimationScalePreset;
-            _scalePresetData = scalePreset.getPresetData(animationCustomPreset._scalePresetName);
-        }
-
-        if(animationCustomPreset._translationPresetName != "")
-        {
-            AnimationTranslationPreset scalePreset = ResourceContainerEx.Instance().GetScriptableObject("Preset/AnimationTranslationPreset") as AnimationTranslationPreset;
-            _translationPresetData = scalePreset.getPresetData(animationCustomPreset._translationPresetName);
-        }
     }
-#endif
 }
 
 public class MultiSelectAnimationData
 {
     public string                           _path = "";
     public ActionGraphConditionCompareData  _actionConditionData = null;
-
+#if UNITY_EDITOR
     public void serialize(ref BinaryWriter binaryWriter)
     {
         binaryWriter.Write(_path);
@@ -175,7 +181,7 @@ public class MultiSelectAnimationData
         if(_actionConditionData != null)
             _actionConditionData.serialize(ref binaryWriter);
     }
-
+#endif
     public void deserialize(ref BinaryReader binaryReader)
     {
         _path = binaryReader.ReadString();
@@ -193,13 +199,13 @@ public struct FlipState
 {
     public bool xFlip;
     public bool yFlip;
-
+#if UNITY_EDITOR
     public void serialize(ref BinaryWriter binaryWriter)
     {
         binaryWriter.Write(xFlip);
         binaryWriter.Write(yFlip);
     }
-
+#endif
     public void deserialize(ref BinaryReader binaryReader)
     {
         xFlip = binaryReader.ReadBoolean();
@@ -235,7 +241,6 @@ public class AnimationPlayer
 
     private string _currentAnimationName;
     private Sprite[] _currentAnimationSprites;
-    private MovementGraph _currentMovementGraph;
 
     private bool _multiSelectAnimationUpdated = false;
 
@@ -452,11 +457,6 @@ public class AnimationPlayer
     {
         _currentAnimationPlayData = playData;
         _currentAnimationSprites = ResourceContainerEx.Instance().GetSpriteAll(playData._path);
-        if(playData._hasMovementGraph == true)
-        {
-            _currentMovementGraph = ResourceContainerEx.Instance().getMovementgraph(playData._path);
-            DebugUtil.assert(_currentMovementGraph != null, "무브먼트 그래프가 존재하지 않는데 사용하려 합니다. : {0}", playData._path);        
-        }
 
         DebugUtil.assert(_currentAnimationSprites != null, "애니메이션 스프라이트 배열이 null입니다. 해당 경로에 스프라이트가 존재 하나요? : {0}",playData._path);
         _multiSelectAnimationUpdated = false;
@@ -583,7 +583,6 @@ public class AnimationPlayer
 
     public MoveValuePerFrameFromTimeDesc getMoveValuePerFrameFromTimeDesc() {return _animationTimeProcessor.getMoveValuePerFrameFromTimeDesc();}
     public AnimationTimeProcessor getTimeProcessor(){return _animationTimeProcessor;}
-    public MovementGraph getCurrentMovementGraph() {return _currentMovementGraph;}
 
     public bool getCurrentAnimationTranslation(out Vector3 outTranslation)
     {

@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Numerics;
+using System.IO;
 
 public enum ProjectileChildFrameEventType
 {
@@ -10,13 +11,28 @@ public enum ProjectileChildFrameEventType
     Count,
 }
 
-public class ProjectileGraphBaseData
+public class ProjectileGraphBaseDataList : SerializableDataType
 {
-    public string                       _name;
-    public ProjectileGraphShotInfoData  _defaultProjectileShotInfoData;
-    public AnimationPlayDataInfo[]      _animationPlayData;
+    public ProjectileGraphBaseData[] _projectileGraphBaseDataList = null;
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        BinaryHelper.writeArray<ProjectileGraphBaseData>(ref binaryWriter, _projectileGraphBaseDataList);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _projectileGraphBaseDataList = BinaryHelper.readArray<ProjectileGraphBaseData>(ref binaryReader);
+    }
+}
 
-    public Dictionary<ProjectileChildFrameEventType,ChildFrameEventItem> _projectileChildFrameEvent = null;
+public class ProjectileGraphBaseData : SerializableDataType
+{
+    public string                       _name = "";
+    public ProjectileGraphShotInfoData  _defaultProjectileShotInfoData = new ProjectileGraphShotInfoData();
+    public AnimationPlayDataInfo[]      _animationPlayData = null;
+
+    public Dictionary<ProjectileChildFrameEventType,ChildFrameEventItem> _projectileChildFrameEvent = new Dictionary<ProjectileChildFrameEventType, ChildFrameEventItem>();
 
     public float                        _collisionRadius = 0.1f;
     public float                        _collisionAngle = 0f;
@@ -29,9 +45,62 @@ public class ProjectileGraphBaseData
     public bool                         _executeBySummoner = false;
 
     public int                          _penetrateCount = 1;
+
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        binaryWriter.Write(_name);
+        _defaultProjectileShotInfoData.serialize(ref binaryWriter);
+        BinaryHelper.writeArray<AnimationPlayDataInfo>(ref binaryWriter, _animationPlayData);
+        binaryWriter.Write(_projectileChildFrameEvent == null ? 0 : _projectileChildFrameEvent.Count);
+        if(_projectileChildFrameEvent != null)
+        {
+            foreach(var item in _projectileChildFrameEvent)
+            {
+                binaryWriter.Write((int)item.Key);
+                item.Value.serialize(ref binaryWriter);
+            }
+        }
+
+        binaryWriter.Write(_collisionRadius);
+        binaryWriter.Write(_collisionAngle);
+        binaryWriter.Write(_collisionStartDistance);
+        binaryWriter.Write(_gravity);
+        binaryWriter.Write(_useSpriteRotation);
+        binaryWriter.Write(_castShadow);
+        binaryWriter.Write(_executeBySummoner);
+        binaryWriter.Write(_penetrateCount );
+    }
+#endif
+
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _name = binaryReader.ReadString();
+        _defaultProjectileShotInfoData = new ProjectileGraphShotInfoData();
+        _defaultProjectileShotInfoData.deserialize(ref binaryReader);
+        _animationPlayData = BinaryHelper.readArray<AnimationPlayDataInfo>(ref binaryReader);
+        int childFrameEventCount = binaryReader.ReadInt32();
+        for(int i =0; i < childFrameEventCount; ++i)
+        {
+            ProjectileChildFrameEventType eventType = (ProjectileChildFrameEventType)binaryReader.ReadInt32();
+            ChildFrameEventItem childFrameEventItem = new ChildFrameEventItem();
+            childFrameEventItem.deserialize(ref binaryReader);
+
+            _projectileChildFrameEvent.Add(eventType, childFrameEventItem);
+        }
+
+        _collisionRadius = binaryReader.ReadSingle();
+        _collisionAngle = binaryReader.ReadSingle();
+        _collisionStartDistance = binaryReader.ReadSingle();
+        _gravity = binaryReader.ReadSingle();
+        _useSpriteRotation = binaryReader.ReadBoolean();
+        _castShadow = binaryReader.ReadBoolean();
+        _executeBySummoner = binaryReader.ReadBoolean();
+        _penetrateCount = binaryReader.ReadInt32();
+    }
 }
 
-public struct ProjectileGraphShotInfoData
+public struct ProjectileGraphShotInfoData : SerializableStructure
 {
     public float                    _deafaultVelocity;
     public float                    _acceleration;
@@ -85,6 +154,31 @@ public struct ProjectileGraphShotInfoData
         _useRandomAngle = false;
         _randomAngle = UnityEngine.Vector2.zero;
     }
-
+#if UNITY_EDITOR
+    public void serialize(ref BinaryWriter binaryWriter)
+    {
+        binaryWriter.Write(_deafaultVelocity);
+        binaryWriter.Write(_acceleration);
+        binaryWriter.Write(_friction);
+        binaryWriter.Write(_defaultAngle);
+        binaryWriter.Write(_angularAcceleration);
+        binaryWriter.Write(_lifeTime);
+        BinaryHelper.writeVector3(ref binaryWriter, _offset);
+        binaryWriter.Write(_useRandomAngle);
+        BinaryHelper.writeVector2(ref binaryWriter, _randomAngle);
+    }
+#endif
+    public void deserialize(ref BinaryReader binaryReader)
+    {
+        _deafaultVelocity = binaryReader.ReadSingle();
+        _acceleration = binaryReader.ReadSingle();
+        _friction = binaryReader.ReadSingle();
+        _defaultAngle = binaryReader.ReadSingle();
+        _angularAcceleration = binaryReader.ReadSingle();
+        _lifeTime = binaryReader.ReadSingle();
+        _offset = BinaryHelper.readVector3(ref binaryReader);
+        _useRandomAngle = binaryReader.ReadBoolean();
+        _randomAngle = BinaryHelper.readVector2(ref binaryReader);
+    }
 }
 

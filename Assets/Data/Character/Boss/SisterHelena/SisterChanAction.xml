@@ -148,7 +148,7 @@
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2502" Attach="true" Switch="True"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="24" MaxVelocity="12" Velocity="0" Speed="0"/>
             <!-- 낙뢰 -->
-            <FrameEvent Type="Danmaku" StartTime="0" Path="Enemy/ThunderStorm.xml" Offset="0.5 0 0" UseDirection="True"/>
+            <FrameEvent Type="Danmaku" StartTime="0" Path="Assets/Data/DanmakuGraph/Enemy/ThunderStorm.xml" Offset="0.5 0 0" UseDirection="True"/>
 
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="With" EventTargetType="SummonTargetRange" Range="100.0" AllyTarget="Ally"/>
         </Animation>

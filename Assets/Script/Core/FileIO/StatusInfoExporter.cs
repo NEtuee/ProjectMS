@@ -7,7 +7,24 @@ using ICSharpCode.WpfDesign.XamlDom;
 
 public static class StatusInfoLoader
 {
-    public static Dictionary<string, StatusInfoData> readFromXML(string path)
+#if UNITY_EDITOR
+    public static StatusInfoDataList readFromXMLAndExportToBinary(string path, string binaryOutputPath)
+    {
+        StatusInfoDataList statusInfoDataList = readFromXML(path);
+        statusInfoDataList.writeData(binaryOutputPath);
+
+        return statusInfoDataList;
+    }
+#endif
+    public static StatusInfoDataList readData(string binaryPath)
+    {
+        StatusInfoDataList data = new StatusInfoDataList();
+        data.readData(binaryPath);
+
+        return data;
+    }
+
+    public static StatusInfoDataList readFromXML(string path)
     {
         PositionXmlDocument xmlDoc = new PositionXmlDocument();
         try
@@ -31,7 +48,7 @@ public static class StatusInfoLoader
             return null;
         }
 
-        Dictionary<string, StatusInfoData> StatusInfoDataList = new Dictionary<string, StatusInfoData>();
+        StatusInfoDataList statusInfoDataList = new StatusInfoDataList();
         XmlNodeList projectileNodes = xmlDoc.FirstChild.ChildNodes;
         try
         {
@@ -41,7 +58,7 @@ public static class StatusInfoLoader
                 if(baseData == null)
                     return null;
 
-                StatusInfoDataList.Add(baseData._statusInfoName,baseData);
+                statusInfoDataList._statusInfoList.Add(baseData._statusInfoName,baseData);
             }
         }
         catch(System.Exception ex)
@@ -50,7 +67,7 @@ public static class StatusInfoLoader
             return null;
         }
 
-        return StatusInfoDataList;
+        return statusInfoDataList;
     }
 
     private static StatusInfoData readStatusInfoData(XmlNode node)

@@ -7,7 +7,6 @@ public abstract class MovementBase
     public enum MovementType
     {
         Empty = 0,
-        RootMotion,
         GraphPreset,
         FrameEvent,
         Count,

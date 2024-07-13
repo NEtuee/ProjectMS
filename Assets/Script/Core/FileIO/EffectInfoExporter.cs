@@ -7,7 +7,24 @@ using ICSharpCode.WpfDesign.XamlDom;
 
 public static class EffectInfoExporter
 {
-    public static Dictionary<string,EffectInfoDataBase[]> readFromXML(string path)
+#if UNITY_EDITOR
+    public static EffectInfoDataList readFromXMLAndExportToBinary(string path, string binaryOutputPath)
+    {
+        var data = readFromXML(path);
+        data.writeData(binaryOutputPath);
+        return data;
+    }
+#endif
+
+    public static EffectInfoDataList readData(string binaryPath)
+    {
+        EffectInfoDataList data = new EffectInfoDataList();
+        data.readData(binaryPath);
+
+        return data;
+    }
+
+    public static EffectInfoDataList readFromXML(string path)
     {
         PositionXmlDocument xmlDoc = new PositionXmlDocument();
         try
@@ -63,13 +80,13 @@ public static class EffectInfoExporter
                 effectInfoDataDictionary[effectInfoData._key].Insert(0,effectInfoData);
         }
 
-        Dictionary<string,EffectInfoDataBase[]> resultEffectInfoDataDictionary = new Dictionary<string,EffectInfoDataBase[]>();
+        EffectInfoDataList effectInfoDataList = new EffectInfoDataList();
         foreach(var item in effectInfoDataDictionary)
         {
-            resultEffectInfoDataDictionary.Add(item.Key,item.Value.ToArray());
+            effectInfoDataList._effectInfoDataDic.Add(item.Key,item.Value.ToArray());
         }
 
-        return resultEffectInfoDataDictionary;
+        return effectInfoDataList;
     }
 
     private static bool readEffectInfoBaseData(XmlNode node, string filePath, EffectInfoDataBase effectInfoDataBase)

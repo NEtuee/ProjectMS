@@ -228,7 +228,7 @@ public static class IOControl {
 		DirectoryInfo di = new DirectoryInfo(PathForDocumentsFile(path));
 		getFileListRecursiveInner(ref di, extension, ref fileList, ref fullPathList);
 
-		string dataPath = IOControl.PathForDocumentsFile("").ToLower() + "/";
+		string dataPath = IOControl.PathForDocumentsFile("").ToLower();
 		for(int index = 0; index < fullPathList.Count; ++index)
 		{
 			fullPathList[index] = fullPathList[index].Replace("\\","/");
@@ -238,6 +238,7 @@ public static class IOControl {
 
 	private static void getFileListRecursiveInner(ref DirectoryInfo directoryInfo, string extension, ref List<string> fileList, ref List<string> fullPathList)
 	{
+		DebugUtil.assert(directoryInfo.Exists, "Directory Not Exists");
 		foreach (FileInfo file in directoryInfo.GetFiles())
 		{
 			if(file.Extension.ToLower() != extension)
@@ -284,6 +285,6 @@ public static class IOControl {
 			path = path.Substring(0,path.LastIndexOf('/'));
 		}
 
-		return Path.Combine(path,str);
+		return path + "/" + str;
 	}
 }

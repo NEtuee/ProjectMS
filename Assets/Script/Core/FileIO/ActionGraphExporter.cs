@@ -11,6 +11,12 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
 
     private static string _currentFileName = "";
     PositionXmlDocument _xmlDoc = null;
+
+    public override ActionGraphBaseData createNewDataInstance()
+    {
+        return new ActionGraphBaseData();
+    }
+
     public override ActionGraphBaseData readFromXML(string path)
     {
         _currentFileName = path;
@@ -408,7 +414,6 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             {
                 AnimationPlayDataInfo animationData = ReadActionAnimation(nodeList[i],masterPath,defaultFPS, filePath, actionTime);
                 nodeData._animationInfoIndex = animationDataList.Count;
-                animationData._hasMovementGraph = nodeData._movementType == MovementBase.MovementType.RootMotion;
                 animationPlayDataInfoList.Add(animationData);
 
 #if UNITY_EDITOR
@@ -666,6 +671,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             {
                 if(nodeList[i].Name == "FrameEvent")
                 {
+#if UNITY_EDITOR
                     ActionFrameEventBase frameEvent = FrameEventLoader.readFromXMLNode(nodeList[i], filePath);
                     if(frameEvent == null)
                         continue;
@@ -674,6 +680,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
                         timeEventList.Add(frameEvent);
                     else if(frameEvent._executeTimingType == FrameEventExecuteTimingType.FrameBase)
                         frameEventList.Add(frameEvent);
+#endif
                 }
                 else if(nodeList[i].Name == "MultiSelectAnimation")
                 {
@@ -777,7 +784,6 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
 
         nodeData._isDummyAction = true;
 
-        animationPlayDataInfo._hasMovementGraph = false;
 
         return nodeData;
     }
@@ -812,11 +818,13 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         {
             if(nodeList[index].Name == "FrameEvent")
             {
+#if UNITY_EDITOR
                 ActionFrameEventBase frameEvent = FrameEventLoader.readFromXMLNode(nodeList[index], filePath);
                 if(frameEvent == null)
                     continue;
                 
                 frameEvents.Add(frameEvent);
+#endif
             }
         }
 

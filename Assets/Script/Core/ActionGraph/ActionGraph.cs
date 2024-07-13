@@ -205,6 +205,9 @@ public class ActionGraph
     {
         _customValueDictionary.Clear();
 
+        if(customValueData == null)
+            return;
+
         for(int index = 0; index < customValueData.Length; ++index)
         {
             _customValueDictionary.Add(customValueData[index]._name,customValueData[index]._customValue);
@@ -868,7 +871,6 @@ public class ActionGraph
     public bool getCurrentAnimationTranslation(out UnityEngine.Vector3 outTranslation) { return _animationPlayer.getCurrentAnimationTranslation(out outTranslation); }
     public FlipState getCurrentFlipState() {return _animationPlayer.getCurrentFlipState();}
     public FlipType getCurrentFlipType() {return getCurrentAction()._flipType;}
-    public MovementGraph getCurrentMovementGraph() {return _animationPlayer.getCurrentMovementGraph();}
     public MovementBase.MovementType getCurrentMovement() {return getCurrentAction()._movementType;}
 
     public float getMoveScaleByIndex(int index) {return _actionGraphBaseData._actionNodeData[index]._moveScale;}

@@ -167,7 +167,6 @@ public class EffectItem : EffectItemBase
         _animationPlayData._actionTime = -1f;
         _animationPlayData._frameEventDataCount = 0;
         _animationPlayData._timeEventDataCount = 0;
-        _animationPlayData._hasMovementGraph = false;
         _animationPlayData._isLoop = false;
         _animationPlayData._animationLoopCount = 0;
         _animationPlayData._flipState = new FlipState{xFlip = false, yFlip = false};

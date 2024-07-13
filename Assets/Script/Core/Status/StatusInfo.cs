@@ -79,8 +79,8 @@ public class StatusInfo
         Delayed,
     };
 
-    private static Dictionary<string, StatusInfoData> _statusInfoDataDictionary;
-    private static Dictionary<int, BuffData> _buffDataDictionary;
+    private static StatusInfoDataList   _statusInfoDataList;
+    private static BuffDataList _buffDataList;
     private static Dictionary<string, int> _buffKeyDictinary = new Dictionary<string, int>();
 
     private StatusInfoData _statusInfoData;
@@ -150,24 +150,24 @@ public class StatusInfo
 
     private StatusInfoData getStatusInfoData(string targetName)
     {
-        if(_statusInfoDataDictionary.ContainsKey(targetName) == false)
+        if(_statusInfoDataList._statusInfoList.ContainsKey(targetName) == false)
         {
             DebugUtil.assert(false, "target status info data not exists: {0}",targetName);
             return null;
         }
 
-        return _statusInfoDataDictionary[targetName];
+        return _statusInfoDataList._statusInfoList[targetName];
     }
 
     private BuffData getBuffData(int buffKey)
     {
-        if(_buffDataDictionary.ContainsKey(buffKey) == false)
+        if(_buffDataList._buffDataList.ContainsKey(buffKey) == false)
         {
             DebugUtil.assert(false, "target buff data not exists: {0}",buffKey);
             return null;
         }
 
-        return _buffDataDictionary[buffKey];
+        return _buffDataList._buffDataList[buffKey];
     }
 
     public static int getBuffKeyFromName(string buffName)
@@ -178,21 +178,21 @@ public class StatusInfo
         return _buffKeyDictinary[buffName];
     }
 
-    public static void setBuffDataDictionary(Dictionary<int, BuffData> data)
+    public static void setBuffDataDictionary(BuffDataList data)
     {
-        _buffDataDictionary = data;
+        _buffDataList = data;
 
         _buffKeyDictinary.Clear();
 
-        foreach(var item in _buffDataDictionary)
+        foreach(var item in _buffDataList._buffDataList)
         {
             _buffKeyDictinary.Add(item.Value._buffName, item.Value._buffKey);
         }
     }
 
-    public static void setStatusInfoDataDictionary(Dictionary<string, StatusInfoData> data)
+    public static void setStatusInfoDataDictionary(StatusInfoDataList data)
     {
-        _statusInfoDataDictionary = data;
+        _statusInfoDataList = data;
     }
 
     private void createStatusValueDictionary(StatusInfoData data)
@@ -227,7 +227,7 @@ public class StatusInfo
 
     public void applyBuff(int buffKey)
     {
-        if(_buffDataDictionary.ContainsKey(buffKey) == false)
+        if(_buffDataList._buffDataList.ContainsKey(buffKey) == false)
         {
             DebugUtil.assert(false, "invalid buff key: {0}", buffKey);
             return;
@@ -242,7 +242,7 @@ public class StatusInfo
             }
         }
 
-        applyBuff(_buffDataDictionary[buffKey], GlobalTimer.Instance().getScaledGlobalTime());
+        applyBuff(_buffDataList._buffDataList[buffKey], GlobalTimer.Instance().getScaledGlobalTime());
     }
 
     private void applyBuff(BuffData buff, float startedTime)
@@ -697,13 +697,13 @@ public class StatusInfo
 
     public bool checkBuffApplyStatus(int buffKey, string status)
     {
-        if(_buffDataDictionary.ContainsKey(buffKey) == false)
+        if(_buffDataList._buffDataList.ContainsKey(buffKey) == false)
         {
             DebugUtil.assert(false, "target buff is not exists: [targetKey: {0}]", buffKey);
             return false;
         }
 
-        BuffData buff = _buffDataDictionary[buffKey];
+        BuffData buff = _buffDataList._buffDataList[buffKey];
         if(buff.isStatusBuffValid() == false)
             return false;
 
@@ -712,13 +712,13 @@ public class StatusInfo
 
     public float buffValuePrediction(float deltaTime, int buffKey)
     {
-        if(_buffDataDictionary.ContainsKey(buffKey) == false)
+        if(_buffDataList._buffDataList.ContainsKey(buffKey) == false)
         {
             DebugUtil.assert(false, "target buff is not exists: [targetKey: {0}]", buffKey);
             return 0f;
         }
 
-        BuffData buff = _buffDataDictionary[buffKey];
+        BuffData buff = _buffDataList._buffDataList[buffKey];
         if(buff.isStatusBuffValid() == false)
             return 0f;
 

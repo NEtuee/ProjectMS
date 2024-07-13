@@ -8,9 +8,14 @@ using ICSharpCode.WpfDesign.XamlDom;
 public class DanmakuGraphLoader : LoaderBase<DanmakuGraphBaseData>
 {
     static string _currentFileName = "";
+
+    public override DanmakuGraphBaseData createNewDataInstance()
+    {
+        return new DanmakuGraphBaseData();
+    }
+
     public override DanmakuGraphBaseData readFromXML(string path)
     {
-        path = "Assets/Data/DanmakuGraph/" + path;
         _currentFileName = path;
         PositionXmlDocument xmlDoc = new PositionXmlDocument();
         try

@@ -138,7 +138,7 @@
     </KickStop>
 
     <MoveAll MovementType="FrameEvent" DirectionType="MousePoint" RotationType="MoveDirection" FlipType="MousePoint" FlipTypeUpdateOnce="True" RotateBySpeed="True" RotateSpeed="gv_rotateSpeed">
-        <Animation Path="Resources/Sprites/NewPlayer/MoveRotate/" FramePerSecond="1" AngleBaseAnimation="True" XFlip="true">
+        <Animation Path="Sprites/NewPlayer/MoveRotate/" FramePerSecond="1" AngleBaseAnimation="True" XFlip="true">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="gv_MoveVelocityMax" Speed="gv_MoveSpeed"/>
         </Animation>
 
@@ -403,7 +403,7 @@
 
     <DashLongCharge MovementType="FrameEvent" DirectionType="MousePoint" FlipType="Direction">
         <Animation Preset="Sprites/NewPlayer/HyperCharge/" XFlip="true">
-            <FrameEvent Type="Movement" StartTime="0" Friction="gv_IdleFriction" Speed="0"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="gv_IdleFriction" Speed="0" Velocity="gv_MoveVelocityMax"/>
         </Animation>
 
         <Branch Key="(getKey_StunShot == false) && getKey_AttackCharge" Execute="MoveAll"/>
@@ -416,7 +416,7 @@
 
     <KickCharge MovementType="FrameEvent" DirectionType="MousePoint" FlipType="Direction">
         <Animation Preset="Sprites/NewPlayer/KickCharge/" XFlip="true" Duration="0.5">
-            <FrameEvent Type="Movement" StartTime="0" Friction="gv_IdleFriction" Speed="0"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="gv_IdleFriction" Speed="0" Velocity="gv_MoveVelocityMax"/>
         </Animation>
 
         <Branch Key="(getKey_GuardBreak2 == false) && getKey_AttackCharge" Execute="MoveAll"/>
@@ -429,7 +429,7 @@
 
     <KickCharge_Hard MovementType="FrameEvent" DirectionType="MousePoint" FlipType="Direction">
         <Animation Preset="Sprites/NewPlayer/KickCharge/" XFlip="true">
-            <FrameEvent Type="Movement" StartTime="0" Friction="gv_IdleFriction" Speed="0"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="gv_IdleFriction" Speed="0" Velocity="gv_MoveVelocityMax"/>
         </Animation>
 
         <Branch Key="(getKey_GuardBreak2 == false) && getKey_AttackCharge" Execute="MoveAll"/>
@@ -581,7 +581,7 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="Dead"/>
             <FrameEvent Type="AudioPlay" StartTime="0" ID="1008" Attach="true"/>
 
-            <FrameEvent Type="PlaySequencer" StartTime="0" Path="GameSequencer/PlayerDead.xml"/>
+            <FrameEvent Type="PlaySequencer" StartTime="0" Path="Assets/Data/SequencerGraph/GameSequencer/PlayerDead.xml"/>
 
             <FrameEvent Type="SequencerSignal" StartTime="0" Signal="CatchEnd"/>
         </Animation>
@@ -621,7 +621,7 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="Catched"/>
             <FrameEvent Type="ReleaseCatch" StartTime="0" Push="2 0 0" Condition="(getStat_IsCatched == 0.0) && (getTargetFrameTag_Hold == false)"/>
 
-            <FrameEvent Type="PlaySequencer" StartTime="0" Path="GameSequencer/CatchProcess.xml"/>
+            <FrameEvent Type="PlaySequencer" StartTime="0" Path="Assets/Data/SequencerGraph/GameSequencer/CatchProcess.xml"/>
         </Animation>
 
         <Branch Condition="Dead" Execute="Dead"/>   

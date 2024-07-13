@@ -5,9 +5,14 @@ using System.Text;
 using UnityEngine;
 using ICSharpCode.WpfDesign.XamlDom;
 
-public class CharacterInfoLoader : LoaderBase<Dictionary<string,CharacterInfoData>>
+public class CharacterInfoLoader : LoaderBase<CharacterInfoDataList>
 {
-    public override Dictionary<string,CharacterInfoData> readFromXML(string path)
+    public override CharacterInfoDataList createNewDataInstance()
+    {
+        return new CharacterInfoDataList();
+    }
+
+    public override CharacterInfoDataList readFromXML(string path)
     {
         PositionXmlDocument xmlDoc = new PositionXmlDocument();
         try
@@ -31,7 +36,7 @@ public class CharacterInfoLoader : LoaderBase<Dictionary<string,CharacterInfoDat
             return null;
         }
 
-        Dictionary<string,CharacterInfoData> characterInfoDataDictionary = new Dictionary<string,CharacterInfoData>();
+        CharacterInfoDataList characterInfoDataDictionary = new CharacterInfoDataList();
 
         XmlNodeList projectileNodes = xmlDoc.FirstChild.ChildNodes;
         for(int nodeIndex = 0; nodeIndex < projectileNodes.Count; ++nodeIndex)
@@ -40,7 +45,7 @@ public class CharacterInfoLoader : LoaderBase<Dictionary<string,CharacterInfoDat
             if(characterInfoData == null)
                 return null;
 
-            characterInfoDataDictionary.Add(projectileNodes[nodeIndex].Name, characterInfoData);
+            characterInfoDataDictionary._characterInfoDataDic.Add(projectileNodes[nodeIndex].Name, characterInfoData);
         }
 
         return characterInfoDataDictionary;

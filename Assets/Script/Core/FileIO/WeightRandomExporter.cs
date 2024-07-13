@@ -7,7 +7,23 @@ using ICSharpCode.WpfDesign.XamlDom;
 
 public static class WeightRandomExporter
 {
-    public static Dictionary<string, WeightGroupData> readFromXML(string path)
+#if UNITY_EDITOR
+    public static WeightGroupDataList readFromXMLAndExportToBinary(string path, string binaryOutputPath)
+    {
+        var data = readFromXML(path);
+        data.writeData(binaryOutputPath);
+        return data;
+    }
+#endif
+    public static WeightGroupDataList readData(string binaryPath)
+    {
+        WeightGroupDataList data = new WeightGroupDataList();
+        data.readData(binaryPath);
+
+        return data;
+    }
+
+    public static WeightGroupDataList readFromXML(string path)
     {
         PositionXmlDocument xmlDoc = new PositionXmlDocument();
         try
@@ -31,7 +47,7 @@ public static class WeightRandomExporter
             return null;
         }
 
-        Dictionary<string, WeightGroupData> weightGroupDataList = new Dictionary<string, WeightGroupData>();
+        WeightGroupDataList weightGroupDataList = new WeightGroupDataList();
 
         XmlNodeList weightGroupNodes = xmlDoc.FirstChild.ChildNodes;
         for(int nodeIndex = 0; nodeIndex < weightGroupNodes.Count; ++nodeIndex)
@@ -41,13 +57,13 @@ public static class WeightRandomExporter
             if(baseData.isValid() == false)
                 return null;
 
-            if(weightGroupDataList.ContainsKey( baseData._groupKey))
+            if(weightGroupDataList._weightGroupDataList.ContainsKey( baseData._groupKey))
             {
                 DebugUtil.assert(false,"target weight is already exists: group: {0}",baseData._groupKey);
                 return null;
             }
 
-            weightGroupDataList.Add(baseData._groupKey,baseData);
+            weightGroupDataList._weightGroupDataList.Add(baseData._groupKey,baseData);
         }
 
         return weightGroupDataList;

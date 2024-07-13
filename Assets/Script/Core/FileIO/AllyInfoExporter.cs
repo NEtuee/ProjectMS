@@ -5,9 +5,15 @@ using System.Text;
 using UnityEngine;
 using ICSharpCode.WpfDesign.XamlDom;
 
-public class AllyInfoLoader : LoaderBase<Dictionary<string,AllyInfoData>>
+
+public class AllyInfoLoader : LoaderBase<AllyInfoDataList>
 {
-    public override Dictionary<string,AllyInfoData> readFromXML(string path)
+    public override AllyInfoDataList createNewDataInstance()
+    {
+        return new AllyInfoDataList();
+    }
+
+    public override AllyInfoDataList readFromXML(string path)
     {
         PositionXmlDocument xmlDoc = new PositionXmlDocument();
         try
@@ -31,7 +37,7 @@ public class AllyInfoLoader : LoaderBase<Dictionary<string,AllyInfoData>>
             return null;
         }
 
-        Dictionary<string,AllyInfoData> allyInfoDataDictionary = new Dictionary<string,AllyInfoData>();
+        AllyInfoDataList allyInfoDataDictionary = new AllyInfoDataList();
 
         XmlNodeList allyInfoNodes = xmlDoc.FirstChild.ChildNodes;
         for(int nodeIndex = 0; nodeIndex < allyInfoNodes.Count; ++nodeIndex)
@@ -40,14 +46,14 @@ public class AllyInfoLoader : LoaderBase<Dictionary<string,AllyInfoData>>
             allyInfoData._index = nodeIndex;
             allyInfoData._key = allyInfoNodes[nodeIndex].Name;
 
-            allyInfoDataDictionary.Add(allyInfoNodes[nodeIndex].Name, allyInfoData);
+            allyInfoDataDictionary._allyInfoDataDic.Add(allyInfoNodes[nodeIndex].Name, allyInfoData);
         }
 
         allyInfoNodes = xmlDoc.FirstChild.ChildNodes;
         for(int nodeIndex = 0; nodeIndex < allyInfoNodes.Count; ++nodeIndex)
         {
             string attrName = allyInfoNodes[nodeIndex].Name;
-            AllyInfoData allyInfo = allyInfoDataDictionary[attrName];
+            AllyInfoData allyInfo = allyInfoDataDictionary._allyInfoDataDic[attrName];
 
             readAllyInfo(allyInfoNodes[nodeIndex], ref allyInfo, ref allyInfoDataDictionary);
         }
@@ -56,7 +62,7 @@ public class AllyInfoLoader : LoaderBase<Dictionary<string,AllyInfoData>>
     }
 
 
-    public static void readAllyInfo(XmlNode node, ref AllyInfoData allyInfo, ref Dictionary<string,AllyInfoData> allyInfoDataDictionary)
+    public static void readAllyInfo(XmlNode node, ref AllyInfoData allyInfo, ref AllyInfoDataList allyInfoDataDictionary)
     {
         List<int> allyGroup = new List<int>();
         List<int> enemyGroup = new List<int>();
@@ -70,7 +76,7 @@ public class AllyInfoLoader : LoaderBase<Dictionary<string,AllyInfoData>>
             string[] splittedList = attrValue.Split(' ');
             foreach(var item in splittedList)
             {
-                if(allyInfoDataDictionary.ContainsKey(item) == false)
+                if(allyInfoDataDictionary._allyInfoDataDic.ContainsKey(item) == false)
                 {
                     DebugUtil.assert_fileOpen(false,"존재하지 않는 AllyInfo Key [{0}]를 사용하고 있습니다. 오타는 아닌가요?",node.BaseURI,XMLScriptConverter.getLineNumberFromXMLNode(node),item);
                     return;
@@ -81,21 +87,21 @@ public class AllyInfoLoader : LoaderBase<Dictionary<string,AllyInfoData>>
             {
                 foreach(var item in splittedList)
                 {
-                    allyGroup.Add(allyInfoDataDictionary[item]._index);
+                    allyGroup.Add(allyInfoDataDictionary._allyInfoDataDic[item]._index);
                 }
             }
             else if(attrName == "EnemyGroup")
             {
                 foreach(var item in splittedList)
                 {
-                    enemyGroup.Add(allyInfoDataDictionary[item]._index);
+                    enemyGroup.Add(allyInfoDataDictionary._allyInfoDataDic[item]._index);
                 }
             }
             else if(attrName == "NeutralGroup")
             {
                 foreach(var item in splittedList)
                 {
-                    neutralGroup.Add(allyInfoDataDictionary[item]._index);
+                    neutralGroup.Add(allyInfoDataDictionary._allyInfoDataDic[item]._index);
                 }
             }
         }

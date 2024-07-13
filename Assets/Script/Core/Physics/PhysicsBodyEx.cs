@@ -1,8 +1,9 @@
 using System.Threading;
+using System.IO;
 using UnityEngine;
 
 [System.Serializable]
-public struct PhysicsBodyDescription
+public struct PhysicsBodyDescription : SerializableStructure
 {
     public Vector3Ex _velocity;
     public FloatEx _torque;
@@ -36,6 +37,24 @@ public struct PhysicsBodyDescription
         _friction = 0f;
         _angularFriction = 0f;
         _useGravity = false;
+    }
+#if UNITY_EDITOR
+    public void serialize(ref BinaryWriter binaryWriter)
+    {
+        _velocity.serialize(ref binaryWriter);
+        _torque.serialize(ref binaryWriter);
+        binaryWriter.Write(_friction);
+        binaryWriter.Write(_angularFriction);
+        binaryWriter.Write(_useGravity);
+    }
+#endif
+    public void deserialize(ref BinaryReader binaryReader)
+    {
+        _velocity.deserialize(ref binaryReader);
+        _torque.deserialize(ref binaryReader);
+        _friction = binaryReader.ReadSingle();
+        _angularFriction = binaryReader.ReadSingle();
+        _useGravity = binaryReader.ReadBoolean();
     }
 }
 

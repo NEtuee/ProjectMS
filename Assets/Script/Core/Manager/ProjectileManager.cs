@@ -25,7 +25,6 @@ public class DelayedProjectileItem
 public class ProjectileManager : PoolingManagerBase<ProjectileEntityBase>
 {
     public static ProjectileManager _instance;
-    public string _projectileGraphPath = "";
 
     private Queue<ProjectileEntityBase> _projectilePool = new Queue<ProjectileEntityBase>();
     private SimplePool<DelayedProjectileItem> _delayedProjectileItemPool = new SimplePool<DelayedProjectileItem>();
@@ -42,11 +41,11 @@ public class ProjectileManager : PoolingManagerBase<ProjectileEntityBase>
         RegisterRequest();
         
         _projectileGraphDataList.Clear();
-        ProjectileGraphBaseData[] graphDataList = ResourceContainerEx.Instance().GetProjectileGraphBaseData(IOControl.PathForDocumentsFile(_projectileGraphPath));
+        ProjectileGraphBaseData[] graphDataList = ResourceContainerEx.Instance().GetProjectileGraphBaseData("Assets/Data/ProjectileGraph/ProjectileGraph.xml");
 
         if(graphDataList == null)
         {
-            DebugUtil.assert(false, "projectileGraphBaseData load fail: {0}",_projectileGraphPath);
+            DebugUtil.assert(false, "projectileGraphBaseData load fail: Assets/Data/ProjectileGraph/ProjectileGraph.xml");
             return;
         }
 

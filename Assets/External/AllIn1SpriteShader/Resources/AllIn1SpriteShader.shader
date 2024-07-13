@@ -611,7 +611,7 @@
 				o.color = v.color;
 
 				#ifdef PIXELSNAP_ON
-				OUT.vertex = UnityPixelSnap (OUT.vertex);
+				o.vertex = UnityPixelSnap (o.vertex);
 				#endif
 
 				half2 center = half2(0.5, 0.5);

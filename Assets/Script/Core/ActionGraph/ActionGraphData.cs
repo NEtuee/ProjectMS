@@ -1,12 +1,16 @@
+#define INCLUDE_FULLPATH
+
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using JetBrains.Annotations;
 using UnityEditor;
 
+
 [System.Serializable]
-public class ActionGraphBaseData
+public class ActionGraphBaseData : SerializableDataType
 {
     public string                               _name;
     public ActionGraphNodeData[]                _actionNodeData = null;
@@ -28,9 +32,9 @@ public class ActionGraphBaseData
 
     public int                                  _dummyActionIndex = -1;
 
-#if UNITY_EDITOR
+//#if UNITY_EDITOR
     public string _fullPath;
-#endif
+//#endif
 
     public void buildActionIndexMap()
     {
@@ -41,7 +45,7 @@ public class ActionGraphBaseData
     }
 
 #if UNITY_EDITOR
-    public void serialize(ref BinaryWriter binaryWriter)
+    public override void serialize(ref BinaryWriter binaryWriter)
     {
         binaryWriter.Write(_name);
         binaryWriter.Write(_actionNodeCount);
@@ -104,9 +108,14 @@ public class ActionGraphBaseData
                 _triggerEventData[i].serialize(ref binaryWriter);
             }
         }
-    }
 
-    public void deserialize(ref BinaryReader binaryReader)
+#if INCLUDE_FULLPATH
+        binaryWriter.Write(_fullPath);
+#endif
+    }
+#endif
+
+    public override void deserialize(ref BinaryReader binaryReader)
     {
         _name = binaryReader.ReadString();
         _actionNodeCount = binaryReader.ReadInt32();
@@ -184,9 +193,12 @@ public class ActionGraphBaseData
             }
         }
 
+#if INCLUDE_FULLPATH
+        _fullPath = binaryReader.ReadString();
+#endif
+
         buildActionIndexMap();
     }
-#endif
 }
 
 [System.Serializable]
@@ -195,6 +207,7 @@ public class ActionGraphTriggerEventData
     public ActionFrameEventBase[]   _frameEventData = null;
     public int                      _conditionCompareDataIndex = -1;
 
+#if UNITY_EDITOR
     public void serialize(ref BinaryWriter binaryWriter)
     {
         binaryWriter.Write(_frameEventData == null ? 0 : _frameEventData.Length);
@@ -208,7 +221,7 @@ public class ActionGraphTriggerEventData
 
         binaryWriter.Write(_conditionCompareDataIndex);
     }
-
+#endif
     public void deserialize(ref BinaryReader binaryReader)
     {
         int frameEventCount = binaryReader.ReadInt32();
@@ -288,8 +301,9 @@ public class ActionGraphNodeData
     public int                          _triggerIndexStart;
     public int                          _triggerCount;
 
-#if UNITY_EDITOR
     public int _lineNumber;
+
+#if UNITY_EDITOR
 
     public void serialize(ref BinaryWriter binaryWriter)
     {
@@ -304,9 +318,7 @@ public class ActionGraphNodeData
         binaryWriter.Write((int)_flipType);
         binaryWriter.Write((int)_defenceType);
         binaryWriter.Write((int)_characterMaterial);
-        binaryWriter.Write((int)_applyBuffList.Length);
-        for(int i = 0; i < _applyBuffList.Length; ++i)
-            binaryWriter.Write(_applyBuffList[i]);
+        BinaryHelper.writeArray(ref binaryWriter, _applyBuffList);
         binaryWriter.Write((int)_ignoreAttackType);
         binaryWriter.Write(_additionalDirectionAngle);
         binaryWriter.Write(_defenceAngle);
@@ -328,6 +340,9 @@ public class ActionGraphNodeData
         binaryWriter.Write(_branchCount);
         binaryWriter.Write(_triggerIndexStart);
         binaryWriter.Write(_triggerCount);
+#if INCLUDE_FULLPATH
+        binaryWriter.Write(_lineNumber);
+#endif
     }
 #endif
 
@@ -354,10 +369,7 @@ public class ActionGraphNodeData
         _flipType = (FlipType)binaryReader.ReadInt32();
         _defenceType = (DefenceType)binaryReader.ReadInt32();
         _characterMaterial = (CommonMaterial)binaryReader.ReadInt32();
-        int applyBuffListCount = binaryReader.ReadInt32();
-        _applyBuffList = applyBuffListCount == 0 ? null : new int[applyBuffListCount];
-        for(int i = 0; i < applyBuffListCount; ++i)
-            _applyBuffList[i] = binaryReader.ReadInt32();
+        _applyBuffList = BinaryHelper.readArrayInt(ref binaryReader);
         _ignoreAttackType = (AttackType)binaryReader.ReadInt32();
         _additionalDirectionAngle = binaryReader.ReadSingle();
         _defenceAngle = binaryReader.ReadSingle();
@@ -379,6 +391,11 @@ public class ActionGraphNodeData
         _branchCount = binaryReader.ReadInt32();
         _triggerIndexStart = binaryReader.ReadInt32();
         _triggerCount = binaryReader.ReadInt32();
+
+#if INCLUDE_FULLPATH
+        _lineNumber = binaryReader.ReadInt32();
+#endif
+
     }
 }
 
@@ -417,8 +434,8 @@ public class ActionGraphBranchData
     public int      _keyConditionCompareDataIndex = -1;
     public int      _weightConditionCompareDataIndex = -1;
 
-#if UNITY_EDITOR
     public int _lineNumber;
+#if UNITY_EDITOR
 
     public void serialize(ref BinaryWriter binaryWriter)
     {
@@ -426,6 +443,10 @@ public class ActionGraphBranchData
         binaryWriter.Write(_conditionCompareDataIndex);
         binaryWriter.Write(_keyConditionCompareDataIndex);
         binaryWriter.Write(_weightConditionCompareDataIndex);
+
+#if INCLUDE_FULLPATH
+        binaryWriter.Write(_lineNumber);
+#endif
     }
 #endif
 
@@ -435,6 +456,12 @@ public class ActionGraphBranchData
         _conditionCompareDataIndex = binaryReader.ReadInt32();
         _keyConditionCompareDataIndex = binaryReader.ReadInt32();
         _weightConditionCompareDataIndex = binaryReader.ReadInt32();
+
+
+#if INCLUDE_FULLPATH
+        _lineNumber = binaryReader.ReadInt32();
+#endif
+
     }
 }
 
@@ -965,7 +992,7 @@ public class ActionGraphConditionCompareData
             binaryWriter.Write((int)_compareTypeArray[i]);
         }
     }
-
+#endif
     public void deserialize(ref BinaryReader binaryReader)
     {
         _conditionNodeDataCount = binaryReader.ReadInt32();
@@ -1014,10 +1041,10 @@ public class ActionGraphConditionCompareData
 
         _compareTypeCount = binaryReader.ReadInt32();
         _compareTypeArray = _compareTypeCount <= 0 ? null : new ConditionCompareType[_compareTypeCount];
-        for(int i = 0; i < _compareTypeArray.Length; ++i)
+        for(int i = 0; i < _compareTypeCount; ++i)
         {
             _compareTypeArray[i] = (ConditionCompareType)binaryReader.ReadInt32();
         }
     }
-#endif
+
 }

@@ -48,7 +48,7 @@ public class SequencerGraphProcessManager
     {
         SequencerGraphProcessor processor = _sequencerGrpahProcessorPool.dequeue();
         processor.clearSequencerGraphProcessor();
-        processor.startSequencerFromStage(sequencerKey,currentPoint, ref keepUnique,pointCharacters,_ownerEntity,targetEntity,markerList,includePlayer);
+        processor.startSequencerFromStage("Assets/Data/SequencerGraph/" + sequencerKey,currentPoint, ref keepUnique,pointCharacters,_ownerEntity,targetEntity,markerList,includePlayer);
 
         _activeProcessorList.Add(processor);
 
