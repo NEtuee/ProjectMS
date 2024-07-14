@@ -69,6 +69,7 @@ public class GizmoHelper : MonoBehaviour
 
     private void Update()
     {
+#if UNITY_EDITOR
         if(MasterManager.instance.isGameUpdate() == false)
             return;
 
@@ -91,10 +92,12 @@ public class GizmoHelper : MonoBehaviour
         {
             _arcData[index]._timer -= Time.deltaTime;
         }
+#endif
     }
 
     public void drawCircle(Vector3 center, float radius, int accuracy, Color color, float time = 0f)
     {
+#if UNITY_EDITOR
         if(AreGizmosVisible() == false)
             return;
 
@@ -106,10 +109,12 @@ public class GizmoHelper : MonoBehaviour
         circleData._timer = time;
 
         _circleRequestData.Add(circleData);
+#endif
     }
 
     public void drawPolygon(Vector3[] verticies, Color color, float time = 0f)
     {
+#if UNITY_EDITOR
         if(AreGizmosVisible() == false)
             return;
             
@@ -125,10 +130,12 @@ public class GizmoHelper : MonoBehaviour
         polygonData._timer = time;
 
         _polygonData.Add(polygonData);
+#endif
     }
 
     public void drawArc(Vector3 start, float radius, float angle, Vector3 direction, Color color, float time = 0f)
     {
+#if UNITY_EDITOR
         if(AreGizmosVisible() == false)
             return;
             
@@ -141,10 +148,12 @@ public class GizmoHelper : MonoBehaviour
         arcData._timer = time;
 
         _arcData.Add(arcData);
+#endif
     }
 
     public void drawRectangle(Vector3 center, Vector3 widthHeightHalf, Color color, float time = 0f)
     {
+#if UNITY_EDITOR
         if(AreGizmosVisible() == false)
             return;
             
@@ -157,11 +166,13 @@ public class GizmoHelper : MonoBehaviour
         drawLine(rightTop, rightbottom, color, time);
         drawLine(rightbottom, leftBottom, color, time);
         drawLine(leftBottom, leftTop, color, time);
+#endif
     }
 
 
     public void drawLine(Vector3 start, Vector3 end, Color color, float time = 0f)
     {
+#if UNITY_EDITOR
         if(AreGizmosVisible() == false)
             return;
             
@@ -172,10 +183,12 @@ public class GizmoHelper : MonoBehaviour
         lineData._timer = time;
 
         _lineData.Add(lineData);
+#endif
     }
 
     private void drawLine()
     {
+#if UNITY_EDITOR
         Color color = Gizmos.color;
         for(int index = 0; index < _lineData.Count;)
         {
@@ -194,10 +207,12 @@ public class GizmoHelper : MonoBehaviour
         }
 
         Gizmos.color = color;
+#endif
     }
 
     private void drawArc()
     {
+#if UNITY_EDITOR
         Color color = Gizmos.color;
         for(int index = 0; index < _arcData.Count;)
         {
@@ -238,10 +253,12 @@ public class GizmoHelper : MonoBehaviour
         }
 
         Gizmos.color = color;
+#endif
     }
 
     private void drawPolygon()
     {
+#if UNITY_EDITOR
         Color color = Gizmos.color;
         for(int index = 0; index < _polygonData.Count;)
         {
@@ -265,10 +282,12 @@ public class GizmoHelper : MonoBehaviour
         }
 
         Gizmos.color = color;
+#endif
     }
 
     private void drawCircle()
     {
+#if UNITY_EDITOR
         Color color = Gizmos.color;
         for(int index = 0; index < _circleRequestData.Count;)
         {
@@ -297,6 +316,7 @@ public class GizmoHelper : MonoBehaviour
         }
 
         Gizmos.color = color;
+#endif
     }
 
     private void OnDrawGizmos()

@@ -22,7 +22,7 @@ public class ActionGraph
 
     private int _currentAnimationIndex = 0;
 
-    private Dictionary<ConditionNodeUpdateType, byte[]> _actionConditionNodeData = new Dictionary<ConditionNodeUpdateType, byte[]>();
+    private List<byte[]> _actionConditionNodeData = null;
     private Dictionary<string, float>           _customValueDictionary = new Dictionary<string, float>();
 
 
@@ -199,6 +199,13 @@ public class ActionGraph
 
     private void createCoditionNodeDataAll()
     {
+        int conditionCount = (int)ConditionNodeUpdateType.Count;
+        _actionConditionNodeData = new List<byte[]>(conditionCount);
+        for(int i = 0; i < conditionCount; ++i)
+        {
+            _actionConditionNodeData.Add(null);
+        }
+
         foreach(var item in ConditionNodeInfoPreset._nodePreset.Values)
         {
             if(item._updateType == ConditionNodeUpdateType.Literal || 
@@ -213,34 +220,25 @@ public class ActionGraph
                 item._updateType == ConditionNodeUpdateType.AI_GraphCoolTime)
                 continue;
 
-            createConditionNodeData(item);
+            _actionConditionNodeData[(int)item._updateType] = new byte[ConditionNodeInfoPreset._dataSize[(int)item._nodeType]];
         }
 
     }
 
     private void createConditionNodeData(ConditionNodeInfo info)
     {
-        if(_actionConditionNodeData.ContainsKey(info._updateType) == true)
-        {
-            DebugUtil.assert(false, "해당 컨디션 심볼이 이미 존재합니다. 통보 요망");
-            return;
-        }
-        else if(info._updateType == ConditionNodeUpdateType.Count || info._nodeType == ConditionNodeType.Count)
-        {
-            DebugUtil.assert(false, "잘못된 타입 입니다. 통보 요망");
-            return;
-        }
-
-
-        _actionConditionNodeData.Add(info._updateType, new byte[ConditionNodeInfoPreset._dataSize[(int)info._nodeType]]);
+        
     }
 
     private void initializeConditionData()
     {
         foreach(var item in _actionConditionNodeData)
         {
-            for(int i = 0; i < item.Value.Length; ++i)
-                item.Value[i] = 0;
+            if(item == null)
+                continue;
+
+            for(int i = 0; i < item.Length; ++i)
+                item[i] = 0;
         }
     }
 
@@ -406,57 +404,62 @@ public class ActionGraph
 
     public bool setActionConditionData_Int(ConditionNodeUpdateType updateType, int value)
     {
-        if((int)updateType <= (int)ConditionNodeUpdateType.ConditionResult )
+        int updateTypeIndex = (int)updateType;
+        if(updateTypeIndex <= (int)ConditionNodeUpdateType.ConditionResult )
         {
             DebugUtil.assert(false,"잘못된 타입 입니다. 통보 요망 : {0}",updateType);
             return false;
         }
 
-        return copyBytes_Int(value,_actionConditionNodeData[updateType]);
+        return copyBytes_Int(value,_actionConditionNodeData[updateTypeIndex]);
     }
 
     public bool setActionConditionData_Float(ConditionNodeUpdateType updateType, float value)
     {
-        if((int)updateType <= (int)ConditionNodeUpdateType.ConditionResult )
+        int updateTypeIndex = (int)updateType;
+        if(updateTypeIndex <= (int)ConditionNodeUpdateType.ConditionResult )
         {
             DebugUtil.assert(false,"잘못된 타입 입니다. 통보 요망 : {0}",updateType);
             return false;
         }
 
-        return copyBytes_Float(value,_actionConditionNodeData[updateType]);
+        return copyBytes_Float(value,_actionConditionNodeData[updateTypeIndex]);
     }
 
     public bool getActionConditionData_Bool(ConditionNodeUpdateType updateType)
     {
-        if((int)updateType <= (int)ConditionNodeUpdateType.ConditionResult )
+        int updateTypeIndex = (int)updateType;
+        if(updateTypeIndex <= (int)ConditionNodeUpdateType.ConditionResult )
         {
             DebugUtil.assert(false,"잘못된 타입 입니다. 통보 요망 : {0}",updateType);
             return false;
         }
 
-        return _actionConditionNodeData[updateType][0] == 1;
+        return _actionConditionNodeData[updateTypeIndex][0] == 1;
     }
 
     public float getActionConditionData_Float(ConditionNodeUpdateType updateType)
     {
-        if((int)updateType <= (int)ConditionNodeUpdateType.ConditionResult )
+        int updateTypeIndex = (int)updateType;
+        if(updateTypeIndex <= (int)ConditionNodeUpdateType.ConditionResult )
         {
             DebugUtil.assert(false,"잘못된 타입 입니다. 통보 요망 : {0}",updateType);
             return 0f;
         }
 
-        return System.BitConverter.ToSingle(_actionConditionNodeData[updateType],0);
+        return System.BitConverter.ToSingle(_actionConditionNodeData[updateTypeIndex],0);
     }
 
     public bool setActionConditionData_Bool(ConditionNodeUpdateType updateType, bool value)
     {
-        if((int)updateType <= (int)ConditionNodeUpdateType.ConditionResult )
+        int updateTypeIndex = (int)updateType;
+        if( updateTypeIndex <= (int)ConditionNodeUpdateType.ConditionResult )
         {
             DebugUtil.assert(false,"잘못된 타입 입니다. 통보 요망 : {0}",updateType);
             return false;
         }
 
-        return copyBytes_Bool(value,_actionConditionNodeData[updateType]);
+        return copyBytes_Bool(value,_actionConditionNodeData[updateTypeIndex]);
     }
 
     private unsafe bool copyBytes_Int(int value, byte[] destination, int offset = 0)
@@ -724,13 +727,14 @@ public class ActionGraph
             return checkAIGraphCoolTimeValue(data._graphNodeName) ? CommonConditionNodeData.trueByte : CommonConditionNodeData.falseByte;
         }
 
-        if(_actionConditionNodeData.ContainsKey(updateType) == false)
+        int updateTypeIndex = (int)updateType;
+        if(_actionConditionNodeData[updateTypeIndex] == null)
         {
             DebugUtil.assert(false,"해당 업데이트 타입은 존재하지 않습니다. : {0}",updateType);
             return null;
         }
 
-        return _actionConditionNodeData[updateType];
+        return _actionConditionNodeData[updateTypeIndex];
     }
 
     public void addResultData(bool value, int index)

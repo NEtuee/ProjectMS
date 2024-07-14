@@ -507,8 +507,9 @@ public class GameEntityBase : SequencerObjectBase
         laserEffectCheck();
 
         _collisionInfo.updateCollisionInfo(transform.position,getDirection());
-
+#if UNITY_EDITOR
         updateDebug();
+#endif        
     }
 
     public void onActionChanged()
@@ -641,7 +642,7 @@ public class GameEntityBase : SequencerObjectBase
 
         base.dispose(disposeFromMaster);
     }
-
+#if UNITY_EDITOR
     private void updateDebug()
     {
         if(_actionDebug == true || GameEditorMaster._instance._actionDebugAll)
@@ -750,7 +751,7 @@ public class GameEntityBase : SequencerObjectBase
 
         _debugColor = Color.red;
     }
-
+#endif
     private void gameEntityCollisionEvent(CollisionSuccessData data)
     {
         if(_characterInfo._selfCollision == false)
@@ -1000,22 +1001,27 @@ public class GameEntityBase : SequencerObjectBase
 
     public void updateConditionData()
     {
-        Vector3 input = ControllerEx.Instance().GetJoystickAxis();
-        Vector3 inputDirection = ControllerEx.Instance().getJoystickAxisR(transform.position);
-
-        float angleBetweenStick = MathEx.clampDegree(Vector3.SignedAngle(input, inputDirection,Vector3.forward));
         float angleDirection = MathEx.clampDegree(Vector3.SignedAngle(Vector3.right, _direction, Vector3.forward));
-        float angleDirectionToStick = MathEx.clampDegree(Vector3.Angle(getFlipState().xFlip ? -Vector3.right : Vector3.right, inputDirection));
         float angleDirectionToTarget = 0f;
         var targetEntity = getCurrentTargetEntity();
         if(targetEntity)
             angleDirectionToTarget = Vector3.SignedAngle(_direction, (targetEntity.transform.position - transform.position).normalized, Vector3.forward);
         
-        _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Action_Test, MathEx.equals(input.sqrMagnitude,0f,float.Epsilon) == false);
-        _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Action_Dash, Input.GetKey(KeyCode.Space));
-        _actionGraph.setActionConditionData_Float(ConditionNodeUpdateType.Action_AngleBetweenStick, angleBetweenStick);
+        if(_characterInfo._useInpuBuffer)
+        {
+            Vector3 input = ControllerEx.Instance().GetJoystickAxis();
+            Vector3 inputDirection = ControllerEx.Instance().getJoystickAxisR(transform.position);
+
+            float angleBetweenStick = MathEx.clampDegree(Vector3.SignedAngle(input, inputDirection,Vector3.forward));
+            float angleDirectionToStick = MathEx.clampDegree(Vector3.Angle(getFlipState().xFlip ? -Vector3.right : Vector3.right, inputDirection));
+
+            _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Action_Test, MathEx.equals(input.sqrMagnitude,0f,float.Epsilon) == false);
+            _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Action_Dash, Input.GetKey(KeyCode.Space));
+            _actionGraph.setActionConditionData_Float(ConditionNodeUpdateType.Action_AngleBetweenStick, angleBetweenStick);
+            _actionGraph.setActionConditionData_Float(ConditionNodeUpdateType.Action_AngleFlipDirectionToStick, angleDirectionToStick);
+        }
+
         _actionGraph.setActionConditionData_Float(ConditionNodeUpdateType.Action_AngleDirection, angleDirection);
-        _actionGraph.setActionConditionData_Float(ConditionNodeUpdateType.Action_AngleFlipDirectionToStick, angleDirectionToStick);
         _actionGraph.setActionConditionData_Float(ConditionNodeUpdateType.Action_AngleDirectionToTarget, angleDirectionToTarget);
 
         _actionGraph.setActionConditionData_Bool(ConditionNodeUpdateType.Action_IsXFlip, _flipState.xFlip);
