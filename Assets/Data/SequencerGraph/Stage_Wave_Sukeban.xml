@@ -1,0 +1,69 @@
+<SequencerGraph Name="Stage_Wave_Sukeban">
+
+    <InitializePhase>
+        
+    </InitializePhase>
+
+    <UpdatePhase>
+        <!-- First Wave -->
+        <!-- 
+        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="1 2 0"       AllyInfo="Sukeban"      PositionMarker="FirstWavePoint"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="1.5 1 0"     AllyInfo="Sukeban"      PositionMarker="FirstWavePoint"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="2 0 0"       AllyInfo="Sukeban"      PositionMarker="FirstWavePoint"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="1.5 -1 0"    AllyInfo="Sukeban"      PositionMarker="FirstWavePoint"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="1 -2 0"      AllyInfo="Sukeban"      PositionMarker="FirstWavePoint"/>
+        --> 
+        <!-- Left -->
+        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="Random_13^16 Random_4^-4 0"        AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="Random_13^16 Random_4^-4 0"        AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanUziChan" Position="Random_13^16 Random_4^-4 0"        AllyInfo="Sukeban"/>
+        <!-- Right -->
+        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="Random_24^27 Random_4^-4 0"        AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="Random_24^27 Random_4^-4 0"        AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanUziChan" Position="Random_24^27 Random_4^-4 0"        AllyInfo="Sukeban"/>
+        <!-- Up -->
+        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="Random_16^24 Random_3^6 0"          AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="Random_16^24 Random_3^6 0"          AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="Random_16^24 Random_3^6 0"          AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanUziChan" Position="Random_16^24 Random_3^6 0"          AllyInfo="Sukeban"/>
+        <!-- Down -->
+        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="Random_16^24 Random_-3^-6 0"          AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="Random_16^24 Random_-3^-6 0"          AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="Random_16^24 Random_-3^-6 0"          AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanUziChan" Position="Random_16^24 Random_-3^-6 0"          AllyInfo="Sukeban"/>
+
+
+
+
+        <WaitSecond Time="5.0"/>
+        <!-- Second Wave -->
+
+
+        <WaitSecond Time="5.0"/>
+        <!-- Third Wave -->
+        <!-- Left -->
+        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="Random_13^16 Random_4^-4 0"        AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="Random_13^16 Random_4^-4 0"        AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanUziChan" Position="Random_13^16 Random_4^-4 0"        AllyInfo="Sukeban"/>
+        <!-- Right -->
+        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="Random_24^27 Random_4^-4 0"        AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="Random_24^27 Random_4^-4 0"        AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanUziChan" Position="Random_24^27 Random_4^-4 0"        AllyInfo="Sukeban"/>
+        <!-- Up -->
+        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="Random_16^24 Random_3^6 0"          AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="Random_16^24 Random_3^6 0"          AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="Random_16^24 Random_3^6 0"          AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanUziChan" Position="Random_16^24 Random_3^6 0"          AllyInfo="Sukeban"/>
+        <!-- Down -->
+        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="Random_16^24 Random_-3^-6 0"          AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="Random_16^24 Random_-3^-6 0"          AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="Random_16^24 Random_-3^-6 0"          AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanUziChan" Position="Random_16^24 Random_-3^-6 0"          AllyInfo="Sukeban"/>
+
+        <WaitSecond Time="5.0"/>
+        <!-- Forth Wave -->
+
+
+    </UpdatePhase>
+    
+</SequencerGraph>

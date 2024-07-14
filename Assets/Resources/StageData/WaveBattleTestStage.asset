@@ -1,0 +1,84 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eebfbc6ece9cebc4cbd3e126679ce50a, type: 3}
+  m_Name: WaveBattleTestStage
+  m_EditorClassIdentifier: 
+  _stageName: WaveBattleTestStage
+  _backgroundPrefabPath: {fileID: 3160829639783268931, guid: ab97559538486194b90a8a12b173cc6a, type: 3}
+  _isMiniStage: 0
+  _stagePointData:
+  - _pointName: StartPoint
+    _stagePoint: {x: 0, y: 0, z: 0}
+    _maxLimitedDistance: 0
+    _verticalLimitedDistance: 0
+    _horizontalLimitedDistance: 0
+    _cameraZoomSize: 3
+    _cameraZoomSpeed: 4
+    _lerpCameraZoom: 0
+    _lockCameraInBound: 0
+    _cameraBoundToTrigger: 0
+    _onEnterSequencerPath:
+    - WaveBattleTestStage.xml
+    _onExitSequencerPath: []
+    _characterSpawnData:
+    - _characterKey: Akane
+      _uniqueKey: Player
+      _uniqueGroupKey: 
+      _startAction: Spawn
+      _startAIState: Entry
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 1
+      _sortingOrder: 0
+      _allyInfoKey: Player
+      _activeType: 0
+      _localPosition: {x: 0, y: 0, z: 0}
+    _useTriggerBound: 0
+    _targetSearchIdentifier: 1
+    _triggerWidth: 1
+    _triggerHeight: 1
+    _triggerOffset: {x: 0, y: 0, z: 0}
+  - _pointName: FirstWave(Sukeban)
+    _stagePoint: {x: 20, y: 0, z: 0}
+    _maxLimitedDistance: 3
+    _verticalLimitedDistance: 0
+    _horizontalLimitedDistance: 0
+    _cameraZoomSize: 3
+    _cameraZoomSpeed: 4
+    _lerpCameraZoom: 0
+    _lockCameraInBound: 0
+    _cameraBoundToTrigger: 0
+    _onEnterSequencerPath:
+    - Stage_Wave_Sukeban.xml
+    _onExitSequencerPath: []
+    _characterSpawnData: []
+    _useTriggerBound: 0
+    _targetSearchIdentifier: 0
+    _triggerWidth: 3
+    _triggerHeight: 3
+    _triggerOffset: {x: 0, y: 0, z: 0}
+  _miniStageData:
+  - _localStagePosition: {x: 20, y: 0, z: 0}
+    _data: {fileID: 11400000, guid: 8c17e160956fac44cbd192a7f486a54b, type: 2}
+    _overrideTargetSearchIdentifier: 0
+    _overrideTriggerWidth: 5
+    _overrideTriggerHeight: 5
+    _overrideTriggerOffset: {x: 0, y: 0, z: 0}
+    _isPortal: 0
+    _targetStageName: 
+    _targetMarkerName: 
+  _markerData:
+  - _name: FirstWavePoint
+    _position: {x: 23.01, y: -0.04, z: 0}
+  _trackData: []
