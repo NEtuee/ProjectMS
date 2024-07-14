@@ -23,8 +23,8 @@
     <BranchSet Name="IdleBranchSet">
         <!-- <Branch Key="getKey_Guard" Condition="true" Execute="Guard"/> -->
         <!-- <Branch Key="getKey_StunShot && getKey_AttackCharge" Execute="StunShot"/> -->
-        <Branch Key="getKey_GuardBreak2" Execute="KickCharge"/>
         <Branch Key="getKey_StunShot" Execute="DashLongCharge"/>
+        <Branch Key="getKey_GuardBreak2 && getKey_DashMove" Execute="DashRoll_Kick"/>
         <Branch Key="getKey_DashMove" Condition="getStat_DashPoint >= 1.0" Execute="DashRoll"/>
         <Branch Key="getKey_DashMove" Execute="MoveAll"/>
 
@@ -34,8 +34,8 @@
     <BranchSet Name="StopToIdle">
         <!-- <Branch Key="getKey_Guard && getKey_AttackCharge" Condition="true" Execute="Guard"/> -->
         <!-- <Branch Key="getKey_StunShot && getKey_AttackCharge" Execute="StunShot"/> -->
-        <Branch Key="getKey_GuardBreak2" Execute="KickCharge"/>
         <Branch Key="getKey_StunShot" Execute="DashLongCharge"/>
+        <Branch Key="getKey_GuardBreak2 && getKey_DashMove" Execute="DashRoll_Kick"/>
         <Branch Key="getKey_DashMove" Condition="getStat_DashPoint >= 1.0" Execute="DashRoll"/>
         <Branch Key="getKey_DashMove" Execute="MoveAll"/>
         <Branch Key="getKey_NormalMove == true" Execute="MoveAll"/>
@@ -46,7 +46,7 @@
     <BranchSet Name="CancelBranch">
         <!-- <Branch Key="getKey_Guard && getKey_AttackCharge" Condition="true" Execute="Guard"/> -->
         <!-- <Branch Key="getKey_StunShot && getKey_AttackCharge" Condition="getFrameTag_MoveCancel" Execute="StunShot"/> -->
-        <Branch Key="getKey_GuardBreak2" Condition="getFrameTag_StanceCancel" Execute="KickCharge"/>
+        <Branch Key="getKey_GuardBreak2 && getKey_DashMove" Condition="getFrameTag_StanceCancel" Execute="DashRoll_Kick"/>
         <Branch Key="getKey_StunShot" Condition="getFrameTag_StanceCancel" Execute="DashLongCharge"/>
 
         <Branch Key="getKey_GuardBreak2 && getKey_DashMove" Condition="getFrameTag_MoveCancel" Execute="DashRoll_Kick"/>
@@ -146,9 +146,7 @@
 
         <Branch Condition="End == true" Execute="MoveAll"/>
 
-        <Branch Key="(getKey_AttackCharge == false) && (getKey_NormalMove == false) && getKey_GuardBreak2" Execute="KickCharge"/>
         <Branch Key="(getKey_AttackCharge == false) && (getKey_NormalMove == false) && getKey_StunShot" Execute="DashLongCharge"/>
-        <Branch Key="getKey_Escape_2" Execute="KickCharge"/>
         <Branch Key="getKey_StunShot" Execute="DashLongCharge"/>
 
         <Branch Key="(getKey_AttackCharge == false) && (getKey_NormalMove == false)" Execute="MoveStop"/>
@@ -414,32 +412,6 @@
         <Branch Key="getKey_StunShot && getKey_DashMove" Execute="DashRoll"/>
     </DashLongCharge>
 
-    <KickCharge MovementType="FrameEvent" DirectionType="MousePoint" FlipType="Direction">
-        <Animation Preset="Sprites/NewPlayer/KickCharge/" XFlip="true" Duration="0.5">
-            <FrameEvent Type="Movement" StartTime="0" Friction="gv_IdleFriction" Speed="0" Velocity="gv_MoveVelocityMax"/>
-        </Animation>
-
-        <Branch Key="(getKey_GuardBreak2 == false) && getKey_AttackCharge" Execute="MoveAll"/>
-        <Branch Key="(getKey_GuardBreak2 == false) && getKey_NormalMove" Execute="MoveAll"/>
-        <Branch Condition="getKey_GuardBreak2 == false" Execute="Idle"/>
-        
-        <Branch Key="getKey_GuardBreak2 && getKey_DashMove" Execute="DashRoll_Kick"/>
-        <Branch Condition="End" Execute="KickCharge_Hard"/>
-    </KickCharge>
-
-    <KickCharge_Hard MovementType="FrameEvent" DirectionType="MousePoint" FlipType="Direction">
-        <Animation Preset="Sprites/NewPlayer/KickCharge/" XFlip="true">
-            <FrameEvent Type="Movement" StartTime="0" Friction="gv_IdleFriction" Speed="0" Velocity="gv_MoveVelocityMax"/>
-        </Animation>
-
-        <Branch Key="(getKey_GuardBreak2 == false) && getKey_AttackCharge" Execute="MoveAll"/>
-        <Branch Key="(getKey_GuardBreak2 == false) && getKey_NormalMove" Execute="MoveAll"/>
-        <Branch Condition="getKey_GuardBreak2 == false" Execute="Idle"/>
-        
-        <Branch Key="getKey_GuardBreak2 && getKey_DashMove" Execute="DashRoll_Kick_Hard"/>
-        <Branch Condition="End" Execute="KickCharge_Hard"/>
-    </KickCharge_Hard>
-
     <StunShot MovementType="FrameEvent" DirectionType="MousePoint" FlipType="Direction" DirectionUpdateOnce="true">
         <Animation Preset="Sprites/NewPlayer/Guard/" AngleBaseAnimation="True" XFlip="true" ScalePreset="XSpring" Duration="0.3">
             <FrameEvent Type="Movement" StartTime="0" Friction="22" MaxVelocity="18" Speed="0" Velocity="-6"/>
@@ -565,6 +537,10 @@
         <!-- <Branch Condition="getStat_IsStun == 1.0" Execute="Stun"/> -->
         <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="IsCatchTarget" Execute="Catched"/>
+
+        <Branch Key="getKey_GuardBreak2 && getKey_DashMove" Condition="End" Execute="DashRoll_Kick"/>
+        <Branch Key="getKey_DashMove" Condition="End && (getStat_DashPoint >= 1.0)" Execute="DashRoll"/>
+
         <Branch Key="(getKey_Guard == false) && ((getKey_AttackCharge == true) || (getKey_NormalMove == true))" Condition="End" Execute="MoveAll"/>
         <Branch Condition="End" Execute="Idle"/>
     </Hit>
