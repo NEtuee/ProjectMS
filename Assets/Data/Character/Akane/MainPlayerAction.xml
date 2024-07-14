@@ -401,7 +401,7 @@
 
     <DashLongCharge MovementType="FrameEvent" DirectionType="MousePoint" FlipType="Direction">
         <Animation Preset="Sprites/NewPlayer/HyperCharge/" XFlip="true">
-            <FrameEvent Type="Movement" StartTime="0" Friction="gv_IdleFriction" Speed="0" Velocity="gv_MoveVelocityMax"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="gv_IdleFriction" Speed="0"/>
         </Animation>
 
         <Branch Key="(getKey_StunShot == false) && getKey_AttackCharge" Execute="MoveAll"/>

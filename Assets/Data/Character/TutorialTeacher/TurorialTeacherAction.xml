@@ -71,7 +71,7 @@
 
     <HitIdle MovementType="Empty" DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/TutorialTeacher/"/>
-        <Animation Preset="4_dead" XFlip="true" Duration="3">
+        <Animation Preset="hitidle_5" XFlip="true" Duration="3">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2402 " Attach="true"/>
 
             <FrameEvent Type="Effect" StartTime="0" Path="Sprites/UI/Indicator/EnemyHead" FramePerSecond="2" Offset="0 0.2 0" DirectionOffset="False" Attach="true"/>
