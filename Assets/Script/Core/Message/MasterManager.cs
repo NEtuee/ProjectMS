@@ -204,6 +204,8 @@ public class MasterManager : MessageHub<ManagerBase>
         CameraControlEx.Instance().SyncPosition();
 
         _stageProcessor.cameraProcess(GlobalTimer.Instance().getSclaedDeltaTime());
+        _stageProcessor.updateBackgroundLayer();
+
     }
 
     public void FixedUpdate()

@@ -50,6 +50,8 @@ public class StageProcessor
     private Queue<StageProcessor> _miniStagePool = new Queue<StageProcessor>();
     private List<StageProcessor> _miniStageProcessor = new List<StageProcessor>();
 
+    private List<BackgroundLayer> _backgroundLayerList = new List<BackgroundLayer>();
+
     private SequencerGraphProcessManager _sequencerProcessManager = new SequencerGraphProcessManager(null);
     private MovementTrackProcessor _trackProcessor = new MovementTrackProcessor();
 
@@ -102,6 +104,7 @@ public class StageProcessor
     {
         _sequencerProcessManager.initialize();
         _trackProcessor.clear();
+        _backgroundLayerList.Clear();
 
         _cameraTrackPositionError = Vector3.zero;
         _cameraTrackPositionErrorReduceTime = 1f;
@@ -307,10 +310,23 @@ public class StageProcessor
 
     }
 
+    public void registBackgroundLayer(BackgroundLayer backgroundLayer)
+    {
+        _backgroundLayerList.Add(backgroundLayer);
+    }
+
+    public void updateBackgroundLayer()
+    {
+        foreach(var item in _backgroundLayerList)
+        {
+            item.updateCameraPosition();
+        }
+    }
+
     public void stopStage(bool forceStop)
     {
         _sequencerProcessManager.initialize();
-        
+        _backgroundLayerList.Clear();
         _trackProcessor.clear();
 
         _cameraTrackPositionError = Vector3.zero;
