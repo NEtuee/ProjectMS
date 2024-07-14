@@ -4,6 +4,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using System;
 using UnityEngine.UIElements;
+using UnityEditor.Experimental.GraphView;
 
 public class StageProcessor
 {
@@ -442,13 +443,26 @@ public class StageProcessor
         }
     }
 
+    public Vector3 getCameraCenterPosition(Vector3 position)
+    {
+        if(_stageData == null || _stageData._stagePointData == null)
+            return position;
+            
+        Vector3 resultPoint;
+        getLimitedFractionOnLine(_currentPoint, position, out resultPoint);
+
+        return resultPoint;
+    }
+
     public void cameraProcess(float deltaTime)
     {
         if(isValid() == false)
             return;
             
         Vector3 resultPoint;
-        float fraction = getLimitedFractionOnLine(_currentPoint, _targetCameraControl.getCameraPosition(), out resultPoint);
+        float fraction = getLimitedFractionOnLine(_currentPoint, _targetCameraControl.getVirtualCameraPosition(), out resultPoint);
+        resultPoint = getCameraCenterPosition(_targetCameraControl.getCameraPosition());
+
         if(_stageData._stagePointData.Count - 1 > _currentPoint && _stageData._stagePointData[_currentPoint]._lerpCameraZoom)
         {
             float currentZoom = _stageData._stagePointData[_currentPoint]._cameraZoomSize;

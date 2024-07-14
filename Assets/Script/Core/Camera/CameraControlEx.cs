@@ -49,6 +49,11 @@ public abstract class CameraModeBase
         return _cameraPosition;
     }
 
+    public virtual Vector3 getVirtualCameraPosition()
+    {
+        return _cameraPosition;
+    }
+
     public void setCameraPosition(Vector3 cameraPosition)
     {
         _cameraPosition = cameraPosition;
@@ -175,10 +180,28 @@ public class CameraTargetCenterMode : CameraModeBase
     {
     }
 
+    public override Vector3 getVirtualCameraPosition()
+    {
+        return getCameraTargetPosition();
+    }
+
+    public Vector3 getCameraTargetPosition()
+    {
+        if((_targetEntity == null || _targetEntity.isDead()) && _currentTarget != null)
+        {
+            return _currentTarget.transform.position;
+        }
+
+        return getCameraPosition();
+    }
+
     public void updateCameraCenter()
     {
         if((_targetEntity == null || _targetEntity.isDead()) && _currentTarget != null)
+        {
             _currentCenterPosition = _currentTarget.transform.position;
+            _currentCenterPosition = MasterManager.instance._stageProcessor.getCameraCenterPosition(_currentCenterPosition);
+        }
     }
 };
 
@@ -486,6 +509,13 @@ public class CameraControlEx : Singleton<CameraControlEx>
     public Vector3 getCameraPosition()
     {
         Vector3 currentPosition = _currentCameraMode == null ? _currentCamera.transform.position : _currentCameraMode.getCameraPosition();
+        currentPosition.z = -10f;
+        return currentPosition;
+    }
+
+    public Vector3 getVirtualCameraPosition()
+    {
+        Vector3 currentPosition = _currentCameraMode == null ? _currentCamera.transform.position : _currentCameraMode.getVirtualCameraPosition();
         currentPosition.z = -10f;
         return currentPosition;
     }
