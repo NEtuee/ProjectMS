@@ -7,6 +7,14 @@ using System.Linq;
 [System.Serializable]
 public class ActionGraph
 {
+    public struct InputBufferItem
+    {
+        public static double kBufferedInputThreshold = 0.13;
+
+        public double _inputStart;
+        public string _inputKey;
+    }
+
     public const int kTriggerMaxCount = 16;
 
     private int _currentActionNodeIndex = -1;
@@ -30,6 +38,8 @@ public class ActionGraph
     private bool[]                              _triggerExecuteCondition = new bool[kTriggerMaxCount];
 
     private Dictionary<string, bool>            _graphStateCoolTimeMap = new Dictionary<string, bool>();
+
+    private List<InputBufferItem>               _inputBuffer = new List<InputBufferItem>();
 
     public ActionGraph(){}
     public ActionGraph(ActionGraphBaseData baseData){_actionGraphBaseData = baseData;}
@@ -64,6 +74,7 @@ public class ActionGraph
         _blockInput = false;
 
         _graphStateCoolTimeMap.Clear();
+        _inputBuffer.Clear();
 
         for(int i = 0; i < kTriggerMaxCount; ++i)
             _triggerExecuteCondition[i] = false;
@@ -93,6 +104,38 @@ public class ActionGraph
 
         _actionExecutedTime += deltaTime;
         return processAction(getCurrentAction());
+    }
+
+    public void clearInputBuffer()
+    {
+        _inputBuffer.Clear();
+    }
+
+    public void updateInputBuffer(string key, ActionKeyInputData inputData)
+    {
+        for(int i = 0; i < _inputBuffer.Count; ++i)
+        {
+            if(_inputBuffer[i]._inputKey == key)
+            {
+                _inputBuffer[i] = new InputBufferItem{_inputKey = key, _inputStart = GlobalTimer.Instance().getScaledGlobalTime()};
+                return;
+            }
+        }
+
+        _inputBuffer.Add(new InputBufferItem{_inputKey = key, _inputStart = GlobalTimer.Instance().getScaledGlobalTime()});
+    }
+
+    public bool checkInputBuffer(string key)
+    {
+        for(int i = 0; i < _inputBuffer.Count; ++i)
+        {
+            if(_inputBuffer[i]._inputKey == key)
+            {
+                return (GlobalTimer.Instance().getScaledGlobalTime() - _inputBuffer[i]._inputStart) <= InputBufferItem.kBufferedInputThreshold;
+            }
+        }
+
+        return false;
     }
 
     public void updateAnimation(float deltaTime, GameEntityBase targetEntity)
@@ -657,7 +700,11 @@ public class ActionGraph
             if(_blockInput)
                 return CommonConditionNodeData.falseByte;
 
-            return ActionKeyInputManager.Instance().actionKeyCheck(((ActionGraphConditionNodeData_Key)nodeData)._targetKeyName);
+            ActionGraphConditionNodeData_Key keyCondition = (ActionGraphConditionNodeData_Key)nodeData;
+            if(checkInputBuffer(keyCondition._targetKeyName))
+                return CommonConditionNodeData.trueByte;
+            
+            return ActionKeyInputManager.Instance().actionKeyCheck((keyCondition)._targetKeyName);
         }
         else if(updateType == ConditionNodeUpdateType.AngleSector)
         {

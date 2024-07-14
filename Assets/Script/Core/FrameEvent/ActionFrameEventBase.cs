@@ -1129,8 +1129,6 @@ public class ActionFrameEvent_SpawnCharacter : ActionFrameEventBase
     {
         SceneCharacterManager sceneCharacterManager = SceneCharacterManager._managerInstance as SceneCharacterManager;
 
-        DebugUtil.log("Check");
-
         UnityEngine.Vector3 offset = _spawnOffset;
         if(_useFlip && executeEntity is CharacterEntityBase)
         {

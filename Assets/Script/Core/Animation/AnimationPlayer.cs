@@ -88,6 +88,10 @@ public class AnimationPlayDataInfo : SerializableDataType
                 _multiSelectAnimationData[i].serialize(ref binaryWriter);
             }
         }
+
+        binaryWriter.Write(_translationPresetData == null ? "" : _translationPresetData.getName());
+        binaryWriter.Write(_rotationPresetData == null ? "" : _rotationPresetData.getName());
+        binaryWriter.Write(_scalePresetData == null ? "" : _scalePresetData.getName());
     }
 #endif
 
@@ -165,7 +169,27 @@ public class AnimationPlayDataInfo : SerializableDataType
             }
         }
 
+        string translationPresetName = binaryReader.ReadString();
+        string rotationPresetName = binaryReader.ReadString();
+        string scalePresetName = binaryReader.ReadString();
         
+        if(rotationPresetName != "")
+        {
+            AnimationRotationPreset rotationPreset = ResourceContainerEx.Instance().GetScriptableObject("Preset/AnimationRotationPreset") as AnimationRotationPreset;
+            _rotationPresetData = rotationPreset.getPresetData(rotationPresetName);
+        }
+
+        if(scalePresetName != "")
+        {
+            AnimationScalePreset scalePreset = ResourceContainerEx.Instance().GetScriptableObject("Preset/AnimationScalePreset") as AnimationScalePreset;
+            _scalePresetData = scalePreset.getPresetData(scalePresetName);
+        }
+
+        if(translationPresetName != "")
+        {
+            AnimationTranslationPreset scalePreset = ResourceContainerEx.Instance().GetScriptableObject("Preset/AnimationTranslationPreset") as AnimationTranslationPreset;
+            _translationPresetData = scalePreset.getPresetData(translationPresetName);
+        }
     }
 }
 

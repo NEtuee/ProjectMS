@@ -117,7 +117,7 @@ public class GameEntityBase : SequencerObjectBase
     public struct EntityLogData
     {
         public LogType _logType;
-        public float _executeGameTime;
+        public double _executeGameTime;
         public ActionGraphNodeData _actionChangeData;
         public AIGraphNodeData _aiGraphChangeData;
         public AIPackageChangeLogItem _aiPackageChangeData;
@@ -255,6 +255,9 @@ public class GameEntityBase : SequencerObjectBase
             item.stopEffect();
         }
         _hpEffect.Clear();
+
+        if(_characterInfo._useInpuBuffer)
+            ActionKeyInputManager.Instance().addKeyTriggerDelegate(_actionGraph.updateInputBuffer);
 
 #if UNITY_EDITOR
         _entityTotalLog.Clear();
@@ -512,6 +515,8 @@ public class GameEntityBase : SequencerObjectBase
     {
         _isActionChangeFrame = true;
 
+        _actionGraph.clearInputBuffer();
+
         _currentDefenceType = _actionGraph.getCurrentDefenceType();
         _currentDirectionType = _actionGraph.getDirectionType();
 
@@ -619,6 +624,9 @@ public class GameEntityBase : SequencerObjectBase
         _actionGraph.release();
         _danmakuGraph.release();
 
+        if(_characterInfo._useInpuBuffer)
+            ActionKeyInputManager.Instance().deleteKeyTriggerDelegate(_actionGraph.updateInputBuffer);
+
         foreach(var item in _hpEffect)
         {
             item.stopEffect();
@@ -683,7 +691,7 @@ public class GameEntityBase : SequencerObjectBase
 
             foreach(var item in _aiGraph.getCoolTimeMap())
             {
-                float currentTime = (GlobalTimer.Instance().getScaledGlobalTime() - item.Value._checkStartTime);
+                double currentTime = (GlobalTimer.Instance().getScaledGlobalTime() - item.Value._checkStartTime);
                 if(currentTime >= item.Value._coolTime)
                     currentTime = item.Value._coolTime;
 

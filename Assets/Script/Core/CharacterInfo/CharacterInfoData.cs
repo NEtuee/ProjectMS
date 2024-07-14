@@ -19,6 +19,8 @@ public class CharacterInfoData : SerializableDataType
     public bool         _selfCollision = true;
     public bool         _immortalCharacter = false;
 
+    public bool         _useInpuBuffer = false;
+
     public string       _allyInfoKey = "";
     
     public CommonMaterial   _defaultMaterial = CommonMaterial.Skin;
@@ -38,6 +40,7 @@ public class CharacterInfoData : SerializableDataType
         binaryWriter.Write(_immortalCharacter);
         binaryWriter.Write(_allyInfoKey);
         binaryWriter.Write((int)_defaultMaterial);
+        binaryWriter.Write(_useInpuBuffer);
     }
 #endif
     public override void deserialize(ref BinaryReader binaryReader)
@@ -55,6 +58,7 @@ public class CharacterInfoData : SerializableDataType
         _immortalCharacter = binaryReader.ReadBoolean();
         _allyInfoKey = binaryReader.ReadString();
         _defaultMaterial = (CommonMaterial)binaryReader.ReadInt32();
+        _useInpuBuffer = binaryReader.ReadBoolean();
     }
 }
 

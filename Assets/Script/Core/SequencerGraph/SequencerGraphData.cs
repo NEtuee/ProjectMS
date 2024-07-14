@@ -1160,7 +1160,7 @@ public class SequencerGraphEvent_CallAIEvent : SequencerGraphEventBase
 
 public class SequencerGraphEvent_FadeIn : SequencerGraphEventBase
 {
-    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.FadeIn;
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.FadeOut;
 
     private float _lambda = -1f;
 
@@ -1987,7 +1987,7 @@ public class SequencerGraphEvent_Fade : SequencerGraphEventBase
 
 public class SequencerGraphEvent_FadeOut : SequencerGraphEventBase
 {
-    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.FadeOut;
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.FadeIn;
 
     private float _lambda = -1f;
 

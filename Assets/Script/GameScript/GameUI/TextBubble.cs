@@ -225,14 +225,14 @@ public class TextPresenter
 
 public interface BubbleCommend
 {
-    public void Start(TextPresenter presenter, float startTime);
+    public void Start(TextPresenter presenter, double startTime);
     public bool Update(TextPresenter presenter, float deltaTime);
     public void End();
 }
 
 public class DeferredActive : BubbleCommend
 {
-    public void Start(TextPresenter presenter, float startTime)
+    public void Start(TextPresenter presenter, double startTime)
     {
     }
 
@@ -250,8 +250,8 @@ public class DeferredActive : BubbleCommend
 public class ShowText : BubbleCommend
 {
     private float _interval;
-    private float _prevShowTime = 0;
-    private float _currentTime;
+    private double _prevShowTime = 0;
+    private double _currentTime;
     private int _current = 0;
     private char[] _chArray;
     private bool _activeInputIcon = false;
@@ -269,7 +269,7 @@ public class ShowText : BubbleCommend
         _activeInputIcon = true;
     }
     
-    public void Start(TextPresenter presenter, float startTime)
+    public void Start(TextPresenter presenter, double startTime)
     {
         _current = 0;
         _currentTime = startTime;
@@ -323,7 +323,7 @@ public class SetTextColor : BubbleCommend
         _colorHex = colorHex;
     }
     
-    public void Start(TextPresenter presenter, float startTime)
+    public void Start(TextPresenter presenter, double startTime)
     {
         presenter.SetColor(_colorHex);
     }
@@ -344,7 +344,7 @@ public class EndTextColor : BubbleCommend
     {
     }
     
-    public void Start(TextPresenter presenter, float startTime)
+    public void Start(TextPresenter presenter, double startTime)
     {
         presenter.EndColor();
     }
@@ -365,7 +365,7 @@ public class AddLineAlignment : BubbleCommend
     {
     }
     
-    public void Start(TextPresenter presenter, float startTime)
+    public void Start(TextPresenter presenter, double startTime)
     {
         presenter.LineAlignment();
     }
@@ -386,7 +386,7 @@ public class SetBold : BubbleCommend
     {
     }
     
-    public void Start(TextPresenter presenter, float startTime)
+    public void Start(TextPresenter presenter, double startTime)
     {
         presenter.Bold();
     }
@@ -407,7 +407,7 @@ public class EndBold : BubbleCommend
     {
     }
     
-    public void Start(TextPresenter presenter, float startTime)
+    public void Start(TextPresenter presenter, double startTime)
     {
         presenter.EndBold();
     }
@@ -432,7 +432,7 @@ public class Wait : BubbleCommend
         _time = time;
     }
     
-    public void Start(TextPresenter presenter, float startTime)
+    public void Start(TextPresenter presenter, double startTime)
     {
         _currentTime = 0;
     }
@@ -462,7 +462,7 @@ public class WaitInput : BubbleCommend
         _input = input;
     }
     
-    public void Start(TextPresenter presenter, float startTime)
+    public void Start(TextPresenter presenter, double startTime)
     {
     }
 
@@ -488,7 +488,7 @@ public class Clear : BubbleCommend
     }
 
 
-    public void Start(TextPresenter presenter, float startTime)
+    public void Start(TextPresenter presenter, double startTime)
     {
         presenter.Clear();
     }

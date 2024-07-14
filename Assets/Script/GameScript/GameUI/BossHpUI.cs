@@ -112,10 +112,10 @@ public class BossHpUI : IUIElement
         _appearTimer.Play(0.5f);
     }
 
-    private void UpdateAppearHpBar(float t)
+    private void UpdateAppearHpBar(double t)
     {
         //Debug.Log("UpdateAppearHp");
-        _binder.CanvasGroup.alpha = t;
+        _binder.CanvasGroup.alpha = (float)t;
     }
 
     private void PlayFillHpBar()
@@ -126,10 +126,10 @@ public class BossHpUI : IUIElement
         _hpFillTimer.Play(0.5f);
     }
 
-    private void UpdateFillHpBar(float t)
+    private void UpdateFillHpBar(double t)
     {
         //Debug.Log("UpdateFillHp");
-        var value = MathEx.easeOutExpo(0, 1, t);
+        var value = MathEx.easeOutExpo(0, 1, (float)t);
         _binder.InGauge.fillAmount = value;
         _binder.OutGauge.fillAmount = value;
     }
@@ -139,9 +139,9 @@ public class BossHpUI : IUIElement
         _hitTimer.Play(0.8f);
     }
 
-    private void UpdateHitTimer(float t)
+    private void UpdateHitTimer(double t)
     {
-        var value = MathEx.easeOutExpo(_fromPercentage, _toPercentage, t);
+        var value = MathEx.easeOutExpo(_fromPercentage, _toPercentage, (float)t);
         _binder.InGauge.fillAmount = value;
     }
 
@@ -150,7 +150,7 @@ public class BossHpUI : IUIElement
         _shakeTimer.Play(0.15f);
     }
     
-    private void UpdateShake(float t)
+    private void UpdateShake(double t)
     {
         _binder.Root.localPosition = (Vector2)(Random.insideUnitCircle * 7.0f);
     }

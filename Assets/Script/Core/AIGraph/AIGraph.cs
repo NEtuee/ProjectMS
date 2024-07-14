@@ -11,7 +11,7 @@ public class AIGraph
 
     public struct AIGraphStateCoolDownSet
     {
-        public float _checkStartTime;
+        public double _checkStartTime;
         public float _coolTime;
     }
 

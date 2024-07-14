@@ -463,7 +463,7 @@
             <FrameEvent Type="ApplyBuff" StartTime="0" Condition="(getStat_DashPoint >= 1.0)" ApplyBuff="DashPointConsumption"/>
 
             <FrameEvent Type="Movement" StartTime="0" Friction="3" Speed="0" Velocity="-1.5 "/>
-            <FrameEvent Type="FrameTag" StartTime="0.1" EndTime="999" Tag="MoveCancel"/>
+            <FrameEvent Type="FrameTag" StartTime="0.198" EndTime="999" Tag="MoveCancel"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="DashPointIncrement"/>
         </Animation>
 

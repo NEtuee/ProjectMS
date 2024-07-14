@@ -2,13 +2,15 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading;
+using YamlDotNet.Core.Tokens;
 
 public class ActionKeyInputData
 {
+    public static float _bufferedInputThreshold = 0.1f;
+
     public int          _presetDataIndex;
     public float        _thresholdTime = 0f;
-
-    public bool         _consumed = false;
 
     public byte[]       _isValid = new byte[1];
 
@@ -22,10 +24,15 @@ public class ActionKeyInputData
 
 public class ActionKeyInputManager : Singleton<ActionKeyInputManager>
 {
+    public delegate void KeyTriggerDelegate(string key, ActionKeyInputData inputData);
     private Dictionary<string, ActionKeyInputData> _actionKeyInputData;
     private ActionKeyPresetDataList           _actionKeyPresetData;
     private int                             _actinoKeyInputDataCount;
     private bool                            _isValid = false;
+
+    private KeyTriggerDelegate              _keyTriggerDelegate = (x,y)=>{};
+
+
 
     private static Dictionary<string, KeyCode> XBoxKeyCodeBind = new Dictionary<string, KeyCode>
     {
@@ -96,7 +103,7 @@ public class ActionKeyInputManager : Singleton<ActionKeyInputManager>
     {
         return _isValid;
     }
-
+ 
     private static void readPSKeyList(string[] keyListString)
     {
         for(int i = 0; i < keyListString.Length; ++i)
@@ -191,6 +198,16 @@ public class ActionKeyInputManager : Singleton<ActionKeyInputManager>
         }
     }
 
+    public void addKeyTriggerDelegate(KeyTriggerDelegate keyTriggerDelegate)
+    {
+        _keyTriggerDelegate += keyTriggerDelegate;
+    }
+
+    public void deleteKeyTriggerDelegate(KeyTriggerDelegate keyTriggerDelegate)
+    {
+        _keyTriggerDelegate -= keyTriggerDelegate;
+    }
+
     public void progress(float deltaTime)
     {
         if(isValid() == false)
@@ -216,9 +233,11 @@ public class ActionKeyInputManager : Singleton<ActionKeyInputManager>
                     break;
             }
 
-            if(check == false && item._consumed)
-                item._consumed = false;
-            item._isValid[0] = item._consumed ? (byte)0 : (check ? (byte)1 : (byte)0);
+            bool triggered = check && (item._isValid[0] == 0);
+            item._isValid[0] = check ? (byte)1 : (byte)0;
+
+            if(triggered)
+                _keyTriggerDelegate(presetData._actionKeyName, item);
         }
     }
 

@@ -64,7 +64,7 @@ public class StatusInfo
         public bool _spawnStartEffect = false;
         public bool _spawnEndEffect = false;
 
-        public float _startedTime;
+        public double _startedTime;
         public int _uniqueKey = 0;
         public void updateStartTime(float startedTime)
         {
@@ -245,7 +245,7 @@ public class StatusInfo
         applyBuff(_buffDataList._buffDataList[buffKey], GlobalTimer.Instance().getScaledGlobalTime());
     }
 
-    private void applyBuff(BuffData buff, float startedTime)
+    private void applyBuff(BuffData buff, double startedTime)
     {
         if(buff._targetStatusName != null && getStatus(buff._targetStatusName) == null)
         {
@@ -414,7 +414,7 @@ public class StatusInfo
 
     private void updateBuff()
     {
-        float globalTime = GlobalTimer.Instance().getScaledGlobalTime();
+        double globalTime = GlobalTimer.Instance().getScaledGlobalTime();
         _currentDefenceType = DefenceType.Count;
 
         for(int i = 0; i < _currentlyAppliedBuffList.Count;)

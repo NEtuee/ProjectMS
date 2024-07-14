@@ -7,8 +7,8 @@ public class UIActionTimer
 {
     private Action _resultAction;
 
-    private float _startTime;
-    private float _endTime;
+    private double _startTime;
+    private double _endTime;
 
     private bool _isPlay = false;
 
@@ -47,17 +47,17 @@ public class UIActionTimer
 
 public class UIActionLerpTimer
 {
-    private Action<float> _updateAction;
+    private Action<double> _updateAction;
     private Action _endAction;
 
-    private float _startTime;
-    private float _endTime;
-    private float _diff;
+    private double _startTime;
+    private double _endTime;
+    private double _diff;
 
     public bool IsPlay => _isPlay;
     private bool _isPlay = false;
 
-    public UIActionLerpTimer(Action<float> action, Action endAction = null)
+    public UIActionLerpTimer(Action<double> action, Action endAction = null)
     {
         _updateAction = action;
         _endAction = endAction;

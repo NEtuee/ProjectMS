@@ -1,7 +1,7 @@
 
 public class GlobalTimer : Singleton<GlobalTimer>
 {
-    private float _globalTime = 0f;
+    private double _globalTime = 0.0;
     private float _currentDeltaTime = 0f;
 
     private bool _updateProcessing = false;
@@ -20,10 +20,10 @@ public class GlobalTimer : Singleton<GlobalTimer>
 
     public void updateGlobalTime(float deltaTime)
     {
-        _globalTime += deltaTime * _debugTimeRatio;
+        _globalTime += (double)(deltaTime * _debugTimeRatio);
     }
 
-    public float getScaledGlobalTime()
+    public double getScaledGlobalTime()
     {
         return _globalTime;
     }

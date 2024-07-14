@@ -86,6 +86,8 @@ public class CharacterInfoLoader : LoaderBase<CharacterInfoDataList>
                 characterInfoData._selfCollision = bool.Parse(attrValue);
             else if(attrName == "ImmortalCharacter")
                 characterInfoData._immortalCharacter = bool.Parse(attrValue);
+            else if(attrName == "UseInputBuffer")
+                characterInfoData._useInpuBuffer = bool.Parse(attrValue);
         }
 
         return characterInfoData;
