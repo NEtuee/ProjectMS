@@ -1411,6 +1411,14 @@ public class GameEntityBase : SequencerObjectBase
 
     public void setActiveSelf(bool active, bool hideGraphics) 
     {
+        if(_activeSelf != active)
+        {
+            if(active)
+                CollisionManager.Instance().registerObject(_collisionInfo, this);
+            else
+                CollisionManager.Instance().deregisterObject(_collisionInfo.getCollisionInfoData(), this);
+        }
+
         _activeSelf = active;
         if(hideGraphics)
             _spriteRenderer.enabled = _activeSelf;

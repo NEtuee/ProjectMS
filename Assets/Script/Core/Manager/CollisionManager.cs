@@ -140,13 +140,17 @@ public class CollisionManager : Singleton<CollisionManager>
     
     public void deregisterObject(CollisionInfoData collisionInfo, object collisionObject)
     {
-        for(int i = 0; i < _collisionObjectList[(int)collisionInfo.getCollisionType()].Count;)
+        int collisionTypeIndex = (int)collisionInfo.getCollisionType();
+        for(int i = 0; i < _collisionObjectList[collisionTypeIndex].Count; )
         {
-            if(_collisionObjectList[(int)collisionInfo.getCollisionType()][i]._collisionObject == collisionObject)
+            if(_collisionObjectList[collisionTypeIndex][i]._collisionObject == collisionObject)
+            {
                 deregisterObject(i,collisionInfo.getCollisionType());
+            }
             else
+            {
                 ++i;
-
+            }
         }
     }
 
@@ -221,16 +225,18 @@ public class CollisionManager : Singleton<CollisionManager>
 
         List<CollisionObjectData> collisionList = _collisionObjectList[layer];
         CollisionInfo collisionInfo = request._collision;
+        int uniqueID = collisionInfo.getUniqueID();
         for(int i = 0; i < collisionList.Count; ++i)
         {
-            if(collisionInfo.getUniqueID() == collisionList[i]._collisionInfo.getUniqueID() || request._requestObject == collisionList[i]._collisionObject)
+            CollisionObjectData collisionObjectData = collisionList[i];
+            if(request._requestObject == collisionObjectData._collisionObject || uniqueID == collisionObjectData._collisionInfo.getUniqueID())
                 continue;
 
-            if(collisionInfo.collisionCheck(collisionList[i]._collisionInfo) == true)
+            if(collisionInfo.collisionCheck(collisionObjectData._collisionInfo) == true)
             {
                 CollisionSuccessData data;
                 data._requester = request._requestObject;
-                data._target = collisionList[i]._collisionObject;
+                data._target = collisionObjectData._collisionObject;
                 data._startPoint = request._collision.getCenterPosition();
                 request._collisionDelegate?.Invoke(data);
             }
