@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c858e63344676f34a93a8306d92a1f7d, type: 3}
   m_Name: AudioInfo
   m_EditorClassIdentifier: 
-  csvData: {fileID: 4900000, guid: db66d34b7cbeed84b9ba98e9d0256041, type: 3}
+  csvData: {fileID: 4900000, guid: 0e696a98944c98f49a1b6b1af016ab81, type: 3}
   audioData:
   - name: global data
     id: 0
@@ -228,6 +228,20 @@ MonoBehaviour:
       id: 10111
       min: 0
       max: 1
+  - name: ChoKetsusenReady
+    id: 1012
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: 1120787707
+        Data2: 1335038732
+        Data3: -287048283
+        Data4: 1799200008
+      Path: event:/SFX/Akane/ChoKetsusenReady
+    parameters: []
   - name: Dash
     id: 2100
     defaultVolume: 1

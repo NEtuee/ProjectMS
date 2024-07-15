@@ -2,7 +2,7 @@
 
     <!-- 옵션 설정 -->
     <!-- 인지 옵션값 설정 -->
-    <GlobalVariable Name="gv_CognitiveRange"    Value="4.0"/>   <!-- PC 인지 거리 : 해당 거리 내 PC 존재 시 인지한다. -->
+    <GlobalVariable Name="gv_CognitiveRange"    Value="5.0"/>   <!-- PC 인지 거리 : 해당 거리 내 PC 존재 시 인지한다. -->
     <GlobalVariable Name="gv_CognitiveDelay"    Value="0.5"/>   <!-- 인지 지연 시간 : 해당 거리 내 PC 존재 시 인지까지 이루어지는 지연 시간. -->
     <GlobalVariable Name="gv_OvlivionRange"     Value="7.0"/>   <!-- [보류] 인지 망각 거리 : 해당 거리 밖 PC 존재 시 망각 시간을 카운트한다. -->
     <GlobalVariable Name="gv_OvlivionTime"      Value="5.0"/>   <!-- [보류] 인지 망각 시간 : 카운트 된 시간이 망각 시간을 초과하면 평화 상태로 돌아간다. -->
