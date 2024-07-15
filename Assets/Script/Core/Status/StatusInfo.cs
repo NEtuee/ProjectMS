@@ -247,7 +247,7 @@ public class StatusInfo
 
     private void applyBuff(BuffData buff, double startedTime)
     {
-        if(buff._targetStatusName != null && getStatus(buff._targetStatusName) == null)
+        if(buff._targetStatusName != "" && getStatus(buff._targetStatusName) == null)
         {
             if(_ownerObject is GameEntityBase)
             {
