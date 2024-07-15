@@ -13,56 +13,124 @@
         <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="1.5 -1 0"    AllyInfo="Sukeban"      PositionMarker="FirstWavePoint"/>
         <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="1 -2 0"      AllyInfo="Sukeban"      PositionMarker="FirstWavePoint"/>
         --> 
+<!--
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionMarker="SukebanWavePoint" Position="Random_-10^-7 Random_-7^7 0"            AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionMarker="SukebanWavePoint" Position="Random_-10^-7 Random_-7^7 0"            AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanUziChan"      StartAIState="Entry_Battle" PositionMarker="SukebanWavePoint" Position="Random_-10^-7 Random_-7^7 0"            AllyInfo="Sukeban"/>
+        <WaitSecond Time="0.5"/>
+
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionMarker="SukebanWavePoint" Position="Random_7^10 Random_-7^7 0"            AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionMarker="SukebanWavePoint" Position="Random_7^10 Random_-7^7 0"            AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanUziChan"      StartAIState="Entry_Battle" PositionMarker="SukebanWavePoint" Position="Random_7^10 Random_-7^7 0"            AllyInfo="Sukeban"/>
+        <WaitSecond Time="0.5"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionMarker="SukebanWavePoint" Position="Random_-7^7 Random_7^10 0"             AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionMarker="SukebanWavePoint" Position="Random_-7^7 Random_7^10 0"             AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionMarker="SukebanWavePoint" Position="Random_-7^7 Random_7^10 0"             AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanUziChan"      StartAIState="Entry_Battle" PositionMarker="SukebanWavePoint" Position="Random_-7^7 Random_7^10 0"             AllyInfo="Sukeban"/>
+        <WaitSecond Time="0.5"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionMarker="SukebanWavePoint" Position="Random_-7^7 Random_-7^-10 0"           AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionMarker="SukebanWavePoint" Position="Random_-7^7 Random_-7^-10 0"           AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionMarker="SukebanWavePoint" Position="Random_-7^7 Random_-7^-10 0"           AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanUziChan"      StartAIState="Entry_Battle" PositionMarker="SukebanWavePoint" Position="Random_-7^7 Random_-7^-10 0"           AllyInfo="Sukeban"/>
+
+        <WaitSecond Time="7.0"/>
+
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionMarker="SukebanWavePoint" Position="Random_-10^-7 Random_-7^7 0"            AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionMarker="SukebanWavePoint" Position="Random_-10^-7 Random_-7^7 0"            AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanUziChan"      StartAIState="Entry_Battle" PositionMarker="SukebanWavePoint" Position="Random_-10^-7 Random_-7^7 0"            AllyInfo="Sukeban"/>
+        <WaitSecond Time="0.5"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionMarker="SukebanWavePoint" Position="Random_7^10 Random_-7^7 0"            AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionMarker="SukebanWavePoint" Position="Random_7^10 Random_-7^7 0"            AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanUziChan"      StartAIState="Entry_Battle" PositionMarker="SukebanWavePoint" Position="Random_7^10 Random_-7^7 0"            AllyInfo="Sukeban"/>
+        <WaitSecond Time="0.5"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionMarker="SukebanWavePoint" Position="Random_-7^7 Random_7^10 0"             AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionMarker="SukebanWavePoint" Position="Random_-7^7 Random_7^10 0"             AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionMarker="SukebanWavePoint" Position="Random_-7^7 Random_7^10 0"             AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanUziChan"      StartAIState="Entry_Battle" PositionMarker="SukebanWavePoint" Position="Random_-7^7 Random_7^10 0"             AllyInfo="Sukeban"/>
+        <WaitSecond Time="0.5"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionMarker="SukebanWavePoint" Position="Random_-7^7 Random_-7^-10 0"           AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionMarker="SukebanWavePoint" Position="Random_-7^7 Random_-7^-10 0"           AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionMarker="SukebanWavePoint" Position="Random_-7^7 Random_-7^-10 0"           AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanUziChan"      StartAIState="Entry_Battle" PositionMarker="SukebanWavePoint" Position="Random_-7^7 Random_-7^-10 0"           AllyInfo="Sukeban"/>
+
+        <WaitSecond Time="7.0"/>
+ -->
         <!-- Left -->
-        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="Random_13^16 Random_4^-4 0"        AllyInfo="Sukeban"/>
-        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="Random_13^16 Random_4^-4 0"        AllyInfo="Sukeban"/>
-        <SpawnCharacter CharacterKey="SukebanUziChan" Position="Random_13^16 Random_4^-4 0"        AllyInfo="Sukeban"/>
-        <!-- Right -->
-        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="Random_24^27 Random_4^-4 0"        AllyInfo="Sukeban"/>
-        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="Random_24^27 Random_4^-4 0"        AllyInfo="Sukeban"/>
-        <SpawnCharacter CharacterKey="SukebanUziChan" Position="Random_24^27 Random_4^-4 0"        AllyInfo="Sukeban"/>
-        <!-- Up -->
-        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="Random_16^24 Random_3^6 0"          AllyInfo="Sukeban"/>
-        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="Random_16^24 Random_3^6 0"          AllyInfo="Sukeban"/>
-        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="Random_16^24 Random_3^6 0"          AllyInfo="Sukeban"/>
-        <SpawnCharacter CharacterKey="SukebanUziChan" Position="Random_16^24 Random_3^6 0"          AllyInfo="Sukeban"/>
-        <!-- Down -->
-        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="Random_16^24 Random_-3^-6 0"          AllyInfo="Sukeban"/>
-        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="Random_16^24 Random_-3^-6 0"          AllyInfo="Sukeban"/>
-        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="Random_16^24 Random_-3^-6 0"          AllyInfo="Sukeban"/>
-        <SpawnCharacter CharacterKey="SukebanUziChan" Position="Random_16^24 Random_-3^-6 0"          AllyInfo="Sukeban"/>
-
-
-
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-8^-5 Random_-5^5 0"            AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-8^-5 Random_-5^5 0"            AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanUziChan"      StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-8^-5 Random_-5^5 0"            AllyInfo="Sukeban"/>
+        <WaitSecond Time="0.5"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_5^8 Random_-5^5 0"            AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_5^8 Random_-5^5 0"            AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanUziChan"      StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_5^8 Random_-5^5 0"            AllyInfo="Sukeban"/>
+        <WaitSecond Time="0.5"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_5^8 0"             AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_5^8 0"             AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_5^8 0"             AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanUziChan"      StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_5^8 0"             AllyInfo="Sukeban"/>
+        <WaitSecond Time="0.5"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_-8^-5 0"           AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_-8^-5 0"           AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_-8^-5 0"           AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanUziChan"      StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_-8^-5 0"           AllyInfo="Sukeban"/>
 
         <WaitSecond Time="5.0"/>
-        <!-- Second Wave -->
-
-
-        <WaitSecond Time="5.0"/>
-        <!-- Third Wave -->
-        <!-- Left -->
-        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="Random_13^16 Random_4^-4 0"        AllyInfo="Sukeban"/>
-        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="Random_13^16 Random_4^-4 0"        AllyInfo="Sukeban"/>
-        <SpawnCharacter CharacterKey="SukebanUziChan" Position="Random_13^16 Random_4^-4 0"        AllyInfo="Sukeban"/>
-        <!-- Right -->
-        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="Random_24^27 Random_4^-4 0"        AllyInfo="Sukeban"/>
-        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="Random_24^27 Random_4^-4 0"        AllyInfo="Sukeban"/>
-        <SpawnCharacter CharacterKey="SukebanUziChan" Position="Random_24^27 Random_4^-4 0"        AllyInfo="Sukeban"/>
-        <!-- Up -->
-        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="Random_16^24 Random_3^6 0"          AllyInfo="Sukeban"/>
-        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="Random_16^24 Random_3^6 0"          AllyInfo="Sukeban"/>
-        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="Random_16^24 Random_3^6 0"          AllyInfo="Sukeban"/>
-        <SpawnCharacter CharacterKey="SukebanUziChan" Position="Random_16^24 Random_3^6 0"          AllyInfo="Sukeban"/>
-        <!-- Down -->
-        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="Random_16^24 Random_-3^-6 0"          AllyInfo="Sukeban"/>
-        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="Random_16^24 Random_-3^-6 0"          AllyInfo="Sukeban"/>
-        <SpawnCharacter CharacterKey="SukebanKatanaChan" Position="Random_16^24 Random_-3^-6 0"          AllyInfo="Sukeban"/>
-        <SpawnCharacter CharacterKey="SukebanUziChan" Position="Random_16^24 Random_-3^-6 0"          AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-8^-5 Random_-5^5 0"            AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-8^-5 Random_-5^5 0"            AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanUziChan"      StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-8^-5 Random_-5^5 0"            AllyInfo="Sukeban"/>
+        <WaitSecond Time="0.5"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_5^8 Random_-5^5 0"            AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_5^8 Random_-5^5 0"            AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanUziChan"      StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_5^8 Random_-5^5 0"            AllyInfo="Sukeban"/>
+        <WaitSecond Time="0.5"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_5^8 0"             AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_5^8 0"             AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_5^8 0"             AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanUziChan"      StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_5^8 0"             AllyInfo="Sukeban"/>
+        <WaitSecond Time="0.5"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_-8^-5 0"           AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_-8^-5 0"           AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_-8^-5 0"           AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanUziChan"      StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_-8^-5 0"           AllyInfo="Sukeban"/>
 
         <WaitSecond Time="5.0"/>
-        <!-- Forth Wave -->
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-8^-5 Random_-5^5 0"            AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-8^-5 Random_-5^5 0"            AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanUziChan"      StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-8^-5 Random_-5^5 0"            AllyInfo="Sukeban"/>
+        <WaitSecond Time="0.5"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_5^8 Random_-5^5 0"            AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_5^8 Random_-5^5 0"            AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanUziChan"      StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_5^8 Random_-5^5 0"            AllyInfo="Sukeban"/>
+        <WaitSecond Time="0.5"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_5^8 0"             AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_5^8 0"             AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_5^8 0"             AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanUziChan"      StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_5^8 0"             AllyInfo="Sukeban"/>
+        <WaitSecond Time="0.5"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_-8^-5 0"           AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_-8^-5 0"           AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_-8^-5 0"           AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanUziChan"      StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_-8^-5 0"           AllyInfo="Sukeban"/>
 
+        <WaitSecond Time="5.0"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-8^-5 Random_-5^5 0"            AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-8^-5 Random_-5^5 0"            AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanUziChan"      StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-8^-5 Random_-5^5 0"            AllyInfo="Sukeban"/>
+        <WaitSecond Time="0.5"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_5^8 Random_-5^5 0"            AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_5^8 Random_-5^5 0"            AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanUziChan"      StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_5^8 Random_-5^5 0"            AllyInfo="Sukeban"/>
+        <WaitSecond Time="0.5"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_5^8 0"             AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_5^8 0"             AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_5^8 0"             AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanUziChan"      StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_5^8 0"             AllyInfo="Sukeban"/>
+        <WaitSecond Time="0.5"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_-8^-5 0"           AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_-8^-5 0"           AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"   StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_-8^-5 0"           AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanUziChan"      StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_-8^-5 0"           AllyInfo="Sukeban"/>
+        <WaitSecond Time="7.0"/>
 
     </UpdatePhase>
     
