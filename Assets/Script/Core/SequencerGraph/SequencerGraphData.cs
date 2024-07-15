@@ -2125,8 +2125,10 @@ public class SequencerGraphEvent_SpawnCharacter : SequencerGraphEventBase
     private SpawnCharacterOptionDesc    _spawnDesc = SpawnCharacterOptionDesc.defaultValue;
 
     private string                      _uniqueEntityKey = "";
-    private string                      _markerName = "";
+    private string                      _centerMarkerName = "";
+    private string                      _centerUniqueEntityKey = "";
     private string                      _allyInfoKey = "";
+    private Vector3                     _offset = Vector3.zero;
 
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SpawnCharacter;
     
@@ -2134,12 +2136,24 @@ public class SequencerGraphEvent_SpawnCharacter : SequencerGraphEventBase
     {
         _spawnDesc._allyInfo = AllyInfoManager.Instance().GetAllyInfoData(_allyInfoKey);
         _characterInfoData = CharacterInfoManager.Instance().GetCharacterInfoData(_characterKey);
-        if(_markerName != "")
+        if(_centerMarkerName != "")
         {
-            MarkerItem item = processor.getMarker(_markerName);
+            MarkerItem item = processor.getMarker(_centerMarkerName);
             if(item != null)
                 _spawnDesc._position = item._position;
         }
+        else if(_centerUniqueEntityKey != "")
+        {
+            var uniqueEntity = processor.getUniqueEntity(_centerUniqueEntityKey);
+            if(uniqueEntity != null)
+                _spawnDesc._position = uniqueEntity.transform.position;
+        }
+        else if(MasterManager.instance._stageProcessor.isValid())
+        {
+            _spawnDesc._position = MasterManager.instance._stageProcessor.getCurrentPointPosition();
+        }
+
+        _spawnDesc._position += _offset;
     }
 
     public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
@@ -2171,11 +2185,15 @@ public class SequencerGraphEvent_SpawnCharacter : SequencerGraphEventBase
             }
             else if(attrName == "Position")
             {
-                _spawnDesc._position = XMLScriptConverter.valueToVector3(attrValue);
+                _offset = XMLScriptConverter.valueToVector3(attrValue);
             }
             else if(attrName == "PositionMarker")
             {
-                _markerName = attrValue;
+                _centerMarkerName = attrValue;
+            }
+            else if(attrName == "PositionUniqueKey")
+            {
+                _centerUniqueEntityKey = attrValue;
             }
             else if(attrName == "AllyInfo")
             {
@@ -2193,8 +2211,9 @@ public class SequencerGraphEvent_SpawnCharacter : SequencerGraphEventBase
     {
         base.serialize(ref binaryWriter);
         binaryWriter.Write(_characterKey);
-        BinaryHelper.writeVector3(ref binaryWriter, _spawnDesc._position);
-        binaryWriter.Write(_markerName);
+        BinaryHelper.writeVector3(ref binaryWriter, _offset);
+        binaryWriter.Write(_centerMarkerName);
+        binaryWriter.Write(_centerUniqueEntityKey);
         binaryWriter.Write(_allyInfoKey);
         binaryWriter.Write(_uniqueEntityKey);
 
@@ -2203,8 +2222,9 @@ public class SequencerGraphEvent_SpawnCharacter : SequencerGraphEventBase
     public override void deserialize(ref BinaryReader binaryReader)
     {
         _characterKey = binaryReader.ReadString();
-        _spawnDesc._position = BinaryHelper.readVector3(ref binaryReader);
-        _markerName = binaryReader.ReadString();
+        _offset = BinaryHelper.readVector3(ref binaryReader);
+        _centerMarkerName = binaryReader.ReadString();
+        _centerUniqueEntityKey = binaryReader.ReadString();
         _allyInfoKey = binaryReader.ReadString();
         _uniqueEntityKey = binaryReader.ReadString();
     }

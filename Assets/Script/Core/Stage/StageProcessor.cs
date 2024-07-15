@@ -908,6 +908,11 @@ public class StageProcessor
         return _stageData._stagePointData[index]._stagePoint + _offsetPosition;
     }
 
+    public Vector3 getCurrentPointPosition()
+    {
+        return getStagePoint(_currentPoint);
+    }
+
     public bool getNextPoint(ref Vector3 point)
     {
         int nextPointIndex = _currentPoint;
