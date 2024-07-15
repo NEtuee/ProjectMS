@@ -2128,6 +2128,7 @@ public class SequencerGraphEvent_SpawnCharacter : SequencerGraphEventBase
     private string                      _centerMarkerName = "";
     private string                      _centerUniqueEntityKey = "";
     private string                      _allyInfoKey = "";
+    private string                      _startAIState = "";
     private Vector3                     _offset = Vector3.zero;
 
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SpawnCharacter;
@@ -2167,6 +2168,9 @@ public class SequencerGraphEvent_SpawnCharacter : SequencerGraphEventBase
         if(_uniqueEntityKey != "")
             processor.addUniqueEntity(_uniqueEntityKey, createdCharacter);
         
+        if(_startAIState != "")
+            createdCharacter.setAINode(_startAIState);
+        
         return true;
     }
 
@@ -2203,6 +2207,10 @@ public class SequencerGraphEvent_SpawnCharacter : SequencerGraphEventBase
             {
                 _uniqueEntityKey = attrValue;
             }
+            else if(attrName == "StartAIState")
+            {
+                _startAIState = attrValue;
+            }
 
         }
     }
@@ -2216,6 +2224,7 @@ public class SequencerGraphEvent_SpawnCharacter : SequencerGraphEventBase
         binaryWriter.Write(_centerUniqueEntityKey);
         binaryWriter.Write(_allyInfoKey);
         binaryWriter.Write(_uniqueEntityKey);
+        binaryWriter.Write(_startAIState);
 
     }
 #endif
@@ -2227,6 +2236,7 @@ public class SequencerGraphEvent_SpawnCharacter : SequencerGraphEventBase
         _centerUniqueEntityKey = binaryReader.ReadString();
         _allyInfoKey = binaryReader.ReadString();
         _uniqueEntityKey = binaryReader.ReadString();
+        _startAIState = binaryReader.ReadString();
     }
 }
 
