@@ -24,9 +24,14 @@
     <AC_Dodge MovementType="GraphPreset" MovementGraphPreset="Tate_Dodge" DirectionType="AI" FlipType="Direction" DefenceType="Evade" DefenceAngle="360">
         <AnimationHeader MasterPath="Sprites/Enemy/TateChan/0_default/"/>
         <Animation Preset="7_dodge" XFlip="true" Duration="0.7">
-            <FrameEvent Type="AudioPlay" Condition="DefenceSuccess" StartTime="0" ID="4915" Attach="true"/>
-            <FrameEvent Type="AudioPlay" Condition="GuardBroken" StartTime="0" ID="4913" Attach="true"/>
         </Animation>
+
+        <Trigger Condition="DefenceSuccess">
+            <FrameEvent Type="AudioPlay" ID="4915" Attach="true"/>
+        </Trigger>
+        <Trigger Condition="GuardBroken">
+            <FrameEvent Type="AudioPlay" ID="4913" Attach="true"/>
+        </Trigger>
 
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_Dodge>
@@ -36,9 +41,14 @@
         <Animation Preset="1_forward" XFlip="true" Duration="1">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="0.4" Speed="3"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
-            <FrameEvent Type="AudioPlay" Condition="DefenceSuccess" StartTime="0" ID="4915" Attach="true"/>
-            <FrameEvent Type="AudioPlay" Condition="GuardBroken" StartTime="0" ID="4913" Attach="true"/>
         </Animation>
+
+        <Trigger Condition="DefenceSuccess">
+            <FrameEvent Type="AudioPlay" ID="4915" Attach="true"/>
+        </Trigger>
+        <Trigger Condition="GuardBroken">
+            <FrameEvent Type="AudioPlay" ID="4913" Attach="true"/>
+        </Trigger>
 
         <Branch Condition="End == true" Execute="AC_GuardForward"/>
     </AC_GuardForward>
@@ -48,9 +58,14 @@
         <Animation Preset="2_backward" XFlip="true" Duration="1">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="0.4" Speed="-3"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
-            <FrameEvent Type="AudioPlay" Condition="DefenceSuccess" StartTime="0" ID="4915" Attach="true"/>
-            <FrameEvent Type="AudioPlay" Condition="GuardBroken" StartTime="0" ID="4913" Attach="true"/>
         </Animation>
+
+        <Trigger Condition="DefenceSuccess">
+            <FrameEvent Type="AudioPlay" ID="4915" Attach="true"/>
+        </Trigger>
+        <Trigger Condition="GuardBroken">
+            <FrameEvent Type="AudioPlay" ID="4913" Attach="true"/>
+        </Trigger>
 
         <Branch Condition="End == true" Execute="AC_GuardBack"/>
     </AC_GuardBack>
@@ -60,9 +75,14 @@
         <Animation Preset="3_guardSuccess" XFlip="true" Duration="1">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
-            <FrameEvent Type="AudioPlay" Condition="DefenceSuccess" StartTime="0" ID="4915" Attach="true"/>
-            <FrameEvent Type="AudioPlay" Condition="GuardBroken" StartTime="0" ID="4913" Attach="true"/>
         </Animation>
+
+        <Trigger Condition="DefenceSuccess">
+            <FrameEvent Type="AudioPlay" ID="4915" Attach="true"/>
+        </Trigger>
+        <Trigger Condition="GuardBroken">
+            <FrameEvent Type="AudioPlay" ID="4913" Attach="true"/>
+        </Trigger>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_GuardSuccess>
@@ -74,10 +94,14 @@
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0" Velocity="-3.0"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardPointDecrease"/>
-            <FrameEvent Type="AudioPlay" Condition="DefenceSuccess" StartTime="0" ID="4915" Attach="true"/>
-            <FrameEvent Type="AudioPlay" Condition="GuardBroken" StartTime="0" ID="4913" Attach="true"/>
-
         </Animation>
+
+        <Trigger Condition="DefenceSuccess">
+            <FrameEvent Type="AudioPlay" ID="4915" Attach="true"/>
+        </Trigger>
+        <Trigger Condition="GuardBroken">
+            <FrameEvent Type="AudioPlay" ID="4913" Attach="true"/>
+        </Trigger>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_GuardBreakHit>
@@ -101,10 +125,14 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
             <FrameEvent Type="AudioPlay" StartTime="0" ID="4922" Attach="true"/>
-            <FrameEvent Type="AudioPlay" Condition="DefenceSuccess" StartTime="0" ID="4915" Attach="true"/>
-            <FrameEvent Type="AudioPlay" Condition="GuardBroken" StartTime="0" ID="4913" Attach="true"/>
-
         </Animation>
+
+        <Trigger Condition="DefenceSuccess">
+            <FrameEvent Type="AudioPlay" ID="4915" Attach="true"/>
+        </Trigger>
+        <Trigger Condition="GuardBroken">
+            <FrameEvent Type="AudioPlay" ID="4913" Attach="true"/>
+        </Trigger>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_AttackReady>
@@ -139,10 +167,14 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="CancelAvail"/>
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2100" Attach="true"/>
             <FrameEvent Type="AudioPlay" StartTime="0" ID="4912" Attach="true"/>
-            <FrameEvent Type="AudioPlay" Condition="DefenceSuccess" StartTime="0" ID="4915" Attach="true"/>
-            <FrameEvent Type="AudioPlay" Condition="GuardBroken" StartTime="0" ID="4913" Attach="true"/>
-
         </Animation>
+
+        <Trigger Condition="DefenceSuccess">
+            <FrameEvent Type="AudioPlay" ID="4915" Attach="true"/>
+        </Trigger>
+        <Trigger Condition="GuardBroken">
+            <FrameEvent Type="AudioPlay" ID="4913" Attach="true"/>
+        </Trigger>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_AttackMain>
@@ -152,10 +184,14 @@
         <Animation Preset="3_attackSuccess" XFlip="true" Duration="1">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0" Velocity="-3.0"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
-            <FrameEvent Type="AudioPlay" Condition="DefenceSuccess" StartTime="0" ID="4915" Attach="true"/>
-            <FrameEvent Type="AudioPlay" Condition="GuardBroken" StartTime="0" ID="4913" Attach="true"/>
-
         </Animation>
+
+        <Trigger Condition="DefenceSuccess">
+                <FrameEvent Type="AudioPlay" ID="4915" Attach="true"/>
+        </Trigger>
+        <Trigger Condition="GuardBroken">
+            <FrameEvent Type="AudioPlay" ID="4913" Attach="true"/>
+        </Trigger>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_AttackSuccess>
@@ -179,10 +215,14 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
             <FrameEvent Type="AudioPlay" StartTime="0" ID="4921" Attach="true"/>
-            <FrameEvent Type="AudioPlay" Condition="DefenceSuccess" StartTime="0" ID="4915" Attach="true"/>
-            <FrameEvent Type="AudioPlay" Condition="GuardBroken" StartTime="0" ID="4913" Attach="true"/>
-
         </Animation>
+
+        <Trigger Condition="DefenceSuccess">
+            <FrameEvent Type="AudioPlay" ID="4915" Attach="true"/>
+        </Trigger>
+        <Trigger Condition="GuardBroken">
+            <FrameEvent Type="AudioPlay" ID="4913" Attach="true"/>
+        </Trigger>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_HitGuard>

@@ -436,12 +436,6 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             }
             else if(nodeList[i].Name == "Trigger")
             {
-                if(triggerEventDataList.Count >= ActionGraph.kTriggerMaxCount)
-                {
-                    DebugUtil.assert_fileOpen(false,"Trigger는 최대 {0}개까지 선언할 수 있습니다. [Line: {1}] [FileName: {2}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node), ActionGraph.kTriggerMaxCount, XMLScriptConverter.getLineFromXMLNode(node), filePath);
-                    continue;
-                }
-
                 ActionGraphTriggerEventData triggerEventData = readTriggerEvent(nodeList[i],ref compareDataList, ref _globalVariables, filePath);
                 if(triggerEventData == null)
                 {

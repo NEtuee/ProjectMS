@@ -15,8 +15,6 @@ public class ActionGraph
         public string _inputKey;
     }
 
-    public const int kTriggerMaxCount = 16;
-
     private int _currentActionNodeIndex = -1;
     private int _prevActionNodeIndex = -1;
 
@@ -34,8 +32,6 @@ public class ActionGraph
 
     private HashSet<string>                     _currentFrameTag = new HashSet<string>();
     private List<byte[]>                        _conditionResultList = new List<byte[]>();
-
-    private bool[]                              _triggerExecuteCondition = new bool[kTriggerMaxCount];
 
     private Dictionary<string, bool>            _graphStateCoolTimeMap = new Dictionary<string, bool>();
 
@@ -75,9 +71,6 @@ public class ActionGraph
 
         _graphStateCoolTimeMap.Clear();
         _inputBuffer.Clear();
-
-        for(int i = 0; i < kTriggerMaxCount; ++i)
-            _triggerExecuteCondition[i] = false;
 
         setDefaultAction();
     }
@@ -163,22 +156,19 @@ public class ActionGraph
 
         for(int i = 0; i < currentAction._triggerCount; ++i)
         {
-            if(_triggerExecuteCondition[i])
-                continue;
-
-            _triggerExecuteCondition[i] = processTriggerEvent(_actionGraphBaseData._triggerEventData[currentAction._triggerIndexStart + i], targetEntity);
+            processTriggerEvent(_actionGraphBaseData._triggerEventData[currentAction._triggerIndexStart + i], targetEntity);
         }
     }
 
-    public bool processTriggerEvent(ActionGraphTriggerEventData triggerEventData, GameEntityBase targetEntity)
+    public void processTriggerEvent(ActionGraphTriggerEventData triggerEventData, GameEntityBase targetEntity)
     {
         if(triggerEventData == null)
-            return false;
+            return;
 
         if(triggerEventData._conditionCompareDataIndex >= 0)
         {
             if(processActionCondition(_actionGraphBaseData._conditionCompareData[triggerEventData._conditionCompareDataIndex]) == false)
-                return false;
+                return;
         }
 
         for(int index = 0; index < triggerEventData._frameEventData.Length; ++index)
@@ -189,7 +179,6 @@ public class ActionGraph
             frameEvent.onExit(targetEntity, false);
         }
 
-        return true;
     }
 
     public void release()
@@ -317,9 +306,6 @@ public class ActionGraph
                 return false;
             }
         }
-
-        for(int i = 0; i < getCurrentAction()._triggerCount; ++i)
-            _triggerExecuteCondition[i] = false;
 
         _actionExecutedTime = 0f;
         setActionConditionData_Bool(ConditionNodeUpdateType.Action_AnimationEnd, false);
