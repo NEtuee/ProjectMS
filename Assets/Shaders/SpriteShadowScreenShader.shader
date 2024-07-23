@@ -156,7 +156,6 @@ Shader "Custom/SpriteShadowScreenShader"
 
 				half4 _MainTex_TexelSize;
 
-				static const float backgroundBrightnessFactor = 7.5f;
 
 				fixed4 SampleSpriteTexture(sampler2D sampleTexture, float2 uv)
 				{
@@ -368,7 +367,7 @@ Shader "Custom/SpriteShadowScreenShader"
 							Color.rgb += sampleBackground(backgroundTexture, texcoord + float2(cos(d), sin(d)) * Radius * i, worldPosition, firstBackground == false).rgb;
 						}
 					}
-					Color.rgb /= (Quality) * Directions - backgroundBrightnessFactor;
+					Color.rgb /= (Quality) * Directions;
 
 					float brightness = dot(Color.xyz, float3(0.2126f, 0.7152f, 0.0722));
 					if (brightness > 0.5)
@@ -382,7 +381,7 @@ Shader "Custom/SpriteShadowScreenShader"
 								bloom += sampleBackground(backgroundTexture, texcoord + float2(cos(d), sin(d)) * bloomBlurRadius * i, worldPosition, firstBackground == false).rgb;
 							}
 						}
-						bloom /= Quality * Directions - backgroundBrightnessFactor;
+						bloom /= Quality * Directions;
 
 						Color.rgb += bloom;
 						Color.rgb *= 0.5f;

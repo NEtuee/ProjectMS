@@ -43,7 +43,6 @@ public class TitleMenuUI : IUIElement
         _bgmEmitter?.Stop();
 
         _binder.OptionRoot.SetActive(false);
-        _binder.CuttingLine.gameObject.SetActive(true);
     }
 
     private void PlaySoundEmitter()
@@ -148,7 +147,6 @@ public class TitleMenuUI : IUIElement
         updageLanguge();
     }
 
-    private Vector2 _scrollOffset = Vector2.zero;
     public void UpdateByManager()
     {
         if(_binder.OptionRoot.activeInHierarchy || _binder.Root.activeInHierarchy == false)
@@ -164,13 +162,9 @@ public class TitleMenuUI : IUIElement
             }
         }
 
-        _scrollOffset.x += 0.04f * Time.deltaTime;
-        _binder.CuttingLine.material.mainTextureOffset = _scrollOffset;
-
         if(Input.anyKeyDown)
         {
             _binder.OptionRoot.SetActive(true);
-            _binder.CuttingLine.gameObject.SetActive(false);
         }
     }
 

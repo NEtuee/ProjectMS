@@ -21,7 +21,6 @@ public class TitleMenuUIBinder : UIObjectBinder
     public Button LanguageRightButton;
 
     public Image ResolutionImage;
-    public Image CuttingLine;
     public Text LanguageText;
 
     public Sprite resolution800;
@@ -86,12 +85,6 @@ public class TitleMenuUIBinder : UIObjectBinder
         if (ResolutionImage == null)
         {
             reason = "메인메뉴 ui에 ResolutionImage 없음";
-            return false;
-        }
-
-        if (CuttingLine == null)
-        {
-            reason = "메인메뉴 ui에 CuttingLine 없음";
             return false;
         }
 
