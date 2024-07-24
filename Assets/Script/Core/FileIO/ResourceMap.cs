@@ -75,11 +75,8 @@ public class ResourceMap : Singleton<ResourceMap>
     {
 #if UNITY_EDITOR
 
-        if(Application.isPlaying == false)
-        {
-            buildResourceMap();
-            writeBinary();
-        }
+        buildResourceMap();
+        writeBinary();
 #endif
 
         readBinary();
@@ -174,7 +171,7 @@ public class ResourceMap : Singleton<ResourceMap>
 
     public void writeBinary()
     {
-        string fileFullPath = Application.streamingAssetsPath + _resourceMapPath;
+        string fileFullPath = getBinaryRootPath() + _resourceMapPath;
         FileStream fileStream = new FileStream(fileFullPath, FileMode.OpenOrCreate, FileAccess.Write);
         BinaryWriter binaryWriter = new BinaryWriter(fileStream);
 
@@ -193,7 +190,7 @@ public class ResourceMap : Singleton<ResourceMap>
     {
         _resourceMap.Clear();
 
-        string fileFullPath = Application.streamingAssetsPath + _resourceMapPath;
+        string fileFullPath = getBinaryRootPath() + _resourceMapPath;
         FileStream fileStream = new FileStream(fileFullPath, FileMode.Open, FileAccess.Read);
         BinaryReader binaryReader = new BinaryReader(fileStream);
 
