@@ -52,6 +52,10 @@ Shader "Custom/SpriteShadowScreenShader"
 		_FogStrength("Fog Strength", Range(0.0, 1.0)) = 1.0
 		_FogColor("Fog Color", Color) = (1,1,1,1)
 
+		[Space][Space][Space]
+		_Curvature ("Curvature", Range(0, 2)) = 0.0
+		_Scanline ("Scanline", Range(0, 1)) = 0.0
+
 		[MaterialToggle] PixelSnap("Pixel snap", Float) = 0
 	}
 
@@ -153,6 +157,10 @@ Shader "Custom/SpriteShadowScreenShader"
 				float _FogRate;
 				float _FogStrength;
 				fixed4 _FogColor;
+
+				float _Distortion;
+				float _Curvature;
+				float _Scanline;
 
 				half4 _MainTex_TexelSize;
 
@@ -413,13 +421,21 @@ Shader "Custom/SpriteShadowScreenShader"
 					fixed4 shadowdedBackground = lerp(backgroundSample, characterShadow, characterShadow.a);
 					fixed4 mixed2 = lerp(shadowdedBackground, characterSample, characterSample.a);
 					fixed4 mixed3 = lerp(mixed2, forwardScreenSample, forwardScreenSample.a);
-					fixed4 mixed4 = lerp(mixed3, interfaceSample, interfaceSample.a);
-					return mixed4;
+					//fixed4 mixed4 = lerp(mixed3, interfaceSample, interfaceSample.a);
+					return mixed3;
 				}
 
 				fixed4 frag(v2f IN) : SV_Target
 				{
-					fixed4 resultColor = allTogether(IN.texcoord,IN.worldPosition);
+					float2 center = float2(0.5, 0.5);
+            		float2 coord = IN.texcoord - center;
+            		coord *= 1.0 + _Curvature * dot(coord, coord);
+            		coord += center;
+
+					fixed4 resultColor = allTogether(coord,IN.worldPosition);
+
+					// Scanline
+            		resultColor.rgb *= 1.0 + _Scanline * sin(coord.y * 1200.0);
 
 					//brigtness
 					resultColor.rgb *= _Brightness;
@@ -432,19 +448,19 @@ Shader "Custom/SpriteShadowScreenShader"
 					resultColor.rgb *= _ColorTint;
 
 					//fog
-					float fogRate = smoothstep(0.0, 1.0, (IN.texcoord.y - _FogStrength) * (1.0 / ((1.0 - _FogStrength) * _FogRate)));
+					float fogRate = smoothstep(0.0, 1.0, (coord.y - _FogStrength) * (1.0 / ((1.0 - _FogStrength) * _FogRate)));
 					resultColor.rgb *= (fogRate + ((1.0 - fogRate) * (1.0 - _FogColor.a)));
 					resultColor.rgb += _FogColor.rgb * (1.0 - fogRate) * _FogColor.a;
 
 					//vignette
 					float2 offset = float2(5.0f, 5.0f);
 					float2 vignetteRatio = 1.0 - ((_RealCameraSize.xy + offset) / resolution);
-					float2 uv = IN.texcoord.xy - vignetteRatio * 0.5f;
+					float2 uv = coord.xy - vignetteRatio * 0.5f;
 					uv /= 1.0f - vignetteRatio;
     				uv *=  1.0 - uv.yx;
     				float vig = uv.x*uv.y * 8.0;
     				vig = pow(vig, _Vignette);
-    				resultColor.xyz *= vig; 
+    				resultColor.xyz *= vig;
 
 					return resultColor;
 				}
