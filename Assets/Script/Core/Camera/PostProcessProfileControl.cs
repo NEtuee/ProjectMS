@@ -14,6 +14,7 @@ public class PostProcessProfileControl
     {
         public PostProcessProfile _sourceLayer;
         public float _blendTime = 0f;
+        public MathEx.EaseType _easeType = MathEx.EaseType.Linear;
         private float _timer = 0f;
 
         public bool blend(ref PostProcessProfileData postProcessProfileData, float deltaTime, bool reverse)
@@ -25,7 +26,7 @@ public class PostProcessProfileControl
             if(reverse)
                 blendRate = 1f - blendRate;
 
-            postProcessProfileData.blend(_sourceLayer,blendRate);
+            postProcessProfileData.blend(_sourceLayer,MathEx.getEaseFormula(_easeType, 0f, 1f, blendRate));
             return isEnd();
         }
 
@@ -34,9 +35,10 @@ public class PostProcessProfileControl
             return _timer >= _blendTime;
         }
 
-        public void setProfileData(PostProcessProfile profile, float blendTime)
+        public void setProfileData(PostProcessProfile profile, MathEx.EaseType easeType, float blendTime)
         {
             _sourceLayer = profile;
+            _easeType = easeType;
             _blendTime = blendTime;
             _timer = 0f;
         }
@@ -115,7 +117,7 @@ public class PostProcessProfileControl
         _targetMaterial.SetVector("_CenterUV", centerUV);
     }
 
-    public void setAdditionalEffectProfile(PostProcessProfile profile, int order, float blendTime)
+    public void setAdditionalEffectProfile(PostProcessProfile profile, MathEx.EaseType easeType, int order, float blendTime)
     {
         if(_additionalEffectProfile.isEnd() == false && _currentAdditionalBlendingOrder > order)
             return;
@@ -126,15 +128,15 @@ public class PostProcessProfileControl
             return;
         }
 
-        _additionalEffectProfile.setProfileData(profile,blendTime);
+        _additionalEffectProfile.setProfileData(profile,easeType,blendTime);
         _currentAdditionalBlendingOrder = order;
         _isBlending = true;
     }
 
-    public void addBaseBlendProfile(PostProcessProfile profile, float blendTime)
+    public void addBaseBlendProfile(PostProcessProfile profile, MathEx.EaseType easeType, float blendTime)
     {
         ProfileBlender blender = _profileBlenderPool.dequeue();
-        blender.setProfileData(profile,blendTime);
+        blender.setProfileData(profile,easeType,blendTime);
 
         _baseBlendingProfileList.Add(blender);
         _isBlending = true;

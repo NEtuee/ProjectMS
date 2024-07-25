@@ -7,7 +7,7 @@ LineStart,<SetCrossHair,UniqueKey=~~
 LineStart,<SetHPSphere,UniqueKey=~~
 LineStart,<WaitTargetDead,UniqueKey=~~
 LineStart,<TeleportTargetTo,"UniqueKey=~~,Position=~~,PositionMarker=~~"
-LineStart,<ApplyPostProcessProfile,"Path=~~,BlendTime=~~,ApplyType=~~"
+LineStart,<ApplyPostProcessProfile,"Path=~~,BlendTime=~~,ApplyType=~~,EaseType=~~"
 LineStart,<CallAIEvent,"EventName=~~,UniqueKey=~~,Range=~~,AllyTarget=~~,EventTargetType=~~"
 LineStart,<WaitSignal,Signal=~~
 LineStart,<SetCameraZoom,"Size=~~,Speed=~~,Force=~~"
@@ -120,10 +120,10 @@ ShortCut,__KillEntity,<KillEntity UniqueKey=~~/>
 LineStart,<KillEntity,"UniqueKey=~~,UniqueGruopKey=~~"
 ShortCut,__KillAllStageEntity,<KillAllStageEntity/>
 InQuote,AllyTarget=,"Ally,Enemy,Neutral"
-,,
-,,
-,,
-,,
+InQuote,EaseType=,"Linear,EaseInQuad,EaseOutQuad,EaseInOutQuad,EaseInCubic,EaseOutCubic,EaseInOutCubic"
+LineStart,<ShowCursor,Active=~~
+ShortCut,__ShowCursor,<ShowCursor Active=~~/>
+InQuote,Active=,"True,False"
 ,,
 ,,
 ,,

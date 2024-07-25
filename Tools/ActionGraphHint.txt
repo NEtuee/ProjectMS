@@ -102,7 +102,7 @@ FrameEvent,PlaySequencer,Path=~~
 ShortCut,__FrameEvent_SequencerSignal,<FrameEvent Type=~SequencerSignal~ StartTime=~0~ Signal=~~/>
 FrameEvent,SequencerSignal,Signal=~~
 ShortCut,__FrameEvent_ApplyPostProcessProfile,<FrameEvent Type=~ApplyPostProcessProfile~ StartTime=~0~ Path=~~ ApplyType=~~ Order=~~ BlendTime=~~/>
-FrameEvent,ApplyPostProcessProfile,"Path=~~,BlendTime=~~,ApplyType=~~,Order=~~"
+FrameEvent,ApplyPostProcessProfile,"Path=~~,BlendTime=~~,ApplyType=~~,Order=~~,EaseType=~~"
 InQuote,ApplyType=,"BaseBlend,Additional"
 FrameEvent,SetDirectionType,DirectionType=~~
 ShortCut,__FrameEvent_SetDirectionType,<FrameEvent Type=~SetDirectionType~ StartTime=~0~ DirectionType=~~/>
@@ -142,7 +142,7 @@ FrameEvent,DeletePrefab,Key=~~
 ShortCut,__FrameEvent_DeletePrefab,<FrameEvent Type=~DeletePrefab~ StartTime=~0~ Key=~~/>
 ShortCut,__Trigger,<Trigger Condition=~~>#n</Trigger>
 InQuote,AllyTarget=,"Ally,Enemy,Neutral"
-,,
+InQuote,EaseType=,"Linear,EaseInQuad,EaseOutQuad,EaseInOutQuad,EaseInCubic,EaseOutCubic,EaseInOutCubic"
 ,,
 ,,
 ,,

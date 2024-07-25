@@ -87,6 +87,12 @@ public class PostProcessProfileData
     public float _backgroundTransitionRate = 0f;
     public bool _useBackgroundTransitionRate = false;
 
+    public float _curvature = 0f;
+    public bool _useCurvature = true;
+
+    public float _scanLine = 0f;
+    public bool _useScanLine = true;
+
     public bool _pixelSnap = false;
 
     public void syncValueToMaterial(Material targetMaterial)
@@ -144,6 +150,11 @@ public class PostProcessProfileData
         if(_useBackgroundTransitionRate)
             targetMaterial.SetFloat("_CrossFillFactor", _backgroundTransitionRate);
 
+        if(_useCurvature)
+            targetMaterial.SetFloat("_Curvature", _curvature);
+        if(_useScanLine)
+            targetMaterial.SetFloat("_Scanline", _scanLine);
+
         targetMaterial.SetFloat("PixelSnap",_pixelSnap ? 1f : 0f);
     }
 
@@ -175,6 +186,9 @@ public class PostProcessProfileData
         _fogRate = targetMaterial.GetFloat("_FogRate");
         _fogStrength = targetMaterial.GetFloat("_FogStrength");
         _fogColor = targetMaterial.GetColor("_FogColor");
+
+        _curvature = targetMaterial.GetFloat("_Curvature");
+        _scanLine = targetMaterial.GetFloat("_ScanLine");
 
         _pixelSnap = targetMaterial.GetFloat("PixelSnap") == 1f;
     }
@@ -229,6 +243,10 @@ public class PostProcessProfileData
             _fogColor                   = Color.Lerp(_fogColor, destination._profileData._fogColor, ratio);
         if(destination._profileData._useBackgroundTransitionRate)
             _backgroundTransitionRate   = Mathf.Lerp(_backgroundTransitionRate, destination._profileData._backgroundTransitionRate, ratio);
+        if(destination._profileData._useCurvature)
+            _curvature                  = Mathf.Lerp(_curvature, destination._profileData._curvature, ratio);
+        if(destination._profileData._useScanLine)
+            _scanLine                   = Mathf.Lerp(_scanLine, destination._profileData._scanLine, ratio);
 
         _pixelSnap                  = ratio >= 0.5f ? destination._profileData._pixelSnap : _pixelSnap;
     }
@@ -283,6 +301,10 @@ public class PostProcessProfileData
             _fogColor                   = Color.Lerp(source._fogColor, destination._fogColor, ratio);
         if(destination._useBackgroundTransitionRate)
             _backgroundTransitionRate   = Mathf.Lerp(source._backgroundTransitionRate, destination._backgroundTransitionRate, ratio);
+        if(destination._useCurvature)
+            _curvature                  = Mathf.Lerp(source._curvature, destination._curvature, ratio);
+        if(destination._useScanLine)
+            _scanLine                   = Mathf.Lerp(source._scanLine, destination._scanLine, ratio);
 
         _pixelSnap                      = ratio >= 0.5f ? destination._pixelSnap : source._pixelSnap;
     }
@@ -358,6 +380,11 @@ public class PostProcessProfileData
             _fogColor                   = profile._profileData._fogColor;
         if(_useBackgroundTransitionRate)
             _backgroundTransitionRate   = profile._profileData._backgroundTransitionRate;
+        if(_useCurvature)
+            _curvature                  = profile._profileData._curvature;
+        if(_useScanLine)
+            _scanLine                   = profile._profileData._scanLine;
+
         _pixelSnap                  = profile._profileData._pixelSnap;
     }
 }
@@ -420,6 +447,10 @@ public class PostProcessProfileEditor : Editor
 
         GUILayout.Space(20f);
         isChange |= floatField("Background Transition Rate", ref controll._profileData._backgroundTransitionRate, ref controll._profileData._useBackgroundTransitionRate);
+
+        GUILayout.Space(20f);
+        isChange |= floatSlider("Curvature", ref controll._profileData._curvature,0f, 2f, ref controll._profileData._useCurvature);
+        isChange |= floatSlider("ScanLine", ref controll._profileData._scanLine, 0f, 1f, ref controll._profileData._useScanLine);
 
         if(isChange)
         {

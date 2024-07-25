@@ -490,6 +490,7 @@ public class ActionFrameEvent_ApplyPostProcessProfile : ActionFrameEventBase
     private string _path = "";
     private float _blendTime = 0f;
     private int _blendOrder = 0;
+    private MathEx.EaseType _easeType = MathEx.EaseType.Linear;
     private PostProcessProfileApplyType _applyType = PostProcessProfileApplyType.BaseBlend;
 
     public override void initialize(ObjectBase executeEntity)
@@ -505,10 +506,10 @@ public class ActionFrameEvent_ApplyPostProcessProfile : ActionFrameEventBase
         switch(_applyType)
         {
             case PostProcessProfileApplyType.BaseBlend:
-                CameraControlEx.Instance().getPostProcessProfileControl().addBaseBlendProfile(profile as PostProcessProfile,_blendTime);
+                CameraControlEx.Instance().getPostProcessProfileControl().addBaseBlendProfile(profile as PostProcessProfile,_easeType,_blendTime);
             break;
             case PostProcessProfileApplyType.Additional:
-                CameraControlEx.Instance().getPostProcessProfileControl().setAdditionalEffectProfile(profile as PostProcessProfile,_blendOrder,_blendTime);
+                CameraControlEx.Instance().getPostProcessProfileControl().setAdditionalEffectProfile(profile as PostProcessProfile,_easeType,_blendOrder,_blendTime);
             break;
         }
         
@@ -531,6 +532,8 @@ public class ActionFrameEvent_ApplyPostProcessProfile : ActionFrameEventBase
                 _blendTime = XMLScriptConverter.valueToFloatExtend(attrValue);
             else if(attrName == "ApplyType")
                 _applyType = (PostProcessProfileApplyType)System.Enum.Parse(typeof(PostProcessProfileApplyType), attrValue);
+            else if(attrName == "EaseType")
+                _easeType = (MathEx.EaseType)System.Enum.Parse(typeof(MathEx.EaseType), attrValue);
             else if(attrName == "Order")
                 _blendOrder = int.Parse(attrValue);
         }
@@ -549,6 +552,7 @@ public class ActionFrameEvent_ApplyPostProcessProfile : ActionFrameEventBase
         binaryWriter.Write(_blendTime);
         binaryWriter.Write(_blendOrder);
         binaryWriter.Write((int)_applyType);
+        BinaryHelper.writeEnum<MathEx.EaseType>(ref binaryWriter, _easeType);
     }
 #endif
 
@@ -559,6 +563,7 @@ public class ActionFrameEvent_ApplyPostProcessProfile : ActionFrameEventBase
         _blendTime = binaryReader.ReadSingle();
         _blendOrder = binaryReader.ReadInt32();
         _applyType = (PostProcessProfileApplyType)binaryReader.ReadInt32();
+        _easeType = BinaryHelper.readEnum<MathEx.EaseType>(ref binaryReader);
     }
 }
 

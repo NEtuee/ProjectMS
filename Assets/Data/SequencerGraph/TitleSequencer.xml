@@ -7,9 +7,12 @@
         <Fade/>
 
         <FadeIn Lambda="5.0"/>
+
     </InitializePhase>
 
     <UpdatePhase>
+        <ApplyPostProcessProfile Path="PostProcessProfile/CRTImpact" ApplyType="Additional" BlendTime="0.5" EaseType="EaseInCubic"/>
+        <ShowCursor Active="True"/>
 
     </UpdatePhase>
     

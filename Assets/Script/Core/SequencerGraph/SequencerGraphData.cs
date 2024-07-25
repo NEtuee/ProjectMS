@@ -64,6 +64,7 @@ public enum SequencerGraphEventType
     SetCameraBoundLock,
     KillEntity,
     KillAllStageEntity,
+    ShowCursor,
     
     Count,
 }
@@ -206,6 +207,8 @@ public abstract class SequencerGraphEventBase : SerializableDataType
             spawnEvent = new SequencerGraphEvent_KillEntity();
         else if(eventType == SequencerGraphEventType.KillAllStageEntity)
             spawnEvent = new SequencerGraphEvent_KillAllStageEntity();
+        else if(eventType == SequencerGraphEventType.ShowCursor)
+            spawnEvent = new SequencerGraphEvent_ShowCursor();
 
         return spawnEvent;
     }
@@ -2986,6 +2989,48 @@ public class SequencerGraphEvent_KillAllStageEntity : SequencerGraphEventBase
     }
 }
 
+public class SequencerGraphEvent_ShowCursor : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.ShowCursor;
+
+    private bool _active = false;
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor, float deltaTime)
+    {
+        UnityEngine.Cursor.visible = _active;
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "Active")
+                _active = bool.Parse(attrValue);
+        }
+    }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_active);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _active = binaryReader.ReadBoolean();
+    }
+}
+
 public class SequencerGraphEvent_KillEntity : SequencerGraphEventBase
 {
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.KillEntity;
@@ -3376,6 +3421,7 @@ public class SequencerGraphEvent_ApplyPostProcessProfile : SequencerGraphEventBa
 {
     private string _path = "";
     private float _blendTime = 0f;
+    private MathEx.EaseType _easeType = MathEx.EaseType.Linear;
     private PostProcessProfileApplyType _applyType = PostProcessProfileApplyType.BaseBlend;
 
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.ApplyPostProcessProfile;
@@ -3394,10 +3440,10 @@ public class SequencerGraphEvent_ApplyPostProcessProfile : SequencerGraphEventBa
         switch(_applyType)
         {
             case PostProcessProfileApplyType.BaseBlend:
-                CameraControlEx.Instance().getPostProcessProfileControl().addBaseBlendProfile(profile as PostProcessProfile,_blendTime);
+                CameraControlEx.Instance().getPostProcessProfileControl().addBaseBlendProfile(profile as PostProcessProfile,_easeType,_blendTime);
             break;
             case PostProcessProfileApplyType.Additional:
-                CameraControlEx.Instance().getPostProcessProfileControl().setAdditionalEffectProfile(profile as PostProcessProfile,999,_blendTime);
+                CameraControlEx.Instance().getPostProcessProfileControl().setAdditionalEffectProfile(profile as PostProcessProfile,_easeType,999,_blendTime);
             break;
         }
         
@@ -3419,6 +3465,8 @@ public class SequencerGraphEvent_ApplyPostProcessProfile : SequencerGraphEventBa
                 _blendTime = XMLScriptConverter.valueToFloatExtend(attrValue);
             else if(attrName == "ApplyType")
                 _applyType = (PostProcessProfileApplyType)System.Enum.Parse(typeof(PostProcessProfileApplyType), attrValue);
+            else if(attrName == "EaseType")
+                _easeType = (MathEx.EaseType)System.Enum.Parse(typeof(MathEx.EaseType), attrValue);
         }
     }
 #if UNITY_EDITOR
@@ -3428,6 +3476,7 @@ public class SequencerGraphEvent_ApplyPostProcessProfile : SequencerGraphEventBa
         binaryWriter.Write(_path);
         binaryWriter.Write(_blendTime);
         BinaryHelper.writeEnum<PostProcessProfileApplyType>(ref binaryWriter,_applyType);
+        BinaryHelper.writeEnum<MathEx.EaseType>(ref binaryWriter,_easeType);
     }
 #endif
     public override void deserialize(ref BinaryReader binaryReader)
@@ -3435,6 +3484,7 @@ public class SequencerGraphEvent_ApplyPostProcessProfile : SequencerGraphEventBa
         _path = binaryReader.ReadString();
         _blendTime = binaryReader.ReadSingle();
         _applyType = BinaryHelper.readEnum<PostProcessProfileApplyType>(ref binaryReader);
+        _easeType = BinaryHelper.readEnum<MathEx.EaseType>(ref binaryReader);
     }
 }
 
