@@ -8,6 +8,8 @@
 
         <FadeIn Lambda="5.0"/>
 
+        <AudioPlay ID="9003" Switch="True"/>
+
     </InitializePhase>
 
     <UpdatePhase>
@@ -25,5 +27,9 @@
         <NextStage Path="StageData/Stage_1_1"/>
 
     </UpdatePhase>
+
+    <EndPhase>
+        <StopSwitch Switch="Audio" Key="9003"/>
+    </EndPhase>
     
 </SequencerGraph>

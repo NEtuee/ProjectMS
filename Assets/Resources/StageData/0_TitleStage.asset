@@ -29,7 +29,21 @@ MonoBehaviour:
     _onEnterSequencerPath:
     - TitleSequencer.xml
     _onExitSequencerPath: []
-    _characterSpawnData: []
+    _characterSpawnData:
+    - _characterKey: Akane
+      _uniqueKey: Player
+      _uniqueGroupKey: 
+      _startAction: Spawn
+      _startAIState: Entry
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 1
+      _keepAlive: 1
+      _sortingOrder: 0
+      _allyInfoKey: Player
+      _activeType: 0
+      _localPosition: {x: 0, y: 0, z: 0}
     _useTriggerBound: 0
     _targetSearchIdentifier: 1
     _triggerWidth: 1

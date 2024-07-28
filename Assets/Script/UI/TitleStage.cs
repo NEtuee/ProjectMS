@@ -10,8 +10,6 @@ public class TitleStage : MonoBehaviour
 
     private float _timer = 0f;
 
-    private FMODUnity.StudioEventEmitter _bgmEmitter = null;
-
     void Start()
     {
         GameUI.Instance.activeOptionUI(true);
@@ -21,8 +19,6 @@ public class TitleStage : MonoBehaviour
         FMODAudioManager.Instance().Play(5001, Vector3.zero);
         FMODAudioManager.Instance().Play(5002, Vector3.zero);
         FMODAudioManager.Instance().Play(5003, Vector3.zero);
-
-        _bgmEmitter = FMODAudioManager.Instance().Play(9003, Vector3.zero);
     }
 
     public void Update()
@@ -46,11 +42,10 @@ public class TitleStage : MonoBehaviour
         if(_keyCheck == false)
         {
             _timer += Time.deltaTime;
-            if(_timer >= 0.7f)
+            if(_timer >= 1.0f)
             {
                 _active = false;
                 _titleStageAnimator.gameObject.SetActive(false);
-                _bgmEmitter?.Stop();
 
                 FMODAudioManager.Instance().Play(4908, Vector3.zero);
 
