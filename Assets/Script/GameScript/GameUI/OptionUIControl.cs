@@ -292,6 +292,10 @@ public class OptionUIControl : MonoBehaviour
     {
         if(SaveDataManager._instance._optionData._resolutionOption == ResolutionOption.res800x600)
             setResolution(ResolutionOption.res1600x1200);
+        else
+            if(SaveDataManager._instance._optionData._resolutionOption == ResolutionOption.res1600x1200)
+            setResolution(ResolutionOption.res800x600);
+
         updateRes();
 
         _resAnimation.changeAnimationByCustomPreset("Sprites/UI/Option/ArrowButton/Up");
@@ -304,6 +308,9 @@ public class OptionUIControl : MonoBehaviour
     {
         if(SaveDataManager._instance._optionData._resolutionOption == ResolutionOption.res1600x1200)
             setResolution(ResolutionOption.res800x600);
+        else if(SaveDataManager._instance._optionData._resolutionOption == ResolutionOption.res800x600)
+            setResolution(ResolutionOption.res1600x1200);
+
         updateRes();
 
         _resAnimation.changeAnimationByCustomPreset("Sprites/UI/Option/ArrowButton/Down");

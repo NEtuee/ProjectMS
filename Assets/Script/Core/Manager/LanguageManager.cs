@@ -65,12 +65,17 @@ public class LanguageManager : ManagerBase
 
     public SystemLanguage getSystemLanguage(int index)
     {
+        if(index < 0)
+            index = _languageList.Count - 1;
+        else if(index >= _languageList.Count)
+            index = 0;
+            
         return _languageList[index].Item1;
     }
 
     public bool isValidLanguageIndex(int index)
     {
-        return index >= 0 && index < _languageList.Count;
+        return true;
     }
 
     public int getLanguageIndex(SystemLanguage systemLanguage)

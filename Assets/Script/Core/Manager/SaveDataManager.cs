@@ -45,15 +45,21 @@ public class OptionData
 
     public void setBGM(int volume)
     {
-        _bgmVolume = MathEx.mini(volume,100);
-        _bgmVolume = MathEx.maxi(0, _bgmVolume);
+        _bgmVolume = volume;
+        if(_bgmVolume > 100)
+            _bgmVolume = 0;
+        else if(_bgmVolume < 0)
+            _bgmVolume = 100;
         saveData();
     }
 
     public void setSFX(int volume)
     {
-        _sfxVolume = MathEx.mini(volume,100);
-        _sfxVolume = MathEx.maxi(0, _sfxVolume);
+        _sfxVolume = volume;
+        if(_sfxVolume > 100)
+            _sfxVolume = 0;
+        else if(_sfxVolume < 0)
+            _sfxVolume = 100;
         saveData();
     }
 
