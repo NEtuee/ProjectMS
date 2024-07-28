@@ -174,6 +174,8 @@ public class OptionUIControl : MonoBehaviour
             _detailObject.gameObject.SetActive(false);
             _menuObject.SetActive(true);
         });
+
+        FMODAudioManager.Instance().Play(5005 ,Vector3.zero);
     }
 
     public void openLangDetail()
@@ -192,6 +194,8 @@ public class OptionUIControl : MonoBehaviour
         _descriptionText.gameObject.SetActive(false);
 
         _descriptionAnimation.SetTrigger("Appear");
+
+        FMODAudioManager.Instance().Play(5005 ,Vector3.zero);
     }
 
     public void openBGMDetail()
@@ -210,6 +214,8 @@ public class OptionUIControl : MonoBehaviour
         _descriptionText.gameObject.SetActive(false);
 
         _descriptionAnimation.SetTrigger("Appear");
+
+        FMODAudioManager.Instance().Play(5005 ,Vector3.zero);
     }
 
     public void openSFXDetail()
@@ -228,6 +234,8 @@ public class OptionUIControl : MonoBehaviour
         _descriptionText.gameObject.SetActive(false);
 
         _descriptionAnimation.SetTrigger("Appear");
+
+        FMODAudioManager.Instance().Play(5005 ,Vector3.zero);
     }
 
     public void openResDetail()
@@ -246,6 +254,8 @@ public class OptionUIControl : MonoBehaviour
         _descriptionText.gameObject.SetActive(false);
 
         _descriptionAnimation.SetTrigger("Appear");
+
+        FMODAudioManager.Instance().Play(5005 ,Vector3.zero);
     }
 
     public void bgmUp()
@@ -256,6 +266,8 @@ public class OptionUIControl : MonoBehaviour
         _bgmAnimation.setOnAnimationEnd(()=>{
             _descriptionAnimation.SetTrigger("Clicked");
         });
+
+        FMODAudioManager.Instance().Play(5005 ,Vector3.zero);
     }
 
     public void bgmDown()
@@ -266,6 +278,8 @@ public class OptionUIControl : MonoBehaviour
         _bgmAnimation.setOnAnimationEnd(()=>{
             _descriptionAnimation.SetTrigger("Clicked");
         });
+
+        FMODAudioManager.Instance().Play(5005 ,Vector3.zero);
     }
 
     public void sfxUp()
@@ -276,6 +290,8 @@ public class OptionUIControl : MonoBehaviour
         _sfxAnimation.setOnAnimationEnd(()=>{
             _descriptionAnimation.SetTrigger("Clicked");
         });
+
+        FMODAudioManager.Instance().Play(5005 ,Vector3.zero);
     }
 
     public void sfxDown()
@@ -286,6 +302,8 @@ public class OptionUIControl : MonoBehaviour
         _sfxAnimation.setOnAnimationEnd(()=>{
             _descriptionAnimation.SetTrigger("Clicked");
         });
+
+        FMODAudioManager.Instance().Play(5005 ,Vector3.zero);
     }
 
     public void resUp()
@@ -302,6 +320,8 @@ public class OptionUIControl : MonoBehaviour
         _resAnimation.setOnAnimationEnd(()=>{
             _descriptionAnimation.SetTrigger("Clicked");
         });
+
+        FMODAudioManager.Instance().Play(5005 ,Vector3.zero);
     }
 
     public void resDown()
@@ -317,6 +337,8 @@ public class OptionUIControl : MonoBehaviour
         _resAnimation.setOnAnimationEnd(()=>{
             _descriptionAnimation.SetTrigger("Clicked");
         });
+
+        FMODAudioManager.Instance().Play(5005 ,Vector3.zero);
     }
 
     public void langUp()
@@ -333,6 +355,8 @@ public class OptionUIControl : MonoBehaviour
             _descriptionAnimation.SetTrigger("Clicked");
             updateLanguage();
         });
+
+        FMODAudioManager.Instance().Play(5005 ,Vector3.zero);
     }
 
     public void langDown()
@@ -349,6 +373,8 @@ public class OptionUIControl : MonoBehaviour
             _descriptionAnimation.SetTrigger("Clicked");
             updateLanguage();
         });
+
+        FMODAudioManager.Instance().Play(5005 ,Vector3.zero);
     }
 
     public void setBGM(int volume)

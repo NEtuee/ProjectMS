@@ -14,6 +14,16 @@
         <ApplyPostProcessProfile Path="PostProcessProfile/CRTImpact" ApplyType="Additional" BlendTime="0.5" EaseType="EaseInCubic"/>
         <ShowCursor Active="True"/>
 
+        <WaitSignal Signal="NextStage"/>
+        <ApplyPostProcessProfile Path="PostProcessProfile/TitleStart" ApplyType="Additional" BlendTime="0.5"/>
+
+        <WaitSecond Time="0.6"/>
+
+        <FadeOut Lambda="5.0"/>
+
+        <WaitSecond Time="2.0"/>
+        <NextStage Path="StageData/Stage_1_1"/>
+
     </UpdatePhase>
     
 </SequencerGraph>
