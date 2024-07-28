@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using System.IO;
 using System.Text;
+using TMPro;
 
 public abstract class SerializableDataType
 {
@@ -179,6 +180,7 @@ public class ResourceContainerEx : Singleton<ResourceContainerEx>
 	private ManagedResourceItem<GameObject>		 		_prefabResource = new ManagedResourceItem<GameObject>();
 	private ManagedResourceItem<Material>		 		_materialResource = new ManagedResourceItem<Material>();
 	private ManagedResourceItem<StageData>		 		_stageDataResource = new ManagedResourceItem<StageData>();
+	private ManagedResourceItem<TMP_FontAsset>		 	_fontAssetResource = new ManagedResourceItem<TMP_FontAsset>();
 
 	private DataResourceItem<ActionGraphBaseData,ActionGraphLoader>				_actionGraphResource = new DataResourceItem<ActionGraphBaseData,ActionGraphLoader>();
 	private DataResourceItem<AIGraphBaseData,AIGraphLoader>						_aiGraphResource = new DataResourceItem<AIGraphBaseData,AIGraphLoader>();
@@ -237,6 +239,11 @@ public class ResourceContainerEx : Singleton<ResourceContainerEx>
 	public StageData[] GetStageDataAll(string filePath)
 	{
 		return _stageDataResource.GetOrLoadResources(filePath,"StageData not found");
+	}
+
+	public TMP_FontAsset getFont(string fileName)
+	{
+		return _fontAssetResource.GetOrLoadResource(fileName);
 	}
 
 	public ActionGraphBaseData GetActionGraph(string path)

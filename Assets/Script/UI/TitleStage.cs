@@ -4,15 +4,10 @@ using UnityEngine;
 
 public class TitleStage : MonoBehaviour
 {
-    // Start is called before the first frame update
     void Start()
     {
-        
+        GameUI.Instance.activeOptionUI(true);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 }

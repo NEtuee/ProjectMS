@@ -12,6 +12,7 @@ public static partial class MessageTitles
     public const ushort     system_pauseUpdate          = 0x0104;
     public const ushort     system_playUpdate           = 0x0105;
     public const ushort     system_updateFrame          = 0x0106;
+    public const ushort     system_languageChanged      = 0x0107;
 
     //게임 시작 알림
     public const ushort     game_gameStart              = 0x0200;

@@ -23,6 +23,8 @@ public class GameUI : MonoBehaviour
     public PauseUIBinder PauseUIBinder;
     public ArrowUIBinder ArrowUIBinder;
 
+    public OptionUIControl _optionUIControl;
+
     public TextBubble TextBubble { get; private set; }
     
     private HpBpGageUI _hpBpGageUI;
@@ -94,8 +96,16 @@ public class GameUI : MonoBehaviour
 
     public void ActivePauseUI(bool active)
     {
+        activeOptionUI(active);
+
         _pauseUI.ActivePauseUI(active);
         Cursor.visible = active;
+    }
+
+    public void activeOptionUI(bool active)
+    {
+        _optionUIControl.initialize();
+        _optionUIControl.gameObject.SetActive(active);
     }
 
     public void SetBossHpEntity(GameEntityBase targetEntity)

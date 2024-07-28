@@ -26,12 +26,7 @@ public class TitleMenuUIBinder : UIObjectBinder
     public Sprite resolution800;
     public Sprite resolution1600;
     
-    public enum ResolutionOption
-    {
-        res800x600 = 0,
-        res1600x1200 = 1
-    }
-    
+
     public override bool CheckValidLink(out string reason)
     {
         if (Root == null)

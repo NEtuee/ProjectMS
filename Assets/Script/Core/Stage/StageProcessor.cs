@@ -140,6 +140,7 @@ public class StageProcessor
         }
         
         GameUI.Instance.InitializeBySceneStart();
+        GameUI.Instance.activeOptionUI(false);
 
         if(_stageData._backgroundPrefabPath != null)
         {

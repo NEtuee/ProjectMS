@@ -93,8 +93,6 @@ public static class StaticDataLoader
         {
             AllyInfoManager.Instance().SetAllyInfo(ResourceContainerEx.Instance().getAllyInfo(allyInfoPath));
         }
-
-        LanguageManager.InitLocalize();
     }
 
     public static void loadStaticData()
@@ -104,6 +102,5 @@ public static class StaticDataLoader
 #endif
 
         readStaticDataAll(ResourceMap.Instance());
-        LanguageManager.InitLocalize();
     }
 }

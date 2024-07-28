@@ -114,13 +114,21 @@ public class MasterManager : MessageHub<ManagerBase>
         if(Input.GetKeyDown(KeyCode.Escape))
         {
 #if UNITY_EDITOR
-            _stageProcessor.stopStage(true);
-            HPSphereUIManager.Instance().setActive(true);
-            GameUI.Instance.SetActiveCrossHair(true);
-            GameUI.Instance.SetEntity(null);
-            ScreenDirector._instance.setActiveMainHud(true);
-            ScreenDirector._instance._screenFader.clear();
-            LetterBox._instance.clear();
+            if(Input.GetKey(KeyCode.Return))
+            {
+                GameUI.Instance.ActivePauseUI(_update);
+                _update = !_update;
+            }
+            else
+            {
+                _stageProcessor.stopStage(true);
+                HPSphereUIManager.Instance().setActive(true);
+                GameUI.Instance.SetActiveCrossHair(true);
+                GameUI.Instance.SetEntity(null);
+                ScreenDirector._instance.setActiveMainHud(true);
+                ScreenDirector._instance._screenFader.clear();
+                LetterBox._instance.clear();
+            }
 #else
             GameUI.Instance.ActivePauseUI(_update);
             _update = !_update;

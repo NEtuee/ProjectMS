@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 public class AnimationTimeProcessor
 {
 
@@ -14,6 +16,7 @@ public class AnimationTimeProcessor
     private bool        _isEnd = false;
 
     private bool        _isLoopedThisFrame = false;
+    private bool        _isEndThisFrame = false;
 
     private int         _animationLoopCount = 0;
     private int         _totalLoopCountPerFrame;
@@ -51,6 +54,7 @@ public class AnimationTimeProcessor
         _isEnd = false;
         _isLoop = false;
         _isLoopedThisFrame = false;
+        _isEndThisFrame = false;
 
         _animationLoopCount = 0;
 
@@ -83,7 +87,10 @@ public class AnimationTimeProcessor
         _totalLoopCountPerFrame = 0;
 
         if(_isEnd == true)
+        {
+            _isEndThisFrame = false;
             return true;
+        }
 
         if(_animationSpeed == 0f)
         {
@@ -102,6 +109,7 @@ public class AnimationTimeProcessor
         _animationTotalPlayTime += deltaTime;
 
         _isLoopedThisFrame = false;
+        _isEndThisFrame = false;
 
         if(_customPresetData != null)
             return updateTime2(deltaTime);
@@ -142,6 +150,8 @@ public class AnimationTimeProcessor
             
         _currentIndex = getIndexInner();
 
+        _isEndThisFrame = _isEnd;
+
         return _isEnd;
     }
 
@@ -164,6 +174,8 @@ public class AnimationTimeProcessor
 
             _frameDurationStack += _customPresetData._duration[index];
         }
+
+        bool prevEnd = _isEnd;
 
         _isEnd = CurrentAnimationIsEndInner();
 
@@ -193,16 +205,16 @@ public class AnimationTimeProcessor
             _isLoopedThisFrame = _isLoop || _animationLoopCount != 0;
             _frameDurationStack = 0f;
 
-            float stack = _customPresetData._duration[0];
+            float stack = 0f;
             for(int index = 0; index < _endIndex; ++index)
             {
+                stack += _customPresetData._duration[index];
                 _currentIndex = index;
 
                 if(_currentAnimationTime < stack)
                     break;
                 
                 _frameDurationStack += _customPresetData._duration[index];
-                stack += _customPresetData._duration[index];
             }
 
             setAnimationSpeed(1f);
@@ -213,6 +225,8 @@ public class AnimationTimeProcessor
             _currentAnimationTime = _animationEndTime;
         }
 
+
+
         if(forceEnd)
         {
             _isEnd = true;
@@ -220,6 +234,7 @@ public class AnimationTimeProcessor
         }
 
         _isEnd &= _actionDuration == -1f;
+        _isEndThisFrame = _isEnd;
 
         return _isEnd;
     }
@@ -345,6 +360,7 @@ public class AnimationTimeProcessor
     }
 
     public bool isLoop() {return _isLoop;}
+    public bool isEndThisFrame() {return _isEndThisFrame;}
 
     public void setLoopCount(int loopCount)
     {

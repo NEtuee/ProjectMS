@@ -272,6 +272,8 @@ public class AnimationPlayer
     private int _currentFrameEventIndex;
     private int _currentTimeEventIndex;
 
+    private System.Action _onAnimationEnd = null;
+
     private List<FrameEventProcessDescription> _frameEventProcessList = new List<FrameEventProcessDescription>();
 
     public AnimationPlayer()
@@ -310,14 +312,29 @@ public class AnimationPlayer
             processFrameEvent(_currentAnimationPlayData, targetEntity);
         }
         
-
+        if(_animationTimeProcessor.isEndThisFrame())
+        {
+            if(_onAnimationEnd != null)
+            {
+                _onAnimationEnd.Invoke();
+                _onAnimationEnd = null;
+            }
+        }
+        
         return _animationTimeProcessor.isEnd();
     } 
+
+    public void setOnAnimationEnd(System.Action onAnimationEnd)
+    {
+        _onAnimationEnd = onAnimationEnd;
+    }
 
     public void Release()
     {
         
     }
+
+    public bool isEndThisFrame() {return _animationTimeProcessor.isEndThisFrame();}
 
     public void processMultiSelectAnimation(ActionGraph actionGraph)
     {
