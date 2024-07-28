@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eebfbc6ece9cebc4cbd3e126679ce50a, type: 3}
+  m_Name: 0_LogoStage
+  m_EditorClassIdentifier: 
+  _stageName: LogoStage
+  _backgroundPrefabPath: {fileID: 1711423756447921490, guid: d3e92fba8cd2be6458931adb09c12eff, type: 3}
+  _isMiniStage: 0
+  _stagePointData:
+  - _pointName: New Point 0
+    _stagePoint: {x: 0, y: 0, z: 0}
+    _maxLimitedDistance: 0
+    _verticalLimitedDistance: 0
+    _horizontalLimitedDistance: 0
+    _cameraZoomSize: 3
+    _cameraZoomSpeed: 4
+    _lerpCameraZoom: 0
+    _lockCameraInBound: 0
+    _cameraBoundToTrigger: 0
+    _onEnterSequencerPath:
+    - LogoSequencer.xml
+    _onExitSequencerPath: []
+    _characterSpawnData: []
+    _useTriggerBound: 0
+    _targetSearchIdentifier: 1
+    _triggerWidth: 1
+    _triggerHeight: 1
+    _triggerOffset: {x: 0, y: 0, z: 0}
+  _miniStageData: []
+  _markerData: []
+  _trackData: []

@@ -1,0 +1,16 @@
+<SequencerGraph Name="LogoSequencer">
+
+    <InitializePhase>
+        <SetHideUI Hide="True"/>
+    </InitializePhase>
+
+    <UpdatePhase>
+        <WaitSignal Signal="NextStage"/>
+        <FadeOut Lambda="5.0"/>
+        <WaitSecond Time="2.0"/>
+        
+        <Fade/>
+        <NextStage Path="StageData/0_TitleStage"/>
+    </UpdatePhase>
+    
+</SequencerGraph>

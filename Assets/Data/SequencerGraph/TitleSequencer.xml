@@ -1,21 +1,26 @@
 <SequencerGraph Name="TitleSequencer">
 
-    <InitializePhase>
+    <InitializePhase>        
         <ApplyPostProcessProfile Path="PostProcessProfile/TitlePPP"/>
-        
+
         <SetHideUI Hide="True"/>
-        <Fade/>
-
-        <FadeIn Lambda="5.0"/>
         <SetHideCharacter UniqueKey="Player" Hide="True"/>
-
-        <AudioPlay ID="9003" Switch="True"/>
+        <Fade/>
 
     </InitializePhase>
 
     <UpdatePhase>
-        <ApplyPostProcessProfile Path="PostProcessProfile/CRTImpact" ApplyType="Additional" BlendTime="0.5" EaseType="EaseInCubic"/>
         <ShowCursor Active="True"/>
+
+        <WaitSecond Time="1.0"/>
+
+        <FadeIn Lambda="5.0"/>
+        <ApplyPostProcessProfile Path="PostProcessProfile/CRTImpact" ApplyType="Additional" BlendTime="0.7" EaseType="EaseInCubic"/>
+        
+        <WaitSecond Time="0.5"/>
+
+        <AudioPlay ID="5000"/>
+        <AudioPlay ID="9003" Switch="True"/>
 
         <WaitSignal Signal="NextStage"/>
         <ApplyPostProcessProfile Path="PostProcessProfile/TitleStart" ApplyType="Additional" BlendTime="0.5"/>
@@ -31,6 +36,7 @@
 
     <EndPhase>
         <StopSwitch Switch="Audio" Key="9003"/>
+        <SetHideCharacter UniqueKey="Player" Hide="False"/>
     </EndPhase>
     
 </SequencerGraph>

@@ -229,8 +229,14 @@ public class MasterManager : MessageHub<ManagerBase>
     {
         LetterBox._instance.clear();
         ScreenDirector._instance._screenFader.clear();
-        GameUI.Instance.ActiveTitleMenuUI(true);
         Cursor.visible = true;
+
+        var logoStageData = ResourceContainerEx.Instance().GetStageData("StageData/0_LogoStage");
+        if (logoStageData == null)
+            return;
+        
+        MasterManager.instance._stageProcessor.stopStage(true);
+        MasterManager.instance._stageProcessor.startStage(logoStageData,Vector3.zero,Vector3.zero);
     }
 
     public void StopUpdateSecond(float time)

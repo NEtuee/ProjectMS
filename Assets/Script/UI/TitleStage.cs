@@ -15,7 +15,6 @@ public class TitleStage : MonoBehaviour
         GameUI.Instance.activeOptionUI(true);
         _active = true;
 
-        FMODAudioManager.Instance().Play(5000, Vector3.zero);
         FMODAudioManager.Instance().Play(5001, Vector3.zero);
         FMODAudioManager.Instance().Play(5002, Vector3.zero);
         FMODAudioManager.Instance().Play(5003, Vector3.zero);
