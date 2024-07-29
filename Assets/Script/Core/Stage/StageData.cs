@@ -84,6 +84,7 @@ public class StageData : ScriptableObject
     public string           _stageName;
     public GameObject       _backgroundPrefabPath = null;
     public bool             _isMiniStage = false;
+    public bool             _isMenuStage = false;
 
     public List<StagePointData>         _stagePointData = new List<StagePointData>();
     public List<MiniStageListItem>      _miniStageData = new List<MiniStageListItem>();

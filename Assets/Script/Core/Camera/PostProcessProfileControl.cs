@@ -131,6 +131,8 @@ public class PostProcessProfileControl
         _additionalEffectProfile.setProfileData(profile,easeType,blendTime);
         _currentAdditionalBlendingOrder = order;
         _isBlending = true;
+
+        processBlend(0f);
     }
 
     public void addBaseBlendProfile(PostProcessProfile profile, MathEx.EaseType easeType, float blendTime)

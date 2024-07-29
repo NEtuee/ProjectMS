@@ -116,8 +116,7 @@ public class MasterManager : MessageHub<ManagerBase>
 #if UNITY_EDITOR
             if(Input.GetKey(KeyCode.Return))
             {
-                GameUI.Instance.ActivePauseUI(_update);
-                _update = !_update;
+                activePauseUI();
             }
             else
             {
@@ -131,8 +130,7 @@ public class MasterManager : MessageHub<ManagerBase>
                 LetterBox._instance.clear();
             }
 #else
-            GameUI.Instance.ActivePauseUI(_update);
-            _update = !_update;
+            activePauseUI();
 #endif
         }
 
@@ -144,7 +142,6 @@ public class MasterManager : MessageHub<ManagerBase>
 #endif
 
         float deltaTime = Time.deltaTime * deltaTimeMultiflier;
-        ActionKeyInputManager.Instance().progress(deltaTime);
         GlobalTimer.Instance().setUpdateProcessing(true);
 
         CameraControlEx.Instance().updateDebugMode();
@@ -155,6 +152,8 @@ public class MasterManager : MessageHub<ManagerBase>
             ReceiveMessageProcessing();
             return;
         }
+
+        ActionKeyInputManager.Instance().progress(deltaTime);
         
         if(_frameUpdate)
         {
@@ -223,6 +222,25 @@ public class MasterManager : MessageHub<ManagerBase>
     public void FixedUpdate()
     {
         ManagersFixedUpdate(Time.fixedDeltaTime);
+    }
+
+    public void activePauseUI()
+    {
+        if(_stageProcessor.isValid() && _stageProcessor._stageData._isMenuStage)
+            return;
+
+        if(_update)
+        {
+            ScriptableObject profile = ResourceContainerEx.Instance().GetScriptableObject("PostProcessProfile/CRTImpact");
+            CameraControlEx.Instance().getPostProcessProfileControl().setAdditionalEffectProfile(profile as PostProcessProfile,MathEx.EaseType.EaseInCubic,999,0.7f);
+        }
+        else
+        {
+            ScriptableObject profile = ResourceContainerEx.Instance().GetScriptableObject("PostProcessProfile/TitleStart");
+            CameraControlEx.Instance().getPostProcessProfileControl().setAdditionalEffectProfile(profile as PostProcessProfile,MathEx.EaseType.EaseInCubic,999,0.5f);
+        }
+        GameUI.Instance.ActivePauseUI(_update);
+        _update = !_update;
     }
 
     public void ActiveTitleMenu()

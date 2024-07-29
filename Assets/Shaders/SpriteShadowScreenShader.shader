@@ -435,10 +435,11 @@ Shader "Custom/SpriteShadowScreenShader"
 					fixed4 resultColor = allTogether(coord,IN.worldPosition);
 
 					// Scanline
-            		resultColor.rgb *= 1.0 + _Scanline * sin(coord.y * 1200.0);
+					float time = _Time.y * 0.01f;
+            		resultColor.rgb *= 1.0 + _Scanline * sin((coord.y + time) * 1200.0);
 
 					//brigtness
-					resultColor.rgb *= _Brightness;
+					resultColor.rgb *= _Brightness; 
 
 					//grayscale
 					float gray = dot(resultColor.rgb, fixed3(0.21f, 0.72f, 0.07f));

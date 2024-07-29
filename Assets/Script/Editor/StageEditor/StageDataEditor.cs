@@ -668,6 +668,7 @@ public class StageDataEditor : EditorWindow
         editorKeyCheck();
 
         GUILayout.BeginVertical("box");
+            _editStageData._isMenuStage = EditorGUILayout.Toggle("Menu Stage",_editStageData._isMenuStage);
             _editStageData._stageName = EditorGUILayout.TextField("Stage Name",_editStageData._stageName);
 
             GUILayout.BeginHorizontal();
