@@ -57,6 +57,10 @@ public class OptionUIControl : MonoBehaviour
         _descriptionAnimation.SetTrigger("Idle");
         _textAnimation.SetTrigger("Idle");
 
+        setBGM(SaveDataManager._instance._optionData._bgmVolume);
+        setSFX(SaveDataManager._instance._optionData._sfxVolume);
+        setResolution(SaveDataManager._instance._optionData._resolutionOption);
+
         updateBGM();
         updateSFX();
         updateRes();
@@ -382,8 +386,10 @@ public class OptionUIControl : MonoBehaviour
         SaveDataManager._instance._optionData.setBGM(volume);
         SaveDataManager._instance._optionData.saveData();
 
-        FMODAudioManager.Instance().SetGlobalParam(2, (float)volume * 0.01f);
-        FMODAudioManager.Instance().SetGlobalParam(3, (float)volume * 0.01f);
+        int realVolume = SaveDataManager._instance._optionData._bgmVolume;
+
+        FMODAudioManager.Instance().SetGlobalParam(2, (float)realVolume * 0.01f);
+        FMODAudioManager.Instance().SetGlobalParam(3, (float)realVolume * 0.01f);
     }
 
     public void updateBGM()
@@ -397,7 +403,9 @@ public class OptionUIControl : MonoBehaviour
         SaveDataManager._instance._optionData.setSFX(volume);
         SaveDataManager._instance._optionData.saveData();
 
-        FMODAudioManager.Instance().SetGlobalParam(1, (float)volume * 0.01f);
+        int realVolume = SaveDataManager._instance._optionData._sfxVolume;
+
+        FMODAudioManager.Instance().SetGlobalParam(1, (float)realVolume * 0.01f);
     }
 
     public void updateSFX()
@@ -410,7 +418,7 @@ public class OptionUIControl : MonoBehaviour
     {
         SaveDataManager._instance._optionData.setRes(res);
 
-        switch(res)
+        switch(SaveDataManager._instance._optionData._resolutionOption)
         {
             case ResolutionOption.res800x600:
                 Screen.SetResolution(800,600,FullScreenMode.Windowed);
