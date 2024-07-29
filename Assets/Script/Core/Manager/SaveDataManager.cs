@@ -50,6 +50,7 @@ public class OptionData
             _bgmVolume = 0;
         else if(_bgmVolume < 0)
             _bgmVolume = 100;
+        
         saveData();
     }
 
