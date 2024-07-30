@@ -236,8 +236,17 @@ public class ActionKeyInputManager : Singleton<ActionKeyInputManager>
             bool triggered = check && (item._isValid[0] == 0);
             item._isValid[0] = check ? (byte)1 : (byte)0;
 
+            triggered &= MasterManager.instance.isGameUpdate();
             if(triggered)
                 _keyTriggerDelegate(presetData._actionKeyName, item);
+        }
+    }
+
+    public void clearInputData()
+    {
+        foreach(ActionKeyInputData item in _actionKeyInputData.Values)
+        {
+            item._isValid[0] = (byte)0;
         }
     }
 

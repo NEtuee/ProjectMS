@@ -100,6 +100,8 @@ public class GameUI : MonoBehaviour
 
         _pauseUI.ActivePauseUI(active);
         Cursor.visible = active;
+
+        FMODAudioManager.Instance().SetGlobalParam(21, active ? 1f : 0f);
     }
 
     public void activeOptionUI(bool active)
@@ -108,14 +110,12 @@ public class GameUI : MonoBehaviour
         _optionUIControl.gameObject.SetActive(active);
     }
 
-    public void SetBossHpEntity(GameEntityBase targetEntity)
+    public void SetBossHpEntity(GameEntityBase targetEntity, string key, Sprite portrait)
     {
         if (targetEntity == null)
-        {
             return;
-        }
         
-        _bossHp.Active(targetEntity);
+        _bossHp.Active(targetEntity,key,portrait);
     }
 
     public void DisableBossHp()

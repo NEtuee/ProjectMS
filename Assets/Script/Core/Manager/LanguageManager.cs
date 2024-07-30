@@ -136,6 +136,8 @@ public class LanguageManager : ManagerBase
 
         var msg = MessagePack(MessageTitles.system_languageChanged, _boradcastWithoutSenderNumber, null);
         HandleBroadcastMessage(msg);
+
+        CallReceiveMessageProcessing();
     }
 
     private void SetDialogLanguage(SystemLanguage language)

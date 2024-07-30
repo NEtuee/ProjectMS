@@ -65,7 +65,7 @@ public class GameEditorMaster : MonoBehaviour
 
         if(_activeEditor == false)
             return;
-
+        
         updateHotkeysEditor();
 
         _currentFocusWindow?.updateHotKey();
@@ -291,4 +291,6 @@ public class GameEditorMaster : MonoBehaviour
 
         Cursor.visible = false;
     }
+
+    public bool isEditorActive() {return _activeEditor;}
 }
