@@ -1,0 +1,583 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eebfbc6ece9cebc4cbd3e126679ce50a, type: 3}
+  m_Name: SpeedBattleTestStage
+  m_EditorClassIdentifier: 
+  _stageName: SpeedBattleTestStage
+  _backgroundPrefabPath: {fileID: 3160829639783268931, guid: ab97559538486194b90a8a12b173cc6a, type: 3}
+  _isMiniStage: 0
+  _isMenuStage: 0
+  _stagePointData:
+  - _pointName: StartPoint
+    _stagePoint: {x: 0, y: 0, z: 0}
+    _maxLimitedDistance: 0
+    _verticalLimitedDistance: 0
+    _horizontalLimitedDistance: 0
+    _cameraZoomSize: 3
+    _cameraZoomSpeed: 4
+    _lerpCameraZoom: 0
+    _lockCameraInBound: 0
+    _cameraBoundToTrigger: 0
+    _onEnterSequencerPath:
+    - SpeedBattleTestStage.xml
+    _onExitSequencerPath: []
+    _characterSpawnData:
+    - _characterKey: Akane
+      _uniqueKey: Player
+      _uniqueGroupKey: 
+      _startAction: Spawn
+      _startAIState: Entry
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: Player
+      _activeType: 0
+      _localPosition: {x: -1.26, y: 0, z: 0}
+    _useTriggerBound: 0
+    _targetSearchIdentifier: 1
+    _triggerWidth: 1
+    _triggerHeight: 1
+    _triggerOffset: {x: 0, y: 0, z: 0}
+  - _pointName: EntryPoint
+    _stagePoint: {x: 8.68, y: 0, z: 0}
+    _maxLimitedDistance: 0
+    _verticalLimitedDistance: 0
+    _horizontalLimitedDistance: 0
+    _cameraZoomSize: 3
+    _cameraZoomSpeed: 4
+    _lerpCameraZoom: 0
+    _lockCameraInBound: 0
+    _cameraBoundToTrigger: 0
+    _onEnterSequencerPath: []
+    _onExitSequencerPath: []
+    _characterSpawnData: []
+    _useTriggerBound: 0
+    _targetSearchIdentifier: 1
+    _triggerWidth: 1
+    _triggerHeight: 1
+    _triggerOffset: {x: 0, y: 0, z: 0}
+  - _pointName: TypeA
+    _stagePoint: {x: 20, y: 0, z: 0}
+    _maxLimitedDistance: 0
+    _verticalLimitedDistance: 0
+    _horizontalLimitedDistance: 0
+    _cameraZoomSize: 3
+    _cameraZoomSpeed: 4
+    _lerpCameraZoom: 0
+    _lockCameraInBound: 0
+    _cameraBoundToTrigger: 0
+    _onEnterSequencerPath: []
+    _onExitSequencerPath: []
+    _characterSpawnData:
+    - _characterKey: TutorialStudent
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: 
+      _startAIState: 
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: CommonBattle
+      _activeType: 0
+      _localPosition: {x: -0.03, y: 0, z: 0}
+    - _characterKey: TutorialStudent
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: 
+      _startAIState: 
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: CommonBattle
+      _activeType: 0
+      _localPosition: {x: 2.63, y: 0, z: 0}
+    - _characterKey: TutorialStudent
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: 
+      _startAIState: 
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: CommonBattle
+      _activeType: 0
+      _localPosition: {x: 5.01, y: 0, z: 0}
+    - _characterKey: TutorialStudent
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: 
+      _startAIState: 
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: CommonBattle
+      _activeType: 0
+      _localPosition: {x: 7.52, y: 0, z: 0}
+    - _characterKey: TutorialStudent
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: 
+      _startAIState: 
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: CommonBattle
+      _activeType: 0
+      _localPosition: {x: 9.97, y: 0, z: 0}
+    - _characterKey: TutorialStudent
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: 
+      _startAIState: 
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: CommonBattle
+      _activeType: 0
+      _localPosition: {x: 12.51, y: 0, z: 0}
+    - _characterKey: TutorialStudent
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: 
+      _startAIState: 
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: CommonBattle
+      _activeType: 0
+      _localPosition: {x: 15.01, y: 0, z: 0}
+    - _characterKey: TutorialStudent
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: 
+      _startAIState: 
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: CommonBattle
+      _activeType: 0
+      _localPosition: {x: 17.5, y: 0, z: 0}
+    _useTriggerBound: 0
+    _targetSearchIdentifier: 1
+    _triggerWidth: 1
+    _triggerHeight: 1
+    _triggerOffset: {x: 0, y: 0, z: 0}
+  - _pointName: TypeB
+    _stagePoint: {x: 42, y: 0, z: 0}
+    _maxLimitedDistance: 0
+    _verticalLimitedDistance: 0
+    _horizontalLimitedDistance: 0
+    _cameraZoomSize: 4
+    _cameraZoomSpeed: 4
+    _lerpCameraZoom: 0
+    _lockCameraInBound: 0
+    _cameraBoundToTrigger: 0
+    _onEnterSequencerPath: []
+    _onExitSequencerPath: []
+    _characterSpawnData:
+    - _characterKey: TutorialStudent
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: 
+      _startAIState: 
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: CommonBattle
+      _activeType: 0
+      _localPosition: {x: 0, y: 0, z: 0}
+    - _characterKey: TutorialStudent
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: 
+      _startAIState: 
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: CommonBattle
+      _activeType: 0
+      _localPosition: {x: 2.56, y: 0, z: 0}
+    - _characterKey: TutorialStudent
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: 
+      _startAIState: 
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: CommonBattle
+      _activeType: 0
+      _localPosition: {x: 5.04, y: 0, z: 0}
+    - _characterKey: TutorialStudent
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: 
+      _startAIState: 
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: CommonBattle
+      _activeType: 0
+      _localPosition: {x: 7.52, y: 0, z: 0}
+    - _characterKey: TutorialStudent
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: 
+      _startAIState: 
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: CommonBattle
+      _activeType: 0
+      _localPosition: {x: 10.05, y: 0, z: 0}
+    - _characterKey: TutorialStudent
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: 
+      _startAIState: 
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: CommonBattle
+      _activeType: 0
+      _localPosition: {x: 12.53, y: 0, z: 0}
+    - _characterKey: TutorialStudent
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: 
+      _startAIState: 
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: CommonBattle
+      _activeType: 0
+      _localPosition: {x: 15.04, y: 0, z: 0}
+    _useTriggerBound: 1
+    _targetSearchIdentifier: 0
+    _triggerWidth: 1
+    _triggerHeight: 8
+    _triggerOffset: {x: -4, y: 0, z: 0}
+  - _pointName: TypeC
+    _stagePoint: {x: 61, y: 0, z: 0}
+    _maxLimitedDistance: 0
+    _verticalLimitedDistance: 0
+    _horizontalLimitedDistance: 0
+    _cameraZoomSize: 2
+    _cameraZoomSpeed: 4
+    _lerpCameraZoom: 0
+    _lockCameraInBound: 0
+    _cameraBoundToTrigger: 0
+    _onEnterSequencerPath: []
+    _onExitSequencerPath: []
+    _characterSpawnData:
+    - _characterKey: TutorialStudent
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: 
+      _startAIState: 
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: CommonBattle
+      _activeType: 0
+      _localPosition: {x: 0, y: 0, z: 0}
+    - _characterKey: TutorialStudent
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: 
+      _startAIState: 
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: CommonBattle
+      _activeType: 0
+      _localPosition: {x: 2.56, y: 0, z: 0}
+    - _characterKey: TutorialStudent
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: 
+      _startAIState: 
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: CommonBattle
+      _activeType: 0
+      _localPosition: {x: 4.99, y: 0, z: 0}
+    - _characterKey: TutorialStudent
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: 
+      _startAIState: 
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: CommonBattle
+      _activeType: 0
+      _localPosition: {x: 7.47, y: 0, z: 0}
+    - _characterKey: TutorialStudent
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: 
+      _startAIState: 
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: CommonBattle
+      _activeType: 0
+      _localPosition: {x: 9.97, y: 0, z: 0}
+    - _characterKey: TutorialStudent
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: 
+      _startAIState: 
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: CommonBattle
+      _activeType: 0
+      _localPosition: {x: 12.53, y: 0, z: 0}
+    - _characterKey: TutorialStudent
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: 
+      _startAIState: 
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: CommonBattle
+      _activeType: 0
+      _localPosition: {x: 14.99, y: 0, z: 0}
+    - _characterKey: TutorialStudent
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: 
+      _startAIState: 
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: CommonBattle
+      _activeType: 0
+      _localPosition: {x: 17.52, y: 0, z: 0}
+    _useTriggerBound: 1
+    _targetSearchIdentifier: 1
+    _triggerWidth: 1
+    _triggerHeight: 8
+    _triggerOffset: {x: -3.5, y: 0, z: 0}
+  - _pointName: TypeD
+    _stagePoint: {x: 85.08, y: 0, z: 0}
+    _maxLimitedDistance: 0
+    _verticalLimitedDistance: 0
+    _horizontalLimitedDistance: 0
+    _cameraZoomSize: 5
+    _cameraZoomSpeed: 4
+    _lerpCameraZoom: 0
+    _lockCameraInBound: 0
+    _cameraBoundToTrigger: 0
+    _onEnterSequencerPath: []
+    _onExitSequencerPath: []
+    _characterSpawnData:
+    - _characterKey: TutorialStudent
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: 
+      _startAIState: 
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: CommonBattle
+      _activeType: 0
+      _localPosition: {x: 0, y: 0, z: 0}
+    - _characterKey: TutorialStudent
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: 
+      _startAIState: 
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: CommonBattle
+      _activeType: 0
+      _localPosition: {x: 2.43, y: 0, z: 0}
+    - _characterKey: TutorialStudent
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: 
+      _startAIState: 
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: CommonBattle
+      _activeType: 0
+      _localPosition: {x: 4.89, y: 0, z: 0}
+    - _characterKey: TutorialStudent
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: 
+      _startAIState: 
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: CommonBattle
+      _activeType: 0
+      _localPosition: {x: 7.42, y: 0, z: 0}
+    - _characterKey: TutorialStudent
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: 
+      _startAIState: 
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: CommonBattle
+      _activeType: 0
+      _localPosition: {x: 9.97, y: 0, z: 0}
+    - _characterKey: TutorialStudent
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: 
+      _startAIState: 
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: CommonBattle
+      _activeType: 0
+      _localPosition: {x: 12.43, y: 0, z: 0}
+    - _characterKey: TutorialStudent
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: 
+      _startAIState: 
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: CommonBattle
+      _activeType: 0
+      _localPosition: {x: 14.89, y: 0, z: 0}
+    _useTriggerBound: 1
+    _targetSearchIdentifier: 1
+    _triggerWidth: 1
+    _triggerHeight: 10
+    _triggerOffset: {x: -6, y: 0, z: 0}
+  - _pointName: ==========
+    _stagePoint: {x: 104, y: 0, z: 0}
+    _maxLimitedDistance: 0
+    _verticalLimitedDistance: 0
+    _horizontalLimitedDistance: 0
+    _cameraZoomSize: 3
+    _cameraZoomSpeed: 4
+    _lerpCameraZoom: 0
+    _lockCameraInBound: 0
+    _cameraBoundToTrigger: 0
+    _onEnterSequencerPath: []
+    _onExitSequencerPath: []
+    _characterSpawnData: []
+    _useTriggerBound: 1
+    _targetSearchIdentifier: 1
+    _triggerWidth: 1
+    _triggerHeight: 8
+    _triggerOffset: {x: -3.5, y: 0, z: 0}
+  _miniStageData: []
+  _markerData: []
+  _trackData: []
