@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,8 +8,11 @@ public class BossHpUIBinder : UIObjectBinder
 {
     public CanvasGroup CanvasGroup;
     public Transform Root;
+    public Transform _decoRoot;
     public Image InGauge;
     public Image OutGauge;
+    public LocalizationText _localizationText;
+    public Image _portrait;
 
     public override bool CheckValidLink(out string reason)
     {

@@ -2393,6 +2393,8 @@ public class SequencerGraphEvent_SetCrossHair : SequencerGraphEventBase
 public class SequencerGraphEvent_ActiveBossHp : SequencerGraphEventBase
 {
     private string _uniqueKey = "";
+    private string _key = "";
+    private string _spritePath = "";
 
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.ActiveBossHp;
 
@@ -2409,7 +2411,9 @@ public class SequencerGraphEvent_ActiveBossHp : SequencerGraphEventBase
             return true;
         }
         
-        GameUI.Instance.SetBossHpEntity(uniqueEntity);
+        Sprite sprite = _spritePath == "" ? null : ResourceContainerEx.Instance().GetSprite(_spritePath);
+
+        GameUI.Instance.SetBossHpEntity(uniqueEntity,_key,sprite);
 
         return true;
     }
@@ -2425,6 +2429,11 @@ public class SequencerGraphEvent_ActiveBossHp : SequencerGraphEventBase
 
             if(attrName == "UniqueKey")
                 _uniqueKey = attrValue;
+            else if(attrName == "NameKey")
+                _key = attrValue;
+            else if(attrName == "PortraitPath")
+                _spritePath = attrValue;
+                
         }
     }
 #if UNITY_EDITOR
@@ -2432,11 +2441,15 @@ public class SequencerGraphEvent_ActiveBossHp : SequencerGraphEventBase
     {
         base.serialize(ref binaryWriter);
         binaryWriter.Write(_uniqueKey);
+        binaryWriter.Write(_key);
+        binaryWriter.Write(_spritePath);
     }
 #endif
     public override void deserialize(ref BinaryReader binaryReader)
     {
         _uniqueKey = binaryReader.ReadString();
+        _key = binaryReader.ReadString();
+        _spritePath = binaryReader.ReadString();
     }
 }
 

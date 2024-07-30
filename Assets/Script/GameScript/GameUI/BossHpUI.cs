@@ -42,6 +42,7 @@ public class BossHpUI : IUIElement
     public void Initialize()
     {
         _binder.Root.gameObject.SetActive(false);
+        _binder._decoRoot.gameObject.SetActive(false);
         _binder.InGauge.fillAmount = 0.0f;
         _binder.OutGauge.fillAmount = 0.0f;
 
@@ -85,11 +86,19 @@ public class BossHpUI : IUIElement
         }
     }
 
-    public void Active(GameEntityBase target)
+    public void Active(GameEntityBase target, string localizationKey, Sprite portrait)
     {
         _active = true;
         _binder.Root.gameObject.SetActive(true);
+        _binder._decoRoot.gameObject.SetActive(true);
         _target = target;
+
+        _binder._localizationText.updateString(localizationKey);
+        _binder._portrait.sprite = portrait;
+        _binder._portrait.gameObject.SetActive(portrait != null);
+
+        if(portrait != null)
+            _binder._portrait.SetNativeSize();            
         
         PlayAppearHpBar();
     }
@@ -99,6 +108,7 @@ public class BossHpUI : IUIElement
         _active = false;
         _target = null;
         _binder.Root.gameObject.SetActive(false);
+        _binder._decoRoot.gameObject.SetActive(false);
         
         _appearTimer.Stop();
         _hpFillTimer.Stop();

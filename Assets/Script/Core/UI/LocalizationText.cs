@@ -65,7 +65,8 @@ public class LocalizationText : ObjectBase
         _textKey = key;
         foreach(var item in _textMeshPro)
         {
-            item.text = LanguageManager._instance.getString(_textKey);
+            item.text = _textKey == "" ? "" : LanguageManager._instance.getString(_textKey);
+
             item.ForceMeshUpdate();
         }
         if (_useCenterAlign)

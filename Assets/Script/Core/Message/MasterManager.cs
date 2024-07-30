@@ -9,6 +9,7 @@ public class MasterManager : MessageHub<ManagerBase>
     public List<ManagerBase>        managers;
 
     private bool                    _update = true;
+    private bool                    _prevUpdate = true;
 
     private bool                    _frameUpdate = false;
 
@@ -125,6 +126,7 @@ public class MasterManager : MessageHub<ManagerBase>
                 GameUI.Instance.SetActiveCrossHair(true);
                 GameUI.Instance.SetEntity(null);
                 GameUI.Instance.activeOptionUI(false);
+                GameUI.Instance.ActivePauseUI(false);
                 ScreenDirector._instance.setActiveMainHud(true);
                 ScreenDirector._instance._screenFader.clear();
                 LetterBox._instance.clear();
@@ -143,17 +145,22 @@ public class MasterManager : MessageHub<ManagerBase>
 
         float deltaTime = Time.deltaTime * deltaTimeMultiflier;
         GlobalTimer.Instance().setUpdateProcessing(true);
+        ActionKeyInputManager.Instance().progress(deltaTime);
 
         CameraControlEx.Instance().updateDebugMode();
+
+        if(_prevUpdate != _update)
+            ActionKeyInputManager.Instance().clearInputData();
+        
+        _prevUpdate = _update;
 
         if(_update == false && _frameUpdate == false)
         {
             GlobalTimer.Instance().setUpdateProcessing(false);
             ReceiveMessageProcessing();
+
             return;
         }
-
-        ActionKeyInputManager.Instance().progress(deltaTime);
         
         if(_frameUpdate)
         {
@@ -240,6 +247,7 @@ public class MasterManager : MessageHub<ManagerBase>
             CameraControlEx.Instance().getPostProcessProfileControl().setAdditionalEffectProfile(profile as PostProcessProfile,MathEx.EaseType.EaseInCubic,999,0.5f);
         }
         GameUI.Instance.ActivePauseUI(_update);
+
         _update = !_update;
     }
 
