@@ -9,7 +9,6 @@ Shader "Custom/SpriteShadowScreenShader"
 		_MainTex("Background Texture", 2D) = "white" {}
 
 		//[HideInInspector]
-		_InterfaceTexture("Interface Texture", 2D) = "white" {}
 		//[HideInInspector]
 		_PerspectiveDepthTexture("Perspective Depth Texture", 2D) = "white" {}
 
@@ -117,7 +116,6 @@ Shader "Custom/SpriteShadowScreenShader"
 
 				sampler2D _CharacterTexture;
 				sampler2D _MainTex;
-				sampler2D _InterfaceTexture;
 				sampler2D _AlphaTex;
 				sampler2D _PerspectiveDepthTexture;
 				sampler2D _ForwardScreenTexture;
@@ -203,12 +201,7 @@ Shader "Custom/SpriteShadowScreenShader"
 					return fixed4(characterSample.xyz * (1.0 - _ImpactFrame), characterSample.w);
 				}
 
-				fixed4 drawInterface(float2 texcoord)
-				{
-					fixed4 interfaceSample = SampleSpriteTexture(_InterfaceTexture, texcoord);
 
-					return interfaceSample;
-				}
 
 				fixed4 sampleOtherBackground(float2 texcoord, float3 worldPosition, bool ignoreOtherBackground)
 				{
@@ -416,12 +409,9 @@ Shader "Custom/SpriteShadowScreenShader"
 						characterShadow.a = 0.0;
 
 					fixed4 forwardScreenSample = bluredBackgroundSample(_ForwardScreenTexture, texcoord, worldPosition, false);
-					fixed4 interfaceSample = drawInterface(texcoord);
-
 					fixed4 shadowdedBackground = lerp(backgroundSample, characterShadow, characterShadow.a);
 					fixed4 mixed2 = lerp(shadowdedBackground, characterSample, characterSample.a);
 					fixed4 mixed3 = lerp(mixed2, forwardScreenSample, forwardScreenSample.a);
-					//fixed4 mixed4 = lerp(mixed3, interfaceSample, interfaceSample.a);
 					return mixed3;
 				}
 
