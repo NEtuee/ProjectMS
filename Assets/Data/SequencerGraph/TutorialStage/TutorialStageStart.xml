@@ -14,10 +14,15 @@
     </InitializePhase>
 
     <UpdatePhase>
+        <EffectPreset UniqueKey="Player" EffectPreset="Sleeping" Switch="True"/>
+
         <WaitSecond Time="1.5"/>
         <FadeIn Lambda="4.0"/>
 
         <QTEFence KeyName="AttackCharge"/>
+
+        <StopSwitch Switch="Effect" UniqueKey="Player" Key="Sleeping"/>
+
         <SetBackgroundAnimationTrigger Key="Tutorial" Trigger="Hide"/>
 
         <ApplyPostProcessProfile Path="PostProcessProfile/AdditionalTest" BlendTime="0.5" ApplyType="Additional"/>
