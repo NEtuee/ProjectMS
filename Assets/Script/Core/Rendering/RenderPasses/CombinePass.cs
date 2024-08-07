@@ -11,7 +11,6 @@ public class CombinePass : AkaneRenderPass
     CharacterRenderPass characterRenderPass;
     PerspectiveDepthRenderPass perspectiveDepthRenderPass;
     ForwardScreenRenderPass forwardScreenRenderPass;
-    InterfaceRenderPass interfaceRenderPass;
 
     private static int shadowScreenLayer;
     public override int layerMasks => shadowScreenLayer;
@@ -30,12 +29,11 @@ public class CombinePass : AkaneRenderPass
         }
     }
 
-    public static CombinePass CreateInstance(BackgroundRenderPass backgroundPass, CharacterRenderPass characterPass, InterfaceRenderPass interfacePass, PerspectiveDepthRenderPass perspectiveDepthPass, ForwardScreenRenderPass forwardScreenPass)
+    public static CombinePass CreateInstance(BackgroundRenderPass backgroundPass, CharacterRenderPass characterPass, PerspectiveDepthRenderPass perspectiveDepthPass, ForwardScreenRenderPass forwardScreenPass)
     {
         var pass = ScriptableObject.CreateInstance<CombinePass>();
         pass.backgroundRenderPass = backgroundPass;
         pass.characterRenderPass = characterPass;
-        pass.interfaceRenderPass = interfacePass;
         pass.perspectiveDepthRenderPass = perspectiveDepthPass;
         pass.forwardScreenRenderPass = forwardScreenPass;
         return pass;
@@ -44,7 +42,6 @@ public class CombinePass : AkaneRenderPass
     {
         renderMaterial?.SetTexture("_CharacterTexture", characterRenderPass?.RenderTexture);
         renderMaterial?.SetTexture("_MainTex", backgroundRenderPass?.RenderTexture);
-        renderMaterial?.SetTexture("_InterfaceTexture", interfaceRenderPass?.RenderTexture);
         renderMaterial?.SetTexture("_PerspectiveDepthTexture", perspectiveDepthRenderPass?.RenderTexture);
         renderMaterial?.SetTexture("_ForwardScreenTexture", forwardScreenRenderPass?.RenderTexture);
 
