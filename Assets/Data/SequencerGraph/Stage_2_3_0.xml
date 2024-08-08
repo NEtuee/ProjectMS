@@ -7,6 +7,9 @@
         <SetCrossHair UniqueKey="Player"/>
 
         <Fade/>
+
+        <StopSwitch Switch="Effect" UniqueKey="Player" Key="Back_Leaf"/>
+        <EffectPreset UniqueKey="Player" EffectPreset="Back_Dust" Switch="True"/>
     </InitializePhase>
 
     <UpdatePhase>

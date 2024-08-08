@@ -22,6 +22,7 @@
         - identity : 정방향으로 생성된다
         - Direction : 이펙트 생성 대상의 방향을 따라 생성된다.
         - AttackPoint : 이펙트 생성 대상이 가장 최근에 받은 공격의 위치에서 대상을 바라보는 방향으로 생성된다. 
+    - FollowCamera (Boolean) : 카메라를 따라간다
     -->
 
 
@@ -648,6 +649,38 @@
         LifeTime="0.0"
         FollowDirection="False"
         CastShadow="False"
+    />
+
+    <ParticleEffect Key="Back_Dust" 
+        AttackMaterial="" 
+        DefenceMaterial=""
+        Path="Prefab/Effect/AtmosphereDust"
+        AngleOffset="0.0"
+        Offset="0.0 0.0 0.0"
+        ToTarget="False"
+        UpdateType="ScaledDeltaTime"
+        Attach="False"
+        AngleType="identity"
+        LifeTime="0.0"
+        FollowDirection="False"
+        CastShadow="False"
+        FollowCamera="True"
+    />
+
+    <ParticleEffect Key="Back_Leaf" 
+        AttackMaterial="" 
+        DefenceMaterial=""
+        Path="Prefab/Effect/AtmosphereLeaf"
+        AngleOffset="0.0"
+        Offset="0.0 0.0 0.0"
+        ToTarget="False"
+        UpdateType="ScaledDeltaTime"
+        Attach="False"
+        AngleType="identity"
+        LifeTime="0.0"
+        FollowDirection="False"
+        CastShadow="False"
+        FollowCamera="True"
     />
 
 <!-- =============================================================== SpriteEffects -->

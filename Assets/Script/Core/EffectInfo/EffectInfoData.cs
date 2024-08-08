@@ -52,6 +52,7 @@ public abstract class EffectInfoDataBase : SerializableDataType
     public bool                _followDirection = false;
     public bool                _castShadow = false;
     public bool                _dependentAction = false;
+    public bool                _followCamera = false;
     public float               _angleOffset = 0f;
     public float               _lifeTime = 0f;
 
@@ -118,6 +119,7 @@ public abstract class EffectInfoDataBase : SerializableDataType
         binaryWriter.Write(_followDirection);
         binaryWriter.Write(_castShadow);
         binaryWriter.Write(_dependentAction);
+        binaryWriter.Write(_followCamera);
         binaryWriter.Write(_angleOffset);
         binaryWriter.Write(_lifeTime);
         BinaryHelper.writeEnum<CommonMaterial>(ref binaryWriter, _attackMaterial);
@@ -137,6 +139,7 @@ public abstract class EffectInfoDataBase : SerializableDataType
         _followDirection = binaryReader.ReadBoolean();
         _castShadow = binaryReader.ReadBoolean();
         _dependentAction = binaryReader.ReadBoolean();
+        _followCamera = binaryReader.ReadBoolean();
         _angleOffset = binaryReader.ReadSingle();
         _lifeTime = binaryReader.ReadSingle();
         _attackMaterial = BinaryHelper.readEnum<CommonMaterial>(ref binaryReader);
@@ -203,6 +206,7 @@ public class ParticleEffectInfoData : EffectInfoDataBase
         requestData._followDirection = _followDirection;
         requestData._castShadow = _castShadow;
         requestData._dependentAction = _dependentAction;
+        requestData._followCamera = _followCamera;
 
         if(_attach)
         {
@@ -247,6 +251,7 @@ public class SpriteEffectInfoData : EffectInfoDataBase
         requestData._followDirection = _followDirection;
         requestData._castShadow = _castShadow;
         requestData._dependentAction = _dependentAction;
+        requestData._followCamera = _followCamera;
         requestData._animationCustomPreset = ResourceContainerEx.Instance().GetAnimationCustomPreset(_effectPath);
 
         if(_attach)

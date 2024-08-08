@@ -13,6 +13,9 @@
         <Fade/>
         <LetterBoxShow/>
 
+        <StopSwitch Switch="Effect" UniqueKey="Player" Key="Back_Dust"/>
+        <EffectPreset UniqueKey="Player" EffectPreset="Back_Leaf" Switch="True"/>
+
         <AudioParameter Key="9006" ParameterID="90061" ParameterValue="1" ParameterType="Local"/>
         <AudioPlay ID="8005" Switch="True"/>
     </InitializePhase>
