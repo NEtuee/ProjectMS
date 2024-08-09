@@ -21,9 +21,10 @@ public class GameUI : MonoBehaviour
     public BossHpUIBinder BossHpBinder;
     public TitleMenuUIBinder TitleMenuUIBinder;
     public PauseUIBinder PauseUIBinder;
-    public ArrowUIBinder ArrowUIBinder;
 
     public OptionUIControl _optionUIControl;
+
+    public GameObject _ratioCut;
 
     public TextBubble TextBubble { get; private set; }
     
@@ -37,7 +38,6 @@ public class GameUI : MonoBehaviour
     private BossHpUI _bossHp;
     private TitleMenuUI _titleMenuUI;
     private PauseUI _pauseUI;
-    private ArrowUI _arrowUI;
     
     private GameEntityBase _targetEntity;
 
@@ -49,6 +49,8 @@ public class GameUI : MonoBehaviour
         SetBinder();
         CheckValidUI();
         BindNotifySubscriber();
+
+        _ratioCut.SetActive(true);
     }
 
     public void InitializeBySceneStart()
@@ -79,14 +81,6 @@ public class GameUI : MonoBehaviour
     {
         CrosshairBinder.HeadObject.SetActive(active);
         CrosshairBinder.SubMarker.SetActive(active);
-    }
-
-    public void SetActiveStageArrow(bool active)
-    {
-        if(active)
-            _arrowUI.ActiveArrow();
-        else
-            _arrowUI.DisableArrow();
     }
 
     public void ActiveTitleMenuUI(bool active)
@@ -160,7 +154,6 @@ public class GameUI : MonoBehaviour
         _textBubble.UpdateByManager();
         _enemyHp.UpdateByManager(deltaTime);
         _bossHp.UpdateByManager();
-        _arrowUI.UpdateByManager();
     }
 
     private void SetBinder()
@@ -204,7 +197,6 @@ public class GameUI : MonoBehaviour
         _bossHp = new BossHpUI();
         _titleMenuUI = new TitleMenuUI();
         _pauseUI = new PauseUI();
-        _arrowUI = new ArrowUI();
         
         TextBubble = _textBubble;
 
@@ -218,7 +210,6 @@ public class GameUI : MonoBehaviour
         _bossHp.SetBinder(BossHpBinder);
         _titleMenuUI.SetBinder(TitleMenuUIBinder);
         _pauseUI.SetBinder(PauseUIBinder);
-        _arrowUI.SetBinder(ArrowUIBinder);
     }
 
     private void CheckValidUI()
@@ -234,7 +225,6 @@ public class GameUI : MonoBehaviour
         uiElementList.Add(_bossHp);
         uiElementList.Add(_titleMenuUI);
         uiElementList.Add(_pauseUI);
-        uiElementList.Add(_arrowUI);
 
         foreach (var uiElement in uiElementList)
         {
