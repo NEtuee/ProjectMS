@@ -167,6 +167,10 @@ public static class EffectInfoExporter
             {
                 effectInfoDataBase._dependentAction = bool.Parse(attrValue);
             }
+            else if(attrName == "FollowCamera")
+            {
+                effectInfoDataBase._followCamera = bool.Parse(attrValue);
+            }
             else
             {
                 DebugUtil.assert_fileOpen(false, "알 수 없는 EffectInfo Attribute", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node));    

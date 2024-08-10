@@ -37,6 +37,7 @@ public class EffectRequestData : MessageData
     public bool _useFlip;
     public bool _castShadow;
     public bool _dependentAction;
+    public bool _followCamera;
     public bool _behindCharacter;
     public bool _manualEnd;
 
@@ -83,6 +84,7 @@ public class EffectRequestData : MessageData
         _useFlip = false;
         _castShadow = false;
         _dependentAction = false;
+        _followCamera = false;
         _behindCharacter = false;
         _manualEnd = false;
         _effectType = EffectType.SpriteEffect;
@@ -436,6 +438,7 @@ public class ParticleEffectItem : EffectItemBase
     public ObjectBase               _executeObject;
     public bool                     _followDirection;
     private bool                    _dependentAction = false;
+    private bool                    _followCamera = false;
     public Transform                _parentTransform = null;
 
     public float                    _lifeTime = 0f;
@@ -485,6 +488,7 @@ public class ParticleEffectItem : EffectItemBase
 
         _parentTransform = effectData._parentTransform;
         _dependentAction = effectData._dependentAction;
+        _followCamera = effectData._followCamera;
 
         _lifeTime = effectData._lifeTime;
 
@@ -557,6 +561,13 @@ public class ParticleEffectItem : EffectItemBase
             }
         }
 
+        if(_followCamera)
+        {
+            Vector3 position = Camera.main.transform.position;
+            position.z = 0f;
+            _effectObject.transform.position = position;
+        }
+
         if(_followDirection)
             _effectObject.transform.rotation = Quaternion.Euler(0f,0f,MathEx.directionToAngle(_executeObject.getDirection())) * _rotationOffset;
 
@@ -567,6 +578,9 @@ public class ParticleEffectItem : EffectItemBase
     {
         foreach(var item in _allParticleSystems)
         {
+            if(item == null)
+                continue;
+
             item?.Stop();
         }
     }
@@ -579,6 +593,9 @@ public class ParticleEffectItem : EffectItemBase
 
     public void disableEffect()
     {
+        if(_effectObject == null)
+            return;
+            
         _effectObject?.transform.SetParent(null);
         _effectObject?.SetActive(false);
     }

@@ -131,7 +131,8 @@
                     <FrameEvent Type="ShakeEffect" Scale="0.1" Speed="10.0" Time="0.1"/>
                 </OnHit>
             </FrameEvent>
-            
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+
         </Animation>
 
         <Branch Condition="End" Execute="AC_AttackRecover"/>

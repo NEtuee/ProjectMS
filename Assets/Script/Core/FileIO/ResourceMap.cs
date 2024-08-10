@@ -128,6 +128,8 @@ public class ResourceMap : Singleton<ResourceMap>
     {
         _exportBinary = true;
 
+        writeBinary();
+
         StaticDataLoader.writeStaticDataAll(this);
 
         var characterInfo = CharacterInfoManager.Instance()._characterInfoData;
