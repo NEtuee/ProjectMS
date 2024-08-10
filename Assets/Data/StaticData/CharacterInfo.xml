@@ -364,6 +364,20 @@
         AllyInfo="Sukeban"
     />
 
+    <SukebanTaishouChan
+        DisplayName="스케반 타이쇼쨩"
+        ActionGraph="Assets/Data/Character/Enemy/02_SukebanTaishou/SukebanTaishouAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/02_SukebanTaishou/SukebanTaishouAI.xml"
+        StatusInfoName="SukebanTaishouChanStatus"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+        UseHPInterface="True"
+
+        AllyInfo="Sukeban"
+    />
+
     <PitcherChan
         DisplayName="운동부 핏쳐쨩"
         ActionGraph="Assets/Data/Character/Enemy/01_LugerChan/LugerChanAction.xml"
