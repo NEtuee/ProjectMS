@@ -679,10 +679,9 @@ public class ActionGraph
             return _targetFrameTagData.Contains(((ActionGraphConditionNodeData_FrameTag)nodeData)._targetFrameTag) ? CommonConditionNodeData.trueByte : CommonConditionNodeData.falseByte;
         }
         else if(updateType == ConditionNodeUpdateType.Weight)
-        {
+        {            
             ActionGraphConditionNodeData_Weight data = (ActionGraphConditionNodeData_Weight)nodeData;
             return WeightRandomManager.Instance().getRandom(data._weightGroupKey, data._weightName) ? CommonConditionNodeData.trueByte : CommonConditionNodeData.falseByte;
-
         }
         else if(updateType == ConditionNodeUpdateType.Key)
         {

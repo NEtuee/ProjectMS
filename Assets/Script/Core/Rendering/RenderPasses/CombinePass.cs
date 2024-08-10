@@ -11,6 +11,7 @@ public class CombinePass : AkaneRenderPass
     CharacterRenderPass characterRenderPass;
     PerspectiveDepthRenderPass perspectiveDepthRenderPass;
     ForwardScreenRenderPass forwardScreenRenderPass;
+    DecalRenderPass decalRenderPass;
 
     private static int shadowScreenLayer;
     public override int layerMasks => shadowScreenLayer;
@@ -29,13 +30,15 @@ public class CombinePass : AkaneRenderPass
         }
     }
 
-    public static CombinePass CreateInstance(BackgroundRenderPass backgroundPass, CharacterRenderPass characterPass, PerspectiveDepthRenderPass perspectiveDepthPass, ForwardScreenRenderPass forwardScreenPass)
+    public static CombinePass CreateInstance(BackgroundRenderPass backgroundPass, CharacterRenderPass characterPass, PerspectiveDepthRenderPass perspectiveDepthPass, ForwardScreenRenderPass forwardScreenPass, DecalRenderPass decalPass)
     {
         var pass = ScriptableObject.CreateInstance<CombinePass>();
         pass.backgroundRenderPass = backgroundPass;
         pass.characterRenderPass = characterPass;
         pass.perspectiveDepthRenderPass = perspectiveDepthPass;
         pass.forwardScreenRenderPass = forwardScreenPass;
+        pass.decalRenderPass = decalPass;
+
         return pass;
     }
     public override void Draw(Camera renderCamera)
@@ -44,6 +47,7 @@ public class CombinePass : AkaneRenderPass
         renderMaterial?.SetTexture("_MainTex", backgroundRenderPass?.RenderTexture);
         renderMaterial?.SetTexture("_PerspectiveDepthTexture", perspectiveDepthRenderPass?.RenderTexture);
         renderMaterial?.SetTexture("_ForwardScreenTexture", forwardScreenRenderPass?.RenderTexture);
+        renderMaterial?.SetTexture("_DecalTexture", decalRenderPass?.RenderTexture);
 
         float orthoSize = Camera.main.orthographicSize;
         float aspectRatio = Camera.main.aspect;

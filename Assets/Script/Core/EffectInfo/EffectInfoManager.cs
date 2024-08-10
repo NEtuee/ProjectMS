@@ -34,7 +34,7 @@ public class EffectInfoManager : Singleton<EffectInfoManager>
 
         requestData._position += position;
 
-        EffectItemBase itemBase = EffectManager._instance.createEffect(requestData);
+        EffectItemBase itemBase = EffectManager._instance.createEffect(requestData, false);
         requestData.isUsing = true;
 
         return itemBase;
@@ -50,7 +50,7 @@ public class EffectInfoManager : Singleton<EffectInfoManager>
         if(requestData == null)
             return null;
 
-        EffectItemBase itemBase = EffectManager._instance.createEffect(requestData);
+        EffectItemBase itemBase = EffectManager._instance.createEffect(requestData, false);
         requestData.isUsing = true;
 
         return itemBase;

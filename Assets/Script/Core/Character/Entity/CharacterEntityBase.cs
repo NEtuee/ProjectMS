@@ -100,7 +100,7 @@ public class CharacterEntityBase : GameEntityBase
             requestData._parentTransform = this.transform;
             requestData._position = this.transform.position + Vector3.down;
 
-            _qteEffectItem = EffectManager._instance.createEffect(requestData) as EffectItem;
+            _qteEffectItem = EffectManager._instance.createEffect(requestData, true) as EffectItem;
             requestData.isUsing = true;
         }
         else if(checkCurrentActionFlag(ActionFlags.QTE) == false && _qteEffectItem != null)

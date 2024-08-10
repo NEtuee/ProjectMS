@@ -152,6 +152,8 @@ public class FollowAttackProcessor : AttackProcessorBase
 
     public void executeChildFrameEvent(ChildFrameEventType eventType, ObjectBase executeEntity, ObjectBase targetEntity)
     {
+        WeightRandomManager.Instance().updateRandom();
+        
         if(_attackFrameEvent._childFrameEventItems == null || _attackFrameEvent._childFrameEventItems.ContainsKey(eventType) == false)
             return;
         

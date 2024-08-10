@@ -20,7 +20,7 @@ public class WeightRandomManager : Singleton<WeightRandomManager>
             DebugUtil.assert(false,"target weight group is not exists: {0}",group);
             return false;
         }
-
+        
         return isWeightValid(_weightGroupData._weightGroupDataList[group],key);
     }
 

@@ -23,6 +23,7 @@
         - Direction : 이펙트 생성 대상의 방향을 따라 생성된다.
         - AttackPoint : 이펙트 생성 대상이 가장 최근에 받은 공격의 위치에서 대상을 바라보는 방향으로 생성된다. 
     - FollowCamera (Boolean) : 카메라를 따라간다
+    - Decal (Boolean) : 배경에 데칼로 붙는다
     -->
 
 
@@ -688,7 +689,7 @@
         AttackMaterial="" 
         DefenceMaterial=""
         Path="Sprites/Effect/SisterBarrier"
-        AngleOffset="0.0"
+        AngleOffset="Random_160.0^200"
         Offset="0.0 0.0 0.0"
         ToTarget="False"
         UpdateType="ScaledDeltaTime"
@@ -697,6 +698,54 @@
         LifeTime="0.0"
         FollowDirection="False"
         CastShadow="True"
-    /> 
+    />
+
+    <SpriteEffect Key="BloodDecal_Short" 
+        AttackMaterial="" 
+        DefenceMaterial=""
+        Path="Sprites/Effect/Splatter/Short"
+        AngleOffset="Random_-10.0^10"
+        Offset="0.0 0.0 0.0"
+        ToTarget="True"
+        UpdateType="ScaledDeltaTime"
+        Attach="False"
+        AngleType="Direction"
+        LifeTime="30.0"
+        FollowDirection="False"
+        CastShadow="False"
+        Decal="True"
+    />
+
+    <SpriteEffect Key="BloodDecal_Middle" 
+        AttackMaterial="" 
+        DefenceMaterial=""
+        Path="Sprites/Effect/Splatter/Middle"
+        AngleOffset="Random_-10.0^10"
+        Offset="0.0 0.0 0.0"
+        ToTarget="True"
+        UpdateType="ScaledDeltaTime"
+        Attach="False"
+        AngleType="Direction"
+        LifeTime="30.0"
+        FollowDirection="False"
+        CastShadow="False"
+        Decal="True"
+    />
+
+    <SpriteEffect Key="BloodDecal_Long" 
+        AttackMaterial="" 
+        DefenceMaterial=""
+        Path="Sprites/Effect/Splatter/Long"
+        AngleOffset="Random_-10.0^10"
+        Offset="0.0 0.0 0.0"
+        ToTarget="True"
+        UpdateType="ScaledDeltaTime"
+        Attach="False"
+        AngleType="Direction"
+        LifeTime="30.0"
+        FollowDirection="False"
+        CastShadow="False"
+        Decal="True"
+    />
 
 </EffectInfo>

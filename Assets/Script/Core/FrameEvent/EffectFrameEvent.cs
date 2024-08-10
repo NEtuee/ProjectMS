@@ -547,7 +547,6 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
         requestData._framePerSecond = _framePerSecond;
         requestData._position = centerPosition + (_useDirectionOffset ? (directionAngle  * _spawnOffset) : _spawnOffset);
         requestData._usePhysics = _usePhysics;
-        requestData._rotation = directionAngle;
         requestData._effectType = EffectType.SpriteEffect;
         requestData._updateType = _effectUpdateType;
         requestData._castShadow = _castShadow;
@@ -582,18 +581,21 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
 
         requestData._physicsBodyDesc = physicsBody;
 
+        float rotationAngle = 0f;
         if(_followEntity == true)
         {
-            requestData._angle = executeEntity.getSpriteRendererTransform().rotation.eulerAngles.z;
+            rotationAngle = executeEntity.getSpriteRendererTransform().rotation.eulerAngles.z;
         }
         else if(_random == true)
         {
-            requestData._angle = Random.Range(_randomValue.x,_randomValue.y);
+            rotationAngle = Random.Range(_randomValue.x,_randomValue.y);
         }
         else
         {
-            requestData._angle = _spawnAngle;
+            rotationAngle = _spawnAngle;
         }
+
+        requestData._rotation *= Quaternion.Euler(0f,0f,rotationAngle);
 
         executeEntity.SendMessageEx(MessageTitles.effect_spawnEffect,UniqueIDBase.QueryUniqueID("EffectManager"),requestData);
 

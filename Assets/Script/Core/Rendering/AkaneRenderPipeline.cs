@@ -24,22 +24,26 @@ public class AkaneRenderPipeline : MonoBehaviour
         ForwardScreenRenderPass forwardScreenPass = ScriptableObject.CreateInstance<ForwardScreenRenderPass>();
         forwardScreenPass.Awake();
 
+        DecalRenderPass decalPass = ScriptableObject.CreateInstance<DecalRenderPass>();
+        decalPass.Awake();
+
         PerspectiveDepthRenderPass perspectiveDepthPass = ScriptableObject.CreateInstance<PerspectiveDepthRenderPass>();
         perspectiveDepthPass.Awake();
 
-        CombinePass combinePass = CombinePass.CreateInstance(backgroundPass, characterPass, perspectiveDepthPass,forwardScreenPass);
+        CombinePass combinePass = CombinePass.CreateInstance(backgroundPass, characterPass, perspectiveDepthPass,forwardScreenPass,decalPass);
         combinePass.Awake();
 
-        EmptyRenderPass emptyPass = ScriptableObject.CreateInstance<EmptyRenderPass>();
-        emptyPass.Awake();
+        // EmptyRenderPass emptyPass = ScriptableObject.CreateInstance<EmptyRenderPass>();
+        // emptyPass.Awake();
 
         renderPasses.Add(backgroundPass);
         renderPasses.Add(perspectiveDepthPass);
         renderPasses.Add(characterPass);
         renderPasses.Add(forwardScreenPass);
+        renderPasses.Add(decalPass);
         renderPasses.Add(effectPass);
         renderPasses.Add(combinePass);
-        renderPasses.Add(emptyPass);
+        //renderPasses.Add(emptyPass);
     }
 
     private void Awake()

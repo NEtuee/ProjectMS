@@ -171,6 +171,9 @@
 
                     <!-- 마테리얼 히트 이펙트 -->
                     <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/MaterialHit_Timeline" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true"/>
+                    <FrameEvent Type="EffectPreset" Condition="getWeight_RandVector3^x" Key="BloodDecal_Short"/>
+                    <FrameEvent Type="EffectPreset" Condition="getWeight_RandVector3^y" Key="BloodDecal_Middle"/>
+                    <FrameEvent Type="EffectPreset" Condition="getWeight_RandVector3^z" Key="BloodDecal_Long"/>
 
                     <FrameEvent Type="TeleportToTargetBack" Condition="(getTargetFrameTag_Groggy == false) && (Kill == false)" DistanceOffset="-0.3"/>
                     <FrameEvent Type="TeleportToTargetBack" Condition="getTargetFrameTag_Groggy || Kill" DistanceOffset="0.2"/>
@@ -238,6 +241,9 @@
 
                     <!-- 마테리얼 히트 이펙트 -->
                     <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/MaterialHit_Timeline" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true"/>
+                    <FrameEvent Type="EffectPreset" Condition="getWeight_RandVector3^x" Key="BloodDecal_Short"/>
+                    <FrameEvent Type="EffectPreset" Condition="getWeight_RandVector3^y" Key="BloodDecal_Middle"/>
+                    <FrameEvent Type="EffectPreset" Condition="getWeight_RandVector3^z" Key="BloodDecal_Long"/>
 
                     <FrameEvent Type="TeleportToTargetBack" Condition="Kill == false" DistanceOffset="-0.0"/>
                     <FrameEvent Type="TeleportToTargetBack" Condition="Kill" DistanceOffset="0.4"/>
@@ -770,7 +776,10 @@
 
                     <!-- 마테리얼 히트 이펙트 -->
                     <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/MaterialHit_Timeline" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true"/>
-
+                    <FrameEvent Type="EffectPreset" Condition="getWeight_RandVector3^x" Key="BloodDecal_Short"/>
+                    <FrameEvent Type="EffectPreset" Condition="getWeight_RandVector3^y" Key="BloodDecal_Middle"/>
+                    <FrameEvent Type="EffectPreset" Condition="getWeight_RandVector3^z" Key="BloodDecal_Long"/>
+                    
                     <FrameEvent Type="TeleportToTargetBack" Condition="(getTargetFrameTag_Groggy == false) && (Kill == false)" DistanceOffset="-0.0"/>
                     <FrameEvent Type="TeleportToTargetBack" Condition="getTargetFrameTag_Groggy || Kill" DistanceOffset="0.4"/>
 

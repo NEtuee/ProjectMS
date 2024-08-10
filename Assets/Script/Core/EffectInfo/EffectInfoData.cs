@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using FMODUnity;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -53,7 +54,8 @@ public abstract class EffectInfoDataBase : SerializableDataType
     public bool                _castShadow = false;
     public bool                _dependentAction = false;
     public bool                _followCamera = false;
-    public float               _angleOffset = 0f;
+    public bool                _decal = false;
+    public FloatEx             _angleOffset = new FloatEx();
     public float               _lifeTime = 0f;
 
     public CommonMaterial      _attackMaterial = CommonMaterial.Empty;
@@ -120,7 +122,8 @@ public abstract class EffectInfoDataBase : SerializableDataType
         binaryWriter.Write(_castShadow);
         binaryWriter.Write(_dependentAction);
         binaryWriter.Write(_followCamera);
-        binaryWriter.Write(_angleOffset);
+        binaryWriter.Write(_decal);
+        _angleOffset.serialize(ref binaryWriter);
         binaryWriter.Write(_lifeTime);
         BinaryHelper.writeEnum<CommonMaterial>(ref binaryWriter, _attackMaterial);
         BinaryHelper.writeEnum<CommonMaterial>(ref binaryWriter, _defenceMaterial);
@@ -140,7 +143,8 @@ public abstract class EffectInfoDataBase : SerializableDataType
         _castShadow = binaryReader.ReadBoolean();
         _dependentAction = binaryReader.ReadBoolean();
         _followCamera = binaryReader.ReadBoolean();
-        _angleOffset = binaryReader.ReadSingle();
+        _decal = binaryReader.ReadBoolean();
+        _angleOffset.deserialize(ref binaryReader);
         _lifeTime = binaryReader.ReadSingle();
         _attackMaterial = BinaryHelper.readEnum<CommonMaterial>(ref binaryReader);
         _defenceMaterial = BinaryHelper.readEnum<CommonMaterial>(ref binaryReader);
@@ -197,7 +201,7 @@ public class ParticleEffectInfoData : EffectInfoDataBase
         requestData._effectPath = _effectPath;
         requestData._position = centerPosition + requestData._rotation * _spawnOffset;
         requestData._rotation = executeEntity == null ? Quaternion.identity : getAngleByType(executeEntity, requestData._position, _angleDirectionType);
-        requestData._rotationOffset = Quaternion.Euler(0f,0f,_angleOffset);
+        requestData._rotationOffset = Quaternion.Euler(0f,0f,_angleOffset.getValue());
         requestData._rotation *= requestData._rotationOffset;
         requestData._updateType = _effectUpdateType;
         requestData._effectType = EffectType.ParticleEffect;
@@ -207,6 +211,7 @@ public class ParticleEffectInfoData : EffectInfoDataBase
         requestData._castShadow = _castShadow;
         requestData._dependentAction = _dependentAction;
         requestData._followCamera = _followCamera;
+        requestData._decal = _decal;
 
         if(_attach)
         {
@@ -242,7 +247,7 @@ public class SpriteEffectInfoData : EffectInfoDataBase
         requestData._effectPath = _effectPath;
         requestData._position = centerPosition + requestData._rotation * _spawnOffset;
         requestData._rotation = executeEntity == null ? Quaternion.identity : getAngleByType(executeEntity, requestData._position, _angleDirectionType);
-        requestData._rotationOffset = Quaternion.Euler(0f,0f,_angleOffset);
+        requestData._rotationOffset = Quaternion.Euler(0f,0f,_angleOffset.getValue());
         requestData._rotation *= requestData._rotationOffset;
         requestData._updateType = _effectUpdateType;
         requestData._effectType = EffectType.SpriteEffect;
@@ -252,6 +257,7 @@ public class SpriteEffectInfoData : EffectInfoDataBase
         requestData._castShadow = _castShadow;
         requestData._dependentAction = _dependentAction;
         requestData._followCamera = _followCamera;
+        requestData._decal = _decal;
         requestData._animationCustomPreset = ResourceContainerEx.Instance().GetAnimationCustomPreset(_effectPath);
 
         if(_attach)

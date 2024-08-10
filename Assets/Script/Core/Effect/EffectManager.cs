@@ -30,8 +30,6 @@ public class EffectRequestData : MessageData
     public float _endFrame;
     public float _framePerSecond;
 
-    public float _angle;
-
     public bool _followDirection;
     public bool _usePhysics;
     public bool _useFlip;
@@ -40,6 +38,7 @@ public class EffectRequestData : MessageData
     public bool _followCamera;
     public bool _behindCharacter;
     public bool _manualEnd;
+    public bool _decal;
 
     public string _attackDataName;
 
@@ -78,7 +77,6 @@ public class EffectRequestData : MessageData
         _startFrame = 0f;
         _endFrame = -1f;
         _framePerSecond = 0f;
-        _angle = 0f;
         _followDirection = false;
         _usePhysics = false;
         _useFlip = false;
@@ -87,6 +85,7 @@ public class EffectRequestData : MessageData
         _followCamera = false;
         _behindCharacter = false;
         _manualEnd = false;
+        _decal = false;
         _effectType = EffectType.SpriteEffect;
         _updateType = EffectUpdateType.ScaledDeltaTime;
         _position = Vector3.zero;
@@ -112,6 +111,7 @@ public abstract class EffectItemBase
     public EffectType              _effectType = EffectType.SpriteEffect;
     public string                  _effectPath = "";
 
+    public bool                    _isManual = false;
     protected bool                 _stopEffect = false;
 
     public abstract void    initialize(EffectRequestData effectData);
@@ -175,7 +175,7 @@ public class EffectItem : EffectItemBase
 
         _stopEffect = false;
 
-        _endTimer = -1f;
+        _endTimer = effectData._lifeTime;
 
         if(effectData._animationCustomPreset != null)
         {
@@ -210,11 +210,29 @@ public class EffectItem : EffectItemBase
         if(_parentTransform != null && _parentTransform.gameObject.activeInHierarchy == false)
             _parentTransform = null;
 
-        _spriteRenderer.gameObject.layer = effectData._castShadow ? LayerMask.NameToLayer("Character") : effectData._behindCharacter ? LayerMask.NameToLayer("Background") :  LayerMask.NameToLayer("EffectEtc");
-        _spriteRenderer.sortingOrder = effectData._castShadow ? ( effectData._behindCharacter ? -999 : 999 ) : 999;
+        if(effectData._decal)
+        {
+            _spriteRenderer.gameObject.layer = LayerMask.NameToLayer("Decal");
+            _spriteRenderer.sortingOrder = 999;
+        }
+        else if(effectData._castShadow)
+        {
+            _spriteRenderer.gameObject.layer = LayerMask.NameToLayer("Character");
+            _spriteRenderer.sortingOrder = effectData._behindCharacter ? -999 : 999;
+        }
+        else if(effectData._behindCharacter)
+        {
+            _spriteRenderer.gameObject.layer = LayerMask.NameToLayer("Background");
+            _spriteRenderer.sortingOrder = 999;
+        }
+        else
+        {
+            _spriteRenderer.gameObject.layer = LayerMask.NameToLayer("EffectEtc");
+            _spriteRenderer.sortingOrder = 999;
+        }
 
-        _spriteRenderer.transform.position = effectData._position;
-        _spriteRenderer.transform.localRotation = Quaternion.Euler(0f,0f,effectData._angle);
+        _spriteRenderer.transform.position = MathEx.floorNoSign(effectData._position, 2);
+        _spriteRenderer.transform.localRotation = effectData._rotation;
         _spriteRenderer.transform.localScale = effectData._scale;
         _spriteRenderer.sprite = _animationPlayer.getCurrentSprite();
         setVisible(true);
@@ -228,7 +246,6 @@ public class EffectItem : EffectItemBase
         _manualEnd = effectData._manualEnd;
 
         _useFlip = effectData._useFlip;
-        _rotation = effectData._rotation;
     }
 
     public override bool progress(float deltaTime)
@@ -282,9 +299,13 @@ public class EffectItem : EffectItemBase
 
         if(_endTimer > 0f)
         {
+            isEnd = false;
             _endTimer -= deltaTime;
             if(_endTimer < 0f)
+            {
+                isEnd = true;
                 stopEffect();
+            }
         }
 
         return _manualEnd ? false : isEnd;
@@ -356,7 +377,7 @@ public class AnimationEffectItem : EffectItemBase
         _effectPath = effectData._effectPath;
         _effectUpdateType = effectData._updateType;
 
-        _effectObject.transform.position = effectData._position;
+        _effectObject.transform.position = MathEx.floorNoSign(effectData._position, 2);
         _effectObject.transform.rotation = _executeObject ? Quaternion.Euler(0f,0f,MathEx.directionToAngle(_executeObject.getDirection())) : effectData._rotation;
 
         _parentTransform = effectData._parentTransform;
@@ -482,7 +503,7 @@ public class ParticleEffectItem : EffectItemBase
         _effectPath = effectData._effectPath;
         _effectUpdateType = effectData._updateType;
 
-        _effectObject.transform.position = effectData._position;
+        _effectObject.transform.position = MathEx.floorNoSign(effectData._position, 2);
         _effectObject.transform.rotation = effectData._rotation;
         _rotationOffset = effectData._rotationOffset;
 
@@ -492,7 +513,22 @@ public class ParticleEffectItem : EffectItemBase
 
         _lifeTime = effectData._lifeTime;
 
-        _effectObject.layer = effectData._castShadow ? LayerMask.NameToLayer("Character") : effectData._behindCharacter ? LayerMask.NameToLayer("Background") : LayerMask.NameToLayer("EffectEtc");
+        if(effectData._decal)
+        {
+            _effectObject.layer = LayerMask.NameToLayer("Decal");
+        }
+        else if(effectData._castShadow)
+        {
+            _effectObject.layer = LayerMask.NameToLayer("Character");
+        }
+        else if(effectData._behindCharacter)
+        {
+            _effectObject.layer = LayerMask.NameToLayer("Background");
+        }
+        else
+        {
+            _effectObject.layer = LayerMask.NameToLayer("EffectEtc");
+        }
 
         _stopEffect = false;
         _skipFirstFrame = true;
@@ -654,7 +690,7 @@ public class TrailEffectItem : EffectItemBase
         _effectPath = "Trail";
         _effectUpdateType = effectData._updateType;
 
-        _effectObject.transform.position = effectData._position;
+        _effectObject.transform.position = MathEx.floorNoSign(effectData._position, 2);
         _effectObject.transform.rotation = effectData._rotation;
 
         _parentTransform = effectData._parentTransform;
@@ -767,7 +803,7 @@ public class TimelineEffectItem : EffectItemBase
         _effectPath = effectData._effectPath;
         _effectUpdateType = effectData._updateType;
 
-        _effectObject.transform.position = effectData._position;
+        _effectObject.transform.position = MathEx.floorNoSign(effectData._position, 2);
         _effectObject.transform.rotation = _executeObject ? Quaternion.Euler(0f,0f,MathEx.directionToAngle(_executeObject.getDirection())) : effectData._rotation;
 
         _parentTransform = effectData._parentTransform;
@@ -914,6 +950,22 @@ public class EffectManager : ManagerBase
         }
     }
 
+    public void clearCommonEffects()
+    {
+        for(int i = 0; i < _processingItems.Count;)
+        {
+            if(_processingItems[i]._isManual)
+            {
+                ++i;
+                continue;
+            }
+            
+            _processingItems[i].release();
+            returnEffectItemToQueue(_processingItems[i]);
+            _processingItems.RemoveAt(i);
+        }
+    }
+
     private void returnEffectItemToQueue(EffectItemBase item)
     {
         switch(item._effectType)
@@ -951,7 +1003,7 @@ public class EffectManager : ManagerBase
         }
 
         EffectRequestData requestData = EffectInfoManager.Instance().createRequestData(effectPresetKey,ownerObject,targetObject,CommonMaterial.Empty,CommonMaterial.Empty);
-        EffectItemBase effect = createEffect(requestData);
+        EffectItemBase effect = createEffect(requestData, true);
         if(effect == null)
             return null;
 
@@ -993,7 +1045,7 @@ public class EffectManager : ManagerBase
         effectItemList.Clear();
     }
 
-    public EffectItemBase createEffect(EffectRequestData requestData)
+    public EffectItemBase createEffect(EffectRequestData requestData, bool isManual)
     {
         EffectItemBase itemBase = null;
 
@@ -1064,11 +1116,12 @@ public class EffectManager : ManagerBase
         itemBase._spawnOwner = requestData._executeEntity;
         _processingItems.Add(itemBase);
 
+        itemBase._isManual = isManual;
         return itemBase;
     }
 
     public void receiveEffectRequest(Message msg)
     {
-        createEffect(MessageDataPooling.CastData<EffectRequestData>(msg.data));
+        createEffect(MessageDataPooling.CastData<EffectRequestData>(msg.data), false);
     }
 }

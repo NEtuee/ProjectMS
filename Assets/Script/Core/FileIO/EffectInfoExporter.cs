@@ -141,7 +141,7 @@ public static class EffectInfoExporter
             }
             else if(attrName == "AngleOffset")
             {
-                effectInfoDataBase._angleOffset = XMLScriptConverter.valueToFloatExtend(attrValue);
+                effectInfoDataBase._angleOffset.loadFromXML(attrValue);
             }
             else if(attrName == "LifeTime")
             {
@@ -170,6 +170,10 @@ public static class EffectInfoExporter
             else if(attrName == "FollowCamera")
             {
                 effectInfoDataBase._followCamera = bool.Parse(attrValue);
+            }
+            else if(attrName == "Decal")
+            {
+                effectInfoDataBase._decal = bool.Parse(attrValue);
             }
             else
             {

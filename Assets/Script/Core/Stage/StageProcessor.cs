@@ -142,6 +142,8 @@ public class StageProcessor
         GameUI.Instance.InitializeBySceneStart();
         GameUI.Instance.activeOptionUI(false);
 
+        EffectManager._instance.clearCommonEffects();
+
         if(_stageData._backgroundPrefabPath != null)
         {
             _stageBackgroundOjbect = GameObject.Instantiate(_stageData._backgroundPrefabPath);

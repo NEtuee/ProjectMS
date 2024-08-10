@@ -579,7 +579,7 @@ public class StatusInfo
             requestData._position = _ownerObject.transform.position;
             requestData._effectPath = buffData._particleEffect;
             requestData._effectType = EffectType.ParticleEffect;
-            buffItem._particleEffect = EffectManager._instance.createEffect(requestData) as ParticleEffectItem;
+            buffItem._particleEffect = EffectManager._instance.createEffect(requestData, true) as ParticleEffectItem;
             requestData.isUsing = true;
         }
         
@@ -593,7 +593,7 @@ public class StatusInfo
             requestData._position = _ownerObject.transform.position;
             requestData._effectPath = buffData._timelineEffect;
             requestData._effectType = EffectType.TimelineEffect;
-            buffItem._timelineEffect = EffectManager._instance.createEffect(requestData) as TimelineEffectItem;
+            buffItem._timelineEffect = EffectManager._instance.createEffect(requestData, true) as TimelineEffectItem;
 
             requestData.isUsing = true;
         }
