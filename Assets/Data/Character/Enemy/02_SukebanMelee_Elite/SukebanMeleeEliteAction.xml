@@ -10,15 +10,15 @@
 <GlobalVariable Name="gv_MovementFriction"          Value="0.0"/>
 
 <!-- AttackReady Movement Speed Option Variant Set-->
-<GlobalVariable Name="gv_AtkRdMovementSpeed"        Value="5.0"/>  <!-- Speed는 Velocity = 0 과 병행 사용 불가-->
+<GlobalVariable Name="gv_AtkRdMovementSpeed"        Value="7.0"/>  <!-- Speed는 Velocity = 0 과 병행 사용 불가-->
 <GlobalVariable Name="gv_AtkRdMovementVelocity"     Value="0.0"/>   
-<GlobalVariable Name="gv_AtkRdMovementMaxVelocity"  Value="5.0"/>
-<GlobalVariable Name="gv_AtkRdMovementFriction"     Value="10.0"/>
+<GlobalVariable Name="gv_AtkRdMovementMaxVelocity"  Value="10.0"/>
+<GlobalVariable Name="gv_AtkRdMovementFriction"     Value="5.0"/>
 
 <!-- Attack Movement Speed Option Variant Set-->
 <GlobalVariable Name="gv_AtkMovementSpeed"          Value="0.0"/>   <!-- Speed는 Velocity = 0 과 병행 사용 불가-->
-<GlobalVariable Name="gv_AtkMovementVelocity"       Value="14.0"/>  
-<GlobalVariable Name="gv_AtkMovementMaxVelocity"    Value="14.0"/>
+<GlobalVariable Name="gv_AtkMovementVelocity"       Value="16.0"/>  
+<GlobalVariable Name="gv_AtkMovementMaxVelocity"    Value="16.0"/>
 <GlobalVariable Name="gv_AtkMovementFriction"       Value="24.0"/>
 
 <!-- AttackSuccess Movement Speed Option Variant Set-->
@@ -42,7 +42,7 @@
         <Animation Preset="0_default/1_idle" XFlip="true" Duration="1">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
             
-            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
+            <!-- <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/> -->
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
@@ -115,10 +115,10 @@
             <FrameEvent Type="AudioPlay" StartTime="0" ID="4907" Attach="true"/>
             <FrameEvent Type="Movement" Condition="gv_AtkMovementVelocity == 0.0" StartTime="0" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Speed="gv_AtkMovementSpeed"/>
             <FrameEvent Type="Movement" Condition="gv_AtkMovementVelocity > 0.0" StartTime="0" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Velocity="gv_AtkMovementVelocity" Speed="gv_AtkMovementSpeed"/>
-            
             <FrameEvent Type="Attack" StartTime="0" EndTime="0.2" AttackPreset="SukebanMelee_Normal">
                 <OnHit>
                     <FrameEvent Type="AudioPlay" StartTime="0" ID="4908" Attach="true"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
 
                     <FrameEvent Type="EffectPreset" StartTime="0" Key="Slash"/>
@@ -157,9 +157,9 @@
 <!-- Attack Action -->
 
 <!-- Defense Action -->
-    <AC_Dodge MovementType="GraphPreset" MovementGraphPreset="Preset_Dodge" DirectionType="AI" FlipType="Direction">
+    <AC_Dodge MovementType="GraphPreset" MovementGraphPreset="SukebanElite_Dodge" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="2_defense/1_dodge" XFlip="true" Duration="0.7">
+        <Animation Preset="2_defense/1_dodge" XFlip="true" Duration="0.3">
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
         </Animation>

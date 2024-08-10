@@ -16,9 +16,9 @@
     <!-- 전투 상태 행동 타입 설정 -->
     <!-- 공격 타입 설정 -->
     <GlobalVariable Name="gv_bIsNormalAttack"               Value="False"/>     <!-- 일반 공격 타입 : 공격을 실행한다. -->
-    <GlobalVariable Name="gv_bIsLockOnlAttack"              Value="False"/>      <!-- 락온 공격 타입 : PC를 추적하며 공격을 실행한다. -->
+    <GlobalVariable Name="gv_bIsLockOnlAttack"              Value="True"/>      <!-- 락온 공격 타입 : PC를 추적하며 공격을 실행한다. -->
     <GlobalVariable Name="gv_bIsBumpAttack"                 Value="False"/>     <!-- 충돌 공격 타입 : PC 공격 성공 시 액션(리커버)이 바뀌는 공격을 실행한다. -->
-    <GlobalVariable Name="gv_bIsLaserAttack"                 Value="True"/>     <!-- 빔 공격 타입 : PC를 추적하다 공격 시점에 추적을 중단한다. -->
+    <GlobalVariable Name="gv_bIsLaserAttack"                 Value="False"/>     <!-- 빔 공격 타입 : PC를 추적하다 공격 시점에 추적을 중단한다. -->
     <!-- 공격 거리 설정 -->
     <GlobalVariable Name="gv_MeleeAttackRangeMin"           Value="0.0"/>       <!-- 최소 공격 사거리 : Value보다 PC가 가까우면 공격하지 않는다. -->
     <GlobalVariable Name="gv_MeleeAttackRangeMax"           Value="2.8"/>       <!-- 최대 공격 사거리 : Value보다 PC가 멀면 공격하지 않는다. -->
@@ -48,7 +48,7 @@
     <GlobalVariable Name="gv_bIsDodgeToPassiveDef_Guard"    Value="False"/>      <!-- 누적 피격 시 패시브 방어 : 회피 타입 -->
     <GlobalVariable Name="gv_bIsCounterToPassiveDef_Guard"  Value="False"/>     <!-- 누적 피격 시 패시브 방어 : 반격 타입 -->
     <!-- 패시브 방어 실행 지연 시간 설정 -->
-    <GlobalVariable Name="gv_PassiveDef_Hit_DelayTime" Value="0.3"/>            <!-- 누적 피격 반응 지연 시간-->
+    <GlobalVariable Name="gv_PassiveDef_Hit_DelayTime" Value="0.0"/>            <!-- 누적 피격 반응 지연 시간-->
     <GlobalVariable Name="gv_PassiveDef_Guard_DelayTime" Value="0.2"/>            <!-- 누적 가드 반응 지연 시간-->
 
     <!-- 행동 옵션값 설정 -->
@@ -74,6 +74,7 @@
     <Include Path="Assets/Data/AILibrary/Package/CommonAwayPackage.xml"/>          <!-- 후진 이동 패키지 -->
     <Include Path="Assets/Data/AILibrary/Package/CommonAttackPackage.xml"/>        <!-- 일반 공격 패키지 -->
     <Include Path="Assets/Data/AILibrary/Package/CommonLockOnAttackPackage.xml"/>  <!-- 락온 공격 패키지 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonLockOnAllAttackPackage.xml"/>  <!-- 락온 공격 패키지 -->
     <Include Path="Assets/Data/AILibrary/Package/CommonBumpAttackPackage.xml"/>    <!-- 충돌 공격 패키지 (공격 성공 시 액션 전환)-->
     <Include Path="Assets/Data/AILibrary/Package/CommonLaserAttackPackage.xml"/>   <!-- 빔 공격 패키지 (공격 시 추적 불가)-->
     <Include Path="Assets/Data/AILibrary/Package/CommonDodgePackage.xml"/>         <!-- 회피 패키지 -->
@@ -303,7 +304,7 @@
         <UseBranchSet Name="BattlePackageEndSet"/>
     </MeleeAttack>
     
-    <MeleeLockOnAttack Package="CommonLockOnAttackPackage">
+    <MeleeLockOnAttack Package="CommonLockOnAllAttackPackage">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </MeleeLockOnAttack>
