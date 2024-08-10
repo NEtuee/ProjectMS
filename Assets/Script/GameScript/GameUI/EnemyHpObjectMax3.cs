@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class EnemyHpObjectMax3 : MonoBehaviour
@@ -44,7 +45,7 @@ public class EnemyHpObjectMax3 : MonoBehaviour
     private Vector3 _offset;
     private Type _type = Type.Max3;
     
-    private int _prevHp = -1;
+    private float _prevHp = -1;
     
     public void Init()
     {
@@ -131,7 +132,7 @@ public class EnemyHpObjectMax3 : MonoBehaviour
     
     private void ChangeAnimation()
     {
-        var hp = (int)_target.getStatus("HP");
+        var hp = _target.getStatus("HP");
         if (_prevHp == hp)
         {
             return;
@@ -139,14 +140,14 @@ public class EnemyHpObjectMax3 : MonoBehaviour
 
         _prevHp = hp;
         
-        if (_type == Type.Max3 && hp <= 2)
+        if (_type == Type.Max3 && (hp - 2f) < float.Epsilon)
         {
             gameObject.SetActive(true);
             Blood1.gameObject.SetActive(true);
             _animationPlayerForBlood1.changeAnimationByCustomPreset(_blood1AppearInfo._path, _blood2AppearInfo._customPreset);
         }
         
-        if (hp <= 1)
+        if ((hp - 1f) < float.Epsilon)
         {
             Last.gameObject.SetActive(true);
             _animationPlayerForLast.changeAnimationByCustomPreset(_lastAppearInfo._path, _lastAppearInfo._customPreset);
@@ -164,7 +165,7 @@ public class EnemyHpObjectMax3 : MonoBehaviour
             }
         }
 
-        if (hp <= 0)
+        if (hp <= 0f)
         {
             _follow = false;
             _dead = true;
