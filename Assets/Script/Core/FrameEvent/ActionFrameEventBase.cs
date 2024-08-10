@@ -2863,6 +2863,8 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
 
     public void executeChildFrameEvent(ChildFrameEventType eventType, ObjectBase executeEntity, ObjectBase targetEntity)
     {
+        WeightRandomManager.Instance().updateRandom();
+        
         if(_childFrameEventItems == null || _childFrameEventItems.ContainsKey(eventType) == false)
             return;
         
