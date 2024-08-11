@@ -28,6 +28,9 @@
 
             <FrameEvent Type="SetRotateSlotValue" StartTime="0" Speed="90" Radius="2.5"/>
         </Animation>
+        <Trigger Condition="GuardBroken">
+            <FrameEvent Type="AudioPlay" ID="4911" Attach="true"/>
+        </Trigger>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_Idle>
@@ -40,6 +43,9 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
+        <Trigger Condition="GuardBroken">
+            <FrameEvent Type="AudioPlay" ID="4911" Attach="true"/>
+        </Trigger>        
 
         <Branch Condition="End == true" Execute="AC_Move"/>
     </AC_Move>
@@ -50,6 +56,9 @@
             <FrameEvent Type="Movement" Condition="TargetDistance >= 10.0" StartTime="0" Friction="0" MaxVelocity="20" Speed="40"/>
             <FrameEvent Type="Movement" Condition="TargetDistance < 10.0" StartTime="0" Friction="12" Velocity="0" MaxVelocity="5" Speed="15"/>
         </Animation>
+        <Trigger Condition="GuardBroken">
+            <FrameEvent Type="AudioPlay" ID="4911" Attach="true"/>
+        </Trigger>        
 
         <Branch Condition="End == true" Execute="AC_SystemChase"/>
     </AC_SystemChase>
@@ -101,6 +110,9 @@
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
         </Animation>
+        <Trigger Condition="GuardBroken">
+            <FrameEvent Type="AudioPlay" ID="4911" Attach="true"/>
+        </Trigger>
 
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_Dash>
@@ -115,6 +127,9 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
+        <Trigger Condition="GuardBroken">
+            <FrameEvent Type="AudioPlay" ID="4911" Attach="true"/>
+        </Trigger>
     
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_ThunderStrokeReady_Idle>
@@ -124,8 +139,10 @@
         <Animation Preset="2_skill/1_thunderStroke/1_attackReady" XFlip="true" Duration="0.7">
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
-            
         </Animation>
+        <Trigger Condition="GuardBroken">
+            <FrameEvent Type="AudioPlay" ID="4911" Attach="true"/>
+        </Trigger>            
         
         <!-- <Branch Condition="TargetDistance <= 2.0" Execute="AC_ThunderStrokeReady"/> -->
         <Branch Condition="End" Execute="AC_Idle"/>
@@ -136,8 +153,10 @@
         <Animation Preset="2_skill/1_thunderStroke/1_attackReady" XFlip="true" Duration="0.7">
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
-            
         </Animation>
+        <Trigger Condition="GuardBroken">
+            <FrameEvent Type="AudioPlay" ID="4911" Attach="true"/>
+        </Trigger>            
     
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_ThunderStrokeReady>
@@ -152,6 +171,9 @@
 
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="With" EventTargetType="SummonTargetRange" Range="100.0" AllyTarget="Ally"/>
         </Animation>
+        <Trigger Condition="GuardBroken">
+            <FrameEvent Type="AudioPlay" ID="4911" Attach="true"/>
+        </Trigger>        
 
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_ThunderStrokeMain>
@@ -163,6 +185,9 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
+        <Trigger Condition="GuardBroken">
+            <FrameEvent Type="AudioPlay" ID="4911" Attach="true"/>
+        </Trigger>
 
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_ThunderStrokeRecover>
@@ -177,6 +202,9 @@
                 <FrameEvent Type="EffectPreset" StartTime="0" Key="Helena_DischargeBoundery"/>
                 <FrameEvent Type="AudioPlay" StartTime="0" ID="2505" Attach="true" Switch="True"/>
         </Animation>
+        <Trigger Condition="GuardBroken">
+            <FrameEvent Type="AudioPlay" ID="4911" Attach="true"/>
+        </Trigger>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_DischargeReady>
@@ -193,6 +221,9 @@
                 </OnHit>
             </FrameEvent>
         </Animation>
+        <Trigger Condition="GuardBroken">
+            <FrameEvent Type="AudioPlay" ID="4911" Attach="true"/>
+        </Trigger>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_DischargeMain>
@@ -203,6 +234,9 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
+        <Trigger Condition="GuardBroken">
+            <FrameEvent Type="AudioPlay" ID="4911" Attach="true"/>
+        </Trigger>
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_DischargeRecover>
         
@@ -311,6 +345,9 @@
             
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
+        <Trigger Condition="GuardBroken">
+            <FrameEvent Type="AudioPlay" ID="4911" Attach="true"/>
+        </Trigger>
 
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_SpawnThunderBall>
@@ -325,6 +362,9 @@
             
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
+        <Trigger Condition="GuardBroken">
+            <FrameEvent Type="AudioPlay" ID="4911" Attach="true"/>
+        </Trigger>
 
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_SpawnCrimsonMain>
@@ -340,6 +380,9 @@
             
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
+        <Trigger Condition="GuardBroken">
+            <FrameEvent Type="AudioPlay" ID="4911" Attach="true"/>
+        </Trigger>
 
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_SpawnCrimsonMainSet>
@@ -356,6 +399,9 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
+        <Trigger Condition="GuardBroken">
+            <FrameEvent Type="AudioPlay" ID="4911" Attach="true"/>
+        </Trigger>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_CommandBook_LaserToTarget>
@@ -370,6 +416,9 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
+        <Trigger Condition="GuardBroken">
+            <FrameEvent Type="AudioPlay" ID="4911" Attach="true"/>
+        </Trigger>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_CommandBook_LaserWith>
@@ -385,6 +434,9 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
+        <Trigger Condition="GuardBroken">
+            <FrameEvent Type="AudioPlay" ID="4911" Attach="true"/>
+        </Trigger>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_CommandBook_LaserOut>
@@ -406,6 +458,9 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
+        <Trigger Condition="GuardBroken">
+            <FrameEvent Type="AudioPlay" ID="4911" Attach="true"/>
+        </Trigger>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_CommandBook_LaserIn>
@@ -425,6 +480,9 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
+        <Trigger Condition="GuardBroken">
+            <FrameEvent Type="AudioPlay" ID="4911" Attach="true"/>
+        </Trigger>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_Pray>
@@ -432,7 +490,7 @@
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/6_barrior/2_entry" XFlip="true" Duration="0.2">
             <!-- TODO: 캐치용 스크립트, 모션X -->
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2510" Attach="true" Switch="True"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="4911" Attach="true" Switch="True"/>
             <FrameEvent Type="Attack" StartTime="0" EndTime="0.2" AttackPreset="Aoba_Tsuba" AttackType="Catch" CatchOffset="0.1 0 0">
                 <OnCatch>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CatchedSet"/>
@@ -568,6 +626,9 @@
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
         </Animation>
+        <Trigger Condition="GuardBroken">
+            <FrameEvent Type="AudioPlay" ID="4911" Attach="true"/>
+        </Trigger>
 
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_Appear>
@@ -581,6 +642,9 @@
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
         </Animation>
+        <Trigger Condition="GuardBroken">
+            <FrameEvent Type="AudioPlay" ID="4911" Attach="true"/>
+        </Trigger>            
 
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_Dodge>
@@ -591,6 +655,9 @@
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
         </Animation>
+        <Trigger Condition="GuardBroken">
+            <FrameEvent Type="AudioPlay" ID="4911" Attach="true"/>
+        </Trigger>            
 
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_ExplosionDodge>

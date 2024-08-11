@@ -63,7 +63,11 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
             
+
         </Animation>
+        <Trigger Condition="DefenceSuccess">
+            <FrameEvent Type="AudioPlay" ID="4911" Attach="true"/>
+        </Trigger>
 
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
@@ -77,6 +81,9 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
+        <Trigger Condition="DefenceSuccess">
+            <FrameEvent Type="AudioPlay" ID="4911" Attach="true"/>
+        </Trigger>
 
         <Branch Condition="End == true" Execute="AC_Move"/>
     </AC_Move>
@@ -92,7 +99,11 @@
 
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        
         </Animation>
+        <Trigger Condition="DefenceSuccess">
+            <FrameEvent Type="AudioPlay" ID="4911" Attach="true"/>
+        </Trigger>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_Hit>
@@ -130,6 +141,9 @@
             
             <FrameEvent Type="SetDirectionType" StartTime="0.7" DirectionType="Keep"/>  <!-- 타겟 추적 중단용 이벤트 -->
         </Animation>
+        <Trigger Condition="DefenceSuccess">
+            <FrameEvent Type="AudioPlay" ID="4911" Attach="true"/>
+        </Trigger>
     
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_AttackReady>
@@ -163,6 +177,9 @@
             <!-- Object Attack -->
             <FrameEvent Type="SpawnCharacter" Condition="gv_bIsObjectAttack" StartTime="0" CharacterKey="gv_ObjectKey" Offset="0 0 0" UseFlip="true"/>
         </Animation>
+        <Trigger Condition="DefenceSuccess">
+            <FrameEvent Type="AudioPlay" ID="4911" Attach="true"/>
+        </Trigger>
 
         <Branch Condition="End" Execute="AC_AttackRecover"/>
     </AC_AttackMain>
@@ -173,6 +190,9 @@
             <FrameEvent Type="Movement" Condition="gv_AtkSucMovementVelocity == 0.0" StartTime="0" Friction="gv_AtkSucMovementFriction" MaxVelocity="gv_AtkSucMovementMaxVelocity" Speed="gv_AtkSucMovementSpeed"/>
             <FrameEvent Type="Movement" Condition="gv_AtkSucMovementVelocity > 0.0" StartTime="0" Friction="gv_AtkSucMovementFriction" MaxVelocity="gv_AtkSucMovementMaxVelocity" Velocity="gv_AtkSucMovementVelocity" Speed="gv_AtkSucMovementSpeed"/>
         </Animation>
+        <Trigger Condition="DefenceSuccess">
+            <FrameEvent Type="AudioPlay" ID="4911" Attach="true"/>
+        </Trigger>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_AttackSuccess>
@@ -183,6 +203,9 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
+        <Trigger Condition="DefenceSuccess">
+            <FrameEvent Type="AudioPlay" ID="4911" Attach="true"/>
+        </Trigger>
 
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_AttackRecover>
@@ -195,6 +218,9 @@
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
         </Animation>
+        <Trigger Condition="DefenceSuccess">
+            <FrameEvent Type="AudioPlay" ID="4911" Attach="true"/>
+        </Trigger>
 
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_Dodge>
@@ -207,7 +233,11 @@
 
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        
         </Animation>
+        <Trigger Condition="DefenceSuccess">
+            <FrameEvent Type="AudioPlay" ID="4911" Attach="true"/>
+        </Trigger>
 
         <Branch Condition="End == true" Execute="AC_Guard"/>
     </AC_Guard>
@@ -247,7 +277,11 @@
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        
         </Animation>
+        <Trigger Condition="DefenceSuccess">
+            <FrameEvent Type="AudioPlay" ID="4911" Attach="true"/>
+        </Trigger>
     
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_Pray>
