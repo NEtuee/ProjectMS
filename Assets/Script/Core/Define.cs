@@ -97,7 +97,11 @@ public enum CommonMaterial
 public enum ResolutionOption
 {
     res800x600 = 0,
-    res1600x1200 = 1
+    res1024x768 = 1,
+    res1280x960 = 2,
+    res1400x1050 = 3,
+    res1600x1200 = 4,
+    Count,
 }
 
 public struct Triangle

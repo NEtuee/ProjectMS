@@ -312,12 +312,18 @@ public class OptionUIControl : MonoBehaviour
 
     public void resUp()
     {
-        if(SaveDataManager._instance._optionData._resolutionOption == ResolutionOption.res800x600)
-            setResolution(ResolutionOption.res1600x1200);
-        else
-            if(SaveDataManager._instance._optionData._resolutionOption == ResolutionOption.res1600x1200)
-            setResolution(ResolutionOption.res800x600);
+        ResolutionOption res = SaveDataManager._instance._optionData._resolutionOption;
 
+        if((int)res + 1 == (int)ResolutionOption.Count)
+        {
+            res = (ResolutionOption)0;
+        }
+        else
+        {
+            res = (ResolutionOption)((int)res + 1);
+        }
+
+        setResolution(res);
         updateRes();
 
         _resAnimation.changeAnimationByCustomPreset("Sprites/UI/Option/ArrowButton/Up");
@@ -330,11 +336,18 @@ public class OptionUIControl : MonoBehaviour
 
     public void resDown()
     {
-        if(SaveDataManager._instance._optionData._resolutionOption == ResolutionOption.res1600x1200)
-            setResolution(ResolutionOption.res800x600);
-        else if(SaveDataManager._instance._optionData._resolutionOption == ResolutionOption.res800x600)
-            setResolution(ResolutionOption.res1600x1200);
+        ResolutionOption res = SaveDataManager._instance._optionData._resolutionOption;
 
+        if((int)res == 0)
+        {
+            res = (ResolutionOption)((int)ResolutionOption.Count - 1);
+        }
+        else
+        {
+            res = (ResolutionOption)((int)res - 1);
+        }
+
+        setResolution(res);
         updateRes();
 
         _resAnimation.changeAnimationByCustomPreset("Sprites/UI/Option/ArrowButton/Down");
@@ -423,6 +436,15 @@ public class OptionUIControl : MonoBehaviour
             case ResolutionOption.res800x600:
                 Screen.SetResolution(800,600,FullScreenMode.Windowed);
             break;
+            case ResolutionOption.res1024x768:
+                Screen.SetResolution(1024,768,FullScreenMode.Windowed);
+            break;
+            case ResolutionOption.res1280x960:
+                Screen.SetResolution(1280,960,FullScreenMode.Windowed);
+            break;
+            case ResolutionOption.res1400x1050:
+                Screen.SetResolution(1400,1050,FullScreenMode.Windowed);
+            break;
             case ResolutionOption.res1600x1200:
                 Screen.SetResolution(1600,1200,FullScreenMode.Windowed);
             break;
@@ -436,6 +458,18 @@ public class OptionUIControl : MonoBehaviour
             case ResolutionOption.res800x600:
                 foreach(var item in _resText)
                     item.text = "800x600";
+            break;
+            case ResolutionOption.res1024x768:
+                foreach(var item in _resText)
+                    item.text = "1024x768";
+            break;
+            case ResolutionOption.res1280x960:
+                foreach(var item in _resText)
+                    item.text = "1280x960";
+            break;
+            case ResolutionOption.res1400x1050:
+                foreach(var item in _resText)
+                    item.text = "1400x1050";
             break;
             case ResolutionOption.res1600x1200:
                 foreach(var item in _resText)
