@@ -14,7 +14,7 @@
         <Branch Condition="GuardBroken" Execute="GuardBroken"/>
     </Idle>
 
-    <GuardBroken DirectionType="Keep" FlipType="Direction">
+    <GuardBroken DirectionType="Keep" FlipType="Direction" Flags="ClearDanmaku">
         <Animation Path="Resources/Sprites/DummyPlayer/JustGuardBreak/" StartFrame="0" EndFrame="1" XFlip="true">
         </Animation>
 
@@ -108,6 +108,7 @@
             <FrameEvent Type="Danmaku" StartTime="0" Path="Assets/Data/DanmakuGraph/DanmakuTest.xml" UseDirection="True"/>
         </Animation>
 
+        <Branch Condition="GuardBroken || GuardBreakFail" Execute="GuardBroken"/>
         <Branch Condition="End == true" Execute="TEST_Danmaku"/>
     </TEST_Danmaku>
 <!-- ================================================================ -->

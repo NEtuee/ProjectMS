@@ -29,6 +29,11 @@ public class DanmakuGraph
         {
             _data = data;
 
+            clearDanmaku();
+        }
+
+        public void clearDanmaku()
+        {
             for(int i = 0; i < _danmakuVariables.Length; ++i)
                 _danmakuVariables[i] = 0f;
             
@@ -135,6 +140,16 @@ public class DanmakuGraph
             else
                 ++i;
         }
+    }
+
+    public void clearDanmaku()
+    {
+        for(int i = 0; i < _currentPlayList.Count; ++i)
+        {
+            _currentPlayList[i].clearDanmaku();
+            _danmakuPlayItemPool.enqueue(_currentPlayList[i]);
+        }
+        _currentPlayList.Clear();
     }
 
     public void release()

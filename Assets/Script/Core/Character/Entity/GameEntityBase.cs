@@ -560,6 +560,11 @@ public class GameEntityBase : SequencerObjectBase
         if(_actionGraph.checkCurrentActionFlag(ActionFlags.ClearPush) || _actionGraph.checkCurrentActionFlag(ActionFlags.IgnorePush))
             _currentVelocity = Vector3.zero;
 
+        if(_actionGraph.checkCurrentActionFlag(ActionFlags.ClearDanmaku))
+        {
+            _danmakuGraph.clearDanmaku();
+        }
+
         bool hideBuffEffect = _actionGraph.checkCurrentActionFlag(ActionFlags.HideBuffEffect);
         if(hideBuffEffect || _actionGraph.checkPrevActionFlag(ActionFlags.HideBuffEffect))
             _statusInfo.setBuffEffectVisible(hideBuffEffect == false);
