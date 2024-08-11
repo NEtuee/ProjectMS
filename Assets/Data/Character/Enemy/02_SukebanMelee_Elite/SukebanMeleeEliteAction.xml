@@ -103,7 +103,6 @@
             <FrameEvent Type="Movement" Condition="gv_AtkRdMovementVelocity == 0.0" StartTime="0" Friction="gv_AtkRdMovementFriction" MaxVelocity="gv_AtkRdMovementMaxVelocity" Speed="gv_AtkRdMovementSpeed"/>
             <FrameEvent Type="Movement" Condition="gv_AtkRdMovementVelocity > 0.0" StartTime="0" Friction="gv_AtkRdMovementFriction" MaxVelocity="gv_AtkRdMovementMaxVelocity" Velocity="gv_AtkRdMovementVelocity" Speed="gv_AtkRdMovementSpeed"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
-            
         </Animation>
     
         <Branch Condition="End" Execute="AC_Idle"/>
@@ -159,7 +158,7 @@
 <!-- Defense Action -->
     <AC_Dodge MovementType="GraphPreset" MovementGraphPreset="SukebanElite_Dodge" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="2_defense/1_dodge" XFlip="true" Duration="0.3">
+        <Animation Preset="2_defense/1_dodge" XFlip="true" Duration="0.4">
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
         </Animation>
@@ -185,7 +184,6 @@
         <Animation Preset="2_defense/3_guardBroken" XFlip="true" Duration="1.25">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
-            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountIncrease"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
 
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>

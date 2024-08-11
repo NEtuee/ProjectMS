@@ -80,7 +80,7 @@
         <Branch Condition="End == true" Execute="AC_Move"/>
     </AC_Move>
 
-    <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
+    <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction" Flags="ClearDanmaku">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="0_default/3_hit" XFlip="true" Duration="1.25">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
@@ -131,7 +131,7 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_AttackReady>
 
-    <AC_AttackMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction" Flags="LaserEffect">
+    <AC_AttackMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction" Flags="LaserEffect ">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="1_attack/2_attackMain" XFlip="true" Duration="1.0">
             <FrameEvent Type="SetDirectionType" Condition="gv_bIsLaserAttack == false" StartTime="0" DirectionType="AI"/>
@@ -157,6 +157,9 @@
             <FrameEvent Type="Danmaku" Condition="gv_bIsDanmakuAttack" StartTime="0" Path="gv_DanmakuPath" Offset="0.5 0.12 0" UseFlip="true"/>
             <!-- Object Attack -->
             <FrameEvent Type="SpawnCharacter" Condition="gv_bIsObjectAttack" StartTime="0" CharacterKey="gv_ObjectKey" Offset="0 0 0" UseFlip="true"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_AttackRecover"/>
@@ -207,7 +210,7 @@
         <Branch Condition="End == true" Execute="AC_Guard"/>
     </AC_Guard>
 
-    <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
+    <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction" Flags="ClearDanmaku">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_defense/3_guardBroken" XFlip="true" Duration="1.25">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
