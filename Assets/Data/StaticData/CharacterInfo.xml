@@ -336,6 +336,20 @@
         AllyInfo="Sukeban"
     />
 
+    <BrainWashedSukebanKatanaChan
+        DisplayName="세뇌당한 스케반 카타나쨩"
+        ActionGraph="Assets/Data/Character/Enemy/02_SukebanMelee/SukebanMeleeBrainWashedAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/02_SukebanMelee/SukebanMeleeAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+        UseHPInterface="True"
+
+        AllyInfo="Sister"
+    />
+
     <SukebanEliteChan
         DisplayName="스케반 엘리트쨩"
         ActionGraph="Assets/Data/Character/Enemy/02_SukebanMelee_Elite/SukebanMeleeEliteAction.xml"
@@ -350,6 +364,20 @@
         AllyInfo="Sukeban"
     />
 
+    <BrainWashedSukebanEliteChan
+        DisplayName="세뇌당한 스케반 엘리트쨩"
+        ActionGraph="Assets/Data/Character/Enemy/02_SukebanMelee_Elite/SukebanMeleeEliteBrainWashedAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/02_SukebanMelee_Elite/SukebanMeleeEliteAI.xml"
+        StatusInfoName="SukebanEliteChanStatus"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+        UseHPInterface="True"
+
+        AllyInfo="Sister"
+    />
+
     <SukebanUziChan
         DisplayName="스케반 우지쨩"
         ActionGraph="Assets/Data/Character/Enemy/02_SukebanRanged/SukebanRangedAction.xml"
@@ -362,6 +390,20 @@
         UseHPInterface="True"
 
         AllyInfo="Sukeban"
+    />
+
+    <BrainWashedSukebanUziChan
+        DisplayName="세뇌당한 스케반 우지쨩"
+        ActionGraph="Assets/Data/Character/Enemy/02_SukebanRanged/SukebanRangedBrainWashedAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/02_SukebanRanged/SukebanRangedAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+        UseHPInterface="True"
+
+        AllyInfo="Sister"
     />
 
     <SukebanTaishouChan
