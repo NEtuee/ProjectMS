@@ -315,4 +315,20 @@
         <Animation Preset="4_rushReady" XFlip="true" Duration="0.7">  <!-- TODO: 임시 모션이므로 바꿔줘야함. -->
         </Animation>
     </SQ_Angry>
+    <SQ_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/0_default/"/>
+        <Animation Preset="4_hit" XFlip="true" Duration="1.25">
+            <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2109"/>
+
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountIncrease"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+
+            <FrameEvent Type="ReleaseCatch" StartTime="0" Push="1 0 0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </SQ_Hit>
 </ActionGraph>
