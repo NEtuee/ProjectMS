@@ -627,6 +627,10 @@
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="9" Speed="0" Velocity="-5"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="CatchedClear"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="StunClear"/>
+            
+            <!-- Enemy Catch Attack Debuff Clear -->
+            <FrameEvent Type="DeleteBuff" StartTime="0" BuffList="CatchAttack_SisterSpear"/>
+
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="1.3" Tag="CatchReleased"/>
             <FrameEvent Type="FrameTag" StartTime="0.4" EndTime="1.3" Tag="MoveCancel"/>
 
