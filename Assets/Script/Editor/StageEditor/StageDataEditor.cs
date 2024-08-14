@@ -670,6 +670,7 @@ public class StageDataEditor : EditorWindow
         GUILayout.BeginVertical("box");
             _editStageData._isMenuStage = EditorGUILayout.Toggle("Menu Stage",_editStageData._isMenuStage);
             _editStageData._stageName = EditorGUILayout.TextField("Stage Name",_editStageData._stageName);
+            _editStageData._audioBoardPath = EditorGUILayout.TextField("AudioBoard Path",_editStageData._audioBoardPath);
 
             GUILayout.BeginHorizontal();
             _editStageData._backgroundPrefabPath = EditorGUILayout.ObjectField("Background Prefab",_editStageData._backgroundPrefabPath, typeof(GameObject), true) as GameObject;

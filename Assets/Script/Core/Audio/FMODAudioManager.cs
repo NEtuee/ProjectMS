@@ -322,6 +322,7 @@ public class FMODAudioManager : Singleton<FMODAudioManager>
             comp.Preload = true;
             comp.gameObject.SetActive(active);
             comp.transform.SetParent(_audioObject.transform);
+            comp._audioEventKey = id;
 
             if(_cacheMap.ContainsKey(id))
             {

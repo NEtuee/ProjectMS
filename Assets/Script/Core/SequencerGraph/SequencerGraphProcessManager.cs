@@ -77,6 +77,23 @@ public class SequencerGraphProcessManager
         return processor;
     }
 
+    public SequencerGraphProcessor startSequencerClean(SequencerGraphBaseData baseData, GameEntityBase targetEntity,bool includePlayer)
+    {
+        foreach(var item in _activeProcessorList)
+        {
+            if(item.getSequencerName() == baseData._sequencerName)
+                return null;
+        }
+        
+        SequencerGraphProcessor processor = _sequencerGrpahProcessorPool.dequeue();
+        processor.clearSequencerGraphProcessor();
+        processor.startSequencer(baseData,_ownerEntity,targetEntity,includePlayer);
+
+        _activeProcessorList.Add(processor);
+
+        return processor;
+    }
+
     public void addSequencerSignal(string signal)
     {
         foreach(var processor in _activeProcessorList)

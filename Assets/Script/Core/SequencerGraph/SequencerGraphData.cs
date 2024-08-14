@@ -65,6 +65,7 @@ public enum SequencerGraphEventType
     KillEntity,
     KillAllStageEntity,
     ShowCursor,
+    AudioBoardEvent,
     
     Count,
 }
@@ -209,8 +210,53 @@ public abstract class SequencerGraphEventBase : SerializableDataType
             spawnEvent = new SequencerGraphEvent_KillAllStageEntity();
         else if(eventType == SequencerGraphEventType.ShowCursor)
             spawnEvent = new SequencerGraphEvent_ShowCursor();
+        else if(eventType == SequencerGraphEventType.AudioBoardEvent)
+            spawnEvent = new SequencerGraphEvent_AudioBoardEvent();
 
         return spawnEvent;
+    }
+}
+
+public class SequencerGraphEvent_AudioBoardEvent : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.AudioBoardEvent;
+
+    public string _eventName = "";
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        MasterManager.instance._stageProcessor.runAudioBoardEvent(_eventName);
+
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "Event")
+                _eventName = attrValue;
+        }
+    }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_eventName);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _eventName = binaryReader.ReadString();
     }
 }
 
@@ -3811,5 +3857,39 @@ public class SequencerGraphBaseData : SerializableDataType
     {
         _sequencerName = binaryReader.ReadString();
         _sequencerGraphPhase = BinaryHelper.readArray<SequencerGraphPhaseData>(ref binaryReader);
+    }
+}
+
+public class SequencerGraphSetBaseData : SerializableDataType
+{
+    public int _bgmKey = -1;
+    public int _startIndex = -1;
+
+    public SequencerGraphBaseData[] _sequencerGraphSet = null;
+
+    public SequencerGraphBaseData findSequencerGraph(string key)
+    {
+        foreach(var item in _sequencerGraphSet)
+        {
+            if(item._sequencerName == key)
+                return item;
+        }
+
+        return null;
+    }
+
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        binaryWriter.Write(_bgmKey);
+        binaryWriter.Write(_startIndex);
+        BinaryHelper.writeArray<SequencerGraphBaseData>(ref binaryWriter, _sequencerGraphSet);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _bgmKey = binaryReader.ReadInt32();
+        _startIndex = binaryReader.ReadInt32();
+        _sequencerGraphSet = BinaryHelper.readArray<SequencerGraphBaseData>(ref binaryReader);
     }
 }

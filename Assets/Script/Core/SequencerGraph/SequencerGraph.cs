@@ -530,6 +530,15 @@ public class SequencerGraphProcessor
         if(_currentSequencer == null)
             return;
 
+        startSequencer(_currentSequencer, ownerEntity, targetEntity, includePlayer);
+    }
+
+    public void startSequencer(SequencerGraphBaseData baseData, GameEntityBase ownerEntity, GameEntityBase targetEntity, bool includePlayer = false)
+    {
+        _currentSequencer = baseData;
+        if(_currentSequencer == null)
+            return;
+
         initialize();
 
         if(ownerEntity != null)

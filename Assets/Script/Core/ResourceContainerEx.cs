@@ -187,6 +187,7 @@ public class ResourceContainerEx : Singleton<ResourceContainerEx>
 	private DataResourceItem<ProjectileGraphBaseDataList,ProjectileGraphLoader>	_projectileGraphResource = new DataResourceItem<ProjectileGraphBaseDataList,ProjectileGraphLoader>();
 	private DataResourceItem<DanmakuGraphBaseData,DanmakuGraphLoader>			_danmakuGraphResource = new DataResourceItem<DanmakuGraphBaseData,DanmakuGraphLoader>();
 	private DataResourceItem<SequencerGraphBaseData,SequencrGraphLoader>		_sequencerGraphResource = new DataResourceItem<SequencerGraphBaseData,SequencrGraphLoader>();
+	private DataResourceItem<SequencerGraphSetBaseData,SequencerGraphSetLoader>	_sequencerGraphSetResource = new DataResourceItem<SequencerGraphSetBaseData,SequencerGraphSetLoader>();
 	private DataResourceItem<CharacterInfoDataList,CharacterInfoLoader>			_characterInfoResource = new DataResourceItem<CharacterInfoDataList,CharacterInfoLoader>();
 	private DataResourceItem<AllyInfoDataList,AllyInfoLoader>					_allyInfoResource = new DataResourceItem<AllyInfoDataList,AllyInfoLoader>();
 
@@ -259,6 +260,11 @@ public class ResourceContainerEx : Singleton<ResourceContainerEx>
 	public SequencerGraphBaseData GetSequencerGraph(string path)
 	{
 		return _sequencerGraphResource.GetOrLoadResource(path);
+	}
+
+	public SequencerGraphSetBaseData getSequencerGraphSet(string path)
+	{
+		return _sequencerGraphSetResource.GetOrLoadResource(path);
 	}
 
 	public DanmakuGraphBaseData GetDanmakuGraph(string path)

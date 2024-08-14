@@ -54,6 +54,9 @@ public class StageProcessor
     private SequencerGraphProcessManager _sequencerProcessManager = new SequencerGraphProcessManager(null);
     private MovementTrackProcessor _trackProcessor = new MovementTrackProcessor();
 
+    private SequencerGraphSetBaseData _audioBoardData = null;
+    private FMODUnity.StudioEventEmitter _bgmEmitter = null;
+
     private Vector3         _cameraTrackPositionError = Vector3.zero;
     private float           _cameraTrackPositionErrorReduceTime = 1f;
 
@@ -115,6 +118,27 @@ public class StageProcessor
         _isEnd = false;
         _blockPointExit = false;
         _unlockLimit = false;
+
+        if(_stageData._audioBoardPath == null || _stageData._audioBoardPath == "")
+        {
+            if(_bgmEmitter != null)
+                _bgmEmitter.Stop();
+                
+            _bgmEmitter = null;
+            _audioBoardData = null;
+        }
+        else
+        {
+            _audioBoardData = ResourceContainerEx.Instance().getSequencerGraphSet("Assets/Data/AudioBoard/" + _stageData._audioBoardPath);
+            if(_bgmEmitter != null && _bgmEmitter._audioEventKey != _audioBoardData._bgmKey)
+            {
+                _bgmEmitter.Stop();
+                _bgmEmitter = null;
+            }
+
+            if(_audioBoardData._bgmKey != -1)
+                _bgmEmitter = FMODAudioManager.Instance().Play(_audioBoardData._bgmKey,Vector3.zero);
+        }
 
         if(_stageData._stagePointData.Count == 0)
             return;
@@ -343,6 +367,12 @@ public class StageProcessor
         _blockPointExit = false;
         _unlockLimit = false;
 
+        if(_bgmEmitter != null)
+            _bgmEmitter.Stop();
+
+        _bgmEmitter = null;
+        _audioBoardData = null;
+
         _offsetPosition = Vector3.zero;
         if(_stageBackgroundOjbect != null)
         {
@@ -470,6 +500,24 @@ public class StageProcessor
         getLimitedFractionOnLine(_currentPoint, position, out resultPoint);
 
         return resultPoint;
+    }
+
+    public void runAudioBoardEvent(string key)
+    {
+        if(_audioBoardData == null)
+        {
+            DebugUtil.assert(false, "오디오 보드가 없습니다.");
+            return;
+        }
+
+        SequencerGraphBaseData baseData = _audioBoardData.findSequencerGraph(key);
+        if(baseData == null)
+        {
+            DebugUtil.assert(false, "해당 이벤트가 존재하지 않습니다. [{0}]",key);
+            return;
+        }
+
+        _sequencerProcessManager.startSequencerClean(baseData, null, true);
     }
 
     public void cameraProcess(float deltaTime)

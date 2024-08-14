@@ -1029,6 +1029,23 @@ public class EffectManager : ManagerBase
         }
     }
 
+    public void killSwitchAll()
+    {
+        foreach(var switchItem in _effectSwitchMap)
+        {
+            List<EffectSwitchItem> effectItemList = switchItem.Value;
+
+            for(int index = 0; index < effectItemList.Count; ++index)
+            {
+                effectItemList[index]._effect.release();
+                effectItemList.RemoveAt(index);
+            }
+
+            effectItemList.Clear();
+        }
+        
+    }
+
     public void killSwitchAll(ObjectBase ownerObject)
     {
         if(_effectSwitchMap.ContainsKey(ownerObject) == false)

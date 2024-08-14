@@ -82,6 +82,7 @@ public class MarkerItem
 public class StageData : ScriptableObject
 {
     public string           _stageName;
+    public string           _audioBoardPath;
     public GameObject       _backgroundPrefabPath = null;
     public bool             _isMiniStage = false;
     public bool             _isMenuStage = false;

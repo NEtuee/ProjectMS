@@ -5,6 +5,95 @@ using System.Text;
 using UnityEngine;
 using ICSharpCode.WpfDesign.XamlDom;
 
+
+public class SequencerGraphSetLoader : LoaderBase<SequencerGraphSetBaseData>
+{
+    static string _currentFileName = "";
+
+    public override SequencerGraphSetBaseData createNewDataInstance()
+    {
+        return new SequencerGraphSetBaseData();
+    }
+
+    public override SequencerGraphSetBaseData readFromXML(string path)
+    {
+        _currentFileName = path;
+        
+        PositionXmlDocument xmlDoc = new PositionXmlDocument();
+        try
+        {
+            XmlReaderSettings readerSettings = new XmlReaderSettings();
+            readerSettings.IgnoreComments = true;
+            using (XmlReader reader = XmlReader.Create(XMLScriptConverter.convertXMLScriptSymbol(_currentFileName),readerSettings))
+            {
+                xmlDoc.Load(reader);
+            }
+        }
+        catch(System.Exception ex)
+        {
+            DebugUtil.assert(false,"xml load exception : {0} \n{1}",path,ex.Message);
+            return null;
+        }
+        
+        if(xmlDoc.HasChildNodes == false)
+        {
+            DebugUtil.assert(false,"xml is empty");
+            return null;
+        }
+
+        if(xmlDoc.FirstChild.Name != "SequencerGraphSet")
+        {
+            DebugUtil.assert(false,"Data Type Error");
+            return null;
+        }
+
+        SequencerGraphSetBaseData baseData = new SequencerGraphSetBaseData();
+
+        List<SequencerGraphBaseData> sequencerGraphBaseDataList = new List<SequencerGraphBaseData>();
+
+        XmlNode parentNode = xmlDoc.FirstChild;
+        
+        XmlNodeList nodeList = parentNode.ChildNodes;
+        for(int i = 0; i < nodeList.Count; ++i)
+        {
+            SequencerGraphBaseData seq = SequencrGraphLoader.readSequencerGraphData(nodeList[i]);
+            if(seq == null)
+                return null;
+
+            sequencerGraphBaseDataList.Add(seq);
+        }
+
+        XmlAttributeCollection attriubtes = parentNode.Attributes;
+        for(int i = 0; i < attriubtes.Count; ++i)
+        {
+            string attrName = attriubtes[i].Name;
+            string attrValue = attriubtes[i].Value;
+
+            if(attrName == "BGM")
+            {
+                baseData._bgmKey = int.Parse(attrValue);
+            }
+            else if(attrName == "StartSequencer")
+            {
+                for(int j = 0; j < sequencerGraphBaseDataList.Count; ++i)
+                {
+                    if(attrValue == sequencerGraphBaseDataList[j]._sequencerName)
+                    {
+                        baseData._startIndex = j;
+                        break;
+                    }
+                }
+
+                DebugUtil.assert_fileOpen(false, "해당 Sequencer를 찾을 수 없습니다 [{0}]", path, XMLScriptConverter.getLineNumberFromXMLNode(parentNode), attrValue);
+            }
+        }
+
+        baseData._sequencerGraphSet = sequencerGraphBaseDataList.ToArray();
+        return baseData;
+    }
+}
+
+
 public class SequencrGraphLoader : LoaderBase<SequencerGraphBaseData>
 {
     static string _currentFileName = "";
@@ -40,10 +129,14 @@ public class SequencrGraphLoader : LoaderBase<SequencerGraphBaseData>
             return null;
         }
 
+        return readSequencerGraphData(xmlDoc.FirstChild);
+    }
 
+    public static SequencerGraphBaseData readSequencerGraphData(XmlNode node)
+    {
         SequencerGraphBaseData baseData = new SequencerGraphBaseData();
 
-        XmlAttributeCollection firstNodeAttribute = xmlDoc.FirstChild.Attributes;
+        XmlAttributeCollection firstNodeAttribute = node.Attributes;
         for(int i = 0; i < firstNodeAttribute.Count; ++i)
         {
             string attrName = firstNodeAttribute[i].Name;
@@ -55,7 +148,7 @@ public class SequencrGraphLoader : LoaderBase<SequencerGraphBaseData>
             }
         }
 
-        XmlNodeList nodes = xmlDoc.FirstChild.ChildNodes;
+        XmlNodeList nodes = node.ChildNodes;
         for(int nodeIndex = 0; nodeIndex < nodes.Count; ++nodeIndex)
         {
             XmlNode phaseNode = nodes[nodeIndex];
