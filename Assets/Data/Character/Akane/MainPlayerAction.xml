@@ -582,6 +582,8 @@
             <FrameEvent Type="ApplyBuff" StartTime="0.0" ApplyBuff="CatchedClear StunClear"/>
             <FrameEvent Type="ApplyBuff" StartTime="0.0" ApplyBuff="ReviveHP ReviveDashPoint"/>
             <FrameEvent Type="ApplyBuff" StartTime="0.0" ApplyBuff="BattleDecrementKeep DashPointRegenDelayed BloodAlertEffect DecreaseBloodPointDelayed BloodPointToHP ClearOutlineXXX"/>
+
+            <FrameEvent Type="DeleteBuff" StartTime="0" BuffList="CatchAttack_SisterSpear"/>
         </Animation>
 
         <Branch Condition="End" Execute="Spawn"/>

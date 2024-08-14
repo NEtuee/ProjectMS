@@ -91,28 +91,30 @@
     <!-- 패키지 인클루드 : 커스텀 스킬 -->
     <AIPackage Name="SkillPackage" DefaultState="AI_AttackReady">
         <AIState>
-            <AI_AttackReady UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+            <AI_AttackReady UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" AllyTarget="Enemy">
                 <Event_OnExecute>
                     <AIEvent Type="SetDirectionToTarget"/>
                     <AIEvent Type="SetAction" Action="AC_AttackReady"/>
                 </Event_OnExecute>
+
+                <Event_OnUpdate>
+                    <AIEvent Type="SetDirectionToTarget"/>
+                </Event_OnUpdate>
                 
                 <Branch Condition="End" Execute="AI_AttackMain"/>
             </AI_AttackReady>
-            <AI_AttackMain UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+            <AI_AttackMain UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" AllyTarget="Enemy">
                 <Event_OnExecute>
+                    <AIEvent Type="SetDirectionToTarget"/>
                     <AIEvent Type="SetAction" Action="AC_AttackMain"/>
                 </Event_OnExecute>
-
-                <Event_OnFrame>
-                    <AIEvent Type="SetDirectionToTarget" Speed="360"/>
-                </Event_OnFrame>
-
+                
                 <Branch Condition="AttackCatchTarget" Execute="AI_Entry"/>
                 <Branch Condition="End" Execute="AI_AttackRecover"/>
             </AI_AttackMain>
-            <AI_AttackRecover UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+            <AI_AttackRecover UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" AllyTarget="Enemy">
                 <Event_OnExecute>
+                    <!--<AIEvent Type="SetDirectionToTarget"/>-->
                     <AIEvent Type="SetAction" Action="AC_AttackRecover"/>
                 </Event_OnExecute>
                 

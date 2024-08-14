@@ -18,7 +18,7 @@
 <GlobalVariable Name="gv_ObjectKey" Value="EmpGrenade"/>                                    <!-- CharacterInfo Key -->
 
 <!-- Ranged Attack Delay TIme -->
-<GlobalVariable Name="gv_RangedAttackMovementDelay" Value="0.0"/>  
+<GlobalVariable Name="gv_RangedAttackMovementDelay" Value="0.01"/>  
 
 <!-- Movement Speed Option Variant Set -->
 <GlobalVariable Name="gv_MovementSpeed"             Value="12.0"/>  <!-- Speed는 Velocity = 0 과 병행 사용 불가-->
@@ -33,10 +33,10 @@
 <GlobalVariable Name="gv_AtkRdMovementFriction"     Value="10.0"/>
 
 <!-- Attack Movement Speed Option Variant Set-->
-<GlobalVariable Name="gv_AtkMovementSpeed"          Value="25.0"/>   <!-- Speed는 Velocity = 0 과 병행 사용 불가-->
-<GlobalVariable Name="gv_AtkMovementVelocity"       Value="0.0"/>  <!-- 반동으로 인한 후방이동은 음수값 사용 -->
-<GlobalVariable Name="gv_AtkMovementMaxVelocity"    Value="5.0"/>
-<GlobalVariable Name="gv_AtkMovementFriction"       Value="10.0"/>
+<GlobalVariable Name="gv_AtkMovementSpeed"          Value="0.0"/>   <!-- Speed는 Velocity = 0 과 병행 사용 불가-->
+<GlobalVariable Name="gv_AtkMovementVelocity"       Value="20.0"/>  <!-- 반동으로 인한 후방이동은 음수값 사용 -->
+<GlobalVariable Name="gv_AtkMovementMaxVelocity"    Value="20.0"/>
+<GlobalVariable Name="gv_AtkMovementFriction"       Value="30.0"/>
 
 <!-- AttackSuccess Movement Speed Option Variant Set-->
 <GlobalVariable Name="gv_AtkSucMovementSpeed"          Value="0.0"/> 
@@ -127,11 +127,12 @@
 <!-- Attack Action -->
     <AC_AttackReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="LaserEffect">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="1_attack/1_attackReady" XFlip="true" Duration="0.8">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2519" Attach="true"/>
+        <Animation Preset="1_attack/1_attackReady" XFlip="true" Duration="0.7">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2501" Attach="true"/>
 
             <FrameEvent Type="Movement" Condition="gv_AtkRdMovementVelocity == 0.0" StartTime="0" Friction="gv_AtkRdMovementFriction" MaxVelocity="gv_AtkRdMovementMaxVelocity" Speed="gv_AtkRdMovementSpeed"/>
             <FrameEvent Type="Movement" Condition="gv_AtkRdMovementVelocity > 0.0" StartTime="0" Friction="gv_AtkRdMovementFriction" MaxVelocity="gv_AtkRdMovementMaxVelocity" Velocity="gv_AtkRdMovementVelocity" Speed="gv_AtkRdMovementSpeed"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
 
         </Animation>
     
@@ -140,17 +141,24 @@
 
     <AC_AttackMain MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction" Flags="LaserEffect">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="1_attack/2_attackMain" XFlip="true" Duration="2.0">
+        <Animation Preset="1_attack/2_attackMain" XFlip="true" Duration="0.55">
             <FrameEvent Type="Movement" Condition="gv_AtkMovementVelocity == 0.0" StartTime="gv_RangedAttackMovementDelay" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Speed="gv_AtkMovementSpeed"/>
             <FrameEvent Type="Movement" Condition="gv_AtkMovementVelocity > 0.0" StartTime="gv_RangedAttackMovementDelay" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Velocity="gv_AtkMovementVelocity" Speed="gv_AtkMovementSpeed"/>
             <FrameEvent Type="Movement" Condition="gv_AtkMovementVelocity < 0.0" StartTime="gv_RangedAttackMovementDelay" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Velocity="gv_AtkMovementVelocity" Speed="gv_AtkMovementSpeed"/>
+
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="4901" Attach="true" Switch="True"/>
             <!-- TODO: AttackPreset -->
-            <FrameEvent Type="Attack" StartTime="0" EndTime="2.0" AttackPreset="SisterSpear_Catch" AttackType="Catch" CatchOffset="0.1 0 0">
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.35" AttackPreset="SisterSpear_Catch" AttackType="Catch" CatchOffset="0.1 0 0">
                 <OnCatch>
-                    <FrameEvent Type="AudioPlay" StartTime="0" ID="4911" Attach="true" Switch="True"/>
+                    <FrameEvent Type="AudioPlay" StartTime="0" ID="4908" Attach="true" Switch="True"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CatchedSet"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CatchAttack_SisterSpear"/>
                     
+                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Slash"/>
+                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
+                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+
+                    <FrameEvent Type="ShakeEffect" Scale="0.1" Speed="10.0" Time="0.1"/>
                     <FrameEvent Type="ZoomEffect" Scale="-0.4"/>
                     <FrameEvent Type="StopUpdate" Time="0.15"/>
                 </OnCatch>
@@ -228,7 +236,7 @@
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="3_skill/1_entry" XFlip="true" Duration="0.3">
 
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2511" Attach="true" Switch="True"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2103" Attach="true" Switch="True"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12"/>
         </Animation>
 
@@ -237,7 +245,7 @@
     <AC_Catch_Struggle MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="3_skill/2_struggle" XFlip="true" Duration="0.3">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2511" Attach="true" Switch="True"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2411" Attach="true" Switch="True"/>
             <FrameEvent Type="Movement" StartTime="0" Speed="0" Velocity="2" MaxVelocity="5" Friction="12"/>
         </Animation>
 
@@ -247,7 +255,6 @@
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="3_skill/3_away" XFlip="true" Duration="0.9">
         <!-- 밀리기 -->
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2512" Attach="true" Switch="True"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="4" MaxVelocity="9" Velocity="-4" Speed="0"/>
 
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
