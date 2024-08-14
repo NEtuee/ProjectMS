@@ -2174,6 +2174,7 @@ public class SequencerGraphEvent_SpawnCharacter : SequencerGraphEventBase
     private SpawnCharacterOptionDesc    _spawnDesc = SpawnCharacterOptionDesc.defaultValue;
 
     private string                      _uniqueEntityKey = "";
+    private string                      _uniqueGroupKey = "";
     private string                      _centerMarkerName = "";
     private string                      _centerUniqueEntityKey = "";
     private string                      _allyInfoKey = "";
@@ -2186,6 +2187,11 @@ public class SequencerGraphEvent_SpawnCharacter : SequencerGraphEventBase
     {
         _spawnDesc._allyInfo = AllyInfoManager.Instance().GetAllyInfoData(_allyInfoKey);
         _characterInfoData = CharacterInfoManager.Instance().GetCharacterInfoData(_characterKey);
+        
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
         if(_centerMarkerName != "")
         {
             MarkerItem item = processor.getMarker(_centerMarkerName);
@@ -2204,10 +2210,7 @@ public class SequencerGraphEvent_SpawnCharacter : SequencerGraphEventBase
         }
 
         _spawnDesc._position += _offset;
-    }
 
-    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
-    {
         SceneCharacterManager sceneCharacterManager = SceneCharacterManager._managerInstance as SceneCharacterManager;
         CharacterEntityBase createdCharacter = sceneCharacterManager.createCharacterFromPool(_characterInfoData,_spawnDesc);
 
@@ -2216,6 +2219,9 @@ public class SequencerGraphEvent_SpawnCharacter : SequencerGraphEventBase
 
         if(_uniqueEntityKey != "")
             processor.addUniqueEntity(_uniqueEntityKey, createdCharacter);
+        
+        if(_uniqueGroupKey != "")
+            processor.addUniqueGroupEntity(_uniqueGroupKey, createdCharacter);
         
         if(_startAIState != "")
             createdCharacter.setAINode(_startAIState);
@@ -2256,6 +2262,10 @@ public class SequencerGraphEvent_SpawnCharacter : SequencerGraphEventBase
             {
                 _uniqueEntityKey = attrValue;
             }
+            else if(attrName == "UniqueGroupKey")
+            {
+                _uniqueGroupKey = attrValue;
+            }
             else if(attrName == "StartAIState")
             {
                 _startAIState = attrValue;
@@ -2273,6 +2283,7 @@ public class SequencerGraphEvent_SpawnCharacter : SequencerGraphEventBase
         binaryWriter.Write(_centerUniqueEntityKey);
         binaryWriter.Write(_allyInfoKey);
         binaryWriter.Write(_uniqueEntityKey);
+        binaryWriter.Write(_uniqueGroupKey);
         binaryWriter.Write(_startAIState);
 
     }
@@ -2285,6 +2296,7 @@ public class SequencerGraphEvent_SpawnCharacter : SequencerGraphEventBase
         _centerUniqueEntityKey = binaryReader.ReadString();
         _allyInfoKey = binaryReader.ReadString();
         _uniqueEntityKey = binaryReader.ReadString();
+        _uniqueGroupKey = binaryReader.ReadString();
         _startAIState = binaryReader.ReadString();
     }
 }

@@ -456,7 +456,8 @@ public class StageProcessor
             return;
         }
 
-        _sequencerProcessManager?.progress(deltaTime);
+        if(_playerEntity != null && _playerEntity.isDead() == false)
+            _sequencerProcessManager?.progress(deltaTime);
 
         if(_stageData._isMiniStage)
         {
@@ -686,6 +687,8 @@ public class StageProcessor
         Vector2 trackStartPosition;
         if(_trackProcessor.getCurrentTrackStartPosition(out trackStartPosition) == false)
             return;
+
+        _cameraPositionBlendTimeLeft = 0f;
 
         Vector3 resultPosition = trackStartPosition;
 

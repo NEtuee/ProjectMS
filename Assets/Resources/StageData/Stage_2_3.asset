@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: Stage_2_3
   m_EditorClassIdentifier: 
   _stageName: Stage_2_3
+  _audioBoardPath: 
   _backgroundPrefabPath: {fileID: 7959953899566033563, guid: cac2c394f5b21dd45a8c02a0d6f1902d, type: 3}
   _isMiniStage: 0
+  _isMenuStage: 0
   _stagePointData:
   - _pointName: New Point 0
     _stagePoint: {x: 0, y: 0, z: 0}
@@ -165,7 +167,7 @@ MonoBehaviour:
       _sortingOrder: 0
       _allyInfoKey: 
       _activeType: 1
-      _localPosition: {x: 1.94, y: 0.48, z: 0}
+      _localPosition: {x: 2.62, y: 1.95, z: 0}
     - _characterKey: DumbellChan
       _uniqueKey: 
       _uniqueGroupKey: 
@@ -179,7 +181,7 @@ MonoBehaviour:
       _sortingOrder: 0
       _allyInfoKey: 
       _activeType: 1
-      _localPosition: {x: 2.8, y: 3.55, z: 0}
+      _localPosition: {x: 2.86, y: 4.93, z: 0}
     - _characterKey: BarbellChan
       _uniqueKey: 
       _uniqueGroupKey: 
@@ -193,7 +195,7 @@ MonoBehaviour:
       _sortingOrder: 0
       _allyInfoKey: 
       _activeType: 1
-      _localPosition: {x: -1.04, y: 3.08, z: 0}
+      _localPosition: {x: -1.55, y: 4.51, z: 0}
     - _characterKey: ProjectileShotCharacter
       _uniqueKey: 
       _uniqueGroupKey: 
@@ -221,7 +223,7 @@ MonoBehaviour:
       _sortingOrder: 0
       _allyInfoKey: 
       _activeType: 1
-      _localPosition: {x: 0.94, y: 6.25, z: 0}
+      _localPosition: {x: 1.23, y: 6.47, z: 0}
     - _characterKey: SukebanUziChan
       _uniqueKey: 
       _uniqueGroupKey: 
@@ -235,7 +237,7 @@ MonoBehaviour:
       _sortingOrder: 0
       _allyInfoKey: 
       _activeType: 1
-      _localPosition: {x: -1.53, y: 6.62, z: 0}
+      _localPosition: {x: -1.02, y: 7.12, z: 0}
     _useTriggerBound: 0
     _targetSearchIdentifier: 1
     _triggerWidth: 1
@@ -254,25 +256,11 @@ MonoBehaviour:
     _onEnterSequencerPath: []
     _onExitSequencerPath: []
     _characterSpawnData:
-    - _characterKey: SukebanUziChan
-      _uniqueKey: 
-      _uniqueGroupKey: 
-      _startAction: AC_Entry
-      _startAIState: Entry_Peace
-      _flip: 1
-      _setDirection: 0
-      _directionAngle: 0
-      _hideWhenDeactive: 0
-      _keepAlive: 0
-      _sortingOrder: 0
-      _allyInfoKey: 
-      _activeType: 1
-      _localPosition: {x: 8.72, y: 0.03, z: 0}
     - _characterKey: ProjectileShotCharacter
       _uniqueKey: 
       _uniqueGroupKey: 
       _startAction: LinerRepeat
-      _startAIState: 
+      _startAIState: Entry
       _flip: 0
       _setDirection: 1
       _directionAngle: 352.46
@@ -288,8 +276,8 @@ MonoBehaviour:
     _triggerHeight: 1
     _triggerOffset: {x: 0, y: 0, z: 0}
   - _pointName: New Point 4
-    _stagePoint: {x: 40.53, y: 7.62, z: 0}
-    _maxLimitedDistance: 1
+    _stagePoint: {x: 40.18, y: 7.62, z: 0}
+    _maxLimitedDistance: 4
     _verticalLimitedDistance: 0
     _horizontalLimitedDistance: 0
     _cameraZoomSize: 3
@@ -298,136 +286,24 @@ MonoBehaviour:
     _lockCameraInBound: 0
     _cameraBoundToTrigger: 0
     _onEnterSequencerPath:
-    - Stage_2_3_2.xml
+    - Stage_2_3_Wave.xml
     _onExitSequencerPath: []
     _characterSpawnData:
-    - _characterKey: DecoSportClubStudent
-      _uniqueKey: 
-      _uniqueGroupKey: 
-      _startAction: Move
-      _startAIState: Entry
-      _flip: 0
-      _setDirection: 1
-      _directionAngle: 46.35
+    - _characterKey: BarbellChan
+      _uniqueKey: Talk_0
+      _uniqueGroupKey: EnemyGroup
+      _startAction: AC_Entry
+      _startAIState: Entry_Peace
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
       _hideWhenDeactive: 0
       _keepAlive: 0
       _sortingOrder: 0
-      _allyInfoKey: 
+      _allyInfoKey: SportsClub
       _activeType: 1
-      _localPosition: {x: -2.09, y: -6.25, z: 0}
-    - _characterKey: DecoSportClubStudent
-      _uniqueKey: 
-      _uniqueGroupKey: 
-      _startAction: Move
-      _startAIState: Entry
-      _flip: 0
-      _setDirection: 1
-      _directionAngle: 46.35
-      _hideWhenDeactive: 0
-      _keepAlive: 0
-      _sortingOrder: 0
-      _allyInfoKey: 
-      _activeType: 1
-      _localPosition: {x: -3.6, y: -9.25, z: 0}
-    - _characterKey: DecoSportClubStudent
-      _uniqueKey: 
-      _uniqueGroupKey: 
-      _startAction: Move
-      _startAIState: Entry
-      _flip: 0
-      _setDirection: 1
-      _directionAngle: 46.35
-      _hideWhenDeactive: 0
-      _keepAlive: 0
-      _sortingOrder: 0
-      _allyInfoKey: 
-      _activeType: 1
-      _localPosition: {x: -4.22, y: -6.53, z: 0}
-    - _characterKey: DecoSportClubStudent
-      _uniqueKey: 
-      _uniqueGroupKey: 
-      _startAction: Move
-      _startAIState: Entry
-      _flip: 0
-      _setDirection: 1
-      _directionAngle: 298.12
-      _hideWhenDeactive: 0
-      _keepAlive: 0
-      _sortingOrder: 0
-      _allyInfoKey: 
-      _activeType: 1
-      _localPosition: {x: 3.91, y: 4.08, z: 0}
-    - _characterKey: DecoSportClubStudent
-      _uniqueKey: 
-      _uniqueGroupKey: 
-      _startAction: Move
-      _startAIState: Entry
-      _flip: 0
-      _setDirection: 1
-      _directionAngle: 46.35
-      _hideWhenDeactive: 0
-      _keepAlive: 0
-      _sortingOrder: 0
-      _allyInfoKey: 
-      _activeType: 1
-      _localPosition: {x: -2.23, y: -8.69, z: 0}
-    - _characterKey: ProjectileShotCharacter
-      _uniqueKey: 
-      _uniqueGroupKey: 
-      _startAction: BaseBallRepeat
-      _startAIState: Entry
-      _flip: 0
-      _setDirection: 1
-      _directionAngle: 308.11
-      _hideWhenDeactive: 0
-      _keepAlive: 0
-      _sortingOrder: 0
-      _allyInfoKey: 
-      _activeType: 1
-      _localPosition: {x: 0.37, y: 4.33, z: 0}
-    - _characterKey: ProjectileShotCharacter
-      _uniqueKey: 
-      _uniqueGroupKey: 
-      _startAction: BaseBallRepeatFast
-      _startAIState: Entry
-      _flip: 0
-      _setDirection: 1
-      _directionAngle: 29.5
-      _hideWhenDeactive: 0
-      _keepAlive: 0
-      _sortingOrder: 0
-      _allyInfoKey: 
-      _activeType: 1
-      _localPosition: {x: 0.82, y: -5.47, z: 0}
-    - _characterKey: ProjectileShotCharacter
-      _uniqueKey: 
-      _uniqueGroupKey: 
-      _startAction: LinerRepeat
-      _startAIState: Entry
-      _flip: 0
-      _setDirection: 1
-      _directionAngle: 64.97
-      _hideWhenDeactive: 0
-      _keepAlive: 0
-      _sortingOrder: 0
-      _allyInfoKey: 
-      _activeType: 1
-      _localPosition: {x: 9.36, y: -5.39, z: 0}
-    - _characterKey: ProjectileShotCharacter
-      _uniqueKey: 
-      _uniqueGroupKey: 
-      _startAction: SoccerBallRepeat
-      _startAIState: Entry
-      _flip: 0
-      _setDirection: 1
-      _directionAngle: 108.01
-      _hideWhenDeactive: 0
-      _keepAlive: 0
-      _sortingOrder: 0
-      _allyInfoKey: 
-      _activeType: 1
-      _localPosition: {x: 6.8, y: -5.08, z: 0}
-    - _characterKey: SukebanKatanaChan
+      _localPosition: {x: -3.18, y: -1.89, z: 0}
+    - _characterKey: BarbellChan
       _uniqueKey: 
       _uniqueGroupKey: EnemyGroup
       _startAction: AC_Entry
@@ -438,23 +314,9 @@ MonoBehaviour:
       _hideWhenDeactive: 0
       _keepAlive: 0
       _sortingOrder: 0
-      _allyInfoKey: 
+      _allyInfoKey: SportsClub
       _activeType: 1
-      _localPosition: {x: 6.59, y: -0.75, z: 0}
-    - _characterKey: SukebanUziChan
-      _uniqueKey: 
-      _uniqueGroupKey: EnemyGroup
-      _startAction: AC_Entry
-      _startAIState: Entry_Peace
-      _flip: 1
-      _setDirection: 0
-      _directionAngle: 0
-      _hideWhenDeactive: 0
-      _keepAlive: 0
-      _sortingOrder: 0
-      _allyInfoKey: 
-      _activeType: 1
-      _localPosition: {x: 8.5, y: 1.25, z: 0}
+      _localPosition: {x: 8.92, y: 0.9, z: 0}
     - _characterKey: DumbellChan
       _uniqueKey: 
       _uniqueGroupKey: EnemyGroup
@@ -466,10 +328,10 @@ MonoBehaviour:
       _hideWhenDeactive: 0
       _keepAlive: 0
       _sortingOrder: 0
-      _allyInfoKey: 
+      _allyInfoKey: SportsClub
       _activeType: 1
-      _localPosition: {x: 9.66, y: -0.42, z: 0}
-    - _characterKey: SukebanKatanaChan
+      _localPosition: {x: -0.94, y: 1.82, z: 0}
+    - _characterKey: DumbellChan
       _uniqueKey: 
       _uniqueGroupKey: EnemyGroup
       _startAction: AC_Entry
@@ -480,10 +342,10 @@ MonoBehaviour:
       _hideWhenDeactive: 0
       _keepAlive: 0
       _sortingOrder: 0
-      _allyInfoKey: 
+      _allyInfoKey: SportsClub
       _activeType: 1
-      _localPosition: {x: 14.49, y: -1.1, z: 0}
-    - _characterKey: SukebanKatanaChan
+      _localPosition: {x: 15.5, y: -4.86, z: 0}
+    - _characterKey: DumbellChan
       _uniqueKey: 
       _uniqueGroupKey: EnemyGroup
       _startAction: AC_Entry
@@ -494,16 +356,104 @@ MonoBehaviour:
       _hideWhenDeactive: 0
       _keepAlive: 0
       _sortingOrder: 0
-      _allyInfoKey: 
+      _allyInfoKey: SportsClub
       _activeType: 1
-      _localPosition: {x: 17.36, y: 0.7, z: 0}
+      _localPosition: {x: 5.54, y: 3.74, z: 0}
+    - _characterKey: BarbellChan
+      _uniqueKey: 
+      _uniqueGroupKey: EnemyGroup
+      _startAction: AC_Entry
+      _startAIState: Entry_Peace
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: SportsClub
+      _activeType: 1
+      _localPosition: {x: 13.79, y: 3.7, z: 0}
+    - _characterKey: BarbellChan
+      _uniqueKey: 
+      _uniqueGroupKey: EnemyGroup
+      _startAction: AC_Entry
+      _startAIState: Entry_Peace
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: SportsClub
+      _activeType: 1
+      _localPosition: {x: 11.02, y: -2.93, z: 0}
+    - _characterKey: DumbellChan
+      _uniqueKey: 
+      _uniqueGroupKey: EnemyGroup
+      _startAction: AC_Entry
+      _startAIState: Entry_Peace
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: SportsClub
+      _activeType: 1
+      _localPosition: {x: 16.65, y: 0.57, z: 0}
+    - _characterKey: BarbellChan
+      _uniqueKey: 
+      _uniqueGroupKey: EnemyGroup
+      _startAction: AC_Entry
+      _startAIState: Entry_Peace
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: SportsClub
+      _activeType: 1
+      _localPosition: {x: 19.91, y: -2.7, z: 0}
+    - _characterKey: DumbellChan
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: 
+      _startAIState: 
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: SportsClub
+      _activeType: 0
+      _localPosition: {x: 18.26, y: 2.29, z: 0}
+    _useTriggerBound: 1
+    _targetSearchIdentifier: 1
+    _triggerWidth: 17.1
+    _triggerHeight: 19.56
+    _triggerOffset: {x: -0.03, y: 0, z: 0}
+  - _pointName: New Point 5
+    _stagePoint: {x: 58.35, y: 7.62, z: 0}
+    _maxLimitedDistance: 4
+    _verticalLimitedDistance: 0
+    _horizontalLimitedDistance: 0
+    _cameraZoomSize: 3
+    _cameraZoomSpeed: 4
+    _lerpCameraZoom: 0
+    _lockCameraInBound: 0
+    _cameraBoundToTrigger: 0
+    _onEnterSequencerPath: []
+    _onExitSequencerPath: []
+    _characterSpawnData: []
     _useTriggerBound: 0
     _targetSearchIdentifier: 1
     _triggerWidth: 1
     _triggerHeight: 1
     _triggerOffset: {x: 0, y: 0, z: 0}
   - _pointName: New Point 5
-    _stagePoint: {x: 57.02, y: 7.62, z: 0}
+    _stagePoint: {x: 68.14, y: 7.62, z: 0}
     _maxLimitedDistance: 1
     _verticalLimitedDistance: 0
     _horizontalLimitedDistance: 0
@@ -515,147 +465,7 @@ MonoBehaviour:
     _onEnterSequencerPath:
     - Stage_2_3_2.xml
     _onExitSequencerPath: []
-    _characterSpawnData:
-    - _characterKey: SukebanKatanaChan
-      _uniqueKey: 
-      _uniqueGroupKey: 
-      _startAction: AC_Entry
-      _startAIState: 
-      _flip: 1
-      _setDirection: 0
-      _directionAngle: 0
-      _hideWhenDeactive: 0
-      _keepAlive: 0
-      _sortingOrder: 0
-      _allyInfoKey: 
-      _activeType: 1
-      _localPosition: {x: 11.91, y: -0.68, z: 0}
-    - _characterKey: SukebanKatanaChan
-      _uniqueKey: 
-      _uniqueGroupKey: 
-      _startAction: AC_Entry
-      _startAIState: Entry_Peace
-      _flip: 1
-      _setDirection: 0
-      _directionAngle: 0
-      _hideWhenDeactive: 0
-      _keepAlive: 0
-      _sortingOrder: 0
-      _allyInfoKey: 
-      _activeType: 1
-      _localPosition: {x: 9.54, y: 0.86, z: 0}
-    - _characterKey: SukebanKatanaChan
-      _uniqueKey: 
-      _uniqueGroupKey: 
-      _startAction: AC_Entry
-      _startAIState: Entry_Peace
-      _flip: 1
-      _setDirection: 0
-      _directionAngle: 0
-      _hideWhenDeactive: 0
-      _keepAlive: 0
-      _sortingOrder: 0
-      _allyInfoKey: 
-      _activeType: 1
-      _localPosition: {x: 16.44, y: -1.01, z: 0}
-    - _characterKey: SukebanUziChan
-      _uniqueKey: 
-      _uniqueGroupKey: 
-      _startAction: AC_Entry
-      _startAIState: Entry_Peace
-      _flip: 1
-      _setDirection: 0
-      _directionAngle: 0
-      _hideWhenDeactive: 0
-      _keepAlive: 0
-      _sortingOrder: 0
-      _allyInfoKey: 
-      _activeType: 1
-      _localPosition: {x: 6.51, y: 0.02, z: 0}
-    - _characterKey: SukebanUziChan
-      _uniqueKey: 
-      _uniqueGroupKey: 
-      _startAction: AC_Entry
-      _startAIState: 
-      _flip: 1
-      _setDirection: 0
-      _directionAngle: 0
-      _hideWhenDeactive: 0
-      _keepAlive: 0
-      _sortingOrder: 0
-      _allyInfoKey: 
-      _activeType: 1
-      _localPosition: {x: 13.65, y: 0.43, z: 0}
-    - _characterKey: ProjectileShotCharacter
-      _uniqueKey: 
-      _uniqueGroupKey: 
-      _startAction: SoccerBallRepeat
-      _startAIState: 
-      _flip: 0
-      _setDirection: 1
-      _directionAngle: 44.72
-      _hideWhenDeactive: 0
-      _keepAlive: 0
-      _sortingOrder: 0
-      _allyInfoKey: 
-      _activeType: 1
-      _localPosition: {x: 0.74, y: -4.35, z: 0}
-    - _characterKey: ProjectileShotCharacter
-      _uniqueKey: 
-      _uniqueGroupKey: 
-      _startAction: LinerRepeat
-      _startAIState: 
-      _flip: 0
-      _setDirection: 1
-      _directionAngle: 182.51
-      _hideWhenDeactive: 0
-      _keepAlive: 0
-      _sortingOrder: 0
-      _allyInfoKey: 
-      _activeType: 1
-      _localPosition: {x: 24.3, y: 2.73, z: 0}
-    - _characterKey: DumbellChan
-      _uniqueKey: 
-      _uniqueGroupKey: 
-      _startAction: AC_Entry
-      _startAIState: 
-      _flip: 1
-      _setDirection: 0
-      _directionAngle: 0
-      _hideWhenDeactive: 0
-      _keepAlive: 0
-      _sortingOrder: 0
-      _allyInfoKey: 
-      _activeType: 1
-      _localPosition: {x: 8.28, y: -1.07, z: 0}
-    - _characterKey: DumbellChan
-      _uniqueKey: 
-      _uniqueGroupKey: 
-      _startAction: AC_Entry
-      _startAIState: Entry_Peace
-      _flip: 1
-      _setDirection: 0
-      _directionAngle: 0
-      _hideWhenDeactive: 0
-      _keepAlive: 0
-      _sortingOrder: 0
-      _allyInfoKey: 
-      _activeType: 1
-      _localPosition: {x: 8.91, y: 2, z: 0}
-    - _characterKey: DumbellChan
-      _uniqueKey: 
-      _uniqueGroupKey: 
-      _startAction: AC_Entry
-      _startAIState: 
-      _flip: 1
-      _setDirection: 0
-      _directionAngle: 0
-      _hideWhenDeactive: 0
-      _keepAlive: 0
-      _sortingOrder: 0
-      _allyInfoKey: 
-      _activeType: 1
-      _localPosition: {x: 14.73, y: -1.86, z: 0}
+    _characterSpawnData: []
     _useTriggerBound: 0
     _targetSearchIdentifier: 1
     _triggerWidth: 1
