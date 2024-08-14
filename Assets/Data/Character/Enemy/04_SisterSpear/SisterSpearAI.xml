@@ -250,6 +250,7 @@
     <!-- 피격 리액션 브랜치 셋 -->
     <BranchSet Name="HitReactionSet">
         <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="getTargetFrameTag_Dead" Execute="EnemyWin"/>
         <Branch Condition="Hit && getFrameTag_HitAvail" Execute="Hit"/>
         <Branch Condition="GuardBreakFail && getFrameTag_GbAvail" Execute="GuardBroken"/>
         <Branch Condition="GuardBroken && (getStat_GuardCount >= gv_GuardBrokenThreshold) && getFrameTag_GbAvail" Execute="GuardBroken"/> <!-- TODO : 일반 공격도 카운트 되긴 하나, 가드 브레이크로만 파괴 가능한 상태 -->
@@ -268,6 +269,10 @@
     <Entry_Peace Package="CommonIdlePackage">
         <UseBranchSet Name="PeaceStateSet"/>
     </Entry_Peace>
+
+    <EnemyWin Package="CommonIdlePackage">
+        <Branch Condition="getTargetFrameTag_Dead == false" Execute="Entry_Battle"/>
+    </EnemyWin>
 
     <!-- AI 스테이트 : 평화 상태 -->
     <Peace_Idle Package="CommonIdlePackage">
