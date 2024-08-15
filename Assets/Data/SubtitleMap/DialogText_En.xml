@@ -4,7 +4,13 @@
     <Test3><ShowText Text = "이거 말풍선 갱신 테스트임" Interval = "0.03"/><Wait Time = "3.0"/><ShowText Text = "이렇게 새로 쓰임" Interval = "0.03" Clear = "true"/><Wait Input = "PassTalkBalloon"/></Test3>
 
     <Talk_SleepEffect><ShowText Text = "ZZZZZZ" Interval = "0.03"/><Wait Time = "2.0"/></Talk_SleepEffect>
-
+    
+    <Talk_IinchoChan_0><ShowText Text = "Shit... Sit down!" Interval = "0.03"/><Wait Time = "2.0"/></Talk_IinchoChan_0>
+    <Talk_IinchoChan_1><ShowText Text = "Stop it!" Interval = "0.03"/><Wait Time = "2.0"/></Talk_IinchoChan_1>
+    <Talk_IinchoChan_2><ShowText Text = "It's still time for class!" Interval = "0.03"/><Wait Time = "2.0"/></Talk_IinchoChan_2>
+    <Talk_IinchoChan_3><ShowText Text = "Are you going to make me angry?!" Interval = "0.03"/><Wait Time = "2.0"/></Talk_IinchoChan_3>
+    <Talk_IinchoChan_4><ShowText Text = "(Screaming)!" Interval = "0.03"/><Wait Time = "2.0"/></Talk_IinchoChan_4>
+    
     <Talk_TutorialTeacher_0><ShowText Text = "What are you doing? Is it self-display?" Interval = "0.03"/><Wait Time = "2.0"/></Talk_TutorialTeacher_0>
     <Talk_TutorialTeacher_1><ShowText Text = "You have a death wish?" Interval = "0.03"/><Wait Time = "2.0"/></Talk_TutorialTeacher_1>
     <Talk_TutorialTeacher_2><ShowText Text = "What the fxxk are you doing in class!" Interval = "0.03"/><Wait Time = "2.0"/></Talk_TutorialTeacher_2>
@@ -63,6 +69,8 @@
     <Talk_Stage02_2_5><ShowText Text = "Hooray!" Interval = "0.03"/><Wait Time = "3.0"/></Talk_Stage02_2_5>
 
     <Talk_Stage02_3_0><ShowText Text = "This is a temporary alliance!" Interval = "0.03"/><Wait Time = "3.0"/></Talk_Stage02_3_0>
+    <Talk_Stage02_3_1><ShowText Text = "Surround her and get behind her! Cowardly!" Interval = "0.03"/><Wait Time = "4.0"/></Talk_Stage02_3_1>
+    <Talk_Stage02_3_2><ShowText Text = "Where did they all come from?" Interval = "0.03"/><Wait Time = "3.0"/></Talk_Stage02_3_2>
 
     <Talk_Stage02_Boss_0>
         <ShowText Text="Oh!!" Interval="0.03"/>
@@ -92,264 +100,264 @@
         <Wait Input="PassTalkBalloon"/>
     </Talk_Stage02_Boss_4>
 
-    <Talk_Stage03_1_0><ShowText Text = "갸아아아아악!!" Interval = "0.03"/><Wait Time = "3.0"/></Talk_Stage03_1_0>
-    <Talk_Stage03_1_1><ShowText Text = "엣?!" Interval = "0.03"/><Wait Time = "3.0"/></Talk_Stage03_1_1>
-    <Talk_Stage03_1_2><ShowText Text = "뭐.. 뭐야?!" Interval = "0.03"/><Wait Time = "3.0"/></Talk_Stage03_1_2>
-    <Talk_Stage03_1_3><ShowText Text = "이쪽인가?" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Stage03_1_3>
+    <Talk_Stage03_1_0><ShowText Text = "(Screaming)!!" Interval = "0.03"/><Wait Time = "3.0"/></Talk_Stage03_1_0>
+    <Talk_Stage03_1_1><ShowText Text = "huh?!" Interval = "0.03"/><Wait Time = "3.0"/></Talk_Stage03_1_1>
+    <Talk_Stage03_1_2><ShowText Text = "What the..?!" Interval = "0.03"/><Wait Time = "3.0"/></Talk_Stage03_1_2>
+    <Talk_Stage03_1_3><ShowText Text = "Is it this way?" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Stage03_1_3>
 
     <Talk_Stage03_1_4>
-        <ShowText Text="이.. 이야기는 전부 들었어!" Interval="0.03"/>
+        <ShowText Text="I... I've heard everything!" Interval="0.03"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text="아무리 치..친구라고 해도!" Interval="0.03" Clear="True"/>
+        <ShowText Text="No matter how much you're friends!" Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text="아니!" Interval="0.03" Clear="True"/>
+        <ShowText Text="No!" Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text="오히려 친구니까!" Interval="0.03" Clear="True"/>
+        <ShowText Text="Because we're friends!" Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text="내가 너를 막을꺼야!!" Interval="0.03" Clear="True"/>
+        <ShowText Text="I'm gonna stop you!!" Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
     </Talk_Stage03_1_4>
 
     <Talk_Stage03_1_5>
-        <ShowText Text="하?" Interval="0.03"/>
+        <ShowText Text="huh?" Interval="0.03"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text="너 누군데" Interval="0.03" Clear="True"/>
+        <ShowText Text="Who the fxxk are you" Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
     </Talk_Stage03_1_5>
 
     <Talk_Stage03_1_6>
-        <ShowText Text="에에에..." Interval="0.03"/>
+        <ShowText Text="Oh..." Interval="0.03"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text="너... 너무해..." Interval="0.03" Clear="True"/>
+        <ShowText Text="You... You are so mean..." Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
     </Talk_Stage03_1_6>
 
     <Talk_Stage03_1_7>
-        <ShowText Text="아... 아무튼!" Interval="0.03"/>
+        <ShowText Text="A... Anyway!" Interval="0.03"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text="이... 이 아이는 내가 지킬거야!" Interval="0.03" Clear="True"/>
+        <ShowText Text="I... I'm going to protect her" Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text="각오해!" Interval="0.03" Clear="True"/>
+        <ShowText Text="Be prepared!" Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
     </Talk_Stage03_1_7>
 
-    <Talk_Stage03_1_8_1><ShowText Text = "우우우!!" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Stage03_1_8_1>
-    <Talk_Stage03_1_8_2><ShowText Text = "죽어라 쓰레기!" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Stage03_1_8_2>
-    <Talk_Stage03_1_8_3><ShowText Text = "쳐죽여버려!" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Stage03_1_8_3>
-    <Talk_Stage03_1_8_4><ShowText Text = "지옥으로 떨어져라!" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Stage03_1_8_4>
+    <Talk_Stage03_1_8_1><ShowText Text = "Booo!!" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Stage03_1_8_1>
+    <Talk_Stage03_1_8_2><ShowText Text = "Die, you trash!" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Stage03_1_8_2>
+    <Talk_Stage03_1_8_3><ShowText Text = "Hit her, Kill her!" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Stage03_1_8_3>
+    <Talk_Stage03_1_8_4><ShowText Text = "Go to hell!" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Stage03_1_8_4>
 
     <Talk_Stage03_1_9>
         <ShowText Text="..." Interval="0.03"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text="미.. 미안..." Interval="0.03" Clear="True"/>
+        <ShowText Text="I'm, I'm Sorry..." Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
     </Talk_Stage03_1_9>
 
-    <Talk_Stage03_1_11><ShowText Text = "야끼소바빵 내놔" Interval = "0.03"/><Wait Input="PassTalkBalloon"/></Talk_Stage03_1_11>
+    <Talk_Stage03_1_11><ShowText Text = "Give me the yakisoba pan" Interval = "0.03"/><Wait Input="PassTalkBalloon"/></Talk_Stage03_1_11>
 
     <Talk_Stage03_1_12>
-        <ShowText Text="엣..." Interval="0.03"/>
+        <ShowText Text="Uh..." Interval="0.03"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text="시.. 싫은..." Interval="0.03" Clear="True"/>
+        <ShowText Text="I.. I don't wanna..." Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text="아!" Interval="0.03" Clear="True"/>
+        <ShowText Text="Oh" Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text="아니!" Interval="0.03" Clear="True"/>
+        <ShowText Text="No!" Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text="사실은!" Interval="0.03" Clear="True"/>
+        <ShowText Text="Actually!" Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text="아까 남은 빵을 다 뿌려버려서!" Interval="0.03" Clear="True"/>
+        <ShowText Text="I gave out all the leftover bread earlier!" Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text="새로 만들어야 할 것 같은데!" Interval="0.03" Clear="True"/>
+        <ShowText Text="So, I think we need to make a new one!" Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
     </Talk_Stage03_1_12>
 
-    <Talk_Stage03_1_13><ShowText Text = "그럼 빨리 만들어" Interval = "0.03"/><Wait Input="PassTalkBalloon"/></Talk_Stage03_1_13>
+    <Talk_Stage03_1_13><ShowText Text = "Then hurry up" Interval = "0.03"/><Wait Input="PassTalkBalloon"/></Talk_Stage03_1_13>
 
     <Talk_Stage03_1_14>
-        <ShowText Text="그게... 그러니까.." Interval="0.03"/>
+        <ShowText Text="It's... I mean.." Interval="0.03"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text="그래! 재료!" Interval="0.03" Clear="True"/>
+        <ShowText Text="Yes! Ingredients!" Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text="재료가 없어서!!" Interval="0.03" Clear="True"/>
+        <ShowText Text="I don't have any ingredients!!" Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text="사실 재료는 다 수녀원에서 가져오거든!!" Interval="0.03" Clear="True"/>
+        <ShowText Text="Actually, all the ingredients are from the convent!!" Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text="재료만 있으면 바로 만들어 줄게!!!" Interval="0.03" Clear="True"/>
+        <ShowText Text="I'll make it for you as soon as I have the ingredients!!!" Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
     </Talk_Stage03_1_14>
 
     <Talk_Stage03_1_15>
-        <ShowText Text="흠" Interval="0.03"/>
+        <ShowText Text="Hmm" Interval="0.03"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text="그럼 같이 가자" Interval="0.03" Clear="True"/>
+        <ShowText Text="Then let's go together" Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text="따라와" Interval="0.03" Clear="True"/>
+        <ShowText Text="Follow me" Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
     </Talk_Stage03_1_15>
 
     <Talk_Stage03_1_16>
-        <ShowText Text="엑..." Interval="0.03"/>
+        <ShowText Text="Oh..." Interval="0.03"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text="아... 알았어..." Interval="0.03" Clear="True"/>
+        <ShowText Text="O... Okay..." Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
     </Talk_Stage03_1_16>
 
-    <Talk_Stage03_2_1><ShowText Text = "근데 여긴 뭐하는 곳이야?" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Stage03_2_1>
-    <Talk_Stage03_2_2><ShowText Text = "너 상식은 있니?" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Stage03_2_2>
+    <Talk_Stage03_2_1><ShowText Text = "Anyway, What's this place for?" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Stage03_2_1>
+    <Talk_Stage03_2_2><ShowText Text = "Do you have common sense?" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Stage03_2_2>
 
     <Talk_Stage03_2_3>
-        <ShowText Text="큐톨릭 수도원에 오신걸 환영합니다" Interval="0.03"/>
+        <ShowText Text="Welcome to the Cutholic monastery" Interval="0.03"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text="저는..." Interval="0.03" Clear="True"/>
+        <ShowText Text="I..." Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
     </Talk_Stage03_2_3>
 
     <Talk_Stage03_2_4>
-        <ShowText Text="헉" Interval="0.03"/>
+        <ShowText Text="Oops" Interval="0.03"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text="꺄..." Interval="0.03" Clear="True"/>
+        <ShowText Text="(Scre)..." Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text="꺄야아아아아아악!!" Interval="0.03" Clear="True"/>
+        <ShowText Text="(Screaming)!!" Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
     </Talk_Stage03_2_4>
 
-    <Talk_Stage03_2_5><ShowText Text = "무슨일이야?!" Interval = "0.03"/><Wait Input="PassTalkBalloon"/></Talk_Stage03_2_5>
+    <Talk_Stage03_2_5><ShowText Text = "What happened?!" Interval = "0.03"/><Wait Input="PassTalkBalloon"/></Talk_Stage03_2_5>
 
     <Talk_Stage03_2_6>
-        <ShowText Text="귀..." Interval="0.03"/>
+        <ShowText Text="It's..." Interval="0.03"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text="귀엽지 않아...!" Interval="0.03" Clear="True"/>
+        <ShowText Text="It's not cute....!" Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text="귀엽지 않은 존재가 신성한...!" Interval="0.03" Clear="True"/>
+        <ShowText Text="An uncute being...!" Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text="신성한 큐톨릭 수도원에...!!" Interval="0.03" Clear="True"/>
+        <ShowText Text="came to the holy Catholic monastery...!!" Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
     </Talk_Stage03_2_6>
 
     <Talk_Stage03_2_7>
-        <ShowText Text="하?" Interval="0.03"/>
+        <ShowText Text="Huh?" Interval="0.03"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text="쳐죽여버린다 네년" Interval="0.03" Clear="True"/>
+        <ShowText Text="Shut up, before I kill you" Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
     </Talk_Stage03_2_7>
 
     <Talk_Stage03_2_8>
-        <ShowText Text="이제보니 아카네잖아?!" Interval="0.03"/>
+        <ShowText Text="It's Akane now, right?" Interval="0.03"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text="큐톨릭 수도원 비상!!!" Interval="0.03" Clear="True"/>
+        <ShowText Text="Emergency!!!" Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
     </Talk_Stage03_2_8>
 
     <Talk_Stage03_2_9>
-        <ShowText Text="재료는 어디지?" Interval="0.03"/>
+        <ShowText Text="Where are the ingredients?" Interval="0.03"/>
         <Wait Input="PassTalkBalloon"/>
     </Talk_Stage03_2_9>
 
     <Talk_Stage03_2_10>
-        <ShowText Text="엣" Interval="0.03"/>
+        <ShowText Text="Oh" Interval="0.03"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text="아" Interval="0.03" Clear="True"/>
+        <ShowText Text="If.." Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text="앞으로 쭉 가면...?" Interval="0.03" Clear="True"/>
+        <ShowText Text="If you go straight forward...?" Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
     </Talk_Stage03_2_10>
 
-    <Talk_Stage03_2_11><ShowText Text = "없으면 뒤진다" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Stage03_2_11>
-    <Talk_Stage03_2_12><ShowText Text = "재료는 어디냐!!!" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Stage03_2_12>
-    <Talk_Stage03_2_13><ShowText Text = "히... 히에엑" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Stage03_2_13>
+    <Talk_Stage03_2_11><ShowText Text = "If there's no ingredient, I'll kill you" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Stage03_2_11>
+    <Talk_Stage03_2_12><ShowText Text = "Where are the ingredients!!!" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Stage03_2_12>
+    <Talk_Stage03_2_13><ShowText Text = "(gasp)" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Stage03_2_13>
 
-    <Talk_Stage03_2_14><ShowText Text = "막아!!" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Stage03_2_14>
+    <Talk_Stage03_2_14><ShowText Text = "Block it!!" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Stage03_2_14>
 
-    <Talk_Stage03_3_1><ShowText Text = "미안해요!!" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Stage03_3_1>
+    <Talk_Stage03_3_1><ShowText Text = "I'm Sorry!!" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Stage03_3_1>
 
-    <Talk_Stage03_4_1><ShowText Text = "거기 서라!" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Stage03_4_1>
-    <Talk_Stage03_4_2><ShowText Text = "멈춰!" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Stage03_4_2>
-    <Talk_Stage03_4_3><ShowText Text = "이 앞으론 못 지나간다!!" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Stage03_4_3>
+    <Talk_Stage03_4_1><ShowText Text = "Stop there!!" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Stage03_4_1>
+    <Talk_Stage03_4_2><ShowText Text = "Stop!" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Stage03_4_2>
+    <Talk_Stage03_4_3><ShowText Text = "You can't get through here!!" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Stage03_4_3>
 
     <Talk_Stage03_4_4>
-        <ShowText Text="칫" Interval="0.03"/>
+        <ShowText Text="(Tisk)" Interval="0.03"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text="귀찮게하지 말고 비켜!" Interval="0.03" Clear="True"/>
+        <ShowText Text="Don't bother me. Fxxk out of my way!" Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
     </Talk_Stage03_4_4>
 
     <Talk_Stage03_4_5>
-        <ShowText Text="이.." Interval="0.03"/>
+        <ShowText Text="It's.." Interval="0.03"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text="이틈이다!" Interval="0.03" Clear="True"/>
+        <ShowText Text="It's now!" Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
     </Talk_Stage03_4_5>
 
-    <Talk_Stage03_4_6><ShowText Text = "살려줘어어엇!!" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Stage03_4_6>
-    <Talk_Stage03_4_7><ShowText Text = "재료가 저쪽인가?" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Stage03_4_7>
+    <Talk_Stage03_4_6><ShowText Text = "Help! Help me!!" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Stage03_4_6>
+    <Talk_Stage03_4_7><ShowText Text = "Is the ingredient over there?" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Stage03_4_7>
 
     <Talk_Stage03_4_8>
-        <ShowText Text="이야기는 모두 들었어요" Interval="0.03"/>
+        <ShowText Text="I've heard everything" Interval="0.03"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text="재활용도 안되는 쓰.. 쓰레기!" Interval="0.03" Clear="True"/>
+        <ShowText Text="Unrecyclable... garbage!" Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
     </Talk_Stage03_4_8>
 
     <Talk_Stage03_4_9>
-        <ShowText Text="뒤질래?" Interval="0.03"/>
+        <ShowText Text="You wannan die??" Interval="0.03"/>
         <Wait Input="PassTalkBalloon"/>
     </Talk_Stage03_4_9>
 
     <Talk_Stage03_4_10>
-        <ShowText Text="앗... 죄송" Interval="0.03" Clear="True"/>
+        <ShowText Text="Oh... I'm sorry.." Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
     </Talk_Stage03_4_10>
 
     <Talk_Stage03_4_11>
-        <ShowText Text="그.. 그게 아니라!" Interval="0.03" Clear="True"/>
+        <ShowText Text="No, No, I mean!" Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text="이렇게 귀여운 아이를 괴롭히다니!" Interval="0.03" Clear="True"/>
+        <ShowText Text="How can you bully such a cute girl!" Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text="큐톨릭의 이름으로 용서할 수 없어요!" Interval="0.03" Clear="True"/>
+        <ShowText Text="I can't forgive you in the name of the Cutholic Church!" Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text="각오하는게 좋아!" Interval="0.03" Clear="True"/>
+        <ShowText Text="It's better to be prepared!" Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text="이.. 이 추녀야!!!" Interval="0.03" Clear="True"/>
+        <ShowText Text="You.. You Saucy!" Interval="0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
     </Talk_Stage03_4_11>
 
