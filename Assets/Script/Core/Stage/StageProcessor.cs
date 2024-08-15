@@ -456,7 +456,7 @@ public class StageProcessor
             return;
         }
 
-        if(_playerEntity != null && _playerEntity.isDead() == false)
+        if(_stageData._isMenuStage || _playerEntity == null || _playerEntity.isDead() == false)
             _sequencerProcessManager?.progress(deltaTime);
 
         if(_stageData._isMiniStage)
