@@ -32,7 +32,7 @@ Shader "Custom/SpriteShadowScreenShader"
 		_Vignette("Vignette", Range(0.0, 1.0)) = 0.0
 		_Contrast("Background Contrast", Range(0.0, 1.0)) = 1.0
 		_ContrastTarget("Background Contrast Target", Range(0.0, 1.0)) = 0.5
-		_ColorTint("Color Tint", Color) = (1,1,1,1)
+		_ColorTint("Character Color Tint", Color) = (1,1,1,1)
 		_BackgroundColorTint("BackgroundColor", Color) = (1,1,1,1)
 		_ForwardScreenColorTint("ForwardScreenColor", Color) = (1,1,1,1)
 
@@ -196,7 +196,7 @@ Shader "Custom/SpriteShadowScreenShader"
 				*/
 				fixed4 drawCharacter(float2 texcoord)
 				{
-					fixed4 characterSample = SampleSpriteTexture(_CharacterTexture, texcoord);
+					fixed4 characterSample = SampleSpriteTexture(_CharacterTexture, texcoord) * _ColorTint;
 
 					return fixed4(characterSample.xyz * (1.0 - _ImpactFrame), characterSample.w);
 				}
@@ -446,9 +446,6 @@ Shader "Custom/SpriteShadowScreenShader"
 					//grayscale
 					float gray = dot(resultColor.rgb, fixed3(0.21f, 0.72f, 0.07f));
 					resultColor.rgb = lerp(resultColor.rgb, fixed3(gray,gray,gray), 1.0 - _Saturation);
-
-					//color tint
-					resultColor.rgb *= _ColorTint;
 
 					//fog
 					float fogRate = smoothstep(0.0, 1.0, (coord.y - _FogStrength) * (1.0 / ((1.0 - _FogStrength) * _FogRate)));

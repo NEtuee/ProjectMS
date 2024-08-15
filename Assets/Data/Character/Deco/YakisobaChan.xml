@@ -46,6 +46,31 @@
         <Branch Condition="End == true" Execute="CurseAkane"/>
     </CurseAkane>
 
+    <GuardStart MovementType="Empty" DirectionType="Keep" FlipType="Keep" DefenceDirectionType="Direction" DefenceType="Guard" DefenceAngle="360" ApplyBuff="GuardPointReset">
+        <Animation Preset="Sprites/Deco/YakisobaChan/2_defense/2_guard" XFlip="true" Duration="1">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="GuardING"/>
+        <Branch Condition="GuardBroken" Execute="GuardHit"/>
+    </GuardStart>
+
+    <GuardING MovementType="Empty" DirectionType="Keep" FlipType="Keep" DefenceDirectionType="Direction" DefenceType="Guard" DefenceAngle="360">
+        <Animation Preset="Sprites/Deco/YakisobaChan/2_defense/2_guard" XFlip="true" Duration="1">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="GuardING"/>
+        <Branch Condition="GuardBroken" Execute="GuardHit"/>
+    </GuardING>
+
+    <GuardHit MovementType="Empty" DirectionType="Keep" FlipType="Keep" DefenceDirectionType="Direction" DefenceType="Guard" DefenceAngle="360" ApplyBuff="GuardPointDecrease">
+        <Animation Preset="Sprites/Deco/YakisobaChan/2_defense/2_guard" XFlip="true" Duration="1" TranslationPreset="Shake">
+            <FrameEvent Type="SequencerSignal" StartTime="0" Condition="getStat_GuardPoint <= 0" Signal="GuradBroken"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="GuardING"/>
+        <Branch Condition="GuardBroken" Execute="GuardHit"/>
+    </GuardHit>
+
     <ImmediatlyKill MovementType="Empty" DirectionType="Keep" ActiveCollision="False" FlipType="Direction"> 
         <Animation Preset="Sprites/Deco/YakisobaChan" XFlip="true" Duration="1">
             <FrameEvent Type="KillEntity" StartTime="0"/>

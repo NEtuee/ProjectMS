@@ -430,7 +430,7 @@ public class PostProcessProfileEditor : Editor
         isChange |= floatSlider("Background Bloom",ref controll._profileData._bloom, 0f, 2f,ref controll._profileData._useBloom);
         isChange |= floatSlider("Background Contrast", ref controll._profileData._contrast, 0f, 1f, ref controll._profileData._useContrast);
         isChange |= floatSlider("Background Contrast Target", ref controll._profileData._contrastTarget, 0f, 1f, ref controll._profileData._useContrastTarget);
-        isChange |= colorPicker("Color Tint",ref controll._profileData._colorTint,ref controll._profileData._useColorTint);
+        isChange |= colorPicker("Character Color Tint",ref controll._profileData._colorTint,ref controll._profileData._useColorTint);
         isChange |= colorPicker("Background Color Tint",ref controll._profileData._backgroundColorTint,ref controll._profileData._useBackgroundColorTint);
         isChange |= colorPicker("Forward Screen Color Tint",ref controll._profileData._forwardScreenColorTint,ref controll._profileData._useForwardScreenColorTint);
 
