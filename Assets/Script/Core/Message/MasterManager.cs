@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MasterManager : MessageHub<ManagerBase>
 {
@@ -231,6 +232,11 @@ public class MasterManager : MessageHub<ManagerBase>
     public void FixedUpdate()
     {
         ManagersFixedUpdate(Time.fixedDeltaTime);
+    }
+
+    public void resetAll()
+    {
+        SceneManager.LoadScene(0);
     }
 
     public void activePauseUI()

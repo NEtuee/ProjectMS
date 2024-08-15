@@ -19,7 +19,7 @@ public class PauseUIBinder : UIObjectBinder
 
     public void quit()
     {
-        Application.Quit();
+        MasterManager.instance.resetAll();
         FMODAudioManager.Instance().Play(5005 ,Vector3.zero);
     }
 }

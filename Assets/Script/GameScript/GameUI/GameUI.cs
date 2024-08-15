@@ -50,6 +50,7 @@ public class GameUI : MonoBehaviour
         CheckValidUI();
         BindNotifySubscriber();
 
+        _optionUIControl.initialize();
         _ratioCut.SetActive(true);
     }
 
@@ -100,7 +101,6 @@ public class GameUI : MonoBehaviour
 
     public void activeOptionUI(bool active)
     {
-        _optionUIControl.initialize();
         _optionUIControl.gameObject.SetActive(active);
     }
 
