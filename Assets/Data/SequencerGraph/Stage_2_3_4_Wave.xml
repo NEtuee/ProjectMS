@@ -1,0 +1,48 @@
+<SequencerGraph Name="Stage_2_3_Wave">
+
+    <InitializePhase>
+        <BlockPointExit Enable="True"/>
+    </InitializePhase>
+
+    <UpdatePhase>
+        <WaitSecond Time="0.5"/>
+
+        <TalkBalloon UniqueKey="Talk_0" SimpleTalkKey="Talk_Stage02_3_1"/>
+        <WaitSecond Time="3.0"/>
+
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"    UniqueGroupKey="EnemyGroup" StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-10^-5 Random_-5^5 0"            AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="DumbellChan"          UniqueGroupKey="EnemyGroup" StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-10^-5 Random_-5^5 0"            AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"    UniqueGroupKey="EnemyGroup" StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_5^10 Random_-5^5 0"            AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanUziChan"       UniqueGroupKey="EnemyGroup" StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_5^10 Random_-5^5 0"            AllyInfo="Sukeban"/>
+        <WaitSecond Time="8"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"    UniqueGroupKey="EnemyGroup" StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_5^10 0"             AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"    UniqueGroupKey="EnemyGroup" StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_5^10 0"             AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="BarbellChan_najimi"    UniqueGroupKey="EnemyGroup" StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_-10^-5 0"           AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="DumbellChan"          UniqueGroupKey="EnemyGroup" StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_-10^-5 0"           AllyInfo="Sukeban"/>
+
+        <WaitSecond Time="9"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"    UniqueGroupKey="EnemyGroup" StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-10^-5 Random_-5^5 0"            AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"    UniqueGroupKey="EnemyGroup" StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-10^-5 Random_-5^5 0"            AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="DumbellChan"          UniqueGroupKey="EnemyGroup" StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-10^-5 Random_-5^5 0"            AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"    UniqueGroupKey="EnemyGroup" StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_5^10 Random_-5^5 0"            AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanUziChan"       UniqueGroupKey="EnemyGroup" StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_5^10 Random_-5^5 0"            AllyInfo="Sukeban"/>
+        
+        <WaitSecond Time="10"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"    UniqueGroupKey="EnemyGroup" StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_5^10 0"             AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"    UniqueGroupKey="EnemyGroup" StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_5^10 0"             AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanUziChan"       UniqueGroupKey="EnemyGroup" StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_5^10 0"             AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="BarbellChan_najimi"   UniqueGroupKey="EnemyGroup" StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_-10^-5 0"           AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="DumbellChan"          UniqueGroupKey="EnemyGroup" StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_-10^-5 0"           AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"    UniqueGroupKey="EnemyGroup" StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_-10^-5 0"           AllyInfo="Sukeban"/>
+        <SpawnCharacter CharacterKey="SukebanKatanaChan"    UniqueGroupKey="EnemyGroup" StartAIState="Entry_Battle" PositionUniqueKey="Player" Position="Random_-5^5 Random_-10^-5 0"           AllyInfo="Sukeban"/>
+
+        <DeadFence UniqueGroupKey="EnemyGroup"/>
+
+        <WaitSecond Time="1.0"/>
+
+        <TalkBalloon UniqueKey="Player" SimpleTalkKey="Talk_Stage02_3_2"/>
+        <BlockPointExit Enable="False"/>
+
+    </UpdatePhase>
+    
+</SequencerGraph>
