@@ -17,6 +17,10 @@ public class ConsoleRoot : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.BackQuote) == true)
         {
             ConsoleUI.SetActive(!ConsoleUI.activeSelf);
+            if(ConsoleUI.activeSelf)
+            {
+                
+            }
         }
     }
 }

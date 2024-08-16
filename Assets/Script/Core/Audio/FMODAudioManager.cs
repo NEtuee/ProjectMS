@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.ConstrainedExecution;
 using FMOD;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
@@ -173,6 +175,15 @@ public class FMODAudioManager : Singleton<FMODAudioManager>
                 value.Clear();
             }
         }
+
+        if(_audioSwitchMap != null)
+        {
+            foreach(var item in _audioSwitchMap)
+            {
+                if(item.Value != null)
+                    item.Value.Clear();
+            }
+        }
     }
 
     public FMODUnity.StudioEventEmitter Play(int id, Vector3 position)
@@ -285,6 +296,23 @@ public class FMODAudioManager : Singleton<FMODAudioManager>
         emitter.gameObject.SetActive(false);
         emitter.transform.SetParent(_audioObject.transform);
         _cacheMap[id].Enqueue(emitter);
+    }
+
+    public void clearAll()
+    {
+        ReturnAllCache();
+
+        foreach(var item in _infoItem.audioData)
+        {
+            bool isGlobal = item.id == 0;
+            foreach(var param in item.parameters)
+            {
+                if(isGlobal)
+                    continue;
+                
+                SetParam(item.id,param.id,param.min);
+            }
+        }
     }
 
     private FMODUnity.StudioEventEmitter GetCache(int id)

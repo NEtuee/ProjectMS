@@ -101,6 +101,7 @@ public enum ResolutionOption
     res1280x960 = 2,
     res1400x1050 = 3,
     res1600x1200 = 4,
+    resFull,
     Count,
 }
 

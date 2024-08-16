@@ -131,7 +131,7 @@ public class MasterManager : MessageHub<ManagerBase>
                 ScreenDirector._instance.setActiveMainHud(true);
                 ScreenDirector._instance._screenFader.clear();
                 LetterBox._instance.clear();
-                FMODAudioManager.Instance().ReturnAllCache();
+                FMODAudioManager.Instance().clearAll();
                 EffectManager._instance.killSwitchAll();
             }
 #else

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class ConsoleUI : MonoBehaviour
 {
@@ -14,6 +15,12 @@ public class ConsoleUI : MonoBehaviour
     private void Awake()
     {
         Console.SetLogCallBack(PrintLog);
+    }
+
+    private void OnEnable()
+    {
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(InputField.gameObject);
     }
 
     private void OnDisable()
@@ -38,7 +45,15 @@ public class ConsoleUI : MonoBehaviour
         {
             Console.Execute(InputField.text);
             InputField.text = string.Empty;
+
+            gameObject.SetActive(false);
         }
+    }
+
+    public void reset()
+    {
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(InputField.gameObject);
     }
 
     private void PrintLog(string log)

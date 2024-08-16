@@ -448,6 +448,10 @@ public class OptionUIControl : MonoBehaviour
             case ResolutionOption.res1600x1200:
                 Screen.SetResolution(1600,1200,FullScreenMode.Windowed);
             break;
+            case ResolutionOption.resFull:
+                Resolution currentResolution = Screen.currentResolution;
+                Screen.SetResolution(currentResolution.width, currentResolution.height,FullScreenMode.FullScreenWindow);
+            break;
         }
     }
 
@@ -474,6 +478,10 @@ public class OptionUIControl : MonoBehaviour
             case ResolutionOption.res1600x1200:
                 foreach(var item in _resText)
                     item.text = "1600x1200";
+            break;
+            case ResolutionOption.resFull:
+                foreach(var item in _resText)
+                    item.text = "FULLSCREEN";
             break;
         }
     }
