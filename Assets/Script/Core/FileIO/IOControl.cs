@@ -279,6 +279,12 @@ public static class IOControl {
 			path = Application.persistentDataPath;
 			path = path.Substring(0,path.LastIndexOf('/'));
 		}
+		else if(Application.platform == RuntimePlatform.OSXPlayer)
+		{
+			path = Application.dataPath;
+			path = path.Substring(0,path.LastIndexOf('/'));
+			path = path.Substring(0,path.LastIndexOf('/'));
+		}
 		else
 		{
 			path = Application.dataPath;
