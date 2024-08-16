@@ -61,6 +61,8 @@
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/0_default/"/>
         <Animation Preset="4_hit" XFlip="true" Duration="1.25">
             <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2109"/>
+            <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2105"/>
+
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2108" Attach="true"/>
 
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
@@ -79,7 +81,9 @@
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/0_default/"/>
         <Animation Preset="4_hit" XFlip="true" Duration="1.25">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2108" Attach="true"/>
-
+            <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2109"/>
+            <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2105"/>
+            
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountIncrease"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
@@ -216,7 +220,7 @@
         <!-- 투구 준비 모션, 탄막 경로 활성화 -->
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/2_pitchingPattern/"/>
         <Animation Preset="2_pitcherReady" XFlip="true" Duration="0.82">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2105" Attach="true"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2105" Attach="true" Switch="True"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
             <FrameEvent Type="FollowAttack" StartTime="0" EndTime="0.82" FollowType="Movement" Radius="0.7" MoveTime="999" CharacterKey="OsananaNajimiCrossHair" ToTarget="true">
                 <OnBegin>
