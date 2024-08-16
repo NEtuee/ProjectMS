@@ -149,13 +149,16 @@
             <FrameEvent Type="AudioPlay" StartTime="0" ID="4901" Attach="true" Switch="True"/>
             <!-- TODO: AttackPreset -->
             <FrameEvent Type="Attack" StartTime="0" EndTime="0.35" AttackPreset="SisterSpear_Catch" AttackType="Catch" CatchOffset="0.1 0 0">
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
+                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Slash"/>
+                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
+                </OnHit>
                 <OnCatch>
                     <FrameEvent Type="AudioPlay" StartTime="0" ID="4908" Attach="true" Switch="True"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CatchedSet"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CatchAttack_SisterSpear"/>
                     
-                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Slash"/>
-                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
                     <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
 
                     <FrameEvent Type="ShakeEffect" Scale="0.1" Speed="10.0" Time="0.1"/>
