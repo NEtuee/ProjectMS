@@ -363,6 +363,7 @@ Shader "Custom/SpriteShadowScreenShader"
 				fixed4 bluredBackgroundSample(sampler2D backgroundTexture, float2 texcoord, float3 worldPosition, bool firstBackground)
 				{
 					float Pi = 6.28318530718; // Pi*2
+					float3 backgroundTint = (firstBackground == false ? _ForwardScreenColorTint : _BackgroundColorTint).rgb;
 
 					// GAUSSIAN BLUR SETTINGS {{{
 					float Directions = 6.0; // BLUR DIRECTIONS (Default 16.0 - More is better but slower)
@@ -371,33 +372,36 @@ Shader "Custom/SpriteShadowScreenShader"
 					// GAUSSIAN BLUR SETTINGS }}}
 
 					float2 Radius = Size / resolution;
+
+					float3 blur = float3(0, 0, 0);
 					float4 Color = sampleBackground(backgroundTexture, texcoord, worldPosition, firstBackground == false);
 					// Blur calculations
 					for (float d = 0.0; d < Pi; d += Pi / Directions)
 					{
 						for (float i = 1.0 / Quality; i <= 1.0; i += 1.0 / Quality)
 						{
-							Color.rgb += SampleSpriteTexture(backgroundTexture, texcoord + float2(cos(d), sin(d)) * Radius * i).rgb;
+							blur += SampleSpriteTexture(backgroundTexture, texcoord + float2(cos(d), sin(d)) * Radius * i).rgb;
 						}
 					}
-					Color.rgb /= (Quality) * Directions;
+					blur /= (Quality + 1) * Directions;
+					blur *= backgroundTint;
 
 					float brightness = dot(Color.xyz, float3(0.2126f, 0.7152f, 0.0722));
 					if (brightness > 0.5)
 					{
-						float3 bloom = Color.rgb;
+						float3 bloom = float3(0.0, 0.0, 0.0);
 						float bloomBlurRadius = (brightness * 8.0f * _Bloom) / resolution;
 						for (float d = 0.0; d < Pi; d += Pi / Directions)
 						{
 							for (float i = 1.0 / Quality; i <= 1.0; i += 1.0 / Quality)
 							{
-								bloom += SampleSpriteTexture(backgroundTexture, texcoord + float2(cos(d), sin(d)) * bloomBlurRadius * i).rgb;
+								bloom += SampleSpriteTexture(backgroundTexture, texcoord + float2(cos(d), sin(d)) * bloomBlurRadius * i).rgb * backgroundTint;
 							}
 						}
-						bloom /= Quality * Directions;
+						bloom /= (Quality + 1) * Directions;
 
-						Color.rgb += bloom;
-						Color.rgb *= 0.5f;
+						Color.rgb += (blur + bloom);
+						Color.rgb *= 0.33333f;
 					}
 
 					// contrast
