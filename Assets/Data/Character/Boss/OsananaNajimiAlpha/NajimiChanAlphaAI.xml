@@ -140,9 +140,16 @@
 
     <Rush Package="NajimiRushPackage">
         <UseBranchSet Name="IsPlayerDead"/>
+        <Branch Condition="AttackCatchTarget" Execute="RushSuccess"/>
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </Rush>
+
+    <RushSuccess Package="NajimiRushPackage" EntryNode="AI_RushSuccess">
+        <UseBranchSet Name="IsPlayerDead"/>
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+    </RushSuccess>
 
     <Pitching Package="NajimiPitchingPackage" CoolTime="5">
         <UseBranchSet Name="IsPlayerDead"/>

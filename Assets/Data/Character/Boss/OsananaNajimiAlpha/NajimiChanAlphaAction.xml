@@ -124,7 +124,6 @@
         <Animation Preset="1_rushMain" XFlip="true" Duration="0.35">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2100" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="24" MaxVelocity="12" Velocity="12" Speed="0"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="NajimiAddRushCount"/>
             <FrameEvent Type="Attack" StartTime="0" EndTime="0.2" AttackPreset="Najimi_Rush" AttackType="Catch" CatchOffset="0.1 0 0">
                 <OnCatch>
@@ -138,6 +137,7 @@
                     <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Impact" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true" AngleType="AttackPoint"/>
                 </OnCatch>
             </FrameEvent>
+            <FrameEvent Type="FrameTag" Condition="IsCatcher == false" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
         <Animation Preset="2_rushRoll" XFlip="true" Duration="0.25">
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
