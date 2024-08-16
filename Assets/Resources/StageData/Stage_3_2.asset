@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: Stage_3_2
   m_EditorClassIdentifier: 
   _stageName: Stage_3_2
+  _audioBoardPath: 
   _backgroundPrefabPath: {fileID: 2173474380745020397, guid: 9be5263f3392ef04eb8526ed5f37e253, type: 3}
   _isMiniStage: 0
+  _isMenuStage: 0
   _stagePointData:
   - _pointName: New Point 0
     _stagePoint: {x: 0, y: 0, z: 0}
@@ -41,7 +43,7 @@ MonoBehaviour:
       _hideWhenDeactive: 0
       _keepAlive: 1
       _sortingOrder: 0
-      _searchIdentifier: 0
+      _allyInfoKey: 
       _activeType: 0
       _localPosition: {x: -1.7, y: 0, z: 0}
     - _characterKey: YakisobaChanFollow
@@ -55,24 +57,10 @@ MonoBehaviour:
       _hideWhenDeactive: 0
       _keepAlive: 1
       _sortingOrder: 0
-      _searchIdentifier: 3
+      _allyInfoKey: 
       _activeType: 0
       _localPosition: {x: -3.2, y: 0, z: 0}
-    - _characterKey: SisterStaffChan
-      _uniqueKey: Staff
-      _uniqueGroupKey: EnemyGroup
-      _startAction: AC_Entry
-      _startAIState: Entry_Peace
-      _flip: 1
-      _setDirection: 0
-      _directionAngle: 0
-      _hideWhenDeactive: 0
-      _keepAlive: 0
-      _sortingOrder: 0
-      _searchIdentifier: 1
-      _activeType: 1
-      _localPosition: {x: 11.46, y: 0.04, z: 0}
-    - _characterKey: SisterWandChan
+    - _characterKey: SisterSisterSpearChan
       _uniqueKey: Wand
       _uniqueGroupKey: EnemyGroup
       _startAction: AC_Entry
@@ -83,9 +71,23 @@ MonoBehaviour:
       _hideWhenDeactive: 0
       _keepAlive: 0
       _sortingOrder: 0
-      _searchIdentifier: 1
+      _allyInfoKey: Sister
       _activeType: 1
-      _localPosition: {x: 15.31, y: -0.47, z: 0}
+      _localPosition: {x: 15.33, y: -0.49, z: 0}
+    - _characterKey: SisterWandChan
+      _uniqueKey: Staff
+      _uniqueGroupKey: EnemyGroup
+      _startAction: AC_Entry
+      _startAIState: Entry_Peace
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: Sister
+      _activeType: 1
+      _localPosition: {x: 11.48, y: 0.01, z: 0}
     _useTriggerBound: 0
     _targetSearchIdentifier: 1
     _triggerWidth: 1
@@ -134,13 +136,13 @@ MonoBehaviour:
       _hideWhenDeactive: 0
       _keepAlive: 0
       _sortingOrder: 0
-      _searchIdentifier: 1
+      _allyInfoKey: 
       _activeType: 1
       _localPosition: {x: 4.42, y: -1.37, z: 0}
-    - _characterKey: SisterStaffChan
-      _uniqueKey: 
-      _uniqueGroupKey: EnemyGroup
-      _startAction: AC_Idle
+    - _characterKey: SisterWandChan
+      _uniqueKey: EnemyGroup
+      _uniqueGroupKey: 
+      _startAction: AC_Entry
       _startAIState: Entry_Peace
       _flip: 1
       _setDirection: 0
@@ -148,9 +150,9 @@ MonoBehaviour:
       _hideWhenDeactive: 0
       _keepAlive: 0
       _sortingOrder: 0
-      _searchIdentifier: 1
+      _allyInfoKey: Sister
       _activeType: 1
-      _localPosition: {x: 4.5, y: 1.7, z: 0}
+      _localPosition: {x: 4.45, y: 1.71, z: 0}
     _useTriggerBound: 1
     _targetSearchIdentifier: 0
     _triggerWidth: 7.96
@@ -170,24 +172,52 @@ MonoBehaviour:
     - Stage_3_2_1.xml
     _onExitSequencerPath: []
     _characterSpawnData:
+    - _characterKey: SisterWandChan
+      _uniqueKey: 
+      _uniqueGroupKey: EnemyGroup
+      _startAction: AC_Idle
+      _startAIState: Entry_Peace
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: 
+      _activeType: 1
+      _localPosition: {x: 8.94, y: 0.85, z: 0}
+    - _characterKey: SisterSisterSpearChan
+      _uniqueKey: 
+      _uniqueGroupKey: EnemyGroup
+      _startAction: AC_Entry
+      _startAIState: Entry_Peace
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: Sister
+      _activeType: 1
+      _localPosition: {x: 6.98, y: 0, z: 0}
     - _characterKey: SisterStaffChan
       _uniqueKey: 
       _uniqueGroupKey: EnemyGroup
-      _startAction: AC_Idle
-      _startAIState: Entry_Peace
+      _startAction: AC_Entry
+      _startAIState: Skill
       _flip: 1
       _setDirection: 0
       _directionAngle: 0
       _hideWhenDeactive: 0
       _keepAlive: 0
       _sortingOrder: 0
-      _searchIdentifier: 1
+      _allyInfoKey: Sister
       _activeType: 1
-      _localPosition: {x: 9.87, y: -1.01, z: 0}
+      _localPosition: {x: 12.42, y: 0, z: 0}
     - _characterKey: SisterWandChan
       _uniqueKey: 
       _uniqueGroupKey: EnemyGroup
-      _startAction: AC_Idle
+      _startAction: AC_Entry
       _startAIState: Entry_Peace
       _flip: 1
       _setDirection: 0
@@ -195,37 +225,9 @@ MonoBehaviour:
       _hideWhenDeactive: 0
       _keepAlive: 0
       _sortingOrder: 0
-      _searchIdentifier: 1
+      _allyInfoKey: Sister
       _activeType: 1
-      _localPosition: {x: 8.94, y: 0.85, z: 0}
-    - _characterKey: SisterWandChan
-      _uniqueKey: 
-      _uniqueGroupKey: EnemyGroup
-      _startAction: AC_Idle
-      _startAIState: Entry_Peace
-      _flip: 1
-      _setDirection: 0
-      _directionAngle: 0
-      _hideWhenDeactive: 0
-      _keepAlive: 0
-      _sortingOrder: 0
-      _searchIdentifier: 1
-      _activeType: 1
-      _localPosition: {x: 6.64, y: -0.29, z: 0}
-    - _characterKey: SisterWandChan
-      _uniqueKey: 
-      _uniqueGroupKey: EnemyGroup
-      _startAction: AC_Idle
-      _startAIState: Entry_Peace
-      _flip: 1
-      _setDirection: 0
-      _directionAngle: 0
-      _hideWhenDeactive: 0
-      _keepAlive: 0
-      _sortingOrder: 0
-      _searchIdentifier: 1
-      _activeType: 1
-      _localPosition: {x: 15.74, y: -0.03, z: 0}
+      _localPosition: {x: 10.25, y: -1.02, z: 0}
     _useTriggerBound: 0
     _targetSearchIdentifier: 1
     _triggerWidth: 1
@@ -245,7 +247,35 @@ MonoBehaviour:
     - BlockPointByEnemyGroup.xml
     _onExitSequencerPath: []
     _characterSpawnData:
-    - _characterKey: BarbellChan
+    - _characterKey: SisterWandChan
+      _uniqueKey: 
+      _uniqueGroupKey: EnemyGroup
+      _startAction: AC_Idle
+      _startAIState: Entry_Peace
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: 
+      _activeType: 1
+      _localPosition: {x: 11.2, y: 0, z: 0}
+    - _characterKey: SisterStaffChan
+      _uniqueKey: 
+      _uniqueGroupKey: EnemyGroup
+      _startAction: AC_Entry
+      _startAIState: Skill
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: Sister
+      _activeType: 1
+      _localPosition: {x: 8.63, y: 0.9, z: 0}
+    - _characterKey: SisterStaffChan
       _uniqueKey: 
       _uniqueGroupKey: EnemyGroup
       _startAction: AC_Entry
@@ -256,51 +286,9 @@ MonoBehaviour:
       _hideWhenDeactive: 0
       _keepAlive: 0
       _sortingOrder: 0
-      _searchIdentifier: 1
+      _allyInfoKey: Sister
       _activeType: 1
-      _localPosition: {x: 8.22, y: 0.33, z: 0}
-    - _characterKey: SisterWandChan
-      _uniqueKey: 
-      _uniqueGroupKey: EnemyGroup
-      _startAction: AC_Idle
-      _startAIState: Entry_Peace
-      _flip: 1
-      _setDirection: 0
-      _directionAngle: 0
-      _hideWhenDeactive: 0
-      _keepAlive: 0
-      _sortingOrder: 0
-      _searchIdentifier: 1
-      _activeType: 1
-      _localPosition: {x: 9.92, y: 0, z: 0}
-    - _characterKey: SisterWandChan
-      _uniqueKey: 
-      _uniqueGroupKey: EnemyGroup
-      _startAction: AC_Idle
-      _startAIState: Entry_Peace
-      _flip: 1
-      _setDirection: 0
-      _directionAngle: 0
-      _hideWhenDeactive: 0
-      _keepAlive: 0
-      _sortingOrder: 0
-      _searchIdentifier: 1
-      _activeType: 1
-      _localPosition: {x: 9.24, y: -1.29, z: 0}
-    - _characterKey: SisterWandChan
-      _uniqueKey: 
-      _uniqueGroupKey: EnemyGroup
-      _startAction: AC_Idle
-      _startAIState: Entry_Peace
-      _flip: 1
-      _setDirection: 0
-      _directionAngle: 0
-      _hideWhenDeactive: 0
-      _keepAlive: 0
-      _sortingOrder: 0
-      _searchIdentifier: 1
-      _activeType: 1
-      _localPosition: {x: 9.23, y: 1.81, z: 0}
+      _localPosition: {x: 9.68, y: -1, z: 0}
     _useTriggerBound: 0
     _targetSearchIdentifier: 1
     _triggerWidth: 1
@@ -331,9 +319,37 @@ MonoBehaviour:
       _hideWhenDeactive: 0
       _keepAlive: 0
       _sortingOrder: 0
-      _searchIdentifier: 1
+      _allyInfoKey: 
       _activeType: 1
       _localPosition: {x: 8.42, y: 0, z: 0}
+    - _characterKey: SisterSisterSpearChan
+      _uniqueKey: 
+      _uniqueGroupKey: EnemyGroup
+      _startAction: AC_Entry
+      _startAIState: Entry_Peace
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: Sister
+      _activeType: 1
+      _localPosition: {x: 7.66, y: -1.36, z: 0}
+    - _characterKey: SisterSisterSpearChan
+      _uniqueKey: 
+      _uniqueGroupKey: EnemyGroup
+      _startAction: AC_Entry
+      _startAIState: Entry_Peace
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: Sister
+      _activeType: 1
+      _localPosition: {x: 6.77, y: 0.54, z: 0}
     _useTriggerBound: 0
     _targetSearchIdentifier: 1
     _triggerWidth: 1
@@ -365,5 +381,5 @@ MonoBehaviour:
   - _name: YakisobaChanMovePoint
     _position: {x: 7.87, y: 0, z: 0}
   - _name: WandMovePoint
-    _position: {x: 12.095829, y: -0.33464202, z: 0}
+    _position: {x: 12.867, y: -0.33464202, z: 0}
   _trackData: []

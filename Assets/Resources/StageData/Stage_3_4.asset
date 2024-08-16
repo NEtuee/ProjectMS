@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: Stage_3_4
   m_EditorClassIdentifier: 
   _stageName: Stage_3_4
+  _audioBoardPath: 
   _backgroundPrefabPath: {fileID: 8259511134799209111, guid: 28ac2cb0f3535bf44a8d3efe4eb0e88d, type: 3}
   _isMiniStage: 0
+  _isMenuStage: 0
   _stagePointData:
   - _pointName: New Point 0
     _stagePoint: {x: 0, y: 0, z: 0}
@@ -41,7 +43,7 @@ MonoBehaviour:
       _hideWhenDeactive: 0
       _keepAlive: 1
       _sortingOrder: 0
-      _searchIdentifier: 0
+      _allyInfoKey: 
       _activeType: 0
       _localPosition: {x: -5.16, y: 0, z: 0}
     - _characterKey: YakisobaChanFollow
@@ -55,10 +57,10 @@ MonoBehaviour:
       _hideWhenDeactive: 0
       _keepAlive: 1
       _sortingOrder: 0
-      _searchIdentifier: 3
+      _allyInfoKey: 
       _activeType: 0
       _localPosition: {x: -6.52, y: 0, z: 0}
-    - _characterKey: SisterWandChan
+    - _characterKey: SisterSisterSpearChan
       _uniqueKey: Wand3
       _uniqueGroupKey: EnemyGroup
       _startAction: AC_Entry
@@ -69,10 +71,10 @@ MonoBehaviour:
       _hideWhenDeactive: 0
       _keepAlive: 0
       _sortingOrder: 0
-      _searchIdentifier: 1
+      _allyInfoKey: Sister
       _activeType: 0
-      _localPosition: {x: 2.53, y: -4.34, z: 0}
-    - _characterKey: SisterWandChan
+      _localPosition: {x: 2.15, y: -3.65, z: 0}
+    - _characterKey: SisterSisterSpearChan
       _uniqueKey: Wand2
       _uniqueGroupKey: EnemyGroup
       _startAction: AC_Entry
@@ -83,10 +85,10 @@ MonoBehaviour:
       _hideWhenDeactive: 0
       _keepAlive: 0
       _sortingOrder: 0
-      _searchIdentifier: 1
+      _allyInfoKey: Sister
       _activeType: 0
-      _localPosition: {x: 5.46, y: -0.52, z: 0}
-    - _characterKey: SisterWandChan
+      _localPosition: {x: 4.72, y: -0.45, z: 0}
+    - _characterKey: SisterSisterSpearChan
       _uniqueKey: Wand1
       _uniqueGroupKey: EnemyGroup
       _startAction: AC_Entry
@@ -97,9 +99,9 @@ MonoBehaviour:
       _hideWhenDeactive: 0
       _keepAlive: 0
       _sortingOrder: 0
-      _searchIdentifier: 1
+      _allyInfoKey: Sister
       _activeType: 0
-      _localPosition: {x: 2.35, y: 4.03, z: 0}
+      _localPosition: {x: 2.07, y: 3.56, z: 0}
     _useTriggerBound: 0
     _targetSearchIdentifier: 1
     _triggerWidth: 1
@@ -130,9 +132,9 @@ MonoBehaviour:
       _hideWhenDeactive: 0
       _keepAlive: 0
       _sortingOrder: 0
-      _searchIdentifier: 1
+      _allyInfoKey: 
       _activeType: 1
-      _localPosition: {x: 9.62, y: -0.58, z: 0}
+      _localPosition: {x: 8.89, y: -0.07, z: 0}
     - _characterKey: SisterWandChan
       _uniqueKey: 
       _uniqueGroupKey: EnemyGroup
@@ -144,9 +146,9 @@ MonoBehaviour:
       _hideWhenDeactive: 0
       _keepAlive: 0
       _sortingOrder: 0
-      _searchIdentifier: 1
+      _allyInfoKey: 
       _activeType: 1
-      _localPosition: {x: 7.81, y: 1.95, z: 0}
+      _localPosition: {x: 4.12, y: 1.95, z: 0}
     - _characterKey: SisterWandChan
       _uniqueKey: 
       _uniqueGroupKey: EnemyGroup
@@ -158,9 +160,9 @@ MonoBehaviour:
       _hideWhenDeactive: 0
       _keepAlive: 0
       _sortingOrder: 0
-      _searchIdentifier: 1
+      _allyInfoKey: 
       _activeType: 1
-      _localPosition: {x: 8.57, y: -2.37, z: 0}
+      _localPosition: {x: 4.03, y: -2.37, z: 0}
     - _characterKey: SisterStaffChan
       _uniqueKey: 
       _uniqueGroupKey: EnemyGroup
@@ -172,7 +174,7 @@ MonoBehaviour:
       _hideWhenDeactive: 0
       _keepAlive: 0
       _sortingOrder: 0
-      _searchIdentifier: 1
+      _allyInfoKey: 
       _activeType: 1
       _localPosition: {x: 13.04, y: 0.72, z: 0}
     - _characterKey: SisterWandChan
@@ -186,12 +188,12 @@ MonoBehaviour:
       _hideWhenDeactive: 0
       _keepAlive: 0
       _sortingOrder: 0
-      _searchIdentifier: 1
+      _allyInfoKey: 
       _activeType: 1
       _localPosition: {x: 13.14, y: -0.88, z: 0}
-    - _characterKey: DumbellChan
+    - _characterKey: BrainWashedSukebanKatanaChan
       _uniqueKey: 
-      _uniqueGroupKey: 
+      _uniqueGroupKey: EnemyGroup
       _startAction: AC_Entry
       _startAIState: Entry_Peace
       _flip: 1
@@ -200,12 +202,12 @@ MonoBehaviour:
       _hideWhenDeactive: 0
       _keepAlive: 0
       _sortingOrder: 0
-      _searchIdentifier: 1
+      _allyInfoKey: Sister
       _activeType: 1
-      _localPosition: {x: 5.14, y: 0.76, z: 0}
-    - _characterKey: BarbellChan_najimi
+      _localPosition: {x: 5.66, y: 1.22, z: 0}
+    - _characterKey: BrainWashedSukebanKatanaChan
       _uniqueKey: 
-      _uniqueGroupKey: 
+      _uniqueGroupKey: EnemyGroup
       _startAction: AC_Entry
       _startAIState: Entry_Peace
       _flip: 1
@@ -214,9 +216,23 @@ MonoBehaviour:
       _hideWhenDeactive: 0
       _keepAlive: 0
       _sortingOrder: 0
-      _searchIdentifier: 1
+      _allyInfoKey: Sister
       _activeType: 1
-      _localPosition: {x: 4.69, y: -0.65, z: 0}
+      _localPosition: {x: 5.68, y: -1.35, z: 0}
+    - _characterKey: BrainWashedSukebanUziChan
+      _uniqueKey: 
+      _uniqueGroupKey: EnemyGroup
+      _startAction: AC_Entry
+      _startAIState: Entry_Peace
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: Sister
+      _activeType: 1
+      _localPosition: {x: 6.88, y: -0.13, z: 0}
     _useTriggerBound: 0
     _targetSearchIdentifier: 1
     _triggerWidth: 1
@@ -241,7 +257,7 @@ MonoBehaviour:
     _triggerHeight: 1
     _triggerOffset: {x: 0, y: 0, z: 0}
   - _pointName: New Point 3
-    _stagePoint: {x: 34.89, y: 0, z: 0}
+    _stagePoint: {x: 35.19, y: 0, z: 0}
     _maxLimitedDistance: 0
     _verticalLimitedDistance: 0
     _horizontalLimitedDistance: 0
@@ -265,7 +281,7 @@ MonoBehaviour:
       _hideWhenDeactive: 1
       _keepAlive: 1
       _sortingOrder: 0
-      _searchIdentifier: 1
+      _allyInfoKey: 
       _activeType: 1
       _localPosition: {x: 2.03, y: -1.08, z: 0}
     - _characterKey: YakisobaChan
@@ -279,7 +295,7 @@ MonoBehaviour:
       _hideWhenDeactive: 1
       _keepAlive: 0
       _sortingOrder: 0
-      _searchIdentifier: 3
+      _allyInfoKey: 
       _activeType: 1
       _localPosition: {x: 2.58, y: -1.21, z: 0}
     _useTriggerBound: 1
@@ -296,7 +312,7 @@ MonoBehaviour:
   - _name: Enemy1
     _position: {x: 1.29, y: 1.35, z: 0}
   - _name: Enemy2
-    _position: {x: 1.51, y: -0.29, z: 0}
+    _position: {x: 2.14, y: -0.19, z: 0}
   - _name: Enemy3
     _position: {x: 1.07, y: -1.69, z: 0}
   - _name: YakisobaRun
