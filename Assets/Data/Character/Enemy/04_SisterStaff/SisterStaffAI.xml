@@ -28,7 +28,7 @@
     <GlobalVariable Name="gv_SkillCoolTime"                 Value="10.0"/>       <!-- 쿨타임 : 공격 발동 후 공격 실행이 제한되는 시간 -->
     <!-- 가드 옵션 설정 -->
     <GlobalVariable Name="gv_GuardTime"                     Value="3.0"/>       <!-- 방어 지속 시간 -->
-    <GlobalVariable Name="gv_GuardBrokenThreshold"          Value="2.0"/>       <!-- 가드 브레이크 공격을 막을 수 있는 횟수 -->
+    <GlobalVariable Name="gv_GuardBrokenThreshold"          Value="1.0"/>       <!-- 가드 브레이크 공격을 막을 수 있는 횟수 -->
     <GlobalVariable Name="gv_GuardLoopCount"                Value="3.0"/>       <!-- [보류] 가드 성공 시 패시브 방어 루프 횟수 -->
     <!-- 이동 타입 설정 -->
     <GlobalVariable Name="gv_bIsFixed"                      Value="False"/>     <!-- 고정 타입 : 배치된 현재 자리를 고수한다. -->
