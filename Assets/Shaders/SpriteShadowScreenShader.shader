@@ -334,8 +334,8 @@ Shader "Custom/SpriteShadowScreenShader"
 					float clipDistance = far - near;
 					float shadowDistance = (shadowSample * clipDistance);
 					// GAUSSIAN BLUR SETTINGS {{{
-					float Directions = 16.0; // BLUR DIRECTIONS (Default 16.0 - More is better but slower)
-					float Quality = 16.0; // BLUR QUALITY (Default 4.0 - More is better but slower)
+					float Directions = 8.0; // BLUR DIRECTIONS (Default 16.0 - More is better but slower)
+					float Quality = 4.0; // BLUR QUALITY (Default 4.0 - More is better but slower)
 					float Size = _ShadowBlurExponential * (shadowDistance - clipDistance); // BLUR SIZE (Radius)
 					// GAUSSIAN BLUR SETTINGS }}}
 
@@ -354,7 +354,7 @@ Shader "Custom/SpriteShadowScreenShader"
 					// }
 
 					// Color /= (Quality * Directions);
-					// Color *= (1.0 - _ImpactFrame);
+					Color *= (1.0 - _ImpactFrame);
 
 					return Color;
 				}
@@ -365,7 +365,7 @@ Shader "Custom/SpriteShadowScreenShader"
 					float Pi = 6.28318530718; // Pi*2
 
 					// GAUSSIAN BLUR SETTINGS {{{
-					float Directions = 16.0; // BLUR DIRECTIONS (Default 16.0 - More is better but slower)
+					float Directions = 6.0; // BLUR DIRECTIONS (Default 16.0 - More is better but slower)
 					float Quality = 4.0; // BLUR QUALITY (Default 4.0 - More is better but slower)
 					float Size = _BlurSize; // BLUR SIZE (Radius)
 					// GAUSSIAN BLUR SETTINGS }}}
@@ -373,32 +373,32 @@ Shader "Custom/SpriteShadowScreenShader"
 					float2 Radius = Size / resolution;
 					float4 Color = sampleBackground(backgroundTexture, texcoord, worldPosition, firstBackground == false);
 					// Blur calculations
-					// for (float d = 0.0; d < Pi; d += Pi / Directions)
-					// {
-					// 	for (float i = 1.0 / Quality; i <= 1.0; i += 1.0 / Quality)
-					// 	{
-					// 		Color.rgb += SampleSpriteTexture(backgroundTexture, texcoord + float2(cos(d), sin(d)) * Radius * i).rgb;
-					// 	}
-					// }
-					// Color.rgb /= (Quality) * Directions;
+					for (float d = 0.0; d < Pi; d += Pi / Directions)
+					{
+						for (float i = 1.0 / Quality; i <= 1.0; i += 1.0 / Quality)
+						{
+							Color.rgb += SampleSpriteTexture(backgroundTexture, texcoord + float2(cos(d), sin(d)) * Radius * i).rgb;
+						}
+					}
+					Color.rgb /= (Quality) * Directions;
 
-					// float brightness = dot(Color.xyz, float3(0.2126f, 0.7152f, 0.0722));
-					// if (brightness > 0.5)
-					// {
-					// 	float3 bloom = Color.rgb;
-					// 	float bloomBlurRadius = (brightness * 8.0f * _Bloom) / resolution;
-					// 	for (float d = 0.0; d < Pi; d += Pi / Directions)
-					// 	{
-					// 		for (float i = 1.0 / Quality; i <= 1.0; i += 1.0 / Quality)
-					// 		{
-					// 			bloom += SampleSpriteTexture(backgroundTexture, texcoord + float2(cos(d), sin(d)) * bloomBlurRadius * i).rgb;
-					// 		}
-					// 	}
-					// 	bloom /= Quality * Directions;
+					float brightness = dot(Color.xyz, float3(0.2126f, 0.7152f, 0.0722));
+					if (brightness > 0.5)
+					{
+						float3 bloom = Color.rgb;
+						float bloomBlurRadius = (brightness * 8.0f * _Bloom) / resolution;
+						for (float d = 0.0; d < Pi; d += Pi / Directions)
+						{
+							for (float i = 1.0 / Quality; i <= 1.0; i += 1.0 / Quality)
+							{
+								bloom += SampleSpriteTexture(backgroundTexture, texcoord + float2(cos(d), sin(d)) * bloomBlurRadius * i).rgb;
+							}
+						}
+						bloom /= Quality * Directions;
 
-					// 	Color.rgb += bloom;
-					// 	Color.rgb *= 0.5f;
-					// }
+						Color.rgb += bloom;
+						Color.rgb *= 0.5f;
+					}
 
 					// contrast
 					Color.xyz = ((Color.xyz - _ContrastTarget) * max(_Contrast, 0.0)) + _ContrastTarget;
