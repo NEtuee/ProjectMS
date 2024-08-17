@@ -155,7 +155,7 @@
             <FrameEvent Type="Movement" Condition="gv_AtkMovementVelocity == 0.0" StartTime="gv_RangedAttackMovementDelay" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Speed="gv_AtkMovementSpeed"/>
             <FrameEvent Type="Movement" Condition="gv_AtkMovementVelocity > 0.0" StartTime="gv_RangedAttackMovementDelay" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Velocity="gv_AtkMovementVelocity" Speed="gv_AtkMovementSpeed"/>
             <FrameEvent Type="Movement" Condition="gv_AtkMovementVelocity < 0.0" StartTime="gv_RangedAttackMovementDelay" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Velocity="gv_AtkMovementVelocity" Speed="gv_AtkMovementSpeed"/>
-
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
             <!-- Laser Attack -->
             <FrameEvent Type="Attack" Condition="gv_bIsLaserAttack" StartTime="0" EndTime="0.1" AttackPreset="Helena_Laser">
                 <OnHit>

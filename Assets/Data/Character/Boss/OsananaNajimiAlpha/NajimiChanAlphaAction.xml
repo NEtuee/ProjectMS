@@ -83,7 +83,7 @@
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2108" Attach="true"/>
             <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2109"/>
             <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2105"/>
-            
+
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountIncrease"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
@@ -271,7 +271,8 @@
             <FrameEvent Type="EffectPreset" StartTime="0" Key="WindTrail"/>
             <FrameEvent Type="ShakeEffect" StartTime="0.1" Scale="0.2" Speed="35.0" Time="0.15"/>
             <FrameEvent Type="AudioPlay" StartTime="0.0" ID="2106" Attach="true"/>
-
+            <FrameEvent Type="FrameTag" StartTime="0.2" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.2" EndTime="999" Tag="GbAvail"/>
            
         </Animation>
         <Animation Preset="2_pitchingRecovery" XFlip="true" Duration="0.3">
@@ -288,11 +289,10 @@
         <Animation Preset="1_spawnPitchingMachine" XFlip="true" Duration="1.0">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2109" Attach="true" Switch="True"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0.5" CharacterKey="DumbellChan_najimi" Offset="Random_-5^5 Random_-8^-12 0"   InheritDirection="false" AINode="Entry_Battle"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0.6" CharacterKey="BarbellChan_najimi" Offset="Random_10^15 Random_-3^3 0"    InheritDirection="false" AINode="Entry_Battle"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0.7" CharacterKey="BarbellChan_najimi" Offset="Random_-10^-15 Random_-3^3 0"  InheritDirection="false" AINode="Entry_Battle"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0.8" CharacterKey="DumbellChan_najimi" Offset="Random_-5^5 Random_8^12 0"     InheritDirection="false" AINode="Entry_Battle"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0.9" CharacterKey="DumbellChan_najimi" Offset="Random_10^15 Random_-3^3 0"    InheritDirection="false" AINode="Entry_Battle"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0.4" CharacterKey="DumbellChan_najimi" Offset="Random_-5^5 Random_-8^-12 0"   InheritDirection="false" AINode="Entry_Battle"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0.45" CharacterKey="BarbellChan_najimi" Offset="Random_-10^-15 Random_-3^3 0"  InheritDirection="false" AINode="Entry_Battle"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0.5" CharacterKey="DumbellChan_najimi" Offset="Random_-5^5 Random_8^12 0"     InheritDirection="false" AINode="Entry_Battle"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0.55" CharacterKey="DumbellChan_najimi" Offset="Random_10^15 Random_-3^3 0"    InheritDirection="false" AINode="Entry_Battle"/>
            
             <FrameEvent Type="Projectile" Condition="getWeight_RandBoolean^True"   StartTime="0" GraphName="RunnerSpawner" DirectionType="AITarget" SpawnTargetType="Self" Offset="-10 Random_-3^3 0"/>
             <FrameEvent Type="Projectile" Condition="getWeight_RandBoolean^False"  StartTime="0" GraphName="RunnerSpawner" DirectionType="AITarget" SpawnTargetType="Self" Offset="10 Random_-3^3 0"/>
