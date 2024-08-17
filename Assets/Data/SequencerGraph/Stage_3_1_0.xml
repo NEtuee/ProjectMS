@@ -10,6 +10,9 @@
         
         <SetHideCharacter UniqueKey="YakisobaChan" Hide="True"/>
         <SetHideCharacter UniqueKey="Player" Hide="True"/>
+        
+        <StopSwitch Switch="Audio" Key="8001"/>
+        <AudioPlay ID="8006" Switch="True"/>
 
         <LetterBoxShow/>
         <Fade/>
@@ -26,6 +29,9 @@
 
         <WaitSecond Time="3.0"/>
 
+
+
+
         <EffectPreset UniqueKey="Player" EffectPreset="ExplodeBig"/>
         <WaitSecond Time="1.0"/>
         <SetBackgroundAnimationTrigger Key="Door_1" Trigger="Open"/>
@@ -41,6 +47,7 @@
         <SetDirection UniqueKey="TateChan" DirectionType="AlwaysLeft"/>
         <SetAction UniqueKey="TateChan" Action="AC_GuardBroken"/>
         <TalkBalloon UniqueKey="TateChan" SimpleTalkKey="Talk_Stage03_1_1"/>
+    
 
         <WaitSecond Time="2.0"/>
         <TalkBalloon UniqueKey="TateChan" SimpleTalkKey="Talk_Stage03_1_2"/>

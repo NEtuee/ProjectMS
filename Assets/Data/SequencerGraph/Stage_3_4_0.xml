@@ -7,9 +7,12 @@
         <SetCrossHair UniqueKey="Player"/>
         <SetHideUI Hide="True"/>
         <BlockInput Enable="True"/>
+        <StopSwitch Switch="Audio" Key="8006"/>
+        <AudioPlay ID="8005" Switch="True"/>
 
         <LetterBoxShow/>
         <Fade/>
+        <AudioParameter Key="9006" ParameterID="90061" ParameterValue="1" ParameterType="Local"/>
 
         <BlockAI UniqueKey="YakisobaChan" Enable="True"/>
         <BlockAI UniqueGroupKey="EnemyGroup" Enable="True"/>
@@ -68,7 +71,8 @@
         <BlockAI UniqueGroupKey="EnemyGroup" Enable="False"/>
 
         <LetterBoxHide/>
-
+        <AudioParameter Key="9006" ParameterID="90061" ParameterValue="1" ParameterType="Local"/>   
+        
         <BlockPointExit Enable="True"/>
         <DeadFence UniqueGroupKey="EnemyGroup"/>
         <BlockPointExit Enable="False"/>

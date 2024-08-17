@@ -8,6 +8,7 @@
         <SetHideUI Hide="True"/>
 
         <LetterBoxShow/>
+        <AudioPlay ID="9004" Switch="True"/>
 
     </InitializePhase>
 
@@ -32,6 +33,7 @@
         <SetAction UniqueKey="YakisobaChan" Action="CurseAkane"/>
 
         <ActiveBossHp UniqueKey="TateChan"/>
+        <AudioParameter Key="9004" ParameterID="90041" ParameterValue="1" ParameterType="Local"/>
 
         <BlockInput Enable="False"/>
         <SetHideUI Hide="False"/>
@@ -40,6 +42,9 @@
         <DeadFence UniqueKey="TateChan"/>
         <DisableBossHp/>
 
+        <EffectPreset UniqueKey="Player" EffectPreset="ExplodeBig"/>
+        <AudioPlay ID="6001"/>
+        <StopSwitch Switch="Audio" Key="9004"/>
         <BlockInput Enable="True"/>
         <SetHideUI Hide="True"/>
 

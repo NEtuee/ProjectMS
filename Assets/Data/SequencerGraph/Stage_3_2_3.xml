@@ -4,6 +4,9 @@
     </InitializePhase>
 
     <UpdatePhase>
+
+        <StopSwitch Switch="Audio" Key="8006"/>
+ 
         <FadeOut Lambda="5.0"/>
         <WaitSecond Time="1.5"/>
         <NextStage Path="StageData/Stage_3_4"/>

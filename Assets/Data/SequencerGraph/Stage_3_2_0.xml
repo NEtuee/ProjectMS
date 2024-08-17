@@ -56,12 +56,15 @@
 
         <SetCameraTarget UniqueKey="Staff" CameraMode="TargetCenterMode"/>
         <TalkBalloon UniqueKey="Staff" SimpleTalkKey="Talk_Stage03_2_6" Wait="True"/>
+        <AudioPlay ID="9006" Switch="True"/>
+        <AudioParameter Key="9006" ParameterID="90061" ParameterValue="1" ParameterType="Local"/>
 
         <SetCameraTarget UniqueKey="Player" CameraMode="TargetCenterMode"/>
         <TalkBalloon UniqueKey="Player" SimpleTalkKey="Talk_Stage03_2_7" Wait="True"/>
 
         <SetCameraTarget UniqueKey="Wand" CameraMode="TargetCenterMode"/>
         <TalkBalloon UniqueKey="Wand" SimpleTalkKey="Talk_Stage03_2_8" Wait="True"/>
+
 
         <SetCameraTarget UniqueKey="Player" CameraMode="TargetCenterMode"/>
         <SetCameraZoom Size="0.0" Speed="5"/>

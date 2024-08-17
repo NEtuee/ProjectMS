@@ -5,6 +5,7 @@
 
         <SetHideUI Hide="True"/>
         <BlockInput Enable="True"/>
+        <StopSwitch Switch="Audio" Key="9006"/>
 
         <BlockAI UniqueKey="YakisobaChan" Enable="True"/>
         <BlockAI UniqueKey="Boss" Enable="True"/>
@@ -43,6 +44,9 @@
         <SetCameraZoom Size="0.0" Speed="5.0"/>
         <SetCameraUVTarget UniqueKey="Boss"/>
 
+        <AudioPlay ID="6007"/>
+        <StopSwitch Switch="Audio" Key="8005"/>
+        <AudioPlay ID="8001" Switch="True"/>
         <ApplyPostProcessProfile Path="PostProcessProfile/PostProcessProfile_Translated" ApplyType="BaseBlend" BlendTime="6.0"/>
         <SetCameraUVTarget UniqueKey="NULL"/>
 
@@ -53,6 +57,11 @@
         <ActiveBossHp UniqueKey="Boss"/>
         <UnlockStageLimit Enable="True"/>
 
+        <Task ProcessType="StepByStep">
+            <WaitSecond Time="1.0"/>
+            <AudioPlay ID="9005" Switch="True"/>
+        </Task>
+
         <WaitSecond Time="2.0"/>
         <BlockAI UniqueKey="Boss" Enable="False"/>
 
@@ -61,6 +70,9 @@
 
         <DeadFence UniqueKey="Boss"/>
         <KillAllStageEntity/>
+
+        <AudioParameter Key="9005" ParameterID="90051" ParameterValue="1" ParameterType="Local"/>
+        <AudioPlay ID="9007"/>
 
         <BlockInput Enable="True"/>
         <SetHideUI Hide="True"/>
