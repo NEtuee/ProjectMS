@@ -376,33 +376,33 @@ Shader "Custom/SpriteShadowScreenShader"
 					float3 blur = float3(0, 0, 0);
 					float4 Color = sampleBackground(backgroundTexture, texcoord, worldPosition, firstBackground == false);
 					// Blur calculations
-					for (float d = 0.0; d < Pi; d += Pi / Directions)
-					{
-						for (float i = 1.0 / Quality; i <= 1.0; i += 1.0 / Quality)
-						{
-							blur += SampleSpriteTexture(backgroundTexture, texcoord + float2(cos(d), sin(d)) * Radius * i).rgb;
-						}
-					}
-					blur /= (Quality + 1) * Directions;
-					blur *= backgroundTint;
+					// for (float d = 0.0; d < Pi; d += Pi / Directions)
+					// {
+					// 	for (float i = 1.0 / Quality; i <= 1.0; i += 1.0 / Quality)
+					// 	{
+					// 		blur += SampleSpriteTexture(backgroundTexture, texcoord + float2(cos(d), sin(d)) * Radius * i).rgb;
+					// 	}
+					// }
+					// blur /= (Quality + 1) * Directions;
+					// blur *= backgroundTint;
 
-					float brightness = dot(Color.xyz, float3(0.2126f, 0.7152f, 0.0722));
-					if (brightness > 0.5)
-					{
-						float3 bloom = float3(0.0, 0.0, 0.0);
-						float bloomBlurRadius = (brightness * 8.0f * _Bloom) / resolution;
-						for (float d = 0.0; d < Pi; d += Pi / Directions)
-						{
-							for (float i = 1.0 / Quality; i <= 1.0; i += 1.0 / Quality)
-							{
-								bloom += SampleSpriteTexture(backgroundTexture, texcoord + float2(cos(d), sin(d)) * bloomBlurRadius * i).rgb * backgroundTint;
-							}
-						}
-						bloom /= (Quality + 1) * Directions;
+					// float brightness = dot(Color.xyz, float3(0.2126f, 0.7152f, 0.0722));
+					// if (brightness > 0.5)
+					// {
+					// 	float3 bloom = float3(0.0, 0.0, 0.0);
+					// 	float bloomBlurRadius = (brightness * 8.0f * _Bloom) / resolution;
+					// 	for (float d = 0.0; d < Pi; d += Pi / Directions)
+					// 	{
+					// 		for (float i = 1.0 / Quality; i <= 1.0; i += 1.0 / Quality)
+					// 		{
+					// 			bloom += SampleSpriteTexture(backgroundTexture, texcoord + float2(cos(d), sin(d)) * bloomBlurRadius * i).rgb * backgroundTint;
+					// 		}
+					// 	}
+					// 	bloom /= (Quality + 1) * Directions;
 
-						Color.rgb += (blur + bloom);
-						Color.rgb *= 0.33333f;
-					}
+					// 	Color.rgb += (blur + bloom);
+					// 	Color.rgb *= 0.33333f;
+					// }
 
 					// contrast
 					Color.xyz = ((Color.xyz - _ContrastTarget) * max(_Contrast, 0.0)) + _ContrastTarget;
