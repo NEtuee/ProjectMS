@@ -275,54 +275,7 @@ Shader "Custom/SpriteShadowScreenShader"
 
 				fixed4 sampleBackground(sampler2D backgroundTexture, float2 texcoord, float3 worldPosition, bool ignoreOtherBackground)
 				{
-					{
-						float2 directionVector = texcoord - _CenterUV.xy;
-						float crossLength = _CrossFillFactor * 2.5;
-						float cosAngle = cos(_CrossFillFactor * 0.3);
-    					float sinAngle = sin(_CrossFillFactor * 0.3);
-    					float2 rotatedPos = float2(cosAngle * directionVector.x - sinAngle * directionVector.y, sinAngle * directionVector.x + cosAngle * directionVector.y) * 2.5;
-
-						float distanceFromCenterX = abs(rotatedPos.x);
-						float distanceFromCenterY = abs(rotatedPos.y);
-						float widthX = max(0.01 - distanceFromCenterY / crossLength * 0.01, 0);
-						float widthY = max(0.01 - distanceFromCenterX / crossLength * 0.01, 0);
-
-						bool isInCross = (distanceFromCenterX < widthX && distanceFromCenterY < crossLength) || (distanceFromCenterY < widthY && distanceFromCenterX < crossLength);
-						if(isInCross)
-							return sampleOtherBackground(texcoord, worldPosition,ignoreOtherBackground); 
-					}
 					
-					{
-						float2 offset = -_CenterUV.xy + float2(_CrossTileSize,_CrossTileSize) * 0.5 + float2(0.5, 0.5);
-						float2 tileIndex = floor((texcoord + offset ) / _CrossTileSize);
-						float2 tileCenter = (tileIndex * _CrossTileSize);
-
-						float distance = length(tileCenter - float2(0.5, 0.5));
-						float2 tilePos = fmod(abs(texcoord + offset), _CrossTileSize) - 0.5 * _CrossTileSize;
-	
-						tilePos.x /= _CrossWidth;
-    					tilePos.y /= _CrossHeight;
-
-						float fillFactor = _CrossFillFactor - distance * 2;
-    					float value = pow(abs(tilePos.x), fillFactor) + pow(abs(tilePos.y), fillFactor);
-
-    					if (value <= 1.0)
-    					    return sampleOtherBackground(texcoord, worldPosition,ignoreOtherBackground); 
-					}
-
-					fixed4 shadowMap = SampleSpriteTexture(_PerspectiveDepthTexture, texcoord);
-
-					const float near = 0.3f;
-					const float far = 1000.0f;
-
-					float clipDistance = far - near;
-					float shadowDistance = ((1.0 - shadowMap.r) * clipDistance);
-
-					fixed4 decal = SampleSpriteTexture(_DecalTexture,texcoord);
-					fixed4 backgroundSample = SampleSpriteTexture(backgroundTexture, texcoord);
-					backgroundSample.rgb = lerp(backgroundSample.rgb, decal.rgb, decal.a * (1.0 - step(25.0, shadowDistance)));
-
-					return backgroundSample * (ignoreOtherBackground ? _ForwardScreenColorTint : _BackgroundColorTint);
 				}
 
 				fixed4 bluredShadowSample(float2 texcoord)
@@ -374,39 +327,101 @@ Shader "Custom/SpriteShadowScreenShader"
 					float2 Radius = Size / resolution;
 
 					float3 blur = float3(0, 0, 0);
-					float4 Color = sampleBackground(backgroundTexture, texcoord, worldPosition, firstBackground == false);
-					// Blur calculations
-					// for (float d = 0.0; d < Pi; d += Pi / Directions)
-					// {
-					// 	for (float i = 1.0 / Quality; i <= 1.0; i += 1.0 / Quality)
-					// 	{
-					// 		blur += SampleSpriteTexture(backgroundTexture, texcoord + float2(cos(d), sin(d)) * Radius * i).rgb;
-					// 	}
-					// }
-					// blur /= (Quality + 1) * Directions;
-					// blur *= backgroundTint;
+					float4 Color = float4(0,0,0,0);//sampleBackground(backgroundTexture, texcoord, worldPosition, firstBackground == false);
 
-					// float brightness = dot(Color.xyz, float3(0.2126f, 0.7152f, 0.0722));
-					// if (brightness > 0.5)
-					// {
-					// 	float3 bloom = float3(0.0, 0.0, 0.0);
-					// 	float bloomBlurRadius = (brightness * 8.0f * _Bloom) / resolution;
-					// 	for (float d = 0.0; d < Pi; d += Pi / Directions)
-					// 	{
-					// 		for (float i = 1.0 / Quality; i <= 1.0; i += 1.0 / Quality)
-					// 		{
-					// 			bloom += SampleSpriteTexture(backgroundTexture, texcoord + float2(cos(d), sin(d)) * bloomBlurRadius * i).rgb * backgroundTint;
-					// 		}
-					// 	}
-					// 	bloom /= (Quality + 1) * Directions;
 
-					// 	Color.rgb += (blur + bloom);
-					// 	Color.rgb *= 0.33333f;
-					// }
+					float2 directionVector = texcoord - _CenterUV.xy;
+					float crossLength = _CrossFillFactor * 2.5;
+					float cosAngle = cos(_CrossFillFactor * 0.3);
+    				float sinAngle = sin(_CrossFillFactor * 0.3);
+    				float2 rotatedPos = float2(cosAngle * directionVector.x - sinAngle * directionVector.y, sinAngle * directionVector.x + cosAngle * directionVector.y) * 2.5;
 
-					// contrast
-					Color.xyz = ((Color.xyz - _ContrastTarget) * max(_Contrast, 0.0)) + _ContrastTarget;
+					float distanceFromCenterX = abs(rotatedPos.x);
+					float distanceFromCenterY = abs(rotatedPos.y);
+					float widthX = max(0.01 - distanceFromCenterY / crossLength * 0.01, 0);
+					float widthY = max(0.01 - distanceFromCenterX / crossLength * 0.01, 0);
 
+					bool ignoreOtherBackground = firstBackground == false;
+					bool isInCross = (distanceFromCenterX < widthX && distanceFromCenterY < crossLength) || (distanceFromCenterY < widthY && distanceFromCenterX < crossLength);
+					if(isInCross)
+					{
+						Color = sampleOtherBackground(texcoord, worldPosition,ignoreOtherBackground); 
+
+					}
+					else
+					{
+						float2 offset = -_CenterUV.xy + float2(_CrossTileSize,_CrossTileSize) * 0.5 + float2(0.5, 0.5);
+						float2 tileIndex = floor((texcoord + offset ) / _CrossTileSize);
+						float2 tileCenter = (tileIndex * _CrossTileSize);
+
+						float distance = length(tileCenter - float2(0.5, 0.5));
+						float2 tilePos = fmod(abs(texcoord + offset), _CrossTileSize) - 0.5 * _CrossTileSize;
+	
+						tilePos.x /= _CrossWidth;
+    					tilePos.y /= _CrossHeight;
+
+						float fillFactor = _CrossFillFactor - distance * 2;
+    					float value = pow(abs(tilePos.x), fillFactor) + pow(abs(tilePos.y), fillFactor);
+
+    					if (value <= 1.0)
+						{
+							Color = sampleOtherBackground(texcoord, worldPosition,ignoreOtherBackground);  
+						}
+    					else
+						{
+							fixed4 shadowMap = SampleSpriteTexture(_PerspectiveDepthTexture, texcoord);
+
+							const float near = 0.3f;
+							const float far = 1000.0f;
+
+							float clipDistance = far - near;
+							float shadowDistance = ((1.0 - shadowMap.r) * clipDistance);
+
+							fixed4 decal = SampleSpriteTexture(_DecalTexture,texcoord);
+							fixed4 backgroundSample = SampleSpriteTexture(backgroundTexture, texcoord);
+							backgroundSample.rgb = lerp(backgroundSample.rgb, decal.rgb, decal.a * (1.0 - step(25.0, shadowDistance)));
+
+							Color = backgroundSample * (ignoreOtherBackground ? _ForwardScreenColorTint : _BackgroundColorTint);
+
+							//Blur calculations
+							for (float d = 0.0; d < Pi; d += Pi / Directions)
+							{
+								for (float i = 1.0 / Quality; i <= 1.0; i += 1.0 / Quality)
+								{
+									blur += SampleSpriteTexture(backgroundTexture, texcoord + float2(cos(d), sin(d)) * Radius * i).rgb;
+								}
+							}
+							blur /= (Quality + 1) * Directions;
+							blur *= backgroundTint;
+
+							Color.rgb += blur;
+							Color.rgb *= 0.5;
+		
+							float brightness = dot(Color.xyz, float3(0.2126f, 0.7152f, 0.0722));
+							if (brightness > 0.5)
+							{
+								float3 bloom = float3(0.0, 0.0, 0.0);
+								float bloomBlurRadius = (brightness * 8.0f * _Bloom) / resolution;
+								for (float d = 0.0; d < Pi; d += Pi / Directions)
+								{
+									for (float i = 1.0 / Quality; i <= 1.0; i += 1.0 / Quality)
+									{
+										bloom += SampleSpriteTexture(backgroundTexture, texcoord + float2(cos(d), sin(d)) * bloomBlurRadius * i).rgb * backgroundTint;
+									}
+								}
+								bloom /= (Quality + 1) * Directions;
+		
+								Color.rgb += bloom;
+								Color.rgb *= 0.5;
+							}
+
+							// contrast
+							Color.xyz = ((Color.xyz - _ContrastTarget) * max(_Contrast, 0.0)) + _ContrastTarget;
+
+						}
+					}
+
+					
 					//impact frame
 					Color += fixed4(_ImpactFrame, _ImpactFrame, _ImpactFrame, _ImpactFrame);
 					Color.a *= firstBackground ? _ImpactFrame : 1.0f - _ImpactFrame;
