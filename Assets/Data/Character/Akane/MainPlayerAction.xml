@@ -588,7 +588,8 @@
             <FrameEvent Type="EffectPreset" StartTime="0" Key="ExplodeBig"/>
             <FrameEvent Type="AudioPlay" StartTime="1.0" ID="6001"/>
             <FrameEvent Type="ReleaseCatch" StartTime="0"/>
-
+            <FrameEvent Type="Attack" StartTime="1.0" AttackType="GuardBreak" AttackPreset="Akane_Resurrection">
+            </FrameEvent>
             <FrameEvent Type="ApplyBuff" StartTime="0.0" ApplyBuff="CatchedClear StunClear"/>
             <FrameEvent Type="ApplyBuff" StartTime="0.0" ApplyBuff="ReviveHP ReviveDashPoint"/>
             <FrameEvent Type="ApplyBuff" StartTime="0.0" ApplyBuff="BattleDecrementKeep DashPointRegenDelayed BloodAlertEffect DecreaseBloodPointDelayed BloodPointToHP ClearOutlineXXX"/>
