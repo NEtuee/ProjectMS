@@ -18,7 +18,7 @@
         <AnimationHeader MasterPath="Sprites/Enemy/TutorialTeacher/"/>
         <Animation Preset="idle_0" XFlip="true">
             <FrameEvent Type="DeactiveTalkBalloon" StartTime="0"/>
-            <FrameEvent Type="Attack" StartTime="0" EndTime="0.2" AttackPreset="Aoba_Tsuba" AttackType="Catch" CatchOffset="-0.3 0 0">
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.2" AttackPreset="Aoba_Tsuba" AttackType="Catch" CatchOffset="0.5 0 0">
                 <OnCatch>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CatchedSet"/>
                     <FrameEvent Type="AudioPlay" StartTime="0" ID="2410" Attach="true"/>
@@ -63,7 +63,9 @@
         <Animation Preset="1_grab/1_grabPre" XFlip="true" Duration="0.56" TranslationPreset="Shake">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2411" Attach="true"/>
         </Animation>
-
+        <Trigger Condition="IsCatcher == false">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2402 " Attach="true"/>
+        </Trigger>
         <Branch Condition="End" Execute="CatchedLoop"/>
         <Branch Condition="getKey_Escape_1 || getKey_Escape_2" Execute="CatchStruggle"/>
         <Branch Condition="IsCatcher == false" Execute="HitIdle"/>
@@ -72,7 +74,6 @@
     <HitIdle MovementType="Empty" DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/TutorialTeacher/"/>
         <Animation Preset="hitidle_5" XFlip="true" Duration="3">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2402 " Attach="true"/>
 
             <FrameEvent Type="Effect" StartTime="0" Path="Sprites/UI/Indicator/EnemyHead" FramePerSecond="2" Offset="0 0.2 0" DirectionOffset="False" Attach="true"/>
         </Animation>
