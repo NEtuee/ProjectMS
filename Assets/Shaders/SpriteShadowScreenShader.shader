@@ -377,9 +377,7 @@ Shader "Custom/SpriteShadowScreenShader"
 							float clipDistance = far - near;
 							float shadowDistance = ((1.0 - shadowMap.r) * clipDistance);
 
-							fixed4 decal = SampleSpriteTexture(_DecalTexture,texcoord);
 							fixed4 backgroundSample = SampleSpriteTexture(backgroundTexture, texcoord);
-							backgroundSample.rgb = lerp(backgroundSample.rgb, decal.rgb, decal.a * (1.0 - step(25.0, shadowDistance)));
 
 							Color = backgroundSample * (ignoreOtherBackground ? _ForwardScreenColorTint : _BackgroundColorTint);
 
@@ -415,9 +413,11 @@ Shader "Custom/SpriteShadowScreenShader"
 								Color.rgb *= 0.5;
 							}
 
+							fixed4 decal = SampleSpriteTexture(_DecalTexture,texcoord);
+							Color.rgb = lerp(Color.rgb, decal.rgb, decal.a * (1.0 - step(25.0, shadowDistance)));
+
 							// contrast
 							Color.xyz = ((Color.xyz - _ContrastTarget) * max(_Contrast, 0.0)) + _ContrastTarget;
-
 						}
 					}
 
