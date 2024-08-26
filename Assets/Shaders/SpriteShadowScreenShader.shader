@@ -388,7 +388,14 @@ Shader "Custom/SpriteShadowScreenShader"
 							{
 								for (float i = 1.0 / Quality; i <= 1.0; i += 1.0 / Quality)
 								{
-									blur += SampleSpriteTexture(backgroundTexture, texcoord + float2(cos(d), sin(d)) * Radius * i).rgb;
+									float2 offset = texcoord + float2(cos(d), sin(d)) * Radius * i;
+
+									float3 blured = SampleSpriteTexture(backgroundTexture, offset).rgb;
+									fixed4 decal = SampleSpriteTexture(_DecalTexture,offset);
+
+									blured.rgb = lerp(blured.rgb, decal.rgb, decal.a * (1.0 - step(25.0, shadowDistance)));
+
+									blur += blured;
 								}
 							}
 							blur /= (Quality + 1) * Directions;
@@ -406,10 +413,18 @@ Shader "Custom/SpriteShadowScreenShader"
 								{
 									for (float i = 1.0 / Quality; i <= 1.0; i += 1.0 / Quality)
 									{
-										bloom += SampleSpriteTexture(backgroundTexture, texcoord + float2(cos(d), sin(d)) * bloomBlurRadius * i).rgb * backgroundTint;
+										float2 offset = texcoord + float2(cos(d), sin(d)) * bloomBlurRadius * i;
+
+										float3 bloomed = SampleSpriteTexture(backgroundTexture, offset ).rgb;
+										fixed4 decal = SampleSpriteTexture(_DecalTexture,offset);
+
+										bloomed.rgb = lerp(bloomed.rgb, decal.rgb, decal.a * (1.0 - step(25.0, shadowDistance)));
+
+										bloom += bloomed;
 									}
 								}
 								bloom /= (Quality + 1) * Directions;
+								bloom *= backgroundTint;
 		
 								Color.rgb += bloom;
 								Color.rgb *= 0.5;
