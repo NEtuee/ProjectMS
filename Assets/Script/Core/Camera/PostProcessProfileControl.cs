@@ -77,6 +77,11 @@ public class PostProcessProfileControl
         }
     }
 
+    public void syncShadowValueToMaterial(Material material)
+    {
+        _resultData.syncShadowValueToMaterial(material);
+    }
+
     public void updateMaterial(bool editMode)
     {
         _targetMaterial = getPostProcessMaterial(editMode);

@@ -13,9 +13,13 @@ public class CombinePass : AkaneRenderPass
     ForwardScreenRenderPass forwardScreenRenderPass;
     DecalRenderPass decalRenderPass;
 
+    private RenderTexture _combineBackgroundTexture;
+
     private static int shadowScreenLayer;
     public override int layerMasks => shadowScreenLayer;
     public override string layerName => "ShadowScreen";
+
+    public Material _backgroundCombineMaterial;
 
     public void Awake()
     {
@@ -28,6 +32,9 @@ public class CombinePass : AkaneRenderPass
             var renderer = quad.GetComponent<Renderer>();
             renderMaterial = renderer.sharedMaterial;
         }
+
+        _backgroundCombineMaterial = Material.Instantiate(ResourceContainerEx.Instance().GetMaterial("Material/BackgroundDecalCombine"));
+        _combineBackgroundTexture = new RenderTexture(1024, 1024, 1, RenderTextureFormat.ARGBHalf, 1);
     }
 
     public static CombinePass CreateInstance(BackgroundRenderPass backgroundPass, CharacterRenderPass characterPass, PerspectiveDepthRenderPass perspectiveDepthPass, ForwardScreenRenderPass forwardScreenPass, DecalRenderPass decalPass)
@@ -41,14 +48,21 @@ public class CombinePass : AkaneRenderPass
 
         return pass;
     }
-    
+
     public override void Draw(Camera renderCamera)
     {
+        _backgroundCombineMaterial.SetTexture("_DecalTex", decalRenderPass?.RenderTexture);
+        _backgroundCombineMaterial.SetTexture("_PerspectiveDepthTexture",perspectiveDepthRenderPass?.RenderTexture);
+        _backgroundCombineMaterial.SetTexture("_CharacterTexture",characterRenderPass?.RenderTexture);
+
+        CameraControlEx.Instance().getPostProcessProfileControl().syncShadowValueToMaterial(_backgroundCombineMaterial);
+
+        Graphics.Blit(backgroundRenderPass?.RenderTexture, _combineBackgroundTexture,_backgroundCombineMaterial);
+
         renderMaterial?.SetTexture("_CharacterTexture", characterRenderPass?.RenderTexture);
-        renderMaterial?.SetTexture("_MainTex", backgroundRenderPass?.RenderTexture);
+        renderMaterial?.SetTexture("_MainTex", _combineBackgroundTexture);
         renderMaterial?.SetTexture("_PerspectiveDepthTexture", perspectiveDepthRenderPass?.RenderTexture);
         renderMaterial?.SetTexture("_ForwardScreenTexture", forwardScreenRenderPass?.RenderTexture);
-        renderMaterial?.SetTexture("_DecalTexture", decalRenderPass?.RenderTexture);
 
         float orthoSize = Camera.main.orthographicSize;
         float aspectRatio = Camera.main.aspect;

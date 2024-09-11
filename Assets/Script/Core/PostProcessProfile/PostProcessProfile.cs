@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using YamlDotNet.Serialization;
 
 
 #if UNITY_EDITOR
@@ -94,6 +93,23 @@ public class PostProcessProfileData
     public bool _useScanLine = true;
 
     public bool _pixelSnap = false;
+
+    public void syncShadowValueToMaterial(Material targetMaterial)
+    {
+        if(_useSunAngle)
+            targetMaterial.SetFloat("_SunAngle",_sunAngle);
+        if(_useShadowDistance)
+            targetMaterial.SetFloat("_ShadowDistance",_shadowDistance);
+        if(_useShadowDistanceRatio)
+            targetMaterial.SetFloat("_ShadowDistanceRatio",_shadowDistanceRatio);
+
+        if(_useScreenSize)
+            targetMaterial.SetVector("_ScreenSize",new Vector4(_screenSize.x,_screenSize.y,0f,0f));
+        if(_useShadowDistanceOffset)
+            targetMaterial.SetFloat("_ShadowDistanceOffset",_shadowDistanceOffset);
+        if(_useShadowColor)
+            targetMaterial.SetColor("_ShadowColor",_shadowColor);
+    }
 
     public void syncValueToMaterial(Material targetMaterial)
     {
