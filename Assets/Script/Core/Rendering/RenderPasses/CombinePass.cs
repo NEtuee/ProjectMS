@@ -41,6 +41,7 @@ public class CombinePass : AkaneRenderPass
 
         return pass;
     }
+    
     public override void Draw(Camera renderCamera)
     {
         renderMaterial?.SetTexture("_CharacterTexture", characterRenderPass?.RenderTexture);
@@ -59,11 +60,5 @@ public class CombinePass : AkaneRenderPass
         cameraSize.y = height;
         
         renderMaterial?.SetVector("_RealCameraSize",cameraSize * 100.0f);
-
-        renderCamera.cullingMask = layerMasks;
-
-        renderCamera.Render();
-
-        renderCamera.cullingMask = 0;
     }
 }
