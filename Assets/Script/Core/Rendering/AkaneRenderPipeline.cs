@@ -18,8 +18,6 @@ public class AkaneRenderPipeline : MonoBehaviour
         backgroundPass.Awake();
         CharacterRenderPass characterPass = ScriptableObject.CreateInstance<CharacterRenderPass>();
         characterPass.Awake();
-        EffectRenderPass effectPass = ScriptableObject.CreateInstance<EffectRenderPass>();
-        effectPass.Awake();
 
         ForwardScreenRenderPass forwardScreenPass = ScriptableObject.CreateInstance<ForwardScreenRenderPass>();
         forwardScreenPass.Awake();
@@ -41,7 +39,6 @@ public class AkaneRenderPipeline : MonoBehaviour
         renderPasses.Add(characterPass);
         renderPasses.Add(forwardScreenPass);
         renderPasses.Add(decalPass);
-        renderPasses.Add(effectPass);
         renderPasses.Add(combinePass);
         //renderPasses.Add(emptyPass);
     }
