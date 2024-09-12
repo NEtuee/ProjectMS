@@ -55,7 +55,7 @@ public class CombinePass : AkaneRenderPass
         _backgroundCombineMaterial.SetTexture("_PerspectiveDepthTexture",perspectiveDepthRenderPass?.RenderTexture);
         _backgroundCombineMaterial.SetTexture("_CharacterTexture",characterRenderPass?.RenderTexture);
 
-        CameraControlEx.Instance().getPostProcessProfileControl().syncShadowValueToMaterial(_backgroundCombineMaterial);
+        CameraControlEx.Instance().getPostProcessProfileControl()?.syncShadowValueToMaterial(_backgroundCombineMaterial);
 
         Graphics.Blit(backgroundRenderPass?.RenderTexture, _combineBackgroundTexture,_backgroundCombineMaterial);
 
