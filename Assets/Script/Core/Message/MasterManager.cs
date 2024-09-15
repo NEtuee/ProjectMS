@@ -144,6 +144,8 @@ public class MasterManager : MessageHub<ManagerBase>
 #if UNITY_EDITOR
         if(Input.GetKey(KeyCode.LeftBracket))
             deltaTimeMultiflier = 10f;
+
+        GizmoHelper.instance.updateGizmoVisibleState();
 #endif
 
         float deltaTime = Time.deltaTime * deltaTimeMultiflier;

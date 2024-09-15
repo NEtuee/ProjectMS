@@ -62,6 +62,10 @@ public class GizmoHelper : MonoBehaviour
     private List<GizmoLineData> _lineData = new List<GizmoLineData>();
     private List<GizmoArcData> _arcData = new List<GizmoArcData>();
 
+#if UNITY_EDITOR
+    private bool _isGizmoVisible = false;
+#endif
+
     private void Awake()
     {
         instance = this;
@@ -332,6 +336,15 @@ public class GizmoHelper : MonoBehaviour
     bool AreGizmosVisible()
     {
 #if UNITY_EDITOR
+        return _isGizmoVisible;
+#endif
+        return false;
+    }
+
+#if UNITY_EDITOR
+
+    public void updateGizmoVisibleState()
+    {
         Assembly asm = Assembly.GetAssembly(typeof(UnityEditor.Editor));
         Type type = asm.GetType("UnityEditor.GameView");
         if (type != null)
@@ -339,12 +352,15 @@ public class GizmoHelper : MonoBehaviour
             EditorWindow window = GetWindowPrivate(type, false, ""); //EditorWindow.GetWindow(type);
             FieldInfo gizmosField = type.GetField("m_Gizmos", BindingFlags.NonPublic | BindingFlags.Instance);
             if(gizmosField != null)
-                return (bool)gizmosField.GetValue(window);
+            {
+                _isGizmoVisible = (bool)gizmosField.GetValue(window);
+                return;
+            }
         }
-#endif
-        return false;
+
+        _isGizmoVisible = false;
     }
-#if UNITY_EDITOR
+
     EditorWindow GetWindowPrivate(System.Type t, bool utility, string title)
     {
         UnityEngine.Object[] wins = Resources.FindObjectsOfTypeAll(t);
