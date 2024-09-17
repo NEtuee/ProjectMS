@@ -1,12 +1,11 @@
 <SequencerGraph Name="Stage_1_2_0">
 
+    <Include Path="Assets/Data/SequencerGraph/Macro/SequencerMacro.xml"/>
+
     <InitializePhase>
         <ApplyPostProcessProfile Path="PostProcessProfile/Stage/Stage_1_2"/>
         
-        <SetCameraTarget UniqueKey="Player" CameraMode="TargetCenterMode"/>
-        <SetCrossHair UniqueKey="Player"/>
-        <SetHideUI Hide="True"/>
-        <BlockInput Enable="True"/>
+        <UseMacro Name="CutsceneStageStart"/>
         
         <LetterBoxShow/>
         <SetHideCharacter UniqueKey="Player" Hide="True"/>
