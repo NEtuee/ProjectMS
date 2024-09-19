@@ -82,6 +82,7 @@ public class GameUI : MonoBehaviour
     {
         CrosshairBinder.HeadObject.SetActive(active);
         CrosshairBinder.SubMarker.SetActive(active);
+        CrosshairBinder.rangeMarker.SetActive(active);
     }
 
     public void ActiveTitleMenuUI(bool active)

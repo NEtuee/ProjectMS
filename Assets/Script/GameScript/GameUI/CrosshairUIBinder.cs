@@ -5,6 +5,7 @@ public class CrosshairUIBinder : UIObjectBinder
 {
     public GameObject HeadObject;
     public GameObject SubMarker;
+    public GameObject rangeMarker;
     public GameObject MainBaisc;
     public GameObject MainKick;
     public GameObject MainSuper;
@@ -16,6 +17,8 @@ public class CrosshairUIBinder : UIObjectBinder
     public float PlayerRadius = 5f;
     
     public SpriteRenderer MainCursor;
+    public SpriteRenderer rangeSpriteRenderer;
+    public Sprite[] rangeSpriteArray;
 
     public Color IdleColor;
     public Color DetectHighlightColor;
@@ -39,6 +42,12 @@ public class CrosshairUIBinder : UIObjectBinder
         }
         
         if (SubMarker == null)
+        {
+            reason = "크로스헤어 스프라이트 컴포넌트가 연결되어 있지 않습니다";
+            return false;
+        }
+
+        if (rangeMarker == null)
         {
             reason = "크로스헤어 스프라이트 컴포넌트가 연결되어 있지 않습니다";
             return false;

@@ -11,7 +11,6 @@ public class ResourceMapExporter : EditorWindow
 {
     private static ResourceMapExporter _window;
 
-    private string _text = "";
     private Vector2 _scrollPosition;
 
     private string _searchString = "";

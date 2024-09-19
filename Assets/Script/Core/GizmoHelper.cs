@@ -337,8 +337,9 @@ public class GizmoHelper : MonoBehaviour
     {
 #if UNITY_EDITOR
         return _isGizmoVisible;
-#endif
+#else
         return false;
+#endif
     }
 
 #if UNITY_EDITOR
