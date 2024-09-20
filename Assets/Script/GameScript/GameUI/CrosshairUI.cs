@@ -30,8 +30,6 @@ public class CrosshairUI : IUIElement
     private float _highlightDuration = 0.1f;
     private float _subCursorHighlightDuration = 0.2f;
 
-    private int _rangeSpriteIndex = 0;
-
     public CrosshairUI()
     {
         _detectColorTimer = new UIActionTimer(ChangeToIdleColor);
@@ -244,21 +242,6 @@ public class CrosshairUI : IUIElement
         const float scale = (3f / diameter);
 
         _binder.rangeMarker.transform.localScale = new Vector3(scale,scale,scale);
-
-        if(Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            _rangeSpriteIndex = 0;
-        }
-        if(Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            _rangeSpriteIndex = 1;
-        }
-        if(Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            _rangeSpriteIndex = 2;
-        }
-
-        _binder.rangeSpriteRenderer.sprite = _binder.rangeSpriteArray[_rangeSpriteIndex];
     }
 
     private void OnDetectEnemy(CollisionSuccessData collisionSuccessData)

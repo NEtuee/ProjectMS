@@ -19,7 +19,6 @@ public class CrosshairUIBinder : UIObjectBinder
     
     public SpriteRenderer MainCursor;
     public SpriteRenderer rangeSpriteRenderer;
-    public Sprite[] rangeSpriteArray;
 
     public Color IdleColor;
     public Color DetectHighlightColor;
