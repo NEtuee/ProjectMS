@@ -3513,8 +3513,11 @@ public class SequencerGraphEvent_ApplyPostProcessProfile : SequencerGraphEventBa
             case PostProcessProfileApplyType.BaseBlend:
                 CameraControlEx.Instance().getPostProcessProfileControl().addBaseBlendProfile(profile as PostProcessProfile,_easeType,_blendTime);
             break;
-            case PostProcessProfileApplyType.Additional:
-                CameraControlEx.Instance().getPostProcessProfileControl().setAdditionalEffectProfile(profile as PostProcessProfile,_easeType,999,_blendTime);
+            case PostProcessProfileApplyType.OneShot:
+                CameraControlEx.Instance().getPostProcessProfileControl().setOneShotEffectProfile(profile as PostProcessProfile,_easeType,999,_blendTime);
+            break;
+            case PostProcessProfileApplyType.OneShotAdditional:
+                CameraControlEx.Instance().getPostProcessProfileControl().setOneShotAdditionalEffectProfile(profile as PostProcessProfile,_easeType,999,_blendTime);
             break;
         }
         

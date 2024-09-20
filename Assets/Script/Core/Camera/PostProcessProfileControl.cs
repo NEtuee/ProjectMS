@@ -5,7 +5,8 @@ using UnityEngine;
 public enum PostProcessProfileApplyType
 {
     BaseBlend,
-    Additional,
+    OneShot,
+    OneShotAdditional,
 }
 
 public class PostProcessProfileControl
@@ -13,6 +14,8 @@ public class PostProcessProfileControl
     private class ProfileBlender
     {
         public PostProcessProfile _sourceLayer;
+        public PostProcessProfileData _tempData = new PostProcessProfileData();
+
         public float _blendTime = 0f;
         public MathEx.EaseType _easeType = MathEx.EaseType.Linear;
         private float _timer = 0f;
@@ -27,6 +30,22 @@ public class PostProcessProfileControl
                 blendRate = 1f - blendRate;
 
             postProcessProfileData.blend(_sourceLayer,MathEx.getEaseFormula(_easeType, 0f, 1f, blendRate));
+            return isEnd();
+        }
+
+        public bool addBlend(ref PostProcessProfileData postProcessProfileData, float deltaTime, bool reverse)
+        {
+            _timer += deltaTime;
+            float blendRate = _timer * (1f / _blendTime);
+            blendRate = MathEx.clamp01f(blendRate);
+
+            if(reverse)
+                blendRate = 1f - blendRate;
+
+            _tempData.copy(postProcessProfileData);
+            _tempData.add(_sourceLayer);
+
+            postProcessProfileData.blend(_tempData,MathEx.getEaseFormula(_easeType, 0f, 1f, blendRate));
             return isEnd();
         }
 
@@ -46,14 +65,16 @@ public class PostProcessProfileControl
     
     private SimplePool<ProfileBlender>  _profileBlenderPool = new SimplePool<ProfileBlender>();
     private List<ProfileBlender>        _baseBlendingProfileList = new List<ProfileBlender>();
-    private ProfileBlender              _additionalEffectProfile = new ProfileBlender();
+    private ProfileBlender              _oneShotEffectProfile = new ProfileBlender();
+    private ProfileBlender              _oneShotAdditionalEffectProfile = new ProfileBlender();
 
     private PostProcessProfileData      _resultData = new PostProcessProfileData();
 
     private Material                    _targetMaterial;
 
     private bool                        _isBlending = false;
-    private int                         _currentAdditionalBlendingOrder = 0;
+    private int                         _currentOneShotBlendingOrder = 0;
+    private int                         _currentOneShotAdditionalBlendingOrder = 0;
 
     static public Material getPostProcessMaterial(bool editMode)
     {
@@ -92,7 +113,7 @@ public class PostProcessProfileControl
         if(_baseBlendingProfileList.Count == 0)
             return;
 
-        if(_isBlending == false && _additionalEffectProfile.isEnd())
+        if(_isBlending == false && _oneShotEffectProfile.isEnd() && _oneShotAdditionalEffectProfile.isEnd())
             return;
 
         _resultData.copy(_baseBlendingProfileList[0]._sourceLayer);
@@ -108,13 +129,16 @@ public class PostProcessProfileControl
             _baseBlendingProfileList.RemoveAt(0);
         }
 
-        if(_additionalEffectProfile.isEnd() == false)
-            _additionalEffectProfile.blend(ref _resultData, deltaTime, true);
+        if(_oneShotAdditionalEffectProfile.isEnd() == false)
+            _oneShotAdditionalEffectProfile.addBlend(ref _resultData, deltaTime, true);
+
+        if(_oneShotEffectProfile.isEnd() == false)
+            _oneShotEffectProfile.blend(ref _resultData, deltaTime, true);
 
         if(_isBlending)
             _resultData.syncValueToMaterial(_targetMaterial);
 
-        _isBlending = _baseBlendingProfileList.Count > 1 || _additionalEffectProfile.isEnd() == false;
+        _isBlending = _baseBlendingProfileList.Count > 1 || _oneShotEffectProfile.isEnd() == false || _oneShotAdditionalEffectProfile.isEnd() == false;
     }
 
     public void applyCenterUVPosition(Vector2 centerUV)
@@ -122,9 +146,9 @@ public class PostProcessProfileControl
         _targetMaterial.SetVector("_CenterUV", centerUV);
     }
 
-    public void setAdditionalEffectProfile(PostProcessProfile profile, MathEx.EaseType easeType, int order, float blendTime)
+    public void setOneShotEffectProfile(PostProcessProfile profile, MathEx.EaseType easeType, int order, float blendTime)
     {
-        if(_additionalEffectProfile.isEnd() == false && _currentAdditionalBlendingOrder > order)
+        if(_oneShotEffectProfile.isEnd() == false && _currentOneShotBlendingOrder > order)
             return;
         
         if(MasterManager.instance._stageProcessor._stageData == null)
@@ -136,8 +160,29 @@ public class PostProcessProfileControl
             return;
         }
 
-        _additionalEffectProfile.setProfileData(profile,easeType,blendTime);
-        _currentAdditionalBlendingOrder = order;
+        _oneShotEffectProfile.setProfileData(profile,easeType,blendTime);
+        _currentOneShotBlendingOrder = order;
+        _isBlending = true;
+
+        processBlend(0f);
+    }
+
+    public void setOneShotAdditionalEffectProfile(PostProcessProfile profile, MathEx.EaseType easeType, int order, float blendTime)
+    {
+        if(_oneShotAdditionalEffectProfile.isEnd() == false && _currentOneShotAdditionalBlendingOrder > order)
+            return;
+        
+        if(MasterManager.instance._stageProcessor._stageData == null)
+            return;
+
+        if(_baseBlendingProfileList.Count == 0)
+        {
+            DebugUtil.assert(false,"Base Blend PPP가 없습니다. 스테이지 시작 시퀀스에 추가해 주세요 [Stage: ]" + MasterManager.instance._stageProcessor._stageData._stageName);
+            return;
+        }
+
+        _oneShotAdditionalEffectProfile.setProfileData(profile,easeType,blendTime);
+        _currentOneShotAdditionalBlendingOrder = order;
         _isBlending = true;
 
         processBlend(0f);

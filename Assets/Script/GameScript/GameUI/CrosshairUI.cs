@@ -238,7 +238,7 @@ public class CrosshairUI : IUIElement
         _binder.rangeMarker.transform.position = characterPosition;
         _binder.rangeMarker.transform.rotation = rotation;
 
-        _binder.rangeMarker.SetActive(isQte == false);
+        _binder.rangeMarkerRoot.SetActive(isQte == false);
 
         const float diameter = 2.88f;
         const float scale = (3f / diameter);

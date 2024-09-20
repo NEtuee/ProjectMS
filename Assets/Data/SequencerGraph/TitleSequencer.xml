@@ -15,7 +15,7 @@
         <WaitSecond Time="1.0"/>
 
         <FadeIn Lambda="5.0"/>
-        <ApplyPostProcessProfile Path="PostProcessProfile/CRTImpact" ApplyType="Additional" BlendTime="0.7" EaseType="EaseInCubic"/>
+        <ApplyPostProcessProfile Path="PostProcessProfile/CRTImpact" ApplyType="OneShot" BlendTime="0.7" EaseType="EaseInCubic"/>
         
         <WaitSecond Time="0.5"/>
 
@@ -23,7 +23,7 @@
         <AudioPlay ID="9003" Switch="True"/>
 
         <WaitSignal Signal="NextStage"/>
-        <ApplyPostProcessProfile Path="PostProcessProfile/TitleStart" ApplyType="Additional" BlendTime="0.5"/>
+        <ApplyPostProcessProfile Path="PostProcessProfile/TitleStart" ApplyType="OneShot" BlendTime="0.5"/>
 
         <WaitSecond Time="0.6"/>
 

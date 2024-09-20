@@ -27,7 +27,7 @@
 
         <SetBackgroundAnimationTrigger Key="Tutorial" Trigger="Hide"/>
 
-        <ApplyPostProcessProfile Path="PostProcessProfile/AdditionalTest" BlendTime="0.5" ApplyType="Additional"/>
+        <ApplyPostProcessProfile Path="PostProcessProfile/AdditionalTest" BlendTime="0.5" ApplyType="OneShot"/>
 
         <SetAction UniqueKey="Player" Action="SQ_Intro_ToIdle"/>
         <SetAction UniqueGroupKey="Student" Action="AC_Floating"/>

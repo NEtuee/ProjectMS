@@ -4,7 +4,7 @@
         <CallAIEvent EventName="MeleeFightStart" UniqueKey="Owner"/>
 
         <SetCameraZoom Size="2.6"/>
-        <ApplyPostProcessProfile Path="PostProcessProfile/AdditionalTest" BlendTime="0.5" ApplyType="Additional"/>
+        <ApplyPostProcessProfile Path="PostProcessProfile/AdditionalTest" BlendTime="0.5" ApplyType="OneShot"/>
     </InitializePhase>
 
     <UpdatePhase>

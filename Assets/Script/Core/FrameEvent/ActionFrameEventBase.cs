@@ -508,8 +508,11 @@ public class ActionFrameEvent_ApplyPostProcessProfile : ActionFrameEventBase
             case PostProcessProfileApplyType.BaseBlend:
                 CameraControlEx.Instance().getPostProcessProfileControl().addBaseBlendProfile(profile as PostProcessProfile,_easeType,_blendTime);
             break;
-            case PostProcessProfileApplyType.Additional:
-                CameraControlEx.Instance().getPostProcessProfileControl().setAdditionalEffectProfile(profile as PostProcessProfile,_easeType,_blendOrder,_blendTime);
+            case PostProcessProfileApplyType.OneShot:
+                CameraControlEx.Instance().getPostProcessProfileControl().setOneShotEffectProfile(profile as PostProcessProfile,_easeType,_blendOrder,_blendTime);
+            break;
+            case PostProcessProfileApplyType.OneShotAdditional:
+                CameraControlEx.Instance().getPostProcessProfileControl().setOneShotAdditionalEffectProfile(profile as PostProcessProfile,_easeType,_blendOrder,_blendTime);
             break;
         }
         

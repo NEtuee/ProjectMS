@@ -9,7 +9,7 @@
 
         <ZoomEffect Factor="-0.5"/>
         <SetCameraZoom Size="2.5"/>
-        <ApplyPostProcessProfile Path="PostProcessProfile/ImpactFrame" ApplyType="Additional" BlendTime="0.05"/>
+        <ApplyPostProcessProfile Path="PostProcessProfile/ImpactFrame" ApplyType="OneShot" BlendTime="0.05"/>
         <WaitSecond Time="0.12"/>
 
         <SetTimeScale Scale="0.025" Time="4.0" BlendTime="1.5"/>
