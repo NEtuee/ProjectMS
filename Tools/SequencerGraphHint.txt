@@ -130,8 +130,8 @@ ShortCut,__UseMacro,<UseMacro Name=~~/>
 LineStart,<UseMacro,Name=~~
 ShortCut,__Include,<Include Path=~~/>
 LineStart,<Include,Path=~~
-,,
-,,
-,,
+ShortCut,__EntityCountFence,<EntityCountFence UniqueGroupKey=~~ Condition=~~ Count=~~/>
+LineStart,<EntityCountFence,"UniqueGroupKey=~~,Condition=~~,Count=~~"
+LineStartAndInQuote,<EntityCountFence Condition=,"Less,LessEqual"
 ,,
 ,,
