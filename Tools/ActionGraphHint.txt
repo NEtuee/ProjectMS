@@ -103,7 +103,7 @@ ShortCut,__FrameEvent_SequencerSignal,<FrameEvent Type=~SequencerSignal~ StartTi
 FrameEvent,SequencerSignal,Signal=~~
 ShortCut,__FrameEvent_ApplyPostProcessProfile,<FrameEvent Type=~ApplyPostProcessProfile~ StartTime=~0~ Path=~~ ApplyType=~~ Order=~~ BlendTime=~~/>
 FrameEvent,ApplyPostProcessProfile,"Path=~~,BlendTime=~~,ApplyType=~~,Order=~~,EaseType=~~"
-InQuote,ApplyType=,"BaseBlend,Additional"
+InQuote,ApplyType=,"BaseBlend,OneShot,OneShotAdditional"
 FrameEvent,SetDirectionType,DirectionType=~~
 ShortCut,__FrameEvent_SetDirectionType,<FrameEvent Type=~SetDirectionType~ StartTime=~0~ DirectionType=~~/>
 FrameEvent,Torque,"Set=~~,Add=~~"

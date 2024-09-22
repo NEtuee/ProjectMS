@@ -264,8 +264,10 @@ Shader "Custom/SpriteShadowScreenShader"
 
 					float2 directionVector = texcoord - _CenterUV.xy;
 					float crossLength = _CrossFillFactor * 2.5;
-					float cosAngle = cos(_CrossFillFactor * 0.3);
-    				float sinAngle = sin(_CrossFillFactor * 0.3);
+					float cosAngle, sinAngle;// = cos(_CrossFillFactor * 0.3);
+    				//float sinAngle = sin(_CrossFillFactor * 0.3);
+					sincos(_CrossFillFactor * 0.3, sinAngle, cosAngle);
+
     				float2 rotatedPos = float2(cosAngle * directionVector.x - sinAngle * directionVector.y, sinAngle * directionVector.x + cosAngle * directionVector.y) * 2.5;
 
 					float distanceFromCenterX = abs(rotatedPos.x);
@@ -300,27 +302,21 @@ Shader "Custom/SpriteShadowScreenShader"
 						}
     					else
 						{
-							fixed4 shadowMap = SampleSpriteTexture(_PerspectiveDepthTexture, texcoord);
-
-							const float near = 0.3f;
-							const float far = 1000.0f;
-
-							float clipDistance = far - near;
-							float shadowDistance = ((1.0 - shadowMap.r) * clipDistance);
-
 							fixed4 backgroundSample = SampleSpriteTexture(backgroundTexture, texcoord);
-
 							Color = backgroundSample * (ignoreOtherBackground ? _ForwardScreenColorTint : _BackgroundColorTint);
 
 							//Blur calculations
 							for (float d = 0.0; d < Pi; d += Pi / Directions)
 							{
+								float cosineLoop, sineLoop;// = cos(d);
+								//float sineLoop = sin(d);
+								sincos(d, sineLoop, cosineLoop);
 								for (float i = 1.0 / Quality; i <= 1.0; i += 1.0 / Quality)
 								{
-									blur += SampleSpriteTexture(backgroundTexture, texcoord + float2(cos(d), sin(d)) * Radius * i).rgb;
+									blur += SampleSpriteTexture(backgroundTexture, texcoord + float2(cosineLoop, sineLoop) * Radius * i).rgb;
 								}
 							}
-							blur /= (Quality + 1) * Directions;
+							blur /= Quality * Directions;
 							blur *= backgroundTint;
 
 							Color.rgb += blur;
@@ -333,12 +329,15 @@ Shader "Custom/SpriteShadowScreenShader"
 								float bloomBlurRadius = (brightness * 8.0f * _Bloom) / resolution;
 								for (float d = 0.0; d < Pi; d += Pi / Directions)
 								{
+									float cosineLoop, sineLoop;// = cos(d);
+									//float sineLoop = sin(d);
+									sincos(d, sineLoop, cosineLoop);
 									for (float i = 1.0 / Quality; i <= 1.0; i += 1.0 / Quality)
 									{
-										bloom += SampleSpriteTexture(backgroundTexture, texcoord + float2(cos(d), sin(d)) * bloomBlurRadius * i).rgb * backgroundTint;
+										bloom += SampleSpriteTexture(backgroundTexture, texcoord + float2(cosineLoop, sineLoop) * bloomBlurRadius * i).rgb * backgroundTint;
 									}
 								}
-								bloom /= (Quality + 1) * Directions;
+								bloom /= Quality * Directions;
 		
 								Color.rgb += bloom;
 								Color.rgb *= 0.5;

@@ -26,15 +26,15 @@ MonoBehaviour:
     _useShadowColor: 0
     _shadowColor: {r: 0, g: 0, b: 0, a: 1}
     _useImpactFrame: 0
-    _impactFrame: 0
-    _useBrightness: 0
-    _brightness: 1.05
+    _impactFrame: 0.1
+    _useBrightness: 1
+    _brightness: 0.2
     _useSaturation: 0
-    _saturation: 1
+    _saturation: -0.1
     _useBloom: 0
     _bloom: 0
     _useVignette: 1
-    _vignette: 0.03
+    _vignette: 0.06
     _useContrast: 0
     _contrast: 1
     _useContrastTarget: 0
@@ -43,10 +43,10 @@ MonoBehaviour:
     _colorTint: {r: 1, g: 1, b: 1, a: 1}
     _useBackgroundColorTint: 0
     _backgroundColorTint: {r: 1, g: 1, b: 1, a: 1}
-    _useForwardScreenColorTint: 1
+    _useForwardScreenColorTint: 0
     _forwardScreenColorTint: {r: 1, g: 1, b: 1, a: 1}
     _useBlurSize: 0
-    _blurSize: 0
+    _blurSize: 1.84
     _useMultiSampleDistance: 0
     _multiSampleDistance: 0
     _useMultiSampleColorTintRight: 0
@@ -61,8 +61,8 @@ MonoBehaviour:
     _fogColor: {r: 1, g: 1, b: 1, a: 1}
     _backgroundTransitionRate: 0
     _useBackgroundTransitionRate: 0
-    _curvature: 0
-    _useCurvature: 1
-    _scanLine: 0
-    _useScanLine: 1
+    _curvature: 0.31
+    _useCurvature: 0
+    _scanLine: 0.045
+    _useScanLine: 0
     _pixelSnap: 0

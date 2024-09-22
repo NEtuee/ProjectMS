@@ -12,7 +12,7 @@ LineStart,<CallAIEvent,"EventName=~~,UniqueKey=~~,Range=~~,AllyTarget=~~,EventTa
 LineStart,<WaitSignal,Signal=~~
 LineStart,<SetCameraZoom,"Size=~~,Speed=~~,Force=~~"
 InQuote,SearchIdentifier=,"Player,Enemy,Projectile"
-InQuote,ApplyType=,"BaseBlend,Additional"
+InQuote,ApplyType=,"BaseBlend,OneShot,OneShotAdditional"
 InQuote,CameraMode=,"TargetCenterMode,TwoTargetMode"
 ShortCut,_SpawnCharacter,<SpawnCharacter CharacterKey=~~ Position=~0 0 0~ AllyInfo=~~/>
 ShortCut,__WaitSecond,<WaitSecond Time=~1.0~/>
@@ -130,8 +130,8 @@ ShortCut,__UseMacro,<UseMacro Name=~~/>
 LineStart,<UseMacro,Name=~~
 ShortCut,__Include,<Include Path=~~/>
 LineStart,<Include,Path=~~
-,,
-,,
-,,
+ShortCut,__EntityCountFence,<EntityCountFence UniqueGroupKey=~~ Condition=~~ Count=~~/>
+LineStart,<EntityCountFence,"UniqueGroupKey=~~,Condition=~~,Count=~~"
+LineStartAndInQuote,<EntityCountFence Condition=,"Less,LessEqual"
 ,,
 ,,

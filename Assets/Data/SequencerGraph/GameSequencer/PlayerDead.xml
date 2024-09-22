@@ -1,7 +1,7 @@
 <SequencerGraph Name="Text_Dead">
     <UpdatePhase>
         <SetHideUI Hide="True"/>
-        <ApplyPostProcessProfile Path="PostProcessProfile/KillPlayer" BlendTime="3.0" ApplyType="Additional"/>
+        <ApplyPostProcessProfile Path="PostProcessProfile/KillPlayer" BlendTime="3.0" ApplyType="OneShot"/>
         <ZoomEffect Factor="-1.0"/>
         <SetTimeScale Scale="0.1" Time="3.0" BlendTime="2.0"/>
 

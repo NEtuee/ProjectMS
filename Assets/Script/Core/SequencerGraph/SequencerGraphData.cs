@@ -3,8 +3,6 @@ using UnityEngine;
 using System.Xml;
 using System.Collections.Generic;
 using System.IO;
-using FMODUnity;
-using YamlDotNet.Core;
 
 public enum SequencerGraphEventType
 {
@@ -66,6 +64,7 @@ public enum SequencerGraphEventType
     KillAllStageEntity,
     ShowCursor,
     AudioBoardEvent,
+    EntityCountFence,
     
     Count,
 }
@@ -212,8 +211,81 @@ public abstract class SequencerGraphEventBase : SerializableDataType
             spawnEvent = new SequencerGraphEvent_ShowCursor();
         else if(eventType == SequencerGraphEventType.AudioBoardEvent)
             spawnEvent = new SequencerGraphEvent_AudioBoardEvent();
+        else if(eventType == SequencerGraphEventType.EntityCountFence)
+            spawnEvent = new SequencerGraphEvent_EntityCountFence();
 
         return spawnEvent;
+    }
+}
+
+public class SequencerGraphEvent_EntityCountFence : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.EntityCountFence;
+
+    public enum CountConditionType
+    {
+        Less,
+        LessEqual,
+    }
+
+    public string _uniqueGroupKey = "";
+    public int _limitCount = 0;
+    public CountConditionType _compareType = CountConditionType.Less;
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        var list = processor.getUniqueGroup(_uniqueGroupKey,false);
+        if(list == null)
+            return true;
+        
+        int count = list.Count;
+
+        switch(_compareType)
+        {
+            case CountConditionType.Less:
+                return count < _limitCount;
+            case CountConditionType.LessEqual:
+                return count <= _limitCount;
+        }
+
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "Condition")
+                _compareType = (CountConditionType)System.Enum.Parse(typeof(CountConditionType), attrValue);
+            else if(attrName == "Count")
+                _limitCount = Int32.Parse(attrValue);
+            else if(attrName == "UniqueGroupKey")
+                _uniqueGroupKey = attrValue;
+        }
+    }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        BinaryHelper.writeEnum<CountConditionType>(ref binaryWriter, _compareType);
+        binaryWriter.Write(_limitCount);
+        binaryWriter.Write(_uniqueGroupKey);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _compareType = BinaryHelper.readEnum<CountConditionType>(ref binaryReader);
+        _limitCount = binaryReader.ReadInt32();
+        _uniqueGroupKey = binaryReader.ReadString();
     }
 }
 
@@ -3513,8 +3585,11 @@ public class SequencerGraphEvent_ApplyPostProcessProfile : SequencerGraphEventBa
             case PostProcessProfileApplyType.BaseBlend:
                 CameraControlEx.Instance().getPostProcessProfileControl().addBaseBlendProfile(profile as PostProcessProfile,_easeType,_blendTime);
             break;
-            case PostProcessProfileApplyType.Additional:
-                CameraControlEx.Instance().getPostProcessProfileControl().setAdditionalEffectProfile(profile as PostProcessProfile,_easeType,999,_blendTime);
+            case PostProcessProfileApplyType.OneShot:
+                CameraControlEx.Instance().getPostProcessProfileControl().setOneShotEffectProfile(profile as PostProcessProfile,_easeType,999,_blendTime);
+            break;
+            case PostProcessProfileApplyType.OneShotAdditional:
+                CameraControlEx.Instance().getPostProcessProfileControl().setOneShotAdditionalEffectProfile(profile as PostProcessProfile,_easeType,999,_blendTime);
             break;
         }
         

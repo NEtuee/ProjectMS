@@ -30,8 +30,6 @@ public class CrosshairUI : IUIElement
     private float _highlightDuration = 0.1f;
     private float _subCursorHighlightDuration = 0.2f;
 
-    private int _rangeSpriteIndex = 0;
-
     public CrosshairUI()
     {
         _detectColorTimer = new UIActionTimer(ChangeToIdleColor);
@@ -154,7 +152,7 @@ public class CrosshairUI : IUIElement
         
         UpdateMainCursor(isQte, isStunShot, isGuardBreak);
         UpdateSubCursor(targetPosition, rotation, dashPoint, isQte, isStunShot, isGuardBreak);
-        UpdateRangeCursor(targetPosition, rotation, isQte);
+        UpdateRangeCursor(targetPosition, rotation, characterToMouse.magnitude, isQte);
 
         _detectColorTimer.Update();
         _dashColorTimer.Update();
@@ -233,32 +231,23 @@ public class CrosshairUI : IUIElement
         }
     }
 
-    private void UpdateRangeCursor(Vector3 characterPosition, Quaternion rotation, bool isQte)
+    private void UpdateRangeCursor(Vector3 characterPosition, Quaternion rotation, float mouseDistance, bool isQte)
     {
         _binder.rangeMarker.transform.position = characterPosition;
         _binder.rangeMarker.transform.rotation = rotation;
 
-        _binder.rangeMarker.SetActive(isQte == false);
+        const float attackRadius = 1.5f;
+        const float attackDiameter = attackRadius * 2f;
 
         const float diameter = 2.88f;
-        const float scale = (3f / diameter);
+        const float scale = (attackDiameter / diameter);
+
+        if(mouseDistance <= attackRadius)
+            _binder.rangeMarkerRoot.SetActive(false);
+        else
+            _binder.rangeMarkerRoot.SetActive(isQte == false);
 
         _binder.rangeMarker.transform.localScale = new Vector3(scale,scale,scale);
-
-        if(Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            _rangeSpriteIndex = 0;
-        }
-        if(Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            _rangeSpriteIndex = 1;
-        }
-        if(Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            _rangeSpriteIndex = 2;
-        }
-
-        _binder.rangeSpriteRenderer.sprite = _binder.rangeSpriteArray[_rangeSpriteIndex];
     }
 
     private void OnDetectEnemy(CollisionSuccessData collisionSuccessData)

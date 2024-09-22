@@ -13,12 +13,12 @@ public class CrosshairUIBinder : UIObjectBinder
     public SpriteRenderer[] SubCursorDashPointObjectsSpriteRenderers;
     public GameObject SubCursorDashPointRoot;
     public GameObject SubCursorDashPointKick;
+    public GameObject rangeMarkerRoot;
 
     public float PlayerRadius = 5f;
     
     public SpriteRenderer MainCursor;
     public SpriteRenderer rangeSpriteRenderer;
-    public Sprite[] rangeSpriteArray;
 
     public Color IdleColor;
     public Color DetectHighlightColor;

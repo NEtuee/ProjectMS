@@ -249,12 +249,12 @@ public class MasterManager : MessageHub<ManagerBase>
         if(_update)
         {
             ScriptableObject profile = ResourceContainerEx.Instance().GetScriptableObject("PostProcessProfile/CRTImpact");
-            CameraControlEx.Instance().getPostProcessProfileControl().setAdditionalEffectProfile(profile as PostProcessProfile,MathEx.EaseType.EaseInCubic,999,0.7f);
+            CameraControlEx.Instance().getPostProcessProfileControl().setOneShotEffectProfile(profile as PostProcessProfile,MathEx.EaseType.EaseInCubic,999,0.7f);
         }
         else
         {
             ScriptableObject profile = ResourceContainerEx.Instance().GetScriptableObject("PostProcessProfile/TitleStart");
-            CameraControlEx.Instance().getPostProcessProfileControl().setAdditionalEffectProfile(profile as PostProcessProfile,MathEx.EaseType.EaseInCubic,999,0.5f);
+            CameraControlEx.Instance().getPostProcessProfileControl().setOneShotEffectProfile(profile as PostProcessProfile,MathEx.EaseType.EaseInCubic,999,0.5f);
         }
         GameUI.Instance.ActivePauseUI(_update);
 

@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: ActionStageData
   m_EditorClassIdentifier: 
   _stageName: ActionTestStage
+  _audioBoardPath: 
   _backgroundPrefabPath: {fileID: 3160829639783268931, guid: ab97559538486194b90a8a12b173cc6a, type: 3}
   _isMiniStage: 0
+  _isMenuStage: 0
   _stagePointData:
   - _pointName: New Point 0
     _stagePoint: {x: 0, y: 0, z: 0}
@@ -34,7 +36,7 @@ MonoBehaviour:
       _uniqueKey: Player
       _uniqueGroupKey: 
       _startAction: Spawn
-      _startAIState: 
+      _startAIState: Entry
       _flip: 0
       _setDirection: 0
       _directionAngle: 0
@@ -44,6 +46,20 @@ MonoBehaviour:
       _allyInfoKey: 
       _activeType: 0
       _localPosition: {x: -2.21, y: 1.46, z: 0}
+    - _characterKey: TutorialStudent
+      _uniqueKey: 
+      _uniqueGroupKey: EnemyGroup
+      _startAction: AC_Idle
+      _startAIState: Entry
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 1
+      _sortingOrder: 0
+      _allyInfoKey: CommonBattle
+      _activeType: 0
+      _localPosition: {x: 1.02, y: 1.42, z: 0}
     _useTriggerBound: 0
     _targetSearchIdentifier: 0
     _triggerWidth: 0

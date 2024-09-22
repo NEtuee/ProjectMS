@@ -17,7 +17,9 @@
     <UpdatePhase>
         <WaitSecond Time="1.0"/>
 
-        <!-- 스테이지 시퀀서는 스테이지 진행중에 절대 꺼지면 안된다 -->
+        <EntityCountFence UniqueGroupKey="EnemyGroup" Condition="Less" Count="1"/>
+        <ToastMessage Text="Test"/>
+        
         <WaitSignal Signal="NeverEnd"/>
     </UpdatePhase>
 
