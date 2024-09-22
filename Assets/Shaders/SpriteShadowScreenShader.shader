@@ -258,7 +258,6 @@ Shader "Custom/SpriteShadowScreenShader"
 
 					float2 Radius = Size / resolution;
 
-					float3 blur = float3(0, 0, 0);
 					float4 Color = float4(0,0,0,0);
 
 
@@ -306,6 +305,7 @@ Shader "Custom/SpriteShadowScreenShader"
 							Color = backgroundSample * (ignoreOtherBackground ? _ForwardScreenColorTint : _BackgroundColorTint);
 
 							//Blur calculations
+							float3 blur = float3(0, 0, 0);
 							for (float d = 0.0; d < Pi; d += Pi / Directions)
 							{
 								float cosineLoop, sineLoop;// = cos(d);
