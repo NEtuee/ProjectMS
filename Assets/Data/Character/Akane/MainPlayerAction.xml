@@ -188,7 +188,7 @@
                     <FrameEvent Type="ShakeEffect" Condition="Kill" Scale="0.2" Speed="35.0" Time="0.15"/>
                     <FrameEvent Type="ZoomEffect" Condition="Kill" Scale="-0.1"/>
                     <FrameEvent Type="EffectPreset" Condition="Kill" Key="ExplodeBlood"/>
-
+                    <FrameEvent Type="AudioPlay" Condition="Kill" StartTime="0" ID="1013" Attach="true"/>
  
                     <FrameEvent Type="ApplyPostProcessProfile" Condition="Kill" Path="PostProcessProfile/KillEnemy" BlendTime="0.4" ApplyType="OneShotAdditional"/>
                 </OnHit>
@@ -263,6 +263,7 @@
                     <FrameEvent Type="SetAction" Condition="Kill" Action="AttackSuccessFar"/>
                     <FrameEvent Type="SetTimeScale" Scale="0.1" Time="0.1" BlendTime="0.07"/>
                     <FrameEvent Type="ShakeEffect" Condition="Kill" Scale="0.25" Speed="35.0" Time="0.25"/>
+                    <FrameEvent Type="AudioPlay" Condition="Kill" StartTime="0" ID="1013" Attach="true"/>
 
                     <FrameEvent Type="ApplyPostProcessProfile" Condition="Kill" Path="PostProcessProfile/KillEnemy" BlendTime="0.4" ApplyType="OneShotAdditional"/>
                 </OnHit>

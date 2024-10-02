@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c858e63344676f34a93a8306d92a1f7d, type: 3}
   m_Name: AudioInfo
   m_EditorClassIdentifier: 
-  csvData: {fileID: 4900000, guid: cfd99f29091d04940a603f065bafcb2a, type: 3}
+  csvData: {fileID: 4900000, guid: 0f0bbb16c3139974d88d636e55be6933, type: 3}
   audioData:
   - name: global data
     id: 0
@@ -245,6 +245,20 @@ MonoBehaviour:
         Data3: -287048283
         Data4: 1799200008
       Path: event:/SFX/Akane/ChouKetsusenReady
+    parameters: []
+  - name: Kill
+    id: 1013
+    defaultVolume: 0.39
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: -1113615097
+        Data2: 1150854360
+        Data3: 2078196380
+        Data4: 291568812
+      Path: event:/SFX/Akane/Kill
     parameters: []
   - name: Dash
     id: 2100
