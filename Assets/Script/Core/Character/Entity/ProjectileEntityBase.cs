@@ -17,6 +17,9 @@ public class ProjectileEntityBase : ObjectBase
     private bool _spriteRotation = false;
     private float _gravity = 0f;
     private float _gravityAccumulate = 0f;
+    private bool _cameraBound = false;
+
+    private Vector3 _lastHitNormal = Vector3.zero;
 
     public override void assign()
     {
@@ -29,9 +32,13 @@ public class ProjectileEntityBase : ObjectBase
         createSpriteRenderObject();
     }
 
-    public override void initialize()
+    public void initializeProjectile()
     {
-        base.initialize();
+        _cameraBound = false;
+        _spriteRotation = false;
+        _gravity = 0f;
+        _gravityAccumulate = 0f;
+        _lastHitNormal = Vector3.zero;
 
         _collisionUniqueIDList.Clear();
     }
@@ -41,6 +48,7 @@ public class ProjectileEntityBase : ObjectBase
         _spriteRotation = baseData._useSpriteRotation;
         _gravity = baseData._gravity;
         _gravityAccumulate = 0f;
+        _cameraBound = baseData._cameraBound;
 
         _projectileGraph.setData(baseData);
         _collisionInfo.setCollisionInfo(baseData._collisionRadius, baseData._collisionAngle, baseData._collisionStartDistance);
@@ -50,7 +58,7 @@ public class ProjectileEntityBase : ObjectBase
 
     public void shot(Vector3 startPosition)
     {
-        transform.position = startPosition;
+        updatePosition(startPosition);
         _projectileGraph.initialize();
         setDirection(_projectileGraph.getCurrentDirection());
         _spriteRenderer.sprite = _projectileGraph.getCurrentSprite();
@@ -61,7 +69,7 @@ public class ProjectileEntityBase : ObjectBase
 
     public void shot(ProjectileGraphShotInfoData shotInfoData, Vector3 startPosition)
     {
-        transform.position = startPosition;
+        updatePosition(startPosition);
 
         if(_spriteRotation)
             _spriteObject.transform.localRotation = Quaternion.Euler(0f,0f,shotInfoData._defaultAngle);
@@ -81,7 +89,25 @@ public class ProjectileEntityBase : ObjectBase
 
     public override void progress(float deltaTime)
     {
-        if(_projectileGraph.isEnd() == true)
+        bool isProjectileEnd = _projectileGraph.isEnd();
+        bool isOutOfBound = false;
+        Vector3 boundNormal = _lastHitNormal;
+
+        if( isProjectileEnd == false && _cameraBound)
+        {
+            if(hasChildObject() && getChildObject() is CharacterEntityBase)
+            {
+                CharacterEntityBase character = getChildObject() as CharacterEntityBase;
+                isOutOfBound = character.isInCameraBound(out boundNormal) == false;
+
+            }
+            else
+            {
+                isOutOfBound = CameraControlEx.Instance().IsInCameraBound(transform.position, out boundNormal) == false;
+            }
+        }
+
+        if( isProjectileEnd == true || isOutOfBound == true )
         {
             ObjectBase executeTargetEntity = this;
             if(_projectileGraph.isEventExecuteBySummoner())
@@ -89,6 +115,17 @@ public class ProjectileEntityBase : ObjectBase
 
             _projectileGraph.executeChildFrameEvent(ProjectileChildFrameEventType.ChildFrameEvent_OnEnd,executeTargetEntity,null);
 
+            if(hasChildObject() && (isOutOfBound || _projectileGraph.isPenetrateEnd()))
+            {
+                ObjectBase childObject = getChildObject();
+                if(childObject is GameEntityBase)
+                {
+                    Vector3 velocity = Vector3.Reflect(_projectileGraph.getCurrentDirection(),boundNormal) * 2.5f;
+                    (childObject as GameEntityBase).setVelocity(velocity);
+                }
+            }
+
+            detachChildObject();
             DeregisterRequest();
             CollisionManager.Instance().deregisterObject(_collisionInfo.getCollisionInfoData(),this);
             return;
@@ -96,14 +133,15 @@ public class ProjectileEntityBase : ObjectBase
 
         base.progress(deltaTime);
 
-        bool isEnd = _projectileGraph.progress(deltaTime, this);
+        _projectileGraph.progress(deltaTime, this);
         _projectileGraph.updateLifeTime(deltaTime);
 
         Vector3 movementOfFrame = _projectileGraph.getMovementOfFrame();
-        transform.position += movementOfFrame;
+        Vector3 position = transform.position;
+        position += movementOfFrame;
 
         _gravityAccumulate += _gravity * deltaTime;
-        transform.position += Vector3.up * _gravityAccumulate * deltaTime;
+        position += Vector3.up * _gravityAccumulate * deltaTime;
 
         _spriteRenderer.sprite = _projectileGraph.getCurrentSprite();
         _spriteRenderer.transform.localRotation = _projectileGraph.getCurrentAnimationRotation();
@@ -122,15 +160,18 @@ public class ProjectileEntityBase : ObjectBase
         Vector3 direction = movementOfFrame.normalized;
         if(direction.sqrMagnitude != 0f)
             setDirection(direction);
+        
+        updatePosition(position);
 
         CollisionRequestData requestData;
         requestData._collision = _collisionInfo;
         requestData._collisionDelegate = _collisionDelegate;
         requestData._collisionEndEvent = null;
-        requestData._position = transform.position;
+        requestData._position = position;
         requestData._direction = getDirection();
         requestData._requestObject = this;
         CollisionManager.Instance().collisionRequest(requestData);
+
         
         GizmoHelper.instance.drawCircle(transform.position,_collisionInfo.getRadius(),36,_debugColor);
     }
@@ -139,9 +180,12 @@ public class ProjectileEntityBase : ObjectBase
     {
         if(successData._requester is ProjectileEntityBase == false || successData._target is GameEntityBase == false || _projectileGraph.isEnd())
             return;
-
+        
         ProjectileEntityBase requester = successData._requester as ProjectileEntityBase;
         GameEntityBase target = successData._target as GameEntityBase;
+
+        if(getChildObject() == target)
+            return;
 
         if(AllyInfoManager.compareAllyTargetType(requester, target) == AllyTargetType.Ally)
             return;
@@ -159,6 +203,9 @@ public class ProjectileEntityBase : ObjectBase
             executeTargetEntity = requester.getSummonObject() == null ? requester : requester.getSummonObject();
 
         _projectileGraph.executeChildFrameEvent(ProjectileChildFrameEventType.ChildFrameEvent_OnHit,executeTargetEntity,target);
+
+        _lastHitNormal = transform.position - target.transform.position;
+        _lastHitNormal.Normalize();
 
         _projectileGraph.decreasePenetrateCount();
         if(_projectileGraph.isPenetrateEnd() == true)

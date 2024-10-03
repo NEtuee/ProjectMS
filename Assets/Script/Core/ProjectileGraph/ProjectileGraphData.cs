@@ -43,6 +43,7 @@ public class ProjectileGraphBaseData : SerializableDataType
     public bool                         _castShadow = false;
 
     public bool                         _executeBySummoner = false;
+    public bool                         _cameraBound = false;
 
     public int                          _penetrateCount = 1;
 
@@ -70,6 +71,7 @@ public class ProjectileGraphBaseData : SerializableDataType
         binaryWriter.Write(_castShadow);
         binaryWriter.Write(_executeBySummoner);
         binaryWriter.Write(_penetrateCount );
+        binaryWriter.Write(_cameraBound);
     }
 #endif
 
@@ -97,6 +99,7 @@ public class ProjectileGraphBaseData : SerializableDataType
         _castShadow = binaryReader.ReadBoolean();
         _executeBySummoner = binaryReader.ReadBoolean();
         _penetrateCount = binaryReader.ReadInt32();
+        _cameraBound = binaryReader.ReadBoolean();
     }
 }
 

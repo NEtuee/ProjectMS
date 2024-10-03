@@ -185,7 +185,7 @@ public class TextBubbleObject : TextBubbleBinder
             return false;
 
         Vector3 cameraInPosition;
-        return CameraControlEx.Instance().IsInCameraBound(FollowTarget.transform.position, Camera.main.transform.position, out cameraInPosition);
+        return CameraControlEx.Instance().IsInCameraBound(FollowTarget.transform.position, Camera.main.transform.position, out cameraInPosition, out Vector3 normal);
     }
     
     private void UpdateFollowPosition()

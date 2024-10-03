@@ -53,10 +53,11 @@ public enum SetRotateSlotType
 public enum AttackType
 {
     None = 0,
-    Default = 0b001,
-    GuardBreak = 0b010,
-    Catch = 0b100,
-    Count = 3,
+    Default,
+    GuardBreak,
+    Catch,
+    Throw,
+    Count,
 }
 
 public enum AttackState

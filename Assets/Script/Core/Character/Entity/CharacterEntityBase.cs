@@ -37,7 +37,7 @@ public class CharacterEntityBase : GameEntityBase
     {
         _stagePointIndex = 0;
         MasterManager.instance._stageProcessor.updatePointIndex(transform.position, ref _stagePointIndex);
-        _isInCameraBound = MasterManager.instance._stageProcessor.isInCameraBound(_stagePointIndex, transform.position, out Vector3 resultPosition);
+        _isInCameraBound = MasterManager.instance._stageProcessor.isInCameraBound(_stagePointIndex, transform.position, out Vector3 resultPosition, out Vector3 boundNormal);
     }
 
     public override void initializeCharacter(CharacterInfoData characterInfo, AllyInfoData allyInfoData, Vector3 direction)
@@ -128,21 +128,29 @@ public class CharacterEntityBase : GameEntityBase
             }
 
             if(_isInCameraBound == false)
-                _isInCameraBound = MasterManager.instance._stageProcessor.isInCameraBound(_stagePointIndex, transform.position, out Vector3 resultPosition);
+                _isInCameraBound = MasterManager.instance._stageProcessor.isInCameraBound(_stagePointIndex, transform.position, out Vector3 resultPosition, out Vector3 boundNormal);
 
             if (_isInCameraBound)
             {
-                bool inCameraBound = MasterManager.instance._stageProcessor.isInCameraBound(_stagePointIndex, transform.position, out Vector3 resultPosition);
-                
-                if (inCameraBound == false)
+                bool isInCameraBound = MasterManager.instance._stageProcessor.isInCameraBound(_stagePointIndex, transform.position, out Vector3 resultPosition, out Vector3 boundNormal);
+
+                if(isInCameraBound == false)
                 {
                     Vector3 pushDirection = resultPosition - transform.position;
                     float length = pushDirection.magnitude;
                     pushDirection.Normalize();
 
-                    setVelocity(pushDirection * length * 10f);
+                    setBoundVelocity(pushDirection * length * 10f);
+                }
+                else
+                {
+                    setBoundVelocity(Vector3.zero);
                 }
             }
+        }
+        else
+        {
+            setBoundVelocity(Vector3.zero);
         }
     }
 
@@ -151,7 +159,12 @@ public class CharacterEntityBase : GameEntityBase
         _useCameraBoundLock = value ? _characterInfo._useCameraBoundLock : false;
 
         if(_useCameraBoundLock)
-            _isInCameraBound = MasterManager.instance._stageProcessor.isInCameraBound(_stagePointIndex, transform.position, out Vector3 resultPosition);
+            _isInCameraBound = MasterManager.instance._stageProcessor.isInCameraBound(_stagePointIndex, transform.position, out Vector3 resultPosition, out Vector3 boundNormal);
+    }
+
+    public bool isInCameraBound(out Vector3 boundNormal)
+    {
+        return MasterManager.instance._stageProcessor.isInCameraBound(_stagePointIndex, transform.position, out Vector3 resultPosition,out boundNormal);
     }
 
     private void targetSearchQuick()

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
+using UnityEditor.ShaderGraph.Drawing.Inspector.PropertyDrawers;
 using UnityEngine;
 
 public enum CameraModeType
@@ -544,26 +545,40 @@ public class CameraControlEx : Singleton<CameraControlEx>
         return _currentTarget == targetObject;
     }
 
-    public bool IsInCameraBound(Vector3 position)
+    public bool IsInCameraBound(Vector3 position, out Vector3 normal)
     {
         Vector3 inPosition = new Vector3();
-        return IsInCameraBound(position, Camera.main.transform.position, out inPosition);
+        return IsInCameraBound(position, Camera.main.transform.position, out inPosition, out normal);
     }
 
-    public bool IsInCameraBound(Vector3 position, Vector3 cameraPosition, out Vector3 cameraInPosition)
+    public bool IsInCameraBound(Vector3 position, Vector3 cameraPosition, out Vector3 cameraInPosition, out Vector3 normal)
 	{
 		var bound = GetCamBounds(cameraPosition);
         cameraInPosition = position;
+
+        normal = Vector3.zero;
         
         if(position.x < bound.x)
+        {
             cameraInPosition.x = bound.x;
+            normal = Vector3.right;
+        }
         else if(position.x > bound.y)
+        {
             cameraInPosition.x = bound.y;
+            normal = Vector3.left;
+        }
 
         if(position.y < bound.z)
+        {
             cameraInPosition.y = bound.z;
+            normal = Vector3.up;
+        }
         else if(position.y > bound.w)
+        {
             cameraInPosition.y = bound.w;
+            normal = Vector3.down;
+        }
 
 		return (position.x >= bound.x && position.x <= bound.y && position.y >= bound.z && position.y <= bound.w);
 	}

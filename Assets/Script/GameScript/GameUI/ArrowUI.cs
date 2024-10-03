@@ -52,7 +52,7 @@ public class ArrowUI : IUIElement
 
         Vector3 nextPoint = new Vector3();
         MasterManager.instance._stageProcessor.getNextPoint(ref nextPoint);
-        if(CameraControlEx.Instance().IsInCameraBound(nextPoint))
+        if(CameraControlEx.Instance().IsInCameraBound(nextPoint, out Vector3 normal))
         {
             _binder.Arrow.SetActive(false);
             return;

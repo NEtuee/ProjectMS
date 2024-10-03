@@ -207,6 +207,10 @@ public class ProjectileGraphLoader : LoaderBase<ProjectileGraphBaseDataList>
             {
                 baseData._gravity = float.Parse(targetValue);
             }
+            else if(targetName == "CameraBound")
+            {
+                baseData._cameraBound = bool.Parse(targetValue);
+            }
             else
             {
                 DebugUtil.assert(false,"invalid Attribute : {0} [Line: {1}] [FileName: {2}]", targetName, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);

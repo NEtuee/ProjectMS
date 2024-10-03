@@ -1,6 +1,6 @@
 HintType,Symbol,TextList
 FrameEvent,Test,Log=~~
-FrameEvent,Attack,"Radius=~~,Angle=~~,StartDistance=~~,AttackPreset=~~,Push=~~,IgnoreDefenceType=~~,CatchOffset=~~,AttackType=~~,AttackCount=~~,NotifyAttackSuccess=~~,DirectionType=~~,AttackTerm=~~"
+FrameEvent,Attack,"Radius=~~,Angle=~~,StartDistance=~~,AttackPreset=~~,Push=~~,IgnoreDefenceType=~~,CatchOffset=~~,AttackType=~~,AttackCount=~~,NotifyAttackSuccess=~~,DirectionType=~~,AttackTerm=~~,ProjectileName=~~"
 FrameEvent,ApplyBuff,ApplyBuff=~~
 FrameEvent,ApplyBuffTarget,ApplyBuff=~~
 FrameEvent,DeleteBuff,BuffList=~~
@@ -73,7 +73,7 @@ ShortCut,__MultiSelectAnimation,<MultiSelectAnimation Path=~~ Condition=~~/>
 ShortCut,__FrameEvent_ZoomEffect,<FrameEvent Type=~ZoomEffect~ StartTime=~0~ Scale=~~/>
 ShortCut,__FrameEvent_StopUpdate,<FrameEvent Type=~StopUpdate~ StartTime=~0~ Time=~~/>
 ShortCut,__FrameEvent_SpawnCharacter,<FrameEvent Type=~SpawnCharacter~ StartTime=~0~ CharacterKey=~~ Offset=~0 0 0~ AllyInfo=~~ InheritDirection=~~/>
-InQuote,AttackType=,"Default,GuardBreak,Catch"
+InQuote,AttackType=,"Default,GuardBreak,Catch,Throw"
 ShortCut,__FrameEvent_ReleaseCatch,<FrameEvent Type=~ReleaseCatch~ StartTime=~0~ Push=~~ TargetAction=~~/>
 FrameEvent,ReleaseCatch,"Push=~~,TargetAction=~~"
 InQuote,FollowDirection,"true,false"

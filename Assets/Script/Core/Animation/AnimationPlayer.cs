@@ -260,7 +260,7 @@ public struct FrameEventProcessDescription
 
 public class AnimationPlayer
 {
-    private AnimationTimeProcessor _animationTimeProcessor;
+    private AnimationTimeProcessor _animationTimeProcessor = new AnimationTimeProcessor();
     private AnimationPlayDataInfo _currentAnimationPlayData;
 
     private string _currentAnimationName;
@@ -276,11 +276,6 @@ public class AnimationPlayer
 
     private List<FrameEventProcessDescription> _frameEventProcessList = new List<FrameEventProcessDescription>();
 
-    public AnimationPlayer()
-    {
-        _animationTimeProcessor = new AnimationTimeProcessor();
-    }
-
     public bool isValid()
     {
         return true;//_currentAnimationPlayData != null;
@@ -289,6 +284,14 @@ public class AnimationPlayer
     public void initialize()
     {
         _animationTimeProcessor.initialize();
+        _currentAnimationPlayData = null;
+        _currentAnimationSprites = null;
+        _currentAnimationName = "";
+        _currentAnimationFrameEventIndex = 0;
+        _currentFrameEventIndex = 0;
+        _currentTimeEventIndex = 0;
+        _onAnimationEnd = null;
+        _frameEventProcessList.Clear();
     }
 
     public bool progress(float deltaTime, ObjectBase targetEntity)
@@ -696,13 +699,16 @@ public class AnimationPlayer
 
     public Sprite getCurrentSprite(float currentAngleDegree = 0f)
     {
+        if(_currentAnimationPlayData == null)
+            return null;
+
         if(_currentAnimationSprites.Length <= _animationTimeProcessor.getCurrentIndex())
         {
             DebugUtil.assert(false, "스프라이트 Out Of Index 입니다. AnimationPreset이 잘못되어 있지는 않나요? End Frame을 확인해 주세요. [Length: {0}] [Index: {1}] [Loop: {2}] [Path: {3}]",_currentAnimationSprites.Length, _animationTimeProcessor.getCurrentIndex(), _animationTimeProcessor.isLoop(), _currentAnimationPlayData._path);
             return null;
         }
 
-        if(_currentAnimationPlayData != null && _currentAnimationPlayData._isAngleBaseAnimation)
+        if(_currentAnimationPlayData._isAngleBaseAnimation)
         {
             int index = angleToSectorNumberByAngleBaseSpriteCount(currentAngleDegree) + _animationTimeProcessor.getCurrentIndex();
             if(_currentAnimationSprites.Length <= index)

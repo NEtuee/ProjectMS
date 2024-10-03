@@ -355,6 +355,46 @@
         <UseBranchSet Name="KickBranch"/>
     </DashRoll_Kick>
 
+    <DashRoll_Kick_Throw MovementType="FrameEvent" DirectionType="MousePoint" RotationType="MoveDirection" FlipType="MousePoint" DirectionUpdateOnce="true" Flags="ClearPush">
+        <Animation Preset="Sprites/NewPlayer/DashRoll/" XFlip="true" Duration="0.25">
+            <FrameEvent Type="Attack" StartTime="0" AttackType="Throw" AttackPreset="Akane_Kick" IgnoreDefenceType="Guard" AttackCount="1" ProjectileName="AttackThrow">
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="GuardCountClear"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="TargetBattleIncrement" Condition="getTargetFrameTag_Groggy == false"/>
+
+                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/ParrySucc" Offset="0.0 0.0 0.0" Attach="false" ToTarget="true" AngleType="identity"/>
+                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+
+                    <FrameEvent Type="TeleportToTarget" DistanceOffset="0"/>
+                    <FrameEvent Type="StopUpdate" Time="0.15"/>
+
+                    <FrameEvent Type="SetTimeScale" Scale="0.1" Time="0.05" BlendTime="0.01"/>
+                    <FrameEvent Type="ShakeEffect" Scale="0.1" Speed="35.0" Time="0.15"/>
+
+                    <FrameEvent Type="ZoomEffect" StartTime="0" Scale="-0.4"/>
+                </OnHit>
+                
+                <OnEvade>
+                    <FrameEvent Type="TeleportToTarget"/>
+                </OnEvade>
+            </FrameEvent>
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="999" Tag="ZeroApKickFailed" Condition="(getStat_DashPoint < 1.0)"/>
+
+            <FrameEvent Type="Movement" StartTime="0" Friction="gv_DashFriction" MaxVelocity="gv_DashVelocity" Speed="0" Velocity="gv_DashVelocity" Condition="(getStat_DashPoint >= 1.0)"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0.031" ApplyBuff="DashPointConsumption"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0.156" EndTime="999" Tag="MoveCancel"/>
+            <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="0.016" Tag="Attack"/>
+            <FrameEvent Type="AudioPlay" Condition="AttackSuccess == false" StartTime="0.05" ID="1002" Attach="true"/>
+
+            <FrameEvent Type="EffectPreset" Condition="AttackSuccess == false" StartTime="0.05" Key="DashTrail"/>
+        </Animation>
+
+        <Branch Condition="AttackSuccess || AttackGuarded || AttackGuardBreak || AttackGuardBreakFail" Execute="Kicked_Throw"/>
+        
+        <UseBranchSet Name="KickBranch"/>
+    </DashRoll_Kick_Throw>
+
     <DashRoll_Kick_Hard MovementType="FrameEvent" DirectionType="MousePoint" RotationType="MoveDirection" FlipType="MousePoint" DirectionUpdateOnce="true" Flags="ClearPush">
         <Animation Preset="Sprites/NewPlayer/DashRoll/" XFlip="true" Duration="0.25">
             <FrameEvent Type="Attack" StartTime="0" AttackType="GuardBreak" AttackPreset="Akane_Kick_Hard" IgnoreDefenceType="Guard" AttackCount="1">
@@ -450,11 +490,31 @@
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="DashPointIncrement"/>
         </Animation>
 
+        <Branch Key="getKey_GuardBreak2 && getKey_DashMove" Condition="getFrameTag_StanceCancel" Execute="DashRoll_Kick_Throw"/>
+        <Branch Key="getKey_GuardBreak2 && getKey_DashMove" Condition="getFrameTag_MoveCancel" Execute="DashRoll_Kick_Throw"/>
+
         <UseBranchSet Name="CancelBranch"/>
         <!-- <Branch Condition="AttackSuccess" Execute="AttackSuccess"/> -->
         <Branch Key="(getKey_AttackCharge == true) || (getKey_NormalMove == true)" Condition="End" Execute="MoveAll"/>
         <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="KickStop"/>
     </Kicked>
+
+    <Kicked_Throw MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
+        <Animation Preset="Sprites/NewPlayer/kick/" XFlip="true" ScalePreset="YSpring" Duration="0.44">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="1001" Attach="true"/>
+        
+            <FrameEvent Type="ApplyBuff" StartTime="0" Condition="(getStat_DashPoint >= 1.0)" ApplyBuff="DashPointConsumption"/>
+
+            <FrameEvent Type="Movement" StartTime="0" Friction="3" Speed="0" Velocity="-1.5 "/>
+            <FrameEvent Type="FrameTag" StartTime="0.198" EndTime="999" Tag="MoveCancel"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="DashPointIncrement"/>
+        </Animation>
+
+        <UseBranchSet Name="CancelBranch"/>
+        <!-- <Branch Condition="AttackSuccess" Execute="AttackSuccess"/> -->
+        <Branch Key="(getKey_AttackCharge == true) || (getKey_NormalMove == true)" Condition="End" Execute="MoveAll"/>
+        <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="KickStop"/>
+    </Kicked_Throw>
 
     <AttackSuccess MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction" DirectionUpdateOnce="true">
         <Animation Preset="Sprites/NewPlayer/attack/" XFlip="true" ScalePreset="YSpring" Duration="0.315" MultiSelectUpdateOnce="True">

@@ -101,26 +101,28 @@ public class ProjectileManager : PoolingManagerBase<ProjectileEntityBase>
         _currentUpdateList.Add(delayedProjectileItem);
     }
 
-    public void spawnProjectile(string name, ref ProjectileGraphShotInfoData shotInfo, Vector3 startPosition, ObjectBase summoner, AllyInfoData allyInfo)
+    public ProjectileEntityBase spawnProjectile(string name, ref ProjectileGraphShotInfoData shotInfo, Vector3 startPosition, ObjectBase summoner, AllyInfoData allyInfo)
     {
         ProjectileEntityBase entity = dequeuePoolEntity();
 
         entity.name = name;
+        entity.initializeProjectile();
         entity.setAllyInfo(allyInfo);
         entity.setSummonObject(summoner);
         entity.setData(getProjectileGraphData(name));
-        entity.initialize();
         entity.shot(shotInfo,startPosition);
+
+        return entity;
     }
 
     public void spawnProjectile(string name, Vector3 startPosition, ObjectBase summoner, AllyInfoData allyInfo)
     {
         ProjectileEntityBase entity = dequeuePoolEntity();
 
+        entity.initializeProjectile();
         entity.setAllyInfo(allyInfo);
         entity.setSummonObject(summoner);
         entity.setData(getProjectileGraphData(name));
-        entity.initialize();
         entity.shot(startPosition);
     }
 

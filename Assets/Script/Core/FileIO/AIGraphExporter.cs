@@ -836,8 +836,10 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
                 currentEventType = AIChildEventType.AIChildEvent_OnCatchTarget;
             else if(eventType == "OnCatched")
                 currentEventType = AIChildEventType.AIChildEvent_OnCatched;
+            else if(eventType == "OnThrowed")
+                currentEventType = AIChildEventType.AIChildEvent_OnThrowed;
 
-            DebugUtil.assert((int)AIChildEventType.Count == 19, "check this");
+            DebugUtil.assert((int)AIChildEventType.Count == 20, "check this");
         }
 
         if(childEventDic.ContainsKey(currentEventType))

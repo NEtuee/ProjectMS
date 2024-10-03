@@ -2844,6 +2844,8 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
     public bool                    _notifyAttackSuccess = true;
     public int                     _collisionCount = -1;
 
+    public string                  _throwProjectileName = "";
+
 
     public override void initialize(ObjectBase executeEntity)
     {
@@ -2982,6 +2984,10 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
             {
                 _attackTerm = float.Parse(attributes[i].Value);
             }
+            else if(attributes[i].Name == "ProjectileName")
+            {
+                _throwProjectileName = attributes[i].Value;
+            }
         }
 
         CollisionInfoData data = new CollisionInfoData(radius,angle,startDistance,rayRadius, CollisionType.Attack);
@@ -3014,6 +3020,7 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
         binaryWriter.Write(_attackTerm);
         binaryWriter.Write(_notifyAttackSuccess);
         binaryWriter.Write(_collisionCount);
+        binaryWriter.Write(_throwProjectileName);
     }
 #endif
 
@@ -3044,6 +3051,7 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
         _attackTerm = binaryReader.ReadSingle();
         _notifyAttackSuccess = binaryReader.ReadBoolean();
         _collisionCount = binaryReader.ReadInt32();
+        _throwProjectileName = binaryReader.ReadString();
     }
 }
 

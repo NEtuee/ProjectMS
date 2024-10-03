@@ -57,6 +57,7 @@ public class GameEntityBase : SequencerObjectBase
 
 
     private Vector3             _currentVelocity = Vector3.zero;
+    private Vector3             _currentBoundVelocity = Vector3.zero;
     private Vector3             _recentlyAttackPoint = Vector3.zero;
     private Vector3             _defenceDirection = Vector3.zero;
 
@@ -185,6 +186,7 @@ public class GameEntityBase : SequencerObjectBase
         _isDummyEntity = false;
 
         _currentVelocity = Vector3.zero;
+        _currentBoundVelocity = Vector3.zero;
         _currentTarget = null;
 
         _characterLifeTime = 0f;
@@ -394,6 +396,7 @@ public class GameEntityBase : SequencerObjectBase
     {
         _currentDefenceType = _actionGraph.getCurrentDefenceType();
         _currentVelocity = Vector3.zero;
+        _currentBoundVelocity = Vector3.zero;
     }
     
     public override void progress(float deltaTime)
@@ -913,6 +916,7 @@ public class GameEntityBase : SequencerObjectBase
         _isDummyEntity = false;
 
         _currentVelocity = Vector3.zero;
+        _currentBoundVelocity = Vector3.zero;
         _currentTarget = null;
 
         _characterLifeTime = 0f;
@@ -1194,7 +1198,7 @@ public class GameEntityBase : SequencerObjectBase
 
     private void updatePhysics(float deltaTime)
     {
-        transform.position += _currentVelocity * deltaTime;
+        transform.position += (_currentVelocity + _currentBoundVelocity) * deltaTime;
         _currentVelocity = MathEx.convergence0(_currentVelocity, _defaultFriction * deltaTime);
     }
 
@@ -1492,6 +1496,7 @@ public class GameEntityBase : SequencerObjectBase
 
     public void addVelocity(Vector3 velocity) {_currentVelocity += velocity;}
     public void setVelocity(Vector3 velocity) {_currentVelocity = velocity;}
+    public void setBoundVelocity(Vector3 velocity) {_currentBoundVelocity = velocity;}
 
     public bool checkCurrentActionFlag(ActionFlags flag) {return _actionGraph.checkCurrentActionFlag(flag);}
 

@@ -32,7 +32,9 @@ public class ProjectileGraph
         setShotInfo(shotInfoData);
 
         _animationPlayer.initialize();
-        _animationPlayer.changeAnimation(_projectileGraphBaseData._animationPlayData[0]);
+
+        if(_projectileGraphBaseData._animationPlayData != null)
+            _animationPlayer.changeAnimation(_projectileGraphBaseData._animationPlayData[0]);
 
         _movementOfFrame = UnityEngine.Vector3.zero;
         _currentPenetrateCount = _projectileGraphBaseData._penetrateCount;
@@ -43,6 +45,11 @@ public class ProjectileGraph
     public UnityEngine.Vector3 getCurrentDirection()
     {
         return UnityEngine.Quaternion.Euler(0f,0f,_currentAngle) * UnityEngine.Vector3.right;
+    }
+
+    public float getCurrentVelocity()
+    {
+        return _currentVelocity;
     }
 
     private void setShotInfo(ProjectileGraphShotInfoData shotInfoData)

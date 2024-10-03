@@ -55,6 +55,8 @@ public abstract class ObjectBase : MessageReceiver, IProgress
     public virtual void deactive()
     {
         detachChildObject();
+        detachFromParent();
+        
         setSummonObject(null);
 
         while(gameObject.transform.childCount == 0)
@@ -114,6 +116,9 @@ public abstract class ObjectBase : MessageReceiver, IProgress
 
         detachChildObject();
 
+        if(childDescription._childObject != null)
+            childDescription._childObject.detachFromParent();
+
         _childPivot = childDescription._pivot;
         _childObject = childDescription._childObject;
         _childObject.setParentObject(this);
@@ -127,6 +132,14 @@ public abstract class ObjectBase : MessageReceiver, IProgress
 
         _childObject.setParentObject(null);
         _childObject = null;
+    }
+
+    public void detachFromParent()
+    {
+        if(hasParentObject() == false)
+            return;
+        
+        _parentObject.detachChildObject();
     }
 
     public void setAllyInfo(AllyInfoData allyInfo) {_allyInfo = allyInfo;}

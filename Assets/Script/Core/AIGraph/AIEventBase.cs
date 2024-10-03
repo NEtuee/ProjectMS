@@ -53,6 +53,8 @@ public enum AIChildEventType
     AIChildEvent_OnCatchTarget,
     AIChildEvent_OnCatched,
 
+    AIChildEvent_OnThrowed,
+
     AIChildEvent_Custom,
     
 

@@ -867,20 +867,21 @@ public class StageProcessor
         }
     }
 
-    public bool isInCameraBound(Vector3 position)
+    public bool isInCameraBound(Vector3 position, out Vector3 boundNormal)
     {
         Vector3 result;
-        return isInCameraBound(_currentPoint, position, out result);
+        return isInCameraBound(_currentPoint, position, out result, out boundNormal);
     }
 
-    public bool isInCameraBound(int pointIndex, Vector3 position, out Vector3 resultPosition)
+    public bool isInCameraBound(int pointIndex, Vector3 position, out Vector3 resultPosition, out Vector3 boundNormal)
     {
         resultPosition = position;
+        boundNormal = Vector3.zero;
         if(isValid() == false)
             return true;
 
         getLimitedFractionOnLine(pointIndex, position, out resultPosition);
-        return CameraControlEx.Instance().IsInCameraBound(position, resultPosition, out resultPosition);
+        return CameraControlEx.Instance().IsInCameraBound(position, resultPosition, out resultPosition, out boundNormal);
     }
 
     private float getLimitedFractionOnLine(int targetPointIndex, Vector3 targetPosition, out Vector3 resultPoint)

@@ -687,4 +687,44 @@
         </Event>
     </AobaShotgunBullet>
 
+    <!-- 스케반 원거리 (기관단총) -->
+    <AttackThrow PenetrateCount="1" CameraBound="True">
+
+        <CollisionInfo Radius="0.1" Angle="0"/>
+        <DefaultShotInfo Velocity="8" Acceleration="0" Friction="16" Angle="0" AngularAcceleration="0" LifeTime="0.5"/>
+        <Event>
+            <OnHit>
+                <FrameEvent Type="Attack" NotifyAttackSuccess="False" AttackType="GuardBreak" AttackPreset="CommonProjectile" IgnoreDefenceType="Guard">
+                    <OnGuardBreak>
+                        <FrameEvent Type="ApplyBuffTarget" ApplyBuff="GuardCountIncrease"/>
+                        <FrameEvent Type="ApplyBuffTarget" ApplyBuff="TargetBattleIncrement" Condition="getTargetFrameTag_Groggy == false"/>
+
+                        <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/ParrySucc" Offset="0.0 0.0 0.0" Attach="false" ToTarget="true" AngleType="identity"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+
+                        <FrameEvent Type="ShakeEffect" Scale="0.1" Speed="35.0" Time="0.15"/>
+                    </OnGuardBreak>
+
+                    <OnGuardBreakFail>
+                        <FrameEvent Type="ApplyBuffTarget" ApplyBuff="TargetBattleIncrement" Condition="getTargetFrameTag_Groggy == false"/>
+                        <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
+
+                        <FrameEvent Type="AudioPlay" StartTime="0" ID="4902" Attach="true"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="SmashSmall"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="BloodSmall"/>
+
+                        <FrameEvent Type="ShakeEffect" Scale="0.1" Speed="35.0" Time="0.15"/>
+                    </OnGuardBreakFail>
+                </FrameEvent>
+                <FrameEvent Type="EffectPreset" StartTime="0" Key="SmashSmall"/>
+            </OnHit>
+    
+            <OnHitEnd>
+            </OnHitEnd>
+    
+            <OnEnd>
+            </OnEnd>
+        </Event>
+    </AttackThrow>
+
 </ProjectileGraph>

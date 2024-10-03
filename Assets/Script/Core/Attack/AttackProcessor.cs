@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public abstract class AttackProcessorBase
@@ -300,6 +301,12 @@ public class AttackProcessor : AttackProcessorBase
         ObjectBase requester = (ObjectBase)successData._requester;
         GameEntityBase target = (GameEntityBase)successData._target;
 
+        if(requester is ProjectileEntityBase)
+        {
+            if(target == requester.getChildObject())
+                return true;
+        }
+
         if(_collisionList.Contains(target) == true)
             return true;
         else
@@ -337,70 +344,100 @@ public class AttackProcessor : AttackProcessorBase
 
         if(((guardSuccess == false || target.getDefenceType() == DefenceType.Empty) && target.getDefenceType() != DefenceType.Evade) || canIgnore)
         {
-            if(_attackFrameEvent._attackType == AttackType.Default)
+            switch(_attackFrameEvent._attackType)
             {
-                requester.setAttackState(AttackState.AttackSuccess);
-                if(_attackFrameEvent._notifyAttackSuccess)
-                    target.setDefenceState(DefenceState.Hit);
-
-                if(requester is GameEntityBase)
-                    ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnAttack);
-                
-                if(_attackFrameEvent._notifyAttackSuccess)
-                    target.executeAIEvent(AIChildEventType.AIChildEvent_OnAttacked);
-
-                eventType = ChildFrameEventType.ChildFrameEvent_OnHit;
-                attackSuccess = true;
-            }
-            else if(_attackFrameEvent._attackType == AttackType.GuardBreak)
-            {
-                if(target.getDefenceType() == DefenceType.Empty)
+                case AttackType.Default:
                 {
-                    requester.setAttackState(AttackState.AttackGuardBreakFail);
-                    target.setDefenceState(DefenceState.GuardBreakFail);
+                    requester.setAttackState(AttackState.AttackSuccess);
+                    if(_attackFrameEvent._notifyAttackSuccess)
+                        target.setDefenceState(DefenceState.Hit);
 
                     if(requester is GameEntityBase)
-                        ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnAttackGuardBreakFail);
-                    target.executeAIEvent(AIChildEventType.AIChildEvent_OnGuardBreakFail);
+                        ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnAttack);
 
-                    eventType = ChildFrameEventType.ChildFrameEvent_OnGuardBreakFail;
+                    if(_attackFrameEvent._notifyAttackSuccess)
+                        target.executeAIEvent(AIChildEventType.AIChildEvent_OnAttacked);
+
+                    eventType = ChildFrameEventType.ChildFrameEvent_OnHit;
+                    attackSuccess = true;
                 }
-                else
+                break;
+                case AttackType.GuardBreak:
                 {
-                    requester.setAttackState(AttackState.AttackGuardBreak);
-                    target.setDefenceState(DefenceState.GuardBroken);
+                    if(target.getDefenceType() == DefenceType.Empty)
+                    {
+                        requester.setAttackState(AttackState.AttackGuardBreakFail);
+                        target.setDefenceState(DefenceState.GuardBreakFail);
 
-                    if(requester is GameEntityBase)
-                        ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnGuardBreak);
-                    target.executeAIEvent(AIChildEventType.AIChildEvent_OnGuardBroken);
+                        if(requester is GameEntityBase)
+                            ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnAttackGuardBreakFail);
+                        target.executeAIEvent(AIChildEventType.AIChildEvent_OnGuardBreakFail);
 
-                    eventType = ChildFrameEventType.ChildFrameEvent_OnGuardBreak;
+                        eventType = ChildFrameEventType.ChildFrameEvent_OnGuardBreakFail;
+                    }
+                    else
+                    {
+                        requester.setAttackState(AttackState.AttackGuardBreak);
+                        target.setDefenceState(DefenceState.GuardBroken);
+
+                        if(requester is GameEntityBase)
+                            ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnGuardBreak);
+                        target.executeAIEvent(AIChildEventType.AIChildEvent_OnGuardBroken);
+
+                        eventType = ChildFrameEventType.ChildFrameEvent_OnGuardBreak;
+                    }
+
+                    attackSuccess = true;
                 }
-                
-                attackSuccess = true;
-            }
-            else if(_attackFrameEvent._attackType == AttackType.Catch)
-            {
-                if(target.hasParentObject() == false)
+                break;
+                case AttackType.Catch:
                 {
-                    requester.setAttackState(AttackState.AttackCatch);
-                    target.setDefenceState(DefenceState.Catched);
-                
+                    if(target.hasParentObject() == false)
+                    {
+                        requester.setAttackState(AttackState.AttackCatch);
+                        target.setDefenceState(DefenceState.Catched);
+
+                        AttachChildDescription description;
+                        description._childObject = target;
+                        description._pivot = _attackFrameEvent._catchOffset;
+
+                        requester.attachChildObject(description);
+
+                        if(requester is GameEntityBase)
+                            ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnCatchTarget);
+                        target.executeAIEvent(AIChildEventType.AIChildEvent_OnCatched);
+                    }
+
+                    eventType = ChildFrameEventType.ChildFrameEvent_OnCatch;
+
+                    _attackFrameEvent.executeChildFrameEvent(ChildFrameEventType.ChildFrameEvent_OnHit, requester, target);
+                    attackSuccess = true;
+                }
+                break;
+                case AttackType.Throw:
+                {
+                    ProjectileGraphBaseData baseData = ProjectileManager._instance.getProjectileGraphData(_attackFrameEvent._throwProjectileName);
+
+                    ProjectileGraphShotInfoData shotInfo = baseData._defaultProjectileShotInfoData;
+                    shotInfo._defaultAngle += MathEx.directionToAngle(requester.getDirection());
+
+                    ProjectileEntityBase projectile = ProjectileManager._instance.spawnProjectile(_attackFrameEvent._throwProjectileName,ref shotInfo,target.transform.position,requester,requester.getAllyInfo());
+
                     AttachChildDescription description;
                     description._childObject = target;
-                    description._pivot = _attackFrameEvent._catchOffset;
+                    description._pivot = Vector3.zero;
 
-                    requester.attachChildObject(description);
+                    projectile.attachChildObject(description);
 
-                    if(requester is GameEntityBase)
-                        ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnCatchTarget);
-                    target.executeAIEvent(AIChildEventType.AIChildEvent_OnCatched);
+                    eventType = ChildFrameEventType.ChildFrameEvent_OnHit;
+
+                    requester.setAttackState(AttackState.AttackSuccess);
+                    target.setVelocity(Vector3.zero);
+
+                    _attackFrameEvent.executeChildFrameEvent(ChildFrameEventType.ChildFrameEvent_OnHit, requester, target);
+                    attackSuccess = true;
                 }
-
-                eventType = ChildFrameEventType.ChildFrameEvent_OnCatch;
-
-                _attackFrameEvent.executeChildFrameEvent(ChildFrameEventType.ChildFrameEvent_OnHit, requester, target);
-                attackSuccess = true;
+                break;
             }
         }
         else if(guardSuccess && target.getDefenceType() == DefenceType.Guard)
