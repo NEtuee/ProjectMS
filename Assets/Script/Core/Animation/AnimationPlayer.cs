@@ -699,7 +699,7 @@ public class AnimationPlayer
 
     public Sprite getCurrentSprite(float currentAngleDegree = 0f)
     {
-        if(_currentAnimationPlayData == null)
+        if(_currentAnimationPlayData == null && _currentAnimationSprites == null)
             return null;
 
         if(_currentAnimationSprites.Length <= _animationTimeProcessor.getCurrentIndex())
@@ -708,7 +708,7 @@ public class AnimationPlayer
             return null;
         }
 
-        if(_currentAnimationPlayData._isAngleBaseAnimation)
+        if(_currentAnimationPlayData != null && _currentAnimationPlayData._isAngleBaseAnimation)
         {
             int index = angleToSectorNumberByAngleBaseSpriteCount(currentAngleDegree) + _animationTimeProcessor.getCurrentIndex();
             if(_currentAnimationSprites.Length <= index)

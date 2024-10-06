@@ -3,6 +3,7 @@
 <ActionGraph Name="Test" DefaultAction="Spawn" DefaultFramePerSecond="4" DefaultBuff="BattleDecrementKeep DashPointRegenDelayed BloodAlertEffect DecreaseBloodPointDelayed BloodPointToHP ClearOutlineXXX">
 
     <GlobalVariable Name="gv_DashVelocity" Value="10"/>
+    <GlobalVariable Name="gv_QuickDashVelocity" Value="12"/>
     <GlobalVariable Name="gv_LongDashVelocity" Value="35"/>
     <GlobalVariable Name="gv_DashFriction" Value="24"/>
     <GlobalVariable Name="gv_LongDashFriction" Value="10"/>
@@ -225,10 +226,32 @@
         <Branch Condition="AttackSuccess" Execute="AttackSuccess"/>
         <Branch Condition="EvadeSuccess" Execute="EvadeSuccess"/>
         <Branch Condition="AttackGuarded" Execute="AttackGuarded"/>
+
         <Branch Key="getKey_AttackCharge == true" Condition="End" Execute="MoveAll"/>
-        <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="MoveStop"/>
-        <Branch Key="getKey_AttackCharge == false" Condition="getFrameTag_MoveCancel" Execute="MoveStop"/>
+        <Branch Key="getKey_NormalMove == true" Condition="End" Execute="MoveAll"/>
+
+        <Branch Key="getKey_QucikDash" Condition="getFrameTag_MoveCancel" Execute="DashRollQuick"/>
+        
+        <Branch Key="(getKey_NormalMove == false) && (getKey_AttackCharge == false)" Condition="End" Execute="MoveStop"/>
+        <Branch Key="(getKey_NormalMove == false) && (getKey_AttackCharge == false)" Condition="getFrameTag_MoveCancel" Execute="MoveStop"/>
     </DashRoll>
+
+    <DashRollQuick MovementType="FrameEvent" DirectionType="MousePoint" RotationType="MoveDirection" FlipType="MousePoint" DirectionUpdateOnce="true" Flags="ClearPush">
+        <Animation Preset="Sprites/NewPlayer/MoveDirection/" XFlip="true" ScalePreset="QuickDash" Duration="0.1">
+
+            <FrameEvent Type="Movement" StartTime="0" Friction="gv_DashFriction" MaxVelocity="gv_QuickDashVelocity" Speed="0" Velocity="gv_QuickDashVelocity"/>
+
+            <FrameEvent Type="AudioPlay" Condition="AttackSuccess == false" StartTime="0.05" ID="1002" Attach="true"/>
+            <FrameEvent Type="EffectPreset" Condition="AttackSuccess == false" StartTime="0.05" Key="DashTrail"/>
+
+            <FrameEvent Type="ZoomEffect" StartTime="0" Scale="-0.06"/>
+        </Animation>
+
+        <Branch Key="getKey_AttackCharge == true" Condition="End" Execute="MoveAll"/>
+        <Branch Key="getKey_NormalMove == true" Condition="End" Execute="MoveAll"/>
+
+        <Branch Key="(getKey_NormalMove == false) && (getKey_AttackCharge == false)" Condition="End" Execute="MoveStop"/>
+    </DashRollQuick>
 
     <DashRoll_Long MovementType="FrameEvent" DirectionType="MousePoint" RotationType="MoveDirection" FlipType="MousePoint" DirectionUpdateOnce="true" Flags="ClearPush">
         <Animation Preset="Sprites/NewPlayer/DashRoll/" XFlip="true" ScalePreset="YSpring" Duration="0.25">
