@@ -470,7 +470,7 @@ public enum ActionFlags : ulong
     ClearPush = 1,
     LaserEffect = 1 << 1,
     QTE = 1 << 2,
-    HideBuffEffect = 1 << 3,
+    Hide = 1 << 3,
     IgnorePush = 1 << 4,
     ClearDanmaku = 1 << 5,
 };

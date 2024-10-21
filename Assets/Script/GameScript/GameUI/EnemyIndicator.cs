@@ -86,7 +86,7 @@ public class EnemyIndicator : IUIElement
             }
             
             bool isInCamera = IsInCameraSector(center, item.Key.transform.position);
-            var isAppear = _active && isInCamera == false;
+            var isAppear = _active && isInCamera == false && (item.Key.checkCurrentActionFlag(ActionFlags.Hide) == false);
 
             if (isAppear && 
                 item.Value.GetState() != EnemyIndicatorElement.State.AppearPlay &&

@@ -568,8 +568,8 @@ public class GameEntityBase : SequencerObjectBase
             _danmakuGraph.clearDanmaku();
         }
 
-        bool hideBuffEffect = _actionGraph.checkCurrentActionFlag(ActionFlags.HideBuffEffect);
-        if(hideBuffEffect || _actionGraph.checkPrevActionFlag(ActionFlags.HideBuffEffect))
+        bool hideBuffEffect = _actionGraph.checkCurrentActionFlag(ActionFlags.Hide);
+        if(hideBuffEffect || _actionGraph.checkPrevActionFlag(ActionFlags.Hide))
             _statusInfo.setBuffEffectVisible(hideBuffEffect == false);
     }
 

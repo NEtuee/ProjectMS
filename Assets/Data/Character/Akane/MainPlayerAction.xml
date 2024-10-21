@@ -806,7 +806,7 @@
 
     <!-- 여기부터 시퀀스 액션 -->
 
-    <SQ_Intro_Sleep MovementType="Empty" DirectionType="AlwaysRight" FlipType="AlwaysTurnOff" RotationType="AlwaysRight" HeadUpOffset="0.2" Flags="HideBuffEffect">
+    <SQ_Intro_Sleep MovementType="Empty" DirectionType="AlwaysRight" FlipType="AlwaysTurnOff" RotationType="AlwaysRight" HeadUpOffset="0.2" Flags="Hide">
         <Animation Preset="Sprites/NewPlayer/Sequencer/Intro_0" XFlip="true" Duration="7.0">
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="AkaneStartHP"/>
         </Animation>

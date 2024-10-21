@@ -242,6 +242,11 @@ public class ActionKeyInputManager : Singleton<ActionKeyInputManager>
         }
     }
 
+    public void setCursorVisible(bool visible)
+    {
+        Cursor.visible = visible;
+    }
+
     public void clearInputData()
     {
         foreach(ActionKeyInputData item in _actionKeyInputData.Values)
