@@ -65,7 +65,7 @@
         <Branch Key="getKey_AttackCharge == false" Condition="getFrameTag_MoveCancel" Execute="MoveStop"/>
     </BranchSet>
 
-    <Spawn MovementType="FrameEvent" DirectionType="Keep" FlipType="Keep">
+    <Spawn MovementType="FrameEvent" DirectionType="Keep" FlipType="Keep" Flags="Hide">
         <Animation Preset="Sprites/NewPlayer/idle/" XFlip="true" Duration="0.1">
             <!-- <FrameEvent Type="AudioPlay" StartTime="0" ID="1007" Attach="true"/> -->
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_IdleFriction" Speed="0"/>

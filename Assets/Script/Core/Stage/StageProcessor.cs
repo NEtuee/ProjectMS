@@ -548,8 +548,8 @@ public class StageProcessor
                 if(intersectionResult)
                 {
                     fraction = 1f;
-                    _cameraPositionBlendStartPosition = resultPoint;
                     _cameraPositionBlendTimeLeft = 1f;
+                    _cameraPositionBlendStartPosition = resultPoint;
                 }
             }
 

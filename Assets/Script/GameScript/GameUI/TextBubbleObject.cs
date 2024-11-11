@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Microsoft.Unity.VisualStudio.Editor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -18,6 +19,10 @@ public class TextBubbleObject : TextBubbleBinder
 
     private AnimationPlayer _animationPlayer = new AnimationPlayer();
     private AnimationPresetInfo _iconWaitIcon;
+    private AnimationScalePresetData _scalePreset;
+
+    private TimeProcessor _timeProcessor = new TimeProcessor();
+    private TimeProcessor.TimeProcessItem _timeProcessItem = null;
     
     private struct AnimationPresetInfo
     {
@@ -36,10 +41,14 @@ public class TextBubbleObject : TextBubbleBinder
         _textPresenter = new TextPresenter(this);
         gameObject.SetActive(false);
         _owner = owner;
-        
+    
         _iconWaitIcon = new AnimationPresetInfo(ResourceContainerEx.Instance().GetAnimationCustomPreset("Sprites/UI/talkballoon/dialogsticker/opening/"), "Sprites/UI/talkballoon/dialogsticker/opening");
         _animationPlayer.initialize();
         _animationPlayer.changeAnimationByCustomPreset(_iconWaitIcon._path, _iconWaitIcon._customPreset);
+
+        _scalePreset = (ResourceContainerEx.Instance().GetScriptableObject("Preset/AnimationScalePreset") as AnimationScalePreset).getPresetData("PortraitAppear");
+
+        _timeProcessItem = _timeProcessor.addTimer("PortraitAppear", 0.2f);
     }
     
     public void SetActive(bool active)
@@ -66,6 +75,7 @@ public class TextBubbleObject : TextBubbleBinder
         }
         
         _textPresenter.Clear();
+        _timeProcessItem.initialize();
 
         var add1 = GetRandomAdd(randomRange);
         var add2 = GetRandomAdd(randomRange);
@@ -81,7 +91,8 @@ public class TextBubbleObject : TextBubbleBinder
         
         FollowTarget = followTarget;
         UpdateFollowPosition();
-        
+        updatePortrait();
+
         _commendQueue.Clear();
 
         foreach (var commend in commandList)
@@ -101,8 +112,11 @@ public class TextBubbleObject : TextBubbleBinder
             return;
         }
         
+        _timeProcessor.updateProcessor(Time.deltaTime);
+
         UpdateCommand();
         UpdateFollowPosition();
+        updatePortrait();
         CheckDead();
         UpdateInputWaitIcon();
     }
@@ -121,6 +135,12 @@ public class TextBubbleObject : TextBubbleBinder
     {
         IconWaitInput.gameObject.SetActive(true);
         _animationPlayer.changeAnimationByCustomPreset(_iconWaitIcon._path, _iconWaitIcon._customPreset);
+    }
+
+    private void updatePortrait()
+    {
+        float yScale = _scalePreset.evaulate(_timeProcessItem.getRate()).y;
+        _portrait.rectTransform.localScale = new Vector3(FollowTarget.getFlipState().xFlip ? -1f : 1f, yScale, 1f);
     }
 
     private void UpdateInputWaitIcon()
