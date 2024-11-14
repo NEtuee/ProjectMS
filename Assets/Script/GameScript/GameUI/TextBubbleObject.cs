@@ -88,6 +88,13 @@ public class TextBubbleObject : TextBubbleBinder
          add3 = GetRandomAdd(randomRange);
          add4 = GetRandomAdd(randomRange);
         BubblePolygonBack.InitRandomAdd(add1, add2, add3, add4);
+
+
+        BubblePolygonArrow.InitRandomAdd(
+            new Vector2(Random.Range(5f,15f),0f), 
+            new Vector2(Random.Range(-15f,5f),0f), 
+            new Vector2(BubblePolygonArrow.rectTransform.rect.width * 0.5f,0f), 
+            new Vector2(-BubblePolygonArrow.rectTransform.rect.width * 0.5f,0f));
         
         FollowTarget = followTarget;
         UpdateFollowPosition();

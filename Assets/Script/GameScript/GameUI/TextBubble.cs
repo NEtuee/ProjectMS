@@ -146,6 +146,7 @@ public class TextPresenter
         UpdateText(_stringBuilder.ToString());
         _binder.BubblePolygonBack.ForceUpdate();
         _binder.BubblePolygonMain.ForceUpdate();
+        _binder.BubblePolygonArrow.ForceUpdate();
     }
 
     public void InitTextLength(int length)

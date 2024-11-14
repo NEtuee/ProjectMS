@@ -10,6 +10,7 @@ public class TextBubbleBinder : UIObjectBinder
 {
     public UIPolygon BubblePolygonMain;
     public UIPolygon BubblePolygonBack;
+    public UIPolygon BubblePolygonArrow;
     public Text TextComp;
     public Image IconWaitInput;
     public Image _portrait;
