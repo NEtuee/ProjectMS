@@ -872,4 +872,20 @@
 
         AllyInfo="EnemyAllNeutral"
     />
+
+    <TalkCharacter
+        DisplayName="대화용 캐릭터"
+        ActionGraph="Assets/Data/Character/Empty/EmptyAction.xml"
+        AIGraph="Assets/Data/AILibrary/Graph/EmptyAIGraph.xml"
+        StatusInfoName="CommonEnemyStatus"
+
+        CollisionRadius="0.2"
+        HeadUpOffset="0.0"
+        IndicatorVisible="True"
+        UseCameraBoundLock="False"
+        SelfCollision="False"
+        ImmortalCharacter="True"
+
+        AllyInfo="Deco"
+    />
 </CharacterInfo>

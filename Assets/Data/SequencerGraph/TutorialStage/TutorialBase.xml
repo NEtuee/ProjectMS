@@ -1,0 +1,17 @@
+<SequencerGraph Name="TutorialStage/TutorialBase">
+
+    <InitializePhase>
+        <BlockInput Enable="True"/>
+        <SetHideUI Hide="True"/>
+        <LetterBoxShow/>
+        
+    </InitializePhase>
+
+    <UpdatePhase>
+        
+
+        <AIMove UniqueKey="Player" StartAction="AIMove_Start" LoopAction="AIMove_Loop" EndAction="AIMove_End" EndPositionMarker="PlayerMarker"/>
+
+    </UpdatePhase>
+    
+</SequencerGraph>

@@ -1,0 +1,16 @@
+<ActionGraph Name="PlaygroundStudent" DefaultAction="Empty" DefaultFramePerSecond="12">
+
+    <Empty MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+        <Animation Preset="Sprites/NewPlayer/empty" Duration="1">
+        </Animation>
+
+    </Empty>
+
+    <Dead MovementType="Empty" DirectionType="Keep" ActiveCollision="False">
+        <Animation Preset="Sprites/NewPlayer/empty" Duration="1">
+            <FrameEvent Type="KillEntity" StartTime="0"/>
+        </Animation>
+
+    </Dead>
+
+</ActionGraph>
