@@ -20,6 +20,8 @@
         <EntityCountFence UniqueGroupKey="EnemyGroup" Condition="Less" Count="1"/>
         <ToastMessage Text="Test"/>
         
+        <TalkBalloon UniqueKey="Player" SimpleTalkKey="Test4"/>
+
         <WaitSignal Signal="NeverEnd"/>
     </UpdatePhase>
 

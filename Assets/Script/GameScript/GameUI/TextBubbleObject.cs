@@ -143,6 +143,12 @@ public class TextBubbleObject : TextBubbleBinder
         _animationPlayer.changeAnimationByCustomPreset(_iconWaitIcon._path, _iconWaitIcon._customPreset);
     }
 
+    public void HideIconAnimation()
+    {
+        IconWaitInput.gameObject.SetActive(false);
+        _animationPlayer.initialize();
+    }
+
     public void showPortrait(Sprite sprite)
     {
         _portrait.sprite = sprite;

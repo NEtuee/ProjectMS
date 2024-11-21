@@ -224,6 +224,11 @@ public class TextPresenter
     {
         _binder.PlayIconAnimation();
     }
+
+    public void DeactiveInputWaitIcon()
+    {
+        _binder.HideIconAnimation();
+    }
     
     private void UpdateText(string text)
     {
@@ -481,6 +486,7 @@ public class WaitInput : BubbleCommend
     {
         if (ActionKeyInputManager.Instance().keyCheck(_input))
         {
+            presenter.DeactiveInputWaitIcon();
             return false;
         }
         
