@@ -265,7 +265,7 @@ public class MasterManager : MessageHub<ManagerBase>
     {
         LetterBox._instance.clear();
         ScreenDirector._instance._screenFader.clear();
-        Cursor.visible = true;
+        ActionKeyInputManager.setCursorVisible(true);
 
         var logoStageData = ResourceContainerEx.Instance().GetStageData("StageData/0_LogoStage");
         if (logoStageData == null)

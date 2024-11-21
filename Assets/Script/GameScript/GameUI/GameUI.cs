@@ -95,7 +95,7 @@ public class GameUI : MonoBehaviour
         activeOptionUI(active);
 
         _pauseUI.ActivePauseUI(active);
-        Cursor.visible = active;
+        ActionKeyInputManager.setCursorVisible(active);
 
         FMODAudioManager.Instance().SetGlobalParam(21, active ? 1f : 0f);
     }

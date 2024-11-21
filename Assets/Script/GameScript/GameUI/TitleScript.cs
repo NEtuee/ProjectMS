@@ -26,7 +26,7 @@ public class TitleScript : MonoBehaviour
     {
         LetterBox._instance.clear();
         ScreenDirector._instance._screenFader.clear();
-        Cursor.visible = true;        
+        ActionKeyInputManager.setCursorVisible(true);        
     }
 
     private void LateUpdate()

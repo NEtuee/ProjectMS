@@ -101,7 +101,7 @@ public class TitleMenuUI : IUIElement
         FMODAudioManager.Instance().Play(5005 ,Vector3.zero);
 
         _binder.Root.SetActive(false);
-        Cursor.visible = false;
+        ActionKeyInputManager.setCursorVisible(false);
     }
 
     private void OnClickExit()

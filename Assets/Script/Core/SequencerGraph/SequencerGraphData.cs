@@ -3144,7 +3144,7 @@ public class SequencerGraphEvent_ShowCursor : SequencerGraphEventBase
 
     public override bool Execute(SequencerGraphProcessor processor, float deltaTime)
     {
-        UnityEngine.Cursor.visible = _active;
+        ActionKeyInputManager.setCursorVisible(_active);
         return true;
     }
 
