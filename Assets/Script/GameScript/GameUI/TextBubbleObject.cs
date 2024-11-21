@@ -75,7 +75,7 @@ public class TextBubbleObject : TextBubbleBinder
         }
         
         _textPresenter.Clear();
-        _timeProcessItem.initialize();
+        hidePortrait();
 
         var add1 = GetRandomAdd(randomRange);
         var add2 = GetRandomAdd(randomRange);
@@ -98,7 +98,6 @@ public class TextBubbleObject : TextBubbleBinder
         
         FollowTarget = followTarget;
         UpdateFollowPosition();
-        updatePortrait();
 
         _commendQueue.Clear();
 
@@ -144,6 +143,21 @@ public class TextBubbleObject : TextBubbleBinder
         _animationPlayer.changeAnimationByCustomPreset(_iconWaitIcon._path, _iconWaitIcon._customPreset);
     }
 
+    public void showPortrait(Sprite sprite)
+    {
+        _portrait.sprite = sprite;
+        _timeProcessItem.initialize();
+
+        updatePortrait();
+
+        _portrait.gameObject.SetActive(true);
+    }
+
+    public void hidePortrait()
+    {
+        _portrait.gameObject.SetActive(false);
+    }
+
     private void updatePortrait()
     {
         float yScale = _scalePreset.evaulate(_timeProcessItem.getRate()).y;
@@ -171,10 +185,10 @@ public class TextBubbleObject : TextBubbleBinder
             }
             
             _currentCommand = _commendQueue.Dequeue();
-            _currentCommand.Start(_textPresenter, GlobalTimer.Instance().getScaledGlobalTime());
+            _currentCommand.Start(_textPresenter, FollowTarget, GlobalTimer.Instance().getScaledGlobalTime());
         }
 
-        if (_currentCommand.Update(_textPresenter, GlobalTimer.Instance().getSclaedDeltaTime()) == false)
+        if (_currentCommand.Update(_textPresenter, FollowTarget, GlobalTimer.Instance().getSclaedDeltaTime()) == false)
         {
             _currentCommand.End();
             
@@ -189,7 +203,7 @@ public class TextBubbleObject : TextBubbleBinder
             else
             {
                 _currentCommand = _commendQueue.Dequeue();
-                _currentCommand.Start(_textPresenter, GlobalTimer.Instance().getScaledGlobalTime());
+                _currentCommand.Start(_textPresenter, FollowTarget, GlobalTimer.Instance().getScaledGlobalTime());
             }
         }
     }

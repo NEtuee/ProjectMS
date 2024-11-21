@@ -5,6 +5,7 @@ using System.Linq;
 using System.Xml;
 using UnityEngine;
 using ICSharpCode.WpfDesign.XamlDom;
+using System.Linq.Expressions;
 
 public static class DialogDataLoader 
 {
@@ -102,6 +103,10 @@ public static class DialogDataLoader
                 return CreateSetBold(node);
             case "EndBold":
                 return CreateEndBold(node);
+            case "ShowPortrait":
+                return CreateShowPortrait(node);
+            case "HidePortrait":
+                return CreateHidePortrait(node);
         }
 
         return null;
@@ -263,6 +268,41 @@ public static class DialogDataLoader
 
         var result = new List<BubbleCommend>();
         result.Add(new EndBold());
+        return result;
+    }
+
+    private static IList<BubbleCommend> CreateShowPortrait(XmlNode node)
+    {
+        if (node == null)
+        {
+            return null;
+        }
+
+        ExpressionType expressionType = ExpressionType.Normal;
+        
+        for(int index = 0; index < node.Attributes.Count; ++index)
+        {
+            string attrName = node.Attributes[index].Name;
+            string attrValue = node.Attributes[index].Value;
+
+            if(attrName == "Expression")
+                expressionType = (ExpressionType)System.Enum.Parse(typeof(ExpressionType), attrValue);
+        }
+
+        var result = new List<BubbleCommend>();
+        result.Add(new ShowPortrait(expressionType));
+        return result;
+    }
+
+    private static IList<BubbleCommend> CreateHidePortrait(XmlNode node)
+    {
+        if (node == null)
+        {
+            return null;
+        }
+
+        var result = new List<BubbleCommend>();
+        result.Add(new HidePortrait());
         return result;
     }
 }

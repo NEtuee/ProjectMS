@@ -5,13 +5,15 @@ using UnityEngine;
 [System.Serializable]
 public class CharacterInfoData : SerializableDataType
 {
-    public string       _displayName;
-    public string       _actionGraphPath;
-    public string       _aiGraphPath;
-    public string       _statusName;
+    public string       _displayName = "";
+    public string       _actionGraphPath = "";
+    public string       _aiGraphPath = "";
+    public string       _statusName = "";
 
-    public float        _characterRadius;
-    public float        _headUpOffset;
+    public string       _portraitPath = "";
+
+    public float        _characterRadius = 0f;
+    public float        _headUpOffset = 0f;
 
     public bool         _indicatorVisible = true;
     public bool         _useCameraBoundLock = true;
@@ -31,6 +33,7 @@ public class CharacterInfoData : SerializableDataType
         binaryWriter.Write(_actionGraphPath);
         binaryWriter.Write(_aiGraphPath);
         binaryWriter.Write(_statusName);
+        binaryWriter.Write(_portraitPath);
         binaryWriter.Write(_characterRadius);
         binaryWriter.Write(_headUpOffset);
         binaryWriter.Write(_indicatorVisible);
@@ -49,6 +52,7 @@ public class CharacterInfoData : SerializableDataType
         _actionGraphPath = binaryReader.ReadString();
         _aiGraphPath = binaryReader.ReadString();
         _statusName = binaryReader.ReadString();
+        _portraitPath = binaryReader.ReadString();
         _characterRadius = binaryReader.ReadSingle();
         _headUpOffset = binaryReader.ReadSingle();
         _indicatorVisible = binaryReader.ReadBoolean();
