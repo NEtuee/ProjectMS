@@ -1,18 +1,35 @@
 <ActionGraph Name="SetsumeiChanAction" DefaultAction="Idle" DefaultFramePerSecond="12">
+    <GlobalVariable Name="gv_MasterPath" Value="Sprites/Deco/SetsumeiChan/"/>
 
-    <Idle MovementType="Empty" DirectionType="MoveInput">
-        <AnimationHeader MasterPath="Sprites/"/>
-        <Animation Preset="" XFlip="true" Duration="1">
+    <Idle MovementType="Empty" DirectionType="Keep" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="Idle" XFlip="true" Duration="1" TranslationPreset="Idle">
         </Animation>
 
         <Branch Condition="End == true" Execute="Idle"/>
     </Idle>
 
-    <Dead MovementType="Empty" DirectionType="MoveInput">
-        <AnimationHeader MasterPath="Sprites/"/>
-        <Animation Preset="" XFlip="true" Duration="1">
+    <Move MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="Keep" FlipType="Direction" ActiveCollision="False">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="Idle" XFlip="true" Duration="1">
+        </Animation>
 
-            <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/" FramePerSecond="0.2" CastShadow="True">
+        <Branch Condition="End == true" Execute="Move"/>
+    </Move>
+
+    <MoveFast MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="Keep" FlipType="Direction" ActiveCollision="False" MoveScale="3.0">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="Idle" XFlip="true" Duration="1">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="MoveFast"/>
+    </MoveFast>
+
+    <Dead MovementType="Empty" DirectionType="MoveInput">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="Idle" XFlip="true" Duration="1">
+
+            <FrameEvent Type="Effect" StartTime="0" Path="Sprites/Deco/SetsumeiChan/Idle" FramePerSecond="0.2" CastShadow="True">
                 <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
             </FrameEvent>
             <FrameEvent Type="KillEntity" StartTime="0"/>

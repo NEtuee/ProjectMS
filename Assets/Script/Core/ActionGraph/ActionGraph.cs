@@ -838,7 +838,8 @@ public class ActionGraph
         float totalDuration = 0f;
         for(int index = 0; index < animationInfoCount; ++index)
         {
-            totalDuration += _actionGraphBaseData._animationPlayData[animationInfoIndex][index]._duration;
+            float duration = _actionGraphBaseData._animationPlayData[animationInfoIndex][index].getTotalDuration();
+            totalDuration += duration;
         }
 
         return totalDuration;
@@ -869,11 +870,11 @@ public class ActionGraph
         float passedDurationRate = 0f;
         for(int index = 0; index < _currentAnimationIndex; ++index)
         {
-            float duration = _actionGraphBaseData._animationPlayData[currentAnimationInfoIndex][index]._duration;
+            float duration = _actionGraphBaseData._animationPlayData[currentAnimationInfoIndex][index].getTotalDuration();
             passedDurationRate += duration * (1f / totalDuration);
         }
 
-        float currentDuration = _actionGraphBaseData._animationPlayData[currentAnimationInfoIndex][_currentAnimationIndex]._duration;
+        float currentDuration = _actionGraphBaseData._animationPlayData[currentAnimationInfoIndex][_currentAnimationIndex].getTotalDuration();
         MoveValuePerFrameFromTimeDesc timeDesc = _animationPlayer.getMoveValuePerFrameFromTimeDesc();
         timeDesc.currentNormalizedTime = passedDurationRate + (timeDesc.currentTime * (1f / totalDuration));
         timeDesc.prevNormalizedTime = passedDurationRate + (timeDesc.prevTime * (1f / totalDuration));

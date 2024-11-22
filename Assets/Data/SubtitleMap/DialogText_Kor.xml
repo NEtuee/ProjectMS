@@ -18,6 +18,22 @@
         <Wait Input="PassTalkBalloon"/>
     </Talk_Tutorial_Expl_0>
 
+    <Talk_Tutorial_Expl_1>
+        <ShowText Text = "자 그럼 모두!" Interval = "0.03"/>
+        <Wait Input="PassTalkBalloon"/>
+
+        <ShowText Text = "하나" Interval = "0.03" Clear="True"/>
+        <Wait Time="1.0"/>
+        <ShowText Text = "둘" Interval = "0.03"/>
+        <Wait Time="1.0"/>
+
+    </Talk_Tutorial_Expl_1>
+
+     <Talk_Tutorial_Expl_2>
+        <ShowText Text = "알려줘! 세츠메이짱 코너!" Interval = "0.03"/>
+        <Wait Time="4.0"/>
+    </Talk_Tutorial_Expl_2>
+
     <Talk_SleepEffect><ShowText Text = "ZZZZZZ" Interval = "0.03"/><Wait Time = "2.0"/></Talk_SleepEffect>
 
     <Talk_IinchoChan_0><ShowText Text = "자... 자리에 앉아!" Interval = "0.03"/><Wait Time = "2.0"/></Talk_IinchoChan_0>

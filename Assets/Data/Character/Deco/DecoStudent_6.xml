@@ -2,11 +2,19 @@
 
     <AC_Idle MovementType="Empty" DirectionType="Keep" FlipType="Direction" ActiveCollision="False">
         <AnimationHeader MasterPath="Sprites/Deco/Student_6/"/>
-        <Animation Path="Idle" XFlip="true">
+        <Animation Preset="Idle" XFlip="true">
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_Idle>
+
+    <AC_Move MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="Keep" FlipType="Direction" ActiveCollision="False">
+        <AnimationHeader MasterPath="Sprites/Deco/Student_6/"/>
+        <Animation Preset="Idle" XFlip="true">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Move"/>
+    </AC_Move>
 
     <AC_Fear MovementType="Empty" DirectionType="AITarget" FlipType="Direction" ActiveCollision="False">
         <AnimationHeader MasterPath="Sprites/Deco/Student_6/"/>

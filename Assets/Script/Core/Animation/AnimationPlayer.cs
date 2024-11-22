@@ -45,6 +45,17 @@ public class AnimationPlayDataInfo : SerializableDataType
 #if UNITY_EDITOR
     public int                          _lineNumber;
 
+    public float getTotalDuration()
+    {
+        if(_duration > 0f)
+            return _duration;
+        
+        float totalDuration = _customPresetData != null ? _customPresetData.getTotalDuration() : -1f;
+        DebugUtil.assert(totalDuration > 0f, "TotalDuration이 0입니다. 확인 필요 [{0}]",_path);
+
+        return totalDuration;
+    }
+
     public override void serialize(ref BinaryWriter binaryWriter)
     {
         binaryWriter.Write(_multiSelectAnimationDataCount);
@@ -534,7 +545,7 @@ public class AnimationPlayer
         _animationTimeProcessor.setFrame(startFrame,endFrame, framePerSecond);
         _animationTimeProcessor.setLoop(playData._isLoop);
         _animationTimeProcessor.setLoopCount(playData._animationLoopCount);
-        _animationTimeProcessor.setActionDuration(playData._duration);
+        _animationTimeProcessor.setActionDuration(playData.getTotalDuration());
         _animationTimeProcessor.setFrameToTime(startFrame);
         _animationTimeProcessor.setAnimationSpeed(1f);
 

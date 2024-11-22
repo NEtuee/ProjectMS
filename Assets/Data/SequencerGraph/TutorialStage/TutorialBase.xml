@@ -4,13 +4,48 @@
         <BlockInput Enable="True"/>
         <SetHideUI Hide="True"/>
         <LetterBoxShow/>
-        
+
+        <SetHideCharacter UniqueGroupKey="Students" Hide="True"/>
+
     </InitializePhase>
 
     <UpdatePhase>
         
+        <TalkBalloon UniqueKey="TalkCharacter" SimpleTalkKey="Talk_Tutorial_Expl_0" Wait="True"/>
+        <SetHideCharacter UniqueGroupKey="Students" Hide="False"/>
 
-        <AIMove UniqueKey="Player" StartAction="AIMove_Start" LoopAction="AIMove_Loop" EndAction="AIMove_End" EndPositionMarker="PlayerMarker"/>
+        
+        <Task ProcessType="AllAtOnce" Name="AIMove">
+            <AIMove UniqueKey="Player" StartAction="AIMove_Start" LoopAction="AIMove_Loop" EndAction="AIMove_End" EndPositionMarker="PlayerMarker"/>
+            <AIMove UniqueKey="Student0" LoopAction="AC_Move" EndPositionMarker="Student0"/>
+            <AIMove UniqueKey="Student1" LoopAction="AC_Move" EndPositionMarker="Student1"/>
+            <AIMove UniqueKey="Student2" LoopAction="AC_Move" EndPositionMarker="Student2"/>
+            <AIMove UniqueKey="Student3" LoopAction="AC_Move" EndPositionMarker="Student3"/>
+            <AIMove UniqueKey="Student4" LoopAction="AC_Move" EndPositionMarker="Student4"/>
+            <AIMove UniqueKey="Student5" LoopAction="AC_Move" EndPositionMarker="Student5"/>
+            <AIMove UniqueKey="Student6" LoopAction="AC_Move" EndPositionMarker="Student6"/>
+            <AIMove UniqueKey="Student7" LoopAction="AC_Move" EndPositionMarker="Student7"/>
+            <AIMove UniqueKey="Student8" LoopAction="AC_Move" EndPositionMarker="Student8"/>
+        </Task>
+
+        <TaskFence TaskName="AIMove"/>
+
+        <AIMove UniqueKey="SetsumeiChan" LoopAction="Move" EndPositionMarker="SetsumeiChanMarker"/>
+
+        <TaskFence TaskName="AIMove"/>
+        <!-- <SetBackgroundAnimationTrigger Key="Title" Trigger="On"/>
+        <WaitSignal Signal="AnimationEnd"/> -->
+
+        <WaitSecond Time="1.0"/>
+
+        <SetCameraTarget UniqueKey="SetsumeiChan" CameraMode="TargetCenterMode"/>
+        <SetCameraZoom Size="2.0" Speed="5"/>
+        <TalkBalloon UniqueKey="SetsumeiChan" SimpleTalkKey="Talk_Tutorial_Expl_1" Wait="True"/>
+
+        <SetCameraPosition TargetPosition="0 0 0"/>
+        <SetCameraZoom Size="0.0" Speed="5"/>
+        <TalkBalloon UniqueKey="SetsumeiChan" SimpleTalkKey="Talk_Tutorial_Expl_2" Wait="True"/>
+
 
     </UpdatePhase>
     
