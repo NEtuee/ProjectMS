@@ -194,6 +194,16 @@ public class TextPresenter
         _chagneColor = false;
     }
 
+    public void showPortrait(Sprite sprite)
+    {
+        _binder.showPortrait(sprite);
+    }
+
+    public void hidePortrait()
+    {
+        _binder.hidePortrait();
+    }
+
     public void LineAlignment()
     {
         _stringBuilder.Append("\n");
@@ -214,6 +224,11 @@ public class TextPresenter
     {
         _binder.PlayIconAnimation();
     }
+
+    public void DeactiveInputWaitIcon()
+    {
+        _binder.HideIconAnimation();
+    }
     
     private void UpdateText(string text)
     {
@@ -226,18 +241,18 @@ public class TextPresenter
 
 public interface BubbleCommend
 {
-    public void Start(TextPresenter presenter, double startTime);
-    public bool Update(TextPresenter presenter, float deltaTime);
+    public void Start(TextPresenter presenter, GameEntityBase followTarget, double startTime);
+    public bool Update(TextPresenter presenter, GameEntityBase followTarget, float deltaTime);
     public void End();
 }
 
 public class DeferredActive : BubbleCommend
 {
-    public void Start(TextPresenter presenter, double startTime)
+    public void Start(TextPresenter presenter, GameEntityBase followTarget, double startTime)
     {
     }
 
-    public bool Update(TextPresenter presenter, float deltaTime)
+    public bool Update(TextPresenter presenter, GameEntityBase followTarget, float deltaTime)
     {
         presenter.Active(true);
         return true;
@@ -270,7 +285,7 @@ public class ShowText : BubbleCommend
         _activeInputIcon = true;
     }
     
-    public void Start(TextPresenter presenter, double startTime)
+    public void Start(TextPresenter presenter, GameEntityBase followTarget, double startTime)
     {
         _current = 0;
         _currentTime = startTime;
@@ -285,7 +300,7 @@ public class ShowText : BubbleCommend
         }
     }
 
-    public bool Update(TextPresenter presenter, float deltaTime)
+    public bool Update(TextPresenter presenter, GameEntityBase followTarget, float deltaTime)
     {
         if (_current >= _chArray.Length)
         {
@@ -324,12 +339,12 @@ public class SetTextColor : BubbleCommend
         _colorHex = colorHex;
     }
     
-    public void Start(TextPresenter presenter, double startTime)
+    public void Start(TextPresenter presenter, GameEntityBase followTarget, double startTime)
     {
         presenter.SetColor(_colorHex);
     }
 
-    public bool Update(TextPresenter presenter, float deltaTime)
+    public bool Update(TextPresenter presenter, GameEntityBase followTarget, float deltaTime)
     {
         return false;
     }
@@ -345,12 +360,12 @@ public class EndTextColor : BubbleCommend
     {
     }
     
-    public void Start(TextPresenter presenter, double startTime)
+    public void Start(TextPresenter presenter, GameEntityBase followTarget, double startTime)
     {
         presenter.EndColor();
     }
 
-    public bool Update(TextPresenter presenter, float deltaTime)
+    public bool Update(TextPresenter presenter, GameEntityBase followTarget, float deltaTime)
     {
         return false;
     }
@@ -366,12 +381,12 @@ public class AddLineAlignment : BubbleCommend
     {
     }
     
-    public void Start(TextPresenter presenter, double startTime)
+    public void Start(TextPresenter presenter, GameEntityBase followTarget, double startTime)
     {
         presenter.LineAlignment();
     }
 
-    public bool Update(TextPresenter presenter, float deltaTime)
+    public bool Update(TextPresenter presenter, GameEntityBase followTarget, float deltaTime)
     {
         return false;
     }
@@ -387,12 +402,12 @@ public class SetBold : BubbleCommend
     {
     }
     
-    public void Start(TextPresenter presenter, double startTime)
+    public void Start(TextPresenter presenter, GameEntityBase followTarget, double startTime)
     {
         presenter.Bold();
     }
 
-    public bool Update(TextPresenter presenter, float deltaTime)
+    public bool Update(TextPresenter presenter, GameEntityBase followTarget, float deltaTime)
     {
         return false;
     }
@@ -408,12 +423,12 @@ public class EndBold : BubbleCommend
     {
     }
     
-    public void Start(TextPresenter presenter, double startTime)
+    public void Start(TextPresenter presenter, GameEntityBase followTarget, double startTime)
     {
         presenter.EndBold();
     }
 
-    public bool Update(TextPresenter presenter, float deltaTime)
+    public bool Update(TextPresenter presenter, GameEntityBase followTarget, float deltaTime)
     {
         return false;
     }
@@ -433,12 +448,12 @@ public class Wait : BubbleCommend
         _time = time;
     }
     
-    public void Start(TextPresenter presenter, double startTime)
+    public void Start(TextPresenter presenter, GameEntityBase followTarget, double startTime)
     {
         _currentTime = 0;
     }
 
-    public bool Update(TextPresenter presenter, float deltaTime)
+    public bool Update(TextPresenter presenter, GameEntityBase followTarget, float deltaTime)
     {
         if (_currentTime >= _time)
         {
@@ -463,14 +478,15 @@ public class WaitInput : BubbleCommend
         _input = input;
     }
     
-    public void Start(TextPresenter presenter, double startTime)
+    public void Start(TextPresenter presenter, GameEntityBase followTarget, double startTime)
     {
     }
 
-    public bool Update(TextPresenter presenter, float deltaTime)
+    public bool Update(TextPresenter presenter, GameEntityBase followTarget, float deltaTime)
     {
         if (ActionKeyInputManager.Instance().keyCheck(_input))
         {
+            presenter.DeactiveInputWaitIcon();
             return false;
         }
         
@@ -489,12 +505,12 @@ public class Clear : BubbleCommend
     }
 
 
-    public void Start(TextPresenter presenter, double startTime)
+    public void Start(TextPresenter presenter, GameEntityBase followTarget, double startTime)
     {
         presenter.Clear();
     }
 
-    public bool Update(TextPresenter presenter, float deltaTime)
+    public bool Update(TextPresenter presenter, GameEntityBase followTarget, float deltaTime)
     {
         return false;
     }
@@ -504,3 +520,52 @@ public class Clear : BubbleCommend
     }
 }
 
+public class ShowPortrait : BubbleCommend
+{
+    ExpressionType _expressionType = ExpressionType.Normal;
+    public ShowPortrait(ExpressionType expressionType)
+    {
+        _expressionType = expressionType;
+    }
+
+    public void Start(TextPresenter presenter, GameEntityBase followTarget, double startTime)
+    {
+        if(followTarget == null)
+        {
+            presenter.hidePortrait();
+            return;
+        }
+
+        presenter.showPortrait(followTarget.getPortrait(_expressionType) );
+    }
+
+    public bool Update(TextPresenter presenter, GameEntityBase followTarget, float deltaTime)
+    {
+        return false;
+    }
+
+    public void End()
+    {
+    }
+}
+
+public class HidePortrait : BubbleCommend
+{
+    public HidePortrait()
+    {
+    }
+
+    public void Start(TextPresenter presenter, GameEntityBase followTarget, double startTime)
+    {
+        presenter.hidePortrait();
+    }
+
+    public bool Update(TextPresenter presenter, GameEntityBase followTarget, float deltaTime)
+    {
+        return false;
+    }
+
+    public void End()
+    {
+    }
+}

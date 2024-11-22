@@ -41,7 +41,7 @@ public class GameEntityBase : SequencerObjectBase
     private SequencerGraphProcessManager _sequencerProcessManager;
 
     private CollisionInfo       _collisionInfo;
-    protected CharacterInfoData   _characterInfo;
+    protected CharacterInfoData _characterInfo;
 
     private DeadEventDelegate   _deadEventDelegate = null;
 
@@ -1091,6 +1091,14 @@ public class GameEntityBase : SequencerObjectBase
     public void updateFlipState(FlipType flipType)
     {
         _flipState = getCurrentFlipState(flipType);
+    }
+
+    public Sprite getPortrait(ExpressionType expressionType)
+    {
+        if(string.IsNullOrEmpty(_characterInfo._portraitPath))
+            return null;
+            
+        return ResourceContainerEx.Instance().GetSprite(_characterInfo._portraitPath + "/" + expressionType.ToString());
     }
 
     private FlipState getCurrentFlipState(FlipType flipType)

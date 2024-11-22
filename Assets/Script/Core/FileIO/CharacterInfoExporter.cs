@@ -68,6 +68,8 @@ public class CharacterInfoLoader : LoaderBase<CharacterInfoDataList>
                 characterInfoData._aiGraphPath = attrValue;
             else if(attrName == "StatusInfoName")
                 characterInfoData._statusName = attrValue;
+            else if(attrName == "PortraitPath")
+                characterInfoData._portraitPath = attrValue;
             else if(attrName == "CollisionRadius")
                 characterInfoData._characterRadius = float.Parse(attrValue);
             else if(attrName == "HeadUpOffset")

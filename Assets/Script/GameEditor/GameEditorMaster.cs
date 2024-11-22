@@ -122,7 +122,7 @@ public class GameEditorMaster : MonoBehaviour
     {
         bool active = !_stageSelectorParent.activeInHierarchy;
         _stageSelectorParent?.SetActive(active);
-        Cursor.visible = active;
+        ActionKeyInputManager.setCursorVisible(active);
     }
 
     void fillStageSelectorItem()
@@ -278,7 +278,7 @@ public class GameEditorMaster : MonoBehaviour
         _activeEditor = true;
         _editorParent?.SetActive(true);
 
-        Cursor.visible = true;
+        ActionKeyInputManager.setCursorVisible(true);
     }
 
     private void editorOff()
@@ -290,7 +290,7 @@ public class GameEditorMaster : MonoBehaviour
         _activeEditor = false;
         _editorParent?.SetActive(false);
 
-        Cursor.visible = false;
+        ActionKeyInputManager.setCursorVisible(false);
     }
 
     public bool isEditorActive() {return _activeEditor;}

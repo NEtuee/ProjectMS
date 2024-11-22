@@ -242,9 +242,11 @@ public class ActionKeyInputManager : Singleton<ActionKeyInputManager>
         }
     }
 
-    public void setCursorVisible(bool visible)
+    public static void setCursorVisible(bool visible)
     {
         Cursor.visible = visible;
+        Cursor.lockState = visible ? CursorLockMode.None : CursorLockMode.Confined;
+        
     }
 
     public void clearInputData()

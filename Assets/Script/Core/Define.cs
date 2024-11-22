@@ -106,6 +106,17 @@ public enum ResolutionOption
     Count,
 }
 
+public enum ExpressionType
+{
+    Normal,
+    Smile,
+    Dere,
+    Ridic,
+    Angry,
+    Worry,
+    Sad,
+}
+
 public struct Triangle
 {
     private Vector3[] _vertices;

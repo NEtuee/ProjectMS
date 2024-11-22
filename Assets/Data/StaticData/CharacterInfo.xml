@@ -13,6 +13,7 @@
     SelfCollision="True False" : 같은 팀끼리 충돌 처리 여부 (밀어내기) (기본값 True)
     ImmortalCharacter="True False" : 무적 캐릭터인지 여부
     UseInputBuffer="True False" : InputBuffer 사용 여부
+    PortraitPath="" : 대화창에 표시될 초상화 상위 경로
 -->
 
 <CharacterInfo>
@@ -26,6 +27,8 @@
         HeadUpOffset="0.5"
         ProjectileCollisionRadius=""
         UseInputBuffer="True"
+
+        PortraitPath="Sprites/UI/Portrait/Akane"
 
         AllyInfo="Player"
     />
