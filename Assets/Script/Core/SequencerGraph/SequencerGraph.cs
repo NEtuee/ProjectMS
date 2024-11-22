@@ -69,7 +69,7 @@ public class SequencerGraphProcessor
 
     public class SequencerAllAtOnceTaskProcessor : SequencerTaskProcessorBase
     {
-        public struct AllAtOnceTaskEventWrapper
+        public class AllAtOnceTaskEventWrapper
         {
             public SequencerGraphEventBase  _event;
             public bool                     _isEventEnd;

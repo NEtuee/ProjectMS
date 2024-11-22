@@ -1380,14 +1380,21 @@ public class SequencerGraphEvent_AIMove : SequencerGraphEventBase
 
         if(_markerName != "")
         {
-            MarkerItem item = processor.getMarker(_markerName);
-            if(item != null)
+            if(_markerName == "Spawn")
             {
-                _endPosition = item._position;
+                _endPosition = uniqueEntity.getSpawnPosition();
             }
             else
             {
-                DebugUtil.assert(false,"대상 Marker가 존재하지 않습니다 : {0}",_markerName);
+                MarkerItem item = processor.getMarker(_markerName);
+                if(item != null)
+                {
+                    _endPosition = item._position;
+                }
+                else
+                {
+                    DebugUtil.assert(false,"대상 Marker가 존재하지 않습니다 : {0}",_markerName);
+                }
             }
         }
 

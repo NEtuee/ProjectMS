@@ -794,7 +794,6 @@
         <Animation Preset="Sprites/NewPlayer/MoveStop/" XFlip="true" Duration="0.5">
         </Animation>
 
-        <Branch Condition="End" Execute="AIMove_End"/>
     </AIMove_End>
 
     <AIMove MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="AI" RotationType="Direction" FlipType="Direction" RotateBySpeed="True" RotateSpeed="gv_rotateSpeed">

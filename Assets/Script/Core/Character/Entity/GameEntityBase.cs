@@ -60,6 +60,7 @@ public class GameEntityBase : SequencerObjectBase
     private Vector3             _currentBoundVelocity = Vector3.zero;
     private Vector3             _recentlyAttackPoint = Vector3.zero;
     private Vector3             _defenceDirection = Vector3.zero;
+    private Vector3             _spawnPosition = Vector3.zero;
 
 
     private int[]               _currentActionBuffList = null;
@@ -248,6 +249,8 @@ public class GameEntityBase : SequencerObjectBase
         _spriteRenderer.flipX = false;
         _spriteRenderer.flipY = false;
 
+        _spawnPosition = transform.position;
+
         setRotateSlotValue(0f, 0f);
         initializeActionValue();
         updateRotation();
@@ -384,6 +387,8 @@ public class GameEntityBase : SequencerObjectBase
         setRotateSlotValue(0f, 0f);
         initializeActionValue();
         updateRotation();
+
+        _spawnPosition = transform.position;
 
         foreach(var item in _hpEffect)
         {
@@ -957,6 +962,8 @@ public class GameEntityBase : SequencerObjectBase
         _spriteRenderer.flipX = false;
         _spriteRenderer.flipY = false;
 
+        _spawnPosition = transform.position;
+
         setRotateSlotValue(0f, 0f);
         initializeActionValue();
 
@@ -1097,7 +1104,7 @@ public class GameEntityBase : SequencerObjectBase
     {
         if(string.IsNullOrEmpty(_characterInfo._portraitPath))
             return null;
-            
+
         return ResourceContainerEx.Instance().GetSprite(_characterInfo._portraitPath + "/" + expressionType.ToString());
     }
 
@@ -1475,6 +1482,8 @@ public class GameEntityBase : SequencerObjectBase
     {
         return _characterInfo._indicatorVisible;
     }
+
+    public Vector3 getSpawnPosition() {return _spawnPosition;}
 
     public void setKeepAliveEntity(bool value) {_keepAliveEntity = value;}
     public bool isKeepAliveEntity() {return _keepAliveEntity;}

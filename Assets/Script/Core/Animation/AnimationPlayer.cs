@@ -51,8 +51,6 @@ public class AnimationPlayDataInfo : SerializableDataType
             return _duration;
         
         float totalDuration = _customPresetData != null ? _customPresetData.getTotalDuration() : -1f;
-        DebugUtil.assert(totalDuration > 0f, "TotalDuration이 0입니다. 확인 필요 [{0}]",_path);
-
         return totalDuration;
     }
 

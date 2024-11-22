@@ -34,6 +34,35 @@
         <Wait Time="4.0"/>
     </Talk_Tutorial_Expl_2>
 
+    <Talk_Tutorial_Expl_3><ShowText Text = "와아" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Tutorial_Expl_3>
+    <Talk_Tutorial_Expl_4><ShowText Text = "감동이야" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Tutorial_Expl_4>
+    <Talk_Tutorial_Expl_5><ShowText Text = "기대된다" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Tutorial_Expl_5>
+
+    <Talk_Tutorial_Expl_6>
+        <ShowText Text = "자! 오늘은 여기까지야. 도움이 되었으려나?" Interval = "0.03"/>
+        <Wait Input="PassTalkBalloon"/>
+
+        <ShowText Text = "배운 내용은 확실히 복습 하는걸 잊지마!" Interval = "0.03" Clear="True"/>
+        <Wait Input="PassTalkBalloon"/>
+
+        <ShowText Text = "자 그럼 모두!" Interval = "0.03" Clear="True"/>
+        <Wait Input="PassTalkBalloon"/>
+
+        <ShowText Text = "하나" Interval = "0.03" Clear="True"/>
+        <Wait Time="1.0"/>
+        <ShowText Text = "둘" Interval = "0.03"/>
+        <Wait Time="1.0"/>
+    </Talk_Tutorial_Expl_6>
+
+    <Talk_Tutorial_Expl_7>
+        <ShowText Text = "다음에 또 만나!" Interval = "0.03"/>
+        <Wait Time="3.0"/>
+    </Talk_Tutorial_Expl_7>
+
+    <Talk_Tutorial_Expl_8><ShowText Text = "재밌었다" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Tutorial_Expl_8>
+    <Talk_Tutorial_Expl_9><ShowText Text = "또 와아지" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Tutorial_Expl_9>
+
+
     <Talk_SleepEffect><ShowText Text = "ZZZZZZ" Interval = "0.03"/><Wait Time = "2.0"/></Talk_SleepEffect>
 
     <Talk_IinchoChan_0><ShowText Text = "자... 자리에 앉아!" Interval = "0.03"/><Wait Time = "2.0"/></Talk_IinchoChan_0>
