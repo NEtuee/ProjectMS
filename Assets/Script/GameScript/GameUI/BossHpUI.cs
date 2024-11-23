@@ -26,9 +26,9 @@ public class BossHpUI : IUIElement
             _bodyDesc._angularFriction = 10f;
             _bodyDesc._friction = 1f;
             _bodyDesc._torque.setValue( -30f, 30f );
-            _bodyDesc._velocity.setValue(-25f,25f,55f,85f,0f,0f);
+            _bodyDesc._velocity.setValue(-25f,25f,65f,85f,0f,0f);
             _bodyDesc._useGravity = true;
-            _bodyDesc._gravityRatio = 10f;
+            _bodyDesc._gravityRatio = 15f;
 
             imageObject.SetActive(false);
         }
