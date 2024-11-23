@@ -10,6 +10,7 @@ public struct PhysicsBodyDescription : SerializableStructure
 
     public float _friction;
     public float _angularFriction;
+    public float _gravityRatio;
 
     public bool _useGravity;
 
@@ -20,6 +21,7 @@ public struct PhysicsBodyDescription : SerializableStructure
         _friction = 0f;
         _angularFriction = 0f;
         _useGravity = false;
+        _gravityRatio = 1f;
     }
 
     public void clearPhysicsBody()
@@ -68,6 +70,7 @@ public class PhysicsBodyEx
     private float _angularFriction;
     private float _friction;
     private bool _useGravity;
+    private float _gravityRatio = 1f;
 
     public void initialize(bool useGravity, float friction, float angularFriction)
     {
@@ -85,13 +88,14 @@ public class PhysicsBodyEx
         _useGravity = desc._useGravity;
         _friction = desc._friction;
         _angularFriction = desc._angularFriction;
+        _gravityRatio = desc._gravityRatio;
     }
 
     public void progress(float deltaTime)
     {
         _currentVelocity = MathEx.convergence0(_currentVelocity, _friction * deltaTime);
         _currentTorque = MathEx.convergence0(_currentTorque, _angularFriction * deltaTime);
-        addForce(_gravity * deltaTime);
+        addForce(_gravity * _gravityRatio * deltaTime);
     }
 
     public void addTorque(float torque)

@@ -1,0 +1,27 @@
+
+<SequencerGraph Name="Test">
+
+    <InitializePhase>
+        <ApplyPostProcessProfile Path="PostProcessProfile/PostProcessProfile_Default"/>
+
+        <SetCameraTarget UniqueKey="Player" CameraMode="TargetCenterMode"/>
+        <SetAudioListner UniqueKey="Player"/>
+        <SetCrossHair UniqueKey="Player"/>
+
+        <SetCameraZoom Size="0.0"/>
+        
+        <UnlockStageLimit Enable="True"/>
+
+        <ActiveBossHp UniqueKey="Boss"/>
+        
+    </InitializePhase>
+
+    <UpdatePhase>
+        <WaitSecond Time="1.0"/>
+
+        
+
+        <WaitSignal Signal="NeverEnd"/>
+    </UpdatePhase>
+
+</SequencerGraph>

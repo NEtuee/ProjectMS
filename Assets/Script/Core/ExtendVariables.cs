@@ -33,6 +33,13 @@ public class Vector3Ex : ExtendVariable<Vector3>
         _z.setValue(value.z);
     }
 
+    public void setValue(float xMin, float xMax, float yMin, float yMax, float zMin, float zMax)
+    {
+        _x.setValue(xMin,xMax);
+        _y.setValue(yMin,yMax);
+        _z.setValue(zMin,zMax);
+    }
+
     public override void loadFromXML(string valueString)
     {
         string[] splitted = valueString.Split(' ');
@@ -155,6 +162,13 @@ public class FloatEx : ExtendVariable<float>
         _value = value;
     }
 
+    public void setValue(float randomMin, float randomMax)
+    {
+        _isRandom = true;
+        _randomMin = randomMin;
+        _randomMax = randomMax;
+    }
+
     public override void loadFromXML(string valueString)
     {
         if(float.TryParse(valueString,out float result))
@@ -190,9 +204,7 @@ public class FloatEx : ExtendVariable<float>
             return;
         }
 
-        _randomMax = max;
-        _randomMin = min;
-        _isRandom = true;
+        setValue(min,max);
     }
 #if UNITY_EDITOR
     public override void serialize(ref BinaryWriter binaryWriter)

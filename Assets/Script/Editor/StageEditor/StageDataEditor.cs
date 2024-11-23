@@ -456,7 +456,10 @@ public class StageDataEditor : EditorWindow
                 {
                     clear();
                     _outFilePath = item.FullName;
-                    _outFilePath = _outFilePath.Replace(IOControl.PathForDocumentsFile("Assets\\Data\\SequencerGraph\\").Replace('/','\\'),"").Replace('\\','/');
+                    if(Application.platform == RuntimePlatform.OSXEditor )
+                        _outFilePath = _outFilePath.Replace(IOControl.PathForDocumentsFile("Assets/Data/SequencerGraph/"),"").Replace('\\','/');
+                    else
+                        _outFilePath = _outFilePath.Replace(IOControl.PathForDocumentsFile("Assets\\Data\\SequencerGraph\\").Replace('/','\\'),"").Replace('\\','/');
 
                     _viewerOpen = false;
                     return true;

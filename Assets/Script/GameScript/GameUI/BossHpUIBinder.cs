@@ -9,10 +9,13 @@ public class BossHpUIBinder : UIObjectBinder
     public CanvasGroup CanvasGroup;
     public Transform Root;
     public Transform _decoRoot;
+    public Transform _gaugeRoot;
     public Image InGauge;
     public Image OutGauge;
     public LocalizationText _localizationText;
     public Image _portrait;
+
+    public float _inGaugePadding = 0f;
 
     public override bool CheckValidLink(out string reason)
     {
