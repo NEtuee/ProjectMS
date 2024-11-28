@@ -6,7 +6,7 @@
 * distanceAtten : 컬링마스크에 의해 컬링되면 1, 아니면 0 (No확실)
 * shadowAtten : Cast Shadow 값
 **/
-void CustomLight_half(float3 worldPos, out half3 lightDir, out half3 lightColor0, out half distanceAtten, out half shadowAtten)
+void CustomLight_half(float3 worldPos, half3 normal, out half3 lightDir, out half3 lightColor0, out half distanceAtten, out half shadowAtten)
 {
 #ifdef SHADERGRAPH_PREVIEW			//! 쉐이더 그래프 프리뷰에서 보이는 결과
 	lightDir = half3(0.5, 0.5, 0);
@@ -27,9 +27,19 @@ void CustomLight_half(float3 worldPos, out half3 lightDir, out half3 lightColor0
    lightColor0 = mainLight.color;				//! 메인 라이트 칼라
 
    distanceAtten = mainLight.distanceAttenuation;	//! 컬링마스크에 의해 컬링되면 1, 아니면 0 (No확실), 라이트맵 상황때는 다름
-   //shadowAtten = mainLight.shadowAttenuation;		//! <ㅗ
    ShadowSamplingData shadowSamplingData = GetMainLightShadowSamplingData();	//! 쉐도우 감쇠값
-   half4 shadowParams = GetMainLightShadowParams();
-   shadowAtten = SampleShadowmap(TEXTURE2D_ARGS(_MainLightShadowmapTexture, sampler_MainLightShadowmapTexture), TransformWorldToShadowCoord(worldPos), shadowSamplingData, shadowParams, false);
+   shadowAtten = SampleShadowmap(TEXTURE2D_ARGS(_MainLightShadowmapTexture, sampler_MainLightShadowmapTexture), TransformWorldToShadowCoord(worldPos), shadowSamplingData, GetMainLightShadowParams(), false);
+
+   for (int i = 0; i < GetAdditionalLightsCount(); ++i)
+   {
+      Light additionalLight = GetAdditionalLight(i, worldPos);
+      shadowSamplingData = GetAdditionalLightShadowSamplingData(i);
+
+      half shadow = SampleShadowmap(TEXTURE2D_ARGS(_AdditionalLightsShadowmapTexture, sampler_AdditionalLightsShadowmapTexture), TransformWorldToShadowCoord(worldPos), shadowSamplingData, GetAdditionalLightShadowParams(i), false);
+      half cull = saturate(dot(normal, normalize(additionalLight.direction)));
+
+      lightColor0 += additionalLight.color * additionalLight.distanceAttenuation * shadow * cull;
+   }
+
 #endif
 }
