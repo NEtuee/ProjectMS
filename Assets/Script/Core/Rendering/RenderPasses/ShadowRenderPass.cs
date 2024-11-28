@@ -16,6 +16,7 @@ public class ShadowRenderPass : AkaneRenderPass
         shadowLayer = (1 << LayerMask.NameToLayer("ShadowMap"));
         shadowRenderTexture = new RenderTexture(1024, 1024, 1, RenderTextureFormat.Shadowmap, 1);
         shadowRenderTexture.filterMode = FilterMode.Point;
+        shadowRenderTexture.depthStencilFormat = UnityEngine.Experimental.Rendering.GraphicsFormat.D16_UNorm;
     }
     public override void Draw(Camera renderCamera)
     {

@@ -209,7 +209,7 @@
                 return 1.0h;
 #endif
 
-                ShadowSamplingData shadowSamplingData = GetAdditionalLightShadowSamplingData();
+                ShadowSamplingData shadowSamplingData = GetAdditionalLightShadowSamplingData(0);
 
 #if USE_STRUCTURED_BUFFER_FOR_LIGHT_DATA
                 lightIndex = _AdditionalShadowsIndices[lightIndex];
@@ -222,7 +222,7 @@
 
                 float4 shadowCoord = mul(_AdditionalShadowsBuffer[lightIndex].worldToShadowMatrix, float4(positionWS, 1.0));
 #else
-                float4 shadowCoord = mul(_AdditionalLightsWorldToShadow[lightIndex], float4(positionWS, 1.0));
+                float4 shadowCoord = float4(positionWS, 1.0);
 #endif
 
                 half4 shadowParams = GetAdditionalLightShadowParams(lightIndex);

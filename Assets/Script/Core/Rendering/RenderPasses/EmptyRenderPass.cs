@@ -14,6 +14,7 @@ public class EmptyRenderPass : AkaneRenderPass
     public void Awake()
     {
         emptyTexture = new RenderTexture(1024, 1024, 1);
+        emptyTexture.depthStencilFormat = UnityEngine.Experimental.Rendering.GraphicsFormat.D16_UNorm;
     }
 
     public override void Draw(Camera renderCamera)

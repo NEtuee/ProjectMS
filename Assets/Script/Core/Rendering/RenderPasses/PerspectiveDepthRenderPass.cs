@@ -13,8 +13,9 @@ public class PerspectiveDepthRenderPass : AkaneRenderPass
     public void Awake()
     {
         perspectiveLayer = (1 << LayerMask.NameToLayer(layerName));
-        perspectiveDepthRenderTexture = new RenderTexture(1024, 1024, 1, RenderTextureFormat.Depth, 1);
+        perspectiveDepthRenderTexture = new RenderTexture(1024, 1024, 16, RenderTextureFormat.Depth, 1);
         perspectiveDepthRenderTexture.filterMode = FilterMode.Point;
+        perspectiveDepthRenderTexture.depthStencilFormat = UnityEngine.Experimental.Rendering.GraphicsFormat.D16_UNorm;
     }
 
     public override void Draw(Camera renderCamera)

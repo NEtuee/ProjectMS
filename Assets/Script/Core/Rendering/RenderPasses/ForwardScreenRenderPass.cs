@@ -16,6 +16,7 @@ public class ForwardScreenRenderPass : AkaneRenderPass
         forwardScreenLayer = (1 << LayerMask.NameToLayer("ForwardScreen"));
         forwardScreenRenderTexture = new RenderTexture(1024, 1024, 1, RenderTextureFormat.ARGBHalf, 1);
         forwardScreenRenderTexture.filterMode = FilterMode.Point;
+        forwardScreenRenderTexture.depthStencilFormat = UnityEngine.Experimental.Rendering.GraphicsFormat.D16_UNorm;
     }
     public override void Draw(Camera renderCamera)
     {

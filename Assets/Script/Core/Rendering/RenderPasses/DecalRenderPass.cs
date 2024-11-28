@@ -22,6 +22,7 @@ public class DecalRenderPass : AkaneRenderPass
         };
         
         decalRenderTexture.filterMode = FilterMode.Point;
+        decalRenderTexture.depthStencilFormat = UnityEngine.Experimental.Rendering.GraphicsFormat.D16_UNorm;
     }
     public override void Draw(Camera renderCamera)
     {

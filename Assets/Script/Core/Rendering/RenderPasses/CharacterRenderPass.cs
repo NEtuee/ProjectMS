@@ -21,6 +21,7 @@ public class CharacterRenderPass : AkaneRenderPass
         characterRenderTexture = Resources.Load(_renderTexturePath, typeof(RenderTexture)) as RenderTexture;
         if(characterRenderTexture == null)
             DebugUtil.assert(false,$"RenderTexture [{_renderTexturePath}]가 없습니다. 확인 필요");
+        characterRenderTexture.depthStencilFormat = UnityEngine.Experimental.Rendering.GraphicsFormat.D16_UNorm;
     }
     public override void Draw(Camera renderCamera)
     {

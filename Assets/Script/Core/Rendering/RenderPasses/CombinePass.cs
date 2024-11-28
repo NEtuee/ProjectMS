@@ -35,6 +35,7 @@ public class CombinePass : AkaneRenderPass
 
         _backgroundCombineMaterial = Material.Instantiate(ResourceContainerEx.Instance().GetMaterial("Material/BackgroundDecalCombine"));
         _combineBackgroundTexture = new RenderTexture(1024, 1024, 1, RenderTextureFormat.ARGBHalf, 1);
+        _combineBackgroundTexture.depthStencilFormat = UnityEngine.Experimental.Rendering.GraphicsFormat.D16_UNorm;
     }
 
     public static CombinePass CreateInstance(BackgroundRenderPass backgroundPass, CharacterRenderPass characterPass, PerspectiveDepthRenderPass perspectiveDepthPass, ForwardScreenRenderPass forwardScreenPass, DecalRenderPass decalPass)
