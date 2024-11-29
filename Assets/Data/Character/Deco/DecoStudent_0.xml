@@ -28,6 +28,8 @@
         <AnimationHeader MasterPath="Sprites/Deco/Student_0/"/>
         <Animation Preset="FearLoop" XFlip="true">
         </Animation>
+
+        <Branch Condition="End" Execute="AC_FearLoop"/>
     </AC_FearLoop>
 
     <Dead MovementType="Empty" DirectionType="MoveInput">
