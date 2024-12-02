@@ -1,5 +1,6 @@
 using System.IO;
 using System.Collections.Generic;
+using UnityEngine.Animations;
 
 public class StatusInfoDataList : SerializableDataType
 {
@@ -69,78 +70,102 @@ public class StatusInfoData : SerializableDataType
 
 public class StatusDataFloat : SerializableDataType
 {
+    public struct LevelData : SerializableStructure
+    {
+        public LevelData(uint level, float min, float max, float init)
+        {
+            _level = level;
+            _maxValue = max;
+            _minValue = min;
+            _initialValue = init;
+        }
+
+        public uint     _level;
+        public float    _maxValue;
+        public float    _minValue;
+        public float    _initialValue;
+
+#if UNITY_EDITOR
+        public void serialize(ref BinaryWriter binaryWriter)
+        {
+            binaryWriter.Write(_level);
+            binaryWriter.Write(_maxValue);
+            binaryWriter.Write(_minValue);
+            binaryWriter.Write(_initialValue);
+        }
+#endif
+        public void deserialize(ref BinaryReader binaryReader)
+        {
+            _level = binaryReader.ReadUInt32();
+            _maxValue = binaryReader.ReadSingle();
+            _minValue = binaryReader.ReadSingle();
+            _initialValue = binaryReader.ReadSingle();
+        }
+    }
+
     public string _statusName;
     public StatusType _statusType;
 
-    public float _maxValue;
-    public float _minValue;
-    public float _initialValue;
+    public LevelData[] _statusLevelData = null;
+
 
     public StatusDataFloat(){}
-    public StatusDataFloat(StatusType type, string name, float min, float max, float init)
-    {
-        _statusType = type;
-        _statusName = name;
 
-        _maxValue = max;
-        _minValue = min;
-        _initialValue = init;
+
+    public bool getLevelData(uint level, ref LevelData levelData)
+    {
+        if(_statusLevelData == null)
+        {
+            DebugUtil.assert(false,"???");
+            return false;
+        }
+
+        foreach(var item in _statusLevelData)
+        {
+            if(item._level == level)
+            {
+                levelData = item;
+                return true;
+            }
+        }
+
+        return false;
     }
 
-    public bool isStatusValid()
+    public void initStat(ref LevelData levelData, ref float value)
     {
-        return _statusType != StatusType.Count && _maxValue >= _minValue;
+        value = levelData._initialValue;
     }
 
-    public void initStat(ref float value)
+    public void variStat(ref LevelData levelData, ref float value, float additionalMax, float factor )
     {
-        value = _initialValue;
+        value = MathEx.clampf(value + factor, levelData._minValue, levelData._maxValue + additionalMax);
     }
 
-    public void variStat(ref float value, float additionalMax, float factor )
+    public void setStat(ref LevelData levelData, ref float value, float additionalMax, float factor )
     {
-        value = MathEx.clampf(value + factor, _minValue, _maxValue + additionalMax);
+        value = MathEx.clampf(factor,levelData._minValue,levelData._maxValue + additionalMax);
     }
 
-    public void setStat(ref float value, float additionalMax, float factor )
-    {
-        value = MathEx.clampf(factor,_minValue,_maxValue + additionalMax);
-    }
-
-
-    public bool isMax(float value)
-    {
-        return value >= _maxValue;
-    }
-
-    public bool isMin(float value)
-    {
-        return value <= _minValue;
-    }
 
     public StatusType getStatusType() {return _statusType;}
     public string getName() {return _statusName;}
 
-    public float getInitValue() {return _initialValue;}
-    public float getMaxValue() {return _maxValue;}
-    public float getMinValue() {return _minValue;}
+    
 #if UNITY_EDITOR
     public override void serialize(ref BinaryWriter binaryWriter)
     {
         binaryWriter.Write(_statusName);
         binaryWriter.Write((int)_statusType);
-        binaryWriter.Write(_maxValue);
-        binaryWriter.Write(_minValue);
-        binaryWriter.Write(_initialValue);
+        BinaryHelper.writeArrayStructure<LevelData>(ref binaryWriter, _statusLevelData);
+        
     }
 #endif
     public override void deserialize(ref BinaryReader binaryReader)
     {
         _statusName = binaryReader.ReadString();
         _statusType = (StatusType)binaryReader.ReadInt32();
-        _maxValue = binaryReader.ReadSingle();
-        _minValue = binaryReader.ReadSingle();
-        _initialValue = binaryReader.ReadSingle();
+        _statusLevelData = BinaryHelper.readArrayStructure<LevelData>(ref binaryReader);
     }
 }
 

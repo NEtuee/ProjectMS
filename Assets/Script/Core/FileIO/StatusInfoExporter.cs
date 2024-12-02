@@ -85,6 +85,9 @@ public static class StatusInfoLoader
             if(statusNodes[i].Name == "Stat")
             {
                 StatusDataFloat data = new StatusDataFloat();
+                List<StatusDataFloat.LevelData> levelDataList = new List<StatusDataFloat.LevelData>();
+                StatusDataFloat.LevelData defaultLevelData = new StatusDataFloat.LevelData();
+
                 XmlAttributeCollection attributes = statusNodes[i].Attributes;
                 for(int j = 0; j < attributes.Count; ++j)
                 {
@@ -99,17 +102,19 @@ public static class StatusInfoLoader
                     else if(attrName == "Name")
                         data._statusName = attrValue;
                     else if(attrName == "Max")
-                        data._maxValue = float.Parse(attrValue);
+                        defaultLevelData._maxValue = float.Parse(attrValue);
                     else if(attrName == "Min")
-                        data._minValue = float.Parse(attrValue);
+                        defaultLevelData._minValue = float.Parse(attrValue);
                     else if(attrName == "Init")
-                        data._initialValue = float.Parse(attrValue);
+                        defaultLevelData._initialValue = float.Parse(attrValue);
                     else
                     {
                         DebugUtil.assert(false, "invalid attribute name from statusInfo: {0}",attrName);
                         continue;
                     }
                 }
+
+                levelDataList.Add(defaultLevelData);
 
                 if(nameCheck.Contains(data._statusName))
                 {
@@ -118,6 +123,7 @@ public static class StatusInfoLoader
                 }
 
                 nameCheck.Add(data._statusName);
+                data._statusLevelData = levelDataList.ToArray();
 
                 statusInfoDataList.Add(data);
             }

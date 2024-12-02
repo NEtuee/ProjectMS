@@ -14,6 +14,9 @@ public class StatusInfo
         public float _additionalValue = 0f;
         public float _regenFactor = 0f;
 
+        public uint _level = 0;
+        public StatusDataFloat.LevelData _levelData = new StatusDataFloat.LevelData();
+
         public HashSet<int> _updateListWhenValueChange = new HashSet<int>();
 
         public bool _buffListUpdated = false;
@@ -125,7 +128,7 @@ public class StatusInfo
 
         foreach(Status item in _statusValues.Values)
         {
-            _statusInfoData._statusData[item._statusIndex].initStat(ref item._value);
+            _statusInfoData._statusData[item._statusIndex].initStat(ref item._levelData, ref item._value);
             item._value = item._realValue;
             item._additionalValue = 0f;
             item._regenFactor = 0f;
@@ -141,7 +144,7 @@ public class StatusInfo
         _currentDefenceType = DefenceType.Count;
         foreach(Status item in _statusValues.Values)
         {
-            _statusInfoData._statusData[item._statusIndex].initStat(ref item._value);
+            _statusInfoData._statusData[item._statusIndex].initStat(ref item._levelData, ref item._value);
             item._value = item._realValue;
             item._additionalValue = 0f;
             item._regenFactor = 0f;
@@ -204,7 +207,8 @@ public class StatusInfo
             StatusDataFloat statusDataFloat = data._statusData[i];
             Status stat = new Status();
             stat._statusIndex = i;
-            statusDataFloat.initStat(ref stat._realValue);
+            statusDataFloat.getLevelData(stat._level, ref stat._levelData);
+            statusDataFloat.initStat(ref stat._levelData, ref stat._realValue);
 
             stat._statusName = statusDataFloat.getName();
             _statusValues.Add(statusDataFloat.getName(), stat);
@@ -377,7 +381,7 @@ public class StatusInfo
                 continue;
             }
 
-            _statusInfoData._statusData[item._statusIndex].variStat(ref item._realValue, item._additionalValue, item._regenFactor * deltaTime);
+            _statusInfoData._statusData[item._statusIndex].variStat(ref item._levelData, ref item._realValue, item._additionalValue, item._regenFactor * deltaTime);
             item._value = item._realValue;
 
             item._additionalValue = 0f;
@@ -611,7 +615,7 @@ public class StatusInfo
             return 0f;
         }
             
-        return status._realValue * (1f / _statusInfoData._statusData[status._statusIndex].getMaxValue());
+        return status._realValue * (1f / status._levelData._maxValue);
     }
 
     public float getMaxStatus(string targetName)
@@ -623,7 +627,7 @@ public class StatusInfo
             return 0f;
         }
 
-        return _statusInfoData._statusData[status._statusIndex].getMaxValue();
+        return status._levelData._maxValue;
     }
 
     public float getCurrentStatus(string targetName)
@@ -799,7 +803,7 @@ public class StatusInfo
             return false;
         }
             
-        _statusInfoData._statusData[status._statusIndex].variStat(ref status._realValue, 0f, value);
+        _statusInfoData._statusData[status._statusIndex].variStat(ref status._levelData, ref status._realValue, 0f, value);
         return true;
     }
 
@@ -817,7 +821,7 @@ public class StatusInfo
             return false;
         }
             
-        _statusInfoData._statusData[status._statusIndex].setStat(ref status._realValue, 0f, value);
+        _statusInfoData._statusData[status._statusIndex].setStat(ref status._levelData, ref status._realValue, 0f, value);
         return true;
     }
 
