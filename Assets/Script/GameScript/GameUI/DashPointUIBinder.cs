@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +9,7 @@ public class DashPointUIBinder : UIObjectBinder
 {
     public Image[] DashPointImages;
 
+    public TextMeshProUGUI _additionalText;
     public Color _color1;
     public Color _color2;
     public Color _color3;

@@ -34,6 +34,7 @@ public class StatusInfoData : SerializableDataType
 {
     public string _statusInfoName;
     public bool _useHPEffect;
+    public uint _defaultLevel = 0;
 
     public StatusDataFloat[] _statusData;
     public StatusGraphicInterfaceData[] _graphicInterfaceData;
@@ -42,11 +43,12 @@ public class StatusInfoData : SerializableDataType
     {
     }
 
-    public StatusInfoData(string name, bool useHPEffect, StatusDataFloat[] statusArray, StatusGraphicInterfaceData[] graphicInterfaceArray)
+    public StatusInfoData(string name, bool useHPEffect, uint defaultLevel, StatusDataFloat[] statusArray, StatusGraphicInterfaceData[] graphicInterfaceArray)
     {
         _statusInfoName = name;
         _useHPEffect = useHPEffect;
         _statusData = statusArray;
+        _defaultLevel = defaultLevel;
         _graphicInterfaceData = graphicInterfaceArray;
     }
 #if UNITY_EDITOR
@@ -54,6 +56,7 @@ public class StatusInfoData : SerializableDataType
     {
         binaryWriter.Write(_statusInfoName);
         binaryWriter.Write(_useHPEffect);
+        binaryWriter.Write(_defaultLevel);
         BinaryHelper.writeArray<StatusDataFloat>(ref binaryWriter, _statusData);
         BinaryHelper.writeArray<StatusGraphicInterfaceData>(ref binaryWriter, _graphicInterfaceData);
     }
@@ -63,6 +66,7 @@ public class StatusInfoData : SerializableDataType
     {
         _statusInfoName = binaryReader.ReadString();
         _useHPEffect = binaryReader.ReadBoolean();
+        _defaultLevel = binaryReader.ReadUInt32();
         _statusData = BinaryHelper.readArray<StatusDataFloat>(ref binaryReader);
         _graphicInterfaceData = BinaryHelper.readArray<StatusGraphicInterfaceData>(ref binaryReader);
     }
@@ -135,6 +139,12 @@ public class StatusDataFloat : SerializableDataType
     public void initStat(ref LevelData levelData, ref float value)
     {
         value = levelData._initialValue;
+    }
+
+    public void initLessStat(ref LevelData levelData, ref float value)
+    {
+        if(value < levelData._initialValue)
+            value = levelData._initialValue;
     }
 
     public void variStat(ref LevelData levelData, ref float value, float additionalMax, float factor )

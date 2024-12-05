@@ -7,7 +7,14 @@
         <Stat Type="Battle" Max="100" Min="0" Init="0"/>
         <Stat Type="HitCount" Max="999" Min="0" Init="0"/>
         <Stat Type="GuardCount" Max="999" Min="0" Init="0"/>
-        <Stat Type="Custom" Name="DashPoint" Max="4" Min="0" Init="4"/>
+        <Stat Type="Custom" Name="DashPoint" Max="4" Min="0" Init="4">
+            <Stat Level="1" Max="5" Min="0" Init="5"/>
+            <Stat Level="2" Max="6" Min="0" Init="6"/>
+            <Stat Level="3" Max="7" Min="0" Init="7"/>
+            <Stat Level="4" Max="8" Min="0" Init="8"/>
+            <Stat Level="5" Max="9" Min="0" Init="9"/>
+            <Stat Level="6" Max="10" Min="0" Init="10"/>
+        </Stat>
         <Stat Type="Custom" Name="Charging" Max="100" Min="0" Init="0"/>
         <Stat Type="Custom" Name="IsStun" Max="1" Min="0" Init="0"/>
         <Stat Type="Custom" Name="IsCatched" Max="1" Min="0" Init="0"/>

@@ -133,7 +133,7 @@ public class DashPointUI : IUIElement
 
     private void UpdateDashPoint(int point)
     {
-        point = Mathf.Clamp(point, 0, 5);
+        //point = Mathf.Clamp(point, 0, 5);
 
         switch (point)
         {
@@ -152,11 +152,17 @@ public class DashPointUI : IUIElement
             case 4 :
                 SetDashPoint4();
                 break;
+            default:
+                SetDashPoint4();
+                _binder._additionalText.gameObject.SetActive(true);
+                _binder._additionalText.text = "+" + (point - 4);
+                break;
         }
     }
 
     private void SetDashPoint0()
     {
+        _binder._additionalText.gameObject.SetActive(false);
         _binder.DashPointImages[0].gameObject.SetActive(false);
         _binder.DashPointImages[1].gameObject.SetActive(false);
         _binder.DashPointImages[2].gameObject.SetActive(false);
@@ -165,6 +171,7 @@ public class DashPointUI : IUIElement
 
     private void SetDashPoint1()
     {
+        _binder._additionalText.gameObject.SetActive(false);
         _binder.DashPointImages[0].gameObject.SetActive(true);
         _binder.DashPointImages[1].gameObject.SetActive(false);
         _binder.DashPointImages[2].gameObject.SetActive(false);
@@ -175,6 +182,7 @@ public class DashPointUI : IUIElement
     
     private void SetDashPoint2()
     {
+        _binder._additionalText.gameObject.SetActive(false);
         _binder.DashPointImages[0].gameObject.SetActive(true);
         _binder.DashPointImages[1].gameObject.SetActive(true);
         _binder.DashPointImages[2].gameObject.SetActive(false);
@@ -186,6 +194,7 @@ public class DashPointUI : IUIElement
     
     private void SetDashPoint3()
     {
+        _binder._additionalText.gameObject.SetActive(false);
         _binder.DashPointImages[0].gameObject.SetActive(true);
         _binder.DashPointImages[1].gameObject.SetActive(true);
         _binder.DashPointImages[2].gameObject.SetActive(true);
@@ -198,6 +207,7 @@ public class DashPointUI : IUIElement
     
     private void SetDashPoint4()
     {
+        _binder._additionalText.gameObject.SetActive(false);
         _binder.DashPointImages[0].gameObject.SetActive(true);
         _binder.DashPointImages[1].gameObject.SetActive(true);
         _binder.DashPointImages[2].gameObject.SetActive(true);

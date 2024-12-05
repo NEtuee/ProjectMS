@@ -21,6 +21,7 @@ public class GameEditorMaster : MonoBehaviour
     public Text     _timeMagnitudeText;
 
     public Text     _debugCharacterNameText;
+    public Text     _debugCharacterLevelText;
     public Toggle   _actionDebugToggle;
     public Toggle   _aiDebugToggle;
     public Toggle   _statusDebugToggle;
@@ -89,8 +90,10 @@ public class GameEditorMaster : MonoBehaviour
             window.mainUpdate(Time.deltaTime);
         }
 
-
         updateCharacterPick();
+
+        if(_currentlySelectedEntity != null)
+            _debugCharacterLevelText.text = "Level " + _currentlySelectedEntity.getStatusInfo().getLevel().ToString();
 #endif
     }
 
@@ -181,6 +184,22 @@ public class GameEditorMaster : MonoBehaviour
             });
         }
     }
+
+    public void pickedCharacterLevelUp()
+    {
+        if(_currentlySelectedEntity == null)
+            return;
+        
+        _currentlySelectedEntity.getStatusInfo().levelUp();
+    }
+
+    public void pickedCharacterLevelDown()
+    {
+        if(_currentlySelectedEntity == null)
+            return;
+        
+        _currentlySelectedEntity.getStatusInfo().levelDown();
+    }
     
 #if UNITY_EDITOR
     public void updateCharacterPick()
@@ -206,6 +225,7 @@ public class GameEditorMaster : MonoBehaviour
                 EditorGUIUtility.PingObject(character.gameObject);
 
                 _debugCharacterNameText.text = character.gameObject.name;
+                _debugCharacterLevelText.text = "Level " + character.getStatusInfo().getLevel().ToString();
                 _currentlySelectedEntity = null;
                 setTargetDebugSwitch();
 

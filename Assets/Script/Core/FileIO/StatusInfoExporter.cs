@@ -79,6 +79,7 @@ public static class StatusInfoLoader
         XmlNodeList statusNodes = node.ChildNodes;
 
         bool useHPEffect = false;
+        uint defaultLevel = 0;
 
         for(int i = 0; i < statusNodes.Count; ++i)
         {
@@ -112,6 +113,44 @@ public static class StatusInfoLoader
                         DebugUtil.assert(false, "invalid attribute name from statusInfo: {0}",attrName);
                         continue;
                     }
+                }
+
+                foreach(XmlNode childNode in statusNodes[i].ChildNodes)
+                {
+                    if(childNode.Name == "Stat")
+                    {
+                        StatusDataFloat.LevelData levelData = new StatusDataFloat.LevelData();
+                        XmlAttributeCollection childAttributes = childNode.Attributes;
+
+                        int level = 0;
+
+                        for(int j = 0; j < childAttributes.Count; ++j)
+                        {
+                            string attrName = childAttributes[j].Name;
+                            string attrValue = childAttributes[j].Value;
+
+                            if(attrName == "Max")
+                                levelData._maxValue = float.Parse(attrValue);
+                            else if(attrName == "Min")
+                                levelData._minValue = float.Parse(attrValue);
+                            else if(attrName == "Init")
+                                levelData._initialValue = float.Parse(attrValue);
+                            else if(attrName == "Level")
+                                level = int.Parse(attrValue);
+                            else
+                            {
+                                DebugUtil.assert(false, "invalid attribute name from statusInfo: {0}",attrName);
+                                continue;
+                            }
+                        }
+
+                        if(level < 0)
+                            continue;
+                        
+                        levelData._level = (uint)level;
+                        levelDataList.Add(levelData);
+                    }
+
                 }
 
                 levelDataList.Add(defaultLevelData);
@@ -157,7 +196,7 @@ public static class StatusInfoLoader
             }
         }
 
-        StatusInfoData statusInfoData = new StatusInfoData(node.Name,useHPEffect,statusInfoDataList.ToArray(),graphicInterfaceDataList.ToArray());
+        StatusInfoData statusInfoData = new StatusInfoData(node.Name,useHPEffect,defaultLevel,statusInfoDataList.ToArray(),graphicInterfaceDataList.ToArray());
 
         return statusInfoData;
     }
