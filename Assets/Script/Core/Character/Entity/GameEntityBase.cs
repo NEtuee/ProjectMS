@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Mathematics;
 using System;
+using UnityEditor.VersionControl;
+using UnityEngine.AI;
+
+
 
 
 
@@ -17,6 +21,8 @@ public delegate void DeadEventDelegate(GameEntityBase collisionData);
 public class GameEntityBase : SequencerObjectBase
 {
     public static float         _defaultFriction = 4f;
+    private const float         _kOutlineStartSize = 1.3f;
+    private const float         _kOutlineStartTime = 1.0f;
 
     public string               actionGraphPath = "Assets/Data/ActionGraph/ActionGraphTest.xml";
     public string               aiGraphPath = "Assets/Data/AIGraph/CommonEnemyAI.xml";
@@ -55,6 +61,9 @@ public class GameEntityBase : SequencerObjectBase
 
     private PhysicsBodyEx       _physicsBody = new PhysicsBodyEx();
 
+    protected GameObject            _outlineSpriteObject;
+    protected SpriteRenderer        _outlineSpriteRenderer;
+
 
     private Vector3             _currentVelocity = Vector3.zero;
     private Vector3             _currentBoundVelocity = Vector3.zero;
@@ -92,7 +101,6 @@ public class GameEntityBase : SequencerObjectBase
     private DirectionType       _currentDirectionType = DirectionType.AlwaysRight;
     private RotationType        _currentRotationType = RotationType.AlwaysRight;
 
-
     private Quaternion          _actionStartRotation = Quaternion.identity;
     private Quaternion          _angleBaseRotation = Quaternion.identity;
 
@@ -100,6 +108,9 @@ public class GameEntityBase : SequencerObjectBase
     private List<TimelineEffectItem> _enabledLaserEffectItems = new List<TimelineEffectItem>();
     private List<GameEntityBase> _rotateSlotList = new List<GameEntityBase>();
     private GameEntityBase      _rotateSlotParent = null;
+
+    private TimeProcessor       _timeProcessor = new TimeProcessor();
+    private TimeProcessor.TimeProcessItem _outlineAppearTimeProcessItem = null;
 
 #if UNITY_EDITOR
 
@@ -162,6 +173,18 @@ public class GameEntityBase : SequencerObjectBase
         _sequencerProcessManager = new SequencerGraphProcessManager(this);
 
         createSpriteRenderObject();
+
+        _outlineSpriteObject = new GameObject("OutlineSpriteObject");
+        _outlineSpriteObject.transform.SetParent(_spriteObject.transform);
+        _outlineSpriteObject.transform.localPosition = Vector3.zero;
+
+        _outlineSpriteRenderer = _outlineSpriteObject.AddComponent<SpriteRenderer>();
+        _outlineSpriteRenderer.material = Material.Instantiate(getOutlineMaterial());
+
+        _outlineSpriteObject.SetActive(false);
+
+        _outlineAppearTimeProcessItem = _timeProcessor.addTimer("OutlineAppear", _kOutlineStartTime);
+        _outlineAppearTimeProcessItem.initialize(false);
     }
 
     public virtual void initializeCharacter(CharacterInfoData characterInfo, AllyInfoData allyInfo, Vector3 direction)
@@ -250,6 +273,9 @@ public class GameEntityBase : SequencerObjectBase
         _spriteRenderer.flipY = false;
 
         _spawnPosition = transform.position;
+
+        _outlineSpriteObject.SetActive(false);
+        _outlineAppearTimeProcessItem.initialize(false);
 
         setRotateSlotValue(0f, 0f);
         initializeActionValue();
@@ -384,6 +410,9 @@ public class GameEntityBase : SequencerObjectBase
         CollisionManager.Instance().registerObject(_collisionInfo, this);
         _collisionInfo.setActiveCollision(_actionGraph.isActiveCollision());
 
+        _outlineSpriteObject.SetActive(false);
+        _outlineAppearTimeProcessItem.initialize(false);
+
         setRotateSlotValue(0f, 0f);
         initializeActionValue();
         updateRotation();
@@ -407,11 +436,16 @@ public class GameEntityBase : SequencerObjectBase
     public override void progress(float deltaTime)
     {
         base.progress(deltaTime);
+        _timeProcessor.updateProcessor(deltaTime);
+
         if(_isActionChangeFrame)
             _isActionChangeFrame = false;
 
         if(_activeSelf)
+        {
             _characterLifeTime += deltaTime;
+            updateOutline(deltaTime);
+        }
 
         if(_sequencerProcessManager != null)
             _sequencerProcessManager.progress(deltaTime);
@@ -467,6 +501,7 @@ public class GameEntityBase : SequencerObjectBase
             _actionGraph.setActionConditionData_Float(ConditionNodeUpdateType.AI_GraphStateExecutedTime, 0f);
         }
 
+        bool actionChanged = false;
         if(_actionGraph != null && _activeSelf)
         {
             string prevActionName = _actionGraph.getCurrentActionName();
@@ -474,7 +509,8 @@ public class GameEntityBase : SequencerObjectBase
             _physicsBody.progress(deltaTime);
 
             //action,movementGraph 바뀌는 시점
-            if(_actionGraph.progress(deltaTime) == true)
+            actionChanged = _actionGraph.progress(deltaTime);
+            if(actionChanged)
             {
                 onActionChanged();
             }
@@ -514,10 +550,44 @@ public class GameEntityBase : SequencerObjectBase
         _deadEventDelegate = null;
         laserEffectCheck();
 
+        if(actionChanged)
+        {
+            if(_actionGraph.checkPrevActionFlag(ActionFlags.Outline) == false && _actionGraph.checkCurrentActionFlag(ActionFlags.Outline))
+            {
+                _outlineAppearTimeProcessItem.initialize(true);
+                _outlineSpriteObject.SetActive(true);
+                updateOutline(0f);
+            }
+            else if(_actionGraph.checkPrevActionFlag(ActionFlags.Outline) && _actionGraph.checkCurrentActionFlag(ActionFlags.Outline) == false)
+            {
+                _outlineSpriteObject.SetActive(false);
+            }
+        }
+
         _collisionInfo.updateCollisionInfo(transform.position,getDirection());
 #if UNITY_EDITOR
         updateDebug();
 #endif        
+    }
+
+    private void updateOutline(float deltaTime)
+    {
+        if(_outlineSpriteObject.activeInHierarchy == false)
+            return;
+
+        _outlineSpriteRenderer.sprite = _spriteRenderer.sprite;
+        _outlineSpriteRenderer.flipX = _spriteRenderer.flipX;
+        _outlineSpriteRenderer.flipY = _spriteRenderer.flipY;
+        _outlineSpriteRenderer.sortingOrder = _spriteRenderer.sortingOrder - 1;
+        _outlineSpriteObject.layer = _spriteObject.layer;
+
+        if(_outlineAppearTimeProcessItem.isTriggered())
+        {
+            _outlineSpriteObject.transform.localScale = Vector3.one;
+            return;
+        }
+
+        _outlineSpriteObject.transform.localScale = Vector3.Lerp(Vector3.one * _kOutlineStartSize, Vector3.one, MathEx.easeOutCubic(_outlineAppearTimeProcessItem.getRate()));
     }
 
     public void onActionChanged()
@@ -980,6 +1050,9 @@ public class GameEntityBase : SequencerObjectBase
         packageChangeLogItem._nodeData = _aiGraph.getCurrentAIPackageNode_Debug();
         packageChangeLogItem._packageName = _aiGraph.getCurrentPackageName();
         addAIPackageChangeLog(packageChangeLogItem);
+
+        _outlineSpriteObject.SetActive(false);
+        _outlineAppearTimeProcessItem.initialize(false);
 
         _actionDebug = false;
         _aiDebug = false;

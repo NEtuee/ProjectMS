@@ -20,6 +20,7 @@ public abstract class ObjectBase : MessageReceiver, IProgress
 
     protected GameObject            _spriteObject;
     protected SpriteRenderer        _spriteRenderer;
+
     protected Animator              _animator;
     protected Vector3               _direction = Vector3.right;
     protected Vector3               _localSpritePosition = Vector3.zero;
@@ -182,6 +183,11 @@ public abstract class ObjectBase : MessageReceiver, IProgress
     public Material getBaseMaterial()
     {
         return ResourceContainerEx.Instance().GetMaterial("Material/Material_CharacterMaster");
+    }
+
+    public Material getOutlineMaterial()
+    {
+        return ResourceContainerEx.Instance().GetMaterial("Material/Material_CharacterOutlineMaster");
     }
 
     public Animator getAnimator() 
