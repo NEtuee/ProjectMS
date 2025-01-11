@@ -473,7 +473,8 @@ public enum ActionFlags : ulong
     Hide = 1 << 3,
     IgnorePush = 1 << 4,
     ClearDanmaku = 1 << 5,
-    Outline = 1 << 6,
+    OutlineGuard = 1 << 6,
+    OutlineSuperArmor = 1 << 7,
 };
 
 public enum ConditionCompareType

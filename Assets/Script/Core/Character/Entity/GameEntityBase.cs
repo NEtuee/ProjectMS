@@ -62,6 +62,7 @@ public class GameEntityBase : SequencerObjectBase
 
     protected GameObject            _outlineSpriteObject;
     protected SpriteRenderer        _outlineSpriteRenderer;
+    protected Material              _outlineMaterial;
 
 
     private Vector3             _currentVelocity = Vector3.zero;
@@ -179,6 +180,7 @@ public class GameEntityBase : SequencerObjectBase
 
         _outlineSpriteRenderer = _outlineSpriteObject.AddComponent<SpriteRenderer>();
         _outlineSpriteRenderer.material = Material.Instantiate(getOutlineMaterial());
+        _outlineMaterial = _outlineSpriteRenderer.material;
 
         _outlineSpriteObject.SetActive(false);
 
@@ -551,13 +553,18 @@ public class GameEntityBase : SequencerObjectBase
 
         if(actionChanged)
         {
-            if(_actionGraph.checkPrevActionFlag(ActionFlags.Outline) == false && _actionGraph.checkCurrentActionFlag(ActionFlags.Outline))
+            if(_actionGraph.isPrevOutlineAction() == false && _actionGraph.isCurrentOutlineAction())
             {
                 _outlineAppearTimeProcessItem.initialize(true);
                 _outlineSpriteObject.SetActive(true);
+                _outlineMaterial.SetColor("_Color", _actionGraph.getOutlineColor());
                 updateOutline(0f);
             }
-            else if(_actionGraph.checkPrevActionFlag(ActionFlags.Outline) && _actionGraph.checkCurrentActionFlag(ActionFlags.Outline) == false)
+            else if(_actionGraph.isPrevOutlineAction() && _actionGraph.isCurrentOutlineAction())
+            {
+                _outlineMaterial.SetColor("_Color", _actionGraph.getOutlineColor());
+            }
+            else if(_actionGraph.isPrevOutlineAction() && _actionGraph.isCurrentOutlineAction() == false)
             {
                 _outlineSpriteObject.SetActive(false);
             }
