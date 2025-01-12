@@ -3,6 +3,7 @@ Shader "Custom/PixelOutlineShader"
     Properties
     {
         _MainTex ("Main Texture", 2D) = "white" {}
+        _Color ("Color", Color) = (1,1,1,1)
     }
     SubShader
     {
@@ -38,13 +39,7 @@ Shader "Custom/PixelOutlineShader"
 
             float  _OutlineThickness;
             float4 _MainTex_TexelSize; 
-
-            float3 HSVToRGB(float3 hsv)
-            {
-                float4 K = float4(1.0, 2.0/3.0, 1.0/3.0, 3.0);
-                float3 p = abs(frac(hsv.xxx + K.xyz) * 6.0 - K.www);
-                return hsv.z * lerp(K.xxx, saturate(p - K.xxx), hsv.y);
-            }
+            float4 _Color;
 
             Varyings vert (Attributes v)
             {
@@ -75,12 +70,11 @@ Shader "Custom/PixelOutlineShader"
                 outline += step(alphaThreshold, up.a);
 
                 float hue = frac(_Time.y * 2.0f);
-                float3 rainbowRGB = HSVToRGB(float3(hue, 1.0, 1.0));
 
                 if(outline > 0.0 && original.a < alphaThreshold)
-                    return float4(rainbowRGB, 1.0);
+                    return _Color;
 
-                return float4(rainbowRGB, original.a);
+                return float4(_Color.rgb, original.a);
             }
             ENDHLSL
         }

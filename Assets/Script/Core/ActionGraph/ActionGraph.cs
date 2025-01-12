@@ -1,7 +1,5 @@
 
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 
 
 [System.Serializable]
@@ -858,6 +856,27 @@ public class ActionGraph
 
         return (prevAction._actionFlag & (ulong)flag) != 0;
     }
+
+    public bool isCurrentOutlineAction()
+    {
+        return checkCurrentActionFlag(ActionFlags.OutlineGuard) || checkCurrentActionFlag(ActionFlags.OutlineSuperArmor);
+    }
+
+    public bool isPrevOutlineAction()
+    {
+        return checkPrevActionFlag(ActionFlags.OutlineGuard) || checkPrevActionFlag(ActionFlags.OutlineSuperArmor);
+    }
+
+    public UnityEngine.Color getOutlineColor()
+    {
+        if(checkCurrentActionFlag(ActionFlags.OutlineGuard))
+            return new UnityEngine.Color(0.223f, 0.6f, 0.862f, 1.0f);
+        else if(checkCurrentActionFlag(ActionFlags.OutlineSuperArmor))
+            return new UnityEngine.Color(1.0f, 0.47f, 0.0f, 1.0f);
+        else
+            return UnityEngine.Color.white;
+    }
+
 
     public MoveValuePerFrameFromTimeDesc getMoveValuePerFrameFromTimeDesc()
     {
