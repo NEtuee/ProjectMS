@@ -138,6 +138,8 @@ public class TextPresenter
         _bubbleRect = binder.BubblePolygonMain.rectTransform;
         _backRect = binder.BubblePolygonBack.rectTransform;
         _stringBuilder = new StringBuilder();
+
+        InitializeTextBubbleSize();
     }
 
     public void Clear()
@@ -181,6 +183,11 @@ public class TextPresenter
         }
         
         UpdateText(_stringBuilder.ToString());
+    }
+
+    public void setBackgroundColor(Color color)
+    {
+        _binder.BubblePolygonBack.color = color;
     }
 
     public void SetColor(string colorHex)
@@ -233,9 +240,21 @@ public class TextPresenter
     private void UpdateText(string text)
     {
         _binder.TextComp.text = text;
-        _textCompRect.sizeDelta = new Vector2(_binder.TextComp.preferredWidth, _binder.TextComp.preferredHeight);
-        _bubbleRect.sizeDelta = new Vector2(_binder.TextComp.preferredWidth + _binder.WidthPadding * 2.0f, _binder.TextComp.preferredHeight + _binder.HeightPadding * 2.0f);
-        _backRect.sizeDelta = _bubbleRect.sizeDelta;
+        _textCompRect.sizeDelta = new Vector2(MathEx.maxf(30f, _binder.TextComp.preferredWidth), _binder.TextComp.preferredHeight);
+    }
+
+    public void UpdateTextBubbleSize(float deltaTime)
+    {
+        Vector2 targetSize = new Vector2(MathEx.maxf(30f, _binder.TextComp.preferredWidth) + _binder.WidthPadding * 2.0f, _binder.TextComp.preferredHeight + _binder.HeightPadding * 2.0f);
+        _bubbleRect.sizeDelta = Vector2.Lerp(_bubbleRect.sizeDelta, targetSize, 35f * deltaTime);
+        _backRect.sizeDelta =  _bubbleRect.sizeDelta;
+    }
+
+    public void InitializeTextBubbleSize()
+    {
+        Vector2 targetSize = new Vector2(MathEx.maxf(30f, _binder.TextComp.preferredWidth) + _binder.WidthPadding * 2.0f, _binder.TextComp.preferredHeight + _binder.HeightPadding * 2.0f);
+        _bubbleRect.sizeDelta = targetSize;
+        _backRect.sizeDelta = targetSize;
     }
 }
 
@@ -293,10 +312,16 @@ public class ShowText : BubbleCommend
         presenter.AddCharacter(_chArray[_current]);
         _current++;
 
-        if (_activeInputIcon == true &&
-            _chArray.Length <= _activeInputIconRemainLength)
+        if(_activeInputIcon)
         {
-            presenter.ActiveInputWaitIcon();
+            if (_chArray.Length <= _activeInputIconRemainLength)
+                presenter.ActiveInputWaitIcon();
+
+            presenter.setBackgroundColor(new Color(1f,0.7254f,0.3215f,1f));
+        }
+        else
+        {
+            presenter.setBackgroundColor(new Color(0.3647f,0.22f,0.192f,1f));
         }
     }
 
