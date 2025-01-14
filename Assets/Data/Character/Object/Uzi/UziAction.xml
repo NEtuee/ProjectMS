@@ -1,0 +1,133 @@
+<ActionGraph Name="UziAction" DefaultAction="AC_Idle" DefaultFramePerSecond="12">
+<!-- AnimationHeader MasterPath -->
+<GlobalVariable Name="gv_MasterPath" Value="Sprites/Enemy/Uzi/"/>
+<GlobalVariable Name="gv_DeadPath" Value="Sprites/Enemy/Uzi/0_default/4_dead/"/>
+
+<!-- Defualt Action -->
+    <AC_Entry MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/1_idle" XFlip="true" Duration="1">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Entry"/>
+    </AC_Entry>
+
+    <AC_Idle MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/1_idle" XFlip="true" Duration="1">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+
+            <FrameEvent Type="ReleaseCatch" StartTime="0" Push="0 0 0" Condition="getTargetFrameTag_Dead"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_Idle>
+
+    <AC_Move MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/2_move" XFlip="true" Duration="0.5">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="5" Speed="13"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Move"/>
+    </AC_Move>
+
+    <AC_SystemChase MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/2_move" XFlip="true" Duration="0.1">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="20" Speed="40"/>
+
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_SystemChase"/>
+    </AC_SystemChase>
+
+    <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction" RotationType="Keep">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/3_hit" XFlip="true" Duration="1.25">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2301" Attach="true"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_Hit>
+
+    <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction" RotationType="Keep">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/3_hit" XFlip="true" Duration="1.25">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_GuardBroken>
+
+    <Dead DirectionType="Keep" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/4_dead" XFlip="true" Duration="1">
+            <FrameEvent Type="ReleaseCatch" StartTime="0" Push="0 0 0"/>
+            <FrameEvent Type="Effect" StartTime="0" Path="gv_DeadPath" FramePerSecond="0.2" CastShadow="True">
+                <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
+            </FrameEvent>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="DiscountUzi" EventTargetType="Summoner"/>
+            <FrameEvent Type="KillEntity" StartTime="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Dead"/>
+    </Dead>
+<!-- Defualt Action -->
+
+<!-- Skill Action -->
+    <AC_AttackReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction" Flags="LaserEffect">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="1_attack/1_attackReady" XFlip="true" Duration="0.5">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="4903" Attach="true"/>
+            
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="5" Speed="13"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+            
+            <FrameEvent Type="SetDirectionType" StartTime="0.7" DirectionType="Keep"/>  <!-- 타겟 추적 중단용 이벤트 -->
+        </Animation>
+    
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_AttackReady>
+
+    <AC_AttackMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction" Flags="LaserEffect">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="1_attack/2_attackMain" XFlip="true" Duration="1.0">
+            <FrameEvent Type="SetDirectionType" StartTime="0" DirectionType="AI"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="5" Speed="13"/>
+
+            <!-- Danmaku Attack -->
+            <FrameEvent Type="Danmaku" StartTime="0" Path="Assets/Data/DanmakuGraph/Enemy/SukebanShotFire.xml" Offset="0.5 0.12 0" UseFlip="true"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_AttackRecover"/>
+    </AC_AttackMain>
+
+    <AC_AttackRecover MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="1_attack/3_attackRecover" XFlip="true" Duration="0.12">
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_AttackRecover>
+<!-- Skill Action -->
+
+</ActionGraph>
