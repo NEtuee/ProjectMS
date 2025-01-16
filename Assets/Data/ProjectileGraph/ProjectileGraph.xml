@@ -517,6 +517,64 @@
         </Event>
     </MiniBullet_tail>
 
+    <!-- 스케반 엘리트의 우지 -->
+    <UziBullet DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1" CastShadow="True">
+        <Animation Preset="Sprites/Projectile/UziBullet" XFlip="true" Duration="5.0">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="4904" Attach="false"/>    
+                
+        </Animation>
+
+        <CollisionInfo Radius="0.12" Angle="0"/>
+        <DefaultShotInfo Velocity="7" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="5"/>
+        <Event>
+            <OnHit>
+                <FrameEvent Type="Attack" NotifyAttackSuccess="False" StartFrame="0" AttackPreset="CommonProjectile">
+                    <OnHit>
+                        <FrameEvent Type="AudioPlay" StartTime="0" ID="4906" Attach="true"/>
+                        <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonQuarterAttack"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="SmashSmall"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="BloodSmall"/>
+                    </OnHit>
+                </FrameEvent>
+                <FrameEvent Type="EffectPreset" StartTime="0" Key="SmashSmall"/>
+            </OnHit>
+    
+            <OnHitEnd>
+            </OnHitEnd>
+    
+            <OnEnd>
+            </OnEnd>
+        </Event>
+    </UziBullet>
+    <!-- 스케반 엘리트의 우지 / 사운드 분리용 -->
+    <UziBullet_tail DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">
+        <Animation Preset="Sprites/Projectile/UziBullet" XFlip="true" Duration="5.0">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="4905" Attach="false"/>
+        </Animation>
+
+        <CollisionInfo Radius="0.12" Angle="0"/>
+        <DefaultShotInfo Velocity="7" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="5"/>
+        <Event>
+            <OnHit>
+                <FrameEvent Type="Attack" NotifyAttackSuccess="False" StartFrame="0" AttackPreset="CommonProjectile">
+                    <OnHit>
+                        <FrameEvent Type="AudioPlay" StartTime="0" ID="4906" Attach="true"/>
+                        <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonQuarterAttack"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="SmashSmall"/>
+                        <FrameEvent Type="EffectPreset" StartTime="0" Key="BloodSmall"/>
+                    </OnHit>
+                </FrameEvent>
+                <FrameEvent Type="EffectPreset" StartTime="0" Key="SmashSmall"/>
+            </OnHit>
+    
+            <OnHitEnd>
+            </OnHitEnd>
+    
+            <OnEnd>
+            </OnEnd>
+        </Event>
+    </UziBullet_tail>
+
     <!-- 헬레나의 붉은 마도서-->
     <Helena_CrimsonGrimoire DefaultFramePerSecond="4" UseSpriteRotation="false" PenetrateCount="1">
         <Animation Preset="Sprites/Enemy/Helena_CrimsonGrimoire/0_default/2_move" XFlip="true" Duration="0.8">
