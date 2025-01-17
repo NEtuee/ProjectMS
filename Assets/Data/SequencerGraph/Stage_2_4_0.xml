@@ -1,0 +1,20 @@
+<SequencerGraph Name="Stage_2_4_0">
+
+    <InitializePhase>
+        <ApplyPostProcessProfile Path="PostProcessProfile/Stage/Stage_2_3"/>
+
+        <SetCameraTarget UniqueKey="Player" CameraMode="TargetCenterMode"/>
+        <SetCrossHair UniqueKey="Player"/>
+
+        <Fade/>
+
+        <StopSwitch Switch="Effect" UniqueKey="Player" Key="Back_Leaf"/>
+        <EffectPreset UniqueKey="Player" EffectPreset="Back_Dust" Switch="True"/>
+    </InitializePhase>
+
+    <UpdatePhase>
+        <WaitSecond Time="1.0"/>
+
+    </UpdatePhase>
+    
+</SequencerGraph>

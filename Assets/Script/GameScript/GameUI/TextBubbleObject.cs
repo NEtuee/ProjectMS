@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Microsoft.Unity.VisualStudio.Editor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -58,9 +57,17 @@ public class TextBubbleObject : TextBubbleBinder
             gameObject.SetActive(false);
             _isPlay = false;
             IconWaitInput.gameObject.SetActive(false);
+            _textPresenter?.Clear();
+
         }
         else
         {
+            if(gameObject.activeSelf == false)
+            {
+                _textPresenter.InitializeTextBubbleSize();
+                _textPresenter.Clear();
+            }
+                
             gameObject.SetActive(true);
         }
     }
@@ -109,6 +116,8 @@ public class TextBubbleObject : TextBubbleBinder
         SetActive(true);
         _isPlay = true;
         _onEnd = onEnd;
+
+        Update();
     }
     
     public void Update()
@@ -212,6 +221,8 @@ public class TextBubbleObject : TextBubbleBinder
                 _currentCommand.Start(_textPresenter, FollowTarget, GlobalTimer.Instance().getScaledGlobalTime());
             }
         }
+
+        _textPresenter.UpdateTextBubbleSize(GlobalTimer.Instance().getSclaedDeltaTime());
     }
 
     public void ForceEnd()

@@ -291,6 +291,14 @@ public class MasterManager : MessageHub<ManagerBase>
         _timeScaleBlendTimer = blendTime;
     }
 
+    public void initializeTimeScale()
+    {
+        _timeScaleTimer = 0f;
+        _timeScaleBlendTimer = 0f;
+        _timeScaleBlendFactor = 0f;
+        _targetTimeScale = 0f;
+    }
+
     public void ManagersUpdate(float deltaTime)
     {
         foreach(var receiver in _receivers.Values)

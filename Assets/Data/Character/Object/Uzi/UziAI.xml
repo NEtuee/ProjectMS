@@ -1,0 +1,100 @@
+<AIGraph Name="UziAI" DefaultState="Entry">
+
+    <Include Path="Assets/Data/AILibrary/Package/CommonDeadPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonHitPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonIdlePackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonGuardBrokenPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonSystemChasePackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonChasePackage.xml"/>         <!-- 추격 이동 패키지 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonAlertPackage.xml"/>         <!-- 경계 이동 패키지 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonAwayPackage.xml"/>          <!-- 후진 이동 패키지 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonLaserAttackPackage.xml"/>   <!-- 빔 공격 패키지 (공격 시 추적 불가)-->
+    <Include Path="Assets/Data/AILibrary/Package/CommonLockOnAttackPackage.xml"/>  <!-- 락온 공격 패키지 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonLockOnAllAttackPackage.xml"/>  <!-- 락온 공격 패키지 -->
+
+    <GlobalVariable Name="gv_najimiSystemChaseRange" Value="9.75"/>     <!-- 카메라 범위 값. 카메라 바깥으로 사라지지 않게 추격 -->
+  
+    <GlobalVariable Name="gv_AttackRangeMin"           Value="0.0"/>       <!-- 최소 공격 사거리 : Value보다 PC가 가까우면 공격하지 않는다. -->
+    <GlobalVariable Name="gv_AttackRangeMax"           Value="2.8"/>       <!-- 최대 공격 사거리 : Value보다 PC가 멀면 공격하지 않는다. -->
+    <!-- 이동 거리 설정 -->
+    <GlobalVariable Name="gv_MoveThreshold"                 Value="2.5"/>       <!-- 최대 거리 : PC와 Value 이상 거리가 벌어진 경우 이동한다. -->
+    <GlobalVariable Name="gv_StopThreshold"                 Value="2.0"/>       <!-- 최소 거리 : PC와 Value 이상 거리가 가까워진 경우 정지 또는 경계한다. -->
+    <GlobalVariable Name="gv_AwayThreshold"                 Value="1.5"/>       <!-- 최소 거리 : PC와 Value 이상 거리가 가까워진 경우 거리를 벌린다. -->
+
+    <BranchSet Name="IsPlayerDead">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="getTargetFrameTag_Dead" Execute="EnemyWin"/>
+    </BranchSet>
+
+    <BranchSet Name="HitReactionSet">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="Hit && getFrameTag_HitAvail" Execute="Hit"/> 
+        <Branch Condition="(GuardBreakFail || GuardBroken) && getFrameTag_GbAvail" Execute="GuardBroken"/>
+    </BranchSet>
+    <BranchSet Name="AlertMovementSet">
+        <Branch Condition="(TargetDistance <= gv_AwayThreshold)"     Execute="Away"/>
+        <Branch Condition="(TargetDistance <= gv_StopThreshold)"     Execute="Alert"/>
+        <Branch Condition="(TargetDistance > gv_MoveThreshold)"      Execute="Chase"/>
+    </BranchSet>
+    <BranchSet Name="AttackTriggerSet">
+        <Branch Condition="aiGraphCoolTime_Shoot
+                        && (TargetDistance >= gv_AttackRangeMin)
+                        && (TargetDistance <= gv_AttackRangeMax)" Execute="Entry"/>
+    </BranchSet>
+
+    <Entry Package="CommonIdlePackage">
+        <UseBranchSet Name="IsPlayerDead"/>
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="TargetDistance >= gv_najimiSystemChaseRange" Execute="SystemChase"/>
+        <Branch Weight="RandBoolean^True" Condition="aiGraphCoolTime_Shoot" Execute="Shoot"/>
+        <Branch Condition="True" Execute="Chase"/>
+    </Entry>
+
+    <Chase Package="CommonChasePackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="AttackTriggerSet"/>
+        <UseBranchSet Name="AlertMovementSet"/>
+    </Chase>
+
+    <Alert Package="CommonAlertPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="AttackTriggerSet"/>
+        <UseBranchSet Name="AlertMovementSet"/>      
+    </Alert>
+
+    <Away Package="CommonAwayPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="AttackTriggerSet"/>
+        <UseBranchSet Name="AlertMovementSet"/>
+    </Away>
+
+    <SystemChase Package="CommonSystemChasePackage">
+        <UseBranchSet Name="IsPlayerDead"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+    </SystemChase>
+
+    <Hit Package="CommonHitPackage">
+        <UseBranchSet Name="IsPlayerDead"/>
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+    </Hit>
+
+    <GuardBroken Package="CommonGuardBrokenPackage">
+        <UseBranchSet Name="IsPlayerDead"/>
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+    </GuardBroken>
+    
+    <!-- 원거리 공격: 우지 -->
+    <Shoot Package="CommonLockOnAllAttackPackage" CoolTime="3.0">
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+    </Shoot>
+
+    <Dead Package="CommonDeadPackage">
+    </Dead>
+
+    <EnemyWin Package="CommonIdlePackage">
+        <Branch Condition="getTargetFrameTag_Dead == false" Execute="Entry"/>
+    </EnemyWin>
+</AIGraph>

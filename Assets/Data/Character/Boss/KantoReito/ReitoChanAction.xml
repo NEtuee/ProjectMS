@@ -147,7 +147,9 @@
                 </OnHit>
             </FrameEvent>
         </Animation>
-
+            <Trigger Condition="AttackSuccess">
+                <FrameEvent Type="Movement" StartTime="0" Friction="48" Velocity="0" MaxVelocity="0" Speed="0"/>
+            </Trigger>
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_PunchMain>
 

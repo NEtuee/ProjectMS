@@ -16,14 +16,14 @@ MonoBehaviour:
   - _name: PlayerAttackTest
     _attackRadius: 1.5
     _attackAngle: 8
-    _attackStartDistance: 0.1
+    _attackStartDistance: 0.5
     _attackRayRadius: 0.17
     _pushVector: {x: 1.5, y: 0, z: 0}
     _attackMaterial: 0
   - _name: PlayerAttackLong
     _attackRadius: 5
     _attackAngle: 0
-    _attackStartDistance: 0.1
+    _attackStartDistance: 0.5
     _attackRayRadius: 0.25
     _pushVector: {x: 1.5, y: 0, z: 0}
     _attackMaterial: 0
@@ -98,10 +98,10 @@ MonoBehaviour:
     _pushVector: {x: 0, y: 0, z: 0}
     _attackMaterial: 0
   - _name: SisterSpear_Catch
-    _attackRadius: 1
+    _attackRadius: 0.5
     _attackAngle: 0
-    _attackStartDistance: 0
-    _attackRayRadius: 0.1
+    _attackStartDistance: 0.25
+    _attackRayRadius: 0.05
     _pushVector: {x: 0, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Najimi_BatonSlash

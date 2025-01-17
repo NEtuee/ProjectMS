@@ -4,6 +4,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using System;
 using UnityEngine.UIElements;
+using System.Threading;
 
 public class StageProcessor
 {
@@ -404,6 +405,7 @@ public class StageProcessor
 
         if(isMiniStage == false)
         {
+            MasterManager.instance.initializeTimeScale();
             foreach(var item in _miniStageProcessor)
             {
                 item.stopStage(forceStop);

@@ -148,7 +148,7 @@
 
             <FrameEvent Type="AudioPlay" StartTime="0" ID="4901" Attach="true" Switch="True"/>
             <!-- TODO: AttackPreset -->
-            <FrameEvent Type="Attack" StartTime="0" EndTime="0.35" AttackPreset="SisterSpear_Catch" AttackType="Catch" CatchOffset="0.1 0 0">
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.35" AttackPreset="SisterSpear_Catch" AttackType="Catch" CatchOffset="0.4 0 0">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
                     <FrameEvent Type="EffectPreset" StartTime="0" Key="Slash"/>

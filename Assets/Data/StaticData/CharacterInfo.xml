@@ -381,6 +381,19 @@
         AllyInfo="Sister"
     />
 
+    <Uzi
+        DisplayName="스케반 엘리트의 우지 "
+        ActionGraph="Assets/Data/Character/Object/Uzi/UziAction.xml"
+        AIGraph="Assets/Data/Character/Object/Uzi/UziAI.xml"
+        StatusInfoName="CommonHpThreeEnemyStatus"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="Sukeban"
+    />
+
     <SukebanUziChan
         DisplayName="스케반 우지쨩"
         ActionGraph="Assets/Data/Character/Enemy/02_SukebanRanged/SukebanRangedAction.xml"

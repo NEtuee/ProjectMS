@@ -14,6 +14,8 @@ public class StatusInfo
         public float _additionalValue = 0f;
         public float _regenFactor = 0f;
 
+        public StatusDataFloat.LevelData _levelData = new StatusDataFloat.LevelData();
+
         public HashSet<int> _updateListWhenValueChange = new HashSet<int>();
 
         public bool _buffListUpdated = false;
@@ -93,6 +95,7 @@ public class StatusInfo
 
     private DefenceType _currentDefenceType = DefenceType.Count;
 
+    private uint _level = 0;
     private bool _isImmortal = false;
     private bool _isDead = false;
     private int _uniqueKeyIndex = 0;
@@ -123,9 +126,11 @@ public class StatusInfo
         _statusInfoData = getStatusInfoData(dataName);
         createStatusValueDictionary(_statusInfoData);
 
+        _level = _statusInfoData._defaultLevel;
+
         foreach(Status item in _statusValues.Values)
         {
-            _statusInfoData._statusData[item._statusIndex].initStat(ref item._value);
+            _statusInfoData._statusData[item._statusIndex].initStat(ref item._levelData, ref item._realValue);
             item._value = item._realValue;
             item._additionalValue = 0f;
             item._regenFactor = 0f;
@@ -138,10 +143,12 @@ public class StatusInfo
 
         _isDead = false;
         _isImmortal = false;
+        _level = _statusInfoData._defaultLevel;
         _currentDefenceType = DefenceType.Count;
         foreach(Status item in _statusValues.Values)
         {
-            _statusInfoData._statusData[item._statusIndex].initStat(ref item._value);
+            _statusInfoData._statusData[item._statusIndex].getLevelData(_level,ref item._levelData);
+            _statusInfoData._statusData[item._statusIndex].initStat(ref item._levelData, ref item._realValue);
             item._value = item._realValue;
             item._additionalValue = 0f;
             item._regenFactor = 0f;
@@ -204,12 +211,41 @@ public class StatusInfo
             StatusDataFloat statusDataFloat = data._statusData[i];
             Status stat = new Status();
             stat._statusIndex = i;
-            statusDataFloat.initStat(ref stat._realValue);
+            statusDataFloat.getLevelData(_level, ref stat._levelData);
+            statusDataFloat.initStat(ref stat._levelData, ref stat._realValue);
 
             stat._statusName = statusDataFloat.getName();
             _statusValues.Add(statusDataFloat.getName(), stat);
         }
     }
+
+    public void levelUp()
+    {
+        setLevel(_level + 1);
+    }
+
+    public void levelDown()
+    {
+        if(_level == 0)
+            return;
+
+        setLevel(_level - 1);
+    }
+
+    public void setLevel(uint level)
+    {
+        _level = level;
+        foreach(Status item in _statusValues.Values)
+        {
+            if(_statusInfoData._statusData[item._statusIndex].getLevelData(_level,ref item._levelData))
+            {
+                _statusInfoData._statusData[item._statusIndex].initLessStat(ref item._levelData, ref item._realValue);
+                item._value = item._realValue;
+            }
+        }
+    }
+
+    public uint getLevel() {return _level;}
 
     public bool isValid()
     {
@@ -377,7 +413,7 @@ public class StatusInfo
                 continue;
             }
 
-            _statusInfoData._statusData[item._statusIndex].variStat(ref item._realValue, item._additionalValue, item._regenFactor * deltaTime);
+            _statusInfoData._statusData[item._statusIndex].variStat(ref item._levelData, ref item._realValue, item._additionalValue, item._regenFactor * deltaTime);
             item._value = item._realValue;
 
             item._additionalValue = 0f;
@@ -611,7 +647,7 @@ public class StatusInfo
             return 0f;
         }
             
-        return status._realValue * (1f / _statusInfoData._statusData[status._statusIndex].getMaxValue());
+        return status._realValue * (1f / status._levelData._maxValue);
     }
 
     public float getMaxStatus(string targetName)
@@ -623,7 +659,7 @@ public class StatusInfo
             return 0f;
         }
 
-        return _statusInfoData._statusData[status._statusIndex].getMaxValue();
+        return status._levelData._maxValue;
     }
 
     public float getCurrentStatus(string targetName)
@@ -799,7 +835,7 @@ public class StatusInfo
             return false;
         }
             
-        _statusInfoData._statusData[status._statusIndex].variStat(ref status._realValue, 0f, value);
+        _statusInfoData._statusData[status._statusIndex].variStat(ref status._levelData, ref status._realValue, 0f, value);
         return true;
     }
 
@@ -817,7 +853,7 @@ public class StatusInfo
             return false;
         }
             
-        _statusInfoData._statusData[status._statusIndex].setStat(ref status._realValue, 0f, value);
+        _statusInfoData._statusData[status._statusIndex].setStat(ref status._levelData, ref status._realValue, 0f, value);
         return true;
     }
 
@@ -840,7 +876,7 @@ public class StatusInfo
             StatusDataFloat statusDataFloat = _statusInfoData._statusData[i];
             string debugText = "[" + (statusDataFloat._statusType == StatusType.Custom ? "Custom/" : "") + statusDataFloat._statusName + "]";
             Status stat = getStatus(statusDataFloat._statusName);
-            string statText = ": " + stat._value;
+            string statText = ": " + stat._value + " / " + stat._levelData._maxValue;
 
             debugTextManager.updateDebugText(debugText, debugText + statText, UnityEngine.Color.white);
         }

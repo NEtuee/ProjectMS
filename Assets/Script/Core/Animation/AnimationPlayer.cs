@@ -42,9 +42,6 @@ public class AnimationPlayDataInfo : SerializableDataType
 
     public FlipState                    _flipState;
 
-#if UNITY_EDITOR
-    public int                          _lineNumber;
-
     public float getTotalDuration()
     {
         if(_duration > 0f)
@@ -53,6 +50,9 @@ public class AnimationPlayDataInfo : SerializableDataType
         float totalDuration = _customPresetData != null ? _customPresetData.getTotalDuration() : -1f;
         return totalDuration;
     }
+
+#if UNITY_EDITOR
+    public int                          _lineNumber;
 
     public override void serialize(ref BinaryWriter binaryWriter)
     {
