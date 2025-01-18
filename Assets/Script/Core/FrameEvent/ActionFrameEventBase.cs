@@ -2157,6 +2157,7 @@ public class ActionFrameEvent_Danmaku : ActionFrameEventBase
     private UnityEngine.Vector3 _offsetPosition = UnityEngine.Vector3.zero;
     private bool _useFlip = false;
     private bool _useDirection = false;
+    private bool _dependentAction = false;
 
     public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
@@ -2167,11 +2168,11 @@ public class ActionFrameEvent_Danmaku : ActionFrameEventBase
         if(executeEntity is GameEntityBase )
         {
             GameEntityBase requester = (GameEntityBase)executeEntity;
-            requester.addDanmaku(_path,offsetPosition,_useFlip,offsetAngle);
+            requester.addDanmaku(_path,offsetPosition,_useFlip,_dependentAction,offsetAngle);
         }
         else if(executeEntity is ProjectileEntityBase)
         {
-            DanmakuManager.Instance().addDanmaku(_path,executeEntity.transform.position,offsetPosition,_useFlip,offsetAngle,executeEntity.getAllyInfo());
+            DanmakuManager.Instance().addDanmaku(_path,executeEntity.transform.position,offsetPosition,_useFlip,_dependentAction,offsetAngle,executeEntity.getAllyInfo());
         }
 
         return true;
@@ -2191,6 +2192,8 @@ public class ActionFrameEvent_Danmaku : ActionFrameEventBase
                 _useFlip = bool.Parse(attributes[i].Value);
             else if(attributes[i].Name == "UseDirection")
                 _useDirection = bool.Parse(attributes[i].Value);
+            else if(attributes[i].Name == "UseDirection")
+                _dependentAction = bool.Parse(attributes[i].Value);
         }
     }
 

@@ -22,6 +22,7 @@ public class DanmakuGraph
         public bool _isEnd = false;
         public bool _eventEnd = false;
         public bool _useFlip = false;
+        public bool _dependentAction = false;
         public int _currentWaitIndex = -1;
         public float _currentWaitTime = 0f;
 
@@ -150,6 +151,24 @@ public class DanmakuGraph
             _danmakuPlayItemPool.enqueue(_currentPlayList[i]);
         }
         _currentPlayList.Clear();
+    }
+
+    public void onActionChanged()
+    {
+        for(int i = 0; i < _currentPlayList.Count;)
+        {
+            if(_currentPlayList[i]._dependentAction == true)
+            {
+                _currentPlayList[i].clearDanmaku();
+                _danmakuPlayItemPool.enqueue(_currentPlayList[i]);
+
+                _currentPlayList.RemoveAt(i);
+            }
+            else
+            {
+                ++i;
+            }
+        }
     }
 
     public void release()
@@ -355,7 +374,7 @@ public class DanmakuGraph
         }
     }
 
-    public void addDanmakuGraph(string graphPath, Vector3 forcePosition, Vector3 offset, bool useFlip, float offsetAngle, AllyInfoData allyInfoData)
+    public void addDanmakuGraph(string graphPath, Vector3 forcePosition, Vector3 offset, bool useFlip, bool dependentAction, float offsetAngle, AllyInfoData allyInfoData)
     {
         DanmakuGraphBaseData graphData = ResourceContainerEx.Instance().GetDanmakuGraph(graphPath);
         if(graphData == null)
@@ -367,6 +386,7 @@ public class DanmakuGraph
         playItem._forceAllyInfoData = allyInfoData;
         playItem._offsetPosition = offset;
         playItem._useFlip = useFlip;
+        playItem._dependentAction = dependentAction;
         playItem._offsetRotation = Quaternion.Euler(0f,0f,offsetAngle);
 
         _currentPlayList.Add(playItem);

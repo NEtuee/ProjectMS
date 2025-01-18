@@ -8,7 +8,7 @@ FrameEvent,SetDefenceType,DefenceType=~/${1|Empty Guard Parry Evade}~
 FrameEvent,Effect,"Path=~~,FramePerSecond=~~,Offset=~~,Angle=~~,ToTarget=~~,UseFlip=~~,Attach=~~,UpdateType=~~,BehindCharacter=~~"
 FrameEvent,SetFrameTag,"EndTime=~~,Tag=~~,Tag=~~"
 FrameEvent,Projectile,"GraphName=~~,DirectionType=~~,ShotInfoUseType=~~,SpawnTargetType=~~,StartTerm=~~,PredictionAccuracy=~~,Offset=~~,UseFlip=~~,AllyInfo=~~,DirectionAngle=~~"
-FrameEvent,Danmaku,"Path=~~,Offset=~~,UseFlip=~~,UseDirection=~~"
+FrameEvent,Danmaku,"Path=~~,Offset=~~,UseFlip=~~,UseDirection=~~,DependentAction=~~"
 FrameEvent,SetAnimationSpeed,Speed=~~
 FrameEvent,Movement,"Friction=~~,MaxVelocity=~~,Speed=~~,Velocity=~~"
 FrameEvent,ZoomEffect,Scale=~~
@@ -143,7 +143,7 @@ ShortCut,__FrameEvent_DeletePrefab,<FrameEvent Type=~DeletePrefab~ StartTime=~0~
 ShortCut,__Trigger,<Trigger Condition=~~>#n</Trigger>
 InQuote,AllyTarget=,"Ally,Enemy,Neutral"
 InQuote,EaseType=,"Linear,EaseInQuad,EaseOutQuad,EaseInOutQuad,EaseInCubic,EaseOutCubic,EaseInOutCubic"
-,,
+InQuote,DependentAction=,"true,false"
 ,,
 ,,
 ,,

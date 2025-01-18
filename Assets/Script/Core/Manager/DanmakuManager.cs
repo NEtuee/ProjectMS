@@ -23,8 +23,8 @@ public class DanmakuManager : Singleton<DanmakuManager>
         _danmakuGraph.release();
     }
 
-    public void addDanmaku(string path, Vector3 position, Vector3 offset, bool useFlip, float offsetAngle, AllyInfoData allyInfo)
+    public void addDanmaku(string path, Vector3 position, Vector3 offset, bool useFlip, bool dependentAction, float offsetAngle, AllyInfoData allyInfo)
     {
-        _danmakuGraph.addDanmakuGraph(path, position, offset, useFlip, offsetAngle, allyInfo);
+        _danmakuGraph.addDanmakuGraph(path, position, offset, useFlip, dependentAction, offsetAngle, allyInfo);
     }
 }
