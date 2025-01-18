@@ -119,28 +119,6 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
         return Quaternion.Euler(0f,0f,Mathf.Atan2(direction.y,direction.x) * Mathf.Rad2Deg).eulerAngles.z;
     }
 
-    public static Vector3 getSpawnPosition(SetTargetType targetType, ObjectBase executeEntity, ObjectBase targetEntity)
-    {
-        Vector3 spawnPosition = Vector3.zero;
-        switch(targetType)
-        {
-            case SetTargetType.SetTargetType_Self:
-            spawnPosition = executeEntity.transform.position;
-            break;
-            case SetTargetType.SetTargetType_Target:
-            spawnPosition = targetEntity == null ? executeEntity.transform.position : targetEntity.transform.position;
-            break;
-            case SetTargetType.SetTargetType_AITarget:
-            GameEntityBase aiTarget = ((GameEntityBase)executeEntity).getCurrentTargetEntity();
-            spawnPosition = aiTarget == null ? executeEntity.transform.position : aiTarget.transform.position;
-            break;
-        }
-
-        return spawnPosition;
-    }
-
-    
-
     public static bool getShotInfo(string projectileGraphName, ShotInfoUseType useType, float defaultAngle, ref ProjectileGraphShotInfoData defaultShotInfo, out ProjectileGraphShotInfoData outShotInfo)
     {
         ProjectileGraphBaseData baseData = ProjectileManager._instance.getProjectileGraphData(projectileGraphName);

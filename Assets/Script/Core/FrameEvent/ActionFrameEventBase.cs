@@ -141,6 +141,26 @@ public abstract class ActionFrameEventBase : SerializableDataType
         return targetEntity.processActionCondition(_conditionCompareData);
     }
 
+    public static Vector3 getSpawnPosition(SetTargetType targetType, ObjectBase executeEntity, ObjectBase targetEntity)
+    {
+        Vector3 spawnPosition = Vector3.zero;
+        switch(targetType)
+        {
+            case SetTargetType.SetTargetType_Self:
+            spawnPosition = executeEntity.transform.position;
+            break;
+            case SetTargetType.SetTargetType_Target:
+            spawnPosition = targetEntity == null ? executeEntity.transform.position : targetEntity.transform.position;
+            break;
+            case SetTargetType.SetTargetType_AITarget:
+            GameEntityBase aiTarget = ((GameEntityBase)executeEntity).getCurrentTargetEntity();
+            spawnPosition = aiTarget == null ? executeEntity.transform.position : aiTarget.transform.position;
+            break;
+        }
+
+        return spawnPosition;
+    }
+
 #if UNITY_EDITOR
     public abstract void loadFromXML(XmlNode node);
 
@@ -1121,6 +1141,7 @@ public class ActionFrameEvent_SpawnCharacter : ActionFrameEventBase
 
     private CharacterInfoData           _characterInfoData;
     private SpawnCharacterOptionDesc    _spawnDesc = SpawnCharacterOptionDesc.defaultValue;
+    private SetTargetType               _setTargetType = SetTargetType.SetTargetType_Self;
 
     private UnityEngine.Vector3         _spawnOffset = UnityEngine.Vector3.zero;
 
@@ -1146,8 +1167,9 @@ public class ActionFrameEvent_SpawnCharacter : ActionFrameEventBase
 
             offset = UnityEngine.Quaternion.Euler(0f,0f,angle) * offset;
         }
+
+        _spawnDesc._position = getSpawnPosition(_setTargetType, executeEntity, targetEntity) + offset;
         
-        _spawnDesc._position = executeEntity.transform.position + offset;
         if(_inheritDirection)
             _spawnDesc._direction = executeEntity.getDirection();
             
