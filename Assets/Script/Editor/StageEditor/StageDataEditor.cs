@@ -1256,6 +1256,8 @@ public class StageDataEditor : EditorWindow
             string newStartAction = actionNameList[EditorGUILayout.Popup("Start Action", currentIndex,actionNameList.ToArray())];
             if(newStartAction != characterSpawnData._startAction)
             {
+                StaticDataLoader.loadStaticData();
+
                 stagePointDataEditObject._characterObjectList[_characterSelectedIndex].sprite = getActionSpriteFromCharacter(characterInfoData, newStartAction);
                 characterSpawnData._startAction = newStartAction;
             }
@@ -1698,6 +1700,8 @@ public class StageDataEditor : EditorWindow
         spawnData._localPosition = Vector3.zero;
         spawnData._allyInfoKey = characterInfo[characterKey]._allyInfoKey;
 
+        StaticDataLoader.loadStaticData();
+
         SpriteRenderer characterEditItem = getCharacterItem();
         characterEditItem.sprite = getFirstActionSpriteFromCharacter(characterInfo[characterKey]);
         characterEditItem.sortingLayerName = "Character";
@@ -1735,6 +1739,8 @@ public class StageDataEditor : EditorWindow
         var characterInfo = ResourceContainerEx.Instance().getCharacterInfo("Assets/Data/StaticData/CharacterInfo.xml");
         if(miniStageData._stagePointData[0]._characterSpawnData != null)
         {
+            StaticDataLoader.loadStaticData();
+
             for(int index = 0; index < miniStageData._stagePointData[0]._characterSpawnData.Length; ++index)
             {
                 var spawnData = miniStageData._stagePointData[0]._characterSpawnData[index];
@@ -2568,6 +2574,7 @@ public class StageDataEditor : EditorWindow
     private void constructGizmoPoints()
     {
         clearStagePointList();
+        StaticDataLoader.loadStaticData();
 
         if(_editStageData == null)
         {
@@ -3023,7 +3030,6 @@ public class StageDataEditor : EditorWindow
 
     private Sprite getFirstActionSpriteFromCharacter(CharacterInfoData characterInfoData)
     {
-        StaticDataLoader.loadStaticData();
         ActionGraphBaseData baseData = ResourceContainerEx.Instance().GetActionGraph(characterInfoData._actionGraphPath);
         AnimationPlayDataInfo playDataInfo = baseData._animationPlayData[baseData._actionNodeData[baseData._defaultActionIndex]._animationInfoIndex][0];
 
@@ -3036,7 +3042,6 @@ public class StageDataEditor : EditorWindow
 
     private Sprite getActionSpriteFromCharacter(CharacterInfoData characterInfoData, string actionName)
     {
-        StaticDataLoader.loadStaticData();
         ActionGraphBaseData baseData = ResourceContainerEx.Instance().GetActionGraph(characterInfoData._actionGraphPath);
         if(baseData == null)
             return null;
@@ -3232,7 +3237,8 @@ public class CharacterInfoView
             if(GUILayout.Button("Show",GUILayout.Width(50f)))
             {
                 _selectedData = item.Value;
-
+                StaticDataLoader.loadStaticData();
+                
                 Sprite characterSprite = getFirstActionSpriteFromCharacter(item.Value);
                 _characterTexture = characterSprite?.texture;
             }
@@ -3285,7 +3291,6 @@ public class CharacterInfoView
 
     private Sprite getFirstActionSpriteFromCharacter(CharacterInfoData characterInfoData)
     {
-        StaticDataLoader.loadStaticData();
         ActionGraphBaseData baseData = ResourceContainerEx.Instance().GetActionGraph(characterInfoData._actionGraphPath);
         AnimationPlayDataInfo playDataInfo = baseData._animationPlayData[baseData._actionNodeData[baseData._defaultActionIndex]._animationInfoIndex][0];
 
