@@ -27,7 +27,7 @@
     <AC_Move MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="0_default/2_move" XFlip="true" Duration="0.5">
-            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="5" Speed="13"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="4" Speed="8"/>
 
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
@@ -46,11 +46,11 @@
         <Branch Condition="End == true" Execute="AC_SystemChase"/>
     </AC_SystemChase>
 
-    <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction" RotationType="Keep">
+    <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction" RotationType="Keep" Flags="ClearDanmaku">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="0_default/3_hit" XFlip="true" Duration="1.25">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2301" Attach="true"/>
-            <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="24" Speed="0" Velocity="0"/>
 
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
@@ -59,10 +59,10 @@
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_Hit>
 
-    <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction" RotationType="Keep">
+    <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction" RotationType="Keep" Flags="ClearDanmaku">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="0_default/3_hit" XFlip="true" Duration="1.25">
-            <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="24" Speed="0" Velocity="0"/>
 
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
@@ -92,7 +92,7 @@
         <Animation Preset="1_attack/1_attackReady" XFlip="true" Duration="0.5">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="4903" Attach="true"/>
             
-            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="5" Speed="13"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="4" Speed="4"/>
 
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
@@ -107,7 +107,7 @@
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="1_attack/2_attackMain" XFlip="true" Duration="1.0">
             <FrameEvent Type="SetDirectionType" StartTime="0" DirectionType="AI"/>
-            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="5" Speed="13"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="4" Speed="4"/>
 
             <!-- Danmaku Attack -->
             <FrameEvent Type="Danmaku" StartTime="0" Path="Assets/Data/DanmakuGraph/Enemy/UziShootFire.xml" Offset="0.8 0.12 0" UseFlip="true"/>

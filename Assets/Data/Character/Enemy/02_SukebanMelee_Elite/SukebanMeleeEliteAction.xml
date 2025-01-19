@@ -49,7 +49,7 @@
         <Branch Condition="End == true" Execute="AC_SystemChase"/>
     </AC_SystemChase>
 
-    <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
+    <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction" Flags="ClearDanmaku">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="0_default/3_hit" XFlip="true" Duration="1.25">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
@@ -81,7 +81,7 @@
 <!-- Defualt Action -->
 
 <!-- Skill : Slash -->
-    <AC_SlashReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+    <AC_SlashReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineSuperArmor">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/1_slash/1_attackReady" XFlip="true" Duration="0.48">
             <FrameEvent Type="Movement" StartTime="0" Friction="10" MaxVelocity="5.0" Velocity="0.0" Speed="5.0"/>
@@ -91,7 +91,7 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_SlashReady>
 
-    <AC_SlashMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction">
+    <AC_SlashMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction" Flags="OutlineSuperArmor">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/1_slash/2_attackMain" XFlip="true" Duration="0.35">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="4907" Attach="true"/>
@@ -117,7 +117,7 @@
 
     <AC_SlashRecover MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="2_skill/1_slash/3_attackRecover" XFlip="true" Duration="0.2">
+        <Animation Preset="2_skill/1_slash/3_attackRecover" XFlip="true" Duration="0.5">
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
@@ -127,7 +127,7 @@
 <!-- Skill : Slash -->
 
 <!-- Skill : TrippleSlash -->
-    <AC_TrippleSlashReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+    <AC_TrippleSlashReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineSuperArmor">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/2_trippleSlash/1_attackReady" XFlip="true" Duration="0.48">
             <FrameEvent Type="Movement" StartTime="0" Friction="10" MaxVelocity="5.0" Velocity="0.0" Speed="5.0"/>
@@ -137,7 +137,7 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_TrippleSlashReady>
 
-    <AC_TrippleSlashMain_A MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction">
+    <AC_TrippleSlashMain_A MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction" Flags="OutlineSuperArmor">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/2_trippleSlash/2_attackMain_A" XFlip="true" Duration="0.35">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="4907" Attach="true"/>
@@ -145,7 +145,7 @@
             <FrameEvent Type="Attack" StartTime="0" EndTime="0.2" AttackPreset="SukebanMelee_Normal">
                 <OnHit>
                     <FrameEvent Type="AudioPlay" StartTime="0" ID="4908" Attach="true"/>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
 
                     <FrameEvent Type="EffectPreset" StartTime="0" Key="Slash"/>
                     <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
@@ -160,7 +160,7 @@
 
         <Branch Condition="End" Execute="AC_Idle"/> <!-- Package에서 연속 공격 여부 판단 -->
     </AC_TrippleSlashMain_A>
-    <AC_TrippleSlashMain_B MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
+    <AC_TrippleSlashMain_B MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction" Flags="OutlineSuperArmor">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/2_trippleSlash/3_attackMain_B" XFlip="true" Duration="0.35">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="4907" Attach="true"/>
@@ -168,7 +168,7 @@
             <FrameEvent Type="Attack" StartTime="0" EndTime="0.2" AttackPreset="SukebanMelee_Normal">
                 <OnHit>
                     <FrameEvent Type="AudioPlay" StartTime="0" ID="4908" Attach="true"/>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
 
                     <FrameEvent Type="EffectPreset" StartTime="0" Key="Slash"/>
                     <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
@@ -183,7 +183,7 @@
 
         <Branch Condition="End" Execute="AC_Idle"/> <!-- Package에서 연속 공격 여부 판단 -->
     </AC_TrippleSlashMain_B>
-    <AC_TrippleSlashMain_C MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
+    <AC_TrippleSlashMain_C MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction" Flags="OutlineSuperArmor">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/2_trippleSlash/4_attackMain_C" XFlip="true" Duration="0.35">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="4907" Attach="true"/>
@@ -206,10 +206,20 @@
 
         <Branch Condition="End" Execute="AC_Idle"/> <!-- Package에서 후딜 여부 판단 -->
     </AC_TrippleSlashMain_C>
-    
+
+    <AC_TrippleSlash_Dodge MovementType="GraphPreset" MovementGraphPreset="SukebanElite_Dodge" DirectionType="AI" FlipType="Direction" Flags="OutlineSuperArmor">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="2_skill/2_trippleSlash/6_dodge" XFlip="true" Duration="0.48">
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_TrippleSlash_Dodge>
+
     <AC_TrippleSlashRecover MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="2_skill/2_trippleSlash/5_attackRecover" XFlip="true" Duration="0.2">
+        <Animation Preset="2_skill/2_trippleSlash/5_attackRecover" XFlip="true" Duration="0.5">
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
@@ -270,9 +280,12 @@
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
             
             <!-- Object Attack -->
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="Uzi" PositionUniqueKey="Player" Offset="0 3 0" UseFlip="true"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="Uzi" PositionUniqueKey="Player" Offset="-3 0 0" UseFlip="true"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="Uzi" PositionUniqueKey="Player" Offset="0 -3 0" UseFlip="true"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="Uzi" SpawnTargetType="AITarget" Offset="0 3 0" UseFlip="true"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="Uzi" SpawnTargetType="AITarget" Offset="3 0 0" UseFlip="true"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="Uzi" SpawnTargetType="AITarget" Offset="0 -3 0" UseFlip="true"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="CountUzi" EventTargetType="Self"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="CountUzi" EventTargetType="Self"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="CountUzi" EventTargetType="Self"/>
 
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
@@ -385,7 +398,7 @@
         <Branch Condition="End == true" Execute="AC_Guard"/>
     </AC_Guard>
 
-    <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
+    <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction" Flags="ClearDanmaku">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="1_defense/2_guardBroken" XFlip="true" Duration="1.25">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>

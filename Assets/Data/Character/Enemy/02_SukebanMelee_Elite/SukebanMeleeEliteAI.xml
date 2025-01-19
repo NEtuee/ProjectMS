@@ -67,6 +67,18 @@
     <Include Path="Assets/Data/AILibrary/Package/CommonGuardPackage.xml"/>         <!-- 가드 패키지 -->
 <!-- 패키지 인클루드 -->
 
+    <!-- Std Values -->
+    <GlobalVariable Name="gv_UziLimit" Value="0.0"/>        <!-- 건틀렛 소환 기준값 -->
+    <!-- Custom Value -->
+    <CustomValue Name="CurrentUziCount" Value="0.0"/>
+
+    <CustomEvent_CountUzi>
+        <AIEvent Type="AddCustomValue" Name="CurrentUziCount" Value="1.0"/>
+    </CustomEvent_CountUzi>
+    <CustomEvent_DiscountUzi>
+        <AIEvent Type="AddCustomValue" Name="CurrentUziCount" Value="-1.0"/>
+    </CustomEvent_DiscountUzi>
+
 <!-- 간이 테스트 스크립트 -->
     <BranchSet Name="TestBranchA">
         <Branch Condition="Dead" Execute="Dead"/>
@@ -104,8 +116,8 @@
     <BranchSet Name="BattleMovementJudgeSet">
         <Branch Condition="gv_bIsSystemChase && (TargetDistance >= gv_SystemChaseThreshold)" Execute="WarpChase"/>
         <Branch Condition="TargetDistance > gv_StdPassiveAttitude" Execute="Chase"/>
-        <Branch Weight="RandBoolean^True" Condition="(aiGraphCoolTime_Slash || aiGraphCoolTime_TrippleSlash)" Execute="Chase"/>
-        <Branch Weight="RandBoolean^False" Condition="(aiGraphCoolTime_Uzi || aiGraphCoolTime_TrippleUzi)" Execute="Away"/>
+        <Branch Weight="RandBoolean^True" Condition="(aiGraphCoolTime_Slash) || (aiGraphCoolTime_TrippleSlash && (gv_UziLimit >= customValue_CurrentUziCount))" Execute="Chase"/>
+        <Branch Weight="RandBoolean^False" Condition="(aiGraphCoolTime_Uzi) || (aiGraphCoolTime_TrippleUzi && (gv_UziLimit >= customValue_CurrentUziCount))" Execute="Away"/>
     </BranchSet>
 
     <!-- 전투 공격 분기 브랜치 셋 -->
@@ -174,12 +186,14 @@
         <!-- TODO : 근거리용 스킬 작성, 공격이든 방어든, 이동이든 쿨타임 및 조건 기반 사용 -->
         <Branch Weight="RandBoolean^True" Condition="aiGraphCoolTime_Slash" Execute="Slash"/>
         <Branch Weight="RandBoolean^True" Condition="aiGraphCoolTime_TrippleSlash" Execute="TrippleSlash"/>
+        <Branch Weight="RandBoolean^False" Condition="aiGraphCoolTime_Dodge" Execute="Dodge"/>
         <Branch Condition="True" Execute="Away"/>
     </JudgeMeleeAttack>
     <JudgeRangedAttack Package="CommonIdlePackage">
         <!-- TODO : 원거리용 스킬 작성, 공격이든 방어든, 이동이든 쿨타임 및 조건 기반 사용 -->
+        <Branch Weight="RandBoolean^True" Condition="aiGraphCoolTime_TrippleSlash" Execute="TrippleSlash"/>
         <Branch Weight="RandBoolean^True" Condition="aiGraphCoolTime_Uzi" Execute="Uzi"/>
-        <Branch Weight="RandBoolean^True" Condition="aiGraphCoolTime_TrippleUzi" Execute="TrippleUzi"/>
+        <Branch Weight="RandBoolean^True" Condition="aiGraphCoolTime_TrippleUzi && (gv_UziLimit >= customValue_CurrentUziCount)" Execute="TrippleUzi"/>
         <Branch Condition="True" Execute="Chase"/>
     </JudgeRangedAttack>
 
@@ -203,7 +217,7 @@
     <!-- AI 스테이트 : 전투 상태 : 공격 -->
     <!-- Skill State List-->
 
-    <Slash Package="SukebanMeleeEliteSlashPackage" CoolTime="4.0">
+    <Slash Package="SukebanMeleeEliteSlashPackage" CoolTime="2.0">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </Slash>
@@ -229,9 +243,10 @@
 
     <!-- AI 스테이트 : 전투 상태 : 패시브 방어 -->
     <!-- Passive Defense Skill List -->
-    <Dodge Package="CommonDodgePackage">
+    <Dodge Package="CommonDodgePackage" CoolTime="10.0">
         <UseBranchSet Name="HitReactionSet"/>
-        <Branch Condition="CurrentPackageEnd && aiGraphCoolTime_TrippleUzi" Execute="TrippleUzi"/>
+        <Branch Weight="RandBoolean^True" Condition="CurrentPackageEnd && aiGraphCoolTime_TrippleUzi && (gv_UziLimit >= customValue_CurrentUziCount)" Execute="TrippleUzi"/>
+        <Branch Weight="RandBoolean^False" Condition="CurrentPackageEnd && aiGraphCoolTime_TrippleSlash" Execute="TrippleSlash"/>
         <Branch Condition="CurrentPackageEnd" Execute="Uzi"/>
 
         <UseBranchSet Name="BattlePackageEndSet"/>

@@ -46,7 +46,7 @@
         <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="TargetDistance >= gv_najimiSystemChaseRange" Execute="SystemChase"/>
-        <Branch Weight="RandBoolean^True" Condition="aiGraphCoolTime_Shoot" Execute="Shoot"/>
+        <Branch Condition="aiGraphCoolTime_Shoot" Execute="Shoot"/>
         <Branch Condition="True" Execute="Chase"/>
     </Entry>
 
@@ -86,7 +86,7 @@
     </GuardBroken>
     
     <!-- 원거리 공격: 우지 -->
-    <Shoot Package="CommonLockOnAllAttackPackage" CoolTime="3.0">
+    <Shoot Package="CommonLockOnAllAttackPackage" CoolTime="5.0">
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </Shoot>
