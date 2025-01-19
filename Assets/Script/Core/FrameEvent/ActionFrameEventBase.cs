@@ -2229,7 +2229,7 @@ public class ActionFrameEvent_Danmaku : ActionFrameEventBase
                 _useFlip = bool.Parse(attributes[i].Value);
             else if(attributes[i].Name == "UseDirection")
                 _useDirection = bool.Parse(attributes[i].Value);
-            else if(attributes[i].Name == "UseDirection")
+            else if(attributes[i].Name == "DependentAction")
                 _dependentAction = bool.Parse(attributes[i].Value);
         }
     }
