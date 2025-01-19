@@ -128,7 +128,10 @@ public class CharacterEntityBase : GameEntityBase
             }
 
             if(_isInCameraBound == false)
+            {
+                setBoundVelocity(Vector3.zero);
                 _isInCameraBound = MasterManager.instance._stageProcessor.isInCameraBound(_stagePointIndex, transform.position, out Vector3 resultPosition, out Vector3 boundNormal);
+            }
 
             if (_isInCameraBound)
             {

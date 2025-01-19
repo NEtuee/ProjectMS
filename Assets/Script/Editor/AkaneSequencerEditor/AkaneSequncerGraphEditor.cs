@@ -23,8 +23,7 @@ namespace AkaneSequencerGraph
         private string _targetXmlSavePath;
         private string _fileName;
         
-        [MenuItem("CustomWindow/Open SampleGraphView")]
-        public static void Open(AkaneSequencerGraphData data, string path)
+        public static void OpenEditor(AkaneSequencerGraphData data, string path)
         {
             var fileName = Path.GetFileNameWithoutExtension(path);
             var editorWindow = GetWindow<AkaneSequencerGraphEditorWindow>(fileName);

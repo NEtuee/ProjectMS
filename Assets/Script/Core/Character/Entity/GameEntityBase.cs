@@ -649,6 +649,8 @@ public class GameEntityBase : SequencerObjectBase
             _danmakuGraph.clearDanmaku();
         }
 
+        _danmakuGraph.onActionChanged();
+
         bool hideBuffEffect = _actionGraph.checkCurrentActionFlag(ActionFlags.Hide) || (_activeSelf == false);
         if(hideBuffEffect || _actionGraph.checkPrevActionFlag(ActionFlags.Hide))
             _statusInfo.setBuffEffectVisible(hideBuffEffect == false);
@@ -1501,7 +1503,7 @@ public class GameEntityBase : SequencerObjectBase
 
     public void setSpriteRotation(Quaternion rotation) {_spriteObject.transform.rotation = rotation;}
 
-    public void addDanmaku(string path, Vector3 offset, bool useFlip, float offsetAngle) {_danmakuGraph.addDanmakuGraph(path, transform.position, offset, useFlip, offsetAngle, getAllyInfo());}
+    public void addDanmaku(string path, Vector3 offset, bool useFlip, bool dependentAction, float offsetAngle) {_danmakuGraph.addDanmakuGraph(path, transform.position, offset, useFlip, dependentAction, offsetAngle, getAllyInfo());}
     
     public void addDeadEvent(DeadEventDelegate deadEvent) {_deadEventDelegate += deadEvent;} 
     public void deleteDeadEvent(DeadEventDelegate deadEvent) {_deadEventDelegate -= deadEvent;}
