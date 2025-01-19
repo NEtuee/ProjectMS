@@ -1219,6 +1219,19 @@ public class ActionFrameEvent_SpawnCharacter : ActionFrameEventBase
             {
                 _startAINode = attrValue;
             }
+            else if(attrName == "SpawnTargetType")
+            {
+                if(attrValue == "Self")
+                    _setTargetType = SetTargetType.SetTargetType_Self;
+                else if(attrValue == "Target")
+                    _setTargetType = SetTargetType.SetTargetType_Target;
+                else if(attrValue == "AITarget")
+                    _setTargetType = SetTargetType.SetTargetType_AITarget;
+                else
+                {
+                    DebugUtil.assert(false,"invalid targetType: {0}", attrValue);
+                }
+            }
         }
     }
 
@@ -1232,6 +1245,7 @@ public class ActionFrameEvent_SpawnCharacter : ActionFrameEventBase
         binaryWriter.Write(_inherit);
         binaryWriter.Write(_inheritDirection);
         binaryWriter.Write(_useFlip);
+        BinaryHelper.writeEnum<SetTargetType>(ref binaryWriter, _setTargetType);
     }
 #endif
 
@@ -1248,6 +1262,7 @@ public class ActionFrameEvent_SpawnCharacter : ActionFrameEventBase
         _inherit = binaryReader.ReadBoolean();
         _inheritDirection = binaryReader.ReadBoolean();
         _useFlip = binaryReader.ReadBoolean();
+        _setTargetType = BinaryHelper.readEnum<SetTargetType>(ref binaryReader);
 
     }
 }
@@ -2226,6 +2241,7 @@ public class ActionFrameEvent_Danmaku : ActionFrameEventBase
         BinaryHelper.writeVector3(ref binaryWriter, _offsetPosition);
         binaryWriter.Write(_useFlip);
         binaryWriter.Write(_useDirection);
+        binaryWriter.Write(_dependentAction);
     }
 #endif
 
@@ -2236,6 +2252,7 @@ public class ActionFrameEvent_Danmaku : ActionFrameEventBase
         _offsetPosition = BinaryHelper.readVector3(ref binaryReader);
         _useFlip = binaryReader.ReadBoolean();
         _useDirection = binaryReader.ReadBoolean();
+        _dependentAction = binaryReader.ReadBoolean();
     }
 }
 
