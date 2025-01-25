@@ -94,7 +94,7 @@ public class CharacterInfoViewer : EditorWindow
 
             GUI.enabled = true;
 
-            if(item.Key != null && item.Value != null)
+            if(item.Key != null && item.Value._displayName != null)
                 GUILayout.Label(item.Key + ": " + item.Value._displayName);
                 
             GUILayout.EndHorizontal();

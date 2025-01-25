@@ -37,7 +37,6 @@ Shader "Custom/PixelOutlineShader"
             TEXTURE2D(_MainTex);
             SAMPLER(sampler_MainTex);
 
-            float  _OutlineThickness;
             float4 _MainTex_TexelSize; 
             float4 _Color;
 
@@ -49,33 +48,49 @@ Shader "Custom/PixelOutlineShader"
                 return o;
             }
 
-            float4 frag (Varyings i) : SV_Target
+            float4 frag (Varyings input) : SV_Target
             {
-                float4 original = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
-
+                float4 original = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, input.uv);
+            
                 float2 perPixelUV = float2(_MainTex_TexelSize.x, _MainTex_TexelSize.y);
-                float2 offset     = perPixelUV;
-
-                float4 left  = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv + float2(-offset.x,  0));
-                float4 right = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv + float2(+offset.x,  0));
-                float4 down  = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv + float2(0, -offset.y));
-                float4 up    = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv + float2(0, +offset.y));
-
+            
+                // Multiple offsets for thicker outlines
+                float2 offsets[4] = {
+                    float2(-1,  0),  // Left
+                    float2( 1,  0),  // Right
+                    float2( 0, -1),  // Down
+                    float2( 0,  1),  // Up
+                };
+            
                 float alphaThreshold = 0.001;
-
                 float outline = 0.0;
-                outline += step(alphaThreshold, left.a);
-                outline += step(alphaThreshold, right.a);
-                outline += step(alphaThreshold, down.a);
-                outline += step(alphaThreshold, up.a);
+            
+                // Sample around the pixel for thicker outlines
+                int thickness = 2;
+                for(int i = 1; i <= thickness; ++i)
+                {
+                    for (int j = 0; j < 4; j++)
+                    {
+                        float2 offset = offsets[j] * perPixelUV * i;
+                        float4 neighbor = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, input.uv + offset);
+                        outline += step(alphaThreshold, neighbor.a);
 
-                float hue = frac(_Time.y * 2.0f);
-
-                if(outline > 0.0 && original.a < alphaThreshold)
-                    return _Color;
-
-                return float4(_Color.rgb, original.a);
+                        if (outline > 0.0)
+                            break;
+                    }
+                }
+            
+                // Flashing effect
+                float blink = (sin(_Time.y * 12.28) * 0.5 + 0.5); // Oscillates between 0 and 1
+                float4 blinkColor = lerp(float4(1, 1, 1, 1), _Color, blink); // Interpolate between white and _Color
+            
+                // Outline condition
+                if (outline > 0.0 && original.a < alphaThreshold)
+                    return blinkColor;
+            
+                return float4(blinkColor.rgb, original.a);
             }
+
             ENDHLSL
         }
     }

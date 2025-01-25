@@ -14,7 +14,7 @@
         <Branch Condition="GuardBroken" Execute="GuardBroken"/>
     </Idle>
 
-    <GuardBroken DirectionType="Keep" FlipType="Direction" Flags="ClearDanmaku">
+    <GuardBroken DirectionType="Keep" FlipType="Direction">
         <Animation Path="Resources/Sprites/DummyPlayer/JustGuardBreak/" StartFrame="0" EndFrame="1" XFlip="true">
         </Animation>
 
@@ -105,7 +105,7 @@
         <Animation Preset="Sprites/DummyPlayer/idle/" Duration="3.0" XFlip="true">
             
             <!-- 현재 내 방향으로 탄막을 날린다 -->
-            <FrameEvent Type="Danmaku" StartTime="0" Path="Assets/Data/DanmakuGraph/DanmakuTest.xml" UseDirection="True"/>
+            <FrameEvent Type="Danmaku" StartTime="0" Path="Assets/Data/DanmakuGraph/DanmakuTest.xml" UseDirection="True" DependentAction="true"/>
         </Animation>
 
         <Branch Condition="GuardBroken || GuardBreakFail" Execute="GuardBroken"/>
