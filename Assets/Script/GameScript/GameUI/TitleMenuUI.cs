@@ -96,7 +96,7 @@ public class TitleMenuUI : IUIElement
             return;
         
         MasterManager.instance._stageProcessor.stopStage(true);
-        MasterManager.instance._stageProcessor.startStage(introStageData,Vector3.zero,Vector3.zero);
+        MasterManager.instance._stageProcessor.startStage(null, introStageData,Vector3.zero,Vector3.zero);
         
         FMODAudioManager.Instance().Play(5005 ,Vector3.zero);
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Unity.Burst.Intrinsics;
 using UnityEngine;
 
 public enum CameraModeType
@@ -161,10 +162,7 @@ public class CameraTargetCenterMode : CameraModeBase
     public override CameraModeType getCameraModeType() => CameraModeType.TargetCenterMode;
     public override void initialize(Vector3 position)
     {
-        if(_currentTarget != null)
-            _currentCenterPosition = position;
-        else            
-            _cameraPosition = position;
+        _cameraPosition = position;
         _targetEntity = null;
         updateCameraCenter();
     }
@@ -478,6 +476,7 @@ public class CameraControlEx : Singleton<CameraControlEx>
     public void setCameraTarget(ObjectBase obj)
     {
         _currentTarget = obj;
+        _cameraTargetPosition = _currentTarget.transform.position;
         _currentCameraMode?.setCurrentTarget(_currentTarget);
         _currentCameraMode?.initialize(_currentTarget.transform.position);
     }

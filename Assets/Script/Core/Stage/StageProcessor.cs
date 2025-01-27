@@ -17,10 +17,12 @@ public class StageProcessor
         public Vector3 _keepAliveEntityPositionOffset;
     }
 
+    public StageProcessor _ownerProcessor = null;
     public StageData _stageData = null;
 
     private int _currentPoint = 0;
     private bool _isEnd = false;
+    private bool _miniStageTriggered = false;
     private StartNextStageRequsetDesc _startNextStageRequestDesc = new StartNextStageRequsetDesc();
 
     private CameraControlEx _targetCameraControl;
@@ -52,7 +54,7 @@ public class StageProcessor
 
     private List<BackgroundLayer> _backgroundLayerList = new List<BackgroundLayer>();
 
-    private SequencerGraphProcessManager _sequencerProcessManager = new SequencerGraphProcessManager(null);
+    private SequencerGraphProcessManager _sequencerProcessManager;
     private MovementTrackProcessor _trackProcessor = new MovementTrackProcessor();
 
     private SequencerGraphSetBaseData _audioBoardData = null;
@@ -70,6 +72,7 @@ public class StageProcessor
         _startNextStageRequestDesc._startNextStage = false;
         _startNextStageRequestDesc._startMarkerName = "";
         _startNextStageRequestDesc._keepAliveEntityPositionOffset = Vector3.zero;
+        _sequencerProcessManager = new SequencerGraphProcessManager(null, this);
     }
 
     public void requestStartStage(string stagePath, string markerName = "")
@@ -93,18 +96,19 @@ public class StageProcessor
         _targetCameraControl = target;
     }
 
-    public void startMiniStage(MiniStageListItem data, Vector3 startPosition)
+    public void startMiniStage(StageProcessor ownerProcessor, MiniStageListItem data, Vector3 startPosition)
     {
         Vector3 worldPosition = startPosition + data._localStagePosition + data._overrideTriggerOffset;
         _miniStageInfo = data;
         _miniStageTrigger.setData(data._overrideTriggerWidth * 0.5f,data._overrideTriggerHeight * 0.5f,data._overrideTriggerOffset);
         _miniStageTrigger.updateBoundBox(worldPosition);
 
-        startStage(data._data, worldPosition, Vector3.zero);
+        startStage(ownerProcessor, data._data, worldPosition, Vector3.zero);
     }
 
-    public void startStage(StageData data, Vector3 startPosition, Vector3 keepEntityPosition)
+    public void startStage(StageProcessor ownerProcessor, StageData data, Vector3 startPosition, Vector3 keepEntityPosition)
     {
+        _ownerProcessor = ownerProcessor;
         _sequencerProcessManager.initialize();
         _trackProcessor.clear();
         _backgroundLayerList.Clear();
@@ -117,6 +121,7 @@ public class StageProcessor
 
         _currentPoint = 0;
         _isEnd = false;
+        _miniStageTriggered = false;
         _blockPointExit = false;
         _unlockLimit = false;
 
@@ -162,12 +167,11 @@ public class StageProcessor
             ScreenDirector._instance.initialize();
             LetterBox._instance.clear();
             UIRepeater.Instance().initialize();
-        }
-        
-        GameUI.Instance.InitializeBySceneStart();
-        GameUI.Instance.activeOptionUI(false);
 
-        EffectManager._instance.clearCommonEffects();
+            GameUI.Instance.InitializeBySceneStart();
+            GameUI.Instance.activeOptionUI(false);
+            EffectManager._instance.clearCommonEffects();
+        }
 
         if(_stageData._backgroundPrefabPath != null)
         {
@@ -239,6 +243,23 @@ public class StageProcessor
                 spawnDesc._allyInfo = characterSpawnData._allyInfoKey == "" ? (infoData._allyInfoKey == "" ? null : AllyInfoManager.Instance().GetAllyInfoData(infoData._allyInfoKey)) : AllyInfoManager.Instance().GetAllyInfoData(characterSpawnData._allyInfoKey);
                 spawnDesc._sortingOrder = characterSpawnData._sortingOrder;
 
+                if(isMiniStage && characterSpawnData._keepAlive)
+                {
+                    if(_ownerProcessor._keepUniqueMap.ContainsKey(characterSpawnData._uniqueKey) == false)
+                    {
+                        DebugUtil.assert(false, "MiniStage에서 사용했는데, 부모 스테이지에서는 존재하지않습니다 [{0}]",characterSpawnData._uniqueKey);
+                        return;
+                    }
+                    SequencerGraphProcessor.SpawnedCharacterEntityInfo entityInfo = new SequencerGraphProcessor.SpawnedCharacterEntityInfo();
+                    entityInfo._uniqueKey = characterSpawnData._uniqueKey;
+                    entityInfo._characterEntity = _ownerProcessor._keepUniqueMap[characterSpawnData._uniqueKey];
+
+                    _keepUniqueMap.Add(entityInfo._uniqueKey, entityInfo._characterEntity);
+                    _spawnedCharacterEntityDictionary[index].Add(entityInfo);
+
+                    continue;
+                }
+
                 CharacterEntityBase createdCharacter = sceneCharacterManager.createCharacterFromPool(infoData,spawnDesc);
                 if(createdCharacter == null)
                 {
@@ -263,15 +284,17 @@ public class StageProcessor
 
                 createdCharacter.setActiveSelf(activeSelf,characterSpawnData._hideWhenDeactive);
 
-                SequencerGraphProcessor.SpawnedCharacterEntityInfo entityInfo = new SequencerGraphProcessor.SpawnedCharacterEntityInfo();
-                createdCharacter.setKeepAliveEntity(characterSpawnData._keepAlive);
-                entityInfo._uniqueKey = characterSpawnData._uniqueKey;
-                entityInfo._characterEntity = createdCharacter;
+                {
+                    SequencerGraphProcessor.SpawnedCharacterEntityInfo entityInfo = new SequencerGraphProcessor.SpawnedCharacterEntityInfo();
+                    createdCharacter.setKeepAliveEntity(characterSpawnData._keepAlive);
+                    entityInfo._uniqueKey = characterSpawnData._uniqueKey;
+                    entityInfo._characterEntity = createdCharacter;
 
-                _spawnedCharacterEntityDictionary[index].Add(entityInfo);
-
-                if(characterSpawnData._keepAlive)
-                    _keepUniqueMap.Add(entityInfo._uniqueKey, entityInfo._characterEntity);
+                    _spawnedCharacterEntityDictionary[index].Add(entityInfo);
+                
+                    if(characterSpawnData._keepAlive)
+                        _keepUniqueMap.Add(entityInfo._uniqueKey, entityInfo._characterEntity);
+                }
 
                 if(characterSpawnData._startAIState != "")
                     createdCharacter.setAINode(characterSpawnData._startAIState);
@@ -320,7 +343,7 @@ public class StageProcessor
                 else
                     processor = _miniStagePool.Dequeue();
             
-                processor.startMiniStage(item,startPosition);
+                processor.startMiniStage(this, item,startPosition);
                 processor.setPlayEntity(_playerEntity);
                 _miniStageProcessor.Add(processor);
             }
@@ -364,7 +387,8 @@ public class StageProcessor
         _playerEntity = null;
         _miniStageInfo = null;
         _currentPoint = 0;
-        _isEnd = false;
+        _isEnd = true;
+        _miniStageTriggered = false;
         _blockPointExit = false;
         _unlockLimit = false;
 
@@ -391,7 +415,11 @@ public class StageProcessor
             {
                 if(forceStop == false && item[i]._characterEntity.isKeepAliveEntity())
                 {
-                    _keepAliveMap.Add(item[i]._uniqueKey,item[i]._characterEntity);
+                    if(isMiniStage == false)
+                    {
+                        _keepAliveMap.Add(item[i]._uniqueKey,item[i]._characterEntity);
+                    }
+                    
                     ++i;
                     continue;
                 }
@@ -450,10 +478,10 @@ public class StageProcessor
                     return;
                 }
 
-                markerPosition = marker._position + _startNextStageRequestDesc._keepAliveEntityPositionOffset;
+                markerPosition = marker._position + _startNextStageRequestDesc._keepAliveEntityPositionOffset + _offsetPosition;
             }
 
-            startStage(stageData,Vector3.zero,markerPosition);
+            startStage(null, stageData,Vector3.zero,markerPosition);
 
             return;
         }
@@ -461,12 +489,33 @@ public class StageProcessor
         if(_stageData._isMenuStage || _playerEntity == null || _playerEntity.isDead() == false)
             _sequencerProcessManager?.progress(deltaTime);
 
+        for(int index = 0; index < _miniStageProcessor.Count;)
+        {
+            StageProcessor item = _miniStageProcessor[index];
+            item.processStage(deltaTime);
+
+            if(item._isEnd)
+            {
+                // if(item._miniStageInfo._isPortal)
+                // {
+                //     Vector3 offset = Vector3.up * item._miniStageTriggerBottomHitOffset;
+                //     requestStartStage(item._miniStageInfo._targetStageName,item._miniStageInfo._targetMarkerName,offset);
+                // }
+
+                _miniStageProcessor.RemoveAt(index);
+            }
+            else
+            {
+                ++index;
+            }
+        }
+
         if(_stageData._isMiniStage)
         {
-            if(_isEnd == false)
+            if(_miniStageTriggered == false)
             {
-                _isEnd = _miniStageTrigger.intersection(_playerEntity.transform.position);
-                if(_isEnd)
+                _miniStageTriggered = _miniStageTrigger.intersection(_playerEntity.transform.position);
+                if(_miniStageTriggered)
                 {
                     _miniStageTriggerBottomHitOffset = _miniStageTrigger.getBottomCollisionOffset(_playerEntity.transform.position);
                     if(_stageData._stagePointData[0]._onEnterSequencerPath != null && _stageData._stagePointData[0]._onEnterSequencerPath.Length != 0)
@@ -488,8 +537,18 @@ public class StageProcessor
                 }
                 
             }
-            Color color = _isEnd ? Color.green : Color.red;
-            GizmoHelper.instance.drawRectangle(_offsetPosition,new Vector3(_miniStageInfo._overrideTriggerWidth * 0.5f, _miniStageInfo._overrideTriggerHeight * 0.5f),color);
+
+            if(_miniStageTriggered && _sequencerProcessManager.isSequencerProcessing() == false)
+            {
+                stopStage(false);
+            }
+
+            if(_isEnd == false)
+            {
+                Color color = _isEnd ? Color.green : Color.red;
+                GizmoHelper.instance.drawRectangle(_offsetPosition,new Vector3(_miniStageInfo._overrideTriggerWidth * 0.5f, _miniStageInfo._overrideTriggerHeight * 0.5f),color);
+            }
+
             return;
         }
     }
@@ -589,17 +648,6 @@ public class StageProcessor
 
                 _cameraPositionBlendStartPosition = resultPoint;
                 _cameraPositionBlendTimeLeft = 1f;
-            }
-        }
-
-        foreach(var item in _miniStageProcessor)
-        {
-            item.processStage(deltaTime);
-
-            if(item._isEnd && item._miniStageInfo._isPortal)
-            {
-                Vector3 offset = Vector3.up * item._miniStageTriggerBottomHitOffset;
-                requestStartStage(item._miniStageInfo._targetStageName,item._miniStageInfo._targetMarkerName,offset);
             }
         }
 
@@ -963,6 +1011,11 @@ public class StageProcessor
     public Vector3 getStagePoint(int index)
     {
         return _stageData._stagePointData[index]._stagePoint + _offsetPosition;
+    }
+
+    public Vector3 getOffsetPosition()
+    {
+        return _offsetPosition;
     }
 
     public Vector3 getCurrentPointPosition()

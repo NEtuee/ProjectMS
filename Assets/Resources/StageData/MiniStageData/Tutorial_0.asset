@@ -9,13 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eebfbc6ece9cebc4cbd3e126679ce50a, type: 3}
-  m_Name: TutorialBase
+  m_Script: {fileID: 11500000, guid: d5fea97cb629a654b84e0d00bf745c93, type: 3}
+  m_Name: Tutorial_0
   m_EditorClassIdentifier: 
-  _stageName: TutorialBase
+  _stageName: Tutorial_0
   _audioBoardPath: 
   _backgroundPrefabPath: {fileID: 0}
-  _isMiniStage: 0
+  _isMiniStage: 1
   _isMenuStage: 0
   _stagePointData:
   - _pointName: New Point 0
@@ -26,7 +26,7 @@ MonoBehaviour:
     _cameraZoomSize: 3
     _cameraZoomSpeed: 4
     _lerpCameraZoom: 0
-    _lockCameraInBound: 1
+    _lockCameraInBound: 0
     _cameraBoundToTrigger: 0
     _onEnterSequencerPath:
     - TutorialStage/TutorialBase.xml
@@ -40,7 +40,7 @@ MonoBehaviour:
       _flip: 1
       _setDirection: 0
       _directionAngle: 0
-      _hideWhenDeactive: 0
+      _hideWhenDeactive: 1
       _keepAlive: 0
       _sortingOrder: 0
       _allyInfoKey: Deco
@@ -55,7 +55,7 @@ MonoBehaviour:
       _setDirection: 0
       _directionAngle: 0
       _hideWhenDeactive: 0
-      _keepAlive: 0
+      _keepAlive: 1
       _sortingOrder: 0
       _allyInfoKey: Player
       _activeType: 0
@@ -68,7 +68,7 @@ MonoBehaviour:
       _flip: 1
       _setDirection: 0
       _directionAngle: 0
-      _hideWhenDeactive: 0
+      _hideWhenDeactive: 1
       _keepAlive: 0
       _sortingOrder: 0
       _allyInfoKey: Deco
@@ -82,7 +82,7 @@ MonoBehaviour:
       _flip: 0
       _setDirection: 0
       _directionAngle: 0
-      _hideWhenDeactive: 0
+      _hideWhenDeactive: 1
       _keepAlive: 0
       _sortingOrder: 0
       _allyInfoKey: Deco
@@ -96,7 +96,7 @@ MonoBehaviour:
       _flip: 0
       _setDirection: 0
       _directionAngle: 0
-      _hideWhenDeactive: 0
+      _hideWhenDeactive: 1
       _keepAlive: 0
       _sortingOrder: 0
       _allyInfoKey: Deco
@@ -110,7 +110,7 @@ MonoBehaviour:
       _flip: 0
       _setDirection: 0
       _directionAngle: 0
-      _hideWhenDeactive: 0
+      _hideWhenDeactive: 1
       _keepAlive: 0
       _sortingOrder: 0
       _allyInfoKey: Deco
@@ -124,7 +124,7 @@ MonoBehaviour:
       _flip: 0
       _setDirection: 0
       _directionAngle: 0
-      _hideWhenDeactive: 0
+      _hideWhenDeactive: 1
       _keepAlive: 0
       _sortingOrder: 0
       _allyInfoKey: Deco
@@ -138,7 +138,7 @@ MonoBehaviour:
       _flip: 0
       _setDirection: 0
       _directionAngle: 0
-      _hideWhenDeactive: 0
+      _hideWhenDeactive: 1
       _keepAlive: 0
       _sortingOrder: 0
       _allyInfoKey: Deco
@@ -152,7 +152,7 @@ MonoBehaviour:
       _flip: 0
       _setDirection: 0
       _directionAngle: 0
-      _hideWhenDeactive: 0
+      _hideWhenDeactive: 1
       _keepAlive: 0
       _sortingOrder: 0
       _allyInfoKey: Deco
@@ -166,7 +166,7 @@ MonoBehaviour:
       _flip: 0
       _setDirection: 0
       _directionAngle: 0
-      _hideWhenDeactive: 0
+      _hideWhenDeactive: 1
       _keepAlive: 0
       _sortingOrder: 0
       _allyInfoKey: Deco
@@ -180,7 +180,7 @@ MonoBehaviour:
       _flip: 0
       _setDirection: 0
       _directionAngle: 0
-      _hideWhenDeactive: 0
+      _hideWhenDeactive: 1
       _keepAlive: 0
       _sortingOrder: 0
       _allyInfoKey: Deco
@@ -194,7 +194,7 @@ MonoBehaviour:
       _flip: 0
       _setDirection: 0
       _directionAngle: 0
-      _hideWhenDeactive: 0
+      _hideWhenDeactive: 1
       _keepAlive: 0
       _sortingOrder: 0
       _allyInfoKey: Deco
@@ -208,7 +208,7 @@ MonoBehaviour:
       _flip: 0
       _setDirection: 0
       _directionAngle: 0
-      _hideWhenDeactive: 0
+      _hideWhenDeactive: 1
       _keepAlive: 0
       _sortingOrder: 0
       _allyInfoKey: Deco
@@ -222,7 +222,7 @@ MonoBehaviour:
       _flip: 0
       _setDirection: 0
       _directionAngle: 0
-      _hideWhenDeactive: 0
+      _hideWhenDeactive: 1
       _keepAlive: 0
       _sortingOrder: 0
       _allyInfoKey: Deco
@@ -236,7 +236,7 @@ MonoBehaviour:
       _flip: 0
       _setDirection: 0
       _directionAngle: 0
-      _hideWhenDeactive: 0
+      _hideWhenDeactive: 1
       _keepAlive: 0
       _sortingOrder: 0
       _allyInfoKey: Deco
@@ -250,7 +250,7 @@ MonoBehaviour:
       _flip: 0
       _setDirection: 0
       _directionAngle: 0
-      _hideWhenDeactive: 0
+      _hideWhenDeactive: 1
       _keepAlive: 0
       _sortingOrder: 0
       _allyInfoKey: Deco
@@ -264,7 +264,7 @@ MonoBehaviour:
       _flip: 0
       _setDirection: 0
       _directionAngle: 0
-      _hideWhenDeactive: 0
+      _hideWhenDeactive: 1
       _keepAlive: 0
       _sortingOrder: 0
       _allyInfoKey: Deco
@@ -278,7 +278,7 @@ MonoBehaviour:
       _flip: 0
       _setDirection: 0
       _directionAngle: 0
-      _hideWhenDeactive: 0
+      _hideWhenDeactive: 1
       _keepAlive: 0
       _sortingOrder: 0
       _allyInfoKey: Deco
@@ -292,7 +292,7 @@ MonoBehaviour:
       _flip: 0
       _setDirection: 0
       _directionAngle: 0
-      _hideWhenDeactive: 0
+      _hideWhenDeactive: 1
       _keepAlive: 0
       _sortingOrder: 0
       _allyInfoKey: Deco
@@ -306,7 +306,7 @@ MonoBehaviour:
       _flip: 0
       _setDirection: 0
       _directionAngle: 0
-      _hideWhenDeactive: 0
+      _hideWhenDeactive: 1
       _keepAlive: 0
       _sortingOrder: 0
       _allyInfoKey: Deco
@@ -320,7 +320,7 @@ MonoBehaviour:
       _flip: 0
       _setDirection: 0
       _directionAngle: 0
-      _hideWhenDeactive: 0
+      _hideWhenDeactive: 1
       _keepAlive: 0
       _sortingOrder: 0
       _allyInfoKey: Deco
@@ -373,4 +373,10 @@ MonoBehaviour:
     _position: {x: -3.5870001, y: -1.3010001, z: 0}
   - _name: Student17
     _position: {x: -3.966, y: 1.065, z: 0}
+  - _name: CameraStart
+    _position: {x: 0, y: 0, z: 0}
   _trackData: []
+  _targetSearchIdentifier: 1
+  _triggerWidth: 8.18
+  _triggerHeight: 6.53
+  _triggerOffset: {x: 0, y: 0, z: 0}

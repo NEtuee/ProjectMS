@@ -170,7 +170,7 @@ public class GameEntityBase : SequencerObjectBase
         _danmakuGraph = new DanmakuGraph();
         _statusInfo = new StatusInfo();
         _graphicInterface = new StatusGraphicInterface();
-        _sequencerProcessManager = new SequencerGraphProcessManager(this);
+        _sequencerProcessManager = new SequencerGraphProcessManager(this,null);
 
         createSpriteRenderObject();
 

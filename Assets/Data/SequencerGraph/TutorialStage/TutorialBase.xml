@@ -6,6 +6,8 @@
         <LetterBoxShow/>
 
         <SetHideCharacter UniqueGroupKey="Students" Hide="True"/>
+
+        <SetCameraPosition TargetPositionMarker="CameraStart"/>
     </InitializePhase>
 
     <UpdatePhase>
@@ -50,7 +52,7 @@
         <SetCameraZoom Size="2.0" Speed="5"/>
         <TalkBalloon UniqueKey="SetsumeiChan" SimpleTalkKey="Talk_Tutorial_Expl_1" Wait="True"/>
 
-        <SetCameraPosition TargetPosition="0 0 0"/>
+        <SetCameraPosition TargetPositionMarker="CameraStart"/>
         <SetCameraZoom Size="0.0" Speed="5"/>
         <TalkBalloon UniqueKey="SetsumeiChan" SimpleTalkKey="Talk_Tutorial_Expl_2"/>
 
@@ -76,7 +78,7 @@
         <SetCameraZoom Size="2.0" Speed="5"/>
         <TalkBalloon UniqueKey="SetsumeiChan" SimpleTalkKey="Talk_Tutorial_Expl_6" Wait="True"/>
 
-        <SetCameraPosition TargetPosition="0 0 0"/>
+        <SetCameraPosition TargetPositionMarker="CameraStart"/>
         <SetCameraZoom Size="0.0" Speed="5"/>
 
         <TalkBalloon UniqueKey="SetsumeiChan" SimpleTalkKey="Talk_Tutorial_Expl_7"/>
@@ -144,15 +146,12 @@
 
         <TaskFence TaskName="AIMove"/>
 
-        <SetHideCharacter UniqueKeyGroup="Students" Hide="True"/>
-        <SetHideCharacter UniqueKey="SetsumeiChan" Hide="True"/>
-
         <WaitSecond Time="1.0"/>
 
         <SetCameraTarget UniqueKey="Player" CameraMode="TargetCenterMode"/>
         <BlockInput Enable="False"/>
         <SetHideUI Hide="False"/>
-        <LetterBoxShow/>
+        <LetterBoxHide/>
 
     </UpdatePhase>
     

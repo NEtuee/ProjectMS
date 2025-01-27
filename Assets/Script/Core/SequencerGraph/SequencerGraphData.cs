@@ -1389,7 +1389,7 @@ public class SequencerGraphEvent_AIMove : SequencerGraphEventBase
                 MarkerItem item = processor.getMarker(_markerName);
                 if(item != null)
                 {
-                    _endPosition = item._position;
+                    _endPosition = item._position + processor.getOwnerProcessor().getOffsetPosition();
                 }
                 else
                 {
@@ -1771,7 +1771,7 @@ public class SequencerGraphEvent_EffectPreset : SequencerGraphEventBase
                 if(_isSwitch)
                     DebugUtil.assert(false, "실행 주체가 없기 때문에 Switch로 실행 불가");
 
-                EffectInfoManager.Instance().requestEffect(_effectPresetName,item._position);
+                EffectInfoManager.Instance().requestEffect(_effectPresetName,item._position + processor.getOwnerProcessor().getOffsetPosition());
             }
         }
 
@@ -2275,7 +2275,7 @@ public class SequencerGraphEvent_SpawnCharacter : SequencerGraphEventBase
         {
             MarkerItem item = processor.getMarker(_centerMarkerName);
             if(item != null)
-                _spawnDesc._position = item._position;
+                _spawnDesc._position = item._position + processor.getOwnerProcessor().getOffsetPosition();
         }
         else if(_centerUniqueEntityKey != "")
         {
@@ -3655,7 +3655,7 @@ public class SequencerGraphEvent_TeleportTargetTo : SequencerGraphEventBase
         {
             MarkerItem item = processor.getMarker(_markerName);
             if(item != null)
-                _targetPosition = item._position;
+                _targetPosition = item._position + processor.getOwnerProcessor().getOffsetPosition();
         }
     }
 
@@ -3812,9 +3812,10 @@ public class SequencerGraphEvent_SetCameraTarget : SequencerGraphEventBase
 
     public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
     {
+        CameraControlEx.Instance().setCameraTarget(processor.getUniqueEntity(_uniqueKey));
+        
         if(_cameraMode != CameraModeType.Count)
             CameraControlEx.Instance().setCameraMode(_cameraMode);
-        CameraControlEx.Instance().setCameraTarget(processor.getUniqueEntity(_uniqueKey));
 
         return true;
     }
@@ -3862,7 +3863,7 @@ public class SequencerGraphEvent_SetCameraPosition : SequencerGraphEventBase
         {
             MarkerItem item = processor.getMarker(_markerName);
             if(item != null)
-                _cameraTargetPosition = item._position;
+                _cameraTargetPosition = item._position + processor.getOwnerProcessor().getOffsetPosition();
         }
     }
 

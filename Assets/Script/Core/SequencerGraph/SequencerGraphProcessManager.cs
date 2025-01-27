@@ -8,10 +8,12 @@ public class SequencerGraphProcessManager
     private List<SequencerGraphProcessor> _activeProcessorList = new List<SequencerGraphProcessor>();
 
     private GameEntityBase _ownerEntity = null;
+    private StageProcessor _ownerProcessor = null;
 
-    public SequencerGraphProcessManager(GameEntityBase ownerEntity)
+    public SequencerGraphProcessManager(GameEntityBase ownerEntity, StageProcessor ownerProcessor)
     {
         _ownerEntity = ownerEntity;
+        _ownerProcessor = ownerProcessor;
     }
 
     public void initialize()
@@ -48,7 +50,7 @@ public class SequencerGraphProcessManager
     {
         SequencerGraphProcessor processor = _sequencerGrpahProcessorPool.dequeue();
         processor.clearSequencerGraphProcessor();
-        processor.startSequencerFromStage("Assets/Data/SequencerGraph/" + sequencerKey,currentPoint, ref keepUnique,pointCharacters,_ownerEntity,targetEntity,markerList,includePlayer);
+        processor.startSequencerFromStage(_ownerProcessor, "Assets/Data/SequencerGraph/" + sequencerKey,currentPoint, ref keepUnique,pointCharacters,_ownerEntity,targetEntity,markerList,includePlayer);
 
         _activeProcessorList.Add(processor);
 
@@ -70,7 +72,7 @@ public class SequencerGraphProcessManager
         
         SequencerGraphProcessor processor = _sequencerGrpahProcessorPool.dequeue();
         processor.clearSequencerGraphProcessor();
-        processor.startSequencer(sequencerKey,_ownerEntity,targetEntity,includePlayer);
+        processor.startSequencer(_ownerProcessor, sequencerKey,_ownerEntity,targetEntity,includePlayer);
 
         _activeProcessorList.Add(processor);
 
@@ -87,7 +89,7 @@ public class SequencerGraphProcessManager
         
         SequencerGraphProcessor processor = _sequencerGrpahProcessorPool.dequeue();
         processor.clearSequencerGraphProcessor();
-        processor.startSequencer(baseData,_ownerEntity,targetEntity,includePlayer);
+        processor.startSequencer(_ownerProcessor, baseData,_ownerEntity,targetEntity,includePlayer);
 
         _activeProcessorList.Add(processor);
 
@@ -112,5 +114,15 @@ public class SequencerGraphProcessManager
         }
 
         _activeProcessorList.Clear();
+    }
+
+    public bool isSequencerProcessing()
+    {
+        return _activeProcessorList.Count != 0;
+    }
+
+    public StageProcessor getOwnerProcessor()
+    {
+        return _ownerProcessor;
     }
 }

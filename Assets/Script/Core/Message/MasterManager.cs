@@ -272,7 +272,7 @@ public class MasterManager : MessageHub<ManagerBase>
             return;
         
         MasterManager.instance._stageProcessor.stopStage(true);
-        MasterManager.instance._stageProcessor.startStage(logoStageData,Vector3.zero,Vector3.zero);
+        MasterManager.instance._stageProcessor.startStage(null, logoStageData,Vector3.zero,Vector3.zero);
     }
 
     public void StopUpdateSecond(float time)

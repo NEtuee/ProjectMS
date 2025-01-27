@@ -186,6 +186,8 @@ public class SequencerGraphProcessor
     private List<string>                        _deleteUniqueTargetList = new List<string>();
     private List<string>                        _signalList = new List<string>();
 
+    private StageProcessor                      _ownerProcessor;
+
     public void initialize()
     {
         _currentIndex = 0;
@@ -454,8 +456,9 @@ public class SequencerGraphProcessor
         return _currentSequencer._sequencerName;
     }
 
-    public void startSequencerFromStage(string sequencerGraphPath, StagePointData currentPoint, ref Dictionary<string, CharacterEntityBase> keepUnique, List<SequencerGraphProcessor.SpawnedCharacterEntityInfo> pointCharacters, GameEntityBase ownerEntity, GameEntityBase targetEntity, List<MarkerItem> markerList, bool includePlayer = false)
+    public void startSequencerFromStage(StageProcessor ownerProcessor, string sequencerGraphPath, StagePointData currentPoint, ref Dictionary<string, CharacterEntityBase> keepUnique, List<SequencerGraphProcessor.SpawnedCharacterEntityInfo> pointCharacters, GameEntityBase ownerEntity, GameEntityBase targetEntity, List<MarkerItem> markerList, bool includePlayer = false)
     {
+        _ownerProcessor = ownerProcessor;
         _currentSequencer = ResourceContainerEx.Instance().GetSequencerGraph(sequencerGraphPath);
         if(_currentSequencer == null)
             return;
@@ -524,18 +527,19 @@ public class SequencerGraphProcessor
         return _markerDicionary[markerName];
     }
 
-    public void startSequencer(string sequencerGraphPath, GameEntityBase ownerEntity, GameEntityBase targetEntity, bool includePlayer = false)
+    public void startSequencer(StageProcessor ownerProcessor, string sequencerGraphPath, GameEntityBase ownerEntity, GameEntityBase targetEntity, bool includePlayer = false)
     {
         _currentSequencer = ResourceContainerEx.Instance().GetSequencerGraph(sequencerGraphPath);
         if(_currentSequencer == null)
             return;
 
-        startSequencer(_currentSequencer, ownerEntity, targetEntity, includePlayer);
+        startSequencer(ownerProcessor, _currentSequencer, ownerEntity, targetEntity, includePlayer);
     }
 
-    public void startSequencer(SequencerGraphBaseData baseData, GameEntityBase ownerEntity, GameEntityBase targetEntity, bool includePlayer = false)
+    public void startSequencer(StageProcessor ownerProcessor, SequencerGraphBaseData baseData, GameEntityBase ownerEntity, GameEntityBase targetEntity, bool includePlayer = false)
     {
         _currentSequencer = baseData;
+        _ownerProcessor = ownerProcessor;
         if(_currentSequencer == null)
             return;
 
@@ -566,4 +570,8 @@ public class SequencerGraphProcessor
         }
     }
 
+    public StageProcessor getOwnerProcessor()
+    {
+        return _ownerProcessor;
+    }
 }
