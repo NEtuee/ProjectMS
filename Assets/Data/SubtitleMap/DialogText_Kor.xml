@@ -62,6 +62,66 @@
     <Talk_Tutorial_Expl_8><ShowText Text = "재밌었다" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Tutorial_Expl_8>
     <Talk_Tutorial_Expl_9><ShowText Text = "또 와아지" Interval = "0.03"/><Wait Time = "2.0"/></Talk_Tutorial_Expl_9>
 
+    <Talk_Tutorial_Re_0> <ShowText Text="대단해!" Interval="0.03"/> <Wait Time = "2.0"/> </Talk_Tutorial_Re_0>
+    <Talk_Tutorial_Re_1> <ShowText Text="그거야!" Interval="0.03"/> <Wait Time = "2.0"/> </Talk_Tutorial_Re_1>
+    <Talk_Tutorial_Re_2> <ShowText Text="잘하는걸!" Interval="0.03"/> <Wait Time = "2.0"/> </Talk_Tutorial_Re_2>
+    <Talk_Tutorial_Re_3> <ShowText Text="멋져!" Interval="0.03"/> <Wait Time = "2.0"/> </Talk_Tutorial_Re_3>
+
+    <Talk_Tutorial_Re_St_0> <ShowText Text="우와" Interval="0.03"/> <Wait Time = "2.0"/> </Talk_Tutorial_Re_St_0>
+    <Talk_Tutorial_Re_St_1> <ShowText Text="진짜인가" Interval="0.03"/> <Wait Time = "2.0"/> </Talk_Tutorial_Re_St_1>
+    <Talk_Tutorial_Re_St_2> <ShowText Text="무서워" Interval="0.03"/> <Wait Time = "2.0"/> </Talk_Tutorial_Re_St_2>
+    <Talk_Tutorial_Re_St_3> <ShowText Text="말도안돼" Interval="0.03"/> <Wait Time = "2.0"/> </Talk_Tutorial_Re_St_3>
+
+    <Talk_Tutorial_0_0>
+        <ShowText Text = "이번 시간에는 아카네의" Interval = "0.03"/>
+        <ShowText Text = "마법에 대해 알아볼꺼야" Interval = "0.03"/>
+        <Wait Input="PassTalkBalloon"/>
+
+        <ShowText Text = "아카네 너는 분명 피의 마법 소녀였지?" Interval = "0.03" Clear="True"/>
+        <Wait Input="PassTalkBalloon"/>
+    </Talk_Tutorial_0_0>
+
+    <Talk_Tutorial_0_1>
+        <ShowText Text = "안비켜?" Interval = "0.03"/>
+        <Wait Input="PassTalkBalloon"/>
+    </Talk_Tutorial_0_1>
+
+    <Talk_Tutorial_0_2>
+        <ShowText Text = "역시 그랬구나?" Interval = "0.03"/>
+        <Wait Input="PassTalkBalloon"/>
+
+        <ShowText Text = "피의 마법 소녀들은 대부분 비슷한 능력을 가지고 있어" Interval = "0.03" Clear="True"/>
+        <Wait Input="PassTalkBalloon"/>
+
+        <ShowText Text = "바로..." Interval = "0.03" Clear="True"/>
+        <Wait Input="PassTalkBalloon"/>
+
+        <ShowText Text = "적을 공격해 자신을 회복하는거야!" Interval = "0.03" Clear="True"/>
+        <Wait Input="PassTalkBalloon"/>
+    </Talk_Tutorial_0_2>
+
+    <Talk_Tutorial_0_3>
+        <ShowText Text = "다만 회복하기 위해서는" Interval = "0.03"/>
+        <ShowText Text = "빠르게 적을 공격해야 해" Interval = "0.03"/>
+        <Wait Input="PassTalkBalloon"/>
+
+        <ShowText Text = "세계의 법칙이 그래" Interval = "0.03" Clear="True"/>
+        <Wait Input="PassTalkBalloon"/>
+
+        <ShowText Text = "역시 말보다는 직접 보는게 빠르겠지?" Interval = "0.03" Clear="True"/>
+        <Wait Input="PassTalkBalloon"/>
+        <Wait Time = "1.0"/>
+
+        <ShowText Text = "얍!" Interval = "0.03" Clear="True"/>
+        <Wait Input="PassTalkBalloon"/>
+    </Talk_Tutorial_0_3>
+
+    <Talk_Tutorial_0_4> <ShowText Text="적을 공격해 체력을 회복해봐!" Interval="0.03"/> <Wait Time = "2.0"/> </Talk_Tutorial_0_4>
+
+
+
+
+
 
     <Talk_SleepEffect><ShowText Text = "ZZZZZZ" Interval = "0.03"/><Wait Time = "2.0"/></Talk_SleepEffect>
 

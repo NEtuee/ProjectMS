@@ -29,7 +29,7 @@ MonoBehaviour:
     _lockCameraInBound: 0
     _cameraBoundToTrigger: 0
     _onEnterSequencerPath:
-    - TutorialStage/TutorialBase.xml
+    - Tutorial_0.xml
     _onExitSequencerPath: []
     _characterSpawnData:
     - _characterKey: TalkCharacter
@@ -336,7 +336,7 @@ MonoBehaviour:
   - _name: PlayerMarker
     _position: {x: -2.49, y: 0.047514282, z: 0}
   - _name: SetsumeiChanMarker
-    _position: {x: 2.63, y: 0.047514282, z: 0}
+    _position: {x: 0, y: 0.047514282, z: 0}
   - _name: Student0
     _position: {x: -3.458, y: -0.185, z: 0}
   - _name: Student1
@@ -375,6 +375,8 @@ MonoBehaviour:
     _position: {x: -3.966, y: 1.065, z: 0}
   - _name: CameraStart
     _position: {x: 0, y: 0, z: 0}
+  - _name: SetsumeiWait
+    _position: {x: 2.63, y: -0.01, z: 0}
   _trackData: []
   _targetSearchIdentifier: 1
   _triggerWidth: 8.18

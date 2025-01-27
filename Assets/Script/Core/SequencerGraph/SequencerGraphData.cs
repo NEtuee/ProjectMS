@@ -60,6 +60,7 @@ public enum SequencerGraphEventType
     AudioParameter,
     StopSwitch,
     SetCameraBoundLock,
+    SetMainCameraBoundLock,
     KillEntity,
     KillAllStageEntity,
     ShowCursor,
@@ -203,6 +204,8 @@ public abstract class SequencerGraphEventBase : SerializableDataType
             spawnEvent = new SequencerGraphEvent_AudioParameter();
         else if(eventType == SequencerGraphEventType.SetCameraBoundLock)
             spawnEvent = new SequencerGraphEvent_SetCameraBoundLock();
+        else if(eventType == SequencerGraphEventType.SetMainCameraBoundLock)
+            spawnEvent = new SequencerGraphEvent_SetMainameraBoundLock();
         else if(eventType == SequencerGraphEventType.KillEntity)
             spawnEvent = new SequencerGraphEvent_KillEntity();
         else if(eventType == SequencerGraphEventType.KillAllStageEntity)
@@ -3335,6 +3338,49 @@ public class SequencerGraphEvent_SetCameraBoundLock : SequencerGraphEventBase
     }
 }
 
+public class SequencerGraphEvent_SetMainameraBoundLock : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SetMainCameraBoundLock;
+
+    public bool _enable = false;
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor, float deltaTime)
+    {
+        MasterManager.instance._stageProcessor.useMainCameraBoundLock(_enable);
+
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "Enable")
+                _enable = bool.Parse(attrValue);
+        }
+    }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_enable);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _enable = binaryReader.ReadBoolean();
+    }
+}
+
 public class SequencerGraphEvent_SetHideCharacter : SequencerGraphEventBase
 {
     public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.SetHideCharacter;
@@ -3813,7 +3859,7 @@ public class SequencerGraphEvent_SetCameraTarget : SequencerGraphEventBase
     public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
     {
         CameraControlEx.Instance().setCameraTarget(processor.getUniqueEntity(_uniqueKey));
-        
+
         if(_cameraMode != CameraModeType.Count)
             CameraControlEx.Instance().setCameraMode(_cameraMode);
 

@@ -127,29 +127,57 @@ public class CharacterEntityBase : GameEntityBase
                 _isInCameraBound = false;
             }
 
-            if(_isInCameraBound == false)
+            if(MasterManager.instance._stageProcessor.mainCameraBoundLock())
             {
-                setBoundVelocity(Vector3.zero);
-                _isInCameraBound = MasterManager.instance._stageProcessor.isInCameraBound(_stagePointIndex, transform.position, out Vector3 resultPosition, out Vector3 boundNormal);
-            }
-
-            if (_isInCameraBound)
-            {
-                bool isInCameraBound = MasterManager.instance._stageProcessor.isInCameraBound(_stagePointIndex, transform.position, out Vector3 resultPosition, out Vector3 boundNormal);
-
-                if(isInCameraBound == false)
+                if(_isInCameraBound == false)
                 {
-                    Vector3 pushDirection = resultPosition - transform.position;
-                    float length = pushDirection.magnitude;
-                    pushDirection.Normalize();
-
-                    setBoundVelocity(pushDirection * length * 10f);
+                    Vector3 normal;
+                    setBoundVelocity(Vector3.zero);
+                    _isInCameraBound = CameraControlEx.Instance().IsInCameraBound(transform.position, out normal);
                 }
-                else
+
+                if(_isInCameraBound)
+                {
+                    Vector3 normal;
+                    Vector3 resultPosition = CameraControlEx.Instance().getMainCameraBoundPushVector(transform.position);
+                    bool isInCameraBound = CameraControlEx.Instance().IsInCameraBound(transform.position, out normal);
+                    
+                    Vector3 direction = resultPosition - transform.position;
+                    if(isInCameraBound == false)
+                        setBoundVelocity(direction * 10f);
+                    else
+                        setBoundVelocity(Vector3.zero);
+                }
+            }
+            else
+            {
+                if(_isInCameraBound == false)
                 {
                     setBoundVelocity(Vector3.zero);
+                    _isInCameraBound = MasterManager.instance._stageProcessor.isInCameraBound(_stagePointIndex, transform.position, out Vector3 resultPosition, out Vector3 boundNormal);
+                }
+
+                if (_isInCameraBound)
+                {
+                    bool isInCameraBound = MasterManager.instance._stageProcessor.isInCameraBound(_stagePointIndex, transform.position, out Vector3 resultPosition, out Vector3 boundNormal);
+
+                    if(isInCameraBound == false)
+                    {
+                        Vector3 pushDirection = resultPosition - transform.position;
+
+                        float length = pushDirection.magnitude;
+                        pushDirection.Normalize();
+
+                        setBoundVelocity(pushDirection * length * 10f);
+                    }
+                    else
+                    {
+                        setBoundVelocity(Vector3.zero);
+                    }
                 }
             }
+
+            
         }
         else
         {

@@ -65,6 +65,7 @@ public class StageProcessor
 
     private bool            _blockPointExit = false;
     private bool            _unlockLimit = false;
+    private bool            _mainCameraBoundLock = false;
 
     public StageProcessor()
     {
@@ -124,6 +125,7 @@ public class StageProcessor
         _miniStageTriggered = false;
         _blockPointExit = false;
         _unlockLimit = false;
+        _mainCameraBoundLock = false;
 
         if(_stageData._audioBoardPath == null || _stageData._audioBoardPath == "")
         {
@@ -391,6 +393,7 @@ public class StageProcessor
         _miniStageTriggered = false;
         _blockPointExit = false;
         _unlockLimit = false;
+        _mainCameraBoundLock = false;
 
         if(_bgmEmitter != null)
             _bgmEmitter.Stop();
@@ -1046,6 +1049,16 @@ public class StageProcessor
         direction.Normalize();
         
         return true;
+    }
+
+    public bool mainCameraBoundLock()
+    {
+        return _mainCameraBoundLock;
+    }
+
+    public void useMainCameraBoundLock(bool value)
+    {
+        _mainCameraBoundLock = value;
     }
 
     public void unlockLimit(bool value)

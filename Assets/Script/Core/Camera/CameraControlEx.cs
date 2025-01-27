@@ -338,6 +338,39 @@ public class CameraControlEx : Singleton<CameraControlEx>
         GizmoHelper.instance.drawRectangle(_currentCamera.transform.position,_cameraBoundHalf,Color.green);
     }
 
+    public Vector3 getMainCameraBoundPushVector(Vector3 position)
+    {
+        Vector3 cameraPosition = _currentCamera.transform.position;
+        cameraPosition.z = 0f;
+        float mainCamSize = _currentCamera.orthographicSize * _cameraBoundRate;
+        float currentCamHeight = mainCamSize * 2f;
+        float currentcamWidth = currentCamHeight * (800f / 600f);
+
+        float verticalLimitedDistance = 0f;
+        float horizontalLimitedDistance = 0f;
+
+        verticalLimitedDistance += currentCamHeight * 0.5f;
+        horizontalLimitedDistance += currentcamWidth * 0.5f;
+
+        Vector3 resultPoint = position;
+        if(MathEx.distancef(resultPoint.y,cameraPosition.y) > verticalLimitedDistance)
+        {
+            if(resultPoint.y > cameraPosition.y)
+                resultPoint.y = cameraPosition.y + verticalLimitedDistance;
+            else
+                resultPoint.y = cameraPosition.y - verticalLimitedDistance;
+        }
+        if(MathEx.distancef(resultPoint.x,cameraPosition.x) > horizontalLimitedDistance)
+        {
+            if(resultPoint.x > cameraPosition.x)
+                resultPoint.x = cameraPosition.x + horizontalLimitedDistance;
+            else
+                resultPoint.x = cameraPosition.x - horizontalLimitedDistance;
+        }
+
+        return resultPoint;
+    }
+
     public Vector2 worldToBackgroundUV(Vector3 worldPosition)
     {
         float convertedByPPU = _backgroundTextureSize * 0.01f;

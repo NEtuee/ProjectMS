@@ -1,0 +1,186 @@
+<SequencerGraph Name="Tutorial_0">
+
+    <InitializePhase>
+        <BlockInput Enable="True"/>
+        <SetHideUI Hide="True"/>
+        <LetterBoxShow/>
+
+        <SetHideCharacter UniqueGroupKey="Students" Hide="True"/>
+
+        <SetCameraPosition TargetPositionMarker="CameraStart"/>
+    </InitializePhase>
+
+    <UpdatePhase>
+        
+        <TalkBalloon UniqueKey="TalkCharacter" SimpleTalkKey="Talk_Tutorial_Expl_0" Wait="True"/>
+        <SetHideCharacter UniqueGroupKey="Students" Hide="False"/>
+
+        
+        <Task ProcessType="AllAtOnce" Name="AIMove">
+            <AIMove UniqueKey="Player" LoopAction="AIMove_Loop" EndPositionMarker="PlayerMarker"/>
+            <AIMove UniqueKey="Student0" LoopAction="AC_Move" EndPositionMarker="Student0"/>
+            <AIMove UniqueKey="Student1" LoopAction="AC_Move" EndPositionMarker="Student1"/>
+            <AIMove UniqueKey="Student2" LoopAction="AC_Move" EndPositionMarker="Student2"/>
+            <AIMove UniqueKey="Student3" LoopAction="AC_Move" EndPositionMarker="Student3"/>
+            <AIMove UniqueKey="Student4" LoopAction="AC_Move" EndPositionMarker="Student4"/>
+            <AIMove UniqueKey="Student5" LoopAction="AC_Move" EndPositionMarker="Student5"/>
+            <AIMove UniqueKey="Student6" LoopAction="AC_Move" EndPositionMarker="Student6"/>
+            <AIMove UniqueKey="Student7" LoopAction="AC_Move" EndPositionMarker="Student7"/>
+            <AIMove UniqueKey="Student8" LoopAction="AC_Move" EndPositionMarker="Student8"/>
+            <AIMove UniqueKey="Student9" LoopAction="AC_Move" EndPositionMarker="Student9"/>
+            <AIMove UniqueKey="Student10" LoopAction="AC_Move" EndPositionMarker="Student10"/>
+            <AIMove UniqueKey="Student11" LoopAction="AC_Move" EndPositionMarker="Student11"/>
+            <AIMove UniqueKey="Student12" LoopAction="AC_Move" EndPositionMarker="Student12"/>
+            <AIMove UniqueKey="Student13" LoopAction="AC_Move" EndPositionMarker="Student13"/>
+            <AIMove UniqueKey="Student14" LoopAction="AC_Move" EndPositionMarker="Student14"/>
+            <AIMove UniqueKey="Student15" LoopAction="AC_Move" EndPositionMarker="Student15"/>
+            <AIMove UniqueKey="Student16" LoopAction="AC_Move" EndPositionMarker="Student16"/>
+            <AIMove UniqueKey="Student17" LoopAction="AC_Move" EndPositionMarker="Student17"/>
+        </Task>
+
+        <TaskFence TaskName="AIMove"/>
+
+        <AIMove UniqueKey="SetsumeiChan" LoopAction="Move" EndPositionMarker="SetsumeiChanMarker"/>
+
+        <TaskFence TaskName="AIMove"/>
+        <!-- <SetBackgroundAnimationTrigger Key="Title" Trigger="On"/>
+        <WaitSignal Signal="AnimationEnd"/> -->
+
+        <WaitSecond Time="1.0"/>
+
+        <SetCameraTarget UniqueKey="SetsumeiChan" CameraMode="TargetCenterMode"/>
+        <SetCameraZoom Size="2.0" Speed="5"/>
+        <TalkBalloon UniqueKey="SetsumeiChan" SimpleTalkKey="Talk_Tutorial_Expl_1" Wait="True"/>
+
+        <SetCameraPosition TargetPositionMarker="CameraStart"/>
+        <SetCameraZoom Size="0.0" Speed="5"/>
+        <TalkBalloon UniqueKey="SetsumeiChan" SimpleTalkKey="Talk_Tutorial_Expl_2"/>
+
+        <WaitSecond Time="1.0"/>
+        <TalkBalloon UniqueKey="Student0" SimpleTalkKey="Talk_Tutorial_Expl_3"/>
+        <WaitSecond Time="0.2"/>
+        <TalkBalloon UniqueKey="Student10" SimpleTalkKey="Talk_Tutorial_Expl_4"/>
+        <WaitSecond Time="0.5"/>
+        <TalkBalloon UniqueKey="Student16" SimpleTalkKey="Talk_Tutorial_Expl_5"/>
+        <WaitSecond Time="4.0"/>
+
+
+        
+        <TalkBalloon UniqueKey="SetsumeiChan" SimpleTalkKey="Talk_Tutorial_0_0" Wait="True"/>
+        <TalkBalloon UniqueKey="Player" SimpleTalkKey="Talk_Tutorial_0_1" Wait="True"/>
+
+        <TalkBalloon UniqueKey="SetsumeiChan" SimpleTalkKey="Talk_Tutorial_0_2" Wait="True"/>
+
+        <TalkBalloon UniqueKey="Student4" SimpleTalkKey="Talk_Tutorial_Re_St_1"/>
+        <WaitSecond Time="0.2"/>
+        <TalkBalloon UniqueKey="Student2" SimpleTalkKey="Talk_Tutorial_Re_St_2"/>
+        <WaitSecond Time="2.5"/>
+
+        <TalkBalloon UniqueKey="SetsumeiChan" SimpleTalkKey="Talk_Tutorial_0_3" Wait="True"/>
+
+        <EffectPreset UniqueKey="Player" EffectPreset="Smash_NoneTarget"/>
+        <ApplyBuff UniqueKey="Player" Buff="AkaneStartHP"/>
+        <SetAction UniqueKey="Player" Action="Hit"/>
+        
+        <WaitSecond Time="0.5"/>
+
+        <AIMove UniqueKey="SetsumeiChan" LoopAction="Move" EndPositionMarker="SetsumeiWait"/>
+        <SetDirection UniqueKey="SetsumeiChan" DirectionType="AlwaysLeft"/>
+
+        <TalkBalloon UniqueKey="SetsumeiChan" SimpleTalkKey="Talk_Tutorial_0_4"/>
+
+        <BlockInput Enable="False"/>
+        <SetHideUI Hide="False"/>
+        <LetterBoxHide/>
+
+        <SetMainCameraBoundLock Enable="True"/>
+
+        <WaitSignal Signal="Test"/>
+
+
+
+
+        <WaitSecond Time="1.0"/>
+
+        <SetCameraTarget UniqueKey="SetsumeiChan" CameraMode="TargetCenterMode"/>
+        <SetCameraZoom Size="2.0" Speed="5"/>
+        <TalkBalloon UniqueKey="SetsumeiChan" SimpleTalkKey="Talk_Tutorial_Expl_6" Wait="True"/>
+
+        <SetCameraPosition TargetPositionMarker="CameraStart"/>
+        <SetCameraZoom Size="0.0" Speed="5"/>
+
+        <TalkBalloon UniqueKey="SetsumeiChan" SimpleTalkKey="Talk_Tutorial_Expl_7"/>
+
+        <Task ProcessType="AllAtOnce">
+            <AIMove UniqueKey="SetsumeiChan" LoopAction="Move" EndPositionMarker="Spawn"/>
+        </Task>
+
+        <WaitSecond Time="0.2"/>
+        
+        <Task ProcessType="AllAtOnce" Name="AIMove">
+            <AIMove UniqueKey="Student0" LoopAction="AC_Move" EndPositionMarker="Spawn"/>
+            <AIMove UniqueKey="Student1" LoopAction="AC_Move" EndPositionMarker="Spawn"/>
+        </Task>
+
+        <WaitSecond Time="0.1"/>
+        <Task ProcessType="AllAtOnce">
+            <AIMove UniqueKey="Student2" LoopAction="AC_Move" EndPositionMarker="Spawn"/>
+            <AIMove UniqueKey="Student3" LoopAction="AC_Move" EndPositionMarker="Spawn"/>
+        </Task>
+
+        <WaitSecond Time="0.2"/>
+        <Task ProcessType="AllAtOnce">
+            <AIMove UniqueKey="Student4" LoopAction="AC_Move" EndPositionMarker="Spawn"/>
+            <AIMove UniqueKey="Student5" LoopAction="AC_Move" EndPositionMarker="Spawn"/>
+        </Task>
+
+        <WaitSecond Time="0.1"/>
+        <Task ProcessType="AllAtOnce">
+            <AIMove UniqueKey="Student8" LoopAction="AC_Move" EndPositionMarker="Spawn"/>
+            <AIMove UniqueKey="Student9" LoopAction="AC_Move" EndPositionMarker="Spawn"/>
+        </Task>
+
+        <WaitSecond Time="0.1"/>
+        <TalkBalloon UniqueKey="Student11" SimpleTalkKey="Talk_Tutorial_Expl_9"/>
+        <Task ProcessType="AllAtOnce">
+            <AIMove UniqueKey="Student10" LoopAction="AC_Move" EndPositionMarker="Spawn"/>
+            <AIMove UniqueKey="Student11" LoopAction="AC_Move" EndPositionMarker="Spawn"/>
+        </Task>
+
+        <WaitSecond Time="0.1"/>
+        <Task ProcessType="AllAtOnce">
+            <AIMove UniqueKey="Student12" LoopAction="AC_Move" EndPositionMarker="Spawn"/>
+            <AIMove UniqueKey="Student13" LoopAction="AC_Move" EndPositionMarker="Spawn"/>
+        </Task>
+
+        <WaitSecond Time="0.2"/>
+        <Task ProcessType="AllAtOnce">
+            <AIMove UniqueKey="Student14" LoopAction="AC_Move" EndPositionMarker="Spawn"/>
+            <AIMove UniqueKey="Student15" LoopAction="AC_Move" EndPositionMarker="Spawn"/>
+        </Task>
+
+        <WaitSecond Time="0.2"/>
+        <TalkBalloon UniqueKey="Student6" SimpleTalkKey="Talk_Tutorial_Expl_8"/>
+        <Task ProcessType="AllAtOnce">
+            <AIMove UniqueKey="Student6" LoopAction="AC_Move" EndPositionMarker="Spawn"/>
+            <AIMove UniqueKey="Student7" LoopAction="AC_Move" EndPositionMarker="Spawn"/>
+        </Task>
+
+        <WaitSecond Time="0.2"/>
+        <Task ProcessType="AllAtOnce">
+            <AIMove UniqueKey="Student16" LoopAction="AC_Move" EndPositionMarker="Spawn"/>
+            <AIMove UniqueKey="Student17" LoopAction="AC_Move" EndPositionMarker="Spawn"/>
+        </Task>        
+
+        <TaskFence TaskName="AIMove"/>
+
+        <WaitSecond Time="1.0"/>
+
+        <SetCameraTarget UniqueKey="Player" CameraMode="TargetCenterMode"/>
+        <BlockInput Enable="False"/>
+        <SetHideUI Hide="False"/>
+        <LetterBoxHide/>
+
+    </UpdatePhase>
+    
+</SequencerGraph>
