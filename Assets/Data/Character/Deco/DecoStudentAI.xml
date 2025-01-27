@@ -15,7 +15,19 @@
                 <Event_OnExecute>
                     <AIEvent Type="SetAction" Action="AC_Fear"/>
                 </Event_OnExecute>
+
+                <CustomEvent_ToIdle>
+                    <AIEvent Type="ExecuteState" Execute="ToIdle"/>
+                </CustomEvent_ToIdle>
             </Fear>
+
+            <ToIdle UpdateTime="999.0">
+                <Event_OnExecute>
+                    <AIEvent Type="SetAction" Action="AC_Idle"/>
+                </Event_OnExecute>
+
+                <Branch Condition="End" Execute="Entry"/>
+            </ToIdle>
         </AIState>
     </AIPackage>
     

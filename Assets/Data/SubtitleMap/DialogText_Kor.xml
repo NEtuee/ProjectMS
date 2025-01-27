@@ -77,7 +77,7 @@
         <ShowText Text = "마법에 대해 알아볼꺼야" Interval = "0.03"/>
         <Wait Input="PassTalkBalloon"/>
 
-        <ShowText Text = "아카네 너는 분명 피의 마법 소녀였지?" Interval = "0.03" Clear="True"/>
+        <ShowText Text = "아카네, 너는 분명 피의 마법 소녀였지?" Interval = "0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
     </Talk_Tutorial_0_0>
 
@@ -87,7 +87,7 @@
     </Talk_Tutorial_0_1>
 
     <Talk_Tutorial_0_2>
-        <ShowText Text = "역시 그랬구나?" Interval = "0.03"/>
+        <ShowText Text = "역시 그랬구나!" Interval = "0.03"/>
         <Wait Input="PassTalkBalloon"/>
 
         <ShowText Text = "피의 마법 소녀들은 대부분 비슷한 능력을 가지고 있어" Interval = "0.03" Clear="True"/>
@@ -101,13 +101,6 @@
     </Talk_Tutorial_0_2>
 
     <Talk_Tutorial_0_3>
-        <ShowText Text = "다만 회복하기 위해서는" Interval = "0.03"/>
-        <ShowText Text = "빠르게 적을 공격해야 해" Interval = "0.03"/>
-        <Wait Input="PassTalkBalloon"/>
-
-        <ShowText Text = "세계의 법칙이 그래" Interval = "0.03" Clear="True"/>
-        <Wait Input="PassTalkBalloon"/>
-
         <ShowText Text = "역시 말보다는 직접 보는게 빠르겠지?" Interval = "0.03" Clear="True"/>
         <Wait Input="PassTalkBalloon"/>
         <Wait Time = "1.0"/>
@@ -118,7 +111,39 @@
 
     <Talk_Tutorial_0_4> <ShowText Text="적을 공격해 체력을 회복해봐!" Interval="0.03"/> <Wait Time = "2.0"/> </Talk_Tutorial_0_4>
 
+    <Talk_Tutorial_0_5>
+        <ShowText Text = "대단해!" Interval = "0.03" Clear="True"/>
+        <Wait Input="PassTalkBalloon"/>
 
+        <ShowText Text = "가운데 체력 표시가 보이니?" Interval = "0.03" Clear="True"/>
+        <Wait Input="PassTalkBalloon"/>
+
+        <ShowText Text = "적을 공격 할 수록" Interval = "0.03" Clear="True"/>
+        <ShowText Text = "게이지가 차올라 체력을 회복할 수 있어" Interval = "0.03"/>
+        <Wait Input="PassTalkBalloon"/>
+
+        <ShowText Text = "게이지는 시간이 지나면 줄어드니" Interval = "0.03" Clear="True"/>
+        <ShowText Text = "빠르게 적을 공격해 체력을 회복하자!" Interval = "0.03"/>
+        <Wait Input="PassTalkBalloon"/>
+    </Talk_Tutorial_0_5>
+
+    <Talk_Tutorial_0_6> <ShowText Text="게이지가 줄기 전에 적을 공격하자!" Interval="0.03"/> <Wait Time = "2.0"/> </Talk_Tutorial_0_6>
+
+    <Talk_Tutorial_0_7>
+        <ShowText Text = "완벽해!" Interval = "0.03" Clear="True"/>
+        <Wait Input="PassTalkBalloon"/>
+
+        <ShowText Text = "혹시 눈치 챘을까나?" Interval = "0.03" Clear="True"/>
+        <Wait Input="PassTalkBalloon"/>
+
+        <ShowText Text = "적을 공격하는데 성공하면" Interval = "0.03" Clear="True"/>
+        <ShowText Text = "공격 게이지가 초기화돼!" Interval = "0.03"/>
+        <Wait Input="PassTalkBalloon"/>
+
+        <ShowText Text = "위험한 상황에는 오직" Interval = "0.03" Clear="True"/>
+        <ShowText Text = "공격만이 살길이란걸 잊지마!" Interval = "0.03"/>
+        <Wait Input="PassTalkBalloon"/>
+    </Talk_Tutorial_0_7>
 
 
 

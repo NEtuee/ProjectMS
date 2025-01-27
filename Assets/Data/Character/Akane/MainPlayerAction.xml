@@ -76,7 +76,7 @@
 
         <Branch Condition="End" Execute="Idle"/>
     </Spawn>
-    <Idle MovementType="FrameEvent" DirectionType="Keep" FlipType="Keep">
+    <Idle MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <Animation Preset="Sprites/NewPlayer/idle/" XFlip="true" Duration="1.2">
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_IdleFriction" Speed="0"/>
         </Animation>

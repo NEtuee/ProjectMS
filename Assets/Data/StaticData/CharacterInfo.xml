@@ -83,6 +83,19 @@
         AllyInfo="CommonBattle"
     />
 
+    <TutorialStudentHP5
+        DisplayName="튜토리얼 더미 체력 5"
+        ActionGraph="Assets/Data/Character/TutorialStudent/TutorialStudentAction.xml"
+        AIGraph="Assets/Data/Character/TutorialStudent/TutorialStudentAI.xml"
+        StatusInfoName="CommonEnemyStatusHPMaxNoUI"
+
+        CollisionRadius="0.35"
+        ProjectileCollisionRadius=""
+        SelfCollision="False"
+
+        AllyInfo="CommonBattle"
+    />
+
     <IinchoChan
         DisplayName="반장쨩"
         ActionGraph="Assets/Data/Character/IinchoChan/IinchoChanAction.xml"

@@ -11,6 +11,8 @@
     </InitializePhase>
 
     <UpdatePhase>
+        <SetHideCharacter UniqueKey="HP1" Hide="True"/>
+        <SetHideCharacter UniqueKey="HP2" Hide="True"/>
         
         <TalkBalloon UniqueKey="TalkCharacter" SimpleTalkKey="Talk_Tutorial_Expl_0" Wait="True"/>
         <SetHideCharacter UniqueGroupKey="Students" Hide="False"/>
@@ -39,6 +41,9 @@
         </Task>
 
         <TaskFence TaskName="AIMove"/>
+        
+        <SetDirection UniqueKey="Player" DirectionType="AlwaysRight"/>
+        <SetDirection UniqueGroupKey="Students" DirectionType="AlwaysRight"/>
 
         <AIMove UniqueKey="SetsumeiChan" LoopAction="Move" EndPositionMarker="SetsumeiChanMarker"/>
 
@@ -74,7 +79,7 @@
         <TalkBalloon UniqueKey="Student4" SimpleTalkKey="Talk_Tutorial_Re_St_1"/>
         <WaitSecond Time="0.2"/>
         <TalkBalloon UniqueKey="Student2" SimpleTalkKey="Talk_Tutorial_Re_St_2"/>
-        <WaitSecond Time="2.5"/>
+        <WaitSecond Time="2.0"/>
 
         <TalkBalloon UniqueKey="SetsumeiChan" SimpleTalkKey="Talk_Tutorial_0_3" Wait="True"/>
 
@@ -95,8 +100,50 @@
 
         <SetMainCameraBoundLock Enable="True"/>
 
-        <WaitSignal Signal="Test"/>
+        <SetHideCharacter UniqueKey="HP1" Hide="False"/>
+        <DeadFence  UniqueKey="HP1"/>
 
+        <TalkBalloon UniqueKey="Student7" SimpleTalkKey="Talk_Tutorial_Re_St_0"/>
+
+        <WaitSecond Time="1.0"/>
+
+        <CallAIEvent EventName="ToIdle" UniqueKey="Player" EventTargetType="Range" AllyTarget="Neutral" Range="10"/>
+
+        <BlockInput Enable="True"/>
+
+        <AIMove UniqueKey="Player" LoopAction="AIMove_Loop" EndPositionMarker="PlayerMarker"/>
+        <SetDirection UniqueKey="Player" DirectionType="AlwaysRight"/>
+
+        <AIMove UniqueKey="SetsumeiChan" LoopAction="Move" EndPositionMarker="SetsumeiChanMarker"/>
+        <SetDirection UniqueKey="SetsumeiChan" DirectionType="AlwaysLeft"/>
+
+        <TalkBalloon UniqueKey="SetsumeiChan" SimpleTalkKey="Talk_Tutorial_0_5" Wait="True"/>
+
+        <AIMove UniqueKey="SetsumeiChan" LoopAction="Move" EndPositionMarker="SetsumeiWait"/>
+        <SetDirection UniqueKey="SetsumeiChan" DirectionType="AlwaysLeft"/>
+
+        <BlockInput Enable="False"/>
+
+        <TalkBalloon UniqueKey="SetsumeiChan" SimpleTalkKey="Talk_Tutorial_0_6" Wait="True"/>
+
+        <SetHideCharacter UniqueKey="HP2" Hide="False"/>
+        <DeadFence UniqueKey="HP2"/>
+
+        <WaitSecond Time="1.0"/>
+
+        <CallAIEvent EventName="ToIdle" UniqueKey="Player" EventTargetType="Range" AllyTarget="Neutral" Range="10"/>
+
+        <BlockInput Enable="True"/>
+
+        <AIMove UniqueKey="Player" LoopAction="AIMove_Loop" EndPositionMarker="PlayerMarker"/>
+        <SetDirection UniqueKey="Player" DirectionType="AlwaysRight"/>
+
+        <AIMove UniqueKey="SetsumeiChan" LoopAction="Move" EndPositionMarker="SetsumeiChanMarker"/>
+        <SetDirection UniqueKey="SetsumeiChan" DirectionType="AlwaysLeft"/>
+
+        <TalkBalloon UniqueKey="SetsumeiChan" SimpleTalkKey="Talk_Tutorial_0_7" Wait="True"/>
+
+        <SetMainCameraBoundLock Enable="False"/>
 
 
 
@@ -178,8 +225,6 @@
 
         <SetCameraTarget UniqueKey="Player" CameraMode="TargetCenterMode"/>
         <BlockInput Enable="False"/>
-        <SetHideUI Hide="False"/>
-        <LetterBoxHide/>
 
     </UpdatePhase>
     
