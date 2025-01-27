@@ -27,7 +27,7 @@
 
     <AC_Floating_WithoutEffect MovementType="FrameEvent" DirectionType="AlwaysUp" RotationType="Torque">
         <Animation Preset="Sprites/Enemy/TutorialStudent/1_floating" XFlip="true" Duration="1">
-            <FrameEvent Type="Movement" StartTime="0" Friction="20" MaxVelocity="20" Velocity="Random_7^15" Speed="0"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="20" MaxVelocity="20" Velocity="10.0" Speed="0"/>
             <FrameEvent Type="Torque" StartTime="0" Add="Random_-10^10"/>
 
         </Animation>

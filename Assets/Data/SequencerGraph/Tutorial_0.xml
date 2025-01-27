@@ -121,12 +121,12 @@
 
         <AIMove UniqueKey="SetsumeiChan" LoopAction="Move" EndPositionMarker="SetsumeiWait"/>
         <SetDirection UniqueKey="SetsumeiChan" DirectionType="AlwaysLeft"/>
+        
+        <SetHideCharacter UniqueKey="HP2" Hide="False"/>
 
         <BlockInput Enable="False"/>
-
         <TalkBalloon UniqueKey="SetsumeiChan" SimpleTalkKey="Talk_Tutorial_0_6" Wait="True"/>
-
-        <SetHideCharacter UniqueKey="HP2" Hide="False"/>
+        
         <DeadFence UniqueKey="HP2"/>
 
         <WaitSecond Time="1.0"/>
