@@ -136,7 +136,7 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_AttackReady>
 
-    <AC_AttackMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" Flags="LaserEffect">
+    <AC_AttackMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" Flags="LaserEffect OutlineSuperArmor">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="1_attack/2_attackMain" XFlip="true" Duration="0.2">
             <FrameEvent Type="SetDirectionType" Condition="gv_bIsLaserAttack == false" StartTime="0" DirectionType="AI"/>

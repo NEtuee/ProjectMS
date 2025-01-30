@@ -2,7 +2,7 @@
 
     <GlobalVariable Name="gv_MasterPath" Value="Sprites/Enemy/IinchoChan/"/>
 
-    <Idle MovementType="Empty" DirectionType="AI" FlipType="Direction" DefenceType="Guard" DefenceAngle="270" DefenceDirectionType="Direction">
+    <Idle MovementType="Empty" DirectionType="AI" FlipType="Direction" DefenceType="Guard" DefenceAngle="270" DefenceDirectionType="Direction" Flags="OutlineGuard">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="0_default/1_idle" XFlip="true" Duration="4">
             <FrameEvent Type="TalkBalloon" Condition="getWeight_RandVector4^x" StartTime="0" SimpleTalkKey="Talk_IinchoChan_0"/>

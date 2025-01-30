@@ -97,7 +97,7 @@
 <!-- Defualt Action -->
 
 <!-- Attack Action -->
-    <AC_AttackReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+    <AC_AttackReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineSuperArmor">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="1_attack/1_attackReady" XFlip="true" Duration="0.8">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2203" Attach="true"/>
@@ -113,7 +113,7 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_AttackReady>
 
-    <AC_AttackMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction">
+    <AC_AttackMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction" Flags="OutlineSuperArmor">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="1_attack/2_attackMain" XFlip="true" Duration="0.3">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="4901" Attach="true"/>
@@ -172,7 +172,7 @@
         <Branch Condition="End" Execute="AC_AttackRecover"/>
     </AC_AttackMain>
 
-    <AC_AttackSuccess MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction">
+    <AC_AttackSuccess MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction" Flags="OutlineSuperArmor">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="1_attack/4_attackSuccess" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" Condition="gv_AtkSucMovementVelocity == 0.0" StartTime="0" Friction="gv_AtkSucMovementFriction" MaxVelocity="gv_AtkSucMovementMaxVelocity" Speed="gv_AtkSucMovementSpeed"/>
