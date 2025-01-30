@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c858e63344676f34a93a8306d92a1f7d, type: 3}
   m_Name: AudioInfo
   m_EditorClassIdentifier: 
-  csvData: {fileID: 4900000, guid: 0f0bbb16c3139974d88d636e55be6933, type: 3}
+  csvData: {fileID: 4900000, guid: 71af838a4a8712147a24a72e4c5789fc, type: 3}
   audioData:
   - name: global data
     id: 0
@@ -1677,6 +1677,62 @@ MonoBehaviour:
         Data3: -3468870
         Data4: -953716360
       Path: event:/SFX/CutScene/04_ExpandTheZone
+    parameters: []
+  - name: 01_SetsumeiStop
+    id: 6008
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: event:/SFX/CutScene/01_SetsumeiStop
+    parameters: []
+  - name: 01_SetsumeiIntro
+    id: 6009
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: event:/SFX/CutScene/01_SetsumeiIntro
+    parameters: []
+  - name: 01_SetsumeiReaction
+    id: 6010
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: event:/SFX/CutScene/01_SetsumeiReaction
+    parameters: []
+  - name: 01_SetsumeiOuttro
+    id: 6011
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: event:/SFX/CutScene/01_SetsumeiOuttro
     parameters: []
   - name: Zone
     id: 8001
