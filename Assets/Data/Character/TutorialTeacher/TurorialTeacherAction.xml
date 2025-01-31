@@ -7,7 +7,9 @@
             <FrameEvent Type="TalkBalloon" Condition="getWeight_RandVector4^y" StartTime="0" SimpleTalkKey="Talk_TutorialTeacher_1"/>
             <FrameEvent Type="TalkBalloon" Condition="getWeight_RandVector4^z" StartTime="0" SimpleTalkKey="Talk_TutorialTeacher_2"/>
 
-            <FrameEvent Type="Effect" StartTime="0" Path="Sprites/UI/Indicator/EnemyHead" FramePerSecond="2" Offset="0 0.2 0" DirectionOffset="False"/>
+            <FrameEvent Type="Effect" StartTime="0" Path="Sprites/UI/Indicator/EnemyHead" FramePerSecond="2" Offset="0 0.4 0" DirectionOffset="False"/>
+            <FrameEvent Type="Effect" StartTime="1" Path="Sprites/UI/Indicator/EnemyHead" FramePerSecond="2" Offset="0 0.4 0" DirectionOffset="False"/>
+            <FrameEvent Type="Effect" StartTime="2" Path="Sprites/UI/Indicator/EnemyHead" FramePerSecond="2" Offset="0 0.4 0" DirectionOffset="False"/>
         </Animation>
 
         <Branch Condition="GuardBroken || DefenceSuccess" Execute="CatchProcess"/>
@@ -75,7 +77,9 @@
         <AnimationHeader MasterPath="Sprites/Enemy/TutorialTeacher/"/>
         <Animation Preset="hitidle_5" XFlip="true" Duration="3">
 
-            <FrameEvent Type="Effect" StartTime="0" Path="Sprites/UI/Indicator/EnemyHead" FramePerSecond="2" Offset="0 0.2 0" DirectionOffset="False" Attach="true"/>
+            <FrameEvent Type="Effect" StartTime="0" Path="Sprites/UI/Indicator/EnemyHead" FramePerSecond="2" Offset="0 0.4 0" DirectionOffset="False"/>
+            <FrameEvent Type="Effect" StartTime="1" Path="Sprites/UI/Indicator/EnemyHead" FramePerSecond="2" Offset="0 0.4 0" DirectionOffset="False"/>
+            <FrameEvent Type="Effect" StartTime="2" Path="Sprites/UI/Indicator/EnemyHead" FramePerSecond="2" Offset="0 0.4 0" DirectionOffset="False"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="HitIdle"/>
