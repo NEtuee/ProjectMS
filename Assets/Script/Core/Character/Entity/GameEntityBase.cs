@@ -278,6 +278,14 @@ public class GameEntityBase : SequencerObjectBase
         _outlineSpriteObject.SetActive(false);
         _outlineAppearTimeProcessItem.initialize(false);
 
+        if(_actionGraph.isCurrentOutlineAction())
+        {
+            _outlineAppearTimeProcessItem.initialize(true);
+            _outlineSpriteObject.SetActive(true);
+            _outlineMaterial.SetColor("_Color", _actionGraph.getOutlineColor());
+            updateOutline(0f);
+        }
+
         setRotateSlotValue(0f, 0f);
         initializeActionValue();
         updateRotation();
@@ -413,6 +421,14 @@ public class GameEntityBase : SequencerObjectBase
 
         _outlineSpriteObject.SetActive(false);
         _outlineAppearTimeProcessItem.initialize(false);
+
+        if(_actionGraph.isCurrentOutlineAction())
+        {
+            _outlineAppearTimeProcessItem.initialize(true);
+            _outlineSpriteObject.SetActive(true);
+            _outlineMaterial.SetColor("_Color", _actionGraph.getOutlineColor());
+            updateOutline(0f);
+        }
 
         setRotateSlotValue(0f, 0f);
         initializeActionValue();
