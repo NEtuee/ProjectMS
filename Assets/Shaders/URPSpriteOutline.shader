@@ -50,11 +50,9 @@ Shader "Custom/PixelOutlineShader"
 
             float4 frag (Varyings input) : SV_Target
             {
-                float4 original = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, input.uv);
-            
+                //float4 original = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, input.uv);
                 float2 perPixelUV = float2(_MainTex_TexelSize.x, _MainTex_TexelSize.y);
             
-                // Multiple offsets for thicker outlines
                 float2 offsets[4] = {
                     float2(-1,  0),  // Left
                     float2( 1,  0),  // Right
@@ -62,10 +60,9 @@ Shader "Custom/PixelOutlineShader"
                     float2( 0,  1),  // Up
                 };
             
-                float alphaThreshold = 0.001;
-                float outline = 0.0;
+                float alphaThreshold = 0.0001;
+                bool outline = false;
             
-                // Sample around the pixel for thicker outlines
                 int thickness = 2;
                 for(int i = 1; i <= thickness; ++i)
                 {
@@ -73,22 +70,23 @@ Shader "Custom/PixelOutlineShader"
                     {
                         float2 offset = offsets[j] * perPixelUV * i;
                         float4 neighbor = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, input.uv + offset);
-                        outline += step(alphaThreshold, neighbor.a);
+                        outline = neighbor.a > alphaThreshold;
 
-                        if (outline > 0.0)
+                        if (outline)
                             break;
                     }
+
+                    if(outline)
+                        break;
                 }
-            
-                // Flashing effect
-                float blink = (sin(_Time.y * 12.28) * 0.5 + 0.5); // Oscillates between 0 and 1
-                float4 blinkColor = lerp(float4(1, 1, 1, 1), _Color, blink); // Interpolate between white and _Color
-            
-                // Outline condition
-                if (outline > 0.0 && original.a < alphaThreshold)
-                    return blinkColor;
-            
-                return float4(blinkColor.rgb, original.a);
+                
+                float blink = (sin(_Time.y * 12.28) * 0.5 + 0.5);
+                float4 blinkColor = lerp(float4(1, 1, 1, 1), _Color, blink);
+                
+                if (outline == false)
+                    return float4(0.0,0.0,0.0,0.0);
+
+                return blinkColor;
             }
 
             ENDHLSL
