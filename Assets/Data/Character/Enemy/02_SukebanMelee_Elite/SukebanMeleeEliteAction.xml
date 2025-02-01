@@ -281,14 +281,14 @@
             
             <!-- Object Attack -->
             <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="Uzi" SpawnTargetType="AITarget" Offset="0 3 0" UseFlip="true"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="Uzi" SpawnTargetType="AITarget" Offset="3 0 0" UseFlip="true"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="Uzi" SpawnTargetType="AITarget" Offset="0 -3 0" UseFlip="true"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0.05" CharacterKey="Uzi" SpawnTargetType="AITarget" Offset="3 0 0" UseFlip="true"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0.1" CharacterKey="Uzi" SpawnTargetType="AITarget" Offset="0 -3 0" UseFlip="true"/>
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="CountUzi" EventTargetType="Self"/>
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="CountUzi" EventTargetType="Self"/>
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="CountUzi" EventTargetType="Self"/>
 
-            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.1" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.1" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>
