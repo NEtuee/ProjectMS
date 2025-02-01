@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEditor;
+using System;
 
 public class CharacterInfoViewer : EditorWindow
 {
@@ -94,8 +95,15 @@ public class CharacterInfoViewer : EditorWindow
 
             GUI.enabled = true;
 
-            if(item.Key != null && item.Value._displayName != null)
-                GUILayout.Label(item.Key + ": " + item.Value._displayName);
+            try
+            {
+                if(item.Key != null && item.Value._displayName != null)
+                    GUILayout.Label(item.Key + ": " + item.Value._displayName);
+            }
+            catch(Exception ex)
+            {
+                // ignore unity fuck-bug
+            }
                 
             GUILayout.EndHorizontal();
         }
@@ -166,7 +174,7 @@ public class CharacterInfoViewer : EditorWindow
         }
     }
 
-    private void PingTarget(Object obj)
+    private void PingTarget(UnityEngine.Object obj)
     {
         if(obj == null)
         {
