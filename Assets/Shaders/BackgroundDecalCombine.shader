@@ -99,7 +99,7 @@ Shader "Custom/BackgroundDecalCombine"
 			fixed4 sampleBackground(sampler2D backgroundTexture, sampler2D depthTexture, sampler2D normalTexture, float2 texcoord, float3 viewSpaceDir)
 			{
 				float _Scale = 1.0;
-				float _DepthThreshold = 1.0;
+				float _DepthThreshold = 1.5;
 				float _NormalThreshold = 0.3;
 				float _DepthNormalThreshold = 1.5;
 				float _DepthNormalThresholdScale = 6.1;	
