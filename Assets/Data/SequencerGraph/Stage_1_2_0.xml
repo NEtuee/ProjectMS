@@ -36,7 +36,10 @@
             <TalkBalloon UniqueKey="Talk_2" SimpleTalkKey="Talk_Stage01_2"/>
         </Task>
 
-        <WaitSecond Time="1.5"/>
+        <WaitSecond Time="2.0"/>
+
+        <CameraTrack TrackName="MainTrack"/>
+        <IsTrackEnd/>
 
         <SetHideUI Hide="False"/>
         <BlockInput Enable="False"/>

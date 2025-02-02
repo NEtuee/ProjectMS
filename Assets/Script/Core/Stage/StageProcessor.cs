@@ -312,7 +312,6 @@ public class StageProcessor
             }
         }
 
-
         if(isMiniStage == false)
         {
             if(_stageData._stagePointData[0]._onEnterSequencerPath != null && _stageData._stagePointData[0]._onEnterSequencerPath.Length != 0)
@@ -520,21 +519,21 @@ public class StageProcessor
                 _miniStageTriggered = _miniStageTrigger.intersection(_playerEntity.transform.position);
                 if(_miniStageTriggered)
                 {
-                    _miniStageTriggerBottomHitOffset = _miniStageTrigger.getBottomCollisionOffset(_playerEntity.transform.position);
-                    if(_stageData._stagePointData[0]._onEnterSequencerPath != null && _stageData._stagePointData[0]._onEnterSequencerPath.Length != 0)
-                    {
-                        for(int index = 0; index < _stageData._stagePointData[0]._onEnterSequencerPath.Length; ++index)
-                        {
-                            SequencerGraphProcessor processor = _sequencerProcessManager.startSequencerFromStage(_stageData._stagePointData[0]._onEnterSequencerPath[index],_stageData._stagePointData[0], ref _keepUniqueMap,_spawnedCharacterEntityDictionary[0],null,_stageData._markerData,false);
-                        }
-                    }
-
                     if(_spawnedCharacterEntityDictionary.ContainsKey(_currentPoint))
                     {
                         for(int index = 0; index < _spawnedCharacterEntityDictionary[_currentPoint].Count; ++index)
                         {
                             if(_stageData._stagePointData[_currentPoint]._characterSpawnData[index]._activeType == StageSpawnCharacterActiveType.PointActivated)
                                 _spawnedCharacterEntityDictionary[_currentPoint][index]._characterEntity?.setActiveSelf(true,false);
+                        }
+                    }
+
+                    _miniStageTriggerBottomHitOffset = _miniStageTrigger.getBottomCollisionOffset(_playerEntity.transform.position);
+                    if(_stageData._stagePointData[0]._onEnterSequencerPath != null && _stageData._stagePointData[0]._onEnterSequencerPath.Length != 0)
+                    {
+                        for(int index = 0; index < _stageData._stagePointData[0]._onEnterSequencerPath.Length; ++index)
+                        {
+                            SequencerGraphProcessor processor = _sequencerProcessManager.startSequencerFromStage(_stageData._stagePointData[0]._onEnterSequencerPath[index],_stageData._stagePointData[0], ref _keepUniqueMap,_spawnedCharacterEntityDictionary[0],null,_stageData._markerData,false);
                         }
                     }
                 }

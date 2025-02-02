@@ -219,20 +219,6 @@ MonoBehaviour:
       _sortingOrder: 0
       _allyInfoKey: 
       _activeType: 1
-      _localPosition: {x: 0.77, y: 0.76, z: 0}
-    - _characterKey: SukebanKatanaChan
-      _uniqueKey: 
-      _uniqueGroupKey: EnemyGroup
-      _startAction: AC_Entry
-      _startAIState: Entry_Peace
-      _flip: 1
-      _setDirection: 0
-      _directionAngle: 0
-      _hideWhenDeactive: 0
-      _keepAlive: 0
-      _sortingOrder: 0
-      _allyInfoKey: 
-      _activeType: 1
       _localPosition: {x: 2.84, y: -0.57, z: 0}
     - _characterKey: DecoStudent_1
       _uniqueKey: 
@@ -337,20 +323,6 @@ MonoBehaviour:
       _allyInfoKey: 
       _activeType: 1
       _localPosition: {x: 9.79, y: 0.74, z: 0}
-    - _characterKey: SukebanUziChan
-      _uniqueKey: 
-      _uniqueGroupKey: EnemyGroup
-      _startAction: AC_Entry
-      _startAIState: Entry_Peace
-      _flip: 1
-      _setDirection: 0
-      _directionAngle: 0
-      _hideWhenDeactive: 0
-      _keepAlive: 0
-      _sortingOrder: 0
-      _allyInfoKey: 
-      _activeType: 1
-      _localPosition: {x: 10.94, y: -0.32, z: 0}
     - _characterKey: DecoStudent_7
       _uniqueKey: 
       _uniqueGroupKey: 
@@ -404,14 +376,14 @@ MonoBehaviour:
     _triggerHeight: 1
     _triggerOffset: {x: 0, y: 0, z: 0}
   - _pointName: New Point 4
-    _stagePoint: {x: 31.99, y: 0, z: 0}
+    _stagePoint: {x: 34.19, y: 0, z: 0}
     _maxLimitedDistance: 0
     _verticalLimitedDistance: 0
     _horizontalLimitedDistance: 0
     _cameraZoomSize: 3
     _cameraZoomSpeed: 4
     _lerpCameraZoom: 0
-    _lockCameraInBound: 0
+    _lockCameraInBound: 1
     _cameraBoundToTrigger: 0
     _onEnterSequencerPath:
     - Stage_1_2_00_0.xml
@@ -445,6 +417,122 @@ MonoBehaviour:
       _allyInfoKey: Deco
       _activeType: 0
       _localPosition: {x: -1.31, y: 1.14, z: 0}
+    - _characterKey: YakisobaChan
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: Idle
+      _startAIState: Entry
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: Deco
+      _activeType: 1
+      _localPosition: {x: 47.46, y: 0, z: 0}
+    - _characterKey: DecoStudent_0
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: AC_Idle
+      _startAIState: Entry
+      _flip: 0
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: Deco
+      _activeType: 1
+      _localPosition: {x: 8.75, y: 1.27, z: 0}
+    - _characterKey: DecoStudent_1
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: AC_Idle
+      _startAIState: Entry
+      _flip: 0
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: Deco
+      _activeType: 1
+      _localPosition: {x: 15.23, y: -0.96, z: 0}
+    - _characterKey: DecoStudent_2
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: AC_Idle
+      _startAIState: Entry
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: Deco
+      _activeType: 1
+      _localPosition: {x: 22.93, y: 0.02, z: 0}
+    - _characterKey: DecoStudent_3
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: AC_Idle
+      _startAIState: Entry
+      _flip: 0
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: Deco
+      _activeType: 1
+      _localPosition: {x: 32.75, y: 0, z: 0}
+    - _characterKey: DecoStudent_7
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: AC_Idle
+      _startAIState: Entry
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: Deco
+      _activeType: 1
+      _localPosition: {x: 33.78, y: 0, z: 0}
+    _useTriggerBound: 0
+    _targetSearchIdentifier: 1
+    _triggerWidth: 1
+    _triggerHeight: 1
+    _triggerOffset: {x: 0, y: 0, z: 0}
+  - _pointName: New Point 5
+    _stagePoint: {x: 79.33, y: 0, z: 0}
+    _maxLimitedDistance: 0
+    _verticalLimitedDistance: 0
+    _horizontalLimitedDistance: 0
+    _cameraZoomSize: 3
+    _cameraZoomSpeed: 4
+    _lerpCameraZoom: 0
+    _lockCameraInBound: 0
+    _cameraBoundToTrigger: 0
+    _onEnterSequencerPath: []
+    _onExitSequencerPath: []
+    _characterSpawnData:
+    - _characterKey: SukebanKatanaChan
+      _uniqueKey: 
+      _uniqueGroupKey: 
+      _startAction: AC_Entry
+      _startAIState: Entry_Peace
+      _flip: 0
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: Sukeban
+      _activeType: 1
+      _localPosition: {x: 0.87, y: 0, z: 0}
     _useTriggerBound: 0
     _targetSearchIdentifier: 1
     _triggerWidth: 1
@@ -455,53 +543,20 @@ MonoBehaviour:
   _trackData:
   - _name: MainTrack
     _trackPointData:
-    - _easeType: 6
+    - _easeType: 0
       _point: {x: 0, y: 0}
       _bezierPoint: {x: 1, y: 0}
-      _speedToNextPoint: 7
+      _speedToNextPoint: 10
       _waitSecond: 0
-      _isLinearPath: 1
-    - _easeType: 6
-      _point: {x: 14.48, y: 0}
-      _bezierPoint: {x: 15.48, y: 0}
-      _speedToNextPoint: 7
-      _waitSecond: 0.5
-      _isLinearPath: 1
-    - _easeType: 6
-      _point: {x: 27.11, y: 0}
-      _bezierPoint: {x: 28.11, y: 0}
-      _speedToNextPoint: 7
-      _waitSecond: 0.5
-      _isLinearPath: 1
-    - _easeType: 5
-      _point: {x: 40.06, y: 0}
-      _bezierPoint: {x: 41.060005, y: 0}
-      _speedToNextPoint: 7
-      _waitSecond: 2
-      _isLinearPath: 1
+      _isLinearPath: 0
+    - _easeType: 3
+      _point: {x: 78.87, y: 0}
+      _bezierPoint: {x: 79.87, y: 0}
+      _speedToNextPoint: 15
+      _waitSecond: 2.5
+      _isLinearPath: 0
     _pointLengthArray:
-    - 14.5779705
-    - 12.742384
-    - 13.059391
-    _trackTotalLength: 40.379745
-    _startBlend: 1
-    _endBlend: 0
-  - _name: EndTrack
-    _trackPointData:
-    - _easeType: 2
-      _point: {x: 35.633, y: 0}
-      _bezierPoint: {x: 36.633, y: 0}
-      _speedToNextPoint: 2
-      _waitSecond: 0
-      _isLinearPath: 1
-    - _easeType: 0
-      _point: {x: 40.09, y: 0}
-      _bezierPoint: {x: 41.09, y: 0}
-      _speedToNextPoint: 2
-      _waitSecond: 1
-      _isLinearPath: 1
-    _pointLengthArray:
-    - 4.7474136
-    _trackTotalLength: 4.7474136
+    - 78.882385
+    _trackTotalLength: 78.882385
     _startBlend: 1
     _endBlend: 0
