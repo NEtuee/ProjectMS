@@ -37,7 +37,7 @@
 
     <AC_FloatingLoop MovementType="FrameEvent" DirectionType="Keep" RotationType="Torque">
         <Animation Preset="Sprites/Enemy/TutorialStudent/1_floating" XFlip="true" Duration="1">
-            <FrameEvent Type="Effect" StartTime="0" Path="Sprites/UI/Indicator/EnemyHead" FramePerSecond="2" Offset="0 0.3 0" DirectionOffset="False"/>
+            <FrameEvent Type="Effect" StartTime="0" Path="Sprites/UI/Indicator/EnemyHead" FramePerSecond="2" Offset="0 0.3 0" DirectionOffset="False" Attach="true"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_FloatingLoop"/>

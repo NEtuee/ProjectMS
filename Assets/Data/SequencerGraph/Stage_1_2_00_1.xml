@@ -5,31 +5,17 @@
         
         <SetCameraTarget UniqueKey="Player" CameraMode="TargetCenterMode"/>
         <SetCrossHair UniqueKey="Player"/>
-        <SetHideUI Hide="True"/>
-        <BlockInput Enable="True"/>
-        
-        <LetterBoxShow/>
 
+        <BlockInput Enable="True"/>
         <Fade/>
- 
     </InitializePhase>
 
     <UpdatePhase>
-        <WaitSecond Time="2.0"/>
+        <WaitSecond Time="0.5"/>
         <FadeIn Lambda="4.0"/>
 
-        <WaitSecond Time="1.0"/>
-        
-        <AIMove UniqueKey="Player" StartAction="AIMove_Loop" LoopAction="AIMove_Loop" EndAction="AIMove_End" EndPositionMarker="AkaneStart"/>
-
-        <CameraTrack TrackName="MainTrack"/>
-        <IsTrackEnd/>
-
-        <SetHideUI Hide="False"/>
+        <WaitSecond Time="0.5"/>
         <BlockInput Enable="False"/>
-
-        <LetterBoxHide/>
-
     </UpdatePhase>
     
 </SequencerGraph>

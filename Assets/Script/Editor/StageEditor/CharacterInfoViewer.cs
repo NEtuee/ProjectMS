@@ -100,7 +100,7 @@ public class CharacterInfoViewer : EditorWindow
                 if(item.Key != null && item.Value._displayName != null)
                     GUILayout.Label(item.Key + ": " + item.Value._displayName);
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 // ignore unity fuck-bug
             }
