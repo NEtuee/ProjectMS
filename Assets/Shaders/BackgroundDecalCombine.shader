@@ -140,7 +140,7 @@ Shader "Custom/BackgroundDecalCombine"
 				edgeDepth = edgeDepth > depthThreshold ? 1 : 0;	
 
 				float edgeNormal = sqrt(dot(normalFiniteDifference0, normalFiniteDifference0) + dot(normalFiniteDifference1, normalFiniteDifference1));
-				edgeNormal = edgeNormal > normalThreshold ? 1 : 0;
+				edgeNormal = edgeNormal > _NormalThreshold ? 1 : 0;
 
 				float finalEdgeDetection = max(edgeDepth, edgeNormal);
 
