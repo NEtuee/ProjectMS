@@ -297,23 +297,25 @@
 
 <!-- Skill : Tsuba -->
 
-    <AC_Tsuba MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+    <AC_Tsuba MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" DefenceType="Evade">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="2_skill/5_tsuba/1_entry" XFlip="true" Duration="0.3">
-            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
-            <FrameEvent Type="Attack" StartTime="0" EndTime="0.2" AttackPreset="Aoba_Tsuba" AttackType="Catch" CatchOffset="0.1 0 0">
+        <Animation Preset="0_default/3_hit" XFlip="true" Duration="1.25">
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountIncrease"/>
+        </Animation>
+        <Trigger Condition="EvadeSuccess">
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.1" AttackPreset="Aoba_Tsuba" AttackType="Catch" CatchOffset="0.1 0 0">
                 <OnCatch>
                     <FrameEvent Type="AudioPlay" StartTime="0" ID="2410" Attach="true"/>
-                    <FrameEvent Type="TeleportToTarget" StartTime="0"/>
+                    <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
+                    
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CatchedSet"/>
                     
                     <FrameEvent Type="ZoomEffect" Scale="-0.4"/>
                     <FrameEvent Type="StopUpdate" Time="0.15"/>
                 </OnCatch>
             </FrameEvent>
-        </Animation>
-
-        <Branch Condition="End" Execute="AC_Idle"/>
+        </Trigger>
+        <Branch Condition="End" Execute="AC_Tsuba"/>
     </AC_Tsuba>
 
     <AC_TsubaEntry MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
