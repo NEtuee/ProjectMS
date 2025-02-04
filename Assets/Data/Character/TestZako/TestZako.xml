@@ -2,7 +2,8 @@
 <ActionGraph Name="TestZako" DefaultAction="Idle" DefaultFramePerSecond="0.5">
 
     <Idle DirectionType="Keep" FlipType="Direction" DefenceType="Guard" DefenceAngle="360.0" DefenceDirectionType="Direction">
-        <Animation Path="Resources/Sprites/DummyPlayer/Idle/" StartFrame="0" EndFrame="1" FramePerSecond="0.5" XFlip="true">
+        <Animation Path="Resources/Sprites/DummyPlayer/Idle/" StartFrame="0" EndFrame="1" FramePerSecond="1" XFlip="true">
+            <ActionFlag StartTime="0.25" EndTime="0.75" Flags="OutlineGuard"/>
         </Animation>
 
         <Trigger Condition="DefenceSuccess">

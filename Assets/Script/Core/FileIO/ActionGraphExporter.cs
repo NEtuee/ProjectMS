@@ -661,6 +661,7 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
             List<ActionFrameEventBase> frameEventList = new List<ActionFrameEventBase>();
             List<ActionFrameEventBase> timeEventList = new List<ActionFrameEventBase>();
             List<MultiSelectAnimationData> multiSelectAnimationList = new List<MultiSelectAnimationData>();
+            List<FrameFlagData> frameFlagDataList = new List<FrameFlagData>();
             for(int i = 0; i < nodeList.Count; ++i)
             {
                 if(nodeList[i].Name == "FrameEvent")
@@ -684,6 +685,44 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
 
                     multiSelectAnimationList.Add(animationData);
                 }
+                else if(nodeList[i].Name == "ActionFlag")
+                {
+                    FrameFlagData frameFlagData = new FrameFlagData();
+                    frameFlagData._startTime = 0f;
+                    frameFlagData._endTime = 0f;
+                    frameFlagData._actionFlags = 0;
+
+                    XmlAttributeCollection actionFlagAttribute = nodeList[i].Attributes;
+                    for(int attrIndex = 0; attrIndex < actionFlagAttribute.Count; ++attrIndex)
+                    {
+                        string targetName = actionFlagAttribute[attrIndex].Name;
+                        string targetValue = getGlobalVariable(actionFlagAttribute[attrIndex].Value, _globalVariables);
+
+                        if(targetName == "StartTime")
+                        {
+                            frameFlagData._startTime = float.Parse(targetValue);
+                        }
+                        else if(targetName == "EndTime")
+                        {
+                            frameFlagData._endTime = float.Parse(targetValue);
+                        }
+                        else if(targetName == "Flags")
+                        {
+                            string[] flags = targetValue.Split(' ');
+                
+                            for(int f = 0; f < flags.Length; ++f)
+                            {
+                                frameFlagData._actionFlags |= (ulong)((ActionFlags)System.Enum.Parse(typeof(ActionFlags), flags[f]));
+                            }
+                        }
+                        else
+                        {
+                            DebugUtil.assert_fileOpen(false,"잘못된 ActionFlag Attribute입니다. : {0} [Line: {1}] [FileName: {2}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node),targetName, XMLScriptConverter.getLineFromXMLNode(node), filePath);
+                        }
+                    }
+
+                    frameFlagDataList.Add(frameFlagData);
+                }
                 else
                 {
                     DebugUtil.assert_fileOpen(false,"애니메이션 차일드로 들어올 수 없는 타입입니다. 오타인가요? : {0} [Line: {1}] [FileName: {2}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node),nodeList[i].Name, XMLScriptConverter.getLineFromXMLNode(node), filePath);
@@ -691,10 +730,12 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
                 }
             }
 
-            
-
             timeEventList.Sort((x,y)=>{
                 return x._startFrame.CompareTo(y._startFrame);
+            });
+
+            frameFlagDataList.Sort((x,y)=>{
+                return x._startTime.CompareTo(y._startTime);
             });
 
             if(playData._frameEventData == null || playData._frameEventData.Length == 0)
@@ -712,6 +753,8 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
 
             playData._multiSelectAnimationDataCount = multiSelectAnimationList.Count;
             playData._multiSelectAnimationData = multiSelectAnimationList.ToArray();
+
+            playData._frameFlagData = frameFlagDataList.ToArray();
         }
 
         return playData;

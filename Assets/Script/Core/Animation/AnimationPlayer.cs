@@ -12,6 +12,7 @@ public class AnimationPlayDataInfo : SerializableDataType
     public ActionFrameEventBase[]       _frameEventData = null;
     public ActionFrameEventBase[]       _timeEventData = null;
 
+    public FrameFlagData[]              _frameFlagData = null;
     public MultiSelectAnimationData[]   _multiSelectAnimationData = null;
 
     public AnimationTranslationPresetData _translationPresetData = null;
@@ -71,7 +72,6 @@ public class AnimationPlayDataInfo : SerializableDataType
         binaryWriter.Write(_isAngleBaseAnimation);
         binaryWriter.Write(_multiSelectConditionUpdateOnce);
         _flipState.serialize(ref binaryWriter);
-
         binaryWriter.Write(_customPreset != null);
 
         if(_frameEventData != null)
@@ -101,6 +101,8 @@ public class AnimationPlayDataInfo : SerializableDataType
         binaryWriter.Write(_translationPresetData == null ? "" : _translationPresetData.getName());
         binaryWriter.Write(_rotationPresetData == null ? "" : _rotationPresetData.getName());
         binaryWriter.Write(_scalePresetData == null ? "" : _scalePresetData.getName());
+
+        BinaryHelper.writeArrayStructure<FrameFlagData>(ref binaryWriter, _frameFlagData);
     }
 #endif
 
@@ -199,6 +201,32 @@ public class AnimationPlayDataInfo : SerializableDataType
             AnimationTranslationPreset scalePreset = ResourceContainerEx.Instance().GetScriptableObject("Preset/AnimationTranslationPreset") as AnimationTranslationPreset;
             _translationPresetData = scalePreset.getPresetData(translationPresetName);
         }
+
+        _frameFlagData = BinaryHelper.readArrayStructure<FrameFlagData>(ref binaryReader);
+    }
+}
+
+public struct FrameFlagData : SerializableStructure
+{
+    public float _startTime;
+    public float _endTime;
+
+    public ulong _actionFlags;
+
+
+#if UNITY_EDITOR
+	public void serialize(ref BinaryWriter binaryWriter)
+    {
+        binaryWriter.Write(_startTime);
+        binaryWriter.Write(_endTime);
+        binaryWriter.Write(_actionFlags);
+    }
+#endif
+	public void deserialize(ref BinaryReader binaryReader)
+    {
+        _startTime = binaryReader.ReadSingle();
+        _endTime = binaryReader.ReadSingle();
+        _actionFlags = binaryReader.ReadUInt64();
     }
 }
 
@@ -277,9 +305,14 @@ public class AnimationPlayer
 
     private bool _multiSelectAnimationUpdated = false;
 
+    private ulong _currentActionFlags = 0;
+
     private int _currentAnimationFrameEventIndex;
     private int _currentFrameEventIndex;
     private int _currentTimeEventIndex;
+
+    private int _currentActionFlagIndex = 0;
+
 
     private System.Action _onAnimationEnd = null;
 
@@ -299,6 +332,7 @@ public class AnimationPlayer
         _currentAnimationFrameEventIndex = 0;
         _currentFrameEventIndex = 0;
         _currentTimeEventIndex = 0;
+        _currentActionFlagIndex = 0;
         _onAnimationEnd = null;
         _frameEventProcessList.Clear();
     }
@@ -317,7 +351,9 @@ public class AnimationPlayer
             _currentFrameEventIndex = 0;
             _currentAnimationFrameEventIndex = 0;
         }
-            
+
+        processFrameFlag(_currentAnimationPlayData);
+
         if(targetEntity != null)
         {
             processFrameEventContinue();
@@ -485,6 +521,35 @@ public class AnimationPlayer
         }
     }
 
+    public void processFrameFlag(AnimationPlayDataInfo playData)
+    {
+        _currentActionFlags = 0;
+
+        if(playData == null || playData._frameFlagData == null)
+            return;
+
+        float currentTotalTime = _animationTimeProcessor.getAnimationTotalPlayTime();
+
+        for(int i = 0; i < _currentActionFlagIndex; ++i)
+        {
+            if(playData._frameFlagData[i]._endTime >= currentTotalTime)
+                _currentActionFlags |= playData._frameFlagData[i]._actionFlags;
+        }
+
+        for(int i = _currentActionFlagIndex; i < playData._frameFlagData.Length; ++i)
+        {
+            if(MathEx.equals(playData._frameFlagData[i]._startTime, currentTotalTime,float.Epsilon) == true || playData._frameFlagData[i]._startTime < currentTotalTime)
+            {
+                _currentActionFlags |= playData._frameFlagData[i]._actionFlags;
+                _currentActionFlagIndex++;
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+
     private void setCurrentFrameEventIndex(AnimationPlayDataInfo playData)
     {
         float currentFrame = _animationTimeProcessor.getCurrentFrame();
@@ -504,6 +569,23 @@ public class AnimationPlayer
         }
 
         _currentAnimationFrameEventIndex = 0;
+    }
+
+    private void setCurrentFrameFlagIndex(AnimationPlayDataInfo playData)
+    {
+        if(playData == null || playData._frameFlagData == null)
+        {
+            _currentActionFlagIndex = 0;
+            return;
+        }
+        
+        float currentTime = _animationTimeProcessor.getAnimationTotalPlayTime();
+        for(int i = 0; i < playData._frameFlagData.Length; ++i)
+        {
+            _currentActionFlagIndex = i;
+            if(playData._frameFlagData[i]._startTime >= currentTime)
+                break;
+        }
     }
 
     public void changeAnimation(AnimationPlayDataInfo playData)
@@ -560,6 +642,7 @@ public class AnimationPlayer
         _frameEventProcessList.Clear();
 
         setCurrentFrameEventIndex(playData);
+        setCurrentFrameFlagIndex(playData);
     }
 
     public void changeAnimationByCustomPreset(string path)
@@ -633,6 +716,8 @@ public class AnimationPlayer
 
     public int getCurrentIndex() {return _animationTimeProcessor.getCurrentIndex();}
     public int getEndIndex() {return _animationTimeProcessor.getEndIndex();}
+
+    public ulong getCurrentActionFlags() {return _currentActionFlags;}
 
     public MoveValuePerFrameFromTimeDesc getMoveValuePerFrameFromTimeDesc() {return _animationTimeProcessor.getMoveValuePerFrameFromTimeDesc();}
     public AnimationTimeProcessor getTimeProcessor(){return _animationTimeProcessor;}

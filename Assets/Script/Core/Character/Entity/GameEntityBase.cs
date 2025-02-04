@@ -87,7 +87,7 @@ public class GameEntityBase : SequencerObjectBase
     private float               _rotateSlotRadius = 0f;
     private float               _currentRotateSlotAngle = 0f;
     private float               _additionalMoveScale = 1f;
-
+    
     private bool                _updateDirection = true;
     private bool                _updateFlipState = true;
 
@@ -526,6 +526,8 @@ public class GameEntityBase : SequencerObjectBase
             _physicsBody.progress(deltaTime);
 
             //action,movementGraph 바뀌는 시점
+
+            ulong prevAnimationFlags = _actionGraph.getCurrentAnimationFlags();
             actionChanged = _actionGraph.progress(deltaTime);
             if(actionChanged)
             {
@@ -556,36 +558,61 @@ public class GameEntityBase : SequencerObjectBase
             _actionGraph.getCurrentAnimationTranslation(out _localSpritePosition);
 
             _spriteRenderer.sprite = _actionGraph.getCurrentSprite(_actionGraph.getCurrentRotationType() != RotationType.AlwaysRight ? (_spriteRotation * _actionStartRotation).eulerAngles.z : MathEx.directionToAngle(_direction));
+            
+            _spriteRenderer.flipX = _flipState.xFlip;
+            _spriteRenderer.flipY = _flipState.yFlip;
+
+            ulong currentAnimationFlags = _actionGraph.getCurrentAnimationFlags();
+
+            if(actionChanged)
+            {
+                if(_actionGraph.isPrevOutlineAction() == false && _actionGraph.isCurrentOutlineAction())
+                {
+                    _outlineAppearTimeProcessItem.initialize(true);
+                    _outlineSpriteObject.SetActive(true);
+                    _outlineMaterial.SetColor("_Color", _actionGraph.getOutlineColor());
+                    updateOutline(0f);
+                }
+                else if(_actionGraph.isPrevOutlineAction() && _actionGraph.isCurrentOutlineAction())
+                {
+                    _outlineMaterial.SetColor("_Color", _actionGraph.getOutlineColor());
+                }
+                else if(_actionGraph.isPrevOutlineAction() && _actionGraph.isCurrentOutlineAction() == false)
+                {
+                    _outlineSpriteObject.SetActive(false);
+                }
+            }
+
+            {
+                ulong outlineFlags = ((ulong)ActionFlags.OutlineGuard) | ((ulong)ActionFlags.OutlineSuperArmor);
+                if(((prevAnimationFlags ^ currentAnimationFlags) & outlineFlags) != 0)
+                {
+                    if((prevAnimationFlags & outlineFlags) == 0 && (currentAnimationFlags & outlineFlags) != 0)
+                    {
+                        _outlineAppearTimeProcessItem.initialize(true);
+                        _outlineSpriteObject.SetActive(true);
+                        _outlineMaterial.SetColor("_Color", _actionGraph.getOutlineColor(
+                            (currentAnimationFlags & (ulong)ActionFlags.OutlineGuard) != 0 ? ActionFlags.OutlineGuard : ActionFlags.OutlineSuperArmor)
+                        );
+
+                        updateOutline(0f);
+                    }
+                    else if((prevAnimationFlags & outlineFlags) != 0 && (currentAnimationFlags & outlineFlags) == 0)
+                    {
+                        _outlineSpriteObject.SetActive(false);
+                    }
+                }
+            }
 
         }
-        _spriteRenderer.flipX = _flipState.xFlip;
-        _spriteRenderer.flipY = _flipState.yFlip;
-
+        
         if(_statusInfo.isDead())
             _deadEventDelegate?.Invoke(this);
 
         _deadEventDelegate = null;
         laserEffectCheck();
 
-        if(actionChanged)
-        {
-            if(_actionGraph.isPrevOutlineAction() == false && _actionGraph.isCurrentOutlineAction())
-            {
-                _outlineAppearTimeProcessItem.initialize(true);
-                _outlineSpriteObject.SetActive(true);
-                _outlineMaterial.SetColor("_Color", _actionGraph.getOutlineColor());
-                updateOutline(0f);
-            }
-            else if(_actionGraph.isPrevOutlineAction() && _actionGraph.isCurrentOutlineAction())
-            {
-                _outlineMaterial.SetColor("_Color", _actionGraph.getOutlineColor());
-            }
-            else if(_actionGraph.isPrevOutlineAction() && _actionGraph.isCurrentOutlineAction() == false)
-            {
-                _outlineSpriteObject.SetActive(false);
-            }
-        }
-
+        
         _collisionInfo.updateCollisionInfo(transform.position,getDirection());
 #if UNITY_EDITOR
         updateDebug();

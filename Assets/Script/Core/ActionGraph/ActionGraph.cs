@@ -870,11 +870,24 @@ public class ActionGraph
     public UnityEngine.Color getOutlineColor()
     {
         if(checkCurrentActionFlag(ActionFlags.OutlineGuard))
-            return new UnityEngine.Color(0.223f, 0.6f, 0.862f, 1.0f);
+            return getOutlineColor(ActionFlags.OutlineGuard);
         else if(checkCurrentActionFlag(ActionFlags.OutlineSuperArmor))
-            return new UnityEngine.Color(1.0f, 0.47f, 0.0f, 1.0f);
-        else
-            return UnityEngine.Color.white;
+            return getOutlineColor(ActionFlags.OutlineSuperArmor);
+        
+        return UnityEngine.Color.white;
+    }
+
+    public UnityEngine.Color getOutlineColor(ActionFlags flags)
+    {
+        switch(flags)
+        {
+            case ActionFlags.OutlineGuard:
+                return new UnityEngine.Color(0.223f, 0.6f, 0.862f, 1.0f);
+            case ActionFlags.OutlineSuperArmor:
+                return new UnityEngine.Color(1.0f, 0.47f, 0.0f, 1.0f);
+        }
+
+        return UnityEngine.Color.white;
     }
 
 
@@ -926,6 +939,7 @@ public class ActionGraph
     public bool getCurrentAnimationScale(out UnityEngine.Vector3 outScale) {return _animationPlayer.getCurrentAnimationScale(out outScale);}
     public bool getCurrentAnimationTranslation(out UnityEngine.Vector3 outTranslation) { return _animationPlayer.getCurrentAnimationTranslation(out outTranslation); }
     public FlipState getCurrentFlipState() {return _animationPlayer.getCurrentFlipState();}
+    public ulong getCurrentAnimationFlags() {return _animationPlayer.getCurrentActionFlags();}
     public FlipType getCurrentFlipType() {return getCurrentAction()._flipType;}
     public MovementBase.MovementType getCurrentMovement() {return getCurrentAction()._movementType;}
 
