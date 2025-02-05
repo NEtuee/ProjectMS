@@ -84,7 +84,7 @@
     <AC_SlashReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineSuperArmor">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/1_slash/1_attackReady" XFlip="true" Duration="0.48">
-            <FrameEvent Type="Movement" StartTime="0" Friction="10" MaxVelocity="5.0" Velocity="0.0" Speed="5.0"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="0.0" MaxVelocity="5.0" Speed="15.0"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
     
