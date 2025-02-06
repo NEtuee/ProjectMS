@@ -196,7 +196,7 @@ MonoBehaviour:
       _uniqueKey: HideEnemy
       _uniqueGroupKey: EnemyGroup
       _startAction: AC_Entry
-      _startAIState: Entry_Peace
+      _startAIState: Entry_Battle
       _flip: 1
       _setDirection: 0
       _directionAngle: 0
@@ -210,7 +210,7 @@ MonoBehaviour:
       _uniqueKey: 
       _uniqueGroupKey: EnemyGroup
       _startAction: AC_Entry
-      _startAIState: Entry_Peace
+      _startAIState: Entry_Battle
       _flip: 1
       _setDirection: 0
       _directionAngle: 0
@@ -280,7 +280,7 @@ MonoBehaviour:
     _targetSearchIdentifier: 1
     _triggerWidth: 7.6
     _triggerHeight: 6.37
-    _triggerOffset: {x: 0.16, y: 0, z: 0}
+    _triggerOffset: {x: 2.04, y: 0, z: 0}
   - _pointName: New Point 2
     _stagePoint: {x: 17.23, y: 0, z: 0}
     _maxLimitedDistance: 0
@@ -367,16 +367,58 @@ MonoBehaviour:
     _lockCameraInBound: 0
     _cameraBoundToTrigger: 0
     _onEnterSequencerPath:
-    - Stage_1_2_1_1.xml
+    - BlockPointByEnemyGroup.xml
     _onExitSequencerPath: []
-    _characterSpawnData: []
+    _characterSpawnData:
+    - _characterKey: SukebanKatanaChan
+      _uniqueKey: 
+      _uniqueGroupKey: EnemyGroup
+      _startAction: AC_Entry
+      _startAIState: Entry_Peace
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: Sukeban
+      _activeType: 1
+      _localPosition: {x: 10.18, y: -0.65, z: 0}
+    - _characterKey: SukebanKatanaChan
+      _uniqueKey: 
+      _uniqueGroupKey: EnemyGroup
+      _startAction: AC_Entry
+      _startAIState: Entry_Peace
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: Sukeban
+      _activeType: 1
+      _localPosition: {x: 8.3, y: 0.79, z: 0}
+    - _characterKey: SukebanKatanaChan
+      _uniqueKey: 
+      _uniqueGroupKey: EnemyGroup
+      _startAction: AC_Entry
+      _startAIState: Entry_Peace
+      _flip: 1
+      _setDirection: 0
+      _directionAngle: 0
+      _hideWhenDeactive: 0
+      _keepAlive: 0
+      _sortingOrder: 0
+      _allyInfoKey: Sukeban
+      _activeType: 1
+      _localPosition: {x: 5.72, y: -0.93, z: 0}
     _useTriggerBound: 0
     _targetSearchIdentifier: 1
     _triggerWidth: 1
     _triggerHeight: 1
     _triggerOffset: {x: 0, y: 0, z: 0}
   - _pointName: New Point 4
-    _stagePoint: {x: 34.19, y: 0, z: 0}
+    _stagePoint: {x: 36.13, y: 0, z: 0}
     _maxLimitedDistance: 0
     _verticalLimitedDistance: 0
     _horizontalLimitedDistance: 0
@@ -546,13 +588,13 @@ MonoBehaviour:
     - _easeType: 0
       _point: {x: 0, y: 0}
       _bezierPoint: {x: 1, y: 0}
-      _speedToNextPoint: 10
+      _speedToNextPoint: 15
       _waitSecond: 0
       _isLinearPath: 0
     - _easeType: 3
       _point: {x: 78.87, y: 0}
       _bezierPoint: {x: 79.87, y: 0}
-      _speedToNextPoint: 15
+      _speedToNextPoint: 17
       _waitSecond: 2.5
       _isLinearPath: 0
     _pointLengthArray:
