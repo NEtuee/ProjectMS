@@ -9,7 +9,7 @@
 
         <SetCameraPosition TargetPositionMarker="CameraStart"/>
 
-        <AudioParameter Key="9006" ParameterID="90061" ParameterValue="2" ParameterType="Local"/>
+        <AudioPlay ID="5004" Switch="True"/>
     </InitializePhase>
 
     <UpdatePhase>
@@ -234,7 +234,8 @@
         <TaskFence TaskName="AIMove"/>
 
         <WaitSecond Time="1.0"/>
-        <AudioParameter Key="9006" ParameterID="90061" ParameterValue="1" ParameterType="Local"/>
+
+        <StopSwitch Switch="Audio" Key="5004"/>
 
         <SetCameraTarget UniqueKey="Player" CameraMode="TargetCenterMode"/>
         <BlockInput Enable="False"/>
