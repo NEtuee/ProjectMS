@@ -1,0 +1,69 @@
+<AIPackage Name="NajimiTrippleRushPackage" DefaultState="AI_Rush_A">
+
+    <AIState>
+        <AI_Rush_A UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+            <Event_OnExecute>    
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="AC_Rush"/>
+            </Event_OnExecute>
+            
+            <Event_OnFrame> 
+                <AIEvent Type="SetDirectionToTarget"/>
+            </Event_OnFrame>
+
+            <Branch Condition="End || getFrameTag_Cancel" Execute="AI_Dodge_A"/>
+        </AI_Rush_A>
+        <AI_Dodge_A UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Condition="AngleDirectionToTarget < 180" Type="SetDirectionToTarget" Angle="335"/>
+                <AIEvent Condition="AngleDirectionToTarget >= 180" Type="SetDirectionToTarget" Angle="25"/>
+                <AIEvent Type="SetAction" Action="AC_RushDash"/>
+            </Event_OnExecute>
+
+            <Branch Condition="End || getFrameTag_Cancel" Execute="AI_Rush_B"/>
+        </AI_Dodge_A>
+
+        <AI_Rush_B UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+            <Event_OnExecute>    
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="AC_Rush"/>
+            </Event_OnExecute>
+            
+            <Event_OnFrame> 
+                <AIEvent Type="SetDirectionToTarget"/>
+            </Event_OnFrame>
+
+            <Branch Condition="End || getFrameTag_Cancel" Execute="AI_Dodge_B"/>
+        </AI_Rush_B>
+        <AI_Dodge_B UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Condition="AngleDirectionToTarget < 180" Type="SetDirectionToTarget" Angle="335"/>
+                <AIEvent Condition="AngleDirectionToTarget >= 180" Type="SetDirectionToTarget" Angle="25"/>
+                <AIEvent Type="SetAction" Action="AC_RushDash"/>
+            </Event_OnExecute>
+
+            <Branch Condition="End || getFrameTag_Cancel" Execute="AI_Rush_C"/>
+        </AI_Dodge_B>
+
+        <AI_Rush_C UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+            <Event_OnExecute>    
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="AC_Rush"/>
+            </Event_OnExecute>
+            
+            <Event_OnFrame> 
+                <AIEvent Type="SetDirectionToTarget"/>
+            </Event_OnFrame>
+
+            <Branch Condition="End" Execute="TerminatePackage"/>
+        </AI_Rush_C>
+
+        <TerminatePackage>
+            <Event_OnExecute>
+                <AIEvent Type="TerminatePackage"/>
+            </Event_OnExecute>
+        </TerminatePackage>
+
+    </AIState>
+
+</AIPackage>

@@ -9,7 +9,7 @@
         <AI_DodgeUp UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget" Angle="150"/>
-                <AIEvent Type="SetAction" Action="AC_Dash"/>
+                <AIEvent Type="SetAction" Action="AC_Dodge"/>
             </Event_OnExecute>
 
             <Branch Condition="End" Execute="TerminatePackage"/>
@@ -18,7 +18,7 @@
         <AI_DodgeDown UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget" Angle="210"/>
-                <AIEvent Type="SetAction" Action="AC_Dash"/>
+                <AIEvent Type="SetAction" Action="AC_Dodge"/>
             </Event_OnExecute>
 
             <Branch Condition="End" Execute="TerminatePackage"/>

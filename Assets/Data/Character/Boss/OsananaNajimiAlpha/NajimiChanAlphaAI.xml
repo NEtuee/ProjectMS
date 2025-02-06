@@ -10,7 +10,10 @@
     <Include Path="Assets/Data/AILibrary/Package/CommonRunawayPackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonDashPackage.xml"/>
 
+    <Include Path="Assets/Data/Character/Boss/OsananaNajimiAlpha/NajimiHeadbuttPackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/OsananaNajimiAlpha/NajimiRushPackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/OsananaNajimiAlpha/NajimiTrippleRushPackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/OsananaNajimiAlpha/NajimiDashPackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/OsananaNajimiAlpha/NajimiDodgePackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/OsananaNajimiAlpha/NajimiAttackReadyPackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/OsananaNajimiAlpha/NajimiPitchingPackage.xml"/>
@@ -79,6 +82,7 @@
         <!-- 원거리 분기 -->
         <Branch Condition="(TargetDistance >= gv_StdDistance) && aiGraphCoolTime_Call && (customValue_IsHitten >= 1.0)" Execute="Call"/>
         <Branch Condition="(TargetDistance >= gv_StdDistance) && aiGraphCoolTime_Pitching && (customValue_IsHitten >= 1.0)" Execute="Pitching"/>
+        <Branch Condition="(TargetDistance >= gv_StdDistance) && (customValue_IsHitten >= 1.0)" Execute="DashRushReady"/>
         <!-- 근거리 분기 -->
         <Branch Condition="(TargetDistance < gv_StdDistance)" Execute="Chase"/>
         <!-- <Branch Condition="(TargetDistance < gv_StdDistance)" Execute="Rush"/> --> <!-- 난이도 문제 -->
@@ -101,9 +105,8 @@
     <Dodge Package="NajimiDodgePackage">      
         <UseBranchSet Name="IsPlayerDead"/>  
         <!-- 대시 공격 -->
-        <Branch Weight="NajimiDodgeAtk^DashAttack" Condition="CurrentPackageEnd" Execute="DashRushReady"/>
-        <!-- 거리 기반 공격 -->
-        <Branch Weight="NajimiDodgeAtk^DistAttack" Condition="CurrentPackageEnd" Execute="JudgeDistance"/>
+        <Branch Weight="RandBoolean^True" Condition="CurrentPackageEnd" Execute="DashRushReady"/>
+        <Branch Condition="CurrentPackageEnd" Execute="JudgeDistance"/>
     </Dodge>
 
     <Chase Package="CommonChasePackage">
@@ -127,7 +130,7 @@
         <Branch Condition="CurrentPackageEnd" Execute="DashRush"/>
     </DashRushReady>
     
-    <DashRush Package="CommonDashPackage">
+    <DashRush Package="NajimiDashPackage">
         <UseBranchSet Name="IsPlayerDead"/>
         <Branch Condition="(gv_najimiRushRange >= TargetDistance)" Execute="Rush"/>
         <Branch Condition="CurrentPackageEnd" Execute="Rush"/>
@@ -144,6 +147,13 @@
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </Rush>
+
+    <TrippleRush Package="NajimiTrippleRushPackage">
+        <UseBranchSet Name="IsPlayerDead"/>
+        <Branch Condition="AttackCatchTarget" Execute="RushSuccess"/>
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+    </TrippleRush>
 
     <RushSuccess Package="NajimiRushPackage" EntryNode="AI_RushSuccess">
         <UseBranchSet Name="IsPlayerDead"/>
@@ -169,6 +179,12 @@
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </Call>
+
+    <Headbutt Package="NajimiHeadbuttPackage" CoolTime="20">
+        <UseBranchSet Name="IsPlayerDead"/>
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+    </Headbutt>
 
     <GuardBroken Package="CommonGuardBrokenPackage">
         <UseBranchSet Name="IsPlayerDead"/>

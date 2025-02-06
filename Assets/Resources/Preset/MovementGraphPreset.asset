@@ -406,7 +406,7 @@ MonoBehaviour:
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
-      m_RotationOrder: 0
+      m_RotationOrder: 4
     _magnification: 1
     _directionAngle: 0
   - _name: AttackSuccess
@@ -469,7 +469,7 @@ MonoBehaviour:
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
-      m_RotationOrder: 0
+      m_RotationOrder: 4
     _magnification: 0.2
     _directionAngle: 0
   - _name: AtrariRush
@@ -514,7 +514,7 @@ MonoBehaviour:
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
-      m_RotationOrder: 0
+      m_RotationOrder: 4
     _magnification: 4
     _directionAngle: 0
   - _name: Aoba_Dash
@@ -550,7 +550,7 @@ MonoBehaviour:
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
-      m_RotationOrder: 0
+      m_RotationOrder: 4
     _magnification: 3
     _directionAngle: 0
   - _name: Najimi_Dash
@@ -586,9 +586,144 @@ MonoBehaviour:
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
+      m_RotationOrder: 4
+    _magnification: 2
+    _directionAngle: 0
+  - _name: Najimi_Dodge
+    _movementCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 2
+        outSlope: 2
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 0.5006292
+        value: 0.90217775
+        inSlope: 0.5740008
+        outSlope: 0.5740008
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.07427019
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    _magnification: 3.3
+    _directionAngle: 0
+  - _name: Najimi_Headbutt
+    _movementCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 2
+        outSlope: 2
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 0.5006292
+        value: 0.90217775
+        inSlope: 0.5740008
+        outSlope: 0.5740008
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.07427019
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    _magnification: 3
+    _directionAngle: 0
+  - _name: Najimi_Reflected
+    _movementCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 2
+        outSlope: 2
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 0.5006292
+        value: 0.90217775
+        inSlope: 0.5740008
+        outSlope: 0.5740008
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.07427019
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    _magnification: 3
+    _directionAngle: 45
+  - _name: Reito_RotateStep_R
+    _movementCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 2
+        outSlope: 2
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 0.4
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
       m_RotationOrder: 0
     _magnification: 4
-    _directionAngle: 0
+    _directionAngle: 90
   - _name: SystemChase
     _movementCurve:
       serializedVersion: 2
@@ -613,7 +748,7 @@ MonoBehaviour:
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
-      m_RotationOrder: 0
+      m_RotationOrder: 4
     _magnification: 4
     _directionAngle: 0
   - _name: Najimi_BatonSlash
@@ -640,7 +775,7 @@ MonoBehaviour:
         outWeight: 0.33333334
       m_PreInfinity: 2
       m_PostInfinity: 2
-      m_RotationOrder: 0
+      m_RotationOrder: 4
     _magnification: 4.5
     _directionAngle: 0
   - _name: Aoba_Raisen
@@ -667,7 +802,7 @@ MonoBehaviour:
         outWeight: 0.33333334
       m_PreInfinity: 2
       m_PostInfinity: 2
-      m_RotationOrder: 0
+      m_RotationOrder: 4
     _magnification: 4.5
     _directionAngle: 0
   - _name: Aoba_Choraisen
@@ -694,7 +829,7 @@ MonoBehaviour:
         outWeight: 0.33333334
       m_PreInfinity: 2
       m_PostInfinity: 2
-      m_RotationOrder: 0
+      m_RotationOrder: 4
     _magnification: 6
     _directionAngle: 0
   - _name: MissileLaunched
@@ -721,7 +856,7 @@ MonoBehaviour:
         outWeight: 0.33333334
       m_PreInfinity: 2
       m_PostInfinity: 2
-      m_RotationOrder: 0
+      m_RotationOrder: 4
     _magnification: 2
     _directionAngle: 0
   - _name: Reito_Dash
@@ -757,7 +892,7 @@ MonoBehaviour:
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
-      m_RotationOrder: 0
+      m_RotationOrder: 4
     _magnification: 4
     _directionAngle: 0
   - _name: Reito_LinearDash
@@ -784,7 +919,7 @@ MonoBehaviour:
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
-      m_RotationOrder: 0
+      m_RotationOrder: 4
     _magnification: 4
     _directionAngle: 0
   - _name: Reito_Dodge
@@ -820,7 +955,7 @@ MonoBehaviour:
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
-      m_RotationOrder: 0
+      m_RotationOrder: 4
     _magnification: 4
     _directionAngle: 0
   - _name: Aoba_Dodge
@@ -856,7 +991,7 @@ MonoBehaviour:
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
-      m_RotationOrder: 0
+      m_RotationOrder: 4
     _magnification: 3
     _directionAngle: 0
   - _name: Aoba_ShortDodge
@@ -892,7 +1027,7 @@ MonoBehaviour:
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
-      m_RotationOrder: 0
+      m_RotationOrder: 4
     _magnification: 1.2
     _directionAngle: 180
   - _name: Aoba_Charge
@@ -937,7 +1072,7 @@ MonoBehaviour:
         outWeight: 0.33333334
       m_PreInfinity: 2
       m_PostInfinity: 2
-      m_RotationOrder: 0
+      m_RotationOrder: 4
     _magnification: 2.7
     _directionAngle: 0
   - _name: Aoba_EmpGrenade
@@ -964,7 +1099,7 @@ MonoBehaviour:
         outWeight: 0.33333334
       m_PreInfinity: 2
       m_PostInfinity: 2
-      m_RotationOrder: 0
+      m_RotationOrder: 4
     _magnification: 4
     _directionAngle: 0
   - _name: Aoba_Storm
@@ -1000,7 +1135,7 @@ MonoBehaviour:
         outWeight: 0.33333334
       m_PreInfinity: 2
       m_PostInfinity: 2
-      m_RotationOrder: 0
+      m_RotationOrder: 4
     _magnification: 4
     _directionAngle: 0
   - _name: TEST
@@ -1027,7 +1162,7 @@ MonoBehaviour:
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
-      m_RotationOrder: 0
+      m_RotationOrder: 4
     _magnification: 1
     _directionAngle: 0
   - _name: Tate_Dodge
@@ -1099,7 +1234,7 @@ MonoBehaviour:
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
-      m_RotationOrder: 0
+      m_RotationOrder: 4
     _magnification: 3
     _directionAngle: 0
   - _name: SukebanElite_Dodge
@@ -1135,7 +1270,7 @@ MonoBehaviour:
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
-      m_RotationOrder: 0
+      m_RotationOrder: 4
     _magnification: -2.6
     _directionAngle: 0
   - _name: Sequencer_Curve
@@ -1234,7 +1369,7 @@ MonoBehaviour:
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
-      m_RotationOrder: 0
+      m_RotationOrder: 4
     _magnification: 2.5
     _directionAngle: 0
   - _name: MoveEnd

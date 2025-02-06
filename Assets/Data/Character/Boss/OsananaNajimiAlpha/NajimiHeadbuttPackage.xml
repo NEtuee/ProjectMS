@@ -1,0 +1,84 @@
+<AIPackage Name="NajimiHeadbuttPackage" DefaultState="AI_HeadbuttReady">
+
+    <AIState>
+        <AI_HeadbuttReady UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+            <Event_OnExecute>    
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="AC_HeadbuttReady"/>
+            </Event_OnExecute>
+            
+            <Event_OnFrame> 
+                <AIEvent Type="SetDirectionToTarget"/>
+            </Event_OnFrame>
+
+            <Branch Condition="End && (getStat_RushCount >= 3.0)" Execute="TerminatePackage"/>
+            <Branch Condition="End" Execute="AI_Headbutt"/>
+        </AI_HeadbuttReady>
+        <AI_Headbutt UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+            <Event_OnExecute>    
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="AC_Headbutt"/>
+            </Event_OnExecute>
+            
+            <Event_OnUpdate> 
+                <AIEvent Type="SetDirectionToTarget"/>
+            </Event_OnUpdate>
+
+            <Branch Weight="RandBoolean^True" Condition="AttackSuccess" Execute="AI_HeadbuttReflected_A"/>
+            <Branch Weight="RandBoolean^False" Condition="AttackSuccess" Execute="AI_HeadbuttReflected_B"/>
+            <Branch Condition="End" Execute="AI_HeadbuttTurn"/>
+        </AI_Headbutt>
+
+        <AI_HeadbuttReflected_A UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget" Angle="135"/>
+                <AIEvent Type="SetAction" Action="AC_HeadbuttReflected"/>
+            </Event_OnExecute>
+
+            <Branch Condition="End" Execute="AI_HeadbuttTurn"/>
+        </AI_HeadbuttReflected_A>
+        <AI_HeadbuttReflected_B UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget" Angle="315"/>
+                <AIEvent Type="SetAction" Action="AC_HeadbuttReflected"/>
+            </Event_OnExecute>
+
+            <Branch Condition="End" Execute="AI_HeadbuttTurn"/>
+        </AI_HeadbuttReflected_B>
+
+        <AI_HeadbuttTurn UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget" Speed="300"/>
+                <AIEvent Type="SetAction" Action="AC_HeadbuttTurn"/>
+            </Event_OnExecute>
+
+            <Event_OnFrame>
+                <AIEvent Type="SetDirectionToTarget" Speed="300"/>
+            </Event_OnFrame>
+
+            <Branch Condition="End" Execute="AI_HeadbuttTurn_Ready"/>
+        </AI_HeadbuttTurn>
+        <AI_HeadbuttTurn_Ready UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget" Speed="300"/>
+                <AIEvent Type="SetAction" Action="AC_HeadbuttTurn"/>
+            </Event_OnExecute>
+
+            <Event_OnFrame>
+                <AIEvent Type="SetDirectionToTarget" Speed="300"/>
+            </Event_OnFrame>
+
+            <Branch Condition="(getStat_RushCount >= 3.0)" Execute="TerminatePackage"/>
+            <Branch Condition="(TargetDistance <= 1.6)" Execute="AI_Headbutt"/>
+            <Branch Condition="(PackageExecutedTime >= 3.0)" Execute="TerminatePackage"/>
+        </AI_HeadbuttTurn_Ready>
+
+        <TerminatePackage>
+            <Event_OnExecute>
+                <AIEvent Type="TerminatePackage"/>
+            </Event_OnExecute>
+        </TerminatePackage>
+
+    </AIState>
+
+</AIPackage>
