@@ -9,6 +9,22 @@
         <Branch Condition="End == true" Execute="Idle"/>
     </Idle>
 
+    <Pointing MovementType="Empty" DirectionType="Keep" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="Pointing" XFlip="true" Duration="1" TranslationPreset="Idle">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Pointing"/>
+    </Pointing>
+
+    <Teasing MovementType="Empty" DirectionType="Keep" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="Teasing" XFlip="true" Duration="1" TranslationPreset="Idle">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Teasing"/>
+    </Teasing>
+
     <Move MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="Keep" FlipType="Direction" ActiveCollision="False">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="Idle" XFlip="true" Duration="1">
@@ -16,6 +32,14 @@
 
         <Branch Condition="End == true" Execute="Move"/>
     </Move>
+
+    <SpinMove MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="Keep" FlipType="Direction" ActiveCollision="False" MoveScale="0.5">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="Spinning" XFlip="true" Duration="0.6">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="SpinMove"/>
+    </SpinMove>
 
     <MoveFast MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="Keep" FlipType="Direction" ActiveCollision="False" MoveScale="3.0">
         <AnimationHeader MasterPath="gv_MasterPath"/>
