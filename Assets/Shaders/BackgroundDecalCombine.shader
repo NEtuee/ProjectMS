@@ -152,7 +152,7 @@ Shader "Custom/BackgroundDecalCombine"
 
 			fixed4 frag(v2f IN) : SV_Target
 			{
-				fixed4 c = sampleBackground (_MainTex, _PerspectiveDepthTexture, _NormalTexture, IN.uv, IN.viewSpaceDir);
+				fixed4 c = tex2D (_MainTex, IN.uv);//sampleBackground (_MainTex, _PerspectiveDepthTexture, _NormalTexture, IN.uv, IN.viewSpaceDir);
 				fixed4 decal = tex2D (_DecalTex, IN.uv);
 				fixed4 shadowMap = tex2D(_PerspectiveDepthTexture, IN.uv);
 

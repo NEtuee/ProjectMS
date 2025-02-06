@@ -8,7 +8,6 @@ public class CombinePass : AkaneRenderPass
     private Material renderMaterial;
 
     BackgroundRenderPass backgroundRenderPass;
-    NormalRenderPass normalRenderPass;
     CharacterRenderPass characterRenderPass;
     PerspectiveDepthRenderPass perspectiveDepthRenderPass;
     ForwardScreenRenderPass forwardScreenRenderPass;
@@ -39,11 +38,10 @@ public class CombinePass : AkaneRenderPass
         _combineBackgroundTexture.depthStencilFormat = UnityEngine.Experimental.Rendering.GraphicsFormat.D16_UNorm;
     }
 
-    public static CombinePass CreateInstance(BackgroundRenderPass backgroundPass, NormalRenderPass normalPass, CharacterRenderPass characterPass, PerspectiveDepthRenderPass perspectiveDepthPass, ForwardScreenRenderPass forwardScreenPass, DecalRenderPass decalPass)
+    public static CombinePass CreateInstance(BackgroundRenderPass backgroundPass, CharacterRenderPass characterPass, PerspectiveDepthRenderPass perspectiveDepthPass, ForwardScreenRenderPass forwardScreenPass, DecalRenderPass decalPass)
     {
         var pass = ScriptableObject.CreateInstance<CombinePass>();
         pass.backgroundRenderPass = backgroundPass;
-        pass.normalRenderPass = normalPass;
         pass.characterRenderPass = characterPass;
         pass.perspectiveDepthRenderPass = perspectiveDepthPass;
         pass.forwardScreenRenderPass = forwardScreenPass;
@@ -57,7 +55,6 @@ public class CombinePass : AkaneRenderPass
         _backgroundCombineMaterial.SetTexture("_DecalTex", decalRenderPass?.RenderTexture);
         _backgroundCombineMaterial.SetTexture("_PerspectiveDepthTexture",perspectiveDepthRenderPass?.RenderTexture);
         _backgroundCombineMaterial.SetTexture("_CharacterTexture",characterRenderPass?.RenderTexture);
-        _backgroundCombineMaterial.SetTexture("_NormalTexture",normalRenderPass?.RenderTexture);
         _backgroundCombineMaterial.SetColor("_OutlineColor",Color.black);
 
         Matrix4x4 clipToView = GL.GetGPUProjectionMatrix(Camera.main.projectionMatrix, true).inverse;
