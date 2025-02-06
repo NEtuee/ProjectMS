@@ -8,15 +8,17 @@
         <SetHideCharacter UniqueGroupKey="Students" Hide="True"/>
 
         <SetCameraPosition TargetPositionMarker="CameraStart"/>
+
+        <AudioPlay ID="5004" Switch="True"/>
     </InitializePhase>
 
     <UpdatePhase>
         <SetHideCharacter UniqueKey="HP1" Hide="True"/>
         <SetHideCharacter UniqueKey="HP2" Hide="True"/>
         
+        <AudioPlay ID="6008"/>
         <TalkBalloon UniqueKey="TalkCharacter" SimpleTalkKey="Talk_Tutorial_Expl_0" Wait="True"/>
         <SetHideCharacter UniqueGroupKey="Students" Hide="False"/>
-
         
         <Task ProcessType="AllAtOnce" Name="AIMove">
             <AIMove UniqueKey="Player" LoopAction="AIMove_Loop" EndPositionMarker="PlayerMarker"/>
@@ -45,7 +47,8 @@
         <SetDirection UniqueKey="Player" DirectionType="AlwaysRight"/>
         <SetDirection UniqueGroupKey="Students" DirectionType="AlwaysRight"/>
 
-        <AIMove UniqueKey="SetsumeiChan" LoopAction="Move" EndPositionMarker="SetsumeiChanMarker"/>
+        <AIMove UniqueKey="SetsumeiChan" LoopAction="SpinMove" EndPositionMarker="SetsumeiChanMarker"/>
+        <SetDirection UniqueKey="SetsumeiChan" DirectionType="AlwaysLeft"/>
 
         <TaskFence TaskName="AIMove"/>
         <!-- <SetBackgroundAnimationTrigger Key="Title" Trigger="On"/>
@@ -59,9 +62,12 @@
 
         <SetCameraPosition TargetPositionMarker="CameraStart"/>
         <SetCameraZoom Size="0.0" Speed="5"/>
+        <SetAction UniqueKey="SetsumeiChan" Action="Pointing"/>
         <TalkBalloon UniqueKey="SetsumeiChan" SimpleTalkKey="Talk_Tutorial_Expl_2"/>
 
         <WaitSecond Time="1.0"/>
+
+        <AudioPlay ID="6009"/>
         <TalkBalloon UniqueKey="Student0" SimpleTalkKey="Talk_Tutorial_Expl_3"/>
         <WaitSecond Time="0.2"/>
         <TalkBalloon UniqueKey="Student10" SimpleTalkKey="Talk_Tutorial_Expl_4"/>
@@ -70,25 +76,27 @@
         <WaitSecond Time="4.0"/>
 
 
-        
+        <SetAction UniqueKey="SetsumeiChan" Action="Idle"/>
         <TalkBalloon UniqueKey="SetsumeiChan" SimpleTalkKey="Talk_Tutorial_0_0" Wait="True"/>
         <TalkBalloon UniqueKey="Player" SimpleTalkKey="Talk_Tutorial_0_1" Wait="True"/>
 
         <TalkBalloon UniqueKey="SetsumeiChan" SimpleTalkKey="Talk_Tutorial_0_2" Wait="True"/>
 
+        <AudioPlay ID="6010"/>
         <TalkBalloon UniqueKey="Student4" SimpleTalkKey="Talk_Tutorial_Re_St_1"/>
         <WaitSecond Time="0.2"/>
         <TalkBalloon UniqueKey="Student2" SimpleTalkKey="Talk_Tutorial_Re_St_2"/>
         <WaitSecond Time="2.0"/>
 
         <TalkBalloon UniqueKey="SetsumeiChan" SimpleTalkKey="Talk_Tutorial_0_3" Wait="True"/>
+        <SetAction UniqueKey="SetsumeiChan" Action="Pointing"/>
 
         <EffectPreset UniqueKey="Player" EffectPreset="Smash_NoneTarget"/>
         <ApplyBuff UniqueKey="Player" Buff="AkaneStartHP"/>
         <SetAction UniqueKey="Player" Action="Hit"/>
         
         <WaitSecond Time="0.5"/>
-
+        
         <AIMove UniqueKey="SetsumeiChan" LoopAction="Move" EndPositionMarker="SetsumeiWait"/>
         <SetDirection UniqueKey="SetsumeiChan" DirectionType="AlwaysLeft"/>
 
@@ -117,6 +125,7 @@
         <AIMove UniqueKey="SetsumeiChan" LoopAction="Move" EndPositionMarker="SetsumeiChanMarker"/>
         <SetDirection UniqueKey="SetsumeiChan" DirectionType="AlwaysLeft"/>
 
+        <SetAction UniqueKey="SetsumeiChan" Action="Teasing"/>
         <TalkBalloon UniqueKey="SetsumeiChan" SimpleTalkKey="Talk_Tutorial_0_5" Wait="True"/>
 
         <AIMove UniqueKey="SetsumeiChan" LoopAction="Move" EndPositionMarker="SetsumeiWait"/>
@@ -141,6 +150,7 @@
         <AIMove UniqueKey="SetsumeiChan" LoopAction="Move" EndPositionMarker="SetsumeiChanMarker"/>
         <SetDirection UniqueKey="SetsumeiChan" DirectionType="AlwaysLeft"/>
 
+        <SetAction UniqueKey="SetsumeiChan" Action="Teasing"/>
         <TalkBalloon UniqueKey="SetsumeiChan" SimpleTalkKey="Talk_Tutorial_0_7" Wait="True"/>
 
         <SetMainCameraBoundLock Enable="False"/>
@@ -149,6 +159,7 @@
 
         <WaitSecond Time="1.0"/>
 
+        <SetAction UniqueKey="SetsumeiChan" Action="Idle"/>
         <SetCameraTarget UniqueKey="SetsumeiChan" CameraMode="TargetCenterMode"/>
         <SetCameraZoom Size="2.0" Speed="5"/>
         <TalkBalloon UniqueKey="SetsumeiChan" SimpleTalkKey="Talk_Tutorial_Expl_6" Wait="True"/>
@@ -156,10 +167,11 @@
         <SetCameraPosition TargetPositionMarker="CameraStart"/>
         <SetCameraZoom Size="0.0" Speed="5"/>
 
+        <AudioPlay ID="6011"/>
         <TalkBalloon UniqueKey="SetsumeiChan" SimpleTalkKey="Talk_Tutorial_Expl_7"/>
 
         <Task ProcessType="AllAtOnce">
-            <AIMove UniqueKey="SetsumeiChan" LoopAction="Move" EndPositionMarker="Spawn"/>
+            <AIMove UniqueKey="SetsumeiChan" LoopAction="SpinMove" EndPositionMarker="Spawn"/>
         </Task>
 
         <WaitSecond Time="0.2"/>
@@ -222,6 +234,8 @@
         <TaskFence TaskName="AIMove"/>
 
         <WaitSecond Time="1.0"/>
+
+        <StopSwitch Switch="Audio" Key="5004"/>
 
         <SetCameraTarget UniqueKey="Player" CameraMode="TargetCenterMode"/>
         <BlockInput Enable="False"/>
