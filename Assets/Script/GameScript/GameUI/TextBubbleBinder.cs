@@ -14,6 +14,8 @@ public class TextBubbleBinder : UIObjectBinder
     public Text TextComp;
     public Image IconWaitInput;
     public Image _portrait;
+    public Image _portraitEye;
+    public Image _portraitMouth;
 
     public float WidthPadding = 10f;
     public float HeightPadding = 10f;

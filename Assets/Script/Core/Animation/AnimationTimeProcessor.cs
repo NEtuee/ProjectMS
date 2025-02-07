@@ -155,6 +155,20 @@ public class AnimationTimeProcessor
         return _isEnd;
     }
 
+    public void resetTimeProcessor()
+    {
+        _isEnd = false;
+        _isEndThisFrame = false;
+        _totalLoopCountPerFrame = 0;
+        _currentIndex = 0;
+        _prevIndex = 0;
+        _animationTotalPlayTime = 0f;
+        _prevAnimationTotalPlayTime = 0f;
+        _currentAnimationTime = 0f;
+        _prevAnimationTime = 0f;
+        _frameDurationStack = 0f;
+    }
+
     public bool updateTime2(float deltaTime)
     {
         bool forceEnd = false;

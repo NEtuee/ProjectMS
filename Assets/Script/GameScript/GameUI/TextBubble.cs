@@ -126,6 +126,7 @@ public class TextPresenter
     private RectTransform _backRect;
     private StringBuilder _stringBuilder;
 
+    private bool _talking = false;
     private bool _chagneColor = false;
     private string _changeColorHex;
 
@@ -149,6 +150,8 @@ public class TextPresenter
         _binder.BubblePolygonBack.ForceUpdate();
         _binder.BubblePolygonMain.ForceUpdate();
         _binder.BubblePolygonArrow.ForceUpdate();
+
+        _talking = false;
     }
 
     public void InitTextLength(int length)
@@ -159,6 +162,11 @@ public class TextPresenter
     public void Active(bool active)
     {
         _binder.SetActive(active);
+    }
+
+    public void setTalking(bool value)
+    {
+        _talking = value;
     }
 
     public void AddCharacter(char ch)
@@ -201,9 +209,9 @@ public class TextPresenter
         _chagneColor = false;
     }
 
-    public void showPortrait(Sprite sprite)
+    public void showPortrait(ExpressionData data)
     {
-        _binder.showPortrait(sprite);
+        _binder.showPortrait(data);
     }
 
     public void hidePortrait()
@@ -255,6 +263,11 @@ public class TextPresenter
         Vector2 targetSize = new Vector2(MathEx.maxf(30f, _binder.TextComp.preferredWidth) + _binder.WidthPadding * 2.0f, _binder.TextComp.preferredHeight + _binder.HeightPadding * 2.0f);
         _bubbleRect.sizeDelta = targetSize;
         _backRect.sizeDelta = targetSize;
+    }
+
+    public bool isTalking()
+    {
+        return _talking;
     }
 }
 
@@ -310,6 +323,7 @@ public class ShowText : BubbleCommend
         _currentTime = startTime;
         _prevShowTime = _currentTime;
         presenter.AddCharacter(_chArray[_current]);
+        presenter.setTalking(true);
         _current++;
 
         if(_activeInputIcon)
@@ -329,6 +343,7 @@ public class ShowText : BubbleCommend
     {
         if (_current >= _chArray.Length)
         {
+            presenter.setTalking(false);
             return false;
         }
         
