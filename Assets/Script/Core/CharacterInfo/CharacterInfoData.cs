@@ -15,9 +15,10 @@ public class CharacterInfoData : SerializableDataType
     public float        _characterRadius = 0f;
     public float        _headUpOffset = 0f;
 
+    public int          _rankBadgeID = -1;
+
     public bool         _indicatorVisible = true;
     public bool         _useCameraBoundLock = true;
-    public bool         _useHpInterface = false;
     public bool         _selfCollision = true;
     public bool         _immortalCharacter = false;
 
@@ -37,8 +38,8 @@ public class CharacterInfoData : SerializableDataType
         binaryWriter.Write(_characterRadius);
         binaryWriter.Write(_headUpOffset);
         binaryWriter.Write(_indicatorVisible);
+        binaryWriter.Write(_rankBadgeID);
         binaryWriter.Write(_useCameraBoundLock);
-        binaryWriter.Write(_useHpInterface);
         binaryWriter.Write(_selfCollision);
         binaryWriter.Write(_immortalCharacter);
         binaryWriter.Write(_allyInfoKey);
@@ -56,8 +57,8 @@ public class CharacterInfoData : SerializableDataType
         _characterRadius = binaryReader.ReadSingle();
         _headUpOffset = binaryReader.ReadSingle();
         _indicatorVisible = binaryReader.ReadBoolean();
+        _rankBadgeID = binaryReader.ReadInt32();
         _useCameraBoundLock = binaryReader.ReadBoolean();
-        _useHpInterface = binaryReader.ReadBoolean();
         _selfCollision = binaryReader.ReadBoolean();
         _immortalCharacter = binaryReader.ReadBoolean();
         _allyInfoKey = binaryReader.ReadString();
