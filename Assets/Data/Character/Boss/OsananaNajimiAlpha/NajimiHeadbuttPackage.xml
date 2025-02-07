@@ -48,28 +48,28 @@
 
         <AI_HeadbuttTurn UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
-                <AIEvent Type="SetDirectionToTarget" Speed="400"/>
+                <AIEvent Type="SetDirectionToTarget" Speed="500"/>
                 <AIEvent Type="SetAction" Action="AC_HeadbuttTurn"/>
             </Event_OnExecute>
 
             <Event_OnFrame>
-                <AIEvent Type="SetDirectionToTarget" Speed="400"/>
+                <AIEvent Type="SetDirectionToTarget" Speed="500"/>
             </Event_OnFrame>
 
             <Branch Condition="End" Execute="AI_HeadbuttMove"/>
         </AI_HeadbuttTurn>
         <AI_HeadbuttMove UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
-                <AIEvent Type="SetDirectionToTarget" Speed="400"/>
+                <AIEvent Type="SetDirectionToTarget" Speed="500"/>
                 <AIEvent Type="SetAction" Action="AC_HeadbuttMove"/>
             </Event_OnExecute>
 
             <Event_OnFrame>
-                <AIEvent Type="SetDirectionToTarget" Speed="400"/>
+                <AIEvent Type="SetDirectionToTarget" Speed="500"/>
             </Event_OnFrame>
 
             <Branch Condition="(getStat_RushCount >= 3.0)" Execute="TerminatePackage"/>
-            <Branch Condition="(TargetDistance <= 1.6)" Execute="AI_Headbutt"/>
+            <Branch Condition="(TargetDistance <= 1.8)" Execute="AI_Headbutt"/>
             <Branch Condition="(PackageExecutedTime >= 3.0)" Execute="TerminatePackage"/>
         </AI_HeadbuttMove>
 

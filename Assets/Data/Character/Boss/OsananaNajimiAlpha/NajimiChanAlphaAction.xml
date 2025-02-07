@@ -285,9 +285,9 @@
 
     <AC_HeadbuttReflected MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineSuperArmor">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/0_default/"/>
-        <Animation Preset="3_dash" XFlip="true" Duration="0.4">
+        <Animation Preset="3_dash" XFlip="true" Duration="0.3">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2100" Attach="true"/>
-            <FrameEvent Type="Movement" StartTime="0" Friction="24.0" MaxVelocity="12.0" Velocity="12.0" Speed="0.0"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="28.0" MaxVelocity="11.0" Velocity="11.0" Speed="0.0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
             
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
@@ -298,7 +298,7 @@
     <AC_HeadbuttTurn MovementType="FrameEvent"  DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/0_default/"/>
         <Animation Preset="3_dash" XFlip="true" Duration="0.4">
-            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="10" Speed="15"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="4" Speed="15"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
@@ -309,7 +309,7 @@
     <AC_HeadbuttMove MovementType="FrameEvent"  DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/0_default/"/>
         <Animation Preset="3_dash" XFlip="true" Duration="0.4">
-            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="10" Speed="15"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="6" Speed="15"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
