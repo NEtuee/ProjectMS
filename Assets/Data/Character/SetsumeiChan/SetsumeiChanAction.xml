@@ -27,7 +27,7 @@
 
     <Move MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="Keep" FlipType="Direction" ActiveCollision="False">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="Idle" XFlip="true" Duration="1">
+        <Animation Preset="Moving" XFlip="true" Duration="1">
         </Animation>
 
         <Branch Condition="End == true" Execute="Move"/>
@@ -43,7 +43,7 @@
 
     <MoveFast MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="Keep" FlipType="Direction" ActiveCollision="False" MoveScale="3.0">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="Idle" XFlip="true" Duration="1">
+        <Animation Preset="Moving" XFlip="true" Duration="1">
         </Animation>
 
         <Branch Condition="End == true" Execute="MoveFast"/>

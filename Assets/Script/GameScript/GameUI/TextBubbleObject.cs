@@ -198,6 +198,9 @@ public class TextBubbleObject : TextBubbleBinder
         _portraitEye.sprite = _portraitExpressionData._eyeAnimation[_portraitExpressionData._eyeAnimationOrder[0]];
         _portraitMouth.sprite = _portraitExpressionData._talkAnimation[0];
 
+        _portraitEye.SetNativeSize();
+        _portraitMouth.SetNativeSize();
+
         _currentMouthIndex = 0;
 
         if(_portraitExpressionData._eyeRandomPause)
@@ -290,6 +293,8 @@ public class TextBubbleObject : TextBubbleBinder
             _eyeRandomTimeProcessItem.set(Random.Range(pauseMinMax.x,pauseMinMax.y));
         }
 
+        _portraitEye.SetNativeSize();
+        _portraitMouth.SetNativeSize();
     }
 
     private void UpdateInputWaitIcon()
