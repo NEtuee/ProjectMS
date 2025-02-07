@@ -127,16 +127,13 @@ public class EnemyHp : IUIElement
     private void AddCharacter(CharacterEntityBase character)
     {
         var maxHp = (int) character.getStatusInfo().getMaxStatus("HP");
-        if (character.getUseHPInterface() == false || maxHp <= 1)
+        if (character.getRankBadgeID() == -1 )
         {
             return;
         }
 
-        var offset = character.getHeadUpOffset();
-
-        var type = maxHp == 2 ? EnemyHpObjectMax3.Type.Max2 : EnemyHpObjectMax3.Type.Max3;
         var enemyHpMax3Obj = GetObjectForMax3();
-        enemyHpMax3Obj.Active(character, new Vector3(0.0f, offset, 0.0f), type, (returnEnemyHp) => _max3Pool.Enqueue(returnEnemyHp));
+        enemyHpMax3Obj.Active(character, character.getRankBadgeID(), (returnEnemyHp) => _max3Pool.Enqueue(returnEnemyHp));
     }
     
     private void DisableCharacter(CharacterEntityBase character)

@@ -6,12 +6,6 @@ using UnityEngine;
 
 public class EnemyHpObjectMax3 : MonoBehaviour
 {
-    public enum Type
-    {
-        Max2,
-        Max3
-    }
-    
     struct AnimationPresetInfo
     {
         public AnimationCustomPreset _customPreset;
@@ -24,74 +18,69 @@ public class EnemyHpObjectMax3 : MonoBehaviour
         }
     }
 
-    public SpriteRenderer Blood1;
-    public SpriteRenderer Blood2;
-    public SpriteRenderer Last;
+    public SpriteRenderer _spriteRenderer;
 
-    private AnimationPlayer _animationPlayerForBlood1 = new AnimationPlayer();
-    private AnimationPlayer _animationPlayerForBlood2 = new AnimationPlayer();
-    private AnimationPlayer _animationPlayerForLast = new AnimationPlayer();
-
-    private AnimationPresetInfo _lastAppearInfo;
-    private AnimationPresetInfo _lastDisappearInfo;
-
-    private AnimationPresetInfo _blood1AppearInfo;
-    private AnimationPresetInfo _blood2AppearInfo;
-    
     [SerializeField] private GameEntityBase _target;
-    private bool _follow;
-    private bool _dead;
     private Action<EnemyHpObjectMax3> _onDead;
+    
+    private AnimationPlayer _animationPlayer = new AnimationPlayer();
+
+    private AnimationPresetInfo[][] _rankBadgeAnimationSet = new AnimationPresetInfo[4][];
+    private AnimationPresetInfo[] _rank2 = new AnimationPresetInfo[2];
+    private AnimationPresetInfo[] _rank3 = new AnimationPresetInfo[3];
+    private AnimationPresetInfo[] _rankElite = new AnimationPresetInfo[3];
+
     private Vector3 _offset;
-    private Type _type = Type.Max3;
-    
-    private float _prevHp = -1;
-    
+
+    private int _currentBadgeType = 0;
+    private int _currentSegmentIndex = 0;
+    private float _segmentLength = 0f;
+
     public void Init()
     {
-        _lastAppearInfo = new AnimationPresetInfo(ResourceContainerEx.Instance().GetAnimationCustomPreset("Sprites/UI/1hpalert/appear/"), "Sprites/UI/1hpalert/appear");
-        _lastDisappearInfo = new AnimationPresetInfo(ResourceContainerEx.Instance().GetAnimationCustomPreset("Sprites/UI/1hpalert/disappear/"), "Sprites/UI/1hpalert/disappear");
-        
-        _animationPlayerForLast.initialize();
-        _animationPlayerForLast.changeAnimationByCustomPreset(_lastAppearInfo._path, _lastAppearInfo._customPreset);
-        
-        _blood1AppearInfo = new AnimationPresetInfo(ResourceContainerEx.Instance().GetAnimationCustomPreset("Sprites/UI/1hpalert/blooddrip/dripAappear/"), "Sprites/UI/1hpalert/blooddrip/dripAappear");
-        _blood2AppearInfo = new AnimationPresetInfo(ResourceContainerEx.Instance().GetAnimationCustomPreset("Sprites/UI/1hpalert/blooddrip/dripBappear/"), "Sprites/UI/1hpalert/blooddrip/dripBappear");
-        
-        _animationPlayerForBlood1.initialize();
-        _animationPlayerForBlood1.changeAnimationByCustomPreset(_blood1AppearInfo._path, _blood2AppearInfo._customPreset);
-        
-        _animationPlayerForBlood2.initialize();
-        _animationPlayerForBlood2.changeAnimationByCustomPreset(_blood2AppearInfo._path, _blood2AppearInfo._customPreset);
+        _rankBadgeAnimationSet[0] = new AnimationPresetInfo[1];
+        _rankBadgeAnimationSet[0][0] = new AnimationPresetInfo(ResourceContainerEx.Instance().GetAnimationCustomPreset("Sprites/UI/StatusSticker/RankBadge/1/"), "Sprites/UI/StatusSticker/RankBadge/1");
+
+        _rankBadgeAnimationSet[1] = new AnimationPresetInfo[2];
+        _rankBadgeAnimationSet[1][0] = new AnimationPresetInfo(ResourceContainerEx.Instance().GetAnimationCustomPreset("Sprites/UI/StatusSticker/RankBadge/2/1/"), "Sprites/UI/StatusSticker/RankBadge/2/1/");
+        _rankBadgeAnimationSet[1][1] = new AnimationPresetInfo(ResourceContainerEx.Instance().GetAnimationCustomPreset("Sprites/UI/StatusSticker/RankBadge/2/2/"), "Sprites/UI/StatusSticker/RankBadge/2/2/");
+
+        _rankBadgeAnimationSet[2] = new AnimationPresetInfo[3];
+        _rankBadgeAnimationSet[2][0] = new AnimationPresetInfo(ResourceContainerEx.Instance().GetAnimationCustomPreset("Sprites/UI/StatusSticker/RankBadge/3/1/"), "Sprites/UI/StatusSticker/RankBadge/3/1/");
+        _rankBadgeAnimationSet[2][1] = new AnimationPresetInfo(ResourceContainerEx.Instance().GetAnimationCustomPreset("Sprites/UI/StatusSticker/RankBadge/3/2/"), "Sprites/UI/StatusSticker/RankBadge/3/2/");
+        _rankBadgeAnimationSet[2][2] = new AnimationPresetInfo(ResourceContainerEx.Instance().GetAnimationCustomPreset("Sprites/UI/StatusSticker/RankBadge/3/3/"), "Sprites/UI/StatusSticker/RankBadge/3/3/");
+
+        _rankBadgeAnimationSet[3] = new AnimationPresetInfo[3];
+        _rankBadgeAnimationSet[3][0] = new AnimationPresetInfo(ResourceContainerEx.Instance().GetAnimationCustomPreset("Sprites/UI/StatusSticker/RankBadge/Elite/1/"), "Sprites/UI/StatusSticker/RankBadge/Elite/1/");
+        _rankBadgeAnimationSet[3][1] = new AnimationPresetInfo(ResourceContainerEx.Instance().GetAnimationCustomPreset("Sprites/UI/StatusSticker/RankBadge/Elite/2/"), "Sprites/UI/StatusSticker/RankBadge/Elite/2/");
+        _rankBadgeAnimationSet[3][2] = new AnimationPresetInfo(ResourceContainerEx.Instance().GetAnimationCustomPreset("Sprites/UI/StatusSticker/RankBadge/Elite/3/"), "Sprites/UI/StatusSticker/RankBadge/Elite/3/");
+
+        _animationPlayer.initialize();
     }
     
-    public void Active(GameEntityBase target, Vector3 offset, Type type, Action<EnemyHpObjectMax3> onDead)
+    public void Active(GameEntityBase target, int badgeType, Action<EnemyHpObjectMax3> onDead)
     {
         if (target == null)
         {
             return;
         }
+        _animationPlayer.initialize();
         
+        _currentBadgeType = badgeType;
+        _currentSegmentIndex = _rankBadgeAnimationSet[_currentBadgeType].Length - 1; 
+        _segmentLength = 1f / (float)_rankBadgeAnimationSet[_currentBadgeType].Length;
+
+        AnimationPresetInfo presetInfo = _rankBadgeAnimationSet[_currentBadgeType][_currentSegmentIndex];
+
+        _animationPlayer.changeAnimationByCustomPreset(presetInfo._path, presetInfo._customPreset);
+
+        _offset = Vector3.up * target.getHeadUpOffset();
+
         _target = target;
-        _follow = true;
         _onDead = onDead;
-        _offset = offset;
-        _dead = false;
-        
-        gameObject.SetActive(false);
-        Blood1.gameObject.SetActive(false);
-        Blood2.gameObject.SetActive(false);
-        Last.gameObject.SetActive(false);
 
-        var color1 = Blood1.color;
-        color1.a = 1f;
-        Blood1.color = color1;
-
-        var color2 = Blood2.color;
-        color2.a = 1f;
-        Blood2.color = color2;
-
-        _type = type;
+        updatePosition();
+        gameObject.SetActive(target.isSpriteRendererActive());
     }
     
     public void UpdateByManager(float deltaTime)
@@ -101,14 +90,51 @@ public class EnemyHpObjectMax3 : MonoBehaviour
             return;
         }
 
-        Follow();
-        ChangeAnimation();
-        UpdateAnimation(deltaTime);
+        gameObject.SetActive(_target.isSpriteRendererActive());
+
+        if (_target.isDead())
+        {
+            gameObject.SetActive(false);
+            _target = null;
+            _onDead?.Invoke(this);
+            return;
+        }
+
+        float percentage = _target.getStatusPercentage("HP");
+
+        int newSegmentIndex = _currentSegmentIndex;
+        if (percentage == 1f)
+        {
+            newSegmentIndex = _rankBadgeAnimationSet[_currentBadgeType].Length - 1;
+        }
+        else
+        {
+            float realValue = percentage / _segmentLength;
+            newSegmentIndex = (int)(MathEx.floorNoSign(percentage, 2) / MathEx.floorNoSign(_segmentLength,2));
+            newSegmentIndex = MathEx.equals(realValue, (float)newSegmentIndex, float.Epsilon) ? newSegmentIndex - 1 : newSegmentIndex;
+        }
+
+        if(_currentSegmentIndex != newSegmentIndex)
+        {
+            _currentSegmentIndex = newSegmentIndex;
+            AnimationPresetInfo presetInfo = _rankBadgeAnimationSet[_currentBadgeType][_currentSegmentIndex];
+
+            _animationPlayer.changeAnimationByCustomPreset(presetInfo._path, presetInfo._customPreset);
+        }
+
+        updatePosition();
+        
+        _animationPlayer.progress(deltaTime,null);
+        _spriteRenderer.sprite = _animationPlayer.getCurrentSprite();
+    }
+
+    public void updatePosition()
+    {
+        transform.position = _target.transform.position + _offset;
     }
 
     public void Stop()
     {
-        _follow = false;
         gameObject.SetActive(false);
         
         if (_target == null)
@@ -118,101 +144,6 @@ public class EnemyHpObjectMax3 : MonoBehaviour
 
         _target = null;
         _onDead?.Invoke(this);
-    }
-    
-    private void Follow()
-    {
-        if (_follow == false)
-        {
-            return;
-        }
-        
-        transform.position = _target.transform.position + _offset;
-    }
-    
-    private void ChangeAnimation()
-    {
-        var hp = _target.getStatus("HP");
-        if (_prevHp == hp)
-        {
-            return;
-        }
-
-        _prevHp = hp;
-        
-        if (_type == Type.Max3 && (hp - 2f) < float.Epsilon)
-        {
-            gameObject.SetActive(true);
-            Blood1.gameObject.SetActive(true);
-            _animationPlayerForBlood1.changeAnimationByCustomPreset(_blood1AppearInfo._path, _blood2AppearInfo._customPreset);
-        }
-        
-        if ((hp - 1f) < float.Epsilon)
-        {
-            Last.gameObject.SetActive(true);
-            _animationPlayerForLast.changeAnimationByCustomPreset(_lastAppearInfo._path, _lastAppearInfo._customPreset);
-
-            if (_type == Type.Max2)
-            {
-                gameObject.SetActive(true);
-                Blood1.gameObject.SetActive(true);
-                _animationPlayerForBlood1.changeAnimationByCustomPreset(_blood1AppearInfo._path, _blood2AppearInfo._customPreset);
-            }
-            else if (_type == Type.Max3)
-            {
-                Blood2.gameObject.SetActive(true);
-                _animationPlayerForBlood2.changeAnimationByCustomPreset(_blood2AppearInfo._path, _blood2AppearInfo._customPreset);
-            }
-        }
-
-        if (hp <= 0f)
-        {
-            _follow = false;
-            _dead = true;
-            
-            Last.gameObject.SetActive(true);
-            _animationPlayerForLast.changeAnimationByCustomPreset(_lastDisappearInfo._path, _lastDisappearInfo._customPreset);
-        }
-    }
-    
-    private void UpdateAnimation(float deltaTime)
-    {
-        if (_animationPlayerForBlood1.isEnd() == false)
-        {
-            _animationPlayerForBlood1.progress(deltaTime, null);
-            Blood1.sprite = _animationPlayerForBlood1.getCurrentSprite();
-        }
-
-        if (_animationPlayerForBlood2.isEnd() == false)
-        {
-            _animationPlayerForBlood2.progress(deltaTime, null);
-            Blood2.sprite = _animationPlayerForBlood2.getCurrentSprite();
-        }
-        
-        if (_animationPlayerForLast.isEnd() == false)
-        {
-            _animationPlayerForLast.progress(deltaTime, null);
-            Last.sprite = _animationPlayerForLast.getCurrentSprite();
-        }
-        
-        if (_dead == true)
-        {
-            // var color1 = Blood1.color;
-            // color1.a = 0f;
-            // Blood1.color = color1;
-            //
-            // var color2 = Blood2.color;
-            // color2.a = 0f;
-            // Blood2.color = color2;
-            
-            if (_animationPlayerForLast.isEnd() == true)
-            {
-                gameObject.SetActive(false);
-                _target = null;
-                _onDead?.Invoke(this);
-                return;
-            }
-        }
     }
 
 }

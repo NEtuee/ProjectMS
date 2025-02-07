@@ -80,10 +80,10 @@ public class CharacterInfoLoader : LoaderBase<CharacterInfoDataList>
                 characterInfoData._defaultMaterial = (CommonMaterial)System.Enum.Parse(typeof(CommonMaterial), attrValue);
             else if(attrName == "IndicatorVisible")
                 characterInfoData._indicatorVisible = bool.Parse(attrValue);
+            else if(attrName == "RankBadgeID")
+                characterInfoData._rankBadgeID = int.Parse(attrValue);
             else if(attrName == "UseCameraBoundLock")
                 characterInfoData._useCameraBoundLock = bool.Parse(attrValue);
-            else if(attrName == "UseHPInterface")
-                characterInfoData._useHpInterface = bool.Parse(attrValue);
             else if(attrName == "SelfCollision")
                 characterInfoData._selfCollision = bool.Parse(attrValue);
             else if(attrName == "ImmortalCharacter")
