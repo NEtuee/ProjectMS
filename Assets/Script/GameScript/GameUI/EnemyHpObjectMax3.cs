@@ -92,7 +92,7 @@ public class EnemyHpObjectMax3 : MonoBehaviour
 
         gameObject.SetActive(_target.isSpriteRendererActive());
 
-        if (_target.isDead())
+        if (_target.gameObject.activeSelf == false || _target.isDead())
         {
             gameObject.SetActive(false);
             _target = null;
