@@ -1224,12 +1224,16 @@ public class GameEntityBase : SequencerObjectBase
         _flipState = getCurrentFlipState(flipType);
     }
 
-    public Sprite getPortrait(ExpressionType expressionType)
+    public ExpressionData getPortrait(ExpressionType expressionType)
     {
         if(string.IsNullOrEmpty(_characterInfo._portraitPath))
             return null;
 
-        return ResourceContainerEx.Instance().GetSprite(_characterInfo._portraitPath + "/" + expressionType.ToString());
+        ScriptableObject[] portraitData = ResourceContainerEx.Instance().GetScriptableObjects(_characterInfo._portraitPath);
+        if(portraitData == null)
+            return null;
+
+        return (portraitData[0] as PortraitData).getExpressionData(expressionType);
     }
 
     private FlipState getCurrentFlipState(FlipType flipType)
