@@ -307,6 +307,11 @@ public abstract class ObjectBase : MessageReceiver, IProgress
         return _spriteRenderer.transform;
     }
 
+    public bool isSpriteRendererActive()
+    {
+        return _spriteRenderer.enabled;
+    }
+
     public int getAllyInfoKey()
     {
         return _allyInfo == null ? -1 : _allyInfo._index;

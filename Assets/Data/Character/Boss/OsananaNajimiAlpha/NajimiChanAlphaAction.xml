@@ -247,6 +247,7 @@
         <Animation Preset="4_phaseTransition" XFlip="true" Duration="1.0">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2110" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+            <FrameEvent Type="EffectPreset" StartTime="0" Key="AttackReady"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="NajimiClearRushCount"/>
 
@@ -265,7 +266,9 @@
             <FrameEvent Type="Attack" StartTime="0" EndTime="0.4" AttackPreset="Najimi_Rush" AttackType="Default">
                 <OnHit>
                     <FrameEvent Type="AudioPlay" StartTime="0" ID="4902" Attach="true"/>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonTenthsAttack"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonTenthsAttack"/>
                     <FrameEvent Type="ZoomEffect" Scale="-0.4"/>
                     <FrameEvent Type="StopUpdate" Time="0.15"/>
                     
@@ -292,16 +295,28 @@
 
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_HeadbuttReflected>
-    <AC_HeadbuttTurn MovementType="FrameEvent"  DirectionType="AI" FlipType="Direction" Flags="OutlineSuperArmor">
+    <AC_HeadbuttTurn MovementType="FrameEvent"  DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/0_default/"/>
         <Animation Preset="3_dash" XFlip="true" Duration="0.4">
-            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="5" Speed="15"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="10" Speed="15"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_HeadbuttTurn"/>
     </AC_HeadbuttTurn>
+    <AC_HeadbuttMove MovementType="FrameEvent"  DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/0_default/"/>
+        <Animation Preset="3_dash" XFlip="true" Duration="0.4">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="10" Speed="15"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_HeadbuttMove"/>
+    </AC_HeadbuttMove>
 
     <AC_PitcherReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="LaserEffect OutlineSuperArmor">
         <!-- 투구 준비 모션, 탄막 경로 활성화 -->
@@ -324,7 +339,9 @@
                     <FrameEvent Type="Attack" StartTime="0.0" AttackPreset="Najimi_Pitching">
                         <OnHit>
                             <FrameEvent Type="AudioPlay" StartTime="0.1" ID="2107"/>
-                            <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
+                            <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
+                            <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonTenthsAttack"/>
+                            <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonTenthsAttack"/>
                             <FrameEvent Type="ApplyBuffTarget" ApplyBuff="StunSet"/>
                             <FrameEvent Type="EffectPreset" StartTime="0" Key="SmokeBig"/>
                             <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
@@ -351,15 +368,18 @@
     <AC_Pitch MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" Flags="LaserEffect">
         <!-- 투구 모션, 장판 활성화 -->
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/2_pitchingPattern/3_pitching/"/>
-        <Animation Preset="1_pitchingMain" XFlip="true" Duration="1.0">
+        <Animation Preset="1_pitchingMain" XFlip="true" Duration="0.5">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
+            
             <FrameEvent Type="SetDirectionType" Condition="getTargetFrameTag_Stun" StartTime="0.01" DirectionType="AI"/>
             <FrameEvent Type="EffectPreset" StartTime="0.01" Key="WindTrail"/>
             <FrameEvent Type="ShakeEffect" StartTime="0.1" Scale="0.2" Speed="35.0" Time="0.15"/>
+            
             <FrameEvent Type="AudioPlay" StartTime="0.0" ID="2106" Attach="true"/>
-            <ActionFlag StartTime="0.0" EndTime="0.2" Flags="OutlineSuperArmor"/>
+
             <FrameEvent Type="FrameTag" StartTime="0.2" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0.2" EndTime="999" Tag="GbAvail"/>
+            <ActionFlag StartTime="0.0" EndTime="0.2" Flags="OutlineSuperArmor"/>
            
         </Animation>
         <Animation Preset="2_pitchingRecovery" XFlip="true" Duration="0.3">
