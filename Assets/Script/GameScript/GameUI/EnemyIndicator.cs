@@ -184,7 +184,7 @@ public class EnemyIndicator : IUIElement
         }
 
         float orthoSize = _mainCamera.orthographicSize;
-        float aspectRatio = _mainCamera.aspect;
+        float aspectRatio = 1.3333f;//_mainCamera.aspect;
         float height = orthoSize * 2f;
         float width = height * aspectRatio;
 

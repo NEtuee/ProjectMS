@@ -5,6 +5,7 @@
         <BlockInput Enable="True"/>
         <SetHideUI Hide="True"/>
         <LetterBoxShow/>
+        <AudioPlay ID="5004" Switch="True"/>
     </InitializePhase>
 
     <UpdatePhase>
@@ -23,6 +24,7 @@
         <BlockInput Enable="False"/>
         <SetHideUI Hide="False"/>
         <LetterBoxHide/>
+        <StopSwitch Switch="Audio" Key="5004"/>
 
         <ActiveBossHp UniqueKey="Boss" NameKey="BossName_EliteSukeban"/>
 
