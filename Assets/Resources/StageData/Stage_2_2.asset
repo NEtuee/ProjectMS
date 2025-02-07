@@ -910,7 +910,25 @@ MonoBehaviour:
     _triggerHeight: 10.38
     _triggerOffset: {x: -3.09, y: 0, z: 0}
   - _pointName: New Point 8
-    _stagePoint: {x: 126.79, y: 4.32, z: 0}
+    _stagePoint: {x: 120.46, y: 2.33, z: 0}
+    _maxLimitedDistance: 0
+    _verticalLimitedDistance: 0
+    _horizontalLimitedDistance: 0
+    _cameraZoomSize: 3
+    _cameraZoomSpeed: 4
+    _lerpCameraZoom: 0
+    _lockCameraInBound: 0
+    _cameraBoundToTrigger: 0
+    _onEnterSequencerPath: []
+    _onExitSequencerPath: []
+    _characterSpawnData: []
+    _useTriggerBound: 0
+    _targetSearchIdentifier: 1
+    _triggerWidth: 1
+    _triggerHeight: 1
+    _triggerOffset: {x: 0, y: 0, z: 0}
+  - _pointName: New Point 8
+    _stagePoint: {x: 132.14, y: 4.32, z: 0}
     _maxLimitedDistance: 2
     _verticalLimitedDistance: 0
     _horizontalLimitedDistance: 0
@@ -924,7 +942,7 @@ MonoBehaviour:
     _onExitSequencerPath: []
     _characterSpawnData:
     - _characterKey: SukebanEliteChan
-      _uniqueKey: 
+      _uniqueKey: Boss
       _uniqueGroupKey: EnemyGroup
       _startAction: AC_Entry
       _startAIState: Entry_Battle
@@ -936,12 +954,12 @@ MonoBehaviour:
       _sortingOrder: 0
       _allyInfoKey: Sukeban
       _activeType: 1
-      _localPosition: {x: 6.05, y: 0, z: 0}
-    _useTriggerBound: 0
+      _localPosition: {x: 4.6, y: 0, z: 0}
+    _useTriggerBound: 1
     _targetSearchIdentifier: 1
-    _triggerWidth: 1
-    _triggerHeight: 1
-    _triggerOffset: {x: 0, y: 0, z: 0}
+    _triggerWidth: 7.62
+    _triggerHeight: 13.1
+    _triggerOffset: {x: -2.22, y: 0, z: 0}
   - _pointName: New Point 9
     _stagePoint: {x: 139.05, y: 4.32, z: 0}
     _maxLimitedDistance: 2
@@ -977,6 +995,10 @@ MonoBehaviour:
     _position: {x: 121.11, y: 1.2, z: 0}
   - _name: TargetMarker3
     _position: {x: 126.81, y: 2.39, z: 0}
+  - _name: AkaneSukebanTarget
+    _position: {x: 128.02, y: 4.3, z: 0}
+  - _name: EliteSukeban
+    _position: {x: 131.9, y: 4.3, z: 0}
   _trackData:
   - _name: MoveTrack
     _trackPointData:

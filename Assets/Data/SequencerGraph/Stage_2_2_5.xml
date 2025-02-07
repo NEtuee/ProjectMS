@@ -1,12 +1,37 @@
 <SequencerGraph Name="Stage_2_2_5">
 
     <InitializePhase>
+        <BlockAI UniqueKey="Boss" Enable="True"/>
+        <BlockInput Enable="True"/>
+        <SetHideUI Hide="True"/>
+        <LetterBoxShow/>
     </InitializePhase>
 
     <UpdatePhase>
         <BlockPointExit Enable="True"/>
+
+        <AIMove UniqueKey="Player" StartAction="AIMove_Start" LoopAction="AIMove_Loop" EndAction="AIMove_End" EndPositionMarker="AkaneSukebanTarget"/>
+        <SetDirection UniqueKey="Player" DirectionType="AlwaysRight"/>
+
+        <AIMove UniqueKey="Boss" LoopAction="AIMove" EndPositionMarker="EliteSukeban"/>
+        <WaitSecond Time="1.0"/>
+
+        <TalkBalloon UniqueKey="Boss" SimpleTalkKey="Talk_Stage02_2_6" Wait="True"/>
+        <TalkBalloon UniqueKey="Player" SimpleTalkKey="Talk_Stage02_2_7" Wait="True"/>
+        <TalkBalloon UniqueKey="Boss" SimpleTalkKey="Talk_Stage02_2_8" Wait="True"/>
+
+        <BlockInput Enable="False"/>
+        <SetHideUI Hide="False"/>
+        <LetterBoxHide/>
+
+        <ActiveBossHp UniqueKey="Boss" NameKey="BossName_EliteSukeban"/>
+
+        <WaitSecond Time="1.0"/>
+        <BlockAI UniqueKey="Boss" Enable="False"/>
+
         <DeadFence UniqueGroupKey="EnemyGroup"/>
 
+        <WaitSecond Time="2.0"/>
         <BlockPointExit Enable="False"/>
     </UpdatePhase>
     

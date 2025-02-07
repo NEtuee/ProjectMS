@@ -271,6 +271,34 @@
     <Talk_Stage02_2_4><ShowText Text = "오예" Interval = "0.03"/><Wait Time = "3.0"/></Talk_Stage02_2_4>
     <Talk_Stage02_2_5><ShowText Text = "아싸" Interval = "0.03"/><Wait Time = "3.0"/></Talk_Stage02_2_5>
 
+    <Talk_Stage02_2_6>
+        <ShowPortrait Expression="Normal"/>
+        <ShowText Text = "안녕, 아카네" Interval = "0.03"/>
+        <Wait Input="PassTalkBalloon"/>
+
+        <ShowText Text = "미안하지만 이 앞으로는 지나갈 수 없어" Interval = "0.03" Clear="True"/>
+        <Wait Input="PassTalkBalloon"/>
+
+        <ShowText Text = "돌아가 주지 않을래?" Interval = "0.03" Clear="True"/>
+        <Wait Input="PassTalkBalloon"/>
+    </Talk_Stage02_2_6>
+
+    <Talk_Stage02_2_7>
+        <ShowPortrait Expression="Normal"/>
+        <ShowText Text = "싫어" Interval = "0.03"/>
+        <Wait Input="PassTalkBalloon"/>
+    </Talk_Stage02_2_7>
+
+    <Talk_Stage02_2_8>
+        <ShowPortrait Expression="Normal"/>
+        <ShowText Text = "그래?" Interval = "0.03"/>
+        <Wait Input="PassTalkBalloon"/>
+
+        <ShowText Text = "내가 기대한 대답이야" Interval = "0.03"/>
+        <Wait Input="PassTalkBalloon"/>
+    </Talk_Stage02_2_8>
+
+
     <Talk_Stage02_3_0><ShowText Text = "이번만큼은 임시동맹이다!" Interval = "0.03"/><Wait Time = "3.0"/></Talk_Stage02_3_0>
     <Talk_Stage02_3_1><ShowText Text = "둘러싸서 뒤를 노려! 비겁하게!" Interval = "0.03"/><Wait Time = "4.0"/></Talk_Stage02_3_1>
     <Talk_Stage02_3_2><ShowText Text = "다 어디서 튀어 나온거야?" Interval = "0.03"/><Wait Time = "3.0"/></Talk_Stage02_3_2>
