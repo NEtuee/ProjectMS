@@ -92,18 +92,18 @@
         <Branch Weight="RandBoolean^False"  Condition="(TargetDistance > gv_StdDistance)"       Execute="DashRushReady"/>
     </PreBattle>
     <JudgeMeleeAttack Package="CommonIdlePackage">
-        <Branch Condition="aiGraphCoolTime_Headbutt"            Execute="Headbutt"/>
-        <Branch Condition="aiGraphCoolTime_TrippleRushReady"    Execute="TrippleRushReady"/>
-        <Branch Weight="RandBoolean^True"   Condition="true"    Execute="RushReady"/>
-        <Branch Weight="RandBoolean^False"  Condition="true"    Execute="Dodge"/>
+        <Branch Condition="aiGraphCoolTime_Headbutt && (getStat_HP <= 25.0)"    Execute="Headbutt"/>
+        <Branch Condition="aiGraphCoolTime_TrippleRushReady"                    Execute="TrippleRushReady"/>
+        <Branch Weight="RandBoolean^True"   Condition="true"                    Execute="RushReady"/>
+        <Branch Weight="RandBoolean^False"  Condition="true"                    Execute="Dodge"/>
     </JudgeMeleeAttack>
     <JudgeRangedAttack Package="CommonIdlePackage">
-        <Branch Condition="aiGraphCoolTime_Headbutt"            Execute="Headbutt"/>
-        <Branch Condition="aiGraphCoolTime_Call"                Execute="Call"/>
-        <Branch Condition="aiGraphCoolTime_Pitching"            Execute="Pitching"/>
-        <Branch Weight="RandVector3^x"      Condition="true"    Execute="DashRushReady"/>
-        <Branch Weight="RandVector3^y"      Condition="true"    Execute="Chase"/>
-        <Branch Weight="RandVector3^z"      Condition="true"    Execute="Dash"/>
+        <Branch Condition="aiGraphCoolTime_Headbutt && (getStat_HP <= 25.0)"    Execute="Headbutt"/>
+        <Branch Condition="aiGraphCoolTime_Call && (getStat_HP <= 40.0)"        Execute="Call"/>
+        <Branch Condition="aiGraphCoolTime_Pitching"                            Execute="Pitching"/>
+        <Branch Weight="RandVector3^x"      Condition="true"                    Execute="DashRushReady"/>
+        <Branch Weight="RandVector3^y"      Condition="true"                    Execute="Chase"/>
+        <Branch Weight="RandVector3^z"      Condition="true"                    Execute="Dash"/>
     </JudgeRangedAttack>
 
     <!-- 피격 리액션 판단 -->
@@ -152,13 +152,13 @@
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </Rush>
 
-    <Headbutt Package="NajimiHeadbuttPackage" CoolTime="20.0">
+    <Headbutt Package="NajimiHeadbuttPackage" CoolTime="25.0">
         <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </Headbutt>
 
-    <TrippleRushReady Package="NajimiAttackReadyPackage" CoolTime="7.0">
+    <TrippleRushReady Package="NajimiAttackReadyPackage" CoolTime="5.0">
         <UseBranchSet Name="IsPlayerDead"/>
         <Branch Condition="CurrentPackageEnd" Execute="TrippleRush"/>
     </TrippleRushReady>
@@ -187,7 +187,7 @@
         <Branch Condition="TargetExists && (1.5 >= TargetDistance)" Execute="Rush"/>
     </StunChase>
     
-    <Call Package="NajimiSpawnPitchingMachinePackage" CoolTime="12.0">
+    <Call Package="NajimiSpawnPitchingMachinePackage" CoolTime="15.0">
         <UseBranchSet Name="IsPlayerDead"/>
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>

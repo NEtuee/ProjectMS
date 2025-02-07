@@ -68,10 +68,18 @@
                 <AIEvent Type="SetDirectionToTarget" Speed="500"/>
             </Event_OnFrame>
 
-            <Branch Condition="(getStat_RushCount >= 3.0)" Execute="TerminatePackage"/>
+            <Branch Condition="(getStat_RushCount >= 3.0)" Execute="AI_HeadbuttRecover"/>
             <Branch Condition="(TargetDistance <= 1.8)" Execute="AI_Headbutt"/>
-            <Branch Condition="(PackageExecutedTime >= 3.0)" Execute="TerminatePackage"/>
+            <Branch Condition="(PackageExecutedTime >= 3.0)" Execute="AI_HeadbuttRecover"/>
         </AI_HeadbuttMove>
+        <AI_HeadbuttRecover UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="AC_HeadbuttRecover"/>
+            </Event_OnExecute>
+
+            <Branch Condition="End" Execute="TerminatePackage"/>
+        </AI_HeadbuttRecover>
 
         <TerminatePackage>
             <Event_OnExecute>
