@@ -41,6 +41,14 @@
 
     <!-- Introduce -->
     <CustomValue Name="IsHitten" Value="0.0"/>
+    <!-- SummonerCount -->
+    <CustomValue Name="CurrentSummonCount" Value="0.0"/>
+    <CustomEvent_CountSummon>
+        <AIEvent Type="AddCustomValue" Name="CurrentSummonCount" Value="1.0"/>
+    </CustomEvent_CountSummon>
+    <CustomEvent_DiscountSummon>
+        <AIEvent Type="AddCustomValue" Name="CurrentSummonCount" Value="-1.0"/>
+    </CustomEvent_DiscountSummon>
     
     <!-- 패시브 방어 실행 지연 시간 설정 -->
     <GlobalVariable Name="gv_PassiveDef_Hit_DelayTime" Value="0.2"/>            <!-- 누적 피격 반응 지연 시간-->
@@ -99,7 +107,8 @@
     </JudgeMeleeAttack>
     <JudgeRangedAttack Package="CommonIdlePackage">
         <Branch Condition="aiGraphCoolTime_Headbutt && (getStat_HP <= 25.0)"    Execute="Headbutt"/>
-        <Branch Condition="aiGraphCoolTime_Call && (getStat_HP <= 40.0)"        Execute="Call"/>
+        <Branch Condition="aiGraphCoolTime_Call && (getStat_HP <= 40.0)
+                        && (customValue_CurrentSummonCount <= 1.0)"             Execute="Call"/>
         <Branch Condition="aiGraphCoolTime_Pitching"                            Execute="Pitching"/>
         <Branch Weight="RandVector3^x"      Condition="true"                    Execute="DashRushReady"/>
         <Branch Weight="RandVector3^y"      Condition="true"                    Execute="Chase"/>

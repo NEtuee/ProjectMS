@@ -409,7 +409,10 @@
             <FrameEvent Type="SpawnCharacter" StartTime="0.2" CharacterKey="DumbellChan" Offset="Random_-10^-15 Random_-3^3 0"   InheritDirection="false" AINode="Entry_Battle"/>
             <FrameEvent Type="SpawnCharacter" StartTime="0.3" CharacterKey="BarbellChan" Offset="Random_-5^5 Random_8^12 0"  InheritDirection="false" AINode="Entry_Battle"/>
             <FrameEvent Type="SpawnCharacter" StartTime="0.4" CharacterKey="DumbellChan" Offset="Random_10^15 Random_-3^3 0"     InheritDirection="false" AINode="Entry_Battle"/>
-           
+            <FrameEvent Type="CallAIEvent" StartTime="0.2" EventName="CountSummon" EventTargetType="Self"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0.3" EventName="CountSummon" EventTargetType="Self"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0.4" EventName="CountSummon" EventTargetType="Self"/>
+
             <FrameEvent Type="Projectile" Condition="getWeight_RandBoolean^True"   StartTime="0" GraphName="RunnerSpawner" DirectionType="AITarget" SpawnTargetType="Self" Offset="-10 Random_-3^3 0"/>
             <FrameEvent Type="Projectile" Condition="getWeight_RandBoolean^False"  StartTime="0" GraphName="RunnerSpawner" DirectionType="AITarget" SpawnTargetType="Self" Offset="10 Random_-3^3 0"/>
             
