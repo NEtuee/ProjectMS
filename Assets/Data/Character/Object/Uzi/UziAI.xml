@@ -20,14 +20,22 @@
     <GlobalVariable Name="gv_MoveThreshold"                 Value="2.5"/>       <!-- 최대 거리 : PC와 Value 이상 거리가 벌어진 경우 이동한다. -->
     <GlobalVariable Name="gv_StopThreshold"                 Value="2.0"/>       <!-- 최소 거리 : PC와 Value 이상 거리가 가까워진 경우 정지 또는 경계한다. -->
     <GlobalVariable Name="gv_AwayThreshold"                 Value="1.5"/>       <!-- 최소 거리 : PC와 Value 이상 거리가 가까워진 경우 거리를 벌린다. -->
+    <!-- Custom Value -->
+    <CustomValue Name="IsSuicide" Value="0.0"/>
+    
+    <CustomEvent_KillUzi>
+        <AIEvent Type="AddCustomValue" Name="IsSuicide" Value="1.0"/>
+    </CustomEvent_KillUzi>
 
     <BranchSet Name="IsPlayerDead">
         <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="customValue_IsSuicide >= 1.0" Execute="Dead"/>
         <Branch Condition="getTargetFrameTag_Dead" Execute="EnemyWin"/>
     </BranchSet>
 
     <BranchSet Name="HitReactionSet">
         <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="customValue_IsSuicide >= 1.0" Execute="Dead"/>
         <Branch Condition="Hit && getFrameTag_HitAvail" Execute="Hit"/> 
         <Branch Condition="(GuardBreakFail || GuardBroken) && getFrameTag_GbAvail" Execute="GuardBroken"/>
     </BranchSet>
