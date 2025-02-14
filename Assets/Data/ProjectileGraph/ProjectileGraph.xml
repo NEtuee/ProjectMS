@@ -784,5 +784,29 @@
             </OnEnd>
         </Event>
     </AttackThrow>
+    <!-- 자판기 음료 -->
+    
+    <Drink DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1" Gravity="-9.8" CastShadow="True">
+        <Animation Preset="Sprites/Projectile/Drink" XFlip="true" Duration="5.0">        
+        </Animation>
 
+        <CollisionInfo Radius="0.1" Angle="0"/>
+        <DefaultShotInfo Velocity="7.0" Acceleration="0" Friction="3" Angle="0" AngularAcceleration="0" LifeTime="5.0"/>
+        <Event>
+            <OnHit>
+                <FrameEvent Type="AudioPlay" StartTime="0" ID="4902" Attach="true"/>
+                <FrameEvent Type="ApplyBuffTarget" ApplyBuff="VendingMachineHeal"/>
+            </OnHit>
+    
+            <OnHitEnd>
+                
+            </OnHitEnd>
+    
+            <OnEnd>
+                <FrameEvent Type="Effect" Path="Sprites/Projectile/Drink" FramePerSecond="0.2" CastShadow="True" Offset="0 0 0" Attach="false" ToTarget="false" AngleType="Keep">
+                    <Physics UseGravity="True" Velocity="0.0 0.0" Friction="1" Torque="1" AngularFriction="10.0"/>
+                </FrameEvent>
+            </OnEnd>
+        </Event>
+    </Drink>
 </ProjectileGraph>
