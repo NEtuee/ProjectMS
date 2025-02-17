@@ -14,7 +14,7 @@
         </Trigger>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
-     </AC_Idle>
+    </AC_Idle>
     
     <AC_Hit_L MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Keep" DefenceType="Guard" DefenceAngle="360" Flags="OutlineGuard">
         <AnimationHeader MasterPath="gv_MasterPath"/>
