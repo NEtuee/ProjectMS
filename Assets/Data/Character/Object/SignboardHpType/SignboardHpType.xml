@@ -28,7 +28,7 @@
         <Branch Condition="Dead == true" Execute="Dead"/>
     </AC_Bepushed>
     
-    <AC_Dead MovementType="FrameEvent" DirectionType="AlwaysRight">
+    <Dead MovementType="FrameEvent" DirectionType="AlwaysRight">
         <Animation Preset="Sprites/Object/SignboardHpType/4_dead" XFlip="false" Duration="1">
 
             <FrameEvent Type="Effect" StartTime="0" Path="Sprites/Object/SignboardHpType/4_dead" FramePerSecond="0.2" CastShadow="True">
@@ -39,6 +39,6 @@
         </Animation>
 
         <Branch Condition="End == true" Execute="Dead"/>
-    </AC_Dead>
+    </Dead>
 
 </ActionGraph>
