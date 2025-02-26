@@ -1,8 +1,8 @@
-<ActionGraph Name="SignboardHpType" DefaultAction="AC_Idle" DefaultFramePerSecond="12">
+<ActionGraph Name="SignboardRotationType" DefaultAction="AC_Idle" DefaultFramePerSecond="12">
 
-    <AC_Idle MovementType="FrameEvent" DirectionType="AlwaysRight">
-        <Animation Preset="Sprites/Object/SignboardHpType/1_idle" XFlip="false" Duration="1">
-            <FrameEvent Type="Movement" StartTime="0" Friction="0" Velocity="0" MaxVelocity="0" Speed="0"/>
+    <AC_Idle MovementType="FrameEvent" DirectionType="AlwaysRight" RotationType="Torque">
+        <Animation Preset="Sprites/Object/SignboardRotationType/1_idle" XFlip="false" Duration="1">
+             <FrameEvent Type="Torque" Add="20" Set="20"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
@@ -11,7 +11,7 @@
     </AC_Idle>
 
     <AC_Withstand MovementType="FrameEvent" DirectionType="AlwaysRight">
-        <Animation Preset="Sprites/Object/SignboardHpType/2_withstand" XFlip="false" Duration="1">
+        <Animation Preset="Sprites/Object/SignboardRotationType/2_withstand" XFlip="false" Duration="1">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Velocity="0" MaxVelocity="0"/>
         </Animation>
 
@@ -20,7 +20,7 @@
     </AC_Withstand>
 
     <AC_Bepushed MovementType="FrameEvent" DirectionType="AttackedPoint" DirectionAngle="180">
-        <Animation Preset="Sprites/Object/SignboardHpType/3_Bepushed" XFlip="false" Duration="1">
+        <Animation Preset="Sprites/Object/SignboardRotationType/3_Bepushed" XFlip="false" Duration="1">
             <FrameEvent Type="Movement" StartTime="0" Friction="1" Velocity="7" MaxVelocity="7" Speed="0"/>
         </Animation>
 
@@ -29,7 +29,7 @@
     </AC_Bepushed>
     
     <Dead MovementType="FrameEvent" DirectionType="AlwaysRight">
-        <Animation Preset="Sprites/Object/SignboardHpType/4_dead" XFlip="false" Duration="1">
+        <Animation Preset="Sprites/Object/SignboardRotationType/4_dead" XFlip="false" Duration="1">
 
             <FrameEvent Type="Effect" StartTime="0" Path="Sprites/Object/SignboardHpType/4_dead" FramePerSecond="0.2" CastShadow="True">
                 <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
