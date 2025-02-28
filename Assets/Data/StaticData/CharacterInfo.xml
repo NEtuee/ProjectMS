@@ -968,4 +968,26 @@
 
         AllyInfo="CommonBattle"
     />
+    <SignboardHpType
+        DisplayName="대간판"
+        ActionGraph="Assets/Data/Character/Object/SignboardHpType/SignboardHpType.xml"
+        AIGraph="Assets/Data/AILibrary/Graph/EmptyAIGraph.xml"
+        StatusInfoName="SignboardHpType"
+
+        CollisionRadius="0.5"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="CommonBattle"
+    />
+    <SignboardRotationType
+        DisplayName="회전간판"
+        ActionGraph="Assets/Data/Character/Object/SignboardRotationType/SignboardRotationType.xml"
+        AIGraph="Assets/Data/AILibrary/Graph/EmptyAIGraph.xml"
+        StatusInfoName="SignboardRotationType"
+
+        CollisionRadius="0.5"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="CommonBattle"
+    />
 </CharacterInfo>

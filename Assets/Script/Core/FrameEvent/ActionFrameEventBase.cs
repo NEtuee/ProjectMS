@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System;
 using System.IO;
 using UnityEngine;
+using Unity.Collections;
 
 public enum FrameEventType
 {
@@ -2125,6 +2126,10 @@ public class ActionFrameEvent_Movement : ActionFrameEventBase
             MovementSetValueType movementSetValueType = new MovementSetValueType(attrValue, targetValue);
             movementSetValueList.Add(movementSetValueType);
         }
+
+        movementSetValueList.Sort((x,y)=>{
+            return y._targetValue.CompareTo(x._targetValue);
+        });
 
         _setValueList = movementSetValueList.ToArray();
         _valueListCount = movementSetValueList.Count;
