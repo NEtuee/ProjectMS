@@ -475,6 +475,7 @@ public enum ActionFlags : ulong
     ClearDanmaku = 1 << 5,
     OutlineGuard = 1 << 6,
     OutlineSuperArmor = 1 << 7,
+    OutlineNormal = 1 << 8,
 };
 
 public enum ConditionCompareType
