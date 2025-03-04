@@ -27,6 +27,9 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
 
             <FrameEvent Type="SetRotateSlotValue" StartTime="0" Speed="90" Radius="2.5"/>
+            
+            <FrameEvent Type="ApplyBuff" StartTime="0" Condition="(getStat_Phase == 1.0) && (20.0 < getStat_HP) && (getStat_HP <= 40.0)"    ApplyBuff="IncreasePhase"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" Condition="(getStat_Phase == 2.0) && (0.0 < getStat_HP) && (getStat_HP <= 20.0)"     ApplyBuff="IncreasePhase"/>
         </Animation>
         <Trigger Condition="GuardBroken">
             <FrameEvent Type="AudioPlay" ID="4911" Attach="true"/>
@@ -683,6 +686,18 @@
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_GuardBroken>
+
+    <AC_SelfHeal MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/9_selfHeal" XFlip="true" Duration="1">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+            <FrameEvent Type="ApplyBuff" Condition="(getStat_Phase == 1.0)" StartTime="0" ApplyBuff="BossSelfHealPhaseOne"/>
+            <FrameEvent Type="ApplyBuff" Condition="(getStat_Phase == 2.0)" StartTime="0" ApplyBuff="BossSelfHealPhaseTwo"/>
+            <FrameEvent Type="ApplyBuff" Condition="(getStat_Phase == 3.0)" StartTime="0" ApplyBuff="BossSelfHealPhaseThree"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_SelfHeal>
 <!-- Defense Action -->
 
     <AIMove MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="AI" FlipType="Direction" ActiveCollision="False">

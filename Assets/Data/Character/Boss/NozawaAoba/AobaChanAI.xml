@@ -40,6 +40,7 @@
     <Include Path="Assets/Data/AILibrary/Package/CommonGuardBrokenPackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonGroggyPackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonDashPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonSelfHealPackage.xml"/>
 
     <Include Path="Assets/Data/Character/Boss/NozawaAoba/AobaStormRaisenPackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/NozawaAoba/AobaChargeRaisenPackage.xml"/>
@@ -304,7 +305,13 @@
     </Dead>
 
     <EnemyWin Package="CommonIdlePackage">
-        <Branch Condition="getTargetFrameTag_Dead == false" Execute="Entry_Battle"/>
+        <Branch Condition="End" Execute="HealSelf"/>
     </EnemyWin>
+    <HealSelf Package="CommonSelfHealPackage">
+        <Branch Condition="CurrentPackageEnd" Execute="Wait"/>
+    </HealSelf>
+    <Wait Package="CommonIdlePackage">
+        <Branch Condition="getTargetFrameTag_Dead == false" Execute="Entry_Battle"/>
+    </Wait>
 
 </AIGraph>

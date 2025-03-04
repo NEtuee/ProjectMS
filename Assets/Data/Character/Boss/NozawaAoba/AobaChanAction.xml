@@ -18,6 +18,9 @@
             <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2413"/>
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="ResetRaisen" EventTargetType="Self"/>
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="ResetStorm" EventTargetType="Self"/>
+
+            <FrameEvent Type="ApplyBuff" StartTime="0" Condition="(getStat_Phase == 1.0) && (20.0 < getStat_HP) && (getStat_HP <= 40.0)"    ApplyBuff="IncreasePhase"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" Condition="(getStat_Phase == 2.0) && (0.0 < getStat_HP) && (getStat_HP <= 20.0)"     ApplyBuff="IncreasePhase"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
@@ -711,5 +714,17 @@
 
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_Kick>
+
+    <AC_SelfHeal MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+        <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/0_default/"/>
+        <Animation Preset="9_selfHeal" XFlip="true" Duration="1">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+            <FrameEvent Type="ApplyBuff" Condition="(getStat_Phase == 1.0)" StartTime="0" ApplyBuff="BossSelfHealPhaseOne"/>
+            <FrameEvent Type="ApplyBuff" Condition="(getStat_Phase == 2.0)" StartTime="0" ApplyBuff="BossSelfHealPhaseTwo"/>
+            <FrameEvent Type="ApplyBuff" Condition="(getStat_Phase == 3.0)" StartTime="0" ApplyBuff="BossSelfHealPhaseThree"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_SelfHeal>
 
 </ActionGraph>

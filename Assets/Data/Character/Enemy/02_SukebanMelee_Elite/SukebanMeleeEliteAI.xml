@@ -66,6 +66,8 @@
     <Include Path="Assets/Data/AILibrary/Package/CommonLaserAttackPackage.xml"/>   <!-- 빔 공격 패키지 (공격 시 추적 불가)-->
     <Include Path="Assets/Data/AILibrary/Package/CommonDodgePackage.xml"/>         <!-- 회피 패키지 -->
     <Include Path="Assets/Data/AILibrary/Package/CommonGuardPackage.xml"/>         <!-- 가드 패키지 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonSelfHealPackage.xml"/>
+
 <!-- 패키지 인클루드 -->
 
     <!-- Std Values -->
@@ -141,6 +143,7 @@
     <!-- 피격 리액션 브랜치 셋 -->
     <BranchSet Name="HitReactionSet">
         <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="getTargetFrameTag_Dead" Execute="EnemyWin"/>
         <Branch Weight="RandBoolean^True"
                 Condition="Hit && getFrameTag_HitAvail && (gv_HitCountThreshold_Tsuba == getStat_HitCount)
                         && gv_bIsCounterToPassiveDef_Hit
@@ -277,8 +280,15 @@
     </Dead>
 
     <EnemyWin Package="CommonIdlePackage">
-        <Branch Condition="getTargetFrameTag_Dead == false" Execute="Entry_Battle"/>
+        <Branch Condition="End" Execute="HealSelf"/>
     </EnemyWin>
+    <HealSelf Package="CommonSelfHealPackage">
+        <Branch Condition="CurrentPackageEnd" Execute="Wait"/>
+    </HealSelf>
+    <Wait Package="CommonIdlePackage">
+        <Branch Condition="getTargetFrameTag_Dead == false" Execute="Entry_Battle"/>
+    </Wait>
+
 <!-- AI State -->
 
 </AIGraph>

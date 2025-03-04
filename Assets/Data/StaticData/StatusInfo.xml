@@ -116,16 +116,18 @@
         <Stat Type="Battle" Max="0" Min="0" Init="0"/>
         <Stat Type="HitCount" Max="999" Min="0" Init="0"/>
         <Stat Type="GuardCount" Max="999" Min="0" Init="0"/>
+        <Stat Type="Custom" Name="Phase" Max="2" Min="0" Init="1"/>
         <Stat Type="Custom" Name="GuardPoint" Max="2" Min="0" Init="2"/>
         <Stat Type="Custom" Name="AttackDelay" Max="1" Min="0" Init="1"/>
     </TateChanStatus>
 
     <SukebanEliteChanStatus>
-        <Stat Type="HP" Max="25" Min="0" Init="25"/>
+        <Stat Type="HP" Max="30" Min="0" Init="30"/>
         <Stat Type="Blood" Max="100" Min="0" Init="3"/>
         <Stat Type="Battle" Max="0" Min="0" Init="0"/>
         <Stat Type="HitCount" Max="999" Min="0" Init="0"/>
         <Stat Type="GuardCount" Max="999" Min="0" Init="0"/>
+        <Stat Type="Custom" Name="Phase" Max="2" Min="0" Init="1"/>
     </SukebanEliteChanStatus>
 
     <SukebanTaishouChanStatus>
@@ -146,7 +148,7 @@
     </TestEnemyStatus>
 
     <OsananaNajimiStatus>
-        <Stat Type="HP" Max="50" Min="0" Init="50"/>
+        <Stat Type="HP" Max="60" Min="0" Init="60"/>
         <Stat Type="Blood" Max="100" Min="0" Init="3"/>
         <Stat Type="Battle" Max="20" Min="0" Init="0"/>
         <Stat Type="HitCount" Max="999" Min="0" Init="0"/>
@@ -159,12 +161,13 @@
     </OsananaNajimiStatus>
 
     <KantoReitoStatus>
-        <Stat Type="HP" Max="50" Min="0" Init="50"/>
+        <Stat Type="HP" Max="60" Min="0" Init="60"/>
         <Stat Type="Blood" Max="100" Min="0" Init="3"/>
         <Stat Type="Battle" Max="20" Min="0" Init="0"/>
         
         <Stat Type="HitCount" Max="999" Min="0" Init="0"/>
         <Stat Type="GuardCount" Max="999" Min="0" Init="0"/>
+        <Stat Type="Custom" Name="Phase" Max="3" Min="0" Init="1"/>
     
         <DeclareGraphicInterface Target="HP" Color="1 0 0 1" HorizontalGap="0.1"/>
         <DeclareGraphicInterface Target="Battle" Color="1 0.749 0 1" HorizontalGap="0.1"/>
@@ -172,11 +175,12 @@
     </KantoReitoStatus>
 
     <NozawaAobaStatus>
-        <Stat Type="HP" Max="50" Min="0" Init="50"/>
+        <Stat Type="HP" Max="60" Min="0" Init="60"/>
         <Stat Type="Blood" Max="100" Min="0" Init="3"/>
         <Stat Type="Battle" Max="20" Min="0" Init="0"/>
         <Stat Type="HitCount" Max="999" Min="0" Init="0"/>
         <Stat Type="GuardCount" Max="999" Min="0" Init="0"/>
+        <Stat Type="Custom" Name="Phase" Max="3" Min="0" Init="1"/>
 
         <DeclareGraphicInterface Target="HP" Color="1 0 0 1" HorizontalGap="0.1"/>
         <DeclareGraphicInterface Target="Battle" Color="1 0.749 0 1" HorizontalGap="0.1"/>
@@ -188,9 +192,10 @@
     </GauntletStatus>
 
     <SisterHelenaStatus>
-        <Stat Type="HP" Max="50" Min="0" Init="50"/>
+        <Stat Type="HP" Max="60" Min="0" Init="60"/>
         <Stat Type="Blood" Max="100" Min="0" Init="3"/>
         <Stat Type="Battle" Max="20" Min="0" Init="0"/>
+        <Stat Type="Custom" Name="Phase" Max="3" Min="0" Init="1"/>
         
         <Stat Type="HitCount" Max="999" Min="0" Init="0"/>
         <Stat Type="GuardCount" Max="999" Min="0" Init="0"/>
