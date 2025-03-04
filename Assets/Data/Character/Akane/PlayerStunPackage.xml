@@ -5,7 +5,9 @@
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="Stun"/>
             </Event_OnExecute>
-
+            <Event_OnAttacked>
+                <AIEvent Type="SetAction" Action="Hit"/>
+            </Event_OnAttacked>
             <Event_OnCatched>
                 <AIEvent Type="SetAction" Action="Catched"/>
             </Event_OnCatched>
