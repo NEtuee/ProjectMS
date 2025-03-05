@@ -15,6 +15,9 @@
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="0_default/1_idle" XFlip="true" Duration="1">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+            
+            <FrameEvent Type="ApplyBuff" StartTime="0" Condition="(getStat_Phase == 1.0) && (20.0 < getStat_HP) && (getStat_HP <= 40.0)"    ApplyBuff="IncreasePhase"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" Condition="(getStat_Phase == 2.0) && (0.0 < getStat_HP) && (getStat_HP <= 20.0)"     ApplyBuff="IncreasePhase"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
@@ -313,9 +316,22 @@
 
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_MissileLaunch>
+
+    <AC_SelfHeal MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/9_selfHeal" XFlip="true" Duration="1">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+            <FrameEvent Type="ApplyBuff" Condition="(getStat_Phase == 1.0)" StartTime="0" ApplyBuff="BossSelfHealPhaseOne"/>
+            <FrameEvent Type="ApplyBuff" Condition="(getStat_Phase == 2.0)" StartTime="0" ApplyBuff="BossSelfHealPhaseTwo"/>
+            <FrameEvent Type="ApplyBuff" Condition="(getStat_Phase == 3.0)" StartTime="0" ApplyBuff="BossSelfHealPhaseThree"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_SelfHeal>
 <!-- SKill Action -->
 
 
+<!-- Squence -->
     <SQ_CremationBeamReady MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" Flags="LaserEffect">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/2_cremationBeam/1_cremationBeamReady" XFlip="true" Duration="0.85">

@@ -859,12 +859,12 @@ public class ActionGraph
 
     public bool isCurrentOutlineAction()
     {
-        return checkCurrentActionFlag(ActionFlags.OutlineGuard) || checkCurrentActionFlag(ActionFlags.OutlineSuperArmor);
+        return checkCurrentActionFlag(ActionFlags.OutlineGuard) || checkCurrentActionFlag(ActionFlags.OutlineSuperArmor) || checkCurrentActionFlag(ActionFlags.OutlineNormal);
     }
 
     public bool isPrevOutlineAction()
     {
-        return checkPrevActionFlag(ActionFlags.OutlineGuard) || checkPrevActionFlag(ActionFlags.OutlineSuperArmor);
+        return checkPrevActionFlag(ActionFlags.OutlineGuard) || checkPrevActionFlag(ActionFlags.OutlineSuperArmor) || checkPrevActionFlag(ActionFlags.OutlineNormal);
     }
 
     public UnityEngine.Color getOutlineColor()
@@ -873,6 +873,8 @@ public class ActionGraph
             return getOutlineColor(ActionFlags.OutlineGuard);
         else if(checkCurrentActionFlag(ActionFlags.OutlineSuperArmor))
             return getOutlineColor(ActionFlags.OutlineSuperArmor);
+        else if(checkCurrentActionFlag(ActionFlags.OutlineNormal))
+            return getOutlineColor(ActionFlags.OutlineNormal);
         
         return UnityEngine.Color.white;
     }
@@ -885,6 +887,8 @@ public class ActionGraph
                 return new UnityEngine.Color(0.223f, 0.6f, 0.862f, 1.0f);
             case ActionFlags.OutlineSuperArmor:
                 return new UnityEngine.Color(1.0f, 0.47f, 0.0f, 1.0f);
+            case ActionFlags.OutlineNormal:
+                return new UnityEngine.Color(1.0f, 1.0f, 1.0f, 1.0f);
         }
 
         return UnityEngine.Color.white;

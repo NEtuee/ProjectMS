@@ -9,6 +9,7 @@
     <Include Path="Assets/Data/AILibrary/Package/CommonGuardBrokenPackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonRunawayPackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonDashPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonSelfHealPackage.xml"/>
 
     <Include Path="Assets/Data/Character/Boss/OsananaNajimiAlpha/NajimiHeadbuttPackage.xml"/>
     <Include Path="Assets/Data/Character/Boss/OsananaNajimiAlpha/NajimiRushPackage.xml"/>
@@ -97,17 +98,20 @@
     
     <PreBattle Package="CommonIdlePackage">
         <Branch Weight="RandBoolean^True"   Condition="(TargetDistance <= gv_StdDistance)"      Execute="RushReady"/>
-        <Branch Weight="RandBoolean^False"  Condition="(TargetDistance > gv_StdDistance)"       Execute="DashRushReady"/>
+        <Branch Weight="RandBoolean^False"  Condition="true"                                    Execute="Dodge"/>
+        <Branch Weight="RandBoolean^True"   Condition="(TargetDistance > gv_StdDistance)"       Execute="DashRushReady"/>
+        <Branch Weight="RandBoolean^False"  Condition="(TargetDistance > gv_StdDistance) 
+                                                    && aiGraphCoolTime_Pitching"             Execute="Pitching"/>
     </PreBattle>
     <JudgeMeleeAttack Package="CommonIdlePackage">
-        <Branch Condition="aiGraphCoolTime_Headbutt && (getStat_HP <= 25.0)"    Execute="Headbutt"/>
+        <Branch Condition="aiGraphCoolTime_Headbutt && (getStat_HP <= 30.0)"    Execute="Headbutt"/>
         <Branch Condition="aiGraphCoolTime_TrippleRushReady"                    Execute="TrippleRushReady"/>
         <Branch Weight="RandBoolean^True"   Condition="true"                    Execute="RushReady"/>
         <Branch Weight="RandBoolean^False"  Condition="true"                    Execute="Dodge"/>
     </JudgeMeleeAttack>
     <JudgeRangedAttack Package="CommonIdlePackage">
-        <Branch Condition="aiGraphCoolTime_Headbutt && (getStat_HP <= 25.0)"    Execute="Headbutt"/>
-        <Branch Condition="aiGraphCoolTime_Call && (getStat_HP <= 40.0)
+        <Branch Condition="aiGraphCoolTime_Headbutt && (getStat_HP <= 30.0)"    Execute="Headbutt"/>
+        <Branch Condition="aiGraphCoolTime_Call && (getStat_HP <= 50.0)
                         && (customValue_CurrentSummonCount <= 1.0)"             Execute="Call"/>
         <Branch Condition="aiGraphCoolTime_Pitching"                            Execute="Pitching"/>
         <Branch Weight="RandVector3^x"      Condition="true"                    Execute="DashRushReady"/>
@@ -228,7 +232,12 @@
     </Dead>
 
     <NajimiWin Package="CommonIdlePackage">
-        <Branch Condition="getTargetFrameTag_Dead == false" Execute="Entry"/>
+        <Branch Condition="End" Execute="HealSelf"/>
     </NajimiWin>
-
+    <HealSelf Package="CommonSelfHealPackage">
+        <Branch Condition="CurrentPackageEnd" Execute="Wait"/>
+    </HealSelf>
+    <Wait Package="CommonIdlePackage">
+        <Branch Condition="getTargetFrameTag_Dead == false" Execute="Entry"/>
+    </Wait>
 </AIGraph>

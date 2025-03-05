@@ -584,16 +584,14 @@ public class GameEntityBase : SequencerObjectBase
             }
 
             {
-                ulong outlineFlags = ((ulong)ActionFlags.OutlineGuard) | ((ulong)ActionFlags.OutlineSuperArmor);
+                ulong outlineFlags = ((ulong)ActionFlags.OutlineGuard) | ((ulong)ActionFlags.OutlineSuperArmor) | (ulong)ActionFlags.OutlineNormal;
                 if(((prevAnimationFlags ^ currentAnimationFlags) & outlineFlags) != 0)
                 {
                     if((prevAnimationFlags & outlineFlags) == 0 && (currentAnimationFlags & outlineFlags) != 0)
                     {
                         _outlineAppearTimeProcessItem.initialize(true);
                         _outlineSpriteObject.SetActive(true);
-                        _outlineMaterial.SetColor("_Color", _actionGraph.getOutlineColor(
-                            (currentAnimationFlags & (ulong)ActionFlags.OutlineGuard) != 0 ? ActionFlags.OutlineGuard : ActionFlags.OutlineSuperArmor)
-                        );
+                        _outlineMaterial.SetColor("_Color", _actionGraph.getOutlineColor());
 
                         updateOutline(0f);
                     }

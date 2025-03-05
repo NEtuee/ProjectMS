@@ -11,6 +11,7 @@
     <Include Path="Assets/Data/AILibrary/Package/CommonIdlePackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonHitPackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonGuardBrokenPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonSelfHealPackage.xml"/>
     
     <!-- 타겟 인지 거리 -->
     <GlobalVariable Name="gv_TargetSearchRange" Value="10.0"/>
@@ -30,6 +31,7 @@
     <!-- Branch Set -->
     <BranchSet Name="HitReactionSet">
         <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="getTargetFrameTag_Dead" Execute="EnemyWin"/>
         <Branch Condition="Hit" Execute="Hit"/>
         <Branch Condition="(GuardBroken || GuardBreakFail) && getFrameTag_CancelAvail" Execute="GuardBroken"/>
         <Branch Condition="(GuardBroken || GuardBreakFail) && (getStat_GuardPoint <= 0.0)" Execute="GuardBroken"/>
@@ -111,5 +113,16 @@
     
     <Dead Package="CommonDeadPackage">
     </Dead>
+
+
+    <EnemyWin Package="CommonIdlePackage">
+        <Branch Condition="End" Execute="HealSelf"/>
+    </EnemyWin>
+    <HealSelf Package="CommonSelfHealPackage">
+        <Branch Condition="CurrentPackageEnd" Execute="Wait"/>
+    </HealSelf>
+    <Wait Package="CommonIdlePackage">
+        <Branch Condition="getTargetFrameTag_Dead == false" Execute="Entry"/>
+    </Wait>
 
 </AIGraph>

@@ -722,6 +722,42 @@
         UpdateType="OneShot"
         ApplyType="Direct"
 
+        ParticleEffect="Prefab/Effect/Shine"
         Factor="5.0"
+    />
+    <BossSelfHealPhaseOne
+        Key="72"
+        StatusName="HP"
+        UpdateType="OneShot"
+        ApplyType="DirectSet"
+        Factor="60.0"
+    />
+    <BossSelfHealPhaseTwo
+        Key="73"
+        StatusName="HP"
+        UpdateType="OneShot"
+        ApplyType="DirectSet"
+        Factor="40.0"
+    />
+    <BossSelfHealPhaseThree
+        Key="74"
+        StatusName="HP"
+        UpdateType="OneShot"
+        ApplyType="DirectSet"
+        Factor="20.0"
+    />
+    <EliteSelfHealPhaseOne
+        Key="75"
+        StatusName="HP"
+        UpdateType="OneShot"
+        ApplyType="DirectSet"
+        Factor="30.0"
+    />
+    <EliteSelfHealPhaseTwo
+        Key="76"
+        StatusName="HP"
+        UpdateType="OneShot"
+        ApplyType="DirectSet"
+        Factor="15.0"
     />
 </BuffInfo>
