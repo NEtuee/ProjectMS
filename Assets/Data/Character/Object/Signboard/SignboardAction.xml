@@ -5,14 +5,14 @@
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
-        <Branch Condition="Hit == true" Execute="AC_Broken"/>
+        <Branch Condition="Hit == true" Execute="AC_Hit"/>
     </AC_Idle>
-    <AC_Broken MovementType="Empty" DirectionType="AlwaysRight" FlipType="AlwaysTurnOff" RotationType="AlwaysRight">
-        <Animation Preset="Sprites/Object/Signboard/2_broken" XFlip="false" Duration="1">
+    <AC_Hit MovementType="Empty" DirectionType="AlwaysRight" FlipType="AlwaysTurnOff" RotationType="AlwaysRight">
+        <Animation Preset="Sprites/Object/Signboard/2_hit" XFlip="false" Duration="1">
         </Animation>
 
         <Branch Condition="Dead == true" Execute="AC_Dead"/>
-    </AC_Broken>
+    </AC_Hit>
     <AC_Dead MovementType="Empty" DirectionType="AlwaysRight" FlipType="AlwaysTurnOff" RotationType="AlwaysRight">
         <Animation Preset="Sprites/Object/Signboard/3_dead" XFlip="false" Duration="1">
 
