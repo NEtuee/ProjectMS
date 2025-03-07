@@ -1,28 +1,27 @@
 <ActionGraph Name="SignboardHpType" DefaultAction="AC_Idle" DefaultFramePerSecond="12">
 
     <AC_Idle MovementType="FrameEvent" DirectionType="AlwaysRight">
-        <Animation Preset="Sprites/Object/SignboardMoveType/1_idle" XFlip="false" Duration="1">
+        <Animation Preset="Sprites/Object/SignboardMoveType/1_idle" XFlip="false" Duration="3">
             <FrameEvent Type="Movement" StartFrame="0" Friction="3" MaxVelocity="1.5" Speed="10"/>
         </Animation>
 
         <Branch Condition="GuardBreakFail == true" Execute="AC_GuardBroken"/>
         <Branch Condition="Hit == true" Execute="AC_Hit"/>
-        <Branch Condition="ActionExecutedTime == 1.0" Execute="AC_Move"/>
+        <Branch Condition="End == true" Execute="AC_Move"/>
     </AC_Idle>
     
     <AC_Move MovementType="FrameEvent" DirectionType="AlwaysRight" DirectionAngle="180" >
-        <Animation Preset="Sprites/Object/SignboardMoveType/2_move" XFlip="false" Duration="1">
-            <FrameEvent Type="Movement" StartFrame="0" Friction="3" MaxVelocity="1.5" Speed="20"/>
+        <Animation Preset="Sprites/Object/SignboardMoveType/2_move" XFlip="false" Duration="3">
+            <FrameEvent Type="Movement" StartFrame="0" Friction="3" MaxVelocity="1.5" Speed="10"/>
         </Animation>
 
-        <Branch Condition="End == true" Execute="AC_Idle"/>
         <Branch Condition="GuardBreakFail == true" Execute="AC_GuardBroken"/>
         <Branch Condition="Hit == true" Execute="AC_Hit"/>
-        <Branch Condition="ActionExecutedTime == 3.0" Execute="AC_Idle"/>
+        <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_Move>
 
     <AC_Hit MovementType="FrameEvent" DirectionType="AlwaysRight">
-        <Animation Preset="Sprites/Object/SignboardMoveType/3_hit" XFlip="false" Duration="1">
+        <Animation Preset="Sprites/Object/SignboardMoveType/3_hit" XFlip="false" Duration="0.1">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Velocity="0" MaxVelocity="0"/>
         </Animation>
 
@@ -31,7 +30,7 @@
     </AC_Hit>
 
     <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" DirectionAngle="180">
-        <Animation Preset="Sprites/Object/SignboardMoveType/4_dead" XFlip="false" Duration="1">
+        <Animation Preset="Sprites/Object/SignboardMoveType/4_dead" XFlip="false" Duration="0.1">
             <FrameEvent Type="Movement" StartTime="0" Friction="1" Velocity="7" MaxVelocity="7" Speed="0"/>
         </Animation>
 

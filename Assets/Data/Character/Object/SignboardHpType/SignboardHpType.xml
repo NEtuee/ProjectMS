@@ -1,35 +1,35 @@
 <ActionGraph Name="SignboardHpType" DefaultAction="AC_Idle" DefaultFramePerSecond="12">
 
     <AC_Idle MovementType="FrameEvent" DirectionType="AlwaysRight">
-        <Animation Preset="Sprites/Object/SignboardHpType/1_idle" XFlip="false" Duration="1">
+        <Animation Preset="Sprites/Object/SignboardHPType/1_idle" XFlip="false" Duration="1">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Velocity="0" MaxVelocity="0" Speed="0"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
-        <Branch Condition="GuardBreakFail == true" Execute="AC_Bepushed"/>
-        <Branch Condition="Hit == true" Execute="AC_Withstand"/>
+        <Branch Condition="GuardBreakFail == true" Execute="AC_GuardBroken"/>
+        <Branch Condition="Hit == true" Execute="AC_Hit"/>
     </AC_Idle>
 
-    <AC_Withstand MovementType="FrameEvent" DirectionType="AlwaysRight">
-        <Animation Preset="Sprites/Object/SignboardHpType/2_withstand" XFlip="false" Duration="1">
+    <AC_Hit MovementType="FrameEvent" DirectionType="AlwaysRight">
+        <Animation Preset="Sprites/Object/SignboardHPType/2_hit" XFlip="false" Duration="0.1">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Velocity="0" MaxVelocity="0"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
         <Branch Condition="Dead == true" Execute="Dead"/>
-    </AC_Withstand>
+    </AC_Hit>
 
-    <AC_Bepushed MovementType="FrameEvent" DirectionType="AttackedPoint" DirectionAngle="180">
-        <Animation Preset="Sprites/Object/SignboardHpType/3_Bepushed" XFlip="false" Duration="1">
-            <FrameEvent Type="Movement" StartTime="0" Friction="1" Velocity="7" MaxVelocity="7" Speed="0"/>
+    <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" DirectionAngle="180">
+        <Animation Preset="Sprites/Object/SignboardHPType/3_guardbroken" XFlip="false" Duration="0.1">
+            <FrameEvent Type="Movement" StartTime="0" Friction="1" Velocity="1.3" MaxVelocity="1.3" Speed="0"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
         <Branch Condition="Dead == true" Execute="Dead"/>
-    </AC_Bepushed>
+    </AC_GuardBroken>
     
     <Dead MovementType="FrameEvent" DirectionType="AlwaysRight">
-        <Animation Preset="Sprites/Object/SignboardHpType/4_dead" XFlip="false" Duration="1">
+        <Animation Preset="Sprites/Object/SignboardHPType/4_dead" XFlip="false" Duration="1">
 
             <FrameEvent Type="Effect" StartTime="0" Path="Sprites/Object/SignboardHpType/4_dead" FramePerSecond="0.2" CastShadow="True">
                 <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
