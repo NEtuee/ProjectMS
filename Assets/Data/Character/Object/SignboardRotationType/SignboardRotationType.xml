@@ -2,16 +2,15 @@
 
     <AC_Idle MovementType="FrameEvent" DirectionType="AlwaysRight" RotationType="Torque">
         <Animation Preset="Sprites/Object/SignboardRotationType/1_idle" XFlip="false" Duration="1">
-             <FrameEvent Type="Torque" Add="20" Set="20"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
         <Branch Condition="GuardBreakFail == true" Execute="AC_GuardBroken"/>
-        <Branch Condition="Hit == true" Execute=" AC_Hit"/>
+        <Branch Condition="Hit == true" Execute="AC_Hit"/>
     </AC_Idle>
 
     <AC_Hit MovementType="FrameEvent" DirectionType="AlwaysRight">
-        <Animation Preset="Sprites/Object/SignboardRotationType/2_Hit" XFlip="false" Duration="1">
+        <Animation Preset="Sprites/Object/SignboardRotationType/2_Hit" XFlip="false" Duration="0.1">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Velocity="0" MaxVelocity="0"/>
         </Animation>
 
@@ -20,7 +19,7 @@
     </AC_Hit>
 
     <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" DirectionAngle="180">
-        <Animation Preset="Sprites/Object/SignboardRotationType/3_GuardBroken" XFlip="false" Duration="1">
+        <Animation Preset="Sprites/Object/SignboardRotationType/3_GuardBroken" XFlip="false" Duration="0.1">
             <FrameEvent Type="Movement" StartTime="0" Friction="1" Velocity="4" MaxVelocity="4" Speed="0"/>
         </Animation>
 
