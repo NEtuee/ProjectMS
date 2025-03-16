@@ -960,8 +960,8 @@
     <Signboard
         DisplayName="간판"
         ActionGraph="Assets/Data/Character/Object/Signboard/SignboardAction.xml"
-        AIGraph="Assets/Data/AILibrary/Graph/EmptyAIGraph.xml"
-        StatusInfoName="CommonEnemyStatusNoUI"
+        AIGraph="Assets/Data/Character/Object/Signboard/SignboardAI.xml"
+        StatusInfoName="SignboardHpType"
 
         CollisionRadius="0.5"
         ProjectileCollisionRadius=""
@@ -970,7 +970,7 @@
     />
     <SignboardHpType
         DisplayName="대간판"
-        ActionGraph="Assets/Data/Character/Object/SignboardHpType/SignboardHpType.xml"
+        ActionGraph="Assets/Data/Character/Object/SignboardHpType/SignboardHpTypeAI.xml"
         AIGraph="Assets/Data/AILibrary/Graph/EmptyAIGraph.xml"
         StatusInfoName="SignboardHpType"
 
@@ -982,7 +982,7 @@
     <SignboardRotationType
         DisplayName="회전간판"
         ActionGraph="Assets/Data/Character/Object/SignboardRotationType/SignboardRotationType.xml"
-        AIGraph="Assets/Data/AILibrary/Graph/EmptyAIGraph.xml"
+        AIGraph="Assets/Data/Character/Object/SignboardRotationType/SignboardRotationTypeAI.xml"
         StatusInfoName="SignboardRotationType"
 
         CollisionRadius="0.5"
@@ -994,7 +994,7 @@
     <SignboardMoveType
         DisplayName="이동간판"
         ActionGraph="Assets/Data/Character/Object/SignboardMoveType/SignboardMoveType.xml"
-        AIGraph="Assets/Data/AILibrary/Graph/EmptyAIGraph.xml"
+        AIGraph="Assets/Data/Character/Object/SignboardMoveType/SignboardMoveTypeAI.xml"
         StatusInfoName="SignboardMoveType"
 
         CollisionRadius="0.5"
@@ -1006,7 +1006,7 @@
     <SignboardGuardType
         DisplayName="가드간판"
         ActionGraph="Assets/Data/Character/Object/SignboardGuardType/SignboardGuardType.xml"
-        AIGraph="Assets/Data/AILibrary/Graph/EmptyAIGraph.xml"
+        AIGraph="Assets/Data/Character/Object/SignboardGuardType/SignboardGuardTypeAI.xml"
         StatusInfoName="SignboardGuardType"
 
         CollisionRadius="0.5"
