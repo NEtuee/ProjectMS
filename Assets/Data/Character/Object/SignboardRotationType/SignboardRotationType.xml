@@ -5,8 +5,6 @@
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
-        <Branch Condition="GuardBreakFail == true" Execute="AC_GuardBroken"/>
-        <Branch Condition="Hit == true" Execute="AC_Hit"/>
     </AC_Idle>
 
     <AC_Hit MovementType="FrameEvent" DirectionType="AlwaysRight">
@@ -15,7 +13,6 @@
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
-        <Branch Condition="Dead == true" Execute="Dead"/>
     </AC_Hit>
 
     <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" DirectionAngle="180">
@@ -24,7 +21,6 @@
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
-        <Branch Condition="Dead == true" Execute="Dead"/>
     </AC_GuardBroken>
     
     <Dead MovementType="FrameEvent" DirectionType="AlwaysRight">

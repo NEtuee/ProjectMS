@@ -1,0 +1,19 @@
+<AIGraph Name="SignboardMoveTypeAI" DefaultState="Entry">
+
+    <Include Path="Assets/Data/AILibrary/Package/EmptyPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonDeadPackage.xml"/>
+    <Include Path="Assets/Data/Character/Object/SignboardMoveType/SignboardMoveTypePackage.xml"/>
+
+    <Entry Package="EmptyPackage">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="true" Execute="SignboardMoveType"/>
+    </Entry>
+
+    <SignboardMoveType Package="SignboardMoveTypePackage">
+        
+    </SignboardMoveType>
+
+    <Dead Package="CommonDeadPackage">
+    </Dead>
+
+</AIGraph>

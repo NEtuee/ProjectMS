@@ -1,4 +1,4 @@
-<ActionGraph Name="SignboardHpType" DefaultAction="AC_Idle" DefaultFramePerSecond="12">
+<ActionGraph Name="SignboardGuardType" DefaultAction="AC_Idle" DefaultFramePerSecond="12">
 
     <AC_Idle MovementType="FrameEvent" DefenceType="Guard" DefenceDirectionType="MousePoint" DefenceAngle="360">
         <Animation Preset="Sprites/Object/SignboardGuardType/1_idle" XFlip="false" Duration="1">
@@ -6,11 +6,10 @@
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
-        <Branch Condition="GuardBroken == true" Execute="AC_GuardBroken"/>
     </AC_Idle>
 
     <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" DirectionAngle="180">
-        <Animation Preset="Sprites/Object/SignboardHpType/2_GuardBroken" XFlip="false" Duration="1">
+        <Animation Preset="Sprites/Object/SignboardGuardType/2_GuardBroken" XFlip="false" Duration="1">
         <FrameEvent Type="KillEntity" StartTime="0"/>
         </Animation>
 
@@ -18,9 +17,9 @@
     </AC_GuardBroken>
     
     <Dead MovementType="FrameEvent" DirectionType="AlwaysRight">
-        <Animation Preset="Sprites/Object/SignboardHpType/3_dead" XFlip="false" Duration="1">
+        <Animation Preset="Sprites/Object/SignboardGuardType/3_dead" XFlip="false" Duration="1">
 
-            <FrameEvent Type="Effect" StartTime="0" Path="Sprites/Object/SignboardGuardType/4_dead" FramePerSecond="0.2" CastShadow="True">
+            <FrameEvent Type="Effect" StartTime="0" Path="Sprites/Object/SignboardGuardType/3_dead" FramePerSecond="0.2" CastShadow="True">
                 <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
             </FrameEvent>
             <FrameEvent Type="KillEntity" StartTime="0"/>

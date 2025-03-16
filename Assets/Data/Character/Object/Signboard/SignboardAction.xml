@@ -5,14 +5,23 @@
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
-        <Branch Condition="Hit == true" Execute="AC_Hit"/>
     </AC_Idle>
+
     <AC_Hit MovementType="Empty" DirectionType="AlwaysRight" FlipType="AlwaysTurnOff" RotationType="AlwaysRight">
         <Animation Preset="Sprites/Object/Signboard/2_hit" XFlip="false" Duration="1">
         </Animation>
 
-        <Branch Condition="Dead == true" Execute="Dead"/>
+        <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_Hit>
+
+    <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" DirectionAngle="180">
+        <Animation Preset="Sprites/Object/SignboardRotationType/3_GuardBroken" XFlip="false" Duration="0.1">
+            <FrameEvent Type="Movement" StartTime="0" Friction="1" Velocity="4" MaxVelocity="4" Speed="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_GuardBroken>
+
     <Dead MovementType="Empty" DirectionType="AlwaysRight" FlipType="AlwaysTurnOff" RotationType="AlwaysRight">
         <Animation Preset="Sprites/Object/Signboard/3_dead" XFlip="false" Duration="1">
 

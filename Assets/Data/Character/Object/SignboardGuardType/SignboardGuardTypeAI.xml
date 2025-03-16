@@ -1,0 +1,19 @@
+<AIGraph Name="SignboardGuardTypeAI" DefaultState="Entry">
+
+    <Include Path="Assets/Data/AILibrary/Package/EmptyPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonDeadPackage.xml"/>
+    <Include Path="Assets/Data/Character/Object/SignboardGuardType/SignboardGuardTypePackage.xml"/>
+
+    <Entry Package="EmptyPackage">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="true" Execute="SignboardGuardType"/>
+    </Entry>
+
+    <SignboardGuardType Package="SignboardGuardTypePackage">
+        
+    </SignboardGuardType>
+
+    <Dead Package="CommonDeadPackage">
+    </Dead>
+
+</AIGraph>
