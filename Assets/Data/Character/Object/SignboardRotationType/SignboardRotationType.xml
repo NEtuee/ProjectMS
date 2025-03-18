@@ -17,7 +17,7 @@
 
     <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" DirectionAngle="180">
         <Animation Preset="Sprites/Object/SignboardRotationType/3_GuardBroken" XFlip="false" Duration="0.1">
-            <FrameEvent Type="Movement" StartTime="0" Friction="1" Velocity="4" MaxVelocity="4" Speed="0"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="1" Velocity="1.5" MaxVelocity="1.5" Speed="0"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
