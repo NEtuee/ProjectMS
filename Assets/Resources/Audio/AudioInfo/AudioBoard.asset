@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28a8ce2f3e36f66499c829d7661a2b75, type: 3}
+  m_Name: AudioBoard
+  m_EditorClassIdentifier: 
+  _audioBoardEventBase:
+  - rid: 4770124762251264265
+  _entryIndex: 0
+  _nodeData:
+  - rid: 4770124762251264266
+  - rid: 4770124762251264267
+  _noteData:
+  - rid: 4770124762251264268
+  _linkData:
+  - rid: 4770124762251264269
+  references:
+    version: 2
+    RefIds:
+    - rid: 4770124762251264265
+      type: {class: AudioBoardEvent_Log, ns: , asm: Assembly-CSharp}
+      data:
+        _nextEventIndex: 
+        _logText: fwefwefwef
+    - rid: 4770124762251264266
+      type: {class: AudioBoardEventSet/NodeData, ns: , asm: Assembly-CSharp}
+      data:
+        _guid: entry
+        _position: {x: 117, y: 145}
+        _dataIndex: -1
+    - rid: 4770124762251264267
+      type: {class: AudioBoardEventSet/NodeData, ns: , asm: Assembly-CSharp}
+      data:
+        _guid: 234573c6-4802-4dcf-afcd-3db4d6721440
+        _position: {x: 292, y: 145}
+        _dataIndex: 0
+    - rid: 4770124762251264268
+      type: {class: AudioBoardEventSet/NoteData, ns: , asm: Assembly-CSharp}
+      data:
+        _position:
+          serializedVersion: 2
+          x: 415
+          y: 308
+          width: 250
+          height: 100
+        _title: New Note
+        _text: 
+        _theme: 0
+        _fontSize: 0
+    - rid: 4770124762251264269
+      type: {class: AudioBoardEventSet/LinkData, ns: , asm: Assembly-CSharp}
+      data:
+        _outputGuid: entry
+        _outputPort: Next
+        _inputGuid: 234573c6-4802-4dcf-afcd-3db4d6721440
+        _inputPort: Prev
