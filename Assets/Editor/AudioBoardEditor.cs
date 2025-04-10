@@ -8,6 +8,9 @@ using UnityEngine.UIElements;
 using UnityEditor.IMGUI.Controls;
 using UnityEditor.UIElements;
 using UnityEngine.Rendering;
+using Unity.Mathematics;
+using NUnit.Framework.Internal;
+using Packages.Rider.Editor.Util;
 
 
 [CustomEditor(typeof(AudioBoardEventSet))]
@@ -153,6 +156,7 @@ public class AudioBoardGraphView : GraphView
 
     private List<AudioBoardEventBase> _removedAudioEventList = new List<AudioBoardEventBase>();
     private readonly Vector2 kDefaultNodeSize = new Vector2(200f, 100f);
+    private VisualElement _audioEventEntryList;
 
     public AudioBoardGraphView(AudioBoardEventSet audioBoardEventSet)
     {
@@ -160,6 +164,9 @@ public class AudioBoardGraphView : GraphView
         this.AddManipulator(new ContentDragger());
         this.AddManipulator(new SelectionDragger());
         this.AddManipulator(new RectangleSelector());
+
+        var audioEventEntryPanel = CreateAudioEventEntryPanel();
+        Add(audioEventEntryPanel);
 
         this.RegisterCallback<KeyDownEvent>(evt =>
         {
@@ -200,6 +207,17 @@ public class AudioBoardGraphView : GraphView
 
             AddElement(stickyNoteNode);
         });
+
+        evt.menu.AppendAction("Create Group", action => 
+        {
+            Group groupNode = new Group();
+            groupNode.title = "New Group";
+
+            Vector2 worldPosition = contentViewContainer.WorldToLocal(mousePosition);
+            groupNode.SetPosition(new Rect(worldPosition, new Vector2(400f, 200f)));
+
+            AddElement(groupNode);
+        });
     }
 
     private void showDropdown(Vector2 position)
@@ -232,6 +250,142 @@ public class AudioBoardGraphView : GraphView
         audioBoardEventNode.SetPosition(new Rect(worldPosition, kDefaultNodeSize));
 
         return audioBoardEventNode;
+    }
+
+    private VisualElement CreateAudioEventEntryPanel()
+    {
+        var panel = new VisualElement();
+        panel.style.position = Position.Absolute;
+        panel.style.left = 10;
+        panel.style.top = 30;
+        panel.style.width = 200;
+        panel.style.height = Length.Percent(90); // 세로 꽉 차게
+        panel.style.backgroundColor = new Color(0.15f, 0.15f, 0.15f, 0.75f);
+        panel.style.paddingLeft = 8;
+        panel.style.paddingRight = 8;
+        panel.style.paddingTop = 8;
+        panel.style.flexDirection = FlexDirection.Column;
+        panel.style.borderBottomRightRadius = 6;
+        panel.style.borderTopLeftRadius = 8;
+        panel.style.borderTopRightRadius = 8;
+        panel.style.borderBottomLeftRadius = 8;
+        panel.style.borderBottomRightRadius = 8;
+
+        // 제목
+        var title = new Label("Audio Events");
+        title.style.unityFontStyleAndWeight = FontStyle.Bold;
+        title.style.marginBottom = 8;
+        panel.Add(title);
+
+        var listContainer = new VisualElement();
+        listContainer.style.flexDirection = FlexDirection.Column;
+        listContainer.style.height = Length.Percent(100); // 세로 꽉 차게
+        listContainer.style.marginBottom = -50;
+        panel.Add(listContainer);
+
+        _audioEventEntryList = listContainer;
+
+        // 버튼 예시
+        var addButton = new Button(() =>
+        {
+            AudioBoardEventSet.AudioBoardEventEntry eventEntry = createNewAudioEventEntry();
+            AudioBoardEventEntryNode eventEntryNode = createAudioEventEntryNode(ref eventEntry, getGraphCenterPosition());
+
+            AddElement(eventEntryNode);
+
+            createAudioEventListItem(eventEntryNode, _audioEventEntryList);
+        })
+        { text = "+ Add" };
+        panel.Add(addButton);
+
+        return panel;
+    }
+
+    private void createAudioEventListItem(AudioBoardEventEntryNode eventEntry, VisualElement listContainer)
+    {
+        var row = new VisualElement();
+        row.style.flexDirection = FlexDirection.Row;
+        row.style.alignItems = Align.Center;
+        row.style.backgroundColor = new Color(0.2f, 0.2f, 0.2f);
+        row.style.paddingLeft = 4;
+        row.style.paddingRight = 4;
+        row.style.paddingTop = 2;
+        row.style.paddingBottom = 2;
+        row.style.marginBottom = 3;
+        row.style.borderTopLeftRadius = 8;
+        row.style.borderTopRightRadius = 8;
+        row.style.borderBottomLeftRadius = 8;
+        row.style.borderBottomRightRadius = 8;
+    
+        var textField = new TextField { value = eventEntry._eventEntry._entryName };
+        textField.style.flexGrow = 1;
+        textField.RegisterValueChangedCallback(evt =>
+        {
+            eventEntry.title = evt.newValue;
+            eventEntry._eventEntry._entryName = evt.newValue;
+        });
+
+    
+        var deleteButton = new Button(() =>
+        {
+            listContainer.Remove(row);
+            RemoveNodeAndConnections(eventEntry);
+        })
+        {
+            text = "X"
+        };
+        deleteButton.style.width = 20;
+        deleteButton.style.marginLeft = 4;
+    
+        row.Add(textField);
+        row.Add(deleteButton);
+
+        listContainer.Add(row);
+    }
+
+    AudioBoardEventEntryNode createAudioEventEntryNode(ref AudioBoardEventSet.AudioBoardEventEntry eventEntry, Vector2 position)
+    {
+        AudioBoardEventEntryNode eventEntryNode = new AudioBoardEventEntryNode(eventEntry);
+        Vector2 worldPosition = contentViewContainer.WorldToLocal(position);
+        eventEntryNode.SetPosition(new Rect(worldPosition, kDefaultNodeSize));
+
+        return eventEntryNode;
+    }
+
+    public AudioBoardEventSet.AudioBoardEventEntry createNewAudioEventEntry()
+    {
+        AudioBoardEventSet.AudioBoardEventEntry eventEntry = new AudioBoardEventSet.AudioBoardEventEntry();
+        eventEntry._entryType = AudioBoardEventSet.AudioBoardEventEntryType.Custom;
+        eventEntry._entryName = "New Event";
+        eventEntry._entryIndex = -1;
+
+        return eventEntry;
+    }
+
+    Vector2 getGraphCenterPosition()
+    {
+        var graphRect = layout;
+        var centerInWindow = new Vector2(
+                resolvedStyle.width / 2f,
+                resolvedStyle.height / 2f);
+        return parent.LocalToWorld(centerInWindow);
+    }
+
+    public void RemoveNodeAndConnections(Node node)
+    {
+        var edgesToRemove = edges
+            .Where(e => e.input.node == node || e.output.node == node)
+            .ToList();
+
+        foreach (var edge in edgesToRemove)
+        {
+            edge.input?.Disconnect(edge);
+            edge.output?.Disconnect(edge);
+
+            RemoveElement(edge);
+        }
+
+        RemoveElement(node);
     }
 
     public override EventPropagation DeleteSelection()
@@ -281,21 +435,31 @@ public class AudioBoardGraphView : GraphView
         _removedAudioEventList.Clear();
 
         _audioBoardEventSet._audioBoardEventBase.Clear();
+        _audioBoardEventSet._eventEntry.Clear();
         _audioBoardEventSet._nodeData.Clear();
         _audioBoardEventSet._noteData.Clear();
+        _audioBoardEventSet._groupData.Clear();
         _audioBoardEventSet._linkData.Clear();
 
         Dictionary<string, int> guidToAudioBoardEventIndex = new Dictionary<string, int>();
+        Dictionary<AudioBoardEventEntryNode, int> entryNodeToEntryIndex = new Dictionary<AudioBoardEventEntryNode, int>();
+        Dictionary<GraphElement, int> nodeToNodeDataIndex = new Dictionary<GraphElement, int>();
 
         foreach (var node in nodes)
         {
             if(node is AudioBoardEventEntryNode)
             {
                 AudioBoardEventSet.NodeData nodeData = new AudioBoardEventSet.NodeData();
-                nodeData._dataIndex = -1;
+                nodeData._dataIndex = _audioBoardEventSet._eventEntry.Count;
                 nodeData._guid = "entry";
                 nodeData._position = node.GetPosition().position;
+                
+                AudioBoardEventEntryNode entryNode = node as AudioBoardEventEntryNode;
+                entryNodeToEntryIndex.Add(entryNode, nodeData._dataIndex);
+                nodeToNodeDataIndex.Add(entryNode, _audioBoardEventSet._nodeData.Count);
+
                 _audioBoardEventSet._nodeData.Add(nodeData);
+                _audioBoardEventSet._eventEntry.Add(entryNode._eventEntry);
             }
             else if(node is AudioBoardEventNodeBase)
             {
@@ -304,12 +468,13 @@ public class AudioBoardGraphView : GraphView
                 nodeData._dataIndex = _audioBoardEventSet._audioBoardEventBase.Count;
                 nodeData._guid = audioBoardEventNode._guid;
                 nodeData._position = audioBoardEventNode.GetPosition().position;
-                _audioBoardEventSet._nodeData.Add(nodeData);
 
                 AudioBoardEventBase audioBoardEvent = audioBoardEventNode.exportGameEvent();
-                _audioBoardEventSet._audioBoardEventBase.Add(audioBoardEvent);
+                nodeToNodeDataIndex.Add(audioBoardEventNode, _audioBoardEventSet._nodeData.Count);
+                guidToAudioBoardEventIndex.Add(nodeData._guid, _audioBoardEventSet._audioBoardEventBase.Count);
 
-                guidToAudioBoardEventIndex.Add(nodeData._guid, _audioBoardEventSet._audioBoardEventBase.Count - 1);
+                _audioBoardEventSet._nodeData.Add(nodeData);
+                _audioBoardEventSet._audioBoardEventBase.Add(audioBoardEvent);
             }
         }
 
@@ -325,6 +490,25 @@ public class AudioBoardGraphView : GraphView
             });
         }
 
+        foreach (var group in graphElements.OfType<Group>())
+        {
+            List<GraphElement> graphElements = group.containedElements.ToList();
+            foreach(var graphElement in graphElements)
+            {
+                if(nodeToNodeDataIndex.ContainsKey(graphElement) == false)
+                    continue;
+
+                _audioBoardEventSet._nodeData[nodeToNodeDataIndex[graphElement]]._groupIndex = _audioBoardEventSet._groupData.Count;
+            }
+
+
+            _audioBoardEventSet._groupData.Add(new AudioBoardEventSet.GroupData
+            {
+                _title = group.title,
+                _position = group.GetPosition()
+            });
+        }
+
         foreach (var edge in edges.ToList())
         {
             if (edge.input.node is AudioBoardEventNodeBase && edge.output.node is AudioBoardEventEntryNode)
@@ -332,16 +516,23 @@ public class AudioBoardGraphView : GraphView
                 AudioBoardEventNodeBase inputNode = edge.input.node as AudioBoardEventNodeBase;
                 AudioBoardEventEntryNode outputNode = edge.output.node as AudioBoardEventEntryNode;
 
+                int nodeIndex = entryNodeToEntryIndex[outputNode];
+
                 _audioBoardEventSet._linkData.Add(new AudioBoardEventSet.LinkData
                 {
-                    _outputGuid = "entry",
+                    _outputGuid = "entry_" + nodeIndex,
                     _outputPort = edge.output.portName,
                     _inputGuid = inputNode._guid,
                     _inputPort = edge.input.portName
                 });
 
                 int entryIndex = guidToAudioBoardEventIndex[inputNode._guid];
-                _audioBoardEventSet._entryIndex = entryIndex;
+
+                AudioBoardEventSet.AudioBoardEventEntry eventEntry = _audioBoardEventSet._eventEntry[nodeIndex];
+                eventEntry._entryIndex = entryIndex;
+                eventEntry._entryNameHash = IOControl.computeHash(eventEntry._entryName);
+
+                _audioBoardEventSet._eventEntry[nodeIndex] = eventEntry;
             }
             else if (edge.input.node is AudioBoardEventNodeBase && edge.output.node is AudioBoardEventNodeBase)
             {
@@ -383,20 +574,21 @@ public class AudioBoardGraphView : GraphView
 
         DeleteElements(graphElements.ToList());
         Dictionary<string, Node> guidToNode = new Dictionary<string, Node>();
-
-        bool hasEntryNode = false;
+        Dictionary<int, List<Node>> groupIndexToNode = new Dictionary<int, List<Node>>();
 
         foreach (var nodeData in audioBoardEventSet._nodeData)
         {
             Node node = null;
-            if(nodeData._dataIndex == -1 && nodeData._guid == "entry")
+            
+            if(nodeData._guid == "entry")
             {
-                AudioBoardEventEntryNode entryNode = new AudioBoardEventEntryNode();
-                entryNode.SetPosition(new Rect(nodeData._position, kDefaultNodeSize));
+                AudioBoardEventSet.AudioBoardEventEntry eventEntry = audioBoardEventSet._eventEntry[nodeData._dataIndex];
+                AudioBoardEventEntryNode entryNode = createAudioEventEntryNode(ref eventEntry, nodeData._position);
 
-                hasEntryNode = true;
+                createAudioEventListItem(entryNode, _audioEventEntryList);
 
                 node = entryNode;
+                guidToNode["entry_" + nodeData._dataIndex] = node;
             }
             else
             {
@@ -410,10 +602,14 @@ public class AudioBoardGraphView : GraphView
                 audioBoardEventNode.constructPort();
 
                 node = audioBoardEventNode;
+                guidToNode[nodeData._guid] = node;
             }
 
+            if(groupIndexToNode.ContainsKey(nodeData._groupIndex) == false)
+                groupIndexToNode[nodeData._groupIndex] = new List<Node>();
+
+            groupIndexToNode[nodeData._groupIndex].Add(node);
             AddElement(node);
-            guidToNode[nodeData._guid] = node;
         }
 
         foreach (var noteData in audioBoardEventSet._noteData)
@@ -426,6 +622,24 @@ public class AudioBoardGraphView : GraphView
             stickyNote.fontSize = noteData._fontSize;
 
             AddElement(stickyNote);
+        }
+
+        for(int index = 0; index < audioBoardEventSet._groupData.Count; ++index)
+        {
+            Group group = new Group();
+            group.title = audioBoardEventSet._groupData[index]._title;
+            group.SetPosition(audioBoardEventSet._groupData[index]._position);
+
+            if(groupIndexToNode.ContainsKey(index))
+            {
+                List<Node> nodeList = groupIndexToNode[index];
+                foreach(var node in nodeList)
+                {
+                    group.AddElement(node);
+                }
+            }
+
+            AddElement(group);
         }
 
         foreach (var link in audioBoardEventSet._linkData)
@@ -448,23 +662,22 @@ public class AudioBoardGraphView : GraphView
             }
         }
 
-        if(hasEntryNode == false)
-        {
-            AudioBoardEventEntryNode entryNode = new AudioBoardEventEntryNode();
-            entryNode.SetPosition(new Rect(Vector2.zero, kDefaultNodeSize));
-
-            AddElement(entryNode);
-        }
-
+        
     }
 }
 
 public class AudioBoardEventEntryNode : Node
 {
-    public AudioBoardEventEntryNode()
+    public AudioBoardEventSet.AudioBoardEventEntry _eventEntry;
+
+    public AudioBoardEventEntryNode(AudioBoardEventSet.AudioBoardEventEntry eventEntry)
     {
-        title = "Entry";
+        capabilities &= ~Capabilities.Deletable;
         mainContainer.style.backgroundColor = new StyleColor(Color.green);
+
+        _eventEntry = eventEntry;
+
+        title = _eventEntry._entryName;
 
         var output = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, null);
         output.portName = "Next";

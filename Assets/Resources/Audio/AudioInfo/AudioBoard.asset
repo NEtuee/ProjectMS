@@ -13,52 +13,112 @@ MonoBehaviour:
   m_Name: AudioBoard
   m_EditorClassIdentifier: 
   _audioBoardEventBase:
-  - rid: 4770124762251264265
-  _entryIndex: 0
+  - rid: 4770124785498980558
+  - rid: 4770124785498980559
+  _eventEntry:
+  - _entryType: 0
+    _entryName: TestEvent
+    _entryNameHash: 514404018
+    _entryIndex: 0
+  - _entryType: 0
+    _entryName: New Event1
+    _entryNameHash: 164822805
+    _entryIndex: 0
   _nodeData:
-  - rid: 4770124762251264266
-  - rid: 4770124762251264267
+  - rid: 4770124785498980560
+  - rid: 4770124785498980561
+  - rid: 4770124785498980562
+  - rid: 4770124785498980563
   _noteData:
-  - rid: 4770124762251264268
+  - rid: 4770124785498980564
+  _groupData:
+  - rid: 4770124785498980565
   _linkData:
-  - rid: 4770124762251264269
+  - rid: 4770124785498980566
+  - rid: 4770124785498980567
+  - rid: 4770124785498980568
   references:
     version: 2
     RefIds:
-    - rid: 4770124762251264265
+    - rid: 4770124785498980558
+      type: {class: AudioBoardEvent_Log, ns: , asm: Assembly-CSharp}
+      data:
+        _nextEventIndex: 01000000
+        _logText: feqwewfw
+    - rid: 4770124785498980559
       type: {class: AudioBoardEvent_Log, ns: , asm: Assembly-CSharp}
       data:
         _nextEventIndex: 
-        _logText: fwefwefwef
-    - rid: 4770124762251264266
+        _logText: 
+    - rid: 4770124785498980560
       type: {class: AudioBoardEventSet/NodeData, ns: , asm: Assembly-CSharp}
       data:
         _guid: entry
-        _position: {x: 117, y: 145}
-        _dataIndex: -1
-    - rid: 4770124762251264267
+        _position: {x: -252, y: 108}
+        _dataIndex: 0
+        _groupIndex: 0
+    - rid: 4770124785498980561
       type: {class: AudioBoardEventSet/NodeData, ns: , asm: Assembly-CSharp}
       data:
-        _guid: 234573c6-4802-4dcf-afcd-3db4d6721440
-        _position: {x: 292, y: 145}
+        _guid: 6df2f6d4-7616-4693-9b57-11e17f12b7a6
+        _position: {x: -11, y: -4}
         _dataIndex: 0
-    - rid: 4770124762251264268
+        _groupIndex: 0
+    - rid: 4770124785498980562
+      type: {class: AudioBoardEventSet/NodeData, ns: , asm: Assembly-CSharp}
+      data:
+        _guid: 51582c6e-5bb8-4938-b566-36e99a000576
+        _position: {x: 236, y: -4}
+        _dataIndex: 1
+        _groupIndex: 0
+    - rid: 4770124785498980563
+      type: {class: AudioBoardEventSet/NodeData, ns: , asm: Assembly-CSharp}
+      data:
+        _guid: entry
+        _position: {x: -235, y: -97}
+        _dataIndex: 1
+        _groupIndex: 0
+    - rid: 4770124785498980564
       type: {class: AudioBoardEventSet/NoteData, ns: , asm: Assembly-CSharp}
       data:
         _position:
           serializedVersion: 2
-          x: 415
-          y: 308
-          width: 250
-          height: 100
-        _title: New Note
-        _text: 
+          x: -46
+          y: -368
+          width: 254
+          height: 155
+        _title: "\uD14C\uC2A4\uD2B8\uD14C\uC2A4\uD2B8"
+        _text: "\u314B\u314B"
         _theme: 0
         _fontSize: 0
-    - rid: 4770124762251264269
+    - rid: 4770124785498980565
+      type: {class: AudioBoardEventSet/GroupData, ns: , asm: Assembly-CSharp}
+      data:
+        _title: New Group
+        _position:
+          serializedVersion: 2
+          x: -276.99994
+          y: -156
+          width: 688
+          height: 366
+    - rid: 4770124785498980566
       type: {class: AudioBoardEventSet/LinkData, ns: , asm: Assembly-CSharp}
       data:
-        _outputGuid: entry
+        _outputGuid: 6df2f6d4-7616-4693-9b57-11e17f12b7a6
         _outputPort: Next
-        _inputGuid: 234573c6-4802-4dcf-afcd-3db4d6721440
+        _inputGuid: 51582c6e-5bb8-4938-b566-36e99a000576
+        _inputPort: Prev
+    - rid: 4770124785498980567
+      type: {class: AudioBoardEventSet/LinkData, ns: , asm: Assembly-CSharp}
+      data:
+        _outputGuid: entry_1
+        _outputPort: Next
+        _inputGuid: 6df2f6d4-7616-4693-9b57-11e17f12b7a6
+        _inputPort: Prev
+    - rid: 4770124785498980568
+      type: {class: AudioBoardEventSet/LinkData, ns: , asm: Assembly-CSharp}
+      data:
+        _outputGuid: entry_0
+        _outputPort: Next
+        _inputGuid: 6df2f6d4-7616-4693-9b57-11e17f12b7a6
         _inputPort: Prev

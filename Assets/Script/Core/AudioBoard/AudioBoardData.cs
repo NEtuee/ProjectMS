@@ -19,8 +19,23 @@ public enum AudioBoardEventType
 [CreateAssetMenu(fileName = "AudioBoard", menuName = "Scriptable Object/Audio Board")]
 public class AudioBoardEventSet : ScriptableObject
 {
+    public enum AudioBoardEventEntryType
+    {
+        Custom,
+        Count,
+    }
+
+    [Serializable]
+    public struct AudioBoardEventEntry
+    {
+        public AudioBoardEventEntryType _entryType;
+        public string _entryName;
+        public int _entryNameHash;
+        public int _entryIndex;
+    }
+
     [SerializeReference] public List<AudioBoardEventBase> _audioBoardEventBase = new List<AudioBoardEventBase>();
-    [SerializeReference] public int _entryIndex = 0;
+    [SerializeField] public List<AudioBoardEventEntry> _eventEntry = new List<AudioBoardEventEntry>();
 
 #if UNITY_EDITOR
 
@@ -30,6 +45,7 @@ public class AudioBoardEventSet : ScriptableObject
         public string _guid;
         public Vector2 _position;
         public int _dataIndex;
+        public int _groupIndex = -1;
     }
 
     [Serializable]
@@ -43,6 +59,13 @@ public class AudioBoardEventSet : ScriptableObject
     }
 
     [Serializable]
+    public class GroupData
+    {
+        public string _title;
+        public Rect _position;
+    }
+
+    [Serializable]
     public class LinkData
     {
         public string _outputGuid;
@@ -53,6 +76,7 @@ public class AudioBoardEventSet : ScriptableObject
 
     [SerializeReference] public List<NodeData> _nodeData = new List<NodeData>();
     [SerializeReference] public List<NoteData> _noteData = new List<NoteData>();
+    [SerializeReference] public List<GroupData> _groupData = new List<GroupData>();
     [SerializeReference] public List<LinkData> _linkData = new List<LinkData>();
 #endif
 }
