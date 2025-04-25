@@ -806,4 +806,14 @@
             </OnEnd>
         </Event>
     </Drink>
+
+    <PropanegasCylinder DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">
+        <Animation Preset="Sprites/Projectile/PropanegasCylinderVisualizer" XFlip="true" Duration="2.0">  
+        </Animation>
+
+        <CollisionInfo Radius="0.1" Angle="360"/>
+        <DefaultShotInfo Velocity="0" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="0.3"/>
+        <Event>
+        </Event>
+    </PropanegasCylinder>
 </ProjectileGraph>
