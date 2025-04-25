@@ -1,5 +1,12 @@
 <AIPackage Name="SignboardPackage" DefaultState="AI_Idle">
 
+    <BranchSet Name="ReactionSet">
+        <Branch Condition="Dead" Execute="AI_Dead"/>
+        <Branch Condition="Hit" Execute="AI_Hit"/>
+        <Branch Condition="GuardBreakFail || GuardBroken" Execute="AI_GuardBroken"/>
+        <Branch Condition="End" Execute="AI_Idle"/>
+    </BranchSet>
+
     <AIState>
         <AI_Idle UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
@@ -7,10 +14,7 @@
                 <AIEvent Type="SetAction" Action="AC_Idle"/>
             </Event_OnExecute>
 
-            <Branch Condition="Dead" Execute="AI_Dead"/>
-            <Branch Condition="Hit" Execute="AI_Hit"/>
-            <Branch Condition="GuardBreakFail || GuardBroken" Execute="AI_GuardBroken"/>
-            <Branch Condition="End" Execute="AI_Idle"/>
+            <UseBranchSet Name="ReactionSet"/>
         </AI_Idle>
 
         <AI_Hit UpdateTime="0.0">
@@ -18,10 +22,7 @@
                 <AIEvent Type="SetAction" Action="AC_Hit"/>
             </Event_OnExecute>
 
-            <Branch Condition="Dead" Execute="AI_Dead"/>
-            <Branch Condition="Hit" Execute="AI_Hit"/>
-            <Branch Condition="GuardBreakFail || GuardBroken" Execute="AI_GuardBroken"/>
-            <Branch Condition="End" Execute="AI_Idle"/>
+            <UseBranchSet Name="ReactionSet"/>
         </AI_Hit>
 
         <AI_GuardBroken UpdateTime="0.0">
@@ -29,10 +30,7 @@
                 <AIEvent Type="SetAction" Action="AC_GuardBroken"/>
             </Event_OnExecute>
 
-            <Branch Condition="Dead" Execute="AI_Dead"/>
-            <Branch Condition="Hit" Execute="AI_Hit"/>
-            <Branch Condition="GuardBreakFail || GuardBroken" Execute="AI_GuardBroken"/>
-            <Branch Condition="End" Execute="AI_Idle"/>
+            <UseBranchSet Name="ReactionSet"/>
         </AI_GuardBroken>
 
         <AI_Dead UpdateTime="999.0">

@@ -1,19 +1,31 @@
 <AIGraph Name="SignboardHpTypeAI" DefaultState="Entry">
 
-    <Include Path="Assets/Data/AILibrary/Package/EmptyPackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonDeadPackage.xml"/>
-    <Include Path="Assets/Data/Character/Object/SignboardHpType/SignboardHpTypePackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonIdlePackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonHitPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonGuardBrokenPackage.xml"/>
 
-    <Entry Package="EmptyPackage">
+    <BranchSet Name="ReactionSet">
         <Branch Condition="Dead" Execute="Dead"/>
-        <Branch Condition="true" Execute="SignboardHpType"/>
-    </Entry>
+        <Branch Condition="Hit" Execute="Hit"/>
+        <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Idle"/>
+    </BranchSet>
 
-    <SignboardHpType Package="SignboardHpTypePackage">
-        
-    </SignboardHpType>
+    <Idle Package="CommonIdlePackage">
+        <UseBranchSet Name="ReactionSet"/>
+    </Idle>
+
+    <Hit Package="CommonHitPackage">
+        <UseBranchSet Name="ReactionSet"/>
+    </Hit>
+
+    <GuardBroken Package="CommonGuardBrokenPackage">
+        <UseBranchSet Name="ReactionSet"/>
+    </GuardBroken>
 
     <Dead Package="CommonDeadPackage">
+        <UseBranchSet Name="ReactionSet"/>
     </Dead>
 
 </AIGraph>
