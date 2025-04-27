@@ -227,7 +227,7 @@
 
     <AC_Away MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/1_rushPattern/4_away/"/>
-        <Animation Preset="1_awaySpin" XFlip="true" RotationPreset="Away" Duration="1.0">
+        <Animation Preset="1_awaySpin" XFlip="true" Duration="1.0">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2108" Attach="true"/>
 
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Velocity="-6" Speed="0"/>
@@ -258,9 +258,9 @@
 
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_HeadbuttReady>
-    <AC_Headbutt MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineSuperArmor">
-        <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/0_default/"/>
-        <Animation Preset="3_dash" XFlip="true" Duration="0.4">
+    <AC_Headbutt MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction" Flags="OutlineSuperArmor">
+        <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/5_headbutt/"/>
+        <Animation Preset="2_kick" XFlip="true" Duration="0.4">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2100" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="24.0" MaxVelocity="16.0" Velocity="16.0" Speed="0.0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="NajimiAddRushCount"/>
@@ -286,8 +286,8 @@
     </AC_Headbutt>
 
     <AC_HeadbuttReflected MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineSuperArmor">
-        <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/0_default/"/>
-        <Animation Preset="3_dash" XFlip="true" Duration="0.3">
+        <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/5_headbutt/"/>
+        <Animation Preset="1_dash" XFlip="true" Duration="0.4">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2100" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="28.0" MaxVelocity="11.0" Velocity="11.0" Speed="0.0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
@@ -298,8 +298,8 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_HeadbuttReflected>
     <AC_HeadbuttTurn MovementType="FrameEvent"  DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/0_default/"/>
-        <Animation Preset="3_dash" XFlip="true" Duration="0.4">
+        <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/5_headbutt/"/>
+        <Animation Preset="1_dash" XFlip="true" Duration="0.4">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="4" Speed="15"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
@@ -309,8 +309,8 @@
         <Branch Condition="End" Execute="AC_HeadbuttTurn"/>
     </AC_HeadbuttTurn>
     <AC_HeadbuttMove MovementType="FrameEvent"  DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/0_default/"/>
-        <Animation Preset="3_dash" XFlip="true" Duration="0.4">
+        <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/5_headbutt/"/>
+        <Animation Preset="1_dash" XFlip="true" Duration="0.4">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="6" Speed="15"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
