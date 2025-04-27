@@ -1,16 +1,15 @@
-<ActionGraph Name="SignboardGuardType" DefaultAction="AC_Idle" DefaultFramePerSecond="12">
+<ActionGraph Name="SignboardGuardType" DefaultAction="AC_Guard" DefaultFramePerSecond="12">
 
-    <AC_Idle MovementType="FrameEvent" DefenceType="Guard" DefenceDirectionType="MousePoint" DefenceAngle="360">
-        <Animation Preset="Sprites/Object/SignboardGuardType/1_idle" XFlip="false" Duration="1">
+    <AC_Guard MovementType="FrameEvent" DefenceType="Guard" DefenceDirectionType="MousePoint" DefenceAngle="360">
+        <Animation Preset="Sprites/Object/SignboardGuardType/1_Guard" XFlip="false" Duration="1">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Velocity="0" MaxVelocity="0" Speed="0"/>
         </Animation>
 
-        <Branch Condition="End == true" Execute="AC_Idle"/>
-    </AC_Idle>
+        <Branch Condition="End == true" Execute="AC_Guard"/>
+    </AC_Guard>
 
     <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" DirectionAngle="180">
         <Animation Preset="Sprites/Object/SignboardGuardType/2_GuardBroken" XFlip="false" Duration="1">
-        <FrameEvent Type="KillEntity" StartTime="0"/>
         </Animation>
 
         <Branch Condition="Dead == true" Execute="Dead"/>

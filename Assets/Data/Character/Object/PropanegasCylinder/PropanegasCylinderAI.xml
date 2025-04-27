@@ -1,0 +1,17 @@
+<AIGraph Name="PropanegasCylinderAI" DefaultState="Entry">
+    <Include Path="Assets\Data\Character\Object\PropanegasCylinder\PropanegasCylinderPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonGuardBrokenPackage.xml"/>
+
+    <BranchSet Name="ReactionSet">
+        <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
+    </BranchSet>
+
+    <Entry Package="PropanegasCylinderPackage">
+        <UseBranchSet Name="ReactionSet"/>
+    </Entry>
+
+    <GuardBroken Package="CommonGuardBrokenPackage">
+        <UseBranchSet Name="ReactionSet"/>
+    </GuardBroken>
+
+</AIGraph>

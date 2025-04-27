@@ -1,0 +1,19 @@
+<AIPackage Name="PropanegasCylinderPackage" DefaultState="AI_Idle">
+
+    <AIState>
+        <AI_Idle UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="AC_Idle"/>
+            </Event_OnExecute>
+        </AI_Idle>
+
+        <AI_Hit UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="AC_Hit"/>
+            </Event_OnExecute>
+        </AI_Hit>
+    </AIState>
+
+</AIPackage>
