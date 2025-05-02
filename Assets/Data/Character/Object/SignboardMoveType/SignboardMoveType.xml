@@ -5,7 +5,7 @@
             <FrameEvent Type="Movement" StartFrame="0" Friction="3" MaxVelocity="1.5" Speed="10"/>
         </Animation>
 
-        <Branch Condition="End == true" Execute="AC_Move"/>
+        <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_Idle>
     
     <AC_Move MovementType="FrameEvent" DirectionType="AlwaysRight" DirectionAngle="180" >
@@ -13,7 +13,7 @@
             <FrameEvent Type="Movement" StartFrame="0" Friction="3" MaxVelocity="1.5" Speed="10"/>
         </Animation>
 
-        <Branch Condition="End == true" Execute="AC_Idle"/>
+        <Branch Condition="End == true" Execute="AC_Move"/>
     </AC_Move>
 
     <AC_Hit MovementType="FrameEvent" DirectionType="AlwaysRight">

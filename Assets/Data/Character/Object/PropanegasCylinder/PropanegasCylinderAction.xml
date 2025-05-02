@@ -11,7 +11,7 @@
     <AC_Hit MovementType="Empty" DirectionType="Keep" DefenceType="Evade" DefenceAngle="360">
         <Animation Preset="Sprites/Object/PropanegasCylinder/2_hit" Duration="3">
             <FrameEvent Type="Projectile" StartTime="0" EndTime="3" GraphName="PropanegasCylinder" DirectionType="AI" SpawnTargetType="Self"/>
-            <FrameEvent Type="Attack" StartTime="3" EndTime="3" AttackPreset="Aoba_EmpGrenade">
+            <FrameEvent Type="Attack" StartTime="3" AttackPreset="Aoba_EmpGrenade">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
                 </OnHit>
@@ -22,7 +22,7 @@
 
     <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" DirectionAngle="180">
         <Animation Preset="Sprites/Object/PropanegasCylinder/3_guardbroken" XFlip="false" Duration="0.1">
-            <FrameEvent Type="Movement" StartTime="0" Friction="1" Velocity="9.5" MaxVelocity="8" Speed="0"/>
+            <FrameEvent Type="FrameEvent" StartTime="0" Friction="1" Velocity="9.5" MaxVelocity="8" Speed="0"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
