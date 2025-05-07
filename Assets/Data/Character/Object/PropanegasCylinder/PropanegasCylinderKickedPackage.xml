@@ -1,14 +1,14 @@
-<AIPackage Name="PropanegasCylinderPackage" DefaultState="AI_Idle">
+<AIPackage Name="PropanegasCylinderKickedPackage" DefaultState="AI_Hit">
 
-    <AIState>
-        <AI_Idle UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+    <AIState>      
+        <AI_Kicked UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
-                <AIEvent Type="SetAction" Action="AC_Idle"/>
+                <AIEvent Type="SetAction" Action="AC_Kicked"/>
             </Event_OnExecute>
 
-            <Branch Condition="Hit" Execute="AI_Hit"/>
-        </AI_Idle>
+            <Branch Condition="PackageExecutedTime >= 0.2" Execute="AI_Hit"/>
+        </AI_Kicked>
         
         <AI_Hit UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
@@ -24,7 +24,6 @@
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_Exit"/>
             </Event_OnExecute>
-        </AI_Exit>
+        </AI_Exite>
     </AIState>
-
 </AIPackage>

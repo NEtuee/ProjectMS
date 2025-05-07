@@ -1,14 +1,27 @@
-<AIGraph Name="PropanegasCylinderAI" DefaultState="Entry">
+<AIGraph Name="PropanegasCylinderAI" DefaultState="Idle">
+    <Include Path="Assets/Data/AILibrary/Package/CommonIdlePackage.xml"/>
     <Include Path="Assets/Data/Character/Object/PropanegasCylinder/PropanegasCylinderPackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonGuardBrokenPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonHitPackage.xml"/>
+    <Include Path="Assets/Data/Character/Object/PropanegasCylinder/PropanegasCylinderKickedPackage.xml">
 
     <BranchSet Name="ReactionSet">
         <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
+        <Branch Condition="Hit" Execute="Hit"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Idle"/>
     </BranchSet>
 
-    <Entry Package="PropanegasCylinderPackage">
+    <Idle Package="CommonIdlePackage">
         <UseBranchSet Name="ReactionSet"/>
-    </Entry>
+    </Idle>
+
+    <Hit Package="PropanegasCylinderPackage">
+        <Branch Condition="GuardBreakFail || GuardBroken" Execute="Kicked"/>
+    </Hit>
+
+    <Kicked Package="PropanegasCylinderKickedPackage">
+        <Branch Condition="GuardBreakFail || GuardBroken" Execute="Kicked"/>
+    </HitKickedGuardBroken>
 
     <GuardBroken Package="CommonGuardBrokenPackage">
         <UseBranchSet Name="ReactionSet"/>
