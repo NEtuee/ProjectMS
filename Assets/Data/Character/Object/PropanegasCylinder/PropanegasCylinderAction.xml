@@ -1,15 +1,15 @@
 <ActionGraph Name="PropanegasCylinderAction" DefaultAction="AC_Idle" DefaultFramePerSecond="12">
 
-    <AC_Idle MovementType="Empty" DirectionType="AI" FlipType="Direction" RotationType="Direction">
+    <AC_Idle MovementType="Empty" DirectionType="AI" FlipType="Direction" RotationType="Direction" DirectionAngle="180">
         <Animation Preset="Sprites/Object/PropanegasCylinder/1_idle" XFlip="false" Duration="1">
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_Idle>
 
-    <AC_Hit MovementType="SetDefenceType" DirectionType="Keep" DefenceType="Guard" DefenceAngle="360">
+    <AC_Hit MovementType="FrameEvent" DirectionType="Keep" DefenceType="Guard" DefenceAngle="360">
         <Animation Preset="Sprites/Object/PropanegasCylinder/2_hit" Duration="3">
-            <FrameEvent Type="Projectile" StartTime="0" EndTime="3" GraphName="PropanegasCylinder" DirectionType="AI" SpawnTargetType="Self"/>
+            <FrameEvent Type="Projectile" StartTime="3" GraphName="PropanegasCylinder" DirectionType="AI" SpawnTargetType="Self"/>
             <FrameEvent Type="Attack" StartTime="3" AttackPreset="Aoba_EmpGrenade">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
@@ -21,7 +21,7 @@
 
     <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" DirectionAngle="180">
         <Animation Preset="Sprites/Object/PropanegasCylinder/3_guardbroken" XFlip="false" Duration="0.1">
-            <FrameEvent Type="FrameEvent" StartTime="0" Friction="1" Velocity="5" MaxVelocity="3.5" Speed="0"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="1" Velocity="5" MaxVelocity="3.5" Speed="0"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>
@@ -29,14 +29,26 @@
 
     <AC_Kicked MovementType="FrameEvent" DirectionType="AttackedPoint" DirectionAngle="180">
         <Animation Preset="Sprites/Object/PropanegasCylinder/4_kicked" XFlip="false" Duration="0.1">
-            <FrameEvent Type="FrameEvent" StartTime="0" Friction="1" Velocity="9.5" MaxVelocity="8" Speed="0"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="4.5" Velocity="5" MaxVelocity="5" Speed="0"/>
         </Animation>
 
-        <Branch Condition="End" Execute="Exit"/>
+        <Branch Condition="End" Execute="AC_Hit"/>
     </AC_Kicked>
 
+    <AC_Explosion MovementType="FrameEvent" DirectionType="Keep" DefenceType="Guard" DefenceAngle="360">
+        <Animation Preset="Sprites/Object/PropanegasCylinder/5_Explosion" Duration="0.1">
+            <FrameEvent Type="Projectile" StartTime="0.0" GraphName="PropanegasCylinder" DirectionType="AI" SpawnTargetType="Self"/>
+            <FrameEvent Type="Attack" StartTime="0.0" AttackPreset="Aoba_EmpGrenade">
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
+                </OnHit>
+            </FrameEvent>
+        </Animation>
+        <Branch Condition="End" Execute="Exit"/>
+    </AC_Explosion>
+
     <Exit MovementType="Empty" DirectionType="Keep">
-        <Animation Preset="Sprites/Object/PropanegasCylinder/5_exit" Duration="0.016">
+        <Animation Preset="Sprites/Object/PropanegasCylinder/6_exit" Duration="0.016">
             <FrameEvent Type="KillEntity" StartFrame="0"/>
         </Animation>
 

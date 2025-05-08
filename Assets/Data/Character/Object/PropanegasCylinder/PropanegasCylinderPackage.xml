@@ -17,12 +17,24 @@
             </Event_OnExecute>
 
             <Branch Condition="Hit" Execute="AI_Exit"/>
+            <Branch Condition="GuardBreakFail || GuardBroken" Execute="AI_Kicked"/>
         </AI_Hit>
+
+        <AI_Kicked UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="AC_Kicked"/>
+            </Event_OnExecute>
+
+            <Branch Condition="PackageExecutedTime >= 0.2" Execute="AI_Hit"/>
+            <Branch Condition="GuardBreakFail || GuardBroken" Execute="AI_Kicked"/>
+            <Branch Condition="End" Execute="AI_Hit"/>
+        </AI_Kicked>
 
         <AI_Exit UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
-                <AIEvent Type="SetAction" Action="AC_Exit"/>
+                <AIEvent Type="SetAction" Action="Exit"/>
             </Event_OnExecute>
         </AI_Exit>
     </AIState>
