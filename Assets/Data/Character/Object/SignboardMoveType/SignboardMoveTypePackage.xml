@@ -7,10 +7,7 @@
                 <AIEvent Type="SetAction" Action="AC_Idle"/>
             </Event_OnExecute>
 
-            <Branch Condition="Dead" Execute="AI_Dead"/>
-            <Branch Condition="Hit" Execute="AI_Hit"/>
-            <Branch Condition="GuardBreakFail || GuardBroken" Execute="AI_GuardBroken"/>
-            <Branch Condition="End" Execute="AI_Move"/>
+            <Branch Condition="ActionExecutedTime >= 2.0" Execute="AI_Move"/>
         </AI_Idle>
 
         <AI_Move UpdateTime="0.0">
@@ -19,40 +16,8 @@
                 <AIEvent Type="SetAction" Action="AC_Move"/>
             </Event_OnExecute>
 
-            <Branch Condition="Dead" Execute="AI_Dead"/>
-            <Branch Condition="Hit" Execute="AI_Hit"/>
-            <Branch Condition="GuardBreakFail || GuardBroken" Execute="AI_GuardBroken"/>
-            <Branch Condition="End" Execute="AI_Idle"/>
+            <Branch Condition="ActionExecutedTime >= 2.0" Execute="AI_Idle"/>
         </AI_Move>
-
-        <AI_Hit UpdateTime="0.0">
-            <Event_OnExecute>
-                <AIEvent Type="SetAction" Action="AC_Hit"/>
-            </Event_OnExecute>
-
-            <Branch Condition="Dead" Execute="AI_Dead"/>
-            <Branch Condition="Hit" Execute="AI_Hit"/>
-            <Branch Condition="GuardBreakFail || GuardBroken" Execute="AI_GuardBroken"/>
-            <Branch Condition="End" Execute="AI_Idle"/>
-        </AI_Hit>
-
-        <AI_GuardBroken UpdateTime="0.0">
-            <Event_OnExecute>
-                <AIEvent Type="SetAction" Action="AC_GuardBroken"/>
-            </Event_OnExecute>
-
-            <Branch Condition="Dead" Execute="AI_Dead"/>
-            <Branch Condition="Hit" Execute="AI_Hit"/>
-            <Branch Condition="GuardBreakFail || GuardBroken" Execute="AI_GuardBroken"/>
-            <Branch Condition="End" Execute="AI_Idle"/>
-        </AI_GuardBroken>
-
-        <AI_Dead UpdateTime="999.0">
-            <Event_OnExecute>
-               <AIEvent Type="SetAction" Action="Dead"/>
-               <AIEvent Type="TerminatePackage"/>
-            </Event_OnExecute>
-        </AI_Dead>
     </AIState>
 
 </AIPackage>

@@ -1,0 +1,21 @@
+<AIPackage Name="PropanegasCylinderExplosionPackage" DefaultState="AI_Explosion">
+
+    <AIState>
+        <AI_Explosion UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="AC_Explosion"/>
+            </Event_OnExecute>
+
+            <Branch Condition="End" Execute="AI_Exit"/>
+        </AI_Explosion>
+
+        <AI_Exit UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="Exit"/>
+            </Event_OnExecute>
+        </AI_Exit>
+    </AIState>
+
+</AIPackage>

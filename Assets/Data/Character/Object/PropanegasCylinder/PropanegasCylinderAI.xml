@@ -1,17 +1,26 @@
-<AIGraph Name="PropanegasCylinderAI" DefaultState="Entry">
-    <Include Path="Assets\Data\Character\Object\PropanegasCylinder\PropanegasCylinderPackage.xml"/>
+<AIGraph Name="PropanegasCylinderAI" DefaultState="Idle">
+    <Include Path="Assets/Data/Character/Object/PropanegasCylinder/PropanegasCylinderPackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonGuardBrokenPackage.xml"/>
+    <Include Path="Assets/Data/Character/Object/PropanegasCylinder/PropanegasCylinderExplosionPackage.xml"/>
 
     <BranchSet Name="ReactionSet">
         <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
+        <Branch Condition="Hit" Execute="Hit"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Idle"/>
     </BranchSet>
 
-    <Entry Package="PropanegasCylinderPackage">
+    <Idle Package="PropanegasCylinderPackage">
         <UseBranchSet Name="ReactionSet"/>
-    </Entry>
+    </Idle>
+
+    <Hit Package="PropanegasCylinderPackage">
+        <Branch Condition="GraphExecutedTime >= 3.0" Execute="Explosion"/>
+    </Hit>
 
     <GuardBroken Package="CommonGuardBrokenPackage">
         <UseBranchSet Name="ReactionSet"/>
     </GuardBroken>
 
+    <Explosion Package="PropanegasCylinderExplosionPackage">
+    </Explosion>
 </AIGraph>
