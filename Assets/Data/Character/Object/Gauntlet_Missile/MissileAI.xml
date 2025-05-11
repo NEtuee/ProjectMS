@@ -1,4 +1,4 @@
-<AIGraph Name="MissileAI" DefaultState="Chase">
+<AIGraph Name="MissileAI" DefaultState="Launch">
 
     <Include Path="Assets/Data/AILibrary/Package/CommonDeadPackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonIdlePackage.xml"/>
@@ -59,6 +59,18 @@
                 
                 <Branch Condition="End" Execute="TerminatePackage"/>
             </AI_Explosion>
+            <AI_Reverse TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
+                <Event_OnExecute>
+                    <AIEvent Type="SetDirectionToTarget"/>
+                    <AIEvent Type="SetAction" Action="AC_Reverse"/>
+                </Event_OnExecute>
+
+                <Event_OnFrame>
+                    <AIEvent Type="SetDirectionToTarget"/>
+                </Event_OnFrame>
+                
+                <Branch Condition="End" Execute="AI_ReverseChase"/>
+            </AI_Reverse>
             <AI_ReverseChase TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
                 <Event_OnExecute>
                     <AIEvent Type="SetDirectionToTarget"/>
@@ -71,17 +83,17 @@
                 
                 <Branch Condition="End" Execute="AI_ReverseChase"/>
             </AI_ReverseChase>
-            <AI_ExploReverseChase UpdateTime="0.1" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
+            <AI_ExploReverse UpdateTime="0.1" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
                 <Event_OnExecute>
-                    <AIEvent Type="SetAction" Action="AC_ExplosionChase"/>
+                    <AIEvent Type="SetAction" Action="AC_ExploReverse"/>
                 </Event_OnExecute>
                 
                 <Event_OnFrame>
                     <AIEvent Type="SetDirectionToTarget"/>
                 </Event_OnFrame>
                 
-                <Branch Condition="End" Execute="AI_ExploReverseChase"/>
-            </AI_ExploReverseChase>
+                <Branch Condition="End" Execute="AI_ExploReverse"/>
+            </AI_ExploReverse>
             <TerminatePackage>
                 <Event_OnExecute>
                     <AIEvent Type="TerminatePackage"/>
@@ -90,7 +102,13 @@
         </AIState>
     </AIPackage>
 
-    <Chase Package="MissileChasePackage">
+    <Launch Package="MissileChasePackage">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="AttackSuccess" Execute="Explosion"/>
+        <Branch Condition="GuardBroken || GuardBreakFail" Execute="ReverseChase"/>
+        <Branch Condition="GraphExecutedTime >= 10.0" Execute="ExploChase"/>
+    </Launch>
+    <Chase Package="MissileChasePackage" EntryNode="AI_Chase">
         <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="AttackSuccess" Execute="Explosion"/>
         <Branch Condition="GuardBroken || GuardBreakFail" Execute="ReverseChase"/>
@@ -104,13 +122,13 @@
         <Branch Condition="GraphExecutedTime >= 5.0" Execute="Explosion"/>
     </ExploChase>
 
-    <ReverseChase Package="MissileChasePackage" EntryNode="AI_ReverseChase">
+    <ReverseChase Package="MissileChasePackage" EntryNode="AI_Reverse">
         <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="AttackSuccess" Execute="Explosion"/>
         <Branch Condition="GraphExecutedTime >= 10.0" Execute="ExploReverseChase"/>
     </ReverseChase>
 
-    <ExploReverseChase Package="MissileChasePackage" EntryNode="AI_ExploReverseChase">
+    <ExploReverseChase Package="MissileChasePackage" EntryNode="AI_ExploReverse">
         <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="AttackSuccess" Execute="Explosion"/>
         <Branch Condition="GraphExecutedTime >= 5.0" Execute="Explosion"/>

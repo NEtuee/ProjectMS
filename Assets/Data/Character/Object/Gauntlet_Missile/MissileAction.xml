@@ -11,9 +11,9 @@
 
     <AC_Lanch MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="0_default/2_move" XFlip="true" Duration="1.5">
+        <Animation Preset="0_default/2_move" XFlip="true" Duration="0.8">
             <!-- 뒤에 불꽃 붙어서 이동-->
-            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="15" Speed="15"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="8" MaxVelocity="15" Velocity="5" Speed="5"/>
             <!-- TODO : 타겟이 반대 방향에 위치하면 감속하여 회전하도록-->
             <FrameEvent Type="Attack" StartTime="0" EndTime="0.5" AttackPreset="Common_Radius01" NotifyAttackSuccess="False">
                 <OnHit>
@@ -47,7 +47,7 @@
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="1_attack/4_explosion" XFlip="true" Duration="0.5">
             <!-- 타임아웃 되어서 시한폭탄된 상태 -->
-            <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="15"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="15" Speed="15"/>
             <FrameEvent Type="Attack" StartTime="0" EndTime="0.5" AttackPreset="Common_Radius01" NotifyAttackSuccess="False">
                 <OnHit>
                 </OnHit>
@@ -81,6 +81,27 @@
         </Animation>
         <Branch Condition="End == true" Execute="Dead"/>
     </Dead>
+
+    <AC_Reverse MovementType="Empty" DirectionType="AI">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/4_dead" XFlip="true" Duration="0.5">
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="DeleteCrimson" EventTargetType="Range" AllyTarget="Ally" Range="100.0"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="Missile" UseFlip="true" Offset="0 0 0" AllyInfo="PlayerBattleObject" InheritDirection="true" AINode="Chase"/>
+            <FrameEvent Type="KillEntity" StartTime="0"/>
+            
+        </Animation>
+        <Branch Condition="End == true" Execute="Dead"/>
+    </AC_Reverse>
+    <AC_ExploReverse MovementType="Empty" DirectionType="AI">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/4_dead" XFlip="true" Duration="0.5">
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="DeleteCrimson" EventTargetType="Range" AllyTarget="Ally" Range="100.0"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="Missile" UseFlip="true" Offset="0 0 0" AllyInfo="PlayerBattleObject" InheritDirection="true" AINode="ExploChase"/>
+            <FrameEvent Type="KillEntity" StartTime="0"/>
+            
+        </Animation>
+        <Branch Condition="End == true" Execute="Dead"/>
+    </AC_ExploReverse>
 
 
 </ActionGraph>

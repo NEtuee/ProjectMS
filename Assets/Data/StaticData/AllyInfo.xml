@@ -7,7 +7,15 @@
 <AllyInfo>
 
     <Player
-        EnemyGroup="InteractObject CommonBattle Sukeban SportsClub Sister PerfectTeam Police"
+        EnemyGroup="InteractObject CommonBattleObject CommonBattle Sukeban SportsClub Sister PerfectTeam Police"
+        AllyGroup="PlayerBattleObject"
+    />
+    
+    <!-- 적 캐릭터 공격용 오브젝트, 오브젝트와 상호작용하지 않는다. -->
+    <PlayerBattleObject
+        EnemyGroup="CommonBattle Sukeban SportsClub Sister PerfectTeam Police"
+        AllyGroup="Player"
+        NeutralGroup="InteractObject CommonBattleObject"
     />
 
     <!-- 장식용 캐릭터 -->
@@ -33,6 +41,12 @@
 
     <!-- 때릴 수 있는 오브젝트 -->
     <InteractObject/>
+
+    <!-- PC 공격용 오브젝트, 오브젝트와 상호작용하지 않는다. -->
+    <CommonBattleObject
+        EnemyGroup="Player"
+        NeutralGroup="PlayerBattleObject InteractObject"
+    />
 
     <!-- 전투 가능 학생 -->
     <CommonBattle
