@@ -112,7 +112,7 @@
         <Animation Preset="2_attackMain" XFlip="true" Duration="0.35">
             
             <FrameEvent Type="Movement" StartTime="0.0" Friction="14" MaxVelocity="10" Velocity="-5" Speed="0"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="Missile" UseFlip="true" Offset="0.2 0 0" AllyInfo="PerfectTeam" InheritDirection="true"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="Missile" UseFlip="true" Offset="0.2 0 0" AllyInfo="CommonBattleObject" InheritDirection="true"/>
 
         </Animation>
 

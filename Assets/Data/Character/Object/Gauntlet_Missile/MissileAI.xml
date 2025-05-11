@@ -106,32 +106,32 @@
         <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="AttackSuccess" Execute="Explosion"/>
         <Branch Condition="GuardBroken || GuardBreakFail" Execute="ReverseChase"/>
-        <Branch Condition="GraphExecutedTime >= 10.0" Execute="ExploChase"/>
+        <Branch Condition="GraphExecutedTime >= 5.0" Execute="ExploChase"/>
     </Launch>
     <Chase Package="MissileChasePackage" EntryNode="AI_Chase">
         <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="AttackSuccess" Execute="Explosion"/>
         <Branch Condition="GuardBroken || GuardBreakFail" Execute="ReverseChase"/>
-        <Branch Condition="GraphExecutedTime >= 10.0" Execute="ExploChase"/>
+        <Branch Condition="GraphExecutedTime >= 5.0" Execute="ExploChase"/>
     </Chase>
 
     <ExploChase Package="MissileChasePackage" EntryNode="AI_ExploChase">
         <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="AttackSuccess" Execute="Explosion"/>
         <Branch Condition="GuardBroken || GuardBreakFail" Execute="ExploReverseChase"/>
-        <Branch Condition="GraphExecutedTime >= 5.0" Execute="Explosion"/>
+        <Branch Condition="GraphExecutedTime >= 3.0" Execute="Explosion"/>
     </ExploChase>
 
     <ReverseChase Package="MissileChasePackage" EntryNode="AI_Reverse">
         <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="AttackSuccess" Execute="Explosion"/>
-        <Branch Condition="GraphExecutedTime >= 10.0" Execute="ExploReverseChase"/>
+        <Branch Condition="GraphExecutedTime >= 5.0" Execute="ExploReverseChase"/>
     </ReverseChase>
 
     <ExploReverseChase Package="MissileChasePackage" EntryNode="AI_ExploReverse">
         <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="AttackSuccess" Execute="Explosion"/>
-        <Branch Condition="GraphExecutedTime >= 5.0" Execute="Explosion"/>
+        <Branch Condition="GraphExecutedTime >= 3.0" Execute="Explosion"/>
     </ExploReverseChase>
 
     <Explosion Package="MissileChasePackage" EntryNode="AI_Explosion">
