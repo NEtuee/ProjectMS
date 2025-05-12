@@ -22,6 +22,7 @@ public enum AIEventType
     AIEvent_SequencerSignal,
     AIEvent_AttachRotateSlot,
     AIEvent_DetachRotateSlot,
+    AIEvent_ChangeAlly,
     Count,
 }
 
@@ -147,6 +148,10 @@ public abstract class AIEventBase
         {
             aiEvent = new AIEvent_DetachRotateSlot();
         }
+        else if(aiEventType == AIEventType.AIEvent_ChangeAlly)
+        {
+            aiEvent = new AIEvent_ChangeAlly();
+        }
         else
         {
             DebugUtil.assert(false,"유효하지 않은 AI 이벤트 타입 입니다. 오타는 아닌가요?");
@@ -158,9 +163,9 @@ public abstract class AIEventBase
 
 }
 
-public class AIEvent_DetachRotateSlot : AIEventBase
+public class AIEvent_ChangeAlly : AIEventBase
 {
-    public override AIEventType getFrameEventType() {return AIEventType.AIEvent_DetachRotateSlot;}
+    public override AIEventType getFrameEventType() {return AIEventType.AIEvent_ChangeAlly;}
     public override void onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
         if(executeEntity is GameEntityBase == false)
@@ -182,6 +187,54 @@ public class AIEvent_DetachRotateSlot : AIEventBase
     public override void deserialize(ref BinaryReader binaryReader)
     {
         
+    }
+}
+
+public class AIEvent_DetachRotateSlot : AIEventBase
+{
+    public override AIEventType getFrameEventType() {return AIEventType.AIEvent_DetachRotateSlot;}
+
+    private string _allyInfoKey = "";
+    private bool _resetTarget = false;
+
+    public override void onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        if(executeEntity is GameEntityBase == false)
+            return;
+
+        AllyInfoData data = AllyInfoManager.Instance().GetAllyInfoData(_allyInfoKey);
+        if(_resetTarget)
+            (executeEntity as GameEntityBase).setTargetEntity(null);
+
+        (executeEntity as GameEntityBase).setAllyInfo(data);
+    }
+
+    public override void loadFromXML(XmlNode node) 
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "Key")
+                _allyInfoKey = attrValue;
+            else if(attrName == "ResetTarget")
+                _resetTarget = bool.Parse(attrValue);
+        }
+    }
+
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_allyInfoKey);
+        binaryWriter.Write(_resetTarget);
+    }
+
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _allyInfoKey = binaryReader.ReadString();
+        _resetTarget = binaryReader.ReadBoolean();
     }
 }
 

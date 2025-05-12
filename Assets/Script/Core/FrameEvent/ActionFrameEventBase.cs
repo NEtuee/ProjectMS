@@ -52,6 +52,7 @@ public enum FrameEventType
     FrameEvent_SpawnPrefab,
     FrameEvent_DeletePrefab,
     FrameEvent_ClearStatus,
+    FrameEvent_ChangeAlly,
 
     Count,
 }
@@ -317,6 +318,8 @@ public abstract class ActionFrameEventBase : SerializableDataType
             outFrameEvent = new ActionFrameEvent_DeletePrefab();
         else if(frameEventType == FrameEventType.FrameEvent_ClearStatus)
             outFrameEvent = new ActionFrameEvent_ClearStatus();
+        else if(frameEventType == FrameEventType.FrameEvent_ChangeAlly)
+            outFrameEvent = new ActionFrameEvent_ChangeAlly();
         else
         {
             DebugUtil.assert(false, "invalid frameEvent type: {0}",frameEventType.ToString());
@@ -1479,6 +1482,64 @@ public class ActionFrameEvent_ClearStatus : ActionFrameEventBase
     public override void deserialize(ref BinaryReader binaryReader)
     {
         base.deserialize(ref binaryReader);
+    }
+}
+
+public class ActionFrameEvent_ChangeAlly : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_ChangeAlly;}
+
+    private string _allyInfoKey = "";
+    private bool _resetTarget = false;
+
+    public override void initialize(ObjectBase executeEntity)
+    {
+    }
+
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    {
+        if(executeEntity is GameEntityBase == false)
+            return true;
+
+        AllyInfoData data = AllyInfoManager.Instance().GetAllyInfoData(_allyInfoKey);
+        if(_resetTarget)
+            (executeEntity as GameEntityBase).setTargetEntity(null);
+
+        (executeEntity as GameEntityBase).setAllyInfo(data);
+
+        return true;
+    }
+
+#if UNITY_EDITOR
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "Key")
+                _allyInfoKey = attrValue;
+            else if(attrName == "ResetTarget")
+                _resetTarget = bool.Parse(attrValue);
+        }
+    }
+
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_allyInfoKey);
+        binaryWriter.Write(_resetTarget);
+    }
+#endif
+
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        base.deserialize(ref binaryReader);
+        _allyInfoKey = binaryReader.ReadString();
+        _resetTarget = binaryReader.ReadBoolean();
     }
 }
 

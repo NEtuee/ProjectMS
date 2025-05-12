@@ -6,10 +6,6 @@
             <ActionFlag StartTime="0.25" EndTime="0.75" Flags="OutlineGuard"/>
         </Animation>
 
-        <Trigger Condition="DefenceSuccess">
-            <FrameEvent Type="AudioPlay" ID="2205"/>
-        </Trigger>
-
         <Branch Condition="Catched" Execute="Catched"/>
         <Branch Condition="End == true" Execute="Idle"/>
         <Branch Condition="GuardBroken" Execute="GuardBroken"/>
@@ -17,6 +13,7 @@
 
     <GuardBroken DirectionType="Keep" FlipType="Direction">
         <Animation Path="Resources/Sprites/DummyPlayer/JustGuardBreak/" StartFrame="0" EndFrame="1" XFlip="true">
+            <FrameEvent Type="ChangeAlly" StartTime="0" Key="Player" ResetTarget="True"/>
         </Animation>
 
         <Branch Condition="Catched" Execute="Catched"/>

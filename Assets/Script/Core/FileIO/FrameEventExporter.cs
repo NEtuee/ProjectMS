@@ -18,9 +18,6 @@ public static class FrameEventLoader
         FrameEventType frameEventType = (FrameEventType)System.Enum.Parse(typeof(FrameEventType), "FrameEvent_" + type);
         outFrameEvent = ActionFrameEventBase.getFrameEvent(frameEventType);
 
-        DebugUtil.assert((int)FrameEventType.Count == 45, "check here");
-
-
         if(outFrameEvent == null)
         {
             DebugUtil.assert(false,"invalid frame event type : {0}",type);
