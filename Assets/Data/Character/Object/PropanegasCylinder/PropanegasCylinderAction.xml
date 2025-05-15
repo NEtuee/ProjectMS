@@ -9,8 +9,8 @@
 
     <AC_Hit MovementType="FrameEvent" DirectionType="Keep" DefenceType="Guard" DefenceAngle="360">
         <Animation Preset="Sprites/Object/PropanegasCylinder/2_hit" Duration="3">
-            <FrameEvent Type="Projectile" StartTime="3" GraphName="PropanegasCylinder" DirectionType="AI" SpawnTargetType="Self"/>
-            <FrameEvent Type="Attack" StartTime="3" AttackPreset="Aoba_EmpGrenade">
+            <FrameEvent Type="EffectPreset" StartTime="2.3" Key="ExplodeBig"/>  
+            <FrameEvent Type="Attack" StartTime="3" AttackPreset="PropanegasCylinder_Explosion">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
                 </OnHit>
@@ -36,9 +36,9 @@
     </AC_Kicked>
 
     <AC_Explosion MovementType="FrameEvent" DirectionType="Keep" DefenceType="Guard" DefenceAngle="360">
-        <Animation Preset="Sprites/Object/PropanegasCylinder/5_Explosion" Duration="0.1">
-            <FrameEvent Type="Projectile" StartTime="0.0" GraphName="PropanegasCylinder" DirectionType="AI" SpawnTargetType="Self"/>
-            <FrameEvent Type="Attack" StartTime="0.0" AttackPreset="Aoba_EmpGrenade">
+        <Animation Preset="Sprites/Object/PropanegasCylinder/5_Explosion" Duration="0.7">
+            <FrameEvent Type="EffectPreset" StartTime="0" Key="ExplodeBig"/>  
+            <FrameEvent Type="Attack" StartTime="0.7" AttackPreset="PropanegasCylinder_Explosion">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
                 </OnHit>
