@@ -1,0 +1,233 @@
+<ActionGraph Name="SportsPitcherAction" DefaultAction="AC_Entry" DefaultFramePerSecond="12">
+<!-- AnimationHeader MasterPath -->
+<GlobalVariable Name="gv_MasterPath" Value="Sprites/Enemy/SportsPitcher/"/>
+<GlobalVariable Name="gv_DeadPath" Value="Resources/Sprites/Enemy/SportsPitcher/0_default/4_dead"/>
+
+<!-- Movement Speed Option Variant Set -->
+<GlobalVariable Name="gv_MovementSpeed"             Value="15.0"/>  <!-- Speed는 Velocity = 0 과 병행 사용 불가-->
+<GlobalVariable Name="gv_MovementVelocity"          Value="0.0"/>   
+<GlobalVariable Name="gv_MovementMaxVelocity"       Value="5.0"/>
+<GlobalVariable Name="gv_MovementFriction"          Value="0.0"/>
+
+<!-- AttackReady Movement Speed Option Variant Set-->
+<GlobalVariable Name="gv_AtkRdMovementSpeed"        Value="15.0"/>  <!-- Speed는 Velocity = 0 과 병행 사용 불가-->
+<GlobalVariable Name="gv_AtkRdMovementVelocity"     Value="0.0"/>   
+<GlobalVariable Name="gv_AtkRdMovementMaxVelocity"  Value="5.0"/>
+<GlobalVariable Name="gv_AtkRdMovementFriction"     Value="0.0"/>
+
+<!-- Attack Movement Speed Option Variant Set-->
+<GlobalVariable Name="gv_AtkMovementSpeed"          Value="0.0"/>   <!-- Speed는 Velocity = 0 과 병행 사용 불가-->
+<GlobalVariable Name="gv_AtkMovementVelocity"       Value="12.0"/>  
+<GlobalVariable Name="gv_AtkMovementMaxVelocity"    Value="12.0"/>
+<GlobalVariable Name="gv_AtkMovementFriction"       Value="24.0"/>
+
+<!-- AttackSuccess Movement Speed Option Variant Set-->
+<GlobalVariable Name="gv_AtkSucMovementSpeed"          Value="0.0"/> 
+<GlobalVariable Name="gv_AtkSucMovementVelocity"       Value="0.0"/>
+<GlobalVariable Name="gv_AtkSucMovementMaxVelocity"    Value="0.0"/>
+<GlobalVariable Name="gv_AtkSucMovementFriction"       Value="24.0"/>
+
+<!-- Defualt Action -->
+    <AC_Entry MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/1_idle" XFlip="true" Duration="1">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Entry"/>
+    </AC_Entry>
+
+    <AC_Idle MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/1_idle" XFlip="true" Duration="1">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+            
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+            
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_Idle>
+
+    <AC_Move MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/2_move" XFlip="true" Duration="0.5">
+            <FrameEvent Type="Movement" Condition="gv_MovementVelocity == 0.0"  StartTime="0" Friction="gv_MovementFriction" MaxVelocity="gv_MovementMaxVelocity" Speed="gv_MovementSpeed"/>
+            <FrameEvent Type="Movement" Condition="gv_MovementVelocity > 0.0" StartTime="0" Friction="gv_MovementFriction" MaxVelocity="gv_MovementMaxVelocity" Velocity="gv_MovementVelocity" Speed="gv_MovementSpeed"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Move"/>
+    </AC_Move>
+
+    <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/3_hit" XFlip="true" Duration="1.25">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountIncrease"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_Hit>
+
+    <Dead DirectionType="Keep" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/4_dead" XFlip="true" Duration="1">
+            <FrameEvent Type="Effect" StartTime="0" Path="gv_DeadPath" FramePerSecond="0.2" CastShadow="True">
+                <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
+            </FrameEvent>
+
+            <FrameEvent Type="KillEntity" StartTime="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Dead"/>
+    </Dead>
+<!-- Defualt Action -->
+
+<!-- Skill : Pitching -->
+    <AC_PitchReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="2_skill/1_pitching/1_ready" XFlip="true" Duration="2.0">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2105" Attach="true" Switch="True"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
+            <FrameEvent Type="FollowAttack" StartTime="0" EndTime="2.0" FollowType="Movement" Radius="0.7" MoveTime="999" CharacterKey="OsananaNajimiCrossHair" ToTarget="true">
+                <OnBegin>
+                    <FrameEvent Type="Movement" StartTime="0" Friction="4" MaxVelocity="10" Speed="9"/>
+                </OnBegin>
+                <OnEnd>
+                    <FrameEvent Type="Attack" StartTime="0.0" AttackPreset="Najimi_Pitching">
+                        <OnHit>
+                            <FrameEvent Type="AudioPlay" StartTime="0.1" ID="2107"/>
+                            <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
+                            <FrameEvent Type="ApplyBuffTarget" ApplyBuff="StunSet"/>
+                            <FrameEvent Type="EffectPreset" StartTime="0" Key="SmokeBig"/>
+                            <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+                            <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
+
+                            <FrameEvent Type="Effect" Path="Sprites/Projectile/BaseBall" FramePerSecond="0.2" CastShadow="True" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true" AngleType="AttackPoint">
+                                <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
+                            </FrameEvent>
+                        
+                            <FrameEvent Type="StopUpdate" Time="0.07"/>
+                        </OnHit>
+                    </FrameEvent>
+                </OnEnd>
+            </FrameEvent>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+            
+        </Animation>
+    
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_PitchReady>
+
+    <AC_PitchMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="2_skill/1_pitching/2_main" XFlip="true" Duration="0.5">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
+            
+            <FrameEvent Type="SetDirectionType" Condition="getTargetFrameTag_Stun" StartTime="0.01" DirectionType="AI"/>
+            <FrameEvent Type="EffectPreset" StartTime="0.01" Key="WindTrail"/>
+            <FrameEvent Type="ShakeEffect" StartTime="0.1" Scale="0.1" Speed="35.0" Time="0.15"/>
+            
+            <FrameEvent Type="AudioPlay" StartTime="0.0" ID="2106" Attach="true"/>
+
+            <ActionFlag StartTime="0.0" EndTime="0.2" Flags="OutlineSuperArmor"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0.2" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.2" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+        <Animation Preset="2_skill/1_pitching/3_recover" XFlip="true" Duration="0.3">
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="Cancel"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_PitchMain>
+<!-- Skill : Pitching -->
+
+<!-- Skill : Dash -->
+    <AC_Dash MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="2_skill/2_dash/1_main" XFlip="true" Duration="0.35">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2100" Attach="true"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="24" MaxVelocity="14" Velocity="14" Speed="0"/>
+            
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
+        </Animation>
+        <Animation Preset="2_skill/2_dash/2_roll" XFlip="true" Duration="0.25">
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
+        </Animation>
+        <Animation Preset="2_skill/2_dash/3_recover" XFlip="true" Duration="0.25">
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_Dash>
+<!-- Skill : Dash -->
+
+<!-- Defense Action -->
+    <AC_Guard MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" DefenceType="Guard" DefenceDirectionType="Direction" DefenceAngle="180">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="1_defense/1_guard" XFlip="true" Duration="0.5">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
+            <FrameEvent Type="ApplyBuff" Condition="DefenceSuccess" StartTime="0" EndTime="999" ApplyBuff="GuardCountIncrease"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Guard"/>
+    </AC_Guard>
+
+    <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="1_defense/2_guardBroken" XFlip="true" Duration="1.25">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountIncrease"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_GuardBroken>
+
+    <AC_Dodge MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="2_skill/2_dash/1_main" XFlip="true" Duration="0.35">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2100" Attach="true"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="24" MaxVelocity="14" Velocity="14" Speed="0"/>
+            
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
+        </Animation>
+        <Animation Preset="2_skill/2_dash/2_roll" XFlip="true" Duration="0.25">
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
+        </Animation>
+        <Animation Preset="2_skill/2_dash/3_recover" XFlip="true" Duration="0.25">
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_Dodge>
+<!-- Defense Action -->
+
+
+</ActionGraph>

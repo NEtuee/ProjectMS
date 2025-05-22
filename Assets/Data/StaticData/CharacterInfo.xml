@@ -453,10 +453,10 @@
         AllyInfo="Sukeban"
     />
 
-    <PitcherChan
-        DisplayName="운동부 핏쳐쨩"
-        ActionGraph="Assets/Data/Character/Enemy/01_LugerChan/LugerChanAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/01_LugerChan/LugerChanAI.xml"
+    <SportsBatterChan
+        DisplayName="운동부 밧타쨩"
+        ActionGraph="Assets/Data/Character/Enemy/03_SportsBatter/SportsBatterAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/03_SportsBatter/SportsBatterAI.xml"
         StatusInfoName="CommonHpOneEnemyStatusNoUI"
         
         CollisionRadius="0.2"
@@ -466,11 +466,10 @@
 
         AllyInfo="SportsClub"
     />
-
-    <SportsBatterChan
-        DisplayName="운동부 밧타쨩"
-        ActionGraph="Assets/Data/Character/Enemy/03_SportsBatter/SportsBatterAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/03_SportsBatter/SportsBatterAI.xml"
+    <SportsPitcherChan
+        DisplayName="운동부 핏쳐쨩"
+        ActionGraph="Assets/Data/Character/Enemy/03_SportsPitcher/SportsPitcherAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/03_SportsPitcher/SportsPitcherAI.xml"
         StatusInfoName="CommonHpOneEnemyStatusNoUI"
         
         CollisionRadius="0.2"
