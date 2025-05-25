@@ -449,7 +449,7 @@ public class AudioBoardGraphView : GraphView
         {
             if(node is AudioBoardEventEntryNode)
             {
-                AudioBoardEventSet.NodeData nodeData = new AudioBoardEventSet.NodeData();
+                NodeData nodeData = new NodeData();
                 nodeData._dataIndex = _audioBoardEventSet._eventEntry.Count;
                 nodeData._guid = "entry";
                 nodeData._position = node.GetPosition().position;
@@ -464,7 +464,7 @@ public class AudioBoardGraphView : GraphView
             else if(node is AudioBoardEventNodeBase)
             {
                 AudioBoardEventNodeBase audioBoardEventNode = node as AudioBoardEventNodeBase;
-                AudioBoardEventSet.NodeData nodeData = new AudioBoardEventSet.NodeData();
+                NodeData nodeData = new NodeData();
                 nodeData._dataIndex = _audioBoardEventSet._audioBoardEventBase.Count;
                 nodeData._guid = audioBoardEventNode._guid;
                 nodeData._position = audioBoardEventNode.GetPosition().position;
@@ -480,7 +480,7 @@ public class AudioBoardGraphView : GraphView
 
         foreach (var note in graphElements.OfType<StickyNote>())
         {
-            _audioBoardEventSet._noteData.Add(new AudioBoardEventSet.NoteData
+            _audioBoardEventSet._noteData.Add(new NoteData
             {
                 _title = note.title,
                 _text = note.contents,
@@ -502,7 +502,7 @@ public class AudioBoardGraphView : GraphView
             }
 
 
-            _audioBoardEventSet._groupData.Add(new AudioBoardEventSet.GroupData
+            _audioBoardEventSet._groupData.Add(new GroupData
             {
                 _title = group.title,
                 _position = group.GetPosition()
@@ -518,7 +518,7 @@ public class AudioBoardGraphView : GraphView
 
                 int nodeIndex = entryNodeToEntryIndex[outputNode];
 
-                _audioBoardEventSet._linkData.Add(new AudioBoardEventSet.LinkData
+                _audioBoardEventSet._linkData.Add(new LinkData
                 {
                     _outputGuid = "entry_" + nodeIndex,
                     _outputPort = edge.output.portName,
@@ -539,7 +539,7 @@ public class AudioBoardGraphView : GraphView
                 AudioBoardEventNodeBase inputNode = edge.input.node as AudioBoardEventNodeBase;
                 AudioBoardEventNodeBase outputNode = edge.output.node as AudioBoardEventNodeBase;
 
-                _audioBoardEventSet._linkData.Add(new AudioBoardEventSet.LinkData
+                _audioBoardEventSet._linkData.Add(new LinkData
                 {
                     _outputGuid = outputNode._guid,
                     _outputPort = edge.output.portName,
