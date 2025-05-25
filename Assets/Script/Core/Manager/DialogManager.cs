@@ -98,7 +98,6 @@ public class DialogManager : MonoBehaviour
 
                 string dialogText = LanguageManager._instance.getTextFromFile(ref dialogData._textDataName, dialogEvent._dialogIndex);
                 _dialogTextMesh.text = dialogText;
-                _dialogTextMesh.maxVisibleCharacters = 0;
                 _dialogMaxVisibleCharacter = dialogText.Length;
                 _wordPerSec = dialogEvent._wordPerSec;
 
@@ -165,8 +164,6 @@ public class DialogManager : MonoBehaviour
 
         _dialogSpeakTimer += deltaTime;
         int displayTextCount = (int)math.min(_dialogSpeakTimer * _wordPerSec, _dialogMaxVisibleCharacter);
-
-        _dialogTextMesh.maxVisibleCharacters = displayTextCount;
 
         _dialogSpeaking = displayTextCount < _dialogMaxVisibleCharacter;
         _waitInput = _dialogSpeaking == false;
