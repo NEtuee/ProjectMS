@@ -61,7 +61,7 @@ public class FMODAudioManager : Singleton<FMODAudioManager>
                 var value = pair.Value;
                 for(int i = 0; i < value.Count;)
                 {
-                    if(!value[i].IsPlaying())
+                    if(value[i]._manageSelf == false && !value[i].IsPlaying())
                     {
                         //_cacheMap[value[i].DataCode].Enqueue(value[i]);
                         ReturnCache(pair.Key,value[i]);

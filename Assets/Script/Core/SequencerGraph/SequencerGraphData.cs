@@ -246,17 +246,16 @@ public class SequencerGraphEvent_ActiveDialog : SequencerGraphEventBase
         eventData1._dialogIndex = 0;
         eventData1._nextIndex = 1;
         DialogEventData_Dialog eventData2 = new DialogEventData_Dialog();
-        eventData2._dialogIndex = 2;
+        eventData2._dialogIndex = 1;
         eventData2._nextIndex = 2;
         DialogEventData_Dialog eventData3 = new DialogEventData_Dialog();
-        eventData3._dialogIndex = 1;
+        eventData3._dialogIndex = 2;
         eventData3._nextIndex = -1;
 
         entryData._dialogEventList.Add(eventData1);
         entryData._dialogEventList.Add(eventData2);
         entryData._dialogEventList.Add(eventData3);
         entryData._entryKey = "Test";
-        entryData._entryEventIndex = 0;
 
         data._dialogEventEntryList.Add(entryData);
 

@@ -23,6 +23,7 @@ namespace FMODUnity
         public float OverrideMinDistance = -1.0f;
         public float OverrideMaxDistance = -1.0f;
 
+        public bool _manageSelf = false;
         public int _audioEventKey = 0;
 
         protected FMOD.Studio.EventDescription eventDescription;
@@ -290,6 +291,7 @@ namespace FMODUnity
         {
             DeregisterActiveEmitter(this);
             IsActive = false;
+            _manageSelf = false;
             cachedParams.Clear();
             StopInstance();
         }

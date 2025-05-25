@@ -20,6 +20,7 @@ public class StringKeyValueSetData
 [Serializable]
 public class StringKeyValueData
 {
-    public int _key;
-    public string _value;
+    public int _key = -1;
+    public int _audioEventKey = -1;
+    public string _value = "";
 }

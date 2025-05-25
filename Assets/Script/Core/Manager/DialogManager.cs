@@ -51,6 +51,7 @@ public class DialogManager : MonoBehaviour
     private List<DialogObject> _activeObjectList = new List<DialogObject>();
 
     private DialogData _currentDialogData;
+    private FMODUnity.StudioEventEmitter _currentAudioEmitter = null;
 
     private int _dialogEntryIndex = -1;
     private int _dialogEventIndex = -1;
@@ -96,13 +97,22 @@ public class DialogManager : MonoBehaviour
             case DialogEventType.Dialog:
                 DialogEventData_Dialog dialogEvent = dialogEventData as DialogEventData_Dialog;
 
-                string dialogText = LanguageManager._instance.getTextFromFile(ref dialogData._textDataName, dialogEvent._dialogIndex);
+                StringKeyValueData valueData = LanguageManager._instance.getStringKeyValue(ref dialogData._textDataName, dialogEvent._dialogIndex);
+                string dialogText = valueData._value;
                 _dialogTextMesh.text = dialogText;
                 _dialogMaxVisibleCharacter = dialogText.Length;
                 _wordPerSec = dialogEvent._wordPerSec;
 
                 _dialogSpeaking = true;
                 _dialogSpeakTimer = 0f;
+
+                _currentAudioEmitter?.Stop();
+
+                if (valueData._audioEventKey >= 0)
+                {
+                    _currentAudioEmitter = FMODAudioManager.Instance().Play(valueData._audioEventKey, Vector3.zero);
+                    _currentAudioEmitter._manageSelf = true;
+                }
             break;
             default:
                 DebugUtil.assert(false, "구현되지 않은 Dialog EventType {0}", dialogEventData.getDialogEventType());
@@ -146,6 +156,8 @@ public class DialogManager : MonoBehaviour
         _dialogSpeakTimer = 0f;
 
         _dialogRootGameObject.SetActive(false);
+        _currentAudioEmitter?.Stop();
+        _currentAudioEmitter = null;
 
     }
 

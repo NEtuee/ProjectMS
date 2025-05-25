@@ -133,6 +133,12 @@ public class LanguageManager : ManagerBase
                     valuedata._key = int.Parse(item.Name.LocalName.Remove(0,1));
                     valuedata._value = item.Attribute("Value").Value;
 
+                    XAttribute audioEventKey = item.Attribute("Audio");
+                    if (audioEventKey != null)
+                    {
+                        valuedata._audioEventKey = int.Parse(audioEventKey.Value);
+                    }
+
                     dialogData._stringData.Add(valuedata);
                 }
 
@@ -151,7 +157,12 @@ public class LanguageManager : ManagerBase
     public string getTextFromFile(ref string fileName, int index)
     {
         //개별로
-        return _textDic[fileName]._stringData[index]._value;
+        return getStringKeyValue(ref fileName, index)._value;
+    }
+
+    public StringKeyValueData getStringKeyValue(ref string fileName, int index)
+    {
+        return _textDic[fileName]._stringData[index];
     }
 
     public List<Tuple<SystemLanguage, string>> getLanguageList()
