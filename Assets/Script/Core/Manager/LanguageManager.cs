@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using System.Xml;
+using System.Xml.Linq;
 using ICSharpCode.WpfDesign.XamlDom;
 
 public class LanguageManager : ManagerBase
@@ -11,21 +12,29 @@ public class LanguageManager : ManagerBase
     public static LanguageManager _instance;
     public SystemLanguage _currentSystemLang = SystemLanguage.English;
 
+    //이전 언어 데이터를 다 들고있을 필요가 없음. 고쳐야한다
+
+    private Dictionary<SystemLanguage, LanguageConfigData> _languageConfigDic = new Dictionary<SystemLanguage, LanguageConfigData>();
+
+    private Dictionary<string, StringKeyValueSetData> _dialogStringDic = new Dictionary<string, StringKeyValueSetData>();
     private Dictionary<SystemLanguage, SimpleStringData> _simpleStringDic = new Dictionary<SystemLanguage, SimpleStringData>();
     private List<Tuple<SystemLanguage, string>> _languageList = new List<Tuple<SystemLanguage, string>>();
 
     private static readonly string _dialogTextDataKorea = "Assets/Data/SubtitleMap/DialogText_Kor.xml";
     private static readonly string _dialogTextDataJapan = "Assets/Data/SubtitleMap/DialogText_Jp.xml";
     private static readonly string _dialogTextDataEnglish = "Assets/Data/SubtitleMap/DialogText_En.xml";
+    
+    private static readonly string _languageConfigPath = "Data/LanguageConfig.xml";
 
     public override void assign()
     {
         _instance = this;
-        
+
         base.assign();
         CacheUniqueID("LanguageManager");
         RegisterRequest();
 
+        loadLanguageConfig();
         loadAllLanguage();
     }
 
@@ -56,6 +65,38 @@ public class LanguageManager : ManagerBase
             _simpleStringDic.Add(data._systemLanguage, data);
             _languageList.Add(new Tuple<SystemLanguage, string>(data._systemLanguage, data._displayLanguage));
         }
+    }
+
+    public bool loadLanguageConfig()
+    {
+        try
+        {
+            XDocument doc = XDocument.Load(_languageConfigPath);
+            XElement rootElement = doc.Element("LanguageConfig");
+
+            if (rootElement == null)
+                throw new Exception("Root Not Exists");
+
+            foreach (var item in rootElement.Elements())
+            {
+                if (Enum.IsDefined(typeof(SystemLanguage), item.Name.LocalName) == false)
+                    throw new Exception($"{item.Name} is not systemLanguage");
+
+                LanguageConfigData configData = new LanguageConfigData();
+                configData._language = Enum.Parse<SystemLanguage>(item.Name.LocalName);
+                configData._displayName = item.Attribute("Display").Value; 
+                configData._dialogDataPath = item.Attribute("DialogPath").Value;
+
+                _languageConfigDic.Add(configData._language, configData);
+            }
+        }
+        catch (Exception ex)
+        {
+            DebugUtil.assert(false, "LanguageConfig 로드 실패! :{0}", ex.Message);
+            return false;
+        }
+
+        return true;
     }
 
     public List<Tuple<SystemLanguage, string>> getLanguageList()
