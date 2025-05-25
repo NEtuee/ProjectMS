@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c858e63344676f34a93a8306d92a1f7d, type: 3}
   m_Name: AudioInfo
   m_EditorClassIdentifier: 
-  csvData: {fileID: 4900000, guid: 9d6ed2e213ff8fa428f6f606066f2fb5, type: 3}
+  csvData: {fileID: 4900000, guid: ac5dc4c0ab77fe04b9204c9ec1840fd5, type: 3}
   audioData:
   - name: global data
     id: 0
@@ -22,10 +22,10 @@ MonoBehaviour:
     type: Global
     eventReference:
       Guid:
-        Data1: 0
-        Data2: 0
-        Data3: 0
-        Data4: 0
+        Data1: 452109296
+        Data2: 1154528058
+        Data3: -265076572
+        Data4: -2104479398
       Path: 
     parameters:
     - name: SfxVolumeController
@@ -1955,4 +1955,46 @@ MonoBehaviour:
         Data3: -1457738858
         Data4: 990899657
       Path: event:/BGM/School/BossKill
+    parameters: []
+  - name: Akane_TEST01
+    id: 11001
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: -1172918977
+        Data2: 1160248310
+        Data3: 1844674459
+        Data4: 1930376267
+      Path: event:/SFX/Voice/Akane_TEST01
+    parameters: []
+  - name: Akane_TEST02
+    id: 11002
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: -38262387
+        Data2: 1233765330
+        Data3: 1347241859
+        Data4: -1751187945
+      Path: event:/SFX/Voice/Akane_TEST02
+    parameters: []
+  - name: Akane_TEST03
+    id: 11003
+    defaultVolume: 1
+    overrideAttenuation: 0
+    overrideDistance: {x: 0, y: 0, z: 0}
+    type: SFX
+    eventReference:
+      Guid:
+        Data1: -318193472
+        Data2: 1096377701
+        Data3: -121598313
+        Data4: 1728898414
+      Path: event:/SFX/Voice/Akane_TEST03
     parameters: []
