@@ -14,7 +14,7 @@ public class LanguageConfigData
 [Serializable]
 public class StringKeyValueSetData
 {
-    public List<StringKeyValueData> _stringData;
+    public List<StringKeyValueData> _stringData = new List<StringKeyValueData>();
 }
 
 [Serializable]

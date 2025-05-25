@@ -6,6 +6,7 @@ using UnityEngine;
 using System.Xml;
 using System.Xml.Linq;
 using ICSharpCode.WpfDesign.XamlDom;
+using System.Linq;
 
 public class LanguageManager : ManagerBase
 {
@@ -71,7 +72,7 @@ public class LanguageManager : ManagerBase
     {
         try
         {
-            XDocument doc = XDocument.Load(_languageConfigPath);
+            XDocument doc = XDocument.Load(IOControl.PathForDocumentsFile(_languageConfigPath));
             XElement rootElement = doc.Element("LanguageConfig");
 
             if (rootElement == null)
@@ -88,6 +89,54 @@ public class LanguageManager : ManagerBase
                 configData._dialogDataPath = item.Attribute("DialogPath").Value;
 
                 _languageConfigDic.Add(configData._language, configData);
+            }
+        }
+        catch (Exception ex)
+        {
+            DebugUtil.assert(false, "LanguageConfig 로드 실패! :{0}", ex.Message);
+            return false;
+        }
+
+        return true;
+    }
+
+    public bool loadDialogData(SystemLanguage language)
+    {
+        if (_languageConfigDic.ContainsKey(language) == false)
+        {
+            DebugUtil.assert(false, "languageConfig not found : {0}", language);
+            return false;
+        }
+
+        _dialogStringDic.Clear();
+
+        LanguageConfigData configData = _languageConfigDic[language];
+
+        try
+        {
+            List<string> fileList = new List<string>();
+            List<string> fullPathList = new List<string>();
+            IOControl.getFileListRecursive(configData._dialogDataPath, ".xml", ref fileList, ref fullPathList);
+
+            for(int index = 0; index < fullPathList.Count; ++index)
+            {
+                XDocument doc = XDocument.Load(fullPathList[index]);
+                XElement rootElement = doc.Element("DialogData");
+
+                if (rootElement == null)
+                    throw new Exception("Root Not Exists");
+
+                StringKeyValueSetData dialogData = new StringKeyValueSetData();
+                foreach (var item in rootElement.Elements())
+                {
+                    StringKeyValueData valuedata = new StringKeyValueData();
+                    valuedata._key = int.Parse(item.Name.LocalName);
+                    valuedata._value = item.Value;
+
+                    dialogData._stringData.Add(valuedata);
+                }
+
+                _dialogStringDic.Add(fileList[index],dialogData);
             }
         }
         catch (Exception ex)
@@ -184,6 +233,7 @@ public class LanguageManager : ManagerBase
     private void SetDialogLanguage(SystemLanguage language)
     {
         _currentSystemLang = language;
+        loadDialogData(language);
 
         switch (language)
         {
@@ -197,6 +247,7 @@ public class LanguageManager : ManagerBase
                 DialogTextManager.Instance().Init(DialogDataLoader.readFromXML(_dialogTextDataEnglish));
                 break;
         }
+
     }
 }
 
