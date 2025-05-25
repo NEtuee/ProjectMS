@@ -66,6 +66,7 @@ public enum SequencerGraphEventType
     ShowCursor,
     AudioBoardEvent,
     EntityCountFence,
+    ActiveDialog,
     
     Count,
 }
@@ -75,7 +76,7 @@ public abstract class SequencerGraphEventBase : SerializableDataType
     public abstract SequencerGraphEventType getSequencerGraphEventType();
     public abstract void Initialize(SequencerGraphProcessor processor);
     public abstract bool Execute(SequencerGraphProcessor processor, float deltaTime);
-    public virtual void Exit(SequencerGraphProcessor processor) {}
+    public virtual void Exit(SequencerGraphProcessor processor) { }
     public abstract void loadXml(XmlNode node);
 #if UNITY_EDITOR
     public override void serialize(ref BinaryWriter binaryWriter)
@@ -96,128 +97,201 @@ public abstract class SequencerGraphEventBase : SerializableDataType
     public static SequencerGraphEventBase getSequencerGraphEventBase(SequencerGraphEventType eventType)
     {
         SequencerGraphEventBase spawnEvent = null;
-        if(eventType == SequencerGraphEventType.SpawnCharacter)
+        if (eventType == SequencerGraphEventType.SpawnCharacter)
             spawnEvent = new SequencerGraphEvent_SpawnCharacter();
-        else if(eventType == SequencerGraphEventType.WaitSecond)
-            spawnEvent = new SequencerGraphEvent_WaitSecond(); 
-        else if(eventType == SequencerGraphEventType.SetCameraTarget)
+        else if (eventType == SequencerGraphEventType.WaitSecond)
+            spawnEvent = new SequencerGraphEvent_WaitSecond();
+        else if (eventType == SequencerGraphEventType.SetCameraTarget)
             spawnEvent = new SequencerGraphEvent_SetCameraTarget();
-        else if(eventType == SequencerGraphEventType.SetCameraUVTarget)
+        else if (eventType == SequencerGraphEventType.SetCameraUVTarget)
             spawnEvent = new SequencerGraphEvent_SetCameraUVTarget();
-        else if(eventType == SequencerGraphEventType.SetCameraPosition)
+        else if (eventType == SequencerGraphEventType.SetCameraPosition)
             spawnEvent = new SequencerGraphEvent_SetCameraPosition();
-        else if(eventType == SequencerGraphEventType.SetAudioListner)
+        else if (eventType == SequencerGraphEventType.SetAudioListner)
             spawnEvent = new SequencerGraphEvent_SetAudioListner();
-        else if(eventType == SequencerGraphEventType.SetCrossHair)
+        else if (eventType == SequencerGraphEventType.SetCrossHair)
             spawnEvent = new SequencerGraphEvent_SetCrossHair();
-        else if(eventType == SequencerGraphEventType.SetHPSphere)
+        else if (eventType == SequencerGraphEventType.SetHPSphere)
             spawnEvent = new SequencerGraphEvent_SetHPSphere();
-        else if(eventType == SequencerGraphEventType.WaitTargetDead)
+        else if (eventType == SequencerGraphEventType.WaitTargetDead)
             spawnEvent = new SequencerGraphEvent_WaitTargetDead();
-        else if(eventType == SequencerGraphEventType.TeleportTargetTo)
+        else if (eventType == SequencerGraphEventType.TeleportTargetTo)
             spawnEvent = new SequencerGraphEvent_TeleportTargetTo();
-        else if(eventType == SequencerGraphEventType.ApplyPostProcessProfile)
+        else if (eventType == SequencerGraphEventType.ApplyPostProcessProfile)
             spawnEvent = new SequencerGraphEvent_ApplyPostProcessProfile();
-        else if(eventType == SequencerGraphEventType.SaveEventExecuteIndex)
+        else if (eventType == SequencerGraphEventType.SaveEventExecuteIndex)
             spawnEvent = new SequencerGraphEvent_SaveEventExecuteIndex();
-        else if(eventType == SequencerGraphEventType.CallAIEvent)
+        else if (eventType == SequencerGraphEventType.CallAIEvent)
             spawnEvent = new SequencerGraphEvent_CallAIEvent();
-        else if(eventType == SequencerGraphEventType.WaitSignal)
+        else if (eventType == SequencerGraphEventType.WaitSignal)
             spawnEvent = new SequencerGraphEvent_WaitSignal();
-        else if(eventType == SequencerGraphEventType.SetCameraZoom)
+        else if (eventType == SequencerGraphEventType.SetCameraZoom)
             spawnEvent = new SequencerGraphEvent_SetCameraZoom();
-        else if(eventType == SequencerGraphEventType.FadeOut)
+        else if (eventType == SequencerGraphEventType.FadeOut)
             spawnEvent = new SequencerGraphEvent_FadeIn();
-        else if(eventType == SequencerGraphEventType.FadeIn)
+        else if (eventType == SequencerGraphEventType.FadeIn)
             spawnEvent = new SequencerGraphEvent_FadeOut();
-        else if(eventType == SequencerGraphEventType.Fade)
+        else if (eventType == SequencerGraphEventType.Fade)
             spawnEvent = new SequencerGraphEvent_Fade();
-        else if(eventType == SequencerGraphEventType.ForceQuit)
+        else if (eventType == SequencerGraphEventType.ForceQuit)
             spawnEvent = new SequencerGraphEvent_ForceQuit();
-        else if(eventType == SequencerGraphEventType.BlockInput)
+        else if (eventType == SequencerGraphEventType.BlockInput)
             spawnEvent = new SequencerGraphEvent_BlockInput();
-        else if(eventType == SequencerGraphEventType.BlockAI)
+        else if (eventType == SequencerGraphEventType.BlockAI)
             spawnEvent = new SequencerGraphEvent_BlockAI();
-        else if(eventType == SequencerGraphEventType.SetAction)
+        else if (eventType == SequencerGraphEventType.SetAction)
             spawnEvent = new SequencerGraphEvent_SetAction();
-        else if(eventType == SequencerGraphEventType.PlayAnimation)
+        else if (eventType == SequencerGraphEventType.PlayAnimation)
             spawnEvent = new SequencerGraphEvent_PlayAnimation();
-        else if(eventType == SequencerGraphEventType.AIMove)
+        else if (eventType == SequencerGraphEventType.AIMove)
             spawnEvent = new SequencerGraphEvent_AIMove();
-        else if(eventType == SequencerGraphEventType.QTEFence)
+        else if (eventType == SequencerGraphEventType.QTEFence)
             spawnEvent = new SequencerGraphEvent_QTEFence();
-        else if(eventType == SequencerGraphEventType.DeadFence)
+        else if (eventType == SequencerGraphEventType.DeadFence)
             spawnEvent = new SequencerGraphEvent_DeadFence();
-        else if(eventType == SequencerGraphEventType.SetHideUI)
+        else if (eventType == SequencerGraphEventType.SetHideUI)
             spawnEvent = new SequencerGraphEvent_SetHideUI();
-        else if(eventType == SequencerGraphEventType.SetTimeScale)
+        else if (eventType == SequencerGraphEventType.SetTimeScale)
             spawnEvent = new SequencerGraphEvent_SetTimeScale();
-        else if(eventType == SequencerGraphEventType.NextStage)
+        else if (eventType == SequencerGraphEventType.NextStage)
             spawnEvent = new SequencerGraphEvent_NextStage();
-        else if(eventType == SequencerGraphEventType.ShakeEffect)
+        else if (eventType == SequencerGraphEventType.ShakeEffect)
             spawnEvent = new SequencerGraphEvent_ShakeEffect();
-        else if(eventType == SequencerGraphEventType.ZoomEffect)
+        else if (eventType == SequencerGraphEventType.ZoomEffect)
             spawnEvent = new SequencerGraphEvent_ZoomEffect();
-        else if(eventType == SequencerGraphEventType.ToastMessage)
+        else if (eventType == SequencerGraphEventType.ToastMessage)
             spawnEvent = new SequencerGraphEvent_ToastMessage();
-        else if(eventType == SequencerGraphEventType.Task)
+        else if (eventType == SequencerGraphEventType.Task)
             spawnEvent = new SequencerGraphEvent_Task();
-        else if(eventType == SequencerGraphEventType.LetterBoxShow)
+        else if (eventType == SequencerGraphEventType.LetterBoxShow)
             spawnEvent = new SequencerGraphEvent_LetterBoxShow();
-        else if(eventType == SequencerGraphEventType.LetterBoxHide)
+        else if (eventType == SequencerGraphEventType.LetterBoxHide)
             spawnEvent = new SequencerGraphEvent_LetterBoxHide();
-        else if(eventType == SequencerGraphEventType.TalkBalloon)
+        else if (eventType == SequencerGraphEventType.TalkBalloon)
             spawnEvent = new SequencerGraphEvent_TalkBalloon();
-        else if(eventType == SequencerGraphEventType.CameraTrack)
+        else if (eventType == SequencerGraphEventType.CameraTrack)
             spawnEvent = new SequencerGraphEvent_CameraTrack();
-        else if(eventType == SequencerGraphEventType.TaskFence)
+        else if (eventType == SequencerGraphEventType.TaskFence)
             spawnEvent = new SequencerGraphEvent_TaskFence();
-        else if(eventType == SequencerGraphEventType.SetDirection)
+        else if (eventType == SequencerGraphEventType.SetDirection)
             spawnEvent = new SequencerGraphEvent_SetDirection();
-        else if(eventType == SequencerGraphEventType.BlockPointExit)
+        else if (eventType == SequencerGraphEventType.BlockPointExit)
             spawnEvent = new SequencerGraphEvent_BlockPointExit();
-        else if(eventType == SequencerGraphEventType.IsTrackEnd)
+        else if (eventType == SequencerGraphEventType.IsTrackEnd)
             spawnEvent = new SequencerGraphEvent_CameraTrackFence();
-        else if(eventType == SequencerGraphEventType.EffectPreset)
+        else if (eventType == SequencerGraphEventType.EffectPreset)
             spawnEvent = new SequencerGraphEvent_EffectPreset();
-        else if(eventType == SequencerGraphEventType.UnlockStageLimit)
+        else if (eventType == SequencerGraphEventType.UnlockStageLimit)
             spawnEvent = new SequencerGraphEvent_UnlockStageLimit();
-        else if(eventType == SequencerGraphEventType.ActiveBossHp)
+        else if (eventType == SequencerGraphEventType.ActiveBossHp)
             spawnEvent = new SequencerGraphEvent_ActiveBossHp();
-        else if(eventType == SequencerGraphEventType.DisableBossHp)
+        else if (eventType == SequencerGraphEventType.DisableBossHp)
             spawnEvent = new SequencerGraphEvent_DisableBossHp();
-        else if(eventType == SequencerGraphEventType.SetBackgroundAnimationTrigger)
+        else if (eventType == SequencerGraphEventType.SetBackgroundAnimationTrigger)
             spawnEvent = new SequencerGraphEvent_SetBackgroundAnimationTrigger();
-        else if(eventType == SequencerGraphEventType.SetHideCharacter)
+        else if (eventType == SequencerGraphEventType.SetHideCharacter)
             spawnEvent = new SequencerGraphEvent_SetHideCharacter();
-        else if(eventType == SequencerGraphEventType.ApplyBuff)
+        else if (eventType == SequencerGraphEventType.ApplyBuff)
             spawnEvent = new SequencerGraphEvent_ApplyBuff();
-        else if(eventType == SequencerGraphEventType.SpawnPrefab)
+        else if (eventType == SequencerGraphEventType.SpawnPrefab)
             spawnEvent = new SequencerGraphEvent_SpawnPrefab();
-        else if(eventType == SequencerGraphEventType.DeletePrefab)
+        else if (eventType == SequencerGraphEventType.DeletePrefab)
             spawnEvent = new SequencerGraphEvent_DeletePrefab();
-        else if(eventType == SequencerGraphEventType.AudioPlay)
+        else if (eventType == SequencerGraphEventType.AudioPlay)
             spawnEvent = new SequencerGraphEvent_AudioPlay();
-        else if(eventType == SequencerGraphEventType.StopSwitch)
+        else if (eventType == SequencerGraphEventType.StopSwitch)
             spawnEvent = new SequencerGraphEvent_StopSwitch();
-        else if(eventType == SequencerGraphEventType.AudioParameter)
+        else if (eventType == SequencerGraphEventType.AudioParameter)
             spawnEvent = new SequencerGraphEvent_AudioParameter();
-        else if(eventType == SequencerGraphEventType.SetCameraBoundLock)
+        else if (eventType == SequencerGraphEventType.SetCameraBoundLock)
             spawnEvent = new SequencerGraphEvent_SetCameraBoundLock();
-        else if(eventType == SequencerGraphEventType.SetMainCameraBoundLock)
+        else if (eventType == SequencerGraphEventType.SetMainCameraBoundLock)
             spawnEvent = new SequencerGraphEvent_SetMainameraBoundLock();
-        else if(eventType == SequencerGraphEventType.KillEntity)
+        else if (eventType == SequencerGraphEventType.KillEntity)
             spawnEvent = new SequencerGraphEvent_KillEntity();
-        else if(eventType == SequencerGraphEventType.KillAllStageEntity)
+        else if (eventType == SequencerGraphEventType.KillAllStageEntity)
             spawnEvent = new SequencerGraphEvent_KillAllStageEntity();
-        else if(eventType == SequencerGraphEventType.ShowCursor)
+        else if (eventType == SequencerGraphEventType.ShowCursor)
             spawnEvent = new SequencerGraphEvent_ShowCursor();
-        else if(eventType == SequencerGraphEventType.AudioBoardEvent)
+        else if (eventType == SequencerGraphEventType.AudioBoardEvent)
             spawnEvent = new SequencerGraphEvent_AudioBoardEvent();
-        else if(eventType == SequencerGraphEventType.EntityCountFence)
+        else if (eventType == SequencerGraphEventType.EntityCountFence)
             spawnEvent = new SequencerGraphEvent_EntityCountFence();
+        else if (eventType == SequencerGraphEventType.ActiveDialog)
+            spawnEvent = new SequencerGraphEvent_ActiveDialog();
 
         return spawnEvent;
+    }
+}
+
+public class SequencerGraphEvent_ActiveDialog : SequencerGraphEventBase
+{
+    public override SequencerGraphEventType getSequencerGraphEventType() => SequencerGraphEventType.ActiveDialog;
+
+    public string _dialogPath = "";
+    public string _entryKey = "";
+
+    public override void Initialize(SequencerGraphProcessor processor)
+    {
+    }
+
+    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    {
+        DialogData data = new DialogData();
+        data._textDataName = "dialogdata_test.xml";
+        DialogEventEntryData entryData = new DialogEventEntryData();
+        entryData._entryEventIndex = 0;
+
+        DialogEventData_Dialog eventData1 = new DialogEventData_Dialog();
+        eventData1._dialogIndex = 0;
+        eventData1._nextIndex = 1;
+        DialogEventData_Dialog eventData2 = new DialogEventData_Dialog();
+        eventData2._dialogIndex = 2;
+        eventData2._nextIndex = 2;
+        DialogEventData_Dialog eventData3 = new DialogEventData_Dialog();
+        eventData3._dialogIndex = 1;
+        eventData3._nextIndex = -1;
+
+        entryData._dialogEventList.Add(eventData1);
+        entryData._dialogEventList.Add(eventData2);
+        entryData._dialogEventList.Add(eventData3);
+        entryData._entryKey = "Test";
+        entryData._entryEventIndex = 0;
+
+        data._dialogEventEntryList.Add(entryData);
+
+        DialogManager._instance.activeDialog(data, "Test");
+
+        return true;
+    }
+
+    public override void loadXml(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+
+        for (int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if (attrName == "Path")
+                _dialogPath = attrValue;
+            else if (attrName == "Entry")
+                _entryKey = attrValue;
+        }
+    }
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_dialogPath);
+        binaryWriter.Write(_entryKey);
+    }
+#endif
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        _dialogPath = binaryReader.ReadString();
+        _entryKey = binaryReader.ReadString();
     }
 }
 
@@ -239,15 +313,15 @@ public class SequencerGraphEvent_EntityCountFence : SequencerGraphEventBase
     {
     }
 
-    public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
+    public override bool Execute(SequencerGraphProcessor processor, float deltaTime)
     {
-        var list = processor.getUniqueGroup(_uniqueGroupKey,false);
-        if(list == null)
+        var list = processor.getUniqueGroup(_uniqueGroupKey, false);
+        if (list == null)
             return true;
-        
+
         int count = list.Count;
 
-        switch(_compareType)
+        switch (_compareType)
         {
             case CountConditionType.Less:
                 return count < _limitCount;
@@ -261,17 +335,17 @@ public class SequencerGraphEvent_EntityCountFence : SequencerGraphEventBase
     public override void loadXml(XmlNode node)
     {
         XmlAttributeCollection attributes = node.Attributes;
-        
-        for(int i = 0; i < attributes.Count; ++i)
+
+        for (int i = 0; i < attributes.Count; ++i)
         {
             string attrName = attributes[i].Name;
             string attrValue = attributes[i].Value;
 
-            if(attrName == "Condition")
+            if (attrName == "Condition")
                 _compareType = (CountConditionType)System.Enum.Parse(typeof(CountConditionType), attrValue);
-            else if(attrName == "Count")
+            else if (attrName == "Count")
                 _limitCount = Int32.Parse(attrValue);
-            else if(attrName == "UniqueGroupKey")
+            else if (attrName == "UniqueGroupKey")
                 _uniqueGroupKey = attrValue;
         }
     }

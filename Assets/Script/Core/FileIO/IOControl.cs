@@ -238,7 +238,7 @@ public static class IOControl {
 
 	private static void getFileListRecursiveInner(ref DirectoryInfo directoryInfo, string extension, ref List<string> fileList, ref List<string> fullPathList)
 	{
-		DebugUtil.assert(directoryInfo.Exists, "Directory Not Exists");
+		DebugUtil.assert(directoryInfo.Exists, "Directory Not Exists : {0}",directoryInfo.FullName);
 		foreach (FileInfo file in directoryInfo.GetFiles())
 		{
 			if(file.Extension.ToLower() != extension)

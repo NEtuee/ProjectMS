@@ -1,10 +1,13 @@
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DialogManager : Singleton<DialogManager>
+public class DialogManager : MonoBehaviour
 {
+    public static DialogManager _instance;
     public class DialogObject
     {
         public DialogObjectData _dialogObjectData;
@@ -14,14 +17,19 @@ public class DialogManager : Singleton<DialogManager>
 
         public DialogObject()
         {
-            GameObject newUiObject = new GameObject("DialogObject");
-            _uiImage = newUiObject.AddComponent<Image>();
-
-            newUiObject.SetActive(false);
+            
         }
 
         public void set(DialogObjectData dialogObjectData)
         {
+            if (_uiImage == null)
+            {
+                GameObject newUiObject = new GameObject("DialogObject");
+                _uiImage = newUiObject.AddComponent<Image>();
+
+                newUiObject.SetActive(false);
+            }
+            
             _dialogObjectData = dialogObjectData;
         }
 
@@ -44,20 +52,36 @@ public class DialogManager : Singleton<DialogManager>
 
     private DialogData _currentDialogData;
 
-    private int _dialogEntryIndex = 0;
-    private int _dialogEventIndex = 0;
-    private bool _isDialogEnd = false;
+    private int _dialogEntryIndex = -1;
+    private int _dialogEventIndex = -1;
+    private bool _isDialogEnd = true;
 
-    private int _dialogTextIndex = 0;
+    private int _dialogMaxVisibleCharacter = 0;
+    private float _wordPerSec = 12f;
+    private bool _dialogSpeaking = false;
+
+    private float _dialogSpeakTimer = 0f;
+    private bool _waitInput = false;
+
+    private void Awake()
+    {
+        _instance = this;
+        initialize();
+    }
 
     public void initialize()
     {
-
+        clearDialog();
     }
 
     public void progress(float deltaTime)
     {
+        if (_isDialogEnd)
+            return;
+            
+        updateInput();
         updateDialogEvent();
+        updateDialog(deltaTime);
     }
 
     public void release()
@@ -65,13 +89,21 @@ public class DialogManager : Singleton<DialogManager>
 
     }
 
-    public void executeDialogEvent(DialogEventDataBase dialogEventData)
+    public void executeDialogEvent(DialogData dialogData, DialogEventDataBase dialogEventData)
     {
         switch (dialogEventData.getDialogEventType())
         {
             case DialogEventType.Dialog:
                 DialogEventData_Dialog dialogEvent = dialogEventData as DialogEventData_Dialog;
-                //dialogEvent._
+
+                string dialogText = LanguageManager._instance.getTextFromFile(ref dialogData._textDataName, dialogEvent._dialogIndex);
+                _dialogTextMesh.text = dialogText;
+                _dialogTextMesh.maxVisibleCharacters = 0;
+                _dialogMaxVisibleCharacter = dialogText.Length;
+                _wordPerSec = dialogEvent._wordPerSec;
+
+                _dialogSpeaking = true;
+                _dialogSpeakTimer = 0f;
             break;
             default:
                 DebugUtil.assert(false, "구현되지 않은 Dialog EventType {0}", dialogEventData.getDialogEventType());
@@ -82,7 +114,11 @@ public class DialogManager : Singleton<DialogManager>
 
     public bool isEventExecutable()
     {
-        
+        if (_dialogSpeaking)
+            return false;
+
+        if (_waitInput)
+            return false;
 
         return true;
     }
@@ -95,34 +131,74 @@ public class DialogManager : Singleton<DialogManager>
             _dialogObjectPool.enqueue(item);
         }
 
+        _dialogTextMesh.text = "";
+
         _activeObjectList.Clear();
-        _dialogEventIndex = 0;
+        _dialogEventIndex = -1;
+        _dialogEntryIndex = -1;
+        _dialogMaxVisibleCharacter = 0;
+        _wordPerSec = 1f;
+
+        _currentDialogData = null;
+
+        _waitInput = false;
+        _isDialogEnd = true;
+        _dialogSpeaking = false;
+        _dialogSpeakTimer = 0f;
+
+        _dialogRootGameObject.SetActive(false);
+
+    }
+
+    public void updateInput()
+    {
+        if (_waitInput)
+        {
+            _waitInput = Input.GetKeyDown(KeyCode.Mouse0) == false;
+        }
+    }
+
+    public void updateDialog(float deltaTime)
+    {
+        if (_dialogSpeaking == false)
+            return;
+
+        _dialogSpeakTimer += deltaTime;
+        int displayTextCount = (int)math.min(_dialogSpeakTimer * _wordPerSec, _dialogMaxVisibleCharacter);
+
+        _dialogTextMesh.maxVisibleCharacters = displayTextCount;
+
+        _dialogSpeaking = displayTextCount < _dialogMaxVisibleCharacter;
+        _waitInput = _dialogSpeaking == false;
     }
 
     public void updateDialogEvent()
     {
-        if (_currentDialogData == null)
-            return;
-
-        if (_isDialogEnd)
-            return;
-
         DialogEventEntryData entryData = _currentDialogData._dialogEventEntryList[_dialogEntryIndex];
         int dialogEventCount = entryData._dialogEventList.Count;
-        for (int index = _dialogEventIndex; index < dialogEventCount; ++index)
-        {
-            if (isEventExecutable() == false)
-                return;
 
-            executeDialogEvent(entryData._dialogEventList[index]);
+        while (isEventExecutable())
+        {
+            if (_dialogEventIndex < 0)
+            {
+                clearDialog();
+                break;
+            }
+
+            executeDialogEvent(_currentDialogData, entryData._dialogEventList[_dialogEventIndex]);
+            _dialogEventIndex = entryData._dialogEventList[_dialogEventIndex]._nextIndex;
         }
     }
 
-    public void activeDialog(DialogData dialogData, int entryIndex)
+    public void activeDialog(DialogData dialogData, string entryKey)
     {
+        _dialogEntryIndex = dialogData.findDialogEntryIndex(entryKey);
+        if (_dialogEntryIndex < 0)
+            return;
+
         _currentDialogData = dialogData;
-        _dialogEntryIndex = entryIndex;
-        _dialogEventIndex = 0;
+        _dialogEventIndex = _currentDialogData._dialogEventEntryList[_dialogEntryIndex]._entryEventIndex;
+        _isDialogEnd = false;
 
         foreach (var item in dialogData._dialogObjectList)
         {

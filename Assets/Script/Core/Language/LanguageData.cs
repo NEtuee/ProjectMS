@@ -7,7 +7,7 @@ public class LanguageConfigData
 {
     public SystemLanguage _language;
     public string _displayName = "";
-    public string _dialogDataPath = "";
+    public string _textDataPath = "";
 
 }
 

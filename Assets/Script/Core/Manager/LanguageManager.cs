@@ -17,7 +17,7 @@ public class LanguageManager : ManagerBase
 
     private Dictionary<SystemLanguage, LanguageConfigData> _languageConfigDic = new Dictionary<SystemLanguage, LanguageConfigData>();
 
-    private Dictionary<string, StringKeyValueSetData> _dialogStringDic = new Dictionary<string, StringKeyValueSetData>();
+    private Dictionary<string, StringKeyValueSetData> _textDic = new Dictionary<string, StringKeyValueSetData>();
     private Dictionary<SystemLanguage, SimpleStringData> _simpleStringDic = new Dictionary<SystemLanguage, SimpleStringData>();
     private List<Tuple<SystemLanguage, string>> _languageList = new List<Tuple<SystemLanguage, string>>();
 
@@ -86,7 +86,7 @@ public class LanguageManager : ManagerBase
                 LanguageConfigData configData = new LanguageConfigData();
                 configData._language = Enum.Parse<SystemLanguage>(item.Name.LocalName);
                 configData._displayName = item.Attribute("Display").Value; 
-                configData._dialogDataPath = item.Attribute("DialogPath").Value;
+                configData._textDataPath = item.Attribute("TextPath").Value;
 
                 _languageConfigDic.Add(configData._language, configData);
             }
@@ -100,15 +100,15 @@ public class LanguageManager : ManagerBase
         return true;
     }
 
-    public bool loadDialogData(SystemLanguage language)
+    public bool loadTextData(SystemLanguage language)
     {
         if (_languageConfigDic.ContainsKey(language) == false)
         {
-            DebugUtil.assert(false, "languageConfig not found : {0}", language);
+            DebugUtil.assert(false, "TextData not found : {0}", language);
             return false;
         }
 
-        _dialogStringDic.Clear();
+        _textDic.Clear();
 
         LanguageConfigData configData = _languageConfigDic[language];
 
@@ -116,12 +116,12 @@ public class LanguageManager : ManagerBase
         {
             List<string> fileList = new List<string>();
             List<string> fullPathList = new List<string>();
-            IOControl.getFileListRecursive(configData._dialogDataPath, ".xml", ref fileList, ref fullPathList);
+            IOControl.getFileListRecursive(configData._textDataPath, ".xml", ref fileList, ref fullPathList);
 
             for(int index = 0; index < fullPathList.Count; ++index)
             {
                 XDocument doc = XDocument.Load(fullPathList[index]);
-                XElement rootElement = doc.Element("DialogData");
+                XElement rootElement = doc.Element("TextData");
 
                 if (rootElement == null)
                     throw new Exception("Root Not Exists");
@@ -130,22 +130,28 @@ public class LanguageManager : ManagerBase
                 foreach (var item in rootElement.Elements())
                 {
                     StringKeyValueData valuedata = new StringKeyValueData();
-                    valuedata._key = int.Parse(item.Name.LocalName);
-                    valuedata._value = item.Value;
+                    valuedata._key = int.Parse(item.Name.LocalName.Remove(0,1));
+                    valuedata._value = item.Attribute("Value").Value;
 
                     dialogData._stringData.Add(valuedata);
                 }
 
-                _dialogStringDic.Add(fileList[index],dialogData);
+                _textDic.Add(fileList[index],dialogData);
             }
         }
         catch (Exception ex)
         {
-            DebugUtil.assert(false, "LanguageConfig 로드 실패! :{0}", ex.Message);
+            DebugUtil.assert(false, "TextData 로드 실패! :{0}", ex.Message);
             return false;
         }
 
         return true;
+    }
+
+    public string getTextFromFile(ref string fileName, int index)
+    {
+        //개별로
+        return _textDic[fileName]._stringData[index]._value;
     }
 
     public List<Tuple<SystemLanguage, string>> getLanguageList()
@@ -233,7 +239,7 @@ public class LanguageManager : ManagerBase
     private void SetDialogLanguage(SystemLanguage language)
     {
         _currentSystemLang = language;
-        loadDialogData(language);
+        loadTextData(language);
 
         switch (language)
         {

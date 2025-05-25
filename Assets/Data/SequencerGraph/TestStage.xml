@@ -16,11 +16,8 @@
 
     <UpdatePhase>
         <WaitSecond Time="1.0"/>
-
-        <EntityCountFence UniqueGroupKey="EnemyGroup" Condition="Less" Count="1"/>
-        <ToastMessage Text="Test"/>
         
-        <TalkBalloon UniqueKey="Player" SimpleTalkKey="Test4"/>
+        <ActiveDialog/>
 
         <WaitSignal Signal="NeverEnd"/>
     </UpdatePhase>

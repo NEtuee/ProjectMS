@@ -116,7 +116,7 @@ public class MasterManager : MessageHub<ManagerBase>
         if(Input.GetKeyDown(KeyCode.Escape))
         {
 #if UNITY_EDITOR
-            if(Input.GetKey(KeyCode.Return))
+            if (Input.GetKey(KeyCode.Return))
             {
                 activePauseUI();
             }
@@ -133,6 +133,7 @@ public class MasterManager : MessageHub<ManagerBase>
                 LetterBox._instance.clear();
                 FMODAudioManager.Instance().clearAll();
                 EffectManager._instance.killSwitchAll();
+                DialogManager._instance.clearDialog();
             }
 #else
             activePauseUI();
@@ -210,6 +211,7 @@ public class MasterManager : MessageHub<ManagerBase>
         UIRepeater.Instance().updateUIRepeater();
         HPSphereUIManager.Instance().progress(deltaTime);
         TalkBalloonManager.Instance().updateTalkBalloonManager(deltaTime);
+        DialogManager._instance.progress(deltaTime);
 
         CameraControlEx.Instance().progress(deltaTime);
 
