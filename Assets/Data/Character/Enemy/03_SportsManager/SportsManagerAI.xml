@@ -1,0 +1,167 @@
+<AIGraph Name="SportsManagerAI" DefaultState="Entry_Battle">
+
+    <!-- 옵션 설정 -->
+    <!-- 인지 옵션값 설정 -->
+    <GlobalVariable Name="gv_CognitiveRange"    Value="4.0"/>   <!-- PC 인지 거리 : 해당 거리 내 PC 존재 시 인지한다. -->
+    <GlobalVariable Name="gv_CognitiveDelay"    Value="1.5"/>   <!-- 인지 지연 시간 : 해당 거리 내 PC 존재 시 인지까지 이루어지는 지연 시간. -->
+   <!-- TODO: 위의 옵션값을 기준으로 TargetExist, TargetDistance 비교 연산. 이를 위해 CommonPackage에서의 Search 범위는 최대값으로 설정 통일할 것. -->
+
+    <!-- 전투 상태 행동 타입 설정 -->
+    <!-- 공격 거리 설정 -->
+    <GlobalVariable Name="gv_AttackRangeMin"           Value="2.0"/>       <!-- 최소 공격 사거리 : Value보다 PC가 가까우면 공격하지 않는다. -->
+    <GlobalVariable Name="gv_AttackRangeMax"           Value="4.0"/>       <!-- 최대 공격 사거리 : Value보다 PC가 멀면 공격하지 않는다. -->
+
+    <!-- 가드 옵션 설정 -->
+    <GlobalVariable Name="gv_GuardTime"                     Value="3.0"/>       <!-- 방어 지속 시간 -->
+    <GlobalVariable Name="gv_GuardBrokenThreshold"          Value="3.0"/>       <!-- 가드 브레이크 공격을 막을 수 있는 횟수 -->
+    <GlobalVariable Name="gv_GuardLoopCount"                Value="3.0"/>       <!-- [보류] 가드 성공 시 패시브 방어 루프 횟수 -->
+
+<!-- 옵션 설정 -->
+
+<!-- 패키지 인클루드 -->
+    <!-- 패키지 인클루드 : 공통 -->
+    <Include Path="Assets/Data/AILibrary/Package/EmptyPackage.xml"/>          <!-- 사망 패키지 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonDeadPackage.xml"/>          <!-- 사망 패키지 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonHitPackage.xml"/>           <!-- 피격 패키지 -->
+    
+    <Include Path="Assets/Data/AILibrary/Package/CommonGuardBrokenPackage.xml"/>   <!-- 가드 해제 패키지 -->
+    <!-- 패키지 인클루드 : 평화 상태 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonIdlePackage.xml"/>          <!-- 대기 패키지 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonRandMovePackage.xml"/>      <!-- 랜덤 이동 패키지-->
+    <Include Path="Assets/Data/AILibrary/Package/CommonChasePackage.xml"/>         <!-- 추격 이동 패키지 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonAlertPackage.xml"/>         <!-- 경계 이동 패키지 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonAwayPackage.xml"/>          <!-- 후진 이동 패키지 -->
+    
+                                                                                <!-- 지정 이동 패키지 (보류) -->
+    <!-- 패키지 인클루드 : 전투 상태 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonDodgePackage.xml"/>         <!-- 회피 패키지 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonGuardPackage.xml"/>         <!-- 가드 패키지 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonDashPackage.xml"/>          <!-- 대시 패키지 -->
+    <Include Path="Assets/Data/Character/Enemy/03_SportsManager/SportsManagerSpawnPackage.xml"/>          <!-- 대시 패키지 -->
+<!-- 패키지 인클루드 -->
+
+<!-- 간이 테스트 스크립트 -->
+    <BranchSet Name="TestBranchA">
+        <Branch Condition="CurrentPackageEnd" Execute="Test"/>
+    </BranchSet>
+    <BranchSet Name="TestBranchB">
+        <Branch Condition="CurrentPackageEnd" Execute="Test"/>
+    </BranchSet>
+
+   <Test Package="EmptyPackage">
+        <UseBranchSet Name="TestBranchA"/>
+        <UseBranchSet Name="TestBranchB"/>
+    </Test>
+<!-- 간이 테스트 스크립트 -->
+
+<!-- 브랜치 셋 -->
+    
+    <!-- 전투 행동 초기화 브랜치 셋 -->
+    <BranchSet Name="BattlePackageEndSet">
+        <Branch Condition="CurrentPackageEnd" Execute="Entry_Battle"/>
+    </BranchSet>
+
+    <!-- 피격 리액션 브랜치 셋 -->
+    <BranchSet Name="HitReactionSet">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="Hit && getFrameTag_HitAvail" Execute="Hit"/>
+        <Branch Condition="GuardBreakFail && getFrameTag_GbAvail" Execute="GuardBroken"/>
+        <Branch Condition="GuardBroken && getFrameTag_GbAvail" Execute="GuardBroken"/>
+    </BranchSet>
+<!-- 브랜치 셋 -->
+
+<!-- 스테이트 -->
+
+    <!-- AI 스테이트 : 전투 상태 : 분기 -->
+    <Entry_Battle Package="CommonIdlePackage">
+        <Branch Condition="true"  Execute="Battle_JudgeDist"/>
+    </Entry_Battle>
+
+    <Battle_JudgeDist Package="CommonIdlePackage">
+        <Branch Condition="(TargetDistance > gv_AttackRangeMax)" Execute="Battle_Far"/>             <!-- 사거리 밖 -->
+        <Branch Condition="(TargetDistance < gv_AttackRangeMin)" Execute="Battle_Closer"/>          <!-- 초근접 -->
+        <Branch Condition="true" Execute="Battle_Range"/>                                           <!-- 사정거리 -->
+    </Battle_JudgeDist>
+
+    <Battle_Far Package="CommonIdlePackage">
+        <Branch Condition="true" Execute="Chase"/>
+    </Battle_Far>
+    <Battle_Closer Package="CommonIdlePackage">
+        <Branch Condition="aiGraphCoolTime_SpawnRunner" Execute="SpawnRunner"/>
+        <Branch Condition="true" Execute="Away"/>
+    </Battle_Closer>
+    <Battle_Range Package="CommonIdlePackage">
+        <Branch Condition="aiGraphCoolTime_SpawnMachine" Execute="SpawnMachine"/>
+        <Branch Condition="true" Execute="Alert"/>
+    </Battle_Range>
+    
+    <!-- AI 스테이트 : 전투 상태 : 이동 -->
+    <Movement Package="CommonIdlePackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <!-- Movement Release -->
+        <Branch Condition="(TargetDistance <= gv_AttackRangeMax)" Execute="Battle_JudgeDist"/>      <!-- Distance Check-->
+        <Branch Condition="(GraphExecutedTime >= 3.0)" Execute="Entry_Battle"/>                     <!-- Executed Time Check-->
+        
+    </Movement>
+    <Chase Package="CommonChasePackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <!-- Movement Release -->
+        <Branch Condition="(TargetDistance <= gv_AttackRangeMax)" Execute="Battle_JudgeDist"/>      <!-- Distance Check-->
+        <Branch Condition="(GraphExecutedTime >= 3.0)" Execute="Entry_Battle"/>                     <!-- Executed Time Check-->
+        
+    </Chase>
+    <Alert Package="CommonRandMovePackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <!-- Movement Release -->
+        <Branch Condition="(TargetDistance > gv_AttackRangeMax) 
+                        || (TargetDistance < gv_AttackRangeMin)" Execute="Battle_JudgeDist"/>      <!-- Distance Check-->
+        <Branch Condition="(GraphExecutedTime >= 3.0)" Execute="Entry_Battle"/>                     <!-- Executed Time Check-->
+        
+    </Alert>
+    <Away Package="CommonAwayPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <!-- Movement Release -->
+        <Branch Condition="(TargetDistance >= gv_AttackRangeMin)" Execute="Battle_JudgeDist"/>      <!-- Distance Check-->
+        <Branch Condition="(GraphExecutedTime >= 3.0)" Execute="Entry_Battle"/>                     <!-- Executed Time Check-->
+        
+    </Away>
+
+
+    <!-- AI 스테이트 : 전투 상태 : 스킬 -->
+    <SpawnMachine Package="SportsManagerSpawnPackage" CoolTime="6.0" EntryNode="AI_SpawnMachine">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </SpawnMachine>
+
+    <SpawnRunner Package="SportsManagerSpawnPackage" CoolTime="6.0" EntryNode="AI_SpawnRunner">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </SpawnRunner>
+
+    <Dash Package="CommonDashPackage" CoolTime="4.0">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </Dash>
+    
+    <!-- AI 스테이트 : 전투 상태 : 방어 -->
+    <Dodge Package="CommonDodgePackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </Dodge>
+
+    <!-- AI 스테이트 : 피격 상태 : 리액션 -->
+    <Hit Package="CommonHitPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </Hit>
+
+    <GuardBroken Package="CommonGuardBrokenPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </GuardBroken>
+
+    <Dead Package="CommonDeadPackage">
+    </Dead>
+<!-- 스테이트 -->
+
+</AIGraph>
