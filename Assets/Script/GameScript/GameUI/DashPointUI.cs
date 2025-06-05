@@ -9,6 +9,8 @@ public class DashPointUI : IUIElement
 
     private int _prevDashPointInt;
 
+    private int maxDP;
+
     private AnimationPlayer[] _animationPlayers = new AnimationPlayer[4];
     private AnimationCustomPreset _customPreset;
     
@@ -43,16 +45,16 @@ public class DashPointUI : IUIElement
 
     public void InitValue(float dashPoint)
     {
-        _prevDashPointInt = (int)dashPoint;
-        UpdateDashPoint(_prevDashPointInt);
+        maxDP = (int)dashPoint;
+        SetDashPoint(maxDP);
     }
 
-    public void UpdateByManager(float deltaTime, float dashPoint, float blood)
+    public void UpdateByManager(float deltaTime, float dashPoint)
     {
         var currentDashPoint = (int)dashPoint;
         if (_prevDashPointInt != currentDashPoint)
         {
-            UpdateDashPoint(currentDashPoint);
+            SetDashPoint(currentDashPoint);
             _prevDashPointInt = currentDashPoint;
         }
 
@@ -64,92 +66,35 @@ public class DashPointUI : IUIElement
         }
     }
 
-    private void UpdateDashPoint(int point)
+    private void SetDashPoint(int point)
     {
-        switch (point)
+        var activatedDP = point;
+        var deactivatedDP = maxDP - point;
+        var additionalDP = Mathf.Max(0, point - maxDP);
+        for (int i = 0; i < activatedDP; i++)
         {
-            case 0 :
-                SetDashPoint0();
-                break;
-            case 1 :
-                SetDashPoint1();
-                break;
-            case 2 :
-                SetDashPoint2();
-                break;
-            case 3 :
-                SetDashPoint3();
-                break;
-            case 4 :
-                SetDashPoint4();
-                break;
-            default:
-                SetDashPoint4();
-                _binder._additionalText.gameObject.SetActive(true);
-                _binder._additionalText.text = "+" + (point - 4);
-                break;
+            _binder.DashPointImages[i].gameObject.SetActive(true);
         }
+
+        for (int i = activatedDP; i < maxDP; i++)
+        {
+            _binder.DashPointImages[i].gameObject.SetActive(false);
+        }
+
+        if (additionalDP > 0)
+        {
+            _binder._additionalText.gameObject.SetActive(true);
+            _binder._additionalText.text = "+" + (additionalDP);
+        }
+        else
+        {
+            _binder._additionalText.gameObject.SetActive(false);
+        }
+
+        _prevDashPointInt = point;
     }
 
-    private void SetDashPoint0()
-    {
-        _binder._additionalText.gameObject.SetActive(false);
-        _binder.DashPointImages[0].gameObject.SetActive(false);
-        _binder.DashPointImages[1].gameObject.SetActive(false);
-        _binder.DashPointImages[2].gameObject.SetActive(false);
-        _binder.DashPointImages[3].gameObject.SetActive(false);
-    }
 
-    private void SetDashPoint1()
-    {
-        _binder._additionalText.gameObject.SetActive(false);
-        _binder.DashPointImages[0].gameObject.SetActive(true);
-        _binder.DashPointImages[1].gameObject.SetActive(false);
-        _binder.DashPointImages[2].gameObject.SetActive(false);
-        _binder.DashPointImages[3].gameObject.SetActive(false);
-
-        _binder.DashPointImages[0].color = _binder._color1;
-    }
-    
-    private void SetDashPoint2()
-    {
-        _binder._additionalText.gameObject.SetActive(false);
-        _binder.DashPointImages[0].gameObject.SetActive(true);
-        _binder.DashPointImages[1].gameObject.SetActive(true);
-        _binder.DashPointImages[2].gameObject.SetActive(false);
-        _binder.DashPointImages[3].gameObject.SetActive(false);
-        
-        _binder.DashPointImages[0].color = _binder._color2;
-        _binder.DashPointImages[1].color = _binder._color1;
-    }
-    
-    private void SetDashPoint3()
-    {
-        _binder._additionalText.gameObject.SetActive(false);
-        _binder.DashPointImages[0].gameObject.SetActive(true);
-        _binder.DashPointImages[1].gameObject.SetActive(true);
-        _binder.DashPointImages[2].gameObject.SetActive(true);
-        _binder.DashPointImages[3].gameObject.SetActive(false);
-        
-        _binder.DashPointImages[0].color = _binder._color3;
-        _binder.DashPointImages[1].color = _binder._color2;
-        _binder.DashPointImages[2].color = _binder._color1;
-    }
-    
-    private void SetDashPoint4()
-    {
-        _binder._additionalText.gameObject.SetActive(false);
-        _binder.DashPointImages[0].gameObject.SetActive(true);
-        _binder.DashPointImages[1].gameObject.SetActive(true);
-        _binder.DashPointImages[2].gameObject.SetActive(true);
-        _binder.DashPointImages[3].gameObject.SetActive(true);
-        
-        _binder.DashPointImages[0].color = _binder._color4;
-        _binder.DashPointImages[1].color = _binder._color3;
-        _binder.DashPointImages[2].color = _binder._color2;
-        _binder.DashPointImages[3].color = _binder._color1;
-    }
-    
     private struct AnimationPresetInfo
     {
         public AnimationCustomPreset _customPreset;
@@ -161,5 +106,23 @@ public class DashPointUI : IUIElement
             _path = path;
         }
     }
-   
+
+    private AnimationPresetInfo _idleNormalInfo;
+    private AnimationPresetInfo _idleNextInfo;
+    private AnimationPresetInfo _AttackRecoveringInfo;
+    private AnimationPresetInfo _AutoRecoveringInfo;
+    private AnimationPresetInfo _ConsumedInfo;
+
+    //DP의 상태를 State로?
+    //State에 따라 AnimationPresetInfo도 재생,,
+    //Binder와 UI의 분리이유??
+    //Binder 하위에 같은 UI 요소가 있을 때라던가(DP)
+    //핵심적인 데이터의 처리와 전달과 시각적인 애니메이션 처리 등은 따로 분리,,
+    //CrossHair
+    //BossHP
+    //EnemyRank                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+    //AkaneStatus
+    //ㄴHPBar
+    //ㄴDPHolder
+    //  ㄴSingleDP
 }
