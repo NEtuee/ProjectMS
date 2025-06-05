@@ -8,6 +8,9 @@ public class DashPointUI : IUIElement
     private DashPointUIBinder _binder;
 
     private int _prevDashPointInt;
+
+    private AnimationPlayer[] _animationPlayers = new AnimationPlayer[4];
+    private AnimationCustomPreset _customPreset;
     
     public bool CheckValidBinderLink(out string reason)
     {
@@ -16,7 +19,7 @@ public class DashPointUI : IUIElement
             reason = "대쉬 포인터 UI에 바인더가 셋팅되지 않았습니다.";
             return false;
         }
-        
+
         reason = string.Empty;
         return true;
     }
@@ -28,7 +31,14 @@ public class DashPointUI : IUIElement
 
     public void Initialize()
     {
+        _customPreset = ResourceContainerEx.Instance().GetAnimationCustomPreset("Sprites/UI/AkaneStatusBar/DP/1/AttackRecovering/");
 
+        for (int i = 0; i < 4; ++i)
+        {
+            _animationPlayers[i] = new AnimationPlayer();
+            _animationPlayers[i].initialize();
+            _animationPlayers[i].changeAnimationByCustomPreset("Sprites/UI/AkaneStatusBar/DP/1/AttackRecovering/", _customPreset);
+        }
     }
 
     public void InitValue(float dashPoint)
@@ -44,6 +54,13 @@ public class DashPointUI : IUIElement
         {
             UpdateDashPoint(currentDashPoint);
             _prevDashPointInt = currentDashPoint;
+        }
+
+        for (int i = 0; i < 4; ++i)
+        {
+            _animationPlayers[i].progress(deltaTime, null);
+            _binder.DashPointImages[i].sprite = _animationPlayers[i].getCurrentSprite();
+            _binder.DashPointImages[i].SetNativeSize();
         }
     }
 
