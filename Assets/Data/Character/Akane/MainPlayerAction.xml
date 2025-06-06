@@ -704,15 +704,15 @@
         <Branch Condition="End" Execute="Idle"/>
     </AC_AobaTsuba_Fail>
 
-    <Stun MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" ApplyBuff="StunEscape" Flags="QTE">
-        <Animation Preset="Sprites/NewPlayer/stun" XFlip="true" Duration="3.0">
+    <Stun MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" ApplyBuff="StunEscape StunDecrementKeep" Flags="QTE">
+        <Animation Preset="Sprites/NewPlayer/stun" XFlip="true" Duration="5.0">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="1004" ParameterID="10041" ParameterValue="5" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="3" Speed="0"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="Stun"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="ClearBloodPoint"/>
-            <FrameEvent Type="ApplyBuff" StartTime="3.0" ApplyBuff="StunClear"/>
-        </Animation>
 
+        </Animation>
+        
         <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="getStat_IsStun == 0.0" Execute="Idle"/>
     </Stun>

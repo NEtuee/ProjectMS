@@ -760,4 +760,15 @@
         ApplyType="DirectSet"
         Factor="15.0"
     />
+    <StunDecrementKeep
+        Key="77"
+        StatusName="IsStun"
+
+        UpdateType="Continuous"
+        ApplyType="DirectDelta"
+
+        Factor="-0.2"
+
+    />
+
 </BuffInfo>

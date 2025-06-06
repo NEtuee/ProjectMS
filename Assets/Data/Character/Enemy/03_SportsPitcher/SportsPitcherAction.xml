@@ -136,6 +136,7 @@
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
             
             <FrameEvent Type="SetDirectionType" Condition="getTargetFrameTag_Stun" StartTime="0.01" DirectionType="AI"/>
+            <FrameEvent Type="SetDirectionType" Condition="getTargetFrameTag_Stun" StartTime="0.02" DirectionType="Keep"/>
             <FrameEvent Type="EffectPreset" StartTime="0.01" Key="WindTrail"/>
             <FrameEvent Type="ShakeEffect" StartTime="0.1" Scale="0.1" Speed="35.0" Time="0.15"/>
             

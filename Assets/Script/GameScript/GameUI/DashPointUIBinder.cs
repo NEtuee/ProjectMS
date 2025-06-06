@@ -7,13 +7,13 @@ using UnityEngine.UI;
 
 public class DashPointUIBinder : UIObjectBinder
 {
+    public int DashPointNumber;
     public Image[] DashPointImages;
 
+    [SerializeField] private Image NormalDPImage;
+    [SerializeField] private Image NextDPImage;
+
     public TextMeshProUGUI _additionalText;
-    public Color _color1;
-    public Color _color2;
-    public Color _color3;
-    public Color _color4;
 
     public override bool CheckValidLink(out string reason)
     {
@@ -25,5 +25,10 @@ public class DashPointUIBinder : UIObjectBinder
 
         reason = string.Empty;
         return true;
+    }
+
+    private void SetMaxDP()
+    {
+
     }
 }

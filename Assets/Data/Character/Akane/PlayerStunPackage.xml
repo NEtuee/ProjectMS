@@ -5,12 +5,6 @@
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="Stun"/>
             </Event_OnExecute>
-            <Event_OnAttacked>
-                <AIEvent Type="SetAction" Action="Hit"/>
-            </Event_OnAttacked>
-            <Event_OnCatched>
-                <AIEvent Type="SetAction" Action="Catched"/>
-            </Event_OnCatched>
 
             <Branch Condition="getStat_IsStun == 0.0" Execute="TerminatePackage"/>
         </Stun>
@@ -21,4 +15,16 @@
             </Event_OnExecute>
         </TerminatePackage>
     </AIState>
+    
+    <Event_OnAttacked>
+        <AIEvent Type="SetAction" Action="Hit"/>
+        <AIEvent Type="TerminatePackage"/>
+    </Event_OnAttacked>
+
+    <Event_OnCatched>
+        <AIEvent Type="SetDirectionToTarget"/>
+        <AIEvent Type="SetAction" Action="Catched"/>
+        <AIEvent Type="TerminatePackage"/>
+    </Event_OnCatched>
+
 </AIPackage>
