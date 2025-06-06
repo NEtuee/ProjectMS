@@ -288,7 +288,7 @@ public class GameEntityBase : SequencerObjectBase
 
         setRotateSlotValue(0f, 0f);
         initializeActionValue();
-        updateRotation();
+        updateRotation(true);
 
         foreach(var item in _hpEffect)
         {
@@ -432,7 +432,7 @@ public class GameEntityBase : SequencerObjectBase
 
         setRotateSlotValue(0f, 0f);
         initializeActionValue();
-        updateRotation();
+        updateRotation(true);
 
         _spawnPosition = transform.position;
 
@@ -554,7 +554,7 @@ public class GameEntityBase : SequencerObjectBase
             _actionGraph.getCurrentAnimationScale(out outScale);
             _spriteRenderer.transform.localScale = outScale;
 
-            updateRotation();
+            updateRotation(false);
             _actionGraph.getCurrentAnimationTranslation(out _localSpritePosition);
 
             _spriteRenderer.sprite = _actionGraph.getCurrentSprite(_actionGraph.getCurrentRotationType() != RotationType.AlwaysRight ? (_spriteRotation * _actionStartRotation).eulerAngles.z : MathEx.directionToAngle(_direction));
@@ -665,7 +665,7 @@ public class GameEntityBase : SequencerObjectBase
             _updateFlipState = true;
 
             updateDirection();
-            updateRotation();
+            updateRotation(true);
 
             _angleBaseRotation = _spriteRotation;
             _actionStartRotation = _spriteRotation;
@@ -1448,7 +1448,7 @@ public class GameEntityBase : SequencerObjectBase
         return direction;
     }
 
-    private void updateRotation()
+    private void updateRotation(bool initialize)
     {
         RotationType rotationType = _currentRotationType;
         if(_actionGraph != null)
@@ -1469,7 +1469,12 @@ public class GameEntityBase : SequencerObjectBase
                 targetRotation = MathEx.directionToAngle( ControllerEx.Instance().getJoystickAxisR(transform.position));
                 break;
             case RotationType.MoveDirection:
-                targetRotation = MathEx.directionToAngle(getMovementControl().getMoveDirection());
+                Vector3 moveDirection = getMovementControl().getMoveDirection();
+
+                if (initialize && MathEx.equals(moveDirection.sqrMagnitude, 0f, 0.001f))
+                    targetRotation = MathEx.directionToAngle(_direction);
+                else
+                    targetRotation = MathEx.directionToAngle(moveDirection);
                 break;
             case RotationType.Keep:
                 break;
@@ -1480,7 +1485,7 @@ public class GameEntityBase : SequencerObjectBase
         }
         DebugUtil.assert((int)RotationType.Count == 6, "check this");
 
-        if(_actionGraph != null && _actionGraph.isRotateBySpeed())
+        if(_actionGraph != null && initialize == false && _actionGraph.isRotateBySpeed())
         {
             if (MathEx.equals(_spriteRotation.eulerAngles.z, targetRotation, float.Epsilon) == false)
             {
