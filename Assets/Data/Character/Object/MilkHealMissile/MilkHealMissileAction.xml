@@ -1,0 +1,88 @@
+<ActionGraph Name="MilkHealMissileAction" DefaultAction="AC_Idle" DefaultFramePerSecond="12">
+
+    <AC_Idle MovementType="FrameEvent" DirectionType="AI" RotationType="Direction">
+        <Animation Preset="Sprites/Object/MilkMissile/1_idle" XFlip="false" Duration="0.3">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_Idle>
+
+    <AC_Launch MovementType="FrameEvent" DirectionType="AI" RotationType="Direction">
+        <Animation Preset="Sprites/Object/MilkMissile/3_milklaunch" XFlip="false" Duration="0.1">
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.5" AttackPreset="Common_Radius01" NotifyAttackSuccess="False">
+                <OnHit>
+                </OnHit>
+            </FrameEvent>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Move"/>
+    </AC_Launch>
+
+    <AC_Move MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
+        <Animation Preset="Sprites/Object/MilkMissile/2_move" XFlip="true" Duration="2">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="15" Speed="15"/>
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.5" AttackPreset="Common_Radius01" NotifyAttackSuccess="False">
+                <OnHit>
+                </OnHit>
+            </FrameEvent>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Move"/>
+    </AC_Move>
+
+    <AC_Hit MovementType="Empty" DirectionType="AlwaysRight" FlipType="AlwaysTurnOff" RotationType="AlwaysRight">
+        <Animation Preset="Sprites/Object/MilkMissile/4_hit" XFlip="false" Duration="0.1">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Dead"/>
+    </AC_Hit>
+
+    <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" DirectionAngle="180">
+        <Animation Preset="Sprites/Object/MilkMissile/5_guardbroken" XFlip="false" Duration="1">
+            <FrameEvent Type="Movement" StartTime="0" Friction="1" Velocity="1.5" MaxVelocity="1.5" Speed="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Dead"/>
+    </AC_GuardBroken>
+    
+    <AC_ExplosionChase MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
+        <Animation Preset="Sprites/Object/MilkMissile/6_milkExplosionChase" Duration="3">
+            <FrameEvent Type="EffectPreset" StartTime="0" Key="Explode"/>
+             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="15" Speed="15"/>
+            <FrameEvent Type="Attack" StartTime="0" EndTime="3" AttackPreset="Common_Radius05" NotifyAttackSuccess="False">
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="VendingMachineHeal"/>
+                </OnHit>
+            </FrameEvent>
+        </Animation>
+        <Branch Condition="End" Execute="AC_Explosion"/>
+    </AC_ExplosionChase>
+
+    <AC_Explosion MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
+        <Animation Preset="Sprites/Object/MilkMissile/7_milkeExplosion" XFlip="true" Duration="0.2">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="15" Speed="15"/>
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.2" AttackPreset="Common_Radius05" NotifyAttackSuccess="False">
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="VendingMachineHeal"/>
+                </OnHit>
+            </FrameEvent>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+        
+        <Branch Condition="End" Execute="Dead"/>
+    </AC_Explosion>
+
+    <Dead MovementType="Empty" DirectionType="AI">
+        <Animation Preset="Sprites/Object/MilkMissile/8_dead" XFlip="true" Duration="0.5">
+            <FrameEvent Type="KillEntity" StartTime="0"/>
+            
+        </Animation>
+        <Branch Condition="End == true" Execute="Dead"/>
+    </Dead>
+
+</ActionGraph>
