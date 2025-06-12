@@ -1,0 +1,77 @@
+<ActionGraph Name="CakeBoxAction" DefaultAction="AC_Idle" DefaultFramePerSecond="1">
+
+    <AC_Idle MovementType="FrameEvent" DirectionType="AlwaysRight">
+        <Animation Path="Sprites/Object/CakeBox/1_idle" XFlip="true">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_Idle>
+
+    <AC_Hit MovementType="FrameEvent" DirectionType="AlwaysRight">
+        <Animation Preset="Sprites/Object/CakeBox/2_hit" XFlip="false" Duration="0.1">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" Velocity="0" MaxVelocity="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Dead"/>
+    </AC_Hit>
+
+    <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" DirectionAngle="180">
+        <Animation Preset="Sprites/Object/CakeBox/3_guardbroken" XFlip="false" Duration="1">
+            <FrameEvent Type="Movement" StartTime="0" Friction="1" Velocity="1.3" MaxVelocity="1.3" Speed="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Break"/>
+    </AC_GuardBroken>
+
+    <Dead MovementType="Empty" DirectionType="Keep" ActiveCollision="False">
+        <Animation Path="Sprites/Object/CakeBox/4_dead" XFlip="true" Duration="2">
+            <FrameEvent Type="Effect" StartTime="0" Path="Sprites/Object/DoorRight" FramePerSecond="0.1" CastShadow="True" Offset="-0.5 0.0 0.0">
+                <Physics UseGravity="True" Velocity="Random_-7.5^0.0 Random_6^12" Friction="1" Torque="Random_20^30" AngularFriction="10.0"/>
+            </FrameEvent>
+
+            <FrameEvent Type="Effect" StartTime="0" Path="Sprites/Object/DoorRight" FramePerSecond="0.1" CastShadow="True" Offset="0.5 0.0 0.0">
+                <Physics UseGravity="True" Velocity="Random_0.0^7.5 Random_6^12" Friction="1" Torque="Random_20^30" AngularFriction="10.0"/>
+            </FrameEvent>
+
+            <FrameEvent Type="Effect" StartTime="0" Path="Sprites/Object/DoorRight" FramePerSecond="0.1" CastShadow="True" Offset="0.0 0.2 0.4">
+                <Physics UseGravity="True" Velocity="Random_0.0^7.5 Random_6^12" Friction="1" Torque="Random_20^30" AngularFriction="10.0"/>
+            </FrameEvent>
+
+            <FrameEvent Type="Effect" StartTime="0" Path="Sprites/Object/DoorRight" FramePerSecond="0.1" CastShadow="True" Offset="0.0 -0.2 -0.4">
+                <Physics UseGravity="True" Velocity="Random_0.0^7.5 Random_6^12" Friction="1" Torque="Random_20^30" AngularFriction="10.0"/>
+            </FrameEvent>
+
+            <FrameEvent Type="Effect" StartTime="0" Path="Sprites/Object/DoorRight" FramePerSecond="0.1" CastShadow="True" Offset="0.0 0.0 -0.2">
+                <Physics UseGravity="True" Velocity="Random_0.0^7.5 Random_6^12" Friction="1" Torque="Random_20^30" AngularFriction="10.0"/>
+            </FrameEvent>
+
+            <FrameEvent Type="Effect" StartTime="0" Path="Sprites/Object/DoorRight" FramePerSecond="0.1" CastShadow="True" Offset="0.0 0.0 0.2">
+                <Physics UseGravity="True" Velocity="Random_0.0^7.5 Random_6^12" Friction="1" Torque="Random_20^30" AngularFriction="10.0"/>
+            </FrameEvent>
+
+            <FrameEvent Type="Effect" StartTime="0" Path="Sprites/Object/DoorRight" FramePerSecond="0.1" CastShadow="True" Offset="0.2 0.0 0.1">
+                <Physics UseGravity="True" Velocity="Random_0.0^7.5 Random_6^12" Friction="1" Torque="Random_20^30" AngularFriction="10.0"/>
+            </FrameEvent>
+
+            <FrameEvent Type="Effect" StartTime="0" Path="Sprites/Object/DoorRight" FramePerSecond="0.1" CastShadow="True" Offset="-0.2 0.0 -0.1">
+                <Physics UseGravity="True" Velocity="Random_0.0^7.5 Random_6^12" Friction="1" Torque="Random_20^30" AngularFriction="10.0"/>
+            </FrameEvent>
+
+            <FrameEvent Type="KillEntity" StartTime="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Dead"/>
+    </Dead>
+
+    <AC_Break MovementType="Empty" DirectionType="AttackedPoint" ActiveCollision="False" DirectionAngle="180">
+        <Animation Path="Sprites/Object/CakeBox/5_break" XFlip="true" Duration="2">
+            <FrameEvent Type="Effect" StartTime="0" Path="Sprites/Object/DoorRight">
+            <Physics UseGravity="True" Velocity="Random_-3.5^0.0 Random_3^6" Friction="1" Torque="Random_20^30" AngularFriction="10.0"/>
+            </FrameEvent>
+
+            <FrameEvent Type="KillEntity" StartTime="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Dead"/>
+    </AC_Break>
+</ActionGraph>

@@ -4,7 +4,6 @@
         <Branch Condition="Dead" Execute="AI_Dead"/>
         <Branch Condition="Hit" Execute="AI_Hit"/>
         <Branch Condition="GuardBreakFail || GuardBroken" Execute="AI_GuardBroken"/>
-        <Branch Condition="AttackSuccess" Execute="AI_Explosion"/>
     </BranchSet>
 
     <AIState>
@@ -16,6 +15,7 @@
 
             <UseBranchSet Name="ReactionSet"/>
             <Branch Condition="ActionExecutedTime >= 0.2" Execute="AI_Chase"/>
+            <Branch Condition="AttackSuccess" Execute="AI_Explosion"/>
             
         </AI_Launch>
 
@@ -48,6 +48,7 @@
             </Event_OnFrame>
             
             <Branch Condition="AngleToTarget <= 1.0" Execute="AI_ChaseLockOn"/>
+            <Branch Condition="AttackSuccess" Execute="AI_Explosion"/>
         </AI_Chase>
 
         <AI_ChaseLockOn UpdateTime="0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
@@ -62,6 +63,7 @@
             
             <Branch Condition="End" Execute="AI_ChaseLockOn"/>
             <Branch Condition="ActionExecutedTime >= 1.0" Execute="AI_ExploChase"/>
+            <Branch Condition="AttackSuccess" Execute="AI_Explosion"/>
         </AI_ChaseLockOn>
 
         <AI_ExploChase UpdateTime="0.1" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
@@ -82,6 +84,7 @@
             </Event_OnExecute>
 
             <UseBranchSet Name="ReactionSet"/>
+            <Branch Condition="End" Execute="AI_Dead"/>
         </AI_Explosion>
 
         <AI_Dead UpdateTime="999.0">
