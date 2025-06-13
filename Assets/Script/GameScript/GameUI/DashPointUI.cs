@@ -33,14 +33,7 @@ public class DashPointUI : IUIElement
 
     public void Initialize()
     {
-        _customPreset = ResourceContainerEx.Instance().GetAnimationCustomPreset("Sprites/UI/AkaneStatusBar/DP/1/AttackRecovering/");
 
-        for (int i = 0; i < 4; ++i)
-        {
-            _animationPlayers[i] = new AnimationPlayer();
-            _animationPlayers[i].initialize();
-            _animationPlayers[i].changeAnimationByCustomPreset("Sprites/UI/AkaneStatusBar/DP/1/AttackRecovering/", _customPreset);
-        }
     }
 
     public void InitValue(float dashPoint)
@@ -56,13 +49,6 @@ public class DashPointUI : IUIElement
         {
             SetDashPoint(currentDashPoint);
             _prevDashPointInt = currentDashPoint;
-        }
-
-        for (int i = 0; i < 4; ++i)
-        {
-            _animationPlayers[i].progress(deltaTime, null);
-            _binder.DashPointImages[i].sprite = _animationPlayers[i].getCurrentSprite();
-            _binder.DashPointImages[i].SetNativeSize();
         }
     }
 
@@ -106,23 +92,4 @@ public class DashPointUI : IUIElement
             _path = path;
         }
     }
-
-    private AnimationPresetInfo _idleNormalInfo;
-    private AnimationPresetInfo _idleNextInfo;
-    private AnimationPresetInfo _AttackRecoveringInfo;
-    private AnimationPresetInfo _AutoRecoveringInfo;
-    private AnimationPresetInfo _ConsumedInfo;
-
-    //DP의 상태를 State로?
-    //State에 따라 AnimationPresetInfo도 재생,,
-    //Binder와 UI의 분리이유??
-    //Binder 하위에 같은 UI 요소가 있을 때라던가(DP)
-    //핵심적인 데이터의 처리와 전달과 시각적인 애니메이션 처리 등은 따로 분리,,
-    //CrossHair
-    //BossHP
-    //EnemyRank                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
-    //AkaneStatus
-    //ㄴHPBar
-    //ㄴDPHolder
-    //  ㄴSingleDP
 }
