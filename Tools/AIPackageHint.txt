@@ -69,7 +69,8 @@ AIEvent,SetCustomValue,TargetType=~~
 InQuote,TargetType=,"Target,Summoner"
 ShortCut,__AIEvent_DetachRotateSlot,<AIEvent Type=~DetachRotateSlot~/>
 ShortCut,__Event_OnThrowed,<Event_OnThrowed>#n#n</Event_OnThrowed>
-,,
-,,
-,,
-,,
+ShortCut,__If,<If Condition=~~>#n</If>
+ShortCut,__ElseIf,<ElseIf Condition=~~>#n</ElseIf>
+ShortCut,__Else,<Else>#n</Else>
+LineStart,<If,"Key=~~,Condition=~~,Weight=~~"
+LineStart,<ElseIf,"Key=~~,Condition=~~,Weight=~~"

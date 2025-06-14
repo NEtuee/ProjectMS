@@ -63,11 +63,11 @@ AIEvent,SetDirectionToTarget,"Angle=~~,Speed=~~"
 ShortCut,__AIEvent_ChangeAlly,<AIEvent Type=~ChangeAlly~ Key=~~/>
 AIEvent,ChangeAlly,"Key=~~,ResetTarget=~~"
 InQuote,ResetTarget=,"True,False"
-,,
-,,
-,,
-,,
-,,
+ShortCut,__If,<If Condition=~~>#n</If>
+ShortCut,__ElseIf,<ElseIf Condition=~~>#n</ElseIf>
+ShortCut,__Else,<Else>#n</Else>
+LineStart,<If,"Key=~~,Condition=~~,Weight=~~"
+LineStart,<ElseIf,"Key=~~,Condition=~~,Weight=~~"
 ,,
 ,,
 ,,

@@ -149,9 +149,9 @@ LineStart,<ActionFlag,"StartTime=~~,EndTime=~~,Flags=~~"
 ShortCut,__FrameEvent_ChangeAlly,<FrameEvent Type=~ChangeAlly~ StartTime=~0~ Key=~~/>
 FrameEvent,ChangeAlly,"Key=~~,ResetTarget=~~"
 InQuote,ResetTarget=,"True,False"
-,,
-,,
-,,
-,,
-,,
+ShortCut,__If,<If Condition=~~>#n</If>
+ShortCut,__ElseIf,<ElseIf Condition=~~>#n</ElseIf>
+ShortCut,__Else,<Else>#n</Else>
+LineStart,<If,"Key=~~,Condition=~~,Weight=~~"
+LineStart,<ElseIf,"Key=~~,Condition=~~,Weight=~~"
 ,,
