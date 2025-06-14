@@ -434,61 +434,74 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
 #endif
                 branchDataList.Add(branchData);
             }
-            else if(nodeList[i].Name == "Trigger")
+            else if (ActionGraphLoader.isConditionalStateNode(nodeList[i].Name))
             {
-                ActionGraphTriggerEventData triggerEventData = readTriggerEvent(nodeList[i],ref compareDataList, ref _globalVariables, filePath);
-                if(triggerEventData == null)
+                int passCount = ActionGraphLoader.readConditionalState(nodeList[i], ref branchDataList, ref actionCompareDic, ref compareDataList, ref _globalVariables, _currentFileName);
+                i += passCount;
+            }
+            else if (nodeList[i].Name == "Trigger")
+            {
+                ActionGraphTriggerEventData triggerEventData = readTriggerEvent(nodeList[i], ref compareDataList, ref _globalVariables, filePath);
+                if (triggerEventData == null)
                 {
-                    DebugUtil.assert_fileOpen(false,"invalid trigger Event Data [Line: {0}] [FileName: {1}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node), XMLScriptConverter.getLineFromXMLNode(node), filePath);
+                    DebugUtil.assert_fileOpen(false, "invalid trigger Event Data [Line: {0}] [FileName: {1}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node), XMLScriptConverter.getLineFromXMLNode(node), filePath);
                     return null;
                 }
-                
+
                 triggerEventDataList.Add(triggerEventData);
             }
-            else if(nodeList[i].Name == "UseBranchSet")
+            else if (nodeList[i].Name == "UseBranchSet")
             {
                 string branchSetName = "";
                 XmlAttributeCollection branchSetAttr = nodeList[i].Attributes;
-                for(int branchSetAttrIndex = 0; branchSetAttrIndex < branchSetAttr.Count; ++branchSetAttrIndex)
+                for (int branchSetAttrIndex = 0; branchSetAttrIndex < branchSetAttr.Count; ++branchSetAttrIndex)
                 {
-                    if(branchSetAttr[branchSetAttrIndex].Name == "Name")
+                    if (branchSetAttr[branchSetAttrIndex].Name == "Name")
                     {
                         branchSetName = branchSetAttr[branchSetAttrIndex].Value;
                     }
                 }
 
-                if(branchSetDic.ContainsKey(branchSetName) == false)
+                if (branchSetDic.ContainsKey(branchSetName) == false)
                 {
-                    DebugUtil.assert_fileOpen(false, "branch set not exists : {0} [Line: {1}] [FileName: {2}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node),branchSetName, XMLScriptConverter.getLineFromXMLNode(node), filePath);
+                    DebugUtil.assert_fileOpen(false, "branch set not exists : {0} [Line: {1}] [FileName: {2}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node), branchSetName, XMLScriptConverter.getLineFromXMLNode(node), filePath);
                     return null;
                 }
 
                 XmlNodeList branchSetNodeList = branchSetDic[branchSetName];
-                for(int branchSetNodeListIndex = 0; branchSetNodeListIndex < branchSetNodeList.Count; ++branchSetNodeListIndex)
+                for (int branchSetNodeListIndex = 0; branchSetNodeListIndex < branchSetNodeList.Count; ++branchSetNodeListIndex)
                 {
-                    if(branchSetNodeList[branchSetNodeListIndex].Name != "Branch")
+                    if (branchSetNodeList[branchSetNodeListIndex].Name == "Branch")
                     {
-                        DebugUtil.assert_fileOpen(false, "wrong branch type : {0} [Line: {1}] [FileName: {2}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node),branchSetNodeList[branchSetNodeListIndex].Name, XMLScriptConverter.getLineFromXMLNode(node), filePath);
-                        return null;
-                    }
-
-                    ActionGraphBranchData branchData = ReadActionBranch(branchSetNodeList[branchSetNodeListIndex],ref actionCompareDic,ref compareDataList, ref _globalVariables, filePath);
-                    if(branchData == null)
-                    {
-                        DebugUtil.assert_fileOpen(false,"invalid branch data [Line: {0}] [FileName: {1}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node), XMLScriptConverter.getLineFromXMLNode(node), filePath);
-                        return null;
-                    }
+                        ActionGraphBranchData branchData = ReadActionBranch(branchSetNodeList[branchSetNodeListIndex], ref actionCompareDic, ref compareDataList, ref _globalVariables, filePath);
+                        if (branchData == null)
+                        {
+                            DebugUtil.assert_fileOpen(false, "invalid branch data [Line: {0}] [FileName: {1}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node), XMLScriptConverter.getLineFromXMLNode(node), filePath);
+                            return null;
+                        }
 
 #if UNITY_EDITOR
-                    branchData._lineNumber = XMLScriptConverter.getLineNumberFromXMLNode(nodeList[i]);
+                        branchData._lineNumber = XMLScriptConverter.getLineNumberFromXMLNode(nodeList[i]);
 #endif
+                        branchDataList.Add(branchData);
+                    }
+                    else if (ActionGraphLoader.isConditionalStateNode(branchSetNodeList[branchSetNodeListIndex].Name))
+                    {
+                        int passCount = ActionGraphLoader.readConditionalState(branchSetNodeList[branchSetNodeListIndex], ref branchDataList, ref actionCompareDic, ref compareDataList, ref _globalVariables, _currentFileName);
+                        branchSetNodeListIndex += passCount;
+                    }
+                    else
+                    {
+                        DebugUtil.assert_fileOpen(false, "wrong branch type : {0} [Line: {1}] [FileName: {2}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node), branchSetNodeList[branchSetNodeListIndex].Name, XMLScriptConverter.getLineFromXMLNode(node), filePath);
+                        return null;
+                    }
 
-                    branchDataList.Add(branchData);
+                    
                 }
             }
             else
             {
-                DebugUtil.assert_fileOpen(false,"잘못된 Action Node입니다. 확인 필요 [Name: {0}] [Line: {1}] [FileName: {2}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node), nodeList[i].Name, XMLScriptConverter.getLineFromXMLNode(node), filePath);
+                DebugUtil.assert_fileOpen(false, "잘못된 Action Node입니다. 확인 필요 [Name: {0}] [Line: {1}] [FileName: {2}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node), nodeList[i].Name, XMLScriptConverter.getLineFromXMLNode(node), filePath);
                 return null;
             }
         }
@@ -869,59 +882,141 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         return triggerEventData;
     }
 
-    public static ActionGraphBranchData ReadActionBranch(XmlNode node, ref Dictionary<ActionGraphBranchData, string> actionCompareDic,  ref List<ActionGraphConditionCompareData> compareDataList, ref Dictionary<string, string> globalVariableContainer, string filePath)
+    public static bool isConditionalStateNode(string nodeName)
+    {
+        return nodeName == "If" || nodeName == "ElseIf" || nodeName == "Else";
+    }
+
+    public static int readConditionalState(XmlNode startNode, ref List<ActionGraphBranchData> branchDataList, ref Dictionary<ActionGraphBranchData, string> actionCompareDic, ref List<ActionGraphConditionCompareData> compareDataList, ref Dictionary<string, string> globalVariableContainer, string filePath)
+    {
+        int nodePassCount = 0;
+        XmlNode node = startNode;
+        bool isConditionalStateOpen = false;
+        ActionGraphBranchData lastConditionalState = null;
+        List<ActionGraphBranchData> lastBranchList = new List<ActionGraphBranchData>();
+
+        while (node != null)
+        {
+            if (isConditionalStateOpen == false)
+            {
+                if (node.Name == "ElseIf" || node.Name == "Else")
+                {
+                    DebugUtil.assert_fileOpen(false, "If문이 없는데 ElseIf 혹은 Else가 존재하면 안됩니다: {0} [Line: {1}] [FileName: {2}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node), node.Name, XMLScriptConverter.getLineFromXMLNode(node), filePath);
+                    return nodePassCount;
+                }
+            }
+            else
+            {
+                if (node.Name != "ElseIf" && node.Name != "Else")
+                    break;
+            }
+
+            if (node.HasChildNodes == false)
+            {
+                DebugUtil.assert_fileOpen(false, "조건문 하위 Branch가 존재해야 합니다: {0} [Line: {1}] [FileName: {2}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node), node.Name, XMLScriptConverter.getLineFromXMLNode(node), filePath);
+                return nodePassCount;
+            }
+
+            ActionGraphBranchData conditionalBranch = ReadActionBranch(node, ref actionCompareDic, ref compareDataList, ref globalVariableContainer, filePath);
+            if (conditionalBranch == null)
+                return nodePassCount;
+
+            conditionalBranch._isConditionalState = true;
+
+            if (isConditionalStateOpen)
+                ++nodePassCount;
+
+            isConditionalStateOpen = true;
+            branchDataList.Add(conditionalBranch);
+
+            for (int i = 0; i < node.ChildNodes.Count; ++i)
+            {
+                XmlNode childNode = node.ChildNodes[i];
+                if (childNode.Name != "Branch")
+                {
+                    DebugUtil.assert_fileOpen(false, "조건문 하위에는 Branch만 들어갈 수 있습니다: {0} [Line: {1}] [FileName: {2}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node), node.Name, XMLScriptConverter.getLineFromXMLNode(node), filePath);
+                    return nodePassCount;
+                }
+
+                ActionGraphBranchData branchData = ReadActionBranch(childNode, ref actionCompareDic, ref compareDataList, ref globalVariableContainer, filePath);
+                if (branchData == null)
+                    continue;
+
+                branchDataList.Add(branchData);
+            }
+
+            lastBranchList.Add(branchDataList[branchDataList.Count - 1]);
+            lastConditionalState = conditionalBranch;
+
+            conditionalBranch._conditionFailNextIndex = branchDataList.Count;
+
+            if (node.Name == "Else")
+                break;
+
+            node = node.NextSibling;
+        }
+
+        foreach (var item in lastBranchList)
+        {
+            item._conditionFailNextIndex = branchDataList.Count;
+        }
+
+        return nodePassCount;
+    }
+
+    public static ActionGraphBranchData ReadActionBranch(XmlNode node, ref Dictionary<ActionGraphBranchData, string> actionCompareDic, ref List<ActionGraphConditionCompareData> compareDataList, ref Dictionary<string, string> globalVariableContainer, string filePath)
     {
         ActionGraphBranchData branchData = new ActionGraphBranchData();
         XmlAttributeCollection actionAttributes = node.Attributes;
-        for(int attrIndex = 0; attrIndex < actionAttributes.Count; ++attrIndex)
+        for (int attrIndex = 0; attrIndex < actionAttributes.Count; ++attrIndex)
         {
             string targetName = actionAttributes[attrIndex].Name;
             string targetValue = getGlobalVariable(actionAttributes[attrIndex].Value, globalVariableContainer);
 
-            if(targetName == "Condition")
+            if (targetName == "Condition")
             {
-                if(targetValue == "")
+                if (targetValue == "")
                     continue;
 
                 ActionGraphConditionCompareData conditionData = ReadConditionCompareData(targetValue, globalVariableContainer, node, filePath);
-                if(conditionData == null)
+                if (conditionData == null)
                     return null;
 
                 branchData._conditionCompareDataIndex = compareDataList.Count;
                 compareDataList.Add(conditionData);
             }
-            else if(targetName == "Key")
+            else if (targetName == "Key")
             {
-                if(targetValue == "")
+                if (targetValue == "")
                     continue;
-                    
+
                 ActionGraphConditionCompareData keyConditionData = ReadConditionCompareData(targetValue, globalVariableContainer, node, filePath);
-                if(keyConditionData == null)
+                if (keyConditionData == null)
                     return null;
 
                 branchData._keyConditionCompareDataIndex = compareDataList.Count;
                 compareDataList.Add(keyConditionData);
             }
-            else if(targetName == "Weight")
+            else if (targetName == "Weight")
             {
-                if(targetValue == "")
+                if (targetValue == "")
                     continue;
-                
+
                 targetValue = "getWeight_" + targetValue;
                 ActionGraphConditionCompareData keyConditionData = ReadConditionCompareData(targetValue, globalVariableContainer, node, filePath);
-                if(keyConditionData == null)
+                if (keyConditionData == null)
                     return null;
 
                 branchData._weightConditionCompareDataIndex = compareDataList.Count;
                 compareDataList.Add(keyConditionData);
             }
-            else if(targetName == "Execute")
+            else if (targetName == "Execute")
             {
                 actionCompareDic.Add(branchData, targetValue);
             }
             else
             {
-                DebugUtil.assert_fileOpen(false, "invalid branch attribute: {0} [Line: {1}] [FileName: {2}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node),targetName, XMLScriptConverter.getLineFromXMLNode(node), filePath);
+                DebugUtil.assert_fileOpen(false, "invalid branch attribute: {0} [Line: {1}] [FileName: {2}]", filePath, XMLScriptConverter.getLineNumberFromXMLNode(node), targetName, XMLScriptConverter.getLineFromXMLNode(node), filePath);
                 return null;
             }
         }

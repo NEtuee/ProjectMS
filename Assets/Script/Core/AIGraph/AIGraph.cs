@@ -227,13 +227,28 @@ public class AIGraph
 
         if(_changeAINodeIndex == -1)
         {
-            int startIndex = aiGraphNode._branchIndexStart;
-            for(int i = startIndex; i < startIndex + aiGraphNode._branchCount; ++i)
+            int currentIndex = aiGraphNode._branchIndexStart;
+            int branchEndCount = currentIndex + aiGraphNode._branchCount;
+            while (currentIndex < branchEndCount)
             {
-                if(processActionBranch(_aiGraphBaseData._branchData[i],_aiGraphBaseData._conditionCompareData) == true)
+                if (processActionBranch(_aiGraphBaseData._branchData[currentIndex], _aiGraphBaseData._conditionCompareData) == true)
                 {
-                    nodeChanged = changeAINode(_aiGraphBaseData._branchData[i]._branchActionIndex, targetEntity, false);
+                    if (_aiGraphBaseData._branchData[currentIndex]._isConditionalState)
+                    {
+                        ++currentIndex;
+                        continue;
+                    }
+
+                    nodeChanged = changeAINode(_aiGraphBaseData._branchData[currentIndex]._branchActionIndex, targetEntity, false);
                     break;
+                }
+                else
+                {
+                    int nextIndex = _aiGraphBaseData._branchData[currentIndex]._conditionFailNextIndex;
+                    if (nextIndex < 0)
+                        ++currentIndex;
+                    else
+                        currentIndex = nextIndex;
                 }
             }
         }
@@ -299,13 +314,29 @@ public class AIGraph
 
             processAIEvent(AIChildEventType.AIChildEvent_OnUpdate, targetEntity, currentPackageNode._aiEvents);
 
-            int startIndex = aiPackageNode._branchIndexStart;
-            for(int i = startIndex; i < startIndex + aiPackageNode._branchCount; ++i)
+            int currentIndex = aiPackageNode._branchIndexStart;
+            int branchEndCount = currentIndex + aiPackageNode._branchCount;
+
+            AIPackageBaseData currentAIPackage = getCurrentAIPackage();
+            while (currentIndex < branchEndCount)
             {
-                if(processActionBranch(getCurrentAIPackage()._branchData[i],getCurrentAIPackage()._conditionCompareData) == true)
+                if (processActionBranch(currentAIPackage._branchData[currentIndex], currentAIPackage._conditionCompareData) == true)
                 {
-                    stateChanged = changeAIPackageState(getCurrentAIPackage()._branchData[i]._branchActionIndex);
+                    if (currentAIPackage._branchData[currentIndex]._isConditionalState)
+                    {
+                        ++currentIndex;
+                        continue;
+                    }
+                    stateChanged = changeAIPackageState(currentAIPackage._branchData[currentIndex]._branchActionIndex);
                     break;
+                }
+                else
+                {
+                    int nextIndex = currentAIPackage._branchData[currentIndex]._conditionFailNextIndex;
+                    if (nextIndex < 0)
+                        ++currentIndex;
+                    else
+                        currentIndex = nextIndex;
                 }
 
             }

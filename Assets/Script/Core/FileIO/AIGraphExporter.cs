@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using UnityEngine;
 using ICSharpCode.WpfDesign.XamlDom;
+using UnityEditor.Experimental.GraphView;
 
 public class AIGraphLoader : LoaderBase<AIGraphBaseData>
 {
@@ -306,50 +307,62 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
                     
                 branchDataList.Add(branchData);
             }
-            else if(nodeList[i].Name == "UseBranchSet")
+            else if(ActionGraphLoader.isConditionalStateNode(nodeList[i].Name))
+            {
+                int passCount = ActionGraphLoader.readConditionalState(nodeList[i], ref branchDataList, ref actionCompareDic, ref compareDataList, ref _aiGraphGlobalVariables, _currentFileName);
+                i += passCount;
+            }
+            else if (nodeList[i].Name == "UseBranchSet")
             {
                 string branchSetName = "";
                 XmlAttributeCollection branchSetAttr = nodeList[i].Attributes;
-                for(int branchSetAttrIndex = 0; branchSetAttrIndex < branchSetAttr.Count; ++branchSetAttrIndex)
+                for (int branchSetAttrIndex = 0; branchSetAttrIndex < branchSetAttr.Count; ++branchSetAttrIndex)
                 {
-                    if(branchSetAttr[branchSetAttrIndex].Name == "Name")
+                    if (branchSetAttr[branchSetAttrIndex].Name == "Name")
                     {
                         branchSetName = branchSetAttr[branchSetAttrIndex].Value;
                     }
                 }
 
-                if(branchSetDic.ContainsKey(branchSetName) == false)
+                if (branchSetDic.ContainsKey(branchSetName) == false)
                 {
-                    DebugUtil.assert_fileOpen(false, "해당 브랜치 셋이 존재하지 않습니다. 오타가 있지는 않나요? : [BranchSetName: {0}] [Line: {1}] [FileName: {2}]",_currentFileName,XMLScriptConverter.getLineNumberFromXMLNode(node),branchSetName, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
+                    DebugUtil.assert_fileOpen(false, "해당 브랜치 셋이 존재하지 않습니다. 오타가 있지는 않나요? : [BranchSetName: {0}] [Line: {1}] [FileName: {2}]", _currentFileName, XMLScriptConverter.getLineNumberFromXMLNode(node), branchSetName, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
                     return null;
                 }
 
                 XmlNodeList branchSetNodeList = branchSetDic[branchSetName];
-                for(int branchSetNodeListIndex = 0; branchSetNodeListIndex < branchSetNodeList.Count; ++branchSetNodeListIndex)
+                for (int branchSetNodeListIndex = 0; branchSetNodeListIndex < branchSetNodeList.Count; ++branchSetNodeListIndex)
                 {
-                    if(branchSetNodeList[branchSetNodeListIndex].Name != "Branch")
+                    if (branchSetNodeList[branchSetNodeListIndex].Name == "Branch")
                     {
-                        DebugUtil.assert_fileOpen(false, "잘못된 브랜치 타입입니다. 오타가 있지는 않나요? : [BranchType: {0}] [Line: {1}] [FileName: {2}]",_currentFileName,XMLScriptConverter.getLineNumberFromXMLNode(node),branchSetNodeList[branchSetNodeListIndex].Name, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
+                        ActionGraphBranchData branchData = ActionGraphLoader.ReadActionBranch(branchSetNodeList[branchSetNodeListIndex], ref actionCompareDic, ref compareDataList, ref _aiGraphGlobalVariables, _currentFileName);
+                        if (branchData == null)
+                        {
+                            DebugUtil.assert_fileOpen(false, "유효하지 않은 브랜치 데이터 입니다. [Line: {0}] [FileName: {1}]", _currentFileName, XMLScriptConverter.getLineNumberFromXMLNode(node), XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
+                            return null;
+                        }
+
+                        branchDataList.Add(branchData);
+                    }
+                    else if (ActionGraphLoader.isConditionalStateNode(branchSetNodeList[branchSetNodeListIndex].Name))
+                    {
+                        int passCount = ActionGraphLoader.readConditionalState(branchSetNodeList[branchSetNodeListIndex], ref branchDataList, ref actionCompareDic, ref compareDataList, ref _aiGraphGlobalVariables, _currentFileName);
+                        branchSetNodeListIndex += passCount;
+                    }
+                    else
+                    {
+                        DebugUtil.assert_fileOpen(false, "잘못된 브랜치 타입입니다. 오타가 있지는 않나요? : [BranchType: {0}] [Line: {1}] [FileName: {2}]", _currentFileName, XMLScriptConverter.getLineNumberFromXMLNode(node), branchSetNodeList[branchSetNodeListIndex].Name, XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
                         return null;
                     }
-
-                    ActionGraphBranchData branchData = ActionGraphLoader.ReadActionBranch(branchSetNodeList[branchSetNodeListIndex],ref actionCompareDic,ref compareDataList, ref _aiGraphGlobalVariables,_currentFileName);
-                    if(branchData == null)
-                    {
-                        DebugUtil.assert_fileOpen(false,"유효하지 않은 브랜치 데이터 입니다. [Line: {0}] [FileName: {1}]",_currentFileName,XMLScriptConverter.getLineNumberFromXMLNode(node), XMLScriptConverter.getLineFromXMLNode(node), _currentFileName);
-                        return null;
-                    }
-
-                    branchDataList.Add(branchData);
                 }
             }
-            else if(nodeList[i].Name.Contains("Event_"))
+            else if (nodeList[i].Name.Contains("Event_"))
             {
                 readAIChildEvent(nodeList[i], ref nodeData._aiEvents, ref nodeData._customAIEvents, ref aiExecuteStateDic);
             }
             else
             {
-                DebugUtil.assert_fileOpen(false, "유효하지 않은 어트리뷰트 입니다. 오타는 아닌가요? : [Name: {0}] [Line: {1}] [FileName: {2}]",_currentPackageFileName,XMLScriptConverter.getLineNumberFromXMLNode(nodeList[i]),nodeList[i].Name, XMLScriptConverter.getLineFromXMLNode(nodeList[i]), _currentFileName);
+                DebugUtil.assert_fileOpen(false, "유효하지 않은 어트리뷰트 입니다. 오타는 아닌가요? : [Name: {0}] [Line: {1}] [FileName: {2}]", _currentPackageFileName, XMLScriptConverter.getLineNumberFromXMLNode(nodeList[i]), nodeList[i].Name, XMLScriptConverter.getLineFromXMLNode(nodeList[i]), _currentFileName);
             }
         }
         
@@ -677,44 +690,58 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
                     
                 branchDataList.Add(branchData);
             }
-            else if(nodeList[i].Name == "UseBranchSet")
+            else if (ActionGraphLoader.isConditionalStateNode(nodeList[i].Name))
+            {
+                int passCount = ActionGraphLoader.readConditionalState(nodeList[i], ref branchDataList, ref actionCompareDic, ref compareDataList, ref _aiGraphGlobalVariables, _currentFileName);
+                i += passCount;
+            }
+            else if (nodeList[i].Name == "UseBranchSet")
             {
                 string branchSetName = "";
                 XmlAttributeCollection branchSetAttr = nodeList[i].Attributes;
-                for(int branchSetAttrIndex = 0; branchSetAttrIndex < branchSetAttr.Count; ++branchSetAttrIndex)
+                for (int branchSetAttrIndex = 0; branchSetAttrIndex < branchSetAttr.Count; ++branchSetAttrIndex)
                 {
-                    if(branchSetAttr[branchSetAttrIndex].Name == "Name")
+                    if (branchSetAttr[branchSetAttrIndex].Name == "Name")
                     {
                         branchSetName = branchSetAttr[branchSetAttrIndex].Value;
                     }
                 }
 
-                if(branchSetDic.ContainsKey(branchSetName) == false)
+                if (branchSetDic.ContainsKey(branchSetName) == false)
                 {
-                    DebugUtil.assert_fileOpen(false, "해당 브랜치 셋은 존재하지 않습니다. : [BranchSetName: {0}] [Line: {1}] [FileName: {2}]",_currentPackageFileName,XMLScriptConverter.getLineNumberFromXMLNode(nodeList[i]),branchSetName, XMLScriptConverter.getLineFromXMLNode(nodeList[i]), _currentPackageFileName);
+                    DebugUtil.assert_fileOpen(false, "해당 브랜치 셋은 존재하지 않습니다. : [BranchSetName: {0}] [Line: {1}] [FileName: {2}]", _currentPackageFileName, XMLScriptConverter.getLineNumberFromXMLNode(nodeList[i]), branchSetName, XMLScriptConverter.getLineFromXMLNode(nodeList[i]), _currentPackageFileName);
                     return null;
                 }
 
                 XmlNodeList branchSetNodeList = branchSetDic[branchSetName];
-                for(int branchSetNodeListIndex = 0; branchSetNodeListIndex < branchSetNodeList.Count; ++branchSetNodeListIndex)
+                for (int branchSetNodeListIndex = 0; branchSetNodeListIndex < branchSetNodeList.Count; ++branchSetNodeListIndex)
                 {
-                    if(branchSetNodeList[branchSetNodeListIndex].Name != "Branch")
+                    if (branchSetNodeList[branchSetNodeListIndex].Name == "Branch")
                     {
-                        DebugUtil.assert_fileOpen(false, "잘못된 브랜치 타입입니다. 오타는 아닌가요? : [Type: {0}] [Line: {1}] [FileName: {2}]",_currentPackageFileName,XMLScriptConverter.getLineNumberFromXMLNode(nodeList[i]),branchSetNodeList[branchSetNodeListIndex].Name, XMLScriptConverter.getLineFromXMLNode(nodeList[i]), _currentPackageFileName);
+                        ActionGraphBranchData branchData = ActionGraphLoader.ReadActionBranch(branchSetNodeList[branchSetNodeListIndex], ref actionCompareDic, ref compareDataList, ref _aiPackageGlobalVariables, _currentPackageFileName);
+                        if (branchData == null)
+                        {
+                            DebugUtil.assert_fileOpen(false, "유효하지 않은 브랜치 데이터 입니다. [Line: {0}] [FileName: {1}]", _currentPackageFileName, XMLScriptConverter.getLineNumberFromXMLNode(nodeList[i]), XMLScriptConverter.getLineFromXMLNode(nodeList[i]), _currentPackageFileName);
+                            return null;
+                        }
+
+                        branchDataList.Add(branchData);
+                    }
+                    else if (ActionGraphLoader.isConditionalStateNode(branchSetNodeList[branchSetNodeListIndex].Name))
+                    {
+                        int passCount = ActionGraphLoader.readConditionalState(branchSetNodeList[branchSetNodeListIndex], ref branchDataList, ref actionCompareDic, ref compareDataList, ref _aiGraphGlobalVariables, _currentFileName);
+                        branchSetNodeListIndex += passCount;
+                    }
+                    else
+                    {
+                        DebugUtil.assert_fileOpen(false, "잘못된 브랜치 타입입니다. 오타는 아닌가요? : [Type: {0}] [Line: {1}] [FileName: {2}]", _currentPackageFileName, XMLScriptConverter.getLineNumberFromXMLNode(nodeList[i]), branchSetNodeList[branchSetNodeListIndex].Name, XMLScriptConverter.getLineFromXMLNode(nodeList[i]), _currentPackageFileName);
                         return null;
                     }
 
-                    ActionGraphBranchData branchData = ActionGraphLoader.ReadActionBranch(branchSetNodeList[branchSetNodeListIndex],ref actionCompareDic,ref compareDataList, ref _aiPackageGlobalVariables,_currentPackageFileName);
-                    if(branchData == null)
-                    {
-                        DebugUtil.assert_fileOpen(false,"유효하지 않은 브랜치 데이터 입니다. [Line: {0}] [FileName: {1}]",_currentPackageFileName,XMLScriptConverter.getLineNumberFromXMLNode(nodeList[i]), XMLScriptConverter.getLineFromXMLNode(nodeList[i]), _currentPackageFileName);
-                        return null;
-                    }
-
-                    branchDataList.Add(branchData);
+                    
                 }
             }
-            else if(nodeList[i].Name.Contains("Event_"))
+            else if (nodeList[i].Name.Contains("Event_"))
             {
                 readAIChildEvent(nodeList[i], ref nodeData._aiEvents, ref nodeData._customAIEvents, ref aiExecuteEventDic);
             }

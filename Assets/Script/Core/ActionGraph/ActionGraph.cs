@@ -1,5 +1,6 @@
 
 using System.Collections.Generic;
+using System.Diagnostics;
 
 
 [System.Serializable]
@@ -245,13 +246,29 @@ public class ActionGraph
     private bool processAction(ActionGraphNodeData actionData)
     {
         bool actionChanged = false;
-        int startIndex = actionData._branchIndexStart;
-        for(int i = startIndex; i < startIndex + actionData._branchCount; ++i)
+        int currentIndex = actionData._branchIndexStart;
+        int branchEndCount = currentIndex + actionData._branchCount;
+
+        while (currentIndex < branchEndCount)
         {
-            if(processActionBranch(_actionGraphBaseData._branchData[i]) == true)
+            if (processActionBranch(_actionGraphBaseData._branchData[currentIndex]) == true)
             {
-                actionChanged = changeAction(_actionGraphBaseData._branchData[i]._branchActionIndex);
+                if (_actionGraphBaseData._branchData[currentIndex]._isConditionalState)
+                {
+                    ++currentIndex;
+                    continue;
+                }
+
+                actionChanged = changeAction(_actionGraphBaseData._branchData[currentIndex]._branchActionIndex);
                 break;
+            }
+            else
+            {
+                int nextIndex = _actionGraphBaseData._branchData[currentIndex]._conditionFailNextIndex;
+                if (nextIndex < 0)
+                    ++currentIndex;
+                else
+                    currentIndex = nextIndex;
             }
         }
 

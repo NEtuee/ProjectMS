@@ -434,6 +434,9 @@ public class ActionGraphBranchData
     public int      _keyConditionCompareDataIndex = -1;
     public int      _weightConditionCompareDataIndex = -1;
 
+    public bool     _isConditionalState = false;
+    public int      _conditionFailNextIndex = -1;
+
     public int _lineNumber;
 #if UNITY_EDITOR
 
@@ -443,6 +446,8 @@ public class ActionGraphBranchData
         binaryWriter.Write(_conditionCompareDataIndex);
         binaryWriter.Write(_keyConditionCompareDataIndex);
         binaryWriter.Write(_weightConditionCompareDataIndex);
+        binaryWriter.Write(_isConditionalState);
+        binaryWriter.Write(_conditionFailNextIndex);
 
 #if INCLUDE_FULLPATH
         binaryWriter.Write(_lineNumber);
@@ -456,6 +461,8 @@ public class ActionGraphBranchData
         _conditionCompareDataIndex = binaryReader.ReadInt32();
         _keyConditionCompareDataIndex = binaryReader.ReadInt32();
         _weightConditionCompareDataIndex = binaryReader.ReadInt32();
+        _isConditionalState = binaryReader.ReadBoolean();
+        _conditionFailNextIndex = binaryReader.ReadInt32();
 
 
 #if INCLUDE_FULLPATH
