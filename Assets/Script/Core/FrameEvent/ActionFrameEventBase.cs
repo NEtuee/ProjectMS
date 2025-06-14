@@ -2953,6 +2953,7 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
     public int                     _collisionCount = -1;
 
     public string                  _throwProjectileName = "";
+    public int[]                   _attackTagList = null;
 
 
     public override void initialize(ObjectBase executeEntity)
@@ -3008,31 +3009,31 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
         _attackType = AttackType.Default;
 
 
-        for(int i = 0; i < attributes.Count; ++i)
+        for (int i = 0; i < attributes.Count; ++i)
         {
-            if(attributes[i].Name == "Radius")
+            if (attributes[i].Name == "Radius")
             {
                 radius = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
             }
-            else if(attributes[i].Name == "Angle")
+            else if (attributes[i].Name == "Angle")
             {
                 angle = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
             }
-            else if(attributes[i].Name == "StartDistance")
+            else if (attributes[i].Name == "StartDistance")
             {
                 startDistance = XMLScriptConverter.valueToFloatExtend(attributes[i].Value);
             }
-            else if(attributes[i].Name == "AttackType")
+            else if (attributes[i].Name == "AttackType")
             {
                 _attackType = (AttackType)System.Enum.Parse(typeof(AttackType), attributes[i].Value);
             }
-            else if(attributes[i].Name == "AttackPreset")
+            else if (attributes[i].Name == "AttackPreset")
             {
                 AttackPreset preset = ResourceContainerEx.Instance().GetScriptableObject("Preset/AttackPreset") as AttackPreset;
                 AttackPresetData presetData = preset.getPresetData(attributes[i].Value);
-                if(presetData == null)
+                if (presetData == null)
                 {
-                    DebugUtil.assert(false, "failed to load attack preset: {0}",attributes[i].Value);
+                    DebugUtil.assert(false, "failed to load attack preset: {0}", attributes[i].Value);
                     return;
                 }
 
@@ -3043,65 +3044,77 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
                 _pushVector = presetData._pushVector;
                 _attackMaterial = presetData._attackMaterial;
             }
-            else if(attributes[i].Name == "IgnoreDefenceType")
+            else if (attributes[i].Name == "IgnoreDefenceType")
             {
                 string value = attributes[i].Value;
-                
-                if(value == null || value == "")
+
+                if (value == null || value == "")
                 {
-                    DebugUtil.assert(false,"ignoreDefenceType must need type");
+                    DebugUtil.assert(false, "ignoreDefenceType must need type");
                     return;
                 }
 
                 string[] defencies = value.Split(' ');
                 _ignoreDefenceType = new DefenceType[defencies.Length];
 
-                for(int index = 0; index < defencies.Length; ++index)
+                for (int index = 0; index < defencies.Length; ++index)
                 {
                     _ignoreDefenceType[index] = (DefenceType)System.Enum.Parse(typeof(DefenceType), defencies[index]);
                 }
             }
-            else if(attributes[i].Name == "Push")
+            else if (attributes[i].Name == "Push")
             {
                 string[] value = attributes[i].Value.Split(' ');
-                if(value == null || value.Length > 3)
+                if (value == null || value.Length > 3)
                 {
-                    DebugUtil.assert(false, "invalid Action Frame Event Data: Push, {0}",attributes[i].Value);
+                    DebugUtil.assert(false, "invalid Action Frame Event Data: Push, {0}", attributes[i].Value);
                     return;
                 }
 
-                _pushVector = new UnityEngine.Vector3(XMLScriptConverter.valueToFloatExtend(value[0]),XMLScriptConverter.valueToFloatExtend(value[1]),XMLScriptConverter.valueToFloatExtend(value[2]));
+                _pushVector = new UnityEngine.Vector3(XMLScriptConverter.valueToFloatExtend(value[0]), XMLScriptConverter.valueToFloatExtend(value[1]), XMLScriptConverter.valueToFloatExtend(value[2]));
             }
-            else if(attributes[i].Name == "CatchOffset")
+            else if (attributes[i].Name == "CatchOffset")
             {
                 _catchOffset = XMLScriptConverter.valueToVector3(attributes[i].Value);
             }
-            else if(attributes[i].Name == "AttackCount")
+            else if (attributes[i].Name == "AttackCount")
             {
                 _collisionCount = int.Parse(attributes[i].Value);
             }
-            else if(attributes[i].Name == "NotifyAttackSuccess")
+            else if (attributes[i].Name == "NotifyAttackSuccess")
             {
                 _notifyAttackSuccess = bool.Parse(attributes[i].Value);
             }
-            else if(attributes[i].Name == "DirectionType")
+            else if (attributes[i].Name == "DirectionType")
             {
                 _targetDirectionType = (DirectionType)System.Enum.Parse(typeof(DirectionType), attributes[i].Value);
             }
-            else if(attributes[i].Name == "AttackTerm")
+            else if (attributes[i].Name == "AttackTerm")
             {
                 _attackTerm = float.Parse(attributes[i].Value);
             }
-            else if(attributes[i].Name == "ProjectileName")
+            else if (attributes[i].Name == "ProjectileName")
             {
                 _throwProjectileName = attributes[i].Value;
+            }
+            else if (attributes[i].Name == "AttackTag")
+            {
+                string[] tag = attributes[i].Value.Split(' ');
+                if (tag == null)
+                    return;
+
+                List<int> tagList = new List<int>();
+                foreach (var item in tag)
+                {
+                    tagList.Add(IOControl.computeHash(item));
+                }
+
+                _attackTagList = tagList.ToArray();
             }
         }
 
         CollisionInfoData data = new CollisionInfoData(radius,angle,startDistance,rayRadius, CollisionType.Attack);
         _collisionInfo = new CollisionInfo(data);
-
-        
     }
     public override void serialize(ref BinaryWriter binaryWriter)
     {
@@ -3115,7 +3128,7 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
 
         int ignoreDefenceTypeCount = _ignoreDefenceType == null ? 0 : _ignoreDefenceType.Length;
         binaryWriter.Write(ignoreDefenceTypeCount);
-        for(int i = 0; i < ignoreDefenceTypeCount; ++i)
+        for (int i = 0; i < ignoreDefenceTypeCount; ++i)
         {
             binaryWriter.Write((int)_ignoreDefenceType[i]);
         }
@@ -3129,6 +3142,7 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
         binaryWriter.Write(_notifyAttackSuccess);
         binaryWriter.Write(_collisionCount);
         binaryWriter.Write(_throwProjectileName);
+        BinaryHelper.writeArray(ref binaryWriter, _attackTagList);
     }
 #endif
 
@@ -3140,13 +3154,13 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
         float startDistance = binaryReader.ReadSingle();
         float rayRadius = binaryReader.ReadSingle();
         CollisionType collisionType = (CollisionType)binaryReader.ReadInt32();
-        CollisionInfoData data = new CollisionInfoData(radius,angle,startDistance,rayRadius, CollisionType.Attack);
+        CollisionInfoData data = new CollisionInfoData(radius, angle, startDistance, rayRadius, CollisionType.Attack);
         _collisionInfo = new CollisionInfo(data);
 
         int ignoreDefenceTypeCount = binaryReader.ReadInt32();
-        if(ignoreDefenceTypeCount != 0)
+        if (ignoreDefenceTypeCount != 0)
             _ignoreDefenceType = new DefenceType[ignoreDefenceTypeCount];
-        for(int i = 0; i < ignoreDefenceTypeCount; ++i)
+        for (int i = 0; i < ignoreDefenceTypeCount; ++i)
         {
             _ignoreDefenceType[i] = (DefenceType)binaryReader.ReadInt32();
         }
@@ -3160,6 +3174,7 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
         _notifyAttackSuccess = binaryReader.ReadBoolean();
         _collisionCount = binaryReader.ReadInt32();
         _throwProjectileName = binaryReader.ReadString();
+        _attackTagList = BinaryHelper.readArrayInt(ref binaryReader);
     }
 }
 

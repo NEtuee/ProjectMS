@@ -3,7 +3,7 @@
 
     <Idle MovementType="Empty" DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="Idle" XFlip="true" Duration="0.3">
+        <Animation Preset="Idle" XFlip="true">
         </Animation>
 
         <Branch Condition="End == true" Execute="Idle"/>
@@ -11,7 +11,7 @@
 
     <Pointing MovementType="Empty" DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="Pointing" XFlip="true" Duration="0.3">
+        <Animation Preset="Pointing" XFlip="true">
         </Animation>
 
         <Branch Condition="End == true" Execute="Pointing"/>
@@ -19,7 +19,7 @@
 
     <Teasing MovementType="Empty" DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="Teasing" XFlip="true" Duration="1">
+        <Animation Preset="Teasing" XFlip="true">
         </Animation>
 
     </Teasing>
@@ -34,7 +34,7 @@
 
     <SpinMove MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="Keep" FlipType="Direction" ActiveCollision="False" MoveScale="0.5">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="Spinning" XFlip="true" Duration="0.6">
+        <Animation Preset="Spinning" XFlip="true">
         </Animation>
 
         <Branch Condition="End == true" Execute="SpinMove"/>
