@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Numerics;
+using UnityEngine.UIElements;
 
 public class StatusInfo
 {
@@ -837,6 +838,17 @@ public class StatusInfo
             
         _statusInfoData._statusData[status._statusIndex].variStat(ref status._levelData, ref status._realValue, 0f, value);
         return true;
+    }
+
+    public bool checkBuffApplied(string buffName)
+    {
+        foreach(var item in _currentlyAppliedBuffList)
+        {
+            if( item._buffData._buffName == buffName)
+                return true;
+        }
+
+        return false;
     }
 
     public DefenceType getDefenceType()

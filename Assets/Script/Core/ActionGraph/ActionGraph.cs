@@ -37,7 +37,12 @@ public class ActionGraph
 
     private List<InputBufferItem>               _inputBuffer = new List<InputBufferItem>();
 
-    public ActionGraph(){}
+    private GameEntityBase                      _targetEntity = null;
+
+    public ActionGraph(GameEntityBase targetEntity) 
+    {
+        _targetEntity = targetEntity;
+    }
     public ActionGraph(ActionGraphBaseData baseData){_actionGraphBaseData = baseData;}
 
     private bool _actionChangedByOther = false;
@@ -131,9 +136,9 @@ public class ActionGraph
         return false;
     }
 
-    public void updateAnimation(float deltaTime, GameEntityBase targetEntity)
+    public void updateAnimation(float deltaTime)
     {
-        bool isEnd = _animationPlayer.progress(deltaTime, targetEntity);
+        bool isEnd = _animationPlayer.progress(deltaTime, _targetEntity);
         _animationPlayer.processMultiSelectAnimation(this);
 
         if(isEnd && getCurrentAction()._animationInfoCount > ++_currentAnimationIndex)
@@ -148,7 +153,7 @@ public class ActionGraph
         setActionConditionData_Bool(ConditionNodeUpdateType.Action_AnimationEnd,isEnd);
     }
 
-    public void updateTriggerEvent(GameEntityBase targetEntity)
+    public void updateTriggerEvent()
     {
         ActionGraphNodeData currentAction = getCurrentAction();
         if(currentAction._triggerCount <= 0)
@@ -156,11 +161,11 @@ public class ActionGraph
 
         for(int i = 0; i < currentAction._triggerCount; ++i)
         {
-            processTriggerEvent(_actionGraphBaseData._triggerEventData[currentAction._triggerIndexStart + i], targetEntity);
+            processTriggerEvent(_actionGraphBaseData._triggerEventData[currentAction._triggerIndexStart + i]);
         }
     }
 
-    public void processTriggerEvent(ActionGraphTriggerEventData triggerEventData, GameEntityBase targetEntity)
+    public void processTriggerEvent(ActionGraphTriggerEventData triggerEventData)
     {
         if(triggerEventData == null)
             return;
@@ -174,9 +179,9 @@ public class ActionGraph
         for(int index = 0; index < triggerEventData._frameEventData.Length; ++index)
         {
             ActionFrameEventBase frameEvent = triggerEventData._frameEventData[index];
-            frameEvent.initialize(targetEntity);
-            frameEvent.onExecute(targetEntity);
-            frameEvent.onExit(targetEntity, false);
+            frameEvent.initialize(_targetEntity);
+            frameEvent.onExecute(_targetEntity);
+            frameEvent.onExit(_targetEntity, false);
         }
 
     }
@@ -203,6 +208,8 @@ public class ActionGraph
                 item._updateType == ConditionNodeUpdateType.Key || 
                 item._updateType == ConditionNodeUpdateType.FrameTag || 
                 item._updateType == ConditionNodeUpdateType.TargetFrameTag ||
+                item._updateType == ConditionNodeUpdateType.Buff || 
+                item._updateType == ConditionNodeUpdateType.TargetBuff ||
                 item._updateType == ConditionNodeUpdateType.Weight ||
                 item._updateType == ConditionNodeUpdateType.AngleSector || 
                 item._updateType == ConditionNodeUpdateType.AICustomValue ||
@@ -696,6 +703,24 @@ public class ActionGraph
                     return CommonConditionNodeData.falseByte;
 
                 return _targetFrameTagData.Contains(((ActionGraphConditionNodeData_FrameTag)nodeData)._targetFrameTag) ? CommonConditionNodeData.trueByte : CommonConditionNodeData.falseByte;
+            }
+            case ConditionNodeUpdateType.Buff:
+            {
+                if(_targetEntity == null)
+                    return CommonConditionNodeData.falseByte;
+
+                return _targetEntity.checkBuffApplied(((ActionGraphConditionNodeData_Buff)nodeData)._buffName) ? CommonConditionNodeData.trueByte : CommonConditionNodeData.falseByte;
+            }
+            case ConditionNodeUpdateType.TargetBuff:
+            {
+                if(_targetEntity == null)
+                    return CommonConditionNodeData.falseByte;
+
+                GameEntityBase currentTargetEntity = _targetEntity.getCurrentTargetEntity();
+                if(currentTargetEntity == null)
+                    return CommonConditionNodeData.falseByte;
+
+                return currentTargetEntity.checkBuffApplied(((ActionGraphConditionNodeData_Buff)nodeData)._buffName) ? CommonConditionNodeData.trueByte : CommonConditionNodeData.falseByte;
             }
             case ConditionNodeUpdateType.Weight:
             {
