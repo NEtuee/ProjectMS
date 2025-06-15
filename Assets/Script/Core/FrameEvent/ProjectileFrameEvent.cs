@@ -44,7 +44,7 @@ public class ActionFrameEvent_Projectile : ActionFrameEventBase
             _targetAllyInfo = AllyInfoManager.Instance().GetAllyInfoData(_allyInfoKey);
     }
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase frameEventAccessor = null)
     {
         if(ProjectileManager._instance == null)
         {

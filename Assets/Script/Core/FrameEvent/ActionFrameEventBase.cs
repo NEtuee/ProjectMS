@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using UnityEngine;
 using Unity.Collections;
+using FMODUnity;
 
 public enum FrameEventType
 {
@@ -130,7 +131,7 @@ public abstract class ActionFrameEventBase : SerializableDataType
     
     public abstract FrameEventType getFrameEventType();
     public virtual void initialize(ObjectBase executeEntity){}
-    public abstract bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null);
+    public abstract bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null);
     public virtual void onExit(ObjectBase executeEntity, bool isForceEnd){}
 
     public virtual void initializeFromAttack(CommonMaterial attackMaterial) {}
@@ -346,9 +347,12 @@ public class ActionFrameEvent_CallAIEvent : ActionFrameEventBase
     {
     }
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         ObjectBase executeTargetEntity = null;
+
+        bool fromAttack = childFrameEventAccessor != null && childFrameEventAccessor.getFrameEventType() == FrameEventType.FrameEvent_Attack;
+        
         switch(_eventTargetType)
         {
             case CallAIEventTargetType.Self:
@@ -375,8 +379,16 @@ public class ActionFrameEvent_CallAIEvent : ActionFrameEventBase
                 {
                     if(item == null || item is GameEntityBase == false || item == executeEntity)
                         continue;
-                        
-                    (item as GameEntityBase).executeCustomAIEvent(_customAiEventName);
+                    
+                    if (fromAttack)
+                    {
+                        ActionFrameEvent_Attack attackFrameEvent = (childFrameEventAccessor as ActionFrameEvent_Attack);
+                        (item as GameEntityBase).executeCustomAIEvent(_customAiEventName, attackFrameEvent._attackTagList);
+                    }
+                    else
+                    {
+                        (item as GameEntityBase).executeCustomAIEvent(_customAiEventName);
+                    }
                 }
             }
             return true;
@@ -394,7 +406,15 @@ public class ActionFrameEvent_CallAIEvent : ActionFrameEventBase
                     if(item.getSummonObject() != executeEntity)
                         continue;
 
-                    (item as GameEntityBase).executeCustomAIEvent(_customAiEventName);
+                    if (fromAttack)
+                    {
+                        ActionFrameEvent_Attack attackFrameEvent = (childFrameEventAccessor as ActionFrameEvent_Attack);
+                        (item as GameEntityBase).executeCustomAIEvent(_customAiEventName, attackFrameEvent._attackTagList);
+                    }
+                    else
+                    {
+                        (item as GameEntityBase).executeCustomAIEvent(_customAiEventName);
+                    }
                 }
             }
             return true;
@@ -403,7 +423,15 @@ public class ActionFrameEvent_CallAIEvent : ActionFrameEventBase
         if(executeTargetEntity == null || executeTargetEntity is GameEntityBase == false)
             return true;
 
-        (executeTargetEntity as GameEntityBase).executeCustomAIEvent(_customAiEventName);
+        if (fromAttack)
+        {
+            ActionFrameEvent_Attack attackFrameEvent = (childFrameEventAccessor as ActionFrameEvent_Attack);
+            (executeTargetEntity as GameEntityBase).executeCustomAIEvent(_customAiEventName, attackFrameEvent._attackTagList);
+        }
+        else
+        {
+            (executeTargetEntity as GameEntityBase).executeCustomAIEvent(_customAiEventName);
+        }
         return true;
     }
 
@@ -469,7 +497,7 @@ public class ActionFrameEvent_SetDirectionType : ActionFrameEventBase
     {
     }
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         if(executeEntity is GameEntityBase == false)
             return true;
@@ -521,7 +549,7 @@ public class ActionFrameEvent_ApplyPostProcessProfile : ActionFrameEventBase
     {
     }
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         UnityEngine.ScriptableObject profile = ResourceContainerEx.Instance().GetScriptableObject(_path);
         if(profile == null || (profile is PostProcessProfile) == false)
@@ -603,7 +631,7 @@ public class ActionFrameEvent_SequencerSignal : ActionFrameEventBase
     {
     }
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         MasterManager.instance._stageProcessor.addSequencerSignal(_signal);
 
@@ -652,7 +680,7 @@ public class ActionFrameEvent_PlaySequencer : ActionFrameEventBase
     {
     }
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         if(executeEntity is GameEntityBase == false)
             return true;
@@ -710,7 +738,7 @@ public class ActionFrameEvent_AudioPlay : ActionFrameEventBase
     {
     }
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         UnityEngine.Vector3 centerPosition;
         if(_toTarget)
@@ -923,7 +951,7 @@ public class ActionFrameEvent_SetAction : ActionFrameEventBase
     {
     }
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         if(executeEntity is GameEntityBase == false)
             return true;
@@ -976,7 +1004,7 @@ public class ActionFrameEvent_TalkBalloon : ActionFrameEventBase
     {
     }
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         var entity = executeEntity as GameEntityBase;
         if (entity == null)
@@ -1034,7 +1062,7 @@ public class ActionFrameEvent_DeactiveTalkBalloon : ActionFrameEventBase
     {
     }
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         if(executeEntity is GameEntityBase == false)
             return true;
@@ -1071,7 +1099,7 @@ public class ActionFrameEvent_ReleaseCatch : ActionFrameEventBase
     {
     }
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         ObjectBase parentObject = executeEntity.hasChildObject() ? executeEntity : (executeEntity.hasParentObject() ? executeEntity.getParentObject() : null);
         if(parentObject == null)
@@ -1158,7 +1186,7 @@ public class ActionFrameEvent_SpawnCharacter : ActionFrameEventBase
         _characterInfoData = CharacterInfoManager.Instance().GetCharacterInfoData(_characterKey);
     }
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         SceneCharacterManager sceneCharacterManager = SceneCharacterManager._managerInstance as SceneCharacterManager;
 
@@ -1277,7 +1305,7 @@ public class ActionFrameEvent_StopUpdate : ActionFrameEventBase
 
     public float _stopTime = 0f;
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         FloatData data = MessageDataPooling.GetMessageData<FloatData>();
         data.value = _stopTime;
@@ -1322,7 +1350,7 @@ public class ActionFrameEvent_SetTimeScale : ActionFrameEventBase
     public float _timeScalingTime = 0f;
     public float _timeScaleBlendTime = 0f;
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         Vector3Data data = MessageDataPooling.GetMessageData<Vector3Data>();
         data.value = new UnityEngine.Vector3(_targetTimeScale, _timeScalingTime, _timeScaleBlendTime);
@@ -1373,7 +1401,7 @@ public class ActionFrameEvent_ZoomEffect : ActionFrameEventBase
 
     public float _zoomScale = 0f;
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         CameraControlEx.Instance().Zoom(_zoomScale);
         return true;
@@ -1412,7 +1440,7 @@ public class ActionFrameEvent_ShakeEffect : ActionFrameEventBase
     public float _shakeScale = 0f;
     public float _shakeSpeed = 1f;
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         CameraControlEx.Instance().setShake(_shakeScale, _shakeSpeed, _shakeTime);
         return true;
@@ -1459,7 +1487,7 @@ public class ActionFrameEvent_ClearStatus : ActionFrameEventBase
     {
     }
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         if(executeEntity is GameEntityBase == false)
             return true;
@@ -1496,7 +1524,7 @@ public class ActionFrameEvent_ChangeAlly : ActionFrameEventBase
     {
     }
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         if(executeEntity is GameEntityBase == false)
             return true;
@@ -1553,7 +1581,7 @@ public class ActionFrameEvent_DeletePrefab : ActionFrameEventBase
     {
     }
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         MasterManager.instance._stageProcessor.removeSpawnPrefab(_key);
         return true;
@@ -1601,7 +1629,7 @@ public class ActionFrameEvent_SpawnPrefab : ActionFrameEventBase
     {
     }
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         if(_prefab == null)
             return true;
@@ -1663,7 +1691,7 @@ public class ActionFrameEvent_UIEvent : ActionFrameEventBase
     {
     }
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         GameUI.Instance.NotifyToUI(_key);
         return true;
@@ -1717,7 +1745,7 @@ public class ActionFrameEvent_StopSwitch : ActionFrameEventBase
     {
     }
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         switch(_stopSwitchType)
         {
@@ -1792,7 +1820,7 @@ public class ActionFrameEvent_SetHideUIAll : ActionFrameEventBase
     {
     }
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         HPSphereUIManager.Instance().setActive(_value == false);
         GameUI.Instance.SetActiveCrossHair(_value == false);
@@ -1861,7 +1889,7 @@ public class ActionFrameEvent_FollowAttack : ActionFrameEventBase
         executeEntity._attackProcessorManager.initializeAttack(this);
     }
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         executeEntity._attackProcessorManager.executeAttack(this,executeEntity,targetEntity);
         return true;
@@ -1936,7 +1964,7 @@ public class ActionFrameEvent_SetRotateSlotValue : ActionFrameEventBase
     float _radius = 0f;
     float _speed = 0f;
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         if(executeEntity is GameEntityBase)
             (executeEntity as GameEntityBase).setRotateSlotValue(_speed, _radius);
@@ -1980,7 +2008,7 @@ public class ActionFrameEvent_EffectPreset : ActionFrameEventBase
     private string _effectInfoKey = "";
     private bool _isSwitch = false;
     private CommonMaterial _attackMaterial;
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         if(_isSwitch)
         {
@@ -2044,7 +2072,7 @@ public class ActionFrameEvent_Torque : ActionFrameEventBase
 
     private TorqueModifyType _torqueModifyType = TorqueModifyType.Count;
     private FloatEx _value = new FloatEx();
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         if(executeEntity is GameEntityBase == false)
             return false;
@@ -2141,7 +2169,7 @@ public class ActionFrameEvent_Movement : ActionFrameEventBase
 
     private MovementSetValueType[] _setValueList = null;
     private int _valueListCount = 0;
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         if(executeEntity is GameEntityBase == false)
             return false;
@@ -2227,7 +2255,7 @@ public class ActionFrameEvent_KillEntity : ActionFrameEventBase
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_KillEntity;}
 
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         executeEntity.deactive();
         executeEntity.DeregisterRequest();
@@ -2262,7 +2290,7 @@ public class ActionFrameEvent_Danmaku : ActionFrameEventBase
     private bool _useDirection = false;
     private bool _dependentAction = false;
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         float offsetAngle = _useDirection ? MathEx.directionToAngle(executeEntity.getDirection()) : 0f;
         UnityEngine.Quaternion eulerAngle = UnityEngine.Quaternion.Euler(0f,0f,offsetAngle);
@@ -2328,7 +2356,7 @@ public class ActionFrameEvent_FrameTag : ActionFrameEventBase
 
     private string _frameTag;
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         if(executeEntity is GameEntityBase == false)
             return false;
@@ -2380,7 +2408,7 @@ public class ActionFrameEvent_SetCameraZoom : ActionFrameEventBase
 
     private float _zoom = -1f;
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         if(_zoom <= 0f)
             CameraControlEx.Instance().setDefaultZoomSize();
@@ -2424,7 +2452,7 @@ public class ActionFrameEvent_SetCameraDelay : ActionFrameEventBase
 {
     public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_SetCameraDelay;}
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         CameraControl.Instance().setDelay(true);
         return true;
@@ -2462,7 +2490,7 @@ public class ActionFrameEvent_SetDefenceType : ActionFrameEventBase
 
     private DefenceType _defenceType;
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         if(executeEntity is GameEntityBase == false)
             return false;
@@ -2505,7 +2533,7 @@ public class ActionFrameEvent_SetAnimationSpeed : ActionFrameEventBase
 
     private float _speed = 1f;
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         if(executeEntity is GameEntityBase == false)
             return false;
@@ -2549,7 +2577,7 @@ public class ActionFrameEvent_TeleportToTarget : ActionFrameEventBase
 
     private float _distanceOffset = 0f;
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         if(executeEntity is GameEntityBase == false)
             return false;
@@ -2616,7 +2644,7 @@ public class ActionFrameEvent_TeleportToTargetBack : ActionFrameEventBase
 
     private float _distanceOffset = 0f;
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         if(executeEntity is GameEntityBase == false)
             return false;
@@ -2684,7 +2712,7 @@ public class ActionFrameEvent_DeleteBuff : ActionFrameEventBase
 
     private int[] buffKeyList = null;
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         if(executeEntity is GameEntityBase == false)
             return false;
@@ -2768,7 +2796,7 @@ public class ActionFrameEvent_ApplyBuff : ActionFrameEventBase
 
     private int[] buffKeyList = null;
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         if(executeEntity is GameEntityBase == false)
             return false;
@@ -2850,7 +2878,7 @@ public class ActionFrameEvent_ApplyBuffTarget : ActionFrameEventBase
 
     private int[] buffKeyList = null;
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         if(targetEntity is GameEntityBase == false)
             return false;
@@ -2961,7 +2989,7 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
         executeEntity._attackProcessorManager.initializeAttack(this);
     }
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         executeEntity._attackProcessorManager.executeAttack(this,executeEntity,targetEntity);
         _collisionInfo.drawCollosionArea(UnityEngine.Color.red, _startFrame != _endFrame ? 0f : 1f);
@@ -3184,7 +3212,7 @@ public class ActionFrameEvent_Test : ActionFrameEventBase
 
     private string _debugLog = "";
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
     {
         UnityEngine.Debug.Log("Test Frame Event : " + _debugLog);
 

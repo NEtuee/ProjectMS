@@ -168,7 +168,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
             }
             else if(nodeList[i].Name.Contains("Event_"))
             {
-                readAIChildEvent(nodeList[i], ref aiBaseData._aiEvents, ref aiBaseData._customAIEvents, ref aiExecuteStateDic);
+                readAIChildEvent(nodeList[i], ref aiBaseData._aiEvents, ref aiBaseData._customAIEvents, ref aiExecuteStateDic, ref _aiGraphGlobalVariables, _currentFileName);
                 continue;
             }
             
@@ -358,7 +358,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
             }
             else if (nodeList[i].Name.Contains("Event_"))
             {
-                readAIChildEvent(nodeList[i], ref nodeData._aiEvents, ref nodeData._customAIEvents, ref aiExecuteStateDic);
+                readAIChildEvent(nodeList[i], ref nodeData._aiEvents, ref nodeData._customAIEvents, ref aiExecuteStateDic, ref _aiGraphGlobalVariables, _currentFileName);
             }
             else
             {
@@ -525,11 +525,11 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
             }
             else if(nodeList[i].Name.Contains("PackageEvent_"))
             {
-                readAIPackageChildEvent(nodeList[i],ref aiPackageBaseData._aiPackageEvents, ref aiExecuteEventDic);
+                readAIPackageChildEvent(nodeList[i],ref aiPackageBaseData._aiPackageEvents, ref aiExecuteEventDic, ref _aiPackageGlobalVariables, _currentPackageFileName);
             }
             else if(nodeList[i].Name.Contains("Event_"))
             {
-                readAIChildEvent(nodeList[i], ref aiPackageBaseData._aiEvents, ref aiPackageBaseData._customAIEvents, ref aiExecuteEventDic);
+                readAIChildEvent(nodeList[i], ref aiPackageBaseData._aiEvents, ref aiPackageBaseData._customAIEvents, ref aiExecuteEventDic, ref _aiPackageGlobalVariables, _currentPackageFileName);
             }
             else
             {
@@ -743,7 +743,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
             }
             else if (nodeList[i].Name.Contains("Event_"))
             {
-                readAIChildEvent(nodeList[i], ref nodeData._aiEvents, ref nodeData._customAIEvents, ref aiExecuteEventDic);
+                readAIChildEvent(nodeList[i], ref nodeData._aiEvents, ref nodeData._customAIEvents, ref aiExecuteEventDic, ref _aiPackageGlobalVariables,_currentPackageFileName);
             }
             
         }
@@ -760,7 +760,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
         return nodeData;
     }
 
-    private static void readAIPackageChildEvent(XmlNode node, ref Dictionary<AIPackageEventType,AIChildFrameEventItem> childEventDic, ref Dictionary<string, List<AIEvent_ExecuteState>> aiExecuteEventDic)
+    private static void readAIPackageChildEvent(XmlNode node, ref Dictionary<AIPackageEventType,AIChildFrameEventItem> childEventDic, ref Dictionary<string, List<AIEvent_ExecuteState>> aiExecuteEventDic, ref Dictionary<string, string> globalVariableDic, string filePath)
     {
         string eventType = node.Name.Replace("PackageEvent_","");
 
@@ -797,7 +797,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
         XmlNodeList childNodes = node.ChildNodes;
         for(int i = 0; i < childNodes.Count; ++i)
         {
-            aiEventList.Add(readAiEvent(childNodes[i], ref aiExecuteEventDic));
+            aiEventList.Add(readAiEvent(childNodes[i], ref aiExecuteEventDic, ref globalVariableDic, filePath));
         }
 
         item._childFrameEventCount = aiEventList.Count;
@@ -806,7 +806,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
         childEventDic.Add(currentEventType, item);
     }
 
-    private static void readAIChildEvent(XmlNode node, ref Dictionary<AIChildEventType,AIChildFrameEventItem> childEventDic, ref Dictionary<string,AIChildFrameEventItem> customEventDic, ref Dictionary<string, List<AIEvent_ExecuteState>> aiExecuteEventDic)
+    private static void readAIChildEvent(XmlNode node, ref Dictionary<AIChildEventType,AIChildFrameEventItem> childEventDic, ref Dictionary<string,AIChildFrameEventItem> customEventDic, ref Dictionary<string, List<AIEvent_ExecuteState>> aiExecuteEventDic, ref Dictionary<string, string> globalVariableDic, string filePath)
     {
         AIChildFrameEventItem item = null;
         AIChildEventType currentEventType = AIChildEventType.Count;
@@ -892,7 +892,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
         XmlNodeList childNodes = node.ChildNodes;
         for(int i = 0; i < childNodes.Count; ++i)
         {
-            aiEventList.Add(readAiEvent(childNodes[i], ref aiExecuteEventDic));
+            aiEventList.Add(readAiEvent(childNodes[i], ref aiExecuteEventDic, ref globalVariableDic, filePath));
         }
 
         item._childFrameEventCount = aiEventList.Count;
@@ -903,7 +903,7 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
 
     }
 
-    public static AIEventBase readAiEvent(XmlNode node, ref Dictionary<string, List<AIEvent_ExecuteState>> aiExecuteEventDic)
+    public static AIEventBase readAiEvent(XmlNode node, ref Dictionary<string, List<AIEvent_ExecuteState>> aiExecuteEventDic, ref Dictionary<string, string> globalVariableDic, string filePath)
     {
         if(node.Name != "AIEvent")
         {
@@ -913,15 +913,22 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
 
         XmlAttributeCollection attributes = node.Attributes;
         AIEventBase aiEvent = null;
+
+        ActionGraphConditionCompareData conditionCompareData = null;
+
         for(int i = 0; i < attributes.Count; ++i)
         {
             string attrName = attributes[i].Name;
-            string attrValue = attributes[i].Value;
+            string attrValue = getGlobalVariable(attributes[i].Value, globalVariableDic);
 
             if(attrName == "Type")
             {
                 AIEventType aiEventType = (AIEventType)System.Enum.Parse(typeof(AIEventType), "AIEvent_" + attrValue);
                 aiEvent = AIEventBase.getFrameEvent(aiEventType);
+            }
+            else if(attrName == "Condition")
+            {
+                conditionCompareData = ActionGraphLoader.ReadConditionCompareData(attrValue,globalVariableDic, node, filePath);
             }
         }
 
@@ -958,6 +965,8 @@ public class AIGraphLoader : LoaderBase<AIGraphBaseData>
                 return null;
             }
         }
+
+        aiEvent._conditionCompareData = conditionCompareData;
         aiEvent.loadFromXML(node);
         return aiEvent;
     }

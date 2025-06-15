@@ -28,7 +28,7 @@ public class ActionFrameEvent_ParticleEffect : ActionFrameEventBase
 
     public AngleDirectionType  _angleDirectionType = AngleDirectionType.identity;
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase frameEventAccessor = null)
     {
         Vector3 centerPosition;
         if(_toTarget)
@@ -189,7 +189,7 @@ public class ActionFrameEvent_TimelineEffect : ActionFrameEventBase
 
     public AngleDirectionType  _angleDirectionType = AngleDirectionType.identity;
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase frameEventAccessor = null)
     {
         Vector3 centerPosition;
         if(_toTarget)
@@ -353,7 +353,7 @@ public class ActionFrameEvent_AnimationEffect : ActionFrameEventBase
 
     public AngleDirectionType  _angleDirectionType = AngleDirectionType.identity;
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase frameEventAccessor = null)
     {
         Vector3 centerPosition;
         if(_toTarget)
@@ -529,7 +529,7 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
     public PhysicsBodyDescription _physicsBodyDesc = new PhysicsBodyDescription(null);
     public EffectUpdateType _effectUpdateType = EffectUpdateType.ScaledDeltaTime;
 
-    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase frameEventAccessor = null)
     {
         Vector3 centerPosition;
         if(_toTarget)

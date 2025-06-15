@@ -1562,7 +1562,20 @@ public class GameEntityBase : SequencerObjectBase
 
     public void setActionCondition_Bool(ConditionNodeUpdateType updateType, bool value) {_actionGraph.setActionConditionData_Bool(updateType, value);}
 
-    public void executeCustomAIEvent(string eventName) {_aiGraph.executeCustomAIEvent(eventName);}
+    public void executeCustomAIEvent(string eventName)
+    {
+        executeCustomAIEvent(eventName, null);
+    }
+
+    public void executeCustomAIEvent(string eventName, int[] intParam)
+    {
+        AIGraph.ReservedAIEventWithParameter param;
+        param._eventType = AIChildEventType.AIChildEvent_Custom;
+        param._stringParam = eventName;
+        param._intParam = intParam;
+
+        _aiGraph.executeCustomAIEvent(param);
+    }
 
     public void addLaserEffect(TimelineEffectItem laserEffect) {_enabledLaserEffectItems.Add(laserEffect);}
 
@@ -1641,7 +1654,19 @@ public class GameEntityBase : SequencerObjectBase
     public float getStatusPercentage(string targetName) {return _statusInfo.getCurrentStatusPercentage(targetName);}
     public float getStatus(string targetName) {return _statusInfo.getCurrentStatus(targetName);}
 
-    public void executeAIEvent(AIChildEventType eventType) {_aiGraph.executeAIEvent(eventType);}
+    public void executeAIEvent(AIChildEventType eventType)
+    {
+        executeAIEvent(eventType, null);
+    }
+    public void executeAIEvent(AIChildEventType eventType, int[] intParam)
+    {
+        AIGraph.ReservedAIEventWithParameter param;
+        param._eventType = eventType;
+        param._intParam = intParam;
+        param._stringParam = "";
+
+        _aiGraph.executeAIEvent(param);
+    }
     public bool processActionCondition(ActionGraphConditionCompareData compareData) {return _actionGraph.processActionCondition(compareData);}
 
     public HashSet<string> getCurrentFrameTagList() {return _actionGraph.getCurrentFrameTagList();}
@@ -1930,6 +1955,7 @@ public class GameEntityBaseEditor : Editor
                     item.Value._updateType == ConditionNodeUpdateType.Weight || 
                     item.Value._updateType == ConditionNodeUpdateType.AngleSector ||
                     item.Value._updateType == ConditionNodeUpdateType.AICustomValue ||
+                    item.Value._updateType == ConditionNodeUpdateType.AttackTag ||
                     item.Value._updateType == ConditionNodeUpdateType.AI_GraphCoolTime )
                     continue;
 

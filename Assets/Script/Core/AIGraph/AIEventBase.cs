@@ -64,6 +64,8 @@ public enum AIChildEventType
 
 public abstract class AIEventBase
 {
+    public ActionGraphConditionCompareData      _conditionCompareData = null;
+
     public abstract AIEventType getFrameEventType();
     public virtual void initialize(){}
     public abstract void onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null);
@@ -72,14 +74,33 @@ public abstract class AIEventBase
     public virtual void serialize(ref BinaryWriter binaryWriter)
     {
         binaryWriter.Write((int)getFrameEventType());
+        binaryWriter.Write(_conditionCompareData != null);
+        if(_conditionCompareData != null)
+            _conditionCompareData.serialize(ref binaryWriter);
     }
 
     public abstract void deserialize(ref BinaryReader binaryReader);
+
+    public bool checkCondition(GameEntityBase targetEntity)
+    {
+        if(_conditionCompareData == null)
+            return true;
+
+        return targetEntity.processActionCondition(_conditionCompareData);
+    }
 
     public static AIEventBase buildFrameEvent(ref BinaryReader binaryReader)
     {
         AIEventType aiEventType = (AIEventType)binaryReader.ReadInt32();
         AIEventBase aiEvent = getFrameEvent(aiEventType);
+
+        bool hasCondition = binaryReader.ReadBoolean();
+        if(hasCondition)
+        {
+            aiEvent._conditionCompareData = new ActionGraphConditionCompareData();
+            aiEvent._conditionCompareData.deserialize(ref binaryReader);
+        }
+
         aiEvent.deserialize(ref binaryReader);
 
         return aiEvent;

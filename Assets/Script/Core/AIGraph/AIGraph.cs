@@ -9,6 +9,21 @@ public class AIGraph
         public Dictionary<AIChildEventType,AIChildFrameEventItem> _eventDic;
     }
 
+
+    public struct ReservedAIEventWithParameter
+    {
+        public AIChildEventType _eventType;
+        public string _stringParam;
+        public int[] _intParam;
+
+        public void clear()
+        {
+            _eventType = AIChildEventType.Count;
+            _stringParam = "";
+            _intParam = null;
+        }
+    }
+
     public struct AIGraphStateCoolDownSet
     {
         public double _checkStartTime;
@@ -49,13 +64,12 @@ public class AIGraph
     private ActionGraph _actionGraph;
 
     private AIGraphBaseData _aiGraphBaseData;
-    private List<AIChildEventType> _reservedEvents = new List<AIChildEventType>();
+    private List<ReservedAIEventWithParameter> _reservedEvents = new List<ReservedAIEventWithParameter>();
     private List<ReservedAIEventItem> _reservedTargetEvents = new List<ReservedAIEventItem>();
 
-    private List<string> _reservedCustomEvents = new List<string>();
+    private List<ReservedAIEventWithParameter> _reservedCustomEvents = new List<ReservedAIEventWithParameter>();
 
     private Dictionary<string, AIGraphStateCoolDownSet> _graphStateCoolTimeMap = new Dictionary<string, AIGraphStateCoolDownSet>();
-
 
     public AIGraph(){}
     public AIGraph(ActionGraph actionGraph, AIGraphBaseData baseData){_actionGraph = actionGraph; _aiGraphBaseData = baseData;}
@@ -131,17 +145,20 @@ public class AIGraph
 
         for(int i =0; i < _reservedEvents.Count; ++i)
         {
-            processAIEvent(_reservedEvents[i],targetEntity);
+            _actionGraph?.setAIEventParam(_reservedEvents[i]);
+            processAIEvent(_reservedEvents[i]._eventType,targetEntity);
         }
 
         for(int i =0; i < _reservedCustomEvents.Count; ++i)
         {
-            processCustomAIEvent(_reservedCustomEvents[i],targetEntity);
+            _actionGraph?.setAIEventParam(_reservedCustomEvents[i]);
+            processCustomAIEvent(_reservedCustomEvents[i]._stringParam,targetEntity);
         }
 
         _reservedTargetEvents.Clear();
         _reservedEvents.Clear();
         _reservedCustomEvents.Clear();
+        _actionGraph?.clearAIEventParam();
 
         _aiStateChanged = processAINode(deltaTime, getCurrentAINode(), targetEntity);
         _aiPackageStateChanged = processAIPackage(deltaTime, getCurrentAIPackageNode(), targetEntity);
@@ -202,12 +219,12 @@ public class AIGraph
         _rotateAngle = angle;
     }
 
-    public void executeAIEvent(AIChildEventType eventType)
+    public void executeAIEvent(ReservedAIEventWithParameter eventType)
     {
         _reservedEvents.Add(eventType);
     }
 
-    public void executeCustomAIEvent(string eventName)
+    public void executeCustomAIEvent(ReservedAIEventWithParameter eventName)
     {
         _reservedCustomEvents.Add(eventName);
     }
@@ -480,6 +497,9 @@ public class AIGraph
             AIChildFrameEventItem item = aiEventDic[aiEventType];
             for(int i = 0; i < item._childFrameEventCount; ++i)
             {
+                if(item._childFrameEvents[i].checkCondition(targetEntity) == false)
+                    continue;
+
                 item._childFrameEvents[i].initialize();
                 item._childFrameEvents[i].onExecute(targetEntity);
             }
@@ -498,6 +518,9 @@ public class AIGraph
             AIChildFrameEventItem item = aiEventDic[customEvent];
             for(int i = 0; i < item._childFrameEventCount; ++i)
             {
+                if(item._childFrameEvents[i].checkCondition(targetEntity) == false)
+                    continue;
+
                 item._childFrameEvents[i].initialize();
                 item._childFrameEvents[i].onExecute(targetEntity);
             }

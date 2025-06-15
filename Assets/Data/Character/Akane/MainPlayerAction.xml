@@ -158,7 +158,7 @@
 
     <DashRoll MovementType="FrameEvent" DirectionType="MousePoint" RotationType="MoveDirection" FlipType="MousePoint" DirectionUpdateOnce="true" Flags="ClearPush">
         <Animation Preset="Sprites/NewPlayer/DashRoll/" XFlip="true" ScalePreset="YSpring" Duration="0.25">
-            <FrameEvent Type="Attack" StartTime="0" AttackPreset="PlayerAttackTest" Condition="(getStat_DashPoint >= 1.0)">
+            <FrameEvent Type="Attack" StartTime="0" AttackPreset="PlayerAttackTest" Condition="(getStat_DashPoint >= 1.0)" AttackTag="Test">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="TargetBattleIncrement" Condition="getTargetFrameTag_Groggy == false"/>
