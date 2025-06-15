@@ -353,10 +353,10 @@ public class AttackProcessor : AttackProcessorBase
                         target.setDefenceState(DefenceState.Hit);
 
                     if(requester is GameEntityBase)
-                        ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnAttack);
+                        ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnAttack, _attackFrameEvent._attackTagList);
 
                     if(_attackFrameEvent._notifyAttackSuccess)
-                        target.executeAIEvent(AIChildEventType.AIChildEvent_OnAttacked);
+                        target.executeAIEvent(AIChildEventType.AIChildEvent_OnAttacked, _attackFrameEvent._attackTagList);
 
                     eventType = ChildFrameEventType.ChildFrameEvent_OnHit;
                     attackSuccess = true;
@@ -370,8 +370,8 @@ public class AttackProcessor : AttackProcessorBase
                         target.setDefenceState(DefenceState.GuardBreakFail);
 
                         if(requester is GameEntityBase)
-                            ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnAttackGuardBreakFail);
-                        target.executeAIEvent(AIChildEventType.AIChildEvent_OnGuardBreakFail);
+                            ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnAttackGuardBreakFail, _attackFrameEvent._attackTagList);
+                        target.executeAIEvent(AIChildEventType.AIChildEvent_OnGuardBreakFail, _attackFrameEvent._attackTagList);
 
                         eventType = ChildFrameEventType.ChildFrameEvent_OnGuardBreakFail;
                     }
@@ -381,8 +381,8 @@ public class AttackProcessor : AttackProcessorBase
                         target.setDefenceState(DefenceState.GuardBroken);
 
                         if(requester is GameEntityBase)
-                            ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnGuardBreak);
-                        target.executeAIEvent(AIChildEventType.AIChildEvent_OnGuardBroken);
+                            ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnGuardBreak, _attackFrameEvent._attackTagList);
+                        target.executeAIEvent(AIChildEventType.AIChildEvent_OnGuardBroken, _attackFrameEvent._attackTagList);
 
                         eventType = ChildFrameEventType.ChildFrameEvent_OnGuardBreak;
                     }
@@ -404,8 +404,8 @@ public class AttackProcessor : AttackProcessorBase
                         requester.attachChildObject(description);
 
                         if(requester is GameEntityBase)
-                            ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnCatchTarget);
-                        target.executeAIEvent(AIChildEventType.AIChildEvent_OnCatched);
+                            ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnCatchTarget, _attackFrameEvent._attackTagList);
+                        target.executeAIEvent(AIChildEventType.AIChildEvent_OnCatched, _attackFrameEvent._attackTagList);
                     }
 
                     eventType = ChildFrameEventType.ChildFrameEvent_OnCatch;
@@ -446,8 +446,8 @@ public class AttackProcessor : AttackProcessorBase
             target.setDefenceState(DefenceState.DefenceSuccess);
 
             if(requester is GameEntityBase)
-                    ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnGuarded);
-            target.executeAIEvent(AIChildEventType.AIChildEvent_OnGuard);
+                    ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnGuarded, _attackFrameEvent._attackTagList);
+            target.executeAIEvent(AIChildEventType.AIChildEvent_OnGuard, _attackFrameEvent._attackTagList);
 
             eventType = ChildFrameEventType.ChildFrameEvent_OnGuard;
         }
@@ -457,8 +457,8 @@ public class AttackProcessor : AttackProcessorBase
             target.setDefenceState(DefenceState.ParrySuccess);
             
             if(requester is GameEntityBase)
-                    ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnParried);
-            target.executeAIEvent(AIChildEventType.AIChildEvent_OnParry);
+                    ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnParried, _attackFrameEvent._attackTagList);
+            target.executeAIEvent(AIChildEventType.AIChildEvent_OnParry, _attackFrameEvent._attackTagList);
 
             eventType = ChildFrameEventType.ChildFrameEvent_OnParry;
         }
@@ -468,8 +468,8 @@ public class AttackProcessor : AttackProcessorBase
             target.setDefenceState(DefenceState.EvadeSuccess);
 
             if(requester is GameEntityBase)
-                    ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnEvaded);
-            target.executeAIEvent(AIChildEventType.AIChildEvent_OnEvade);
+                    ((GameEntityBase)requester).executeAIEvent(AIChildEventType.AIChildEvent_OnEvaded, _attackFrameEvent._attackTagList);
+            target.executeAIEvent(AIChildEventType.AIChildEvent_OnEvade, _attackFrameEvent._attackTagList);
 
             eventType = ChildFrameEventType.ChildFrameEvent_OnEvade;
         }

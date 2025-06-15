@@ -17,6 +17,10 @@
     </AIPackage>
 
     <Entry Package="EmptyPackage">
+        <Event_OnGuard>
+            <AIEvent Type="KillEntity" Condition="checkAttackTag_Test"/>
+        </Event_OnGuard>
+
         <Branch Condition="Dead" Execute="Dead"/>
     </Entry>
 

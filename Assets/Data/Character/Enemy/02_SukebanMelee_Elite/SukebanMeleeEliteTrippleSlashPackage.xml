@@ -29,8 +29,8 @@
         </AI_AttackMain_A>
         <AI_Dodge_A UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
             <Event_OnExecute>
-                <AIEvent Condition="AngleDirectionToTarget < 180" Type="SetDirectionToTarget" Angle="150"/>
-                <AIEvent Condition="AngleDirectionToTarget >= 180" Type="SetDirectionToTarget" Angle="210"/>
+                <AIEvent Condition="AngleDirectionToTarget < 180.0" Type="SetDirectionToTarget" Angle="150"/>
+                <AIEvent Condition="AngleDirectionToTarget >= 180.0" Type="SetDirectionToTarget" Angle="210"/>
                 <AIEvent Type="SetAction" Action="AC_TrippleSlash_Dodge"/>
             </Event_OnExecute>
 
@@ -46,8 +46,8 @@
         </AI_AttackMain_B>
         <AI_Dodge_B UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
             <Event_OnExecute>
-                <AIEvent Condition="AngleDirectionToTarget < 180" Type="SetDirectionToTarget" Angle="150"/>
-                <AIEvent Condition="AngleDirectionToTarget >= 180" Type="SetDirectionToTarget" Angle="210"/>
+                <AIEvent Condition="AngleDirectionToTarget < 180.0" Type="SetDirectionToTarget" Angle="150"/>
+                <AIEvent Condition="AngleDirectionToTarget >= 180.0" Type="SetDirectionToTarget" Angle="210"/>
                 <AIEvent Type="SetAction" Action="AC_TrippleSlash_Dodge"/>
             </Event_OnExecute>
 

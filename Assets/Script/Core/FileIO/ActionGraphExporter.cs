@@ -1171,6 +1171,10 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         if(nodeData != null)
             return nodeData;
 
+        nodeData = isAttackTag(symbol);
+        if(nodeData != null)
+            return nodeData;
+
         nodeData = new ActionGraphConditionNodeData();
     
         if(ConditionNodeInfoPreset._nodePreset.ContainsKey(symbol) == false)
@@ -1181,6 +1185,17 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
 
         nodeData._symbolName = symbol;
         return nodeData;
+    }
+
+    private static ActionGraphConditionNodeData_AttackTag isAttackTag(string symbol)
+    {
+        if(symbol.Contains("checkAttackTag_") == false)
+            return null;
+        
+        ActionGraphConditionNodeData_AttackTag item = new ActionGraphConditionNodeData_AttackTag();
+        item._symbolName = "AttackTag";
+        item._attackTagHash = IOControl.computeHash(symbol.Replace("checkAttackTag_",""));
+        return item;
     }
 
     private static ActionGraphConditionNodeData_AICustomValue isCustomValue(string symbol)

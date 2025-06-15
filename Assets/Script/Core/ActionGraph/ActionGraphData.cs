@@ -591,6 +591,7 @@ public enum ConditionNodeUpdateType
     Weight,
     AngleSector,
     AICustomValue,
+    AttackTag,
 
     Count,
 }
@@ -687,6 +688,7 @@ public static class ConditionNodeInfoPreset
         {"Weight",new ConditionNodeInfo(ConditionNodeUpdateType.Weight, ConditionNodeType.Bool)},
         {"AngleSector",new ConditionNodeInfo(ConditionNodeUpdateType.AngleSector, ConditionNodeType.Int)},
         {"CustomValue",new ConditionNodeInfo(ConditionNodeUpdateType.AICustomValue, ConditionNodeType.Float)},
+        {"AttackTag",new ConditionNodeInfo(ConditionNodeUpdateType.AttackTag, ConditionNodeType.Bool)},
         
     };
 
@@ -709,6 +711,7 @@ public enum ConditionNodeDataType
     Key,
     Status,
     AIGraphCoolTime,
+    AttackTag,
 }
 
 [System.Serializable]
@@ -729,6 +732,35 @@ public class ActionGraphConditionNodeData
     {
         _symbolName = binaryReader.ReadString();
     }
+}
+
+
+[System.Serializable]
+public class ActionGraphConditionNodeData_AttackTag : ActionGraphConditionNodeData
+{
+    public int _attackTagHash = 0;
+
+    public override ConditionNodeDataType getConditionNodeDataType => ConditionNodeDataType.AttackTag;
+
+    public ActionGraphConditionNodeData_AttackTag()
+    {
+        
+    }
+    
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_attackTagHash);
+    }
+#endif
+
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        base.deserialize(ref binaryReader);
+        _attackTagHash = binaryReader.ReadInt32();
+    }
+    
 }
 
 [System.Serializable]
@@ -762,6 +794,7 @@ public class ActionGraphConditionNodeData_AICustomValue : ActionGraphConditionNo
         _customValueName = binaryReader.ReadString();
     }
 }
+
 [System.Serializable]
 public class ActionGraphConditionNodeData_FrameTag : ActionGraphConditionNodeData
 {
@@ -1039,6 +1072,9 @@ public class ActionGraphConditionCompareData
                 break;
                 case ConditionNodeDataType.Weight:
                     _conditionNodeDataArray[i] = new ActionGraphConditionNodeData_Weight();
+                break;
+                case ConditionNodeDataType.AttackTag:
+                    _conditionNodeDataArray[i] = new ActionGraphConditionNodeData_AttackTag();
                 break;
                 default:
                 {

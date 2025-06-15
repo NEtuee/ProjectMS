@@ -33,6 +33,7 @@ public class ActionGraph
     private List<byte[]>                        _conditionResultList = new List<byte[]>();
 
     private Dictionary<string, bool>            _graphStateCoolTimeMap = new Dictionary<string, bool>();
+    private AIGraph.ReservedAIEventWithParameter _lastExecutedAIEventParam;
 
     private List<InputBufferItem>               _inputBuffer = new List<InputBufferItem>();
 
@@ -205,6 +206,7 @@ public class ActionGraph
                 item._updateType == ConditionNodeUpdateType.Weight ||
                 item._updateType == ConditionNodeUpdateType.AngleSector || 
                 item._updateType == ConditionNodeUpdateType.AICustomValue ||
+                item._updateType == ConditionNodeUpdateType.AttackTag ||
                 item._updateType == ConditionNodeUpdateType.AI_GraphCoolTime)
                 continue;
 
@@ -670,61 +672,69 @@ public class ActionGraph
         ConditionNodeType nodeType = ConditionNodeInfoPreset._nodePreset[nodeData._symbolName]._nodeType;
         ConditionNodeUpdateType updateType = ConditionNodeInfoPreset._nodePreset[nodeData._symbolName]._updateType;
 
-        if(updateType == ConditionNodeUpdateType.Literal)
+        switch(updateType)
         {
-            return ((ActionGraphConditionNodeData_Literal)nodeData).getLiteral();
-        }
-        else if(updateType == ConditionNodeUpdateType.ConditionResult)
-        {
-            return _conditionResultList[((ActionGraphConditionNodeData_ConditionResult)nodeData).getResultIndex()];
-        }
-        else if(updateType == ConditionNodeUpdateType.Status)
-        {
-            return _statusConditionData[((ActionGraphConditionNodeData_Status)nodeData)._targetStatus];
-        }
-        else if(updateType == ConditionNodeUpdateType.FrameTag)
-        {
-            return _currentFrameTag.Contains(((ActionGraphConditionNodeData_FrameTag)nodeData)._targetFrameTag) ? CommonConditionNodeData.trueByte : CommonConditionNodeData.falseByte;
-        }
-        else if(updateType == ConditionNodeUpdateType.TargetFrameTag)
-        {
-            if(_targetFrameTagData == null)
-                return CommonConditionNodeData.falseByte;
+            case ConditionNodeUpdateType.Literal:
+            {
+                return ((ActionGraphConditionNodeData_Literal)nodeData).getLiteral();
+            }
+            case ConditionNodeUpdateType.ConditionResult:
+            {
+                return _conditionResultList[((ActionGraphConditionNodeData_ConditionResult)nodeData).getResultIndex()];
+            }
+            case ConditionNodeUpdateType.Status:
+            {
+                return _statusConditionData[((ActionGraphConditionNodeData_Status)nodeData)._targetStatus];
+            }
+            case ConditionNodeUpdateType.FrameTag:
+            {
+                return _currentFrameTag.Contains(((ActionGraphConditionNodeData_FrameTag)nodeData)._targetFrameTag) ? CommonConditionNodeData.trueByte : CommonConditionNodeData.falseByte;
+            }
+            case ConditionNodeUpdateType.TargetFrameTag:
+            {
+                if(_targetFrameTagData == null)
+                    return CommonConditionNodeData.falseByte;
 
-            return _targetFrameTagData.Contains(((ActionGraphConditionNodeData_FrameTag)nodeData)._targetFrameTag) ? CommonConditionNodeData.trueByte : CommonConditionNodeData.falseByte;
-        }
-        else if(updateType == ConditionNodeUpdateType.Weight)
-        {            
-            ActionGraphConditionNodeData_Weight data = (ActionGraphConditionNodeData_Weight)nodeData;
-            return WeightRandomManager.Instance().getRandom(data._weightGroupKey, data._weightName) ? CommonConditionNodeData.trueByte : CommonConditionNodeData.falseByte;
-        }
-        else if(updateType == ConditionNodeUpdateType.Key)
-        {
-            if(_blockInput)
-                return CommonConditionNodeData.falseByte;
+                return _targetFrameTagData.Contains(((ActionGraphConditionNodeData_FrameTag)nodeData)._targetFrameTag) ? CommonConditionNodeData.trueByte : CommonConditionNodeData.falseByte;
+            }
+            case ConditionNodeUpdateType.Weight:
+            {
+                ActionGraphConditionNodeData_Weight data = (ActionGraphConditionNodeData_Weight)nodeData;
+                return WeightRandomManager.Instance().getRandom(data._weightGroupKey, data._weightName) ? CommonConditionNodeData.trueByte : CommonConditionNodeData.falseByte;
+            }
+            case ConditionNodeUpdateType.Key:
+            {
+                if(_blockInput)
+                    return CommonConditionNodeData.falseByte;
 
-            ActionGraphConditionNodeData_Key keyCondition = (ActionGraphConditionNodeData_Key)nodeData;
-            if(checkInputBuffer(keyCondition._targetKeyName))
-                return CommonConditionNodeData.trueByte;
-            
-            return ActionKeyInputManager.Instance().actionKeyCheck((keyCondition)._targetKeyName);
-        }
-        else if(updateType == ConditionNodeUpdateType.AngleSector)
-        {
-            return ActionKeyInputManager.Instance().actionKeyCheck(((ActionGraphConditionNodeData_Key)nodeData)._targetKeyName);
-        }
-        else if(updateType == ConditionNodeUpdateType.AICustomValue)
-        {
-            ActionGraphConditionNodeData_AICustomValue data = (ActionGraphConditionNodeData_AICustomValue)nodeData;
-            float customValue = getCustomValue(data._customValueName);
-            copyBytes_Float(customValue,data.getLiteral());
+                ActionGraphConditionNodeData_Key keyCondition = (ActionGraphConditionNodeData_Key)nodeData;
+                if(checkInputBuffer(keyCondition._targetKeyName))
+                    return CommonConditionNodeData.trueByte;
 
-            return data.getLiteral();
-        }
-        else if(updateType == ConditionNodeUpdateType.AI_GraphCoolTime)
-        {
-            ActionGraphConditionNodeData_AIGraphCoolTime data = (ActionGraphConditionNodeData_AIGraphCoolTime)nodeData;
-            return checkAIGraphCoolTimeValue(data._graphNodeName) ? CommonConditionNodeData.trueByte : CommonConditionNodeData.falseByte;
+                return ActionKeyInputManager.Instance().actionKeyCheck((keyCondition)._targetKeyName);
+            }
+            case ConditionNodeUpdateType.AngleSector:
+            {
+                return ActionKeyInputManager.Instance().actionKeyCheck(((ActionGraphConditionNodeData_Key)nodeData)._targetKeyName);
+            }
+            case ConditionNodeUpdateType.AICustomValue:
+            {
+                ActionGraphConditionNodeData_AICustomValue data = (ActionGraphConditionNodeData_AICustomValue)nodeData;
+                float customValue = getCustomValue(data._customValueName);
+                copyBytes_Float(customValue,data.getLiteral());
+
+                return data.getLiteral();
+            }
+            case ConditionNodeUpdateType.AI_GraphCoolTime:
+            {
+                ActionGraphConditionNodeData_AIGraphCoolTime data = (ActionGraphConditionNodeData_AIGraphCoolTime)nodeData;
+                return checkAIGraphCoolTimeValue(data._graphNodeName) ? CommonConditionNodeData.trueByte : CommonConditionNodeData.falseByte;
+            }
+            case ConditionNodeUpdateType.AttackTag:
+            {
+                ActionGraphConditionNodeData_AttackTag data = (ActionGraphConditionNodeData_AttackTag)nodeData;
+                return checkAIEventParam(data._attackTagHash) ? CommonConditionNodeData.trueByte : CommonConditionNodeData.falseByte;
+            }
         }
 
         int updateTypeIndex = (int)updateType;
@@ -820,6 +830,30 @@ public class ActionGraph
     public void blockInput(bool value)
     {
         _blockInput = value;
+    }
+
+    public bool checkAIEventParam(int intParam)
+    {
+        if(_lastExecutedAIEventParam._intParam == null)
+            return false;
+        
+        for(int index = 0; index < _lastExecutedAIEventParam._intParam.Length; ++index)
+        {
+            if(_lastExecutedAIEventParam._intParam[index] == intParam)
+                return true;
+        }
+
+        return false;
+    }
+
+    public void setAIEventParam(AIGraph.ReservedAIEventWithParameter param)
+    {
+        _lastExecutedAIEventParam = param;
+    }
+
+    public void clearAIEventParam()
+    {
+        _lastExecutedAIEventParam.clear();
     }
 
     public Dictionary<string,float> getCustomValueDictionary() {return _customValueDictionary;}
