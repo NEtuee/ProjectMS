@@ -9,7 +9,7 @@
 
     <AC_Launch MovementType="FrameEvent" DirectionType="AI" RotationType="Direction">
         <Animation Preset="Sprites/Object/MilkMissile/3_milklaunch" XFlip="false" Duration="0.1">
-            <FrameEvent Type="Attack" StartTime="0" EndTime="0.5" AttackPreset="Common_Radius01" NotifyAttackSuccess="False">
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.5" AttackPreset="Common_Radius05" NotifyAttackSuccess="False">
                 <OnHit>
                 </OnHit>
             </FrameEvent>
@@ -23,7 +23,7 @@
     <AC_Move MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
         <Animation Preset="Sprites/Object/MilkMissile/2_move" XFlip="true" Duration="2">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="15" Speed="15"/>
-            <FrameEvent Type="Attack" StartTime="0" EndTime="0.5" AttackPreset="Common_Radius01" NotifyAttackSuccess="False">
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.5" AttackPreset="Common_Radius05" NotifyAttackSuccess="False">
                 <OnHit>
                 </OnHit>
             </FrameEvent>

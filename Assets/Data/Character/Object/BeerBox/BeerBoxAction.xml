@@ -1,0 +1,67 @@
+<ActionGraph Name="BeerBoxAction" DefaultAction="AC_Idle" DefaultFramePerSecond="12">
+
+    <AC_Idle MovementType="FrameEvent" DirectionType="AlwaysRight">
+        <Animation Preset="Sprites/Object/CarbonatedMilkBox/1_idle" XFlip="false" Duration="1">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" Velocity="0" MaxVelocity="0" Speed="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_Idle>
+
+    <AC_Hit MovementType="FrameEvent" DirectionType="AlwaysRight">
+        <Animation Preset="Sprites/Object/CarbonatedMilkBox/2_hit" XFlip="false" Duration="0.1">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" Velocity="0" MaxVelocity="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_MilkMissileLaunch"/>
+    </AC_Hit>
+
+    <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" DirectionAngle="180">
+        <Animation Preset="Sprites/Object/CarbonatedMilkBox/3_guardbroken" XFlip="false" Duration="0.7">
+            <FrameEvent Type="Movement" StartTime="0" Friction="1" Velocity="1.3" MaxVelocity="1.3" Speed="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_MilkMissileLaunch"/>
+    </AC_GuardBroken>
+    
+    <AC_MoveLeft MovementType="FrameEvent" DirectionType="AlwaysRight">
+        <Animation Preset="Sprites/Object/CarbonatedMilkBox/4_moveleft" XFlip="false" Duration="0.2">
+            <FrameEvent Type="Movement" StartFrame="0" Friction="3" MaxVelocity="10" Speed="10"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_MoveRight"/>
+    </AC_MoveLeft>
+
+    <AC_MoveRight MovementType="FrameEvent" DirectionType="AlwaysRight" DirectionAngle="180" >
+        <Animation Preset="Sprites/Object/CarbonatedMilkBox/5_moveright" XFlip="false" Duration="0.2">
+            <FrameEvent Type="Movement" StartFrame="0" Friction="3" MaxVelocity="13" Speed="13"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_MoveLeft"/>
+    </AC_MoveRight>
+
+    <AC_MilkMissileLaunch MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+        <Animation Preset="Sprites/Object/CarbonatedMilkBox/6_spawn" XFlip="true" Duration="4">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2208" Attach="true"/>
+            <FrameEvent Type="Danmaku" StartTime="0" Path="Assets/Data/DanmakuGraph/Enemy/MilkHealMissile.xml" UseDirection="True"/>
+            <FrameEvent Type="Danmaku" StartTime="0" Path="Assets/Data/DanmakuGraph/Enemy/MilkMissile.xml" UseDirection="True"/>
+            
+        </Animation>
+        <Branch Condition="End" Execute="Dead"/>
+    </AC_MilkMissileLaunch>
+
+    <Dead MovementType="FrameEvent" DirectionType="AlwaysRight">
+        <Animation Preset="Sprites/Object/CarbonatedMilkBox/7_dead" XFlip="false" Duration="0.1">
+
+            <FrameEvent Type="Effect" StartTime="0" Path="Sprites/Object/SignboardHpType/4_dead" FramePerSecond="0.2" CastShadow="True">
+                <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
+            </FrameEvent>
+            <FrameEvent Type="KillEntity" StartTime="0"/>
+
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Dead"/>
+    </Dead>
+
+</ActionGraph>

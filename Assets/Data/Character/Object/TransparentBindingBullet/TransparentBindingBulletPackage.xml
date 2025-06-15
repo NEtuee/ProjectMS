@@ -1,0 +1,61 @@
+<AIPackage Name="TransparentBindingBulletPackage" DefaultState="AI_Chase">
+
+    <AIState>
+        <AI_Launch UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="AC_Launch"/>
+            </Event_OnExecute>
+
+            <Branch Condition="ActionExecutedTime >= 0.2" Execute="AI_Chase"/>
+            <Branch Condition="AttackSuccess" Execute="AI_Explosion"/>
+            
+        </AI_Launch>
+
+        <AI_Chase UpdateTime="0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget" Speed="1000"/>
+                <AIEvent Type="SetAction" Action="AC_Move"/>
+            </Event_OnExecute>
+
+            <Event_OnFrame>
+                <AIEvent Type="SetDirectionToTarget" Speed="1000"/>
+            </Event_OnFrame>
+            
+            <Branch Condition="AngleToTarget <= 0.3" Execute="AI_ChaseLockOn"/>
+            <Branch Condition="AttackSuccess" Execute="AI_Explosion"/>
+        </AI_Chase>
+
+        <AI_ChaseLockOn UpdateTime="0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="AC_Move"/>
+            </Event_OnExecute>
+
+            <Event_OnFrame>
+                <AIEvent Type="SetDirectionToTarget"/>
+            </Event_OnFrame>
+            
+            <Branch Condition="End" Execute="AI_ChaseLockOn"/>
+            <Branch Condition="AttackSuccess" Execute="AI_Explosion"/>
+        </AI_ChaseLockOn>
+
+        <AI_Explosion UpdateTime="0.0">
+            <Event_OnExecute>
+                <AIEvent Type="SetAction" Action="AC_Explosion"/>
+            </Event_OnExecute>
+
+            <Branch Condition="End" Execute="AI_Dead"/>
+        </AI_Explosion>
+
+        <AI_Dead UpdateTime="999.0">
+            <Event_OnExecute>
+               <AIEvent Type="SetAction" Action="Dead"/>
+               <AIEvent Type="TerminatePackage"/>
+            </Event_OnExecute>
+
+            <Branch Condition="End" Execute="AI_Dead"/>
+        </AI_Dead>
+    </AIState>
+
+</AIPackage>
