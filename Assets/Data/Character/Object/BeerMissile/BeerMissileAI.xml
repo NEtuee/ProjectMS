@@ -9,7 +9,7 @@
     </Idle>
 
     <Move Package="BeerMissilePackage">
-        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="GraphExecutedTime >= 7.4" Execute="Dead"/>
     </Move>
 
     <Dead Package="CommonDeadPackage">
