@@ -1,0 +1,19 @@
+<AIGraph Name="BeerMissileAI" DefaultState="Idle">
+
+    <Include Path="Assets/Data/AILibrary/Package/CommonIdlePackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonDeadPackage.xml"/>
+    <Include Path="Assets/Data/Character/Object/BeerMissile/BeerMissilePackage.xml"/>
+
+    <Idle Package="CommonIdlePackage">
+        <Branch Condition="GraphExecutedTime >= 0.2" Execute="Move"/>
+    </Idle>
+
+    <Move Package="BeerMissilePackage">
+        <Branch Condition="Dead" Execute="Dead"/>
+    </Move>
+
+    <Dead Package="CommonDeadPackage">
+        <Branch Condition="Dead" Execute="Dead"/>
+    </Dead>
+
+</AIGraph>

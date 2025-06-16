@@ -862,4 +862,19 @@
         </Event>
     </TransparentBindingBullet>
 
+    <BeerMissile DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">
+        <Animation Preset="Sprites/Object/BeerMissile" XFlip="true" Duration="10">
+        </Animation>
+
+        <CollisionInfo Radius="0.1" Angle="0"/>
+        <DefaultShotInfo Velocity="7" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="0.0"/>
+        
+        <Event>
+            <OnEnd>
+                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="TransparentBindingBullet" Offset="0 0 0" Inherit="true" InheritDirection="true" AllyInfo="CommonBattleObject"/>
+                
+            </OnEnd>
+        </Event>
+    </BeerMissile>
+
 </ProjectileGraph>

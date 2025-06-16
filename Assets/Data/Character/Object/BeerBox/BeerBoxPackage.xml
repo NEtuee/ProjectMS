@@ -1,61 +1,32 @@
-<AIPackage Name="BeerBoxPackage" DefaultState="AI_Rush">
+<AIPackage Name="CarbonatedMilkBoxPackage" DefaultState="AI_MoveLeft">
 
     <AIState>
-        <AI_Rush UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
-            <Event_OnExecute>    
+        <AI_Hit UpdateTime="0.0">
+            <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
-                <AIEvent Type="SetAction" Action="AC_Rush"/>
+                <AIEvent Type="SetAction" Action="AC_Hit"/>
             </Event_OnExecute>
-            
-            <Branch Condition="getTargetFrameTag_Dead" Execute="AI_Idle"/>
-            <Branch Condition="AttackCatchTarget" Execute="AI_RushSuccess"/>
-            <Branch Condition="End" Execute="TerminatePackage"/>
-        </AI_Rush>
 
-        <AI_RushSuccess UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+            <Branch Condition="End" Execute="AI_BeerShot"/>
+        </AI_Hit>
+
+        <AI_BeerShot UpdateTime="0.0">
             <Event_OnExecute>
-                <AIEvent Type="Test" Log="AI Rush Success"/>
-                <AIEvent Type="SetAction" Action="AC_RushSuccess_Entry"/>
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="AC_BeerShot"/>
             </Event_OnExecute>
 
-            <Branch Condition="getTargetFrameTag_Dead" Execute="AI_Idle"/>
-            <Branch Condition="(PackageExecutedTime >= 1.0)" Execute="AI_RushSuccess_Attack"/>
-            <Branch Condition="End && getTargetFrameTag_Recatchable && (PackageExecutedTime >= 1.0)" Execute="AI_RushSuccess"/>
-            <Branch Condition="IsCatcher == false" Execute="AI_Away"/>
-        </AI_RushSuccess>
+            <Branch Condition="End" Execute="AI_Dead"/>
+        </AI_BeerShot>
 
-        <AI_RushSuccess_Attack UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+        <AI_Dead UpdateTime="0.0">
             <Event_OnExecute>
-                <AIEvent Type="SetAction" Action="AC_RushSuccess_Attack"/>
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="Dead"/>
             </Event_OnExecute>
-            
-            <Branch Condition="getTargetFrameTag_Dead" Execute="AI_Idle"/>
-            <Branch Condition="End && getTargetFrameTag_Recatchable" Execute="AI_RushSuccess"/>
-            <Branch Condition="IsCatcher == false" Execute="AI_Away"/>
-            <Branch Condition="End" Execute="AI_Away"/>
-        </AI_RushSuccess_Attack>
 
-        <AI_Idle UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
-            <Event_OnExecute>
-                <AIEvent Type="SetAction" Action="AC_Idle"/>
-            </Event_OnExecute>
-        
-            <Branch Condition="End" Execute="TerminatePackage"/>
-        </AI_Idle>
-
-        <AI_Away UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
-            <Event_OnExecute>
-                <AIEvent Type="SetAction" Action="AC_Away"/>
-            </Event_OnExecute>
-        
-            <Branch Condition="End" Execute="TerminatePackage"/>
-        </AI_Away>
-
-        <TerminatePackage>
-            <Event_OnExecute>
-                <AIEvent Type="TerminatePackage"/>
-            </Event_OnExecute>
-        </TerminatePackage>
+            <Branch Condition="End" Execute="AI_Dead"/>
+        </AI_Dead>
 
     </AIState>
 

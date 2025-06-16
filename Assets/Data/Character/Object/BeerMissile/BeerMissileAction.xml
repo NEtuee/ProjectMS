@@ -1,0 +1,43 @@
+<ActionGraph Name="BeerMissileAction" DefaultAction="AC_Idle" DefaultFramePerSecond="12">
+
+    <AC_Idle MovementType="FrameEvent" DirectionType="AI" RotationType="Direction">
+        <Animation Preset="Sprites/Object/BeerMissile/1_Idle" XFlip="false" Duration="0.2">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_Idle>
+
+    <AC_Launch MovementType="FrameEvent" DirectionType="AI" RotationType="Direction">
+        <Animation Preset="Sprites/Object/BeerMissile/2_Launch" XFlip="false" Duration="0.1">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="10" Speed="10"/>
+
+            </FrameEvent>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Move"/>
+    </AC_Launch>
+
+    <AC_Move MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
+        <Animation Preset="Sprites/Object/BeerMissile/3_Move" XFlip="true" Duration="2">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="10" Speed="10"/>
+
+            </FrameEvent>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Move"/>
+    </AC_Move>
+    
+    <Dead MovementType="FrameEvent" DirectionType="AlwaysRight">
+        <Animation Preset="Sprites/Object/BeerMissile/4_dead" XFlip="false" Duration="0.1">
+            <FrameEvent Type="KillEntity" StartTime="0"/>
+
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Dead"/>
+    </Dead>
+
+</ActionGraph>

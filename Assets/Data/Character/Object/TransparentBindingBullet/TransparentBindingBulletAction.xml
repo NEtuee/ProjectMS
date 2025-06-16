@@ -10,7 +10,7 @@
     <AC_Move MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
         <Animation Preset="Sprites/Object/TransparentBindingBullet/3_Move" XFlip="true" Duration="2">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="10" Speed="10"/>
-            <FrameEvent Type="Attack" StartTime="0" EndTime="0.5" AttackPreset="Common_Radius30" NotifyAttackSuccess="False">
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.5" AttackPreset="Common_Radius50" NotifyAttackSuccess="False">
                 <OnHit>
                 </OnHit>
             </FrameEvent>
@@ -23,7 +23,7 @@
 
     <AC_Launch MovementType="FrameEvent" DirectionType="AI" RotationType="Direction">
         <Animation Preset="Sprites/Object/TransparentBindingBullet/2_Launch" XFlip="false" Duration="0.1">
-            <FrameEvent Type="Attack" StartTime="0" EndTime="0.5" AttackPreset="Common_Radius05" NotifyAttackSuccess="False">
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.5" AttackPreset="Common_Radius50" NotifyAttackSuccess="False">
                 <OnHit>
                 </OnHit>
             </FrameEvent>
@@ -37,7 +37,7 @@
     <AC_Explosion MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
         <Animation Preset="Sprites/Object/TransparentBindingBullet/4_Explosion" XFlip="true" Duration="0.1">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="10" Speed="10"/>
-            <FrameEvent Type="Attack" StartTime="0" EndTime="0.1" AttackPreset="Common_Radius30" NotifyAttackSuccess="False">
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.1" AttackPreset="Common_Radius50" NotifyAttackSuccess="False">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="StunSet"/>
                 </OnHit>
