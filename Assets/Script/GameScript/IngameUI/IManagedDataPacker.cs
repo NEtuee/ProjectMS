@@ -24,11 +24,9 @@ public class IManagedDataPacker
         switch (outdatedData.uiDataType)
         {
             case UIDataType.AkaneHP:
-                PackAkaneHPData((AkaneHP.AkaneHPManagedData)outdatedData);
-                break;
+                return PackAkaneHPData((AkaneHP.AkaneHPManagedData)outdatedData);
             case UIDataType.AkaneBP:
-                PackAkaneBPData((AkaneBP.AkaneBPManagedData)outdatedData);
-                break;
+                return PackAkaneBPData((AkaneBP.AkaneBPManagedData)outdatedData);
             default:
                 break;
         }

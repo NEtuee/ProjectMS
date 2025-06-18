@@ -60,7 +60,7 @@ public class GameUI : MonoBehaviour
         _enemyHp.InitValue();
         _bossHp.Disable();
 
-        //_ingameUI.ActivateUI();
+        _ingameUI.ActivateUI();
     }
 
     public void StopByScene()
@@ -78,7 +78,7 @@ public class GameUI : MonoBehaviour
         _dashPointUI.InitValue(_targetEntity.getStatus("DashPoint"));
         _crossHairUI.InitValue(_targetEntity, _targetEntity.transform.position, _targetEntity.getStatus("DashPoint"));
 
-        //_ingameUI.SetMainUIEntity(_targetEntity);
+        _ingameUI.SetMainUIEntity(_targetEntity);
     }
 
     public void SetActiveCrossHair(bool active)
