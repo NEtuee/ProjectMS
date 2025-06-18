@@ -7,11 +7,12 @@ using UnityEngine;
 public abstract class UIState<TState> where TState : Enum
 {
     //외부의 receivedData와 투영 컴포넌트를 가지고 있는 ProjectorUI
-    protected ProjectorUI<TState> _projectorUI;
+    protected ProjectorUI _projectorUI;
     //AnimationPreset
-    public UIState(ProjectorUI<TState> projectorUI)
+    public UIState(ProjectorUI projectorUI)
     {
         _projectorUI = projectorUI;
+        this.Initialize();
     }
     //AnimationPreset 지정
     //ex. ResourceContainerEx.Instance().GetAnimationCustomPreset("Sprites/UI/AkaneStatusBar/DP/IdleNormal/");

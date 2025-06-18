@@ -8,9 +8,8 @@ using UnityEngine.Serialization;
 public class GameUI : MonoBehaviour
 {
     public static GameUI Instance;
-
+    [SerializeField] private IngameUI _ingameUI;
     public GameObject MainHUDRoot;
-    
     public HpBpGaugeUIBinder HpBpGaugeUIBinder;
     public DashPointUIBinder DashPointBinder;
     public CrosshairUIBinder CrosshairBinder;
@@ -60,6 +59,8 @@ public class GameUI : MonoBehaviour
         _enemyIndicator.InitValue(Camera.main);
         _enemyHp.InitValue();
         _bossHp.Disable();
+
+        //_ingameUI.ActivateUI();
     }
 
     public void StopByScene()
@@ -67,15 +68,17 @@ public class GameUI : MonoBehaviour
         
     }
 
-    public void SetEntity(GameEntityBase targetEntity) 
+    public void SetEntity(GameEntityBase targetEntity)
     {
         _targetEntity = targetEntity;
         if (targetEntity == null)
             return;
-        
+
         _hpBpGaugeUI.InitValue(_targetEntity.getStatusPercentage("HP"), _targetEntity.getStatusPercentage("Blood"));
         _dashPointUI.InitValue(_targetEntity.getStatus("DashPoint"));
         _crossHairUI.InitValue(_targetEntity, _targetEntity.transform.position, _targetEntity.getStatus("DashPoint"));
+
+        //_ingameUI.SetMainUIEntity(_targetEntity);
     }
 
     public void SetActiveCrossHair(bool active)
