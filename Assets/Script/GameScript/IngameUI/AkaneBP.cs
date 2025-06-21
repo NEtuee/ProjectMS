@@ -6,15 +6,27 @@ using UnityEngine.UI;
 
 
 
-public class AkaneBP : ProjectorUI<AkaneBP.StateType>
+public class AkaneBP : ProjectorUI
 {
     [SerializeField] private Image BPProgressImage;
-    public class AkaneBPManagedData : IManagedData
+    public struct AkaneBPManagedData : IManagedData
     {
+        public UIDataType uiDataType { get { return UIDataType.AkaneBP; } }
         public float bpPercentage;
-        public AkaneBPManagedData(float bpPercentage) { this.bpPercentage = bpPercentage; }
+        public float changeAmount;
+        public AkaneBPManagedData(float bpPercentage, float changeAmount) { this.bpPercentage = bpPercentage; this.changeAmount = changeAmount; }
     }
-    public enum StateType { NONE, Opening, Idle, Closing }
+    public AkaneBPManagedData ReceivedData
+    {
+        get { return (AkaneBPManagedData)_receivedData; }
+    }
+    public AkaneBPManagedData ProjectingData
+    {
+        get { return (AkaneBPManagedData)_projectingData; }
+        set { _projectingData = value; }
+    }
+    private StateMachine<UIStateType> _stateMachine;
+    private enum UIStateType { NONE, Idle, Underattacked, LifeTapping, Lifestealing }
 
 
 
@@ -26,23 +38,22 @@ public class AkaneBP : ProjectorUI<AkaneBP.StateType>
     }
     public override void Initialize()
     {
-        var stateMap = new Dictionary<StateType, UIState<StateType>>
+        var stateMap = new Dictionary<UIStateType, UIState<UIStateType>>
         {
-            { StateType.Opening, new OpeningState(this) },
-            { StateType.Idle, new IdleState(this) },
-            { StateType.Closing, new ClosingState(this) }
+            { UIStateType.Idle, new IdleState(this) },
+            { UIStateType.Underattacked, new UnderattackedState(this) },
+            { UIStateType.Lifestealing, new LifestealingState(this) }
         };
 
-        _stateMachine = new StateMachine<StateType>(this);
-        _stateMachine.Initialize(stateMap, StateType.Opening);
+        _stateMachine = new StateMachine<UIStateType>(this, stateMap);
     }
     public override void Activate()
     {
-        _stateMachine.ChangeState(StateType.Opening);
+        _stateMachine.ChangeState(UIStateType.Idle);
     }
     public override void Deactivate()
     {
-        _stateMachine.ChangeState(StateType.Closing);
+        _stateMachine.ChangeState(UIStateType.NONE);
     }
     public override void UpdateProjection(IManagedData data)
     {
@@ -56,16 +67,16 @@ public class AkaneBP : ProjectorUI<AkaneBP.StateType>
 
 
 
-    private class OpeningState : UIState<StateType>
+    private class IdleState : UIState<UIStateType>
     {
-        public OpeningState(ProjectorUI<StateType> projectorUI) : base(projectorUI) {}
+        public IdleState(ProjectorUI projectorUI) : base(projectorUI) {}
         public override void Initialize()
         {
 
         }
-        public override StateType ChangeCondition()
+        public override UIStateType ChangeCondition()
         {
-            return StateType.Opening;
+            return UIStateType.Idle;
         }
         public override IEnumerator OnEnterCoroutine()
         {
@@ -80,16 +91,14 @@ public class AkaneBP : ProjectorUI<AkaneBP.StateType>
             yield return null;
         }
     }
-    private class IdleState : UIState<StateType>
+    //피격
+    private class UnderattackedState : UIState<UIStateType>
     {
-        public IdleState(ProjectorUI<StateType> projectorUI) : base(projectorUI) {}
-        public override void Initialize()
+        public UnderattackedState(ProjectorUI projectorUI) : base(projectorUI) { }
+        public override void Initialize() { return; }
+        public override UIStateType ChangeCondition()
         {
-
-        }
-        public override StateType ChangeCondition()
-        {
-            return StateType.Idle;
+            return UIStateType.Idle;
         }
         public override IEnumerator OnEnterCoroutine()
         {
@@ -104,16 +113,17 @@ public class AkaneBP : ProjectorUI<AkaneBP.StateType>
             yield return null;
         }
     }
-    private class ClosingState : UIState<StateType>
+    //공격 회복
+    private class LifestealingState : UIState<UIStateType>
     {
-        public ClosingState(ProjectorUI<StateType> projectorUI) : base(projectorUI) {}
+        public LifestealingState(ProjectorUI projectorUI) : base(projectorUI) { }
         public override void Initialize()
         {
 
         }
-        public override StateType ChangeCondition()
+        public override UIStateType ChangeCondition()
         {
-            return StateType.Closing;
+            return UIStateType.Idle;
         }
         public override IEnumerator OnEnterCoroutine()
         {

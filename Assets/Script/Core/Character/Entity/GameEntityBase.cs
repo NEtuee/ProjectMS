@@ -161,7 +161,7 @@ public class GameEntityBase : SequencerObjectBase
         });
 
         
-        _actionGraph = new ActionGraph();
+        _actionGraph = new ActionGraph(this);
         _actionGraph.assign();
 
         _aiGraph = new AIGraph();
@@ -542,8 +542,8 @@ public class GameEntityBase : SequencerObjectBase
             }
 
             //animation 바뀌는 시점
-            _actionGraph.updateAnimation(deltaTime, this);
-            _actionGraph.updateTriggerEvent(this);
+            _actionGraph.updateAnimation(deltaTime);
+            _actionGraph.updateTriggerEvent();
             _movementControl?.progress(deltaTime, _direction);
             
             updatePhysics(deltaTime);
@@ -1322,6 +1322,12 @@ public class GameEntityBase : SequencerObjectBase
         return _leftHP <= 0f;
     }
 
+
+    public bool checkBuffApplied(string buffName)
+    {
+        return _statusInfo.checkBuffApplied(buffName);
+    }
+
     private void applyActionBuffList()
     {
         if(_currentActionBuffList != null)
@@ -1952,6 +1958,8 @@ public class GameEntityBaseEditor : Editor
                     item.Value._updateType == ConditionNodeUpdateType.Key || 
                     item.Value._updateType == ConditionNodeUpdateType.FrameTag || 
                     item.Value._updateType == ConditionNodeUpdateType.TargetFrameTag || 
+                    item.Value._updateType == ConditionNodeUpdateType.Buff || 
+                    item.Value._updateType == ConditionNodeUpdateType.TargetBuff ||
                     item.Value._updateType == ConditionNodeUpdateType.Weight || 
                     item.Value._updateType == ConditionNodeUpdateType.AngleSector ||
                     item.Value._updateType == ConditionNodeUpdateType.AICustomValue ||

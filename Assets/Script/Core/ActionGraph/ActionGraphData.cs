@@ -592,6 +592,8 @@ public enum ConditionNodeUpdateType
     AngleSector,
     AICustomValue,
     AttackTag,
+    Buff,
+    TargetBuff,
 
     Count,
 }
@@ -689,6 +691,8 @@ public static class ConditionNodeInfoPreset
         {"AngleSector",new ConditionNodeInfo(ConditionNodeUpdateType.AngleSector, ConditionNodeType.Int)},
         {"CustomValue",new ConditionNodeInfo(ConditionNodeUpdateType.AICustomValue, ConditionNodeType.Float)},
         {"AttackTag",new ConditionNodeInfo(ConditionNodeUpdateType.AttackTag, ConditionNodeType.Bool)},
+        {"Buff",new ConditionNodeInfo(ConditionNodeUpdateType.Buff, ConditionNodeType.Bool)},
+        {"TargetBuff",new ConditionNodeInfo(ConditionNodeUpdateType.TargetBuff, ConditionNodeType.Bool)},
         
     };
 
@@ -712,6 +716,7 @@ public enum ConditionNodeDataType
     Status,
     AIGraphCoolTime,
     AttackTag,
+    Buff,
 }
 
 [System.Serializable]
@@ -735,6 +740,35 @@ public class ActionGraphConditionNodeData
 }
 
 
+[System.Serializable]
+public class ActionGraphConditionNodeData_Buff : ActionGraphConditionNodeData
+{
+    public string _buffName = "";
+
+    public override ConditionNodeDataType getConditionNodeDataType => ConditionNodeDataType.Buff;
+
+    public ActionGraphConditionNodeData_Buff()
+    {
+        
+    }
+    
+    public string getBuffName() {return _buffName;}
+
+#if UNITY_EDITOR
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_buffName);
+    }
+#endif
+
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        base.deserialize(ref binaryReader);
+        _buffName = binaryReader.ReadString();
+    }
+    
+}
 [System.Serializable]
 public class ActionGraphConditionNodeData_AttackTag : ActionGraphConditionNodeData
 {
@@ -1075,6 +1109,9 @@ public class ActionGraphConditionCompareData
                 break;
                 case ConditionNodeDataType.AttackTag:
                     _conditionNodeDataArray[i] = new ActionGraphConditionNodeData_AttackTag();
+                break;
+                case ConditionNodeDataType.Buff:
+                    _conditionNodeDataArray[i] = new ActionGraphConditionNodeData_Buff();
                 break;
                 default:
                 {

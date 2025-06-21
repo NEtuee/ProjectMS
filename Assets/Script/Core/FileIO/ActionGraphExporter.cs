@@ -1163,6 +1163,14 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         if(nodeData != null)
             return nodeData;
 
+        nodeData = isTargetBuff(symbol);
+        if(nodeData != null)
+            return nodeData;
+
+        nodeData = isBuff(symbol);
+        if(nodeData != null)
+            return nodeData;
+
         nodeData = isWeight(symbol);
         if(nodeData != null)
             return nodeData;
@@ -1228,6 +1236,28 @@ public class ActionGraphLoader : LoaderBase<ActionGraphBaseData>
         ActionGraphConditionNodeData_FrameTag item = new ActionGraphConditionNodeData_FrameTag();
         item._symbolName = "FrameTag";
         item._targetFrameTag = symbol.Replace("getFrameTag_","");
+        return item;
+    }
+
+    private static ActionGraphConditionNodeData_Buff isTargetBuff(string symbol)
+    {
+        if(symbol.Contains("checkTargetBuff_") == false)
+            return null;
+        
+        ActionGraphConditionNodeData_Buff item = new ActionGraphConditionNodeData_Buff();
+        item._symbolName = "TargetBuff";
+        item._buffName = symbol.Replace("checkTargetBuff_","");
+        return item;
+    }
+
+    private static ActionGraphConditionNodeData_Buff isBuff(string symbol)
+    {
+        if(symbol.Contains("checkBuff_") == false)
+            return null;
+
+        ActionGraphConditionNodeData_Buff item = new ActionGraphConditionNodeData_Buff();
+        item._symbolName = "Buff";
+        item._buffName = symbol.Replace("checkBuff_","");
         return item;
     }
 

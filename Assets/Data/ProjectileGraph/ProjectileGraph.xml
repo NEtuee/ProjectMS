@@ -816,4 +816,65 @@
         <Event>
         </Event>
     </PropanegasCylinder>
+
+    <MilkMissile DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">
+        <Animation Preset="Sprites/Object/MilkMissile/1_idle" XFlip="true" Duration="0.8">
+        </Animation>
+
+        <CollisionInfo Radius="0.1" Angle="0"/>
+        <DefaultShotInfo Velocity="7" Acceleration="0" Friction="14" Angle="0" AngularAcceleration="0" LifeTime="0.0"/>
+        
+        <Event>
+            <OnEnd>
+                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="MilkMissile" Offset="0 0 0" Inherit="true" InheritDirection="true" AllyInfo="CommonBattleObject"/>
+                
+            </OnEnd>
+        </Event>
+    </MilkMissile>
+
+    <MilkHealMissile DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">
+        <Animation Preset="Sprites/Object/MilkHealMissile" XFlip="true" Duration="0.8">
+        </Animation>
+
+        <CollisionInfo Radius="0.1" Angle="0"/>
+        <DefaultShotInfo Velocity="7" Acceleration="0" Friction="14" Angle="0" AngularAcceleration="0" LifeTime="0.0"/>
+        
+        <Event>
+            <OnEnd>
+                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="MilkHealMissile" Offset="0 0 0" Inherit="true" InheritDirection="true" AllyInfo="CommonBattleObject"/>
+                
+            </OnEnd>
+        </Event>
+    </MilkHealMissile>
+
+    <TransparentBindingBullet DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">
+        <Animation Preset="Sprites/Object/MilkHealMissile" XFlip="true" Duration="10">
+        </Animation>
+
+        <CollisionInfo Radius="0.1" Angle="0"/>
+        <DefaultShotInfo Velocity="7" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="0.0"/>
+        
+        <Event>
+            <OnEnd>
+                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="TransparentBindingBullet" Offset="0 0 0" Inherit="true" InheritDirection="true" AllyInfo="CommonBattleObject"/>
+                
+            </OnEnd>
+        </Event>
+    </TransparentBindingBullet>
+
+    <BeerMissile DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1">
+        <Animation Preset="Sprites/Object/BeerMissile" XFlip="true" Duration="10">
+        </Animation>
+
+        <CollisionInfo Radius="0.1" Angle="0"/>
+        <DefaultShotInfo Velocity="7" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="0.0"/>
+        
+        <Event>
+            <OnEnd>
+                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="TransparentBindingBullet" Offset="0 0 0" Inherit="true" InheritDirection="true" AllyInfo="CommonBattleObject"/>
+                
+            </OnEnd>
+        </Event>
+    </BeerMissile>
+
 </ProjectileGraph>
