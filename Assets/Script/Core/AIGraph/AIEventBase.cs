@@ -183,10 +183,9 @@ public abstract class AIEventBase
     }
 
 }
-
-public class AIEvent_ChangeAlly : AIEventBase
+public class AIEvent_DetachRotateSlot : AIEventBase
 {
-    public override AIEventType getFrameEventType() {return AIEventType.AIEvent_ChangeAlly;}
+    public override AIEventType getFrameEventType() {return AIEventType.AIEvent_DetachRotateSlot;}
     public override void onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null)
     {
         if(executeEntity is GameEntityBase == false)
@@ -211,9 +210,9 @@ public class AIEvent_ChangeAlly : AIEventBase
     }
 }
 
-public class AIEvent_DetachRotateSlot : AIEventBase
+public class AIEvent_ChangeAlly : AIEventBase
 {
-    public override AIEventType getFrameEventType() {return AIEventType.AIEvent_DetachRotateSlot;}
+    public override AIEventType getFrameEventType() {return AIEventType.AIEvent_ChangeAlly;}
 
     private string _allyInfoKey = "";
     private bool _resetTarget = false;
