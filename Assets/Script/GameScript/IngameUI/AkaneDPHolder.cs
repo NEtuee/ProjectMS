@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AkaneDPHolder : ProjectorUI<AkaneDPHolder.StateType>
+public class AkaneDPHolder : ProjectorUI
 {
     public class AkaneDPManagedData : IManagedData
     {
@@ -13,9 +13,11 @@ public class AkaneDPHolder : ProjectorUI<AkaneDPHolder.StateType>
         public int remainingDP;
         public int maxDP;
         public AkaneDPManagedData(int remainingDP, int maxDP) { this.remainingDP = remainingDP; this.maxDP = maxDP; }
+        public UIDataType uiDataType => UIDataType.AkaneDP;
     }
-    private ProjectorUI<AkaneDP.StateType>[] HoldingProjectorUIList;
-    public enum StateType { NONE, Opening, Idle, Closing }
+    private ProjectorUI[] HoldingProjectorUIList;
+    private StateMachine<UIStateType> _stateMachine;
+    public enum UIStateType { NONE, Idle }
 
 
 
@@ -45,68 +47,16 @@ public class AkaneDPHolder : ProjectorUI<AkaneDPHolder.StateType>
 
 
 
-    private class OpeningState : UIState<StateType>
+    private class IdleState : UIState<UIStateType>
     {
-        public OpeningState(ProjectorUI<StateType> projectorUI) : base(projectorUI) {}
+        public IdleState(ProjectorUI projectorUI) : base(projectorUI) {}
         public override void Initialize()
         {
 
         }
-        public override StateType ChangeCondition()
+        public override UIStateType ChangeCondition()
         {
-            return StateType.Closing;
-        }
-        public override IEnumerator OnEnterCoroutine()
-        {
-            yield return null;
-        }
-
-        public override void OnUpdate()
-        {
-
-        }
-
-        public override IEnumerator OnExitCoroutine()
-        {
-            yield return null;
-        }
-    }
-    private class IdleState : UIState<StateType>
-    {
-        public IdleState(ProjectorUI<StateType> projectorUI) : base(projectorUI) {}
-        public override void Initialize()
-        {
-
-        }
-        public override StateType ChangeCondition()
-        {
-            return StateType.Closing;
-        }
-        public override IEnumerator OnEnterCoroutine()
-        {
-            yield return null;
-        }
-
-        public override void OnUpdate()
-        {
-
-        }
-
-        public override IEnumerator OnExitCoroutine()
-        {
-            yield return null;
-        }
-    }
-    private class ClosingState : UIState<StateType>
-    {
-        public ClosingState(ProjectorUI<StateType> projectorUI) : base(projectorUI) {}
-        public override void Initialize()
-        {
-
-        }
-        public override StateType ChangeCondition()
-        {
-            return StateType.Closing;
+            return UIStateType.Idle;
         }
         public override IEnumerator OnEnterCoroutine()
         {

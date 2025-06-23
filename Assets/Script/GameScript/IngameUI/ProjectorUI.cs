@@ -9,27 +9,16 @@ using UnityEngine.UI;
 
 
 
-public abstract class ProjectorUI<TState> : MonoBehaviour where TState : System.Enum
+public abstract class ProjectorUI : MonoBehaviour
 {
     //투영 컴포넌트(이미지, 텍스트박스 등), 하이어라키에 존재하는 UI일 경우 인스펙터에서 연결, 인스턴스 생성해야한다면 Initialize에서 
-    //ex.   [SerializeField] private Image HPProgressImage;
-    //ProjectorUI의 데이터팩
-    //ex.   public class AkaneHPManagedData : IManagedData
-    //      {
-    //      public float hpPercentage;
-    //      public AkaneHPManagedData(float hpPercentage) { this.hpPercentage = hpPercentage; }
-    //      }
-    //실제 데이터와 투영할 데이터
+    //ProjectorUI의 struct 데이터팩
     protected IManagedData _receivedData;
     protected IManagedData _projectingData;
-    //상태머신, 상태 enum인 TState StateType은 각 ProjectorUI에서 따로
-    protected StateMachine<TState> _stateMachine;
-    //상태
-    //ex. public enum StateType { NONE, Opening, Idle, Closing }
-
+    //상태머신, 상태 enum인 TUIState UIStateType은 각 ProjectorUI에서 따로, 여기에서 정의하면 제네릭 머시기 때문에 복잡해지는듯
 
     //IngameUI 및 HolderUI에서 수동으로 초기화
-    //StateMachine에 StateMap 전달, State의 Initialize 실행
+    //StateMachine 생성, 각 State의 Initialize 실행
     public abstract void Initialize();
     //연결된 투영 컴포넌트들([SerializeField] 이미지, 텍스트 박스 등)이 인스펙터 상에서 잘 연결됐는지 확인, 위의 Initialize에 바로 연결?
     public abstract bool CheckLinkedComponent();
@@ -39,5 +28,6 @@ public abstract class ProjectorUI<TState> : MonoBehaviour where TState : System.
     public abstract void Deactivate();
     //IngameUI에서 데이터를 각 ProjectorUI로 전달할 때 사용(LateUpdate)
     //전달받은 IManagedData가 현재 ProjectorUI에서 사용하는 것과 맞는지 후 StateMachine의 현재 State의 메소드를 실행
+    //_receivedData의 값의 변경은 여기에서만
     public abstract void UpdateProjection(IManagedData data);
 }
