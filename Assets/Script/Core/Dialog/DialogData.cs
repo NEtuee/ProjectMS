@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "DialogData", menuName = "Scriptable Objects/DialogData")]
+[CreateAssetMenu(fileName = "DialogData", menuName = "Scriptable Object/DialogData")]
 public class DialogData : ScriptableObject
 {
     [SerializeReference] public List<DialogObjectData> _dialogObjectList = new List<DialogObjectData>();
@@ -19,6 +19,14 @@ public class DialogData : ScriptableObject
         }
 
         return -1;
+    }
+
+    static public DialogEventDataBase createDialogEvent(DialogEventType dialogEventType)
+    {
+        string nodeTypeName = "DialogEventData_" + dialogEventType.ToString();
+        object typeInstance = Activator.CreateInstance(Type.GetType(nodeTypeName));
+
+        return typeInstance as DialogEventDataBase;
     }
 
 #if UNITY_EDITOR
@@ -54,6 +62,7 @@ public class DialogEventEntryData
 public enum DialogEventType
 {
     Dialog,
+    Count,
 }
 
 [Serializable]
