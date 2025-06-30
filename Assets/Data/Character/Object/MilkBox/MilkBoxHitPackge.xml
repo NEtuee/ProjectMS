@@ -1,0 +1,45 @@
+<AIPackage Name="MilkBoxHitPackge" DefaultState="AI_Idle">
+
+    <AIState>
+        <AI_Idle UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Type="SetAction" Action="AC_Idle"/>
+            </Event_OnExecute>
+            
+            <Branch Condition="End == true" Execute="AI_Idle"/>
+            <Branch Condition="Hit && ((AngleToTarget >= 90.0) && (AngleToTarget <= 270.0))" Execute="AI_Hit_L"/>
+            <Branch Condition="Hit && ((AngleToTarget < 90.0) || (AngleToTarget > 270.0))" Execute="AI_Hit_R"/>
+        </AI_Idle>
+
+        <AI_Hit_L UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Type="SetAngleDirection" Angle="100"/>
+                <AIEvent Type="SetAction" Action="AC_Hit_L"/>
+            </Event_OnExecute>
+            
+            <Branch Condition="End == true" Execute="AI_Dead"/>
+            <Branch Condition="Hit && ((AngleToTarget >= 90.0) && (AngleToTarget <= 270.0))" Execute="AI_Hit_L"/>
+            <Branch Condition="Hit && ((AngleToTarget < 90.0) || (AngleToTarget > 270.0))" Execute="AI_Hit_R"/>
+        </AI_Hit_L>
+        
+        <AI_Hit_R UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Type="SetAngleDirection" Angle="80"/>
+                <AIEvent Type="SetAction" Action="AC_Hit_R"/>
+            </Event_OnExecute>
+            
+            <Branch Condition="End == true" Execute="AI_Dead"/>
+            <Branch Condition="Hit && ((AngleToTarget >= 90.0) && (AngleToTarget <= 270.0))" Execute="AI_Hit_L"/>
+            <Branch Condition="Hit && ((AngleToTarget < 90.0) || (AngleToTarget > 270.0))" Execute="AI_Hit_R"/>
+        </AI_Hit_R>
+
+        <AI_Dead UpdateTime="999.0">
+            <Event_OnExecute>
+               <AIEvent Type="SetAction" Action="Dead"/>
+               <AIEvent Type="TerminatePackage"/>
+            </Event_OnExecute>
+        </AI_Dead>
+
+    </AIState>
+
+</AIPackage>

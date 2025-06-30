@@ -1,0 +1,32 @@
+<AIGraph Name="MilkBoxAi" DefaultState="Idle">
+
+    <Include Path="Assets/Data/AILibrary/Package/CommonDeadPackage.xml"/>
+    <Include Path="Assets/Data/Character/Object/MilkBox/MilkBoxPackge.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonGuardBrokenPackage.xml"/>
+    <Include Path="Assets/Data/Character/Object/MilkBox/MilkBoxHitPackge.xml"/>
+
+    <BranchSet Name="ReactionSet">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="Hit" Execute="Hit"/>
+        <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
+    </BranchSet>
+
+    <Idle Package="MilkBoxPackge">
+        <UseBranchSet Name="ReactionSet"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Idle"/>
+    </Idle>
+
+    <Hit Package="MilkBoxHitPackge">
+        <UseBranchSet Name="ReactionSet"/>
+    </Hit>
+
+    <GuardBroken Package="CommonGuardBrokenPackage">
+        <UseBranchSet Name="ReactionSet"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Idle"/>
+    </GuardBroken>
+
+    <Dead Package="CommonDeadPackage">
+        <Branch Condition="Dead" Execute="Dead"/>
+    </Dead>
+
+</AIGraph>
