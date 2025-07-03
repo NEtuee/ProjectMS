@@ -1,76 +1,69 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
+using System.Collections.Generic;
 
 public class AkaneDPHolder : ProjectorUI
 {
-    public class AkaneDPManagedData : IManagedData
+    public new AkaneDPData ReceivedData => (AkaneDPData)_receivedData;
+    public new AkaneDPData ProjectingData
     {
-        //공격 성공 여부 추가
-        //자동 회복 시작 여부 추가
-        public int remainingDP;
-        public int maxDP;
-        public AkaneDPManagedData(int remainingDP, int maxDP) { this.remainingDP = remainingDP; this.maxDP = maxDP; }
-        public UIDataType uiDataType => UIDataType.AkaneDP;
+        get => (AkaneDPData)_projectingData;
+        set => _projectingData = value;
     }
-    private ProjectorUI[] HoldingProjectorUIList;
-    private StateMachine<UIStateType> _stateMachine;
-    public enum UIStateType { NONE, Idle }
-
-
-
-    public override bool CheckLinkedComponent()
+    protected override UIDataType DataType => UIDataType.AkaneDP;
+    public struct AkaneDPData : IPackedUIData
     {
-        return true;
+        public UIDataType UIDataType => UIDataType.AkaneDP;
+        public float CurrentDP;
+
+        public AkaneDPData(float currentDP = 0.0f)
+        {
+            this.CurrentDP = currentDP;
+        }
+
+        public static bool operator ==(AkaneDPData left, AkaneDPData right) =>
+            Mathf.Approximately(left.CurrentDP, right.CurrentDP);
+
+        public static bool operator !=(AkaneDPData left, AkaneDPData right) => !(left == right);
+        public override bool Equals(object obj) => obj is AkaneDPData other && this == other;
+        public override int GetHashCode() => CurrentDP.GetHashCode();
     }
+    protected override IReadOnlyCollection<UIEventKey> ValidEventKeys { get; } =
+        new[] { UIEventKey.HyperFailed, UIEventKey.AttackSucceeded };
+    private enum AkaneDPStateType
+    {
+        NONE,
+        Idle,
+        UnderAttacked,
+        Lifetapping,
+        Lifestealing
+    }
+    private Dictionary<AkaneDPStateType, UIState> _stateMap = new Dictionary<AkaneDPStateType, UIState>();
+
+
+
     public override void Initialize()
     {
+        base.Initialize();
 
+        _receivedData = new AkaneDPData();
+        _projectingData = new AkaneDPData();
+
+        //_stateMap.Add(AkaneDPStateType.NONE, new NONE(this));
+
+        Deactivate();
     }
     public override void Activate()
     {
-
+        _stateMachine.RequestStateChanging(_stateMap[AkaneDPStateType.Idle]);
     }
     public override void Deactivate()
     {
-
+        _stateMachine.RequestStateChanging(_stateMap[AkaneDPStateType.NONE]);
     }
-    public override void UpdateProjection(IManagedData data)
+    protected override void UpdateProjection()
     {
-        if (data is AkaneDPManagedData akaneDPData)
-        {
-            _receivedData = akaneDPData;
-        }
-    }
-
-
-
-    private class IdleState : UIState<UIStateType>
-    {
-        public IdleState(ProjectorUI projectorUI) : base(projectorUI) {}
-        public override void Initialize()
-        {
-
-        }
-        public override UIStateType ChangeCondition()
-        {
-            return UIStateType.Idle;
-        }
-        public override IEnumerator OnEnterCoroutine()
-        {
-            yield return null;
-        }
-
-        public override void OnUpdate()
-        {
-
-        }
-
-        public override IEnumerator OnExitCoroutine()
-        {
-            yield return null;
-        }
+        base.UpdateProjection();
     }
 }

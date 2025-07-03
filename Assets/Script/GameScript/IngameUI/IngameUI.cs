@@ -1,5 +1,5 @@
 //데이터를 가공해서 하위 ProjectorUI에 전달
-//하위 ProjectorUI가 요구하는 IManagedData로 포장
+//하위 ProjectorUI가 요구하는 IPackedUIData로 포장
 
 
 using System;
@@ -14,16 +14,14 @@ public class IngameUI : MonoBehaviour
 {
     public static IngameUI Instance;
     private GameEntityBase _mainUIEntity;
-    private GameEntityBase[] _subUIEntityList;
-    private IManagedDataPacker _iManagedDataPacker = new IManagedDataPacker();
+    private List<GameEntityBase> _subUIEntityList;
+    private UIDataPacker _uiDataPacker = new UIDataPacker();
 
     //인스펙터 상에서 연결할 UI
     private List<ProjectorUI> _projectorUIList = new List<ProjectorUI>();
-    private Dictionary<string, List<Action>> _actionSubscriberUI;
     [SerializeField] private AkaneHP _akaneHP;
-    [SerializeField] private AkaneBP _akaneBP;
-    [SerializeField] private AkaneDPHolder _akaneDPHolder;
-
+    //BP
+    //DPHolder, DP
     //QTE
     //보스HP
     //보스 페이즈
@@ -40,57 +38,70 @@ public class IngameUI : MonoBehaviour
     {
         Instance = this;
         InitializeProjectorUI();
-        BindActionSubscriberUI();
     }
     private void InitializeProjectorUI()
     {
+        //UIList 요소 추가
         _projectorUIList.Add(_akaneHP);
 
         foreach (ProjectorUI projectorUI in _projectorUIList)
             projectorUI.Initialize();
     }
-    private void BindActionSubscriberUI()
-    {
-        //_notifySubscriber.Add(string _actionName, new List<Action>());
-        //_notifySubscriber[string _actionName].Add(_projectorUI.method);
-    }
-
-
-
     //Awake 후 엔티티를 참조하는 UI를 설정
     public void SetMainUIEntity(GameEntityBase mainUIEntity)
     {
         //아카네 체크?
         _mainUIEntity = mainUIEntity;
-        _iManagedDataPacker.UpdateTargetAkane(_mainUIEntity);
+        _uiDataPacker.UpdateTargetAkane(_mainUIEntity);
     }
-    public void SetSubUIEntityList(GameEntityBase[] subUIEntityList)
+    public void SetSubUIEntityList(List<GameEntityBase> subUIEntityList)
     {
         _subUIEntityList = subUIEntityList;
-        _iManagedDataPacker.UpdateTargetEntity(_subUIEntityList);
+        _uiDataPacker.UpdateTargetEntity(_subUIEntityList);
     }
-
-
     public void ActivateUI()
     {
-        _akaneHP.Activate();
+        foreach (ProjectorUI projectorUI in _projectorUIList)
+            projectorUI.Activate();
     }
-    //값 업데이트, IManagedData 세부 struct로 업데이트 및 전달
-    private void LateUpdate()
+    //메인 UI데이터, 매 프레임마다 호출
+    void LateUpdate()
     {
         if (_mainUIEntity == null)
             return;
 
-        float deltaTime = GlobalTimer.Instance().getSclaedDeltaTime();
-        _akaneHP.UpdateProjection(_iManagedDataPacker.PackData(_akaneHP.ReceivedData));
-        //_akaneBP.UpdateProjection(_iManagedDataPacker.PackData(_akaneBP.ReceivedData));
+        foreach (ProjectorUI projectorUI in _projectorUIList)
+            UpdateUIData(projectorUI);
     }
-    //특정 액션 발생하면 UI 호출
-    public void NotifyToUI(string key)
+    private void UpdateUIData(ProjectorUI projectorUI)
     {
-        if (_actionSubscriberUI.TryGetValue(key, out var subscriberList) == false)
-            return;
-        foreach (var action in subscriberList)
-            action?.Invoke();
+        var outdatedData = projectorUI.ReceivedData;
+        var updatedData = _uiDataPacker.PackNewData(outdatedData);
+        DeliverData(projectorUI, updatedData);
+    }
+    private void DeliverData(ProjectorUI projectorUI, IPackedUIData updatedData)
+    {
+        projectorUI.UpdateData(updatedData);
+    }
+    //서브 UI데이터(이벤트 키), 임의 호출
+    public void NotifyUIEventUpdated(string stringKey)
+    {
+        UIEventKey enumKey;
+        if (!Enum.TryParse(stringKey, out enumKey))
+            enumKey = UIEventKey.NONE;
+        
+        SubUIData updatedSubData = _uiDataPacker.PackNewSubData(enumKey);
+
+        foreach (ProjectorUI projectorUI in _projectorUIList)
+            DeliverSubData(projectorUI, updatedSubData);
+    }
+    private void DeliverSubData(ProjectorUI projectorUI, IPackedUIData updatedData)
+    {
+        projectorUI.UpdateSubData(updatedData);
+    }
+    public void DeactivateUI()
+    {
+        foreach (ProjectorUI projectorUI in _projectorUIList)
+            projectorUI.Deactivate();
     }
 }

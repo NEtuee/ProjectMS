@@ -1,141 +1,75 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
-
+using System.Collections;
+using System.Collections.Generic;
 
 public class AkaneBP : ProjectorUI
 {
     [SerializeField] private Image BPProgressImage;
-    public struct AkaneBPManagedData : IManagedData
+
+    public new AkaneBPData ReceivedData => (AkaneBPData)_receivedData;
+    public new AkaneBPData ProjectingData
     {
-        public UIDataType uiDataType { get { return UIDataType.AkaneBP; } }
-        public float bpPercentage;
-        public float changeAmount;
-        public AkaneBPManagedData(float bpPercentage, float changeAmount) { this.bpPercentage = bpPercentage; this.changeAmount = changeAmount; }
+        get => (AkaneBPData)_projectingData;
+        set => _projectingData = value;
     }
-    public AkaneBPManagedData ReceivedData
+    protected override UIDataType DataType => UIDataType.AkaneBP;
+    public struct AkaneBPData : IPackedUIData
     {
-        get { return (AkaneBPManagedData)_receivedData; }
+        public UIDataType UIDataType => UIDataType.AkaneBP;
+        public float BPPercentage;
+        public float ChangeAmount;
+
+        public AkaneBPData(float bpPercentage = 0.0f, float changeAmount = 0.0f)
+        {
+            this.BPPercentage = bpPercentage;
+            this.ChangeAmount = changeAmount;
+        }
+
+        public static bool operator ==(AkaneBPData left, AkaneBPData right) =>
+            Mathf.Approximately(left.BPPercentage, right.BPPercentage) &&
+            Mathf.Approximately(left.ChangeAmount, right.ChangeAmount);
+
+        public static bool operator !=(AkaneBPData left, AkaneBPData right) => !(left == right);
+        public override bool Equals(object obj) => obj is AkaneBPData other && this == other;
+        public override int GetHashCode() => BPPercentage.GetHashCode() ^ ChangeAmount.GetHashCode();
     }
-    public AkaneBPManagedData ProjectingData
+    protected override IReadOnlyCollection<UIEventKey> ValidEventKeys { get; } =
+        new[] { UIEventKey.HyperFailed, UIEventKey.AttackSucceeded };
+    private enum AkaneBPStateType
     {
-        get { return (AkaneBPManagedData)_projectingData; }
-        set { _projectingData = value; }
+        NONE,
+        Idle,
+        UnderAttacked,
+        Lifetapping,
+        Lifestealing
     }
-    private StateMachine<UIStateType> _stateMachine;
-    private enum UIStateType { NONE, Idle, Underattacked, LifeTapping, Lifestealing }
+    private Dictionary<AkaneBPStateType, UIState> _stateMap = new Dictionary<AkaneBPStateType, UIState>();
 
 
 
-    public override bool CheckLinkedComponent()
-    {
-        if (BPProgressImage == null)
-            throw new Exception($"{BPProgressImage}가 연결되지 않았습니다!");
-        return true;
-    }
     public override void Initialize()
     {
-        var stateMap = new Dictionary<UIStateType, UIState<UIStateType>>
-        {
-            { UIStateType.Idle, new IdleState(this) },
-            { UIStateType.Underattacked, new UnderattackedState(this) },
-            { UIStateType.Lifestealing, new LifestealingState(this) }
-        };
+        base.Initialize();
 
-        _stateMachine = new StateMachine<UIStateType>(this, stateMap);
+        _receivedData = new AkaneBPData();
+        _projectingData = new AkaneBPData();
+
+        //_stateMap.Add(AkaneBPStateType.NONE, new NONE(this));
+
+        Deactivate();
     }
     public override void Activate()
     {
-        _stateMachine.ChangeState(UIStateType.Idle);
+        _stateMachine.RequestStateChanging(_stateMap[AkaneBPStateType.Idle]);
     }
     public override void Deactivate()
     {
-        _stateMachine.ChangeState(UIStateType.NONE);
+        _stateMachine.RequestStateChanging(_stateMap[AkaneBPStateType.NONE]);
     }
-    public override void UpdateProjection(IManagedData data)
+    protected override void UpdateProjection()
     {
-        if (data is AkaneBPManagedData akaneBPData)
-        {
-            _receivedData = akaneBPData;
-        }
-
-        _stateMachine.UpdateState();
-    }
-
-
-
-    private class IdleState : UIState<UIStateType>
-    {
-        public IdleState(ProjectorUI projectorUI) : base(projectorUI) {}
-        public override void Initialize()
-        {
-
-        }
-        public override UIStateType ChangeCondition()
-        {
-            return UIStateType.Idle;
-        }
-        public override IEnumerator OnEnterCoroutine()
-        {
-            yield return null;
-        }
-        public override void OnUpdate()
-        {
-
-        }
-        public override IEnumerator OnExitCoroutine()
-        {
-            yield return null;
-        }
-    }
-    //피격
-    private class UnderattackedState : UIState<UIStateType>
-    {
-        public UnderattackedState(ProjectorUI projectorUI) : base(projectorUI) { }
-        public override void Initialize() { return; }
-        public override UIStateType ChangeCondition()
-        {
-            return UIStateType.Idle;
-        }
-        public override IEnumerator OnEnterCoroutine()
-        {
-            yield return null;
-        }
-        public override void OnUpdate()
-        {
-
-        }
-        public override IEnumerator OnExitCoroutine()
-        {
-            yield return null;
-        }
-    }
-    //공격 회복
-    private class LifestealingState : UIState<UIStateType>
-    {
-        public LifestealingState(ProjectorUI projectorUI) : base(projectorUI) { }
-        public override void Initialize()
-        {
-
-        }
-        public override UIStateType ChangeCondition()
-        {
-            return UIStateType.Idle;
-        }
-        public override IEnumerator OnEnterCoroutine()
-        {
-            yield return null;
-        }
-        public override void OnUpdate()
-        {
-
-        }
-        public override IEnumerator OnExitCoroutine()
-        {
-            yield return null;
-        }
+        base.UpdateProjection();
+        BPProgressImage.fillAmount = ProjectingData.BPPercentage;
     }
 }

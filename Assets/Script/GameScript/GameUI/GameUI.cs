@@ -120,9 +120,10 @@ public class GameUI : MonoBehaviour
     {
         _bossHp.Disable();
     }
-    
+
     public void NotifyToUI(string key)
     {
+        _ingameUI.NotifyUIEventUpdated(key);
         if (_notifySubscriber.TryGetValue(key, out var subscriberList) == false)
         {
             return;
@@ -132,6 +133,7 @@ public class GameUI : MonoBehaviour
         {
             action?.Invoke();
         }
+
     }
 
     private void LateUpdate()
@@ -246,10 +248,10 @@ public class GameUI : MonoBehaviour
     private void BindNotifySubscriber()
     {
         _notifySubscriber.Add("Dash", new List<Action>());
-        _notifySubscriber.Add("HitEnemy", new List<Action>());
+        _notifySubscriber.Add("AttackSucceeded", new List<Action>());
         
         _notifySubscriber["Dash"].Add(_crossHairUI.OnDash);
-        _notifySubscriber["HitEnemy"].Add(_crossHairUI.OnHitEnemy);
+        _notifySubscriber["AttackSucceeded"].Add(_crossHairUI.OnHitEnemy);
     }
 
     private void OnInitError()

@@ -1,173 +1,195 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
+using System.Collections.Generic;
 
 public class AkaneHP : ProjectorUI
 {
     [SerializeField] private Image FrameImage;
     [SerializeField] private Image HPProgressImage;
-    public struct AkaneHPManagedData : IManagedData
+
+    public new AkaneHPData ReceivedData => (AkaneHPData)_receivedData;
+    public new AkaneHPData ProjectingData
     {
-        public UIDataType uiDataType { get { return UIDataType.AkaneHP; } }
-        public float hpPercentage;
-        public float changeAmount;
-        public AkaneHPManagedData(float hpPercentage = 0.0f, float changeAmount = 0.0f) { this.hpPercentage = hpPercentage; this.changeAmount = changeAmount; }
+        get => (AkaneHPData)_projectingData;
+        set => _projectingData = value;
     }
-    public AkaneHPManagedData ReceivedData
+    protected override UIDataType DataType => UIDataType.AkaneHP;
+    public struct AkaneHPData : IPackedUIData
     {
-        get { return (AkaneHPManagedData)_receivedData; }
+        public UIDataType UIDataType => UIDataType.AkaneHP;
+        public float HPPercentage;
+        public float ChangeAmount;
+
+        public AkaneHPData(float hpPercentage = 0.0f, float changeAmount = 0.0f)
+        {
+            this.HPPercentage = hpPercentage;
+            this.ChangeAmount = changeAmount;
+        }
+
+        public static bool operator ==(AkaneHPData left, AkaneHPData right) =>
+            Mathf.Approximately(left.HPPercentage, right.HPPercentage) &&
+            Mathf.Approximately(left.ChangeAmount, right.ChangeAmount);
+
+        public static bool operator !=(AkaneHPData left, AkaneHPData right) => !(left == right);
+        public override bool Equals(object obj) => obj is AkaneHPData other && this == other;
+        public override int GetHashCode() => HPPercentage.GetHashCode() ^ ChangeAmount.GetHashCode();
     }
-    public AkaneHPManagedData ProjectingData
+    protected override IReadOnlyCollection<UIEventKey> ValidEventKeys { get; } =
+        new[] { UIEventKey.HyperFailed, UIEventKey.AttackSucceeded };
+    private enum AkaneHPStateType
     {
-        get { return (AkaneHPManagedData)_projectingData; }
-        set { _projectingData = value; }
+        NONE,
+        Idle,
+        UnderAttacked,
+        Lifetapping,
+        Lifestealing
     }
-    private enum UIStateType { NONE, Idle, Underattacked, LifeTapping, Lifestealing }
-    private StateMachine<UIStateType> _stateMachine;
+    private Dictionary<AkaneHPStateType, UIState> _stateMap = new Dictionary<AkaneHPStateType, UIState>();
 
 
 
-    public override bool CheckLinkedComponent()
-    {
-        if (HPProgressImage == null)
-            throw new Exception("AkaneHP UI의 프로젝터 컴포넌트가 연결되지 않았습니다!");
-
-        return true;
-    }
     public override void Initialize()
     {
-        _receivedData = new AkaneHPManagedData(0.0f, 0.0f);
-        _projectingData = new AkaneHPManagedData(0.0f, 0.0f);
+        base.Initialize();
 
-        var stateMap = new Dictionary<UIStateType, UIState<UIStateType>>
-        {
-            { UIStateType.Idle, new IdleState(this) },
-            { UIStateType.Underattacked, new UnderattackedState(this) },
-            { UIStateType.LifeTapping, new LifeTappingState(this) },
-            { UIStateType.Lifestealing, new LifestealingState(this) }
-        };
+        _receivedData = new AkaneHPData();
+        _projectingData = new AkaneHPData();
 
-        _stateMachine = new StateMachine<UIStateType>(this, stateMap);
+        _stateMap.Add(AkaneHPStateType.NONE, new NONE(this));
+        _stateMap.Add(AkaneHPStateType.Idle, new IdleState(this));
+        _stateMap.Add(AkaneHPStateType.UnderAttacked, new UnderAttackedState(this));
+        _stateMap.Add(AkaneHPStateType.Lifetapping, new LifetappingState(this));
+        _stateMap.Add(AkaneHPStateType.Lifestealing, new LifestealingState(this));
+        
+        Deactivate();
     }
     public override void Activate()
     {
-        _stateMachine.ChangeState(UIStateType.Idle);
+        _stateMachine.RequestStateChanging(_stateMap[AkaneHPStateType.Idle]);
     }
     public override void Deactivate()
     {
-        _stateMachine.ChangeState(UIStateType.NONE);
+        _stateMachine.RequestStateChanging(_stateMap[AkaneHPStateType.NONE]);
     }
-    public override void UpdateProjection(IManagedData data)
+    protected override void UpdateProjection()
     {
-        if (data is AkaneHPManagedData akaneHPData)
-        {
-            _receivedData = akaneHPData;
-        }
-
-        _stateMachine.UpdateState();
+        base.UpdateProjection();
+        HPProgressImage.fillAmount = ProjectingData.HPPercentage;
     }
 
 
-
-    private class IdleState : UIState<UIStateType>
+    // 투영 데이터 업데이트
+    private void HPLerpUpdate()
     {
-        private AkaneHP _akaneHP { get { return _projectorUI as AkaneHP; } }
-        private Vector3 _basePosition;
-        private float chasingSpeed = 5.0f;
-
-        public IdleState(ProjectorUI projectorUI) : base(projectorUI) { }
-        public override void Initialize()
-        {
-            _basePosition = _akaneHP.HPProgressImage.rectTransform.anchoredPosition;
-        }
-        public override UIStateType ChangeCondition()
-        {
-            return UIStateType.Idle;
-        }
-        public override IEnumerator OnEnterCoroutine() { yield return null; }
-        public override void OnUpdate()
-        {
-            if (_akaneHP == null)
-                return;
-
-            float updatedHPPercentage = Mathf.Lerp(_akaneHP.ProjectingData.hpPercentage, _akaneHP.ReceivedData.hpPercentage, Time.deltaTime * chasingSpeed);
-            float updatedChangeAmount = 0.0f;
-            _akaneHP.HPProgressImage.fillAmount = _akaneHP.ProjectingData.hpPercentage;
-
-            AkaneHPManagedData updatedProjectingData = new AkaneHPManagedData(updatedHPPercentage, updatedChangeAmount);
-            _akaneHP.ProjectingData = updatedProjectingData;
-        }
-        public override IEnumerator OnExitCoroutine() { yield return null; }
+        float updatedHPPercentage = Mathf.Lerp(ProjectingData.HPPercentage, ReceivedData.HPPercentage, Time.deltaTime * 10.0f);
+        float updatedChangeAmount = 0.0f;
+        AkaneHPData updatedProjectingData = new AkaneHPData(updatedHPPercentage, updatedChangeAmount);
+        ProjectingData = updatedProjectingData;
     }
 
-    private class UnderattackedState : UIState<UIStateType>
-    {
-        public UnderattackedState(ProjectorUI projectorUI) : base(projectorUI) { }
 
-        public override void Initialize() { }
-        public override UIStateType ChangeCondition()
+    //UIState 정의
+    private class IdleState : UIState
+    {
+        private readonly AkaneHP _akaneHP;
+        private readonly Dictionary<AkaneHPStateType, UIState> _stateMap;
+        public IdleState(AkaneHP akaneHP)
         {
-            return UIStateType.Idle;
-        }
-        public override IEnumerator OnEnterCoroutine()
-        {
-            yield return null;
+            _akaneHP = akaneHP;
+            _stateMap = akaneHP._stateMap;
         }
         public override void OnUpdate()
         {
-
+            _akaneHP.HPLerpUpdate();
         }
-        public override IEnumerator OnExitCoroutine()
+        public override UIState ChangeState()
         {
-            yield return null;
+            var eventKey = UIEventKey.NONE; //_akaneHP.ReceivedSubData.UIEventKey;?
+            switch (eventKey)
+            {
+                case UIEventKey.AttackSucceeded:
+                    return _stateMap[AkaneHPStateType.Lifestealing];
+                case UIEventKey.HyperFailed:
+                    return _stateMap[AkaneHPStateType.Lifetapping];
+                default:
+                    break;
+            }
+            //if (_akaneHP.ReceivedData.ChangeAmount < 0.0f)
+            //    return _stateMap[AkaneHPStateType.UnderAttacked];
+
+            return this;
         }
     }
-
-        private class LifeTappingState : UIState<UIStateType>
+    private class UnderAttackedState : UIState
     {
-        public LifeTappingState(ProjectorUI projectorUI) : base(projectorUI) { }
-
-        public override void Initialize() { }
-        public override UIStateType ChangeCondition()
+        private readonly AkaneHP _akaneHP;
+        private readonly Dictionary<AkaneHPStateType, UIState> _stateMap;
+        public UnderAttackedState(AkaneHP akaneHP)
         {
-            return UIStateType.Idle;
+            _akaneHP = akaneHP;
+            _stateMap = akaneHP._stateMap;
         }
-        public override IEnumerator OnEnterCoroutine()
+        public override IEnumerator OnEnter()
         {
-            yield return null;
+            _akaneHP.StartCoroutine(UIAnimationCommons.Shake(_akaneHP.HPProgressImage.rectTransform));
+            yield break;
         }
         public override void OnUpdate()
         {
-
+            
         }
-        public override IEnumerator OnExitCoroutine()
+        public override UIState ChangeState()
         {
-            yield return null;
+            return this;
         }
     }
-
-    private class LifestealingState : UIState<UIStateType>
+    private class LifetappingState : UIState
     {
-        public LifestealingState(ProjectorUI projectorUI) : base(projectorUI) { }
-
-        public override void Initialize() { }
-        public override UIStateType ChangeCondition()
+        private readonly AkaneHP _akaneHP;
+        private readonly Dictionary<AkaneHPStateType, UIState> _stateMap;
+        public LifetappingState(AkaneHP akaneHP)
         {
-            return UIStateType.Idle;
+            _akaneHP = akaneHP;
+            _stateMap = akaneHP._stateMap;
         }
-        public override IEnumerator OnEnterCoroutine()
+        public override UIState ChangeState()
         {
-            yield return null;
+            return this;
         }
-        public override void OnUpdate()
+    }
+    private class LifestealingState : UIState
+    {
+        private readonly AkaneHP _akaneHP;
+        private readonly Dictionary<AkaneHPStateType, UIState> _stateMap;
+        public LifestealingState(AkaneHP akaneHP)
         {
-
+            _akaneHP = akaneHP;
+            _stateMap = akaneHP._stateMap;
         }
-        public override IEnumerator OnExitCoroutine()
+        public override UIState ChangeState()
         {
-            yield return null;
+            return this;
+        }
+    }
+    private class NONE : UIState
+    {
+        private readonly AkaneHP _akaneHP;
+        private readonly Dictionary<AkaneHPStateType, UIState> _stateMap;
+        public NONE(AkaneHP akaneHP)
+        {
+            _akaneHP = akaneHP;
+            _stateMap = akaneHP._stateMap;
+        }
+        public override IEnumerator OnExit()
+        {
+            _akaneHP.StartCoroutine(UIAnimationCommons.Float(_akaneHP.FrameImage.rectTransform));
+            _akaneHP.StartCoroutine(UIAnimationCommons.Float(_akaneHP.HPProgressImage.rectTransform));
+            yield break;
+        }
+        public override UIState ChangeState()
+        {
+            return this;
         }
     }
 }

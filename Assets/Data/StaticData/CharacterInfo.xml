@@ -1190,4 +1190,28 @@
         AllyInfo="CommonBattle"
     /> 
 
+    <SukebanMeleeBatter
+        DisplayName="스케반베트쨩"
+        ActionGraph="Assets/Data/Character/Enemy/02_SukebanMelee_Batter/SukebanMeleeBatterAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/02_SukebanMelee_Batter/SukebanMeleeBatterAI.xml"
+        StatusInfoName="SukebanMeleeBatter"
+
+        CollisionRadius="0.5"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="CommonBattle"
+    /> 
+
+    <BigGrenade
+        DisplayName="빅수류탄"
+        ActionGraph="Assets/Data/Character/Object/BigGrenade/BigGrenadeAction.xml"
+        AIGraph="Assets/Data/Character/Object/BigGrenade/BigGrenadeAI.xml"
+        StatusInfoName="SukebanMeleeBatter"
+
+        CollisionRadius="0.5"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="CommonBattle"
+    /> 
+
 </CharacterInfo>
