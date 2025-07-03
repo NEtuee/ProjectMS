@@ -30,6 +30,8 @@ public abstract class ProjectorUI : MonoBehaviour
     public virtual void Initialize()
     {
         _stateMachine = new UIStateMachine(this);
+        _receivedSubData = new SubUIData();
+        _projectingSubData = new SubUIData();
     }
     public abstract void Activate();
     public abstract void Deactivate();

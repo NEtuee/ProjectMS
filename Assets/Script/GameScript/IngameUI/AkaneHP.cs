@@ -1,7 +1,7 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 public class AkaneHP : ProjectorUI
 {
@@ -54,9 +54,7 @@ public class AkaneHP : ProjectorUI
         base.Initialize();
 
         _receivedData = new AkaneHPData();
-        _receivedSubData = new SubUIData();
         _projectingData = new AkaneHPData();
-        _projectingSubData = new SubUIData();
 
         _stateMap.Add(AkaneHPStateType.NONE, new NONE(this));
         _stateMap.Add(AkaneHPStateType.Idle, new IdleState(this));
@@ -91,7 +89,7 @@ public class AkaneHP : ProjectorUI
     }
 
 
-    //UIState
+    //UIState 정의
     private class IdleState : UIState
     {
         private readonly AkaneHP _akaneHP;
@@ -107,7 +105,7 @@ public class AkaneHP : ProjectorUI
         }
         public override UIState ChangeState()
         {
-            var eventKey = UIEventKey.NONE; //_akaneHP.ReceivedSubData.UIEventKey;
+            var eventKey = UIEventKey.NONE; //_akaneHP.ReceivedSubData.UIEventKey;?
             switch (eventKey)
             {
                 case UIEventKey.AttackSucceeded:
