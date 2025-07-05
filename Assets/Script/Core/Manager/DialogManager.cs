@@ -97,7 +97,7 @@ public class DialogManager : MonoBehaviour
             case DialogEventType.Dialog:
                 DialogEventData_Dialog dialogEvent = dialogEventData as DialogEventData_Dialog;
 
-                StringKeyValueData valueData = LanguageManager._instance.getStringKeyValue(ref dialogData._textDataName, dialogEvent._dialogIndex);
+                StringKeyValueData valueData = LanguageManager._instance.getStringKeyValueFromIndex(ref dialogData._textDataName, dialogEvent._dialogIndex);
                 string dialogText = valueData._value;
                 _dialogTextMesh.text = dialogText;
                 _dialogMaxVisibleCharacter = dialogText.Length;

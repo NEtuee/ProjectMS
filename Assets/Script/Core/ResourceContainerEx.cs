@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using System.Text;
 using TMPro;
+using UnityEngine.Profiling;
 
 public abstract class SerializableDataType
 {
@@ -174,7 +175,7 @@ public class DataResourceItem<Value, Loader> where Value : SerializableDataType 
 
 public class ResourceContainerEx : Singleton<ResourceContainerEx>
 {
-    private ManagedResourceItem<Sprite> 				_spriteResource = new ManagedResourceItem<Sprite>();
+	private ManagedResourceItem<Sprite> 				_spriteResource = new ManagedResourceItem<Sprite>();
 	private ManagedResourceItem<ScriptableObject> 		_scriptableResource = new ManagedResourceItem<ScriptableObject>();
 	private ManagedResourceItem<AnimationCustomPreset> 	_animationCustomPresetResource = new ManagedResourceItem<AnimationCustomPreset>();
 	private ManagedResourceItem<GameObject>		 		_prefabResource = new ManagedResourceItem<GameObject>();
@@ -315,5 +316,181 @@ public class ResourceContainerEx : Singleton<ResourceContainerEx>
 	public void UnLoad(UnityEngine.Object obj)
 	{
 		Resources.UnloadAsset(obj);
+	}
+
+	/// <summary>
+	/// 현재 캐시된 모든 리소스의 메모리 사용량을 계산합니다.
+	/// </summary>
+	public long GetTotalMemoryUsage()
+	{
+		long totalMemory = 0;
+		
+		totalMemory += GetManagedResourceMemory<Sprite>(_spriteResource, "Sprite");
+		totalMemory += GetManagedResourceMemory<ScriptableObject>(_scriptableResource, "ScriptableObject");
+		totalMemory += GetManagedResourceMemory<AnimationCustomPreset>(_animationCustomPresetResource, "AnimationCustomPreset");
+		totalMemory += GetManagedResourceMemory<GameObject>(_prefabResource, "Prefab");
+		totalMemory += GetManagedResourceMemory<Material>(_materialResource, "Material");
+		totalMemory += GetManagedResourceMemory<StageData>(_stageDataResource, "StageData");
+		totalMemory += GetManagedResourceMemory<TMP_FontAsset>(_fontAssetResource, "FontAsset");
+		
+		totalMemory += GetDataResourceMemory();
+		
+		return totalMemory;
+	}
+
+	/// <summary>
+	/// 상세한 메모리 사용량 정보를 출력합니다.
+	/// </summary>
+	public void PrintMemoryUsageDetails()
+	{
+		Debug.Log("=== ResourceContainerEx Memory Usage ===");
+		
+		long spriteMemory = GetManagedResourceMemory<Sprite>(_spriteResource, "Sprite");
+		long scriptableMemory = GetManagedResourceMemory<ScriptableObject>(_scriptableResource, "ScriptableObject");
+		long animationMemory = GetManagedResourceMemory<AnimationCustomPreset>(_animationCustomPresetResource, "AnimationCustomPreset");
+		long prefabMemory = GetManagedResourceMemory<GameObject>(_prefabResource, "Prefab");
+		long materialMemory = GetManagedResourceMemory<Material>(_materialResource, "Material");
+		long stageDataMemory = GetManagedResourceMemory<StageData>(_stageDataResource, "StageData");
+		long fontMemory = GetManagedResourceMemory<TMP_FontAsset>(_fontAssetResource, "FontAsset");
+		long dataMemory = GetDataResourceMemory();
+		
+		Debug.Log($"Sprite Resources: {FormatBytes(spriteMemory)} ({_spriteResource._singleResourceContainer.Count + _spriteResource._multiResourceContainer.Count} items)");
+		Debug.Log($"ScriptableObject Resources: {FormatBytes(scriptableMemory)} ({_scriptableResource._singleResourceContainer.Count + _scriptableResource._multiResourceContainer.Count} items)");
+		Debug.Log($"AnimationCustomPreset Resources: {FormatBytes(animationMemory)} ({_animationCustomPresetResource._singleResourceContainer.Count + _animationCustomPresetResource._multiResourceContainer.Count} items)");
+		Debug.Log($"Prefab Resources: {FormatBytes(prefabMemory)} ({_prefabResource._singleResourceContainer.Count + _prefabResource._multiResourceContainer.Count} items)");
+		Debug.Log($"Material Resources: {FormatBytes(materialMemory)} ({_materialResource._singleResourceContainer.Count + _materialResource._multiResourceContainer.Count} items)");
+		Debug.Log($"StageData Resources: {FormatBytes(stageDataMemory)} ({_stageDataResource._singleResourceContainer.Count + _stageDataResource._multiResourceContainer.Count} items)");
+		Debug.Log($"Font Resources: {FormatBytes(fontMemory)} ({_fontAssetResource._singleResourceContainer.Count + _fontAssetResource._multiResourceContainer.Count} items)");
+		Debug.Log($"Data Resources: {FormatBytes(dataMemory)}");
+		
+		long totalMemory = spriteMemory + scriptableMemory + animationMemory + prefabMemory + materialMemory + stageDataMemory + fontMemory + dataMemory;
+		Debug.Log($"TOTAL MEMORY USAGE: {FormatBytes(totalMemory)}");
+		Debug.Log("========================================");
+	}
+
+	/// <summary>
+	/// ManagedResourceItem의 메모리 사용량을 계산합니다.
+	/// </summary>
+	private long GetManagedResourceMemory<T>(ManagedResourceItem<T> resourceItem, string typeName) where T : class
+	{
+		long memory = 0;
+		
+		// Single resource container
+		foreach (var resource in resourceItem._singleResourceContainer.Values)
+		{
+			if (resource != null)
+			{
+				memory += GetObjectMemorySize(resource);
+			}
+		}
+		
+		// Multi resource container
+		foreach (var resourceArray in resourceItem._multiResourceContainer.Values)
+		{
+			if (resourceArray != null)
+			{
+				foreach (var resource in resourceArray)
+				{
+					if (resource != null)
+					{
+						memory += GetObjectMemorySize(resource);
+					}
+				}
+			}
+		}
+		
+		return memory;
+	}
+
+	/// <summary>
+	/// DataResourceItem들의 메모리 사용량을 계산합니다.
+	/// </summary>
+	private long GetDataResourceMemory()
+	{
+		long memory = 0;
+		
+		// 각 DataResourceItem의 컨테이너 크기를 추정
+		memory += EstimateDataResourceSize(_actionGraphResource, "ActionGraph");
+		memory += EstimateDataResourceSize(_aiGraphResource, "AIGraph");
+		memory += EstimateDataResourceSize(_projectileGraphResource, "ProjectileGraph");
+		memory += EstimateDataResourceSize(_danmakuGraphResource, "DanmakuGraph");
+		memory += EstimateDataResourceSize(_sequencerGraphResource, "SequencerGraph");
+		memory += EstimateDataResourceSize(_sequencerGraphSetResource, "SequencerGraphSet");
+		memory += EstimateDataResourceSize(_characterInfoResource, "CharacterInfo");
+		memory += EstimateDataResourceSize(_allyInfoResource, "AllyInfo");
+		
+		return memory;
+	}
+
+	/// <summary>
+	/// DataResourceItem의 메모리 사용량을 추정합니다.
+	/// </summary>
+	private long EstimateDataResourceSize<TValue, TLoader>(DataResourceItem<TValue, TLoader> dataResource, string typeName) 
+		where TValue : SerializableDataType 
+		where TLoader : LoaderBase<TValue>, new()
+	{
+		// DataResourceItem의 private 필드에 접근할 수 없으므로 추정값 사용
+		// 실제 구현에서는 DataResourceItem에 GetMemoryUsage() 메서드를 추가하는 것이 좋습니다.
+		return 1024; // 기본 추정값 (1KB per item)
+	}
+
+	/// <summary>
+	/// Unity Object의 메모리 사용량을 계산합니다.
+	/// </summary>
+	private long GetObjectMemorySize(object obj)
+	{
+		if (obj == null) return 0;
+		
+		if (obj is UnityEngine.Object unityObj)
+		{
+			return Profiler.GetRuntimeMemorySizeLong(unityObj);
+		}
+		
+		// Unity Object가 아닌 경우 추정값 반환
+		return System.Runtime.InteropServices.Marshal.SizeOf(obj.GetType());
+	}
+
+	/// <summary>
+	/// 바이트를 읽기 쉬운 형태로 포맷합니다.
+	/// </summary>
+	private string FormatBytes(long bytes)
+	{
+		if (bytes < 1024)
+			return $"{bytes} B";
+		else if (bytes < 1024 * 1024)
+			return $"{bytes / 1024.0:F2} KB";
+		else if (bytes < 1024 * 1024 * 1024)
+			return $"{bytes / (1024.0 * 1024.0):F2} MB";
+		else
+			return $"{bytes / (1024.0 * 1024.0 * 1024.0):F2} GB";
+	}
+
+	/// <summary>
+	/// 특정 타입의 리소스만 해제합니다.
+	/// </summary>
+	public void ClearResourceType<T>() where T : class
+	{
+		if (typeof(T) == typeof(Sprite))
+		{
+			ClearManagedResource(_spriteResource);
+		}
+		else if (typeof(T) == typeof(GameObject))
+		{
+			ClearManagedResource(_prefabResource);
+		}
+		else if (typeof(T) == typeof(Material))
+		{
+			ClearManagedResource(_materialResource);
+		}
+		// 필요에 따라 다른 타입들도 추가
+	}
+
+	/// <summary>
+	/// ManagedResourceItem의 캐시를 지웁니다.
+	/// </summary>
+	private void ClearManagedResource<T>(ManagedResourceItem<T> resourceItem) where T : class
+	{
+		resourceItem._singleResourceContainer.Clear();
+		resourceItem._multiResourceContainer.Clear();
 	}
 }

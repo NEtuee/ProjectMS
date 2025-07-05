@@ -156,6 +156,11 @@ public class DialogEditorGraphView : GraphView
                 saveGraph();
                 evt.StopImmediatePropagation();
             }
+            else if ((evt.ctrlKey || evt.commandKey) && evt.keyCode == KeyCode.F)
+            {
+                FocusSearchField();
+                evt.StopImmediatePropagation();
+            }
         });
 
         var grid = new GridBackground();
@@ -206,6 +211,7 @@ public class DialogEditorGraphView : GraphView
         object typeInstance = Activator.CreateInstance(Type.GetType(nodeTypeName));
 
         GameEventNodeBase gameEventNode = typeInstance as GameEventNodeBase;
+        gameEventNode._dialogData = _dialogData;
         Vector2 worldPosition = contentViewContainer.WorldToLocal(position);
         gameEventNode.SetPosition(new Rect(worldPosition, kDefaultNodeSize));
 
@@ -240,9 +246,13 @@ public class DialogEditorGraphView : GraphView
         // 기존 데이터 초기화
         _dialogData.clearAll();
 
+        // DialogData의 _textDataName 설정
+        _dialogData._textDataName = _dialogData.name;
+
         // GUID to Entry/Event 매핑
         Dictionary<string, GameEventNode_Entry> guidToEntryNode = new Dictionary<string, GameEventNode_Entry>();
         Dictionary<string, GameEventNodeBase> guidToEventNode = new Dictionary<string, GameEventNodeBase>();
+        HashSet<string> connectedEventGuids = new HashSet<string>(); // Entry에 연결된 이벤트 노드들
 
         // 노드 데이터 수집
         foreach (var node in nodes)
@@ -259,63 +269,168 @@ public class DialogEditorGraphView : GraphView
             }
             else if(node is GameEventNodeBase gameEventNode)
             {
-                // 일반 이벤트 노드 저장
-                NodeData nodeData = new NodeData();
-                nodeData._guid = gameEventNode._guid;
-                nodeData._position = gameEventNode.GetPosition().position;
-                _dialogData._nodeData.Add(nodeData);
-
                 guidToEventNode.Add(gameEventNode._guid, gameEventNode);
             }
         }
 
-        // Entry별로 이벤트 리스트 구성
+        // Entry별로 이벤트 리스트 구성 및 연결된 노드 추적
         foreach (var entryPair in guidToEntryNode)
         {
             var entryNode = entryPair.Value;
             DialogEventEntryData entryData = entryNode.exportEntryData();
             
-            // Entry에서 시작하는 이벤트 체인 구축
-            BuildEventChain(entryNode, entryData, guidToEventNode);
+            // Entry에서 시작하는 이벤트 체인 구축하고 연결된 노드들 수집
+            BuildEventChain(entryNode, entryData, guidToEventNode, connectedEventGuids);
             
             _dialogData._dialogEventEntryList.Add(entryData);
         }
 
-        // 링크 데이터 저장
+        // 연결된 이벤트 노드들만 NodeData에 추가
+        foreach (var guid in connectedEventGuids)
+        {
+            if (guidToEventNode.ContainsKey(guid))
+            {
+                var gameEventNode = guidToEventNode[guid];
+                NodeData nodeData = new NodeData();
+                nodeData._guid = gameEventNode._guid;
+                nodeData._position = gameEventNode.GetPosition().position;
+                _dialogData._nodeData.Add(nodeData);
+            }
+        }
+
+        // 링크 데이터 저장 (연결된 노드들만)
         foreach (var edge in edges.ToList())
         {
-            LinkData linkData = new LinkData();
+            bool isConnectedLink = false;
             
-            if (edge.output.node is GameEventNodeBase outputNode)
-                linkData._outputGuid = outputNode._guid;
-            else if (edge.output.node is GameEventNode_Entry outputEntryNode)
-                linkData._outputGuid = outputEntryNode._guid;
+            // Entry 노드가 관련된 링크이거나, 양쪽 모두 연결된 이벤트 노드인 경우만 저장
+            if (edge.output.node is GameEventNode_Entry)
+            {
+                isConnectedLink = true;
+            }
+            else if (edge.output.node is GameEventNodeBase outputNode && edge.input.node is GameEventNodeBase inputNode)
+            {
+                isConnectedLink = connectedEventGuids.Contains(outputNode._guid) && connectedEventGuids.Contains(inputNode._guid);
+            }
+            else if (edge.input.node is GameEventNode_Entry)
+            {
+                isConnectedLink = true;
+            }
+
+            if (isConnectedLink)
+            {
+                LinkData linkData = new LinkData();
                 
-            linkData._outputPort = edge.output.portName;
-            
-            if (edge.input.node is GameEventNodeBase inputNode)
-                linkData._inputGuid = inputNode._guid;
-            else if (edge.input.node is GameEventNode_Entry inputEntryNode)
-                linkData._inputGuid = inputEntryNode._guid;
+                if (edge.output.node is GameEventNodeBase outputNode)
+                    linkData._outputGuid = outputNode._guid;
+                else if (edge.output.node is GameEventNode_Entry outputEntryNode)
+                    linkData._outputGuid = outputEntryNode._guid;
+                    
+                linkData._outputPort = edge.output.portName;
                 
-            linkData._inputPort = edge.input.portName;
-            
-            _dialogData._linkData.Add(linkData);
+                if (edge.input.node is GameEventNodeBase inputNode)
+                    linkData._inputGuid = inputNode._guid;
+                else if (edge.input.node is GameEventNode_Entry inputEntryNode)
+                    linkData._inputGuid = inputEntryNode._guid;
+                    
+                linkData._inputPort = edge.input.portName;
+                
+                _dialogData._linkData.Add(linkData);
+            }
         }
 
         EditorUtility.SetDirty(_dialogData);
         AssetDatabase.SaveAssets();
-        Debug.Log($"{_dialogData.name} 저장 완료");
+
+        // 다이얼로그 텍스트 데이터 저장 (연결된 노드들만)
+        SaveDialogTextData(connectedEventGuids);
+
+        Debug.Log($"{_dialogData._textDataName} 저장 완료 (연결된 노드만 저장됨)");
     }
 
-    private void BuildEventChain(GameEventNode_Entry entryNode, DialogEventEntryData entryData, Dictionary<string, GameEventNodeBase> guidToEventNode)
+    private void SaveDialogTextData(HashSet<string> connectedEventGuids = null)
+    {
+        if (_dialogData == null || string.IsNullOrEmpty(_dialogData.name))
+        {
+            Debug.LogError("DialogData가 없거나 이름이 없습니다.");
+            return;
+        }
+
+        // 모든 Dialog 이벤트에서 텍스트 데이터 수집
+        StringKeyValueSetData textData = new StringKeyValueSetData();
+
+        foreach (var entryData in _dialogData._dialogEventEntryList)
+        {
+            foreach (var eventData in entryData._dialogEventList)
+            {
+                if (eventData is DialogEventData_Dialog dialogEvent)
+                {
+                    // 연결된 노드만 필터링 (connectedEventGuids가 null이면 모든 노드 포함)
+                    if (connectedEventGuids != null && !connectedEventGuids.Contains(dialogEvent._editorGuidString))
+                        continue;
+
+                    // 해당 Dialog 노드 찾기
+                    GameEventNode_Dialog dialogNode = FindDialogNodeByGuid(dialogEvent._editorGuidString);
+                    if (dialogNode != null && !string.IsNullOrEmpty(dialogNode._dialogText))
+                    {
+                        // GUID를 해시로 변환하여 키로 사용
+                        int key = IOControl.computeHash(dialogEvent._editorGuidString);
+                        
+                        // StringKeyValueData 생성
+                        StringKeyValueData stringData = new StringKeyValueData();
+                        stringData._key = key;
+                        stringData._value = dialogNode._dialogText;
+                        
+                        dialogEvent._dialogIndex = textData._stringData.Count;
+                        textData._stringData.Add(stringData);
+                    }
+                }
+            }
+        }
+
+        // 텍스트 데이터가 있는 경우에만 저장
+        if (textData._stringData.Count > 0)
+        {
+            // DialogData의 이름을 파일명으로 사용
+            string fileName = _dialogData.name;
+            
+            // LanguageInstanceManager를 통해 저장
+            bool success = LanguageInstanceManager.Instance().SaveTextDataToXML(textData, fileName);
+            if (success)
+            {
+                Debug.Log($"다이얼로그 텍스트 데이터 저장 완료: {fileName}.xml");
+            }
+            else
+            {
+                DebugUtil.assert(false, $"다이얼로그 텍스트 데이터 저장 실패: {fileName}.xml");
+            }
+        }
+        else
+        {
+            DebugUtil.assert(false, "저장할 다이얼로그 텍스트가 없습니다.");
+        }
+    }
+
+    private GameEventNode_Dialog FindDialogNodeByGuid(string guid)
+    {
+        foreach (var node in nodes)
+        {
+            if (node is GameEventNode_Dialog dialogNode && dialogNode._guid == guid)
+            {
+                return dialogNode;
+            }
+        }
+        return null;
+    }
+
+    private void BuildEventChain(GameEventNode_Entry entryNode, DialogEventEntryData entryData, Dictionary<string, GameEventNodeBase> guidToEventNode, HashSet<string> connectedEventGuids)
     {
         // Entry에서 연결된 첫 번째 이벤트 찾기
         var firstEventNode = FindConnectedEventNode(entryNode);
         if (firstEventNode != null)
         {
             entryData._dialogEventList.Clear();
-            BuildEventList(firstEventNode, entryData, guidToEventNode, new HashSet<string>());
+            BuildEventList(firstEventNode, entryData, guidToEventNode, new HashSet<string>(), connectedEventGuids);
         }
     }
 
@@ -331,12 +446,13 @@ public class DialogEditorGraphView : GraphView
         return null;
     }
 
-    private void BuildEventList(GameEventNodeBase currentNode, DialogEventEntryData entryData, Dictionary<string, GameEventNodeBase> guidToEventNode, HashSet<string> visited)
+    private void BuildEventList(GameEventNodeBase currentNode, DialogEventEntryData entryData, Dictionary<string, GameEventNodeBase> guidToEventNode, HashSet<string> visited, HashSet<string> connectedEventGuids)
     {
         if (visited.Contains(currentNode._guid))
             return; // 순환 참조 방지
             
         visited.Add(currentNode._guid);
+        connectedEventGuids.Add(currentNode._guid); // 연결된 노드로 추가
 
         // 현재 노드의 이벤트 데이터 추가
         var eventData = currentNode.exportGameEvent();
@@ -350,7 +466,7 @@ public class DialogEditorGraphView : GraphView
             if (nextNode != null)
             {
                 eventData._nextIndex = currentIndex + 1;
-                BuildEventList(nextNode, entryData, guidToEventNode, visited);
+                BuildEventList(nextNode, entryData, guidToEventNode, visited, connectedEventGuids);
             }
             else
             {
@@ -365,6 +481,8 @@ public class DialogEditorGraphView : GraphView
 
         if(_dialogData == null)
             return;
+
+        LanguageInstanceManager.Instance().LoadSingleTextData(_dialogData._textDataName);
 
         // 기존 요소들 제거
         DeleteElements(graphElements.ToList());
@@ -398,9 +516,9 @@ public class DialogEditorGraphView : GraphView
             {
                 var eventData = entryData._dialogEventList[i];
                 var eventNode = createNode(eventData.getDialogEventType(), Vector2.zero);
-                eventNode.importGameEvent(eventData);
                 eventNode.constructField();
                 eventNode.constructPort();
+                eventNode.importGameEvent(eventData);
 
                 // 이벤트 노드 위치 찾기
                 var eventNodeData = _dialogData._nodeData.Find(n => n._guid == eventData._editorGuidString);
@@ -632,6 +750,15 @@ public class DialogEditorGraphView : GraphView
             _nextButton.SetEnabled(true);
         }
     }
+
+    private void FocusSearchField()
+    {
+        if (_searchField != null)
+        {
+            _searchField.Focus();
+            _searchField.SelectAll();
+        }
+    }
 }
 
 public class GameEventEntryNode : Node
@@ -654,6 +781,7 @@ public abstract class GameEventNodeBase : Node
 {
     public abstract DialogEventType getEventType();
 
+    public DialogData _dialogData;
     public DialogEventDataBase _dialogEvent;
     public string _guid;
 
@@ -752,7 +880,7 @@ public class GameEventNode_Dialog : GameEventNodeBase
         dialogTextField.multiline = true;
         dialogTextField.style.flexGrow = 1;
         dialogTextField.style.whiteSpace = WhiteSpace.Normal;
-        dialogTextField.value = "Enter dialog text here...";
+        dialogTextField.value = "";
         dialogTextField.RegisterValueChangedCallback(evt =>
         {
             _dialogText = evt.newValue;
@@ -779,7 +907,23 @@ public class GameEventNode_Dialog : GameEventNodeBase
         if (eventData is DialogEventData_Dialog dialogData)
         {
             _dialogEvent = dialogData;
-            _dialogText = ""; // 텍스트는 별도 관리이므로 초기화
+            _dialogText = LanguageInstanceManager.Instance().GetTextFromFileFromIndex(_dialogData._textDataName, dialogData._dialogIndex);
+
+            // UI 필드들이 이미 생성되어 있다면 값 업데이트
+            if (characterNameField != null)
+            {
+                characterNameField.value = dialogData._displayCharacterKey ?? "";
+            }
+            
+            if (wordPerSecField != null)
+            {
+                wordPerSecField.value = dialogData._wordPerSec;
+            }
+            
+            if (dialogTextField != null)
+            {
+                dialogTextField.value = _dialogText;
+            }
         }
     }
 
