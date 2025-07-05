@@ -240,7 +240,6 @@ public class SequencerGraphEvent_ActiveDialog : SequencerGraphEventBase
         DialogData data = new DialogData();
         data._textDataName = "dialogdata_test.xml";
         DialogEventEntryData entryData = new DialogEventEntryData();
-        entryData._entryEventIndex = 0;
 
         DialogEventData_Dialog eventData1 = new DialogEventData_Dialog();
         eventData1._dialogIndex = 0;

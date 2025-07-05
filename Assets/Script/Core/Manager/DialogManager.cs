@@ -107,12 +107,6 @@ public class DialogManager : MonoBehaviour
                 _dialogSpeakTimer = 0f;
 
                 _currentAudioEmitter?.Stop();
-
-                if (valueData._audioEventKey >= 0)
-                {
-                    _currentAudioEmitter = FMODAudioManager.Instance().Play(valueData._audioEventKey, Vector3.zero);
-                    _currentAudioEmitter._manageSelf = true;
-                }
             break;
             default:
                 DebugUtil.assert(false, "구현되지 않은 Dialog EventType {0}", dialogEventData.getDialogEventType());
@@ -206,7 +200,7 @@ public class DialogManager : MonoBehaviour
             return;
 
         _currentDialogData = dialogData;
-        _dialogEventIndex = _currentDialogData._dialogEventEntryList[_dialogEntryIndex]._entryEventIndex;
+        _dialogEventIndex = 0;
         _isDialogEnd = false;
 
         foreach (var item in dialogData._dialogObjectList)

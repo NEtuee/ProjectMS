@@ -133,12 +133,6 @@ public class LanguageManager : ManagerBase
                     valuedata._key = int.Parse(item.Name.LocalName.Remove(0,1));
                     valuedata._value = item.Attribute("Value").Value;
 
-                    XAttribute audioEventKey = item.Attribute("Audio");
-                    if (audioEventKey != null)
-                    {
-                        valuedata._audioEventKey = int.Parse(audioEventKey.Value);
-                    }
-
                     dialogData._stringData.Add(valuedata);
                 }
 
@@ -152,6 +146,80 @@ public class LanguageManager : ManagerBase
         }
 
         return true;
+    }
+
+    public bool saveTextDataToXML(StringKeyValueSetData textData, string fileName)
+    {
+        return saveTextDataToXML(textData, fileName, _currentSystemLang);
+    }
+
+    public bool saveTextDataToXML(StringKeyValueSetData textData, string fileName, SystemLanguage language)
+    {
+        if (_languageConfigDic.ContainsKey(language) == false)
+        {
+            DebugUtil.assert(false, "Language config not found : {0}", language);
+            return false;
+        }
+
+        LanguageConfigData configData = _languageConfigDic[language];
+        string fullPath = System.IO.Path.Combine(IOControl.PathForDocumentsFile(configData._textDataPath), fileName);
+
+        // 확장자가 없으면 .xml 추가
+        if (!fullPath.EndsWith(".xml"))
+        {
+            fullPath += ".xml";
+        }
+
+        try
+        {
+            // 디렉토리가 없으면 생성
+            string directory = System.IO.Path.GetDirectoryName(fullPath);
+            if (!System.IO.Directory.Exists(directory))
+            {
+                System.IO.Directory.CreateDirectory(directory);
+            }
+
+            // XML 문서 생성
+            XDocument doc = new XDocument();
+            XElement rootElement = new XElement("TextData");
+
+            // StringKeyValueData를 XML 요소로 변환
+            foreach (var stringData in textData._stringData)
+            {
+                XElement element = new XElement("_" + stringData._key.ToString());
+                element.SetAttributeValue("Value", stringData._value);
+                rootElement.Add(element);
+            }
+
+            doc.Add(rootElement);
+
+            // 파일 저장
+            doc.Save(fullPath);
+
+            DebugUtil.log("텍스트 데이터 저장 완료: {0}", fullPath);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            DebugUtil.assert(false, "텍스트 데이터 저장 실패! :{0}", ex.Message);
+            return false;
+        }
+    }
+
+    public string getTextDataPath()
+    {
+        return getTextDataPath(_currentSystemLang);
+    }
+
+    public string getTextDataPath(SystemLanguage language)
+    {
+        if (_languageConfigDic.ContainsKey(language) == false)
+        {
+            DebugUtil.assert(false, "Language config not found : {0}", language);
+            return "";
+        }
+
+        return _languageConfigDic[language]._textDataPath;
     }
 
     public string getTextFromFile(ref string fileName, int index)

@@ -13,12 +13,117 @@ MonoBehaviour:
   m_Name: DialogData
   m_EditorClassIdentifier: 
   _dialogObjectList: []
-  _dialogEventEntryList: []
+  _dialogEventEntryList:
+  - rid: 502726528799604873
+  - rid: 502726528799604853
   _textDataName: 
-  _nodeData: []
+  _nodeData:
+  - rid: 502726528799604912
+  - rid: 502726528799604913
+  - rid: 502726528799604914
+  - rid: 502726528799604915
+  - rid: 502726528799604916
   _noteData: []
   _groupData: []
-  _linkData: []
+  _linkData:
+  - rid: 502726528799604917
+  - rid: 502726528799604918
+  - rid: 502726528799604919
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 502726528799604853
+      type: {class: DialogEventEntryData, ns: , asm: Assembly-CSharp}
+      data:
+        _entryKey: default
+        _dialogEventList:
+        - rid: 502726528799604857
+        - rid: 502726528799604895
+        _editorGuidString: 2ad449ef-1133-41cb-ac0b-606c1d555fc8
+    - rid: 502726528799604857
+      type: {class: DialogEventData_Dialog, ns: , asm: Assembly-CSharp}
+      data:
+        _nextIndex: 1
+        _editorGuidString: b6bd2e4b-254b-435e-bd5a-c42151df3b12
+        _dialogIndex: 1
+        _displayCharacterKey: 
+        _wordPerSec: 11
+    - rid: 502726528799604873
+      type: {class: DialogEventEntryData, ns: , asm: Assembly-CSharp}
+      data:
+        _entryKey: default
+        _dialogEventList:
+        - rid: 502726528799604880
+        _editorGuidString: d0ad78c9-ab26-4bfd-87ca-cd0aeb9ca3ad
+    - rid: 502726528799604880
+      type: {class: DialogEventData_Dialog, ns: , asm: Assembly-CSharp}
+      data:
+        _nextIndex: -1
+        _editorGuidString: ca7e4a53-bcaa-4f8f-85fb-38b6b3c7a3a3
+        _dialogIndex: 0
+        _displayCharacterKey: 
+        _wordPerSec: 12
+    - rid: 502726528799604895
+      type: {class: DialogEventData_Dialog, ns: , asm: Assembly-CSharp}
+      data:
+        _nextIndex: -1
+        _editorGuidString: 359bc4bd-9cc0-47fe-acd0-f90b53b29134
+        _dialogIndex: 0
+        _displayCharacterKey: 
+        _wordPerSec: 13
+    - rid: 502726528799604912
+      type: {class: NodeData, ns: , asm: Assembly-CSharp}
+      data:
+        _guid: d0ad78c9-ab26-4bfd-87ca-cd0aeb9ca3ad
+        _position: {x: 270, y: 337}
+        _dataIndex: 0
+        _groupIndex: -1
+    - rid: 502726528799604913
+      type: {class: NodeData, ns: , asm: Assembly-CSharp}
+      data:
+        _guid: ca7e4a53-bcaa-4f8f-85fb-38b6b3c7a3a3
+        _position: {x: 686, y: 335}
+        _dataIndex: 0
+        _groupIndex: -1
+    - rid: 502726528799604914
+      type: {class: NodeData, ns: , asm: Assembly-CSharp}
+      data:
+        _guid: 2ad449ef-1133-41cb-ac0b-606c1d555fc8
+        _position: {x: 308, y: 142}
+        _dataIndex: 0
+        _groupIndex: -1
+    - rid: 502726528799604915
+      type: {class: NodeData, ns: , asm: Assembly-CSharp}
+      data:
+        _guid: b6bd2e4b-254b-435e-bd5a-c42151df3b12
+        _position: {x: 750, y: 142}
+        _dataIndex: 0
+        _groupIndex: -1
+    - rid: 502726528799604916
+      type: {class: NodeData, ns: , asm: Assembly-CSharp}
+      data:
+        _guid: 359bc4bd-9cc0-47fe-acd0-f90b53b29134
+        _position: {x: 1133, y: 142}
+        _dataIndex: 0
+        _groupIndex: -1
+    - rid: 502726528799604917
+      type: {class: LinkData, ns: , asm: Assembly-CSharp}
+      data:
+        _outputGuid: d0ad78c9-ab26-4bfd-87ca-cd0aeb9ca3ad
+        _outputPort: Next
+        _inputGuid: ca7e4a53-bcaa-4f8f-85fb-38b6b3c7a3a3
+        _inputPort: Prev
+    - rid: 502726528799604918
+      type: {class: LinkData, ns: , asm: Assembly-CSharp}
+      data:
+        _outputGuid: 2ad449ef-1133-41cb-ac0b-606c1d555fc8
+        _outputPort: Next
+        _inputGuid: b6bd2e4b-254b-435e-bd5a-c42151df3b12
+        _inputPort: Prev
+    - rid: 502726528799604919
+      type: {class: LinkData, ns: , asm: Assembly-CSharp}
+      data:
+        _outputGuid: b6bd2e4b-254b-435e-bd5a-c42151df3b12
+        _outputPort: Next
+        _inputGuid: 359bc4bd-9cc0-47fe-acd0-f90b53b29134
+        _inputPort: Prev
