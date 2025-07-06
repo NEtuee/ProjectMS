@@ -1,84 +1,53 @@
 <ActionGraph Name="MilkBox" DefaultAction="AC_Idle" DefaultFramePerSecond="12">
 
-    <AC_Idle MovementType="FrameEvent" DirectionType="AlwaysRight" DirectionAngle="-90" >
-        <Animation Preset="Sprites/Object/MilkBox/1_idle" XFlip="false" Duration="1.2">
-            <FrameEvent Type="Movement" StartFrame="0" Friction="1" MaxVelocity="0.5" Speed="1.2"/>
-        </Animation>
+    <GlobalVariable Name="gv_DanmakuPath" Value="Assets/Data/DanmakuGraph/Enemy/Milk.xml"/>    
 
-        <Branch Condition="End == true" Execute="AC_Idle"/>
-    </AC_Idle>
-    
-    <AC_Move MovementType="FrameEvent" DirectionType="AlwaysRight" DirectionAngle="90" >
-        <Animation Preset="Sprites/Object/MilkBox/2_move" XFlip="false" Duration="1.2">
-            <FrameEvent Type="Movement" StartFrame="0" Friction="1" MaxVelocity="0.5" Speed="1.2"/>
-        </Animation>
+        <AC_Idle MovementType="FrameEvent" DirectionType="AlwaysRight" DirectionAngle="-90" >
+            <Animation Preset="Sprites/Object/MilkBox/1_idle" XFlip="false" Duration="1.2">
+                <FrameEvent Type="Movement" StartFrame="0" Friction="1" MaxVelocity="0.5" Speed="1.2"/>
+            </Animation>
 
-        <Branch Condition="End == true" Execute="AC_Move"/>
-    </AC_Move>
-
-    <AC_Hit_L MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Keep">
-        <Animation Preset="Sprites/Object/MilkBox/3_hitleft" XFlip="true" Duration="0.5">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="4913" Attach="true"/>
-
-            <FrameEvent Type="Projectile" StartTime="0" GraphName="Milk" Offset="1.0 -1.1 0.0" UseFlip="true" DirectionType="AI" SpawnTargetType="Self"/>
-            <FrameEvent Type="Projectile" StartTime="0" GraphName="Milk" Offset="0.0 0.1 0.5" UseFlip="true" DirectionType="AI" SpawnTargetType="Self"/>
-            <FrameEvent Type="Projectile" StartTime="0" GraphName="Milk" Offset="0.6 0.0 0.0" UseFlip="true" DirectionType="AI" SpawnTargetType="Self"/>
-            <FrameEvent Type="Projectile" StartTime="0" GraphName="Milk" Offset="0.0 0.3 0.1" UseFlip="true" DirectionType="AI" SpawnTargetType="Self"/>
-            <FrameEvent Type="Projectile" StartTime="0" GraphName="Milk" Offset="0.7 -0.3 0.0" UseFlip="true" DirectionType="AI" SpawnTargetType="Self"/>
-            <FrameEvent Type="Projectile" StartTime="0" GraphName="Milk" Offset="0.3 -0.1 0.0" UseFlip="true" DirectionType="AI" SpawnTargetType="Self"/>
-            <FrameEvent Type="Projectile" StartTime="0" GraphName="Milk" Offset="0.0 0.2 1.0" UseFlip="true" DirectionType="AI" SpawnTargetType="Self"/>
-            <FrameEvent Type="Projectile" StartTime="0" GraphName="Milk" Offset="0.3 0.0 0.1" UseFlip="true" DirectionType="AI" SpawnTargetType="Self"/>
-            <FrameEvent Type="Projectile" StartTime="0" GraphName="Milk" Offset="0.1 0.3 2.1" UseFlip="true" DirectionType="AI" SpawnTargetType="Self"/>
-            <FrameEvent Type="Projectile" StartTime="0" GraphName="Milk" Offset="0.4 -0.2 0.1" UseFlip="true" DirectionType="AI" SpawnTargetType="Self"/>
-
-        </Animation>
-        <Trigger Condition="DefenceSuccess">
-            <FrameEvent Type="AudioPlay" ID="4915" Attach="true"/>
-        </Trigger>
-        <Branch Condition="End == true" Execute="AC_Idle"/>
-    </AC_Hit_L>
-    
-    <AC_Hit_R MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Keep">
-        <Animation Preset="Sprites/Object/MilkBox/4_hitright" XFlip="true" Duration="0.5">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="4913" Attach="true"/>
-
-                        <FrameEvent Type="Projectile" StartTime="0" GraphName="Milk" Offset="1.0 -1.1 0.0" UseFlip="true" DirectionType="AI" SpawnTargetType="Self"/>
-            <FrameEvent Type="Projectile" StartTime="0" GraphName="Milk" Offset="0.0 0.1 0.5" UseFlip="true" DirectionType="AI" SpawnTargetType="Self"/>
-            <FrameEvent Type="Projectile" StartTime="0" GraphName="Milk" Offset="0.6 0.0 0.0" UseFlip="true" DirectionType="AI" SpawnTargetType="Self"/>
-            <FrameEvent Type="Projectile" StartTime="0" GraphName="Milk" Offset="0.0 0.3 0.1" UseFlip="true" DirectionType="AI" SpawnTargetType="Self"/>
-            <FrameEvent Type="Projectile" StartTime="0" GraphName="Milk" Offset="0.7 -0.3 0.0" UseFlip="true" DirectionType="AI" SpawnTargetType="Self"/>
-            <FrameEvent Type="Projectile" StartTime="0" GraphName="Milk" Offset="0.3 -0.1 0.0" UseFlip="true" DirectionType="AI" SpawnTargetType="Self"/>
-            <FrameEvent Type="Projectile" StartTime="0" GraphName="Milk" Offset="0.0 0.2 0.0" UseFlip="true" DirectionType="AI" SpawnTargetType="Self"/>
-            <FrameEvent Type="Projectile" StartTime="0" GraphName="Milk" Offset="0.3 0.0 0.1" UseFlip="true" DirectionType="AI" SpawnTargetType="Self"/>
-            <FrameEvent Type="Projectile" StartTime="0" GraphName="Milk" Offset="0.1 0.3 -0.1" UseFlip="true" DirectionType="AI" SpawnTargetType="Self"/>
-            <FrameEvent Type="Projectile" StartTime="0" GraphName="Milk" Offset="0.4 -0.2 0.1" UseFlip="true" DirectionType="AI" SpawnTargetType="Self"/>
+            <Branch Condition="End == true" Execute="AC_Idle"/>
+        </AC_Idle>
         
-        </Animation>
-        <Trigger Condition="DefenceSuccess">
-            <FrameEvent Type="AudioPlay" ID="4915" Attach="true"/>
-        </Trigger>
-        <Branch Condition="End == true" Execute="AC_Idle"/>
-    </AC_Hit_R>
+        <AC_Move MovementType="FrameEvent" DirectionType="AlwaysRight" DirectionAngle="90" >
+            <Animation Preset="Sprites/Object/MilkBox/2_move" XFlip="false" Duration="1.2">
+                <FrameEvent Type="Movement" StartFrame="0" Friction="1" MaxVelocity="0.5" Speed="1.2"/>
+            </Animation>
 
-    <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" DirectionAngle="180">
-        <Animation Preset="Sprites/Object/MilkBox/5_guardbroken" XFlip="false" Duration="0.1">
-            <FrameEvent Type="Movement" StartTime="0" Friction="1" Velocity="7" MaxVelocity="7" Speed="0"/>
-        </Animation>
+            <Branch Condition="End == true" Execute="AC_Move"/>
+        </AC_Move>
+        
+        <AC_Hit_R MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Keep">
+            <Animation Preset="Sprites/Object/MilkBox/4_hitright" XFlip="true" Duration="0.5">
+                <FrameEvent Type="AudioPlay" StartTime="0" ID="4913" Attach="true"/>
+                <FrameEvent Type="Danmaku" Condition="Milk" StartTime="0" Path="gv_DanmakuPath" Offset="0.5 0.12 0" UseFlip="true"/>
+            </Animation>
+            <Trigger Condition="DefenceSuccess">
+                <FrameEvent Type="AudioPlay" ID="4915" Attach="true"/>
+            </Trigger>
+            <Branch Condition="End == true" Execute="Dead"/>
+        </AC_Hit_R>
 
-        <Branch Condition="End == true" Execute="AC_Idle"/>
-    </AC_GuardBroken>
-    
-    <Dead MovementType="FrameEvent" DirectionType="AlwaysRight">
-        <Animation Preset="Sprites/Object/MilkBox/6_dead" XFlip="false" Duration="0.3">
+        <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" DirectionAngle="180">
+            <Animation Preset="Sprites/Object/MilkBox/5_guardbroken" XFlip="false" Duration="0.1">
+                <FrameEvent Type="Movement" StartTime="0" Friction="1" Velocity="7" MaxVelocity="7" Speed="0"/>
+            </Animation>
 
-            <FrameEvent Type="Effect" StartTime="0" Path="Sprites/Object/MilkBox/6_dead" FramePerSecond="0.2" CastShadow="True">
-                <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
-            </FrameEvent>
-            <FrameEvent Type="KillEntity" StartTime="0"/>
+            <Branch Condition="End == true" Execute="AC_Idle"/>
+        </AC_GuardBroken>
+        
+        <Dead MovementType="FrameEvent" DirectionType="AlwaysRight">
+            <Animation Preset="Sprites/Object/MilkBox/6_dead" XFlip="false" Duration="0.3">
 
-        </Animation>
+                <FrameEvent Type="Effect" StartTime="0" Path="Sprites/Object/MilkBox/6_dead" FramePerSecond="0.2" CastShadow="True">
+                    <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
+                </FrameEvent>
+                <FrameEvent Type="KillEntity" StartTime="0"/>
 
-        <Branch Condition="End == true" Execute="Dead"/>
-    </Dead>
+            </Animation>
 
-</ActionGraph>
+            <Branch Condition="End == true" Execute="Dead"/>
+        </Dead>
+
+    </ActionGraph>
