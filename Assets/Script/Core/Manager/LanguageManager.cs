@@ -628,6 +628,8 @@ public class LanguageInstanceManager : Singleton<LanguageInstanceManager>
         string fileKey = fileName;
         if (_textDic.ContainsKey(fileKey))
             return _textDic[fileKey]._stringData[index];
+
+        DebugUtil.assert(false, "StringKeyValueData not found for file: [{0}], index: [{1}]", fileName, index);
         return null;
     }
 

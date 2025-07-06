@@ -160,11 +160,34 @@ public class DialogManager : MonoBehaviour
             case DialogEventType.Dialog:
                 DialogEventData_Dialog dialogEvent = dialogEventData as DialogEventData_Dialog;
 
+                // 다이얼로그 텍스트 설정
                 StringKeyValueData valueData = LanguageManager._instance.getStringKeyValueFromIndex(ref dialogData._textDataName, dialogEvent._dialogIndex);
                 string dialogText = valueData._value;
                 _dialogTextMesh.text = dialogText;
                 _dialogMaxVisibleCharacter = dialogText.Length;
                 _wordPerSec = dialogEvent._wordPerSec;
+
+                // 캐릭터 이름 설정
+                if (string.IsNullOrEmpty(dialogEvent._displayCharacterKey))
+                {
+                    // _displayCharacterKey가 없으면 캐릭터 이름을 비움
+                    _characterNameTextMesh.text = "";
+                }
+                else
+                {
+                    // _displayCharacterKey가 있으면 CharacterInfoManager를 통해 캐릭터 이름 가져오기
+                    CharacterInfoData characterInfo = CharacterInfoManager.Instance().GetCharacterInfoData(dialogEvent._displayCharacterKey);
+                    if (characterInfo != null)
+                    {
+                        _characterNameTextMesh.text = characterInfo._displayName;
+                    }
+                    else
+                    {
+                        // 캐릭터 정보를 찾을 수 없으면 키 자체를 표시하거나 비움
+                        _characterNameTextMesh.text = "";
+                        DebugUtil.assert(false, "Dialog Event : Character info not found for key {0}", dialogEvent._displayCharacterKey);
+                    }
+                }
 
                 _dialogSpeaking = true;
                 _dialogSpeakTimer = 0f;
@@ -227,6 +250,7 @@ public class DialogManager : MonoBehaviour
         }
 
         _dialogTextMesh.text = "";
+        _characterNameTextMesh.text = "";
 
         _activeObjectList.Clear();
         _dialogEventIndex = -1;
@@ -287,6 +311,8 @@ public class DialogManager : MonoBehaviour
 
     public void activeDialog(DialogData dialogData, string entryKey)
     {
+        clearDialog();
+
         _dialogEntryIndex = dialogData.findDialogEntryIndex(entryKey);
         if (_dialogEntryIndex < 0)
         {

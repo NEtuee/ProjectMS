@@ -247,7 +247,7 @@ public class DialogEditorGraphView : GraphView
         _dialogData.clearAll();
 
         // DialogData의 _textDataName 설정
-        _dialogData._textDataName = _dialogData.name;
+        _dialogData._textDataName = _dialogData.name.ToLower();
 
         // GUID to Entry/Event 매핑
         Dictionary<string, GameEventNode_Entry> guidToEntryNode = new Dictionary<string, GameEventNode_Entry>();
