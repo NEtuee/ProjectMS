@@ -5,7 +5,7 @@
     <!-- 전투 상태 행동 타입 설정 -->
     <!-- 공격 거리 설정 -->
     <GlobalVariable Name="gv_MeleeAttackRangeMin"           Value="0.0"/>       <!-- 최소 공격 사거리 : Value보다 PC가 가까우면 공격하지 않는다. -->
-    <GlobalVariable Name="gv_MeleeAttackRangeMax"           Value="1.8"/>       <!-- 최대 공격 사거리 : Value보다 PC가 멀면 공격하지 않는다. -->
+    <GlobalVariable Name="gv_MeleeAttackRangeMax"           Value="2.8"/>       <!-- 최대 공격 사거리 : Value보다 PC가 멀면 공격하지 않는다. -->
     <GlobalVariable Name="gv_StdPassiveAttitude"           Value="4.0"/>       <!-- 장외 기준 거리 : 전투 가능 기준 범위 -->
 
     <!-- 가드 옵션 설정 -->
@@ -24,12 +24,10 @@
     <GlobalVariable Name="gv_GuardCountThreshold"           Value="2.0"/>       <!-- 누적 가드 횟수 트리거 : 해당 횟수 충족 시 패시브 방어 동작 (가드 중 모든 피격 시 카운트) -->
     <!-- 패시브 방어(누적 피격) 반응 타입 설정 -->
         <!-- TODO: 피격 리액션이 상황에 따라 다른 것으로 실행될 수 있음. 복수 선택 가능하게. -->
-    <GlobalVariable Name="gv_bIsDodgeToPassiveDef_Hit"      Value="True"/>      <!-- 누적 피격 시 패시브 방어 : 회피 타입 -->
     <GlobalVariable Name="gv_bIsCounterToPassiveDef_Hit"    Value="True"/>      <!-- 누적 피격 시 패시브 방어 : 반격 타입 -->
     <GlobalVariable Name="gv_bIsGuardToPassiveDef_Hit"      Value="False"/>      <!-- 누적 피격 시 패시브 방어 : 방어 타입 -->
     <!-- 패시브 방어(누적 가드) 반응 타입 설정 -->
         <!-- TODO: 피격 리액션이 상황에 따라 다른 것으로 실행될 수 있음. 복수 선택 가능하게. -->
-    <GlobalVariable Name="gv_bIsDodgeToPassiveDef_Guard"    Value="False"/>      <!-- 누적 피격 시 패시브 방어 : 회피 타입 -->
     <GlobalVariable Name="gv_bIsCounterToPassiveDef_Guard"  Value="False"/>     <!-- 누적 피격 시 패시브 방어 : 반격 타입 -->
     <!-- 패시브 방어 실행 지연 시간 설정 -->
     <GlobalVariable Name="gv_PassiveDef_Hit_DelayTime" Value="0.0"/>            <!-- 누적 피격 반응 지연 시간-->
@@ -60,7 +58,6 @@
     <Include Path="Assets/Data/AILibrary/Package/CommonLockOnAllAttackPackage.xml"/>  <!-- 락온 공격 패키지 -->
     <Include Path="Assets/Data/AILibrary/Package/CommonBumpAttackPackage.xml"/>    <!-- 충돌 공격 패키지 (공격 성공 시 액션 전환)-->
     <Include Path="Assets/Data/AILibrary/Package/CommonLaserAttackPackage.xml"/>   <!-- 빔 공격 패키지 (공격 시 추적 불가)-->
-    <Include Path="Assets/Data/AILibrary/Package/CommonDodgePackage.xml"/>         <!-- 회피 패키지 -->
     <Include Path="Assets/Data/AILibrary/Package/CommonGuardPackage.xml"/>         <!-- 가드 패키지 -->
 
 
@@ -92,11 +89,7 @@
 
     <!-- 전투 패시브 방어 분기 브랜치 셋 -->
     <BranchSet Name="BattleDefenseByHitJudgeSet">
-        <Branch Weight="RandBoolean^True"   Condition="gv_bIsDodgeToPassiveDef_Hit" Execute="Dodge"/>
         <Branch Weight="RandBoolean^False"  Condition="gv_bIsGuardToPassiveDef_Hit" Execute="Guard"/>
-    </BranchSet>
-    <BranchSet Name="BattleDefenseByGuardJudgeSet">
-        <Branch Condition="gv_bIsDodgeToPassiveDef_Guard"    Execute="Dodge"/>
     </BranchSet>
 
     <!-- 피격 리액션 브랜치 셋 -->
@@ -106,12 +99,8 @@
         <Branch Condition="Hit && getFrameTag_HitAvail" Execute="Hit"/>
         <Branch Condition="GuardBreakFail && getFrameTag_GbAvail" Execute="GuardBroken"/>
         <Branch Condition="GuardBroken && (getStat_GuardCount >= gv_GuardBrokenThreshold) && getFrameTag_GbAvail" Execute="GuardBroken"/> <!-- TODO : 일반 공격도 카운트 되긴 하나, 가드 브레이크로만 파괴 가능한 상태 -->
-        <Branch Condition="(gv_bIsDodgeToPassiveDef_Hit || gv_bIsGuardToPassiveDef_Hit || gv_bIsCounterToPassiveDef_Hit) 
-                        && (gv_HitCountThreshold <= getStat_HitCount)
+        <Branch Condition="(gv_HitCountThreshold <= getStat_HitCount)
                         && (gv_PassiveDef_Hit_DelayTime <= GraphExecutedTime)" Execute="Battle_DefenseByHit"/>
-        <Branch Condition="(gv_bIsDodgeToPassiveDef_Guard || gv_bIsCounterToPassiveDef_Guard)
-                        && (gv_GuardCountThreshold <= getStat_GuardCount)
-                        && (gv_PassiveDef_Guard_DelayTime <= GraphExecutedTime)" Execute="Battle_DefenseByGuard"/>
     </BranchSet>
 <!-- 브랜치 셋 -->
 
@@ -132,9 +121,6 @@
         <UseBranchSet Name="BattleDefenseByHitJudgeSet"/>
     </Battle_DefenseByHit>
 
-    <Battle_DefenseByGuard Package="CommonIdlePackage">
-        <UseBranchSet Name="BattleDefenseByGuardJudgeSet"/>
-    </Battle_DefenseByGuard>
 <!-- Preset State -->
 
 <!-- AI State -->
@@ -160,10 +146,24 @@
     </Away>
     <!-- Movement State List -->
 
+
+<!-- AI State -->
+    <!-- AI 스테이트 : 전투 분기 -->
+    <!-- TODO : 크게 근거리 / 원거리로 구분하여 스킬 사용, 패키지는 직접 작성 -->
+    <JudgeMeleeAttack Package="SukebanMeleeBatterRushSwingPackage">
+        <!-- TODO : 근거리용 스킬 작성, 공격이든 방어든, 이동이든 쿨타임 및 조건 기반 사용 -->
+        <Branch Condition="aiGraphCoolTime_RushSwing" Execute="RushSwing"/>
+    </JudgeMeleeAttack>
+
+    <JudgeRangedAttack Package="SukebanMeleeBatterGrnadeSwingPackge">
+        <!-- TODO : 원거리용 스킬 작성, 공격이든 방어든, 이동이든 쿨타임 및 조건 기반 사용 -->
+        <Branch Condition="aiGraphCoolTime_GrnadeSwing" Execute="GrnadeSwing"/>
+    </JudgeRangedAttack>
+
     <!-- AI 스테이트 : 전투 상태 : 공격(전투 상태일때 사용하는 2가지 스킬 분기) -->
     <!-- Skill State List-->
 
-    <RushSwing Package="SukebanMeleeBatterRushSwingPackage" CoolTime="2.5">
+    <RushSwing Package="SukebanMeleeBatterRushSwingPackage" CoolTime="1.5">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="Entry_Battle"/>
@@ -179,13 +179,6 @@
 
     <!-- AI 스테이트 : 전투 상태 : 패시브 방어(전투 상태 도중 방어상태에 들어갔을 때의 ai 분기) -->
     <!-- Passive Defense Skill List -->
-    <Dodge Package="CommonDodgePackage" CoolTime="10.0">
-        <UseBranchSet Name="HitReactionSet"/>
-        <Branch Weight="RandBoolean^False" Condition="CurrentPackageEnd && aiGraphCoolTime_RushSwing" Execute="RushSwing"/>
-        <Branch Condition="CurrentPackageEnd" Execute="GrnadeSwing"/>
-
-        <UseBranchSet Name="BattlePackageEndSet"/>
-    </Dodge>
 
     <Guard Package="CommonGuardPackage">
         <UseBranchSet Name="HitReactionSet"/>

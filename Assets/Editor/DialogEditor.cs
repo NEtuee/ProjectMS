@@ -247,7 +247,7 @@ public class DialogEditorGraphView : GraphView
         _dialogData.clearAll();
 
         // DialogData의 _textDataName 설정
-        _dialogData._textDataName = _dialogData.name;
+        _dialogData._textDataName = _dialogData.name.ToLower();
 
         // GUID to Entry/Event 매핑
         Dictionary<string, GameEventNode_Entry> guidToEntryNode = new Dictionary<string, GameEventNode_Entry>();
@@ -990,3 +990,321 @@ public class GameEventNode_Entry : GameEventNodeBase
         title = _entryData._entryKey;
     }
 }
+
+public class GameEventNode_ActiveObject : GameEventNodeBase
+{
+    public override DialogEventType getEventType() => DialogEventType.ActiveObject;
+
+    private VisualElement activeObjectContainer;
+    private TextField objectIdField;
+    private TextField spritePathField;
+    private Vector2Field positionField;
+    private Toggle flipToggle;
+
+    public override void constructField()
+    {
+        style.width = 300;
+
+        activeObjectContainer = new VisualElement();
+        activeObjectContainer.style.flexDirection = FlexDirection.Column;
+        activeObjectContainer.style.paddingBottom = 4;
+
+        // 오브젝트 ID 필드 (에디터에서는 문자열로 입력)
+        objectIdField = new TextField("Object ID");
+        if (_dialogEvent is DialogEventData_ActiveObject activeObjectData)
+        {
+            objectIdField.value = activeObjectData._objectIdString ?? "";
+            objectIdField.RegisterValueChangedCallback(evt =>
+            {
+                activeObjectData._objectIdString = evt.newValue;
+                // 문자열을 해시로 변환하여 _objectId에 저장
+                activeObjectData._objectId = IOControl.computeHash(evt.newValue);
+            });
+        }
+        objectIdField.style.marginBottom = 4;
+        activeObjectContainer.Add(objectIdField);
+
+        // 스프라이트 경로 필드
+        spritePathField = new TextField("Sprite Path");
+        if (_dialogEvent is DialogEventData_ActiveObject activeObjectData2)
+        {
+            spritePathField.value = activeObjectData2._spritePath ?? "";
+            spritePathField.RegisterValueChangedCallback(evt =>
+            {
+                activeObjectData2._spritePath = evt.newValue;
+            });
+        }
+        spritePathField.style.marginBottom = 4;
+        activeObjectContainer.Add(spritePathField);
+
+        // 위치 필드
+        positionField = new Vector2Field("Position");
+        if (_dialogEvent is DialogEventData_ActiveObject activeObjectData3)
+        {
+            positionField.value = activeObjectData3._position;
+            positionField.RegisterValueChangedCallback(evt =>
+            {
+                activeObjectData3._position = evt.newValue;
+            });
+        }
+        positionField.style.marginBottom = 4;
+        activeObjectContainer.Add(positionField);
+
+        // 플립 토글
+        flipToggle = new Toggle("Flip");
+        if (_dialogEvent is DialogEventData_ActiveObject activeObjectData4)
+        {
+            flipToggle.value = activeObjectData4._flip;
+            flipToggle.RegisterValueChangedCallback(evt =>
+            {
+                activeObjectData4._flip = evt.newValue;
+            });
+        }
+        flipToggle.style.marginBottom = 4;
+        activeObjectContainer.Add(flipToggle);
+
+        mainContainer.Add(activeObjectContainer);
+    }
+
+    public override DialogEventDataBase exportGameEvent()
+    {
+        if (_dialogEvent is DialogEventData_ActiveObject activeObjectData)
+        {
+            // UI에서 데이터 업데이트
+            activeObjectData._objectIdString = objectIdField?.value ?? "";
+            activeObjectData._objectId = IOControl.computeHash(activeObjectData._objectIdString);
+            activeObjectData._spritePath = spritePathField?.value ?? "";
+            activeObjectData._position = positionField?.value ?? Vector2.zero;
+            activeObjectData._flip = flipToggle?.value ?? false;
+        }
+        return _dialogEvent;
+    }
+
+    public override void importGameEvent(DialogEventDataBase eventData)
+    {
+        if (eventData is DialogEventData_ActiveObject activeObjectData)
+        {
+            _dialogEvent = activeObjectData;
+            
+            // UI 필드들이 이미 생성되어 있다면 값 업데이트
+            if (objectIdField != null)
+            {
+                objectIdField.value = activeObjectData._objectIdString ?? "";
+            }
+            
+            if (spritePathField != null)
+            {
+                spritePathField.value = activeObjectData._spritePath ?? "";
+            }
+            
+            if (positionField != null)
+            {
+                positionField.value = activeObjectData._position;
+            }
+            
+            if (flipToggle != null)
+            {
+                flipToggle.value = activeObjectData._flip;
+            }
+        }
+    }
+}
+
+public class GameEventNode_SetSprite : GameEventNodeBase
+{
+    public override DialogEventType getEventType() => DialogEventType.SetSprite;
+
+    private VisualElement setSpriteContainer;
+    private TextField objectIdField;
+    private TextField spritePathField;
+    private Toggle flipToggle;
+
+    public override void constructField()
+    {
+        style.width = 300;
+
+        setSpriteContainer = new VisualElement();
+        setSpriteContainer.style.flexDirection = FlexDirection.Column;
+        setSpriteContainer.style.paddingBottom = 4;
+
+        // 오브젝트 ID 필드 (에디터에서는 문자열로 입력)
+        objectIdField = new TextField("Object ID");
+        if (_dialogEvent is DialogEventData_SetSprite setSpriteData)
+        {
+            objectIdField.value = setSpriteData._objectIdString ?? "";
+            objectIdField.RegisterValueChangedCallback(evt =>
+            {
+                setSpriteData._objectIdString = evt.newValue;
+                // 문자열을 해시로 변환하여 _objectId에 저장
+                setSpriteData._objectId = IOControl.computeHash(evt.newValue);
+            });
+        }
+        objectIdField.style.marginBottom = 4;
+        setSpriteContainer.Add(objectIdField);
+
+        // 스프라이트 경로 필드
+        spritePathField = new TextField("Sprite Path");
+        if (_dialogEvent is DialogEventData_SetSprite setSpriteData2)
+        {
+            spritePathField.value = setSpriteData2._spritePath ?? "";
+            spritePathField.RegisterValueChangedCallback(evt =>
+            {
+                setSpriteData2._spritePath = evt.newValue;
+            });
+        }
+        spritePathField.style.marginBottom = 4;
+        setSpriteContainer.Add(spritePathField);
+
+        // Flip 토글 필드
+        flipToggle = new Toggle("Flip");
+        if (_dialogEvent is DialogEventData_SetSprite setSpriteData3)
+        {
+            flipToggle.value = setSpriteData3._flip;
+            flipToggle.RegisterValueChangedCallback(evt =>
+            {
+                setSpriteData3._flip = evt.newValue;
+            });
+        }
+        flipToggle.style.marginBottom = 4;
+        setSpriteContainer.Add(flipToggle);
+
+        mainContainer.Add(setSpriteContainer);
+    }
+
+    public override DialogEventDataBase exportGameEvent()
+    {
+        if (_dialogEvent is DialogEventData_SetSprite setSpriteData)
+        {
+            // UI에서 데이터 업데이트
+            setSpriteData._objectIdString = objectIdField?.value ?? "";
+            setSpriteData._objectId = IOControl.computeHash(setSpriteData._objectIdString);
+            setSpriteData._spritePath = spritePathField?.value ?? "";
+            setSpriteData._flip = flipToggle?.value ?? false;
+        }
+        return _dialogEvent;
+    }
+
+    public override void importGameEvent(DialogEventDataBase eventData)
+    {
+        if (eventData is DialogEventData_SetSprite setSpriteData)
+        {
+            _dialogEvent = setSpriteData;
+            
+            // UI 필드들이 이미 생성되어 있다면 값 업데이트
+            if (objectIdField != null)
+            {
+                objectIdField.value = setSpriteData._objectIdString ?? "";
+            }
+            
+            if (spritePathField != null)
+            {
+                spritePathField.value = setSpriteData._spritePath ?? "";
+            }
+            
+            if (flipToggle != null)
+            {
+                flipToggle.value = setSpriteData._flip;
+            }
+        }
+    }
+}
+
+public class GameEventNode_SetPosition : GameEventNodeBase
+{
+    public override DialogEventType getEventType() => DialogEventType.SetPosition;
+
+    private VisualElement setPositionContainer;
+    private TextField objectIdField;
+    private Vector2Field positionField;
+    private Toggle flipToggle;
+
+    public override void constructField()
+    {
+        style.width = 300;
+
+        setPositionContainer = new VisualElement();
+        setPositionContainer.style.flexDirection = FlexDirection.Column;
+        setPositionContainer.style.paddingBottom = 4;
+
+        // 오브젝트 ID 필드 (에디터에서는 문자열로 입력)
+        objectIdField = new TextField("Object ID");
+        if (_dialogEvent is DialogEventData_SetPosition setPositionData)
+        {
+            objectIdField.value = setPositionData._objectIdString ?? "";
+            objectIdField.RegisterValueChangedCallback(evt =>
+            {
+                setPositionData._objectIdString = evt.newValue;
+                // 문자열을 해시로 변환하여 _objectId에 저장
+                setPositionData._objectId = IOControl.computeHash(evt.newValue);
+            });
+        }
+        objectIdField.style.marginBottom = 4;
+        setPositionContainer.Add(objectIdField);
+
+        // 위치 필드
+        positionField = new Vector2Field("Position");
+        if (_dialogEvent is DialogEventData_SetPosition setPositionData2)
+        {
+            positionField.value = setPositionData2._position;
+            positionField.RegisterValueChangedCallback(evt =>
+            {
+                setPositionData2._position = evt.newValue;
+            });
+        }
+        positionField.style.marginBottom = 4;
+        setPositionContainer.Add(positionField);
+
+        // Flip 토글 필드
+        flipToggle = new Toggle("Flip");
+        if (_dialogEvent is DialogEventData_SetPosition setPositionData3)
+        {
+            flipToggle.value = setPositionData3._flip;
+            flipToggle.RegisterValueChangedCallback(evt =>
+            {
+                setPositionData3._flip = evt.newValue;
+            });
+        }
+        flipToggle.style.marginBottom = 4;
+        setPositionContainer.Add(flipToggle);
+
+        mainContainer.Add(setPositionContainer);
+    }
+
+    public override DialogEventDataBase exportGameEvent()
+    {
+        if (_dialogEvent is DialogEventData_SetPosition setPositionData)
+        {
+            // UI에서 데이터 업데이트
+            setPositionData._objectIdString = objectIdField?.value ?? "";
+            setPositionData._objectId = IOControl.computeHash(setPositionData._objectIdString);
+            setPositionData._position = positionField?.value ?? Vector2.zero;
+            setPositionData._flip = flipToggle?.value ?? false;
+        }
+        return _dialogEvent;
+    }
+
+    public override void importGameEvent(DialogEventDataBase eventData)
+    {
+        if (eventData is DialogEventData_SetPosition setPositionData)
+        {
+            _dialogEvent = setPositionData;
+            
+            // UI 필드들이 이미 생성되어 있다면 값 업데이트
+            if (objectIdField != null)
+            {
+                objectIdField.value = setPositionData._objectIdString ?? "";
+            }
+            
+            if (positionField != null)
+            {
+                positionField.value = setPositionData._position;
+            }
+            
+            if (flipToggle != null)
+            {
+                flipToggle.value = setPositionData._flip;
+            }
+        }
+    }
+}
+
