@@ -1,16 +1,20 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Timeline;
 using UnityEngine.UI;
 
 public class DialogManager : MonoBehaviour
 {
     public static DialogManager _instance;
+    
     public class DialogObject
     {
-        public DialogObjectData _dialogObjectData;
+        public static float kDefaultScale = 0.21f;
+        public int _objectId = 0;
 
         public Image _uiImage;
         public Vector2 _position;
@@ -20,22 +24,79 @@ public class DialogManager : MonoBehaviour
             
         }
 
-        public void set(DialogObjectData dialogObjectData)
+        public void active(int id, Transform parent, Sprite sprite, Vector2 position, bool flip)
         {
             if (_uiImage == null)
             {
-                GameObject newUiObject = new GameObject("DialogObject");
-                _uiImage = newUiObject.AddComponent<Image>();
-
-                newUiObject.SetActive(false);
+                GameObject dialogObjectGameObject = new GameObject("DialogObject");
+                _uiImage = dialogObjectGameObject.AddComponent<Image>();
+                _uiImage.type = Image.Type.Simple;
+                _uiImage.preserveAspect = true;
+                _uiImage.rectTransform.pivot = new Vector2(0.5f, 0.0f);
+                _uiImage.rectTransform.anchorMin = new Vector2(0.5f, 0.0f);
+                _uiImage.rectTransform.anchorMax = new Vector2(0.5f, 0.0f);
+                _uiImage.gameObject.SetActive(false);   
             }
-            
-            _dialogObjectData = dialogObjectData;
+
+            _objectId = id;
+            _uiImage.transform.SetParent(parent, false);
+
+            _uiImage.sprite = sprite;
+            _uiImage.gameObject.SetActive(true);
+            _uiImage.transform.position = position;
+
+            if (flip)
+                _uiImage.transform.localScale = new Vector3(-kDefaultScale, kDefaultScale, kDefaultScale);
+            else
+                _uiImage.transform.localScale = Vector3.one * kDefaultScale;
+
+            _position = position;
+
+            updateUI();
+        }
+
+        public void setSprite(Sprite sprite)
+        {
+            _uiImage.sprite = sprite;
+            updateUI();
+        }
+
+        public void setSprite(Sprite sprite, bool flip)
+        {
+            _uiImage.sprite = sprite;
+            setFlip(flip);
+            updateUI();
+        }
+
+        public void setPosition(Vector2 position)
+        {
+            _position = position;
+            updateUI();
+        }
+
+        public void setPosition(Vector2 position, bool flip)
+        {
+            _position = position;
+            setFlip(flip);
+            updateUI();
+        }
+
+        public void setFlip(bool flip)
+        {
+            if (flip)
+                _uiImage.transform.localScale = new Vector3(-kDefaultScale, kDefaultScale, kDefaultScale);
+            else
+                _uiImage.transform.localScale = Vector3.one * kDefaultScale;
+        }
+
+        public void updateUI()
+        {
+            _uiImage.SetNativeSize();
+            _uiImage.rectTransform.anchoredPosition = _position;
         }
 
         public void clear()
         {
-            _dialogObjectData = null;
             _uiImage.sprite = null;
             _uiImage.gameObject.SetActive(false);
             _position = Vector2.zero;
@@ -43,6 +104,7 @@ public class DialogManager : MonoBehaviour
     }
 
     public GameObject _dialogRootGameObject;
+    public GameObject _dialogObjectCenterGameObject;
     public TextMeshProUGUI _characterNameTextMesh;
     public TextMeshProUGUI _dialogTextMesh;
 
@@ -67,6 +129,7 @@ public class DialogManager : MonoBehaviour
     private void Awake()
     {
         _instance = this;
+
         initialize();
     }
 
@@ -107,6 +170,35 @@ public class DialogManager : MonoBehaviour
                 _dialogSpeakTimer = 0f;
 
                 _currentAudioEmitter?.Stop();
+            break;
+            case DialogEventType.ActiveObject:
+                DialogEventData_ActiveObject activeObjectEvent = dialogEventData as DialogEventData_ActiveObject;
+
+                Sprite sprite = ResourceContainerEx.Instance().GetSprite(activeObjectEvent._spritePath);
+                if (sprite == null)
+                {
+                    DebugUtil.assert(false, "Dialog Event ActiveObject : Sprite not found at path {0}", activeObjectEvent._spritePath);
+                    return;
+                }
+
+                activeObject(activeObjectEvent._objectId, sprite, activeObjectEvent._position, activeObjectEvent._flip);
+            break;
+            case DialogEventType.SetSprite:
+                DialogEventData_SetSprite setSpriteEvent = dialogEventData as DialogEventData_SetSprite;
+
+                Sprite newSprite = ResourceContainerEx.Instance().GetSprite(setSpriteEvent._spritePath);
+                if (newSprite == null)
+                {
+                    DebugUtil.assert(false, "Dialog Event SetSprite : Sprite not found at path {0}", setSpriteEvent._spritePath);
+                    return;
+                }
+
+                setObjectSprite(setSpriteEvent._objectId, newSprite, setSpriteEvent._flip);
+            break;
+            case DialogEventType.SetPosition:
+                DialogEventData_SetPosition setPositionEvent = dialogEventData as DialogEventData_SetPosition;
+
+                setObjectPosition(setPositionEvent._objectId, setPositionEvent._position, setPositionEvent._flip);
             break;
             default:
                 DebugUtil.assert(false, "구현되지 않은 Dialog EventType {0}", dialogEventData.getDialogEventType());
@@ -197,20 +289,68 @@ public class DialogManager : MonoBehaviour
     {
         _dialogEntryIndex = dialogData.findDialogEntryIndex(entryKey);
         if (_dialogEntryIndex < 0)
+        {
+            DebugUtil.assert(false, "Dialog Entry Key [{0}] not found in DialogData", entryKey);
             return;
+        }
 
         _currentDialogData = dialogData;
         _dialogEventIndex = 0;
         _isDialogEnd = false;
 
-        foreach (var item in dialogData._dialogObjectList)
-        {
-            DialogObject dialogObject = _dialogObjectPool.dequeue();
-            dialogObject.set(item);
+        _dialogRootGameObject.SetActive(true);
+    }
 
-            _activeObjectList.Add(dialogObject);
+    public void activeObject(int id, Sprite sprite, Vector2 position, bool flip)
+    {
+        DialogObject dialogObject = getActiveObject(id);
+        if (dialogObject == null)
+        {
+            dialogObject = _dialogObjectPool.dequeue();
         }
 
-        _dialogRootGameObject.SetActive(true);
+        dialogObject.active(id, _dialogObjectCenterGameObject.transform, sprite, position, flip);
+        _activeObjectList.Add(dialogObject);
+    }
+
+    public void setObjectSprite(int id, Sprite sprite)
+    {
+        DialogObject dialogObject = getActiveObject(id);
+        if (dialogObject == null)
+            return;
+
+        dialogObject.setSprite(sprite);
+    }
+
+    public void setObjectSprite(int id, Sprite sprite, bool flip)
+    {
+        DialogObject dialogObject = getActiveObject(id);
+        if (dialogObject == null)
+            return;
+
+        dialogObject.setSprite(sprite, flip);
+    }
+
+    public void setObjectPosition(int id, Vector2 position)
+    {
+        DialogObject dialogObject = getActiveObject(id);
+        if (dialogObject == null)
+            return;
+
+        dialogObject.setPosition(position);
+    }
+
+    public void setObjectPosition(int id, Vector2 position, bool flip)
+    {
+        DialogObject dialogObject = getActiveObject(id);
+        if (dialogObject == null)
+            return;
+
+        dialogObject.setPosition(position, flip);
+    }
+
+    public DialogObject getActiveObject(int id)
+    {
+        return _activeObjectList.Find(obj => obj._objectId == id);
     }
 }

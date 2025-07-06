@@ -182,6 +182,7 @@ public class ResourceContainerEx : Singleton<ResourceContainerEx>
 	private ManagedResourceItem<Material>		 		_materialResource = new ManagedResourceItem<Material>();
 	private ManagedResourceItem<StageData>		 		_stageDataResource = new ManagedResourceItem<StageData>();
 	private ManagedResourceItem<TMP_FontAsset>		 	_fontAssetResource = new ManagedResourceItem<TMP_FontAsset>();
+	private ManagedResourceItem<DialogData>		 		_dialogDataResource = new ManagedResourceItem<DialogData>();
 
 	private DataResourceItem<ActionGraphBaseData,ActionGraphLoader>				_actionGraphResource = new DataResourceItem<ActionGraphBaseData,ActionGraphLoader>();
 	private DataResourceItem<AIGraphBaseData,AIGraphLoader>						_aiGraphResource = new DataResourceItem<AIGraphBaseData,AIGraphLoader>();
@@ -207,6 +208,11 @@ public class ResourceContainerEx : Singleton<ResourceContainerEx>
 	public ScriptableObject[] GetScriptableObjects(string fileName)
 	{
 		return _scriptableResource.GetOrLoadResources(fileName, "해당 폴더가 없거나, 폴더 안에 ScriptableObject가 없습니다. 경로를 잘못 쓰지는 않았나요? ");
+	}
+
+	public DialogData GetDialogData(string fileName)
+	{
+		return _dialogDataResource.GetOrLoadResource(fileName);
 	}
 
 	public Sprite GetSprite(string fileName)
@@ -327,6 +333,7 @@ public class ResourceContainerEx : Singleton<ResourceContainerEx>
 		
 		totalMemory += GetManagedResourceMemory<Sprite>(_spriteResource, "Sprite");
 		totalMemory += GetManagedResourceMemory<ScriptableObject>(_scriptableResource, "ScriptableObject");
+		totalMemory += GetManagedResourceMemory<DialogData>(_dialogDataResource, "DialogData");
 		totalMemory += GetManagedResourceMemory<AnimationCustomPreset>(_animationCustomPresetResource, "AnimationCustomPreset");
 		totalMemory += GetManagedResourceMemory<GameObject>(_prefabResource, "Prefab");
 		totalMemory += GetManagedResourceMemory<Material>(_materialResource, "Material");
@@ -347,6 +354,7 @@ public class ResourceContainerEx : Singleton<ResourceContainerEx>
 		
 		long spriteMemory = GetManagedResourceMemory<Sprite>(_spriteResource, "Sprite");
 		long scriptableMemory = GetManagedResourceMemory<ScriptableObject>(_scriptableResource, "ScriptableObject");
+		long dialogMemory = GetManagedResourceMemory<DialogData>(_dialogDataResource, "DialogData");
 		long animationMemory = GetManagedResourceMemory<AnimationCustomPreset>(_animationCustomPresetResource, "AnimationCustomPreset");
 		long prefabMemory = GetManagedResourceMemory<GameObject>(_prefabResource, "Prefab");
 		long materialMemory = GetManagedResourceMemory<Material>(_materialResource, "Material");
@@ -356,6 +364,7 @@ public class ResourceContainerEx : Singleton<ResourceContainerEx>
 		
 		Debug.Log($"Sprite Resources: {FormatBytes(spriteMemory)} ({_spriteResource._singleResourceContainer.Count + _spriteResource._multiResourceContainer.Count} items)");
 		Debug.Log($"ScriptableObject Resources: {FormatBytes(scriptableMemory)} ({_scriptableResource._singleResourceContainer.Count + _scriptableResource._multiResourceContainer.Count} items)");
+		Debug.Log($"DialogData Resources: {FormatBytes(dialogMemory)} ({_dialogDataResource._singleResourceContainer.Count + _dialogDataResource._multiResourceContainer.Count} items)");
 		Debug.Log($"AnimationCustomPreset Resources: {FormatBytes(animationMemory)} ({_animationCustomPresetResource._singleResourceContainer.Count + _animationCustomPresetResource._multiResourceContainer.Count} items)");
 		Debug.Log($"Prefab Resources: {FormatBytes(prefabMemory)} ({_prefabResource._singleResourceContainer.Count + _prefabResource._multiResourceContainer.Count} items)");
 		Debug.Log($"Material Resources: {FormatBytes(materialMemory)} ({_materialResource._singleResourceContainer.Count + _materialResource._multiResourceContainer.Count} items)");

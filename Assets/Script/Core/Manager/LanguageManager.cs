@@ -33,13 +33,12 @@ public class LanguageManager : ManagerBase
         // LanguageInstanceManager 초기화
         LanguageInstanceManager.Instance();
         loadAllLanguage();
+        InitLocalize();
     }
 
     public override void initialize()
     {
         base.initialize();
-
-        InitLocalize();
     }
 
     public void InitLocalize()

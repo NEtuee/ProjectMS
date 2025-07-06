@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Xml;
 using System.Collections.Generic;
 using System.IO;
+using Mono.Cecil;
 
 public enum SequencerGraphEventType
 {
@@ -237,28 +238,8 @@ public class SequencerGraphEvent_ActiveDialog : SequencerGraphEventBase
 
     public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
     {
-        DialogData data = new DialogData();
-        data._textDataName = "dialogdata_test";
-        DialogEventEntryData entryData = new DialogEventEntryData();
-
-        DialogEventData_Dialog eventData1 = new DialogEventData_Dialog();
-        eventData1._dialogIndex = 0;
-        eventData1._nextIndex = 1;
-        DialogEventData_Dialog eventData2 = new DialogEventData_Dialog();
-        eventData2._dialogIndex = 1;
-        eventData2._nextIndex = 2;
-        DialogEventData_Dialog eventData3 = new DialogEventData_Dialog();
-        eventData3._dialogIndex = 2;
-        eventData3._nextIndex = -1;
-
-        entryData._dialogEventList.Add(eventData1);
-        entryData._dialogEventList.Add(eventData2);
-        entryData._dialogEventList.Add(eventData3);
-        entryData._entryKey = "Test";
-
-        data._dialogEventEntryList.Add(entryData);
-
-        DialogManager._instance.activeDialog(data, "Test");
+        DialogData data = ResourceContainerEx.Instance().GetDialogData(_dialogPath);
+        DialogManager._instance.activeDialog(data, _entryKey);
 
         return true;
     }
@@ -274,7 +255,7 @@ public class SequencerGraphEvent_ActiveDialog : SequencerGraphEventBase
 
             if (attrName == "Path")
                 _dialogPath = attrValue;
-            else if (attrName == "Entry")
+            else if (attrName == "EntryKey")
                 _entryKey = attrValue;
         }
     }
