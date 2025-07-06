@@ -29,6 +29,19 @@ public class DialogData : ScriptableObject
         return typeInstance as DialogEventDataBase;
     }
 
+    public void clearAll()
+    {
+        _dialogObjectList.Clear();
+        _dialogEventEntryList.Clear();
+
+#if UNITY_EDITOR
+        _nodeData.Clear();
+        _noteData.Clear();
+        _groupData.Clear();
+        _linkData.Clear();
+#endif
+    }
+
 #if UNITY_EDITOR
     [SerializeReference] public List<NodeData> _nodeData = new List<NodeData>();
     [SerializeReference] public List<NoteData> _noteData = new List<NoteData>();
@@ -55,12 +68,16 @@ public class DialogEventEntryData
 {
     public string _entryKey;
 
-    public int _entryEventIndex = -1;
-    public List<DialogEventDataBase> _dialogEventList = new List<DialogEventDataBase>();
+    [SerializeReference] public List<DialogEventDataBase> _dialogEventList = new List<DialogEventDataBase>();
+
+#if UNITY_EDITOR
+    public string _editorGuidString;
+#endif
 }
 
 public enum DialogEventType
 {
+    Entry,
     Dialog,
     Count,
 }
@@ -72,13 +89,7 @@ public abstract class DialogEventDataBase
     public int _nextIndex = -1;
 
 #if UNITY_EDITOR
-    public string GUID { get { return _editorGuidString; } }
-    private string _editorGuidString;
-
-    public void createNewGUIDForEditor()
-    {
-        _editorGuidString = System.Guid.NewGuid().ToString();
-    }
+    public string _editorGuidString;
 #endif
 
 }
@@ -87,10 +98,6 @@ public abstract class DialogEventDataBase
 public class DialogEventData_Dialog : DialogEventDataBase
 {
     public override DialogEventType getDialogEventType() => DialogEventType.Dialog;
-
-#if UNITY_EDITOR
-    public string _dialogGUID;
-#endif
 
     public int _dialogIndex;
     public string _displayCharacterKey;

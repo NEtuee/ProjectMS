@@ -132,6 +132,15 @@ public class DialogEditorGraphView : GraphView
 
     private DialogData _dialogData;
     private readonly Vector2 kDefaultNodeSize = new Vector2(200f, 100f);
+    
+    // 검색 기능 관련 필드들
+    private TextField _searchField;
+    private Label _searchResultLabel;
+    private Button _prevButton;
+    private Button _nextButton;
+    private List<GameEventNode_Dialog> _searchResults = new List<GameEventNode_Dialog>();
+    private int _currentSearchIndex = -1;
+    private string _lastSearchText = "";
 
     public DialogEditorGraphView(DialogData dialogData)
     {
@@ -147,6 +156,11 @@ public class DialogEditorGraphView : GraphView
                 saveGraph();
                 evt.StopImmediatePropagation();
             }
+            else if ((evt.ctrlKey || evt.commandKey) && evt.keyCode == KeyCode.F)
+            {
+                FocusSearchField();
+                evt.StopImmediatePropagation();
+            }
         });
 
         var grid = new GridBackground();
@@ -154,6 +168,9 @@ public class DialogEditorGraphView : GraphView
         Insert(0, grid);
         
         styleSheets.Add(EditorGUIUtility.Load("GraphViewStyle.uss") as StyleSheet);
+
+        // 검색 UI 구성
+        CreateSearchUI();
 
         loadGraph(dialogData);
     }
@@ -194,6 +211,7 @@ public class DialogEditorGraphView : GraphView
         object typeInstance = Activator.CreateInstance(Type.GetType(nodeTypeName));
 
         GameEventNodeBase gameEventNode = typeInstance as GameEventNodeBase;
+        gameEventNode._dialogData = _dialogData;
         Vector2 worldPosition = contentViewContainer.WorldToLocal(position);
         gameEventNode.SetPosition(new Rect(worldPosition, kDefaultNodeSize));
 
@@ -219,162 +237,527 @@ public class DialogEditorGraphView : GraphView
 
     public void saveGraph()
     {
-        // if(_dialogData == null)
-        // {
-        //     DebugUtil.assert(false, "저장할 대상이 없음");
-        //     return;
-        // }
+        if(_dialogData == null)
+        {
+            Debug.LogError("저장할 대상이 없음");
+            return;
+        }
 
-        // _dialogData._nodeData.Clear();
-        // _dialogData._linkData.Clear();
+        // 기존 데이터 초기화
+        _dialogData.clearAll();
 
-        // Dictionary<string, int> guidToGameEventIndex = new Dictionary<string, int>();
+        // DialogData의 _textDataName 설정
+        _dialogData._textDataName = _dialogData.name;
 
-        // foreach (var node in nodes)
-        // {
-        //     if(node is GameEventEntryNode)
-        //     {
-        //         NodeData nodeData = new NodeData();
-        //         nodeData._dataIndex = -1;
-        //         nodeData._guid = "entry";
-        //         nodeData._position = node.GetPosition().position;
-        //         _dialogData._nodeData.Add(nodeData);
-        //     }
-        //     else if(node is GameEventNodeBase)
-        //     {
-        //         GameEventNodeBase gameEventNode = node as GameEventNodeBase;
-        //         NodeData nodeData = new NodeData();
-        //         nodeData._dataIndex = _dialogData._gameEventBase.Count;
-        //         nodeData._guid = gameEventNode._guid;
-        //         nodeData._position = gameEventNode.GetPosition().position;
-        //         _dialogData._nodeData.Add(nodeData);
+        // GUID to Entry/Event 매핑
+        Dictionary<string, GameEventNode_Entry> guidToEntryNode = new Dictionary<string, GameEventNode_Entry>();
+        Dictionary<string, GameEventNodeBase> guidToEventNode = new Dictionary<string, GameEventNodeBase>();
+        HashSet<string> connectedEventGuids = new HashSet<string>(); // Entry에 연결된 이벤트 노드들
 
-        //         DialogEventDataBase gameEvent = gameEventNode.exportGameEvent();
-        //         _dialogData._gameEventBase.Add(gameEvent);
+        // 노드 데이터 수집
+        foreach (var node in nodes)
+        {
+            if(node is GameEventNode_Entry entryNode)
+            {
+                // Entry 노드 저장
+                NodeData nodeData = new NodeData();
+                nodeData._guid = entryNode._guid;
+                nodeData._position = entryNode.GetPosition().position;
+                _dialogData._nodeData.Add(nodeData);
 
-        //         guidToGameEventIndex.Add(nodeData._guid, _dialogData._gameEventBase.Count - 1);
-        //     }
-        // }
+                guidToEntryNode.Add(entryNode._guid, entryNode);
+            }
+            else if(node is GameEventNodeBase gameEventNode)
+            {
+                guidToEventNode.Add(gameEventNode._guid, gameEventNode);
+            }
+        }
 
-        // foreach (var edge in edges.ToList())
-        // {
-        //     if (edge.input.node is GameEventNodeBase && edge.output.node is GameEventEntryNode)
-        //     {
-        //         GameEventNodeBase inputNode = edge.input.node as GameEventNodeBase;
-        //         GameEventEntryNode outputNode = edge.output.node as GameEventEntryNode;
+        // Entry별로 이벤트 리스트 구성 및 연결된 노드 추적
+        foreach (var entryPair in guidToEntryNode)
+        {
+            var entryNode = entryPair.Value;
+            DialogEventEntryData entryData = entryNode.exportEntryData();
+            
+            // Entry에서 시작하는 이벤트 체인 구축하고 연결된 노드들 수집
+            BuildEventChain(entryNode, entryData, guidToEventNode, connectedEventGuids);
+            
+            _dialogData._dialogEventEntryList.Add(entryData);
+        }
 
-        //         _dialogData._linkData.Add(new DialogData.GameEventLinkData
-        //         {
-        //             _outputGuid = "entry",
-        //             _outputPort = edge.output.portName,
-        //             _inputGuid = inputNode._guid,
-        //             _inputPort = edge.input.portName
-        //         });
+        // 연결된 이벤트 노드들만 NodeData에 추가
+        foreach (var guid in connectedEventGuids)
+        {
+            if (guidToEventNode.ContainsKey(guid))
+            {
+                var gameEventNode = guidToEventNode[guid];
+                NodeData nodeData = new NodeData();
+                nodeData._guid = gameEventNode._guid;
+                nodeData._position = gameEventNode.GetPosition().position;
+                _dialogData._nodeData.Add(nodeData);
+            }
+        }
 
-        //         int entryIndex = guidToGameEventIndex[inputNode._guid];
-        //         _dialogData._entryIndex = entryIndex;
-        //     }
-        //     else if (edge.input.node is GameEventNodeBase && edge.output.node is GameEventNodeBase)
-        //     {
-        //         GameEventNodeBase inputNode = edge.input.node as GameEventNodeBase;
-        //         GameEventNodeBase outputNode = edge.output.node as GameEventNodeBase;
+        // 링크 데이터 저장 (연결된 노드들만)
+        foreach (var edge in edges.ToList())
+        {
+            bool isConnectedLink = false;
+            
+            // Entry 노드가 관련된 링크이거나, 양쪽 모두 연결된 이벤트 노드인 경우만 저장
+            if (edge.output.node is GameEventNode_Entry)
+            {
+                isConnectedLink = true;
+            }
+            else if (edge.output.node is GameEventNodeBase outputNode && edge.input.node is GameEventNodeBase inputNode)
+            {
+                isConnectedLink = connectedEventGuids.Contains(outputNode._guid) && connectedEventGuids.Contains(inputNode._guid);
+            }
+            else if (edge.input.node is GameEventNode_Entry)
+            {
+                isConnectedLink = true;
+            }
 
-        //         _dialogData._linkData.Add(new DialogData.GameEventLinkData
-        //         {
-        //             _outputGuid = outputNode._guid,
-        //             _outputPort = edge.output.portName,
-        //             _inputGuid = inputNode._guid,
-        //             _inputPort = edge.input.portName
-        //         });
-
-        //         int inputNodeIndex = guidToGameEventIndex[inputNode._guid];
-        //         int outputNodeIndex = guidToGameEventIndex[outputNode._guid];
-
-        //         DialogEventDataBase gameEventBase = _dialogData._gameEventBase[outputNodeIndex];
+            if (isConnectedLink)
+            {
+                LinkData linkData = new LinkData();
                 
-        //         if(gameEventBase._nextEventIndex == null)
-        //             gameEventBase._nextEventIndex = new int[0];
+                if (edge.output.node is GameEventNodeBase outputNode)
+                    linkData._outputGuid = outputNode._guid;
+                else if (edge.output.node is GameEventNode_Entry outputEntryNode)
+                    linkData._outputGuid = outputEntryNode._guid;
+                    
+                linkData._outputPort = edge.output.portName;
+                
+                if (edge.input.node is GameEventNodeBase inputNode)
+                    linkData._inputGuid = inputNode._guid;
+                else if (edge.input.node is GameEventNode_Entry inputEntryNode)
+                    linkData._inputGuid = inputEntryNode._guid;
+                    
+                linkData._inputPort = edge.input.portName;
+                
+                _dialogData._linkData.Add(linkData);
+            }
+        }
 
-        //         gameEventBase._nextEventIndex = gameEventBase._nextEventIndex.Append(inputNodeIndex).ToArray();
-        //     }
-        // }
+        EditorUtility.SetDirty(_dialogData);
+        AssetDatabase.SaveAssets();
 
-        // EditorUtility.SetDirty(_dialogData);
-        // AssetDatabase.SaveAssets();
+        // 다이얼로그 텍스트 데이터 저장 (연결된 노드들만)
+        SaveDialogTextData(connectedEventGuids);
 
-        // Debug.Log($"{_dialogData.name} 저장 완료");
+        Debug.Log($"{_dialogData._textDataName} 저장 완료 (연결된 노드만 저장됨)");
+    }
+
+    private void SaveDialogTextData(HashSet<string> connectedEventGuids = null)
+    {
+        if (_dialogData == null || string.IsNullOrEmpty(_dialogData.name))
+        {
+            Debug.LogError("DialogData가 없거나 이름이 없습니다.");
+            return;
+        }
+
+        // 모든 Dialog 이벤트에서 텍스트 데이터 수집
+        StringKeyValueSetData textData = new StringKeyValueSetData();
+
+        foreach (var entryData in _dialogData._dialogEventEntryList)
+        {
+            foreach (var eventData in entryData._dialogEventList)
+            {
+                if (eventData is DialogEventData_Dialog dialogEvent)
+                {
+                    // 연결된 노드만 필터링 (connectedEventGuids가 null이면 모든 노드 포함)
+                    if (connectedEventGuids != null && !connectedEventGuids.Contains(dialogEvent._editorGuidString))
+                        continue;
+
+                    // 해당 Dialog 노드 찾기
+                    GameEventNode_Dialog dialogNode = FindDialogNodeByGuid(dialogEvent._editorGuidString);
+                    if (dialogNode != null && !string.IsNullOrEmpty(dialogNode._dialogText))
+                    {
+                        // GUID를 해시로 변환하여 키로 사용
+                        int key = IOControl.computeHash(dialogEvent._editorGuidString);
+                        
+                        // StringKeyValueData 생성
+                        StringKeyValueData stringData = new StringKeyValueData();
+                        stringData._key = key;
+                        stringData._value = dialogNode._dialogText;
+                        
+                        dialogEvent._dialogIndex = textData._stringData.Count;
+                        textData._stringData.Add(stringData);
+                    }
+                }
+            }
+        }
+
+        // 텍스트 데이터가 있는 경우에만 저장
+        if (textData._stringData.Count > 0)
+        {
+            // DialogData의 이름을 파일명으로 사용
+            string fileName = _dialogData.name;
+            
+            // LanguageInstanceManager를 통해 저장
+            bool success = LanguageInstanceManager.Instance().SaveTextDataToXML(textData, fileName);
+            if (success)
+            {
+                Debug.Log($"다이얼로그 텍스트 데이터 저장 완료: {fileName}.xml");
+            }
+            else
+            {
+                DebugUtil.assert(false, $"다이얼로그 텍스트 데이터 저장 실패: {fileName}.xml");
+            }
+        }
+        else
+        {
+            DebugUtil.assert(false, "저장할 다이얼로그 텍스트가 없습니다.");
+        }
+    }
+
+    private GameEventNode_Dialog FindDialogNodeByGuid(string guid)
+    {
+        foreach (var node in nodes)
+        {
+            if (node is GameEventNode_Dialog dialogNode && dialogNode._guid == guid)
+            {
+                return dialogNode;
+            }
+        }
+        return null;
+    }
+
+    private void BuildEventChain(GameEventNode_Entry entryNode, DialogEventEntryData entryData, Dictionary<string, GameEventNodeBase> guidToEventNode, HashSet<string> connectedEventGuids)
+    {
+        // Entry에서 연결된 첫 번째 이벤트 찾기
+        var firstEventNode = FindConnectedEventNode(entryNode);
+        if (firstEventNode != null)
+        {
+            entryData._dialogEventList.Clear();
+            BuildEventList(firstEventNode, entryData, guidToEventNode, new HashSet<string>(), connectedEventGuids);
+        }
+    }
+
+    private GameEventNodeBase FindConnectedEventNode(Node fromNode)
+    {
+        foreach (var edge in edges)
+        {
+            if (edge.output.node == fromNode && edge.input.node is GameEventNodeBase eventNode)
+            {
+                return eventNode;
+            }
+        }
+        return null;
+    }
+
+    private void BuildEventList(GameEventNodeBase currentNode, DialogEventEntryData entryData, Dictionary<string, GameEventNodeBase> guidToEventNode, HashSet<string> visited, HashSet<string> connectedEventGuids)
+    {
+        if (visited.Contains(currentNode._guid))
+            return; // 순환 참조 방지
+            
+        visited.Add(currentNode._guid);
+        connectedEventGuids.Add(currentNode._guid); // 연결된 노드로 추가
+
+        // 현재 노드의 이벤트 데이터 추가
+        var eventData = currentNode.exportGameEvent();
+        if (eventData != null)
+        {
+            int currentIndex = entryData._dialogEventList.Count;
+            entryData._dialogEventList.Add(eventData);
+
+            // 다음 노드 찾기
+            var nextNode = FindConnectedEventNode(currentNode);
+            if (nextNode != null)
+            {
+                eventData._nextIndex = currentIndex + 1;
+                BuildEventList(nextNode, entryData, guidToEventNode, visited, connectedEventGuids);
+            }
+            else
+            {
+                eventData._nextIndex = -1; // 마지막 노드
+            }
+        }
     }
 
     public void loadGraph(DialogData dialogData)
     {
-        // _dialogData = dialogData;
+        _dialogData = dialogData;
 
-        // if(_dialogData == null)
-        //     return;
+        if(_dialogData == null)
+            return;
 
-        // DeleteElements(graphElements.ToList());
-        // Dictionary<string, Node> guidToNode = new Dictionary<string, Node>();
+        LanguageInstanceManager.Instance().LoadSingleTextData(_dialogData._textDataName);
 
-        // bool hasEntryNode = false;
+        // 기존 요소들 제거
+        DeleteElements(graphElements.ToList());
+        Dictionary<string, Node> guidToNode = new Dictionary<string, Node>();
 
-        // foreach (var nodeData in dialogData._nodeData)
-        // {
-        //     Node node = null;
-        //     if(nodeData._dataIndex == -1 && nodeData._guid == "entry")
-        //     {
-        //         GameEventEntryNode entryNode = new GameEventEntryNode();
-        //         entryNode.SetPosition(new Rect(nodeData._position, kDefaultNodeSize));
+        // Entry 노드들 생성
+        foreach (var entryData in _dialogData._dialogEventEntryList)
+        {
+            GameEventNode_Entry entryNode = new GameEventNode_Entry();
+            entryNode.importEntryData(entryData);
+            entryNode.constructField();
+            entryNode.constructPort();
 
-        //         hasEntryNode = true;
+            // Entry 노드 위치 찾기 (NodeData에서)
+            var nodeData = _dialogData._nodeData.Find(n => n._guid == entryData._editorGuidString);
+            if (nodeData != null)
+            {
+                entryNode.SetPosition(new Rect(nodeData._position, kDefaultNodeSize));
+                entryNode._guid = nodeData._guid;
+            }
+            else
+            {
+                DebugUtil.assert(false, "Node Data not found for entry: " + entryData._entryKey);
+            }
 
-        //         node = entryNode;
-        //     }
-        //     else
-        //     {
-        //         DialogEventDataBase targetEvent = dialogData._gameEventBase[nodeData._dataIndex];
+            AddElement(entryNode);
+            guidToNode[entryNode._guid] = entryNode;
 
-        //         GameEventNodeBase gameEventNode = createNode(targetEvent.getEventType(), nodeData._position);
-        //         gameEventNode._guid = nodeData._guid;
-        //         gameEventNode.importGameEvent(targetEvent);
+            // Entry에 속한 이벤트 노드들 생성
+            for (int i = 0; i < entryData._dialogEventList.Count; i++)
+            {
+                var eventData = entryData._dialogEventList[i];
+                var eventNode = createNode(eventData.getDialogEventType(), Vector2.zero);
+                eventNode.constructField();
+                eventNode.constructPort();
+                eventNode.importGameEvent(eventData);
 
-        //         gameEventNode.constructField();
-        //         gameEventNode.constructPort();
+                // 이벤트 노드 위치 찾기
+                var eventNodeData = _dialogData._nodeData.Find(n => n._guid == eventData._editorGuidString);
+                if (eventNodeData != null)
+                {
+                    eventNode.SetPosition(new Rect(eventNodeData._position, kDefaultNodeSize));
+                    eventNode._guid = eventNodeData._guid;
+                }
+                else
+                {
+                    DebugUtil.assert(false, "Node Data not found for event: " + eventData._editorGuidString);
+                }
 
-        //         node = gameEventNode;
-        //     }
+                AddElement(eventNode);
+                guidToNode[eventNode._guid] = eventNode;
+            }
+        }
 
-        //     AddElement(node);
-        //     guidToNode[nodeData._guid] = node;
-        // }
+        // 링크 복원
+        foreach (var link in _dialogData._linkData)
+        {
+            if (guidToNode.ContainsKey(link._outputGuid) && guidToNode.ContainsKey(link._inputGuid))
+            {
+                Node outputNode = guidToNode[link._outputGuid];
+                Node inputNode = guidToNode[link._inputGuid];
 
-        // foreach (var link in dialogData._linkData)
-        // {
-        //     Node outputNode = guidToNode[link._outputGuid];
-        //     Node inputNode = guidToNode[link._inputGuid];
+                Port outputPort = outputNode.outputContainer.Children()
+                    .OfType<Port>()
+                    .FirstOrDefault(p => p.portName == link._outputPort);
 
-        //     Port outputPort = outputNode.outputContainer.Children()
-        //         .OfType<Port>()
-        //         .FirstOrDefault(p => p.portName == link._outputPort);
+                Port inputPort = inputNode.inputContainer.Children()
+                    .OfType<Port>()
+                    .FirstOrDefault(p => p.portName == link._inputPort);
 
-        //     Port inputPort = inputNode.inputContainer.Children()
-        //         .OfType<Port>()
-        //         .FirstOrDefault(p => p.portName == link._inputPort);
+                if (outputPort != null && inputPort != null)
+                {
+                    Edge edge = outputPort.ConnectTo(inputPort);
+                    AddElement(edge);
+                }
+            }
+        }
 
-        //     if (outputPort != null && inputPort != null)
-        //     {
-        //         Edge edge = outputPort.ConnectTo(inputPort);
-        //         AddElement(edge);
-        //     }
-        // }
+    }
 
-        // if(hasEntryNode == false)
-        // {
-        //     GameEventEntryNode entryNode = new GameEventEntryNode();
-        //     entryNode.SetPosition(new Rect(Vector2.zero, kDefaultNodeSize));
+    private void CreateSearchUI()
+    {
+        // 검색 컨테이너 생성
+        var searchContainer = new VisualElement();
+        searchContainer.style.position = Position.Absolute;
+        searchContainer.style.top = 30; // 상단바 아래로 이동
+        searchContainer.style.left = 10;
+        searchContainer.style.flexDirection = FlexDirection.Row;
+        searchContainer.style.backgroundColor = new StyleColor(new Color(0.2f, 0.2f, 0.2f, 0.9f));
+        searchContainer.style.paddingTop = 5;
+        searchContainer.style.paddingBottom = 5;
+        searchContainer.style.paddingLeft = 5;
+        searchContainer.style.paddingRight = 5;
+        searchContainer.style.borderTopLeftRadius = 5;
+        searchContainer.style.borderTopRightRadius = 5;
+        searchContainer.style.borderBottomLeftRadius = 5;
+        searchContainer.style.borderBottomRightRadius = 5;
 
-        //     AddElement(entryNode);
-        // }
+        // 검색 텍스트 필드
+        _searchField = new TextField();
+        _searchField.style.width = 200;
+        _searchField.style.marginRight = 5;
+        
+        // 텍스트 편집 완료 시에만 검색 실행
+        _searchField.RegisterCallback<FocusOutEvent>(evt => OnSearchTextCompleted(true));
+        _searchField.RegisterCallback<KeyDownEvent>(evt =>
+        {
+            if (evt.keyCode == KeyCode.Return || evt.keyCode == KeyCode.KeypadEnter)
+            {
+                OnSearchTextCompleted();
+                evt.StopPropagation();
+            }
+        });
+        
+        searchContainer.Add(_searchField);
 
+        // 검색 결과 라벨
+        _searchResultLabel = new Label("0/0");
+        _searchResultLabel.style.color = Color.white;
+        _searchResultLabel.style.marginRight = 5;
+        _searchResultLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
+        _searchResultLabel.style.minWidth = 40;
+        searchContainer.Add(_searchResultLabel);
+
+        // 이전 버튼
+        _prevButton = new Button(OnPrevButtonClicked);
+        _prevButton.text = "◀";
+        _prevButton.style.width = 30;
+        _prevButton.style.marginRight = 2;
+        _prevButton.SetEnabled(false);
+        searchContainer.Add(_prevButton);
+
+        // 다음 버튼
+        _nextButton = new Button(OnNextButtonClicked);
+        _nextButton.text = "▶";
+        _nextButton.style.width = 30;
+        _nextButton.SetEnabled(false);
+        searchContainer.Add(_nextButton);
+
+        Add(searchContainer);
+    }
+
+    private void OnSearchTextChanged(ChangeEvent<string> evt)
+    {
+        SearchDialogNodes(evt.newValue);
+    }
+
+    private void OnSearchTextCompleted(bool isFocusOut = false)
+    {
+        string currentSearchText = _searchField.value;
+        
+        // 검색어가 이전과 같고 검색 결과가 있으면 다음 결과로 이동
+        if(isFocusOut == false)
+        {
+            if (!string.IsNullOrEmpty(currentSearchText) && 
+                currentSearchText == _lastSearchText && 
+                _searchResults.Count > 0)
+            {
+                OnNextButtonClicked();
+            }
+            else
+            {
+                // 새로운 검색 수행
+                SearchDialogNodes(currentSearchText);
+            }
+        }
+        else
+        {
+            if (!string.IsNullOrEmpty(currentSearchText) && currentSearchText != _lastSearchText )
+            {
+                SearchDialogNodes(currentSearchText);
+            }
+        }
+    }
+
+    private void SearchDialogNodes(string searchText)
+    {
+        _searchResults.Clear();
+        _currentSearchIndex = -1;
+        _lastSearchText = searchText; // 검색어 기록
+
+        if (string.IsNullOrEmpty(searchText))
+        {
+            UpdateSearchUI();
+            return;
+        }
+
+        // 모든 Dialog 노드에서 검색
+        foreach (var node in nodes)
+        {
+            if (node is GameEventNode_Dialog dialogNode)
+            {
+                if (dialogNode._dialogText.ToLower().Contains(searchText.ToLower()))
+                {
+                    _searchResults.Add(dialogNode);
+                }
+            }
+        }
+
+        if (_searchResults.Count > 0)
+        {
+            _currentSearchIndex = 0;
+            FocusSearchResult();
+        }
+
+        UpdateSearchUI();
+    }
+
+    private void OnPrevButtonClicked()
+    {
+        if (_searchResults.Count == 0) return;
+        
+        _currentSearchIndex--;
+        if (_currentSearchIndex < 0)
+            _currentSearchIndex = _searchResults.Count - 1;
+        
+        FocusSearchResult();
+        UpdateSearchUI();
+    }
+
+    private void OnNextButtonClicked()
+    {
+        if (_searchResults.Count == 0) return;
+        
+        _currentSearchIndex++;
+        if (_currentSearchIndex >= _searchResults.Count)
+            _currentSearchIndex = 0;
+        
+        FocusSearchResult();
+        UpdateSearchUI();
+    }
+
+    private void FocusSearchResult()
+    {
+        if (_currentSearchIndex < 0 || _currentSearchIndex >= _searchResults.Count)
+            return;
+
+        var targetNode = _searchResults[_currentSearchIndex];
+        
+        // 선택 초기화
+        ClearSelection();
+        
+        // 해당 노드 선택
+        AddToSelection(targetNode);
+        
+        // 노드 위치로 뷰 이동
+        var nodePosition = targetNode.GetPosition().center;
+        var currentTransform = viewTransform;
+        currentTransform.position = -nodePosition * currentTransform.scale + contentRect.size * 0.5f;
+        UpdateViewTransform(currentTransform.position, currentTransform.scale);
+    }
+
+    private void UpdateSearchUI()
+    {
+        if (_searchResults.Count == 0)
+        {
+            _searchResultLabel.text = "0/0";
+            _prevButton.SetEnabled(false);
+            _nextButton.SetEnabled(false);
+        }
+        else
+        {
+            _searchResultLabel.text = $"{_currentSearchIndex + 1}/{_searchResults.Count}";
+            _prevButton.SetEnabled(true);
+            _nextButton.SetEnabled(true);
+        }
+    }
+
+    private void FocusSearchField()
+    {
+        if (_searchField != null)
+        {
+            _searchField.Focus();
+            _searchField.SelectAll();
+        }
     }
 }
 
@@ -398,13 +781,21 @@ public abstract class GameEventNodeBase : Node
 {
     public abstract DialogEventType getEventType();
 
+    public DialogData _dialogData;
     public DialogEventDataBase _dialogEvent;
     public string _guid;
 
     public GameEventNodeBase()
     {
         _guid = System.Guid.NewGuid().ToString();
-        _dialogEvent = DialogData.createDialogEvent(getEventType());
+
+        if(getEventType() != DialogEventType.Entry)
+        {
+            _dialogEvent = DialogData.createDialogEvent(getEventType());
+            _dialogEvent._editorGuidString = _guid;
+            _dialogEvent._nextIndex = -1;
+        }
+
         title = getEventType().ToString();
         mainContainer.style.backgroundColor = new StyleColor(new Color(0.2f, 0.2f, 0.2f));
     }
@@ -427,6 +818,16 @@ public abstract class GameEventNodeBase : Node
         RefreshExpandedState();
         RefreshPorts();
     }
+
+    public virtual DialogEventDataBase exportGameEvent()
+    {
+        return _dialogEvent;
+    }
+
+    public virtual void importGameEvent(DialogEventDataBase eventData)
+    {
+        _dialogEvent = eventData;
+    }
 }
 
 public class GameEventNode_Dialog : GameEventNodeBase
@@ -434,17 +835,158 @@ public class GameEventNode_Dialog : GameEventNodeBase
     public override DialogEventType getEventType() => DialogEventType.Dialog;
 
     private VisualElement dialogueListContainer;
+    private TextField characterNameField;
+    private TextField dialogTextField;
+    private FloatField wordPerSecField;
 
+    public string _dialogText = "Enter dialog text here...";
 
     public override void constructField()
     {
-        style.width = 250;
+        style.width = 300;
 
         dialogueListContainer = new VisualElement();
         dialogueListContainer.style.flexDirection = FlexDirection.Column;
         dialogueListContainer.style.paddingBottom = 4;
 
+        // 캐릭터 이름 필드
+        characterNameField = new TextField("Character Name");
+        if (_dialogEvent is DialogEventData_Dialog dialogData)
+        {
+            characterNameField.value = dialogData._displayCharacterKey ?? "";
+            characterNameField.RegisterValueChangedCallback(evt =>
+            {
+                dialogData._displayCharacterKey = evt.newValue;
+            });
+        }
+        characterNameField.style.marginBottom = 4;
+        dialogueListContainer.Add(characterNameField);
+
+        // 텍스트 출력 속도 필드
+        wordPerSecField = new FloatField("Words Per Second");
+        if (_dialogEvent is DialogEventData_Dialog dialogData2)
+        {
+            wordPerSecField.value = dialogData2._wordPerSec;
+            wordPerSecField.RegisterValueChangedCallback(evt =>
+            {
+                dialogData2._wordPerSec = evt.newValue;
+            });
+        }
+        wordPerSecField.style.marginBottom = 4;
+        dialogueListContainer.Add(wordPerSecField);
+
+        // 대화 텍스트 필드 (여러 줄)
+        dialogTextField = new TextField("Dialog Text");
+        dialogTextField.multiline = true;
+        dialogTextField.style.flexGrow = 1;
+        dialogTextField.style.whiteSpace = WhiteSpace.Normal;
+        dialogTextField.value = "";
+        dialogTextField.RegisterValueChangedCallback(evt =>
+        {
+            _dialogText = evt.newValue;
+        });
+        dialogTextField.style.marginBottom = 4;
+        dialogueListContainer.Add(dialogTextField);
+
         mainContainer.Add(dialogueListContainer);
     }
 
+    public override DialogEventDataBase exportGameEvent()
+    {
+        if (_dialogEvent is DialogEventData_Dialog dialogData)
+        {
+            // UI에서 데이터 업데이트
+            dialogData._displayCharacterKey = characterNameField?.value ?? "";
+            dialogData._wordPerSec = wordPerSecField?.value ?? 12f;
+        }
+        return _dialogEvent;
+    }
+
+    public override void importGameEvent(DialogEventDataBase eventData)
+    {
+        if (eventData is DialogEventData_Dialog dialogData)
+        {
+            _dialogEvent = dialogData;
+            _dialogText = LanguageInstanceManager.Instance().GetTextFromFileFromIndex(_dialogData._textDataName, dialogData._dialogIndex);
+
+            // UI 필드들이 이미 생성되어 있다면 값 업데이트
+            if (characterNameField != null)
+            {
+                characterNameField.value = dialogData._displayCharacterKey ?? "";
+            }
+            
+            if (wordPerSecField != null)
+            {
+                wordPerSecField.value = dialogData._wordPerSec;
+            }
+            
+            if (dialogTextField != null)
+            {
+                dialogTextField.value = _dialogText;
+            }
+        }
+    }
+
+}
+
+public class GameEventNode_Entry : GameEventNodeBase
+{
+    public override DialogEventType getEventType() => DialogEventType.Entry;
+    public DialogEventEntryData _entryData;
+
+    public GameEventNode_Entry()
+    {
+        title = "Entry";
+        mainContainer.style.backgroundColor = new StyleColor(Color.green);
+
+        _entryData = new DialogEventEntryData();
+        _entryData._entryKey = "default";
+        _entryData._editorGuidString = _guid;
+    }
+
+    public override void constructPort()
+    {
+        var output = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, null);
+        output.portName = "Next";
+        outputContainer.Add(output);
+
+        RefreshExpandedState();
+        RefreshPorts();
+    }
+
+    public override void constructField()
+    {
+        style.width = 250;
+
+        var entryKeyField = new TextField("Entry Key");
+        entryKeyField.value = _entryData._entryKey;
+        entryKeyField.RegisterValueChangedCallback(evt =>
+        {
+            _entryData._entryKey = evt.newValue;
+            title = _entryData._entryKey;
+        });
+        entryKeyField.style.backgroundColor = new StyleColor(Color.gray);
+        mainContainer.Add(entryKeyField);
+    }
+
+    public override DialogEventDataBase exportGameEvent()
+    {
+        return null; // Entry 노드는 이벤트 데이터를 갖지 않음
+    }
+
+    public override void importGameEvent(DialogEventDataBase eventData)
+    {
+        // Entry 노드는 이벤트 데이터를 갖지 않음
+    }
+
+    public DialogEventEntryData exportEntryData()
+    {
+        return _entryData;
+    }
+
+    public void importEntryData(DialogEventEntryData entryData)
+    {
+        _entryData = entryData;
+        title = _entryData._entryKey;
+    }
 }

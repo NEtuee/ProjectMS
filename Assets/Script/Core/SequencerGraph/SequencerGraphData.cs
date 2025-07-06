@@ -238,9 +238,8 @@ public class SequencerGraphEvent_ActiveDialog : SequencerGraphEventBase
     public override bool Execute(SequencerGraphProcessor processor,float deltaTime)
     {
         DialogData data = new DialogData();
-        data._textDataName = "dialogdata_test.xml";
+        data._textDataName = "dialogdata_test";
         DialogEventEntryData entryData = new DialogEventEntryData();
-        entryData._entryEventIndex = 0;
 
         DialogEventData_Dialog eventData1 = new DialogEventData_Dialog();
         eventData1._dialogIndex = 0;

@@ -13,12 +13,52 @@ MonoBehaviour:
   m_Name: DialogData
   m_EditorClassIdentifier: 
   _dialogObjectList: []
-  _dialogEventEntryList: []
-  _textDataName: 
-  _nodeData: []
+  _dialogEventEntryList:
+  - rid: 502726528799604957
+  _textDataName: DialogData
+  _nodeData:
+  - rid: 502726528799604958
+  - rid: 502726528799604959
   _noteData: []
   _groupData: []
-  _linkData: []
+  _linkData:
+  - rid: 502726528799604960
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 502726528799604957
+      type: {class: DialogEventEntryData, ns: , asm: Assembly-CSharp}
+      data:
+        _entryKey: default
+        _dialogEventList:
+        - rid: 502726528799604961
+        _editorGuidString: d34bbf23-3c89-463b-b3b4-247dad2a0532
+    - rid: 502726528799604958
+      type: {class: NodeData, ns: , asm: Assembly-CSharp}
+      data:
+        _guid: d34bbf23-3c89-463b-b3b4-247dad2a0532
+        _position: {x: 236, y: 134}
+        _dataIndex: 0
+        _groupIndex: -1
+    - rid: 502726528799604959
+      type: {class: NodeData, ns: , asm: Assembly-CSharp}
+      data:
+        _guid: 4a5874fc-3f04-49e5-81d0-b44a03083175
+        _position: {x: 644, y: 114}
+        _dataIndex: 0
+        _groupIndex: -1
+    - rid: 502726528799604960
+      type: {class: LinkData, ns: , asm: Assembly-CSharp}
+      data:
+        _outputGuid: d34bbf23-3c89-463b-b3b4-247dad2a0532
+        _outputPort: Next
+        _inputGuid: 4a5874fc-3f04-49e5-81d0-b44a03083175
+        _inputPort: Prev
+    - rid: 502726528799604961
+      type: {class: DialogEventData_Dialog, ns: , asm: Assembly-CSharp}
+      data:
+        _nextIndex: -1
+        _editorGuidString: 4a5874fc-3f04-49e5-81d0-b44a03083175
+        _dialogIndex: 0
+        _displayCharacterKey: 
+        _wordPerSec: 12
