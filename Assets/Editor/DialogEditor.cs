@@ -36,9 +36,15 @@ public class DialogEditor : EditorWindow
 
         var saveButton = new ToolbarButton(() => saveGraph()) { text = "Save" };
         var loadButton = new ToolbarButton(() => loadGraph(null)) { text = "Load" };
+        var previewToggleButton = new ToolbarToggle() { text = "Preview" };
+        previewToggleButton.RegisterValueChangedCallback(evt => 
+        {
+            _graphView?.TogglePreviewPanel(evt.newValue);
+        });
 
         _toolbar.Add(saveButton);
         _toolbar.Add(loadButton);
+        _toolbar.Add(previewToggleButton);
 
         rootVisualElement.Insert(0,_toolbar);
     }
@@ -95,6 +101,11 @@ public class DialogEditor : EditorWindow
         _graphView.StretchToParentSize();
         rootVisualElement.Insert(0,_graphView);
     }
+
+    public void TogglePreview(bool isVisible)
+    {
+        _graphView?.TogglePreviewPanel(isVisible);
+    }
 }
 
 public class DialogEditorGraphView : GraphView
@@ -142,12 +153,26 @@ public class DialogEditorGraphView : GraphView
     private int _currentSearchIndex = -1;
     private string _lastSearchText = "";
 
+    // 프리뷰 패널 관련 필드들
+    private VisualElement _previewPanel;
+    private DialogPreviewController _previewController;
+    private bool _isPreviewVisible = false;
+
     public DialogEditorGraphView(DialogData dialogData)
     {
         this.AddManipulator(new ContentZoomer());
         this.AddManipulator(new ContentDragger());
         this.AddManipulator(new SelectionDragger());
         this.AddManipulator(new RectangleSelector());
+
+        // 포커스 가능하도록 설정 (키보드 이벤트를 받기 위해)
+        focusable = true;
+
+        // 마우스 클릭 시 포커스 설정
+        this.RegisterCallback<MouseDownEvent>(evt =>
+        {
+            Focus();
+        });
 
         this.RegisterCallback<KeyDownEvent>(evt =>
         {
@@ -161,6 +186,54 @@ public class DialogEditorGraphView : GraphView
                 FocusSearchField();
                 evt.StopImmediatePropagation();
             }
+            // 키보드 십자키로 그래프 뷰 이동
+            else if (evt.keyCode == KeyCode.LeftArrow)
+            {
+                MoveView(Vector3.right * 50f);
+                evt.StopImmediatePropagation();
+            }
+            else if (evt.keyCode == KeyCode.RightArrow)
+            {
+                MoveView(Vector3.left * 50f);
+                evt.StopImmediatePropagation();
+            }
+            else if (evt.keyCode == KeyCode.UpArrow)
+            {
+                MoveView(Vector3.up * 50f);
+                evt.StopImmediatePropagation();
+            }
+            else if (evt.keyCode == KeyCode.DownArrow)
+            {
+                MoveView(Vector3.down * 50f);
+                evt.StopImmediatePropagation();
+            }
+            // Shift + 십자키로 빠른 이동
+            else if (evt.shiftKey && evt.keyCode == KeyCode.LeftArrow)
+            {
+                MoveView(Vector3.right * 200f);
+                evt.StopImmediatePropagation();
+            }
+            else if (evt.shiftKey && evt.keyCode == KeyCode.RightArrow)
+            {
+                MoveView(Vector3.left * 200f);
+                evt.StopImmediatePropagation();
+            }
+            else if (evt.shiftKey && evt.keyCode == KeyCode.UpArrow)
+            {
+                MoveView(Vector3.up * 200f);
+                evt.StopImmediatePropagation();
+            }
+            else if (evt.shiftKey && evt.keyCode == KeyCode.DownArrow)
+            {
+                MoveView(Vector3.down * 200f);
+                evt.StopImmediatePropagation();
+            }
+            // Home 키로 원점으로 이동
+            else if (evt.keyCode == KeyCode.Home)
+            {
+                ResetViewToCenter();
+                evt.StopImmediatePropagation();
+            }
         });
 
         var grid = new GridBackground();
@@ -171,6 +244,9 @@ public class DialogEditorGraphView : GraphView
 
         // 검색 UI 구성
         CreateSearchUI();
+
+        // 프리뷰 컨트롤러 초기화
+        _previewController = new DialogPreviewController();
 
         loadGraph(dialogData);
     }
@@ -561,6 +637,11 @@ public class DialogEditorGraphView : GraphView
             }
         }
 
+        // 프리뷰 패널이 활성화되어 있으면 데이터 업데이트
+        if (_isPreviewVisible && _previewController != null)
+        {
+            _previewController.SetDialogData(_dialogData);
+        }
     }
 
     private void CreateSearchUI()
@@ -759,6 +840,65 @@ public class DialogEditorGraphView : GraphView
             _searchField.SelectAll();
         }
     }
+
+    // 키보드를 통한 뷰 이동 메서드들
+    private void MoveView(Vector3 delta)
+    {
+        var currentTransform = viewTransform;
+        currentTransform.position += delta;
+        UpdateViewTransform(currentTransform.position, currentTransform.scale);
+    }
+
+    private void ResetViewToCenter()
+    {
+        var currentTransform = viewTransform;
+        currentTransform.position = Vector3.zero;
+        currentTransform.scale = Vector3.one;
+        UpdateViewTransform(currentTransform.position, currentTransform.scale);
+    }
+
+    // 프리뷰 패널 토글 기능
+    public void TogglePreviewPanel(bool isVisible)
+    {
+        if (_previewPanel == null && isVisible)
+        {
+            CreatePreviewPanel();
+        }
+        
+        if (_previewPanel != null)
+        {
+            _previewPanel.style.display = isVisible ? DisplayStyle.Flex : DisplayStyle.None;
+            _isPreviewVisible = isVisible;
+            
+            // 그래프 뷰 크기 조정
+            if (isVisible)
+            {
+                style.paddingRight = 420; // 프리뷰 패널 너비 + 여백
+            }
+            else
+            {
+                style.paddingRight = 0;
+            }
+            
+            // 프리뷰 데이터 업데이트
+            if (isVisible && _dialogData != null)
+            {
+                _previewController.SetDialogData(_dialogData);
+                
+                // Static Data 로딩 상태 확인
+                if (!_previewController.IsStaticDataLoaded())
+                {
+                    Debug.Log("Dialog Preview: Static Data will be loaded when preview starts");
+                }
+            }
+        }
+    }
+
+    private void CreatePreviewPanel()
+    {
+        _previewPanel = _previewController.CreatePreviewPanel();
+        Add(_previewPanel);
+    }
 }
 
 public class GameEventEntryNode : Node
@@ -829,482 +969,3 @@ public abstract class GameEventNodeBase : Node
         _dialogEvent = eventData;
     }
 }
-
-public class GameEventNode_Dialog : GameEventNodeBase
-{
-    public override DialogEventType getEventType() => DialogEventType.Dialog;
-
-    private VisualElement dialogueListContainer;
-    private TextField characterNameField;
-    private TextField dialogTextField;
-    private FloatField wordPerSecField;
-
-    public string _dialogText = "Enter dialog text here...";
-
-    public override void constructField()
-    {
-        style.width = 300;
-
-        dialogueListContainer = new VisualElement();
-        dialogueListContainer.style.flexDirection = FlexDirection.Column;
-        dialogueListContainer.style.paddingBottom = 4;
-
-        // 캐릭터 이름 필드
-        characterNameField = new TextField("Character Name");
-        if (_dialogEvent is DialogEventData_Dialog dialogData)
-        {
-            characterNameField.value = dialogData._displayCharacterKey ?? "";
-            characterNameField.RegisterValueChangedCallback(evt =>
-            {
-                dialogData._displayCharacterKey = evt.newValue;
-            });
-        }
-        characterNameField.style.marginBottom = 4;
-        dialogueListContainer.Add(characterNameField);
-
-        // 텍스트 출력 속도 필드
-        wordPerSecField = new FloatField("Words Per Second");
-        if (_dialogEvent is DialogEventData_Dialog dialogData2)
-        {
-            wordPerSecField.value = dialogData2._wordPerSec;
-            wordPerSecField.RegisterValueChangedCallback(evt =>
-            {
-                dialogData2._wordPerSec = evt.newValue;
-            });
-        }
-        wordPerSecField.style.marginBottom = 4;
-        dialogueListContainer.Add(wordPerSecField);
-
-        // 대화 텍스트 필드 (여러 줄)
-        dialogTextField = new TextField("Dialog Text");
-        dialogTextField.multiline = true;
-        dialogTextField.style.flexGrow = 1;
-        dialogTextField.style.whiteSpace = WhiteSpace.Normal;
-        dialogTextField.value = "";
-        dialogTextField.RegisterValueChangedCallback(evt =>
-        {
-            _dialogText = evt.newValue;
-        });
-        dialogTextField.style.marginBottom = 4;
-        dialogueListContainer.Add(dialogTextField);
-
-        mainContainer.Add(dialogueListContainer);
-    }
-
-    public override DialogEventDataBase exportGameEvent()
-    {
-        if (_dialogEvent is DialogEventData_Dialog dialogData)
-        {
-            // UI에서 데이터 업데이트
-            dialogData._displayCharacterKey = characterNameField?.value ?? "";
-            dialogData._wordPerSec = wordPerSecField?.value ?? 12f;
-        }
-        return _dialogEvent;
-    }
-
-    public override void importGameEvent(DialogEventDataBase eventData)
-    {
-        if (eventData is DialogEventData_Dialog dialogData)
-        {
-            _dialogEvent = dialogData;
-            _dialogText = LanguageInstanceManager.Instance().GetTextFromFileFromIndex(_dialogData._textDataName, dialogData._dialogIndex);
-
-            // UI 필드들이 이미 생성되어 있다면 값 업데이트
-            if (characterNameField != null)
-            {
-                characterNameField.value = dialogData._displayCharacterKey ?? "";
-            }
-            
-            if (wordPerSecField != null)
-            {
-                wordPerSecField.value = dialogData._wordPerSec;
-            }
-            
-            if (dialogTextField != null)
-            {
-                dialogTextField.value = _dialogText;
-            }
-        }
-    }
-
-}
-
-public class GameEventNode_Entry : GameEventNodeBase
-{
-    public override DialogEventType getEventType() => DialogEventType.Entry;
-    public DialogEventEntryData _entryData;
-
-    public GameEventNode_Entry()
-    {
-        title = "Entry";
-        mainContainer.style.backgroundColor = new StyleColor(Color.green);
-
-        _entryData = new DialogEventEntryData();
-        _entryData._entryKey = "default";
-        _entryData._editorGuidString = _guid;
-    }
-
-    public override void constructPort()
-    {
-        var output = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, null);
-        output.portName = "Next";
-        outputContainer.Add(output);
-
-        RefreshExpandedState();
-        RefreshPorts();
-    }
-
-    public override void constructField()
-    {
-        style.width = 250;
-
-        var entryKeyField = new TextField("Entry Key");
-        entryKeyField.value = _entryData._entryKey;
-        entryKeyField.RegisterValueChangedCallback(evt =>
-        {
-            _entryData._entryKey = evt.newValue;
-            title = _entryData._entryKey;
-        });
-        entryKeyField.style.backgroundColor = new StyleColor(Color.gray);
-        mainContainer.Add(entryKeyField);
-    }
-
-    public override DialogEventDataBase exportGameEvent()
-    {
-        return null; // Entry 노드는 이벤트 데이터를 갖지 않음
-    }
-
-    public override void importGameEvent(DialogEventDataBase eventData)
-    {
-        // Entry 노드는 이벤트 데이터를 갖지 않음
-    }
-
-    public DialogEventEntryData exportEntryData()
-    {
-        return _entryData;
-    }
-
-    public void importEntryData(DialogEventEntryData entryData)
-    {
-        _entryData = entryData;
-        title = _entryData._entryKey;
-    }
-}
-
-public class GameEventNode_ActiveObject : GameEventNodeBase
-{
-    public override DialogEventType getEventType() => DialogEventType.ActiveObject;
-
-    private VisualElement activeObjectContainer;
-    private TextField objectIdField;
-    private TextField spritePathField;
-    private Vector2Field positionField;
-    private Toggle flipToggle;
-
-    public override void constructField()
-    {
-        style.width = 300;
-
-        activeObjectContainer = new VisualElement();
-        activeObjectContainer.style.flexDirection = FlexDirection.Column;
-        activeObjectContainer.style.paddingBottom = 4;
-
-        // 오브젝트 ID 필드 (에디터에서는 문자열로 입력)
-        objectIdField = new TextField("Object ID");
-        if (_dialogEvent is DialogEventData_ActiveObject activeObjectData)
-        {
-            objectIdField.value = activeObjectData._objectIdString ?? "";
-            objectIdField.RegisterValueChangedCallback(evt =>
-            {
-                activeObjectData._objectIdString = evt.newValue;
-                // 문자열을 해시로 변환하여 _objectId에 저장
-                activeObjectData._objectId = IOControl.computeHash(evt.newValue);
-            });
-        }
-        objectIdField.style.marginBottom = 4;
-        activeObjectContainer.Add(objectIdField);
-
-        // 스프라이트 경로 필드
-        spritePathField = new TextField("Sprite Path");
-        if (_dialogEvent is DialogEventData_ActiveObject activeObjectData2)
-        {
-            spritePathField.value = activeObjectData2._spritePath ?? "";
-            spritePathField.RegisterValueChangedCallback(evt =>
-            {
-                activeObjectData2._spritePath = evt.newValue;
-            });
-        }
-        spritePathField.style.marginBottom = 4;
-        activeObjectContainer.Add(spritePathField);
-
-        // 위치 필드
-        positionField = new Vector2Field("Position");
-        if (_dialogEvent is DialogEventData_ActiveObject activeObjectData3)
-        {
-            positionField.value = activeObjectData3._position;
-            positionField.RegisterValueChangedCallback(evt =>
-            {
-                activeObjectData3._position = evt.newValue;
-            });
-        }
-        positionField.style.marginBottom = 4;
-        activeObjectContainer.Add(positionField);
-
-        // 플립 토글
-        flipToggle = new Toggle("Flip");
-        if (_dialogEvent is DialogEventData_ActiveObject activeObjectData4)
-        {
-            flipToggle.value = activeObjectData4._flip;
-            flipToggle.RegisterValueChangedCallback(evt =>
-            {
-                activeObjectData4._flip = evt.newValue;
-            });
-        }
-        flipToggle.style.marginBottom = 4;
-        activeObjectContainer.Add(flipToggle);
-
-        mainContainer.Add(activeObjectContainer);
-    }
-
-    public override DialogEventDataBase exportGameEvent()
-    {
-        if (_dialogEvent is DialogEventData_ActiveObject activeObjectData)
-        {
-            // UI에서 데이터 업데이트
-            activeObjectData._objectIdString = objectIdField?.value ?? "";
-            activeObjectData._objectId = IOControl.computeHash(activeObjectData._objectIdString);
-            activeObjectData._spritePath = spritePathField?.value ?? "";
-            activeObjectData._position = positionField?.value ?? Vector2.zero;
-            activeObjectData._flip = flipToggle?.value ?? false;
-        }
-        return _dialogEvent;
-    }
-
-    public override void importGameEvent(DialogEventDataBase eventData)
-    {
-        if (eventData is DialogEventData_ActiveObject activeObjectData)
-        {
-            _dialogEvent = activeObjectData;
-            
-            // UI 필드들이 이미 생성되어 있다면 값 업데이트
-            if (objectIdField != null)
-            {
-                objectIdField.value = activeObjectData._objectIdString ?? "";
-            }
-            
-            if (spritePathField != null)
-            {
-                spritePathField.value = activeObjectData._spritePath ?? "";
-            }
-            
-            if (positionField != null)
-            {
-                positionField.value = activeObjectData._position;
-            }
-            
-            if (flipToggle != null)
-            {
-                flipToggle.value = activeObjectData._flip;
-            }
-        }
-    }
-}
-
-public class GameEventNode_SetSprite : GameEventNodeBase
-{
-    public override DialogEventType getEventType() => DialogEventType.SetSprite;
-
-    private VisualElement setSpriteContainer;
-    private TextField objectIdField;
-    private TextField spritePathField;
-    private Toggle flipToggle;
-
-    public override void constructField()
-    {
-        style.width = 300;
-
-        setSpriteContainer = new VisualElement();
-        setSpriteContainer.style.flexDirection = FlexDirection.Column;
-        setSpriteContainer.style.paddingBottom = 4;
-
-        // 오브젝트 ID 필드 (에디터에서는 문자열로 입력)
-        objectIdField = new TextField("Object ID");
-        if (_dialogEvent is DialogEventData_SetSprite setSpriteData)
-        {
-            objectIdField.value = setSpriteData._objectIdString ?? "";
-            objectIdField.RegisterValueChangedCallback(evt =>
-            {
-                setSpriteData._objectIdString = evt.newValue;
-                // 문자열을 해시로 변환하여 _objectId에 저장
-                setSpriteData._objectId = IOControl.computeHash(evt.newValue);
-            });
-        }
-        objectIdField.style.marginBottom = 4;
-        setSpriteContainer.Add(objectIdField);
-
-        // 스프라이트 경로 필드
-        spritePathField = new TextField("Sprite Path");
-        if (_dialogEvent is DialogEventData_SetSprite setSpriteData2)
-        {
-            spritePathField.value = setSpriteData2._spritePath ?? "";
-            spritePathField.RegisterValueChangedCallback(evt =>
-            {
-                setSpriteData2._spritePath = evt.newValue;
-            });
-        }
-        spritePathField.style.marginBottom = 4;
-        setSpriteContainer.Add(spritePathField);
-
-        // Flip 토글 필드
-        flipToggle = new Toggle("Flip");
-        if (_dialogEvent is DialogEventData_SetSprite setSpriteData3)
-        {
-            flipToggle.value = setSpriteData3._flip;
-            flipToggle.RegisterValueChangedCallback(evt =>
-            {
-                setSpriteData3._flip = evt.newValue;
-            });
-        }
-        flipToggle.style.marginBottom = 4;
-        setSpriteContainer.Add(flipToggle);
-
-        mainContainer.Add(setSpriteContainer);
-    }
-
-    public override DialogEventDataBase exportGameEvent()
-    {
-        if (_dialogEvent is DialogEventData_SetSprite setSpriteData)
-        {
-            // UI에서 데이터 업데이트
-            setSpriteData._objectIdString = objectIdField?.value ?? "";
-            setSpriteData._objectId = IOControl.computeHash(setSpriteData._objectIdString);
-            setSpriteData._spritePath = spritePathField?.value ?? "";
-            setSpriteData._flip = flipToggle?.value ?? false;
-        }
-        return _dialogEvent;
-    }
-
-    public override void importGameEvent(DialogEventDataBase eventData)
-    {
-        if (eventData is DialogEventData_SetSprite setSpriteData)
-        {
-            _dialogEvent = setSpriteData;
-            
-            // UI 필드들이 이미 생성되어 있다면 값 업데이트
-            if (objectIdField != null)
-            {
-                objectIdField.value = setSpriteData._objectIdString ?? "";
-            }
-            
-            if (spritePathField != null)
-            {
-                spritePathField.value = setSpriteData._spritePath ?? "";
-            }
-            
-            if (flipToggle != null)
-            {
-                flipToggle.value = setSpriteData._flip;
-            }
-        }
-    }
-}
-
-public class GameEventNode_SetPosition : GameEventNodeBase
-{
-    public override DialogEventType getEventType() => DialogEventType.SetPosition;
-
-    private VisualElement setPositionContainer;
-    private TextField objectIdField;
-    private Vector2Field positionField;
-    private Toggle flipToggle;
-
-    public override void constructField()
-    {
-        style.width = 300;
-
-        setPositionContainer = new VisualElement();
-        setPositionContainer.style.flexDirection = FlexDirection.Column;
-        setPositionContainer.style.paddingBottom = 4;
-
-        // 오브젝트 ID 필드 (에디터에서는 문자열로 입력)
-        objectIdField = new TextField("Object ID");
-        if (_dialogEvent is DialogEventData_SetPosition setPositionData)
-        {
-            objectIdField.value = setPositionData._objectIdString ?? "";
-            objectIdField.RegisterValueChangedCallback(evt =>
-            {
-                setPositionData._objectIdString = evt.newValue;
-                // 문자열을 해시로 변환하여 _objectId에 저장
-                setPositionData._objectId = IOControl.computeHash(evt.newValue);
-            });
-        }
-        objectIdField.style.marginBottom = 4;
-        setPositionContainer.Add(objectIdField);
-
-        // 위치 필드
-        positionField = new Vector2Field("Position");
-        if (_dialogEvent is DialogEventData_SetPosition setPositionData2)
-        {
-            positionField.value = setPositionData2._position;
-            positionField.RegisterValueChangedCallback(evt =>
-            {
-                setPositionData2._position = evt.newValue;
-            });
-        }
-        positionField.style.marginBottom = 4;
-        setPositionContainer.Add(positionField);
-
-        // Flip 토글 필드
-        flipToggle = new Toggle("Flip");
-        if (_dialogEvent is DialogEventData_SetPosition setPositionData3)
-        {
-            flipToggle.value = setPositionData3._flip;
-            flipToggle.RegisterValueChangedCallback(evt =>
-            {
-                setPositionData3._flip = evt.newValue;
-            });
-        }
-        flipToggle.style.marginBottom = 4;
-        setPositionContainer.Add(flipToggle);
-
-        mainContainer.Add(setPositionContainer);
-    }
-
-    public override DialogEventDataBase exportGameEvent()
-    {
-        if (_dialogEvent is DialogEventData_SetPosition setPositionData)
-        {
-            // UI에서 데이터 업데이트
-            setPositionData._objectIdString = objectIdField?.value ?? "";
-            setPositionData._objectId = IOControl.computeHash(setPositionData._objectIdString);
-            setPositionData._position = positionField?.value ?? Vector2.zero;
-            setPositionData._flip = flipToggle?.value ?? false;
-        }
-        return _dialogEvent;
-    }
-
-    public override void importGameEvent(DialogEventDataBase eventData)
-    {
-        if (eventData is DialogEventData_SetPosition setPositionData)
-        {
-            _dialogEvent = setPositionData;
-            
-            // UI 필드들이 이미 생성되어 있다면 값 업데이트
-            if (objectIdField != null)
-            {
-                objectIdField.value = setPositionData._objectIdString ?? "";
-            }
-            
-            if (positionField != null)
-            {
-                positionField.value = setPositionData._position;
-            }
-            
-            if (flipToggle != null)
-            {
-                flipToggle.value = setPositionData._flip;
-            }
-        }
-    }
-}
-
