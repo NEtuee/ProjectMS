@@ -7,9 +7,11 @@ using UnityEditor.UIElements;
 
 public class DialogPreviewController
 {
-    // 인게임 해상도 비율 (1600x1200)
-    private readonly float kGameAspectRatio = 1600f / 1200f;
-    private readonly Vector2 kPreviewSize = new Vector2(400f, 300f); // 프리뷰 패널 크기 (게임 해상도의 1/4)
+    // 프리뷰 해상도 (4:3 비율, 800x600)
+    private readonly Vector2 kPreviewSize = new Vector2(800f, 600f);
+    private readonly Vector2 kDialogBoxSize = new Vector2(800f, 143f);
+    private readonly float kSpriteScale = 0.21f; // DialogManager의 kDefaultScale과 동일
+    private readonly float kControlPanelHeight = 85f; // 컨트롤 패널의 고정 높이
     
     private VisualElement _previewContainer;
     private VisualElement _gameViewContainer;
@@ -26,25 +28,15 @@ public class DialogPreviewController
     
     // 프리뷰 컨트롤 요소들
     private DropdownField _entryDropdown;
-    private Button _playButton;
-    private Button _pauseButton;
     private Button _resetButton;
     private Button _nextButton;
+    private Button _stepButton;
     private Slider _speedSlider;
     
     // 시뮬레이션 상태
     private DialogData _currentDialogData;
     private DialogEventEntryData _currentEntry;
     private int _currentEventIndex = 0;
-    private bool _isPlaying = false;
-    private bool _isPaused = false;
-    private float _playSpeed = 1.0f;
-    
-    // 텍스트 타이핑 애니메이션
-    private string _currentFullText = "";
-    private int _currentVisibleChars = 0;
-    private double _lastTime = 0;
-    private float _wordsPerSecond = 12f;
     
     // Static Data 로딩 상태
     private bool _isStaticDataLoaded = false;
@@ -54,12 +46,14 @@ public class DialogPreviewController
     {
         _previewContainer = new VisualElement();
         _previewContainer.style.width = kPreviewSize.x;
-        _previewContainer.style.height = Length.Percent(100);
+        _previewContainer.style.height = kPreviewSize.y + kControlPanelHeight; // 컨트롤 패널 높이 포함
         _previewContainer.style.backgroundColor = new StyleColor(new Color(0.1f, 0.1f, 0.1f, 1f));
         _previewContainer.style.borderLeftWidth = 2;
         _previewContainer.style.borderLeftColor = new StyleColor(Color.gray);
         _previewContainer.style.flexDirection = FlexDirection.Column;
-        _previewContainer.style.marginTop = 25; // 툴바 높이만큼 여백 추가
+        _previewContainer.style.position = Position.Absolute;
+        _previewContainer.style.left = 0;
+        _previewContainer.style.top = 20;
 
         CreateControlPanel();
         CreateGameView();
@@ -80,6 +74,8 @@ public class DialogPreviewController
         controlPanel.style.paddingRight = 5;
         controlPanel.style.borderBottomWidth = 1;
         controlPanel.style.borderBottomColor = new StyleColor(Color.gray);
+        controlPanel.style.height = kControlPanelHeight;
+        controlPanel.style.width = kPreviewSize.x;
 
         // Entry 선택 드롭다운
         _entryDropdown = new DropdownField("Entry:");
@@ -92,33 +88,21 @@ public class DialogPreviewController
         buttonContainer.style.flexDirection = FlexDirection.Row;
         buttonContainer.style.marginBottom = 5;
 
-        _playButton = new Button(OnPlayClicked) { text = "▶" };
-        _playButton.style.width = 30;
-        _playButton.style.marginRight = 2;
-        buttonContainer.Add(_playButton);
-
-        _pauseButton = new Button(OnPauseClicked) { text = "⏸" };
-        _pauseButton.style.width = 30;
-        _pauseButton.style.marginRight = 2;
-        _pauseButton.SetEnabled(false);
-        buttonContainer.Add(_pauseButton);
-
         _resetButton = new Button(OnResetClicked) { text = "⏹" };
         _resetButton.style.width = 30;
         _resetButton.style.marginRight = 5;
         buttonContainer.Add(_resetButton);
 
-        _nextButton = new Button(OnNextClicked) { text = "Next" };
-        _nextButton.style.flexGrow = 1;
+        _nextButton = new Button(OnNextDialogClicked) { text = "Next" };
+        _nextButton.style.width = 50;
+        _nextButton.style.marginRight = 2;
         buttonContainer.Add(_nextButton);
 
-        controlPanel.Add(buttonContainer);
+        _stepButton = new Button(OnNextClicked) { text = "Step" };
+        _stepButton.style.flexGrow = 1;
+        buttonContainer.Add(_stepButton);
 
-        // 속도 조절 슬라이더
-        _speedSlider = new Slider("Speed:", 0.1f, 3.0f);
-        _speedSlider.value = 1.0f;
-        _speedSlider.RegisterValueChangedCallback(evt => _playSpeed = evt.newValue);
-        controlPanel.Add(_speedSlider);
+        controlPanel.Add(buttonContainer);
 
         // 상태 표시 라벨
         _statusLabel = new Label("Initializing...");
@@ -133,25 +117,35 @@ public class DialogPreviewController
 
     private void CreateGameView()
     {
+        // 게임 뷰 높이 = 전체 높이 - 컨트롤 패널 높이
+        float gameViewHeight = kPreviewSize.y;// - kControlPanelHeight;
+        
         _gameViewContainer = new VisualElement();
-        _gameViewContainer.style.flexGrow = 1;
+        _gameViewContainer.style.width = kPreviewSize.x;
+        _gameViewContainer.style.height = gameViewHeight;
         _gameViewContainer.style.backgroundColor = new StyleColor(new Color(0.05f, 0.05f, 0.1f, 1f));
         _gameViewContainer.style.position = Position.Relative;
-
-        // 캐릭터 스프라이트 컨테이너 (게임 화면 전체)
+        // 컨트롤 패널 높이만큼 아래로 이동하여 가려지지 않도록 함
+        _gameViewContainer.style.top = 0; // Relative position이므로 자동으로 컨트롤 패널 아래에 배치됨
+        
+        // 캐릭터 스프라이트 컨테이너 (게임 화면에서 대화창 제외한 영역)
+        float characterAreaHeight = gameViewHeight - kDialogBoxSize.y;
+        
         _characterContainer = new VisualElement();
         _characterContainer.style.position = Position.Absolute;
-        _characterContainer.style.width = Length.Percent(100);
-        _characterContainer.style.height = Length.Percent(100);
+        _characterContainer.style.width = kPreviewSize.x;
+        _characterContainer.style.height = characterAreaHeight;
+        _characterContainer.style.top = 0;
+        _characterContainer.style.left = 0;
         _gameViewContainer.Add(_characterContainer);
 
-        // 대화 UI 컨테이너 (하단에 고정)
+        // 대화 UI 컨테이너 (하단에 고정, 800x143)
         _dialogUIContainer = new VisualElement();
         _dialogUIContainer.style.position = Position.Absolute;
         _dialogUIContainer.style.bottom = 0;
         _dialogUIContainer.style.left = 0;
-        _dialogUIContainer.style.right = 0;
-        _dialogUIContainer.style.height = 120; // 대화창 높이
+        _dialogUIContainer.style.width = kDialogBoxSize.x;
+        _dialogUIContainer.style.height = kDialogBoxSize.y;
         
         CreateDialogUI();
         _gameViewContainer.Add(_dialogUIContainer);
@@ -161,7 +155,7 @@ public class DialogPreviewController
 
     private void CreateDialogUI()
     {
-        // 대화창 배경
+        // 대화창 배경 (800x143 크기)
         _dialogBox = new VisualElement();
         _dialogBox.style.backgroundColor = new StyleColor(new Color(0f, 0f, 0f, 0.8f));
         _dialogBox.style.borderTopWidth = 2;
@@ -170,8 +164,11 @@ public class DialogPreviewController
         _dialogBox.style.paddingBottom = 10;
         _dialogBox.style.paddingLeft = 15;
         _dialogBox.style.paddingRight = 15;
-        _dialogBox.style.width = Length.Percent(100);
-        _dialogBox.style.height = Length.Percent(100);
+        _dialogBox.style.width = kDialogBoxSize.x;
+        _dialogBox.style.height = kDialogBoxSize.y;
+        _dialogBox.style.position = Position.Absolute;
+        _dialogBox.style.bottom = 0;
+        _dialogBox.style.left = 0;
 
         // 캐릭터 이름
         _characterNameLabel = new Label("");
@@ -179,6 +176,7 @@ public class DialogPreviewController
         _characterNameLabel.style.fontSize = 14;
         _characterNameLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
         _characterNameLabel.style.marginBottom = 5;
+        _characterNameLabel.style.height = 20;
         _dialogBox.Add(_characterNameLabel);
 
         // 대화 텍스트
@@ -187,6 +185,7 @@ public class DialogPreviewController
         _dialogTextLabel.style.fontSize = 12;
         _dialogTextLabel.style.whiteSpace = WhiteSpace.Normal;
         _dialogTextLabel.style.flexGrow = 1;
+        _dialogTextLabel.style.maxHeight = kDialogBoxSize.y - 50; // 여백 고려
         _dialogBox.Add(_dialogTextLabel);
 
         _dialogUIContainer.Add(_dialogBox);
@@ -231,38 +230,6 @@ public class DialogPreviewController
         UpdateButtonStates();
     }
 
-    private void OnPlayClicked()
-    {
-        if (_currentEntry == null)
-            return;
-
-        // Static Data가 로드되지 않았으면 로드 후 재시도
-        if (!_isStaticDataLoaded)
-        {
-            UpdateStatusLabel("Loading Static Data...");
-            EditorApplication.delayCall += () =>
-            {
-                LoadStaticData();
-                // 로딩 완료 후 다시 시도
-                EditorApplication.delayCall += OnPlayClicked;
-            };
-            return;
-        }
-
-        _isPlaying = true;
-        _isPaused = false;
-        _playButton.SetEnabled(false);
-        _pauseButton.SetEnabled(true);
-        
-        StartDialogSimulation();
-    }
-
-    private void OnPauseClicked()
-    {
-        _isPaused = !_isPaused;
-        _pauseButton.text = _isPaused ? "▶" : "⏸";
-    }
-
     private void OnResetClicked()
     {
         ResetPreview();
@@ -288,26 +255,68 @@ public class DialogPreviewController
             ExecuteDialogEvent(_currentEntry._dialogEventList[_currentEventIndex]);
             _currentEventIndex++;
             
+            // 버튼 상태 업데이트
+            UpdateButtonStates();
+            
             if (_currentEventIndex >= _currentEntry._dialogEventList.Count)
             {
-                _isPlaying = false;
-                _playButton.SetEnabled(true);
-                _pauseButton.SetEnabled(false);
+                // 완료됨 - 더 이상 할 일 없음
             }
+        }
+    }
+
+    private void OnNextDialogClicked()
+    {
+        // Static Data가 로드되지 않았으면 먼저 로드
+        if (!_isStaticDataLoaded)
+        {
+            UpdateStatusLabel("Loading Static Data...");
+            EditorApplication.delayCall += () =>
+            {
+                LoadStaticData();
+                // 로딩 완료 후 다시 시도
+                EditorApplication.delayCall += OnNextDialogClicked;
+            };
+            return;
+        }
+
+        if (_currentEntry != null && _currentEventIndex < _currentEntry._dialogEventList.Count)
+        {
+            ExecuteToNextDialog();
+        }
+    }
+
+    private void ExecuteToNextDialog()
+    {
+        bool foundDialog = false;
+        
+        // 현재 이벤트부터 시작하여 다음 Dialog 이벤트까지 실행
+        while (_currentEventIndex < _currentEntry._dialogEventList.Count && !foundDialog)
+        {
+            var eventData = _currentEntry._dialogEventList[_currentEventIndex];
+            ExecuteDialogEvent(eventData);
+            _currentEventIndex++;
+            
+            // Dialog 이벤트를 찾았으면 중단
+            if (eventData.getDialogEventType() == DialogEventType.Dialog)
+            {
+                foundDialog = true;
+            }
+        }
+        
+        // 버튼 상태 업데이트
+        UpdateButtonStates();
+        
+        // 모든 이벤트가 완료되었으면 자동으로 멈춤
+        if (_currentEventIndex >= _currentEntry._dialogEventList.Count)
+        {
+            // 더 이상 진행할 이벤트가 없음
         }
     }
 
     private void ResetPreview()
     {
-        _isPlaying = false;
-        _isPaused = false;
         _currentEventIndex = 0;
-        _currentVisibleChars = 0;
-        _lastTime = EditorApplication.timeSinceStartup;
-        
-        _playButton.SetEnabled(true);
-        _pauseButton.SetEnabled(false);
-        _pauseButton.text = "⏸";
         
         // UI 초기화
         _characterNameLabel.text = "";
@@ -316,6 +325,9 @@ public class DialogPreviewController
         
         // 캐릭터 스프라이트 제거
         ClearCharacterSprites();
+        
+        // 버튼 상태 업데이트
+        UpdateButtonStates();
     }
 
     private void StartDialogSimulation()
@@ -329,7 +341,7 @@ public class DialogPreviewController
 
     private void ExecuteNextEvent()
     {
-        if (_isPaused || !_isPlaying || _currentEntry == null || _currentEventIndex >= _currentEntry._dialogEventList.Count)
+        if (_currentEntry == null || _currentEventIndex >= _currentEntry._dialogEventList.Count)
             return;
 
         var eventData = _currentEntry._dialogEventList[_currentEventIndex];
@@ -345,9 +357,7 @@ public class DialogPreviewController
         else if (_currentEventIndex >= _currentEntry._dialogEventList.Count)
         {
             // 시뮬레이션 완료
-            _isPlaying = false;
-            _playButton.SetEnabled(true);
-            _pauseButton.SetEnabled(false);
+            UpdateButtonStates();
         }
     }
 
@@ -403,66 +413,22 @@ public class DialogPreviewController
         // 텍스트 데이터 가져오기
         try
         {
-            if (LanguageManager._instance != null)
+            if (LanguageInstanceManager.Instance() != null)
             {
-                var textData = LanguageManager._instance.getStringKeyValueFromIndex(ref _currentDialogData._textDataName, dialogEvent._dialogIndex);
-                _currentFullText = textData?._value ?? $"[Text Index: {dialogEvent._dialogIndex}]";
+                var textData = LanguageInstanceManager.Instance().GetStringKeyValueFromIndex(_currentDialogData._textDataName, dialogEvent._dialogIndex);
+                _dialogTextLabel.text = textData?._value ?? $"[Text Index: {dialogEvent._dialogIndex}]";
             }
             else
             {
-                _currentFullText = $"[Preview Mode - Dialog Index: {dialogEvent._dialogIndex}]";
+                _dialogTextLabel.text = $"[Preview Mode - Dialog Index: {dialogEvent._dialogIndex}]";
             }
         }
         catch (System.Exception e)
         {
             Debug.LogWarning($"Dialog Preview: Failed to get text data: {e.Message}");
-            _currentFullText = $"[Error loading text - Index: {dialogEvent._dialogIndex}]";
+            _dialogTextLabel.text = $"[Error loading text - Index: {dialogEvent._dialogIndex}]";
         }
         
-        _wordsPerSecond = dialogEvent._wordPerSec * _playSpeed;
-        
-        // 타이핑 애니메이션 시작
-        _currentVisibleChars = 0;
-        _lastTime = EditorApplication.timeSinceStartup;
-        StartTextAnimation();
-    }
-
-    private void StartTextAnimation()
-    {
-        EditorApplication.update += UpdateTextAnimation;
-    }
-
-    private void UpdateTextAnimation()
-    {
-        if (_isPaused || !_isPlaying)
-            return;
-
-        double currentTime = EditorApplication.timeSinceStartup;
-        double deltaTime = currentTime - _lastTime;
-        _lastTime = currentTime;
-        
-        int targetChars = Mathf.Min((int)(deltaTime * _wordsPerSecond * _playSpeed) + _currentVisibleChars, _currentFullText.Length);
-        
-        if (_currentVisibleChars < targetChars)
-        {
-            _currentVisibleChars = targetChars;
-            _dialogTextLabel.text = _currentFullText.Substring(0, _currentVisibleChars);
-        }
-        
-        // 텍스트 애니메이션 완료
-        if (_currentVisibleChars >= _currentFullText.Length)
-        {
-            EditorApplication.update -= UpdateTextAnimation;
-            
-            // 잠시 후 다음 이벤트 실행
-            EditorApplication.delayCall += () => 
-            {
-                if (_isPlaying && !_isPaused)
-                {
-                    EditorApplication.delayCall += ExecuteNextEvent;
-                }
-            };
-        }
     }
 
     private void ShowCharacterSprite(DialogEventData_ActiveObject activeObjectEvent)
@@ -498,7 +464,27 @@ public class DialogPreviewController
                 if (sprite != null)
                 {
                     var spriteElement = _characterSprites[setSpriteEvent._objectId];
+                    
+                    // 새로운 스프라이트 크기 계산
+                    float spriteWidth = sprite.texture.width * kSpriteScale;
+                    float spriteHeight = sprite.texture.height * kSpriteScale;
+                    
+                    spriteElement.style.width = spriteWidth;
+                    spriteElement.style.height = spriteHeight;
+                    
                     UpdateSpriteVisual(spriteElement, sprite, setSpriteEvent._flip);
+                    
+                    // 현재 위치 정보를 가져와서 다시 설정 (크기가 바뀌었으므로)
+                    // spriteElement의 현재 위치를 기반으로 게임 좌표를 역계산
+                    float currentLeft = spriteElement.style.left.value.value;
+                    float currentTop = spriteElement.style.top.value.value;
+                    
+                    // 게임 좌표로 역변환 (수정된 UpdateSpritePosition 로직에 맞춤)
+                    float gameX = currentLeft - (kPreviewSize.x * 0.5f) + (spriteWidth * 0.5f);
+                    float gameY = kPreviewSize.y - currentTop - spriteHeight;
+                    
+                    // 새로운 크기로 위치 재설정
+                    UpdateSpritePosition(spriteElement, new Vector2(gameX, gameY), setSpriteEvent._flip, spriteWidth, spriteHeight);
                 }
                 else
                 {
@@ -517,7 +503,20 @@ public class DialogPreviewController
         if (_characterSprites.ContainsKey(setPositionEvent._objectId))
         {
             var spriteElement = _characterSprites[setPositionEvent._objectId];
-            UpdateSpritePosition(spriteElement, setPositionEvent._position, setPositionEvent._flip);
+            float spriteWidth = spriteElement.style.width.value.value;
+            float spriteHeight = spriteElement.style.height.value.value;
+            
+            UpdateSpritePosition(spriteElement, setPositionEvent._position, setPositionEvent._flip, spriteWidth, spriteHeight);
+            
+            // Flip 상태 업데이트
+            if (setPositionEvent._flip)
+            {
+                spriteElement.style.scale = new StyleScale(new Scale(new Vector3(-1, 1, 1)));
+            }
+            else
+            {
+                spriteElement.style.scale = new StyleScale(new Scale(Vector3.one));
+            }
         }
     }
 
@@ -531,27 +530,44 @@ public class DialogPreviewController
 
         var spriteElement = new VisualElement();
         spriteElement.style.position = Position.Absolute;
-        spriteElement.style.backgroundImage = new StyleBackground(sprite.texture);
-        spriteElement.style.width = 80; // 프리뷰 크기 조정
-        spriteElement.style.height = 80;
         
-        UpdateSpritePosition(spriteElement, position, flip);
+        // 스프라이트 크기 계산 (0.21배 스케일 적용)
+        float spriteWidth = sprite.texture.width * kSpriteScale;
+        float spriteHeight = sprite.texture.height * kSpriteScale;
+        
+        spriteElement.style.width = spriteWidth;
+        spriteElement.style.height = spriteHeight;
+        
+        // 스프라이트 이미지 설정
+        spriteElement.style.backgroundImage = new StyleBackground(sprite.texture);
+        spriteElement.style.unityBackgroundImageTintColor = Color.white;
+        
+        UpdateSpritePosition(spriteElement, position, flip, spriteWidth, spriteHeight);
         UpdateSpriteVisual(spriteElement, sprite, flip);
         
         _characterContainer.Add(spriteElement);
         _characterSprites[objectId] = spriteElement;
     }
 
-    private void UpdateSpritePosition(VisualElement spriteElement, Vector2 position, bool flip)
+    private void UpdateSpritePosition(VisualElement spriteElement, Vector2 position, bool flip, float spriteWidth = 0, float spriteHeight = 0)
     {
-        // 게임 좌표를 프리뷰 좌표로 변환 (1600x1200 -> 프리뷰 크기)
-        var containerRect = _characterContainer.contentRect;
-        float scaleX = containerRect.width / 1600f;
-        float scaleY = containerRect.height / 1200f;
+        // 스프라이트 크기가 제공되지 않으면 현재 크기 사용
+        if (spriteWidth == 0) spriteWidth = spriteElement.style.width.value.value;
+        if (spriteHeight == 0) spriteHeight = spriteElement.style.height.value.value;
         
-        // 게임에서는 중앙이 (0,0), 하단이 기준점
-        float previewX = (position.x * scaleX) + (containerRect.width * 0.5f);
-        float previewY = containerRect.height - (position.y * scaleY) - 80; // 스프라이트 높이만큼 오프셋
+        // 게임 좌표계에서 프리뷰 좌표계로 변환
+        // 게임: 중앙이 (0,0), Y축이 위쪽 양수, pivot이 bottom center
+        // 프리뷰: 좌상단이 (0,0), Y축이 아래쪽 양수
+        
+        // 캐릭터 컨테이너의 실제 높이 (대화창 제외한 게임 영역)
+        float characterAreaHeight = kPreviewSize.y - kControlPanelHeight - kDialogBoxSize.y;
+        
+        // X 좌표: 화면 중앙(400) + 게임 위치 - 스프라이트 폭의 절반 (bottom-center pivot)
+        float previewX = (kPreviewSize.x * 0.5f) + position.x - (spriteWidth * 0.5f);
+        
+        // Y 좌표: 캐릭터 영역 하단에서 게임 위치만큼 위로 - 스프라이트 높이 (bottom pivot)
+        // position.y가 양수일 때 화면 위쪽으로 이동해야 함
+        float previewY = -spriteHeight + kPreviewSize.y - position.y;
         
         spriteElement.style.left = previewX;
         spriteElement.style.top = previewY;
@@ -588,6 +604,10 @@ public class DialogPreviewController
             _characterContainer.Remove(_characterSprites[objectId]);
         }
 
+        // 플레이스홀더 크기 (기본 크기에 0.21배 적용)
+        float placeholderWidth = 200 * kSpriteScale;  // 200px 기본 크기
+        float placeholderHeight = 300 * kSpriteScale; // 300px 기본 크기
+
         var spriteElement = new VisualElement();
         spriteElement.style.position = Position.Absolute;
         spriteElement.style.backgroundColor = new StyleColor(new Color(0.5f, 0.5f, 0.5f, 0.8f));
@@ -599,20 +619,22 @@ public class DialogPreviewController
         spriteElement.style.borderBottomColor = Color.red;
         spriteElement.style.borderLeftColor = Color.red;
         spriteElement.style.borderRightColor = Color.red;
-        spriteElement.style.width = 80;
-        spriteElement.style.height = 80;
+        spriteElement.style.width = placeholderWidth;
+        spriteElement.style.height = placeholderHeight;
         
         // "NO IMAGE" 텍스트 추가
         var label = new Label("NO\nIMAGE");
         label.style.color = Color.red;
-        label.style.fontSize = 10;
+        label.style.fontSize = (int)(12 * kSpriteScale); // 크기에 맞게 폰트 크기 조정
         label.style.unityTextAlign = TextAnchor.MiddleCenter;
         label.style.position = Position.Absolute;
-        label.style.width = 80;
-        label.style.height = 80;
+        label.style.width = placeholderWidth;
+        label.style.height = placeholderHeight;
+        label.style.left = 0;
+        label.style.top = 0;
         spriteElement.Add(label);
         
-        UpdateSpritePosition(spriteElement, position, flip);
+        UpdateSpritePosition(spriteElement, position, flip, placeholderWidth, placeholderHeight);
         
         if (flip)
         {
@@ -741,28 +763,52 @@ public class DialogPreviewController
 
     private void UpdateButtonStates()
     {
-        if (_playButton != null && _nextButton != null)
+        if (_stepButton != null && _nextButton != null)
         {
             bool dataReady = _isStaticDataLoaded;
             bool hasEntry = _currentEntry != null;
+            bool hasMoreEvents = hasEntry && _currentEventIndex < _currentEntry._dialogEventList.Count;
             
-            _playButton.SetEnabled(dataReady && hasEntry && !_isPlaying);
-            _nextButton.SetEnabled(dataReady && hasEntry);
+            // 다음 Dialog 이벤트가 있는지 확인
+            bool hasNextDialog = false;
+            if (hasEntry && _currentEventIndex < _currentEntry._dialogEventList.Count)
+            {
+                for (int i = _currentEventIndex; i < _currentEntry._dialogEventList.Count; i++)
+                {
+                    if (_currentEntry._dialogEventList[i].getDialogEventType() == DialogEventType.Dialog)
+                    {
+                        hasNextDialog = true;
+                        break;
+                    }
+                }
+            }
+            
+            _stepButton.SetEnabled(dataReady && hasMoreEvents);
+            _nextButton.SetEnabled(dataReady && hasNextDialog);
             
             // 툴팁 설정
             if (!dataReady)
             {
-                _playButton.tooltip = "Static Data is loading...";
+                _stepButton.tooltip = "Static Data is loading...";
                 _nextButton.tooltip = "Static Data is loading...";
             }
             else if (!hasEntry)
             {
-                _playButton.tooltip = "Select an entry to preview";
+                _stepButton.tooltip = "Select an entry to preview";
                 _nextButton.tooltip = "Select an entry to preview";
+            }
+            else if (!hasMoreEvents)
+            {
+                _stepButton.tooltip = "No more events to execute";
+                _nextButton.tooltip = "No more events to execute";
+            }
+            else if (!hasNextDialog)
+            {
+                _nextButton.tooltip = "No more dialog events";
             }
             else
             {
-                _playButton.tooltip = "";
+                _stepButton.tooltip = "";
                 _nextButton.tooltip = "";
             }
         }
@@ -771,5 +817,113 @@ public class DialogPreviewController
     public bool IsStaticDataLoaded()
     {
         return _isStaticDataLoaded;
+    }
+
+    // 특정 이벤트 GUID까지 진행하는 메서드
+    public void SetDialogDataAndPlayToEvent(DialogData dialogData, string entryKey, string eventGuid)
+    {
+        SetDialogData(dialogData);
+        
+        if (!string.IsNullOrEmpty(entryKey))
+        {
+            // 특정 엔트리 선택
+            _entryDropdown.value = entryKey;
+            OnEntrySelected(entryKey);
+        }
+        
+        if (!string.IsNullOrEmpty(eventGuid))
+        {
+            // 해당 이벤트까지 자동 진행
+            EditorApplication.delayCall += () => PlayToEventGuid(eventGuid);
+        }
+    }
+
+    private void PlayToEventGuid(string targetEventGuid)
+    {
+        // Static Data가 로드되지 않았으면 먼저 로드
+        if (!_isStaticDataLoaded)
+        {
+            UpdateStatusLabel("Loading Static Data...");
+            EditorApplication.delayCall += () =>
+            {
+                LoadStaticData();
+                // 로딩 완료 후 다시 시도
+                EditorApplication.delayCall += () => PlayToEventGuid(targetEventGuid);
+            };
+            return;
+        }
+
+        if (_currentEntry == null)
+            return;
+
+        ResetPreview();
+
+        // 대상 이벤트를 찾을 때까지 진행
+        for (int i = 0; i < _currentEntry._dialogEventList.Count; i++)
+        {
+            var eventData = _currentEntry._dialogEventList[i];
+            
+            // 현재 이벤트 실행
+            ExecuteDialogEvent(eventData);
+            _currentEventIndex = i + 1;
+            
+            // 대상 이벤트에 도달했으면 중단
+            if (eventData._editorGuidString == targetEventGuid)
+            {
+                break;
+            }
+        }
+        
+        // 버튼 상태 업데이트
+        UpdateButtonStates();
+    }
+
+    // 특정 엔트리와 이벤트 인덱스까지 진행하는 메서드 (GUID가 없을 경우 대안)
+    public void SetDialogDataAndPlayToIndex(DialogData dialogData, string entryKey, int eventIndex)
+    {
+        SetDialogData(dialogData);
+        
+        if (!string.IsNullOrEmpty(entryKey))
+        {
+            // 특정 엔트리 선택
+            _entryDropdown.value = entryKey;
+            OnEntrySelected(entryKey);
+        }
+        
+        // 해당 인덱스까지 자동 진행
+        EditorApplication.delayCall += () => PlayToEventIndex(eventIndex);
+    }
+
+    private void PlayToEventIndex(int targetIndex)
+    {
+        // Static Data가 로드되지 않았으면 먼저 로드
+        if (!_isStaticDataLoaded)
+        {
+            UpdateStatusLabel("Loading Static Data...");
+            EditorApplication.delayCall += () =>
+            {
+                LoadStaticData();
+                // 로딩 완료 후 다시 시도
+                EditorApplication.delayCall += () => PlayToEventIndex(targetIndex);
+            };
+            return;
+        }
+
+        if (_currentEntry == null)
+            return;
+
+        ResetPreview();
+
+        // 대상 인덱스까지 진행
+        int maxIndex = Mathf.Min(targetIndex + 1, _currentEntry._dialogEventList.Count);
+        for (int i = 0; i < maxIndex; i++)
+        {
+            var eventData = _currentEntry._dialogEventList[i];
+            ExecuteDialogEvent(eventData);
+            _currentEventIndex = i + 1;
+        }
+        
+        // 버튼 상태 업데이트
+        UpdateButtonStates();
     }
 }

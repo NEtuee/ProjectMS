@@ -288,6 +288,7 @@ public class DialogEditorGraphView : GraphView
 
         GameEventNodeBase gameEventNode = typeInstance as GameEventNodeBase;
         gameEventNode._dialogData = _dialogData;
+        gameEventNode._parentGraphView = this; // 부모 그래프 뷰 설정
         Vector2 worldPosition = contentViewContainer.WorldToLocal(position);
         gameEventNode.SetPosition(new Rect(worldPosition, kDefaultNodeSize));
 
@@ -870,10 +871,10 @@ public class DialogEditorGraphView : GraphView
             _previewPanel.style.display = isVisible ? DisplayStyle.Flex : DisplayStyle.None;
             _isPreviewVisible = isVisible;
             
-            // 그래프 뷰 크기 조정
+            // 그래프 뷰 크기 조정 (프리뷰 패널 너비 820 = 800 + 여백)
             if (isVisible)
             {
-                style.paddingRight = 420; // 프리뷰 패널 너비 + 여백
+                style.paddingRight = 820; // 프리뷰 패널 너비 + 여백
             }
             else
             {
@@ -898,6 +899,97 @@ public class DialogEditorGraphView : GraphView
     {
         _previewPanel = _previewController.CreatePreviewPanel();
         Add(_previewPanel);
+    }
+
+    // 특정 이벤트까지 미리보기를 진행하는 메서드
+    public void ShowPreviewToEvent(GameEventNodeBase targetNode)
+    {
+        // 프리뷰 패널이 없으면 생성하고 표시
+        if (!_isPreviewVisible)
+        {
+            TogglePreviewPanel(true);
+        }
+        
+        if (_dialogData == null || _previewController == null)
+        {
+            Debug.LogWarning("Dialog Preview: No dialog data available for preview");
+            return;
+        }
+        
+        // 타겟 노드가 속한 엔트리를 찾기
+        string entryKey = FindEntryForNode(targetNode);
+        if (string.IsNullOrEmpty(entryKey))
+        {
+            Debug.LogWarning($"Dialog Preview: Could not find entry for node {targetNode.title}");
+            return;
+        }
+        
+        // 이벤트 GUID를 사용하여 미리보기 진행
+        string eventGuid = targetNode._dialogEvent?._editorGuidString;
+        if (!string.IsNullOrEmpty(eventGuid))
+        {
+            _previewController.SetDialogDataAndPlayToEvent(_dialogData, entryKey, eventGuid);
+        }
+        else
+        {
+            Debug.LogWarning($"Dialog Preview: Node {targetNode.title} has no valid GUID");
+        }
+    }
+
+    // 노드가 속한 엔트리를 찾는 헬퍼 메서드
+    private string FindEntryForNode(GameEventNodeBase targetNode)
+    {
+        // 현재 저장된 그래프에서 노드들의 연결 관계를 추적하여 엔트리를 찾기
+        foreach (var element in graphElements)
+        {
+            if (element is GameEventNode_Entry entryNode)
+            {
+                // Entry 노드에서 시작하여 연결된 노드들을 추적
+                if (IsNodeConnectedToEntry(entryNode, targetNode))
+                {
+                    var entryData = entryNode.exportEntryData();
+                    return entryData?._entryKey;
+                }
+            }
+        }
+        
+        return null;
+    }
+
+    // Entry 노드와 대상 노드가 연결되어 있는지 확인하는 헬퍼 메서드
+    private bool IsNodeConnectedToEntry(GameEventNode_Entry entryNode, GameEventNodeBase targetNode)
+    {
+        var visited = new HashSet<Node>();
+        var queue = new Queue<Node>();
+        
+        queue.Enqueue(entryNode);
+        visited.Add(entryNode);
+        
+        while (queue.Count > 0)
+        {
+            var currentNode = queue.Dequeue();
+            
+            if (currentNode == targetNode)
+            {
+                return true;
+            }
+            
+            // 출력 포트에서 연결된 다음 노드들을 확인
+            foreach (var port in currentNode.outputContainer.Children().OfType<Port>())
+            {
+                foreach (var edge in port.connections)
+                {
+                    var connectedNode = edge.input.node;
+                    if (!visited.Contains(connectedNode))
+                    {
+                        visited.Add(connectedNode);
+                        queue.Enqueue(connectedNode);
+                    }
+                }
+            }
+        }
+        
+        return false;
     }
 }
 
@@ -924,6 +1016,7 @@ public abstract class GameEventNodeBase : Node
     public DialogData _dialogData;
     public DialogEventDataBase _dialogEvent;
     public string _guid;
+    public DialogEditorGraphView _parentGraphView;
 
     public GameEventNodeBase()
     {
@@ -938,6 +1031,25 @@ public abstract class GameEventNodeBase : Node
 
         title = getEventType().ToString();
         mainContainer.style.backgroundColor = new StyleColor(new Color(0.2f, 0.2f, 0.2f));
+    }
+
+    public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
+    {
+        base.BuildContextualMenu(evt);
+        
+        // Entry 노드가 아닌 경우에만 Show Preview 옵션 추가
+        if (getEventType() != DialogEventType.Entry)
+        {
+            evt.menu.AppendAction("Show Preview", (a) => ShowPreview(), DropdownMenuAction.AlwaysEnabled);
+        }
+    }
+
+    private void ShowPreview()
+    {
+        if (_parentGraphView != null)
+        {
+            _parentGraphView.ShowPreviewToEvent(this);
+        }
     }
 
     public virtual void constructField()
