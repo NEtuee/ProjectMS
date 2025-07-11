@@ -907,6 +907,16 @@ public class StatusInfo
         return _isDead;
     }
 
+    public Dictionary<string, Status> getStatusValues()
+    {
+        return _statusValues;
+    }
+
+    public List<BuffItem> getCurrentlyAppliedBuffList()
+    {
+        return _currentlyAppliedBuffList;
+    }
+
     public StatusInfoData getStatusInfoData()
     {
         return _statusInfoData;

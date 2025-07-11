@@ -95,15 +95,9 @@ public class CharacterInfoViewer : EditorWindow
 
             GUI.enabled = true;
 
-            try
-            {
-                if(item.Key != null && item.Value._displayName != null)
-                    GUILayout.Label(item.Key + ": " + item.Value._displayName);
-            }
-            catch(Exception)
-            {
-                // ignore unity fuck-bug
-            }
+            if(item.Key != null && item.Value._displayName != null)
+                GUILayout.Label(item.Key + ": " + item.Value._displayName);
+
                 
             GUILayout.EndHorizontal();
         }
