@@ -279,6 +279,7 @@ public class GameEventNode_ActiveObject : GameEventNodeBase
             flipToggle.RegisterValueChangedCallback(evt =>
             {
                 activeObjectData4._flip = evt.newValue;
+                UpdateSpriteFlip(evt.newValue);
             });
         }
         flipToggle.style.marginBottom = 4;
@@ -386,10 +387,30 @@ public class GameEventNode_ActiveObject : GameEventNodeBase
         if (sprite != null)
         {
             spritePreviewImage.image = sprite.texture;
+            // Flip 상태 반영
+            if (_dialogEvent is DialogEventData_ActiveObject activeObjectData)
+            {
+                UpdateSpriteFlip(activeObjectData._flip);
+            }
         }
         else
         {
             spritePreviewImage.image = null;
+        }
+    }
+
+    private void UpdateSpriteFlip(bool flip)
+    {
+        if (spritePreviewImage != null)
+        {
+            if (flip)
+            {
+                spritePreviewImage.style.scale = new StyleScale(new Scale(new Vector3(-1, 1, 1)));
+            }
+            else
+            {
+                spritePreviewImage.style.scale = new StyleScale(new Scale(Vector3.one));
+            }
         }
     }
 
@@ -433,6 +454,7 @@ public class GameEventNode_ActiveObject : GameEventNodeBase
             if (flipToggle != null)
             {
                 flipToggle.value = activeObjectData._flip;
+                UpdateSpriteFlip(activeObjectData._flip);
             }
         }
     }
@@ -535,6 +557,7 @@ public class GameEventNode_SetSprite : GameEventNodeBase
             flipToggle.RegisterValueChangedCallback(evt =>
             {
                 setSpriteData3._flip = evt.newValue;
+                UpdateSpriteFlip(evt.newValue);
             });
         }
         flipToggle.style.marginBottom = 4;
@@ -620,10 +643,30 @@ public class GameEventNode_SetSprite : GameEventNodeBase
         if (sprite != null)
         {
             spritePreviewImage.image = sprite.texture;
+            // Flip 상태 반영
+            if (_dialogEvent is DialogEventData_SetSprite setSpriteData)
+            {
+                UpdateSpriteFlip(setSpriteData._flip);
+            }
         }
         else
         {
             spritePreviewImage.image = null;
+        }
+    }
+
+    private void UpdateSpriteFlip(bool flip)
+    {
+        if (spritePreviewImage != null)
+        {
+            if (flip)
+            {
+                spritePreviewImage.style.scale = new StyleScale(new Scale(new Vector3(-1, 1, 1)));
+            }
+            else
+            {
+                spritePreviewImage.style.scale = new StyleScale(new Scale(Vector3.one));
+            }
         }
     }
 
@@ -661,6 +704,7 @@ public class GameEventNode_SetSprite : GameEventNodeBase
             if (flipToggle != null)
             {
                 flipToggle.value = setSpriteData._flip;
+                UpdateSpriteFlip(setSpriteData._flip);
             }
         }
     }

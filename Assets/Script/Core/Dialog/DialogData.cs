@@ -5,9 +5,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "DialogData", menuName = "Scriptable Object/DialogData")]
 public class DialogData : ScriptableObject
 {
-    [SerializeField] public List<DialogEventEntryData> _dialogEventEntryList = new List<DialogEventEntryData>();
+    [SerializeReference] public List<DialogEventEntryData> _dialogEventEntryList = new List<DialogEventEntryData>();
 
-    [SerializeField] public string _textDataName = "";
+    [SerializeReference] public string _textDataName = "";
 
     public int findDialogEntryIndex(string key)
     {
