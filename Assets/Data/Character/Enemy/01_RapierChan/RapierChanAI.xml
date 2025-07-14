@@ -12,7 +12,7 @@
             - Hit & Run 방식으로 공격한다.
                 - 공격 성공 직후 후딜을 캔슬하고 Dodge를 사용해 거리를 벌린다. (보류)
                 - 거리를 벌렸을 때 잠시 Alert 이동으로 주위를 선회한다.
-            - 일대다 전투를 자연스럽게 만들기 위해 공격 타이밍을 랜덤으로 적용한다. (타이밍 퍼지)
+            - 일대다 전투를 자연스럽게 만들기 위해 공격 타이밍을 랜덤으로 적용한다. (타이밍 퍼지 -> 확률적 쿨타임 무시 공격)
         공략
             - 공격을 하기 전에 선제적으로 공격한다.
             - 공격을 회피한 후 후딜 타임을 노린다.
@@ -85,6 +85,7 @@
         <Branch Condition="true" Execute="Away"/>
     </Battle_Closer>
     <Battle_Range Package="CommonIdlePackage">
+        <Branch Weight="RandVector3^x" Condition="true" Execute="Pierce"/>
         <Branch Condition="aiGraphCoolTime_Pierce" Execute="Pierce"/>
         <Branch Condition="true" Execute="Alert"/>
     </Battle_Range>
