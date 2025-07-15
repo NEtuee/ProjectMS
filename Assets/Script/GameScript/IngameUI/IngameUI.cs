@@ -52,12 +52,12 @@ public class IngameUI : MonoBehaviour
     {
         //아카네 체크?
         _mainUIEntity = mainUIEntity;
-        _uiDataPacker.UpdateTargetAkane(_mainUIEntity);
+        _uiDataPacker.RefreshTargetAkane(_mainUIEntity);
     }
     public void SetSubUIEntityList(List<GameEntityBase> subUIEntityList)
     {
         _subUIEntityList = subUIEntityList;
-        _uiDataPacker.UpdateTargetEntity(_subUIEntityList);
+        _uiDataPacker.RefreshTargetEntity(_subUIEntityList);
     }
     public void ActivateUI()
     {
@@ -81,10 +81,10 @@ public class IngameUI : MonoBehaviour
     }
     private void DeliverData(ProjectorUI projectorUI, IPackedUIData updatedData)
     {
-        projectorUI.UpdateData(updatedData);
+        projectorUI.ReceiveData(updatedData);
     }
     //서브 UI데이터(이벤트 키), 임의 호출
-    public void NotifyUIEventUpdated(string stringKey)
+    public void NotifyUIEventHappened(string stringKey)
     {
         UIEventKey enumKey;
         if (!Enum.TryParse(stringKey, out enumKey))
@@ -97,7 +97,7 @@ public class IngameUI : MonoBehaviour
     }
     private void DeliverSubData(ProjectorUI projectorUI, IPackedUIData updatedData)
     {
-        projectorUI.UpdateSubData(updatedData);
+        projectorUI.ReceiveSubData(updatedData);
     }
     public void DeactivateUI()
     {

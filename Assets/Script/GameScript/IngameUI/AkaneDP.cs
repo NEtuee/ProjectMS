@@ -5,9 +5,18 @@ using System.Collections.Generic;
 
 public class AkaneDP : ProjectorUI
 {
-    protected override UIDataType DataType => UIDataType.AkaneDP;
-    protected override IReadOnlyCollection<UIEventKey> ValidEventKeys { get; } =
+    protected override UIDataType _dataType => UIDataType.AkaneDP;
+    protected override IReadOnlyCollection<UIEventKey> _validEventKeys =>
         new[] { UIEventKey.HyperFailed, UIEventKey.AttackSucceeded };
+    private enum AkaneDPStateType
+    {
+        NONE,
+        Idle,
+        Consumed,
+        AutoRecovering,
+        AttackRecovering
+    }
+    private Dictionary<AkaneDPStateType, UIState> _stateMap = new Dictionary<AkaneDPStateType, UIState>();
     public override void Initialize()
     {
         base.Initialize();

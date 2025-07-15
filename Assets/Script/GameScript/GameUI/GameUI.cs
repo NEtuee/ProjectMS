@@ -123,7 +123,7 @@ public class GameUI : MonoBehaviour
 
     public void NotifyToUI(string key)
     {
-        _ingameUI.NotifyUIEventUpdated(key);
+        _ingameUI.NotifyUIEventHappened(key);
         if (_notifySubscriber.TryGetValue(key, out var subscriberList) == false)
         {
             return;

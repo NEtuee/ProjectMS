@@ -13,7 +13,7 @@ public class AkaneBP : ProjectorUI
         get => (AkaneBPData)_projectingData;
         set => _projectingData = value;
     }
-    protected override UIDataType DataType => UIDataType.AkaneBP;
+    protected override UIDataType _dataType => UIDataType.AkaneBP;
     public struct AkaneBPData : IPackedUIData
     {
         public UIDataType UIDataType => UIDataType.AkaneBP;
@@ -34,13 +34,13 @@ public class AkaneBP : ProjectorUI
         public override bool Equals(object obj) => obj is AkaneBPData other && this == other;
         public override int GetHashCode() => BPPercentage.GetHashCode() ^ ChangeAmount.GetHashCode();
     }
-    protected override IReadOnlyCollection<UIEventKey> ValidEventKeys { get; } =
+    protected override IReadOnlyCollection<UIEventKey> _validEventKeys =>
         new[] { UIEventKey.HyperFailed, UIEventKey.AttackSucceeded };
     private enum AkaneBPStateType
     {
         NONE,
         Idle,
-        UnderAttacked,
+        Underattacked,
         Lifetapping,
         Lifestealing
     }
@@ -61,11 +61,11 @@ public class AkaneBP : ProjectorUI
     }
     public override void Activate()
     {
-        _stateMachine.RequestStateChanging(_stateMap[AkaneBPStateType.Idle]);
+        _stateMachine.ForceStateChanging(_stateMap[AkaneBPStateType.Idle]);
     }
     public override void Deactivate()
     {
-        _stateMachine.RequestStateChanging(_stateMap[AkaneBPStateType.NONE]);
+        _stateMachine.ForceStateChanging(_stateMap[AkaneBPStateType.NONE]);
     }
     protected override void UpdateProjection()
     {

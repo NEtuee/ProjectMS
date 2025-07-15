@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
-public class AkaneDPHolder : ProjectorUI
+public class AkaneDPHolder : HolderUI
 {
     public new AkaneDPData ReceivedData => (AkaneDPData)_receivedData;
     public new AkaneDPData ProjectingData
@@ -11,7 +11,7 @@ public class AkaneDPHolder : ProjectorUI
         get => (AkaneDPData)_projectingData;
         set => _projectingData = value;
     }
-    protected override UIDataType DataType => UIDataType.AkaneDP;
+    protected override UIDataType _dataType => UIDataType.AkaneDP;
     public struct AkaneDPData : IPackedUIData
     {
         public UIDataType UIDataType => UIDataType.AkaneDP;
@@ -29,17 +29,15 @@ public class AkaneDPHolder : ProjectorUI
         public override bool Equals(object obj) => obj is AkaneDPData other && this == other;
         public override int GetHashCode() => CurrentDP.GetHashCode();
     }
-    protected override IReadOnlyCollection<UIEventKey> ValidEventKeys { get; } =
+    protected override IReadOnlyCollection<UIEventKey> _validEventKeys =>
         new[] { UIEventKey.HyperFailed, UIEventKey.AttackSucceeded };
-    private enum AkaneDPStateType
+    private enum AkaneDPHolderStateType //개별 DP에 전달? 여기는 Holder의 상태만,,
     {
         NONE,
         Idle,
-        UnderAttacked,
-        Lifetapping,
-        Lifestealing
+        Underattacked,
     }
-    private Dictionary<AkaneDPStateType, UIState> _stateMap = new Dictionary<AkaneDPStateType, UIState>();
+    private Dictionary<AkaneDPHolderStateType, UIState> _stateMap = new Dictionary<AkaneDPHolderStateType, UIState>();
 
 
 
@@ -56,11 +54,11 @@ public class AkaneDPHolder : ProjectorUI
     }
     public override void Activate()
     {
-        _stateMachine.RequestStateChanging(_stateMap[AkaneDPStateType.Idle]);
+        _stateMachine.ForceStateChanging(_stateMap[AkaneDPHolderStateType.Idle]);
     }
     public override void Deactivate()
     {
-        _stateMachine.RequestStateChanging(_stateMap[AkaneDPStateType.NONE]);
+        _stateMachine.ForceStateChanging(_stateMap[AkaneDPHolderStateType.NONE]);
     }
     protected override void UpdateProjection()
     {

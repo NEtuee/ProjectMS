@@ -8,8 +8,8 @@ public class UIDataPacker
     private GameEntityBase _targetAkane;
     private List<GameEntityBase> _targetEntityList;
 
-    public void UpdateTargetAkane(GameEntityBase akane) { _targetAkane = akane;}
-    public void UpdateTargetEntity(List<GameEntityBase> entityList) { _targetEntityList = entityList;}
+    public void RefreshTargetAkane(GameEntityBase akane) { _targetAkane = akane;}
+    public void RefreshTargetEntity(List<GameEntityBase> entityList) { _targetEntityList = entityList;}
     public IPackedUIData PackNewData(IPackedUIData outdatedData) //매 프레임 업데이트 되는 메인 데이터
     {
         switch (outdatedData.UIDataType)

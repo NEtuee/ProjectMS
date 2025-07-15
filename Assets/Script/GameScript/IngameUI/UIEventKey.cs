@@ -2,5 +2,6 @@ public enum UIEventKey
 {
     NONE,
     HyperFailed,
-    AttackSucceeded
+    AttackSucceeded,
+    Hit
 }
