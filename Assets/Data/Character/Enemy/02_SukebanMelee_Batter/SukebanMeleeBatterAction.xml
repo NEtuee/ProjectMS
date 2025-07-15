@@ -17,8 +17,8 @@
 
 <!-- Attack Movement Speed Option Variant Set-->
 <GlobalVariable Name="gv_AtkMovementSpeed"          Value="0.0"/>   <!-- Speed는 Velocity = 0 과 병행 사용 불가-->
-<GlobalVariable Name="gv_AtkMovementVelocity"       Value="14.0"/>  
-<GlobalVariable Name="gv_AtkMovementMaxVelocity"    Value="14.0"/>
+<GlobalVariable Name="gv_AtkMovementVelocity"       Value="48.0"/>  
+<GlobalVariable Name="gv_AtkMovementMaxVelocity"    Value="48.0"/>
 <GlobalVariable Name="gv_AtkMovementFriction"       Value="24.0"/>
 
 <!-- AttackSuccess Movement Speed Option Variant Set-->
@@ -139,11 +139,11 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
-        <Branch Condition="End" Execute="AC_AttackReady2"/>
+        <Branch Condition="End" Execute="AC_AttackReady_B"/>
     </AC_AttackRecover>
 
 <!-- Skill : Swing 2번째 공격 -->
-    <AC_AttackReady2 MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineSuperArmor">
+    <AC_AttackReady_B MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineSuperArmor">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/1_rushSwing/5_attackReady2" XFlip="true" Duration="0.4">            
             <FrameEvent Type="Movement" Condition="gv_AtkRdMovementVelocity == 0.0" StartTime="0" Friction="gv_AtkRdMovementFriction" MaxVelocity="gv_AtkRdMovementMaxVelocity" Speed="gv_AtkRdMovementSpeed"/>
@@ -153,10 +153,10 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
     
-        <Branch Condition="End" Execute="AC_AttackRush2"/>
-    </AC_AttackReady2>
+        <Branch Condition="End" Execute="AC_AttackRush_B"/>
+    </AC_AttackReady_B>
 
-    <AC_AttackRush2 MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction" Flags="OutlineSuperArmor">
+    <AC_AttackRush_B MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction" Flags="OutlineSuperArmor">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/1_rushSwing/6_attackRush2" XFlip="true" Duration="0.35">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="4901" Attach="true"/>
@@ -179,10 +179,10 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
-        <Branch Condition="End" Execute="AC_AttackRecover2"/>
-    </AC_AttackRush2>
+        <Branch Condition="End" Execute="AC_AttackRecover_B"/>
+    </AC_AttackRush_B>
 
-    <AC_AttackRecover2 MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+    <AC_AttackRecover_B MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/1_rushSwing/8_attackRecover2" XFlip="true" Duration="0.5">
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
@@ -190,7 +190,7 @@
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>
-    </AC_AttackRecover2>
+    </AC_AttackRecover_B>
 
 <!-- Skill: Grenade  -->
     <AC_GrenadeReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction" Flags="LaserEffect">
@@ -215,7 +215,7 @@
             <FrameEvent Type="Movement" StartTime="0" Friction="0.0" MaxVelocity="0.0" Speed="0.0"/>
 
             <!-- Danmaku Attack -->
-            <FrameEvent Type="Danmaku" StartTime="0" Path="Assets/Data/DanmakuGraph/Enemy/BigGrenade.xml" Offset="0.5 0.12 0" UseFlip="true"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="BigGrenade" Offset="0 0 0" UseFlip="true"/>
 
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
@@ -264,15 +264,6 @@
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_GuardBroken>
     
-    <AC_Dodge MovementType="GraphPreset" MovementGraphPreset="Preset_Dodge" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="1_defense/3_dodge" XFlip="true" Duration="0.5">
-            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
-            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
-        </Animation>
-
-        <Branch Condition="End" Execute="AC_Idle"/>
-    </AC_Dodge>
 <!-- Defense Action -->
 
 

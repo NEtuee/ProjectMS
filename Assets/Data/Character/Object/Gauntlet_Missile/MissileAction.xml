@@ -63,6 +63,7 @@
         <Animation Preset="Sprites/Projectile/empty" Duration="0.3">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2415" Attach="true"/>
             <FrameEvent Type="EffectPreset" StartTime="0" Key="Explode"/>
+            <FrameEvent Type="DeleteBuff" StartTime="0" BuffList="PlayerBattleObjectXXX"/>
             <FrameEvent Type="Attack" StartTime="0" EndTime="0.3" AttackPreset="Common_Radius05" NotifyAttackSuccess="False">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
@@ -82,25 +83,30 @@
         <Branch Condition="End == true" Execute="Dead"/>
     </Dead>
 
-    <AC_Reverse MovementType="Empty" DirectionType="AI">
+    <AC_Reverse MovementType="Empty" DirectionType="AI" RotationType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="0_default/4_dead" XFlip="true" Duration="0.5">
+        <Animation Preset="2_defense/3_guardBroken" XFlip="true" Duration="1.0">
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="DeleteCrimson" EventTargetType="Range" AllyTarget="Ally" Range="100.0"/>
+            <FrameEvent Type="ChangeAlly" StartTime="0" Key="PlayerBattleObject" ResetTarget="True"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="PlayerBattleObjectXXX"/>
+            <!--
             <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="Missile" UseFlip="true" Offset="0 0 0" AllyInfo="PlayerBattleObject" InheritDirection="true" AINode="Chase"/>
             <FrameEvent Type="KillEntity" StartTime="0"/>
-            
+            -->
         </Animation>
-        <Branch Condition="End == true" Execute="Dead"/>
+        <Branch Condition="End" Execute="AC_Idle"/>
     </AC_Reverse>
     <AC_ExploReverse MovementType="Empty" DirectionType="AI">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="0_default/4_dead" XFlip="true" Duration="0.5">
+        <Animation Preset="2_defense/3_guardBroken" XFlip="true" Duration="1.0">
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="DeleteCrimson" EventTargetType="Range" AllyTarget="Ally" Range="100.0"/>
+            <FrameEvent Type="ChangeAlly" StartTime="0" Key="PlayerBattleObject" ResetTarget="True"/>
+            <!--
             <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="Missile" UseFlip="true" Offset="0 0 0" AllyInfo="PlayerBattleObject" InheritDirection="true" AINode="ExploChase"/>
             <FrameEvent Type="KillEntity" StartTime="0"/>
-            
+            -->
         </Animation>
-        <Branch Condition="End == true" Execute="Dead"/>
+        <Branch Condition="End" Execute="AC_Idle"/>
     </AC_ExploReverse>
 
 

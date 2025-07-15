@@ -11,21 +11,16 @@ using System.Linq;
 public class LanguageManager : ManagerBase
 {
     public static LanguageManager _instance;
-    public SystemLanguage _currentSystemLang = SystemLanguage.English;
+    public SystemLanguage _currentSystemLang = SystemLanguage.Unknown;
 
     //이전 언어 데이터를 다 들고있을 필요가 없음. 고쳐야한다
 
-    private Dictionary<SystemLanguage, LanguageConfigData> _languageConfigDic = new Dictionary<SystemLanguage, LanguageConfigData>();
-
-    private Dictionary<string, StringKeyValueSetData> _textDic = new Dictionary<string, StringKeyValueSetData>();
     private Dictionary<SystemLanguage, SimpleStringData> _simpleStringDic = new Dictionary<SystemLanguage, SimpleStringData>();
     private List<Tuple<SystemLanguage, string>> _languageList = new List<Tuple<SystemLanguage, string>>();
 
     private static readonly string _dialogTextDataKorea = "Assets/Data/SubtitleMap/DialogText_Kor.xml";
     private static readonly string _dialogTextDataJapan = "Assets/Data/SubtitleMap/DialogText_Jp.xml";
     private static readonly string _dialogTextDataEnglish = "Assets/Data/SubtitleMap/DialogText_En.xml";
-    
-    private static readonly string _languageConfigPath = "Data/LanguageConfig.xml";
 
     public override void assign()
     {
@@ -35,15 +30,15 @@ public class LanguageManager : ManagerBase
         CacheUniqueID("LanguageManager");
         RegisterRequest();
 
-        loadLanguageConfig();
+        // LanguageInstanceManager 초기화
+        LanguageInstanceManager.Instance();
         loadAllLanguage();
+        InitLocalize();
     }
 
     public override void initialize()
     {
         base.initialize();
-
-        InitLocalize();
     }
 
     public void InitLocalize()
@@ -68,101 +63,41 @@ public class LanguageManager : ManagerBase
         }
     }
 
-    public bool loadLanguageConfig()
-    {
-        try
-        {
-            XDocument doc = XDocument.Load(IOControl.PathForDocumentsFile(_languageConfigPath));
-            XElement rootElement = doc.Element("LanguageConfig");
-
-            if (rootElement == null)
-                throw new Exception("Root Not Exists");
-
-            foreach (var item in rootElement.Elements())
-            {
-                if (Enum.IsDefined(typeof(SystemLanguage), item.Name.LocalName) == false)
-                    throw new Exception($"{item.Name} is not systemLanguage");
-
-                LanguageConfigData configData = new LanguageConfigData();
-                configData._language = Enum.Parse<SystemLanguage>(item.Name.LocalName);
-                configData._displayName = item.Attribute("Display").Value; 
-                configData._textDataPath = item.Attribute("TextPath").Value;
-
-                _languageConfigDic.Add(configData._language, configData);
-            }
-        }
-        catch (Exception ex)
-        {
-            DebugUtil.assert(false, "LanguageConfig 로드 실패! :{0}", ex.Message);
-            return false;
-        }
-
-        return true;
-    }
-
     public bool loadTextData(SystemLanguage language)
     {
-        if (_languageConfigDic.ContainsKey(language) == false)
-        {
-            DebugUtil.assert(false, "TextData not found : {0}", language);
-            return false;
-        }
+        // LanguageInstanceManager 사용
+        LanguageInstanceManager.Instance().CurrentLanguage = language;
+        return LanguageInstanceManager.Instance().LoadTextData(language);
+    }
 
-        _textDic.Clear();
+    public bool saveTextDataToXML(StringKeyValueSetData textData, string fileName)
+    {
+        return LanguageInstanceManager.Instance().SaveTextDataToXML(textData, fileName);
+    }
 
-        LanguageConfigData configData = _languageConfigDic[language];
+    public bool saveTextDataToXML(StringKeyValueSetData textData, string fileName, SystemLanguage language)
+    {
+        return LanguageInstanceManager.Instance().SaveTextDataToXML(textData, fileName, language);
+    }
 
-        try
-        {
-            List<string> fileList = new List<string>();
-            List<string> fullPathList = new List<string>();
-            IOControl.getFileListRecursive(configData._textDataPath, ".xml", ref fileList, ref fullPathList);
+    public string getTextDataPath()
+    {
+        return LanguageInstanceManager.Instance().GetTextDataPath();
+    }
 
-            for(int index = 0; index < fullPathList.Count; ++index)
-            {
-                XDocument doc = XDocument.Load(fullPathList[index]);
-                XElement rootElement = doc.Element("TextData");
-
-                if (rootElement == null)
-                    throw new Exception("Root Not Exists");
-
-                StringKeyValueSetData dialogData = new StringKeyValueSetData();
-                foreach (var item in rootElement.Elements())
-                {
-                    StringKeyValueData valuedata = new StringKeyValueData();
-                    valuedata._key = int.Parse(item.Name.LocalName.Remove(0,1));
-                    valuedata._value = item.Attribute("Value").Value;
-
-                    XAttribute audioEventKey = item.Attribute("Audio");
-                    if (audioEventKey != null)
-                    {
-                        valuedata._audioEventKey = int.Parse(audioEventKey.Value);
-                    }
-
-                    dialogData._stringData.Add(valuedata);
-                }
-
-                _textDic.Add(fileList[index],dialogData);
-            }
-        }
-        catch (Exception ex)
-        {
-            DebugUtil.assert(false, "TextData 로드 실패! :{0}", ex.Message);
-            return false;
-        }
-
-        return true;
+    public string getTextDataPath(SystemLanguage language)
+    {
+        return LanguageInstanceManager.Instance().GetTextDataPath(language);
     }
 
     public string getTextFromFile(ref string fileName, int index)
     {
-        //개별로
-        return getStringKeyValue(ref fileName, index)._value;
+        return LanguageInstanceManager.Instance().GetTextFromFile(fileName, index);
     }
 
-    public StringKeyValueData getStringKeyValue(ref string fileName, int index)
+    public StringKeyValueData getStringKeyValueFromIndex(ref string fileName, int index)
     {
-        return _textDic[fileName]._stringData[index];
+        return LanguageInstanceManager.Instance().GetStringKeyValueFromIndex(fileName, index);
     }
 
     public List<Tuple<SystemLanguage, string>> getLanguageList()
@@ -249,8 +184,14 @@ public class LanguageManager : ManagerBase
 
     private void SetDialogLanguage(SystemLanguage language)
     {
+        if(_currentSystemLang == language)
+            return;
+        
         _currentSystemLang = language;
-        loadTextData(language);
+        
+        // LanguageInstanceManager 사용
+        LanguageInstanceManager.Instance().CurrentLanguage = language;
+        LanguageInstanceManager.Instance().LoadTextData(language);
 
         switch (language)
         {
@@ -264,7 +205,6 @@ public class LanguageManager : ManagerBase
                 DialogTextManager.Instance().Init(DialogDataLoader.readFromXML(_dialogTextDataEnglish));
                 break;
         }
-
     }
 }
 
@@ -370,5 +310,350 @@ public class SimpleStringData
             return "NULL";
         }
         return _stringData[key];
+    }
+}
+
+/// <summary>
+/// Static 언어 데이터 관리 클래스 - 에디터와 런타임에서 모두 사용 가능
+/// </summary>
+public class LanguageInstanceManager : Singleton<LanguageInstanceManager>
+{
+    private Dictionary<SystemLanguage, LanguageConfigData> _languageConfigDic = new Dictionary<SystemLanguage, LanguageConfigData>();
+    private Dictionary<string, StringKeyValueSetData> _textDic = new Dictionary<string, StringKeyValueSetData>();
+    private SystemLanguage _currentLanguage = SystemLanguage.Korean;
+    
+    private readonly string _languageConfigPath = "Data/LanguageConfig.xml";
+
+    /// <summary>
+    /// 언어 설정 초기화
+    /// </summary>
+    public LanguageInstanceManager()
+    {
+        LoadLanguageConfig();
+    }
+
+    /// <summary>
+    /// 현재 언어 설정
+    /// </summary>
+    public SystemLanguage CurrentLanguage
+    {
+        get => _currentLanguage;
+        set => _currentLanguage = value;
+    }
+
+    /// <summary>
+    /// 언어 설정 파일 로드
+    /// </summary>
+    public bool LoadLanguageConfig()
+    {
+        try
+        {
+            XDocument doc = XDocument.Load(IOControl.PathForDocumentsFile(_languageConfigPath));
+            XElement rootElement = doc.Element("LanguageConfig");
+
+            if (rootElement == null)
+                throw new Exception("Root Not Exists");
+
+            _languageConfigDic.Clear();
+
+            foreach (var item in rootElement.Elements())
+            {
+                if (Enum.IsDefined(typeof(SystemLanguage), item.Name.LocalName) == false)
+                    throw new Exception($"{item.Name} is not systemLanguage");
+
+                LanguageConfigData configData = new LanguageConfigData();
+                configData._language = Enum.Parse<SystemLanguage>(item.Name.LocalName);
+                configData._displayName = item.Attribute("Display").Value; 
+                configData._textDataPath = item.Attribute("TextPath").Value;
+
+                _languageConfigDic.Add(configData._language, configData);
+            }
+
+            DebugUtil.log("언어 설정 로드 완료: {0}개 언어", _languageConfigDic.Count);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            DebugUtil.assert(false, "LanguageConfig 로드 실패! :{0}", ex.Message);
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// 특정 언어의 모든 텍스트 데이터 로드
+    /// </summary>
+    public bool LoadTextData(SystemLanguage language)
+    {
+        if (_languageConfigDic.ContainsKey(language) == false)
+        {
+            DebugUtil.assert(false, "TextData not found : {0}", language);
+            return false;
+        }
+
+        _textDic.Clear();
+        LanguageConfigData configData = _languageConfigDic[language];
+
+        try
+        {
+            List<string> fileList = new List<string>();
+            List<string> fullPathList = new List<string>();
+            IOControl.getFileListRecursive(configData._textDataPath, ".xml", ref fileList, ref fullPathList);
+
+            for(int index = 0; index < fullPathList.Count; ++index)
+            {
+                XDocument doc = XDocument.Load(fullPathList[index]);
+                XElement rootElement = doc.Element("TextData");
+
+                if (rootElement == null)
+                    throw new Exception("Root Not Exists");
+
+                StringKeyValueSetData dialogData = new StringKeyValueSetData();
+                foreach (var item in rootElement.Elements())
+                {
+                    StringKeyValueData valuedata = new StringKeyValueData();
+                    valuedata._key = int.Parse(item.Name.LocalName.Remove(0,1));
+                    valuedata._value = item.Attribute("Value").Value;
+
+                    dialogData._stringData.Add(valuedata);
+                }
+
+                _textDic.Add(System.IO.Path.GetFileNameWithoutExtension(fileList[index]), dialogData);
+            }
+
+            DebugUtil.log("텍스트 데이터 로드 완료: {0}개 파일", _textDic.Count);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            DebugUtil.assert(false, "TextData 로드 실패! :{0}", ex.Message);
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// 단일 텍스트 파일 로드
+    /// </summary>
+    public bool LoadSingleTextData(string fileName, SystemLanguage language)
+    {
+        if (_languageConfigDic.ContainsKey(language) == false)
+        {
+            DebugUtil.assert(false, "Language config not found : {0}", language);
+            return false;
+        }
+
+        LanguageConfigData configData = _languageConfigDic[language];
+        
+        // 확장자가 없으면 .xml 추가
+        string targetFileName = fileName;
+        if (!targetFileName.EndsWith(".xml"))
+        {
+            targetFileName += ".xml";
+        }
+
+        string fullPath = System.IO.Path.Combine(IOControl.PathForDocumentsFile(configData._textDataPath), targetFileName);
+
+        try
+        {
+            // 파일이 존재하는지 확인
+            if (!System.IO.File.Exists(fullPath))
+                return false;
+
+            XDocument doc = XDocument.Load(fullPath);
+            XElement rootElement = doc.Element("TextData");
+
+            if (rootElement == null)
+                throw new Exception("Root Element 'TextData' not found");
+
+            StringKeyValueSetData textData = new StringKeyValueSetData();
+            foreach (var item in rootElement.Elements())
+            {
+                StringKeyValueData valueData = new StringKeyValueData();
+                valueData._key = int.Parse(item.Name.LocalName.Remove(0, 1)); // "_0" -> "0"
+                valueData._value = item.Attribute("Value").Value;
+
+                textData._stringData.Add(valueData);
+            }
+
+            // 기존 데이터가 있으면 덮어씌우고, 없으면 추가
+            string fileKey = System.IO.Path.GetFileNameWithoutExtension(targetFileName);
+            if (_textDic.ContainsKey(fileKey))
+            {
+                _textDic[fileKey] = textData; // 덮어씌우기
+                DebugUtil.log("텍스트 데이터 업데이트: {0}", fileKey);
+            }
+            else
+            {
+                _textDic.Add(fileKey, textData); // 새로 추가
+                DebugUtil.log("텍스트 데이터 추가: {0}", fileKey);
+            }
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            DebugUtil.assert(false, "단일 텍스트 데이터 로드 실패! 파일: {0}, 오류: {1}", fileName, ex.Message);
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// 현재 언어로 단일 텍스트 파일 로드
+    /// </summary>
+    public bool LoadSingleTextData(string fileName)
+    {
+        return LoadSingleTextData(fileName, _currentLanguage);
+    }
+
+    /// <summary>
+    /// 텍스트 데이터를 XML로 저장
+    /// </summary>
+    public bool SaveTextDataToXML(StringKeyValueSetData textData, string fileName, SystemLanguage language)
+    {
+        if (_languageConfigDic.ContainsKey(language) == false)
+        {
+            DebugUtil.assert(false, "Language config not found : {0}", language);
+            return false;
+        }
+
+        LanguageConfigData configData = _languageConfigDic[language];
+        string fullPath = System.IO.Path.Combine(IOControl.PathForDocumentsFile(configData._textDataPath), fileName);
+
+        // 확장자가 없으면 .xml 추가
+        if (!fullPath.EndsWith(".xml"))
+        {
+            fullPath += ".xml";
+        }
+
+        try
+        {
+            // 디렉토리가 없으면 생성
+            string directory = System.IO.Path.GetDirectoryName(fullPath);
+            if (!System.IO.Directory.Exists(directory))
+            {
+                System.IO.Directory.CreateDirectory(directory);
+            }
+
+            // XML 문서 생성
+            XDocument doc = new XDocument();
+            XElement rootElement = new XElement("TextData");
+
+            // StringKeyValueData를 XML 요소로 변환
+            foreach (var stringData in textData._stringData)
+            {
+                XElement element = new XElement("_" + stringData._key.ToString());
+                element.SetAttributeValue("Value", stringData._value);
+                rootElement.Add(element);
+            }
+
+            doc.Add(rootElement);
+
+            // 파일 저장
+            doc.Save(fullPath);
+
+            DebugUtil.log("텍스트 데이터 저장 완료: {0}", fullPath);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            DebugUtil.assert(false, "텍스트 데이터 저장 실패! :{0}", ex.Message);
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// 현재 언어로 텍스트 데이터 저장
+    /// </summary>
+    public bool SaveTextDataToXML(StringKeyValueSetData textData, string fileName)
+    {
+        return SaveTextDataToXML(textData, fileName, _currentLanguage);
+    }
+
+    /// <summary>
+    /// 텍스트 데이터 경로 가져오기
+    /// </summary>
+    public string GetTextDataPath(SystemLanguage language)
+    {
+        if (_languageConfigDic.ContainsKey(language) == false)
+        {
+            DebugUtil.assert(false, "Language config not found : {0}", language);
+            return "";
+        }
+
+        return _languageConfigDic[language]._textDataPath;
+    }
+
+    /// <summary>
+    /// 현재 언어의 텍스트 데이터 경로 가져오기
+    /// </summary>
+    public string GetTextDataPath()
+    {
+        return GetTextDataPath(_currentLanguage);
+    }
+
+    public string GetTextFromFile(string fileName, int key)
+    {
+        string fileKey = fileName;
+
+        if (_textDic.ContainsKey(fileKey))
+        {
+            var stringData = _textDic[fileKey]._stringData.Find(x => x._key == key);
+
+            return stringData?._value ?? "";
+        }
+        return "";
+    }
+
+    public string GetTextFromFileFromIndex(string fileName, int index)
+    {
+        string fileKey = fileName;
+
+        if (_textDic.ContainsKey(fileKey))
+            return _textDic[fileKey]._stringData[index]._value;
+
+        return "NULL";
+    }
+
+    public StringKeyValueData GetStringKeyValue(string fileName, int key)
+    {
+        string fileKey = fileName;
+        if (_textDic.ContainsKey(fileKey))
+        {
+            return _textDic[fileKey]._stringData.Find(x => x._key == key);
+        }
+        return null;
+    }
+
+    public StringKeyValueData GetStringKeyValueFromIndex(string fileName, int index)
+    {
+        string fileKey = fileName;
+        if (_textDic.ContainsKey(fileKey))
+            return _textDic[fileKey]._stringData[index];
+
+        DebugUtil.assert(false, "StringKeyValueData not found for file: [{0}], index: [{1}]", fileName, index);
+        return null;
+    }
+
+    /// <summary>
+    /// 모든 텍스트 데이터 클리어
+    /// </summary>
+    public void ClearTextData()
+    {
+        _textDic.Clear();
+    }
+
+    /// <summary>
+    /// 언어 설정 데이터 가져오기
+    /// </summary>
+    public LanguageConfigData GetLanguageConfig(SystemLanguage language)
+    {
+        return _languageConfigDic.ContainsKey(language) ? _languageConfigDic[language] : null;
+    }
+
+    /// <summary>
+    /// 지원되는 언어 목록 가져오기
+    /// </summary>
+    public List<SystemLanguage> GetSupportedLanguages()
+    {
+        return new List<SystemLanguage>(_languageConfigDic.Keys);
     }
 }

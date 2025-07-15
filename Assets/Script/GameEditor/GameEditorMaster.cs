@@ -43,7 +43,7 @@ public class GameEditorMaster : MonoBehaviour
     private EditorWindowBase _currentFocusWindow;
     private bool _activeEditor = false;
 
-    private GameEntityBase _currentlySelectedEntity;
+    public GameEntityBase _currentlySelectedEntity;
 
     private void Awake()
     {
