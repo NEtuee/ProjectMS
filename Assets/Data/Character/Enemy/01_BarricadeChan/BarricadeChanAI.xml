@@ -1,59 +1,152 @@
-<AIGraph Name="BarricadeChanAI" DefaultState="Entry">
+<AIGraph Name="BarricadeChanAI" DefaultState="Entry_Battle">
+<!-- 전투 명세 -->
+    <!--
+        선도부 부원으로 불량 학생에 대해 호전적으로 제압하려든다.
+            - 아카네에게 접근하여 움직임을 제한시킨다.
+            - 레이피어나 루거의 탱커 역할을 수행한다.
+        필드에 복수로 소수 배치되어 집단으로 전투를 수행한다.
+            - 근거리에서 아카네의 전투를 방해한다.
+            - 낮은 빈도로 방패로 후려친다.
+            - 일대다 전투를 자연스럽게 만들기 위해 공격 타이밍을 랜덤으로 적용한다. (타이밍 퍼지, 확률적 쿨타임 캔슬)
+        공략
+            - 방패를 발로 차 무장해제 후 공략한다.
+            - 방패 후리기 후딜을 공략한다.
+            - 후방을 공략한다.
+    -->
+<!-- 전투 명세 -->
 
-    <Include Path="Assets/Data/AILibrary/Package/CommonRandMovePackage.xml"/>
-    <Include Path="Assets/Data/AILibrary/Package/CommonDeadPackage.xml"/>
-    <Include Path="Assets/Data/AILibrary/Package/CommonHitPackage.xml"/>
-    <Include Path="Assets/Data/AILibrary/Package/CommonChasePackage.xml"/>
+<!-- 옵션 설정 -->
+    <!-- 공격 거리 설정 -->
+    <GlobalVariable Name="gv_AttackRangeMin"           Value="1.0"/>       <!-- 최소 공격 사거리 : Value보다 PC가 가까우면 공격하지 않는다. -->
+    <GlobalVariable Name="gv_AttackRangeMax"           Value="2.0"/>       <!-- 최대 공격 사거리 : Value보다 PC가 멀면 공격하지 않는다. -->
+    <GlobalVariable Name="gv_AttacDelayTime"           Value="0.4"/>       <!-- 최대 공격 사거리 : Value보다 PC가 멀면 공격하지 않는다. -->
+<!-- 옵션 설정 -->
+
+<!-- 패키지 설정 -->
+    <!-- 패키지 인클루드 : 공통 -->
+    <Include Path="Assets/Data/AILibrary/Package/EmptyPackage.xml"/>               <!-- 공백 패키지 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonDeadPackage.xml"/>          <!-- 사망 패키지 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonHitPackage.xml"/>           <!-- 피격 패키지 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonGuardBrokenPackage.xml"/>   <!-- 가드 해제 패키지 -->
+
+    <!-- 패키지 인클루드 : 이동 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonIdlePackage.xml"/>          <!-- 대기 패키지 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonRandMovePackage.xml"/>      <!-- 랜덤 이동 패키지-->
+    <Include Path="Assets/Data/AILibrary/Package/CommonChasePackage.xml"/>         <!-- 추격 이동 패키지 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonAlertPackage.xml"/>         <!-- 경계 이동 패키지 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonAlertMovePackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonAwayPackage.xml"/>          <!-- 후진 이동 패키지 -->
+    
+    <!-- 패키지 인클루드 : 전투 -->
     <Include Path="Assets/Data/AILibrary/Package/CommonLockOnAttackPackage.xml"/>
-    <Include Path="Assets/Data/AILibrary/Package/CommonIdlePackage.xml"/>
-    <Include Path="Assets/Data/AILibrary/Package/CommonGuardBrokenPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonGuardPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonLockOnAllGuardPackage.xml"/>
+    <Include Path="Assets/Data/Character/Enemy/01_BarricadeChan/BarricadeChanAttackPackage.xml"/>
+    <Include Path="Assets/Data/Character/Enemy/01_BarricadeChan/BarricadeChanGuardHitPackage.xml"/>
+<!-- 패키지 설정 -->
 
-    <!-- 플레이어를 인지하는 거리 -->
-    <GlobalVariable Name="gv_SightRange" Value="3.5"/>
-    <!-- 플레이어를 공격할 수 있는 거리-->
-    <GlobalVariable Name="gv_AttackRange" Value="3.5"/>
-    <!-- 아타리가 행동을 전환하는데 걸리는 시간-->
-    <GlobalVariable Name="gv_atariChanTransitionTime" Value="0.4"/>
-    
-    <Entry Package="CommonRandMovePackage">
+<!-- 브랜치 셋 -->
+    <!-- 전투 행동 초기화 브랜치 셋 -->
+    <BranchSet Name="BattlePackageEndSet">
+        <Branch Condition="CurrentPackageEnd" Execute="Entry_Battle"/>
+    </BranchSet>
+
+    <!-- 피격 리액션 브랜치 셋 -->
+    <BranchSet Name="HitReactionSet">
         <Branch Condition="Dead" Execute="Dead"/>
-        <Branch Condition="Hit" Execute="Hit"/>
-        <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
-        <Branch Condition="TargetExists && (gv_SightRange >= TargetDistance)" Execute="Chase"/>
-        
-    </Entry>
+        <Branch Condition="Hit && getFrameTag_HitAvail" Execute="Hit"/>
+        <Branch Condition="GuardBreakFail && getFrameTag_GbAvail" Execute="GuardBroken"/>
+        <Branch Condition="GuardBroken && getFrameTag_GbAvail" Execute="GuardBroken"/>
+        <!-- Custom Reaction -->
+
+    </BranchSet>
+<!-- 브랜치 셋 -->
+
+
+<!-- 스테이트 -->
+    <!-- AI 스테이트 : 전투 상태 : 분기 -->
+    <Entry_Battle Package="CommonIdlePackage">
+        <Branch Condition="true"  Execute="Battle_JudgeDist"/>
+    </Entry_Battle>
+
+    <Battle_JudgeDist Package="CommonIdlePackage">
+        <Branch Condition="(TargetDistance > gv_AttackRangeMax)" Execute="Battle_Far"/>             <!-- 사거리 밖 -->
+        <Branch Condition="(TargetDistance < gv_AttackRangeMin)" Execute="Battle_Closer"/>          <!-- 초근접 -->
+        <Branch Condition="true" Execute="Battle_Range"/>                                           <!-- 사정거리 -->
+    </Battle_JudgeDist>
     
+    <Battle_Far Package="CommonIdlePackage">
+        <Branch Condition="true" Execute="Chase"/>
+    </Battle_Far>
+    <Battle_Closer Package="CommonIdlePackage">
+        <Branch Condition="true" Execute="Away"/>
+    </Battle_Closer>
+    <Battle_Range Package="CommonIdlePackage">
+        <Branch Weight="RandBoolean^true" Condition="true" Execute="Alert"/>
+        <Branch Condition="true" Execute="Chase"/>
+    </Battle_Range>
+
+    <!-- AI 스테이트 : 전투 상태 : 이동 -->
+    <Idle Package="CommonIdlePackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <!-- Movement Release -->
+        <Branch Condition="(TargetDistance <= gv_AttackRangeMax)" Execute="Battle_JudgeDist"/>      <!-- Distance Check-->
+        <Branch Condition="(GraphExecutedTime >= 3.0)" Execute="Entry_Battle"/>                     <!-- Executed Time Check-->
+    </Idle>
     <Chase Package="CommonChasePackage">
-        <Branch Condition="Dead" Execute="Dead"/>
-        <Branch Condition="Hit" Execute="Hit"/> 
-        <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
+        <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="TargetExists && 
-                           (gv_AttackRange >= TargetDistance) && 
-                           (GraphExecutedTime > gv_atariChanTransitionTime)" Execute="Attack"/>
+                           (TargetDistance <= gv_AttackRangeMax) && 
+                           (GraphExecutedTime > gv_AttacDelayTime) &&
+                           (aiGraphCoolTime_Attack == False)"       Execute="Guard"/>
+        <Branch Condition="TargetExists && 
+                           (TargetDistance <= gv_AttackRangeMax) && 
+                           (GraphExecutedTime > gv_AttacDelayTime)" Execute="Attack"/>
     </Chase>
+    <Away Package="CommonAwayPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <!-- Movement Release -->
+        <Branch Condition="(TargetDistance >= gv_AttackRangeMin)" Execute="Battle_JudgeDist"/>      <!-- Distance Check-->
+        <Branch Condition="(GraphExecutedTime >= 3.0)" Execute="Entry_Battle"/>                     <!-- Executed Time Check-->
+    </Away>
+    <Alert Package="CommonAlertPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <!-- Movement Release -->
+        <Branch Condition="(TargetDistance > gv_AttackRangeMax) 
+                        || (TargetDistance < gv_AttackRangeMin)" Execute="Battle_JudgeDist"/>      <!-- Distance Check-->
+        <Branch Condition="(GraphExecutedTime >= 1.0)" Execute="Entry_Battle"/>                     <!-- Executed Time Check-->
+    </Alert>
 
-    <Attack Package="CommonLockOnAttackPackage">
-        <Branch Condition="Dead" Execute="Dead"/>
-        <Branch Condition="Hit" Execute="Hit"/> 
-        <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
-        <Branch Condition="CurrentPackageEnd" Execute="Chase"/>
+    <!-- AI 스테이트 : 전투 상태 : 스킬 -->
+    <Attack Package="BarricadeChanAttackPackage" CoolTime="6.0">
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Guard"/>
     </Attack>
+    <Guard Package="CommonLockOnAllGuardPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="DefenceSuccess" Execute="GuardHit"/>
+        <!-- Movement Release -->
+        <Branch Condition="(TargetDistance >= gv_AttackRangeMax) && (GraphExecutedTime >= 0.3)" Execute="Battle_JudgeDist"/>      <!-- Distance Check-->
+        <Branch Condition="(GraphExecutedTime >= 1.0)" Execute="Entry_Battle"/>                     <!-- Executed Time Check-->
+    </Guard>
+    <GuardHit Package="BarricadeChanGuardHitPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Attack"/>
+    </GuardHit>
 
+    <!-- AI 스테이트 : 피격 상태 : 리액션 -->
     <Hit Package="CommonHitPackage">
-        <Branch Condition="Dead" Execute="Dead"/>
-        <Branch Condition="Hit" Execute="Hit"/>
-        <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
-        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
     </Hit>
 
     <GuardBroken Package="CommonGuardBrokenPackage">
-        <Branch Condition="Dead" Execute="Dead"/>
-        <Branch Condition="Hit" Execute="Hit"/>
-        <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
-        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
     </GuardBroken>
     
     <Dead Package="CommonDeadPackage">
     </Dead>
+<!-- 스테이트 -->
 
 </AIGraph>

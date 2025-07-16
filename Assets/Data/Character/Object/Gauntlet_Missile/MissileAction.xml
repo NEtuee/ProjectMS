@@ -64,7 +64,7 @@
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2415" Attach="true"/>
             <FrameEvent Type="EffectPreset" StartTime="0" Key="Explode"/>
             <FrameEvent Type="DeleteBuff" StartTime="0" BuffList="PlayerBattleObjectXXX"/>
-            <FrameEvent Type="Attack" StartTime="0" EndTime="0.3" AttackPreset="Common_Radius05" NotifyAttackSuccess="False">
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.3" AttackPreset="Missile_Explosion" NotifyAttackSuccess="False">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
                 </OnHit>

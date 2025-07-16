@@ -108,7 +108,7 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_AttackReady>
 
-    <AC_AttackMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction">
+    <AC_AttackMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction" Flags="OutlineSuperArmor">
         <AnimationHeader MasterPath="Sprites/Enemy/RapierChan/1_attack/"/>
         <Animation Preset="2_attackMain" XFlip="true" Duration="0.35">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="4907" Attach="true"/>

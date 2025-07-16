@@ -10,7 +10,7 @@
             <Branch Condition="true" Execute="AI_Chase"/>
         </AI_Entry>
 
-        <AI_Chase UpdateTime="0.2" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
+        <AI_Chase UpdateTime="0.1" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
                 <AIEvent Type="SetAction" Action="AC_Move"/>
