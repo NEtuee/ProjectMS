@@ -17,7 +17,7 @@ MonoBehaviour:
     _attackRadius: 1.5
     _attackAngle: 8
     _attackStartDistance: 0.5
-    _attackRayRadius: 0.17
+    _attackRayRadius: 0.1
     _pushVector: {x: 1.5, y: 0, z: 0}
     _attackMaterial: 0
   - _name: PlayerAttackLong
@@ -266,10 +266,10 @@ MonoBehaviour:
     _pushVector: {x: 5, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Barricade_Normal
-    _attackRadius: 0.2
+    _attackRadius: 0.3
     _attackAngle: 0
-    _attackStartDistance: 0
-    _attackRayRadius: 0.2
+    _attackStartDistance: 0.2
+    _attackRayRadius: 0.1
     _pushVector: {x: 4, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Tate_Normal
@@ -440,3 +440,10 @@ MonoBehaviour:
     _attackRayRadius: 0
     _pushVector: {x: 4.5, y: 2, z: 0}
     _attackMaterial: 2
+  - _name: Missile_Explosion
+    _attackRadius: 0.5
+    _attackAngle: 360
+    _attackStartDistance: 0
+    _attackRayRadius: 0
+    _pushVector: {x: 4, y: 0, z: 0}
+    _attackMaterial: 0
