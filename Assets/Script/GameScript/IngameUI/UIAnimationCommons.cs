@@ -1,65 +1,111 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public static class UIAnimationCommons
 {
-    public static IEnumerator Shake(Image targetImage) //지속 시간동안 흔들림, 갈수록 약해짐
+    public static void InitializePosition(Image targetImage)
     {
-        Vector2 basePosition = targetImage.rectTransform.anchoredPosition;
-        float timer = 0.0f;
-        float duration = 0.5f;
-        float strength = 1.0f;
+        targetImage.rectTransform.anchoredPosition = new Vector2(0.0f, 0.0f);
+    }
+    public static IEnumerator Shake(Image targetImage, float duration, float strength) //지속 시간동안 흔들림, 갈수록 약해짐
+    {
+        float elapsedTime = 0.0f;
 
-        while (timer < duration)
+        while (elapsedTime < duration)
         {
-            timer += Time.deltaTime;
-            float t = Mathf.Clamp01(timer / duration);
-            float eased = Mathf.Sin(t * Mathf.PI * 0.5f);
-            float x = Random.Range(-1f, 1f) * strength * eased;
-            float y = Random.Range(-1f, 1f) * strength * eased;
-            targetImage.rectTransform.anchoredPosition = basePosition + new Vector2(x, y);
+            elapsedTime += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsedTime / duration);
+            float easedT = Mathf.Sin(t * Mathf.PI * 0.5f);
+            float x = Random.Range(-1f, 1f) * strength * easedT;
+            float y = Random.Range(-1f, 1f) * strength * easedT;
+            targetImage.rectTransform.anchoredPosition = new Vector2(x, y);
 
             yield return null;
         }
 
-        targetImage.rectTransform.anchoredPosition = basePosition;
+        targetImage.rectTransform.anchoredPosition = new Vector2(0.0f, 0.0f);
     }
-    public static IEnumerator Float(Image targetImage) //지속 시간동안 떠오름, 갈수록 약해짐
+    public static IEnumerator Float(Image targetImage, float duration, float distance) //지속 시간동안 떠오름, 갈수록 약해짐
     {
-        Vector2 basePosition = targetImage.rectTransform.anchoredPosition;
-        float timer = 0.0f;
-        float duration = 0.5f;
-        float distance = 24.0f;
+        float elapsedTime = 0.0f;
 
-        Vector2 startPosition = basePosition - new Vector2(0.0f, distance);
+        Vector2 startPosition = new Vector2(0.0f, - distance);
         targetImage.rectTransform.anchoredPosition = startPosition;
 
-        while (timer < duration)
+        while (elapsedTime < duration)
         {
-            timer += Time.deltaTime;
-            float t = Mathf.Clamp01(timer / duration);
-            float eased = Mathf.Sin(t * Mathf.PI * 0.5f);
-            targetImage.rectTransform.anchoredPosition = Vector2.Lerp(startPosition, basePosition, eased);
+            elapsedTime += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsedTime / duration);
+            float easedT = Mathf.Sin(t * Mathf.PI * 0.5f);
+            targetImage.rectTransform.anchoredPosition = Vector2.Lerp(startPosition, new Vector2(0.0f, 0.0f), easedT);
             yield return null;
         }
 
-        targetImage.rectTransform.anchoredPosition = basePosition;
+        targetImage.rectTransform.anchoredPosition = new Vector2(0.0f, 0.0f);
     }
-    public static IEnumerator WaitA()
+    public static IEnumerator Wave(Image targetImage, float duration, float distance)
     {
-        int timer = 0;
-        while (timer < 120)
+        float elapsedTime = 0.0f;
+
+        Vector2 startPosition = new Vector2(0.0f, 0.0f);
+
+        while (elapsedTime < duration)
         {
-            timer += 1;
-            Debug.Log($"{timer}");
+            elapsedTime += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsedTime / duration);
+            float easedT = Mathf.Sin(t * Mathf.PI);
+            targetImage.rectTransform.anchoredPosition = startPosition - new Vector2(0.0f, (distance * easedT));
             yield return null;
         }
-        Debug.Log("WaitingA Done");
+
+        targetImage.rectTransform.anchoredPosition = new Vector2(0.0f, 0.0f);
     }
-    public static IEnumerator WaitB()
+    public static IEnumerator Flick(Image targetImage, float duration) //지속시간 동안 깜빡임
+    {
+        yield return null;
+    }
+    public static IEnumerator FadeIn(Image targetImage, float duration) //지속시간 동안 투명도 1로
+    {
+        float elapsedTime = 0.0f;
+        float initialAlpha = targetImage.color.a;
+        Color currentColor = targetImage.color;
+
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsedTime / duration);
+            float easedT = Mathf.Sin(t * Mathf.PI * 0.5f);
+            currentColor.a = Mathf.Lerp(initialAlpha, 1.0f, easedT);
+            targetImage.color = currentColor;
+            yield return null;
+        }
+
+        currentColor.a = 1.0f;
+        targetImage.color = currentColor;
+    }
+    public static IEnumerator FadeOut(Image targetImage, float duration) //지속시간 동안 투명도 0으로
+    {
+        float elapsedTime = 0.0f;
+        float initialAlpha = targetImage.color.a;
+        Color currentColor = targetImage.color;
+
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsedTime / duration);
+            float easedT = Mathf.Sin(t * Mathf.PI * 0.5f);
+            currentColor.a = Mathf.Lerp(initialAlpha, 0.0f, easedT);
+            targetImage.color = currentColor;
+            yield return null;
+        }
+
+        currentColor.a = 0.0f;
+        targetImage.color = currentColor;
+    }
+    public static IEnumerator CommonWait()
     {
         yield return new WaitForSeconds(2.0f);
-        //Debug.Log("WaitingB Done");
     }
 }

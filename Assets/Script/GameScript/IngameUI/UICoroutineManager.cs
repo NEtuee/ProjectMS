@@ -1,38 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public class UICoroutineManager : MonoBehaviour //상태 내의 개별 코루틴을 실행할 때 여기에 등록, 중복 실행 방지?, 이름으로 등록하지 말고 같은 OnEnter, OnExit 내부에 있는걸 묶어서,, (공통 코루틴 존재하니까)
+
+//UIState의 OnEnter, OnExit 내부의 모든 코루틴을 한 리스트로 묶어서 UICoroutineManager로 전달
+//새 리스트가 들어오면 기존 리스트 정지 후 새 리스트 코루틴 실행
+public class UICoroutineManager : MonoBehaviour
 {
-    private readonly ProjectorUI _projectorUI;
-    public UICoroutineManager(ProjectorUI projectorUI) => _projectorUI = projectorUI;
-    private Dictionary<IEnumerator, Coroutine> _runningCoroutines = new Dictionary<IEnumerator, Coroutine>();
-
-    public bool IsCoroutineRunning(IEnumerator coroutine)
+    private List<Coroutine> _runningCoroutines = new List<Coroutine>();
+    public void RegisterCoroutineList(ProjectorUI projectorUI, List<IEnumerator> newCoroutineList)
     {
-        return _runningCoroutines.ContainsKey(coroutine);
+        StopAllCoroutines();
+        _runningCoroutines.Clear();
+
+        foreach (IEnumerator coroutine in newCoroutineList)
+        {
+            Coroutine activeCoroutine = projectorUI.StartCoroutine(coroutine);
+            _runningCoroutines.Add(activeCoroutine);
+        }
     }
-    public void RegisterCoroutine(IEnumerator coroutine) //코루틴을 등록,, 같은 이름의 코루틴이 있다면 중지 후 다시 시작?
+    public IEnumerator WaitAllListedCoroutine()
     {
-        if (_runningCoroutines.ContainsKey(coroutine))
-            RestartCoroutine(coroutine);
+        foreach (Coroutine activeCoroutine in _runningCoroutines)
+        {
+            yield return activeCoroutine;
+        }
 
-        Coroutine newCoroutine = _projectorUI.StartCoroutine(ObserveCoroutine(coroutine));
-        _runningCoroutines[coroutine] = newCoroutine;
-    }
-    private void RestartCoroutine(IEnumerator coroutine)
-    {
-        if (!_runningCoroutines.ContainsKey(coroutine))
-            return;
-
-        _projectorUI.StopCoroutine(_runningCoroutines[coroutine]);
-        _runningCoroutines.Remove(coroutine);
-
-        Coroutine restartingCoroutine = _projectorUI.StartCoroutine(ObserveCoroutine(coroutine));
-        _runningCoroutines[coroutine] = restartingCoroutine;
-    }
-    private IEnumerator ObserveCoroutine(IEnumerator coroutine) //끝나면 리스트에서 삭제
-    {
-        yield return coroutine;
-        _runningCoroutines.Remove(coroutine);
+        Debug.Log("All Coroutine End!");
     }
 }

@@ -2,12 +2,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO.Compression;
 
 public class AkaneHP : ProjectorUI
 {
     [SerializeField] private Image FrameImage;
     [SerializeField] private Image HPProgressImage;
-    //위의 이미지마다 basePosition?
     public new AkaneHPData ReceivedData => (AkaneHPData)_receivedData;
     public new AkaneHPData ProjectingData
     {
@@ -61,7 +61,7 @@ public class AkaneHP : ProjectorUI
         _stateMap.Add(AkaneHPStateType.Underattacked, new UnderattackedState(this));
         _stateMap.Add(AkaneHPStateType.Lifetapping, new LifetappingState(this));
         _stateMap.Add(AkaneHPStateType.Lifestealing, new LifestealingState(this));
-        
+
         Deactivate();
     }
     public override void Activate()
@@ -75,19 +75,73 @@ public class AkaneHP : ProjectorUI
     protected override void UpdateProjection()
     {
         base.UpdateProjection();
-        HPProgressImage.fillAmount = ProjectingData.HPPercentage;
     }
 
 
-    // 투영 데이터 업데이트
+
+    //투영 데이터 업데이트
+    private void HPProjectionUpdate()
+    {
+        HPProgressImage.fillAmount = ProjectingData.HPPercentage;
+    }
     private void HPLerpUpdate()
     {
         float updatedHPPercentage = Mathf.Lerp(ProjectingData.HPPercentage, ReceivedData.HPPercentage, Time.deltaTime * 10.0f);
         float updatedChangeAmount = 0.0f;
         AkaneHPData updatedProjectingData = new AkaneHPData(updatedHPPercentage, updatedChangeAmount);
         ProjectingData = updatedProjectingData;
-    }
 
+        HPProjectionUpdate();
+    }
+    private IEnumerator OpeningHPLerpCoroutine(float duration)
+    {
+        float elapsedTime = 0.0f;
+        float initialHPPercentage = ProjectingData.HPPercentage;
+        float targetHPPercentage = ReceivedData.HPPercentage;
+
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsedTime / duration);
+            float easedT = t * t * t;
+            float updatedHPPercentage = Mathf.Lerp(ProjectingData.HPPercentage, ReceivedData.HPPercentage, easedT);
+            float updatedChangeAmount = 0.0f;
+            AkaneHPData updatedProjectingData = new AkaneHPData(updatedHPPercentage, updatedChangeAmount);
+            ProjectingData = updatedProjectingData;
+
+            HPProjectionUpdate();
+            yield return null;
+        }
+
+        ProjectingData = ReceivedData;
+        HPProjectionUpdate();
+    }
+    private IEnumerator NormalHPLerpCoroutine(float duration)
+    {
+        float elapsedTime = 0.0f;
+        float initialHPPercentage = ProjectingData.HPPercentage;
+        float targetHPPercentage = ReceivedData.HPPercentage;
+
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            float updatedHPPercentage = Mathf.Lerp(ProjectingData.HPPercentage, ReceivedData.HPPercentage, Time.deltaTime * 10.0f);
+            float updatedChangeAmount = 0.0f;
+            AkaneHPData updatedProjectingData = new AkaneHPData(updatedHPPercentage, updatedChangeAmount);
+            ProjectingData = updatedProjectingData;
+
+            HPProjectionUpdate();
+            yield return null;
+        }
+
+        ProjectingData = ReceivedData;
+        HPProjectionUpdate();
+    }
+    //UI 애니메이션 전용 메서드 및 코루틴
+    private IEnumerator PrivateWait()
+    {
+        yield return new WaitForSeconds(1.0f);
+    }
 
     //UIState 정의
     private class IdleState : UIState
@@ -103,11 +157,7 @@ public class AkaneHP : ProjectorUI
         {
             _akaneHP.HPLerpUpdate();
         }
-        public override UIState UpdateState()
-        {
-            return null;
-        }
-        public override UIState ChangeState(SubUIData subData) //외부에서 실행? 아카네와 관련없는건 매 프레임 체크해야되니 패스,, 아닌가? OnUpdate에서도 처리 가능하지 않은지
+        public override UIState ChangeState(SubUIData subData)
         {
             var eventKey = subData.UIEventKey;
             switch (eventKey)
@@ -124,6 +174,10 @@ public class AkaneHP : ProjectorUI
 
             return null;
         }
+        public override UIState UpdateState()
+        {
+            return null;
+        }
     }
     private class UnderattackedState : UIState
     {
@@ -133,6 +187,10 @@ public class AkaneHP : ProjectorUI
         {
             _akaneHP = akaneHP;
             _stateMap = akaneHP._stateMap;
+        }
+        public override IEnumerator OnEnter()
+        {
+            yield return null;
         }
         public override UIState ChangeState(SubUIData subData)
         {
@@ -155,11 +213,17 @@ public class AkaneHP : ProjectorUI
         public override IEnumerator OnEnter()
         {
             yield return null;
-            yield return _akaneHP.StartCoroutine(UIAnimationCommons.WaitB());
-            //Debug.Log("Lifetapping Enter Entered");
-            //코루틴 리스트를 한꺼번에 묶기?
-            //List<string, IEnumerator> onEnterCoroutines
-            //Debug.Log("Lifetapping Enter Ended");
+            UIAnimationCommons.InitializePosition(_akaneHP.FrameImage);
+            UIAnimationCommons.InitializePosition(_akaneHP.HPProgressImage);
+
+            List<IEnumerator> coroutineList = new List<IEnumerator>();
+            IEnumerator coroutineA = UIAnimationCommons.Wave(_akaneHP.HPProgressImage, 0.25f, 2.0f);
+            IEnumerator coroutineB = _akaneHP.NormalHPLerpCoroutine(0.25f);
+            coroutineList.Add(coroutineA);
+            coroutineList.Add(coroutineB);
+
+            _akaneHP._uiCoroutineManager.RegisterCoroutineList(_akaneHP, coroutineList);
+            yield return _akaneHP._uiCoroutineManager.WaitAllListedCoroutine();
         }
         public override UIState ChangeState(SubUIData subData)
         {
@@ -181,7 +245,7 @@ public class AkaneHP : ProjectorUI
         }
         public override IEnumerator OnEnter()
         {
-            yield return _akaneHP.StartCoroutine(UIAnimationCommons.WaitA());
+            yield return null;
         }
         public override UIState ChangeState(SubUIData subData)
         {
@@ -201,9 +265,40 @@ public class AkaneHP : ProjectorUI
             _akaneHP = akaneHP;
             _stateMap = akaneHP._stateMap;
         }
+        public override IEnumerator OnEnter()
+        {
+            //투명도 0으로
+            yield return null;
+
+            List<IEnumerator> coroutineList = new List<IEnumerator>();
+            IEnumerator coroutineA = UIAnimationCommons.FadeOut(_akaneHP.FrameImage, 0.25f);
+            IEnumerator coroutineB = UIAnimationCommons.FadeOut(_akaneHP.HPProgressImage, 0.25f);
+            coroutineList.Add(coroutineA);
+            coroutineList.Add(coroutineB);
+
+            _akaneHP._uiCoroutineManager.RegisterCoroutineList(_akaneHP, coroutineList);
+            yield return _akaneHP._uiCoroutineManager.WaitAllListedCoroutine();
+        }
         public override IEnumerator OnExit()
         {
-            yield return _akaneHP.StartCoroutine(UIAnimationCommons.Float(_akaneHP.HPProgressImage));
+            //위로 떠올라서 원래 위치로
+            //투명도 0에서 1로
+            yield return null;
+
+            List<IEnumerator> coroutineList = new List<IEnumerator>();
+            IEnumerator coroutineA = UIAnimationCommons.Float(_akaneHP.FrameImage, 0.5f, 24.0f);
+            IEnumerator coroutineB = UIAnimationCommons.Float(_akaneHP.HPProgressImage, 0.5f, 24.0f);
+            IEnumerator coroutineC = UIAnimationCommons.FadeIn(_akaneHP.FrameImage, 1.0f);
+            IEnumerator coroutineD = UIAnimationCommons.FadeIn(_akaneHP.HPProgressImage, 1.0f);
+            IEnumerator coroutineE = _akaneHP.OpeningHPLerpCoroutine(1.0f);
+            coroutineList.Add(coroutineA);
+            coroutineList.Add(coroutineB);
+            coroutineList.Add(coroutineC);
+            coroutineList.Add(coroutineD);
+            coroutineList.Add(coroutineE);
+
+            _akaneHP._uiCoroutineManager.RegisterCoroutineList(_akaneHP, coroutineList);
+            yield return _akaneHP._uiCoroutineManager.WaitAllListedCoroutine();
         }
         public override UIState ChangeState(SubUIData subData)
         {

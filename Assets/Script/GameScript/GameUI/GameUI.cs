@@ -60,7 +60,7 @@ public class GameUI : MonoBehaviour
         _enemyHp.InitValue();
         _bossHp.Disable();
 
-        _ingameUI.ActivateUI();
+        _ingameUI.ActivateAllUI();
     }
 
     public void StopByScene()

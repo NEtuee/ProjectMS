@@ -25,12 +25,14 @@ public abstract class ProjectorUI : MonoBehaviour
         set => _projectingSubData = value;
     }
     protected UIStateMachine _stateMachine;
+    protected UICoroutineManager _uiCoroutineManager;
 
 
 
     public virtual void Initialize()
     {
         _stateMachine = new UIStateMachine(this);
+        _uiCoroutineManager = gameObject.AddComponent<UICoroutineManager>();
         _receivedSubData = new SubUIData();
         _projectingSubData = new SubUIData();
     }

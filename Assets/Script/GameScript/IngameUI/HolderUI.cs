@@ -1,6 +1,5 @@
-using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 //프리팹으로 동적으로 생성되는 UI를 모아서 관리하는 용도? UI의 생성도 여기서 해야하는지,, 아니면 IngameUI에서?

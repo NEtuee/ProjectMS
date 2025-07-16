@@ -5,8 +5,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
-using System.Xml.Schema;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,8 +18,9 @@ public class IngameUI : MonoBehaviour
     //인스펙터 상에서 연결할 UI
     private List<ProjectorUI> _projectorUIList = new List<ProjectorUI>();
     [SerializeField] private AkaneHP _akaneHP;
-    //BP
-    //DPHolder, DP
+    [SerializeField] private AkaneBP _akaneBP;
+    [SerializeField] private AkaneDPHolder _akaneDPHolder;
+
     //QTE
     //보스HP
     //보스 페이즈
@@ -59,7 +58,7 @@ public class IngameUI : MonoBehaviour
         _subUIEntityList = subUIEntityList;
         _uiDataPacker.RefreshTargetEntity(_subUIEntityList);
     }
-    public void ActivateUI()
+    public void ActivateAllUI()
     {
         foreach (ProjectorUI projectorUI in _projectorUIList)
             projectorUI.Activate();
@@ -99,7 +98,7 @@ public class IngameUI : MonoBehaviour
     {
         projectorUI.ReceiveSubData(updatedData);
     }
-    public void DeactivateUI()
+    public void DeactivateAllUI()
     {
         foreach (ProjectorUI projectorUI in _projectorUIList)
             projectorUI.Deactivate();
