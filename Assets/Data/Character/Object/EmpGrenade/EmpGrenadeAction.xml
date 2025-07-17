@@ -14,10 +14,9 @@
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2415" Attach="true"/>
             <!-- TODO: 폭발 이펙트  -->
             <FrameEvent Type="Projectile" StartTime="0" GraphName="Emp" DirectionType="AI" SpawnTargetType="Self"/>
-            <FrameEvent Type="Attack" StartTime="0" EndTime="0.3" AttackPreset="Aoba_EmpGrenade">
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.3" AttackPreset="Aoba_EmpGrenade" AttackTag="Stun">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="StunSet"/>
                 </OnHit>
             </FrameEvent>
         </Animation>

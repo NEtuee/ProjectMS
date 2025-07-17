@@ -349,13 +349,13 @@
                 </OnExit>
             
                 <OnEnd>
-                    <FrameEvent Type="Attack" StartTime="0.0" AttackPreset="Najimi_Pitching">
+                    <FrameEvent Type="Attack" StartTime="0.0" AttackPreset="Najimi_Pitching" AttackTag="Stun">
                         <OnHit>
                             <FrameEvent Type="AudioPlay" StartTime="0.1" ID="2107"/>
                             <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
                             <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonTenthsAttack"/>
                             <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonTenthsAttack"/>
-                            <FrameEvent Type="ApplyBuffTarget" ApplyBuff="StunSet"/>
+                            
                             <FrameEvent Type="EffectPreset" StartTime="0" Key="SmokeBig"/>
                             <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
                             <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>

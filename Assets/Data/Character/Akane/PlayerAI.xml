@@ -1,17 +1,10 @@
 <AIGraph Name="PlayerAI" DefaultState="Entry">
     <Include Path="Assets/Data/Character/Akane/PlayerTargetSearchPackage.xml"/>
-    <Include Path="Assets/Data/Character/Akane/PlayerStunPackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonDeadPackage.xml"/>
 
     <Entry Package="PlayerTargetSearchPackage">
-        <Branch Condition="getStat_IsStun == 1.0" Execute="Stun"/>
         <Branch Condition="Dead" Execute="Dead"/>
     </Entry>
-
-    <Stun Package="PlayerStunPackage">
-        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
-        <Branch Condition="Dead" Execute="Dead"/>
-    </Stun>
 
     <Dead Package="CommonDeadPackage">
         <Branch Condition="Dead == false" Execute="Entry"/>

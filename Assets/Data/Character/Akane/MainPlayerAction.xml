@@ -572,6 +572,9 @@
             <FrameEvent Type="UIEvent" StartTime="0" Key="Hit"/>
 
             <FrameEvent Type="SequencerSignal" StartTime="0" Signal="CatchEnd"/>
+
+            <!-- 특수 피격 관련 버프 리셋 -->
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="StunClear"/>
         </Animation>
 
         <!-- <Branch Condition="getStat_IsStun == 1.0" Execute="Stun"/> -->
@@ -708,9 +711,12 @@
 
     <Stun MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" ApplyBuff="StunEscape StunDecrementKeep" Flags="QTE">
         <Animation Preset="Sprites/NewPlayer/stun" XFlip="true" Duration="5.0">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="1004" ParameterID="10041" ParameterValue="5" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="3" Speed="0"/>
+            <!-- 스턴 버프 적용 -->
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="StunSet"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="Stun"/>
+            
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="1004" ParameterID="10041" ParameterValue="5" Attach="true"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="ClearBloodPoint"/>
 
         </Animation>
