@@ -597,7 +597,7 @@ public class ActionFrameEvent_Effect : ActionFrameEventBase
 
         requestData._rotation *= Quaternion.Euler(0f,0f,rotationAngle);
 
-        executeEntity.SendMessageEx(MessageTitles.effect_spawnEffect,UniqueIDBase.QueryUniqueID("EffectManager"),requestData);
+        executeEntity.SendMessageQuick(MessageTitles.effect_spawnEffect,UniqueIDBase.QueryUniqueID("EffectManager"),requestData);
 
         return true;
     }
