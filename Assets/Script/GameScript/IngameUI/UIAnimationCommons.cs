@@ -1,7 +1,9 @@
 using UnityEngine;
-using UnityEngine.UI; // UI Image 컴포넌트를 사용하기 위해 필요
+using UnityEngine.UI;
 using System.Collections;
-using System; // Func 델리게이트를 사용하기 위해 필요
+using System;
+
+
 
 public static class UIAnimationCommons
 {
@@ -30,14 +32,14 @@ public static class UIAnimationCommons
     public static float EaseInBack(float t)
     {
         float c1 = 1.70158f;
-        return c1 * t * t * t - (c1 - 1f) * t * t;
+        return c1 * t * t * t - (c1 - 1.0f) * t * t;
     }
 
     public static float EaseOutBack(float t)
     {
         float c1 = 1.70158f;
         t = t - 1.0f;
-        return (t * t * ((c1 + 1f) * t + c1) + 1f);
+        return (t * t * ((c1 + 1.0f) * t + c1) + 1.0f);
     }
     public static float EaseOutCirc(float t)
     {
@@ -104,8 +106,8 @@ public static class UIAnimationCommons
             float t = Mathf.Clamp01(elapsedTime / duration);
             float easedT = easingFunction(t);
 
-            float offsetX = (Mathf.PerlinNoise(Time.time * 20f, 0f) * 2f - 1f) * strength * (1f - easedT);
-            float offsetY = (Mathf.PerlinNoise(0f, Time.time * 20f) * 2f - 1f) * strength * (1f - easedT);
+            float offsetX = (Mathf.PerlinNoise(Time.time * 20f, 0f) * 2.0f - 1.0f) * strength * (1.0f - easedT);
+            float offsetY = (Mathf.PerlinNoise(0f, Time.time * 20f) * 2.0f - 1.0f) * strength * (1.0f - easedT);
 
             targetImage.rectTransform.anchoredPosition = startPosition + new Vector2(offsetX, offsetY);
 
@@ -141,8 +143,8 @@ public static class UIAnimationCommons
 
         targetImage.rectTransform.anchoredPosition = endPosition;
     }
-    public static IEnumerator WaveDown(Image targetImage, float duration, float strength, 
-                                        Func<float, float> downEasingFunction = null, 
+    public static IEnumerator WaveDown(Image targetImage, float duration, float strength,
+                                        Func<float, float> downEasingFunction = null,
                                         Func<float, float> upEasingFunction = null)
     {
         if (targetImage == null)
@@ -191,8 +193,8 @@ public static class UIAnimationCommons
 
         targetImage.rectTransform.anchoredPosition = endPosition;
     }
-    public static IEnumerator WaveUp(Image targetImage, float duration, float strength, 
-                                    Func<float, float> upEasingFunction = null, 
+    public static IEnumerator WaveUp(Image targetImage, float duration, float strength,
+                                    Func<float, float> upEasingFunction = null,
                                     Func<float, float> downEasingFunction = null)
     {
         if (targetImage == null)
@@ -239,14 +241,14 @@ public static class UIAnimationCommons
             yield return null;
         }
     }
-    public static IEnumerator FadeIn(Image targetImage, float duration, 
+    public static IEnumerator FadeIn(Image targetImage, float duration,
                                     Func<float, float> easingFunction = null)
     {
         if (targetImage == null)
             yield break;
 
         if (easingFunction == null)
-            easingFunction = EaseOutQuad; // 기본값: 초반에 빠르게 흐려지고 서서히 투명해짐
+            easingFunction = EaseOutQuad;
 
         float startAlpha = targetImage.color.a;
         float endAlpha = 1.0f;
@@ -270,14 +272,14 @@ public static class UIAnimationCommons
         endColor.a = endAlpha;
         targetImage.color = endColor;
     }
-    public static IEnumerator FadeOut(Image targetImage, float duration, 
+    public static IEnumerator FadeOut(Image targetImage, float duration,
                                     Func<float, float> easingFunction = null)
     {
         if (targetImage == null)
             yield break;
 
         if (easingFunction == null)
-            easingFunction = EaseOutQuad; // 기본값: 초반에 빠르게 흐려지고 서서히 투명해짐
+            easingFunction = EaseOutQuad;
 
         float startAlpha = targetImage.color.a;
         float endAlpha = 0.0f;
@@ -301,8 +303,51 @@ public static class UIAnimationCommons
         endColor.a = endAlpha;
         targetImage.color = endColor;
     }
-    public static IEnumerator Flick(Image targetImage, float duration)
+    public static IEnumerator Flick(Image targetImage, float duration, float strength, int frequency,
+                                    Func<float, float> easingFunction = null)
     {
-        yield return null;
+        if (targetImage == null)
+            yield break;
+
+        if (easingFunction == null)
+            easingFunction = EaseOutQuint;
+
+        Color startColor = targetImage.color;
+        float startAlpha = startColor.a;
+        float singleFlickDuration = duration / frequency;
+
+        for (int i = 0; i < frequency; i++)
+        {
+            float singleFlickElapsedTime = 0.0f;
+            float overallT = (float)i / frequency;
+            float easedOverallT = easingFunction(overallT);
+
+            float currentStrength = Mathf.Clamp01(strength) * (1.0f - easedOverallT);
+
+            while (singleFlickElapsedTime < singleFlickDuration)
+            {
+                singleFlickElapsedTime += Time.deltaTime;
+                float t = Mathf.Clamp01(singleFlickElapsedTime / singleFlickDuration);
+
+                Color currentColor = targetImage.color;
+                float currentAlpha;
+
+                if (t < 0.5f)
+                {
+                    currentAlpha = Mathf.Lerp(startAlpha, startAlpha - currentStrength, t * 2.0f);
+                }
+                else
+                {
+                    currentAlpha = Mathf.Lerp(startAlpha - currentStrength, startAlpha, (t - 0.5f) * 2.0f);
+                }
+
+                currentColor.a = currentAlpha;
+                targetImage.color = currentColor;
+
+                yield return null;
+            }
+
+            targetImage.color = startColor;
+        }
     }
 }

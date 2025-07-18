@@ -14,7 +14,7 @@ public class UICoroutineManager : MonoBehaviour
 
         foreach (IEnumerator coroutine in newCoroutineList)
         {
-            Coroutine activeCoroutine = projectorUI.StartCoroutine(coroutine);
+            Coroutine activeCoroutine = StartCoroutine(coroutine);
             _runningCoroutines.Add(activeCoroutine);
         }
     }
@@ -24,7 +24,5 @@ public class UICoroutineManager : MonoBehaviour
         {
             yield return activeCoroutine;
         }
-
-        Debug.Log("All Coroutine End!");
     }
 }
