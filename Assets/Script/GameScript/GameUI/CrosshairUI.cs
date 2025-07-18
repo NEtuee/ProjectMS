@@ -117,12 +117,24 @@ public class CrosshairUI : IUIElement
 
         var screenHeight = Screen.height;
         var screenWidth = Screen.width;
-
-        var mousePosition = Input.mousePosition;
-        var clampMousePosition = new Vector3(Mathf.Clamp(mousePosition.x, 0.0f, screenWidth), Mathf.Clamp(mousePosition.y, 0.0f, screenHeight), 0.0f);
         
-        Vector3 worldMousePosition = mainCamera.ScreenToWorldPoint(clampMousePosition);
-        worldMousePosition.z = 0.0f;
+        Vector3 worldMousePosition;
+        
+        if(ControllerEx.Instance().getCurrentControllerType() == ControllerEx.ControllerType.KeyboardMouse)
+        {
+            var mousePosition = Input.mousePosition;
+            var clampMousePosition = new Vector3(Mathf.Clamp(mousePosition.x, 0.0f, screenWidth), Mathf.Clamp(mousePosition.y, 0.0f, screenHeight), 0.0f);
+            worldMousePosition = mainCamera.ScreenToWorldPoint(clampMousePosition);
+            worldMousePosition.z = 0.0f;
+        }
+        else
+        {
+            Vector3 joystickDirection = ControllerEx.Instance().getJoystickAxisR(Vector3.zero);
+            if(joystickDirection.magnitude <= 0.0f)
+                joystickDirection = Vector3.right;
+
+            worldMousePosition = targetPosition + joystickDirection * 2f;  
+        }
 
         Vector3 toMouseVector = worldMousePosition - targetPosition;
         Quaternion rotation = Quaternion.Euler(0f, 0f, MathEx.directionToAngle(toMouseVector.normalized));

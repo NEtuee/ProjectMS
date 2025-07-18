@@ -1123,10 +1123,12 @@ public class ControllerEx : Singleton<ControllerEx>
     public Vector3 getJoystickAxisR(Vector3 position)
     {
         Vector3 axis = Vector2.zero;
-        if(controller == ControllerType.XboxController)
-            axis = new Vector3(Input.GetAxis("XBoxRightHorizontal"),Input.GetAxis("XBoxRightVertical"));
-        else if(controller == ControllerType.PSController)
-            axis = new Vector3(Input.GetAxis("PSRightHorizontal"),Input.GetAxis("PSRightVertical"));
+        // if(controller == ControllerType.XboxController)
+        //     axis = new Vector3(Input.GetAxis("XBoxRightHorizontal"),Input.GetAxis("XBoxRightVertical"));
+        // else if(controller == ControllerType.PSController)
+        //     axis = new Vector3(Input.GetAxis("PSRightHorizontal"),Input.GetAxis("PSRightVertical"));
+        if(controller == ControllerType.XboxController || controller == ControllerType.PSController)
+            axis = GetJoystickAxis();
         else if(controller == ControllerType.KeyboardMouse)
             axis = (MathEx.deleteZ(Camera.main.ScreenToWorldPoint(Input.mousePosition)) - position).normalized;
 
