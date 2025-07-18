@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Threading;
 using YamlDotNet.Core.Tokens;
+using Unity.Mathematics;
 
 public class ActionKeyInputData
 {
@@ -850,7 +851,7 @@ public class ControllerEx : Singleton<ControllerEx>
             else if(k.type == KeyType.Axis)
             {
                 k.axis = Input.GetAxis(k.axisName);
-                bool down = k.axis >= _axisPushStr;
+                bool down = MathEx.abs(k.axis) >= _axisPushStr;
 
                 if(down && k.state == KeyState.Down)
                     k.state = KeyState.Press;
