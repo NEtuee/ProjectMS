@@ -2978,6 +2978,7 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
 
     public float                   _attackTerm = -1f;
     public bool                    _notifyAttackSuccess = true;
+    public bool                    _attackShake = false;
     public int                     _collisionCount = -1;
 
     public string                  _throwProjectileName = "";
@@ -3055,6 +3056,10 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
             {
                 _attackType = (AttackType)System.Enum.Parse(typeof(AttackType), attributes[i].Value);
             }
+            else if (attributes[i].Name == "AttackShake")
+            {
+                _attackShake = bool.Parse(attributes[i].Value);
+            }
             else if (attributes[i].Name == "AttackPreset")
             {
                 AttackPreset preset = ResourceContainerEx.Instance().GetScriptableObject("Preset/AttackPreset") as AttackPreset;
@@ -3071,6 +3076,7 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
                 rayRadius = presetData._attackRayRadius;
                 _pushVector = presetData._pushVector;
                 _attackMaterial = presetData._attackMaterial;
+                _attackShake = presetData._attackShake;
             }
             else if (attributes[i].Name == "IgnoreDefenceType")
             {
@@ -3170,6 +3176,7 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
         binaryWriter.Write(_notifyAttackSuccess);
         binaryWriter.Write(_collisionCount);
         binaryWriter.Write(_throwProjectileName);
+        binaryWriter.Write(_attackShake);
         BinaryHelper.writeArray(ref binaryWriter, _attackTagList);
     }
 #endif
@@ -3202,6 +3209,7 @@ public class ActionFrameEvent_Attack : ActionFrameEventBase
         _notifyAttackSuccess = binaryReader.ReadBoolean();
         _collisionCount = binaryReader.ReadInt32();
         _throwProjectileName = binaryReader.ReadString();
+        _attackShake = binaryReader.ReadBoolean();
         _attackTagList = BinaryHelper.readArrayInt(ref binaryReader);
     }
 }

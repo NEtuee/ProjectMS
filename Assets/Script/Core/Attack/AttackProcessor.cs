@@ -344,6 +344,21 @@ public class AttackProcessor : AttackProcessorBase
 
         if(((guardSuccess == false || target.getDefenceType() == DefenceType.Empty) && target.getDefenceType() != DefenceType.Evade) || canIgnore)
         {
+            if(_attackFrameEvent._attackShake)
+            {
+                AnimationTranslationPreset translationPreset = ResourceContainerEx.Instance().GetScriptableObject("Preset/AnimationTranslationPreset") as AnimationTranslationPreset;
+                AnimationRotationPreset rotationPreset = ResourceContainerEx.Instance().GetScriptableObject("Preset/AnimationRotationPreset") as AnimationRotationPreset;
+
+                AnimationTranslationPresetData translationPresetData = null;
+                AnimationRotationPresetData rotationPresetData = null;
+                if(GlobalVariable._shakeTranslationPreset != "")
+                    translationPresetData = translationPreset.getPresetData(GlobalVariable._shakeTranslationPreset);
+                if(GlobalVariable._shakeRotationPreset != "")
+                    rotationPresetData = rotationPreset.getPresetData(GlobalVariable._shakeRotationPreset);
+
+                target.setShake(translationPresetData, rotationPresetData, GlobalVariable._shakeDuration);
+            }
+
             switch(_attackFrameEvent._attackType)
             {
                 case AttackType.Default:

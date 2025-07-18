@@ -111,6 +111,9 @@ public class GameEntityBase : SequencerObjectBase
 
     private TimeProcessor       _timeProcessor = new TimeProcessor();
     private TimeProcessor.TimeProcessItem _outlineAppearTimeProcessItem = null;
+    private TimeProcessor.TimeProcessItem _shakeTimeProcessItem = null;
+    private AnimationTranslationPresetData _shakeTranslationPresetData = null;
+    private AnimationRotationPresetData _shakeRotationPresetData = null;
 
 #if UNITY_EDITOR
 
@@ -186,6 +189,10 @@ public class GameEntityBase : SequencerObjectBase
 
         _outlineAppearTimeProcessItem = _timeProcessor.addTimer("OutlineAppear", _kOutlineStartTime);
         _outlineAppearTimeProcessItem.initialize(false);
+
+        _shakeTimeProcessItem = _timeProcessor.addTimer("Shake", 0.5f);
+        _shakeTimeProcessItem.setIgnoreDeltaTimeScale(true);
+        _shakeTimeProcessItem.initialize(false);
     }
 
     public virtual void initializeCharacter(CharacterInfoData characterInfo, AllyInfoData allyInfo, Vector3 direction)
@@ -277,6 +284,7 @@ public class GameEntityBase : SequencerObjectBase
 
         _outlineSpriteObject.SetActive(false);
         _outlineAppearTimeProcessItem.initialize(false);
+        _shakeTimeProcessItem.initialize(false);
 
         if(_actionGraph.isCurrentOutlineAction())
         {
@@ -421,6 +429,7 @@ public class GameEntityBase : SequencerObjectBase
 
         _outlineSpriteObject.SetActive(false);
         _outlineAppearTimeProcessItem.initialize(false);
+        _shakeTimeProcessItem.initialize(false);
 
         if(_actionGraph.isCurrentOutlineAction())
         {
@@ -564,6 +573,8 @@ public class GameEntityBase : SequencerObjectBase
 
             ulong currentAnimationFlags = _actionGraph.getCurrentAnimationFlags();
 
+            updateShake(deltaTime);
+
             if(actionChanged)
             {
                 if(_actionGraph.isPrevOutlineAction() == false && _actionGraph.isCurrentOutlineAction())
@@ -635,6 +646,18 @@ public class GameEntityBase : SequencerObjectBase
         }
 
         _outlineSpriteObject.transform.localScale = Vector3.Lerp(Vector3.one * _kOutlineStartSize, Vector3.one, MathEx.easeOutCubic(_outlineAppearTimeProcessItem.getRate()));
+    }
+
+    private void updateShake(float deltaTime)
+    {
+        if(_shakeTimeProcessItem.isTriggered() )
+            return;
+
+        if(_shakeTranslationPresetData != null)
+            _localSpritePosition = _shakeTranslationPresetData.evaulate(_shakeTimeProcessItem.getRate());
+
+        if(_shakeRotationPresetData != null)
+            _spriteObject.transform.localRotation *= Quaternion.Euler(0f,0f,_shakeRotationPresetData.evaulate(_shakeTimeProcessItem.getRate()));
     }
 
     public void onActionChanged()
@@ -939,6 +962,14 @@ public class GameEntityBase : SequencerObjectBase
         _rotateSlotSpeed = speed;
     }
 
+    public void setShake(AnimationTranslationPresetData translationPresetData, AnimationRotationPresetData rotationPresetData, float shakeTime = 0.5f)
+    {
+        _shakeTranslationPresetData = translationPresetData;
+        _shakeRotationPresetData = rotationPresetData;
+        _shakeTimeProcessItem.set(shakeTime);
+        _shakeTimeProcessItem.initialize(true);
+    }
+
     public void attachToSlot(GameEntityBase parentEntity)
     {
         if(_rotateSlotParent != null)
@@ -1102,6 +1133,7 @@ public class GameEntityBase : SequencerObjectBase
 
         _outlineSpriteObject.SetActive(false);
         _outlineAppearTimeProcessItem.initialize(false);
+        _shakeTimeProcessItem.initialize(false);
 
         _actionDebug = false;
         _aiDebug = false;

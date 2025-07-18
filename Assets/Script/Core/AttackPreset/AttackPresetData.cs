@@ -7,6 +7,8 @@ public class AttackPresetData
     public float                _attackStartDistance;
     public float                _attackRayRadius = 0f;
 
+    public bool                 _attackShake = false;
+
     public UnityEngine.Vector3  _pushVector;
 
     public CommonMaterial       _attackMaterial;
