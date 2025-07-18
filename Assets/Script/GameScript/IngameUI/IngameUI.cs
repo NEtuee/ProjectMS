@@ -42,6 +42,7 @@ public class IngameUI : MonoBehaviour
     {
         //UIList 요소 추가
         _projectorUIList.Add(_akaneHP);
+        _projectorUIList.Add(_akaneBP);
 
         foreach (ProjectorUI projectorUI in _projectorUIList)
             projectorUI.Initialize();

@@ -213,14 +213,14 @@ public class AkaneHP : ProjectorUI
         public override IEnumerator OnEnter()
         {
             yield return null;
-            UIAnimationCommons.InitializePosition(_akaneHP.FrameImage);
-            UIAnimationCommons.InitializePosition(_akaneHP.HPProgressImage);
 
             List<IEnumerator> coroutineList = new List<IEnumerator>();
-            IEnumerator coroutineA = UIAnimationCommons.Wave(_akaneHP.HPProgressImage, 0.25f, 2.0f);
-            IEnumerator coroutineB = _akaneHP.NormalHPLerpCoroutine(0.25f);
+            IEnumerator coroutineA = UIAnimationCommons.WaveDown(_akaneHP.HPProgressImage, 1.0f, 4.0f);
+            IEnumerator coroutineB = UIAnimationCommons.WaveDown(_akaneHP.FrameImage, 0.9f, 4.0f);
+            IEnumerator coroutineC = _akaneHP.NormalHPLerpCoroutine(0.25f);
             coroutineList.Add(coroutineA);
             coroutineList.Add(coroutineB);
+            coroutineList.Add(coroutineC);
 
             _akaneHP._uiCoroutineManager.RegisterCoroutineList(_akaneHP, coroutineList);
             yield return _akaneHP._uiCoroutineManager.WaitAllListedCoroutine();
@@ -246,6 +246,17 @@ public class AkaneHP : ProjectorUI
         public override IEnumerator OnEnter()
         {
             yield return null;
+
+            List<IEnumerator> coroutineList = new List<IEnumerator>();
+            IEnumerator coroutineA = UIAnimationCommons.WaveUp(_akaneHP.HPProgressImage, 1.5f, 1.0f);
+            IEnumerator coroutineB = UIAnimationCommons.WaveUp(_akaneHP.FrameImage, 1.35f, 1.0f);
+            IEnumerator coroutineC = _akaneHP.NormalHPLerpCoroutine(0.25f);
+            coroutineList.Add(coroutineA);
+            coroutineList.Add(coroutineB);
+            coroutineList.Add(coroutineC);
+
+            _akaneHP._uiCoroutineManager.RegisterCoroutineList(_akaneHP, coroutineList);
+            yield return _akaneHP._uiCoroutineManager.WaitAllListedCoroutine();
         }
         public override UIState ChangeState(SubUIData subData)
         {
@@ -284,6 +295,8 @@ public class AkaneHP : ProjectorUI
             //위로 떠올라서 원래 위치로
             //투명도 0에서 1로
             yield return null;
+            UIAnimationCommons.FadeIn(_akaneHP.FrameImage, 0.0f);
+            UIAnimationCommons.FadeIn(_akaneHP.HPProgressImage, 0.0f);
 
             List<IEnumerator> coroutineList = new List<IEnumerator>();
             IEnumerator coroutineA = UIAnimationCommons.Float(_akaneHP.FrameImage, 0.5f, 24.0f);

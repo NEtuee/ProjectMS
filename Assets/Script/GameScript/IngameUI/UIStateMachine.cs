@@ -101,10 +101,16 @@ public class UIStateMachine
 
     private IEnumerator WaitForOnExit(UIState state)
     {
+        if (state == null)
+            yield break;
+        
         yield return _projectorUI.StartCoroutine(state.OnExit());
     }
     private IEnumerator WaitForOnEnter(UIState state)
     {
+        if (state == null)
+            yield break;
+        
         yield return _projectorUI.StartCoroutine(state.OnEnter());
     }
 }

@@ -14,6 +14,8 @@ public class UIDataPacker
         {
             case UIDataType.AkaneHP:
                 return UpdateAkaneHPData((AkaneHP.AkaneHPData)outdatedData);
+            case UIDataType.AkaneBP:
+                return UpdateAkaneBPData((AkaneBP.AkaneBPData)outdatedData);
             default:
                 return outdatedData;
         }
@@ -24,6 +26,14 @@ public class UIDataPacker
         float newChangeAmount = newHPPercentage - outdatedData.HPPercentage;
 
         AkaneHP.AkaneHPData updatedData = new AkaneHP.AkaneHPData(newHPPercentage, newChangeAmount);
+        return updatedData;
+    }
+    private AkaneBP.AkaneBPData UpdateAkaneBPData(AkaneBP.AkaneBPData outdatedData)
+    {
+        float newBPPercentage = _targetAkane.getStatusPercentage("Blood");
+        float newChangeAmount = newBPPercentage - outdatedData.BPPercentage;
+
+        AkaneBP.AkaneBPData updatedData = new AkaneBP.AkaneBPData(newBPPercentage, newChangeAmount);
         return updatedData;
     }
     public SubUIData PackNewSubData(UIEventKey key) //임의 업데이트 되는 서브 데이터
