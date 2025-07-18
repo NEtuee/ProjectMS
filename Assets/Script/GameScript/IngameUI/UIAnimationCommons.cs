@@ -12,52 +12,46 @@ public static class UIAnimationCommons
     {
         return t;
     }
-
     public static float EaseInQuad(float t)
     {
         return t * t;
     }
-
     public static float EaseOutQuad(float t)
     {
-        return 1.0f - (1.0f - t) * (1.0f - t);
+        return 1.0f - EaseInQuad(1.0f - t);
     }
-
+    public static float EaseInQuint(float t)
+    {
+        return t * t * t * t * t;
+    }
     public static float EaseOutQuint(float t)
     {
-        t -= 1.0f;
-        return t * t * t * t * t + 1.0f;
+        return 1.0f - EaseInQuint(1.0f - t);
     }
 
     public static float EaseInBack(float t)
     {
         float c1 = 1.70158f;
-        return c1 * t * t * t - (c1 - 1.0f) * t * t;
+        return t * t * ((c1 + 1.0f) * t - c1);
     }
-
     public static float EaseOutBack(float t)
     {
-        float c1 = 1.70158f;
-        t = t - 1.0f;
-        return (t * t * ((c1 + 1.0f) * t + c1) + 1.0f);
+        return 1.0f - EaseInBack(1.0f - t);
+    }
+    public static float EaseInCirc(float t)
+    {
+        return -((float)Mathf.Sqrt(1.0f - t * t) - 1.0f);
     }
     public static float EaseOutCirc(float t)
     {
-        t -= 1.0f;
-        return Mathf.Sqrt(1.0f - t * t);
+        return 1.0f - EaseInCirc(1.0f - t);
     }
     public static float EaseInOutCirc(float t)
     {
         if (t < 0.5f)
-        {
-            t *= 2.0f;
-            return (1.0f - Mathf.Sqrt(1.0f - t * t)) / 2.0f;
-        }
+            return EaseInCirc(t * 2.0f) / 2.0f;
         else
-        {
-            t = t * 2.0f - 2.0f;
-            return (Mathf.Sqrt(1.0f - t * t) + 1.0f) / 2.0f;
-        }
+            return 1 - EaseInCirc((1.0f - t) * 2.0f) / 2.0f;
     }
 
 
@@ -310,7 +304,7 @@ public static class UIAnimationCommons
             yield break;
 
         if (easingFunction == null)
-            easingFunction = EaseOutQuint;
+            easingFunction = EaseLinear;
 
         Color startColor = targetImage.color;
         float startAlpha = startColor.a;

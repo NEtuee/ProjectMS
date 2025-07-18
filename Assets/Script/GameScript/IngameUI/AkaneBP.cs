@@ -102,7 +102,8 @@ public class AkaneBP : ProjectorUI
         {
             elapsedTime += Time.deltaTime;
             float t = Mathf.Clamp01(elapsedTime / duration);
-            float easedT = t * t * t;
+            float easedT = UIAnimationCommons.EaseInQuad(t);
+
             float updatedBPPercentage = Mathf.Lerp(ProjectingData.BPPercentage, ReceivedData.BPPercentage, easedT);
             float updatedChangeAmount = 0.0f;
             AkaneBPData updatedProjectingData = new AkaneBPData(updatedBPPercentage, updatedChangeAmount);
@@ -124,7 +125,27 @@ public class AkaneBP : ProjectorUI
         while (elapsedTime < duration)
         {
             elapsedTime += Time.deltaTime;
+
             float updatedBPPercentage = Mathf.Lerp(ProjectingData.BPPercentage, ReceivedData.BPPercentage, Time.deltaTime * 10.0f);
+            float updatedChangeAmount = 0.0f;
+            AkaneBPData updatedProjectingData = new AkaneBPData(updatedBPPercentage, updatedChangeAmount);
+            ProjectingData = updatedProjectingData;
+
+            BPProjectionUpdate();
+            yield return null;
+        }
+
+        ProjectingData = ReceivedData;
+        BPProjectionUpdate();
+    }
+    private IEnumerator DirectBPLerpCoroutine(float duration)
+    {
+        float elapsedTime = 0.0f;
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+
+            float updatedBPPercentage = ReceivedData.BPPercentage;
             float updatedChangeAmount = 0.0f;
             AkaneBPData updatedProjectingData = new AkaneBPData(updatedBPPercentage, updatedChangeAmount);
             ProjectingData = updatedProjectingData;
@@ -190,6 +211,13 @@ public class AkaneBP : ProjectorUI
         public override IEnumerator OnEnter()
         {
             yield return null;
+
+            List<IEnumerator> coroutineList = new List<IEnumerator>();
+            IEnumerator coroutineA = _akaneBP.DirectBPLerpCoroutine(1.0f);
+            coroutineList.Add(coroutineA);
+
+            _akaneBP._uiCoroutineManager.RegisterCoroutineList(_akaneBP, coroutineList);
+            yield return _akaneBP._uiCoroutineManager.WaitAllListedCoroutine();
         }
         public override UIState ChangeState(SubUIData subData)
         {
@@ -215,9 +243,11 @@ public class AkaneBP : ProjectorUI
 
             List<IEnumerator> coroutineList = new List<IEnumerator>();
             IEnumerator coroutineA = UIAnimationCommons.WaveDown(_akaneBP.BPProgressImage, 1.0f, 4.0f);
-            IEnumerator coroutineB = _akaneBP.NormalBPLerpCoroutine(0.25f);
+            IEnumerator coroutineB = UIAnimationCommons.Flick(_akaneBP.BPProgressImage, 0.5f, 1.0f, 4);
+            IEnumerator coroutineC = _akaneBP.DirectBPLerpCoroutine(1.0f);
             coroutineList.Add(coroutineA);
             coroutineList.Add(coroutineB);
+            coroutineList.Add(coroutineC);
 
             _akaneBP._uiCoroutineManager.RegisterCoroutineList(_akaneBP, coroutineList);
             yield return _akaneBP._uiCoroutineManager.WaitAllListedCoroutine();
@@ -246,9 +276,11 @@ public class AkaneBP : ProjectorUI
 
             List<IEnumerator> coroutineList = new List<IEnumerator>();
             IEnumerator coroutineA = UIAnimationCommons.WaveUp(_akaneBP.BPProgressImage, 1.5f, 1.0f);
-            IEnumerator coroutineB = _akaneBP.NormalBPLerpCoroutine(0.25f);
+            IEnumerator coroutineB = UIAnimationCommons.Flick(_akaneBP.BPProgressImage, 0.1f, 0.2f, 1);
+            IEnumerator coroutineC = _akaneBP.NormalBPLerpCoroutine(0.25f);
             coroutineList.Add(coroutineA);
             coroutineList.Add(coroutineB);
+            coroutineList.Add(coroutineC);
 
             _akaneBP._uiCoroutineManager.RegisterCoroutineList(_akaneBP, coroutineList);
             yield return _akaneBP._uiCoroutineManager.WaitAllListedCoroutine();
