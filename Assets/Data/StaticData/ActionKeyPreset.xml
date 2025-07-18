@@ -7,54 +7,70 @@
         
         Key_KM="Space"
         Key_XBOX="A"
-        Key_PS="X"
+        
     />
-
+    
+    <!-- USE FOR MoveAll (공격 후 클릭 유지) -->
     <AttackCharge
         PressType="KeyPressed"
         MultiInputType="Single"
         Threshold="0.0"
         
         Key_KM="Mouse0"
-        Key_XBOX="X"
-        Key_PS="X"
+        Key_XBOX="RTrigger"
+        Key_PS="RTrigger"
     />
-
+    <!-- USE FOR DashRoll (대시) -->
     <DashMove
         PressType="KeyDown"
         MultiInputType="Single"
         Threshold="0.0"
         
         Key_KM="Mouse0"
-        Key_XBOX="X"
-        Key_PS="X"
+        Key_XBOX="RTrigger"
+        Key_PS="RTrigger"
     />
 
+    <!-- USE FOR MoveAll (이동)-->
     <NormalMove
         PressType="KeyPressed"
         MultiInputType="Single"
         Threshold="0.0"
         
         Key_KM="Mouse1"
-        Key_XBOX="A"
+        Key_XBOX="X"
+        Key_PS="Sq"
+    />
+    <!-- USE FOR MoveAll (이동-패드)-->
+    <NormalMovePad
+        PressType="KeyPressed"
+        MultiInputType="Single"
+        Threshold="0.0"
+        
+        Key_XBOX="X"
+        Key_PS="Sq"
     />
 
+    <!-- USE FOR DashRollQuick (공격 후 이동 입력 시 무료 대시) -->
     <QucikDash
         PressType="KeyDown"
         MultiInputType="Single"
         Threshold="0.0"
         
         Key_KM="Mouse1"
-        Key_XBOX="A"
+        Key_XBOX="X"
+        Key_PS="Sq"
     />
 
+    <!-- USE FOR DashLongCharge (초혈섬 준비 자세) -->
     <StunShot
         PressType="KeyPressed"
         MultiInputType="Single"
         Threshold="0.0"
         
         Key_KM="Q"
-        Key_XBOX="RB"
+        Key_XBOX="LTrigger"
+        Key_PS="LTrigger"
     />
 
     <HyperAttack
@@ -63,9 +79,10 @@
         Threshold="999.0"
         
         Key_KM="Q Mouse0"
-        Key_XBOX="RB X"
+        Key_XBOX="LTrigger RTrigger"
     />
 
+    <!-- USE FOR DashRoll_Kick (발차기 준비) -->
     <GuardBreak2
         PressType="KeyPressed"
         MultiInputType="Single"
@@ -73,6 +90,7 @@
         
         Key_KM="W"
         Key_XBOX="LB"
+        Key_PS="L1"
     />
 
     <Guard
@@ -90,7 +108,7 @@
         
         Key_KM="Mouse1"
         Key_XBOX="LB"
-        Key_PS="X"
+    
     />
 
     <Escape_1
@@ -100,6 +118,7 @@
         
         Key_KM="Q"
         Key_XBOX="LB"
+        Key_PS="L1"
     />
     
     <Escape_2
@@ -109,6 +128,7 @@
         
         Key_KM="W"
         Key_XBOX="RB"
+        Key_PS="R1"
     />
 
     <EditorHotKey_EditorOnOff
@@ -117,6 +137,7 @@
         Threshold="0.0"
         
         Key_KM="Tab"
+        Key_XBOX="DPADUp"
     />
     <EditorHotKey_UpdateFrame
         PressType="KeyDown"
@@ -124,6 +145,7 @@
         Threshold="0.0"
         
         Key_KM="RightBracket"
+        Key_XBOX="DPADRight"
     />
     <EditorHotKey_StageSelectorOnOff
         PressType="KeyDown"
@@ -131,6 +153,7 @@
         Threshold="0.0"
         
         Key_KM="Alpha1"
+        Key_XBOX="Menu"
     />
     
     <PassTalkBalloon
@@ -139,8 +162,8 @@
             Threshold="0.0"
 
             Key_KM="Mouse0"
-            Key_XBOX="RB"
-            Key_PS="X"
+            Key_XBOX="A"
+        
     />
 
 </ActionKeyPreset>
