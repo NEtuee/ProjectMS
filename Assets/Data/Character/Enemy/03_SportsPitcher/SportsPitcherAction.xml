@@ -4,7 +4,7 @@
 <GlobalVariable Name="gv_DeadPath" Value="Resources/Sprites/Enemy/SportsPitcher/0_default/4_dead"/>
 
 <!-- Movement Speed Option Variant Set -->
-<GlobalVariable Name="gv_MovementSpeed"             Value="15.0"/>  <!-- Speed는 Velocity = 0 과 병행 사용 불가-->
+<GlobalVariable Name="gv_MovementSpeed"             Value="5.0"/>  <!-- Speed는 Velocity = 0 과 병행 사용 불가-->
 <GlobalVariable Name="gv_MovementVelocity"          Value="0.0"/>   
 <GlobalVariable Name="gv_MovementMaxVelocity"       Value="5.0"/>
 <GlobalVariable Name="gv_MovementFriction"          Value="0.0"/>
@@ -160,7 +160,7 @@
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/2_dash/1_main" XFlip="true" Duration="0.35">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2100" Attach="true"/>
-            <FrameEvent Type="Movement" StartTime="0" Friction="24" MaxVelocity="14" Velocity="14" Speed="0"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="10" MaxVelocity="7" Velocity="7" Speed="0"/>
             
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
@@ -211,7 +211,7 @@
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/2_dash/1_main" XFlip="true" Duration="0.35">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2100" Attach="true"/>
-            <FrameEvent Type="Movement" StartTime="0" Friction="24" MaxVelocity="14" Velocity="14" Speed="0"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="10" MaxVelocity="7" Velocity="7" Speed="0"/>
             
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
