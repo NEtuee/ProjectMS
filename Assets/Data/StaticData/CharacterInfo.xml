@@ -1214,4 +1214,16 @@
         AllyInfo="CommonBattle"
     /> 
 
+    <BasePreset
+        DisplayName="베이스 프리셋 캐릭터"
+        ActionGraph="Assets/Data/CharacterPreset/_ActionPreset/BaseAction.xml"
+        AIGraph="Assets/Data/CharacterPreset/_AIPreset/BasePresetAI.xml"
+        StatusInfoName="TestEnemyStatus"
+
+        CollisionRadius="0.5"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="CommonBattle"
+    /> 
+
 </CharacterInfo>

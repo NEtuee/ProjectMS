@@ -1,0 +1,25 @@
+<AIPackage Name="CommonPeaceMotionPackage" DefaultState="AI_Loop">
+
+    <AIState>
+        <AI_Loop UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Type="SetAction" Action="AC_PeaceMotionLoop"/>
+            </Event_OnExecute>
+
+            <Branch Condition="End" Execute="AI_Loop"/>
+        </AI_Loop>
+        <AI_End UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Type="SetAction" Action="AC_PeaceMotionEnd"/>
+            </Event_OnExecute>
+
+            <Branch Condition="End" Execute="TerminatePackage"/>
+        </AI_End>
+        <TerminatePackage>
+            <Event_OnExecute>
+                <AIEvent Type="TerminatePackage"/>
+            </Event_OnExecute>
+        </TerminatePackage>
+    </AIState>
+
+</AIPackage>
