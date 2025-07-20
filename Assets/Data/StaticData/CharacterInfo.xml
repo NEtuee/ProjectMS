@@ -131,6 +131,18 @@
         AllyInfo="EnemyAllNeutral"
     />
 
+    <SisterNormalCrossHair
+        DisplayName="나지미 크로스헤어"
+        ActionGraph="Assets/Data/Character/Object/CrossHair/SisterNormalCrossHair.xml"
+        AIGraph="Assets/Data/AILibrary/Graph/CommonEnemyAI.xml"
+        StatusInfoName="CommonEnemyStatusNoUI"
+
+        CollisionRadius="0.7"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="EnemyAllNeutral"
+    />
+
     <PoliceTacticalStaffCrossHair
         DisplayName="폴리스 택티컬 스태프 크로스헤어"
         ActionGraph="Assets/Data/Character/Object/CrossHair/PoliceTacticalStaffCrossHair.xml"
@@ -587,6 +599,19 @@
         AllyInfo="SportsClub"
     />
 
+    <SisterNormal
+        DisplayName="시스터 노말"
+        ActionGraph="Assets/Data/Character/Enemy/04_SisterNormal/SisterNormalAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/04_SisterNormal/SisterNormalAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+        RankBadgeID="0"
+
+        AllyInfo="Sister"
+    />
     <SisterStaffChan
         DisplayName="시스터 스태프쨩"
         ActionGraph="Assets/Data/Character/Enemy/04_SisterStaff/SisterStaffAction.xml"
