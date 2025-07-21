@@ -222,7 +222,7 @@
 
             <FrameEvent Type="EffectPreset" Condition="AttackSuccess == false" StartTime="0.05" Key="DashTrail"/>
             <FrameEvent Type="SetDefenceType" Condition="AttackSuccess == false" StartTime="0.031" DefenceType="Evade"/>
-            <FrameEvent Type="SpawnCharacter" Condition="AttackSuccess == false" StartTime="0.031" CharacterKey="AkaneDodgeCheck" Offset="0 0 0" AllyInfo="PlayerDodgeCheck" InheritDirection="false"/>
+<!--        <FrameEvent Type="SpawnCharacter" Condition="AttackSuccess == false" StartTime="0.031" CharacterKey="AkaneDodgeCheck" Offset="0 0 0" AllyInfo="PlayerDodgeCheck" InheritDirection="false"/> -->
             <FrameEvent Type="SetDefenceType" StartTime="0.125" DefenceType="Empty"/>
         </Animation>
 
