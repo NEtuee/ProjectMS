@@ -21,6 +21,7 @@ public class IngameUI : MonoBehaviour
     [SerializeField] private AkaneBP _akaneBP;
     [SerializeField] private AkaneDPHolder _akaneDPHolder;
 
+    private List<HolderUI> _holderUIList = new List<HolderUI>();
     //QTE
     //보스HP
     //보스 페이즈

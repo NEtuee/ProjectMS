@@ -11,7 +11,13 @@ public class UIStateMachine
     private Coroutine _stateChangingCoroutine = null;
 
     public UIStateMachine(ProjectorUI projectorUI) => _projectorUI = projectorUI;
-
+    public void Initialize()
+    {
+        _previousState = null;
+        _currentState = null;
+        _isStateChanging = false;
+        _stateChangingCoroutine = null;
+    }
     public void ProjectingCurrentState() //매 프레임 실행됨, _currentState의 ChangeState를 실행하고 null을 반환했으면 _currentState의 OnUpdate를, UIState를 반환했으면 RequestStateChanging을 실행
     {
         if (_currentState == null)
@@ -63,21 +69,15 @@ public class UIStateMachine
         }
         else //상태 전환 중이라면 Overwrite
         {
-            if (_stateChangingCoroutine != null) //정지시켜야 되니 null 체크
+
+            if (_stateChangingCoroutine != null && _currentState.OnEnter().MoveNext()) //currentState의 OnEnter가 비어있지 않다면 진행중이던 ChangingCoroutine 계속 진행, 여기서 코루틴의 첫줄을 실행하고 넘어가는듯
             {
-                if (_currentState.OnEnter().MoveNext()) //currentState의 OnEnter가 비어있지 않다면 진행중이던 ChangingCoroutine 계속 진행, 여기서 코루틴의 첫줄을 실행하고 넘어가는듯
-                {
-                    _projectorUI.StopCoroutine(_stateChangingCoroutine);
-                    _stateChangingCoroutine = _projectorUI.StartCoroutine(OverwriteChangingCoroutine());
-                }
-                else
-                {
-                    //Debug.Log($"Skipped StateChangingCoroutine");
-                }
-            }
+                _projectorUI.StopCoroutine(_stateChangingCoroutine);
+                _stateChangingCoroutine = _projectorUI.StartCoroutine(OverwriteChangingCoroutine());
+            }   
         }
     }
-    private IEnumerator NormalChangingCoroutine() //일반 전환, 이전 상태의 OnExit과 현재 상태의 OnEnter 실행
+    private IEnumerator NormalChangingCoroutine() //일반 상태 전환, 이전 상태의 OnExit과 현재 상태의 OnEnter 실행
     {
         //Debug.Log($"Normal Changing Coroutine: {_prevState} to {_currentState}");
         _isStateChanging = true;
@@ -88,7 +88,7 @@ public class UIStateMachine
         _isStateChanging = false;
         _stateChangingCoroutine = null;
     }
-    private IEnumerator OverwriteChangingCoroutine() //강제 전환, 현재 상태의 OnEnter만 실행
+    private IEnumerator OverwriteChangingCoroutine() //강제 상태 전환, 현재 상태의 OnEnter만 실행
     {
         //Debug.Log($"Overwrite Changing Coroutine: {_prevState} to {_currentState}");
         _isStateChanging = true;

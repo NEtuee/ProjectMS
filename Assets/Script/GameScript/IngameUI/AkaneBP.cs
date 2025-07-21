@@ -1,22 +1,15 @@
-using UnityEngine;
-using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO.Compression;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class AkaneBP : ProjectorUI
 {
     [SerializeField] private Image BPProgressImage;
-    public new AkaneBPData ReceivedData => (AkaneBPData)_receivedData;
-    public new AkaneBPData ProjectingData
-    {
-        get => (AkaneBPData)_projectingData;
-        set => _projectingData = value;
-    }
     protected override UIDataType _dataType => UIDataType.AkaneBP;
     public struct AkaneBPData : IPackedUIData
     {
-        public UIDataType UIDataType => UIDataType.AkaneBP;
+        public readonly UIDataType UIDataType => UIDataType.AkaneBP;
         public float BPPercentage;
         public float ChangeAmount;
 
@@ -25,14 +18,12 @@ public class AkaneBP : ProjectorUI
             this.BPPercentage = bpPercentage;
             this.ChangeAmount = changeAmount;
         }
-
-        public static bool operator ==(AkaneBPData left, AkaneBPData right) =>
-            Mathf.Approximately(left.BPPercentage, right.BPPercentage) &&
-            Mathf.Approximately(left.ChangeAmount, right.ChangeAmount);
-
-        public static bool operator !=(AkaneBPData left, AkaneBPData right) => !(left == right);
-        public override bool Equals(object obj) => obj is AkaneBPData other && this == other;
-        public override int GetHashCode() => BPPercentage.GetHashCode() ^ ChangeAmount.GetHashCode();
+    }
+    public new AkaneBPData ReceivedData => (AkaneBPData)_receivedData;
+    public new AkaneBPData ProjectingData
+    {
+        get => (AkaneBPData)_projectingData;
+        set => _projectingData = value;
     }
     protected override IReadOnlyCollection<UIEventKey> _validEventKeys =>
         new[] { UIEventKey.HyperFailed, UIEventKey.AttackSucceeded, UIEventKey.Hit };
@@ -47,10 +38,10 @@ public class AkaneBP : ProjectorUI
     private Dictionary<AkaneBPStateType, UIState> _stateMap = new Dictionary<AkaneBPStateType, UIState>();
 
 
-
+    //공통 메서드
     public override void Initialize()
     {
-        base.Initialize();
+        base.PrepareInitialize();
 
         _receivedData = new AkaneBPData();
         _projectingData = new AkaneBPData();
@@ -71,11 +62,6 @@ public class AkaneBP : ProjectorUI
     {
         _stateMachine.ForceStateChanging(_stateMap[AkaneBPStateType.NONE]);
     }
-    protected override void UpdateProjection()
-    {
-        base.UpdateProjection();
-    }
-
 
 
     //투영 데이터 업데이트
@@ -102,7 +88,7 @@ public class AkaneBP : ProjectorUI
         {
             elapsedTime += Time.deltaTime;
             float t = Mathf.Clamp01(elapsedTime / duration);
-            float easedT = UIAnimationCommons.EaseInQuad(t);
+            float easedT = MathEx.getEaseFormula(MathEx.EaseType.EaseInCubic, 0.0f, 1.0f, t);
 
             float updatedBPPercentage = Mathf.Lerp(ProjectingData.BPPercentage, ReceivedData.BPPercentage, easedT);
             float updatedChangeAmount = 0.0f;
@@ -126,7 +112,7 @@ public class AkaneBP : ProjectorUI
         {
             elapsedTime += Time.deltaTime;
 
-            float updatedBPPercentage = Mathf.Lerp(ProjectingData.BPPercentage, ReceivedData.BPPercentage, Time.deltaTime * 10.0f);
+            float updatedBPPercentage = Mathf.Lerp(ProjectingData.BPPercentage, ReceivedData.BPPercentage, Time.deltaTime * 50.0f);
             float updatedChangeAmount = 0.0f;
             AkaneBPData updatedProjectingData = new AkaneBPData(updatedBPPercentage, updatedChangeAmount);
             ProjectingData = updatedProjectingData;
@@ -242,8 +228,8 @@ public class AkaneBP : ProjectorUI
             yield return null;
 
             List<IEnumerator> coroutineList = new List<IEnumerator>();
-            IEnumerator coroutineA = UIAnimationCommons.WaveDown(_akaneBP.BPProgressImage, 1.0f, 4.0f);
-            IEnumerator coroutineB = UIAnimationCommons.Flick(_akaneBP.BPProgressImage, 0.5f, 1.0f, 4);
+            IEnumerator coroutineA = UIAnimationCommons.WaveDownPosition(_akaneBP.BPProgressImage, 0.5f, 4.0f);
+            IEnumerator coroutineB = UIAnimationCommons.FlickAlpha(_akaneBP.BPProgressImage, 0.5f, 1.0f, 4);
             IEnumerator coroutineC = _akaneBP.DirectBPLerpCoroutine(1.0f);
             coroutineList.Add(coroutineA);
             coroutineList.Add(coroutineB);
@@ -275,8 +261,8 @@ public class AkaneBP : ProjectorUI
             yield return null;
 
             List<IEnumerator> coroutineList = new List<IEnumerator>();
-            IEnumerator coroutineA = UIAnimationCommons.WaveUp(_akaneBP.BPProgressImage, 1.5f, 1.0f);
-            IEnumerator coroutineB = UIAnimationCommons.Flick(_akaneBP.BPProgressImage, 0.1f, 0.2f, 1);
+            IEnumerator coroutineA = UIAnimationCommons.WaveUpPosition(_akaneBP.BPProgressImage, 0.3f, 1.0f);
+            IEnumerator coroutineB = UIAnimationCommons.FlickAlpha(_akaneBP.BPProgressImage, 0.1f, 0.2f, 1);
             IEnumerator coroutineC = _akaneBP.NormalBPLerpCoroutine(0.25f);
             coroutineList.Add(coroutineA);
             coroutineList.Add(coroutineB);
@@ -305,11 +291,10 @@ public class AkaneBP : ProjectorUI
         }
         public override IEnumerator OnEnter()
         {
-            //투명도 0으로
             yield return null;
 
             List<IEnumerator> coroutineList = new List<IEnumerator>();
-            IEnumerator coroutineA = UIAnimationCommons.FadeOut(_akaneBP.BPProgressImage, 0.25f);
+            IEnumerator coroutineA = UIAnimationCommons.FadeOutAlpha(_akaneBP.BPProgressImage, 0.25f);
             coroutineList.Add(coroutineA);
 
             _akaneBP._uiCoroutineManager.RegisterCoroutineList(_akaneBP, coroutineList);
@@ -317,14 +302,12 @@ public class AkaneBP : ProjectorUI
         }
         public override IEnumerator OnExit()
         {
-            //위로 떠올라서 원래 위치로
-            //투명도 0에서 1로
             yield return null;
-            UIAnimationCommons.FadeIn(_akaneBP.BPProgressImage, 0.0f);
+            UIAnimationCommons.FadeInAlpha(_akaneBP.BPProgressImage, 0.0f);
 
             List<IEnumerator> coroutineList = new List<IEnumerator>();
-            IEnumerator coroutineA = UIAnimationCommons.Float(_akaneBP.BPProgressImage, 0.5f, 24.0f);
-            IEnumerator coroutineB = UIAnimationCommons.FadeIn(_akaneBP.BPProgressImage, 1.0f);
+            IEnumerator coroutineA = UIAnimationCommons.FloatPosition(_akaneBP.BPProgressImage, 0.5f, 24.0f);
+            IEnumerator coroutineB = UIAnimationCommons.FadeInAlpha(_akaneBP.BPProgressImage, 1.0f);
             IEnumerator coroutineC = _akaneBP.OpeningBPLerpCoroutine(1.0f);
             coroutineList.Add(coroutineA);
             coroutineList.Add(coroutineB);

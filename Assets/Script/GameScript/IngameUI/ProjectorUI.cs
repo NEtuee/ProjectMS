@@ -1,7 +1,7 @@
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public abstract class ProjectorUI : MonoBehaviour
@@ -25,19 +25,20 @@ public abstract class ProjectorUI : MonoBehaviour
         set => _projectingSubData = value;
     }
     protected UIStateMachine _stateMachine;
+    protected AnimationPlayer _animationPlayer;
     protected UICoroutineManager _uiCoroutineManager;
 
 
-
-    public virtual void Initialize()
+    //공통 메서드
+    public virtual void PrepareInitialize()
     {
-        _stateMachine = new UIStateMachine(this);
-        _uiCoroutineManager = gameObject.AddComponent<UICoroutineManager>();
         _receivedSubData = new SubUIData();
         _projectingSubData = new SubUIData();
+
+        _stateMachine = new UIStateMachine(this);
+        _animationPlayer = new AnimationPlayer();
+        _uiCoroutineManager = gameObject.AddComponent<UICoroutineManager>();
     }
-    public abstract void Activate();
-    public abstract void Deactivate();
     public virtual void ReceiveData(IPackedUIData data)
     {
         if (data != null && data.UIDataType == _dataType)
@@ -62,11 +63,16 @@ public abstract class ProjectorUI : MonoBehaviour
             _receivedSubData = new SubUIData();
         }
         else
+        {
             _stateMachine.RequestStateByUpdate();
+        }
     }
     private void LateUpdate()
     {
         UpdateProjection();
         UpdateUIState();
     }
+    public abstract void Initialize();
+    public abstract void Activate();
+    public abstract void Deactivate();
 }
