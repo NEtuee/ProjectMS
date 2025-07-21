@@ -92,7 +92,7 @@
     </Battle_Far>
     <Battle_Closer Package="CommonIdlePackage">
         <Branch Condition="aiGraphCoolTime_Dodge" Execute="Dodge"/>
-        <Branch Condition="true" Execute="Movement"/>
+        <Branch Condition="true" Execute="Away"/>
     </Battle_Closer>
     <Battle_Range Package="CommonIdlePackage">
         <Branch Condition="aiGraphCoolTime_Pitching" Execute="Pitching"/>
@@ -107,6 +107,12 @@
         <Branch Condition="(GraphExecutedTime >= 3.0)" Execute="Entry_Battle"/>                     <!-- Executed Time Check-->
         
     </Movement>
+    <Away Package="CommonAwayPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <!-- Movement Release Sample -->
+        <Branch Condition="(TargetDistance >= gv_AttackRangeMin)" Execute="Battle_JudgeDist"/>      <!-- Distance Check-->
+        <Branch Condition="(GraphExecutedTime >= 2.0)" Execute="Entry_Battle"/>                     <!-- Executed Time Check-->
+    </Away>
 
     <!-- AI 스테이트 : 전투 상태 : 스킬 -->
     <Pitching Package="SportsPitcherPitchingPackage" CoolTime="7.0">
@@ -120,7 +126,7 @@
     </Dash>
     
     <!-- AI 스테이트 : 전투 상태 : 방어 -->
-    <Dodge Package="CommonDodgePackage">
+    <Dodge Package="CommonDodgePackage" CoolTime="3.0">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </Dodge>

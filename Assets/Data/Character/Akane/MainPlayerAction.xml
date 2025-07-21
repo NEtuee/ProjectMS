@@ -29,7 +29,7 @@
         <Branch Key="getKey_DashMove" Condition="getStat_DashPoint >= 1.0" Execute="DashRoll"/>
         <Branch Key="getKey_DashMove" Execute="MoveAll"/>
 
-        <Branch Key="getKey_NormalMove == true" Execute="MoveAll"/>
+        <Branch Key="(getKey_NormalMove || getKey_NormalMovePad) == true" Execute="MoveAll"/>
     </BranchSet>
 
     <BranchSet Name="StopToIdle">
@@ -39,7 +39,7 @@
         <Branch Key="getKey_GuardBreak2 && getKey_DashMove" Execute="DashRoll_Kick"/>
         <Branch Key="getKey_DashMove" Condition="getStat_DashPoint >= 1.0" Execute="DashRoll"/>
         <Branch Key="getKey_DashMove" Execute="MoveAll"/>
-        <Branch Key="getKey_NormalMove == true" Execute="MoveAll"/>
+        <Branch Key="(getKey_NormalMove || getKey_NormalMovePad) == true" Execute="MoveAll"/>
 
         <Branch Condition="End == true" Execute="Idle"/>
     </BranchSet>
@@ -54,7 +54,7 @@
         <Branch Key="getKey_StunShot && getKey_DashMove" Condition="getFrameTag_MoveCancel && (getStat_DashPoint >= 1.0) && (getStat_HP > 1.0)" Execute="DashLongCharge"/>
         <Branch Key="getKey_DashMove" Condition="getFrameTag_MoveCancel && (getStat_DashPoint >= 1.0)" Execute="DashRoll"/>
         <Branch Key="getKey_DashMove" Condition="getFrameTag_MoveCancel" Execute="MoveAll"/>
-        <Branch Key="getKey_NormalMove == true" Condition="getFrameTag_MoveCancel" Execute="MoveAll"/>
+        <Branch Key="(getKey_NormalMove || getKey_NormalMovePad) == true" Condition="getFrameTag_MoveCancel" Execute="MoveAll"/>
     </BranchSet>
 
     <BranchSet Name="KickBranch">
@@ -147,10 +147,10 @@
 
         <Branch Condition="End == true" Execute="MoveAll"/>
         
-        <Branch Key="(getKey_AttackCharge == false) && (getKey_NormalMove == false) && getKey_StunShot" Execute="DashLongCharge"/>
+        <Branch Key="(getKey_AttackCharge == false) && ((getKey_NormalMove || getKey_NormalMovePad) == false) && getKey_StunShot" Execute="DashLongCharge"/>
         <Branch Key="getKey_StunShot" Execute="DashLongCharge"/>
 
-        <Branch Key="(getKey_AttackCharge == false) && (getKey_NormalMove == false)" Execute="MoveStop"/>
+        <Branch Key="(getKey_AttackCharge == false) && ((getKey_NormalMove || getKey_NormalMovePad) == false)" Execute="MoveStop"/>
 
         <Branch Key="getKey_GuardBreak2 && getKey_DashMove" Execute="DashRoll_Kick"/>
         <Branch Key="getKey_DashMove && (getStat_DashPoint >= 1.0)" Execute="DashRoll"/>
@@ -228,12 +228,12 @@
         <Branch Condition="AttackGuarded" Execute="AttackGuarded"/>
 
         <Branch Key="getKey_AttackCharge == true" Condition="End" Execute="MoveAll"/>
-        <Branch Key="getKey_NormalMove == true" Condition="End" Execute="MoveAll"/>
+        <Branch Key="(getKey_NormalMove || getKey_NormalMovePad) == true" Condition="End" Execute="MoveAll"/>
 
         <Branch Key="getKey_QucikDash" Condition="getFrameTag_MoveCancel" Execute="DashRollQuick"/>
         
-        <Branch Key="(getKey_NormalMove == false) && (getKey_AttackCharge == false)" Condition="End" Execute="MoveStop"/>
-        <Branch Key="(getKey_NormalMove == false) && (getKey_AttackCharge == false)" Condition="getFrameTag_MoveCancel" Execute="MoveStop"/>
+        <Branch Key="((getKey_NormalMove || getKey_NormalMovePad) == false) && (getKey_AttackCharge == false)" Condition="End" Execute="MoveStop"/>
+        <Branch Key="((getKey_NormalMove || getKey_NormalMovePad) == false) && (getKey_AttackCharge == false)" Condition="getFrameTag_MoveCancel" Execute="MoveStop"/>
     </DashRoll>
 
     <DashRollQuick MovementType="FrameEvent" DirectionType="MousePoint" RotationType="MoveDirection" FlipType="MousePoint" DirectionUpdateOnce="true" Flags="ClearPush">
@@ -248,9 +248,9 @@
         </Animation>
 
         <Branch Key="getKey_AttackCharge == true" Condition="End" Execute="MoveAll"/>
-        <Branch Key="getKey_NormalMove == true" Condition="End" Execute="MoveAll"/>
+        <Branch Key="(getKey_NormalMove || getKey_NormalMovePad) == true" Condition="End" Execute="MoveAll"/>
 
-        <Branch Key="(getKey_NormalMove == false) && (getKey_AttackCharge == false)" Condition="End" Execute="MoveStop"/>
+        <Branch Key="((getKey_NormalMove || getKey_NormalMovePad) == false) && (getKey_AttackCharge == false)" Condition="End" Execute="MoveStop"/>
     </DashRollQuick>
 
     <DashRoll_Long MovementType="FrameEvent" DirectionType="MousePoint" RotationType="MoveDirection" FlipType="MousePoint" DirectionUpdateOnce="true" Flags="ClearPush">
@@ -439,7 +439,7 @@
         </Animation>
 
         <Branch Key="(getKey_StunShot == false) && getKey_AttackCharge" Execute="MoveAll"/>
-        <Branch Key="(getKey_StunShot == false) && getKey_NormalMove" Execute="MoveAll"/>
+        <Branch Key="(getKey_StunShot == false) && (getKey_NormalMove || getKey_NormalMovePad)" Execute="MoveAll"/>
         <Branch Condition="getKey_StunShot == false" Execute="Idle"/>
 
         <Branch Key="getKey_StunShot && getKey_DashMove" Condition="(getStat_DashPoint >= 1.0) && (getStat_HP > 1.0)" Execute="DashRoll_Long"/>
@@ -462,7 +462,7 @@
 
         <UseBranchSet Name="CancelBranch"/>
         <!-- <Branch Condition="AttackSuccess" Execute="AttackSuccess"/> -->
-        <Branch Key="(getKey_AttackCharge == true) || (getKey_NormalMove == true)" Condition="End" Execute="MoveAll"/>
+        <Branch Key="(getKey_AttackCharge == true) || ((getKey_NormalMove || getKey_NormalMovePad) == true)" Condition="End" Execute="MoveAll"/>
         <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="KickStop"/>
     </Kicked>
 
@@ -479,7 +479,7 @@
 
         <UseBranchSet Name="CancelBranch"/>
         <!-- <Branch Condition="AttackSuccess" Execute="AttackSuccess"/> -->
-        <Branch Key="(getKey_AttackCharge == true) || (getKey_NormalMove == true)" Condition="End" Execute="MoveAll"/>
+        <Branch Key="(getKey_AttackCharge == true) || ((getKey_NormalMove || getKey_NormalMovePad) == true)" Condition="End" Execute="MoveAll"/>
         <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="KickStop"/>
     </Kicked_Throw>
 
@@ -497,7 +497,7 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="AttackSuccess"/>
         </Animation>
 
-        <Branch Key="(getKey_AttackCharge == true) || (getKey_NormalMove == true)" Condition="End" Execute="MoveAll"/>
+        <Branch Key="(getKey_AttackCharge == true) || ((getKey_NormalMove || getKey_NormalMovePad) == true)" Condition="End" Execute="MoveAll"/>
         <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="AttackStop"/>
         <UseBranchSet Name="CancelBranch"/>
     </AttackSuccess>
@@ -514,7 +514,7 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="AttackSuccess"/>
         </Animation>
 
-        <Branch Key="(getKey_AttackCharge == true) || (getKey_NormalMove == true)" Condition="End" Execute="MoveAll"/>
+        <Branch Key="(getKey_AttackCharge == true) || ((getKey_NormalMove || getKey_NormalMovePad) == true)" Condition="End" Execute="MoveAll"/>
         <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="AttackStop"/>
         <UseBranchSet Name="CancelBranch"/>
     </AttackSuccess_Long>
@@ -528,7 +528,7 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="Evaded"/>
         </Animation>
 
-        <Branch Key="(getKey_AttackCharge == true) || (getKey_NormalMove == true)" Condition="End" Execute="MoveAll"/>
+        <Branch Key="(getKey_AttackCharge == true) || ((getKey_NormalMove || getKey_NormalMovePad) == true)" Condition="End" Execute="MoveAll"/>
         <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="AttackStop"/>
         <UseBranchSet Name="CancelBranch"/>
     </EvadeSuccess>
@@ -547,7 +547,7 @@
         </Animation>
 
         <UseBranchSet Name="CancelBranch"/>
-        <Branch Key="(getKey_AttackCharge == true) || (getKey_NormalMove == true)" Condition="End" Execute="MoveAll"/>
+        <Branch Key="(getKey_AttackCharge == true) || ((getKey_NormalMove || getKey_NormalMovePad) == true)" Condition="End" Execute="MoveAll"/>
         <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="AttackStop"/>
     </AttackSuccessFar>
 
@@ -557,7 +557,7 @@
 
         </Animation>
 
-        <Branch Key="(getKey_AttackCharge == true) || (getKey_NormalMove == true)" Condition="End" Execute="MoveAll"/>
+        <Branch Key="(getKey_AttackCharge == true) || ((getKey_NormalMove || getKey_NormalMovePad) == true)" Condition="End" Execute="MoveAll"/>
         <Branch Key="getKey_AttackCharge == false" Condition="End" Execute="Idle"/>
     </AttackGuarded>
 
@@ -584,7 +584,7 @@
         <Branch Key="getKey_GuardBreak2 && getKey_DashMove" Condition="End" Execute="DashRoll_Kick"/>
         <Branch Key="getKey_DashMove" Condition="End && (getStat_DashPoint >= 1.0)" Execute="DashRoll"/>
 
-        <Branch Key="(getKey_Guard == false) && ((getKey_AttackCharge == true) || (getKey_NormalMove == true))" Condition="End" Execute="MoveAll"/>
+        <Branch Key="(getKey_Guard == false) && ((getKey_AttackCharge == true) || ((getKey_NormalMove || getKey_NormalMovePad) == true))" Condition="End" Execute="MoveAll"/>
         <Branch Condition="End" Execute="Idle"/>
     </Hit>
 
