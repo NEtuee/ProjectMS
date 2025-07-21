@@ -32,6 +32,19 @@
 
         AllyInfo="Player"
     />
+    <AkaneDodgeCheck
+        DisplayName="아카네 극한회피 판정기"
+        ActionGraph="Assets/Data/Character/Akane/MainPlayerDodgeAction.xml"
+        AIGraph="Assets/Data/Character/Akane/MainPlayerDodgeAI.xml"
+        StatusInfoName="CommonPlayerStatus"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+        UseInputBuffer="True"
+
+        AllyInfo="PlayerDodgeCheck"
+    />
     
     <TateChan
         DisplayName="타테짱"

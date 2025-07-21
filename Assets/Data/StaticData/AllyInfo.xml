@@ -8,35 +8,39 @@
 
     <Player
         EnemyGroup="InteractObject CommonBattleObject CommonBattle Sukeban SportsClub Sister PerfectTeam Police"
-        AllyGroup="PlayerBattleObject"
+        AllyGroup="PlayerBattleObject PlayerDodgeCheck"
+    />
+    <PlayerDodgeCheck
+        EnemyGroup="InteractObject CommonBattleObject CommonBattle Sukeban SportsClub Sister PerfectTeam Police"
+        AllyGroup="Player"
     />
     
     <!-- 적 캐릭터 공격용 오브젝트, 오브젝트와 상호작용하지 않는다. -->
     <PlayerBattleObject
         EnemyGroup="CommonBattle Sukeban SportsClub Sister PerfectTeam Police"
-        AllyGroup="Player"
+        AllyGroup="Player PlayerDodgeCheck"
         NeutralGroup="InteractObject CommonBattleObject"
     />
 
     <!-- 장식용 캐릭터 -->
     <Deco
-        AllyGroup="Player"
+        AllyGroup="Player PlayerDodgeCheck"
         NeutralGroup="Deco"
     />
 
     <!-- 전체 적 판정 -->
     <EnemyAllNeutral
-        EnemyGroup="Player Sukeban SportsClub PerfectTeam Police"
+        EnemyGroup="Player PlayerDodgeCheck Sukeban SportsClub PerfectTeam Police"
     />
 
     <!-- 전체 동맹 판정 -->
     <AllyAllNeutral
-        AllyGroup="Player Sukeban SportsClub PerfectTeam Police"
+        AllyGroup="Player PlayerDodgeCheck Sukeban SportsClub PerfectTeam Police"
     />
 
     <!-- 전체 중립 판정 -->
     <NeutralAllNeutral
-        NeutralGroup="Player Sukeban SportsClub PerfectTeam Police"
+        NeutralGroup="Player PlayerDodgeCheck Sukeban SportsClub PerfectTeam Police"
     />
 
     <!-- 때릴 수 있는 오브젝트 -->
@@ -44,38 +48,38 @@
 
     <!-- PC 공격용 오브젝트, 오브젝트와 상호작용하지 않는다. -->
     <CommonBattleObject
-        EnemyGroup="Player"
+        EnemyGroup="Player PlayerDodgeCheck"
         NeutralGroup="PlayerBattleObject InteractObject"
     />
 
     <!-- 전투 가능 학생 -->
     <CommonBattle
-        EnemyGroup="Player"
+        EnemyGroup="Player PlayerDodgeCheck"
     />
 
     <!-- 스케반 -->
     <Sukeban
-        EnemyGroup="Player"
+        EnemyGroup="Player PlayerDodgeCheck"
     />
 
     <!-- 수녀 -->
     <Sister
-        EnemyGroup="Player"
+        EnemyGroup="Player PlayerDodgeCheck"
     />  
 
     <!-- 운동부 -->
     <SportsClub
-        EnemyGroup="Player"
+        EnemyGroup="Player PlayerDodgeCheck"
     />
 
     <!-- 풍기 위원회 -->
     <PerfectTeam
-        EnemyGroup="Player"
+        EnemyGroup="Player PlayerDodgeCheck"
     />
 
     <!-- 경찰 -->
     <Police
-        EnemyGroup="Player"
+        EnemyGroup="Player PlayerDodgeCheck"
     />
 
 </AllyInfo>

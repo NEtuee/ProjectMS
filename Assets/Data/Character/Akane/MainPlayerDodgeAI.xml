@@ -1,0 +1,9 @@
+<AIGraph Name="MainPlayerDodgeAI" DefaultState="Entry">
+    
+    <Include Path="Assets/Data/Character/Akane/MainPlayerDodgeCheckPackage.xml"/>
+
+    <Entry Package="MainPlayerDodgeCheckPackage">
+        <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
+    </Entry>
+
+</AIGraph>
