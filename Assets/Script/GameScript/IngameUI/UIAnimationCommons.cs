@@ -1,69 +1,19 @@
+using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
-using System;
-
-
 
 public static class UIAnimationCommons
 {
-    //Easing 함수
-    public static float EaseLinear(float t)
-    {
-        return t;
-    }
-    public static float EaseInQuad(float t)
-    {
-        return t * t;
-    }
-    public static float EaseOutQuad(float t)
-    {
-        return 1.0f - EaseInQuad(1.0f - t);
-    }
-    public static float EaseInQuint(float t)
-    {
-        return t * t * t * t * t;
-    }
-    public static float EaseOutQuint(float t)
-    {
-        return 1.0f - EaseInQuint(1.0f - t);
-    }
-
-    public static float EaseInBack(float t)
-    {
-        float c1 = 1.70158f;
-        return t * t * ((c1 + 1.0f) * t - c1);
-    }
-    public static float EaseOutBack(float t)
-    {
-        return 1.0f - EaseInBack(1.0f - t);
-    }
-    public static float EaseInCirc(float t)
-    {
-        return -((float)Mathf.Sqrt(1.0f - t * t) - 1.0f);
-    }
-    public static float EaseOutCirc(float t)
-    {
-        return 1.0f - EaseInCirc(1.0f - t);
-    }
-    public static float EaseInOutCirc(float t)
-    {
-        if (t < 0.5f)
-            return EaseInCirc(t * 2.0f) / 2.0f;
-        else
-            return 1 - EaseInCirc((1.0f - t) * 2.0f) / 2.0f;
-    }
-
-
     //공통 애니메이션 코루틴, 모두 최종적으로 Vector2(0.0f, 0.0f)로 초기화?
     public static IEnumerator LerpToInitialPosition(Image targetImage, float duration,
-                                                    Func<float, float> easingFunction = null)
+                                                    MathEx.EaseType easingFunction = MathEx.EaseType.End)
     {
         if (targetImage == null)
             yield break;
 
-        if (easingFunction == null)
-            easingFunction = EaseOutQuad;
+        if (easingFunction == MathEx.EaseType.End)
+            easingFunction = MathEx.EaseType.EaseOutCubic;
 
         Vector2 startPosition = targetImage.rectTransform.anchoredPosition;
         Vector2 endPosition = new Vector2(0.0f, 0.0f);
@@ -73,7 +23,7 @@ public static class UIAnimationCommons
         {
             elapsedTime += Time.deltaTime;
             float t = Mathf.Clamp01(elapsedTime / duration);
-            float easedT = easingFunction(t);
+            float easedT = MathEx.getEaseFormula(easingFunction, 0.0f, 1.0f, t);
 
             targetImage.rectTransform.anchoredPosition = Vector2.Lerp(startPosition, endPosition, easedT);
             yield return null;
@@ -81,14 +31,14 @@ public static class UIAnimationCommons
 
         targetImage.rectTransform.anchoredPosition = endPosition;
     }
-    public static IEnumerator Shake(Image targetImage, float duration, float strength,
-                                    Func<float, float> easingFunction = null)
+    public static IEnumerator ShakePosition(Image targetImage, float duration, float strength,
+                                    MathEx.EaseType easingFunction = MathEx.EaseType.End)
     {
         if (targetImage == null)
             yield break;
 
-        if (easingFunction == null)
-            easingFunction = EaseOutQuad;
+        if (easingFunction == MathEx.EaseType.End)
+            easingFunction = MathEx.EaseType.EaseOutCubic;
 
         Vector2 startPosition = targetImage.rectTransform.anchoredPosition;
         Vector2 endPosition = new Vector2(0.0f, 0.0f);
@@ -98,7 +48,7 @@ public static class UIAnimationCommons
         {
             elapsedTime += Time.deltaTime;
             float t = Mathf.Clamp01(elapsedTime / duration);
-            float easedT = easingFunction(t);
+            float easedT = MathEx.getEaseFormula(easingFunction, 0.0f, 1.0f, t);
 
             float offsetX = (Mathf.PerlinNoise(Time.time * 20f, 0f) * 2.0f - 1.0f) * strength * (1.0f - easedT);
             float offsetY = (Mathf.PerlinNoise(0f, Time.time * 20f) * 2.0f - 1.0f) * strength * (1.0f - easedT);
@@ -110,14 +60,14 @@ public static class UIAnimationCommons
 
         targetImage.rectTransform.anchoredPosition = endPosition;
     }
-    public static IEnumerator Float(Image targetImage, float duration, float distance,
-                                    Func<float, float> easingFunction = null)
+    public static IEnumerator FloatPosition(Image targetImage, float duration, float distance,
+                                    MathEx.EaseType easingFunction = MathEx.EaseType.End)
     {
         if (targetImage == null)
             yield break;
 
-        if (easingFunction == null)
-            easingFunction = EaseOutQuad;
+        if (easingFunction == MathEx.EaseType.End)
+            easingFunction = MathEx.EaseType.EaseOutCubic;
 
         Vector2 startPosition = targetImage.rectTransform.anchoredPosition - new Vector2(0.0f, distance);
         Vector2 endPosition = new Vector2(0.0f, 0.0f);
@@ -129,7 +79,7 @@ public static class UIAnimationCommons
         {
             elapsedTime += Time.deltaTime;
             float t = Mathf.Clamp01(elapsedTime / duration);
-            float easedT = easingFunction(t);
+            float easedT = MathEx.getEaseFormula(easingFunction, 0.0f, 1.0f, t);
 
             targetImage.rectTransform.anchoredPosition = Vector2.Lerp(startPosition, endPosition, easedT);
             yield return null;
@@ -137,17 +87,17 @@ public static class UIAnimationCommons
 
         targetImage.rectTransform.anchoredPosition = endPosition;
     }
-    public static IEnumerator WaveDown(Image targetImage, float duration, float strength,
-                                        Func<float, float> downEasingFunction = null,
-                                        Func<float, float> upEasingFunction = null)
+    public static IEnumerator WaveDownPosition(Image targetImage, float duration, float strength,
+                                        MathEx.EaseType downEasingFunction = MathEx.EaseType.End,
+                                        MathEx.EaseType upEasingFunction = MathEx.EaseType.End)
     {
         if (targetImage == null)
             yield break;
 
-        if (downEasingFunction == null)
-            downEasingFunction = EaseOutQuint;
-        if (upEasingFunction == null)
-            upEasingFunction = EaseOutCirc;
+        if (downEasingFunction == MathEx.EaseType.End)
+            downEasingFunction = MathEx.EaseType.EaseInCubic;
+        if (upEasingFunction == MathEx.EaseType.End)
+            upEasingFunction = MathEx.EaseType.EaseInCubic;
 
         Vector2 startPosition = targetImage.rectTransform.anchoredPosition;
         Vector2 endPosition = new Vector2(0.0f, 0.0f);
@@ -167,14 +117,14 @@ public static class UIAnimationCommons
             if (elapsedTime <= downDuration)
             {
                 float t = Mathf.Clamp01(elapsedTime / downDuration);
-                float easedT = downEasingFunction(t);
+                float easedT = MathEx.getEaseFormula(downEasingFunction, 0.0f, 1.0f, t);
 
                 currentYOffset = Mathf.Lerp(0.0f, -strength, easedT);
             }
             else
             {
                 float t = Mathf.Clamp01((elapsedTime - downDuration) / upDuration);
-                float easedT = upEasingFunction(t);
+                float easedT = MathEx.getEaseFormula(upEasingFunction, 0.0f, 1.0f, t);
 
                 currentYOffset = Mathf.Lerp(-strength, 0.0f, easedT);
             }
@@ -187,17 +137,17 @@ public static class UIAnimationCommons
 
         targetImage.rectTransform.anchoredPosition = endPosition;
     }
-    public static IEnumerator WaveUp(Image targetImage, float duration, float strength,
-                                    Func<float, float> upEasingFunction = null,
-                                    Func<float, float> downEasingFunction = null)
+    public static IEnumerator WaveUpPosition(Image targetImage, float duration, float strength,
+                                    MathEx.EaseType upEasingFunction = MathEx.EaseType.End,
+                                    MathEx.EaseType downEasingFunction = MathEx.EaseType.End)
     {
         if (targetImage == null)
             yield break;
 
-        if (upEasingFunction == null)
-            upEasingFunction = EaseOutQuint;
-        if (downEasingFunction == null)
-            downEasingFunction = EaseOutCirc;
+        if (upEasingFunction == MathEx.EaseType.End)
+            upEasingFunction = MathEx.EaseType.EaseOutCubic;
+        if (downEasingFunction == MathEx.EaseType.End)
+            downEasingFunction = MathEx.EaseType.EaseOutCubic;
 
         Vector2 startPosition = targetImage.rectTransform.anchoredPosition;
         Vector2 endPosition = new Vector2(0.0f, 0.0f);
@@ -217,14 +167,14 @@ public static class UIAnimationCommons
             if (elapsedTime <= upDuration)
             {
                 float t = Mathf.Clamp01(elapsedTime / upDuration);
-                float easedT = upEasingFunction(t);
+                float easedT = MathEx.getEaseFormula(upEasingFunction, 0.0f, 1.0f, t);
 
                 currentYOffset = Mathf.Lerp(0.0f, strength, easedT);
             }
             else
             {
                 float t = Mathf.Clamp01((elapsedTime - upDuration) / downDuration);
-                float easedT = downEasingFunction(t);
+                float easedT = MathEx.getEaseFormula(downEasingFunction, 0.0f, 1.0f, t);
 
                 currentYOffset = Mathf.Lerp(strength, 0.0f, easedT);
             }
@@ -235,14 +185,14 @@ public static class UIAnimationCommons
             yield return null;
         }
     }
-    public static IEnumerator FadeIn(Image targetImage, float duration,
-                                    Func<float, float> easingFunction = null)
+    public static IEnumerator FadeInAlpha(Image targetImage, float duration,
+                                        MathEx.EaseType easingFunction = MathEx.EaseType.End)
     {
         if (targetImage == null)
             yield break;
 
-        if (easingFunction == null)
-            easingFunction = EaseOutQuad;
+        if (easingFunction == MathEx.EaseType.End)
+            easingFunction = MathEx.EaseType.EaseOutCubic;
 
         float startAlpha = targetImage.color.a;
         float endAlpha = 1.0f;
@@ -252,7 +202,7 @@ public static class UIAnimationCommons
         {
             elapsedTime += Time.deltaTime;
             float t = Mathf.Clamp01(elapsedTime / duration);
-            float easedT = easingFunction(t);
+            float easedT = MathEx.getEaseFormula(easingFunction, 0.0f, 1.0f, t);
 
             float currentAlpha = Mathf.Lerp(startAlpha, endAlpha, easedT);
             Color currentColor = targetImage.color;
@@ -266,14 +216,14 @@ public static class UIAnimationCommons
         endColor.a = endAlpha;
         targetImage.color = endColor;
     }
-    public static IEnumerator FadeOut(Image targetImage, float duration,
-                                    Func<float, float> easingFunction = null)
+    public static IEnumerator FadeOutAlpha(Image targetImage, float duration,
+                                        MathEx.EaseType easingFunction = MathEx.EaseType.End)
     {
         if (targetImage == null)
             yield break;
 
-        if (easingFunction == null)
-            easingFunction = EaseOutQuad;
+        if (easingFunction == MathEx.EaseType.End)
+            easingFunction = MathEx.EaseType.EaseOutCubic;
 
         float startAlpha = targetImage.color.a;
         float endAlpha = 0.0f;
@@ -283,7 +233,7 @@ public static class UIAnimationCommons
         {
             elapsedTime += Time.deltaTime;
             float t = Mathf.Clamp01(elapsedTime / duration);
-            float easedT = easingFunction(t);
+            float easedT = MathEx.getEaseFormula(easingFunction, 0.0f, 1.0f, t);
 
             float currentAlpha = Mathf.Lerp(startAlpha, endAlpha, easedT);
             Color currentColor = targetImage.color;
@@ -297,24 +247,24 @@ public static class UIAnimationCommons
         endColor.a = endAlpha;
         targetImage.color = endColor;
     }
-    public static IEnumerator Flick(Image targetImage, float duration, float strength, int frequency,
-                                    Func<float, float> easingFunction = null)
+    public static IEnumerator FlickAlpha(Image targetImage, float duration, float strength, int frequency,
+                                        MathEx.EaseType easingFunction = MathEx.EaseType.End)
     {
         if (targetImage == null)
             yield break;
 
-        if (easingFunction == null)
-            easingFunction = EaseLinear;
+        if (easingFunction == MathEx.EaseType.End)
+            easingFunction = MathEx.EaseType.Linear;
 
-        Color startColor = targetImage.color;
-        float startAlpha = startColor.a;
+        float startAlpha = targetImage.color.a;
+        float endAlpha = 1.0f;
         float singleFlickDuration = duration / frequency;
 
         for (int i = 0; i < frequency; i++)
         {
             float singleFlickElapsedTime = 0.0f;
             float overallT = (float)i / frequency;
-            float easedOverallT = easingFunction(overallT);
+            float easedOverallT = MathEx.getEaseFormula(easingFunction, 0.0f, 1.0f, overallT);
 
             float currentStrength = Mathf.Clamp01(strength) * (1.0f - easedOverallT);
 
@@ -341,7 +291,9 @@ public static class UIAnimationCommons
                 yield return null;
             }
 
-            targetImage.color = startColor;
+            Color endColor = targetImage.color;
+            endColor.a = endAlpha;
+            targetImage.color = endColor;
         }
     }
 }

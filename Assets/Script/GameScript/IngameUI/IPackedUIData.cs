@@ -1,1 +1,4 @@
-public interface IPackedUIData { public UIDataType UIDataType { get; } }
+public interface IPackedUIData
+{
+    public UIDataType UIDataType { get; }
+}
