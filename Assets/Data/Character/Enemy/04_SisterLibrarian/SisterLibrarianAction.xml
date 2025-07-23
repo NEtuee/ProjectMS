@@ -15,7 +15,7 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
             
-            <FrameEvent Type="SetRotateSlotValue" StartTime="0" Speed="90" Radius="0.5"/>
+        <!-- <FrameEvent Type="SetRotateSlotValue" StartTime="0" Speed="90" Radius="0.5"/> -->
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
@@ -57,9 +57,7 @@
 
         <Branch Condition="End == true" Execute="Dead"/>
     </Dead>
-<!-- Defualt Action -->
 
-<!-- Defualt Action -->
     <AC_PeaceMotionLoop MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="0_default/1_idle" XFlip="true" Duration="1">
@@ -75,17 +73,17 @@
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_PeaceMotionLoop>
-    <AC_PeaceMotionEnd MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+    <AC_PeaceMotionEnd MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="0_default/1_idle" XFlip="true" Duration="0.7">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
-            <FrameEvent Type="SetRotateSlotValue" StartTime="0" Speed="45" Radius="0.5"/>
+<!--            <FrameEvent Type="SetRotateSlotValue" StartTime="0" Speed="45" Radius="0.5"/> -->
 
-            <FrameEvent Type="Danmaku" StartTime="0"                                        Path="Assets/Data/DanmakuGraph/Enemy/SisterLibrarianSpawnBook.xml"/>
-            <FrameEvent Type="Danmaku" StartTime="0" Condition="getWeight_RandBoolean^true" Path="Assets/Data/DanmakuGraph/Enemy/SisterLibrarianSpawnBook.xml"/>
-            <FrameEvent Type="Danmaku" StartTime="0" Condition="getWeight_RandVector3^x"    Path="Assets/Data/DanmakuGraph/Enemy/SisterLibrarianSpawnBook.xml"/>
+            <FrameEvent Type="Danmaku" StartTime="0"                                        Path="Assets/Data/DanmakuGraph/Enemy/SisterLibrarianSpawnBook.xml" UseDirection="True"/>
+            <FrameEvent Type="Danmaku" StartTime="0" Condition="getWeight_RandBoolean^true" Path="Assets/Data/DanmakuGraph/Enemy/SisterLibrarianSpawnBook.xml" UseDirection="True"/>
+            <FrameEvent Type="Danmaku" StartTime="0" Condition="getWeight_RandVector3^x"    Path="Assets/Data/DanmakuGraph/Enemy/SisterLibrarianSpawnBook.xml" UseDirection="True"/>
             <!--
             <FrameEvent Type="Projectile"                                           StartTime="0.0" GraphName="Grimore" DirectionType="AI" DirectionAngle="0.0" SpawnTargetType="Self"/>
             <FrameEvent Type="Projectile" Condition="getWeight_RandBoolean^true"    StartTime="0.0" GraphName="Grimore" DirectionType="AI" DirectionAngle="0.0" SpawnTargetType="Self"/>
@@ -105,7 +103,6 @@
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_PeaceMotionEnd>
-
 <!-- Defualt Action -->
 
 <!-- Skill : Sample -->
@@ -118,7 +115,7 @@
             <FrameEvent Type="AudioPlay" Condition="getWeight_RandVector3^x" StartTime="0" ID="2509" Attach="true" Switch="True"/>
             <FrameEvent Type="AudioPlay" StartTime="1" ID="2510" Attach="true" Switch="True"/>
             
-            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="LaserToTarget" EventTargetType="SummonTargetRange" Range="10.0" AllyTarget="Ally"/>
+            <!-- <FrameEvent Type="CallAIEvent" StartTime="0" EventName="LaserToTarget" EventTargetType="SummonTargetRange" Range="10.0" AllyTarget="Ally"/> -->
             <FrameEvent Type="FollowAttack" StartTime="0" EndTime="1.0" FollowType="Attach" Radius="0.7" MoveTime="1" CharacterKey="SisterNormalCrossHair" ToTarget="true">
                 <OnBegin>
 

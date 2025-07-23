@@ -10,16 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 89c4079abb23d874a882227bf7cb4b83, type: 3}
-  m_Name: dodge
+  m_Name: move
   m_EditorClassIdentifier: 
   _animationCustomPresetData:
     _duration:
-    - 0.1
-    - 0.1
+    - 0.5
+    _effectFrameEvent:
+    - Spark
     _playCount: 0
-  _translationPresetName: 
-  _rotationPresetName: 
+  _translationPresetName: ShakeSmall
+  _rotationPresetName: SpinLinear_Reverse
   _scalePresetName: 
-  _spriteEffects: []
-  _particleEffects: []
-  _timelineEffects: []
