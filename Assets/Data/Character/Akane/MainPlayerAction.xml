@@ -221,10 +221,14 @@
             <FrameEvent Type="AudioPlay" Condition="AttackSuccess == false" StartTime="0.05" ID="1002" Attach="true"/>
 
             <FrameEvent Type="EffectPreset" Condition="AttackSuccess == false" StartTime="0.05" Key="DashTrail"/>
+            <FrameEvent Type="SetDefenceType" Condition="AttackSuccess == false" StartTime="0.031" DefenceType="Evade"/>
+<!--        <FrameEvent Type="SpawnCharacter" Condition="AttackSuccess == false" StartTime="0.031" CharacterKey="AkaneDodgeCheck" Offset="0 0 0" AllyInfo="PlayerDodgeCheck" InheritDirection="false"/> -->
+            <FrameEvent Type="SetDefenceType" StartTime="0.125" DefenceType="Empty"/>
         </Animation>
 
         <Branch Condition="AttackSuccess" Execute="AttackSuccess"/>
-        <Branch Condition="EvadeSuccess" Execute="EvadeSuccess"/>
+<!--        <Branch Condition="EvadeSuccess" Execute="EvadeSuccess"/>-->
+
         <Branch Condition="AttackGuarded" Execute="AttackGuarded"/>
 
         <Branch Key="getKey_AttackCharge == true" Condition="End" Execute="MoveAll"/>

@@ -74,7 +74,9 @@
             </FrameEvent>
             <FrameEvent Type="Movement" StartTime="0.06" Friction="18" MaxVelocity="10" Velocity="-7" Speed="0"/>
         </Animation>
-        <Animation Preset="1_attack/3_attackRecover" XFlip="true" Duration="2.0">
+        <Animation Preset="1_attack/3_attackRecover" XFlip="true" Duration="0.2">
+        </Animation>
+        <Animation Preset="0_default/1_idle" XFlip="true" Duration="1.8">
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Idle_WithHelena"/>
@@ -218,6 +220,16 @@
         </Animation>
         <Branch Condition="End" Execute="Dead"/>
     </AC_Explosion>
+
+    <AC_Spawn MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/5_spawn/2_stop" XFlip="true" Duration="0.3">
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Move"/>
+    </AC_Spawn>
 
     <Dead MovementType="Empty" DirectionType="AI">
         <AnimationHeader MasterPath="gv_MasterPath"/>

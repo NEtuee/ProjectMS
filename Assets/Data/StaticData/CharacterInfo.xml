@@ -32,6 +32,19 @@
 
         AllyInfo="Player"
     />
+    <AkaneDodgeCheck
+        DisplayName="아카네 극한회피 판정기"
+        ActionGraph="Assets/Data/Character/Akane/MainPlayerDodgeAction.xml"
+        AIGraph="Assets/Data/Character/Akane/MainPlayerDodgeAI.xml"
+        StatusInfoName="CommonPlayerStatus"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+        UseInputBuffer="True"
+
+        AllyInfo="PlayerDodgeCheck"
+    />
     
     <TateChan
         DisplayName="타테짱"
@@ -612,6 +625,19 @@
 
         AllyInfo="Sister"
     />
+    <SisterLibrarian
+        DisplayName="시스터 라이브러리안"
+        ActionGraph="Assets/Data/Character/Enemy/04_SisterLibrarian/SisterLibrarianAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/04_SisterLibrarian/SisterLibrarianAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+        RankBadgeID="0"
+
+        AllyInfo="Sister"
+    />
     <SisterStaffChan
         DisplayName="시스터 스태프쨩"
         ActionGraph="Assets/Data/Character/Enemy/04_SisterStaff/SisterStaffAction.xml"
@@ -749,6 +775,17 @@
         DisplayName="헬레나의 붉은 마도서"
         ActionGraph="Assets/Data/Character/Object/Helena_CrimsonGirmoire/CrimsonGirmoireAction.xml"
         AIGraph="Assets/Data/Character/Object/Helena_CrimsonGirmoire/CrimsonGirmoireAI.xml"
+        StatusInfoName="CommonEnemyStatus"
+
+        CollisionRadius="0.2"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="Sister"
+    />
+    <CrimsonGrimoire
+        DisplayName="붉은 마도서"
+        ActionGraph="Assets/Data/Character/Object/Helena_CrimsonGirmoire/CrimsonGirmoireAction.xml"
+        AIGraph="Assets/Data/Character/Object/Helena_CrimsonGirmoire/NormalCrimsonGirmoireAI.xml"
         StatusInfoName="CommonEnemyStatus"
 
         CollisionRadius="0.2"

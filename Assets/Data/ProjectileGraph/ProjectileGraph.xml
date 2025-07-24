@@ -590,6 +590,20 @@
         </Event>
     </Helena_CrimsonGrimoire>
 
+    <CrimsonGrimoire DefaultFramePerSecond="4" UseSpriteRotation="false" PenetrateCount="1" Gravity="-9.8" CastShadow="True">
+        <Animation Preset="Sprites/Enemy/Helena_CrimsonGrimoire/0_default/5_spawn/1_move" XFlip="true" Duration="0.6">
+        </Animation>
+
+        <CollisionInfo Radius="0.1" Angle="0"/>
+        <DefaultShotInfo Velocity="6" Acceleration="0" Friction="1" Angle="0" AngularAcceleration="0" Torque="15" AngularFriction="10.0" LifeTime="1.0"/>
+        
+        <Event>
+            <OnEnd>
+                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="CrimsonGrimoire" Offset="0 0 0" Inherit="true" InheritDirection="true"/>
+            </OnEnd>
+        </Event>
+    </CrimsonGrimoire>
+
     <Dumbell DefaultFramePerSecond="4" UseSpriteRotation="true" PenetrateCount="1" Gravity="-9.8" CastShadow="True">
         <Animation Preset="Sprites/Projectile/Dumbell" XFlip="true" Duration="5.0">        
         </Animation>

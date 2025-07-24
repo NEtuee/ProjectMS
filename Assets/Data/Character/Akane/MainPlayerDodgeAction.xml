@@ -1,0 +1,19 @@
+<ActionGraph Name="MainPlayerDodgeAction" DefaultAction="AC_Idle" DefaultFramePerSecond="12">
+
+    <AC_Idle MovementType="Empty" DirectionType="Keep" DefenceType="Evade">
+        <Animation Preset="Sprites/NewPlayer/empty" XFlip="true" Duration="0.2">
+            <FrameEvent Type="KillEntity" StartTime="0.2"/>
+            <FrameEvent Type="Test" Condition="TargetExists" StartTime="0" Log="TargetExists"/>
+        </Animation>
+        <Trigger Condition="EvadeSuccess">
+            <FrameEvent Type="Test" StartTime="0" Log="EvadeSuccess"/>
+            <FrameEvent Type="ApplyBuffTarget" StartTime="0" ApplyBuff="DashPointReset"/>
+            <FrameEvent Type="AudioPlay" StartTime="0.0" ID="2106" Attach="false"/>
+            <FrameEvent Type="SetTimeScale" StartTime="0" Scale="0.1" Time="0.2" BlendTime="0.1"/>
+            <FrameEvent Type="KillEntity" StartTime="0.0"/>
+        </Trigger>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_Idle>
+
+</ActionGraph>
