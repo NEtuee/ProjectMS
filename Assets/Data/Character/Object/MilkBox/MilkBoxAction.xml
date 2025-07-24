@@ -18,16 +18,16 @@
             <Branch Condition="End == true" Execute="AC_Move"/>
         </AC_Move>
         
-        <AC_Hit_R MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Keep">
-            <Animation Preset="Sprites/Object/MilkBox/4_hitright" XFlip="true" Duration="0.5">
+        <AC_Hit MovementType="FrameEvent" DirectionType="AlwaysRight" FlipType="Direction" RotationType="Keep">
+            <Animation Preset="Sprites/Object/MilkBox/4_hitright" XFlip="true" Duration="0.2">
                 <FrameEvent Type="AudioPlay" StartTime="0" ID="4913" Attach="true"/>
-                <FrameEvent Type="Danmaku" Condition="Milk" StartTime="0" Path="gv_DanmakuPath" Offset="0.5 0.12 0" UseFlip="true"/>
+                <FrameEvent Type="Danmaku" StartTime="0" Gravity="9.8" Offset="0.0 -0.1 0.0" Path="Assets/Data/DanmakuGraph/Enemy/Milk.xml"/>
             </Animation>
             <Trigger Condition="DefenceSuccess">
                 <FrameEvent Type="AudioPlay" ID="4915" Attach="true"/>
             </Trigger>
             <Branch Condition="End == true" Execute="Dead"/>
-        </AC_Hit_R>
+        </AC_Hit>
 
         <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" DirectionAngle="180">
             <Animation Preset="Sprites/Object/MilkBox/5_guardbroken" XFlip="false" Duration="0.1">

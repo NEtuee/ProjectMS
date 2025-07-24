@@ -1,0 +1,549 @@
+<ActionGraph Name="RadioMagicGirlEliteAction" DefaultAction="AC_Entry" DefaultFramePerSecond="12">
+<!-- AnimationHeader MasterPath -->
+<GlobalVariable Name="gv_MasterPath" Value="Sprites/Enemy/SukebanMelee_Elite/"/>
+<GlobalVariable Name="gv_DeadPath" Value="Resources/Sprites/Enemy/SukebanMelee_Elite/0_default/4_dead/"/>
+
+
+<!-- Defualt Action -->
+    <AC_Entry MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/1_idle" XFlip="true" Duration="1">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Entry"/>
+    </AC_Entry>
+
+    <AC_Idle MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/1_idle" XFlip="true" Duration="1">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+            
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+            
+            <FrameEvent Type="ApplyBuff" StartTime="0" Condition="(getStat_Phase == 1.0) && (0.0 < getStat_HP) && (getStat_HP <= 15.0)"    ApplyBuff="IncreasePhase"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_Idle>
+
+    <AC_Move MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/2_move" XFlip="true" Duration="0.5">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0.0" MaxVelocity="5.0" Speed="15.0"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Move"/>
+    </AC_Move>
+
+    <AC_SystemChase MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/2_move" XFlip="true" Duration="0.1">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="20" Speed="40"/>
+
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_SystemChase"/>
+    </AC_SystemChase>
+
+    <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction" Flags="ClearDanmaku">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/3_hit" XFlip="true" Duration="1.25">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountIncrease"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_Hit>
+
+    <Dead DirectionType="Keep" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/4_dead" XFlip="true" Duration="1">
+            <FrameEvent Type="Effect" StartTime="0" Path="gv_DeadPath" FramePerSecond="0.2" CastShadow="True">
+                <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
+            </FrameEvent>
+            <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Effect/Weapon/Katana" FramePerSecond="0.2" CastShadow="True">
+                <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
+            </FrameEvent>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="KillUzi" EventTargetType="SummonTargetRange" Range="999.0" AllyTarget="Ally"/>
+            <FrameEvent Type="KillEntity" StartTime="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Dead"/>
+    </Dead>
+<!-- Defualt Action -->
+
+<!-- Skill : DodgeLaser -->
+    <AC_DodgeLaserTPReady_A MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineSuperArmor">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="여기 채워라" XFlip="true" Duration="0.3">
+            <FrameEvent Type="Movement" StartTime="0" Friction="10" MaxVelocity="5.0" Velocity="0.0" Speed="5.0"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+    
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_DodgeLaserTPReady_A>
+
+    <AC_DodgeLaserTP_A MovementType="GraphPreset" MovementGraphPreset="SukebanElite_Dodge" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="여기 채워라" XFlip="true" Duration="0.3">
+            <FrameEvent Type="Movement" StartTime="0" Friction="20.0" MaxVelocity="16.0" Velocity="16.0" Speed="0.0"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_DodgeLaserTP_A>
+
+    <AC_DodgeLaserReady_A MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="LaserEffect">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="여기 채워라" XFlip="true" Duration="0.85">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2206" Attach="true"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
+            <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/CommonBeam_TimeLine" Attach="true" AngleType="Direction" LifeTime="1.05" FollowDirection="True" AttackPreset="Gauntlet_Beam"/>
+            
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_DodgeLaserReady_A>
+
+    <AC_DodgeLaserMain_A MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" Flags="LaserEffect">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="여기 채워라" XFlip="true" Duration="0.3">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
+            <!-- TODO: 화장포 이펙트 추가해야함. 해당 이펙트 지속시간에 따라 Main 모션 시간과 Attack 지속 시간 조정 -->
+            <FrameEvent Type="AudioPlay" StartTime="0.2" ID="2207" Attach="true"/>
+            <FrameEvent Type="Attack" StartTime="0.2" AttackPreset="Gauntlet_Beam">
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
+                    <FrameEvent Type="StopUpdate" Time="0.07"/>
+                    <FrameEvent Type="SetTimeScale" Scale="0.2" Time="0.2" BlendTime="0.2"/>
+                    <FrameEvent Type="ShakeEffect" Scale="0.15" Speed="35.0" Time="0.2"/>
+
+                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Slash" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
+                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Blood" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
+                    <FrameEvent Type="StopUpdate" Time="0.07"/>
+                </OnHit>
+            </FrameEvent>
+            <FrameEvent Type="EffectPreset" StartTime="0.2" Key="Laser"/>
+        </Animation>
+        <Animation Preset="여기 채워라" XFlip="true" Duration="0.3">
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_DodgeLaserMain_A>
+
+    <AC_DodgeLaserTPReady_B MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineSuperArmor">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="여기 채워라" XFlip="true" Duration="0.1">
+            <FrameEvent Type="Movement" StartTime="0" Friction="10" MaxVelocity="5.0" Velocity="0.0" Speed="5.0"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+    
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_DodgeLaserTPReady_B>
+
+    <AC_DodgeLaserTP_B MovementType="GraphPreset" MovementGraphPreset="SukebanElite_Dodge" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="여기 채워라" XFlip="true" Duration="0.3">
+            <FrameEvent Type="Movement" StartTime="0" Friction="20.0" MaxVelocity="16.0" Velocity="16.0" Speed="0.0"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_DodgeLaserTP_B>
+
+    <AC_DodgeLaserReady_B MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="LaserEffect">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="여기 채워라" XFlip="true" Duration="0.85">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2206" Attach="true"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
+            <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/CommonBeam_TimeLine" Attach="true" AngleType="Direction" LifeTime="1.05" FollowDirection="True" AttackPreset="Gauntlet_Beam"/>
+            
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_DodgeLaserReady_B>
+
+    <AC_DodgeLaserMain_B MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" Flags="LaserEffect">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="여기 채워라" XFlip="true" Duration="0.3">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
+            <!-- TODO: 화장포 이펙트 추가해야함. 해당 이펙트 지속시간에 따라 Main 모션 시간과 Attack 지속 시간 조정 -->
+            <FrameEvent Type="AudioPlay" StartTime="0.2" ID="2207" Attach="true"/>
+            <FrameEvent Type="Attack" StartTime="0.2" AttackPreset="Gauntlet_Beam">
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
+                    <FrameEvent Type="StopUpdate" Time="0.07"/>
+                    <FrameEvent Type="SetTimeScale" Scale="0.2" Time="0.2" BlendTime="0.2"/>
+                    <FrameEvent Type="ShakeEffect" Scale="0.15" Speed="35.0" Time="0.2"/>
+
+                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Slash" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
+                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Blood" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
+                    <FrameEvent Type="StopUpdate" Time="0.07"/>
+                </OnHit>
+            </FrameEvent>
+            <FrameEvent Type="EffectPreset" StartTime="0.2" Key="Laser"/>
+        </Animation>
+        <Animation Preset="여기 채워라" XFlip="true" Duration="0.3">
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_DodgeLaserMain_B>
+
+    <AC_DodgeLaserTPReady_C MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineSuperArmor">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="여기 채워라" XFlip="true" Duration="0.1">
+            <FrameEvent Type="Movement" StartTime="0" Friction="10" MaxVelocity="5.0" Velocity="0.0" Speed="5.0"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+    
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_DodgeLaserTPReady_C>
+
+    <AC_DodgeLaserTP_C MovementType="GraphPreset" MovementGraphPreset="SukebanElite_Dodge" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="여기 채워라" XFlip="true" Duration="0.3">
+            <FrameEvent Type="Movement" StartTime="0" Friction="20.0" MaxVelocity="16.0" Velocity="16.0" Speed="0.0"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_DodgeLaserTP_C>
+
+    <AC_DodgeLaserReady_C MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="LaserEffect">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="여기 채워라" XFlip="true" Duration="0.85">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2206" Attach="true"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
+            <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/CommonBeam_TimeLine" Attach="true" AngleType="Direction" LifeTime="1.05" FollowDirection="True" AttackPreset="Gauntlet_Beam"/>
+            
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_DodgeLaserReady_C>
+
+    <AC_DodgeLaserMain_C MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" Flags="LaserEffect">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="여기 채워라" XFlip="true" Duration="0.3">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
+            <!-- TODO: 화장포 이펙트 추가해야함. 해당 이펙트 지속시간에 따라 Main 모션 시간과 Attack 지속 시간 조정 -->
+            <FrameEvent Type="AudioPlay" StartTime="0.2" ID="2207" Attach="true"/>
+            <FrameEvent Type="Attack" StartTime="0.2" AttackPreset="Gauntlet_Beam">
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
+                    <FrameEvent Type="StopUpdate" Time="0.07"/>
+                    <FrameEvent Type="SetTimeScale" Scale="0.2" Time="0.2" BlendTime="0.2"/>
+                    <FrameEvent Type="ShakeEffect" Scale="0.15" Speed="35.0" Time="0.2"/>
+
+                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Slash" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
+                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Blood" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
+                    <FrameEvent Type="StopUpdate" Time="0.07"/>
+                </OnHit>
+            </FrameEvent>
+            <FrameEvent Type="EffectPreset" StartTime="0.2" Key="Laser"/>
+        </Animation>
+        <Animation Preset="여기 채워라" XFlip="true" Duration="0.3">
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_DodgeLaserMain_C>
+
+    <AC_DodgeLaserTPReady_D MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineSuperArmor">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="여기 채워라" XFlip="true" Duration="0.1">
+            <FrameEvent Type="Movement" StartTime="0" Friction="10" MaxVelocity="5.0" Velocity="0.0" Speed="5.0"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+    
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_DodgeLaserTPReady_D>
+
+    <AC_DodgeLaserTP_D MovementType="GraphPreset" MovementGraphPreset="SukebanElite_Dodge" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="여기 채워라" XFlip="true" Duration="0.3">
+            <FrameEvent Type="Movement" StartTime="0" Friction="20.0" MaxVelocity="16.0" Velocity="16.0" Speed="0.0"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_DodgeLaserTP_D>
+
+    <AC_DodgeLaserReady_D MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="LaserEffect">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="여기 채워라" XFlip="true" Duration="0.85">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2206" Attach="true"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
+            <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/CommonBeam_TimeLine" Attach="true" AngleType="Direction" LifeTime="1.05" FollowDirection="True" AttackPreset="Gauntlet_Beam"/>
+            
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_DodgeLaserReady_D>
+
+    <AC_DodgeLaserMain_D MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" Flags="LaserEffect">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="여기 채워라" XFlip="true" Duration="0.3">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
+            <!-- TODO: 화장포 이펙트 추가해야함. 해당 이펙트 지속시간에 따라 Main 모션 시간과 Attack 지속 시간 조정 -->
+            <FrameEvent Type="AudioPlay" StartTime="0.2" ID="2207" Attach="true"/>
+            <FrameEvent Type="Attack" StartTime="0.2" AttackPreset="Gauntlet_Beam">
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
+                    <FrameEvent Type="StopUpdate" Time="0.07"/>
+                    <FrameEvent Type="SetTimeScale" Scale="0.2" Time="0.2" BlendTime="0.2"/>
+                    <FrameEvent Type="ShakeEffect" Scale="0.15" Speed="35.0" Time="0.2"/>
+
+                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Slash" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
+                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Blood" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
+                    <FrameEvent Type="StopUpdate" Time="0.07"/>
+                </OnHit>
+            </FrameEvent>
+            <FrameEvent Type="EffectPreset" StartTime="0.2" Key="Laser"/>
+        </Animation>
+        <Animation Preset="여기 채워라" XFlip="true" Duration="0.3">
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_DodgeLaserMain_D>
+
+    <AC_DodgeLaserRecover MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="여기 채워라 " XFlip="true" Duration="0.5">
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_DodgeLaserRecover>
+<!-- Skill : TrippleSlash -->
+
+<!-- Skill : 빅 레이져 -->
+    <AC_BigLaserReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="LaserEffect">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="여기 채워야 함" XFlip="true" Duration="0.8">
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="LaserShotCharacter" Offset="-0.3 0.3 0" AllyInfo="Sister" InheritDirection="true"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2519" Attach="true"/>
+
+            <FrameEvent Type="Movement" Condition="gv_AtkRdMovementVelocity == 0.0" StartTime="0" Friction="gv_AtkRdMovementFriction" MaxVelocity="gv_AtkRdMovementMaxVelocity" Speed="gv_AtkRdMovementSpeed"/>
+            <FrameEvent Type="Movement" Condition="gv_AtkRdMovementVelocity > 0.0" StartTime="0" Friction="gv_AtkRdMovementFriction" MaxVelocity="gv_AtkRdMovementMaxVelocity" Velocity="gv_AtkRdMovementVelocity" Speed="gv_AtkRdMovementSpeed"/>
+
+            <!-- Laser Attack Indicator -->
+            <FrameEvent Type="TimelineEffect" Condition="gv_bIsLaserAttack" StartTime="0" Path="gv_TimelineEffectPath" Attach="true" AngleType="Direction" LifeTime="0.8" FollowDirection="True" AttackPreset="Helena_Laser"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+            
+            <FrameEvent Type="SetDirectionType" StartTime="0.7" DirectionType="Keep"/>  <!-- 타겟 추적 중단용 이벤트 -->
+        </Animation>
+        <Trigger Condition="DefenceSuccess">
+            <FrameEvent Type="AudioPlay" ID="4911" Attach="true"/>
+        </Trigger>
+    
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_BigLaserReady>
+
+    <AC_BigLaserMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" Flags="LaserEffect">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="여기 채워라" XFlip="true" Duration="0.35">
+            <FrameEvent Type="SetDirectionType" Condition="gv_bIsLaserAttack == false" StartTime="0" DirectionType="AI"/>
+            <FrameEvent Type="Movement" Condition="gv_AtkMovementVelocity == 0.0" StartTime="gv_RangedAttackMovementDelay" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Speed="gv_AtkMovementSpeed"/>
+            <FrameEvent Type="Movement" Condition="gv_AtkMovementVelocity > 0.0" StartTime="gv_RangedAttackMovementDelay" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Velocity="gv_AtkMovementVelocity" Speed="gv_AtkMovementSpeed"/>
+            <FrameEvent Type="Movement" Condition="gv_AtkMovementVelocity < 0.0" StartTime="gv_RangedAttackMovementDelay" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Velocity="gv_AtkMovementVelocity" Speed="gv_AtkMovementSpeed"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+            <!-- Laser Attack -->
+            <FrameEvent Type="Attack" Condition="gv_bIsLaserAttack" StartTime="0" EndTime="0.1" AttackPreset="Helena_Laser">
+                <OnHit>
+                    <FrameEvent Type="AudioPlay" StartTime="0" ID="2205" Attach="true"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
+                    
+                    <FrameEvent Type="StopUpdate" Time="0.1"/>
+                    <FrameEvent Type="SetTimeScale" Scale="0.1" Time="0.1" BlendTime="0.1"/>
+                    <FrameEvent Type="ShakeEffect" Scale="0.1" Speed="10.0" Time="0.1"/>
+                    
+                    <!-- visual -->
+                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+                </OnHit>
+            </FrameEvent>
+            <!-- Projectile Attack -->
+            <FrameEvent Type="Projectile" Condition="gv_bIsProjectileAttack" StartTime="0" GraphName="gv_ProjectileName" Offset="0 0 0" UseFlip="true" DirectionType="AI" SpawnTargetType="Self"/>
+            <!-- Danmaku Attack -->
+            <FrameEvent Type="Danmaku" Condition="gv_bIsDanmakuAttack" StartTime="0" Path="gv_DanmakuPath" Offset="0 0 0" UseFlip="true"/>
+            <!-- Object Attack -->
+            <FrameEvent Type="SpawnCharacter" Condition="gv_bIsObjectAttack" StartTime="0" CharacterKey="gv_ObjectKey" Offset="0 0 0" UseFlip="true"/>
+        </Animation>
+        <Trigger Condition="DefenceSuccess">
+            <FrameEvent Type="AudioPlay" ID="4911" Attach="true"/>
+        </Trigger>
+
+        <Branch Condition="End" Execute="AC_BigLaserRecover"/>
+    </AC_BigLaserAttackMain>
+
+    <AC_AttackSuccess MovementType="FrameEvent" DirectionType="Keep" FlipType="Keep" RotationType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="1_attack/4_attackSuccess" XFlip="true" Duration="1.0">
+            <FrameEvent Type="Movement" Condition="gv_AtkSucMovementVelocity == 0.0" StartTime="0" Friction="gv_AtkSucMovementFriction" MaxVelocity="gv_AtkSucMovementMaxVelocity" Speed="gv_AtkSucMovementSpeed"/>
+            <FrameEvent Type="Movement" Condition="gv_AtkSucMovementVelocity > 0.0" StartTime="0" Friction="gv_AtkSucMovementFriction" MaxVelocity="gv_AtkSucMovementMaxVelocity" Velocity="gv_AtkSucMovementVelocity" Speed="gv_AtkSucMovementSpeed"/>
+        </Animation>
+        <Trigger Condition="DefenceSuccess">
+            <FrameEvent Type="AudioPlay" ID="4911" Attach="true"/>
+        </Trigger>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_AttackSuccess>
+
+    <AC_BigLaserRecover MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="1_attack/3_attackRecover" XFlip="true" Duration="1.2">
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+        <Trigger Condition="DefenceSuccess">
+            <FrameEvent Type="AudioPlay" ID="4911" Attach="true"/>
+        </Trigger>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_BigLaserRecover>
+
+    <AC_DodgeLaserTPReady_E MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineSuperArmor">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="여기 채워라" XFlip="true" Duration="0.1">
+            <FrameEvent Type="Movement" StartTime="0" Friction="10" MaxVelocity="5.0" Velocity="0.0" Speed="5.0"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+    
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_DodgeLaserTPReady_E>
+
+    <AC_DodgeLaserTP_E MovementType="GraphPreset" MovementGraphPreset="SukebanElite_Dodge" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="여기 채워라" XFlip="true" Duration="0.3">
+            <FrameEvent Type="Movement" StartTime="0" Friction="20.0" MaxVelocity="16.0" Velocity="16.0" Speed="0.0"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_DodgeLaserTP_E>
+
+    <AC_DodgeLaserReady_E MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="LaserEffect">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="여기 채워라" XFlip="true" Duration="0.85">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2206" Attach="true"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
+            <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/CommonBeam_TimeLine" Attach="true" AngleType="Direction" LifeTime="1.05" FollowDirection="True" AttackPreset="Gauntlet_Beam"/>
+            
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_DodgeLaserReady_E>
+
+    <AC_DodgeLaserMain_E MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" Flags="LaserEffect">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="여기 채워라" XFlip="true" Duration="0.3">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
+            <!-- TODO: 화장포 이펙트 추가해야함. 해당 이펙트 지속시간에 따라 Main 모션 시간과 Attack 지속 시간 조정 -->
+            <FrameEvent Type="AudioPlay" StartTime="0.2" ID="2207" Attach="true"/>
+            <FrameEvent Type="Attack" StartTime="0.2" AttackPreset="Gauntlet_Beam">
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
+                    <FrameEvent Type="StopUpdate" Time="0.07"/>
+                    <FrameEvent Type="SetTimeScale" Scale="0.2" Time="0.2" BlendTime="0.2"/>
+                    <FrameEvent Type="ShakeEffect" Scale="0.15" Speed="35.0" Time="0.2"/>
+
+                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Slash" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
+                    <FrameEvent Type="ParticleEffect" Path="Prefab/Effect/Blood" Offset="0.0 0.0 0.0" ToTarget="true" AngleType="AttackPoint"/>
+                    <FrameEvent Type="StopUpdate" Time="0.07"/>
+                </OnHit>
+            </FrameEvent>
+            <FrameEvent Type="EffectPreset" StartTime="0.2" Key="Laser"/>
+        </Animation>
+        <Animation Preset="여기 채워라" XFlip="true" Duration="0.3">
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_DodgeLaserRecover"/>
+    </AC_DodgeLaserMain_E>
+
+    <AC_DodgeLaserRecover MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="여기 채워라 " XFlip="true" Duration="0.5">
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_DodgeLaserRecover>
+
+<!-- Skill : Uzi -->
+
+<!-- Skill : RadioMagicGirlAlterEgo (Spawn) -->
+    <AC_SpawnUzi MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="2_skill/4_trippleUzi" XFlip="true" Duration="1.0">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2208" Attach="true"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
+            
+            <!-- Object Attack -->
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="RadioMagicGirlAlterEgo" SpawnTargetType="AITarget" Offset="0 10 0" UseFlip="true"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0.05" CharacterKey="RadioMagicGirlAlterEgo" SpawnTargetType="AITarget" Offset="10 0 0" UseFlip="true"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0.1" CharacterKey="RadioMagicGirlAlterEgo" SpawnTargetType="AITarget" Offset="0 -10 0" UseFlip="true"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0.1" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.1" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_SpawnUzi>
+<!-- Skill : RadioMagicGirlAlterEgo (Spawn) -->
+
+<!-- Defense Action -->
+    <AC_Dodge MovementType="GraphPreset" MovementGraphPreset="SukebanElite_Dodge" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="1_defense/3_dodge" XFlip="true" Duration="0.3">
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_Dodge>
+
+<!-- Defense Action -->
+
+    <AIMove MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="AI" FlipType="Direction" ActiveCollision="False">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/2_move" XFlip="true" Duration="1.0">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AIMove"/>
+    </AIMove>
+
+    <AIMoveFast MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="AI" FlipType="Direction" ActiveCollision="False">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/2_move" XFlip="true" Duration="0.5">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AIMoveFast"/>
+    </AIMoveFast>
+
+
+</ActionGraph>

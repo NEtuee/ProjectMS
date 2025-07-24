@@ -1,45 +1,39 @@
 <DanmakuGraph Name="Milk">
 
-    <Angle Set="0"/>
+    <Angle Add="0"/>
     <Acceleration Mul="1"/>
-    <LifeTime Set="1"/>
+    <LifeTime Add="3"/>
+
+    <Velocity Add="6.5"/>
+    <Friction Add="1.8"/>
+
+    <Angle Add="Random_-0^50"/>
+    <Projectile Name="Milk" ShotInfoUseType="Overlap" DirectionType="AITarget"/>
+    <Angle Add="Random_-0^50"/>
+    <Projectile Name="Milk" ShotInfoUseType="Overlap" DirectionType="AITarget"/>
+    <Angle Add="Random_-0^50"/>
+    <Projectile Name="Milk" ShotInfoUseType="Overlap" DirectionType="AITarget"/>
+
+
+
+    <Velocity Add="5"/>
+    <Friction Add="1.8"/>
     
-    <Velocity Set="7"/>
-    <Friction Set="5"/>
-    
-    <Angle Set="0"/>
+        <Wait Time="0.1"/>
+    <Angle Add="Random_-0^50"/>
+    <Projectile Name="Milk" ShotInfoUseType="Overlap" DirectionType="AITarget"/>
+    <Angle Add="Random_-50^0"/>
     <Projectile Name="Milk" ShotInfoUseType="Overlap" DirectionType="AITarget"/>
 
-    <Velocity Set="6.5"/>
-    <Friction Set="4.5"/>
+    <Velocity Add="5"/>
+    <Friction Add="0.9"/>
 
-    <Angle Set="Random_-10^10"/>
+    <Wait Time="0.1"/>
+    <Angle Add="Random_-50^0"/>
     <Projectile Name="Milk" ShotInfoUseType="Overlap" DirectionType="AITarget"/>
-    <Angle Set="Random_-10^10"/>
+    <Wait Time="0.1"/>
+    <Angle Add="Random_-50^0"/>
     <Projectile Name="Milk" ShotInfoUseType="Overlap" DirectionType="AITarget"/>
-    <Angle Set="Random_-10^10"/>
-    <Projectile Name="Milk" ShotInfoUseType="Overlap" DirectionType="AITarget"/>
-    <Angle Set="Random_-10^10"/>
-    <Projectile Name="Milk" ShotInfoUseType="Overlap" DirectionType="AITarget"/>
+    <Angle Add="Random_-50^0"/>
 
-    <Velocity Set="6"/>
-    <Friction Set="4"/>
-
-    <Angle Set="Random_-20^20"/>
-    <Projectile Name="Milk" ShotInfoUseType="Overlap" DirectionType="AITarget"/>
-    <Angle Set="Random_-20^20"/>
-    <Projectile Name="Milk" ShotInfoUseType="Overlap" DirectionType="AITarget"/>
-    <Angle Set="Random_-20^20"/>
-    <Projectile Name="Milk" ShotInfoUseType="Overlap" DirectionType="AITarget"/>
-    <Angle Set="Random_-20^20"/>
-
-    <Velocity Set="6.5"/>
-    <Friction Set="3.5"/>
-
-    <Angle Set="Random_-30^30"/>
-    <Projectile Name="Milk" ShotInfoUseType="Overlap" DirectionType="AITarget"/>
-    <Angle Set="Random_-30^30"/>
-    <Projectile Name="Milk" ShotInfoUseType="Overlap" DirectionType="AITarget"/>
-    <Angle Set="Random_-30^30"/>
-    <Projectile Name="Milk" ShotInfoUseType="Overlap" DirectionType="AITarget"/>
 </DanmakuGraph>

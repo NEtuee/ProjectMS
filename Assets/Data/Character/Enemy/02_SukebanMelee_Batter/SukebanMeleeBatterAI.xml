@@ -152,12 +152,12 @@
     <!-- TODO : 크게 근거리 / 원거리로 구분하여 스킬 사용, 패키지는 직접 작성 -->
     <JudgeMeleeAttack Package="SukebanMeleeBatterRushSwingPackage">
         <!-- TODO : 근거리용 스킬 작성, 공격이든 방어든, 이동이든 쿨타임 및 조건 기반 사용 -->
-        <Branch Condition="aiGraphCoolTime_RushSwing" Execute="RushSwing"/>
+        <Branch Weight="RandBoolean^True" Condition="aiGraphCoolTime_RushSwing" Execute="RushSwing"/>
     </JudgeMeleeAttack>
 
     <JudgeRangedAttack Package="SukebanMeleeBatterGrnadeSwingPackge">
         <!-- TODO : 원거리용 스킬 작성, 공격이든 방어든, 이동이든 쿨타임 및 조건 기반 사용 -->
-        <Branch Condition="aiGraphCoolTime_GrnadeSwing" Execute="GrnadeSwing"/>
+        <Branch Weight="RandBoolean^True" Condition="aiGraphCoolTime_GrnadeSwing" Execute="GrnadeSwing"/>
     </JudgeRangedAttack>
 
     <!-- AI 스테이트 : 전투 상태 : 공격(전투 상태일때 사용하는 2가지 스킬 분기) -->

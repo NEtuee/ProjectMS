@@ -1,0 +1,101 @@
+<AIGraph Name="RadioMagicGirlEgoSmallLaserAI" DefaultState="RangedLaserAttack">
+
+    <!-- 옵션 설정 -->
+    <!-- 인지 옵션값 설정 -->
+    <GlobalVariable Name="gv_CognitiveRange"    Value="5.0"/>   <!-- PC 인지 거리 : 해당 거리 내 PC 존재 시 인지한다. -->
+    <GlobalVariable Name="gv_CognitiveDelay"    Value="0.2"/>   <!-- 인지 지연 시간 : 해당 거리 내 PC 존재 시 인지까지 이루어지는 지연 시간. -->
+    <GlobalVariable Name="gv_OvlivionRange"     Value="30.0"/>   <!-- [보류] 인지 망각 거리 : 해당 거리 밖 PC 존재 시 망각 시간을 카운트한다. -->
+    <GlobalVariable Name="gv_OvlivionTime"      Value="30.0"/>   <!-- [보류] 인지 망각 시간 : 카운트 된 시간이 망각 시간을 초과하면 평화 상태로 돌아간다. -->
+    <!-- TODO: 위의 옵션값을 기준으로 TargetExist, TargetDistance 비교 연산. 이를 위해 CommonPackage에서의 Search 범위는 최대값으로 설정 통일할 것. -->
+
+    <!-- 평화 상태 행동 타입 설정 -->
+    <GlobalVariable Name="gv_bIsIdleType"       Value="True"/>  <!-- 대기형 -->
+    <GlobalVariable Name="gv_bIsRandMoveType"   Value="False"/> <!-- 랜덤이동형 -->
+    <GlobalVariable Name="gv_bIsMoveType"       Value="False"/> <!-- [보류] 지정이동형 -->
+
+    <!-- 전투 상태 행동 타입 설정 -->
+    <!-- 공격 타입 설정 -->
+    <GlobalVariable Name="gv_bIsNormalAttack"               Value="True"/>     <!-- 일반 공격 타입 : 공격을 실행한다. -->
+    <GlobalVariable Name="gv_bIsLockOnlAttack"              Value="False"/>      <!-- 락온 공격 타입 : PC를 추적하며 공격을 실행한다. -->
+    <GlobalVariable Name="gv_bIsBumpAttack"                 Value="False"/>     <!-- 충돌 공격 타입 : PC 공격 성공 시 액션(리커버)이 바뀌는 공격을 실행한다. -->
+    <GlobalVariable Name="gv_bIsLaserAttack"                 Value="False"/>     <!-- 빔 공격 타입 : PC를 추적하다 공격 시점에 추적을 중단한다. -->
+    <!-- 공격 거리 설정 -->
+    <GlobalVariable Name="gv_MeleeAttackRangeMin"           Value="0.1"/>       <!-- 최소 공격 사거리 : Value보다 PC가 가까우면 공격하지 않는다. -->
+    <GlobalVariable Name="gv_MeleeAttackRangeMax"           Value="20.0"/>       <!-- 최대 공격 사거리 : Value보다 PC가 멀면 공격하지 않는다. -->
+    <!-- 공격 딜레이 설정 -->
+    <GlobalVariable Name="gv_MeleeAttackCoolTime"           Value="5.0"/>       <!-- 쿨타임 : 공격 발동 후 공격 실행이 제한되는 시간 -->
+    <!-- 가드 옵션 설정 -->
+    <GlobalVariable Name="gv_GuardTime"                     Value="0.0"/>       <!-- 방어 지속 시간 -->
+    <GlobalVariable Name="gv_GuardBrokenThreshold"          Value="0.0"/>       <!-- 가드 브레이크 공격을 막을 수 있는 횟수 -->
+    <GlobalVariable Name="gv_GuardLoopCount"                Value="0.0"/>       <!-- [보류] 가드 성공 시 패시브 방어 루프 횟수 -->
+    <!-- 이동 타입 설정 -->
+    <GlobalVariable Name="gv_bIsFixed"                      Value="True"/>     <!-- 고정 타입 : 배치된 현재 자리를 고수한다. -->
+    <GlobalVariable Name="gv_bIsChaseOnly"                  Value="False"/>      <!-- 추격 타입 : 거리가 멀면 PC를 추격한다. 가까우면 정지한다. -->
+    <GlobalVariable Name="gv_bIsChaseAway"                  Value="False"/>     <!-- 거리 유지 타입 : 거리가 멀면 PC를 추격한다. 가까우면 후진한다. -->
+    <GlobalVariable Name="gv_bIsAlert"                      Value="False"/>     <!-- 경계 타입 : 거리가 멀어지면 PC를 추격, 가까우면(정지거리) 측면으로 이동한다. -->
+
+    <!-- 행동 옵션값 설정 -->
+    <GlobalVariable Name="gv_TransitionDelay"   Value="0.2"/>                   <!-- [보류] State 전환 지연시간 (State 최소 실행 시간) -->
+
+<!-- 옵션 설정 -->
+
+<!-- 패키지 인클루드 -->
+    <!-- 패키지 인클루드 : 공통 -->
+    <Include Path="Assets/Data/AILibrary/Package/EmptyPackage.xml"/>          <!-- 사망 패키지 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonDeadPackage.xml"/>          <!-- 사망 패키지 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonHitPackage.xml"/>           <!-- 피격 패키지 -->
+    
+    <!-- 패키지 인클루드 : 평화 상태 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonIdlePackage.xml"/>          <!-- 대기 패키지 -->
+                                                                                <!-- 지정 이동 패키지 (보류) -->
+    <!-- 패키지 인클루드 : 전투 상태 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonAttackPackage.xml"/>        <!-- 일반 공격 패키지 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonLockOnAttackPackage.xml"/>  <!-- 락온 공격 패키지 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonBumpAttackPackage.xml"/>    <!-- 충돌 공격 패키지 (공격 성공 시 액션 전환)-->
+    <Include Path="Assets/Data/AILibrary/Package/CommonLaserAttackPackage.xml"/>   <!-- 빔 공격 패키지 (공격 시 추적 불가)-->
+
+    
+    <!-- 전투 행동 초기화 브랜치 셋 -->
+    <BranchSet Name="BattlePackageEndSet">
+        <Branch Condition="CurrentPackageEnd" Execute="RangedLaserAttack"/>
+    </BranchSet>
+
+    <!-- 전투 행동 분기 브랜치 셋-->
+    <BranchSet Name="BattleEntrySet">
+        <Branch Condition="(TargetDistance >= gv_MeleeAttackRangeMin) && (TargetDistance <= gv_MeleeAttackRangeMax)"  Execute="RangedLaserAttack"/>
+    </BranchSet>
+
+    <!-- 전투 공격 분기 브랜치 셋 -->
+    <BranchSet Name="BattleAttackJudgeSet">
+        <Branch Condition="gv_bIsLaserAttack"       Execute="RangedLaserAttack"/>
+    </BranchSet>
+
+    <BranchSet Name="AttackTriggerSet">
+        <Branch Condition="aiGraphCoolTime_Battle_Attack
+                        && (TargetDistance >= gv_MeleeAttackRangeMin)
+                        && (TargetDistance <= gv_MeleeAttackRangeMax)" Execute="RangedLaserAttack"/>
+    </BranchSet>
+
+    <!-- 피격 리액션 브랜치 셋 -->
+    <BranchSet Name="HitReactionSet">
+        <Branch Condition="Hit" Execute="Dead"/>
+    </BranchSet>
+<!-- 브랜치 셋 -->
+
+
+    <RangedLaserAttack Package="CommonLaserAttackPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </RangedLaserAttack>
+
+    <!-- AI 스테이트 : 피격 상태 -->
+    <Hit Package="CommonHitPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </Hit>
+
+    <Dead Package="CommonDeadPackage">
+    </Dead>
+<!-- 스테이트 -->
+
+</AIGraph>
