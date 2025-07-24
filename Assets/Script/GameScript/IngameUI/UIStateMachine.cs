@@ -41,8 +41,10 @@ public class UIStateMachine
     }
     public void RequestStateByUpdate() //매 프레임마다 호출, subData 업데이트랑 겹치지 않게 조심해야할듯
     {
+        if (_currentState == null)
+            return;
+        
         UIState nextState = _currentState.UpdateState();
-
         if (nextState != null)
         {
             _previousState = _currentState;
@@ -70,7 +72,7 @@ public class UIStateMachine
         else //상태 전환 중이라면 Overwrite
         {
 
-            if (_stateChangingCoroutine != null && _currentState.OnEnter().MoveNext()) //currentState의 OnEnter가 비어있지 않다면 진행중이던 ChangingCoroutine 계속 진행, 여기서 코루틴의 첫줄을 실행하고 넘어가는듯
+            if (_stateChangingCoroutine != null) //currentState의 OnEnter가 비어있지 않다면 진행중이던 ChangingCoroutine 계속 진행, 여기서 코루틴의 첫줄을 실행하고 넘어가는듯
             {
                 _projectorUI.StopCoroutine(_stateChangingCoroutine);
                 _stateChangingCoroutine = _projectorUI.StartCoroutine(OverwriteChangingCoroutine());
@@ -98,7 +100,6 @@ public class UIStateMachine
         _isStateChanging = false;
         _stateChangingCoroutine = null;
     }
-
     private IEnumerator WaitForOnExit(UIState state)
     {
         if (state == null)

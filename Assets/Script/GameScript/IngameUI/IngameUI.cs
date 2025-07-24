@@ -22,8 +22,8 @@ public class IngameUI : MonoBehaviour
     [SerializeField] private AkaneDPHolder _akaneDPHolder;
 
     private List<HolderUI> _holderUIList = new List<HolderUI>();
-    //QTE
-    //보스HP
+    //QTE ()
+    //보스HP (체력 감소에만 반응?)
     //보스 페이즈
     //적 랭크뱃지
     //적 화면밖 인디케이터

@@ -5,9 +5,6 @@ using UnityEngine.UI;
 
 public class AkaneHP : ProjectorUI
 {
-    [SerializeField] private Image FrameImage;
-    [SerializeField] private Image HPProgressImage;
-    [SerializeField] private Image HPBackProgressImage;
     protected override UIDataType _dataType => UIDataType.AkaneHP;
     public struct AkaneHPData : IPackedUIData
     {
@@ -29,7 +26,7 @@ public class AkaneHP : ProjectorUI
     }
     protected override IReadOnlyCollection<UIEventKey> _validEventKeys =>
         new[] { UIEventKey.HyperFailed, UIEventKey.AttackSucceeded, UIEventKey.Hit };
-    private enum AkaneHPStateType
+    public enum AkaneHPStateType
     {
         NONE,
         Idle,
@@ -37,39 +34,65 @@ public class AkaneHP : ProjectorUI
         Lifetapping,
         Lifestealing
     }
-    private Dictionary<AkaneHPStateType, UIState> _stateMap = new Dictionary<AkaneHPStateType, UIState>();
+    private Dictionary<AkaneHPStateType, UIState> _akaneHPStateMap = new Dictionary<AkaneHPStateType, UIState>();
+    protected override IDictionary<TUIStateType, UIState> _stateMap<TUIStateType>()
+        { return (IDictionary<TUIStateType, UIState>)(object)_akaneHPStateMap; }
+    public IDictionary<AkaneHPStateType, UIState> StateMap => _stateMap<AkaneHPStateType>();
+    [SerializeField] private UIVisualModuleData<AkaneHPStateType> FrameData;
+    [SerializeField] private UIVisualModuleData<AkaneHPStateType> HPProgressData;
+    private UIVisualModule Frame;
+    private UIVisualModule HPProgress;
 
 
     //공통 메서드    
-    public override void Initialize()
+    protected override void SetInitialConstructor()
     {
-        base.PrepareInitialize();
-
         _receivedData = new AkaneHPData();
         _projectingData = new AkaneHPData();
+        _receivedSubData = new SubUIData();
+        _projectingSubData = new SubUIData();
 
-        _stateMap.Add(AkaneHPStateType.NONE, new NONE(this));
-        _stateMap.Add(AkaneHPStateType.Idle, new IdleState(this));
-        _stateMap.Add(AkaneHPStateType.Underattacked, new UnderattackedState(this));
-        _stateMap.Add(AkaneHPStateType.Lifetapping, new LifetappingState(this));
-        _stateMap.Add(AkaneHPStateType.Lifestealing, new LifestealingState(this));
+        Frame = new UIVisualModule();
+        HPProgress = new UIVisualModule();
+    }
+    protected override void SetStateMap()
+    {
+        _akaneHPStateMap.Add(AkaneHPStateType.NONE, new NONE(this));
+        _akaneHPStateMap.Add(AkaneHPStateType.Idle, new IdleState(this));
+        _akaneHPStateMap.Add(AkaneHPStateType.Underattacked, new UnderattackedState(this));
+        _akaneHPStateMap.Add(AkaneHPStateType.Lifetapping, new LifetappingState(this));
+        _akaneHPStateMap.Add(AkaneHPStateType.Lifestealing, new LifestealingState(this));
+    }
+    protected override void SetUIVisualModule()
+    {
+        Frame.SetFromData<AkaneHPStateType>(FrameData);
+        HPProgress.SetFromData<AkaneHPStateType>(HPProgressData);
 
-        Deactivate();
+        List<IEnumerator> effectList = new List<IEnumerator>();
+        effectList.Add(UIAnimationCommons.FadeOutAlpha(Frame, 0.0f));
+        effectList.Add(UIAnimationCommons.FadeOutAlpha(HPProgress, 0.0f));
+        _uiEffectManager.RegisterEffectList(this, effectList);
+        _uiEffectManager.WaitAllListedEffects();
     }
     public override void Activate()
     {
-        _stateMachine.ForceStateChanging(_stateMap[AkaneHPStateType.Idle]);
+        if (_memorySavingCoroutine != null)
+            StopCoroutine(_memorySavingCoroutine);
+
+        gameObject.SetActive(true);
+        _stateMachine.ForceStateChanging(StateMap[AkaneHPStateType.Idle]);
     }
     public override void Deactivate()
     {
-        _stateMachine.ForceStateChanging(_stateMap[AkaneHPStateType.NONE]);
+        _stateMachine.ForceStateChanging(StateMap[AkaneHPStateType.NONE]);
+        _memorySavingCoroutine = StartCoroutine(MemorySavingCoroutine());
     }
 
 
     //투영 데이터 업데이트 메서드 및 코루틴
     private void HPProjectionUpdate()
     {
-        HPProgressImage.fillAmount = ProjectingData.HPPercentage;
+        HPProgress.Image.fillAmount = ProjectingData.HPPercentage;
     }
     private void HPLerpUpdate()
     {
@@ -131,21 +154,12 @@ public class AkaneHP : ProjectorUI
         yield return null;
     }
     //전용 애니메이션 메서드 및 코루틴
-    private IEnumerator PrivateWait()
-    {
-        yield return new WaitForSeconds(1.0f);
-    }
 
     //UIState 정의
     private class IdleState : UIState
     {
-        private readonly AkaneHP _akaneHP;
-        private readonly Dictionary<AkaneHPStateType, UIState> _stateMap;
-        public IdleState(AkaneHP akaneHP)
-        {
-            _akaneHP = akaneHP;
-            _stateMap = akaneHP._stateMap;
-        }
+        private AkaneHP _akaneHP => (AkaneHP)_projectorUI;
+        public IdleState(AkaneHP akaneHP) : base(akaneHP) {}
         public override void OnUpdate()
         {
             _akaneHP.HPLerpUpdate();
@@ -156,11 +170,11 @@ public class AkaneHP : ProjectorUI
             switch (eventKey)
             {
                 case UIEventKey.AttackSucceeded:
-                    return _stateMap[AkaneHPStateType.Lifestealing];
+                    return _akaneHP.StateMap[AkaneHPStateType.Lifestealing];
                 case UIEventKey.HyperFailed:
-                    return _stateMap[AkaneHPStateType.Lifetapping];
+                    return _akaneHP.StateMap[AkaneHPStateType.Lifetapping];
                 case UIEventKey.Hit:
-                    return _stateMap[AkaneHPStateType.Underattacked];
+                    return _akaneHP.StateMap[AkaneHPStateType.Underattacked];
                 default:
                     break;
             }
@@ -174,29 +188,18 @@ public class AkaneHP : ProjectorUI
     }
     private class UnderattackedState : UIState
     {
-        private readonly AkaneHP _akaneHP;
-        private readonly Dictionary<AkaneHPStateType, UIState> _stateMap;
-        public UnderattackedState(AkaneHP akaneHP)
-        {
-            _akaneHP = akaneHP;
-            _stateMap = akaneHP._stateMap;
-        }
+        private AkaneHP _akaneHP => (AkaneHP)_projectorUI;
+        public UnderattackedState(AkaneHP akaneHP) : base(akaneHP) {}
         public override IEnumerator OnEnter()
         {
-            yield return null;
+            List<IEnumerator> effectList = new List<IEnumerator>();
+            effectList.Add(UIAnimationCommons.WaveDownPosition(_akaneHP.Frame, 0.45f, 2.0f));
+            effectList.Add(UIAnimationCommons.ShakePosition(_akaneHP.HPProgress, 0.5f, 4.0f));
+            effectList.Add(UIAnimationCommons.FlickAlpha(_akaneHP.HPProgress, 0.5f, 1.0f, 4));
+            effectList.Add(_akaneHP.NormalHPLerpCoroutine(0.1f));
 
-            List<IEnumerator> coroutineList = new List<IEnumerator>();
-            IEnumerator coroutineA = UIAnimationCommons.WaveDownPosition(_akaneHP.FrameImage, 0.45f, 2.0f);
-            IEnumerator coroutineB = UIAnimationCommons.ShakePosition(_akaneHP.HPProgressImage, 0.5f, 4.0f);
-            IEnumerator coroutineC = UIAnimationCommons.FlickAlpha(_akaneHP.HPProgressImage, 0.5f, 1.0f, 4);
-            IEnumerator coroutineD = _akaneHP.NormalHPLerpCoroutine(0.1f);
-            coroutineList.Add(coroutineA);
-            coroutineList.Add(coroutineB);
-            coroutineList.Add(coroutineC);
-            coroutineList.Add(coroutineD);
-
-            _akaneHP._uiCoroutineManager.RegisterCoroutineList(_akaneHP, coroutineList);
-            yield return _akaneHP._uiCoroutineManager.WaitAllListedCoroutine();
+            _akaneHP._uiEffectManager.RegisterEffectList(_akaneHP, effectList);
+            yield return _akaneHP._uiEffectManager.WaitAllListedEffects();
         }
         public override UIState ChangeState(SubUIData subData)
         {
@@ -204,34 +207,23 @@ public class AkaneHP : ProjectorUI
         }
         public override UIState UpdateState()
         {
-            return _stateMap[AkaneHPStateType.Idle];
+            return _akaneHP.StateMap[AkaneHPStateType.Idle];
         }
     }
     private class LifetappingState : UIState
     {
-        private readonly AkaneHP _akaneHP;
-        private readonly Dictionary<AkaneHPStateType, UIState> _stateMap;
-        public LifetappingState(AkaneHP akaneHP)
-        {
-            _akaneHP = akaneHP;
-            _stateMap = akaneHP._stateMap;
-        }
+        private AkaneHP _akaneHP => (AkaneHP)_projectorUI;
+        public LifetappingState(AkaneHP akaneHP) : base(akaneHP) {}
         public override IEnumerator OnEnter()
         {
-            yield return null;
+            List<IEnumerator> effectList = new List<IEnumerator>();
+            effectList.Add(UIAnimationCommons.WaveDownPosition(_akaneHP.Frame, 0.45f, 4.0f));
+            effectList.Add(UIAnimationCommons.WaveDownPosition(_akaneHP.HPProgress, 0.5f, 4.0f));
+            effectList.Add(UIAnimationCommons.FlickAlpha(_akaneHP.HPProgress, 0.25f, 0.5f, 2));
+            effectList.Add(_akaneHP.NormalHPLerpCoroutine(0.1f));
 
-            List<IEnumerator> coroutineList = new List<IEnumerator>();
-            IEnumerator coroutineA = UIAnimationCommons.WaveDownPosition(_akaneHP.FrameImage, 0.45f, 4.0f);
-            IEnumerator coroutineB = UIAnimationCommons.WaveDownPosition(_akaneHP.HPProgressImage, 0.5f, 4.0f);
-            IEnumerator coroutineC = UIAnimationCommons.FlickAlpha(_akaneHP.HPProgressImage, 0.25f, 0.5f, 2);
-            IEnumerator coroutineD = _akaneHP.NormalHPLerpCoroutine(0.1f);
-            coroutineList.Add(coroutineA);
-            coroutineList.Add(coroutineB);
-            coroutineList.Add(coroutineC);
-            coroutineList.Add(coroutineD);
-
-            _akaneHP._uiCoroutineManager.RegisterCoroutineList(_akaneHP, coroutineList);
-            yield return _akaneHP._uiCoroutineManager.WaitAllListedCoroutine();
+            _akaneHP._uiEffectManager.RegisterEffectList(_akaneHP, effectList);
+            yield return _akaneHP._uiEffectManager.WaitAllListedEffects();
         }
         public override UIState ChangeState(SubUIData subData)
         {
@@ -239,35 +231,23 @@ public class AkaneHP : ProjectorUI
         }
         public override UIState UpdateState()
         {
-            return _stateMap[AkaneHPStateType.Idle];
+            return _akaneHP.StateMap[AkaneHPStateType.Idle];
         }
     }
     private class LifestealingState : UIState
     {
-        private readonly AkaneHP _akaneHP;
-        private readonly Dictionary<AkaneHPStateType, UIState> _stateMap;
-        public LifestealingState(AkaneHP akaneHP)
-        {
-            _akaneHP = akaneHP;
-            _stateMap = akaneHP._stateMap;
-        }
+        private AkaneHP _akaneHP => (AkaneHP)_projectorUI;
+        public LifestealingState(AkaneHP akaneHP) : base(akaneHP) {}
         public override IEnumerator OnEnter()
         {
-            yield return null;
+            List<IEnumerator> effectList = new List<IEnumerator>();
+            effectList.Add(UIAnimationCommons.WaveUpPosition(_akaneHP.Frame, 0.3f, 1.0f));
+            effectList.Add(UIAnimationCommons.WaveUpPosition(_akaneHP.HPProgress, 0.27f, 1.0f));
+            effectList.Add(UIAnimationCommons.FlickAlpha(_akaneHP.HPProgress, 0.1f, 0.2f, 1));
+            effectList.Add(_akaneHP.NormalHPLerpCoroutine(0.25f));
 
-            List<IEnumerator> coroutineList = new List<IEnumerator>();
-            IEnumerator coroutineA = UIAnimationCommons.WaveUpPosition(_akaneHP.FrameImage, 0.3f, 1.0f);
-            IEnumerator coroutineB = UIAnimationCommons.WaveUpPosition(_akaneHP.HPProgressImage, 0.27f, 1.0f);
-            IEnumerator coroutineC = UIAnimationCommons.FlickAlpha(_akaneHP.HPProgressImage, 0.1f, 0.2f, 1);
-            
-            IEnumerator coroutineD = _akaneHP.NormalHPLerpCoroutine(0.25f);
-            coroutineList.Add(coroutineA);
-            coroutineList.Add(coroutineB);
-            coroutineList.Add(coroutineC);
-            coroutineList.Add(coroutineD);
-
-            _akaneHP._uiCoroutineManager.RegisterCoroutineList(_akaneHP, coroutineList);
-            yield return _akaneHP._uiCoroutineManager.WaitAllListedCoroutine();
+            _akaneHP._uiEffectManager.RegisterEffectList(_akaneHP, effectList);
+            yield return _akaneHP._uiEffectManager.WaitAllListedEffects();
         }
         public override UIState ChangeState(SubUIData subData)
         {
@@ -275,54 +255,36 @@ public class AkaneHP : ProjectorUI
         }
         public override UIState UpdateState()
         {
-            return _stateMap[AkaneHPStateType.Idle];
+            return _akaneHP.StateMap[AkaneHPStateType.Idle];
         }
     }
     private class NONE : UIState
     {
-        private readonly AkaneHP _akaneHP;
-        private readonly Dictionary<AkaneHPStateType, UIState> _stateMap;
-        public NONE(AkaneHP akaneHP)
-        {
-            _akaneHP = akaneHP;
-            _stateMap = akaneHP._stateMap;
-        }
+        private AkaneHP _akaneHP => (AkaneHP)_projectorUI;
+        public NONE(AkaneHP akaneHP) : base(akaneHP) {}
         public override IEnumerator OnEnter()
         {
-            //투명도 0으로
-            yield return null;
+            List<IEnumerator> effectList = new List<IEnumerator>();
+            effectList.Add(UIAnimationCommons.FadeOutAlpha(_akaneHP.Frame, 0.25f));
+            effectList.Add(UIAnimationCommons.FadeOutAlpha(_akaneHP.HPProgress, 0.25f));
 
-            List<IEnumerator> coroutineList = new List<IEnumerator>();
-            IEnumerator coroutineA = UIAnimationCommons.FadeOutAlpha(_akaneHP.FrameImage, 0.25f);
-            IEnumerator coroutineB = UIAnimationCommons.FadeOutAlpha(_akaneHP.HPProgressImage, 0.25f);
-            coroutineList.Add(coroutineA);
-            coroutineList.Add(coroutineB);
-
-            _akaneHP._uiCoroutineManager.RegisterCoroutineList(_akaneHP, coroutineList);
-            yield return _akaneHP._uiCoroutineManager.WaitAllListedCoroutine();
+            _akaneHP._uiEffectManager.RegisterEffectList(_akaneHP, effectList);
+            yield return _akaneHP._uiEffectManager.WaitAllListedEffects();
         }
         public override IEnumerator OnExit()
         {
-            //위로 떠올라서 원래 위치로
-            //투명도 0에서 1로
-            yield return null;
-            UIAnimationCommons.FadeInAlpha(_akaneHP.FrameImage, 0.0f);
-            UIAnimationCommons.FadeInAlpha(_akaneHP.HPProgressImage, 0.0f);
+            UIAnimationCommons.FadeInAlpha(_akaneHP.Frame, 0.0f);
+            UIAnimationCommons.FadeInAlpha(_akaneHP.HPProgress, 0.0f);
 
-            List<IEnumerator> coroutineList = new List<IEnumerator>();
-            IEnumerator coroutineA = UIAnimationCommons.FloatPosition(_akaneHP.FrameImage, 0.5f, 24.0f);
-            IEnumerator coroutineB = UIAnimationCommons.FadeInAlpha(_akaneHP.FrameImage, 1.0f);
-            IEnumerator coroutineC = UIAnimationCommons.FloatPosition(_akaneHP.HPProgressImage, 0.5f, 24.0f);
-            IEnumerator coroutineD = UIAnimationCommons.FadeInAlpha(_akaneHP.HPProgressImage, 1.0f);
-            IEnumerator coroutineE = _akaneHP.OpeningHPLerpCoroutine(1.0f);
-            coroutineList.Add(coroutineA);
-            coroutineList.Add(coroutineB);
-            coroutineList.Add(coroutineC);
-            coroutineList.Add(coroutineD);
-            coroutineList.Add(coroutineE);
+            List<IEnumerator> effectList = new List<IEnumerator>();
+            effectList.Add(UIAnimationCommons.FloatPosition(_akaneHP.Frame, 0.5f, 24.0f));
+            effectList.Add(UIAnimationCommons.FadeInAlpha(_akaneHP.Frame, 1.0f));
+            effectList.Add(UIAnimationCommons.FloatPosition(_akaneHP.HPProgress, 0.5f, 24.0f));
+            effectList.Add(UIAnimationCommons.FadeInAlpha(_akaneHP.HPProgress, 1.0f));
+            effectList.Add(_akaneHP.OpeningHPLerpCoroutine(1.0f));
 
-            _akaneHP._uiCoroutineManager.RegisterCoroutineList(_akaneHP, coroutineList);
-            yield return _akaneHP._uiCoroutineManager.WaitAllListedCoroutine();
+            _akaneHP._uiEffectManager.RegisterEffectList(_akaneHP, effectList);
+            yield return _akaneHP._uiEffectManager.WaitAllListedEffects();
         }
         public override UIState ChangeState(SubUIData subData)
         {

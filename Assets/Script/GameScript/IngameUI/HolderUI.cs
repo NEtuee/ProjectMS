@@ -15,6 +15,7 @@ public abstract class HolderUI : MonoBehaviour
     public IPackedUIData ReceivedData => _receivedData;
     public SubUIData ReceivedSubData => (SubUIData)_receivedSubData;
     protected ObjectPool<ProjectorUI> _objectPool;
+    protected abstract Vector2 _poolSize { get; }
     protected List<ProjectorUI> _uiHolder;
     protected abstract ProjectorUI _projectorUIPrefab { get; }
 
@@ -22,7 +23,13 @@ public abstract class HolderUI : MonoBehaviour
     //공통 메서드
     public virtual void PrepareInitialize()
     {
-        _objectPool = new ObjectPool<ProjectorUI>(CreateProjectorUI, TakeProjectorUI, ReturnProjectorUI, DestroyProjectorUI, true, 5, 50);
+        _objectPool = new ObjectPool<ProjectorUI>(
+            createFunc: CreateProjectorUI,
+            actionOnGet: TakeProjectorUI,
+            actionOnRelease: ReturnProjectorUI,
+            actionOnDestroy: DestroyProjectorUI,
+            false, (int)_poolSize.x, (int)_poolSize.y);
+        _uiHolder = new List<ProjectorUI>();
     }
     public virtual void ReceiveData(IPackedUIData data)
     {
@@ -41,22 +48,27 @@ public abstract class HolderUI : MonoBehaviour
         foreach (ProjectorUI projectorUI in _uiHolder)
             projectorUI.ReceiveSubData(ReceivedSubData);
     }
+    //오브젝트 풀 메서드
     protected virtual ProjectorUI CreateProjectorUI() //프리팹 생성
     {
         ProjectorUI projectorUI = Instantiate(_projectorUIPrefab);
+        projectorUI.Initialize();
+
         return projectorUI;
     }
-    protected virtual void TakeProjectorUI(ProjectorUI projectorUI)
+    protected virtual void TakeProjectorUI(ProjectorUI projectorUI) //홀더 등록
     {
-
+        projectorUI.Activate();
+        _uiHolder.Add(projectorUI);
     }
-    protected virtual void ReturnProjectorUI(ProjectorUI projectorUI)
+    protected virtual void ReturnProjectorUI(ProjectorUI projectorUI) //홀더 해제
     {
-
+        projectorUI.Deactivate();
+        _uiHolder.Remove(projectorUI);
     }
     protected virtual void DestroyProjectorUI(ProjectorUI projectorUI) //프리팹 삭제
     {
-
+        Destroy(projectorUI);
     }
     public abstract void Initialize();
     public abstract void Activate();
