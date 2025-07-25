@@ -1,0 +1,30 @@
+<AIPackage Name="MilkBoxGuardBrokenPackge" DefaultState="AI_Idle">
+
+    <AIState>
+        <AI_Idle UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Type="SetAction" Action="AC_Idle"/>
+            </Event_OnExecute>
+            
+            <Branch Condition="End == true" Execute="AI_Idle"/>
+            <Branch Condition="GuardBreakFail || GuardBroken" Execute="AI_GuardBroken"/>
+        </AI_Idle>
+
+        <AI_GuardBroken UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Type="SetAction" Action="AC_GuardBroken"/>
+            </Event_OnExecute>
+            
+            <Branch Condition="End == true" Execute="AI_Destory"/>
+        </AI_GuardBroken>
+
+        <AI_Destory UpdateTime="999.0">
+            <Event_OnExecute>
+               <AIEvent Type="SetAction" Action="AC_Destory"/>
+               <AIEvent Type="TerminatePackage"/>
+            </Event_OnExecute>
+        </AI_Destory>
+
+    </AIState>
+
+</AIPackage>

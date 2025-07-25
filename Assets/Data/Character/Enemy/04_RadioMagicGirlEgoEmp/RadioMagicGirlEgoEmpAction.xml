@@ -1,4 +1,4 @@
-<ActionGraph Name="BigGrenadeAction" DefaultAction="Move" DefaultFramePerSecond="12">
+<ActionGraph Name="RadioMagicGirlEgoEmpAction" DefaultAction="Move" DefaultFramePerSecond="12">
 
     <Move MovementType="GraphPreset" MovementGraphPreset="Aoba_EmpGrenade" DirectionType="AI" FlipType="Direction" RotationType="Direction">
         <!-- TODO: 폭발 도달 속도 플레이 해보고 조절할 것 -->
@@ -11,9 +11,8 @@
 
     <Explosion MovementType="Empty" DirectionType="Keep" DefenceType="Evade" DefenceAngle="360">
         <Animation Preset="Sprites/Object/BigGrenade/2_explosion" Duration="0.3">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="6002" Attach="true"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2415" Attach="true"/>
             <!-- TODO: 폭발 이펙트  -->
-            <FrameEvent Type="EffectPreset" Key="Helena_Explode"/>
             <FrameEvent Type="Attack" StartTime="0" EndTime="0.3" AttackPreset="Common_Radius05">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
