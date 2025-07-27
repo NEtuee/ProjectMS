@@ -143,7 +143,7 @@
         <Animation Preset="0_default/3_hit" XFlip="true" Duration="1.25">
         </Animation>
         <Trigger Condition="EvadeSuccess">
-            <FrameEvent Type="Attack" StartTime="0" EndTime="0.1" AttackPreset="Common_Radius10" AttackType="Catch" CatchOffset="0.1 0 0">
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.1" AttackPreset="Common_Radius10" AttackType="Catch" CatchOffset="0.1 0 0" IgnoreDefenceType="Evade">
                 <OnCatch>
                     <FrameEvent Type="AudioPlay" StartTime="0" ID="2410" Attach="true"/>
                     <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>

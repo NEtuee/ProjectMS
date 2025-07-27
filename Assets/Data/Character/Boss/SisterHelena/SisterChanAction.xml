@@ -493,7 +493,7 @@
         <Animation Preset="2_skill/6_barrior/2_entry" XFlip="true" Duration="0.2">
             <!-- TODO: 캐치용 스크립트, 모션X -->
             <FrameEvent Type="AudioPlay" StartTime="0" ID="4911" Attach="true" Switch="True"/>
-            <FrameEvent Type="Attack" StartTime="0" EndTime="0.2" AttackPreset="Aoba_Tsuba" AttackType="Catch" CatchOffset="0.1 0 0">
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.2" AttackPreset="Aoba_Tsuba" AttackType="Catch" CatchOffset="0.1 0 0" IgnoreDefenceType="Evade" >
                 <OnCatch>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CatchedSet"/>
                     

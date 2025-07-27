@@ -308,7 +308,7 @@
     <AC_Tsuba MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/NozawaAoba/4_Tsuba/"/>
         <Animation Preset="1_kamae" XFlip="true" Duration="0.35">
-            <FrameEvent Type="Attack" StartTime="0" EndTime="0.2" AttackPreset="Aoba_Tsuba" AttackType="Catch" CatchOffset="0.1 0 0">
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.2" AttackPreset="Aoba_Tsuba" AttackType="Catch" CatchOffset="0.1 0 0" IgnoreDefenceType="Evade">
                 <OnCatch>
                     <FrameEvent Type="AudioPlay" StartTime="0" ID="2410" Attach="true"/>
                     <FrameEvent Type="TeleportToTarget" StartTime="0"/>
