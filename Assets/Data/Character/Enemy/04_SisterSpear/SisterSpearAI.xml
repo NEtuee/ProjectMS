@@ -9,8 +9,8 @@
     <GlobalVariable Name="gv_IsPeaceMotion"           Value="false"/>       <!-- 평화 모션 사용 : True일 시 평화 모션 재생, False일 경우 랜덤 이동 -->
         
     <!-- 간격 거리 설정 -->
-    <GlobalVariable Name="gv_AttackRangeMin"           Value="1.0"/>       <!-- 근거리 기준 : 해당 값보다 낮으면 근거리로 판단한다. -->
-    <GlobalVariable Name="gv_AttackRangeMax"           Value="3.5"/>       <!-- 원거리 기준 : 해당 값보다 높으면 원거리로 판단한다. -->
+    <GlobalVariable Name="gv_AttackRangeMin"           Value="0.5"/>       <!-- 근거리 기준 : 해당 값보다 낮으면 근거리로 판단한다. -->
+    <GlobalVariable Name="gv_AttackRangeMax"           Value="2.5"/>       <!-- 원거리 기준 : 해당 값보다 높으면 원거리로 판단한다. -->
 
     <!-- 가드 옵션 설정 -->
     <GlobalVariable Name="gv_GuardTime"                     Value="3.0"/>       <!-- 방어 지속 시간 -->

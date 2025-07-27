@@ -88,9 +88,9 @@
 <!-- Defualt Action -->
 
 <!-- Skill : Attack -->
-    <AC_AttackReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+    <AC_AttackReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineNormal">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="1_attack/1_attackReady" XFlip="true" Duration="0.7">
+        <Animation Preset="1_attack/1_attackReady" XFlip="true" Duration="0.5">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2501" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Velocity="0" MaxVelocity="0" Speed="0"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
@@ -100,7 +100,7 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_AttackReady>
 
-    <AC_AttackMain MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
+    <AC_AttackMain MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction" Flags="OutlineNormal">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="1_attack/2_attackMain" XFlip="true" Duration="0.55">
             <FrameEvent Type="Movement" StartTime="0" Friction="24" MaxVelocity="18" Velocity="18" Speed="0"/>
@@ -118,6 +118,8 @@
                     <FrameEvent Type="ShakeEffect" Scale="0.1" Speed="10.0" Time="0.1"/>
                 </OnHit>
             </FrameEvent>
+
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_AttackRecover"/>
