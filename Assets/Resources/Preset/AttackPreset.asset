@@ -18,6 +18,7 @@ MonoBehaviour:
     _attackAngle: 8
     _attackStartDistance: 0.5
     _attackRayRadius: 0.1
+    _attackShake: 0
     _pushVector: {x: 1.5, y: 0, z: 0}
     _attackMaterial: 0
   - _name: PlayerAttackLong
@@ -25,6 +26,7 @@ MonoBehaviour:
     _attackAngle: 0
     _attackStartDistance: 0.5
     _attackRayRadius: 0.25
+    _attackShake: 0
     _pushVector: {x: 1.5, y: 0, z: 0}
     _attackMaterial: 0
   - _name: PlayerBloodSpreadTest
@@ -32,6 +34,7 @@ MonoBehaviour:
     _attackAngle: 140
     _attackStartDistance: 0
     _attackRayRadius: 0
+    _attackShake: 0
     _pushVector: {x: 0, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Player_JustGuardBreak
@@ -39,6 +42,7 @@ MonoBehaviour:
     _attackAngle: 140
     _attackStartDistance: 0
     _attackRayRadius: 0
+    _attackShake: 0
     _pushVector: {x: 0, y: 0, z: 0}
     _attackMaterial: 0
   - _name: projectileTest
@@ -46,6 +50,7 @@ MonoBehaviour:
     _attackAngle: 360
     _attackStartDistance: 0
     _attackRayRadius: 0
+    _attackShake: 0
     _pushVector: {x: 1, y: 0, z: 0}
     _attackMaterial: 0
   - _name: tutorial_spear
@@ -53,6 +58,7 @@ MonoBehaviour:
     _attackAngle: 360
     _attackStartDistance: 0
     _attackRayRadius: 0
+    _attackShake: 0
     _pushVector: {x: 1, y: 0, z: 0}
     _attackMaterial: 0
   - _name: AttackGuardBreak
@@ -60,6 +66,7 @@ MonoBehaviour:
     _attackAngle: 180
     _attackStartDistance: 0.1
     _attackRayRadius: 0
+    _attackShake: 0
     _pushVector: {x: 1.5, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Akane_Kick
@@ -67,6 +74,7 @@ MonoBehaviour:
     _attackAngle: 25
     _attackStartDistance: 0.1
     _attackRayRadius: 0
+    _attackShake: 0
     _pushVector: {x: 2.5, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Akane_Kick_Hard
@@ -74,6 +82,7 @@ MonoBehaviour:
     _attackAngle: 25
     _attackStartDistance: 0.1
     _attackRayRadius: 0
+    _attackShake: 0
     _pushVector: {x: 5, y: 0, z: 0}
     _attackMaterial: 0
   - _name: MagicalBullet
@@ -81,6 +90,7 @@ MonoBehaviour:
     _attackAngle: 360
     _attackStartDistance: 0
     _attackRayRadius: 0
+    _attackShake: 0
     _pushVector: {x: 1, y: 0, z: 0}
     _attackMaterial: 0
   - _name: AtrariRush
@@ -88,6 +98,7 @@ MonoBehaviour:
     _attackAngle: 180
     _attackStartDistance: 0
     _attackRayRadius: 0
+    _attackShake: 0
     _pushVector: {x: 5, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Najimi_Catch
@@ -95,20 +106,23 @@ MonoBehaviour:
     _attackAngle: 360
     _attackStartDistance: 0
     _attackRayRadius: 0
+    _attackShake: 0
     _pushVector: {x: 0, y: 0, z: 0}
     _attackMaterial: 0
-  - _name: SisterSpear_Catch
-    _attackRadius: 0.5
+  - _name: SisterSpear_Normal
+    _attackRadius: 0.8
     _attackAngle: 0
-    _attackStartDistance: 0.25
-    _attackRayRadius: 0.05
-    _pushVector: {x: 0, y: 0, z: 0}
-    _attackMaterial: 0
+    _attackStartDistance: 0
+    _attackRayRadius: 0.1
+    _attackShake: 1
+    _pushVector: {x: 0.1, y: 0, z: 0}
+    _attackMaterial: 3
   - _name: Najimi_BatonSlash
     _attackRadius: 4.5
     _attackAngle: 4
     _attackStartDistance: 0.1
     _attackRayRadius: 0
+    _attackShake: 0
     _pushVector: {x: 1, y: 0, z: 0}
     _attackMaterial: 0
   - _name: LaserTest
@@ -116,6 +130,7 @@ MonoBehaviour:
     _attackAngle: 0
     _attackStartDistance: 0.1
     _attackRayRadius: 0.5
+    _attackShake: 0
     _pushVector: {x: 3, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Najimi_Pitching
@@ -123,6 +138,7 @@ MonoBehaviour:
     _attackAngle: 0
     _attackStartDistance: 0
     _attackRayRadius: 0
+    _attackShake: 0
     _pushVector: {x: 3, y: 0, z: 0}
     _attackMaterial: 0
   - _name: BaseBall
@@ -130,6 +146,7 @@ MonoBehaviour:
     _attackAngle: 360
     _attackStartDistance: 0
     _attackRayRadius: 0
+    _attackShake: 0
     _pushVector: {x: 1, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Najimi_Beam
@@ -137,6 +154,7 @@ MonoBehaviour:
     _attackAngle: 0
     _attackStartDistance: 0.1
     _attackRayRadius: 0.8
+    _attackShake: 0
     _pushVector: {x: 5, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Najimi_Rush
@@ -144,6 +162,7 @@ MonoBehaviour:
     _attackAngle: 45
     _attackStartDistance: 0.1
     _attackRayRadius: 0
+    _attackShake: 0
     _pushVector: {x: 0, y: 0, z: 0}
     _attackMaterial: 0
   - _name: MagicalFireworkBullet
@@ -151,6 +170,7 @@ MonoBehaviour:
     _attackAngle: 360
     _attackStartDistance: 0
     _attackRayRadius: 0
+    _attackShake: 0
     _pushVector: {x: 0, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Reito_Punch
@@ -158,6 +178,7 @@ MonoBehaviour:
     _attackAngle: 45
     _attackStartDistance: 0.1
     _attackRayRadius: 0
+    _attackShake: 0
     _pushVector: {x: 7, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Reito_Beam
@@ -165,6 +186,7 @@ MonoBehaviour:
     _attackAngle: 0
     _attackStartDistance: 0.1
     _attackRayRadius: 0.6
+    _attackShake: 0
     _pushVector: {x: 5, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Gauntlet_Beam
@@ -172,6 +194,7 @@ MonoBehaviour:
     _attackAngle: 0
     _attackStartDistance: 0.1
     _attackRayRadius: 0.3
+    _attackShake: 0
     _pushVector: {x: 5, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Aoba_Raisen
@@ -179,6 +202,7 @@ MonoBehaviour:
     _attackAngle: 0
     _attackStartDistance: 0.1
     _attackRayRadius: 0.2
+    _attackShake: 0
     _pushVector: {x: 1, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Aoba_Choraisen
@@ -186,6 +210,7 @@ MonoBehaviour:
     _attackAngle: 0
     _attackStartDistance: 0.1
     _attackRayRadius: 0.25
+    _attackShake: 0
     _pushVector: {x: 1.5, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Aoba_UnwaverRaisen
@@ -193,6 +218,7 @@ MonoBehaviour:
     _attackAngle: 0
     _attackStartDistance: 0
     _attackRayRadius: 0
+    _attackShake: 0
     _pushVector: {x: 0, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Aoba_Stungun
@@ -200,6 +226,7 @@ MonoBehaviour:
     _attackAngle: 60
     _attackStartDistance: 0.1
     _attackRayRadius: 0
+    _attackShake: 0
     _pushVector: {x: 1, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Aoba_EmpGrenade
@@ -207,6 +234,7 @@ MonoBehaviour:
     _attackAngle: 0
     _attackStartDistance: 0
     _attackRayRadius: 0
+    _attackShake: 0
     _pushVector: {x: 0, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Aoba_Discharge
@@ -214,6 +242,7 @@ MonoBehaviour:
     _attackAngle: 0
     _attackStartDistance: 0
     _attackRayRadius: 0
+    _attackShake: 0
     _pushVector: {x: 0, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Aoba_ElectronicShock
@@ -221,6 +250,7 @@ MonoBehaviour:
     _attackAngle: 0
     _attackStartDistance: 0
     _attackRayRadius: 0
+    _attackShake: 0
     _pushVector: {x: 0, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Aoba_Storm
@@ -228,6 +258,7 @@ MonoBehaviour:
     _attackAngle: 0
     _attackStartDistance: 0
     _attackRayRadius: 0.2
+    _attackShake: 0
     _pushVector: {x: 0, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Aoba_Tsuba
@@ -235,6 +266,7 @@ MonoBehaviour:
     _attackAngle: 0
     _attackStartDistance: 0
     _attackRayRadius: 0
+    _attackShake: 0
     _pushVector: {x: 0, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Aoba_Thrust
@@ -242,6 +274,7 @@ MonoBehaviour:
     _attackAngle: 0
     _attackStartDistance: 0
     _attackRayRadius: 0.1
+    _attackShake: 0
     _pushVector: {x: 3.5, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Aoba_Kick
@@ -249,6 +282,7 @@ MonoBehaviour:
     _attackAngle: 8
     _attackStartDistance: 0.1
     _attackRayRadius: 0
+    _attackShake: 0
     _pushVector: {x: 4, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Rapier_Normal
@@ -256,6 +290,7 @@ MonoBehaviour:
     _attackAngle: 0
     _attackStartDistance: 0.2
     _attackRayRadius: 0.1
+    _attackShake: 0
     _pushVector: {x: 0.1, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Luger_Normal
@@ -263,6 +298,7 @@ MonoBehaviour:
     _attackAngle: 0
     _attackStartDistance: 0.1
     _attackRayRadius: 0.2
+    _attackShake: 0
     _pushVector: {x: 5, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Barricade_Normal
@@ -270,6 +306,7 @@ MonoBehaviour:
     _attackAngle: 0
     _attackStartDistance: 0.2
     _attackRayRadius: 0.1
+    _attackShake: 0
     _pushVector: {x: 4, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Tate_Normal
@@ -277,6 +314,7 @@ MonoBehaviour:
     _attackAngle: 0
     _attackStartDistance: 0
     _attackRayRadius: 0.2
+    _attackShake: 0
     _pushVector: {x: 7, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Preset_Melee_Normal
@@ -284,6 +322,7 @@ MonoBehaviour:
     _attackAngle: 0
     _attackStartDistance: 0
     _attackRayRadius: 0.1
+    _attackShake: 0
     _pushVector: {x: 0.1, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Preset_Ranged_Laser_Normal
@@ -291,6 +330,7 @@ MonoBehaviour:
     _attackAngle: 0
     _attackStartDistance: 0.1
     _attackRayRadius: 0.2
+    _attackShake: 0
     _pushVector: {x: 5, y: 0, z: 0}
     _attackMaterial: 0
   - _name: SukebanMelee_Normal
@@ -298,6 +338,7 @@ MonoBehaviour:
     _attackAngle: 0
     _attackStartDistance: 0
     _attackRayRadius: 0.1
+    _attackShake: 0
     _pushVector: {x: 0.1, y: 0, z: 0}
     _attackMaterial: 0
   - _name: CommonProjectile
@@ -305,6 +346,7 @@ MonoBehaviour:
     _attackAngle: 0
     _attackStartDistance: 0
     _attackRayRadius: 0
+    _attackShake: 0
     _pushVector: {x: 0.1, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Dumbell
@@ -312,6 +354,7 @@ MonoBehaviour:
     _attackAngle: 360
     _attackStartDistance: 0
     _attackRayRadius: 0
+    _attackShake: 0
     _pushVector: {x: 1, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Barbell_Normal
@@ -319,6 +362,7 @@ MonoBehaviour:
     _attackAngle: 0
     _attackStartDistance: 0
     _attackRayRadius: 0.1
+    _attackShake: 0
     _pushVector: {x: 0.1, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Helena_ThunderStroke
@@ -326,6 +370,7 @@ MonoBehaviour:
     _attackAngle: 0
     _attackStartDistance: 0
     _attackRayRadius: 0
+    _attackShake: 0
     _pushVector: {x: 0, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Helena_ThunderStorm
@@ -333,6 +378,7 @@ MonoBehaviour:
     _attackAngle: 0
     _attackStartDistance: 0
     _attackRayRadius: 0
+    _attackShake: 0
     _pushVector: {x: 0, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Helena_ThunderSmall
@@ -340,6 +386,7 @@ MonoBehaviour:
     _attackAngle: 0
     _attackStartDistance: 0
     _attackRayRadius: 0
+    _attackShake: 0
     _pushVector: {x: 0, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Helena_Discharge
@@ -347,6 +394,7 @@ MonoBehaviour:
     _attackAngle: 360
     _attackStartDistance: 0
     _attackRayRadius: 0
+    _attackShake: 0
     _pushVector: {x: 3, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Common_Radius01
@@ -354,6 +402,7 @@ MonoBehaviour:
     _attackAngle: 360
     _attackStartDistance: 0
     _attackRayRadius: 0
+    _attackShake: 0
     _pushVector: {x: 0, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Common_Radius05
@@ -361,6 +410,7 @@ MonoBehaviour:
     _attackAngle: 360
     _attackStartDistance: 0
     _attackRayRadius: 0
+    _attackShake: 0
     _pushVector: {x: 0, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Common_Radius10
@@ -368,6 +418,7 @@ MonoBehaviour:
     _attackAngle: 360
     _attackStartDistance: 0
     _attackRayRadius: 0
+    _attackShake: 0
     _pushVector: {x: 0, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Common_Radius20
@@ -375,6 +426,7 @@ MonoBehaviour:
     _attackAngle: 360
     _attackStartDistance: 0
     _attackRayRadius: 0
+    _attackShake: 0
     _pushVector: {x: 0, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Common_Radius30
@@ -382,6 +434,7 @@ MonoBehaviour:
     _attackAngle: 360
     _attackStartDistance: 0
     _attackRayRadius: 0
+    _attackShake: 0
     _pushVector: {x: 0, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Helena_Laser
@@ -389,6 +442,7 @@ MonoBehaviour:
     _attackAngle: 0
     _attackStartDistance: 0.3
     _attackRayRadius: 0.2
+    _attackShake: 0
     _pushVector: {x: 5, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Sister_Laser
@@ -396,6 +450,7 @@ MonoBehaviour:
     _attackAngle: 0
     _attackStartDistance: 0.3
     _attackRayRadius: 0.08
+    _attackShake: 0
     _pushVector: {x: 5, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Police_TacticalStaff
@@ -403,6 +458,7 @@ MonoBehaviour:
     _attackAngle: 0
     _attackStartDistance: 0
     _attackRayRadius: 0
+    _attackShake: 0
     _pushVector: {x: 0, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Akane_Resurrection
@@ -410,6 +466,7 @@ MonoBehaviour:
     _attackAngle: 0
     _attackStartDistance: 0
     _attackRayRadius: 0
+    _attackShake: 0
     _pushVector: {x: 5, y: 0, z: 0}
     _attackMaterial: 0
   - _name: Sports_BatterSwing
@@ -417,6 +474,7 @@ MonoBehaviour:
     _attackAngle: 0
     _attackStartDistance: 0
     _attackRayRadius: 0.1
+    _attackShake: 0
     _pushVector: {x: 5, y: 0, z: 0}
     _attackMaterial: 2
   - _name: Runner_Normal
@@ -424,6 +482,7 @@ MonoBehaviour:
     _attackAngle: 360
     _attackStartDistance: 0
     _attackRayRadius: 0
+    _attackShake: 0
     _pushVector: {x: 3, y: 0, z: 0}
     _attackMaterial: 1
   - _name: PropanegasCylinder_Explosion
@@ -431,6 +490,7 @@ MonoBehaviour:
     _attackAngle: 360
     _attackStartDistance: 0
     _attackRayRadius: 0
+    _attackShake: 0
     _pushVector: {x: 4.5, y: 0, z: 0}
     _attackMaterial: 2
   - _name: Common_Radius50
@@ -438,6 +498,7 @@ MonoBehaviour:
     _attackAngle: 360
     _attackStartDistance: 0
     _attackRayRadius: 0
+    _attackShake: 0
     _pushVector: {x: 4.5, y: 2, z: 0}
     _attackMaterial: 2
   - _name: Missile_Explosion
@@ -445,5 +506,6 @@ MonoBehaviour:
     _attackAngle: 360
     _attackStartDistance: 0
     _attackRayRadius: 0
+    _attackShake: 0
     _pushVector: {x: 4, y: 0, z: 0}
     _attackMaterial: 0
