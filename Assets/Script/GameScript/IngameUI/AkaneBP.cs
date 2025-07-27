@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,7 +7,7 @@ using UnityEngine.UI;
 
 public class AkaneBP : ProjectorUI
 {
-    protected override UIDataType _dataType => UIDataType.AkaneBP;
+    protected override IPackedUIData _dataStruct => new AkaneBPData();
     public struct AkaneBPData : IPackedUIData
     {
         public readonly UIDataType UIDataType => UIDataType.AkaneBP;
@@ -26,6 +28,10 @@ public class AkaneBP : ProjectorUI
     }
     protected override IReadOnlyCollection<UIEventKey> _validEventKeys =>
         new[] { UIEventKey.HyperFailed, UIEventKey.AttackSucceeded, UIEventKey.Hit };
+    public override IReadOnlyCollection<UIVisualModule> UIVisualModules =>
+        new[] { BPProgress };
+    [SerializeField] private UIVisualModuleData<AkaneBPStateType> BPProgressData;
+    private UIVisualModule BPProgress;
     public enum AkaneBPStateType
     {
         NONE,
@@ -35,11 +41,8 @@ public class AkaneBP : ProjectorUI
         Lifestealing
     }
     private Dictionary<AkaneBPStateType, UIState> _akaneBPStateMap = new Dictionary<AkaneBPStateType, UIState>();
-    protected override IDictionary<TUIStateType, UIState> _stateMap<TUIStateType>()
-        { return (IDictionary<TUIStateType, UIState>)(object)_akaneBPStateMap; }
-    public IDictionary<AkaneBPStateType, UIState> StateMap => _stateMap<AkaneBPStateType>();
-    [SerializeField] private UIVisualModuleData<AkaneBPStateType> BPProgressData;
-    private UIVisualModule BPProgress;
+    protected override IDictionary<Enum, UIState> _stateMap =>
+        (IDictionary<Enum, UIState>)_akaneBPStateMap;
 
 
     //공통 메서드
@@ -75,11 +78,11 @@ public class AkaneBP : ProjectorUI
             StopCoroutine(_memorySavingCoroutine);
 
         gameObject.SetActive(true);
-        _stateMachine.ForceStateChanging(StateMap[AkaneBPStateType.Idle]);
+        _stateMachine.ForceStateChanging(_akaneBPStateMap[AkaneBPStateType.Idle]);
     }
     public override void Deactivate()
     {
-        _stateMachine.ForceStateChanging(StateMap[AkaneBPStateType.NONE]);
+        _stateMachine.ForceStateChanging(_akaneBPStateMap[AkaneBPStateType.NONE]);
         _memorySavingCoroutine = StartCoroutine(MemorySavingCoroutine());
     }
 
@@ -184,11 +187,11 @@ public class AkaneBP : ProjectorUI
             switch (eventKey)
             {
                 case UIEventKey.AttackSucceeded:
-                    return _akaneBP.StateMap[AkaneBPStateType.Lifestealing];
+                    return _akaneBP._akaneBPStateMap[AkaneBPStateType.Lifestealing];
                 case UIEventKey.HyperFailed:
-                    return _akaneBP.StateMap[AkaneBPStateType.Lifetapping];
+                    return _akaneBP._akaneBPStateMap[AkaneBPStateType.Lifetapping];
                 case UIEventKey.Hit:
-                    return _akaneBP.StateMap[AkaneBPStateType.Underattacked];
+                    return _akaneBP._akaneBPStateMap[AkaneBPStateType.Underattacked];
                 default:
                     break;
             }
@@ -219,7 +222,7 @@ public class AkaneBP : ProjectorUI
         }
         public override UIState UpdateState()
         {
-            return _akaneBP.StateMap[AkaneBPStateType.Idle];
+            return _akaneBP._akaneBPStateMap[AkaneBPStateType.Idle];
         }
     }
     private class LifetappingState : UIState
@@ -242,7 +245,7 @@ public class AkaneBP : ProjectorUI
         }
         public override UIState UpdateState()
         {
-            return _akaneBP.StateMap[AkaneBPStateType.Idle];
+            return _akaneBP._akaneBPStateMap[AkaneBPStateType.Idle];
         }
     }
     private class LifestealingState : UIState
@@ -265,7 +268,7 @@ public class AkaneBP : ProjectorUI
         }
         public override UIState UpdateState()
         {
-            return _akaneBP.StateMap[AkaneBPStateType.Idle];
+            return _akaneBP._akaneBPStateMap[AkaneBPStateType.Idle];
         }
     }
     private class NONE : UIState
@@ -282,8 +285,6 @@ public class AkaneBP : ProjectorUI
         }
         public override IEnumerator OnExit()
         {
-            UIAnimationCommons.FadeInAlpha(_akaneBP.BPProgress, 0.0f);
-
             List<IEnumerator> effectList = new List<IEnumerator>();
             effectList.Add(UIAnimationCommons.FloatPosition(_akaneBP.BPProgress, 0.5f, 24.0f));
             effectList.Add(UIAnimationCommons.FadeInAlpha(_akaneBP.BPProgress, 1.0f));

@@ -1,7 +1,5 @@
-using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 
 public static class UIAnimationCommons
 {
@@ -209,6 +207,8 @@ public static class UIAnimationCommons
         Color endColor = uiVisualModule.Image.color;
         endColor.a = endAlpha;
         uiVisualModule.Image.color = endColor;
+
+        yield return null;
     }
     public static IEnumerator FadeOutAlpha(UIVisualModule uiVisualModule, float duration,
                                         MathEx.EaseType easingFunction = MathEx.EaseType.End)
@@ -240,6 +240,8 @@ public static class UIAnimationCommons
         Color endColor = uiVisualModule.Image.color;
         endColor.a = endAlpha;
         uiVisualModule.Image.color = endColor;
+
+        yield return null;
     }
     public static IEnumerator FlickAlpha(UIVisualModule uiVisualModule, float duration, float strength, int frequency,
                                         MathEx.EaseType easingFunction = MathEx.EaseType.End)

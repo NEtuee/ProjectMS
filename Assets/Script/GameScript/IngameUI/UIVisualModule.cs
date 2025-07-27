@@ -4,22 +4,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Android;
 
 public class UIVisualModule
 {
     public Image Image;
     public Vector2 BasePosition;
-    public class UIAnimationPack
-    {
-        public AnimationCustomPreset animationCustomPreset;
-        public string spriteFolderPath;
-        public UIAnimationPack(AnimationCustomPreset animationCustomPreset, string spriteFolderPath)
-        {
-            this.animationCustomPreset = animationCustomPreset;
-            this.spriteFolderPath = spriteFolderPath;
-        }
-    }
     private Dictionary<int, UIAnimationPack> _uiAnimationData = new Dictionary<int, UIAnimationPack>();
     private AnimationPlayer _animationPlayer = new AnimationPlayer();
 
@@ -35,8 +24,6 @@ public class UIVisualModule
         this.Image = data.Image;
         this.BasePosition = data.Image.rectTransform.anchoredPosition;
 
-        Debug.Log($"{Image}");
-
         foreach (var singleData in data.UIAnimationPackDataList)
         {
             int key = Convert.ToInt32(singleData.StateType);
@@ -46,9 +33,24 @@ public class UIVisualModule
                 Debug.LogWarning($"중복 UI 비주얼 모듈 데이터 감지");
         }
     }
-    public void PlayAnimation()
+    public void Reposition(Vector2 updatedPosition)
     {
-
+        Image.rectTransform.anchoredPosition = updatedPosition;
+        this.BasePosition = updatedPosition;
+    }
+    public void ChangeAnimation(int key)
+    {
+        _animationPlayer.changeAnimationByCustomPreset(_uiAnimationData[key].SpriteFolderPath, _uiAnimationData[key].AnimationCustomPreset);
+    }
+    public void UpdateImage(float deltaTime)
+    {
+        if (_animationPlayer.isEnd() == false)
+        {
+            _animationPlayer.progress(deltaTime, null);
+            Sprite updatedSprite = _animationPlayer.getCurrentSprite();
+            if (updatedSprite != null)
+                Image.sprite = updatedSprite;
+        }
     }
 }
 
@@ -61,7 +63,18 @@ public class UIVisualModuleData<TUIStateType> where TUIStateType : Enum
     public class UIAnimationPackData
     {
         public TUIStateType StateType;
-        public UIVisualModule.UIAnimationPack UIAnimationPack;
+        public UIAnimationPack UIAnimationPack;
     }
     public List<UIAnimationPackData> UIAnimationPackDataList = new List<UIAnimationPackData>();
+}
+[System.Serializable]
+public class UIAnimationPack
+{
+    public AnimationCustomPreset AnimationCustomPreset;
+    public string SpriteFolderPath;
+    public UIAnimationPack(AnimationCustomPreset animationCustomPreset, string spriteFolderPath)
+    {
+        this.AnimationCustomPreset = animationCustomPreset;
+        this.SpriteFolderPath = spriteFolderPath;
+    }
 }

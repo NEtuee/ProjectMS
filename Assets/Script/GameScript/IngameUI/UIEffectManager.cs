@@ -21,8 +21,6 @@ public class UIEffectManager : MonoBehaviour
     public IEnumerator WaitAllListedEffects()
     {
         foreach (Coroutine activeEffect in _runningEffects)
-        {
             yield return activeEffect;
-        }
     }
 }

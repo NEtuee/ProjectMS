@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,7 +7,7 @@ using UnityEngine.UI;
 
 public class AkaneHP : ProjectorUI
 {
-    protected override UIDataType _dataType => UIDataType.AkaneHP;
+    protected override IPackedUIData _dataStruct => new AkaneHPData();
     public struct AkaneHPData : IPackedUIData
     {
         public readonly UIDataType UIDataType => UIDataType.AkaneHP;
@@ -26,6 +28,12 @@ public class AkaneHP : ProjectorUI
     }
     protected override IReadOnlyCollection<UIEventKey> _validEventKeys =>
         new[] { UIEventKey.HyperFailed, UIEventKey.AttackSucceeded, UIEventKey.Hit };
+    public override IReadOnlyCollection<UIVisualModule> UIVisualModules =>
+    new[] { Frame, HPProgress };
+    [SerializeField] private UIVisualModuleData<AkaneHPStateType> FrameData;
+    private UIVisualModule Frame;
+    [SerializeField] private UIVisualModuleData<AkaneHPStateType> HPProgressData;
+    private UIVisualModule HPProgress;
     public enum AkaneHPStateType
     {
         NONE,
@@ -35,13 +43,8 @@ public class AkaneHP : ProjectorUI
         Lifestealing
     }
     private Dictionary<AkaneHPStateType, UIState> _akaneHPStateMap = new Dictionary<AkaneHPStateType, UIState>();
-    protected override IDictionary<TUIStateType, UIState> _stateMap<TUIStateType>()
-        { return (IDictionary<TUIStateType, UIState>)(object)_akaneHPStateMap; }
-    public IDictionary<AkaneHPStateType, UIState> StateMap => _stateMap<AkaneHPStateType>();
-    [SerializeField] private UIVisualModuleData<AkaneHPStateType> FrameData;
-    [SerializeField] private UIVisualModuleData<AkaneHPStateType> HPProgressData;
-    private UIVisualModule Frame;
-    private UIVisualModule HPProgress;
+    protected override IDictionary<Enum, UIState> _stateMap =>
+        (IDictionary<Enum, UIState>)_akaneHPStateMap;
 
 
     //공통 메서드    
@@ -80,11 +83,11 @@ public class AkaneHP : ProjectorUI
             StopCoroutine(_memorySavingCoroutine);
 
         gameObject.SetActive(true);
-        _stateMachine.ForceStateChanging(StateMap[AkaneHPStateType.Idle]);
+        _stateMachine.ForceStateChanging(_akaneHPStateMap[AkaneHPStateType.Idle]);
     }
     public override void Deactivate()
     {
-        _stateMachine.ForceStateChanging(StateMap[AkaneHPStateType.NONE]);
+        _stateMachine.ForceStateChanging(_akaneHPStateMap[AkaneHPStateType.NONE]);
         _memorySavingCoroutine = StartCoroutine(MemorySavingCoroutine());
     }
 
@@ -170,11 +173,11 @@ public class AkaneHP : ProjectorUI
             switch (eventKey)
             {
                 case UIEventKey.AttackSucceeded:
-                    return _akaneHP.StateMap[AkaneHPStateType.Lifestealing];
+                    return _akaneHP._akaneHPStateMap[AkaneHPStateType.Lifestealing];
                 case UIEventKey.HyperFailed:
-                    return _akaneHP.StateMap[AkaneHPStateType.Lifetapping];
+                    return _akaneHP._akaneHPStateMap[AkaneHPStateType.Lifetapping];
                 case UIEventKey.Hit:
-                    return _akaneHP.StateMap[AkaneHPStateType.Underattacked];
+                    return _akaneHP._akaneHPStateMap[AkaneHPStateType.Underattacked];
                 default:
                     break;
             }
@@ -207,7 +210,7 @@ public class AkaneHP : ProjectorUI
         }
         public override UIState UpdateState()
         {
-            return _akaneHP.StateMap[AkaneHPStateType.Idle];
+            return _akaneHP._akaneHPStateMap[AkaneHPStateType.Idle];
         }
     }
     private class LifetappingState : UIState
@@ -231,7 +234,7 @@ public class AkaneHP : ProjectorUI
         }
         public override UIState UpdateState()
         {
-            return _akaneHP.StateMap[AkaneHPStateType.Idle];
+            return _akaneHP._akaneHPStateMap[AkaneHPStateType.Idle];
         }
     }
     private class LifestealingState : UIState
@@ -255,7 +258,7 @@ public class AkaneHP : ProjectorUI
         }
         public override UIState UpdateState()
         {
-            return _akaneHP.StateMap[AkaneHPStateType.Idle];
+            return _akaneHP._akaneHPStateMap[AkaneHPStateType.Idle];
         }
     }
     private class NONE : UIState

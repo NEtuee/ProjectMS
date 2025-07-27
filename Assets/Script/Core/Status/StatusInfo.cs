@@ -579,6 +579,39 @@ public class StatusInfo
         }
     }
 
+    public float getBuffDurationPercentage(int buffKey)
+    {
+        double globalTime = GlobalTimer.Instance().getScaledGlobalTime();
+        float durationPercentage = 0.0f;
+
+        for (int i = 0; i < _currentlyAppliedBuffList.Count; i++)
+        {
+            if (_currentlyAppliedBuffList[i]._buffData._buffKey == buffKey)
+            {
+                BuffItem buffItem = _currentlyAppliedBuffList[i];
+                BuffData buffData = buffItem._buffData;
+
+                switch (buffData._buffUpdateType)
+                {
+                    case BuffUpdateType.DelayedContinuous:
+                        {
+                            Status targetStatus = getStatus(buffData._targetStatusName);
+
+                            durationPercentage = (float)(buffData._buffCustomValue0 - (globalTime - buffItem._startedTime)) / buffData._buffCustomValue0;
+                            break;
+                        }
+                    default:
+                        break;
+                }
+
+                return durationPercentage;
+            }
+        }
+
+        return 0.0f;
+    }
+    
+
     public void resetBuffEffect(ref BuffItem buffItem)
     {
         buffItem._particleEffect?.stopEffect();

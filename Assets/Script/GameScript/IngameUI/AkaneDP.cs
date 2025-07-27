@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,15 +7,17 @@ using UnityEngine.UI;
 
 public class AkaneDP : ProjectorUI
 {
-    protected override UIDataType _dataType => UIDataType.AkaneDP;
+    protected override IPackedUIData _dataStruct => new SingleAkaneDPData();
     public struct SingleAkaneDPData : IPackedUIData
     {
         public readonly UIDataType UIDataType => UIDataType.AkaneDP;
         public bool IsActivated;
+        public bool IsWaiting;
         public float RecoveryRatio;
-        public SingleAkaneDPData(bool isActivated = true, float recoveryRatio = 0.0f)
+        public SingleAkaneDPData(bool isActivated = true, bool isWaiting = true, float recoveryRatio = 0.0f)
         {
             this.IsActivated = isActivated;
+            this.IsWaiting = isWaiting;
             this.RecoveryRatio = recoveryRatio;
         }
     }
@@ -25,24 +29,26 @@ public class AkaneDP : ProjectorUI
     }
     protected override IReadOnlyCollection<UIEventKey> _validEventKeys =>
         new[] { UIEventKey.Dash, UIEventKey.HyperFailed, UIEventKey.AttackSucceeded };
-    public enum AkaneDPStateType
-    {
-        NONE,
-        Idle,
-        Consumed,
-        Autorecovering,
-        Attackrecovering
-    }
-    private Dictionary<AkaneDPStateType, UIState> _akaneDPStateMap = new Dictionary<AkaneDPStateType, UIState>();
-    protected override IDictionary<TUIStateType, UIState> _stateMap<TUIStateType>()
-        { return (IDictionary<TUIStateType, UIState>)(object)_akaneDPStateMap; }
-    public IDictionary<AkaneDPStateType, UIState> StateMap => _stateMap<AkaneDPStateType>();
+    public override IReadOnlyCollection<UIVisualModule> UIVisualModules =>
+        new[] { DP, DPProgress, DPProgressFrame };
     [SerializeField] private UIVisualModuleData<AkaneDPStateType> DPData;
     private UIVisualModule DP;
     [SerializeField] private UIVisualModuleData<AkaneDPStateType> DPProgressData;
     private UIVisualModule DPProgress;
     [SerializeField] private UIVisualModuleData<AkaneDPStateType> DPProgressFrameData;
     private UIVisualModule DPProgressFrame;
+    public enum AkaneDPStateType
+    {
+        NONE,
+        Idle,
+        Waiting,
+        Consumed,
+        Autorecovering,
+        Attackrecovering
+    }
+    private Dictionary<AkaneDPStateType, UIState> _akaneDPStateMap = new Dictionary<AkaneDPStateType, UIState>();
+    protected override IDictionary<Enum, UIState> _stateMap =>
+        (IDictionary<Enum, UIState>)_akaneDPStateMap;
 
 
     //공통 메서드
@@ -61,6 +67,7 @@ public class AkaneDP : ProjectorUI
     {
         _akaneDPStateMap.Add(AkaneDPStateType.NONE, new NONE(this));
         _akaneDPStateMap.Add(AkaneDPStateType.Idle, new IdleState(this));
+        _akaneDPStateMap.Add(AkaneDPStateType.Waiting, new WaitingState(this));
         _akaneDPStateMap.Add(AkaneDPStateType.Consumed, new ConsumedState(this));
         _akaneDPStateMap.Add(AkaneDPStateType.Autorecovering, new AutorecoveringState(this));
         _akaneDPStateMap.Add(AkaneDPStateType.Attackrecovering, new AttackrecoveringState(this));
@@ -73,12 +80,13 @@ public class AkaneDP : ProjectorUI
     }
     public override void Activate()
     {
-        _stateMachine.ForceStateChanging(StateMap[AkaneDPStateType.Idle]);
+        _stateMachine.ForceStateChanging(_akaneDPStateMap[AkaneDPStateType.Idle]);
     }
     public override void Deactivate()
     {
-        _stateMachine.ForceStateChanging(StateMap[AkaneDPStateType.NONE]);
+        _stateMachine.ForceStateChanging(_akaneDPStateMap[AkaneDPStateType.NONE]);
     }
+
 
     //투영 데이터 업데이트 메서드 및 코루틴
     private void DPProjectionUpdate()
@@ -96,25 +104,85 @@ public class AkaneDP : ProjectorUI
     {
         private AkaneDP _akaneDP => (AkaneDP)_projectorUI;
         public IdleState(AkaneDP akaneDP) : base(akaneDP) {}
+        public override IEnumerator OnEnter()
+        {
+            _akaneDP.DP.ChangeAnimation(Convert.ToInt32(AkaneDPStateType.Idle));
+
+            List<IEnumerator> effectList = new List<IEnumerator>();
+            effectList.Add(UIAnimationCommons.FadeInAlpha(_akaneDP.DP, 0.0f));
+
+            _akaneDP._uiEffectManager.RegisterEffectList(_akaneDP, effectList);
+            yield return _akaneDP._uiEffectManager.WaitAllListedEffects();
+        }
         public override UIState ChangeState(SubUIData subData)
         {
             return null;
         }
         public override UIState UpdateState()
         {
+            if (_akaneDP.ReceivedData.IsWaiting == true)
+                return _akaneDP._akaneDPStateMap[AkaneDPStateType.Waiting];
+            if (_akaneDP.ReceivedData.IsActivated == false)
+                return _akaneDP._akaneDPStateMap[AkaneDPStateType.Consumed];
+
+            return null;
+        }
+    }
+    private class WaitingState : UIState
+    {
+        private AkaneDP _akaneDP => (AkaneDP)_projectorUI;
+        public WaitingState(AkaneDP akaneDP) : base(akaneDP) {}
+        public override IEnumerator OnEnter()
+        {
+            _akaneDP.DP.ChangeAnimation(Convert.ToInt32(AkaneDPStateType.Waiting));
+            yield break;
+        }
+        public override UIState ChangeState(SubUIData subData)
+        {
+            var eventKey = subData.UIEventKey;
+            switch (eventKey)
+            {
+                case UIEventKey.AttackSucceeded:
+                    return _akaneDP._akaneDPStateMap[AkaneDPStateType.Attackrecovering];
+                default:
+                    break;
+            }
+
+            return null;
+        }
+        public override UIState UpdateState()
+        {
+            if (_akaneDP.ReceivedData.IsActivated == false)
+                return _akaneDP._akaneDPStateMap[AkaneDPStateType.Consumed];
+            if (_akaneDP.ReceivedData.IsWaiting == false)
+                return _akaneDP._akaneDPStateMap[AkaneDPStateType.Idle];
+            
             return null;
         }
     }
     private class ConsumedState : UIState
     {
         private AkaneDP _akaneDP => (AkaneDP)_projectorUI;
-        public ConsumedState(AkaneDP akaneDP) : base(akaneDP) {}
+        public ConsumedState(AkaneDP akaneDP) : base(akaneDP) { }
+        public override IEnumerator OnEnter()
+        {
+            _akaneDP.DP.ChangeAnimation(Convert.ToInt32(AkaneDPStateType.Idle));
+
+            List<IEnumerator> effectList = new List<IEnumerator>();
+            effectList.Add(UIAnimationCommons.FadeOutAlpha(_akaneDP.DP, 0.1f));
+
+            _akaneDP._uiEffectManager.RegisterEffectList(_akaneDP, effectList);
+            yield return _akaneDP._uiEffectManager.WaitAllListedEffects();
+        }
         public override UIState ChangeState(SubUIData subData)
         {
             return null;
         }
         public override UIState UpdateState()
         {
+            if (_akaneDP.ReceivedData.IsActivated == true)
+                return _akaneDP._akaneDPStateMap[AkaneDPStateType.Idle];
+
             return null;
         }
     }
@@ -141,7 +209,10 @@ public class AkaneDP : ProjectorUI
         }
         public override UIState UpdateState()
         {
-            return null;
+            if (_akaneDP.ReceivedData.IsWaiting == true)
+                return _akaneDP._akaneDPStateMap[AkaneDPStateType.Waiting];
+            else
+                return _akaneDP._akaneDPStateMap[AkaneDPStateType.Idle];
         }
     }
     private class NONE : UIState

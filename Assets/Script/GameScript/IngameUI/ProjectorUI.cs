@@ -5,18 +5,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public abstract class ProjectorUI : MonoBehaviour
+public abstract class ProjectorUI : MonoBehaviour, IUIDataReceivable
 {
-    protected abstract UIDataType _dataType { get; }
+    protected abstract IPackedUIData _dataStruct { get; }
     protected IPackedUIData _receivedData;
-    protected IPackedUIData _projectingData;
     protected abstract IReadOnlyCollection<UIEventKey> _validEventKeys { get; }
     protected IPackedUIData _receivedSubData;
-    protected IPackedUIData _projectingSubData;
-    public UIDataType DataType => _dataType;
+    //IUIDataReceivable
+    public UIDataType DataType => _dataStruct.UIDataType;
     public IReadOnlyCollection<UIEventKey> ValidEventKeys => _validEventKeys;
     public IPackedUIData ReceivedData => _receivedData;
     public SubUIData ReceivedSubData => (SubUIData)_receivedSubData;
+    //ProjectorUI
+    protected IPackedUIData _projectingData;
+    protected IPackedUIData _projectingSubData;
     public IPackedUIData ProjectingData
     {
         get => _projectingData;
@@ -27,7 +29,8 @@ public abstract class ProjectorUI : MonoBehaviour
         get => (SubUIData)_projectingSubData;
         set => _projectingSubData = value;
     }
-    protected abstract IDictionary<TUIStateType, UIState> _stateMap<TUIStateType>() where TUIStateType : Enum;
+    public abstract IReadOnlyCollection<UIVisualModule> UIVisualModules { get; }
+    protected abstract IDictionary<Enum, UIState> _stateMap { get; }
     protected UIStateMachine _stateMachine;
     protected UIEffectManager _uiEffectManager;
     protected Coroutine _memorySavingCoroutine;
@@ -48,19 +51,22 @@ public abstract class ProjectorUI : MonoBehaviour
     protected abstract void SetInitialConstructor();
     protected abstract void SetStateMap();
     protected abstract void SetUIVisualModule();
-    public virtual void ReceiveData(IPackedUIData data)
+    public virtual void ReceiveUpdatedData(IPackedUIData data)
     {
         if (data != null && data.UIDataType == DataType)
             _receivedData = data;
     }
-    public virtual void ReceiveSubData(IPackedUIData data)
+    public virtual void ReceiveUpdatedSubData(IPackedUIData data)
     {
         if (data is SubUIData subData && ValidEventKeys.Contains(subData.UIEventKey))
             _receivedSubData = subData;
     }
-    protected virtual void UpdateProjection()
+    protected virtual void UpdateProjection(float deltaTime)
     {
         _stateMachine.ProjectingCurrentState();
+
+        foreach (UIVisualModule uiVisualModule in UIVisualModules)
+            uiVisualModule.UpdateImage(deltaTime);
     }
     protected virtual void UpdateUIState()
     {
@@ -72,18 +78,16 @@ public abstract class ProjectorUI : MonoBehaviour
             _receivedSubData = new SubUIData();
         }
         else
-        {
             _stateMachine.RequestStateByUpdate();
-        }
     }
     protected IEnumerator MemorySavingCoroutine()
     {
         yield return new WaitForSeconds(3.0f);
         gameObject.SetActive(false);
     }
-    private void LateUpdate()
+    public void UpdateUI(float deltaTime)
     {
-        UpdateProjection();
+        UpdateProjection(deltaTime);
         UpdateUIState();
     }
     public abstract void Activate();
