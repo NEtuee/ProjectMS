@@ -226,6 +226,7 @@
         <Animation Preset="0_default/5_spawn/2_stop" XFlip="true" Duration="0.3">
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="LaserToTarget" EventTargetType="Self"/>
         </Animation>
 
         <Branch Condition="End == true" Execute="AC_Move"/>

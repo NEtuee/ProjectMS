@@ -31,7 +31,7 @@
 
     <AIPackage Name="HelenaBookStarePackage" DefaultState="AI_Keep">
         <AIState>
-            <AI_WithHelena UpdateTime="2.0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
+            <AI_WithHelena UpdateTime="1.2" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
                 <Event_OnExecute>
                     <AIEvent Type="SetAction" Action="AC_Idle_WithHelena"/>
                 </Event_OnExecute>
@@ -39,7 +39,7 @@
                 <Branch Weight="RandVector4^r" Condition="PackageExecutedTime >= 0.0" Execute="AI_RandomExplo"/>
                 <Branch Condition="false" Execute="TerminatePackage"/>
             </AI_WithHelena>
-            <AI_ToTarget UpdateTime="2.0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
+            <AI_ToTarget UpdateTime="1.2" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
                 <Event_OnExecute>
                     <AIEvent Type="SetDirectionToTarget"/>
                     <AIEvent Type="SetAction" Action="AC_Idle"/>
@@ -49,7 +49,7 @@
                 <Branch Weight="RandVector4^r" Condition="PackageExecutedTime >= 0.0" Execute="AI_RandomLaser"/>
                 <Branch Condition="false" Execute="TerminatePackage"/>
             </AI_ToTarget>
-            <AI_Keep UpdateTime="2.0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
+            <AI_Keep UpdateTime="1.2" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
                 <Event_OnExecute>
                     <AIEvent Type="SetAction" Action="AC_Idle_Keep"/>
                 </Event_OnExecute>
@@ -90,14 +90,16 @@
                 </Event_OnExecute>
 
                 <Event_OnFrame>
-                    <AIEvent Type="SetDirectionToTarget" Speed="60"/>
+                    <AIEvent Type="SetDirectionToTarget" Speed="50"/>
                 </Event_OnFrame>
 
                 <Event_OnExit>
                     <AIEvent Type="SetCustomValue" Name="Laser" Value="-1.0"/>
                 </Event_OnExit>
+
                 <Branch Condition="End" Execute="TerminatePackage"/>
             </AI_ToTarget>
+            
             <AI_With UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
                 <Event_OnExecute>
                     <AIEvent Type="SetAction" Action="AC_Shoot_with"/>
