@@ -330,7 +330,7 @@ public class AttackProcessor : AttackProcessorBase
 
         bool attackSuccess = false;
 
-        if(_attackFrameEvent._pushVector.sqrMagnitude > float.Epsilon)
+        if(_attackFrameEvent._pushVector.sqrMagnitude > float.Epsilon && ( target.getDefenceType() != DefenceType.Evade || canIgnore ))
         {
             UnityEngine.Vector3 attackPointDirection;
             if(requester is GameEntityBase && ((GameEntityBase)requester)._isDummyEntity)
