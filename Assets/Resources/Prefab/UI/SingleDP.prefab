@@ -167,7 +167,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DPData:
     Image: {fileID: 7115141046418461326}
-    UIAnimationPackDataList: []
+    UIAnimationPackDataList:
+    - StateType: 1
+      UIAnimationPack:
+        AnimationCustomPreset: {fileID: 11400000, guid: 4a07f52e3bd15de489c32ee8523eab2c, type: 2}
+        SpriteFolderPath: Sprites/IngameUI/AkaneStatus/DP/Idle
+    - StateType: 2
+      UIAnimationPack:
+        AnimationCustomPreset: {fileID: 11400000, guid: 0c48979450574994981f2d3f72f16b3a, type: 2}
+        SpriteFolderPath: Sprites/IngameUI/AkaneStatus/DP/Waiting
   DPProgressData:
     Image: {fileID: 7038465806959242126}
     UIAnimationPackDataList: []
