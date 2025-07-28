@@ -818,6 +818,18 @@
         AllyInfo="CommonBattle"
     />
 
+    <AttackTester
+        DisplayName="공격 테스터"
+        ActionGraph="Assets/Data/Character/AttackTester/AttackTesterAction.xml"
+        AIGraph="Assets/Data/AILibrary/Graph/EmptyAIGraph.xml"
+        StatusInfoName="CommonEnemyStatusNoUITest"
+
+        CollisionRadius="0.2"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="CommonBattle"
+    />
+
 
 
 

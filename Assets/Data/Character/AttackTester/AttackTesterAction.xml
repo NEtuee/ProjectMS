@@ -1,0 +1,25 @@
+<ActionGraph Name="TestAction" DefaultAction="AC_Idle" DefaultFramePerSecond="12">
+<GlobalVariable Name="gv_MasterPath" Value="Sprites/Enemy/_Preset/_EmptyPreset/_EnemyPreset/0_default/"/>
+
+    <AC_Idle MovementType="Empty" DirectionType="AlwaysRight" ActiveCollision="False">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="1_idle" XFlip="true" Duration="0.5">
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.5" AttackPreset="Common_Radius10">
+                <OnHit>
+                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+                </OnHit>
+
+                <OnCatch>
+                </OnCatch>
+
+                <OnEvaded>
+                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Explode"/>
+                </OnEvaded>
+            </FrameEvent>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_Idle>
+
+
+</ActionGraph>
