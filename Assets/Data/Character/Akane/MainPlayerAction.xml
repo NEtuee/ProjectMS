@@ -258,7 +258,19 @@
             <FrameEvent Type="EffectPreset" Condition="AttackSuccess == false" StartTime="0.05" Key="DashTrail"/>
 
             <FrameEvent Type="ZoomEffect" StartTime="0" Scale="-0.06"/>
+            <!-- 극한회피 -->
+            <!-- 대시 Only <FrameEvent Type="SetDefenceType" Condition="AttackSuccess == false" StartTime="0.031" DefenceType="Evade"/> -->
+            <FrameEvent Type="SetDefenceType" StartTime="0.0" DefenceType="Evade"/>
+            <FrameEvent Type="SetDefenceType" StartTime="0.1" DefenceType="Empty"/>
         </Animation>
+        <!-- 극한회피 -->
+        <Trigger Condition="EvadeSuccess">
+            <FrameEvent Type="Test" StartTime="0" Log="extreme avoidance : Quick"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0.0" ApplyBuff="DashPointReset"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0.0" ApplyBuff="ExtremeAvoidance"/>
+            <FrameEvent Type="AudioPlay" StartTime="0.0" ID="2106" Attach="false"/>
+            <FrameEvent Type="SetTimeScale" StartTime="0" Scale="0.1" Time="0.3" BlendTime="0.1"/>
+        </Trigger>
 
         <Branch Key="getKey_AttackCharge == true" Condition="End" Execute="MoveAll"/>
         <Branch Key="(getKey_NormalMove || getKey_NormalMovePad) == true" Condition="End" Execute="MoveAll"/>
