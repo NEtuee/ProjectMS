@@ -118,7 +118,7 @@
 <!-- Defualt Action -->
 
 <!-- Attack Action -->
-    <AC_AttackReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="LaserEffect">
+    <AC_AttackReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="LaserEffect OutlineNormal">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="1_attack/1_attackReady" XFlip="true" Duration="0.5">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2203" Attach="true"/>
@@ -128,7 +128,7 @@
 
             <!-- Laser Attack Indicator -->
             <FrameEvent Type="TimelineEffect" Condition="gv_bIsLaserAttack" StartTime="0" Path="gv_TimelineEffectPath" Attach="true" AngleType="Direction" LifeTime="0.8" FollowDirection="True" AttackPreset="gv_LaserAttackPreset"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
             
             <FrameEvent Type="SetDirectionType" StartTime="0.7" DirectionType="Keep"/>  <!-- 타겟 추적 중단용 이벤트 -->
@@ -137,7 +137,7 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_AttackReady>
 
-    <AC_AttackMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" Flags="LaserEffect OutlineSuperArmor">
+    <AC_AttackMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" Flags="LaserEffect OutlineNormal">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="1_attack/2_attackMain" XFlip="true" Duration="0.2">
             <FrameEvent Type="SetDirectionType" Condition="gv_bIsLaserAttack == false" StartTime="0" DirectionType="AI"/>
@@ -149,6 +149,8 @@
             
             <FrameEvent Type="Movement" Condition="(TargetDistance <= 1.7)" StartTime="gv_RangedAttackMovementDelay" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Velocity="2" Speed="0"/>
             
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+
             <!-- Laser Attack -->
             <FrameEvent Type="Attack" Condition="gv_bIsLaserAttack" StartTime="0" EndTime="0.1" AttackPreset="gv_LaserAttackPreset">
                 <OnHit>

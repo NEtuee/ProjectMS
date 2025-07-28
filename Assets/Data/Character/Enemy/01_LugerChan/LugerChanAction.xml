@@ -95,25 +95,24 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_AttackReady>
 -->
-    <AC_AttackReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction" Flags="LaserEffect">
+    <AC_AttackReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction" Flags="OutlineNormal">
         <AnimationHeader MasterPath="Sprites/Enemy/LugerChan/1_attack/"/>
         <Animation Preset="1_attackReady" XFlip="true" Duration="0.5">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2208" Attach="true"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
     
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_AttackReady>
 
-    <AC_AttackMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction">
+    <AC_AttackMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction" Flags="OutlineNormal">
         <AnimationHeader MasterPath="Sprites/Enemy/LugerChan/1_attack/"/>
         <Animation Preset="2_attackMain" XFlip="true" Duration="0.35">
             
             <FrameEvent Type="Movement" StartTime="0.0" Friction="14" MaxVelocity="10" Velocity="-5" Speed="0"/>
             <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="Missile" UseFlip="true" Offset="0.2 0 0" AllyInfo="CommonBattleObject" InheritDirection="true"/>
-
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_AttackRecover"/>

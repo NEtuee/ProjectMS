@@ -71,7 +71,9 @@
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountIncrease"/>
-
+            
+            <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2109"/>
+            
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
@@ -93,34 +95,43 @@
     </Dead>
 <!-- Defualt Action -->
 
-<!-- Skill : Pitching -->
-    <AC_SpawnMachine MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+<!-- Skill : Spawn -->
+    <AC_SpawnMachine MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineNormal">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="2_skill/1_spawnMachine" XFlip="true" Duration="1.0">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="2109" Attach="true" Switch="True"/>
+        <Animation Preset="2_skill/1_spawnMachine/1_ready" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="1.0" CharacterKey="SportsMachine" Offset="0 0 0" InheritDirection="true" AINode="Entry_Battle"/>
-            <FrameEvent Type="FrameTag" StartTime="0.5" EndTime="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0.5" EndTime="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
-
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_SpawnMachine>
 
-    <AC_SpawnRunner MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+    <AC_SpawnMachineRecover MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="2_skill/2_spawnRunner/1_ready" XFlip="true" Duration="0.5">
+        <Animation Preset="2_skill/1_spawnMachine/2_main" XFlip="true" Duration="0.5">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="SportsMachine" Offset="0 0 0" InheritDirection="true" AINode="Entry_Battle"/>
         </Animation>
-        <Animation Preset="2_skill/2_spawnRunner/2_main" XFlip="true" Duration="0.5">
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_SpawnMachineRecover>
+
+    <AC_SpawnRunner MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" Flags="OutlineNormal">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="2_skill/2_spawnRunner" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <FrameEvent Type="Projectile" Condition="getWeight_RandBoolean^True"   StartTime="0" GraphName="RunnerSpawner" DirectionType="AITarget" SpawnTargetType="Self" Offset="-10 Random_-3^3 0"/>
-            <FrameEvent Type="Projectile" Condition="getWeight_RandBoolean^False"  StartTime="0" GraphName="RunnerSpawner" DirectionType="AITarget" SpawnTargetType="Self" Offset="10 Random_-3^3 0"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2109" Attach="true" Switch="True"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="0.5" Tag="GbAvail"/>
+
+            <ActionFlag StartTime="0.5" EndTime="1.0" Flags="OutlineSuperArmor"/>
+            <FrameEvent Type="Projectile" Condition="getWeight_RandBoolean^True"   StartTime="0.5" GraphName="RunnerSpawner" DirectionType="AITarget" SpawnTargetType="Self" Offset="-10 Random_-3^3 0"/>
+            <FrameEvent Type="Projectile" Condition="getWeight_RandBoolean^False"  StartTime="0.5" GraphName="RunnerSpawner" DirectionType="AITarget" SpawnTargetType="Self" Offset="10 Random_-3^3 0"/>
+            
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_SpawnRunner>
-<!-- Skill : Pitching -->
+<!-- Skill : Spawn -->
 
 
 <!-- Defense Action -->
@@ -142,6 +153,9 @@
         <Animation Preset="1_defense/2_guardBroken" XFlip="true" Duration="1.25">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
+            
+            <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2109"/>
+
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountIncrease"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
 

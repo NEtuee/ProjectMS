@@ -9,7 +9,7 @@
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_Idle>
 
-    <AC_Move_Slow MovementType="GraphPreset" MovementGraphPreset="Runner_Slow" DirectionType="Keep" FlipType="Direction">
+    <AC_Move_Slow MovementType="GraphPreset" MovementGraphPreset="Runner_Slow" DirectionType="Keep" FlipType="Direction" Flags="OutlineNormal">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="0_default/2_move" XFlip="true" Duration="4.0">
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
@@ -28,7 +28,7 @@
 
         <Branch Condition="End == true" Execute="AC_Move_Slow"/>
     </AC_Move_Slow>
-    <AC_Move_Normal MovementType="GraphPreset" MovementGraphPreset="Runner_Normal" DirectionType="Keep" FlipType="Direction">
+    <AC_Move_Normal MovementType="GraphPreset" MovementGraphPreset="Runner_Normal" DirectionType="Keep" FlipType="Direction" Flags="OutlineNormal">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="0_default/2_move" XFlip="true" Duration="4.0">
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
@@ -47,7 +47,7 @@
 
         <Branch Condition="End == true" Execute="AC_Move_Normal"/>
     </AC_Move_Normal>
-    <AC_Move_Fast MovementType="GraphPreset" MovementGraphPreset="Runner_Fast" DirectionType="Keep" FlipType="Direction">
+    <AC_Move_Fast MovementType="GraphPreset" MovementGraphPreset="Runner_Fast" DirectionType="Keep" FlipType="Direction" Flags="OutlineNormal">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="0_default/2_move" XFlip="true" Duration="4.0">
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>

@@ -82,7 +82,7 @@
 <!-- Defualt Action -->
 
 <!-- Skill : Slash -->
-    <AC_SlashReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineSuperArmor">
+    <AC_SlashReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineNormal">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/1_slash/1_attackReady" XFlip="true" Duration="0.48">
             <FrameEvent Type="Movement" StartTime="0" Friction="0.0" MaxVelocity="5.0" Speed="15.0"/>
@@ -92,7 +92,7 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_SlashReady>
 
-    <AC_SlashMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction" Flags="OutlineSuperArmor">
+    <AC_SlashMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction" Flags="OutlineNormal">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/1_slash/2_attackMain" XFlip="true" Duration="0.35">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="4907" Attach="true"/>
@@ -128,7 +128,7 @@
 <!-- Skill : Slash -->
 
 <!-- Skill : TrippleSlash -->
-    <AC_TrippleSlashReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineSuperArmor">
+    <AC_TrippleSlashReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineNormal">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/2_trippleSlash/1_attackReady" XFlip="true" Duration="0.48">
             <FrameEvent Type="Movement" StartTime="0" Friction="10" MaxVelocity="5.0" Velocity="0.0" Speed="5.0"/>
@@ -138,7 +138,7 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_TrippleSlashReady>
 
-    <AC_TrippleSlashMain_A MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction" Flags="OutlineSuperArmor">
+    <AC_TrippleSlashMain_A MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction" Flags="OutlineNormal">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/2_trippleSlash/2_attackMain_A" XFlip="true" Duration="0.35">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="4907" Attach="true"/>
@@ -161,7 +161,7 @@
 
         <Branch Condition="End" Execute="AC_Idle"/> <!-- Package에서 연속 공격 여부 판단 -->
     </AC_TrippleSlashMain_A>
-    <AC_TrippleSlashMain_B MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction" Flags="OutlineSuperArmor">
+    <AC_TrippleSlashMain_B MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction" Flags="OutlineNormal">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/2_trippleSlash/3_attackMain_B" XFlip="true" Duration="0.35">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="4907" Attach="true"/>
@@ -184,7 +184,7 @@
 
         <Branch Condition="End" Execute="AC_Idle"/> <!-- Package에서 연속 공격 여부 판단 -->
     </AC_TrippleSlashMain_B>
-    <AC_TrippleSlashMain_C MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction" Flags="OutlineSuperArmor">
+    <AC_TrippleSlashMain_C MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction" Flags="OutlineNormal">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/2_trippleSlash/4_attackMain_C" XFlip="true" Duration="0.35">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="4907" Attach="true"/>
@@ -208,7 +208,7 @@
         <Branch Condition="End" Execute="AC_Idle"/> <!-- Package에서 후딜 여부 판단 -->
     </AC_TrippleSlashMain_C>
 
-    <AC_TrippleSlash_Dodge MovementType="GraphPreset" MovementGraphPreset="SukebanElite_Dodge" DirectionType="AI" FlipType="Direction" Flags="OutlineSuperArmor">
+    <AC_TrippleSlash_Dodge MovementType="GraphPreset" MovementGraphPreset="SukebanElite_Dodge" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/2_trippleSlash/6_dodge" XFlip="true" Duration="0.48">
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
@@ -388,7 +388,7 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_Dodge>
 
-    <AC_Guard MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" DefenceType="Guard" DefenceDirectionType="Direction" DefenceAngle="180">
+    <AC_Guard MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" DefenceType="Guard" DefenceDirectionType="Direction" DefenceAngle="180" Flags="OutlineGuard">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="1_defense/1_guard" XFlip="true" Duration="0.5">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>

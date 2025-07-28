@@ -83,7 +83,7 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_Dodge>
 
-    <AC_Guard MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" DefenceType="Guard" DefenceDirectionType="Direction" DefenceAngle="180">
+    <AC_Guard MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" DefenceType="Guard" DefenceDirectionType="Direction" DefenceAngle="180" Flags="OutlineGuard">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="1_defense/2_guard" XFlip="true" Duration="0.5">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="3" Speed="-1"/>
@@ -111,7 +111,7 @@
 
 <!-- SKill Action -->
     <!-- 근거리 공격 : 펀치 -->
-    <AC_PunchReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+    <AC_PunchReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineNormal">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/1_punch/1_punchReady" XFlip="true" Duration="0.4">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2203" Attach="true"/>
@@ -126,7 +126,7 @@
     </AC_PunchReady>
 
         <!-- TODO: 그래프 이동으로 모션감 조정 -->
-    <AC_PunchMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction">
+    <AC_PunchMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction" Flags="OutlineSuperArmor">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/1_punch/3_punchSuccess" XFlip="true" Duration="0.38">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2204" Attach="true"/>
@@ -167,7 +167,7 @@
     </AC_PunchRecover>
 
     <!-- 원거리 공격 : 스텝 펀치 -->
-    <AC_StepPunchReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+    <AC_StepPunchReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineNormal">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/1_punch/1_punchReady" XFlip="true" Duration="0.013">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2203" Attach="true"/>
@@ -179,7 +179,7 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_StepPunchReady>
 
-    <AC_StepPunchMove MovementType="GraphPreset" MovementGraphPreset="Reito_ForwardStep" DirectionType="AI" FlipType="Direction">
+    <AC_StepPunchMove MovementType="GraphPreset" MovementGraphPreset="Reito_ForwardStep" DirectionType="AI" FlipType="Direction" Flags="OutlineSuperArmor">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/1_punch/2_punchMain" XFlip="true" Duration="0.6">
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
@@ -194,7 +194,7 @@
     </AC_StepPunchMove>
 
     <!-- 회피 기동 : 백스텝 (회피 상태 유지하다가 공격 이벤트 들어오면 이동)-->
-    <AC_BackStep MovementType="GraphPreset" MovementGraphPreset="Reito_BackStep" DirectionType="AI" FlipType="Direction">
+    <AC_BackStep MovementType="GraphPreset" MovementGraphPreset="Reito_BackStep" DirectionType="AI" FlipType="Direction" Flags="OutlineNormal">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/4_backStep" XFlip="true" Duration="0.6">
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
@@ -205,7 +205,7 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_BackStep>
     <!-- 공격 기동 : 회전 스텝 (공격 전 크게 돌아 측면을 공격한다)-->    
-    <AC_RotateStep_L MovementType="GraphPreset" MovementGraphPreset="Reito_RotateStep_L" DirectionType="AI" FlipType="Direction">
+    <AC_RotateStep_L MovementType="GraphPreset" MovementGraphPreset="Reito_RotateStep_L" DirectionType="AI" FlipType="Direction" Flags="OutlineNormal">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/5_rotateStep" XFlip="true" Duration="0.5">
             <FrameEvent Type="EffectPreset" StartTime="0.3" Key="AttackReady"/>
@@ -215,7 +215,7 @@
 
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_RotateStep_L>
-    <AC_RotateStep_R MovementType="GraphPreset" MovementGraphPreset="Reito_RotateStep_R" DirectionType="AI" FlipType="Direction">
+    <AC_RotateStep_R MovementType="GraphPreset" MovementGraphPreset="Reito_RotateStep_R" DirectionType="AI" FlipType="Direction" Flags="OutlineNormal">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/5_rotateStep" XFlip="true" Duration="0.5">
             <FrameEvent Type="EffectPreset" StartTime="0.3" Key="AttackReady"/>
@@ -251,7 +251,8 @@
             <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/CommonBeam_TimeLine" Attach="true" AngleType="Direction" LifeTime="1.05" FollowDirection="True" AttackPreset="Reito_Beam"/>
             
             <!-- 건틀렛 레이저 명령 (CALL AI EVENT) -->
-            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <!-- <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/> -->
+            <ActionFlag StartTime="0" EndTime="999" Flags="OutlineNormal"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
@@ -262,6 +263,9 @@
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/2_cremationBeam/2_cremationBeamShot" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
+            <ActionFlag StartTime="0" EndTime="0.2" Flags="OutlineSuperArmor"/>
+            <FrameEvent Type="FrameTag" StartTime="0.2" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.2" EndTime="999" Tag="GbAvail"/>
             <!-- TODO: 화장포 이펙트 추가해야함. 해당 이펙트 지속시간에 따라 Main 모션 시간과 Attack 지속 시간 조정 -->
             <FrameEvent Type="AudioPlay" StartTime="0.2" ID="2207" Attach="true"/>
             <FrameEvent Type="Attack" StartTime="0.2" AttackPreset="Reito_Beam">
@@ -295,7 +299,8 @@
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2206" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
             
-            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <!-- <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/> -->
+            <ActionFlag StartTime="0" EndTime="999" Flags="OutlineNormal"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
@@ -308,6 +313,7 @@
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2208" Attach="true"/>
             <FrameEvent Type="Danmaku" StartTime="0" Path="Assets/Data/DanmakuGraph/Enemy/ReitoMissile.xml" UseDirection="True"/>
+            <ActionFlag StartTime="0" EndTime="0.4" Flags="OutlineSuperArmor"/>
         </Animation>
         <Animation Preset="2_skill/2_cremationBeam/3_cremationBeamRecovery" XFlip="true" Duration="0.3">
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>

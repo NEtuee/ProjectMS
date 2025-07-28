@@ -133,6 +133,7 @@
     </AC_RushReady>
 
     <!-- 아카네를 잡기위해 돌진하는 모션, 충돌 시 데미지 적용, 잡기 처리 -->
+    <!-- TODO: RotationType 추가 적용 -->
     <AC_Rush MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <!-- 나지미 돌진, 헛다리 애니메이션. 공격 성공 시 성공 액션으로 전이. -->
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/1_rushPattern/1_rush/"/>
@@ -140,7 +141,8 @@
             <ActionFlag StartTime="0.0" EndTime="0.35" Flags="OutlineSuperArmor"/>
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2100" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="24" MaxVelocity="14" Velocity="14" Speed="0"/>
-            
+            <FrameEvent Type="SetDirectionType" StartTime="0" DirectionType="Keep"/>
+
             <FrameEvent Type="Attack" StartTime="0" EndTime="0.2" AttackPreset="Najimi_Rush" AttackType="Catch" CatchOffset="0.1 0 0">
                 <OnCatch>
                     <FrameEvent Type="AudioPlay" StartTime="0" ID="2102" Attach="true"/>
@@ -163,6 +165,8 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
         <Animation Preset="3_rushRecover" XFlip="true" Duration="1.47">
+    
+            <FrameEvent Type="SetDirectionType" StartTime="0" DirectionType="AI"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="Cancel"/>
@@ -258,7 +262,7 @@
 
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_HeadbuttReady>
-    <AC_Headbutt MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction" Flags="OutlineSuperArmor">
+    <AC_Headbutt MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction" Flags="OutlineNormal">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/5_headbutt/"/>
         <Animation Preset="2_kick" XFlip="true" Duration="0.4">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2100" Attach="true"/>
@@ -285,7 +289,7 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_Headbutt>
 
-    <AC_HeadbuttReflected MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineSuperArmor">
+    <AC_HeadbuttReflected MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineNormal">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/5_headbutt/"/>
         <Animation Preset="1_dash" XFlip="true" Duration="0.4">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2100" Attach="true"/>
@@ -331,7 +335,7 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_HeadbuttRecover>
 
-    <AC_PitcherReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="LaserEffect OutlineSuperArmor">
+    <AC_PitcherReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="LaserEffect OutlineNormal">
         <!-- 투구 준비 모션, 탄막 경로 활성화 -->
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/2_pitchingPattern/"/>
         <Animation Preset="2_pitcherReady" XFlip="true" Duration="0.82">
@@ -383,6 +387,7 @@
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/2_pitchingPattern/3_pitching/"/>
         <Animation Preset="1_pitchingMain" XFlip="true" Duration="0.5">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
+            <ActionFlag StartTime="0.0" EndTime="0.2" Flags="OutlineSuperArmor"/>
             
             <FrameEvent Type="SetDirectionType" Condition="getTargetFrameTag_Stun" StartTime="0.01" DirectionType="AI"/>
             <FrameEvent Type="EffectPreset" StartTime="0.01" Key="WindTrail"/>
@@ -392,7 +397,6 @@
 
             <FrameEvent Type="FrameTag" StartTime="0.2" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0.2" EndTime="999" Tag="GbAvail"/>
-            <ActionFlag StartTime="0.0" EndTime="0.2" Flags="OutlineSuperArmor"/>
            
         </Animation>
         <Animation Preset="2_pitchingRecovery" XFlip="true" Duration="0.3">
@@ -420,8 +424,8 @@
             <FrameEvent Type="Projectile" Condition="getWeight_RandBoolean^False"  StartTime="0" GraphName="RunnerSpawner" DirectionType="AITarget" SpawnTargetType="Self" Offset="10 Random_-3^3 0"/>
             
             <ActionFlag StartTime="0.0" EndTime="0.5" Flags="OutlineSuperArmor"/>
-            <FrameEvent Type="FrameTag" StartTime="0.5" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0.5" EndTime="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0.5" EndTime="999" Tag="HitAvail"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>

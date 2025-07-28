@@ -164,7 +164,7 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_ThunderStrokeReady>
 
-    <AC_ThunderStrokeMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction">
+    <AC_ThunderStrokeMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction" Flags="OutlineSuperArmor">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/1_thunderStroke/2_attackMain" XFlip="true" Duration="0.35">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2502" Attach="true" Switch="True"/>
@@ -196,7 +196,7 @@
     </AC_ThunderStrokeRecover>
 
     <!-- 근거리 공격: 방전-->
-    <AC_DischargeReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+    <AC_DischargeReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineNormal">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <!-- 기도, 오라, 폭발 차징 표현 -->
         <Animation Preset="2_skill/2_discharge/1_attackReady" XFlip="true" Duration="0.7">
@@ -211,7 +211,7 @@
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_DischargeReady>
-    <AC_DischargeMain MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+    <AC_DischargeMain MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineSuperArmor">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/2_discharge/2_attackMain" XFlip="true" Duration="0.5">
             <!-- 헬레나 방전 이펙트 -->
@@ -337,7 +337,7 @@
     </AC_ThunderStorm_Down>
 
     <!-- 원거리 공격: 유도 장판 -->
-    <AC_SpawnThunderBall MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+    <AC_SpawnThunderBall MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineNormal">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/4_spawnBook" XFlip="true" Duration="1.0">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2208" Attach="true" Switch="True"/>
@@ -354,7 +354,7 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_SpawnThunderBall>
     <!-- 소환: 마도서 소환 -->
-    <AC_SpawnCrimsonMain MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+    <AC_SpawnCrimsonMain MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineNormal">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/4_spawnBook" XFlip="true" Duration="1.0">
             <FrameEvent Type="AudioPlay" StartTime="0.013" ID="2506" Attach="true" Switch="True"/>
@@ -370,7 +370,7 @@
 
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_SpawnCrimsonMain>
-    <AC_SpawnCrimsonMainSet MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+    <AC_SpawnCrimsonMainSet MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineNormal">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/4_spawnBook" XFlip="true" Duration="1.0">
             <FrameEvent Type="AudioPlay" StartTime="0.013" ID="2506" Attach="true" Switch="True"/>
@@ -577,6 +577,7 @@
         <Animation Preset="2_skill/6_barrior/6_counter/2_attackMain" XFlip="true" Duration="0.1">
             <FrameEvent Type="SetDirectionType" StartTime="0.0" DirectionType="Keep"/>
             <FrameEvent Type="EffectPreset" StartTime="0" Key="Helena_LaserShot"/>
+            <ActionFlag StartTime="0" EndTime="0.1" Flags="OutlineSuperArmor"/>
             <FrameEvent Type="Attack" StartTime="0.05" EndTime="0.1" AttackPreset="Helena_Laser">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
