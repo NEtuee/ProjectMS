@@ -93,7 +93,7 @@
 <!-- Defualt Action -->
 
 <!-- Skill : Swing -->
-    <AC_AttackReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineSuperArmor">
+    <AC_AttackReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineNormal">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/1_rushSwing/1_attackReady" XFlip="true" Duration="0.4">            
             <FrameEvent Type="Movement" StartTime="0" Friction="0.0" MaxVelocity="5.0" Speed="15.0"/>
@@ -103,7 +103,7 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_AttackReady>
 
-    <AC_AttackMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction" Flags="OutlineSuperArmor">
+    <AC_AttackMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction" Flags="OutlineNormal">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/1_rushSwing/2_attackMain" XFlip="true" Duration="0.35">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="4901" Attach="true"/>
@@ -141,7 +141,7 @@
 <!-- Skill : Swing -->
 
 <!-- Defense Action -->
-    <AC_Guard MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" DefenceType="Guard" DefenceDirectionType="Direction" DefenceAngle="180">
+    <AC_Guard MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" DefenceType="Guard" DefenceDirectionType="Direction" DefenceAngle="180" Flags="OutlineGuard">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="1_defense/1_guard" XFlip="true" Duration="0.5">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>

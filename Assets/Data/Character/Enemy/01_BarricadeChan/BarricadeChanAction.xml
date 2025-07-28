@@ -95,9 +95,7 @@
         </Trigger>
 
         <Branch Condition="End == true" Execute="AC_Guard"/>
-    </AC_GuardHit>
-
-    
+    </AC_GuardHit>    
 
     <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/BarricadeChan/0_default/"/>

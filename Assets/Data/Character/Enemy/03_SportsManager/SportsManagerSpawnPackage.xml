@@ -18,8 +18,16 @@
                 <AIEvent Type="SetDirectionToTarget" Speed="600"/>
             </Event_OnUpdate>
             
-            <Branch Condition="End" Execute="TerminatePackage"/>
+            <Branch Condition="End" Execute="AI_SpawnMachine_Recover"/>
         </AI_SpawnMachine>
+
+        <AI_SpawnMachine_Recover UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Type="SetAction" Action="AC_SpawnMachineRecover"/>
+            </Event_OnExecute>
+            
+            <Branch Condition="End" Execute="TerminatePackage"/>
+        </AI_SpawnMachine_Recover>
 
         <AI_SpawnRunner UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>

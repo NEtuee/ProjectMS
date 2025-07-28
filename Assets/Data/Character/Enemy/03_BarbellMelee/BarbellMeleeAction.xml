@@ -98,7 +98,7 @@
 <!-- Defualt Action -->
 
 <!-- Attack Action -->
-    <AC_AttackReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineSuperArmor">
+    <AC_AttackReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineNormal">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="1_attack/1_attackReady" XFlip="true" Duration="0.8">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2203" Attach="true"/>
@@ -114,7 +114,7 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_AttackReady>
 
-    <AC_AttackMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction" Flags="OutlineSuperArmor">
+    <AC_AttackMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction" Flags="OutlineNormal">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="1_attack/2_attackMain" XFlip="true" Duration="0.3">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="4901" Attach="true"/>
@@ -143,7 +143,6 @@
             <FrameEvent Type="Movement" Condition="gv_AtkRdMovementVelocity == 0.0" StartTime="0" Friction="gv_AtkRdMovementFriction" MaxVelocity="gv_AtkRdMovementMaxVelocity" Speed="gv_AtkRdMovementSpeed"/>
             <FrameEvent Type="Movement" Condition="gv_AtkRdMovementVelocity > 0.0" StartTime="0" Friction="gv_AtkRdMovementFriction" MaxVelocity="gv_AtkRdMovementMaxVelocity" Velocity="gv_AtkRdMovementVelocity" Speed="gv_AtkRdMovementSpeed"/>
 
-            <FrameEvent Type="FrameTag" StartTime="0" EndTime="0.3" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="0.3" Tag="GbAvail"/>
         </Animation>
 
@@ -165,7 +164,6 @@
                 </OnHit>
             </FrameEvent>
 
-            <FrameEvent Type="FrameTag" StartTime="0.3" EndTime="0.7" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0.12" EndTime="0.7" Tag="GbAvail"/>
             
         </Animation>
