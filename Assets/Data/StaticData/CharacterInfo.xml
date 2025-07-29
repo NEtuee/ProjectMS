@@ -145,7 +145,7 @@
     />
 
     <SisterNormalCrossHair
-        DisplayName="나지미 크로스헤어"
+        DisplayName="시스터 크로스헤어"
         ActionGraph="Assets/Data/Character/Object/CrossHair/SisterNormalCrossHair.xml"
         AIGraph="Assets/Data/AILibrary/Graph/CommonEnemyAI.xml"
         StatusInfoName="CommonEnemyStatusNoUI"
@@ -703,6 +703,18 @@
         ProjectileCollisionRadius=""
 
         AllyInfo="Sister"
+    />
+    <Sister_Knife
+        DisplayName="시스터 그리모어의 나이프"
+        ActionGraph="Assets/Data/Character/Object/SisterKnife/SisterKnifeAction.xml"
+        AIGraph="Assets/Data/Character/Object/SisterKnife/SisterKnifeAI.xml"
+        StatusInfoName="CommonHpTenthsEnemyStatus"
+        
+        CollisionRadius="0.1"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="CommonBattleObject"
     />
 
     <PoliceOmawariChan

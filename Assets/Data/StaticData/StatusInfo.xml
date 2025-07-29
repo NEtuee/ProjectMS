@@ -64,6 +64,14 @@
         <Stat Type="GuardCount" Max="999" Min="0" Init="0"/>
         <Stat Type="Custom" Name="GuardPoint" Max="3" Min="0" Init="3"/>
     </CommonHpOneEnemyStatus>
+    <CommonHpTenthsEnemyStatus>
+        <Stat Type="HP" Max="0.1" Min="0" Init="0.1"/>
+        <Stat Type="Blood" Max="100" Min="0" Init="3"/>
+        <Stat Type="Battle" Max="0" Min="0" Init="0"/>
+        <Stat Type="HitCount" Max="999" Min="0" Init="0"/>
+        <Stat Type="GuardCount" Max="999" Min="0" Init="0"/>
+        <Stat Type="Custom" Name="GuardPoint" Max="3" Min="0" Init="3"/>
+    </CommonHpTenthsEnemyStatus>
 
     <CommonHpOneEnemyStatusNoUI>
       <Stat Type="HP" Max="1" Min="0" Init="1"/>
