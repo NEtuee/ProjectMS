@@ -192,7 +192,7 @@
 <!-- Skill : Knife -->
     <AC_KnifeReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineNormal">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="2_skill/3_knife/1_ready" XFlip="true" Duration="2.0">
+        <Animation Preset="2_skill/3_knife/1_ready" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
             <FrameEvent Type="SetRotateSlotValue" StartTime="0" Speed="10" Radius="1.0"/>
@@ -201,25 +201,25 @@
             
             <FrameEvent Type="SpawnCharacter"   StartTime="0.5" CharacterKey="Sister_Knife" Offset="0 0 0" UseFlip="true"/>
             <FrameEvent Type="CallAIEvent"      StartTime="0.5" EventName="AddKnife" EventTargetType="Self"/>
-            <FrameEvent Type="SpawnCharacter"   StartTime="0.6" CharacterKey="Sister_Knife" Offset="0 0 0" UseFlip="true"/>
-            <FrameEvent Type="CallAIEvent"      StartTime="0.6" EventName="AddKnife" EventTargetType="Self"/>
-            <FrameEvent Type="SpawnCharacter"   StartTime="0.7" CharacterKey="Sister_Knife" Offset="0 0 0" UseFlip="true"/>
-            <FrameEvent Type="CallAIEvent"      StartTime="0.7" EventName="AddKnife" EventTargetType="Self"/>
-            <FrameEvent Type="SpawnCharacter"   StartTime="0.8" CharacterKey="Sister_Knife" Offset="0 0 0" UseFlip="true"/>
-            <FrameEvent Type="CallAIEvent"      StartTime="0.8" EventName="AddKnife" EventTargetType="Self"/>
-            <FrameEvent Type="SpawnCharacter"   StartTime="0.9" CharacterKey="Sister_Knife" Offset="0 0 0" UseFlip="true"/>
-            <FrameEvent Type="CallAIEvent"      StartTime="0.9" EventName="AddKnife" EventTargetType="Self"/>
-            <FrameEvent Type="SpawnCharacter"   StartTime="1.0" CharacterKey="Sister_Knife" Offset="0 0 0" UseFlip="true"/>
-            <FrameEvent Type="CallAIEvent"      StartTime="1.0" EventName="AddKnife" EventTargetType="Self"/>
-            <FrameEvent Type="SpawnCharacter"   StartTime="1.1" CharacterKey="Sister_Knife" Offset="0 0 0" UseFlip="true"/>
-            <FrameEvent Type="CallAIEvent"      StartTime="1.1" EventName="AddKnife" EventTargetType="Self"/>
-            <FrameEvent Type="SpawnCharacter"   StartTime="1.2" CharacterKey="Sister_Knife" Offset="0 0 0" UseFlip="true"/>
-            <FrameEvent Type="CallAIEvent"      StartTime="1.2" EventName="AddKnife" EventTargetType="Self"/>
-            <FrameEvent Type="SpawnCharacter"   StartTime="1.3" CharacterKey="Sister_Knife" Offset="0 0 0" UseFlip="true"/>
-            <FrameEvent Type="CallAIEvent"      StartTime="1.3" EventName="AddKnife" EventTargetType="Self"/>
-            <FrameEvent Type="SpawnCharacter"   StartTime="1.4" CharacterKey="Sister_Knife" Offset="0 0 0" UseFlip="true"/>
-            <FrameEvent Type="CallAIEvent"      StartTime="1.4" EventName="AddKnife" EventTargetType="Self"/>
-            <FrameEvent Type="SetRotateSlotValue" StartTime="2.0" Speed="10" Radius="2.0"/>
+            <FrameEvent Type="SpawnCharacter"   StartTime="0.5" CharacterKey="Sister_Knife" Offset="0 0 0" UseFlip="true"/>
+            <FrameEvent Type="CallAIEvent"      StartTime="0.5" EventName="AddKnife" EventTargetType="Self"/>
+            <FrameEvent Type="SpawnCharacter"   StartTime="0.5" CharacterKey="Sister_Knife" Offset="0 0 0" UseFlip="true"/>
+            <FrameEvent Type="CallAIEvent"      StartTime="0.5" EventName="AddKnife" EventTargetType="Self"/>
+            <FrameEvent Type="SpawnCharacter"   StartTime="0.5" CharacterKey="Sister_Knife" Offset="0 0 0" UseFlip="true"/>
+            <FrameEvent Type="CallAIEvent"      StartTime="0.5" EventName="AddKnife" EventTargetType="Self"/>
+            <FrameEvent Type="SpawnCharacter"   StartTime="0.5" CharacterKey="Sister_Knife" Offset="0 0 0" UseFlip="true"/>
+            <FrameEvent Type="CallAIEvent"      StartTime="0.5" EventName="AddKnife" EventTargetType="Self"/>
+            <FrameEvent Type="SpawnCharacter"   StartTime="0.5" CharacterKey="Sister_Knife" Offset="0 0 0" UseFlip="true"/>
+            <FrameEvent Type="CallAIEvent"      StartTime="0.5" EventName="AddKnife" EventTargetType="Self"/>
+            <FrameEvent Type="SpawnCharacter"   StartTime="0.5" CharacterKey="Sister_Knife" Offset="0 0 0" UseFlip="true"/>
+            <FrameEvent Type="CallAIEvent"      StartTime="0.5" EventName="AddKnife" EventTargetType="Self"/>
+            <FrameEvent Type="SpawnCharacter"   StartTime="0.5" CharacterKey="Sister_Knife" Offset="0 0 0" UseFlip="true"/>
+            <FrameEvent Type="CallAIEvent"      StartTime="0.5" EventName="AddKnife" EventTargetType="Self"/>
+            <FrameEvent Type="SpawnCharacter"   StartTime="0.5" CharacterKey="Sister_Knife" Offset="0 0 0" UseFlip="true"/>
+            <FrameEvent Type="CallAIEvent"      StartTime="0.5" EventName="AddKnife" EventTargetType="Self"/>
+            <FrameEvent Type="SpawnCharacter"   StartTime="0.5" CharacterKey="Sister_Knife" Offset="0 0 0" UseFlip="true"/>
+            <FrameEvent Type="CallAIEvent"      StartTime="0.5" EventName="AddKnife" EventTargetType="Self"/>
+            <FrameEvent Type="SetRotateSlotValue" StartTime="1.0" Speed="10" Radius="2.0"/>
 
         </Animation>
         <Trigger Condition="(DefenceSuccess || GuardBreakFail || GuardBroken) && (customValue_IsBarriorOn == 1.0) ">
