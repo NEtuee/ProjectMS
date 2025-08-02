@@ -1,38 +1,43 @@
-<AIGraph Name="SisterKnifeAI" DefaultState="Release">
+<AIGraph Name="SisterKnifeAI" DefaultState="Spawn">
 
     <Include Path="Assets/Data/AILibrary/Package/CommonDeadPackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonIdlePackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonChasePackage.xml"/>
 
-<CustomValue Name="AttackCount" Value="0.0"/>
-<CustomValue Name="IsRelease" Value="-1.0"/>
+    <CustomValue Name="AttackCount" Value="0.0"/>
+    <CustomValue Name="IsRelease" Value="0.0"/>
 
-<CustomEvent_AttackCount>
-    <AIEvent Type="AddCustomValue" Name="AttackCount" Value="1.0"/>
-</CustomEvent_AttackCount>
-<CustomEvent_KnifeRelease>
-    <AIEvent Type="SetCustomValue" Name="IsRelease" Value="1.0"/>
-</CustomEvent_KnifeRelease>
+    <CustomEvent_AttackCount>
+        <AIEvent Type="AddCustomValue" Name="AttackCount" Value="1.0"/>
+    </CustomEvent_AttackCount>
+    <CustomEvent_KnifeRelease>
+        <AIEvent Type="DetachRotateSlot"/>
+        <AIEvent Type="SetCustomValue" Name="IsRelease" Value="1.0"/>
+    </CustomEvent_KnifeRelease>
+    <CustomEvent_Dead>
+        <AIEvent Type="SetAction" Action="Dead"/>
+    </CustomEvent_Dead>
 
     <AIPackage Name="KnifeChasePackage" DefaultState="AI_Idle">
         <AIState>
             <AI_Idle UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
                 <Event_OnExecute>
                     <AIEvent Type="SetAction" Action="AC_Idle"/>
+                    <AIEvent Type="AttachRotateSlot" TargetType="Summoner"/>
                 </Event_OnExecute>
                 
                 <Branch Condition="End" Execute="AI_Idle"/>
             </AI_Idle>
             <AI_Release UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
                 <Event_OnExecute>
-                    <AIEvent Type="SetDirectionToTarget" Speed="120"/>
+                    <AIEvent Type="SetDirectionToTarget"/>
                     <AIEvent Type="SetAction" Action="AC_Release"/>
                 </Event_OnExecute>
                 <Event_OnFrame>
                     <AIEvent Type="SetDirectionToTarget" Speed="120"/>
                 </Event_OnFrame>
                 
-                <Branch Condition="PackageExecutedTime >= 2.0" Execute="AI_Chase"/>
+                <Branch Condition="End" Execute="AI_Chase"/>
             </AI_Release>
             <AI_Chase UpdateTime="0" TargetSearchType="Near" TargetSearchRange="999.9" AllyTarget="Enemy">
                 <Event_OnExecute>

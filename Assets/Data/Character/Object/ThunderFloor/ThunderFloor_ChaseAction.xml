@@ -23,7 +23,7 @@
     <Dead MovementType="Empty" DirectionType="AI" ActiveCollision="False">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="empty" XFlip="true" Duration="0.5">
-
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="TracerDelete" EventTargetType="Summoner"/>
             <FrameEvent Type="KillEntity" StartTime="0"/>
             
         </Animation>

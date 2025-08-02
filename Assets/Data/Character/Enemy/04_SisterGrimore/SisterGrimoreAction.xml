@@ -1,0 +1,375 @@
+<ActionGraph Name="SisterGrimoreAction" DefaultAction="AC_Idle" DefaultFramePerSecond="12">
+
+<!-- AnimationHeader MasterPath -->
+<GlobalVariable Name="gv_MasterPath" Value="Sprites/Enemy/SisterGrimore/"/>
+<GlobalVariable Name="gv_DeadPath" Value="Resources/Sprites/Enemy/SisterGrimore/0_default/4_dead"/>
+
+<!-- Defualt Action -->
+    <AC_Idle MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/1_idle" XFlip="true" Duration="1">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+            
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+            
+        </Animation>
+        <Trigger Condition="(DefenceSuccess || GuardBreakFail || GuardBroken) && (customValue_IsBarriorOn == 1.0) ">
+            <FrameEvent Type="DeleteBuff" StartTime="0" BuffList="HelenaBarriorOn"/>
+            <FrameEvent Type="AudioPlay" Condition="customValue_IsBarriorOn == 1.0" StartTime="0" ID="2512" Attach="true" Switch="True"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="BarriorBroken" EventTargetType="Self"/>
+        </Trigger>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_Idle>
+
+    <AC_Move MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/2_move" XFlip="true" Duration="0.5">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="5" Speed="10"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+        <Trigger Condition="(DefenceSuccess || GuardBreakFail || GuardBroken) && (customValue_IsBarriorOn == 1.0) ">
+            <FrameEvent Type="DeleteBuff" StartTime="0" BuffList="HelenaBarriorOn"/>
+            <FrameEvent Type="AudioPlay" Condition="customValue_IsBarriorOn == 1.0" StartTime="0" ID="2512" Attach="true" Switch="True"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="BarriorBroken" EventTargetType="Self"/>
+        </Trigger>
+
+        <Branch Condition="End == true" Execute="AC_Move"/>
+    </AC_Move>
+
+    <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/3_hit" XFlip="true" Duration="1.25">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountIncrease"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+        <Trigger Condition="(DefenceSuccess || GuardBreakFail || GuardBroken) && (customValue_IsBarriorOn == 1.0) ">
+            <FrameEvent Type="DeleteBuff" StartTime="0" BuffList="HelenaBarriorOn"/>
+            <FrameEvent Type="AudioPlay" Condition="customValue_IsBarriorOn == 1.0" StartTime="0" ID="2512" Attach="true" Switch="True"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="BarriorBroken" EventTargetType="Self"/>
+        </Trigger>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_Hit>
+
+    <Dead DirectionType="Keep" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/4_dead" XFlip="true" Duration="1">
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="Dead" EventTargetType="SummonTargetRange" Range="999" AllyTarget="Ally"/>
+            <FrameEvent Type="Effect" StartTime="0" Path="gv_DeadPath" FramePerSecond="0.2" CastShadow="True">
+                <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
+            </FrameEvent>
+
+            <FrameEvent Type="KillEntity" StartTime="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Dead"/>
+    </Dead>
+    
+    <AC_PeaceMotionLoop MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/5_peace/1_loop" XFlip="true" Duration="1">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+            
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+            
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_PeaceMotionLoop>
+    <AC_PeaceMotionEnd MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/5_peace/2_end" XFlip="true" Duration="1">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+            
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_PeaceMotionEnd>
+<!-- Defualt Action -->
+<!-- Skill : Barrior -->
+    <AC_Barrior MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="2_skill/1_pray" XFlip="true" Duration="1.5">
+            <ActionFlag StartTime="0" EndTime="1" Flags="OutlineNormal"/>
+
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2509" Attach="true" Switch="True"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+
+            <FrameEvent Type="ApplyBuff" StartTime="1" ApplyBuff="HelenaBarriorOn"/>
+            <FrameEvent Type="CallAIEvent" StartTime="1" EventName="BarriorActivated" EventTargetType="Self"/>
+            <FrameEvent Type="AudioPlay" StartTime="1" ID="2510" Attach="true" Switch="True"/>
+
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="1" EndTime="999" Tag="HitAvail"/>
+        </Animation>
+        <Trigger Condition="(DefenceSuccess || GuardBreakFail || GuardBroken) && (customValue_IsBarriorOn == 1.0) ">
+            <FrameEvent Type="DeleteBuff" StartTime="0" BuffList="HelenaBarriorOn"/>
+            <FrameEvent Type="AudioPlay" Condition="customValue_IsBarriorOn == 1.0" StartTime="0" ID="2512" Attach="true" Switch="True"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="BarriorBroken" EventTargetType="Self"/>
+        </Trigger>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_Barrior>
+<!-- Skill : Barrior -->
+<!-- Skill : Pray (Fast) -->
+    <AC_Pray MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineNormal">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="2_skill/1_pray" XFlip="true" Duration="0.5">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+            <FrameEvent Type="AudioPlay" Condition="getWeight_RandVector3^x" StartTime="0" ID="2509" Attach="true" Switch="True"/>
+            <FrameEvent Type="AudioPlay" StartTime="0.5" ID="2510" Attach="true" Switch="True"/>
+            <FrameEvent Type="FollowAttack" StartTime="0" EndTime="0.5" FollowType="Attach" Radius="1.0" MoveTime="1" CharacterKey="SisterNormalCrossHair" ToTarget="true">
+                <OnBegin>
+                </OnBegin>
+                <OnEnd>
+                    <FrameEvent Type="Projectile" StartTime="0.5" GraphName="ThunderStorm" DirectionType="Keep" SpawnTargetType="AITarget"/>
+                </OnEnd>
+            </FrameEvent>
+        </Animation>
+        <Trigger Condition="(DefenceSuccess || GuardBreakFail || GuardBroken) && (customValue_IsBarriorOn == 1.0) ">
+            <FrameEvent Type="DeleteBuff" StartTime="0" BuffList="HelenaBarriorOn"/>
+            <FrameEvent Type="AudioPlay" Condition="customValue_IsBarriorOn == 1.0" StartTime="0" ID="2512" Attach="true" Switch="True"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="BarriorBroken" EventTargetType="Self"/>
+        </Trigger>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_Pray>
+<!-- Skill : Pray (Fast) -->
+<!-- Skill : Tracer -->
+    <AC_TracerReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineNormal">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="2_skill/2_tracer/1_ready" XFlip="true" Duration="0.4">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+        <Trigger Condition="(DefenceSuccess || GuardBreakFail || GuardBroken) && (customValue_IsBarriorOn == 1.0) ">
+            <FrameEvent Type="DeleteBuff" StartTime="0" BuffList="HelenaBarriorOn"/>
+            <FrameEvent Type="AudioPlay" Condition="customValue_IsBarriorOn == 1.0" StartTime="0" ID="2512" Attach="true" Switch="True"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="BarriorBroken" EventTargetType="Self"/>
+        </Trigger>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+        
+    </AC_TracerReady>
+
+    <AC_TracerSpawn MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction" Flags="OutlineNormal">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="2_skill/2_tracer/2_spawn" XFlip="true" Duration="0.35">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2204" Attach="true"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="18" MaxVelocity="10" Velocity="0" Speed="0"/>            
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="ThunderFloor_Chase" Offset="0 0 0" UseFlip="true"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+        <Trigger Condition="(DefenceSuccess || GuardBreakFail || GuardBroken) && (customValue_IsBarriorOn == 1.0) ">
+            <FrameEvent Type="DeleteBuff" StartTime="0" BuffList="HelenaBarriorOn"/>
+            <FrameEvent Type="AudioPlay" Condition="customValue_IsBarriorOn == 1.0" StartTime="0" ID="2512" Attach="true" Switch="True"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="BarriorBroken" EventTargetType="Self"/>
+        </Trigger>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_TracerSpawn>
+<!-- Skill : Tracer -->
+<!-- Skill : Knife -->
+    <AC_KnifeReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineNormal">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="2_skill/3_knife/1_ready" XFlip="true" Duration="2.0">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+            <FrameEvent Type="SetRotateSlotValue" StartTime="0" Speed="10" Radius="1.0"/>
+
+            <FrameEvent Type="CallAIEvent"      StartTime="0.5" EventName="KnifeSpawn" EventTargetType="Self"/>
+            
+            <FrameEvent Type="SpawnCharacter"   StartTime="0.5" CharacterKey="Sister_Knife" Offset="0 0 0" UseFlip="true"/>
+            <FrameEvent Type="CallAIEvent"      StartTime="0.5" EventName="AddKnife" EventTargetType="Self"/>
+            <FrameEvent Type="SpawnCharacter"   StartTime="0.6" CharacterKey="Sister_Knife" Offset="0 0 0" UseFlip="true"/>
+            <FrameEvent Type="CallAIEvent"      StartTime="0.6" EventName="AddKnife" EventTargetType="Self"/>
+            <FrameEvent Type="SpawnCharacter"   StartTime="0.7" CharacterKey="Sister_Knife" Offset="0 0 0" UseFlip="true"/>
+            <FrameEvent Type="CallAIEvent"      StartTime="0.7" EventName="AddKnife" EventTargetType="Self"/>
+            <FrameEvent Type="SpawnCharacter"   StartTime="0.8" CharacterKey="Sister_Knife" Offset="0 0 0" UseFlip="true"/>
+            <FrameEvent Type="CallAIEvent"      StartTime="0.8" EventName="AddKnife" EventTargetType="Self"/>
+            <FrameEvent Type="SpawnCharacter"   StartTime="0.9" CharacterKey="Sister_Knife" Offset="0 0 0" UseFlip="true"/>
+            <FrameEvent Type="CallAIEvent"      StartTime="0.9" EventName="AddKnife" EventTargetType="Self"/>
+            <FrameEvent Type="SpawnCharacter"   StartTime="1.0" CharacterKey="Sister_Knife" Offset="0 0 0" UseFlip="true"/>
+            <FrameEvent Type="CallAIEvent"      StartTime="1.0" EventName="AddKnife" EventTargetType="Self"/>
+            <FrameEvent Type="SpawnCharacter"   StartTime="1.1" CharacterKey="Sister_Knife" Offset="0 0 0" UseFlip="true"/>
+            <FrameEvent Type="CallAIEvent"      StartTime="1.1" EventName="AddKnife" EventTargetType="Self"/>
+            <FrameEvent Type="SpawnCharacter"   StartTime="1.2" CharacterKey="Sister_Knife" Offset="0 0 0" UseFlip="true"/>
+            <FrameEvent Type="CallAIEvent"      StartTime="1.2" EventName="AddKnife" EventTargetType="Self"/>
+            <FrameEvent Type="SpawnCharacter"   StartTime="1.3" CharacterKey="Sister_Knife" Offset="0 0 0" UseFlip="true"/>
+            <FrameEvent Type="CallAIEvent"      StartTime="1.3" EventName="AddKnife" EventTargetType="Self"/>
+            <FrameEvent Type="SpawnCharacter"   StartTime="1.4" CharacterKey="Sister_Knife" Offset="0 0 0" UseFlip="true"/>
+            <FrameEvent Type="CallAIEvent"      StartTime="1.4" EventName="AddKnife" EventTargetType="Self"/>
+            <FrameEvent Type="SetRotateSlotValue" StartTime="2.0" Speed="10" Radius="2.0"/>
+
+        </Animation>
+        <Trigger Condition="(DefenceSuccess || GuardBreakFail || GuardBroken) && (customValue_IsBarriorOn == 1.0) ">
+            <FrameEvent Type="DeleteBuff" StartTime="0" BuffList="HelenaBarriorOn"/>
+            <FrameEvent Type="AudioPlay" Condition="customValue_IsBarriorOn == 1.0" StartTime="0" ID="2512" Attach="true" Switch="True"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="BarriorBroken" EventTargetType="Self"/>
+        </Trigger>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_KnifeReady>
+
+    <AC_KnifeRelease MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction" Flags="OutlineNormal">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="2_skill/3_knife/2_release" XFlip="true" Duration="0.35">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2204" Attach="true"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="18" MaxVelocity="10" Velocity="0" Speed="0"/>            
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0.35" EventName="KnifeRelease" EventTargetType="Self"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0.35" EventName="KnifeRelease" EventTargetType="SummonTargetRange" Range="999.0" AllyTarget="Ally"/>
+        </Animation>
+        <Trigger Condition="(DefenceSuccess || GuardBreakFail || GuardBroken) && (customValue_IsBarriorOn == 1.0) ">
+            <FrameEvent Type="DeleteBuff" StartTime="0" BuffList="HelenaBarriorOn"/>
+            <FrameEvent Type="AudioPlay" Condition="customValue_IsBarriorOn == 1.0" StartTime="0" ID="2512" Attach="true" Switch="True"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="BarriorBroken" EventTargetType="Self"/>
+        </Trigger>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_KnifeRelease>
+<!-- Skill : Knife -->
+<!-- Skill : Discharge -->
+    <AC_DischargeReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineNormal">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="2_skill/4_discharge/1_attackReady" XFlip="true" Duration="1.0">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+                <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+                <FrameEvent Type="EffectPreset" StartTime="0" Key="Helena_DischargeBoundery"/>
+                <FrameEvent Type="AudioPlay" StartTime="0" ID="2505" Attach="true" Switch="True"/>
+                
+        </Animation>
+        <Trigger Condition="(DefenceSuccess || GuardBreakFail || GuardBroken) && (customValue_IsBarriorOn == 1.0) ">
+            <FrameEvent Type="DeleteBuff" StartTime="0" BuffList="HelenaBarriorOn"/>
+            <FrameEvent Type="AudioPlay" Condition="customValue_IsBarriorOn == 1.0" StartTime="0" ID="2512" Attach="true" Switch="True"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="BarriorBroken" EventTargetType="Self"/>
+        </Trigger>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_DischargeReady>
+    <AC_DischargeMain MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineSuperArmor">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="2_skill/4_discharge/2_attackMain" XFlip="true" Duration="0.5">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+            <FrameEvent Type="EffectPreset" StartTime="0" Key="Helena_Discharge"/>
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.1" AttackPreset="Helena_Discharge" AttackTag="Stun">
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
+                </OnHit>
+            </FrameEvent>
+        </Animation>
+        <Trigger Condition="(DefenceSuccess || GuardBreakFail || GuardBroken) && (customValue_IsBarriorOn == 1.0) ">
+            <FrameEvent Type="DeleteBuff" StartTime="0" BuffList="HelenaBarriorOn"/>
+            <FrameEvent Type="AudioPlay" Condition="customValue_IsBarriorOn == 1.0" StartTime="0" ID="2512" Attach="true" Switch="True"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="BarriorBroken" EventTargetType="Self"/>
+        </Trigger>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_DischargeMain>
+    <AC_DischargeRecover MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="2_skill/4_discharge/3_attackRecover" XFlip="true" Duration="0.5">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+        <Trigger Condition="(DefenceSuccess || GuardBreakFail || GuardBroken) && (customValue_IsBarriorOn == 1.0) ">
+            <FrameEvent Type="DeleteBuff" StartTime="0" BuffList="HelenaBarriorOn"/>
+            <FrameEvent Type="AudioPlay" Condition="customValue_IsBarriorOn == 1.0" StartTime="0" ID="2512" Attach="true" Switch="True"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="BarriorBroken" EventTargetType="Self"/>
+        </Trigger>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_DischargeRecover>
+<!-- Skill : Discharge -->
+<!-- Defense Action -->
+    <AC_Guard MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" DefenceType="Guard" DefenceDirectionType="Direction" DefenceAngle="180">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="1_defense/1_guard" XFlip="true" Duration="0.5">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
+            <FrameEvent Type="ApplyBuff" Condition="DefenceSuccess" StartTime="0" EndTime="999" ApplyBuff="GuardCountIncrease"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+        <Trigger Condition="(DefenceSuccess || GuardBreakFail || GuardBroken) && (customValue_IsBarriorOn == 1.0) ">
+            <FrameEvent Type="DeleteBuff" StartTime="0" BuffList="HelenaBarriorOn"/>
+            <FrameEvent Type="AudioPlay" Condition="customValue_IsBarriorOn == 1.0" StartTime="0" ID="2512" Attach="true" Switch="True"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="BarriorBroken" EventTargetType="Self"/>
+        </Trigger>
+        <Branch Condition="End == true" Execute="AC_Guard"/>
+    </AC_Guard>
+
+    <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="1_defense/2_guardBroken" XFlip="true" Duration="1.25">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="4921" Attach="true"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountIncrease"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+        <Trigger Condition="(DefenceSuccess || GuardBreakFail || GuardBroken) && (customValue_IsBarriorOn == 1.0) ">
+            <FrameEvent Type="DeleteBuff" StartTime="0" BuffList="HelenaBarriorOn"/>
+            <FrameEvent Type="AudioPlay" Condition="customValue_IsBarriorOn == 1.0" StartTime="0" ID="2512" Attach="true" Switch="True"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="BarriorBroken" EventTargetType="Self"/>
+        </Trigger>
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_GuardBroken>
+
+    <AC_Dodge MovementType="GraphPreset" MovementGraphPreset="Helena_BackStep" DirectionType="AI" FlipType="Direction" RotationType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="1_defense/3_dodge" XFlip="true" Duration="0.35">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2100" Attach="true"/>
+
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
+        </Animation>
+        <Trigger Condition="((DefenceSuccess || GuardBreakFail || GuardBroken) && (customValue_IsBarriorOn == 1.0) ) && (customValue_IsBarriorOn == 1.0) ">
+            <FrameEvent Type="DeleteBuff" StartTime="0" BuffList="HelenaBarriorOn"/>
+            <FrameEvent Type="AudioPlay" Condition="customValue_IsBarriorOn == 1.0" StartTime="0" ID="2512" Attach="true" Switch="True"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="BarriorBroken" EventTargetType="Self"/>
+        </Trigger>
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_Dodge>
+<!-- Defense Action -->
+
+    <AIMove MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="AI" FlipType="Direction" ActiveCollision="False">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/2_move" XFlip="true" Duration="0.5">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AIMove"/>
+    </AIMove>
+
+    <AIMoveFast MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="AI" FlipType="Direction" ActiveCollision="False">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/2_move" XFlip="true" Duration="0.5">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AIMoveFast"/>
+    </AIMoveFast>
+
+</ActionGraph>
