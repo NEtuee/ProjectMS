@@ -86,7 +86,7 @@ public abstract class AIEventBase
         if(_conditionCompareData == null)
             return true;
 
-        return targetEntity.processActionCondition(_conditionCompareData);
+        return targetEntity.processActionCondition(_conditionCompareData, ConditionEvaluationContext.AI);
     }
 
     public static AIEventBase buildFrameEvent(ref BinaryReader binaryReader)

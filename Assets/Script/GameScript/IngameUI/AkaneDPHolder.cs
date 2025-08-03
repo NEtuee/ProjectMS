@@ -15,12 +15,14 @@ public class AkaneDPHolder : HolderUI
         public readonly UIDataType UIDataType => UIDataType.AkaneDP;
         public int CurrentDP;
         public int MaxDP;
-        public float DelayedRegenTime;
-        public AkaneDPData(int currentDP = 0, int maxDP = 0, float delayedRegenTime = 0.0f)
+        public float CooldownPercentage;
+        public bool JustConsumed;
+        public AkaneDPData(int currentDP = 0, int maxDP = 0, float cooldownPercentage = 0.0f, bool justConsumed = false)
         {
             this.CurrentDP = currentDP;
             this.MaxDP = maxDP;
-            this.DelayedRegenTime = delayedRegenTime;
+            this.CooldownPercentage = cooldownPercentage;
+            this.JustConsumed = justConsumed;
         }
     }
     public new AkaneDPData ReceivedData => (AkaneDPData)_receivedData;
@@ -51,16 +53,16 @@ public class AkaneDPHolder : HolderUI
             AkaneDP.SingleAkaneDPData updatedSingleData = new AkaneDP.SingleAkaneDPData();
 
             if (i < ReceivedData.CurrentDP - 1) //Idle
-                updatedSingleData = new AkaneDP.SingleAkaneDPData(true, false, 0.0f);
+                updatedSingleData = new AkaneDP.SingleAkaneDPData(true, false, ReceivedData.CooldownPercentage, ReceivedData.JustConsumed);
             else if (i == ReceivedData.CurrentDP - 1) //Waiting
-                updatedSingleData = new AkaneDP.SingleAkaneDPData(true, true, 0.0f);
+                updatedSingleData = new AkaneDP.SingleAkaneDPData(true, true, ReceivedData.CooldownPercentage, ReceivedData.JustConsumed);
             else if (i > ReceivedData.CurrentDP - 1) //Consumed
-                updatedSingleData = new AkaneDP.SingleAkaneDPData(false, false, 0.0f);
+                updatedSingleData = new AkaneDP.SingleAkaneDPData(false, false, ReceivedData.CooldownPercentage, ReceivedData.JustConsumed);
 
             singleDP.ReceiveUpdatedData(updatedSingleData);
         }
     }
-    protected override void UpdateHolder() //데이터에 맞춰 Holder 업데이트,, MaxDP만큼 pool에서 Holder로 옮기고 가운데 정렬
+    protected override void UpdateHolder() //데이터에 맞춰 Holder 업데이트
     {
         int difference = ReceivedData.MaxDP - _uiHolder.Count;
 
@@ -74,6 +76,7 @@ public class AkaneDPHolder : HolderUI
                 if (_uiHolder.Count > 0)
                 {
                     ProjectorUI projectorUI = _uiHolder[0];
+                    _uiHolder.RemoveAt(0);
                     _objectPool.Release(projectorUI);
                 }
             }
@@ -82,7 +85,7 @@ public class AkaneDPHolder : HolderUI
         {
             for (int i = 0; i < difference; i++)
             {
-                _objectPool.Get();
+                _uiHolder.Add(_objectPool.Get());
             }
         }
 
@@ -91,8 +94,11 @@ public class AkaneDPHolder : HolderUI
 
 
     //전용 메서드
-    private void RepositionHoldingDP() //최대 DP에 맞춰서 홀더에 있는 DP 가운데 정렬 및 위치 지정, uiHolder의 AkaneDP는 항상 maxDP만큼 있어야함
+    private void RepositionHoldingDP() //최대 DP에 맞춰서 홀더에 있는 DP 가운데 정렬 및 위치 지정
     {
+        if (_uiHolder == null || _uiHolder.Count == 0)
+            return;
+        
         int holdingDPCount = _uiHolder.Count;
         List<int> dpXOffset = new List<int>();
 
@@ -107,7 +113,8 @@ public class AkaneDPHolder : HolderUI
         else
         {
             dpXOffset.Add(0);
-            for (int i = 0; i <= (holdingDPCount - 1) / 2; i++)
+
+            for (int i = 1; i <= (holdingDPCount - 1) / 2; i++)
             {
                 dpXOffset.Add(0 - (21 * i));
                 dpXOffset.Add(0 + (21 * i));
@@ -118,8 +125,7 @@ public class AkaneDPHolder : HolderUI
 
         for (int i = 0; i < holdingDPCount; i++)
         {
-            foreach (UIVisualModule singleUIVisualModule in _uiHolder[i].UIVisualModules)
-                singleUIVisualModule.Reposition(new Vector2(dpXOffset[i], 0));
+            ((AkaneDP)_uiHolder[i]).DP.UpdateBasePosition(new Vector2(dpXOffset[i], 0));
         }
     }
     //1. 최초 생성

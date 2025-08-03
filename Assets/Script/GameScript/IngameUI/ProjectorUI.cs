@@ -32,23 +32,19 @@ public abstract class ProjectorUI : MonoBehaviour, IUIDataReceivable
     public abstract IReadOnlyCollection<UIVisualModule> UIVisualModules { get; }
     protected abstract IDictionary<Enum, UIState> _stateMap { get; }
     protected UIStateMachine _stateMachine;
-    protected UIEffectManager _uiEffectManager;
-    protected Coroutine _memorySavingCoroutine;
+    public List<Coroutine> _projectingCoroutineList;
 
 
     //공통 메서드
     public virtual void Initialize()
     {
-        _stateMachine = new UIStateMachine(this);
-        _uiEffectManager = gameObject.AddComponent<UIEffectManager>();
-
-        SetInitialConstructor();
+        SetDataConstructor();
         SetStateMap();
         SetUIVisualModule();
 
         Deactivate();
     }
-    protected abstract void SetInitialConstructor();
+    protected abstract void SetDataConstructor();
     protected abstract void SetStateMap();
     protected abstract void SetUIVisualModule();
     public virtual void ReceiveUpdatedData(IPackedUIData data)
@@ -61,12 +57,17 @@ public abstract class ProjectorUI : MonoBehaviour, IUIDataReceivable
         if (data is SubUIData subData && ValidEventKeys.Contains(subData.UIEventKey))
             _receivedSubData = subData;
     }
+    public void UpdateUI(float deltaTime)
+    {
+        UpdateProjection(deltaTime);
+        UpdateUIState();
+    }
     protected virtual void UpdateProjection(float deltaTime)
     {
         _stateMachine.ProjectingCurrentState();
 
         foreach (UIVisualModule uiVisualModule in UIVisualModules)
-            uiVisualModule.UpdateImage(deltaTime);
+            uiVisualModule.UpdateSprite(deltaTime);
     }
     protected virtual void UpdateUIState()
     {
@@ -80,15 +81,18 @@ public abstract class ProjectorUI : MonoBehaviour, IUIDataReceivable
         else
             _stateMachine.RequestStateByUpdate();
     }
-    protected IEnumerator MemorySavingCoroutine()
+    public void StopAllProjectionCoroutine()
     {
-        yield return new WaitForSeconds(3.0f);
-        gameObject.SetActive(false);
-    }
-    public void UpdateUI(float deltaTime)
-    {
-        UpdateProjection(deltaTime);
-        UpdateUIState();
+        foreach (Coroutine projectingCoroutine in _projectingCoroutineList)
+        {
+            if (projectingCoroutine != null)
+                StopCoroutine(projectingCoroutine);
+        }
+
+        _projectingCoroutineList.Clear();
+
+        foreach (UIVisualModule uiVisualModule in UIVisualModules)
+            uiVisualModule.StopAllEffects();
     }
     public abstract void Activate();
     public abstract void Deactivate();

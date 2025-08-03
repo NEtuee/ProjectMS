@@ -3,8 +3,17 @@ using UnityEngine;
 
 public static class UIAnimationCommons
 {
-    //공통 애니메이션 코루틴, 모두 최종적으로 Vector2(0.0f, 0.0f)로 초기화?
-    public static IEnumerator LerpToInitialPosition(UIVisualModule uiVisualModule, float duration,
+    public static IEnumerator Wait(float duration)
+    {
+        float elapsedTime = 0.0f;
+
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+    }
+    public static IEnumerator LerpToBasePosition(UIVisualModule uiVisualModule, float duration,
                                                     MathEx.EaseType easingFunction = MathEx.EaseType.End)
     {
         if (uiVisualModule.Image == null)
@@ -29,7 +38,7 @@ public static class UIAnimationCommons
 
         uiVisualModule.Image.rectTransform.anchoredPosition = endPosition;
     }
-    public static IEnumerator ShakePosition(UIVisualModule uiVisualModule, float duration, float strength,
+    public static IEnumerator AddShakeOffsetToPosition(UIVisualModule uiVisualModule, float duration, float strength,
                                     MathEx.EaseType easingFunction = MathEx.EaseType.End)
     {
         if (easingFunction == MathEx.EaseType.End)
@@ -55,17 +64,13 @@ public static class UIAnimationCommons
 
         uiVisualModule.Image.rectTransform.anchoredPosition = endPosition;
     }
-    public static IEnumerator FloatPosition(UIVisualModule uiVisualModule, float duration, float distance,
+    public static IEnumerator AddFloatOffsetToPosition(UIVisualModule uiVisualModule, float duration, float distance,
                                     MathEx.EaseType easingFunction = MathEx.EaseType.End)
     {
         if (easingFunction == MathEx.EaseType.End)
             easingFunction = MathEx.EaseType.EaseOutCubic;
 
-        Vector2 startPosition = uiVisualModule.Image.rectTransform.anchoredPosition - new Vector2(0.0f, distance);
-        Vector2 endPosition = uiVisualModule.BasePosition;
         float elapsedTime = 0.0f;
-
-        uiVisualModule.Image.rectTransform.anchoredPosition = startPosition;
 
         while (elapsedTime < duration)
         {
@@ -73,13 +78,15 @@ public static class UIAnimationCommons
             float t = Mathf.Clamp01(elapsedTime / duration);
             float easedT = MathEx.getEaseFormula(easingFunction, 0.0f, 1.0f, t);
 
-            uiVisualModule.Image.rectTransform.anchoredPosition = Vector2.Lerp(startPosition, endPosition, easedT);
+            float offsetY = -distance * (1.0f - easedT);
+
+            uiVisualModule.Image.rectTransform.anchoredPosition = uiVisualModule.BasePosition + new Vector2(0.0f, offsetY);
             yield return null;
         }
 
-        uiVisualModule.Image.rectTransform.anchoredPosition = endPosition;
+        uiVisualModule.Image.rectTransform.anchoredPosition = uiVisualModule.BasePosition;
     }
-    public static IEnumerator WaveDownPosition(UIVisualModule uiVisualModule, float duration, float strength,
+    public static IEnumerator AddWaveDownOffsetToPosition(UIVisualModule uiVisualModule, float duration, float strength,
                                         MathEx.EaseType downEasingFunction = MathEx.EaseType.End,
                                         MathEx.EaseType upEasingFunction = MathEx.EaseType.End)
     {
@@ -91,8 +98,6 @@ public static class UIAnimationCommons
         if (upEasingFunction == MathEx.EaseType.End)
             upEasingFunction = MathEx.EaseType.EaseInCubic;
 
-        Vector2 startPosition = uiVisualModule.Image.rectTransform.anchoredPosition;
-        Vector2 endPosition = uiVisualModule.BasePosition;
         float elapsedTime = 0.0f;
 
         float downPhaseRatio = 0.33f;
@@ -104,32 +109,31 @@ public static class UIAnimationCommons
         while (elapsedTime < duration)
         {
             elapsedTime += Time.deltaTime;
-            float currentYOffset = 0.0f;
+            float offsetY = 0.0f;
 
             if (elapsedTime <= downDuration)
             {
                 float t = Mathf.Clamp01(elapsedTime / downDuration);
                 float easedT = MathEx.getEaseFormula(downEasingFunction, 0.0f, 1.0f, t);
 
-                currentYOffset = Mathf.Lerp(0.0f, -strength, easedT);
+                offsetY = Mathf.Lerp(0.0f, -strength, easedT);
             }
             else
             {
                 float t = Mathf.Clamp01((elapsedTime - downDuration) / upDuration);
                 float easedT = MathEx.getEaseFormula(upEasingFunction, 0.0f, 1.0f, t);
 
-                currentYOffset = Mathf.Lerp(-strength, 0.0f, easedT);
+                offsetY = Mathf.Lerp(-strength, 0.0f, easedT);
             }
 
-            float overallT = Mathf.Clamp01(elapsedTime / duration);
-            uiVisualModule.Image.rectTransform.anchoredPosition = Vector2.Lerp(startPosition, endPosition, overallT) + new Vector2(0.0f, currentYOffset);
+            uiVisualModule.Image.rectTransform.anchoredPosition = uiVisualModule.BasePosition + new Vector2(0.0f, offsetY);
 
             yield return null;
         }
 
-        uiVisualModule.Image.rectTransform.anchoredPosition = endPosition;
+        uiVisualModule.Image.rectTransform.anchoredPosition = uiVisualModule.BasePosition;
     }
-    public static IEnumerator WaveUpPosition(UIVisualModule uiVisualModule, float duration, float strength,
+    public static IEnumerator AddWaveUpOffsetToPosition(UIVisualModule uiVisualModule, float duration, float strength,
                                     MathEx.EaseType upEasingFunction = MathEx.EaseType.End,
                                     MathEx.EaseType downEasingFunction = MathEx.EaseType.End)
     {
@@ -141,8 +145,6 @@ public static class UIAnimationCommons
         if (downEasingFunction == MathEx.EaseType.End)
             downEasingFunction = MathEx.EaseType.EaseOutCubic;
 
-        Vector2 startPosition = uiVisualModule.Image.rectTransform.anchoredPosition;
-        Vector2 endPosition = uiVisualModule.BasePosition;
         float elapsedTime = 0.0f;
 
         float upPhaseRatio = 0.1f;
@@ -154,28 +156,29 @@ public static class UIAnimationCommons
         while (elapsedTime < duration)
         {
             elapsedTime += Time.deltaTime;
-            float currentYOffset = 0.0f;
+            float offsetY = 0.0f;
 
             if (elapsedTime <= upDuration)
             {
                 float t = Mathf.Clamp01(elapsedTime / upDuration);
                 float easedT = MathEx.getEaseFormula(upEasingFunction, 0.0f, 1.0f, t);
 
-                currentYOffset = Mathf.Lerp(0.0f, strength, easedT);
+                offsetY = Mathf.Lerp(0.0f, strength, easedT);
             }
             else
             {
                 float t = Mathf.Clamp01((elapsedTime - upDuration) / downDuration);
                 float easedT = MathEx.getEaseFormula(downEasingFunction, 0.0f, 1.0f, t);
 
-                currentYOffset = Mathf.Lerp(strength, 0.0f, easedT);
+                offsetY = Mathf.Lerp(strength, 0.0f, easedT);
             }
 
-            float overallT = Mathf.Clamp01(elapsedTime / duration);
-            uiVisualModule.Image.rectTransform.anchoredPosition = Vector2.Lerp(startPosition, endPosition, overallT) + new Vector2(0, currentYOffset);
+            uiVisualModule.Image.rectTransform.anchoredPosition = uiVisualModule.BasePosition + new Vector2(0.0f, offsetY);
 
             yield return null;
         }
+
+        uiVisualModule.Image.rectTransform.anchoredPosition = uiVisualModule.BasePosition;
     }
     public static IEnumerator FadeInAlpha(UIVisualModule uiVisualModule, float duration,
                                         MathEx.EaseType easingFunction = MathEx.EaseType.End)
@@ -207,8 +210,6 @@ public static class UIAnimationCommons
         Color endColor = uiVisualModule.Image.color;
         endColor.a = endAlpha;
         uiVisualModule.Image.color = endColor;
-
-        yield return null;
     }
     public static IEnumerator FadeOutAlpha(UIVisualModule uiVisualModule, float duration,
                                         MathEx.EaseType easingFunction = MathEx.EaseType.End)
@@ -240,8 +241,6 @@ public static class UIAnimationCommons
         Color endColor = uiVisualModule.Image.color;
         endColor.a = endAlpha;
         uiVisualModule.Image.color = endColor;
-
-        yield return null;
     }
     public static IEnumerator FlickAlpha(UIVisualModule uiVisualModule, float duration, float strength, int frequency,
                                         MathEx.EaseType easingFunction = MathEx.EaseType.End)
