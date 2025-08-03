@@ -447,7 +447,7 @@
             <OnEnd>
                 <FrameEvent Type="EffectPreset" StartTime="0.0" Key="Helena_Discharge"/>
                 <FrameEvent Type="AudioPlay" StartTime="0" ID="2504" Attach="true"/>
-                <FrameEvent Type="Attack" StartFrame="0.0" AttackPreset="Helena_Discharge">
+                <FrameEvent Type="Attack" StartFrame="0.0" AttackPreset="SisterStaff_Pray">
                     <OnHit>
                         <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
                         <FrameEvent Type="CallAIEvent" StartTime="0" EventName="PlayerHit" EventTargetType="Summoner"/>
@@ -456,6 +456,30 @@
             </OnEnd>
         </Event>
     </ThunderStorm_Large>
+
+    <ThunderStorm_Medium DefaultFramePerSecond="10" UseSpriteRotation="true" PenetrateCount="999">
+        <Animation Preset="Sprites/Projectile/empty" XFlip="true" Duration="0.2">
+            <FrameEvent Type="EffectPreset" StartTime="0.0" Key="Helena_DischargeBoundery"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2503" Attach="true"/>
+
+        </Animation>
+
+        <CollisionInfo Radius="0.4" Angle="0"/>
+        
+        <DefaultShotInfo Velocity="0" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="0.5"/>
+        <Event>
+            <OnEnd>
+                <FrameEvent Type="EffectPreset" StartTime="0.0" Key="Helena_ExplodeBig"/>
+                <FrameEvent Type="AudioPlay" StartTime="0" ID="2504" Attach="true"/>
+                <FrameEvent Type="Attack" StartFrame="0.0" AttackPreset="SisterGrimore_Pray">
+                    <OnHit>
+                        <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
+                        <FrameEvent Type="CallAIEvent" StartTime="0" EventName="PlayerHit" EventTargetType="Summoner"/>
+                    </OnHit>
+                </FrameEvent>
+            </OnEnd>
+        </Event>
+    </ThunderStorm_Medium>
 
     <Thunder_Small DefaultFramePerSecond="10" UseSpriteRotation="true" PenetrateCount="999">
         <Animation Preset="Sprites/Projectile/empty" XFlip="true" Duration="1.0">

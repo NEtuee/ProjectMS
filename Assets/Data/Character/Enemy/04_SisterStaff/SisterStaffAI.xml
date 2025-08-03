@@ -66,8 +66,7 @@
     <Include Path="Assets/Data/AILibrary/Package/CommonLockOnAllGuardPackage.xml"/> <!-- 락온 가드 패키지 -->
     <Include Path="Assets/Data/AILibrary/Package/CommonDodgePackage.xml"/>          <!-- 회피 패키지 -->
     <!-- TODO :  전용 스킬 패키지 추가-->
-    <Include Path="Assets/Data/Character/Enemy/04_SisterNormal/SisterNormalSkillPackage.xml"/>          <!-- 스킬 패키지 -->
-    <Include Path="Assets/Data/Character/Enemy/04_SisterGrimore/SisterGrimoreSkillPackage.xml"/>          <!-- 스킬 패키지 -->
+    <Include Path="Assets/Data/Character/Enemy/04_SisterStaff/SisterStaffSkillPackage.xml"/>          <!-- 스킬 패키지 -->
 
 <!-- 패키지 인클루드 -->
 
@@ -199,15 +198,15 @@
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </Swing>
-    <Pray Package="SisterNormalSkillPackage" EntryNode="AI_Pray">
+    <Pray Package="SisterStaffSkillPackage" EntryNode="AI_Pray">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </Pray>
-    <Barrior Package="SisterGrimoreSkillPackage" EntryNode="AI_Barrior" CoolTime="15.0">
+    <Barrior Package="SisterStaffSkillPackage" EntryNode="AI_Barrior" CoolTime="15.0">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </Barrior>
-    <Tracer Package="SisterGrimoreSkillPackage" EntryNode="AI_TracerReady" CoolTime="10.0">
+    <Tracer Package="SisterStaffSkillPackage" EntryNode="AI_TracerReady" CoolTime="10.0">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </Tracer>
@@ -227,7 +226,7 @@
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </Defense>
-    <Counter Package="SisterNormalSkillPackage" EntryNode="AI_Pray">
+    <Counter Package="SisterStaffSkillPackage" EntryNode="AI_Pray">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </Counter>

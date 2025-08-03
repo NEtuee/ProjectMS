@@ -145,8 +145,30 @@
     />
 
     <SisterNormalCrossHair
-        DisplayName="시스터 크로스헤어"
+        DisplayName="시스터 노말 크로스헤어"
         ActionGraph="Assets/Data/Character/Object/CrossHair/SisterNormalCrossHair.xml"
+        AIGraph="Assets/Data/AILibrary/Graph/CommonEnemyAI.xml"
+        StatusInfoName="CommonEnemyStatusNoUI"
+
+        CollisionRadius="0.7"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="EnemyAllNeutral"
+    />
+    <SisterGrimoreCrossHair
+        DisplayName="시스터 그리모어 크로스헤어"
+        ActionGraph="Assets/Data/Character/Object/CrossHair/SisterGrimoreCrossHair.xml"
+        AIGraph="Assets/Data/AILibrary/Graph/CommonEnemyAI.xml"
+        StatusInfoName="CommonEnemyStatusNoUI"
+
+        CollisionRadius="0.7"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="EnemyAllNeutral"
+    />
+    <SisterStaffCrossHair
+        DisplayName="시스터 스태프 크로스헤어"
+        ActionGraph="Assets/Data/Character/Object/CrossHair/SisterStaffCrossHair.xml"
         AIGraph="Assets/Data/AILibrary/Graph/CommonEnemyAI.xml"
         StatusInfoName="CommonEnemyStatusNoUI"
 
