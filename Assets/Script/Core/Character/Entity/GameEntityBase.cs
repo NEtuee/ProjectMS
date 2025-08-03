@@ -99,6 +99,7 @@ public class GameEntityBase : SequencerObjectBase
     private bool                _useHPEffect = false;
 
     private DirectionType       _currentDirectionType = DirectionType.AlwaysRight;
+    private FlipType            _currentFlipType = FlipType.AlwaysTurnOff;
     private RotationType        _currentRotationType = RotationType.AlwaysRight;
 
     private Quaternion          _actionStartRotation = Quaternion.identity;
@@ -267,6 +268,7 @@ public class GameEntityBase : SequencerObjectBase
         applyActionBuffList();
 
         _currentDirectionType = _actionGraph.getDirectionType();
+        _currentFlipType = _actionGraph.getCurrentFlipType();
         _currentRotationType = _actionGraph.getCurrentRotationType();
 
         CollisionInfoData data = new CollisionInfoData(characterInfo._characterRadius,0f,0f,0f, CollisionType.Character);
@@ -546,7 +548,7 @@ public class GameEntityBase : SequencerObjectBase
             updateDirection();
             if(_updateFlipState)
             {
-                updateFlipState(_actionGraph.getCurrentFlipType());
+                updateFlipState(_currentFlipType);
                 _updateFlipState = _actionGraph.getCurrentFlipTypeUpdateOnce() == false;
             }
 
@@ -667,6 +669,7 @@ public class GameEntityBase : SequencerObjectBase
         _actionGraph.clearInputBuffer();
 
         _currentDefenceType = _actionGraph.getCurrentDefenceType();
+        _currentFlipType = _actionGraph.getCurrentFlipType();
         _currentDirectionType = _actionGraph.getDirectionType();
 
         _collisionInfo.setActiveCollision(_actionGraph.isActiveCollision());
@@ -1547,6 +1550,22 @@ public class GameEntityBase : SequencerObjectBase
     {
         _currentDirectionType = directionType;
         updateDirection();
+    }
+
+    public void setRotationType(RotationType rotationType)
+    {
+        _currentRotationType = rotationType;
+        updateRotation(true);
+    }
+
+    public void setFlipType(FlipType flipType, bool updateFlipStateOnce)
+    {
+        _currentFlipType = flipType;
+        updateFlipState(_currentFlipType);
+        _spriteRenderer.flipX = _flipState.xFlip;
+        _spriteRenderer.flipY = _flipState.yFlip;
+
+        _updateFlipState = updateFlipStateOnce == false;
     }
 
     public DirectionType getDirectionType()

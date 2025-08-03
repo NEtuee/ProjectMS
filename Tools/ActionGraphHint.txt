@@ -154,4 +154,8 @@ ShortCut,__ElseIf,<ElseIf Condition=~~>#n</ElseIf>
 ShortCut,__Else,<Else>#n</Else>
 LineStart,<If,"Key=~~,Condition=~~,Weight=~~"
 LineStart,<ElseIf,"Key=~~,Condition=~~,Weight=~~"
-,,
+InQuote,AttackShake=,"True,False"
+FrameEvent,SetRotationType,RotationType=~~
+ShortCut,__FrameEvent_SetRotationType,<FrameEvent Type=~SetRotationType~ StartTime=~0~ RotationType=~~/>
+FrameEvent,SetFlipType,FlipType=~~
+ShortCut,__FrameEvent_SetFlipType,<FrameEvent Type=~SetFlipType~ StartTime=~0~ FlipType=~~/>
