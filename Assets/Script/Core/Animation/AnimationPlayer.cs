@@ -395,7 +395,7 @@ public class AnimationPlayer
         _multiSelectAnimationUpdated = true;
         for(int i = 0; i < _currentAnimationPlayData._multiSelectAnimationDataCount; ++i)
         {
-            if(actionGraph.processActionCondition(_currentAnimationPlayData._multiSelectAnimationData[i]._actionConditionData) == true)
+            if(actionGraph.processActionCondition(_currentAnimationPlayData._multiSelectAnimationData[i]._actionConditionData, ConditionEvaluationContext.Action) == true)
             {
                 _currentAnimationSprites = ResourceContainerEx.Instance().GetSpriteAll(_currentAnimationPlayData._multiSelectAnimationData[i]._path);
                 return;

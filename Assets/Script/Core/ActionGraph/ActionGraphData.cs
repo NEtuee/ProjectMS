@@ -483,6 +483,13 @@ public enum ActionFlags : ulong
     OutlineGuard = 1 << 6,
     OutlineSuperArmor = 1 << 7,
     OutlineNormal = 1 << 8,
+    ActionFlow = 1 << 9,
+};
+
+public enum ConditionEvaluationContext
+{
+    Action = 0,  // 액션 시스템에서 호출
+    AI,          // AI 시스템에서 호출
 };
 
 public enum ConditionCompareType

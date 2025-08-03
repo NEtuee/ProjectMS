@@ -143,7 +143,7 @@ public abstract class ActionFrameEventBase : SerializableDataType
         if(_conditionCompareData == null)
             return true;
 
-        return targetEntity.processActionCondition(_conditionCompareData);
+        return targetEntity.processActionCondition(_conditionCompareData, ConditionEvaluationContext.Action);
     }
 
     public static Vector3 getSpawnPosition(SetTargetType targetType, ObjectBase executeEntity, ObjectBase targetEntity)

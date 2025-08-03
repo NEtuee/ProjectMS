@@ -150,7 +150,7 @@ public class ActionGraph
         if(isEnd)
             _currentAnimationIndex = getCurrentAction()._animationInfoCount - 1;
 
-        setActionConditionData_Bool(ConditionNodeUpdateType.Action_AnimationEnd,isEnd);
+        setActionConditionData_Bool(ConditionNodeUpdateType.Action_AnimationEnd, isEnd);
     }
 
     public void updateTriggerEvent()
@@ -172,7 +172,7 @@ public class ActionGraph
 
         if(triggerEventData._conditionCompareDataIndex >= 0)
         {
-            if(processActionCondition(_actionGraphBaseData._conditionCompareData[triggerEventData._conditionCompareDataIndex]) == false)
+            if(processActionCondition(_actionGraphBaseData._conditionCompareData[triggerEventData._conditionCompareDataIndex], ConditionEvaluationContext.Action) == false)
                 return;
         }
 
@@ -355,28 +355,28 @@ public class ActionGraph
         if(branchData._weightConditionCompareDataIndex != -1)
         {
             ActionGraphConditionCompareData compareData = _actionGraphBaseData._conditionCompareData[branchData._weightConditionCompareDataIndex];
-            weightCondition = processActionCondition(compareData);
+            weightCondition = processActionCondition(compareData, ConditionEvaluationContext.Action);
         }
         
         bool keyCondition = true;
         if(branchData._keyConditionCompareDataIndex != -1)
         {
             ActionGraphConditionCompareData keyCompareData = _actionGraphBaseData._conditionCompareData[branchData._keyConditionCompareDataIndex];
-            keyCondition = processActionCondition(keyCompareData);
+            keyCondition = processActionCondition(keyCompareData, ConditionEvaluationContext.Action);
         }
 
         bool condition = true;
         if(branchData._conditionCompareDataIndex != -1)
         {
             ActionGraphConditionCompareData compareData = _actionGraphBaseData._conditionCompareData[branchData._conditionCompareDataIndex];
-            condition = processActionCondition(compareData);
+            condition = processActionCondition(compareData, ConditionEvaluationContext.Action);
         }
 
         return weightCondition && keyCondition && condition;
 
     }
 
-    public bool processActionCondition(ActionGraphConditionCompareData compareData)
+    public bool processActionCondition(ActionGraphConditionCompareData compareData, ConditionEvaluationContext context)
     {
         if(compareData._conditionNodeDataCount == 0)
             return true;
@@ -385,7 +385,7 @@ public class ActionGraph
         {
             DebugUtil.assert(isNodeType(compareData._conditionNodeDataArray[0],ConditionNodeType.Bool) == true, "잘못된 노드 타입 입니다. 통보 요망 : {0}",compareData._conditionNodeDataArray[0]._symbolName);
 
-            return getDataFromConditionNode(compareData._conditionNodeDataArray[0])[0] == 1;
+            return getDataFromConditionNode(compareData._conditionNodeDataArray[0], context)[0] == 1;
         }
 
         for(int i = 0; i < compareData._compareTypeCount; ++i)
@@ -393,7 +393,7 @@ public class ActionGraph
             ActionGraphConditionNodeData lvalue = compareData._conditionNodeDataArray[i * 2];
             ActionGraphConditionNodeData rvalue = compareData._conditionNodeDataArray[i * 2 + 1];
 
-            addResultData(compareTwoCondition(lvalue,rvalue,compareData._compareTypeArray[i]), i);
+            addResultData(compareTwoCondition(lvalue,rvalue,compareData._compareTypeArray[i],  context), i);
         }
 
         return _conditionResultList[compareData._compareTypeCount - 1][0] == 1;
@@ -537,7 +537,7 @@ public class ActionGraph
 
 
     //todo : 이제 비교는 되니까 식 만들어서 최종 결과 계산할 수 있게 만들어야 함. 단순 boolean, inverse boolean 처리 할 수 있도록 해야 함
-    public bool compareTwoCondition(ActionGraphConditionNodeData lvalue, ActionGraphConditionNodeData rvalue, ConditionCompareType compareType)
+    public bool compareTwoCondition(ActionGraphConditionNodeData lvalue, ActionGraphConditionNodeData rvalue, ConditionCompareType compareType, ConditionEvaluationContext context)
     {
         ConditionNodeInfo lvalueNodeInfo = ConditionNodeInfoPreset._nodePreset[lvalue._symbolName];
         ConditionNodeInfo rvalueNodeInfo = ConditionNodeInfoPreset._nodePreset[rvalue._symbolName];
@@ -548,8 +548,8 @@ public class ActionGraph
             return false;
         }
 
-        byte[] lvalueData = getDataFromConditionNode(lvalue);
-        byte[] rvalueData = getDataFromConditionNode(rvalue);
+        byte[] lvalueData = getDataFromConditionNode(lvalue, context);
+        byte[] rvalueData = getDataFromConditionNode(rvalue, context);
 
         int dataSize = ConditionNodeInfoPreset._dataSize[(int)lvalueNodeInfo._nodeType];
 
@@ -674,7 +674,7 @@ public class ActionGraph
         return nodeType == ConditionNodeInfoPreset._nodePreset[nodeData._symbolName]._nodeType;
     }
 
-    public byte[] getDataFromConditionNode(ActionGraphConditionNodeData nodeData)
+    public byte[] getDataFromConditionNode(ActionGraphConditionNodeData nodeData, ConditionEvaluationContext context)
     {
         ConditionNodeType nodeType = ConditionNodeInfoPreset._nodePreset[nodeData._symbolName]._nodeType;
         ConditionNodeUpdateType updateType = ConditionNodeInfoPreset._nodePreset[nodeData._symbolName]._updateType;
@@ -769,8 +769,22 @@ public class ActionGraph
             return null;
         }
 
+        // ActionFlow 로직: AI 컨텍스트에서 Action_AnimationEnd를 체크할 때만 적용
+        if(context == ConditionEvaluationContext.AI && updateType == ConditionNodeUpdateType.Action_AnimationEnd)
+        {
+            bool originalEnd = _actionConditionNodeData[updateTypeIndex][0] == 1;
+            
+            // ActionFlow 액션이 종료되었을 때 AI에게는 false 반환
+            if(originalEnd && (getCurrentAction()._actionFlag & (ulong)ActionFlags.ActionFlow) != 0)
+            {
+                return CommonConditionNodeData.falseByte;
+            }
+        }
+
         return _actionConditionNodeData[updateTypeIndex];
     }
+
+
 
     public void addResultData(bool value, int index)
     {

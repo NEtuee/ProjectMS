@@ -1724,7 +1724,7 @@ public class GameEntityBase : SequencerObjectBase
 
         _aiGraph.executeAIEvent(param);
     }
-    public bool processActionCondition(ActionGraphConditionCompareData compareData) {return _actionGraph.processActionCondition(compareData);}
+    public bool processActionCondition(ActionGraphConditionCompareData compareData, ConditionEvaluationContext context) {return _actionGraph.processActionCondition(compareData, context);}
 
     public HashSet<string> getCurrentFrameTagList() {return _actionGraph.getCurrentFrameTagList();}
 
