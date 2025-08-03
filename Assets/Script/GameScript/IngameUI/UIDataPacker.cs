@@ -41,13 +41,16 @@ public class UIDataPacker
     {
         int newCurrentDP = (int)_targetAkane.getStatus("DashPoint");
         int newMaxDP = (int)_targetAkane.getStatusInfo().getMaxStatus("DashPoint");
-        float newDelayedRegenTime = 0.0f;
+        bool newJustConsumed = false;
+        if (outdatedData.CurrentDP > newCurrentDP)
+            newJustConsumed = true;
+        float newCooldownPercentage = -1.0f;
         if (newCurrentDP < newMaxDP)
         {
-            newDelayedRegenTime = (float)_targetAkane.getStatusInfo().getBuffDurationPercentage(35); //35번 버프 DashPointRegenDelayed
+            newCooldownPercentage = 1.0f - (float)_targetAkane.getStatusInfo().getBuffDurationPercentage(35); //35번 버프 DashPointRegenDelayed
         }
 
-        AkaneDPHolder.AkaneDPData updatedData = new AkaneDPHolder.AkaneDPData(newCurrentDP, newMaxDP, newDelayedRegenTime);
+        AkaneDPHolder.AkaneDPData updatedData = new AkaneDPHolder.AkaneDPData(newCurrentDP, newMaxDP, newCooldownPercentage, newJustConsumed);
         return updatedData;
     }
     public SubUIData PackNewSubData(UIEventKey key) //임의 업데이트 되는 서브 데이터
