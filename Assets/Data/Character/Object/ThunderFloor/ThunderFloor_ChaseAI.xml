@@ -37,7 +37,7 @@
     </CustomEvent_CancelLaser>
 
     <Move Package="ThunderFloor_ChasePackage">
-        <Branch Condition="GraphExecutedTime > 5.0" Execute="Dead"/>
+        <Branch Condition="GraphExecutedTime > 3.0" Execute="Dead"/>
         <Branch Condition="customValue_IsPlayerHit >= 1.0" Execute="Dead"/>
     </Move>
 
