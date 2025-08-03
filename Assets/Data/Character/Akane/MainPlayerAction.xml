@@ -168,8 +168,6 @@
                     <FrameEvent Type="EffectPreset" StartTime="0" Key="Slash"/>
                     <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
 
-                    <FrameEvent Type="UIEvent" StartTime="0" Key="AttackSucceeded"/>
-
                     <!-- 마테리얼 히트 이펙트 -->
                     <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/MaterialHit_Timeline" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true"/>
                     <FrameEvent Type="EffectPreset" Condition="getWeight_RandVector3^x" Key="BloodDecal_Short"/>
@@ -207,8 +205,6 @@
                     <FrameEvent Type="TeleportToTarget"/>
                 </OnEvade>
             </FrameEvent>
-
-            <FrameEvent Type="UIEvent" StartTime="0" Condition="AttackSuccess == false" Key="Dash"/>
 
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="Fear" EventTargetType="Range" AllyTarget="Neutral" Range="2.5"/>
 
@@ -287,8 +283,6 @@
                     <FrameEvent Type="ApplyBuff" ApplyBuff="BattleIncrement"/>
                     <FrameEvent Type="ApplyBuff" ApplyBuff="IncreaseBloodPoint"/>
 
-                    <FrameEvent Type="UIEvent" StartTime="0" Key="AttackSucceeded"/>
-
                     <!-- 마테리얼 히트 이펙트 -->
                     <FrameEvent Type="TimelineEffect" Path="Prefab/Effect/MaterialHit_Timeline" Offset="0.0 0.0 0.0" Attach="true" ToTarget="true"/>
                     <FrameEvent Type="EffectPreset" Condition="getWeight_RandVector3^x" Key="BloodDecal_Short"/>
@@ -331,8 +325,6 @@
 
             </FrameEvent>
 
-            <FrameEvent Type="UIEvent" StartTime="0" Condition="AttackSuccess == false" Key="HyperFailed"/>
-
             <FrameEvent Type="Movement" StartTime="0" Friction="gv_LongDashFriction" MaxVelocity="gv_LongDashVelocity" Speed="0" Velocity="gv_LongDashVelocity" Condition="(getStat_DashPoint >= 1.0) && (getStat_HP > 1.0)"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="ClearBloodPoint" Condition="(getStat_DashPoint >= 1.0) && (getStat_HP > 1.0)"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="CommonAttack" Condition="(getStat_DashPoint >= 1.0) && (getStat_HP > 1.0)"/>
@@ -340,6 +332,8 @@
 
             <FrameEvent Type="FrameTag" StartTime="0.156" EndTime="999" Tag="MoveCancel"/>
             <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="0.016" Tag="Attack"/>
+
+            <FrameEvent Type="UIEvent" Condition="AttackSuccess == false" StartTime="0" Key="Hyperfailed"/>
 
             <FrameEvent Type="AudioPlay" Condition="AttackSuccess == false" ID="1009" Attach="true"/>
             <FrameEvent Type="EffectPreset" Condition="AttackSuccess == false" Key="DashTrail"/>
@@ -407,6 +401,7 @@
 
             <FrameEvent Type="FrameTag" StartTime="0.156" EndTime="999" Tag="MoveCancel"/>
             <FrameEvent Type="FrameTag" StartTime="0.0" EndTime="0.016" Tag="Attack"/>
+
             <FrameEvent Type="AudioPlay" Condition="AttackSuccess == false" StartTime="0.05" ID="1002" Attach="true"/>
             <FrameEvent Type="EffectPreset" Condition="AttackSuccess == false" StartTime="0.05" Key="DashTrail"/>
             <!-- 극한회피 -->
@@ -505,6 +500,8 @@
             <FrameEvent Type="FrameTag" StartTime="0.198" EndTime="999" Tag="MoveCancel"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="DashPointIncrement"/>
 
+            <FrameEvent Type="UIEvent" StartTime="0" Key="Kicked"/>
+
             <!-- 극한회피 : 발차기 -->
             <FrameEvent Type="DeleteBuff"       StartTime="0.031" BuffList="ExtremeAvoidance"/>
         </Animation>
@@ -548,6 +545,8 @@
             <FrameEvent Type="FrameTag" StartTime="0.15" EndTime="999" Tag="StanceCancel"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="AttackSuccess"/>
             
+            <FrameEvent Type="UIEvent" StartTime="0" Key="Attacked"/>
+
             <!-- 극한회피 : 혈섬 -->
             <FrameEvent Type="DeleteBuff"       StartTime="0.031" BuffList="ExtremeAvoidance"/>
         </Animation>
@@ -567,7 +566,9 @@
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="DashPointReset"/>
             <FrameEvent Type="FrameTag" StartTime="0.26" EndTime="999" Tag="MoveCancel"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="AttackSuccess"/>
-            
+
+            <FrameEvent Type="UIEvent" StartTime="0" Key="Hyperattacked"/>
+
             <!-- 극한회피 : 초혈섬 -->
             <FrameEvent Type="DeleteBuff"       StartTime="0.031" BuffList="ExtremeAvoidance"/>
         </Animation>
@@ -584,6 +585,8 @@
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="DashPointReset"/>
             <FrameEvent Type="FrameTag" StartTime="0.26" EndTime="999" Tag="MoveCancel"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="Evaded"/>
+
+            <FrameEvent Type="UIEvent" StartTime="0" Key="Evaded"/>
         </Animation>
 
         <Branch Key="(getKey_AttackCharge == true) || ((getKey_NormalMove || getKey_NormalMovePad) == true)" Condition="End" Execute="MoveAll"/>
