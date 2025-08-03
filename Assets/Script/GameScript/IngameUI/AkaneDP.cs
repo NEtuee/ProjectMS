@@ -34,7 +34,7 @@ public class AkaneDP : ProjectorUI
     public override IReadOnlyCollection<UIVisualModule> UIVisualModules =>
         new[] { DP, Progress, ProgressFrame };
     [SerializeField] private UIVisualModuleData<AkaneDPStateType> DPData;
-    public UIVisualModule DP; //프리팹의 최상위는 public으로,,
+    [HideInInspector] public UIVisualModule DP; //프리팹의 최상위는 public으로,,
     [SerializeField] private UIVisualModuleData<AkaneDPStateType> DPProgressData;
     private UIVisualModule Progress;
     [SerializeField] private UIVisualModuleData<AkaneDPStateType> DPProgressFrameData;
@@ -126,11 +126,12 @@ public class AkaneDP : ProjectorUI
         public DeactivatedState(AkaneDP akaneDP) : base(akaneDP) { }
         protected override IEnumerator OnEnterProjection()
         {
-            foreach (UIVisualModule uiVisualModule in _akaneDP.UIVisualModules)
-            {
-                uiVisualModule.HideImage();
-                uiVisualModule.BackToBasePosition();
-            }
+            _akaneDP.DP.HideImage();
+            _akaneDP.Progress.HideImage();
+            _akaneDP.ProgressFrame.HideImage();
+            _akaneDP.DP.BackToBasePosition();
+            _akaneDP.Progress.BackToBasePosition();
+            _akaneDP.ProgressFrame.BackToBasePosition();
 
             yield break;
         }
@@ -180,6 +181,9 @@ public class AkaneDP : ProjectorUI
             _akaneDP.DP.ShowImage();
             _akaneDP.Progress.HideImage();
             _akaneDP.ProgressFrame.HideImage();
+            _akaneDP.DP.BackToBasePosition();
+            _akaneDP.Progress.BackToBasePosition();
+            _akaneDP.ProgressFrame.BackToBasePosition();
 
             _akaneDP.DP.ChangeAnimation(Convert.ToInt32(AkaneDPStateType.Idle));
 
@@ -287,20 +291,7 @@ public class AkaneDP : ProjectorUI
         }
         public override UIState ChangeState(SubUIData subData)
         {
-            var eventKey = subData.UIEventKey;
-            switch (eventKey)
-            {
-                case UIEventKey.Attacked or UIEventKey.Hyperattacked:
-                    return _akaneDP._akaneDPStateMap[AkaneDPStateType.Attackrecovering];
-                case UIEventKey.Kicked:
-                    return _akaneDP._akaneDPStateMap[AkaneDPStateType.Kickrecovering];
-                case UIEventKey.Evaded:
-                    return _akaneDP._akaneDPStateMap[AkaneDPStateType.Evaderecovering];
-                default:
-                    break;
-            }
-
-            return null;
+            return _akaneDP._akaneDPStateMap[AkaneDPStateType.Consumed];
         }
         public override UIState UpdateState()
         {
@@ -308,6 +299,11 @@ public class AkaneDP : ProjectorUI
                 return _akaneDP._akaneDPStateMap[AkaneDPStateType.Autorecovering];
             else if (!_onEntered && _akaneDP.ReceivedData.JustConsumed)
                 return _akaneDP._akaneDPStateMap[AkaneDPStateType.Consumed];
+
+            if (_akaneDP.ReceivedData.IsActivated)
+                return _akaneDP._akaneDPStateMap[AkaneDPStateType.Idle];
+            else if (_akaneDP.ReceivedData.IsWaiting)
+                return _akaneDP._akaneDPStateMap[AkaneDPStateType.Waiting];
 
             return null;
         }
@@ -348,20 +344,7 @@ public class AkaneDP : ProjectorUI
         }
         public override UIState ChangeState(SubUIData subData)
         {
-            var eventKey = subData.UIEventKey;
-            switch (eventKey)
-            {
-                case UIEventKey.Attacked or UIEventKey.Hyperattacked:
-                    return _akaneDP._akaneDPStateMap[AkaneDPStateType.Attackrecovering];
-                case UIEventKey.Kicked:
-                    return _akaneDP._akaneDPStateMap[AkaneDPStateType.Kickrecovering];
-                case UIEventKey.Evaded:
-                    return _akaneDP._akaneDPStateMap[AkaneDPStateType.Evaderecovering];
-                default:
-                    break;
-            }
-
-            return null;
+            return _akaneDP._akaneDPStateMap[AkaneDPStateType.Consumed];
         }
         public override UIState UpdateState()
         {
@@ -381,14 +364,24 @@ public class AkaneDP : ProjectorUI
         protected override IEnumerator OnEnterProjection()
         {
             //IsWaiting에 따라 다른 애니메이션 재생
-            foreach (UIVisualModule uiVisualModule in _akaneDP.UIVisualModules)
-            {
-                uiVisualModule.HideImage();
-                uiVisualModule.BackToBasePosition();
-            }
             _akaneDP.DP.ShowImage();
+            _akaneDP.Progress.HideImage();
+            _akaneDP.ProgressFrame.HideImage();
+            _akaneDP.DP.BackToBasePosition();
+            _akaneDP.Progress.BackToBasePosition();
+            _akaneDP.ProgressFrame.BackToBasePosition();
 
-            yield return null;
+            _akaneDP.DP.ChangeAnimation(Convert.ToInt32(AkaneDPStateType.Attackrecovering));
+
+            IEnumerator[] dpEffects = new IEnumerator[]
+            {
+                    UIAnimationCommons.FlickAlpha(_akaneDP.DP, 0.05f, 0.8f, 1)
+            };
+
+            _akaneDP._projectingCoroutineList.Add(_akaneDP.StartCoroutine(_akaneDP.DP.ApplyEffectsInParallel(dpEffects)));
+
+            foreach (Coroutine coroutine in _akaneDP._projectingCoroutineList)
+                yield return coroutine;
         }
         public override UIState ChangeState(SubUIData subData)
         {
@@ -410,7 +403,8 @@ public class AkaneDP : ProjectorUI
         public override UIState UpdateState()
         {
             if (_onEntered)
-                return _akaneDP._akaneDPStateMap[AkaneDPStateType.Idle];
+                if (!_akaneDP.ReceivedData.IsWaiting)
+                    return _akaneDP._akaneDPStateMap[AkaneDPStateType.Idle];
 
             return null;
         }
@@ -421,14 +415,24 @@ public class AkaneDP : ProjectorUI
         public KickrecoveringState(AkaneDP akaneDP) : base(akaneDP) { }
         protected override IEnumerator OnEnterProjection()
         {
-            foreach (UIVisualModule uiVisualModule in _akaneDP.UIVisualModules)
-            {
-                uiVisualModule.HideImage();
-                uiVisualModule.BackToBasePosition();
-            }
             _akaneDP.DP.ShowImage();
+            _akaneDP.Progress.HideImage();
+            _akaneDP.ProgressFrame.HideImage();
+            _akaneDP.DP.BackToBasePosition();
+            _akaneDP.Progress.BackToBasePosition();
+            _akaneDP.ProgressFrame.BackToBasePosition();
 
-            yield break;
+            _akaneDP.DP.ChangeAnimation(Convert.ToInt32(AkaneDPStateType.Kickrecovering));
+
+            IEnumerator[] dpEffects = new IEnumerator[]
+            {
+                    UIAnimationCommons.FlickAlpha(_akaneDP.DP, 0.05f, 0.8f, 1)
+            };
+
+            _akaneDP._projectingCoroutineList.Add(_akaneDP.StartCoroutine(_akaneDP.DP.ApplyEffectsInParallel(dpEffects)));
+
+            foreach (Coroutine coroutine in _akaneDP._projectingCoroutineList)
+                yield return coroutine;
         }
         public override UIState ChangeState(SubUIData subData)
         {
@@ -450,7 +454,8 @@ public class AkaneDP : ProjectorUI
         public override UIState UpdateState()
         {
             if (_onEntered)
-                return _akaneDP._akaneDPStateMap[AkaneDPStateType.Idle];
+                if (!_akaneDP.ReceivedData.IsWaiting)
+                    return _akaneDP._akaneDPStateMap[AkaneDPStateType.Idle];
 
             return null;
         }
@@ -461,12 +466,12 @@ public class AkaneDP : ProjectorUI
         public EvaderecoveringState(AkaneDP akaneDP) : base(akaneDP) { }
         protected override IEnumerator OnEnterProjection()
         {
-            foreach (UIVisualModule uiVisualModule in _akaneDP.UIVisualModules)
-            {
-                uiVisualModule.HideImage();
-                uiVisualModule.BackToBasePosition();
-            }
             _akaneDP.DP.ShowImage();
+            _akaneDP.Progress.HideImage();
+            _akaneDP.ProgressFrame.HideImage();
+            _akaneDP.DP.BackToBasePosition();
+            _akaneDP.Progress.BackToBasePosition();
+            _akaneDP.ProgressFrame.BackToBasePosition();
 
             yield break;
         }
@@ -490,7 +495,8 @@ public class AkaneDP : ProjectorUI
         public override UIState UpdateState()
         {
             if (_onEntered)
-                return _akaneDP._akaneDPStateMap[AkaneDPStateType.Idle];
+                if (!_akaneDP.ReceivedData.IsWaiting)
+                    return _akaneDP._akaneDPStateMap[AkaneDPStateType.Idle];
 
             return null;
         }
