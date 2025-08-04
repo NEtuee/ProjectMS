@@ -43,7 +43,7 @@ public class LanguageManager : ManagerBase
 
     public void InitLocalize()
     {
-        var language = SaveDataManager._instance._optionData._language;
+        var language = SystemLanguage.Korean;// SaveDataManager._instance._optionData._language;
         SetLanguage(language);
     }
 
