@@ -162,8 +162,9 @@ public class LanguageManager : ManagerBase
     {
         if(_simpleStringDic.ContainsKey(_currentSystemLang) == false)
         {
-            DebugUtil.assert(false, "invalid language [{0}]", _currentSystemLang.ToString());
-            return null;
+            // DebugUtil.assert(false, "invalid language [{0}]", _currentSystemLang.ToString());
+            // return null;
+            _currentSystemLang = SystemLanguage.Korean;
         }
 
         return _simpleStringDic[_currentSystemLang].getFont();
