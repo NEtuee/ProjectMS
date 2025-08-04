@@ -65,12 +65,14 @@ public class UIStateMachine
         if (_stateChangingProjection != null)
         {
             _projectorUI.StopCoroutine(_stateChangingProjection);
-            _stateChangingProjection = _projectorUI.StartCoroutine(OverwriteChangingCoroutine());
+            if (_projectorUI.gameObject.activeInHierarchy)
+                _stateChangingProjection = _projectorUI.StartCoroutine(OverwriteChangingCoroutine());
 
             return;
         }
-
-        _stateChangingProjection = _projectorUI.StartCoroutine(NormalChangingCoroutine());
+        
+        if (_projectorUI.gameObject.activeInHierarchy)
+            _stateChangingProjection = _projectorUI.StartCoroutine(NormalChangingCoroutine());
     }
     private IEnumerator NormalChangingCoroutine() //_stateChangingCoroutine, 일반 상태 전환, 이전 상태의 OnExit과 현재 상태의 OnEnter를 실행
     {

@@ -78,22 +78,17 @@ public class AkaneBP : ProjectorUI
             uiVisualModule.Initialize();
         
         Progress.SetFromData<AkaneBPStateType>(BPProgressData);
-
-        IEnumerator[] bpProgressEffects = new IEnumerator[]
-        {
-            UIAnimationCommons.FadeOutAlpha(Progress, 0.0f)
-        };
-
-        StartCoroutine(Progress.ApplyEffectsInSequence(bpProgressEffects));
     }
     public override void Activate()
     {
         gameObject.SetActive(true);
+        StopAllProjectionCoroutine();
         _stateMachine.ForceStateChanging(_akaneBPStateMap[AkaneBPStateType.Idle]);
     }
     public override void Deactivate()
     {
         _stateMachine.ForceStateChanging(_akaneBPStateMap[AkaneBPStateType.Deactivated]);
+        StopAllProjectionCoroutine();
         gameObject.SetActive(false);
     }
 

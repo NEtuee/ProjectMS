@@ -101,11 +101,13 @@ public class AkaneDP : ProjectorUI
     public override void Activate()
     {
         gameObject.SetActive(true);
+        StopAllProjectionCoroutine();
         _stateMachine.ForceStateChanging(_akaneDPStateMap[AkaneDPStateType.Activated]);
     }
     public override void Deactivate()
     {
         _stateMachine.ForceStateChanging(_akaneDPStateMap[AkaneDPStateType.Deactivated]);
+        StopAllProjectionCoroutine();
         gameObject.SetActive(false);
     }
 
@@ -328,11 +330,11 @@ public class AkaneDP : ProjectorUI
             };
             IEnumerator[] progressEffects = new IEnumerator[]
             {
-                    UIAnimationCommons.FlickAlpha(_akaneDP.Progress, 0.5f, 1.0f, 4)
+                UIAnimationCommons.FlickAlpha(_akaneDP.Progress, 0.5f, 1.0f, 4)
             };
             IEnumerator[] progressFrameEffects = new IEnumerator[]
             {
-                    UIAnimationCommons.FadeInAlpha(_akaneDP.ProgressFrame, 0.25f)
+                UIAnimationCommons.FadeInAlpha(_akaneDP.ProgressFrame, 0.25f)
             };
 
             _akaneDP._projectingCoroutineList.Add(_akaneDP.StartCoroutine(_akaneDP.DP.ApplyEffectsInParallel(dpEffects)));
@@ -375,7 +377,7 @@ public class AkaneDP : ProjectorUI
 
             IEnumerator[] dpEffects = new IEnumerator[]
             {
-                    UIAnimationCommons.FlickAlpha(_akaneDP.DP, 0.05f, 0.8f, 1)
+                UIAnimationCommons.FlickAlpha(_akaneDP.DP, 0.1f, 1.0f, 1)
             };
 
             _akaneDP._projectingCoroutineList.Add(_akaneDP.StartCoroutine(_akaneDP.DP.ApplyEffectsInParallel(dpEffects)));
@@ -426,7 +428,7 @@ public class AkaneDP : ProjectorUI
 
             IEnumerator[] dpEffects = new IEnumerator[]
             {
-                    UIAnimationCommons.FlickAlpha(_akaneDP.DP, 0.05f, 0.8f, 1)
+                UIAnimationCommons.FlickAlpha(_akaneDP.DP, 0.1f, 1.0f, 1)
             };
 
             _akaneDP._projectingCoroutineList.Add(_akaneDP.StartCoroutine(_akaneDP.DP.ApplyEffectsInParallel(dpEffects)));

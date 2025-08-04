@@ -88,6 +88,7 @@ public abstract class HolderUI : MonoBehaviour, IUIDataReceivable
     }
     public virtual void Activate()
     {
+        gameObject.SetActive(true);
         foreach (ProjectorUI projectorUI in _uiHolder)
         {
             if (projectorUI != null)
@@ -101,6 +102,7 @@ public abstract class HolderUI : MonoBehaviour, IUIDataReceivable
             if (projectorUI != null)
                 projectorUI.Deactivate();
         }
+        gameObject.SetActive(false);
     }
     public void UpdateUI(float deltaTime)
     {

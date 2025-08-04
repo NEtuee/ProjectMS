@@ -82,27 +82,17 @@ public class AkaneHP : ProjectorUI
 
         Frame.SetFromData<AkaneHPStateType>(FrameData);
         Progress.SetFromData<AkaneHPStateType>(HPProgressData);
-
-        IEnumerator[] frameEffects = new IEnumerator[]
-        {
-            UIAnimationCommons.FadeOutAlpha(Frame, 0.0f)
-        };
-        IEnumerator[] hpProgressEffects = new IEnumerator[]
-        {
-            UIAnimationCommons.FadeOutAlpha(Progress, 0.0f)
-        };
-
-        StartCoroutine(Frame.ApplyEffectsInSequence(frameEffects));
-        StartCoroutine(Progress.ApplyEffectsInSequence(hpProgressEffects));
     }
     public override void Activate()
     {
         gameObject.SetActive(true);
+        StopAllProjectionCoroutine();
         _stateMachine.ForceStateChanging(_akaneHPStateMap[AkaneHPStateType.Activated]);
     }
     public override void Deactivate()
     {
         _stateMachine.ForceStateChanging(_akaneHPStateMap[AkaneHPStateType.Deactivated]);
+        StopAllProjectionCoroutine();
         gameObject.SetActive(false);
     }
 

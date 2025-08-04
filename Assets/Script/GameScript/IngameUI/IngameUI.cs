@@ -73,6 +73,8 @@ public class IngameUI : MonoBehaviour
     {
         foreach (ProjectorUI projectorUI in _projectorUIList)
             projectorUI.Activate();
+        foreach (HolderUI holderUI in _holderUIList)
+            holderUI.Activate();
     }
     //메인 UI데이터, 매 프레임마다 호출
     void LateUpdate()
@@ -125,5 +127,7 @@ public class IngameUI : MonoBehaviour
     {
         foreach (ProjectorUI projectorUI in _projectorUIList)
             projectorUI.Deactivate();
+        foreach (HolderUI holderUI in _holderUIList)
+            holderUI.Deactivate();
     }
 }
