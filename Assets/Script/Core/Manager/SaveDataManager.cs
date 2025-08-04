@@ -31,10 +31,10 @@ public class OptionData
 
     public void createNewOption()
     {
-        if(LanguageManager._instance.isLanguageValid(Application.systemLanguage))
-            _language = Application.systemLanguage;
-        else
-            _language = SystemLanguage.English;
+        // if(LanguageManager._instance.isLanguageValid(Application.systemLanguage))
+        //     _language = Application.systemLanguage;
+        // else
+        _language = SystemLanguage.English;
 
         _resolutionOption = ResolutionOption.res800x600;
         _bgmVolume = 100;
