@@ -219,6 +219,7 @@
             <FrameEvent Type="EffectPreset" Condition="AttackSuccess == false" StartTime="0.05" Key="DashTrail"/>
             <!-- 극한회피 -->
             <!-- 대시 Only <FrameEvent Type="SetDefenceType" Condition="AttackSuccess == false" StartTime="0.031" DefenceType="Evade"/> -->
+            <FrameEvent Type="AddCollision" StartTime="0" Radius="0.2" LifeTime="0.1" AttackCount="1"/>
             <FrameEvent Type="SetDefenceType" StartTime="0.0" DefenceType="Evade"/>
             <FrameEvent Type="SetDefenceType" StartTime="0.125" DefenceType="Empty"/>
         </Animation>

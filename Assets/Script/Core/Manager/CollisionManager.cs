@@ -9,6 +9,7 @@ public struct CollisionSuccessData
 {
     public object _requester;
     public object _target;
+    public CollisionInfo _targetCollisionInfo;
     public Vector3 _startPoint;
 }
 
@@ -261,10 +262,11 @@ public class CollisionManager : Singleton<CollisionManager>
             {
                 _collisionOverlapCheckList.Add(collisionObjectData._collisionObject);
 
-                CollisionSuccessData data;
+                CollisionSuccessData data = new CollisionSuccessData();
                 data._requester = request._requestObject;
                 data._target = collisionObjectData._collisionObject;
                 data._startPoint = request._collision.getCenterPosition();
+                data._targetCollisionInfo = collisionObjectData._collisionInfo;
                 request._collisionDelegate?.Invoke(data);
             }
                 

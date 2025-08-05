@@ -13,31 +13,38 @@ public class AdditionalCollisionInfo
     public CollisionInfo _collisionInfo;
     public float _lifeTime;
     public float _currentTime;
-    public bool _isActive;
+    public int _collisionCount = -1;
 
     public AdditionalCollisionInfo()
     {
-        _collisionInfo = null;
-        _lifeTime = -1f;
-        _currentTime = 0f;
-        _isActive = false;
+        reset();
     }
 
-    public void initialize(CollisionInfo collisionInfo, float lifeTime)
+    public void initialize(CollisionInfo collisionInfo, float lifeTime, int collisionCount)
     {
         _collisionInfo = collisionInfo;
         _lifeTime = lifeTime;
         _currentTime = 0f;
-        _isActive = true;
+        _collisionCount = collisionCount;
     }
 
     public bool update(float deltaTime)
     {
-        if(!_isActive || _lifeTime < 0f)
+        if(_lifeTime < 0 || _collisionCount == 0)
             return true;
 
         _currentTime += deltaTime;
         return _currentTime < _lifeTime;
+    }
+
+    public void decreaseCollisionCount()
+    {
+        if(_collisionCount <= 0 || _collisionInfo == null)
+            return;
+        
+        _collisionCount--;
+        if(_collisionCount <= 0)
+            _collisionInfo.setActiveCollision(false);
     }
 
     public void reset()
@@ -45,7 +52,7 @@ public class AdditionalCollisionInfo
         _collisionInfo = null;
         _lifeTime = -1f;
         _currentTime = 0f;
-        _isActive = false;
+        _collisionCount = -1;
     }
 }
 
@@ -884,7 +891,7 @@ public class GameEntityBase : SequencerObjectBase
             // 추가 충돌체 그리기
             for(int i = 0; i < _additionalCollisions.Count; i++)
             {
-                if(_additionalCollisions[i]._isActive)
+                if(_additionalCollisions[i]._collisionInfo != null && _additionalCollisions[i]._collisionInfo.isActiveCollision())
                 {
                     Color additionalColor = Color.yellow;
                     if(_additionalCollisions[i]._lifeTime > 0f)
@@ -1857,12 +1864,12 @@ public class GameEntityBase : SequencerObjectBase
     public MovementBase getCurrentMovement() {return _movementControl.getCurrentMovement();}
     public MovementControl getMovementControl(){return _movementControl;}
 
-    public void addAdditionalCollision(CollisionInfoData collisionData, float lifeTime = -1f)
+    public void addAdditionalCollision(CollisionInfoData collisionData, float lifeTime, int collisionCount)
     {
         AdditionalCollisionInfo additionalCollision = _additionalCollisionPool.dequeue();
         CollisionInfo collisionInfo = new CollisionInfo(collisionData);
         
-        additionalCollision.initialize(collisionInfo, lifeTime);
+        additionalCollision.initialize(collisionInfo, lifeTime, collisionCount);
         additionalCollision._collisionInfo.updateCollisionInfo(transform.position, getDirection());
 
         _additionalCollisions.Add(additionalCollision);
@@ -1870,10 +1877,10 @@ public class GameEntityBase : SequencerObjectBase
         CollisionManager.Instance().registerObject(collisionInfo, this);
     }
 
-    public void addAdditionalCollision(float radius, CollisionType collisionType, float lifeTime = -1f)
+    public void addAdditionalCollision(float radius, CollisionType collisionType, float lifeTime, int collisionCount)
     {
         CollisionInfoData collisionData = new CollisionInfoData(radius, 0f, 0f, 0f, collisionType);
-        addAdditionalCollision(collisionData, lifeTime);
+        addAdditionalCollision(collisionData, lifeTime, collisionCount);
     }
 
     public void removeAdditionalCollision(CollisionInfo collisionInfo)
@@ -1911,6 +1918,30 @@ public class GameEntityBase : SequencerObjectBase
         }
     }
 
+    public void decreaseAdditionalCollisionCollisionCount(CollisionInfo collisionInfo)
+    {
+        for(int i = 0; i < _additionalCollisions.Count; i++)
+        {
+            if(_additionalCollisions[i]._collisionInfo == collisionInfo)
+            {
+                if(_additionalCollisions[i]._collisionCount > 0)
+                {
+                    _additionalCollisions[i]._collisionCount--;
+                    if(_additionalCollisions[i]._collisionCount <= 0)
+                    {
+                        CollisionManager.Instance().deregisterSpecificCollision(collisionInfo, this);
+                        AdditionalCollisionInfo additionalCollision = _additionalCollisions[i];
+                        _additionalCollisions.RemoveAt(i);
+    
+                        additionalCollision.reset();
+                        _additionalCollisionPool.enqueue(additionalCollision);
+                    }
+                }
+                break;
+            }
+        }
+    }
+
     public void clearAdditionalCollisions()
     {
         for(int i = _additionalCollisions.Count - 1; i >= 0; i--)
@@ -1922,6 +1953,20 @@ public class GameEntityBase : SequencerObjectBase
             _additionalCollisionPool.enqueue(additionalCollision);
         }
         _additionalCollisions.Clear();
+    }
+
+    public AdditionalCollisionInfo getAdditionalCollisionInfo(CollisionInfo collisionInfo)
+    {
+        if(collisionInfo == null || _additionalCollisions.Count == 0)
+            return null;
+
+        for(int i = 0; i < _additionalCollisions.Count; i++)
+        {
+            if(_additionalCollisions[i]._collisionInfo == collisionInfo)
+                return _additionalCollisions[i];
+        }
+
+        return null;
     }
 
     public List<AdditionalCollisionInfo> getAdditionalCollisions() { return _additionalCollisions; }

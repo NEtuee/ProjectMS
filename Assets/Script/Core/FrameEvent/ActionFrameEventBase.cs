@@ -3364,6 +3364,7 @@ public class ActionFrameEvent_AddCollision : ActionFrameEventBase
 {
     public float _radius = 1.0f;        // 충돌체 반지름
     public float _lifeTime = 1.0f;     // 충돌체 지속 시간 (-1이면 무한)
+    public int _collisionCount = -1;
 
     public override FrameEventType getFrameEventType()
     {
@@ -3383,7 +3384,7 @@ public class ActionFrameEvent_AddCollision : ActionFrameEventBase
         GameEntityBase gameEntity = executeEntity as GameEntityBase;
         
         // 추가 충돌체를 캐릭터의 현재 위치에 생성
-        gameEntity.addAdditionalCollision(_radius, CollisionType.Character, _lifeTime);
+        gameEntity.addAdditionalCollision(_radius, CollisionType.Character, _lifeTime, _collisionCount);
 
         return true; // 일회성 이벤트이므로 즉시 종료
     }
@@ -3411,6 +3412,10 @@ public class ActionFrameEvent_AddCollision : ActionFrameEventBase
             {
                 _lifeTime = XMLScriptConverter.valueToFloatExtend(attrValue);
             }
+            else if(attrName == "AttackCount")
+            {
+                _collisionCount = int.Parse(attrValue);
+            }
         }
     }
 
@@ -3419,6 +3424,7 @@ public class ActionFrameEvent_AddCollision : ActionFrameEventBase
         base.serialize(ref binaryWriter);
         binaryWriter.Write(_radius);
         binaryWriter.Write(_lifeTime);
+        binaryWriter.Write(_collisionCount);
     }
 #endif
 
@@ -3427,6 +3433,7 @@ public class ActionFrameEvent_AddCollision : ActionFrameEventBase
         base.deserialize(ref binaryReader);
         _radius = binaryReader.ReadSingle();
         _lifeTime = binaryReader.ReadSingle();
+        _collisionCount = binaryReader.ReadInt32();
     }
 }
 

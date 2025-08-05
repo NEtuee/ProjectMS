@@ -330,6 +330,10 @@ public class AttackProcessor : AttackProcessorBase
 
         bool attackSuccess = false;
 
+        AdditionalCollisionInfo additionalCollisionInfo = target.getAdditionalCollisionInfo(successData._targetCollisionInfo);
+        if(additionalCollisionInfo != null)
+            additionalCollisionInfo.decreaseCollisionCount();
+
         if(_attackFrameEvent._pushVector.sqrMagnitude > float.Epsilon && ( target.getDefenceType() != DefenceType.Evade || canIgnore ))
         {
             UnityEngine.Vector3 attackPointDirection;
