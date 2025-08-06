@@ -34,15 +34,8 @@
                     <AIEvent Type="SetAction" Action="AC_TracerReady"/>
                 </Event_OnExecute>
                 
-                <Branch Condition="End" Execute="AI_TracerSpawn"/>
-            </AI_TracerReady>
-            <AI_TracerSpawn UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
-                <Event_OnExecute>
-                    <AIEvent Type="SetAction" Action="AC_TracerSpawn"/>
-                </Event_OnExecute>
-                
                 <Branch Condition="End" Execute="TerminatePackage"/>
-            </AI_TracerSpawn>
+            </AI_TracerReady>
         <!-- 스킬 Tracer -->
         <TerminatePackage>
             <Event_OnExecute>
