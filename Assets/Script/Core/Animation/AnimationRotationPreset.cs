@@ -72,6 +72,9 @@ public class AnimationRotationPreset : ScriptableObject
 [CustomEditor(typeof(AnimationRotationPreset))]
 public class AnimationRotationPresetEditor : Editor
 {
+    private string _searchString = "";
+    private string[] _searchStringList;
+    private string _searchStringCompare = "";
     AnimationRotationPreset controll;
 
 	void OnEnable()
@@ -81,18 +84,75 @@ public class AnimationRotationPresetEditor : Editor
 
     public override void OnInspectorGUI()
     {
-		base.OnInspectorGUI();
+        serializedObject.Update();
+
+        EditorGUILayout.LabelField("Animation Rotation Preset Search", EditorStyles.boldLabel);
+        _searchString = EditorGUILayout.TextField("Search", _searchString);
+
+        if (_searchStringCompare != _searchString)
+        {
+            if (string.IsNullOrEmpty(_searchString))
+                _searchStringList = null;
+            else
+                _searchStringList = _searchString.ToLower().Split(' ');
+
+            _searchStringCompare = _searchString;
+        }
+
+        EditorGUILayout.Space();
+
+        SerializedProperty presetData = serializedObject.FindProperty("_presetData");
+
+        if (_searchStringList == null)
+        {
+            EditorGUILayout.PropertyField(presetData, true);
+        }
+        else
+        {
+            EditorGUILayout.PropertyField(presetData.FindPropertyRelative("Array.size"));
+
+            for (int i = 0; i < presetData.arraySize; i++)
+            {
+                SerializedProperty element = presetData.GetArrayElementAtIndex(i);
+                SerializedProperty nameProperty = element.FindPropertyRelative("_name");
+                string presetName = nameProperty.stringValue;
+
+                if (string.IsNullOrEmpty(presetName))
+                {
+                    EditorGUILayout.PropertyField(element, new GUIContent("Element " + i), true);
+                    continue;
+                }
+
+                string lowerName = presetName.ToLower();
+                bool shouldShow = true;
+                foreach (var searchItem in _searchStringList)
+                {
+                    if (!lowerName.Contains(searchItem))
+                    {
+                        shouldShow = false;
+                        break;
+                    }
+                }
+
+                if (shouldShow)
+                {
+                    EditorGUILayout.PropertyField(element, new GUIContent(presetName), true);
+                }
+            }
+        }
+
+        serializedObject.ApplyModifiedProperties();
 
         GUILayout.Space(10f);
         if(GUILayout.Button("Add 0 ~ 360 Linear"))
         {
-            AnimationRotationPresetData presetData = new AnimationRotationPresetData();
-            presetData._name = "NewPreset";
-            presetData._rotationCurve = new AnimationCurve();
-            presetData._rotationCurve.AddKey(0f,0f);
-            presetData._rotationCurve.AddKey(1f,360f);
+            AnimationRotationPresetData presetDataButton = new AnimationRotationPresetData();
+            presetDataButton._name = "NewPreset";
+            presetDataButton._rotationCurve = new AnimationCurve();
+            presetDataButton._rotationCurve.AddKey(0f,0f);
+            presetDataButton._rotationCurve.AddKey(1f,360f);
 
-            controll.addPresetData(presetData);
+            controll.addPresetData(presetDataButton);
             EditorUtility.SetDirty(controll);
         }
     }
