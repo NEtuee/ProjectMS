@@ -202,6 +202,9 @@ public class ProjectileEntityBase : ObjectBase
         if(_projectileGraph.isEventExecuteBySummoner())
             executeTargetEntity = requester.getSummonObject() == null ? requester : requester.getSummonObject();
 
+        AdditionalCollisionInfo additionalCollisionInfo = target.getAdditionalCollisionInfo(successData._targetCollisionInfo);
+        additionalCollisionInfo?.decreaseCollisionCount();
+
         if(target.getDefenceType() == DefenceType.Evade)
         {
             target.setDefenceState(DefenceState.EvadeSuccess);
