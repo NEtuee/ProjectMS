@@ -17,8 +17,8 @@
 
 <!-- Attack Movement Speed Option Variant Set-->
 <GlobalVariable Name="gv_AtkMovementSpeed"          Value="0.0"/>   <!-- Speed는 Velocity = 0 과 병행 사용 불가-->
-<GlobalVariable Name="gv_AtkMovementVelocity"       Value="48.0"/>  
-<GlobalVariable Name="gv_AtkMovementMaxVelocity"    Value="48.0"/>
+<GlobalVariable Name="gv_AtkMovementVelocity"       Value="24.0"/>  
+<GlobalVariable Name="gv_AtkMovementMaxVelocity"    Value="24.0"/>
 <GlobalVariable Name="gv_AtkMovementFriction"       Value="24.0"/>
 
 <!-- AttackSuccess Movement Speed Option Variant Set-->
@@ -61,7 +61,7 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
-        <Branch Condition="End == true" Execute="AC_Move"/>
+        <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_Move>
 
     <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
@@ -96,27 +96,22 @@
     <AC_AttackReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineSuperArmor">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/1_rushSwing/1_attackReady" XFlip="true" Duration="0.4">            
-            <FrameEvent Type="Movement" Condition="gv_AtkRdMovementVelocity == 0.0" StartTime="0" Friction="gv_AtkRdMovementFriction" MaxVelocity="gv_AtkRdMovementMaxVelocity" Speed="gv_AtkRdMovementSpeed"/>
-            <FrameEvent Type="Movement" Condition="gv_AtkRdMovementVelocity > 0.0" StartTime="0" Friction="gv_AtkRdMovementFriction" MaxVelocity="gv_AtkRdMovementMaxVelocity" Velocity="gv_AtkRdMovementVelocity" Speed="gv_AtkRdMovementSpeed"/>
-
-            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="0.0" MaxVelocity="5.0" Speed="15.0"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
-        <Branch Condition="End" Execute="AC_AttackRush"/>
+        <Branch Condition="End" Execute="AC_Idle"/>
     </AC_AttackReady>
 
     <AC_AttackRush MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction" Flags="OutlineSuperArmor">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/1_rushSwing/2_attackRush" XFlip="true" Duration="0.35">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="4901" Attach="true"/>
-            <FrameEvent Type="Movement" Condition="gv_AtkMovementVelocity == 0.0" StartTime="0" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Speed="gv_AtkMovementSpeed"/>
-            <FrameEvent Type="Movement" Condition="gv_AtkMovementVelocity > 0.0" StartTime="0" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Velocity="gv_AtkMovementVelocity" Speed="gv_AtkMovementSpeed"/>
-            
-            <FrameEvent Type="Attack" StartTime="0" EndTime="0.2" AttackPreset="SukebanMelee_Normal">
+            <FrameEvent Type="Movement" StartTime="0" Friction="24.0" MaxVelocity="16.0" Velocity="16.0" Speed="0.0"/>           
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.2" AttackPreset="SukebanMeleeBatter">
                 <OnHit>
                     <FrameEvent Type="AudioPlay" StartTime="0" ID="4908" Attach="true"/>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="TestProjectileAttack"/>
 
                     <FrameEvent Type="EffectPreset" StartTime="0" Key="Slash"/>
                     <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
@@ -129,8 +124,17 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
-        <Branch Condition="End" Execute="AC_AttackRecover"/>
+        <Branch Condition="End" Execute="AC_Idle"/>
     </AC_AttackRush>
+
+    <AC_AttackSuccess MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="2_skill/1_rushSwing/3_attacksuccess" XFlip="true" Duration="0.2">
+            <FrameEvent Type="Movement" StartTime="0" Friction="40.0" MaxVelocity="0.0" Speed="0.0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_AttackRecover"/>
+    </AC_AttackSuccess>
 
     <AC_AttackRecover MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
@@ -139,58 +143,8 @@
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
-        <Branch Condition="End" Execute="AC_AttackReady_B"/>
-    </AC_AttackRecover>
-
-<!-- Skill : Swing 2번째 공격 -->
-    <AC_AttackReady_B MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineSuperArmor">
-        <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="2_skill/1_rushSwing/5_attackReady2" XFlip="true" Duration="0.4">            
-            <FrameEvent Type="Movement" Condition="gv_AtkRdMovementVelocity == 0.0" StartTime="0" Friction="gv_AtkRdMovementFriction" MaxVelocity="gv_AtkRdMovementMaxVelocity" Speed="gv_AtkRdMovementSpeed"/>
-            <FrameEvent Type="Movement" Condition="gv_AtkRdMovementVelocity > 0.0" StartTime="0" Friction="gv_AtkRdMovementFriction" MaxVelocity="gv_AtkRdMovementMaxVelocity" Velocity="gv_AtkRdMovementVelocity" Speed="gv_AtkRdMovementSpeed"/>
-
-            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
-        </Animation>
-    
-        <Branch Condition="End" Execute="AC_AttackRush_B"/>
-    </AC_AttackReady_B>
-
-    <AC_AttackRush_B MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction" Flags="OutlineSuperArmor">
-        <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="2_skill/1_rushSwing/6_attackRush2" XFlip="true" Duration="0.35">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="4901" Attach="true"/>
-            <FrameEvent Type="Movement" Condition="gv_AtkMovementVelocity == 0.0" StartTime="0" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Speed="gv_AtkMovementSpeed"/>
-            <FrameEvent Type="Movement" Condition="gv_AtkMovementVelocity > 0.0" StartTime="0" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Velocity="gv_AtkMovementVelocity" Speed="gv_AtkMovementSpeed"/>
-            
-            <FrameEvent Type="Attack" StartTime="0" EndTime="0.2" AttackPreset="SukebanMelee_Normal">
-                <OnHit>
-                    <FrameEvent Type="AudioPlay" StartTime="0" ID="4908" Attach="true"/>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
-
-                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Slash"/>
-                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
-                    
-                    <FrameEvent Type="StopUpdate" Time="0.1"/>
-                    <FrameEvent Type="SetTimeScale" Scale="0.1" Time="0.1" BlendTime="0.1"/>
-                    <FrameEvent Type="ShakeEffect" Scale="0.1" Speed="10.0" Time="0.1"/>
-                </OnHit>
-            </FrameEvent>
-            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
-        </Animation>
-
-        <Branch Condition="End" Execute="AC_AttackRecover_B"/>
-    </AC_AttackRush_B>
-
-    <AC_AttackRecover_B MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="2_skill/1_rushSwing/8_attackRecover2" XFlip="true" Duration="0.5">
-            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
-        </Animation>
-
         <Branch Condition="End" Execute="AC_Idle"/>
-    </AC_AttackRecover_B>
+    </AC_AttackRecover>
 
 <!-- Skill: Grenade  -->
     <AC_GrenadeReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction" Flags="LaserEffect">
@@ -204,7 +158,7 @@
             <FrameEvent Type="SetDirectionType" StartTime="0.7" DirectionType="Keep"/>  <!-- 타겟 추적 중단용 이벤트 -->
         </Animation>
     
-        <Branch Condition="End" Execute="AC_GrenadeSmash"/>
+        <Branch Condition="End" Execute="AC_Idle"/>
     </AC_GrenadeReady>
 
     <AC_GrenadeSmash MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction" Flags="LaserEffect">

@@ -5,33 +5,53 @@
     <!-- 전투 상태 행동 타입 설정 -->
     <!-- 공격 거리 설정 -->
     <GlobalVariable Name="gv_MeleeAttackRangeMin"           Value="0.0"/>       <!-- 최소 공격 사거리 : Value보다 PC가 가까우면 공격하지 않는다. -->
-    <GlobalVariable Name="gv_MeleeAttackRangeMax"           Value="2.8"/>       <!-- 최대 공격 사거리 : Value보다 PC가 멀면 공격하지 않는다. -->
+    <GlobalVariable Name="gv_MeleeAttackRangeMax"           Value="1.6"/>       <!-- 최대 공격 사거리 : Value보다 PC가 멀면 공격하지 않는다. -->
     <GlobalVariable Name="gv_StdPassiveAttitude"           Value="4.0"/>       <!-- 장외 기준 거리 : 전투 가능 기준 범위 -->
 
     <!-- 가드 옵션 설정 -->
     <GlobalVariable Name="gv_GuardTime"                     Value="3.0"/>       <!-- 방어 지속 시간 -->
     <GlobalVariable Name="gv_GuardBrokenThreshold"          Value="3.0"/>       <!-- 가드 브레이크 공격을 막을 수 있는 횟수 -->
     <GlobalVariable Name="gv_GuardLoopCount"                Value="3.0"/>       <!-- [보류] 가드 성공 시 패시브 방어 루프 횟수 -->
+    
+    
     <!-- 워프 여부 설정 -->
     <GlobalVariable Name="gv_bIsSystemChase"                Value="True"/>     <!-- 시스템 추격: 일정 거리 이상일 시 PC로 워프한다. (카메라 밖에서 동작) -->
+    
+    
+    <!-- 이동 타입 설정 -->
+    <GlobalVariable Name="gv_bIsFixed"                      Value="False"/>     <!-- 고정 타입 : 배치된 현재 자리를 고수한다. -->
+    <GlobalVariable Name="gv_bIsChaseOnly"                  Value="False"/>      <!-- 추격 타입 : 거리가 멀면 PC를 추격한다. 가까우면 정지한다. -->
+    <GlobalVariable Name="gv_bIsChaseAway"                  Value="True"/>     <!-- 거리 유지 타입 : 거리가 멀면 PC를 추격한다. 가까우면 후진한다. -->
+    <GlobalVariable Name="gv_bIsAlert"                      Value="False"/>     <!-- 경계 타입 : 거리가 멀어지면 PC를 추격, 가까우면(정지거리) 측면으로 이동한다. -->
+    
     <!-- 이동 거리 설정 -->
     <GlobalVariable Name="gv_SystemChaseThreshold"          Value="9.75"/>     <!-- 시스템 추격 거리: 카메라 범위 값. 카메라 바깥으로 사라지지 않게 추격 -->
     <GlobalVariable Name="gv_MoveThreshold"                 Value="3.0"/>       <!-- 최대 거리 : PC와 Value 이상 거리가 벌어진 경우 이동한다. -->
     <GlobalVariable Name="gv_StopThreshold"                 Value="2.3"/>       <!-- 최소 거리 : PC와 Value 이상 거리가 가까워진 경우 정지 또는 경계한다. -->
     <GlobalVariable Name="gv_AwayThreshold"                 Value="1.8"/>       <!-- 최소 거리 : PC와 Value 이상 거리가 가까워진 경우 거리를 벌린다. -->
+    
+    
     <!-- 패시브 방어 반응 임계치 설정 -->
     <GlobalVariable Name="gv_HitCountThreshold"             Value="3.0"/>       <!-- 누적 피격 횟수 트리거 : 해당 횟수 충족 시 패시브 방어 동작 (가드를 제외한 모든 피격 카운트) -->
     <GlobalVariable Name="gv_GuardCountThreshold"           Value="2.0"/>       <!-- 누적 가드 횟수 트리거 : 해당 횟수 충족 시 패시브 방어 동작 (가드 중 모든 피격 시 카운트) -->
+
     <!-- 패시브 방어(누적 피격) 반응 타입 설정 -->
         <!-- TODO: 피격 리액션이 상황에 따라 다른 것으로 실행될 수 있음. 복수 선택 가능하게. -->
     <GlobalVariable Name="gv_bIsCounterToPassiveDef_Hit"    Value="True"/>      <!-- 누적 피격 시 패시브 방어 : 반격 타입 -->
     <GlobalVariable Name="gv_bIsGuardToPassiveDef_Hit"      Value="False"/>      <!-- 누적 피격 시 패시브 방어 : 방어 타입 -->
+    
+    
     <!-- 패시브 방어(누적 가드) 반응 타입 설정 -->
         <!-- TODO: 피격 리액션이 상황에 따라 다른 것으로 실행될 수 있음. 복수 선택 가능하게. -->
     <GlobalVariable Name="gv_bIsCounterToPassiveDef_Guard"  Value="False"/>     <!-- 누적 피격 시 패시브 방어 : 반격 타입 -->
+    
+    
     <!-- 패시브 방어 실행 지연 시간 설정 -->
     <GlobalVariable Name="gv_PassiveDef_Hit_DelayTime" Value="0.0"/>            <!-- 누적 피격 반응 지연 시간-->
     <GlobalVariable Name="gv_PassiveDef_Guard_DelayTime" Value="0.2"/>            <!-- 누적 가드 반응 지연 시간-->
+
+
+    
 
 <!-- 옵션 설정 -->
 
@@ -62,10 +82,6 @@
 
 
 <!-- 브랜치 셋 (패키지를 불러오는 것이 아닌 분기를 이름으로 묶어 놓은 것 )-->
-    <BranchSet Name="IsPlayerDead">
-        <Branch Condition="Dead" Execute="Dead"/>
-        <Branch Condition="getTargetFrameTag_Dead" Execute="Dead"/>
-    </BranchSet>
     
     <!-- 전투 행동 초기화 브랜치 셋 -->
     <BranchSet Name="BattlePackageEndSet">
@@ -74,10 +90,9 @@
 
     <!-- 전투 행동 분기 브랜치 셋-->
     <BranchSet Name="BattleEntrySet">
-        <Branch Condition="aiGraphCoolTime_Battle_Attack
-                        && (TargetDistance >= gv_MeleeAttackRangeMin)
-                        && (TargetDistance <= gv_MeleeAttackRangeMax)"  Execute="Battle_Attack"/>
-        <Branch Condition="true"                                        Execute="Battle_Attack"/>
+        <Branch Condition="TargetDistance >= gv_MeleeAttackRangeMin" Execute="Battle_Attack"/>
+        <Branch Condition= "TargetDistance <= gv_MeleeAttackRangeMax" Execute="Battle_Attack"/>
+        <Branch Condition="true" Execute="Battle_Attack"/>
     </BranchSet>
 
     <!-- 전투 공격 분기 브랜치 셋 -->
@@ -85,6 +100,12 @@
         <!-- TODO : 거리기반 스킬 분기 -->
         <Branch Condition="(TargetDistance > gv_MeleeAttackRangeMax)" Execute="RushSwing"/>
         <Branch Condition="(TargetDistance <= gv_MeleeAttackRangeMax)" Execute="GrnadeSwing"/>
+    </BranchSet>
+
+    <BranchSet Name="AttackTriggerSet">
+        <Branch Condition="aiGraphCoolTime_Battle_Attack
+                        && (TargetDistance >= gv_MeleeAttackRangeMin)
+                        && (TargetDistance <= gv_MeleeAttackRangeMax)" Execute="Battle_Attack"/>
     </BranchSet>
 
     <!-- 전투 패시브 방어 분기 브랜치 셋 -->
@@ -97,10 +118,7 @@
         <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="getTargetFrameTag_Dead" Execute="Entry_Battle"/>
         <Branch Condition="Hit && getFrameTag_HitAvail" Execute="Hit"/>
-        <Branch Condition="GuardBreakFail && getFrameTag_GbAvail" Execute="GuardBroken"/>
-        <Branch Condition="GuardBroken && (getStat_GuardCount >= gv_GuardBrokenThreshold) && getFrameTag_GbAvail" Execute="GuardBroken"/> <!-- TODO : 일반 공격도 카운트 되긴 하나, 가드 브레이크로만 파괴 가능한 상태 -->
-        <Branch Condition="(gv_HitCountThreshold <= getStat_HitCount)
-                        && (gv_PassiveDef_Hit_DelayTime <= GraphExecutedTime)" Execute="Battle_DefenseByHit"/>
+        <Branch Condition="GuardBroken && (getStat_GuardCount >= gv_GuardBrokenThreshold) && getFrameTag_GbAvail" Execute="GuardBroken"/> <!-- TODO : 일반 공격도 카운트 되긴 하나, 가드 브레이크로만 파괴 가능한 상태 -->=
     </BranchSet>
 <!-- 브랜치 셋 -->
 
@@ -117,63 +135,66 @@
         <UseBranchSet Name="BattleAttackJudgeSet"/>
     </Battle_CounterAttack>
 
-    <Battle_DefenseByHit Package="CommonIdlePackage">
-        <UseBranchSet Name="BattleDefenseByHitJudgeSet"/>
-    </Battle_DefenseByHit>
-
 <!-- Preset State -->
 
-<!-- AI State -->
-
-    <!-- AI 스테이트 : 전투 상태 : 이동(전투 상태일 때 이동하는 분기) -->
-    <!-- Movement State List -->
-     <!-- 순간이동 -->
-    <WarpChase Package="CommonSystemChasePackage">
-        <UseBranchSet Name="HitReactionSet"/>
-        <UseBranchSet Name="BattlePackageEndSet"/>
-    </WarpChase>
-    
-    <!-- 추적이동 -->
-    <Chase Package="CommonChasePackage">
-        <UseBranchSet Name="HitReactionSet"/>
-        <Branch Condition="(TargetDistance < gv_MeleeAttackRangeMax)" Execute="RushSwing"/>
-    </Chase>
-
-    <!-- 도주이동 -->
-    <Away Package="CommonAwayPackage">
-        <UseBranchSet Name="HitReactionSet"/>
-        <Branch Condition="(TargetDistance >= gv_MeleeAttackRangeMax)" Execute="RushSwing"/>
-    </Away>
-    <!-- Movement State List -->
-
 
 <!-- AI State -->
+
+    <!-- Movement State List -->
+
+     <!-- 전투 이동 분기 브랜치 셋 -->
+    <BranchSet Name="BattleMovementJudgeSet">
+        <Branch Condition="gv_bIsFixed"         Execute="Fixed"/>
+        <Branch Condition="gv_bIsChaseOnly"     Execute="Chase"/>
+        <Branch Condition="gv_bIsChaseAway"     Execute="Chase"/>
+        <Branch Condition="gv_bIsAlert"         Execute="Chase"/>
+    </BranchSet>
+
+    <BranchSet Name="ChaseOnlyMovementSet">
+        <Branch Condition="gv_bIsChaseOnly && (TargetDistance <= gv_StopThreshold)"     Execute="Fixed"/>
+        <Branch Condition="gv_bIsChaseOnly && (TargetDistance > gv_MoveThreshold)"      Execute="Chase"/>
+    </BranchSet>    
+
+    <BranchSet Name="ChaseAwayMovementSet">
+        <Branch Condition="gv_bIsChaseAway && (TargetDistance <= gv_AwayThreshold)"     Execute="Away"/>
+        <Branch Condition="gv_bIsChaseAway && (TargetDistance <= gv_StopThreshold)"     Execute="Fixed"/>
+        <Branch Condition="gv_bIsChaseAway && (TargetDistance > gv_MoveThreshold)"      Execute="Chase"/>
+    </BranchSet>
+
+    <BranchSet Name="AlertMovementSet">
+        <Branch Condition="gv_bIsAlert && (TargetDistance <= gv_AwayThreshold)"     Execute="Away"/>
+        <Branch Condition="gv_bIsAlert && (TargetDistance <= gv_StopThreshold)"     Execute="Alert"/>
+        <Branch Condition="gv_bIsAlert && (TargetDistance > gv_MoveThreshold)"      Execute="Chase"/>
+    </BranchSet>
+
+
+    <!-- AI State -->
     <!-- AI 스테이트 : 전투 분기 -->
     <!-- TODO : 크게 근거리 / 원거리로 구분하여 스킬 사용, 패키지는 직접 작성 -->
-    <JudgeMeleeAttack Package="SukebanMeleeBatterRushSwingPackage">
+    <JudgeMeleeAttack Package="CommonIdlePackage">
         <!-- TODO : 근거리용 스킬 작성, 공격이든 방어든, 이동이든 쿨타임 및 조건 기반 사용 -->
         <Branch Weight="RandBoolean^True" Condition="aiGraphCoolTime_RushSwing" Execute="RushSwing"/>
     </JudgeMeleeAttack>
 
-    <JudgeRangedAttack Package="SukebanMeleeBatterGrnadeSwingPackge">
+    <JudgeRangedAttack Package="CommonIdlePackage">
         <!-- TODO : 원거리용 스킬 작성, 공격이든 방어든, 이동이든 쿨타임 및 조건 기반 사용 -->
         <Branch Weight="RandBoolean^True" Condition="aiGraphCoolTime_GrnadeSwing" Execute="GrnadeSwing"/>
     </JudgeRangedAttack>
 
     <!-- AI 스테이트 : 전투 상태 : 공격(전투 상태일때 사용하는 2가지 스킬 분기) -->
     <!-- Skill State List-->
-
-    <RushSwing Package="SukebanMeleeBatterRushSwingPackage" CoolTime="1.5">
-        <UseBranchSet Name="HitReactionSet"/>
-        <UseBranchSet Name="BattlePackageEndSet"/>
-        <Branch Condition="CurrentPackageEnd" Execute="Entry_Battle"/>
-    </RushSwing>
-
+     
     <GrnadeSwing Package="SukebanMeleeBatterGrnadeSwingPackge" CoolTime="5.0">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="Entry_Battle"/>
     </GrnadeSwing>
+
+    <RushSwing Package="SukebanMeleeBatterRushSwingPackage" CoolTime="7.5">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Entry_Battle"/>
+    </RushSwing>
 
     <!-- Skill State List-->
 
@@ -185,6 +206,43 @@
         <Branch Condition="(GraphExecutedTime  >= gv_GuardTime)" Execute="Entry_Battle"/>
     </Guard>
     <!-- Passive Defense Skill List -->
+
+    <!-- AI 스테이트 : 전투 상태 : 이동 -->
+    <Fixed Package="CommonIdlePackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="AttackTriggerSet"/>
+        
+        <UseBranchSet Name="ChaseOnlyMovementSet"/>
+        <UseBranchSet Name="ChaseAwayMovementSet"/>
+        <UseBranchSet Name="AlertMovementSet"/>
+    </Fixed>
+
+    <Chase Package="CommonChasePackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="AttackTriggerSet"/>
+        
+        <UseBranchSet Name="ChaseOnlyMovementSet"/>
+        <UseBranchSet Name="ChaseAwayMovementSet"/>
+        <UseBranchSet Name="AlertMovementSet"/>
+    </Chase>
+
+    <Alert Package="CommonAlertPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="AttackTriggerSet"/>
+        
+        <UseBranchSet Name="ChaseOnlyMovementSet"/>
+        <UseBranchSet Name="ChaseAwayMovementSet"/>
+        <UseBranchSet Name="AlertMovementSet"/>      
+    </Alert>
+
+    <Away Package="CommonAwayPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="AttackTriggerSet"/>
+        
+        <UseBranchSet Name="ChaseOnlyMovementSet"/>
+        <UseBranchSet Name="ChaseAwayMovementSet"/>
+        <UseBranchSet Name="AlertMovementSet"/>
+    </Away>
 
     <!-- AI 스테이트 : 피격 상태(피격 상태일 때의 ai분기 정리) -->
     <Hit Package="CommonHitPackage">
@@ -199,11 +257,5 @@
 
     <Dead Package="CommonDeadPackage">
     </Dead>
-
-    <Wait Package="CommonIdlePackage">
-        <Branch Condition="getTargetFrameTag_Dead == false" Execute="Entry_Battle"/>
-    </Wait>
-
-<!-- AI State -->
 
 </AIGraph>
