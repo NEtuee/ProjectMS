@@ -202,14 +202,27 @@ public class ProjectileEntityBase : ObjectBase
         if(_projectileGraph.isEventExecuteBySummoner())
             executeTargetEntity = requester.getSummonObject() == null ? requester : requester.getSummonObject();
 
-        _projectileGraph.executeChildFrameEvent(ProjectileChildFrameEventType.ChildFrameEvent_OnHit,executeTargetEntity,target);
+        AdditionalCollisionInfo additionalCollisionInfo = target.getAdditionalCollisionInfo(successData._targetCollisionInfo);
+        additionalCollisionInfo?.decreaseCollisionCount();
 
-        _lastHitNormal = transform.position - target.transform.position;
-        _lastHitNormal.Normalize();
+        if(target.getDefenceType() == DefenceType.Evade)
+        {
+            target.setDefenceState(DefenceState.EvadeSuccess);
+            _projectileGraph.executeChildFrameEvent(ProjectileChildFrameEventType.ChildFrameEvent_OnEvaded,executeTargetEntity,target);
+        }
+        else
+        {
+            _projectileGraph.executeChildFrameEvent(ProjectileChildFrameEventType.ChildFrameEvent_OnHit,executeTargetEntity,target);
 
-        _projectileGraph.decreasePenetrateCount();
-        if(_projectileGraph.isPenetrateEnd() == true)
-            _projectileGraph.executeChildFrameEvent(ProjectileChildFrameEventType.ChildFrameEvent_OnHitEnd,executeTargetEntity,target);    
+            _lastHitNormal = transform.position - target.transform.position;
+            _lastHitNormal.Normalize();
+
+            _projectileGraph.decreasePenetrateCount();
+            if(_projectileGraph.isPenetrateEnd() == true)
+                _projectileGraph.executeChildFrameEvent(ProjectileChildFrameEventType.ChildFrameEvent_OnHitEnd,executeTargetEntity,target);    
+        }
+
+        
     }
 
     

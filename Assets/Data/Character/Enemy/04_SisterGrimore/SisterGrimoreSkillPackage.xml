@@ -53,7 +53,7 @@
                     <AIEvent Type="SetAction" Action="AC_KnifeReady"/>
                 </Event_OnExecute>
                 
-                <Branch Condition="End" Execute="AI_KnifeRelease"/>
+                <Branch Condition="End" Execute="TerminatePackage"/>
             </AI_KnifeReady>
             <AI_KnifeRelease UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
                 <Event_OnExecute>
@@ -72,25 +72,8 @@
                     <AIEvent Type="SetAction" Action="AC_DischargeReady"/>
                 </Event_OnExecute>
                 
-                <Branch Condition="End" Execute="AI_DischargeMain"/>
-            </AI_DischargeReady>
-
-            <AI_DischargeMain UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" AllyTarget="Enemy">
-                <Event_OnExecute>
-                    <AIEvent Type="SetDirectionToTarget"/>
-                    <AIEvent Type="SetAction" Action="AC_DischargeMain"/>
-                </Event_OnExecute>
-                
-                <Branch Condition="End" Execute="AI_DischargeRecover"/>
-            </AI_DischargeMain>
-            <AI_DischargeRecover UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" AllyTarget="Enemy">
-                <Event_OnExecute>
-                    <AIEvent Type="SetDirectionToTarget"/>
-                    <AIEvent Type="SetAction" Action="AC_DischargeRecover"/>
-                </Event_OnExecute>
-                
                 <Branch Condition="End" Execute="TerminatePackage"/>
-            </AI_DischargeRecover>
+            </AI_DischargeReady>
         <!-- 스킬 Discharge -->
         <TerminatePackage>
             <Event_OnExecute>

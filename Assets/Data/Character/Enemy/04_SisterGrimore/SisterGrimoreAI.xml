@@ -150,18 +150,18 @@
         </Battle_JudgeDist>
         
         <Battle_Far Package="CommonIdlePackage">
-            <Branch Condition="(customValue_HasKnife == 1.0)" Execute="KnifeRelease"/>
+            <Branch Condition="(customValue_HasKnife == 1.0) && aiGraphCoolTime_KnifeRelease" Execute="KnifeRelease"/>
             <Branch Condition="(customValue_IsBarriorOn == 0.0) && aiGraphCoolTime_Barrior" Execute="Barrior"/>
             <Branch Condition="true" Execute="Chase"/>
         </Battle_Far>
         <Battle_Closer Package="CommonIdlePackage">
             <Branch Weight="RandBoolean^true" Condition="(customValue_IsBarriorOn == 0.0) && aiGraphCoolTime_Dodge" Execute="Dodge"/>
-            <Branch Condition="(customValue_HasKnife == 1.0)" Execute="KnifeRelease"/>
+            <Branch Condition="(customValue_HasKnife == 1.0) && aiGraphCoolTime_KnifeRelease" Execute="KnifeRelease"/>
             <Branch Condition="aiGraphCoolTime_Discharge" Execute="Discharge"/>
             <Branch Condition="true" Execute="Away"/>
         </Battle_Closer>
         <Battle_Range Package="CommonIdlePackage">
-            <Branch Condition="(customValue_HasKnife == 1.0)" Execute="KnifeRelease"/>
+            <Branch Condition="(customValue_HasKnife == 1.0) && aiGraphCoolTime_KnifeRelease" Execute="KnifeRelease"/>
             <Branch Condition="aiGraphCoolTime_Knife && (customValue_HasKnife == 0.0) && (customValue_KnifeCount <= 3.0)" Execute="Knife"/>
             <Branch Weight="RandBoolean^True" Condition="(customValue_IsBarriorOn == 0.0) && aiGraphCoolTime_Barrior" Execute="Barrior"/>
             <Branch Condition="aiGraphCoolTime_Pray" Execute="Pray"/>
@@ -219,9 +219,9 @@
     </Barrior>
     <Knife Package="SisterGrimoreSkillPackage" EntryNode="AI_KnifeReady" CoolTime="10.0">
         <UseBranchSet Name="HitReactionSet"/>
-        <UseBranchSet Name="BattlePackageEndSet"/>
+        <Branch Condition="CurrentPackageEnd" Execute="KnifeRelease"/>
     </Knife>
-    <KnifeRelease Package="SisterGrimoreSkillPackage" EntryNode="AI_KnifeRelease">
+    <KnifeRelease Package="SisterGrimoreSkillPackage" EntryNode="AI_KnifeRelease" CoolTime="5.0">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </KnifeRelease>

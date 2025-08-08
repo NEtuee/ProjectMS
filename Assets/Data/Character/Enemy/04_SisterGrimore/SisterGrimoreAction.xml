@@ -188,7 +188,7 @@
     </AC_KnifeRelease>
 <!-- Skill : Knife -->
 <!-- Skill : Discharge -->
-    <AC_DischargeReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineNormal">
+    <AC_DischargeReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineNormal ActionFlow">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/3_discharge/1_attackReady" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
@@ -203,9 +203,9 @@
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="BarriorBroken" EventTargetType="Self"/>
         </Trigger>
 
-        <Branch Condition="End == true" Execute="AC_Idle"/>
+        <Branch Condition="End" Execute="AC_DischargeMain"/>
     </AC_DischargeReady>
-    <AC_DischargeMain MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineSuperArmor">
+    <AC_DischargeMain MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineSuperArmor ActionFlow">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/3_discharge/2_attackMain" XFlip="true" Duration="0.5">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
@@ -222,7 +222,7 @@
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="BarriorBroken" EventTargetType="Self"/>
         </Trigger>
 
-        <Branch Condition="End == true" Execute="AC_Idle"/>
+        <Branch Condition="End" Execute="AC_DischargeRecover"/>
     </AC_DischargeMain>
     <AC_DischargeRecover MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>

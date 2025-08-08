@@ -241,6 +241,8 @@ public class ProjectileGraphLoader : LoaderBase<ProjectileGraphBaseDataList>
                 eventType = ProjectileChildFrameEventType.ChildFrameEvent_OnHitEnd;
             else if(targetName == "OnEnd")
                 eventType = ProjectileChildFrameEventType.ChildFrameEvent_OnEnd;
+            else if(targetName == "OnEvaded")
+                eventType = ProjectileChildFrameEventType.ChildFrameEvent_OnEvaded;
 
             List<ActionFrameEventBase> actionFrameEventList = new List<ActionFrameEventBase>();
             XmlNodeList childNodes = childNodeList[i].ChildNodes;
