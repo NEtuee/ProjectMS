@@ -1,6 +1,6 @@
 <ActionGraph Name="BigGrenadeAction" DefaultAction="Move" DefaultFramePerSecond="12">
 
-    <Move MovementType="GraphPreset" MovementGraphPreset="Aoba_EmpGrenade" DirectionType="AI" FlipType="Direction" RotationType="Direction">
+    <Move MovementType="GraphPreset" MovementGraphPreset="Sukeban_BigGrnade" DirectionType="AI" FlipType="Direction" RotationType="Direction">
         <!-- TODO: 폭발 도달 속도 플레이 해보고 조절할 것 -->
         <Animation Preset="Sprites/Object/BigGrenade/1_move" XFlip="true" Duration="1.0">
         </Animation>

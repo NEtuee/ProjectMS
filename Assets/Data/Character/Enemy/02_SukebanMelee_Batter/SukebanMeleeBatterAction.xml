@@ -39,7 +39,7 @@
 
     <AC_Idle MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="0_default/1_idle" XFlip="true" Duration="1">
+        <Animation Preset="0_default/1_idle" XFlip="true" Duration="0.3">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
             
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
@@ -54,7 +54,7 @@
 
     <AC_Move MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="0_default/2_move" XFlip="true" Duration="0.5">
+        <Animation Preset="0_default/2_move" XFlip="true" Duration="3.5">
             <FrameEvent Type="Movement" Condition="gv_MovementVelocity == 0.0"  StartTime="0" Friction="gv_MovementFriction" MaxVelocity="gv_MovementMaxVelocity" Speed="gv_MovementSpeed"/>
             <FrameEvent Type="Movement" Condition="gv_MovementVelocity > 0.0" StartTime="0" Friction="gv_MovementFriction" MaxVelocity="gv_MovementMaxVelocity" Velocity="gv_MovementVelocity" Speed="gv_MovementSpeed"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
@@ -66,7 +66,7 @@
 
     <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="0_default/3_hit" XFlip="true" Duration="1.25">
+        <Animation Preset="0_default/3_hit" XFlip="true" Duration="0.2">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountIncrease"/>
