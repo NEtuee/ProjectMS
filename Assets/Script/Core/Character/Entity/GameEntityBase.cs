@@ -4,16 +4,57 @@ using UnityEngine;
 using Unity.Mathematics;
 using System;
 using UnityEngine.AI;
-
-
-
-
-
-
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
+public class AdditionalCollisionInfo
+{
+    public CollisionInfo _collisionInfo;
+    public float _lifeTime;
+    public float _currentTime;
+    public int _collisionCount = -1;
+
+    public AdditionalCollisionInfo()
+    {
+        reset();
+    }
+
+    public void initialize(CollisionInfo collisionInfo, float lifeTime, int collisionCount)
+    {
+        _collisionInfo = collisionInfo;
+        _lifeTime = lifeTime;
+        _currentTime = 0f;
+        _collisionCount = collisionCount;
+    }
+
+    public bool update(float deltaTime)
+    {
+        if(_lifeTime < 0 || _collisionCount == 0)
+            return true;
+
+        _currentTime += deltaTime;
+        return _currentTime < _lifeTime;
+    }
+
+    public void decreaseCollisionCount()
+    {
+        if(_collisionCount <= 0 || _collisionInfo == null)
+            return;
+        
+        _collisionCount--;
+        if(_collisionCount <= 0)
+            _collisionInfo.setActiveCollision(false);
+    }
+
+    public void reset()
+    {
+        _collisionInfo = null;
+        _lifeTime = -1f;
+        _currentTime = 0f;
+        _collisionCount = -1;
+    }
+}
 
 public delegate void DeadEventDelegate(GameEntityBase collisionData);
 
@@ -47,6 +88,9 @@ public class GameEntityBase : SequencerObjectBase
 
     private CollisionInfo       _collisionInfo;
     protected CharacterInfoData _characterInfo;
+
+    private List<AdditionalCollisionInfo> _additionalCollisions = new List<AdditionalCollisionInfo>();
+    private static SimplePool<AdditionalCollisionInfo> _additionalCollisionPool = new SimplePool<AdditionalCollisionInfo>();
 
     private DeadEventDelegate   _deadEventDelegate = null;
 
@@ -99,6 +143,7 @@ public class GameEntityBase : SequencerObjectBase
     private bool                _useHPEffect = false;
 
     private DirectionType       _currentDirectionType = DirectionType.AlwaysRight;
+    private FlipType            _currentFlipType = FlipType.AlwaysTurnOff;
     private RotationType        _currentRotationType = RotationType.AlwaysRight;
 
     private Quaternion          _actionStartRotation = Quaternion.identity;
@@ -267,6 +312,7 @@ public class GameEntityBase : SequencerObjectBase
         applyActionBuffList();
 
         _currentDirectionType = _actionGraph.getDirectionType();
+        _currentFlipType = _actionGraph.getCurrentFlipType();
         _currentRotationType = _actionGraph.getCurrentRotationType();
 
         CollisionInfoData data = new CollisionInfoData(characterInfo._characterRadius,0f,0f,0f, CollisionType.Character);
@@ -471,6 +517,8 @@ public class GameEntityBase : SequencerObjectBase
         {
             _characterLifeTime += deltaTime;
             updateOutline(deltaTime);
+            
+            updateAdditionalCollisions(deltaTime);
         }
 
         if(_sequencerProcessManager != null)
@@ -546,7 +594,7 @@ public class GameEntityBase : SequencerObjectBase
             updateDirection();
             if(_updateFlipState)
             {
-                updateFlipState(_actionGraph.getCurrentFlipType());
+                updateFlipState(_currentFlipType);
                 _updateFlipState = _actionGraph.getCurrentFlipTypeUpdateOnce() == false;
             }
 
@@ -667,6 +715,7 @@ public class GameEntityBase : SequencerObjectBase
         _actionGraph.clearInputBuffer();
 
         _currentDefenceType = _actionGraph.getCurrentDefenceType();
+        _currentFlipType = _actionGraph.getCurrentFlipType();
         _currentDirectionType = _actionGraph.getDirectionType();
 
         _collisionInfo.setActiveCollision(_actionGraph.isActiveCollision());
@@ -756,6 +805,9 @@ public class GameEntityBase : SequencerObjectBase
         }
         _hpEffect.Clear();
 
+        // 추가 충돌체 정리
+        clearAdditionalCollisions();
+
         detachToSlot();
         foreach(var item in _rotateSlotList)
         {
@@ -815,6 +867,7 @@ public class GameEntityBase : SequencerObjectBase
             debugTextManager.updateDebugText("FrameTag","FrameTag: " + frameTag, UnityEngine.Color.white);
             debugTextManager.updateDebugText("AllyType","AllyType: " + (_allyInfo == null ? "AllyInfo Not Exists" : _allyInfo._key), UnityEngine.Color.white);
             debugTextManager.updateDebugText("ActiveCollision","ActiveCollision: " + _collisionInfo.isActiveCollision(), UnityEngine.Color.white);
+            debugTextManager.updateDebugText("AdditionalCollisions","AdditionalCollisions: " + _additionalCollisions.Count, UnityEngine.Color.white);
             
             List<SequencerGraphProcessor> activeProcessorList = _sequencerProcessManager.getActiveProcessorList();
             foreach(var item in activeProcessorList)
@@ -834,6 +887,21 @@ public class GameEntityBase : SequencerObjectBase
             GizmoHelper.instance.drawLine(transform.position, transform.position + ControllerEx.Instance().getJoystickAxisR(transform.position) * 0.5f,Color.cyan);
 
             _collisionInfo.drawCollosionArea(_debugColor);
+            
+            // 추가 충돌체 그리기
+            for(int i = 0; i < _additionalCollisions.Count; i++)
+            {
+                if(_additionalCollisions[i]._collisionInfo != null && _additionalCollisions[i]._collisionInfo.isActiveCollision())
+                {
+                    Color additionalColor = Color.yellow;
+                    if(_additionalCollisions[i]._lifeTime > 0f)
+                    {
+                        float lifeRatio = 1f - (_additionalCollisions[i]._currentTime / _additionalCollisions[i]._lifeTime);
+                        additionalColor = Color.Lerp(Color.red, Color.yellow, lifeRatio);
+                    }
+                    _additionalCollisions[i]._collisionInfo.drawCollosionArea(additionalColor);
+                }
+            }
         }
 
         if(_aiDebug == true || GameEditorMaster._instance._aiDebugAll)
@@ -1549,6 +1617,22 @@ public class GameEntityBase : SequencerObjectBase
         updateDirection();
     }
 
+    public void setRotationType(RotationType rotationType)
+    {
+        _currentRotationType = rotationType;
+        updateRotation(true);
+    }
+
+    public void setFlipType(FlipType flipType, bool updateFlipStateOnce)
+    {
+        _currentFlipType = flipType;
+        updateFlipState(_currentFlipType);
+        _spriteRenderer.flipX = _flipState.xFlip;
+        _spriteRenderer.flipY = _flipState.yFlip;
+
+        _updateFlipState = updateFlipStateOnce == false;
+    }
+
     public DirectionType getDirectionType()
     {
         return _currentDirectionType;
@@ -1705,7 +1789,7 @@ public class GameEntityBase : SequencerObjectBase
 
         _aiGraph.executeAIEvent(param);
     }
-    public bool processActionCondition(ActionGraphConditionCompareData compareData) {return _actionGraph.processActionCondition(compareData);}
+    public bool processActionCondition(ActionGraphConditionCompareData compareData, ConditionEvaluationContext context) {return _actionGraph.processActionCondition(compareData, context);}
 
     public HashSet<string> getCurrentFrameTagList() {return _actionGraph.getCurrentFrameTagList();}
 
@@ -1779,6 +1863,114 @@ public class GameEntityBase : SequencerObjectBase
     public MovementGraphPresetData getCurrentMovementGraphPreset() {return _actionGraph.getCurrentMovementGraphPreset();}
     public MovementBase getCurrentMovement() {return _movementControl.getCurrentMovement();}
     public MovementControl getMovementControl(){return _movementControl;}
+
+    public void addAdditionalCollision(CollisionInfoData collisionData, float lifeTime, int collisionCount)
+    {
+        AdditionalCollisionInfo additionalCollision = _additionalCollisionPool.dequeue();
+        CollisionInfo collisionInfo = new CollisionInfo(collisionData);
+        
+        additionalCollision.initialize(collisionInfo, lifeTime, collisionCount);
+        additionalCollision._collisionInfo.updateCollisionInfo(transform.position, getDirection());
+
+        _additionalCollisions.Add(additionalCollision);
+        
+        CollisionManager.Instance().registerObject(collisionInfo, this);
+    }
+
+    public void addAdditionalCollision(float radius, CollisionType collisionType, float lifeTime, int collisionCount)
+    {
+        CollisionInfoData collisionData = new CollisionInfoData(radius, 0f, 0f, 0f, collisionType);
+        addAdditionalCollision(collisionData, lifeTime, collisionCount);
+    }
+
+    public void removeAdditionalCollision(CollisionInfo collisionInfo)
+    {
+        for(int i = _additionalCollisions.Count - 1; i >= 0; i--)
+        {
+            if(_additionalCollisions[i]._collisionInfo == collisionInfo)
+            {
+                AdditionalCollisionInfo additionalCollision = _additionalCollisions[i];
+                _additionalCollisions.RemoveAt(i);
+                
+                CollisionManager.Instance().deregisterSpecificCollision(collisionInfo, this);
+                
+                additionalCollision.reset();
+                _additionalCollisionPool.enqueue(additionalCollision);
+                break;
+            }
+        }
+    }
+
+    public void updateAdditionalCollisions(float deltaTime)
+    {
+        for(int i = _additionalCollisions.Count - 1; i >= 0; i--)
+        {
+            AdditionalCollisionInfo additionalCollision = _additionalCollisions[i];
+            
+            if(!additionalCollision.update(deltaTime))
+            {
+                CollisionManager.Instance().deregisterSpecificCollision(additionalCollision._collisionInfo, this);
+                _additionalCollisions.RemoveAt(i);
+                
+                additionalCollision.reset();
+                _additionalCollisionPool.enqueue(additionalCollision);
+            }
+        }
+    }
+
+    public void decreaseAdditionalCollisionCollisionCount(CollisionInfo collisionInfo)
+    {
+        for(int i = 0; i < _additionalCollisions.Count; i++)
+        {
+            if(_additionalCollisions[i]._collisionInfo == collisionInfo)
+            {
+                if(_additionalCollisions[i]._collisionCount > 0)
+                {
+                    _additionalCollisions[i]._collisionCount--;
+                    if(_additionalCollisions[i]._collisionCount <= 0)
+                    {
+                        CollisionManager.Instance().deregisterSpecificCollision(collisionInfo, this);
+                        AdditionalCollisionInfo additionalCollision = _additionalCollisions[i];
+                        _additionalCollisions.RemoveAt(i);
+    
+                        additionalCollision.reset();
+                        _additionalCollisionPool.enqueue(additionalCollision);
+                    }
+                }
+                break;
+            }
+        }
+    }
+
+    public void clearAdditionalCollisions()
+    {
+        for(int i = _additionalCollisions.Count - 1; i >= 0; i--)
+        {
+            AdditionalCollisionInfo additionalCollision = _additionalCollisions[i];
+            CollisionManager.Instance().deregisterSpecificCollision(additionalCollision._collisionInfo, this);
+            
+            additionalCollision.reset();
+            _additionalCollisionPool.enqueue(additionalCollision);
+        }
+        _additionalCollisions.Clear();
+    }
+
+    public AdditionalCollisionInfo getAdditionalCollisionInfo(CollisionInfo collisionInfo)
+    {
+        if(collisionInfo == null || _additionalCollisions.Count == 0)
+            return null;
+
+        for(int i = 0; i < _additionalCollisions.Count; i++)
+        {
+            if(_additionalCollisions[i]._collisionInfo == collisionInfo)
+                return _additionalCollisions[i];
+        }
+
+        return null;
+    }
+
+    public List<AdditionalCollisionInfo> getAdditionalCollisions() { return _additionalCollisions; }
+    public int getAdditionalCollisionCount() { return _additionalCollisions.Count; }
 
 #if UNITY_EDITOR
     public ActionGraph getActionGraph_Debug() {return _actionGraph;}

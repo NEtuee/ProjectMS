@@ -93,7 +93,7 @@ FrameEvent,CallAIEvent,"EventName=~~,EventTargetType=~~,Range=~~,AllyTarget=~~"
 InQuote,EventTargetType=,"Range,Self,FrameEventTarget,Summoner,SummonTargetRange"
 ShortCut,__FrameEvent_AudioPlay,<FrameEvent Type=~AudioPlay~ StartTime=~0~ ID=~~/>
 FrameEvent,AudioPlay,"ID=~~,ToTarget=~~,Attach=~~,UseFlip=~~,ParameterID=~~,ParameterValue=~~,Switch=~~"
-InQuote,Flags=,"ClearPush,LaserEffect,Hide,IgnorePush,ClearDanmaku,OutlineGuard,OutlineSuperArmor,OutlineNormal"
+InQuote,Flags=,"ClearPush,LaserEffect,Hide,IgnorePush,ClearDanmaku,OutlineGuard,OutlineSuperArmor,OutlineNormal,ActionFlow"
 ShortCut,__FrameEvent_Test,<FrameEvent Type=~Test~ StartTime=~0~ Log=~~/>
 FrameEvent,SetCameraZoom,Size=~~
 ShortCut,__FrameEvent_SetCameraZoom,<FrameEvent Type=~SetCameraZoom~ StartTime=~0~ Size=~~/>
@@ -154,4 +154,10 @@ ShortCut,__ElseIf,<ElseIf Condition=~~>#n</ElseIf>
 ShortCut,__Else,<Else>#n</Else>
 LineStart,<If,"Key=~~,Condition=~~,Weight=~~"
 LineStart,<ElseIf,"Key=~~,Condition=~~,Weight=~~"
-,,
+InQuote,AttackShake=,"True,False"
+FrameEvent,SetRotationType,RotationType=~~
+ShortCut,__FrameEvent_SetRotationType,<FrameEvent Type=~SetRotationType~ StartTime=~0~ RotationType=~~/>
+FrameEvent,SetFlipType,FlipType=~~
+ShortCut,__FrameEvent_SetFlipType,<FrameEvent Type=~SetFlipType~ StartTime=~0~ FlipType=~~/>
+FrameEvent,AddCollision,"Radius=~~,LifeTime=~~,AttackCount=~~"
+ShortCut,__FrameEvent_AddCollision,<FrameEvent Type=~AddCollision~ StartTime=~0~ Radius=~~ LifeTime=~~ AttackCount=~~/>

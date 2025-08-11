@@ -43,6 +43,8 @@ public enum FrameEventType
     FrameEvent_SequencerSignal,
     FrameEvent_ApplyPostProcessProfile,
     FrameEvent_SetDirectionType,
+    FrameEvent_SetFlipType,
+    FrameEvent_SetRotationType,
     FrameEvent_Torque,
     FrameEvent_EffectPreset,
     FrameEvent_SetRotateSlotValue,
@@ -54,6 +56,7 @@ public enum FrameEventType
     FrameEvent_DeletePrefab,
     FrameEvent_ClearStatus,
     FrameEvent_ChangeAlly,
+    FrameEvent_AddCollision,
 
     Count,
 }
@@ -141,7 +144,7 @@ public abstract class ActionFrameEventBase : SerializableDataType
         if(_conditionCompareData == null)
             return true;
 
-        return targetEntity.processActionCondition(_conditionCompareData);
+        return targetEntity.processActionCondition(_conditionCompareData, ConditionEvaluationContext.Action);
     }
 
     public static Vector3 getSpawnPosition(SetTargetType targetType, ObjectBase executeEntity, ObjectBase targetEntity)
@@ -299,6 +302,10 @@ public abstract class ActionFrameEventBase : SerializableDataType
             outFrameEvent = new ActionFrameEvent_ApplyPostProcessProfile();
         else if(frameEventType == FrameEventType.FrameEvent_SetDirectionType)
             outFrameEvent = new ActionFrameEvent_SetDirectionType();
+        else if(frameEventType == FrameEventType.FrameEvent_SetFlipType)
+            outFrameEvent = new ActionFrameEvent_SetFlipType();
+        else if(frameEventType == FrameEventType.FrameEvent_SetRotationType)
+            outFrameEvent = new ActionFrameEvent_SetRotationType();
         else if(frameEventType == FrameEventType.FrameEvent_Torque)
             outFrameEvent = new ActionFrameEvent_Torque();
         else if(frameEventType == FrameEventType.FrameEvent_EffectPreset)
@@ -321,6 +328,8 @@ public abstract class ActionFrameEventBase : SerializableDataType
             outFrameEvent = new ActionFrameEvent_ClearStatus();
         else if(frameEventType == FrameEventType.FrameEvent_ChangeAlly)
             outFrameEvent = new ActionFrameEvent_ChangeAlly();
+        else if(frameEventType == FrameEventType.FrameEvent_AddCollision)
+            outFrameEvent = new ActionFrameEvent_AddCollision();
         else
         {
             DebugUtil.assert(false, "invalid frameEvent type: {0}",frameEventType.ToString());
@@ -532,6 +541,105 @@ public class ActionFrameEvent_SetDirectionType : ActionFrameEventBase
     {
         base.deserialize(ref binaryReader);
         _directionType = (DirectionType)binaryReader.ReadInt32();
+    }
+}
+
+public class ActionFrameEvent_SetFlipType : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_SetFlipType;}
+    public FlipType _flipType = FlipType.Count;
+    public bool _updateFlipStateOnce = false;
+
+    public override void initialize(ObjectBase executeEntity)
+    {
+    }
+
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
+    {
+        if(executeEntity is GameEntityBase == false)
+            return true;
+        
+        (executeEntity as GameEntityBase).setFlipType(_flipType, _updateFlipStateOnce);
+        return true;
+    }
+
+#if UNITY_EDITOR
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "FlipType")
+                _flipType = (FlipType)System.Enum.Parse(typeof(FlipType), attrValue);
+            else if(attrName == "UpdateFlipStateOnce")
+                _updateFlipStateOnce = bool.Parse(attrValue);
+        }
+    }
+
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write((int)_flipType);
+        binaryWriter.Write(_updateFlipStateOnce);
+    }
+#endif
+
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        base.deserialize(ref binaryReader);
+        _flipType = (FlipType)binaryReader.ReadInt32();
+        _updateFlipStateOnce = binaryReader.ReadBoolean();
+    }
+}
+
+public class ActionFrameEvent_SetRotationType : ActionFrameEventBase
+{
+    public override FrameEventType getFrameEventType(){return FrameEventType.FrameEvent_SetRotationType;}
+    public RotationType _rotationType = RotationType.Count;
+
+    public override void initialize(ObjectBase executeEntity)
+    {
+    }
+
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
+    {
+        if(executeEntity is GameEntityBase == false)
+            return true;
+        
+        (executeEntity as GameEntityBase).setRotationType(_rotationType);
+        return true;
+    }
+
+#if UNITY_EDITOR
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "RotationType")
+                _rotationType = (RotationType)System.Enum.Parse(typeof(RotationType), attrValue);
+        }
+    }
+
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write((int)_rotationType);
+    }
+#endif
+
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        base.deserialize(ref binaryReader);
+        _rotationType = (RotationType)binaryReader.ReadInt32();
     }
 }
 
@@ -3249,6 +3357,83 @@ public class ActionFrameEvent_Test : ActionFrameEventBase
     {
         base.deserialize(ref binaryReader);
         _debugLog = binaryReader.ReadString();
+    }
+}
+
+public class ActionFrameEvent_AddCollision : ActionFrameEventBase
+{
+    public float _radius = 1.0f;        // 충돌체 반지름
+    public float _lifeTime = 1.0f;     // 충돌체 지속 시간 (-1이면 무한)
+    public int _collisionCount = -1;
+
+    public override FrameEventType getFrameEventType()
+    {
+        return FrameEventType.FrameEvent_AddCollision;
+    }
+
+    public override void initialize(ObjectBase executeEntity)
+    {
+        // 초기화 시 특별한 작업 없음
+    }
+
+    public override bool onExecute(ObjectBase executeEntity, ObjectBase targetEntity = null, ActionFrameEventBase childFrameEventAccessor = null)
+    {
+        if(executeEntity is GameEntityBase == false)
+            return true;
+
+        GameEntityBase gameEntity = executeEntity as GameEntityBase;
+        
+        // 추가 충돌체를 캐릭터의 현재 위치에 생성
+        gameEntity.addAdditionalCollision(_radius, CollisionType.Character, _lifeTime, _collisionCount);
+
+        return true; // 일회성 이벤트이므로 즉시 종료
+    }
+
+    public override void onExit(ObjectBase executeEntity, bool isForceEnd)
+    {
+        // 특별한 정리 작업 없음 (GameEntityBase에서 자동 관리)
+    }
+
+#if UNITY_EDITOR
+    public override void loadFromXML(XmlNode node)
+    {
+        XmlAttributeCollection attributes = node.Attributes;
+        
+        for(int i = 0; i < attributes.Count; ++i)
+        {
+            string attrName = attributes[i].Name;
+            string attrValue = attributes[i].Value;
+
+            if(attrName == "Radius")
+            {
+                _radius = XMLScriptConverter.valueToFloatExtend(attrValue);
+            }
+            else if(attrName == "LifeTime")
+            {
+                _lifeTime = XMLScriptConverter.valueToFloatExtend(attrValue);
+            }
+            else if(attrName == "AttackCount")
+            {
+                _collisionCount = int.Parse(attrValue);
+            }
+        }
+    }
+
+    public override void serialize(ref BinaryWriter binaryWriter)
+    {
+        base.serialize(ref binaryWriter);
+        binaryWriter.Write(_radius);
+        binaryWriter.Write(_lifeTime);
+        binaryWriter.Write(_collisionCount);
+    }
+#endif
+
+    public override void deserialize(ref BinaryReader binaryReader)
+    {
+        base.deserialize(ref binaryReader);
+        _radius = binaryReader.ReadSingle();
+        _lifeTime = binaryReader.ReadSingle();
+        _collisionCount = binaryReader.ReadInt32();
     }
 }
 

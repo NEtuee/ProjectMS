@@ -160,5 +160,9 @@ public class ScreenDirector : MonoBehaviour
     {
         UIRepeater.Instance().updateUIRepeater();
         _mainHudParent?.SetActive(active);
+        if (active)
+            IngameUI.Instance.ActivateAllUI();
+        else
+            IngameUI.Instance.DeactivateAllUI();
     }
 }

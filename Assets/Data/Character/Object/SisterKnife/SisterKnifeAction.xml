@@ -1,0 +1,81 @@
+<ActionGraph Name="SisterKnifeAction" DefaultAction="AC_Idle" DefaultFramePerSecond="12">
+    <GlobalVariable Name="gv_MasterPath" Value="Sprites/Enemy/Sister_Knife/"/>
+    <GlobalVariable Name="gv_DeadPath" Value="Resources/Sprites/Enemy/Sister_Knife/0_default/4_dead"/> 
+
+    <AC_Idle MovementType="Empty" DirectionType="ToSummoner" RotationType="Direction" ActiveCollision="True">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/1_idle" XFlip="true" Duration="0.5">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_Idle>
+    <AC_Release MovementType="FrameEvent" DirectionType="AI" RotationType="Direction" ActiveCollision="True">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/1_idle" XFlip="true" Duration="0.5">
+            <FrameEvent Type="Movement" StartTime="0" Friction="6" Velocity="6" MaxVelocity="14" Speed="2"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_Release>
+
+    <AC_Move MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/2_move" XFlip="true" Duration="0.5">
+            <FrameEvent Type="Movement" StartTime="0" Friction="2" MaxVelocity="5" Speed="6"/>
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.5" AttackPreset="Common_Radius01" NotifyAttackSuccess="False">
+                <OnHit>
+                </OnHit>
+            </FrameEvent>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Move"/>
+    </AC_Move>
+    <AC_Accel MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction" Flags="OutlineSuperArmor">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/2_move" XFlip="true" Duration="0.3">
+            <FrameEvent Type="Movement" StartTime="0" Friction="2" Velocity="9" MaxVelocity="14" Speed="6"/>
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.5" AttackPreset="Common_Radius01" NotifyAttackSuccess="False" AttackShake="true">
+                <OnHit>
+                    <FrameEvent Type="AudioPlay" StartTime="0" ID="4908" Attach="true"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonTenthsAttack"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonTenthsAttack"/>
+
+                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Slash"/>
+                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
+                    <FrameEvent Type="CallAIEvent" StartTime="0" EventName="AttackCount" EventTargetType="Self"/>
+                </OnHit>
+            </FrameEvent>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Move"/>
+    </AC_Accel>
+
+    <Dead MovementType="Empty" DirectionType="AI">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/4_dead" XFlip="true" Duration="0.5">
+            <FrameEvent Type="Effect" StartTime="0" Path="gv_DeadPath" FramePerSecond="0.2" CastShadow="True">
+                <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
+            </FrameEvent>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="DeleteKnife" EventTargetType="Summoner"/>
+            <FrameEvent Type="DeleteBuff" StartTime="0" ApplyBuff="PlayerBattleObjectXXX"/>
+            <FrameEvent Type="KillEntity" StartTime="0"/>
+        </Animation>
+        <Branch Condition="End == true" Execute="Dead"/>
+    </Dead>
+
+    <AC_Reverse MovementType="Empty" DirectionType="AI" RotationType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/3_hit" XFlip="true" Duration="1.0">
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="DeleteKnife" EventTargetType="Summoner"/>
+            <FrameEvent Type="ChangeAlly" StartTime="0" Key="PlayerBattleObject" ResetTarget="True"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="PlayerBattleObjectXXX"/>
+        </Animation>
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_Reverse>
+
+
+</ActionGraph>

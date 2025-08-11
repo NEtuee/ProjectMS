@@ -1,0 +1,86 @@
+<AIPackage Name="SisterGrimoreSkillPackage" DefaultState="AI_Idle">
+
+    <AIState>
+        <AI_Idle UpdateTime="0.0">
+            <Event_OnExecute>
+                <AIEvent Type="SetAction" Action="AC_Idle"/>
+            </Event_OnExecute>
+            <Branch Condition="End" Execute="AI_Idle"/>
+        </AI_Idle>
+        
+        <!-- 스킬 Pray -->
+            <AI_Pray UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+                <Event_OnExecute>
+                    <AIEvent Type="SetDirectionToTarget"/>
+                    <AIEvent Type="SetAction" Action="AC_Pray"/>
+                </Event_OnExecute>
+                
+                <Branch Condition="End" Execute="TerminatePackage"/>
+            </AI_Pray>
+        <!-- 스킬 Pray -->
+        <!-- 스킬 Barrior -->
+            <AI_Barrior UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+                <Event_OnExecute>
+                    <AIEvent Type="SetDirectionToTarget"/>
+                    <AIEvent Type="SetAction" Action="AC_Barrior"/>
+                </Event_OnExecute>
+                
+                <Branch Condition="End" Execute="TerminatePackage"/>
+            </AI_Barrior>
+        <!-- 스킬 Barrior -->
+        <!-- 스킬 Tracer -->
+            <AI_TracerReady UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+                <Event_OnExecute>
+                    <AIEvent Type="SetDirectionToTarget"/>
+                    <AIEvent Type="SetAction" Action="AC_TracerReady"/>
+                </Event_OnExecute>
+                
+                <Branch Condition="End" Execute="AI_TracerSpawn"/>
+            </AI_TracerReady>
+            <AI_TracerSpawn UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+                <Event_OnExecute>
+                    <AIEvent Type="SetAction" Action="AC_TracerSpawn"/>
+                </Event_OnExecute>
+                
+                <Branch Condition="End" Execute="TerminatePackage"/>
+            </AI_TracerSpawn>
+        <!-- 스킬 Tracer -->
+
+        <!-- 스킬 Knife -->
+            <AI_KnifeReady UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+                <Event_OnExecute>
+                    <AIEvent Type="SetDirectionToTarget"/>
+                    <AIEvent Type="SetAction" Action="AC_KnifeReady"/>
+                </Event_OnExecute>
+                
+                <Branch Condition="End" Execute="TerminatePackage"/>
+            </AI_KnifeReady>
+            <AI_KnifeRelease UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+                <Event_OnExecute>
+                    <AIEvent Type="SetDirectionToTarget"/>
+                    <AIEvent Type="SetAction" Action="AC_KnifeRelease"/>
+                </Event_OnExecute>
+                
+                <Branch Condition="End" Execute="TerminatePackage"/>
+            </AI_KnifeRelease>
+        <!-- 스킬 Knife -->
+
+        <!-- 스킬 Discharge -->
+            <AI_DischargeReady UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" AllyTarget="Enemy">
+                <Event_OnExecute>
+                    <AIEvent Type="SetDirectionToTarget"/>
+                    <AIEvent Type="SetAction" Action="AC_DischargeReady"/>
+                </Event_OnExecute>
+                
+                <Branch Condition="End" Execute="TerminatePackage"/>
+            </AI_DischargeReady>
+        <!-- 스킬 Discharge -->
+        <TerminatePackage>
+            <Event_OnExecute>
+                <AIEvent Type="TerminatePackage"/>
+            </Event_OnExecute>
+        </TerminatePackage>
+
+    </AIState>
+
+</AIPackage>

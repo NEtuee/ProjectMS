@@ -9,6 +9,7 @@ public struct CollisionSuccessData
 {
     public object _requester;
     public object _target;
+    public CollisionInfo _targetCollisionInfo;
     public Vector3 _startPoint;
 }
 
@@ -38,8 +39,10 @@ public class CollisionManager : Singleton<CollisionManager>
 
     private bool[][] _collisionMatrix;
 
-    private int                                                 _collisionTypeCount = 0;
-    private int                                                 _collisionRequestCount = 0;
+    private int          _collisionTypeCount = 0;
+    private int          _collisionRequestCount = 0;
+
+    private List<object> _collisionOverlapCheckList = new List<object>();
 
     public CollisionManager()
     {
@@ -154,6 +157,25 @@ public class CollisionManager : Singleton<CollisionManager>
         }
     }
 
+    // 특정 CollisionInfo만 제거하는 메서드 추가
+    public void deregisterSpecificCollision(CollisionInfo collisionInfo, object collisionObject)
+    {
+        int collisionTypeIndex = (int)collisionInfo.getCollisionType();
+        for(int i = 0; i < _collisionObjectList[collisionTypeIndex].Count; )
+        {
+            if(_collisionObjectList[collisionTypeIndex][i]._collisionObject == collisionObject && 
+               _collisionObjectList[collisionTypeIndex][i]._collisionInfo == collisionInfo)
+            {
+                deregisterObject(i, collisionInfo.getCollisionType());
+                break; // 특정 충돌체만 제거하므로 break
+            }
+            else
+            {
+                ++i;
+            }
+        }
+    }
+
     public void deregisterObject(int index, CollisionType collisionType)
     {
         if(index < 0 || index >= _collisionObjectList[(int)collisionType].Count)
@@ -170,9 +192,10 @@ public class CollisionManager : Singleton<CollisionManager>
 
     public void processCollision(ref CollisionRequestData request)
     {
+        request._collision.updateCollisionInfo(request._position, request._direction);
+
         for(int i = 0; i < _collisionTypeCount; ++i)
         {
-            request._collision.updateCollisionInfo(request._position, request._direction);
             collisionCheck(i,request);
         }
 
@@ -232,15 +255,23 @@ public class CollisionManager : Singleton<CollisionManager>
             if(request._requestObject == collisionObjectData._collisionObject || uniqueID == collisionObjectData._collisionInfo.getUniqueID())
                 continue;
 
+            if(_collisionOverlapCheckList.Contains(collisionObjectData._collisionObject))
+                continue;
+
             if(collisionInfo.collisionCheck(collisionObjectData._collisionInfo) == true)
             {
-                CollisionSuccessData data;
+                _collisionOverlapCheckList.Add(collisionObjectData._collisionObject);
+
+                CollisionSuccessData data = new CollisionSuccessData();
                 data._requester = request._requestObject;
                 data._target = collisionObjectData._collisionObject;
                 data._startPoint = request._collision.getCenterPosition();
+                data._targetCollisionInfo = collisionObjectData._collisionInfo;
                 request._collisionDelegate?.Invoke(data);
             }
                 
         }
+
+        _collisionOverlapCheckList.Clear();
     }
 }

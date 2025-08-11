@@ -145,8 +145,30 @@
     />
 
     <SisterNormalCrossHair
-        DisplayName="나지미 크로스헤어"
+        DisplayName="시스터 노말 크로스헤어"
         ActionGraph="Assets/Data/Character/Object/CrossHair/SisterNormalCrossHair.xml"
+        AIGraph="Assets/Data/AILibrary/Graph/CommonEnemyAI.xml"
+        StatusInfoName="CommonEnemyStatusNoUI"
+
+        CollisionRadius="0.7"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="EnemyAllNeutral"
+    />
+    <SisterGrimoreCrossHair
+        DisplayName="시스터 그리모어 크로스헤어"
+        ActionGraph="Assets/Data/Character/Object/CrossHair/SisterGrimoreCrossHair.xml"
+        AIGraph="Assets/Data/AILibrary/Graph/CommonEnemyAI.xml"
+        StatusInfoName="CommonEnemyStatusNoUI"
+
+        CollisionRadius="0.7"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="EnemyAllNeutral"
+    />
+    <SisterStaffCrossHair
+        DisplayName="시스터 스태프 크로스헤어"
+        ActionGraph="Assets/Data/Character/Object/CrossHair/SisterStaffCrossHair.xml"
         AIGraph="Assets/Data/AILibrary/Graph/CommonEnemyAI.xml"
         StatusInfoName="CommonEnemyStatusNoUI"
 
@@ -642,7 +664,7 @@
         DisplayName="시스터 스태프쨩"
         ActionGraph="Assets/Data/Character/Enemy/04_SisterStaff/SisterStaffAction.xml"
         AIGraph="Assets/Data/Character/Enemy/04_SisterStaff/SisterStaffAI.xml"
-        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        StatusInfoName="CommonHpFourEnemyStatus"
         
         CollisionRadius="0.2"
         HeadUpOffset="0.5"
@@ -665,12 +687,25 @@
 
         AllyInfo="Sister"
     />
+    <SisterGrimore
+        DisplayName="시스터 그리모어"
+        ActionGraph="Assets/Data/Character/Enemy/04_SisterGrimore/SisterGrimoreAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/04_SisterGrimore/SisterGrimoreAI.xml"
+        StatusInfoName="CommonHpFiveEnemyStatus"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+        RankBadgeID="0"
+
+        AllyInfo="Sister"
+    />
 
     <SisterSisterSpearChan
         DisplayName="시스터 스피어쨩"
         ActionGraph="Assets/Data/Character/Enemy/04_SisterSpear/SisterSpearAction.xml"
         AIGraph="Assets/Data/Character/Enemy/04_SisterSpear/SisterSpearAI.xml"
-        StatusInfoName="CommonHpThreeEnemyStatus"
+        StatusInfoName="CommonHpFiveEnemyStatus"
         
         CollisionRadius="0.2"
         HeadUpOffset="0.5"
@@ -699,6 +734,18 @@
         StatusInfoName="CommonHpOneEnemyStatusNoUI"
         
         CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="Sister"
+    />
+    <Sister_Knife
+        DisplayName="시스터 그리모어의 나이프"
+        ActionGraph="Assets/Data/Character/Object/SisterKnife/SisterKnifeAction.xml"
+        AIGraph="Assets/Data/Character/Object/SisterKnife/SisterKnifeAI.xml"
+        StatusInfoName="CommonHpTenthsEnemyStatus"
+        
+        CollisionRadius="0.1"
         HeadUpOffset="0.5"
         ProjectileCollisionRadius=""
 

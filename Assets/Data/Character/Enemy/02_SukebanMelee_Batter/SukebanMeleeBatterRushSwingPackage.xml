@@ -1,7 +1,7 @@
 <AIPackage Name="SukebanMeleeBatterRushSwingPackage" DefaultState="AI_Entry">
 
     <GlobalVariable Name="gv_MeleeAttackRangeMin"           Value="0.0"/>       <!-- 최소 공격 사거리 : Value보다 PC가 가까우면 공격하지 않는다. -->
-    <GlobalVariable Name="gv_MeleeAttackRangeMax"           Value="1.8"/>       <!-- 최대 공격 사거리 : Value보다 PC가 멀면 공격하지 않는다. -->
+    <GlobalVariable Name="gv_MeleeAttackRangeMax"           Value="1.6"/>       <!-- 최대 공격 사거리 : Value보다 PC가 멀면 공격하지 않는다. -->
     <GlobalVariable Name="gv_StdPassiveAttitude"           Value="4.0"/>       <!-- 장외 기준 거리 : 전투 가능 기준 범위 -->
 
     <AIState>
@@ -30,45 +30,25 @@
                 <AIEvent Type="SetAction" Action="AC_AttackRush"/>
             </Event_OnExecute>
             
+            <Branch Condition="AttackSuccess" Execute="AI_AttackSuccess"/>
             <Branch Condition="End" Execute="AI_AttackRecover"/>
         </AI_RushMain>
+
+        <AI_AttackSuccess UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Type="SetAction" Action="AC_AttackSuccess"/>
+            </Event_OnExecute>
+            
+            <Branch Condition="End" Execute="AI_AttackRecover"/>
+        </AI_AttackSuccess>
 
         <AI_AttackRecover UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetAction" Action="AC_AttackRecover"/>
             </Event_OnExecute>
             
-            <Branch Condition="End" Execute="AI_AttackReady_B"/>
-        </AI_AttackRecover>
-
-        <AI_AttackReady_B UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
-            <Event_OnExecute>
-                <AIEvent Type="SetDirectionToTarget"/>
-                <AIEvent Type="SetAction" Action="AC_AttackReady_B"/>
-            </Event_OnExecute>
-
-            <Event_OnUpdate>
-                <AIEvent Type="SetDirectionToTarget" Speed="600"/>
-            </Event_OnUpdate>
-            
-            <Branch Condition="End" Execute="AI_RushMain_B"/>
-        </AI_AttackReady_B>
-
-        <AI_RushMain_B UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
-            <Event_OnExecute>
-                <AIEvent Type="SetAction" Action="AC_AttackRush_B"/>
-            </Event_OnExecute>
-            
-            <Branch Condition="End" Execute="AI_AttackRecover_B"/>
-        </AI_RushMain_B>
-
-        <AI_AttackRecover_B UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
-            <Event_OnExecute>
-                <AIEvent Type="SetAction" Action="AC_AttackRecover_B"/>
-            </Event_OnExecute>
-            
             <Branch Condition="End" Execute="TerminatePackage"/>
-        </AI_AttackRecover_B>
+        </AI_AttackRecover>
 
         <TerminatePackage>
             <Event_OnExecute>

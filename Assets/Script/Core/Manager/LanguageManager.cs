@@ -43,7 +43,7 @@ public class LanguageManager : ManagerBase
 
     public void InitLocalize()
     {
-        var language = SaveDataManager._instance._optionData._language;
+        var language = SystemLanguage.Korean;// SaveDataManager._instance._optionData._language;
         SetLanguage(language);
     }
 
@@ -162,8 +162,9 @@ public class LanguageManager : ManagerBase
     {
         if(_simpleStringDic.ContainsKey(_currentSystemLang) == false)
         {
-            DebugUtil.assert(false, "invalid language [{0}]", _currentSystemLang.ToString());
-            return null;
+            // DebugUtil.assert(false, "invalid language [{0}]", _currentSystemLang.ToString());
+            // return null;
+            _currentSystemLang = SystemLanguage.Korean;
         }
 
         return _simpleStringDic[_currentSystemLang].getFont();

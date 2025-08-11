@@ -538,21 +538,21 @@ public class AIGraph
         if(branchData._weightConditionCompareDataIndex != -1)
         {
             ActionGraphConditionCompareData compareData = compareDatas[branchData._weightConditionCompareDataIndex];
-            weightCondition = _actionGraph.processActionCondition(compareData);
+            weightCondition = _actionGraph.processActionCondition(compareData, ConditionEvaluationContext.AI);
         }
 
         bool keyCondition = true;
         if(branchData._keyConditionCompareDataIndex != -1)
         {
             ActionGraphConditionCompareData keyCompareData = compareDatas[branchData._keyConditionCompareDataIndex];
-            keyCondition = _actionGraph.processActionCondition(keyCompareData);
+            keyCondition = _actionGraph.processActionCondition(keyCompareData, ConditionEvaluationContext.AI);
         }
 
         bool condition = true;
         if(branchData._conditionCompareDataIndex != -1)
         {
             ActionGraphConditionCompareData compareData = compareDatas[branchData._conditionCompareDataIndex];
-            condition = _actionGraph.processActionCondition(compareData);
+            condition = _actionGraph.processActionCondition(compareData, ConditionEvaluationContext.AI);
         }
 
         return weightCondition && keyCondition && condition;

@@ -38,46 +38,46 @@ public class DashPointUI : IUIElement
 
     public void InitValue(float dashPoint)
     {
-        maxDP = (int)dashPoint;
-        SetDashPoint(maxDP);
+        // maxDP = (int)dashPoint;
+        // SetDashPoint(maxDP);
     }
 
     public void UpdateByManager(float deltaTime, float dashPoint)
     {
-        var currentDashPoint = (int)dashPoint;
-        if (_prevDashPointInt != currentDashPoint)
-        {
-            SetDashPoint(currentDashPoint);
-            _prevDashPointInt = currentDashPoint;
-        }
+        // var currentDashPoint = (int)dashPoint;
+        // if (_prevDashPointInt != currentDashPoint)
+        // {
+        //     SetDashPoint(currentDashPoint);
+        //     _prevDashPointInt = currentDashPoint;
+        // }
     }
 
     private void SetDashPoint(int point)
     {
-        var activatedDP = point;
-        var deactivatedDP = maxDP - point;
-        var additionalDP = Mathf.Max(0, point - maxDP);
-        for (int i = 0; i < activatedDP; i++)
-        {
-            _binder.DashPointImages[i].gameObject.SetActive(true);
-        }
+        // var activatedDP = point;
+        // var deactivatedDP = maxDP - point;
+        // var additionalDP = Mathf.Max(0, point - maxDP);
+        // for (int i = 0; i < activatedDP; i++)
+        // {
+        //     _binder.DashPointImages[i].gameObject.SetActive(true);
+        // }
 
-        for (int i = activatedDP; i < maxDP; i++)
-        {
-            _binder.DashPointImages[i].gameObject.SetActive(false);
-        }
+        // for (int i = activatedDP; i < maxDP; i++)
+        // {
+        //     _binder.DashPointImages[i].gameObject.SetActive(false);
+        // }
 
-        if (additionalDP > 0)
-        {
-            _binder._additionalText.gameObject.SetActive(true);
-            _binder._additionalText.text = "+" + (additionalDP);
-        }
-        else
-        {
-            _binder._additionalText.gameObject.SetActive(false);
-        }
+        // if (additionalDP > 0)
+        // {
+        //     _binder._additionalText.gameObject.SetActive(true);
+        //     _binder._additionalText.text = "+" + (additionalDP);
+        // }
+        // else
+        // {
+        //     _binder._additionalText.gameObject.SetActive(false);
+        // }
 
-        _prevDashPointInt = point;
+        // _prevDashPointInt = point;
     }
 
 

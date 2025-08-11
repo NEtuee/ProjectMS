@@ -77,12 +77,10 @@ public abstract class HolderUI : MonoBehaviour, IUIDataReceivable
     protected virtual void TakeProjectorUI(ProjectorUI projectorUI) //홀더 등록
     {
         projectorUI.Activate();
-        _uiHolder.Add(projectorUI);
     }
     protected virtual void ReturnProjectorUI(ProjectorUI projectorUI) //홀더 해제
     {
         projectorUI.Deactivate();
-        _uiHolder.Remove(projectorUI);
     }
     protected virtual void DestroyProjectorUI(ProjectorUI projectorUI) //프리팹 삭제
     {
@@ -90,6 +88,7 @@ public abstract class HolderUI : MonoBehaviour, IUIDataReceivable
     }
     public virtual void Activate()
     {
+        gameObject.SetActive(true);
         foreach (ProjectorUI projectorUI in _uiHolder)
         {
             if (projectorUI != null)
@@ -103,6 +102,7 @@ public abstract class HolderUI : MonoBehaviour, IUIDataReceivable
             if (projectorUI != null)
                 projectorUI.Deactivate();
         }
+        gameObject.SetActive(false);
     }
     public void UpdateUI(float deltaTime)
     {

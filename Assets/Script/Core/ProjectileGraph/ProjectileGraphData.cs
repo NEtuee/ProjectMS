@@ -8,6 +8,7 @@ public enum ProjectileChildFrameEventType
     ChildFrameEvent_OnHit,
     ChildFrameEvent_OnHitEnd,
     ChildFrameEvent_OnEnd,
+    ChildFrameEvent_OnEvaded,
     Count,
 }
 

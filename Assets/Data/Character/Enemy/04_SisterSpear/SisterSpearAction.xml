@@ -87,10 +87,10 @@
     </AC_PeaceMotionEnd>
 <!-- Defualt Action -->
 
-<!-- Skill : Attack -->
+<!-- Skill : Swing -->
     <AC_AttackReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineNormal">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="1_attack/1_attackReady" XFlip="true" Duration="0.5">
+        <Animation Preset="2_skill/3_swing/1_attackReady" XFlip="true" Duration="0.5">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2501" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Velocity="0" MaxVelocity="0" Speed="0"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
@@ -102,7 +102,7 @@
 
     <AC_AttackMain MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction" Flags="OutlineNormal">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="1_attack/2_attackMain" XFlip="true" Duration="0.55">
+        <Animation Preset="2_skill/3_swing/2_attackMain" XFlip="true" Duration="0.55">
             <FrameEvent Type="Movement" StartTime="0" Friction="24" MaxVelocity="18" Velocity="18" Speed="0"/>
             <FrameEvent Type="AudioPlay" StartTime="0" ID="4901" Attach="true" Switch="True"/>
             
@@ -127,7 +127,7 @@
 
     <AC_AttackRecover MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="1_attack/3_attackRecover" XFlip="true" Duration="1.2">
+        <Animation Preset="2_skill/3_swing/3_attackRecover" XFlip="true" Duration="1.2">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
@@ -135,7 +135,7 @@
 
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_AttackRecover>
-<!-- Skill : Attack -->
+<!-- Skill : Swing -->
 
 <!-- Skill : Tsuba -->
     <AC_Tsuba MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" DefenceType="Evade">
@@ -160,7 +160,7 @@
 
     <AC_TsubaEntry MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="3_skill/2_tsuba/1_entry" XFlip="true" Duration="0.3">
+        <Animation Preset="2_skill/2_tsuba/1_entry" XFlip="true" Duration="0.3">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2411" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12"/>
         </Animation>
@@ -170,7 +170,7 @@
 
     <AC_TsubaStruggle MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="3_skill/2_tsuba/2_struggle" XFlip="true" Duration="0.3">
+        <Animation Preset="2_skill/2_tsuba/2_struggle" XFlip="true" Duration="0.3">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2411" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12"/>
         </Animation>
@@ -180,7 +180,7 @@
  
     <AC_TsubaAttack MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="3_skill/2_tsuba/3_attack" XFlip="true" Duration="0.5">
+        <Animation Preset="2_skill/2_tsuba/3_attack" XFlip="true" Duration="0.5">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2412" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12"/>
             
@@ -201,12 +201,12 @@
     <AC_TsubaAway MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <!-- 밀리기 -->
-        <Animation Preset="3_skill/2_tsuba/4_away" XFlip="true" Duration="0.9">
+        <Animation Preset="2_skill/2_tsuba/4_away" XFlip="true" Duration="0.9">
             <FrameEvent Type="Movement" StartTime="0" Friction="4" MaxVelocity="9" Velocity="-4" Speed="0"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
-        <Animation Preset="3_skill/2_tsuba/4_away" XFlip="true" Duration="0.1">
+        <Animation Preset="2_skill/2_tsuba/4_away" XFlip="true" Duration="0.1">
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
@@ -216,22 +216,9 @@
 <!-- Skill : Tsuba -->
 
 <!-- Defense Action -->
-    <AC_Dodge MovementType="GraphPreset" MovementGraphPreset="Preset_Dodge" DirectionType="AI" FlipType="Direction">
-        <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="2_defense/1_dodge" XFlip="true" Duration="0.7">
-            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
-            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
-
-            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
-            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
-        </Animation>
-
-        <Branch Condition="End" Execute="AC_Idle"/>
-    </AC_Dodge>
-
     <AC_Guard MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" DefenceType="Guard" DefenceDirectionType="Direction" DefenceAngle="180">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="2_defense/2_guard" XFlip="true" Duration="0.5">
+        <Animation Preset="1_defense/1_guard" XFlip="true" Duration="0.5">
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" Condition="DefenceSuccess" StartTime="0" EndTime="999" ApplyBuff="GuardCountIncrease"/>
 
@@ -244,7 +231,7 @@
 
     <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="2_defense/3_guardBroken" XFlip="true" Duration="1.25">
+        <Animation Preset="1_defense/2_guardBroken" XFlip="true" Duration="1.25">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="4921" Attach="true"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
@@ -255,6 +242,19 @@
 
         <Branch Condition="End == true" Execute="AC_Idle"/>
     </AC_GuardBroken>
+
+    <AC_Dodge MovementType="GraphPreset" MovementGraphPreset="Preset_Dodge" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="1_defense/3_dodge" XFlip="true" Duration="0.7">
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="AC_Idle"/>
+    </AC_Dodge>
 <!-- Defense Action -->
 
     <AIMove MovementType="GraphPreset" MovementGraphPreset="Move" DirectionType="AI" FlipType="Direction" ActiveCollision="False">
@@ -304,7 +304,7 @@
 
     <AC_Catch_Entry MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="3_skill/1_catch/1_entry" XFlip="true" Duration="0.3">
+        <Animation Preset="2_skill/1_catch/1_entry" XFlip="true" Duration="0.3">
 
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2103" Attach="true" Switch="True"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12"/>
@@ -314,7 +314,7 @@
     </AC_Catch_Entry>
     <AC_Catch_Struggle MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="3_skill/1_catch/2_struggle" XFlip="true" Duration="0.3">
+        <Animation Preset="2_skill/1_catch/2_struggle" XFlip="true" Duration="0.3">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2411" Attach="true" Switch="True"/>
             <FrameEvent Type="Movement" StartTime="0" Speed="0" Velocity="2" MaxVelocity="5" Friction="12"/>
         </Animation>
@@ -323,7 +323,7 @@
     </AC_Catch_Struggle>
     <AC_Catch_Away MovementType="FrameEvent" DirectionType="Keep" RotationType="Direction" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="3_skill/1_catch/3_away" XFlip="true" Duration="0.9">
+        <Animation Preset="2_skill/1_catch/3_away" XFlip="true" Duration="0.9">
         
             <FrameEvent Type="Movement" StartTime="0" Friction="4" MaxVelocity="9" Velocity="-4" Speed="0"/>
 
