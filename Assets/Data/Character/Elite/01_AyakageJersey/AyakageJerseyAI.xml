@@ -1,10 +1,10 @@
-<AIGraph Name="EmptyAIGraph" DefaultState="Entry">
+<AIGraph Name="AyakageJerseyAI" DefaultState="Entry">
 
-    <Include Path="Assets/Data/Character/Boss/TateChan/TateChanPackage.xml"/>
-    <Include Path="Assets/Data/Character/Boss/TateChan/TateRepressPackage.xml"/>
-    <Include Path="Assets/Data/Character/Boss/TateChan/TateDefensePackage.xml"/>
-    <Include Path="Assets/Data/Character/Boss/TateChan/TateGuardBreakHitPackage.xml"/>
-    <Include Path="Assets/Data/Character/Boss/TateChan/TateDodgePackage.xml"/>
+    <Include Path="Assets/Data/Character/Elite/01_AyakageJersey/AyakageJerseyPackage.xml"/>
+    <Include Path="Assets/Data/Character/Elite/01_AyakageJersey/AyakageJerseyRepressPackage.xml"/>
+    <Include Path="Assets/Data/Character/Elite/01_AyakageJersey/AyakageJerseyDefensePackage.xml"/>
+    <Include Path="Assets/Data/Character/Elite/01_AyakageJersey/AyakageJerseyGuardBreakHitPackage.xml"/>
+    <Include Path="Assets/Data/Character/Elite/01_AyakageJersey/AyakageJerseyDodgePackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonDeadPackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonChasePackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonBumpAttackPackage.xml"/>
@@ -39,7 +39,7 @@
     </BranchSet>
     <!-- Branch Set -->
     
-    <Test Package="TateChanPackage">
+    <Test Package="AyakageJerseyPackage">
         <Branch Condition="Dead" Execute="Dead"/>
     </Test>
 
@@ -56,14 +56,14 @@
         <!-- <Branch Condition="GraphExecutedTime >= gv_movingTime" Execute="Entry"/> -->
     </Chase>
 
-    <DefenseMode Package="TateDefensePackage">
+    <DefenseMode Package="AyakageJerseyDefensePackage">
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="TargetExists == false" Execute="Entry"/>
         <Branch Condition="(TargetDistance >= gv_guardOffDistance)" Execute="Entry"/>
         <Branch Condition="(TargetDistance <= gv_guardAttackDistance) && (GraphExecutedTime >= 0.2)&& (getStat_AttackDelay >= 1.0)" Execute="Attack"/>
     </DefenseMode>
 
-    <RepressMode Package="TateRepressPackage">
+    <RepressMode Package="AyakageJerseyRepressPackage">
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="TargetExists == false" Execute="Entry"/>
         <Branch Condition="TargetDistance >= gv_guardOffDistance" Execute="Entry"/>
@@ -76,7 +76,7 @@
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </Attack>
 
-    <GuardBreakHit Package="TateGuardBreakHitPackage">
+    <GuardBreakHit Package="AyakageJerseyGuardBreakHitPackage">
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="TargetExists == false" Execute="Entry"/>
         <Branch Condition="CurrentPackageEnd" Execute="DefenseMode"/>
@@ -95,7 +95,7 @@
         <Branch Condition="CurrentPackageEnd" Execute="Entry"/>
     </Hit>
 
-    <HitGuard Package="TateDefensePackage" EntryNode="AI_HitGuard">
+    <HitGuard Package="AyakageJerseyDefensePackage" EntryNode="AI_HitGuard">
         <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="Hit && (getStat_HitCount >= 2.0)" Execute="HitGuard"/>
         <Branch Condition="Hit" Execute="Hit"/>
@@ -106,7 +106,7 @@
     </HitGuard>
 
     <!-- TODO 연속 피격 후 회피 패턴 검토-->
-    <Dodge Package="TateDodgePackage">
+    <Dodge Package="AyakageJerseyDodgePackage">
         <UseBranchSet Name="HitReactionSet"/>
         <Branch Condition="CurrentPackageEnd" Execute="Attack"/>
     </Dodge>

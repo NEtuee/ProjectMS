@@ -18,7 +18,7 @@
         <Fade/>
 
         <BlockAI UniqueKey="YakisobaChan" Enable="True"/>
-        <BlockAI UniqueKey="TateChan" Enable="True"/>
+        <BlockAI UniqueKey="AyakageJersey" Enable="True"/>
 
         <SetCameraBoundLock UniqueKey="YakisobaChan" Enable="False"/>
     </InitializePhase>
@@ -44,16 +44,16 @@
             <AIMove UniqueKey="YakisobaChan" LoopAction="Throw" EndPositionMarker="YakisobaChanEnd"/>
         </Task>
 
-        <SetDirection UniqueKey="TateChan" DirectionType="AlwaysLeft"/>
-        <SetAction UniqueKey="TateChan" Action="AC_GuardBroken"/>
-        <TalkBalloon UniqueKey="TateChan" SimpleTalkKey="Talk_Stage03_1_1"/>
+        <SetDirection UniqueKey="AyakageJersey" DirectionType="AlwaysLeft"/>
+        <SetAction UniqueKey="AyakageJersey" Action="AC_GuardBroken"/>
+        <TalkBalloon UniqueKey="AyakageJersey" SimpleTalkKey="Talk_Stage03_1_1"/>
     
 
         <WaitSecond Time="2.0"/>
-        <TalkBalloon UniqueKey="TateChan" SimpleTalkKey="Talk_Stage03_1_2"/>
-        <AIMove UniqueKey="TateChan" LoopAction="SQ_Move" EndPositionMarker="YakisobaChanEnd"/>
+        <TalkBalloon UniqueKey="AyakageJersey" SimpleTalkKey="Talk_Stage03_1_2"/>
+        <AIMove UniqueKey="AyakageJersey" LoopAction="SQ_Move" EndPositionMarker="YakisobaChanEnd"/>
 
-        <KillEntity UniqueKey="TateChan"/>
+        <KillEntity UniqueKey="AyakageJersey"/>
         <KillEntity UniqueKey="YakisobaChan"/>
 
         <WaitSecond Time="0.5"/>

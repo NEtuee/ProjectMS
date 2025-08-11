@@ -32,25 +32,12 @@
 
         AllyInfo="Player"
     />
-    <AkaneDodgeCheck
-        DisplayName="아카네 극한회피 판정기"
-        ActionGraph="Assets/Data/Character/Akane/MainPlayerDodgeAction.xml"
-        AIGraph="Assets/Data/Character/Akane/MainPlayerDodgeAI.xml"
-        StatusInfoName="CommonPlayerStatus"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-        UseInputBuffer="True"
-
-        AllyInfo="PlayerDodgeCheck"
-    />
     
-    <TateChan
-        DisplayName="타테짱"
-        ActionGraph="Assets/Data/Character/Boss/TateChan/TateChanAction.xml"
-        AIGraph="Assets/Data/Character/Boss/TateChan/TateChanAI.xml"
-        StatusInfoName="TateChanStatus"
+    <AyakageJersey
+        DisplayName="하즈키노미야 아야카게(체육복)"
+        ActionGraph="Assets/Data/Character/Elite/01_AyakageJersey/AyakageJerseyAction.xml"
+        AIGraph="Assets/Data/Character/Elite/01_AyakageJersey/AyakageJerseyAI.xml"
+        StatusInfoName="AyakageJerseyStatus"
 
         HeadUpOffset="0.5"
         CollisionRadius="0.2"
@@ -335,6 +322,18 @@
         AllyInfo="PerfectTeam"
     />
 
+    <SisterOlive
+        DisplayName="시스터 올리브"
+        ActionGraph="Assets/Data/Character/Boss/SisterOlive/SisterOliveAction.xml"
+        AIGraph="Assets/Data/Character/Boss/SisterOlive/SisterOliveAI.xml"
+        StatusInfoName="SisterHelenaStatus"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="Sister"
+    />
     <SisterHelena
         DisplayName="시스터 헬레나"
         ActionGraph="Assets/Data/Character/Boss/SisterHelena/SisterChanAction.xml"
