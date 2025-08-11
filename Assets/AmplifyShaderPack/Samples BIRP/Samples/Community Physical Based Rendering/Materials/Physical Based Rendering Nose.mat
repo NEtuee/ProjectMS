@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Physical Based Rendering Nose
+  m_Shader: {fileID: 4800000, guid: cfe5425e28069094abb1c8efcf7ec21b, type: 3}
+  m_Parent: {fileID: 2100000, guid: 59819dfcc7fc0b84eabad2e87e69f253, type: 2}
+  m_ModifiedSerializedProperties: 16
+  m_ValidKeywords: []
+  m_InvalidKeywords:
+  - _ADD_PRECOMPUTED_VELOCITY
+  - _ENABLELIGHTMAPS_ON
+  - _REFLECTIVEBYPASS_ON
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BumpMap:
+        m_Texture: {fileID: 2800000, guid: f565e9e1bb652464cb5e29db8db2ccb2, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MSOMROMap:
+        m_Texture: {fileID: 2800000, guid: e894e9e71b4afad448262a5ba8c0e0be, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MSOMap:
+        m_Texture: {fileID: 2800000, guid: 93fe70f86dc6e81428ce4e2fa2d1783a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainMaskMap:
+        m_Texture: {fileID: 2800000, guid: e894e9e71b4afad448262a5ba8c0e0be, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: f066cb97f188c654a88fd05ce05e6512, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _Brightness: 1.15
+    - _ConvertMaptoMRO: 0
+    - _Float2: 1
+    - _IndirectDiffuse: 0.65
+    - _MainMaskType: 1
+    - _MetallicStrength: 1
+    - _NDFAnistropic: -2
+    - _NDFRoughness: 1.9
+    - _NDFSmoothness: 0.765
+    - _OcclusionStrengthAO: 1
+    - _Saturation: 0
+    - _ShadowSharpness: 0.738
+    - _SmoothnessStrength: 1
+    - _TranslucencyMapInverted: 0
+    m_Colors:
+    - _IndirectSpecColor: {r: 0.6132076, g: 0.25743148, b: 0.25743148, a: 1}
+    - _IndirectSpecularColor: {r: 1, g: 0.9568626, b: 0.8392157, a: 0}
+    - _ShadowColor: {r: 0.3301887, g: 0.09812211, b: 0.11353245, a: 0}
+    - _SpecularColor: {r: 0.9528302, g: 0.62473303, b: 0.6526562, a: 1}
+    - _TranslucencyColor: {r: 0.8879232, g: 0.4072403, b: 0.4072403, a: 1}
+    - _TransmissionColor: {r: 0.8867924, g: 0.40574938, b: 0.40574938, a: 1}
+  m_BuildTextureStacks: []
