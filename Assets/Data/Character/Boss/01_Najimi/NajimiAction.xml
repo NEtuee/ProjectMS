@@ -1,4 +1,4 @@
-<ActionGraph Name="NajimiChanAlphaAction" DefaultAction="AC_Idle" DefaultFramePerSecond="12" DefaultBuff="NajimiBattleDecrementKeep">
+<ActionGraph Name="NajimiAction" DefaultAction="AC_Idle" DefaultFramePerSecond="12" DefaultBuff="NajimiBattleDecrementKeep">
 
     <AC_Entry MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/0_default/"/>
@@ -134,7 +134,7 @@
 
     <!-- 아카네를 잡기위해 돌진하는 모션, 충돌 시 데미지 적용, 잡기 처리 -->
     <!-- TODO: RotationType 추가 적용 -->
-    <AC_Rush MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+    <AC_Rush MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
         <!-- 나지미 돌진, 헛다리 애니메이션. 공격 성공 시 성공 액션으로 전이. -->
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/1_rushPattern/1_rush/"/>
         <Animation Preset="1_rushMain" XFlip="true" Duration="0.35">
