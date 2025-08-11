@@ -1,4 +1,4 @@
-<AIGraph Name="ReitoChanAI" DefaultState="Entry_Battle">
+<AIGraph Name="ReitoAI" DefaultState="Entry_Battle">
     <!-- 옵션 설정 -->
     <!-- 공격 거리 설정 -->
     <GlobalVariable Name="gv_MeleeAttackRangeMin"           Value="0.0"/>       <!-- 최소 공격 사거리 : Value보다 PC가 가까우면 공격하지 않는다. -->
@@ -44,13 +44,13 @@
     <Include Path="Assets/Data/AILibrary/Package/CommonGuardPackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonSelfHealPackage.xml"/>
 
-    <Include Path="Assets/Data/Character/Boss/KantoReito/ReitoPunchPackage.xml"/>
-    <Include Path="Assets/Data/Character/Boss/KantoReito/ReitoStepPackage.xml"/>
-    <Include Path="Assets/Data/Character/Boss/KantoReito/ReitoSpwanGauntletPackage.xml"/>
-    <Include Path="Assets/Data/Character/Boss/KantoReito/ReitoSpawnMissilePackage.xml"/>
-    <Include Path="Assets/Data/Character/Boss/KantoReito/ReitoCremationBeamPackage.xml"/>
-    <Include Path="Assets/Data/Character/Boss/KantoReito/ReitoDodgePackage.xml"/>
-    <Include Path="Assets/Data/Character/Boss/KantoReito/ReitoGuardPackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/03_Reito/ReitoPunchPackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/03_Reito/ReitoStepPackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/03_Reito/ReitoSpwanGauntletPackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/03_Reito/ReitoSpawnMissilePackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/03_Reito/ReitoCremationBeamPackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/03_Reito/ReitoDodgePackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/03_Reito/ReitoGuardPackage.xml"/>
 
     <Test Package="CommonTestPackage">
         <Branch Condition="CurrentPackageEnd" Execute="Test"/>
