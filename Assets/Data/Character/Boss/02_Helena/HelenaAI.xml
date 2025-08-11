@@ -1,4 +1,4 @@
-<AIGraph Name="SisterChanAI" DefaultState="JudgeRangedAttack"> <!--Entry_Battle-->
+<AIGraph Name="HelenaAI" DefaultState="JudgeRangedAttack"> <!--Entry_Battle-->
     <!-- 옵션 설정 -->
     <!-- 공격 거리 설정 -->
     <GlobalVariable Name="gv_MeleeAttackRangeMin"           Value="0.0"/>       <!-- 최소 공격 사거리 : Value보다 PC가 가까우면 공격하지 않는다. -->
@@ -43,13 +43,13 @@
     <Include Path="Assets/Data/AILibrary/Package/CommonGuardPackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonSelfHealPackage.xml"/>
 
-    <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterThunderStrokePackage.xml"/>
-    <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterSpawnBookPackage.xml"/>
-    <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterBarriorPackage.xml"/>
-    <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterThunderStormPackage.xml"/>
-    <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterCommandBookPackage.xml"/>
-    <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterDodgePackage.xml"/>
-    <Include Path="Assets/Data/Character/Boss/SisterHelena/SisterDischargePackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/02_Helena/HelenaThunderStrokePackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/02_Helena/HelenaSpawnBookPackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/02_Helena/HelenaBarriorPackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/02_Helena/HelenaThunderStormPackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/02_Helena/HelenaCommandBookPackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/02_Helena/HelenaDodgePackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/02_Helena/HelenaDischargePackage.xml"/>
 
     <!-- Custom Value -->
     <CustomValue Name="CountCrimson" Value="0.0"/>
@@ -136,7 +136,7 @@
     <!-- BranchSet -->
 
     <!-- Test -->
-        <Test Package="SisterSpawnBookPackage" EntryNode="AI_Crimson">
+        <Test Package="HelenaSpawnBookPackage" EntryNode="AI_Crimson">
             <Branch Condition="Hit && getFrameTag_HitAvil" Execute="TestHit"/>
             <Branch Condition="(GuardBreakFail || GuardBroken) && getFrameTag_GbAvail" Execute="TestGuardBroken"/>
             <Branch Condition="CurrentPackageEnd" Execute="Test"/>
@@ -161,7 +161,7 @@
         <UseBranchSet Name="BattleEntrySet"/>
     </Entry_Battle>
     
-    <Battle_Move Package="SisterDodgePackage" EntryNode="AI_InvisibleDodge_Invisible">
+    <Battle_Move Package="HelenaDodgePackage" EntryNode="AI_InvisibleDodge_Invisible">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </Battle_Move>
@@ -236,28 +236,28 @@
     <!-- AI 스테이트 : 전투 상태 : 공격 -->
 
     <!-- 근거리 통상 공격: 낙뢰  -->
-    <ThunderStroke Package="SisterThunderStrokePackage" CoolTime="0.0">
+    <ThunderStroke Package="HelenaThunderStrokePackage" CoolTime="0.0">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </ThunderStroke>
     <!-- 근거리 공격: 방전 -->
-    <Discharge Package="SisterDischargePackage" CoolTime="10.0">
+    <Discharge Package="HelenaDischargePackage" CoolTime="10.0">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </Discharge>
     <!-- 원거리 통상 공격: 레이저 -->
-    <HelenaLaser Package="SisterBarriorPackage" EntryNode="AI_Counter" CoolTime="0.0">
+    <HelenaLaser Package="HelenaBarriorPackage" EntryNode="AI_Counter" CoolTime="0.0">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>        
     </HelenaLaser>
 
     <!-- 소환: 마도서 소환 -->
-    <SpawnBook_Crimson Package="SisterSpawnBookPackage" EntryNode="AI_Crimson" CoolTime="8.0">
+    <SpawnBook_Crimson Package="HelenaSpawnBookPackage" EntryNode="AI_Crimson" CoolTime="8.0">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
         <Branch Condition="(customValue_CountCrimson < 3.0)" Execute="SpawnBook_Crimson_Set"/>
     </SpawnBook_Crimson>
-    <SpawnBook_Crimson_Set Package="SisterSpawnBookPackage" EntryNode="AI_CrimsonSet" CoolTime="8.0">
+    <SpawnBook_Crimson_Set Package="HelenaSpawnBookPackage" EntryNode="AI_CrimsonSet" CoolTime="8.0">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </SpawnBook_Crimson_Set>
@@ -268,23 +268,23 @@
 
     <!-- 명령: 마도서 공격 -->
     <!-- 원거리 통상 공격 : 레이저 발사 -->
-    <CommandBook_LaserWith Package="SisterCommandBookPackage" EntryNode="AI_LaserWith" CoolTime="0.0">
+    <CommandBook_LaserWith Package="HelenaCommandBookPackage" EntryNode="AI_LaserWith" CoolTime="0.0">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </CommandBook_LaserWith>
     <!-- 원거리 강공격 : 레이저 서라운드 -->
-    <CommandBook_LaserIn Package="SisterCommandBookPackage" EntryNode="AI_LaserIn" CoolTime="14.0">
+    <CommandBook_LaserIn Package="HelenaCommandBookPackage" EntryNode="AI_LaserIn" CoolTime="14.0">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </CommandBook_LaserIn>
 
     <!-- 잡기: 배리어 활성 -->
-    <ActivateBarrior Package="SisterBarriorPackage" EntryNode="AI_Pray" CoolTime="15.0">
+    <ActivateBarrior Package="HelenaBarriorPackage" EntryNode="AI_Pray" CoolTime="15.0">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>        
     </ActivateBarrior>
     
-    <BarriorActivated Package="SisterBarriorPackage">
+    <BarriorActivated Package="HelenaBarriorPackage">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>        
     </BarriorActivated>
@@ -292,13 +292,13 @@
 
     <!-- 필드 장악: 라이트닝볼트 (광역장판) -->
     <!-- NOTUSE -->
-    <ThunderStorm Package="SisterThunderStormPackage" CoolTime="20.0">
+    <ThunderStorm Package="HelenaThunderStormPackage" CoolTime="20.0">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </ThunderStorm>
 
     <!-- 필드 장악: 레이저 스핀 -->
-    <CommandBook_LaserOut Package="SisterCommandBookPackage" EntryNode="AI_LaserOut" CoolTime="15.0">
+    <CommandBook_LaserOut Package="HelenaCommandBookPackage" EntryNode="AI_LaserOut" CoolTime="15.0">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </CommandBook_LaserOut>
@@ -309,7 +309,7 @@
         <UseBranchSet Name="BattlePackageEndSet"/>
     </Dodge>
 
-    <InvisibleDodge Package="SisterDodgePackage" EntryNode="AI_InvisibleDodge_Disapper" CoolTime="10.0">
+    <InvisibleDodge Package="HelenaDodgePackage" EntryNode="AI_InvisibleDodge_Disapper" CoolTime="10.0">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </InvisibleDodge>

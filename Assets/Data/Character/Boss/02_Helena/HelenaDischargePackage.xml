@@ -1,4 +1,4 @@
-<AIPackage Name="SisterDodgePackage" DefaultState="AI_Entry">
+<AIPackage Name="HelenaDischargePackage" DefaultState="AI_DischargeReady">
 
     <AIState>
         <AI_Entry UpdateTime="0.0">
@@ -8,30 +8,31 @@
             <Branch Condition="true" Execute="TerminatePackage"/>
         </AI_Entry>
 
-        <AI_InvisibleDodge_Disapper UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" AllyTarget="Enemy">
+        <AI_DischargeReady UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
-                <AIEvent Type="SetAction" Action="AC_Disappear"/>
+                <AIEvent Type="SetAction" Action="AC_DischargeReady"/>
             </Event_OnExecute>
             
-            <Branch Condition="End" Execute="AI_InvisibleDodge_Invisible"/>
-        </AI_InvisibleDodge_Disapper>
-        <AI_InvisibleDodge_Invisible UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" AllyTarget="Enemy">
+            <Branch Condition="End" Execute="AI_DischargeMain"/>
+        </AI_DischargeReady>
+
+        <AI_DischargeMain UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
-                <AIEvent Type="SetAction" Action="AC_Invisible"/>
+                <AIEvent Type="SetAction" Action="AC_DischargeMain"/>
             </Event_OnExecute>
             
-            <Branch Condition="End" Execute="AI_InvisibleDodge_Appear"/>
-        </AI_InvisibleDodge_Invisible>
-        <AI_InvisibleDodge_Appear UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" AllyTarget="Enemy">
+            <Branch Condition="End" Execute="AI_DischargeRecover"/>
+        </AI_DischargeMain>
+        <AI_DischargeRecover UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" AllyTarget="Enemy">
             <Event_OnExecute>
                 <AIEvent Type="SetDirectionToTarget"/>
-                <AIEvent Type="SetAction" Action="AC_Appear"/>
+                <AIEvent Type="SetAction" Action="AC_DischargeRecover"/>
             </Event_OnExecute>
             
             <Branch Condition="End" Execute="TerminatePackage"/>
-        </AI_InvisibleDodge_Appear>
+        </AI_DischargeRecover>
 
         <TerminatePackage>
             <Event_OnExecute>

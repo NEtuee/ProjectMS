@@ -17,6 +17,7 @@
 -->
 
 <CharacterInfo>
+<!-- Player -->
     <Akane
         DisplayName="아카네"
         ActionGraph="Assets/Data/Character/Akane/MainPlayerAction.xml"
@@ -32,7 +33,65 @@
 
         AllyInfo="Player"
     />
-    
+<!-- Player -->
+
+<!-- Boss -->
+    <Najimi
+        DisplayName="오사나나 나지미"
+        ActionGraph="Assets/Data/Character/Boss/01_Najimi/NajimiAction.xml"
+        AIGraph="Assets/Data/Character/Boss/01_Najimi/NajimiAI.xml"
+        StatusInfoName="NajimiStatus"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        PortraitPath="Sprites/UI/Portrait/Najimi"
+
+        AllyInfo="SportsClub"
+    />
+
+    <Helena
+        DisplayName="시스터 헬레나"
+        ActionGraph="Assets/Data/Character/Boss/02_Helena/HelenaAction.xml"
+        AIGraph="Assets/Data/Character/Boss/02_Helena/HelenaAI.xml"
+        StatusInfoName="HelenaStatus"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="Sister"
+    />
+
+    <Reito
+        DisplayName="칸토 레이토"
+        ActionGraph="Assets/Data/Character/Boss/03_Reito/ReitoAction.xml"
+        AIGraph="Assets/Data/Character/Boss/03_Reito/ReitoAI.xml"
+        StatusInfoName="ReitoStatus"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="CommonBattle"
+    />
+
+    <Aoba
+        DisplayName="노자와 아오바"
+        ActionGraph="Assets/Data/Character/Boss/04_Aoba/AobaAction.xml"
+        AIGraph="Assets/Data/Character/Boss/04_Aoba/AobaAI.xml"
+        StatusInfoName="AobaStatus"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="Police"
+    />
+<!-- Boss -->
+
+<!-- Elite -->
     <AyakageJersey
         DisplayName="하즈키노미야 아야카게(체육복)"
         ActionGraph="Assets/Data/Character/Elite/01_AyakageJersey/AyakageJerseyAction.xml"
@@ -45,30 +104,40 @@
 
         AllyInfo="CommonBattle"
     />
+<!-- Elite -->
 
-    <TestZako
-        DisplayName="자코"
-        ActionGraph="Assets/Data/Character/TestZako/TestZako.xml"
-        AIGraph="Assets/Data/Character/TestZako/TestZakoAI.xml"
+<!-- Mob -->
+<!-- Mob -->
+
+<!-- NPC :: TODO -->
+    <IinchoChan
+        DisplayName="반장쨩"
+        ActionGraph="Assets/Data/Character/IinchoChan/IinchoChanAction.xml"
+        AIGraph="Assets/Data/AILibrary/Graph/CommonPlayerTargetAIGraph.xml"
         StatusInfoName="CommonEnemyStatus"
 
         CollisionRadius="0.2"
-        ProjectileCollisionRadius=""
+        HeadUpOffset="0.5"
 
         AllyInfo="CommonBattle"
     />
-    <TutorialStudentTest
-        DisplayName="튜토리얼 더미 체력 개많음"
-        ActionGraph="Assets/Data/Character/TutorialStudent/TutorialStudentAction.xml"
-        AIGraph="Assets/Data/Character/TutorialStudent/TutorialStudentAI.xml"
-        StatusInfoName="CommonEnemyStatusNoUITest"
+
+    <TutorialTeacher
+        DisplayName="튜토리얼 선생"
+        ActionGraph="Assets/Data/Character/TutorialTeacher/TurorialTeacherAction.xml"
+        AIGraph="Assets/Data/AILibrary/Graph/CommonEnemyAI.xml"
+        StatusInfoName="CommonEnemyStatusNoUI"
 
         CollisionRadius="0.35"
+        HeadUpOffset="0.5"
         ProjectileCollisionRadius=""
 
         AllyInfo="CommonBattle"
     />
 
+<!-- NPC -->
+
+<!-- Object :: TODO -->
     <TutorialStudent
         DisplayName="튜토리얼 더미"
         ActionGraph="Assets/Data/Character/TutorialStudent/TutorialStudentAction.xml"
@@ -94,19 +163,7 @@
 
         AllyInfo="CommonBattle"
     />
-
-    <IinchoChan
-        DisplayName="반장쨩"
-        ActionGraph="Assets/Data/Character/IinchoChan/IinchoChanAction.xml"
-        AIGraph="Assets/Data/AILibrary/Graph/CommonPlayerTargetAIGraph.xml"
-        StatusInfoName="CommonEnemyStatus"
-
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-
-        AllyInfo="CommonBattle"
-    />
-
+    
     <Chair
         DisplayName="의자"
         ActionGraph="Assets/Data/Character/Object/Chair/ChairObject.xml"
@@ -118,6 +175,83 @@
 
         AllyInfo="InteractObject"
     />
+
+    <Gauntlet
+        DisplayName="건틀렛"
+        ActionGraph="Assets/Data/Character/Object/Gauntlet/GauntletAction.xml"
+        AIGraph="Assets/Data/Character/Object/Gauntlet/GauntletAI.xml"
+        StatusInfoName="GauntletStatus"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="CommonBattle"
+    />
+    <Missile
+        DisplayName="미사일"
+        ActionGraph="Assets/Data/Character/Object/Gauntlet_Missile/MissileAction.xml"
+        AIGraph="Assets/Data/Character/Object/Gauntlet_Missile/MissileAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="CommonBattle"
+    />
+
+    <FireworkBullet
+        DisplayName="폭죽탄"
+        ActionGraph="Assets/Data/Character/Object/FireworkBullet/FireworkBulletAction.xml"
+        AIGraph="Assets/Data/Character/Object/FireworkBullet/FireworkBulletAI.xml"
+        StatusInfoName="ActionProjectileStatus"
+        
+        CollisionRadius="0.2"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="CommonBattle"
+    />
+
+    <EmpGrenade
+        DisplayName="EMP그레네이드"
+        ActionGraph="Assets/Data/Character/Object/EmpGrenade/EmpGrenadeAction.xml"
+        AIGraph="Assets/Data/Character/Object/EmpGrenade/EmpGrenadeAI.xml"
+        StatusInfoName="ActionProjectileStatus"
+        
+        CollisionRadius="0.2"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="CommonBattle"
+    />
+<!-- Object -->
+
+<!-- Test -->
+    <TestZako
+        DisplayName="자코"
+        ActionGraph="Assets/Data/Character/TestZako/TestZako.xml"
+        AIGraph="Assets/Data/Character/TestZako/TestZakoAI.xml"
+        StatusInfoName="CommonEnemyStatus"
+
+        CollisionRadius="0.2"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="CommonBattle"
+    />
+    <TutorialStudentTest
+        DisplayName="튜토리얼 더미 체력 개많음"
+        ActionGraph="Assets/Data/Character/TutorialStudent/TutorialStudentAction.xml"
+        AIGraph="Assets/Data/Character/TutorialStudent/TutorialStudentAI.xml"
+        StatusInfoName="CommonEnemyStatusNoUITest"
+
+        CollisionRadius="0.35"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="CommonBattle"
+    />
+<!-- Test -->
+
+<!-- CrossHair -->
 
     <OsananaNajimiCrossHair
         DisplayName="나지미 크로스헤어"
@@ -176,109 +310,15 @@
 
         AllyInfo="EnemyAllNeutral"
     />
+<!-- CrossHair -->
 
-    <TutorialTeacher
-        DisplayName="튜토리얼 선생"
-        ActionGraph="Assets/Data/Character/TutorialTeacher/TurorialTeacherAction.xml"
-        AIGraph="Assets/Data/AILibrary/Graph/CommonEnemyAI.xml"
-        StatusInfoName="CommonEnemyStatusNoUI"
 
-        CollisionRadius="0.35"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
 
-        AllyInfo="CommonBattle"
-    />
 
-    <Najimi
-        DisplayName="오사나나 나지미"
-        ActionGraph="Assets/Data/Character/Boss/01_Najimi/NajimiAction.xml"
-        AIGraph="Assets/Data/Character/Boss/01_Najimi/NajimiAI.xml"
-        StatusInfoName="NajimiStatus"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
 
-        PortraitPath="Sprites/UI/Portrait/Najimi"
 
-        AllyInfo="SportsClub"
-    />
 
-    <Reito
-        DisplayName="칸토 레이토"
-        ActionGraph="Assets/Data/Character/Boss/03_Reito/ReitoAction.xml"
-        AIGraph="Assets/Data/Character/Boss/03_Reito/ReitoAI.xml"
-        StatusInfoName="ReitoStatus"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
 
-        AllyInfo="CommonBattle"
-    />
-
-    <NozawaAoba
-        DisplayName="노자와 아오바"
-        ActionGraph="Assets/Data/Character/Boss/NozawaAoba/AobaChanAction.xml"
-        AIGraph="Assets/Data/Character/Boss/NozawaAoba/AobaChanAI.xml"
-        StatusInfoName="NozawaAobaStatus"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="Police"
-    />
-
-    <Gauntlet
-        DisplayName="건틀렛"
-        ActionGraph="Assets/Data/Character/Object/Gauntlet/GauntletAction.xml"
-        AIGraph="Assets/Data/Character/Object/Gauntlet/GauntletAI.xml"
-        StatusInfoName="GauntletStatus"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="CommonBattle"
-    />
-    <Missile
-        DisplayName="미사일"
-        ActionGraph="Assets/Data/Character/Object/Gauntlet_Missile/MissileAction.xml"
-        AIGraph="Assets/Data/Character/Object/Gauntlet_Missile/MissileAI.xml"
-        StatusInfoName="CommonHpOneEnemyStatusNoUI"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="CommonBattle"
-    />
-
-    <FireworkBullet
-        DisplayName="폭죽탄"
-        ActionGraph="Assets/Data/Character/Object/FireworkBullet/FireworkBulletAction.xml"
-        AIGraph="Assets/Data/Character/Object/FireworkBullet/FireworkBulletAI.xml"
-        StatusInfoName="ActionProjectileStatus"
-        
-        CollisionRadius="0.2"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="CommonBattle"
-    />
-
-    <EmpGrenade
-        DisplayName="EMP그레네이드"
-        ActionGraph="Assets/Data/Character/Object/EmpGrenade/EmpGrenadeAction.xml"
-        AIGraph="Assets/Data/Character/Object/EmpGrenade/EmpGrenadeAI.xml"
-        StatusInfoName="ActionProjectileStatus"
-        
-        CollisionRadius="0.2"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="CommonBattle"
-    />
     
     <RapierChan
         DisplayName="선도부 선봉부대 레이피어쨩"
@@ -326,7 +366,7 @@
         DisplayName="시스터 올리브"
         ActionGraph="Assets/Data/Character/Boss/SisterOlive/SisterOliveAction.xml"
         AIGraph="Assets/Data/Character/Boss/SisterOlive/SisterOliveAI.xml"
-        StatusInfoName="SisterHelenaStatus"
+        StatusInfoName="HelenaStatus"
         
         CollisionRadius="0.2"
         HeadUpOffset="0.5"
@@ -334,18 +374,7 @@
 
         AllyInfo="Sister"
     />
-    <SisterHelena
-        DisplayName="시스터 헬레나"
-        ActionGraph="Assets/Data/Character/Boss/SisterHelena/SisterChanAction.xml"
-        AIGraph="Assets/Data/Character/Boss/SisterHelena/SisterChanAI.xml"
-        StatusInfoName="SisterHelenaStatus"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
 
-        AllyInfo="Sister"
-    />
 
     <MeleePreset
         DisplayName="근접 프리셋 테스트 캐릭터"

@@ -1,4 +1,4 @@
-<AIGraph Name="AobaChanAI" DefaultState="Entry_Battle">
+<AIGraph Name="AobaAI" DefaultState="Entry_Battle">
     <!-- 옵션 설정 -->
     <!-- 공격 거리 설정 -->
     <GlobalVariable Name="gv_MeleeAttackRangeMin"           Value="0.0"/>       <!-- 최소 공격 사거리 : Value보다 PC가 가까우면 공격하지 않는다. -->
@@ -42,17 +42,17 @@
     <Include Path="Assets/Data/AILibrary/Package/CommonDashPackage.xml"/>
     <Include Path="Assets/Data/AILibrary/Package/CommonSelfHealPackage.xml"/>
 
-    <Include Path="Assets/Data/Character/Boss/NozawaAoba/AobaStormRaisenPackage.xml"/>
-    <Include Path="Assets/Data/Character/Boss/NozawaAoba/AobaChargeRaisenPackage.xml"/>
-    <Include Path="Assets/Data/Character/Boss/NozawaAoba/AobaUnwaverRaisenPackage.xml"/>
-    <Include Path="Assets/Data/Character/Boss/NozawaAoba/AobaEmpPackage.xml"/>
-    <Include Path="Assets/Data/Character/Boss/NozawaAoba/AobaWarpChasePackage.xml"/>
-    <Include Path="Assets/Data/Character/Boss/NozawaAoba/AobaTsubaPackage.xml"/>
-    <Include Path="Assets/Data/Character/Boss/NozawaAoba/AobaTsubaReadyPackage.xml"/>
-    <Include Path="Assets/Data/Character/Boss/NozawaAoba/AobaDodgePackage.xml"/>
-    <Include Path="Assets/Data/Character/Boss/NozawaAoba/AobaSpawnDronePackage.xml"/>
-    <Include Path="Assets/Data/Character/Boss/NozawaAoba/AobaThrustPackage.xml"/>
-    <Include Path="Assets/Data/Character/Boss/NozawaAoba/AobaKickPackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/03_Aoba/AobaStormRaisenPackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/03_Aoba/AobaChargeRaisenPackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/03_Aoba/AobaUnwaverRaisenPackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/03_Aoba/AobaEmpPackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/03_Aoba/AobaWarpChasePackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/03_Aoba/AobaTsubaPackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/03_Aoba/AobaTsubaReadyPackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/03_Aoba/AobaDodgePackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/03_Aoba/AobaSpawnDronePackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/03_Aoba/AobaThrustPackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/03_Aoba/AobaKickPackage.xml"/>
 
     <CustomValue Name="CurrentRaisenCount" Value="0.0"/>
     <CustomValue Name="CurrentStormCount" Value="0.0"/>

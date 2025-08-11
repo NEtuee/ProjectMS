@@ -198,7 +198,7 @@
         
     </ReitoStatus>
 
-    <NozawaAobaStatus>
+    <AobaStatus>
         <Stat Type="HP" Max="60" Min="0" Init="60"/>
         <Stat Type="Blood" Max="100" Min="0" Init="3"/>
         <Stat Type="Battle" Max="20" Min="0" Init="0"/>
@@ -208,14 +208,14 @@
 
         <DeclareGraphicInterface Target="HP" Color="1 0 0 1" HorizontalGap="0.1"/>
         <DeclareGraphicInterface Target="Battle" Color="1 0.749 0 1" HorizontalGap="0.1"/>
-    </NozawaAobaStatus>
+    </AobaStatus>
 
     <GauntletStatus>
         <Stat Type="HP" Max="3" Min="0" Init="3"/>
         <Stat Type="Battle" Max="20" Min="0" Init="0"/>
     </GauntletStatus>
 
-    <SisterHelenaStatus>
+    <HelenaStatus>
         <Stat Type="HP" Max="60" Min="0" Init="60"/>
         <Stat Type="Blood" Max="100" Min="0" Init="3"/>
         <Stat Type="Battle" Max="20" Min="0" Init="0"/>
@@ -223,7 +223,7 @@
         
         <Stat Type="HitCount" Max="999" Min="0" Init="0"/>
         <Stat Type="GuardCount" Max="999" Min="0" Init="0"/>
-    </SisterHelenaStatus>
+    </HelenaStatus>
     
     <ActionProjectileStatus>
         <Stat Type="HP" Max="1" Min="0" Init="1"/>
