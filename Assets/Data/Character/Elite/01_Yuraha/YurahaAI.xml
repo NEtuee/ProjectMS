@@ -1,4 +1,4 @@
-<AIGraph Name="SukebanMeleeEliteAI" DefaultState="Entry_Battle">
+<AIGraph Name="YurahaAI" DefaultState="Entry_Battle">
 
 <!-- 옵션 설정 -->
 
@@ -50,11 +50,11 @@
     <Include Path="Assets/Data/AILibrary/Package/CommonRandMovePackage.xml"/>      <!-- 랜덤 이동 패키지-->
                                                                                 <!-- 지정 이동 패키지 (보류) -->
     <!-- 패키지 인클루드 : 전투 상태 -->
-    <Include Path="Assets/Data/Character/Enemy/02_SukebanMelee_Elite/SukebanMeleeEliteSlashPackage.xml"/>           <!-- Skill -->
-    <Include Path="Assets/Data/Character/Enemy/02_SukebanMelee_Elite/SukebanMeleeEliteTrippleSlashPackage.xml"/>    <!-- Skill -->
-    <Include Path="Assets/Data/Character/Enemy/02_SukebanMelee_Elite/SukebanMeleeEliteUziPackage.xml"/>             <!-- Skill -->
-    <Include Path="Assets/Data/Character/Enemy/02_SukebanMelee_Elite/SukebanMeleeEliteSpwanUziPackage.xml"/>        <!-- Skill -->
-    <Include Path="Assets/Data/Character/Enemy/02_SukebanMelee_Elite/SukebanMeleeEliteTsubaPackage.xml"/>           <!-- Skill -->
+    <Include Path="Assets/Data/Character/Elite/01_Yuraha/YurahaSlashPackage.xml"/>           <!-- Skill -->
+    <Include Path="Assets/Data/Character/Elite/01_Yuraha/YurahaTrippleSlashPackage.xml"/>    <!-- Skill -->
+    <Include Path="Assets/Data/Character/Elite/01_Yuraha/YurahaUziPackage.xml"/>             <!-- Skill -->
+    <Include Path="Assets/Data/Character/Elite/01_Yuraha/YurahaSpwanUziPackage.xml"/>        <!-- Skill -->
+    <Include Path="Assets/Data/Character/Elite/01_Yuraha/YurahaTsubaPackage.xml"/>           <!-- Skill -->
     <Include Path="Assets/Data/AILibrary/Package/CommonChasePackage.xml"/>         <!-- 추격 이동 패키지 -->
     <Include Path="Assets/Data/AILibrary/Package/CommonSystemChasePackage.xml"/>   <!-- 시스템 추격 이동 패키지 -->
     <Include Path="Assets/Data/AILibrary/Package/CommonAlertPackage.xml"/>         <!-- 경계 이동 패키지 -->
@@ -224,24 +224,24 @@
     <!-- AI 스테이트 : 전투 상태 : 공격 -->
     <!-- Skill State List-->
 
-    <Slash Package="SukebanMeleeEliteSlashPackage" CoolTime="2.0">
+    <Slash Package="YurahaSlashPackage" CoolTime="2.0">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </Slash>
-    <TrippleSlash Package="SukebanMeleeEliteTrippleSlashPackage" CoolTime="7.0">
+    <TrippleSlash Package="YurahaTrippleSlashPackage" CoolTime="7.0">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </TrippleSlash>
-    <Uzi Package="SukebanMeleeEliteUziPackage" CoolTime="4.0">
+    <Uzi Package="YurahaUziPackage" CoolTime="4.0">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </Uzi>
-    <TrippleUzi Package="SukebanMeleeEliteSpwanUziPackage" CoolTime="10.0">
+    <TrippleUzi Package="YurahaSpwanUziPackage" CoolTime="10.0">
         <UseBranchSet Name="HitReactionSet"/>
         <UseBranchSet Name="BattlePackageEndSet"/>
     </TrippleUzi>
 
-    <Tsuba Package="SukebanMeleeEliteTsubaPackage" CoolTime="7.0">
+    <Tsuba Package="YurahaTsubaPackage" CoolTime="7.0">
         <Branch Condition="Dead" Execute="Dead"/>
         <Branch Condition="getTargetFrameTag_Dead" Execute="EnemyWin"/>
         <UseBranchSet Name="BattlePackageEndSet"/>

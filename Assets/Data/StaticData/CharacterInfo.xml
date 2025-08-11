@@ -92,6 +92,22 @@
 <!-- Boss -->
 
 <!-- Elite -->
+    <Yuraha
+        DisplayName="카미시로 유라하"
+        ActionGraph="Assets/Data/Character/Elite/01_Yuraha/YurahaAction.xml"
+        AIGraph="Assets/Data/Character/Elite/01_Yuraha/YurahaAI.xml"
+        StatusInfoName="YurahaStatus"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+        RankBadgeID="3"
+
+        PortraitPath="Sprites/UI/Portrait/EliteSukeban"
+
+        AllyInfo="Sukeban"
+    />
+
     <AyakageJersey
         DisplayName="하즈키노미야 아야카게(체육복)"
         ActionGraph="Assets/Data/Character/Elite/01_AyakageJersey/AyakageJerseyAction.xml"
@@ -442,35 +458,6 @@
         AllyInfo="Sister"
     />
 
-    <SukebanEliteChan
-        DisplayName="스케반 엘리트쨩"
-        ActionGraph="Assets/Data/Character/Enemy/02_SukebanMelee_Elite/SukebanMeleeEliteAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/02_SukebanMelee_Elite/SukebanMeleeEliteAI.xml"
-        StatusInfoName="SukebanEliteChanStatus"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-        RankBadgeID="3"
-
-        PortraitPath="Sprites/UI/Portrait/EliteSukeban"
-
-        AllyInfo="Sukeban"
-    />
-
-    <BrainWashedSukebanEliteChan
-        DisplayName="세뇌당한 스케반 엘리트쨩"
-        ActionGraph="Assets/Data/Character/Enemy/02_SukebanMelee_Elite/SukebanMeleeEliteBrainWashedAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/02_SukebanMelee_Elite/SukebanMeleeEliteAI.xml"
-        StatusInfoName="SukebanEliteChanStatus"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-        RankBadgeID="3"
-
-        AllyInfo="Sister"
-    />
 
     <Uzi
         DisplayName="스케반 엘리트의 우지 "
