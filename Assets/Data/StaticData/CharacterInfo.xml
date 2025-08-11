@@ -120,6 +120,19 @@
 
         AllyInfo="CommonBattle"
     />
+    
+    <Olive
+        DisplayName="시스터 올리브"
+        ActionGraph="Assets/Data/Character/Elite/02_Olive/OliveAction.xml"
+        AIGraph="Assets/Data/Character/Elite/02_Olive/OliveAI.xml"
+        StatusInfoName="HelenaStatus"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="Sister"
+    />
 <!-- Elite -->
 
 <!-- Mob -->
@@ -378,18 +391,6 @@
         AllyInfo="PerfectTeam"
     />
 
-    <SisterOlive
-        DisplayName="시스터 올리브"
-        ActionGraph="Assets/Data/Character/Boss/SisterOlive/SisterOliveAction.xml"
-        AIGraph="Assets/Data/Character/Boss/SisterOlive/SisterOliveAI.xml"
-        StatusInfoName="HelenaStatus"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="Sister"
-    />
 
 
     <MeleePreset
