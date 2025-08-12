@@ -178,10 +178,10 @@
         AllyInfo="PerfectTeam"
     />
 
-    <SukebanKatanaChan
-        DisplayName="스케반 카타나쨩"
-        ActionGraph="Assets/Data/Character/Enemy/02_SukebanMelee/SukebanMeleeAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/02_SukebanMelee/SukebanMeleeAI.xml"
+    <SukebanKatana
+        DisplayName="스케반 카타나"
+        ActionGraph="Assets/Data/Character/Enemy/02_SukebanKatana/SukebanKatanaAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/02_SukebanKatana/SukebanKatanaAI.xml"
         StatusInfoName="CommonHpOneEnemyStatusNoUI"
         
         CollisionRadius="0.2"
@@ -194,8 +194,8 @@
 
     <BrainWashedSukebanKatanaChan
         DisplayName="세뇌당한 스케반 카타나쨩"
-        ActionGraph="Assets/Data/Character/Enemy/02_SukebanMelee/SukebanMeleeBrainWashedAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/02_SukebanMelee/SukebanMeleeAI.xml"
+        ActionGraph="Assets/Data/Character/Enemy/02_SukebanKatana/SukebanMeleeBrainWashedAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/02_SukebanKatana/SukebanKatanaAI.xml"
         StatusInfoName="CommonHpOneEnemyStatusNoUI"
         
         CollisionRadius="0.2"
@@ -206,10 +206,10 @@
         AllyInfo="Sister"
     />
 
-    <SukebanUziChan
+    <SukebanUzi
         DisplayName="스케반 우지쨩"
-        ActionGraph="Assets/Data/Character/Enemy/02_SukebanRanged/SukebanRangedAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/02_SukebanRanged/SukebanRangedAI.xml"
+        ActionGraph="Assets/Data/Character/Enemy/02_SukebanUzi/SukebanUziAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/02_SukebanUzi/SukebanUziAI.xml"
         StatusInfoName="CommonHpOneEnemyStatusNoUI"
         
         CollisionRadius="0.2"
@@ -222,8 +222,8 @@
 
     <BrainWashedSukebanUziChan
         DisplayName="세뇌당한 스케반 우지쨩"
-        ActionGraph="Assets/Data/Character/Enemy/02_SukebanRanged/SukebanRangedBrainWashedAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/02_SukebanRanged/SukebanRangedAI.xml"
+        ActionGraph="Assets/Data/Character/Enemy/02_SukebanUzi/SukebanRangedBrainWashedAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/02_SukebanUzi/SukebanUziAI.xml"
         StatusInfoName="CommonHpOneEnemyStatusNoUI"
         
         CollisionRadius="0.2"
