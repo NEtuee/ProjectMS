@@ -1,23 +1,40 @@
-<ActionGraph Name="BarbellMeleeAction" DefaultAction="AC_Entry" DefaultFramePerSecond="12">
+<ActionGraph Name="SportsDumbellAction" DefaultAction="AC_Entry" DefaultFramePerSecond="12">
+
 <!-- AnimationHeader MasterPath -->
-<GlobalVariable Name="gv_MasterPath" Value="Sprites/Enemy/BarbbellChan/"/>
-<GlobalVariable Name="gv_DeadPath" Value="Resources/Sprites/Enemy/BarbbellChan/0_default/4_dead"/>
+<GlobalVariable Name="gv_MasterPath" Value="Sprites/Enemy/DumbbellChan/"/>
+<GlobalVariable Name="gv_DeadPath" Value="Resources/Sprites/Enemy/DumbbellChan/0_default/4_dead"/>
+
+<!-- Ranged Attack Type -->
+<GlobalVariable Name="gv_bIsLaserAttack" Value="False"/>
+<GlobalVariable Name="gv_bIsProjectileAttack" Value="True"/>
+<GlobalVariable Name="gv_bIsDanmakuAttack" Value="False"/>
+<GlobalVariable Name="gv_bIsObjectAttack" Value="False"/>   <!-- Spawn Character -->
+
+<!-- Ranged Attack Path -->
+<GlobalVariable Name="gv_TimelineEffectPath" Value="Prefab/Effect/CommonBeam_TimeLine"/>    <!-- Laser -->
+<GlobalVariable Name="gv_LaserAttackPreset" Value="Preset_Ranged_Laser_Normal"/>    <!-- Laser AttackPreset (타임라인 이펙트와 연동됨) -->
+<GlobalVariable Name="gv_ProjectileName" Value="Dumbell"/>                     <!-- Projectile -->
+<GlobalVariable Name="gv_DanmakuPath" Value="Assets/Data/DanmakuGraph/Enemy/MagicalBullet.xml"/>                     <!-- Danmaku -->
+<GlobalVariable Name="gv_ObjectKey" Value="EmpGrenade"/>                                    <!-- CharacterInfo Key -->
+
+<!-- Ranged Attack Delay TIme -->
+<GlobalVariable Name="gv_RangedAttackMovementDelay" Value="0.0"/>  
 
 <!-- Movement Speed Option Variant Set -->
-<GlobalVariable Name="gv_MovementSpeed"             Value="12.0"/>  <!-- Speed는 Velocity = 0 과 병행 사용 불가-->
+<GlobalVariable Name="gv_MovementSpeed"             Value="15.0"/>  <!-- Speed는 Velocity = 0 과 병행 사용 불가-->
 <GlobalVariable Name="gv_MovementVelocity"          Value="0.0"/>   
 <GlobalVariable Name="gv_MovementMaxVelocity"       Value="5.0"/>
 <GlobalVariable Name="gv_MovementFriction"          Value="0.0"/>
 
 <!-- AttackReady Movement Speed Option Variant Set-->
-<GlobalVariable Name="gv_AtkRdMovementSpeed"        Value="15.0"/>  <!-- Speed는 Velocity = 0 과 병행 사용 불가-->
+<GlobalVariable Name="gv_AtkRdMovementSpeed"        Value="8.0"/>  <!-- Speed는 Velocity = 0 과 병행 사용 불가-->
 <GlobalVariable Name="gv_AtkRdMovementVelocity"     Value="0.0"/>   
-<GlobalVariable Name="gv_AtkRdMovementMaxVelocity"  Value="5.0"/>
+<GlobalVariable Name="gv_AtkRdMovementMaxVelocity"  Value="4.0"/>
 <GlobalVariable Name="gv_AtkRdMovementFriction"     Value="0.0"/>
 
 <!-- Attack Movement Speed Option Variant Set-->
 <GlobalVariable Name="gv_AtkMovementSpeed"          Value="0.0"/>   <!-- Speed는 Velocity = 0 과 병행 사용 불가-->
-<GlobalVariable Name="gv_AtkMovementVelocity"       Value="8.0"/>  
+<GlobalVariable Name="gv_AtkMovementVelocity"       Value="8.0"/>  <!-- 반동으로 인한 후방이동은 음수값 사용 -->
 <GlobalVariable Name="gv_AtkMovementMaxVelocity"    Value="12.0"/>
 <GlobalVariable Name="gv_AtkMovementFriction"       Value="18.0"/>
 
@@ -85,11 +102,14 @@
             <FrameEvent Type="Effect" StartTime="0" Path="gv_DeadPath" FramePerSecond="0.2" CastShadow="True">
                 <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
             </FrameEvent>
-            <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Effect/Weapon/Barbell" FramePerSecond="0.2" CastShadow="True">
+            <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Effect/Weapon/Dumbell" FramePerSecond="0.2" CastShadow="True">
+                <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
+            </FrameEvent>
+            <FrameEvent Type="Effect" StartTime="0" Path="Resources/Sprites/Effect/Weapon/Dumbell" FramePerSecond="0.2" CastShadow="True">
                 <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
             </FrameEvent>
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="DiscountSummon" EventTargetType="Summoner"/>
-
+            
             <FrameEvent Type="KillEntity" StartTime="0"/>
         </Animation>
 
@@ -98,80 +118,65 @@
 <!-- Defualt Action -->
 
 <!-- Attack Action -->
-    <AC_AttackReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineNormal">
+    <AC_AttackReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="LaserEffect OutlineNormal">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="1_attack/1_attackReady" XFlip="true" Duration="0.8">
+        <Animation Preset="1_attack/1_attackReady" XFlip="true" Duration="0.5">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2203" Attach="true"/>
             
             <FrameEvent Type="Movement" Condition="gv_AtkRdMovementVelocity == 0.0" StartTime="0" Friction="gv_AtkRdMovementFriction" MaxVelocity="gv_AtkRdMovementMaxVelocity" Speed="gv_AtkRdMovementSpeed"/>
             <FrameEvent Type="Movement" Condition="gv_AtkRdMovementVelocity > 0.0" StartTime="0" Friction="gv_AtkRdMovementFriction" MaxVelocity="gv_AtkRdMovementMaxVelocity" Velocity="gv_AtkRdMovementVelocity" Speed="gv_AtkRdMovementSpeed"/>
 
+            <!-- Laser Attack Indicator -->
+            <FrameEvent Type="TimelineEffect" Condition="gv_bIsLaserAttack" StartTime="0" Path="gv_TimelineEffectPath" Attach="true" AngleType="Direction" LifeTime="0.8" FollowDirection="True" AttackPreset="gv_LaserAttackPreset"/>
+            
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
             
-            <FrameEvent Type="SetDirectionType" StartTime="0.7" DirectionType="Keep"/>
+            <FrameEvent Type="SetDirectionType" StartTime="0.7" DirectionType="Keep"/>  <!-- 타겟 추적 중단용 이벤트 -->
         </Animation>
     
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_AttackReady>
 
-    <AC_AttackMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction" Flags="OutlineNormal">
+    <AC_AttackMain MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" Flags="LaserEffect OutlineNormal">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="1_attack/2_attackMain" XFlip="true" Duration="0.3">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="4901" Attach="true"/>
-            <FrameEvent Type="Movement" Condition="gv_AtkMovementVelocity == 0.0" StartTime="0" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Speed="gv_AtkMovementSpeed"/>
-            <FrameEvent Type="Movement" Condition="gv_AtkMovementVelocity > 0.0" StartTime="0" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Velocity="gv_AtkMovementVelocity" Speed="gv_AtkMovementSpeed"/>
+        <Animation Preset="1_attack/2_attackMain" XFlip="true" Duration="0.2">
+            <FrameEvent Type="SetDirectionType" Condition="gv_bIsLaserAttack == false" StartTime="0" DirectionType="AI"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="4909" Attach="true"/>
             
-            <FrameEvent Type="Attack" StartTime="0" EndTime="0.12" AttackPreset="Barbell_Normal">
-                <OnHit>
-                    <FrameEvent Type="AudioPlay" StartTime="0" ID="4902" Attach="true"/>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
+            <FrameEvent Type="Movement" Condition="(gv_AtkMovementVelocity == 0.0) && (TargetDistance > 1.7)" StartTime="gv_RangedAttackMovementDelay" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Speed="gv_AtkMovementSpeed"/>
+            <FrameEvent Type="Movement" Condition="(gv_AtkMovementVelocity > 0.0)  && (TargetDistance > 1.7)" StartTime="gv_RangedAttackMovementDelay" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Velocity="gv_AtkMovementVelocity" Speed="gv_AtkMovementSpeed"/>
+            <FrameEvent Type="Movement" Condition="(gv_AtkMovementVelocity < 0.0)  && (TargetDistance > 1.7)" StartTime="gv_RangedAttackMovementDelay" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Velocity="gv_AtkMovementVelocity" Speed="gv_AtkMovementSpeed"/>
+            
+            <FrameEvent Type="Movement" Condition="(TargetDistance <= 1.7)" StartTime="gv_RangedAttackMovementDelay" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Velocity="2" Speed="0"/>
+            
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
 
+            <!-- Laser Attack -->
+            <FrameEvent Type="Attack" Condition="gv_bIsLaserAttack" StartTime="0" EndTime="0.1" AttackPreset="gv_LaserAttackPreset">
+                <OnHit>
+                    <FrameEvent Type="AudioPlay" StartTime="0" ID="2205" Attach="true"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
+                    
+                    <FrameEvent Type="StopUpdate" Time="0.1"/>
+                    <FrameEvent Type="SetTimeScale" Scale="0.1" Time="0.1" BlendTime="0.1"/>
+                    <FrameEvent Type="ShakeEffect" Scale="0.1" Speed="10.0" Time="0.1"/>
+                    
+                    <!-- visual -->
                     <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
-                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Blood"/>
-                    
-                    <FrameEvent Type="StopUpdate" Time="0.1"/>
-                    <FrameEvent Type="SetTimeScale" Scale="0.1" Time="0.1" BlendTime="0.1"/>
-                    <FrameEvent Type="ShakeEffect" Scale="0.1" Speed="10.0" Time="0.1"/>
                 </OnHit>
             </FrameEvent>
-            <FrameEvent Type="FrameTag" StartTime="0.12" EndTime="0.3" Tag="GbAvail"/>
-        </Animation>
-
-        <Animation Preset="1_attack/1_attackReady" XFlip="true" Duration="0.3">
-            <FrameEvent Type="SetDirectionType" StartTime="0" DirectionType="AI"/>
-            
-            <FrameEvent Type="Movement" Condition="gv_AtkRdMovementVelocity == 0.0" StartTime="0" Friction="gv_AtkRdMovementFriction" MaxVelocity="gv_AtkRdMovementMaxVelocity" Speed="gv_AtkRdMovementSpeed"/>
-            <FrameEvent Type="Movement" Condition="gv_AtkRdMovementVelocity > 0.0" StartTime="0" Friction="gv_AtkRdMovementFriction" MaxVelocity="gv_AtkRdMovementMaxVelocity" Velocity="gv_AtkRdMovementVelocity" Speed="gv_AtkRdMovementSpeed"/>
-
-            <FrameEvent Type="FrameTag" StartTime="0" EndTime="0.3" Tag="GbAvail"/>
-        </Animation>
-
-        <Animation Preset="1_attack/2_attackMain" XFlip="true" Duration="0.7">
-            <FrameEvent Type="SetDirectionType" StartTime="0" DirectionType="Keep"/>
-
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="4901" Attach="true"/>
-            <FrameEvent Type="Movement" Condition="gv_AtkMovementVelocity == 0.0" StartTime="0" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Speed="gv_AtkMovementSpeed"/>
-            <FrameEvent Type="Movement" Condition="gv_AtkMovementVelocity > 0.0" StartTime="0" Friction="gv_AtkMovementFriction" MaxVelocity="gv_AtkMovementMaxVelocity" Velocity="gv_AtkMovementVelocity" Speed="gv_AtkMovementSpeed"/>
-            
-            <FrameEvent Type="Attack" StartTime="0" EndTime="0.12" AttackPreset="Barbell_Normal">
-                <OnHit>
-                    <FrameEvent Type="AudioPlay" StartTime="0" ID="4902" Attach="true"/>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
-                    
-                    <FrameEvent Type="StopUpdate" Time="0.1"/>
-                    <FrameEvent Type="SetTimeScale" Scale="0.1" Time="0.1" BlendTime="0.1"/>
-                    <FrameEvent Type="ShakeEffect" Scale="0.1" Speed="10.0" Time="0.1"/>
-                </OnHit>
-            </FrameEvent>
-
-            <FrameEvent Type="FrameTag" StartTime="0.12" EndTime="0.7" Tag="GbAvail"/>
-            
+            <!-- Danmaku Attack -->
+            <FrameEvent Type="Danmaku" Condition="gv_bIsDanmakuAttack" StartTime="0" Path="gv_DanmakuPath"/>
+            <!-- Projectile Attack -->
+            <FrameEvent Type="Projectile" Condition="gv_bIsProjectileAttack" StartTime="0" GraphName="gv_ProjectileName" Offset="0.5 0.12 0" UseFlip="true" DirectionType="AI" SpawnTargetType="Self"/>
+            <!-- Object Attack -->
+            <FrameEvent Type="SpawnCharacter" Condition="gv_bIsObjectAttack" StartTime="0" CharacterKey="gv_ObjectKey" Offset="0 0 0" UseFlip="true"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_AttackRecover"/>
     </AC_AttackMain>
 
-    <AC_AttackSuccess MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction" Flags="OutlineSuperArmor">
+    <AC_AttackSuccess MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="1_attack/4_attackSuccess" XFlip="true" Duration="1.0">
             <FrameEvent Type="Movement" Condition="gv_AtkSucMovementVelocity == 0.0" StartTime="0" Friction="gv_AtkSucMovementFriction" MaxVelocity="gv_AtkSucMovementMaxVelocity" Speed="gv_AtkSucMovementSpeed"/>

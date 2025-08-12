@@ -247,8 +247,8 @@
         AllyInfo="Sukeban"
     />
 
-    <SportsBatterChan
-        DisplayName="운동부 밧타쨩"
+    <SportsBatter
+        DisplayName="운동부 밧타"
         ActionGraph="Assets/Data/Character/Enemy/03_SportsBatter/SportsBatterAction.xml"
         AIGraph="Assets/Data/Character/Enemy/03_SportsBatter/SportsBatterAI.xml"
         StatusInfoName="CommonHpOneEnemyStatusNoUI"
@@ -260,8 +260,8 @@
 
         AllyInfo="SportsClub"
     />
-    <SportsPitcherChan
-        DisplayName="운동부 핏쳐쨩"
+    <SportsPitcher
+        DisplayName="운동부 핏쳐"
         ActionGraph="Assets/Data/Character/Enemy/03_SportsPitcher/SportsPitcherAction.xml"
         AIGraph="Assets/Data/Character/Enemy/03_SportsPitcher/SportsPitcherAI.xml"
         StatusInfoName="CommonHpOneEnemyStatusNoUI"
@@ -275,7 +275,7 @@
     />
 
     <SportsManager
-        DisplayName="운동부 매니저쨩"
+        DisplayName="운동부 매니저"
         ActionGraph="Assets/Data/Character/Enemy/03_SportsManager/SportsManagerAction.xml"
         AIGraph="Assets/Data/Character/Enemy/03_SportsManager/SportsManagerAI.xml"
         StatusInfoName="CommonHpOneEnemyStatusNoUI"
@@ -288,10 +288,10 @@
         AllyInfo="SportsClub"
     />
     
-    <BarbellChan
-        DisplayName="운동부 바벨쨩"
-        ActionGraph="Assets/Data/Character/Enemy/03_BarbellMelee/BarbellMeleeAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/03_BarbellMelee/BarbellMeleeAI.xml"
+    <SportsBarbell
+        DisplayName="운동부 바벨"
+        ActionGraph="Assets/Data/Character/Enemy/03_SportsBarbell/SportsBarbellAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/03_SportsBarbell/SportsBarbellAI.xml"
         StatusInfoName="CommonHpThreeEnemyStatus"
         
         CollisionRadius="0.2"
@@ -301,10 +301,10 @@
 
         AllyInfo="SportsClub"
     />    
-    <DumbellChan
-        DisplayName="운동부 덤벨쨩"
-        ActionGraph="Assets/Data/Character/Enemy/03_DumbellRanged/DumbellRangedAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/03_DumbellRanged/DumbellRangedAI.xml"
+    <SportsDumbell
+        DisplayName="운동부 덤벨"
+        ActionGraph="Assets/Data/Character/Enemy/03_SportsDumbell/SportsDumbellAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/03_SportsDumbell/SportsDumbellAI.xml"
         StatusInfoName="CommonHpTwoEnemyStatus"
         
         CollisionRadius="0.2"
@@ -314,10 +314,10 @@
 
         AllyInfo="SportsClub"
     />
-    <BarbellChan_najimi
-        DisplayName="운동부 바벨쨩"
-        ActionGraph="Assets/Data/Character/Enemy/03_BarbellMelee/BarbellMeleeAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/03_BarbellMelee/BarbellMeleeAI.xml"
+    <SportsBarbellLowHP
+        DisplayName="운동부 바벨"
+        ActionGraph="Assets/Data/Character/Enemy/03_SportsBarbell/SportsBarbellAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/03_SportsBarbell/SportsBarbellAI.xml"
         StatusInfoName="CommonHpTwoEnemyStatusNoUI"
         
         CollisionRadius="0.2"
@@ -327,10 +327,10 @@
 
         AllyInfo="SportsClub"
     />    
-    <DumbellChan_najimi
-        DisplayName="운동부 덤벨쨩"
-        ActionGraph="Assets/Data/Character/Enemy/03_DumbellRanged/DumbellRangedAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/03_DumbellRanged/DumbellRangedAI.xml"
+    <SportsDumbellLowHP
+        DisplayName="운동부 덤벨"
+        ActionGraph="Assets/Data/Character/Enemy/03_SportsDumbell/SportsDumbellAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/03_SportsDumbell/SportsDumbellAI.xml"
         StatusInfoName="CommonHpOneEnemyStatusNoUI"
         
         CollisionRadius="0.2"
@@ -340,10 +340,10 @@
 
         AllyInfo="SportsClub"
     />
-    <RunnerChan
-        DisplayName="운동부 러너쨩"
-        ActionGraph="Assets/Data/Character/Enemy/03_RunnerChan/RunnerChanAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/03_RunnerChan/RunnerChanAI.xml"
+    <SportsRunner
+        DisplayName="운동부 러너"
+        ActionGraph="Assets/Data/Character/Enemy/03_SportsRunner/SportsRunnerAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/03_SportsRunner/SportsRunnerAI.xml"
         StatusInfoName="CommonHpOneEnemyStatusNoUI"
         
         CollisionRadius="0.2"

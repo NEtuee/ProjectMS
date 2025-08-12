@@ -413,9 +413,9 @@
         <Animation Preset="1_spawnPitchingMachine" XFlip="true" Duration="1.0">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2109" Attach="true" Switch="True"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0.2" CharacterKey="DumbellChan" Offset="Random_-10^-15 Random_-3^3 0"   InheritDirection="false" AINode="Entry_Battle"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0.3" CharacterKey="BarbellChan" Offset="Random_-5^5 Random_8^12 0"  InheritDirection="false" AINode="Entry_Battle"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0.4" CharacterKey="DumbellChan" Offset="Random_10^15 Random_-3^3 0"     InheritDirection="false" AINode="Entry_Battle"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0.2" CharacterKey="SportsDumbell" Offset="Random_-10^-15 Random_-3^3 0"   InheritDirection="false" AINode="Entry_Battle"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0.3" CharacterKey="SportsBarbell" Offset="Random_-5^5 Random_8^12 0"  InheritDirection="false" AINode="Entry_Battle"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0.4" CharacterKey="SportsDumbell" Offset="Random_10^15 Random_-3^3 0"     InheritDirection="false" AINode="Entry_Battle"/>
             <FrameEvent Type="CallAIEvent" StartTime="0.2" EventName="CountSummon" EventTargetType="Self"/>
             <FrameEvent Type="CallAIEvent" StartTime="0.3" EventName="CountSummon" EventTargetType="Self"/>
             <FrameEvent Type="CallAIEvent" StartTime="0.4" EventName="CountSummon" EventTargetType="Self"/>
