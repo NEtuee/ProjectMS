@@ -124,7 +124,7 @@
     <AC_AttackReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineSuperArmor">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/1_rushSwing/1_attackReady" XFlip="true" Duration="0.4">            
-            <FrameEvent Type="Movement" StartTime="0" Friction="0.0" MaxVelocity="5.0" Speed="15.0"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="0.0" MaxVelocity="0.0" Speed="0.0"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
@@ -177,7 +177,7 @@
 <!-- Skill: Grenade  -->
     <AC_GrenadeReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction" Flags="LaserEffect">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="2_skill/2_grnadeSwing/1_attackReady" XFlip="true" Duration="0.8">
+        <Animation Preset="2_skill/2_grnadeSwing/1_grenadeReady" XFlip="true" Duration="0.8">
             <FrameEvent Type="Movement" StartTime="0" Friction="0.0" MaxVelocity="0.0" Speed="0.0"/>
 
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
@@ -191,7 +191,7 @@
 
     <AC_GrenadeSmash MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction" Flags="LaserEffect">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="2_skill/2_grnadeSwing/2_grenadeSmash" XFlip="true" Duration="1.0">
+        <Animation Preset="2_skill/2_grnadeSwing/2_grenadeSmash" XFlip="true" Duration="0.3">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="4901" Attach="true"/>
             <FrameEvent Type="SetDirectionType" StartTime="0" DirectionType="AI"/>
             <FrameEvent Type="Movement" StartTime="0" Friction="0.0" MaxVelocity="0.0" Speed="0.0"/>
@@ -208,12 +208,12 @@
 
     <AC_GrenadeRecover MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="2_skill/2_grnadeSwing/3_attackRecover" XFlip="true" Duration="0.12">
+        <Animation Preset="2_skill/2_grnadeSwing/3_grenadeRecover" XFlip="true" Duration="0.12">
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
 
-        <Branch Condition="End" Execute="AC_Idle"/>
+        <Branch Condition="End" Execute="AC_Entry"/>
     </AC_GrenadeRecover>
 
 <!-- Defense Action -->

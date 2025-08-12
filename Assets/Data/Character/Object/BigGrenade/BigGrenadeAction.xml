@@ -6,15 +6,24 @@
         </Animation>
 
         <Branch Condition="Hit" Execute="Destroy"/>
-        <Branch Condition="End" Execute="Explosion"/>
+        <Branch Condition="End" Execute="ExplosionAtmosphere"/>
     </Move>
 
+    <ExplosionAtmosphere MovementType="Empty" DirectionType="Keep">
+        <Animation Preset="Sprites/Object/BigGrenade/2_explosionatmosphere" Duration="1.5">
+        </Animation>
+        
+        <Branch Condition="Hit" Execute="Destroy"/>
+        <Branch Condition="GuardBroken || GuardBreakFail" Execute="AC_GuardBroken"/>
+        <Branch Condition="End" Execute="Explosion"/>
+    </ExplosionAtmosphere>
+
     <Explosion MovementType="Empty" DirectionType="Keep" DefenceType="Evade" DefenceAngle="360">
-        <Animation Preset="Sprites/Object/BigGrenade/2_explosion" Duration="0.3">
-            <FrameEvent Type="AudioPlay" StartTime="0" ID="6002" Attach="true"/>
+        <Animation Preset="Sprites/Object/BigGrenade/3_explosion" Duration="0.2">
+            <FrameEvent Type="AudioPlay" StartTime="0.1" ID="6002" Attach="true"/>
             <!-- TODO: 폭발 이펙트  -->
-            <FrameEvent Type="EffectPreset" Key="Helena_Explode"/>
-            <FrameEvent Type="Attack" StartTime="0" EndTime="0.3" AttackPreset="Common_Radius05">
+            <FrameEvent Type="EffectPreset"  EndTime="0.2" Key="Helena_Explode"/>
+            <FrameEvent Type="Attack" StartTime="0.1" EndTime="0.2" AttackPreset="Common_Radius05">
                 <OnHit>
                     <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
                 </OnHit>
@@ -24,7 +33,7 @@
     </Explosion>
 
     <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction" RotationType="Keep">
-        <Animation Preset="Sprites/Object/BigGrenade/3_guardbroken" Duration="0.016">
+        <Animation Preset="Sprites/Object/BigGrenade/4_guardbroken" Duration="0.016">
             <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="BigGrenade" Offset="0 0 0" AllyInfo="EnemyAllNeutral" UseFlip="true" InheritDirection="False" AINode="Kicked"/>
             <FrameEvent Type="KillEntity" StartFrame="0"/>
         </Animation>
@@ -33,7 +42,7 @@
     </AC_GuardBroken>
 
     <Exit MovementType="Empty" DirectionType="Keep">
-        <Animation Preset="Sprites/Object/BigGrenade/4_exit" Duration="0.016">
+        <Animation Preset="Sprites/Object/BigGrenade/5_exit" Duration="0.016">
             <FrameEvent Type="KillEntity" StartTime="0"/>
         </Animation>
 
@@ -41,7 +50,7 @@
     </Exit>
 
     <Destroy MovementType="Empty" DirectionType="Keep">
-        <Animation Preset="Sprites/Object/BigGrenade/5_destory" Duration="0.016">
+        <Animation Preset="Sprites/Object/BigGrenade/6_destory" Duration="0.016">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2416" Attach="true"/>
             <FrameEvent Type="KillEntity" StartFrame="0"/>
         </Animation>
