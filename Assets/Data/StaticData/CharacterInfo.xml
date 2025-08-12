@@ -136,10 +136,10 @@
 <!-- Elite -->
 
 <!-- Mob :: TODO -->
-    <RapierChan
-        DisplayName="선도부 선봉부대 레이피어쨩"
-        ActionGraph="Assets/Data/Character/Enemy/01_RapierChan/RapierChanAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/01_RapierChan/RapierChanAI.xml"
+    <PerfectRapier
+        DisplayName="선도부 레이피어"
+        ActionGraph="Assets/Data/Character/Enemy/01_PerfectRapier/PerfectRapierAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/01_PerfectRapier/PerfectRapierAI.xml"
         StatusInfoName="CommonHpOneEnemyStatusNoUI"
         
         CollisionRadius="0.2"
@@ -150,10 +150,10 @@
         AllyInfo="PerfectTeam"
     />
 
-    <LugerChan
-        DisplayName="선도부 마법부대 루거쨩"
-        ActionGraph="Assets/Data/Character/Enemy/01_LugerChan/LugerChanAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/01_LugerChan/LugerChanAI.xml"
+    <PerfectLuger
+        DisplayName="선도부 루거"
+        ActionGraph="Assets/Data/Character/Enemy/01_PerfectLuger/PerfectLugerAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/01_PerfectLuger/PerfectLugerAI.xml"
         StatusInfoName="CommonHpOneEnemyStatusNoUI"
         
         CollisionRadius="0.2"
@@ -164,10 +164,10 @@
         AllyInfo="PerfectTeam"
     />
 
-    <BarricadeChan
-        DisplayName="선도부 마법부대 바리케이드쨩"
-        ActionGraph="Assets/Data/Character/Enemy/01_BarricadeChan/BarricadeChanAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/01_BarricadeChan/BarricadeChanAI.xml"
+    <PerfectBarricade
+        DisplayName="선도부 바리케이드"
+        ActionGraph="Assets/Data/Character/Enemy/01_PerfectBarricade/PerfectBarricadeAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/01_PerfectBarricade/PerfectBarricadeAI.xml"
         StatusInfoName="CommonHpOneEnemyStatusNoUI"
         
         CollisionRadius="0.2"
