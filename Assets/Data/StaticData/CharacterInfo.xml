@@ -379,25 +379,11 @@
 
         AllyInfo="Sister"
     />
-    <SisterStaffChan
-        DisplayName="시스터 스태프쨩"
+    <SisterStaff
+        DisplayName="시스터 스태프"
         ActionGraph="Assets/Data/Character/Enemy/04_SisterStaff/SisterStaffAction.xml"
         AIGraph="Assets/Data/Character/Enemy/04_SisterStaff/SisterStaffAI.xml"
         StatusInfoName="CommonHpFourEnemyStatus"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-        RankBadgeID="0"
-
-        AllyInfo="Sister"
-    />
-    
-    <SisterWandChan
-        DisplayName="시스터 완드쨩"
-        ActionGraph="Assets/Data/Character/Enemy/04_SisterWand/SisterWandAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/04_SisterWand/SisterWandAI.xml"
-        StatusInfoName="CommonHpOneEnemyStatusNoUI"
         
         CollisionRadius="0.2"
         HeadUpOffset="0.5"
@@ -420,8 +406,8 @@
         AllyInfo="Sister"
     />
 
-    <SisterSisterSpearChan
-        DisplayName="시스터 스피어쨩"
+    <SisterSpear
+        DisplayName="시스터 스피어"
         ActionGraph="Assets/Data/Character/Enemy/04_SisterSpear/SisterSpearAction.xml"
         AIGraph="Assets/Data/Character/Enemy/04_SisterSpear/SisterSpearAI.xml"
         StatusInfoName="CommonHpFiveEnemyStatus"
