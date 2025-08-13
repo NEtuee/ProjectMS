@@ -564,9 +564,9 @@
         AllyInfo="CommonBattle"
     />
     
-    <Chair
-        DisplayName="의자"
-        ActionGraph="Assets/Data/Character/Object/Chair/ChairObject.xml"
+    <Obj_CommonChair
+        DisplayName="OBJ 공용 의자"
+        ActionGraph="Assets/Data/Character/Object/99_CommonChair/CommonChairObject.xml"
         AIGraph="Assets/Data/AILibrary/Graph/CommonEnemyAI.xml"
         StatusInfoName="CommonEnemyStatusNoUI"
 
@@ -576,11 +576,26 @@
         AllyInfo="InteractObject"
     />
 
-    <Gauntlet
-        DisplayName="건틀렛"
-        ActionGraph="Assets/Data/Character/Object/Gauntlet/GauntletAction.xml"
-        AIGraph="Assets/Data/Character/Object/Gauntlet/GauntletAI.xml"
-        StatusInfoName="GauntletStatus"
+    <Obj_YurahaUzi
+        DisplayName="OBJ 유라하 우지 "
+        ActionGraph="Assets/Data/Character/Object/00_YurahaUzi/YurahaUziAction.xml"
+        AIGraph="Assets/Data/Character/Object/00_YurahaUzi/YurahaUziAI.xml"
+        StatusInfoName="CommonHpTwoEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        RankBadgeID="1"
+
+        AllyInfo="Sukeban"
+    />
+    
+    <Obj_ReitoGauntlet
+        DisplayName="OBJ 레이토 건틀렛"
+        ActionGraph="Assets/Data/Character/Object/00_ReitoGauntlet/ReitoGauntletAction.xml"
+        AIGraph="Assets/Data/Character/Object/00_ReitoGauntlet/ReitoGauntletAI.xml"
+        StatusInfoName="ReitoGauntletStatus"
         
         CollisionRadius="0.2"
         HeadUpOffset="0.5"
@@ -588,14 +603,156 @@
 
         AllyInfo="CommonBattle"
     />
-    <Missile
-        DisplayName="미사일"
-        ActionGraph="Assets/Data/Character/Object/Gauntlet_Missile/MissileAction.xml"
-        AIGraph="Assets/Data/Character/Object/Gauntlet_Missile/MissileAI.xml"
+    <Obj_ReitoMissile
+        DisplayName="OBJ 레이토 미사일"
+        ActionGraph="Assets/Data/Character/Object/00_ReitoMissile/ReitoMissileAction.xml"
+        AIGraph="Assets/Data/Character/Object/00_ReitoMissile/ReitoMissileAI.xml"
         StatusInfoName="CommonHpOneEnemyStatusNoUI"
         
         CollisionRadius="0.2"
         HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="CommonBattle"
+    />
+    
+    <Obj_PerfectMissile
+        DisplayName="OBJ 선도부 미사일"
+        ActionGraph="Assets/Data/Character/Object/00_ReitoMissile/ReitoMissileAction.xml"
+        AIGraph="Assets/Data/Character/Object/00_ReitoMissile/ReitoMissileAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="CommonBattle"
+    />
+
+    <Obj_AobaEmp
+        DisplayName="OBJ 아오바 EMP"
+        ActionGraph="Assets/Data/Character/Object/00_AobaEmp/AobaEmpAction.xml"
+        AIGraph="Assets/Data/Character/Object/00_AobaEmp/AobaEmpAI.xml"
+        StatusInfoName="ActionProjectileStatus"
+        
+        CollisionRadius="0.2"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="CommonBattle"
+    />
+
+    <Obj_AobaDrone
+        DisplayName="OBJ 아오바 드론"
+        ActionGraph="Assets/Data/Character/Object/00_AobaDrone/AobaDroneAction.xml"
+        AIGraph="Assets/Data/Character/Object/00_AobaDrone/AobaDroneAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+
+        CollisionRadius="0.2"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="Police"
+    />
+
+    <Obj_SportsMachine
+        DisplayName="OBJ 운동부 머신"
+        ActionGraph="Assets/Data/Character/Object/03_SportsMachine/SportsMachineAction.xml"
+        AIGraph="Assets/Data/Character/Object/03_SportsMachine/SportsMachineAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+        RankBadgeID="0"
+
+        AllyInfo="SportsClub"
+    />
+
+    <Obj_SportsBaseball
+        DisplayName="OBJ 운동부 야구공"
+        ActionGraph="Assets/Data/Character/Object/03_SportsBaseball/SportsBaseballAction.xml"
+        AIGraph="Assets/Data/Character/Object/03_SportsBaseball/SportsBaseballAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+
+        CollisionRadius="0.1"
+        HeadUpOffset="0.0"
+        ProjectileCollisionRadius="0.1"
+        RankBadgeID="0"
+        IndicatorVisible="False"
+        UseCameraBoundLock="False"
+
+        AllyInfo="SportsClub"
+    />
+
+    <Obj_SisterTracer
+        DisplayName="OBJ 시스터 트레이서"
+        ActionGraph="Assets/Data/Character/Object/04_SisterTracer/SisterTracerAction.xml"
+        AIGraph="Assets/Data/Character/Object/04_SisterTracer/SisterTracerAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="Sister"
+    />
+
+    <Obj_SisterKnife
+        DisplayName="OBJ 시스터 나이프"
+        ActionGraph="Assets/Data/Character/Object/04_SisterKnife/SisterKnifeAction.xml"
+        AIGraph="Assets/Data/Character/Object/04_SisterKnife/SisterKnifeAI.xml"
+        StatusInfoName="CommonHpTenthsEnemyStatus"
+        
+        CollisionRadius="0.1"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="Sister"
+    />
+
+    <Obj_HelenaGrimoire
+        DisplayName="OBJ 헬레나 마도서"
+        ActionGraph="Assets/Data/Character/Object/00_HelenaGrimoire/HelenaGrimoireAction.xml"
+        AIGraph="Assets/Data/Character/Object/00_HelenaGrimoire/HelenaGrimoireAI.xml"
+        StatusInfoName="CommonEnemyStatus"
+
+        CollisionRadius="0.2"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="Sister"
+    />
+
+    <Obj_HelenaStorm
+        DisplayName="OBJ 헬레나 스톰"
+        ActionGraph="Assets/Data/Character/Object/00_HelenaStorm/HelenaStormAction.xml"
+        AIGraph="Assets/Data/Character/Object/00_HelenaStorm/HelenaStormAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="Sister"
+    />
+
+    <Obj_SisterGrimoire
+        DisplayName="OBJ 시스터 마도서"
+        ActionGraph="Assets/Data/Character/Object/00_HelenaGrimoire/HelenaGrimoireAction.xml"
+        AIGraph="Assets/Data/Character/Object/00_HelenaGrimoire/NormalGrimoireAI.xml"
+        StatusInfoName="CommonEnemyStatus"
+
+        CollisionRadius="0.2"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="Sister"
+    />
+
+    <Obj_VendingMachine
+        DisplayName="OBJ 공용 자판기"
+        ActionGraph="Assets/Data/Character/Object/99_VendingMachine/VendingMachineAction.xml"
+        AIGraph="Assets/Data/Character/Object/99_VendingMachine/VendingMachineAI.xml"
+        StatusInfoName="CommonEnemyStatusNoUI"
+
+        CollisionRadius="0.5"
         ProjectileCollisionRadius=""
 
         AllyInfo="CommonBattle"
@@ -613,18 +770,6 @@
         AllyInfo="CommonBattle"
     />
 
-    <EmpGrenade
-        DisplayName="EMP그레네이드"
-        ActionGraph="Assets/Data/Character/Object/EmpGrenade/EmpGrenadeAction.xml"
-        AIGraph="Assets/Data/Character/Object/EmpGrenade/EmpGrenadeAI.xml"
-        StatusInfoName="ActionProjectileStatus"
-        
-        CollisionRadius="0.2"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="CommonBattle"
-    />
-    
     <SchoolDoor
         DisplayName="학교 문"
         ActionGraph="Assets/Data/Character/Object/BigDoor/BigDoor.xml"
@@ -636,136 +781,6 @@
 
         AllyInfo="InteractObject"
     />
-
-    <Uzi
-        DisplayName="스케반 엘리트의 우지 "
-        ActionGraph="Assets/Data/Character/Object/Uzi/UziAction.xml"
-        AIGraph="Assets/Data/Character/Object/Uzi/UziAI.xml"
-        StatusInfoName="CommonHpTwoEnemyStatusNoUI"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-
-        RankBadgeID="1"
-
-        AllyInfo="Sukeban"
-    />
-    
-    <SportsMachine
-        DisplayName="운동부 머신"
-        ActionGraph="Assets/Data/Character/Enemy/03_SportsMachine/SportsMachineAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/03_SportsMachine/SportsMachineAI.xml"
-        StatusInfoName="CommonHpOneEnemyStatusNoUI"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-        RankBadgeID="0"
-
-        AllyInfo="SportsClub"
-    />
-
-    <BaseBall
-        DisplayName="야구공"
-        ActionGraph="Assets/Data/Character/Object/BaseBall/BaseBallAction.xml"
-        AIGraph="Assets/Data/Character/Object/BaseBall/BaseBallAI.xml"
-        StatusInfoName="CommonHpOneEnemyStatusNoUI"
-
-        CollisionRadius="0.1"
-        HeadUpOffset="0.0"
-        ProjectileCollisionRadius="0.1"
-        RankBadgeID="0"
-        IndicatorVisible="False"
-        UseCameraBoundLock="False"
-
-        AllyInfo="SportsClub"
-    />
-
-    <ThunderFloor_Chase
-        DisplayName="헬레나 전기장판 (추격)"
-        ActionGraph="Assets/Data/Character/Object/ThunderFloor/ThunderFloor_ChaseAction.xml"
-        AIGraph="Assets/Data/Character/Object/ThunderFloor/ThunderFloor_ChaseAI.xml"
-        StatusInfoName="CommonHpOneEnemyStatusNoUI"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="Sister"
-    />
-    <ThunderFloor_Shoot
-        DisplayName="헬레나 전기장판 (발사)"
-        ActionGraph="Assets/Data/Character/Object/ThunderFloor/ThunderFloor_ShootAction.xml"
-        AIGraph="Assets/Data/Character/Object/ThunderFloor/ThunderFloor_ShootAI.xml"
-        StatusInfoName="CommonHpOneEnemyStatusNoUI"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="Sister"
-    />
-    <Sister_Knife
-        DisplayName="시스터 그리모어의 나이프"
-        ActionGraph="Assets/Data/Character/Object/SisterKnife/SisterKnifeAction.xml"
-        AIGraph="Assets/Data/Character/Object/SisterKnife/SisterKnifeAI.xml"
-        StatusInfoName="CommonHpTenthsEnemyStatus"
-        
-        CollisionRadius="0.1"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="Sister"
-    />
-
-    <Helena_CrimsonGrimoire
-        DisplayName="헬레나의 붉은 마도서"
-        ActionGraph="Assets/Data/Character/Object/Helena_CrimsonGirmoire/CrimsonGirmoireAction.xml"
-        AIGraph="Assets/Data/Character/Object/Helena_CrimsonGirmoire/CrimsonGirmoireAI.xml"
-        StatusInfoName="CommonEnemyStatus"
-
-        CollisionRadius="0.2"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="Sister"
-    />
-    <CrimsonGrimoire
-        DisplayName="붉은 마도서"
-        ActionGraph="Assets/Data/Character/Object/Helena_CrimsonGirmoire/CrimsonGirmoireAction.xml"
-        AIGraph="Assets/Data/Character/Object/Helena_CrimsonGirmoire/NormalCrimsonGirmoireAI.xml"
-        StatusInfoName="CommonEnemyStatus"
-
-        CollisionRadius="0.2"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="Sister"
-    />
-
-    <NozawaAoba_Drone
-        DisplayName="아오바의 자폭 드론"
-        ActionGraph="Assets/Data/Character/Object/Aoba_Drone/AobaDroneAction.xml"
-        AIGraph="Assets/Data/Character/Object/Aoba_Drone/AobaDroneAI.xml"
-        StatusInfoName="CommonHpOneEnemyStatusNoUI"
-
-        CollisionRadius="0.2"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="Police"
-    />
-
-    <VendingMachine
-        DisplayName="자판기"
-        ActionGraph="Assets/Data/Character/Object/VendingMachine/VendingMachineAction.xml"
-        AIGraph="Assets/Data/Character/Object/VendingMachine/VendingMachineAI.xml"
-        StatusInfoName="CommonEnemyStatusNoUI"
-
-        CollisionRadius="0.5"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="CommonBattle"
-    />
-
 
     <ProjectileShotCharacter
         DisplayName="프로젝타일 생성용 캐릭터"

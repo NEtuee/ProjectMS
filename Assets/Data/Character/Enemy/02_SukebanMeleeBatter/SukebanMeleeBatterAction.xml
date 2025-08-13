@@ -189,7 +189,7 @@
         <Branch Condition="End" Execute="AC_Idle"/>
     </AC_GrenadeReady>
 
-    <AC_GrenadeSmash MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Direction" Flags="LaserEffect">
+    <AC_GrenadeSmash MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction" Flags="LaserEffect">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/2_grnadeSwing/2_grenadeSmash" XFlip="true" Duration="0.3">
             <FrameEvent Type="AudioPlay" StartTime="0" ID="4901" Attach="true"/>

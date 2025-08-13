@@ -1,0 +1,18 @@
+<AIGraph Name="AobaEmpAI" DefaultState="Entry">
+
+    <Include Path="Assets/Data/Character/Object/00_AobaEmp/AobaEmpPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonGuardBrokenPackage.xml"/>
+    
+    <Entry Package="AobaEmpPackage">
+        <Branch Condition="GuardBroken || GuardBreakFail" Execute="GuardBroken"/>
+    </Entry>
+    <GuardBroken Package="CommonGuardBrokenPackage">
+    </GuardBroken>
+    <Kicked Package="AobaEmpPackage" EntryNode="Kicked">
+        <Branch Condition="GuardBroken || GuardBreakFail" Execute="GuardBroken"/>
+    </Kicked>
+
+    
+
+
+</AIGraph>

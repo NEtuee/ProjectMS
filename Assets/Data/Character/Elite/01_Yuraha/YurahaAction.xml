@@ -281,9 +281,9 @@
             <FrameEvent Type="Movement" StartTime="0" Friction="12" MaxVelocity="0" Speed="0"/>
             
             <!-- Object Attack -->
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="Uzi" SpawnTargetType="AITarget" Offset="0 3 0" UseFlip="true"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0.05" CharacterKey="Uzi" SpawnTargetType="AITarget" Offset="3 0 0" UseFlip="true"/>
-            <FrameEvent Type="SpawnCharacter" StartTime="0.1" CharacterKey="Uzi" SpawnTargetType="AITarget" Offset="0 -3 0" UseFlip="true"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="Obj_YurahaUzi" SpawnTargetType="AITarget" Offset="0 3 0" UseFlip="true"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0.05" CharacterKey="Obj_YurahaUzi" SpawnTargetType="AITarget" Offset="3 0 0" UseFlip="true"/>
+            <FrameEvent Type="SpawnCharacter" StartTime="0.1" CharacterKey="Obj_YurahaUzi" SpawnTargetType="AITarget" Offset="0 -3 0" UseFlip="true"/>
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="CountUzi" EventTargetType="Self"/>
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="CountUzi" EventTargetType="Self"/>
             <FrameEvent Type="CallAIEvent" StartTime="0" EventName="CountUzi" EventTargetType="Self"/>
