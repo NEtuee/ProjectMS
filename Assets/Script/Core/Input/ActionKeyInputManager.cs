@@ -246,7 +246,11 @@ public class ActionKeyInputManager : Singleton<ActionKeyInputManager>
     public static void setCursorVisible(bool visible)
     {
         Cursor.visible = visible;
+#if UNITY_EDITOR
+        Cursor.lockState = CursorLockMode.None;
+#else
         Cursor.lockState = visible ? CursorLockMode.None : CursorLockMode.Confined;
+#endif
         
     }
 
