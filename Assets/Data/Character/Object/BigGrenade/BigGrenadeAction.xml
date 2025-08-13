@@ -6,6 +6,7 @@
         </Animation>
 
         <Branch Condition="Hit" Execute="Destroy"/>
+        <Branch Condition="GuardBroken || GuardBreakFail" Execute="AC_Reverse"/>
         <Branch Condition="End" Execute="ExplosionAtmosphere"/>
     </Move>
 
@@ -14,7 +15,7 @@
         </Animation>
         
         <Branch Condition="Hit" Execute="Destroy"/>
-        <Branch Condition="GuardBroken || GuardBreakFail" Execute="AC_GuardBroken"/>
+        <Branch Condition="GuardBroken || GuardBreakFail" Execute="AC_Reverse"/>
         <Branch Condition="End" Execute="Explosion"/>
     </ExplosionAtmosphere>
 
@@ -25,21 +26,21 @@
             <FrameEvent Type="EffectPreset"  EndTime="0.2" Key="Helena_Explode"/>
             <FrameEvent Type="Attack" StartTime="0.1" EndTime="0.2" AttackPreset="Common_Radius05">
                 <OnHit>
-                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
                 </OnHit>
             </FrameEvent>
         </Animation>
         <Branch Condition="End" Execute="Exit"/>
     </Explosion>
 
-    <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction" RotationType="Keep">
-        <Animation Preset="Sprites/Object/BigGrenade/4_guardbroken" Duration="0.016">
-            <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="BigGrenade" Offset="0 0 0" AllyInfo="EnemyAllNeutral" UseFlip="true" InheritDirection="False" AINode="Kicked"/>
-            <FrameEvent Type="KillEntity" StartFrame="0"/>
+    <AC_Reverse MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction" RotationType="Keep" DirectionAngle="180">
+        <Animation Preset="Sprites/Object/BigGrenade/4_reverse" Duration="0.27">
+            <FrameEvent Type="ChangeAlly" StartTime="0" Key="PlayerBattleObject" ResetTarget="True"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="3" Velocity="7" MaxVelocity="7" Speed="0"/>
         </Animation>
 
-        <Branch Condition="End" Execute="Exit"/>
-    </AC_GuardBroken>
+        <Branch Condition="End" Execute="Explosion"/>
+    </AC_Reverse>
 
     <Exit MovementType="Empty" DirectionType="Keep">
         <Animation Preset="Sprites/Object/BigGrenade/5_exit" Duration="0.016">
