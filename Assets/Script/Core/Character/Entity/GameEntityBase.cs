@@ -605,7 +605,14 @@ public class GameEntityBase : SequencerObjectBase
             
             updatePhysics(deltaTime);
 
-            _spriteRenderer.transform.localRotation = _actionGraph.getCurrentAnimationRotation();
+            Quaternion animationRotation = _actionGraph.getCurrentAnimationRotation();
+            if(_flipState.xFlip)
+            {
+                Vector3 eulerAngles = animationRotation.eulerAngles;
+                eulerAngles.z = -eulerAngles.z;
+                animationRotation = Quaternion.Euler(eulerAngles);
+            }
+            _spriteRenderer.transform.localRotation = animationRotation;
 
             Vector3 outScale = Vector3.one;
             _actionGraph.getCurrentAnimationScale(out outScale);
