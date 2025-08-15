@@ -133,8 +133,7 @@
     </AC_RushReady>
 
     <!-- 아카네를 잡기위해 돌진하는 모션, 충돌 시 데미지 적용, 잡기 처리 -->
-    <!-- TODO: RotationType 추가 적용 -->
-    <AC_Rush MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
+    <AC_Rush MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
         <!-- 나지미 돌진, 헛다리 애니메이션. 공격 성공 시 성공 액션으로 전이. -->
         <AnimationHeader MasterPath="Sprites/Enemy/OsananaNajimi/1_rushPattern/1_rush/"/>
         <Animation Preset="1_rushMain" XFlip="true" Duration="0.35">
@@ -159,17 +158,18 @@
                 </OnCatch>
             </FrameEvent>
             <FrameEvent Type="FrameTag" Condition="IsCatcher == false" StartTime="0" EndTime="999" Tag="GbAvail"/>
+            
         </Animation>
         <Animation Preset="2_rushRoll" XFlip="true" Duration="0.25">
+            <FrameEvent Type="SetDirectionType" StartTime="0" DirectionType="Keep"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
         </Animation>
         <Animation Preset="3_rushRecover" XFlip="true" Duration="1.47">
-    
-            <FrameEvent Type="SetDirectionType" StartTime="0" DirectionType="AI"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="Cancel"/>
+            <FrameEvent Type="SetDirectionType" StartTime="0.6" DirectionType="AI"/>
         </Animation>
 
         <Branch Condition="End" Execute="AC_Idle"/>
