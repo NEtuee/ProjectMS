@@ -1,6 +1,13 @@
-<AIPackage Name="BigGrenadePackage" DefaultState="AI_Reverse">
+<AIPackage Name="BigGrenadePackage" DefaultState="Entry">
 
     <AIState>
+
+        <Entry UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="Move"/>
+            </Event_OnExecute>
+        </Entry>
 
         <AI_Reverse UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
             <Event_OnExecute>

@@ -33,10 +33,10 @@
         <Branch Condition="End" Execute="Exit"/>
     </Explosion>
 
-    <AC_Reverse MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction" RotationType="Keep" DirectionAngle="180">
+    <AC_Reverse MovementType="GraphPreset" MovementGraphPreset="Sukeban_BigGrnadeReverse" DirectionType="AttackedPoint" FlipType="Direction" RotationType="Keep" DirectionAngle="180">
         <Animation Preset="Sprites/Object/BigGrenade/4_reverse" Duration="0.27">
             <FrameEvent Type="ChangeAlly" StartTime="0" Key="PlayerBattleObject" ResetTarget="True"/>
-            <FrameEvent Type="Movement" StartTime="0" Friction="3" Velocity="7" MaxVelocity="7" Speed="0"/>
+
         </Animation>
 
         <Branch Condition="End" Execute="Explosion"/>

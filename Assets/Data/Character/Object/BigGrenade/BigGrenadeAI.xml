@@ -1,17 +1,9 @@
 <AIGraph Name="BigGrenadeAI" DefaultState="Entry">
 
-    <Include Path="Assets/Data/Character/Object/BigGrenade/BigGrenadePackage.xml"/>
-    <Include Path="Assets/Data/AILibrary/Package/EmptyPackage.xml"/>
-    
-    <Entry Package="EmptyPackage">
-        <Branch Condition="GuardBroken || GuardBreakFail" Execute="Kicked"/>
+    <Include Path="Assets/Data/Character/Object/BigGrenade/BigGrenadePackage.xml"/>    
+
+    <Entry Package="BigGrenadePackage">  
     </Entry>
-
-    <Kicked Package="BigGrenadePackage">
-    
-    </Kicked>
-
-    
 
 
 </AIGraph>
