@@ -90,6 +90,7 @@
             <FrameEvent Type="Projectile" Condition="getWeight_RandVector3^x"       StartTime="0.0" GraphName="Grimore" DirectionType="AI" DirectionAngle="0.0" SpawnTargetType="Self"/>
            -->
             <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
+            <FrameEvent Type="EffectPreset" StartTime="0" Key="Paper"/>
             <FrameEvent Type="Effect" StartTime="0" Path="Sprites/Enemy/Helena_CrimsonGrimoire/0_default/4_dead" FramePerSecond="0.2" CastShadow="True">
                 <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_3.5^5.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
             </FrameEvent>
