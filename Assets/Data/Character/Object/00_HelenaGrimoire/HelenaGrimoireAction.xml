@@ -1,0 +1,251 @@
+<ActionGraph Name="HelenaGrimoireAction" DefaultAction="AC_Idle" DefaultFramePerSecond="12">
+    <GlobalVariable Name="gv_MasterPath" Value="Sprites/Enemy/Helena_CrimsonGrimoire/"/>
+
+    <AC_Idle MovementType="Empty" DirectionType="AI">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/1_idle" XFlip="true" Duration="0.5">
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_Idle>
+    <AC_Idle_Keep MovementType="Empty" DirectionType="AlwaysRight">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/1_idle" XFlip="true" Duration="0.5">
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_Idle_Keep>
+    
+    <AC_Idle_WithHelena MovementType="Empty" DirectionType="Summoner">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/1_idle" XFlip="true" Duration="0.5">
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
+            <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="GuardCountClear"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_Idle_WithHelena>
+    <AC_Move MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/2_move" XFlip="true" Duration="0.5">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="5" Speed="15"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Move"/>
+    </AC_Move>
+
+    <AC_Shoot MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="LaserEffect">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="1_attack/1_attackReady" XFlip="true" Duration="0.8">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2507" Attach="true" Switch="True"/>    
+
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+            <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/CommonBeam_TimeLine" Attach="true" AngleType="Direction" LifeTime="0.85" FollowDirection="True" AttackPreset="Helena_Laser"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+            
+        </Animation>
+        <Animation Preset="1_attack/2_attackMain" XFlip="true" Duration="0.1">
+            <FrameEvent Type="SetDirectionType" StartTime="0.0" DirectionType="Keep"/>
+            <FrameEvent Type="EffectPreset" StartTime="0" Key="Helena_LaserShot"/>
+            <FrameEvent Type="Attack" StartTime="0.05" EndTime="0.1" AttackPreset="Helena_Laser">
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
+                    
+                    <FrameEvent Type="StopUpdate" Time="0.1"/>
+                    <FrameEvent Type="SetTimeScale" Scale="0.1" Time="0.1" BlendTime="0.1"/>
+                    <FrameEvent Type="ShakeEffect" Scale="0.1" Speed="10.0" Time="0.1"/>
+                    
+                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+                </OnHit>
+            </FrameEvent>
+            <FrameEvent Type="Movement" StartTime="0.06" Friction="18" MaxVelocity="10" Velocity="-7" Speed="0"/>
+        </Animation>
+        <Animation Preset="1_attack/3_attackRecover" XFlip="true" Duration="0.2">
+        </Animation>
+        <Animation Preset="0_default/1_idle" XFlip="true" Duration="1.8">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle_WithHelena"/>
+    </AC_Shoot>
+    
+    <AC_Shoot_with MovementType="FrameEvent" DirectionType="Summoner" FlipType="Direction" Flags="LaserEffect">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="1_attack/1_attackReady" XFlip="true" Duration="0.8">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2507" Attach="true" Switch="True"/>
+
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+            <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/CommonBeam_TimeLine" Attach="true" AngleType="Direction" LifeTime="0.85" FollowDirection="True" AttackPreset="Helena_Laser"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+
+        </Animation>
+        <Animation Preset="1_attack/2_attackMain" XFlip="true" Duration="0.1">
+            <FrameEvent Type="EffectPreset" StartTime="0" Key="Helena_LaserShot"/>
+            <FrameEvent Type="Attack" StartTime="0.05" EndTime="0.1" AttackPreset="Helena_Laser">
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
+                    
+                    <FrameEvent Type="StopUpdate" Time="0.1"/>
+                    <FrameEvent Type="SetTimeScale" Scale="0.1" Time="0.1" BlendTime="0.1"/>
+                    <FrameEvent Type="ShakeEffect" Scale="0.1" Speed="10.0" Time="0.1"/>
+                    
+                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+                </OnHit>
+            </FrameEvent>
+            <FrameEvent Type="Movement" StartTime="0.06" Friction="18" MaxVelocity="10" Velocity="-7" Speed="0"/>
+        </Animation>
+        <Animation Preset="1_attack/3_attackRecover" XFlip="true" Duration="0.2">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle_WithHelena"/>
+    </AC_Shoot_with>
+    
+    <AC_Shoot_out MovementType="FrameEvent" DirectionType="ToSummoner" DirectionAngle="180" FlipType="Direction" Flags="LaserEffect">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="1_attack/1_attackReady" XFlip="true" Duration="0.8">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2516" Attach="true" Switch="True"/>    
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+            <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/CommonBeam_TimeLine" Attach="true" AngleType="Direction" LifeTime="0.85" FollowDirection="True" AttackPreset="Helena_Laser"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+        <Animation Preset="1_attack/2_attackMain" XFlip="true" Duration="2.0">
+            <FrameEvent Type="EffectPreset" StartTime="0" Key="Helena_LaserOut"/>
+            <FrameEvent Type="Attack" StartTime="0.05" EndTime="2.0" AttackPreset="Helena_Laser">
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
+                    
+                    <FrameEvent Type="StopUpdate" Time="0.1"/>
+                    <FrameEvent Type="SetTimeScale" Scale="0.1" Time="0.1" BlendTime="0.1"/>
+                    <FrameEvent Type="ShakeEffect" Scale="0.1" Speed="10.0" Time="0.1"/>
+                    
+                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+                </OnHit>
+            </FrameEvent>
+        </Animation>
+        <Animation Preset="1_attack/3_attackRecover" XFlip="true" Duration="0.2">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle_WithHelena"/>
+    </AC_Shoot_out>
+    
+    <AC_Shoot_in MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="LaserEffect"> 
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="1_attack/1_attackReady" XFlip="true" Duration="0.8">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2507" Attach="true" Switch="True"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+            <FrameEvent Type="TimelineEffect" StartTime="0" Path="Prefab/Effect/CommonBeam_TimeLine" Attach="true" AngleType="Direction" LifeTime="0.85" FollowDirection="True" AttackPreset="Helena_Laser"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+        <Animation Preset="1_attack/2_attackMain" XFlip="true" Duration="0.1">
+            <FrameEvent Type="SetDirectionType" StartTime="0.0" DirectionType="Keep"/>
+            <FrameEvent Type="EffectPreset" StartTime="0" Key="Helena_LaserShot"/>
+            <FrameEvent Type="Attack" StartTime="0.05" EndTime="0.1" AttackPreset="Helena_Laser">
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
+                    
+                    <FrameEvent Type="StopUpdate" Time="0.1"/>
+                    <FrameEvent Type="SetTimeScale" Scale="0.1" Time="0.1" BlendTime="0.1"/>
+                    <FrameEvent Type="ShakeEffect" Scale="0.1" Speed="10.0" Time="0.1"/>
+                    
+                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+                </OnHit>
+            </FrameEvent>
+            <FrameEvent Type="Movement" StartTime="0.06" Friction="18" MaxVelocity="10" Velocity="-7" Speed="0"/>
+        </Animation>
+        <Animation Preset="1_attack/3_attackRecover" XFlip="true" Duration="0.2">
+        </Animation>
+        <Branch Condition="End == true" Execute="AC_Idle_WithHelena"/>
+    </AC_Shoot_in>
+    
+    <AC_ExplosionChase_Entry MovementType="FrameEvent" DirectionType="AI">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="1_attack/4_explosion" XFlip="true" Duration="0.013">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2503" Attach="true" Switch="True"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2518" Attach="true" Switch="True"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="5" Speed="15"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+        <Branch Condition="End" Execute="AC_ExplosionChase"/>
+    </AC_ExplosionChase_Entry>
+
+    <AC_ExplosionChase MovementType="FrameEvent" DirectionType="AI">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="1_attack/4_explosion" XFlip="true" Duration="0.5">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="5" Speed="15"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+        <Branch Condition="TargetDistance <= 0.5" Execute="AC_ExplosionStart"/>
+        <Branch Condition="End" Execute="AC_ExplosionChase"/>
+    </AC_ExplosionChase>
+
+    <AC_ExplosionStart MovementType="Empty" DirectionType="Keep">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="1_attack/4_explosion" XFlip="true" Duration="0.2">
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+        <Branch Condition="End" Execute="AC_Explosion"/>
+    </AC_ExplosionStart>
+
+    <AC_Explosion MovementType="Empty" DirectionType="Keep">
+        <Animation Preset="Sprites/Projectile/empty" Duration="0.3">
+            <FrameEvent Type="EffectPreset" StartTime="0" Key="Paper"/>
+            <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2518"/>
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2504" Attach="true"/>
+            <!-- TODO: 폭발 이펙트  -->
+            <FrameEvent Type="EffectPreset" StartTime="0" Key="Helena_ExplodeBig"/>
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.3" AttackPreset="Common_Radius20">
+                <OnHit>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonAttack"/>
+                </OnHit>
+            </FrameEvent>
+        </Animation>
+        <Branch Condition="End" Execute="Dead"/>
+    </AC_Explosion>
+
+    <AC_Spawn MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/5_spawn/2_stop" XFlip="true" Duration="0.3">
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="LaserToTarget" EventTargetType="Self"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Move"/>
+    </AC_Spawn>
+
+    <Dead MovementType="Empty" DirectionType="AI">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/4_dead" XFlip="true" Duration="0.5">
+            <FrameEvent Type="EffectPreset" StartTime="0" Key="Paper"/>
+            <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2507"/>
+            <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2516"/>
+            <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2518"/>
+            <FrameEvent Type="StopSwitch" StartTime="0" Switch="Audio" Key="2503"/>
+            <FrameEvent Type="CallAIEvent" StartTime="0" EventName="DeleteCrimson" EventTargetType="Range" AllyTarget="Ally" Range="100.0"/>
+            <FrameEvent Type="KillEntity" StartTime="0"/>
+            
+        </Animation>
+        <Branch Condition="End == true" Execute="Dead"/>
+    </Dead>
+
+
+</ActionGraph>

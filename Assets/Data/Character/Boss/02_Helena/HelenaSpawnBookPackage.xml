@@ -1,0 +1,36 @@
+<AIPackage Name="HelenaSpawnBookPackage" DefaultState="AI_Entry">
+
+    <AIState>
+        <AI_Entry UpdateTime="0.0">
+            <Event_OnExecute>
+                <AIEvent Type="SetAction" Action="AC_Idle"/>
+            </Event_OnExecute>
+            <Branch Condition="true" Execute="TerminatePackage"/>
+        </AI_Entry>
+
+        <AI_Crimson UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="AC_SpawnCrimsonMain"/>
+            </Event_OnExecute>
+            
+            <Branch Condition="End" Execute="TerminatePackage"/>
+        </AI_Crimson>
+
+        <AI_CrimsonSet UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="50.0" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="AC_SpawnCrimsonMainSet"/>
+            </Event_OnExecute>
+            
+            <Branch Condition="End" Execute="TerminatePackage"/>
+        </AI_CrimsonSet>
+
+        <TerminatePackage>
+            <Event_OnExecute>
+                <AIEvent Type="TerminatePackage"/>
+            </Event_OnExecute>
+        </TerminatePackage>
+    </AIState>
+
+</AIPackage>

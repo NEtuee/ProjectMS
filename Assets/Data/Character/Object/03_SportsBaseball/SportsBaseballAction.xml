@@ -1,0 +1,51 @@
+<ActionGraph Name="SportsBaseballAction" DefaultAction="AC_Move" DefaultFramePerSecond="12">
+    <GlobalVariable Name="gv_MasterPath" Value="Sprites/Projectile/"/>
+    <GlobalVariable Name="gv_DeadPath" Value="Resources/Sprites/Projectile/BaseBall"/>
+
+    <AC_Move MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="BaseBall" XFlip="true" Duration="0.5">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="7" Velocity="5"/>
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.5" AttackPreset="Common_Radius01">
+                <OnHit>
+                    <FrameEvent Type="AudioPlay" StartTime="0" ID="4902" Attach="true"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
+                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+                </OnHit>
+            </FrameEvent>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Move"/>
+        <Branch Condition="AttackSuccess" Execute="Dead"/>
+    </AC_Move>
+
+    <AC_Reverse MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" RotationType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="BaseBall" XFlip="true" Duration="0.5">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" MaxVelocity="7" Velocity="5"/>
+            <FrameEvent Type="ChangeAlly" StartTime="0" Key="PlayerBattleObject"/>
+            <FrameEvent Type="Attack" StartTime="0" EndTime="0.5" AttackPreset="Common_Radius01">
+                <OnHit>
+                    <FrameEvent Type="AudioPlay" StartTime="0" ID="4902" Attach="true"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonHalfAttack"/>
+                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+                </OnHit>
+            </FrameEvent>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Move"/>
+        <Branch Condition="AttackSuccess" Execute="Dead"/>
+    </AC_Reverse>
+
+    <Dead MovementType="Empty" DirectionType="AI">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="BaseBall" XFlip="true" Duration="0.5">
+            <FrameEvent Type="Effect" StartTime="0" Path="gv_DeadPath" FramePerSecond="0.2" CastShadow="True">
+                <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
+            </FrameEvent>
+            <FrameEvent Type="KillEntity" StartTime="0"/>
+        </Animation>
+        <Branch Condition="End == true" Execute="Dead"/>
+    </Dead>
+
+</ActionGraph>

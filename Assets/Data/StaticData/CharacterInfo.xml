@@ -17,6 +17,7 @@
 -->
 
 <CharacterInfo>
+<!-- Player -->
     <Akane
         DisplayName="아카네"
         ActionGraph="Assets/Data/Character/Akane/MainPlayerAction.xml"
@@ -32,25 +33,86 @@
 
         AllyInfo="Player"
     />
-    <AkaneDodgeCheck
-        DisplayName="아카네 극한회피 판정기"
-        ActionGraph="Assets/Data/Character/Akane/MainPlayerDodgeAction.xml"
-        AIGraph="Assets/Data/Character/Akane/MainPlayerDodgeAI.xml"
-        StatusInfoName="CommonPlayerStatus"
+<!-- Player -->
+
+<!-- Boss -->
+    <Najimi
+        DisplayName="오사나나 나지미"
+        ActionGraph="Assets/Data/Character/Boss/01_Najimi/NajimiAction.xml"
+        AIGraph="Assets/Data/Character/Boss/01_Najimi/NajimiAI.xml"
+        StatusInfoName="NajimiStatus"
         
         CollisionRadius="0.2"
         HeadUpOffset="0.5"
         ProjectileCollisionRadius=""
-        UseInputBuffer="True"
 
-        AllyInfo="PlayerDodgeCheck"
+        PortraitPath="Sprites/UI/Portrait/Najimi"
+
+        AllyInfo="SportsClub"
     />
-    
-    <TateChan
-        DisplayName="타테짱"
-        ActionGraph="Assets/Data/Character/Boss/TateChan/TateChanAction.xml"
-        AIGraph="Assets/Data/Character/Boss/TateChan/TateChanAI.xml"
-        StatusInfoName="TateChanStatus"
+
+    <Helena
+        DisplayName="시스터 헬레나"
+        ActionGraph="Assets/Data/Character/Boss/02_Helena/HelenaAction.xml"
+        AIGraph="Assets/Data/Character/Boss/02_Helena/HelenaAI.xml"
+        StatusInfoName="HelenaStatus"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="Sister"
+    />
+
+    <Reito
+        DisplayName="칸토 레이토"
+        ActionGraph="Assets/Data/Character/Boss/03_Reito/ReitoAction.xml"
+        AIGraph="Assets/Data/Character/Boss/03_Reito/ReitoAI.xml"
+        StatusInfoName="ReitoStatus"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="CommonBattle"
+    />
+
+    <Aoba
+        DisplayName="노자와 아오바"
+        ActionGraph="Assets/Data/Character/Boss/04_Aoba/AobaAction.xml"
+        AIGraph="Assets/Data/Character/Boss/04_Aoba/AobaAI.xml"
+        StatusInfoName="AobaStatus"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="Police"
+    />
+<!-- Boss -->
+
+<!-- Elite -->
+    <Yuraha
+        DisplayName="카미시로 유라하"
+        ActionGraph="Assets/Data/Character/Elite/01_Yuraha/YurahaAction.xml"
+        AIGraph="Assets/Data/Character/Elite/01_Yuraha/YurahaAI.xml"
+        StatusInfoName="YurahaStatus"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+        RankBadgeID="3"
+
+        PortraitPath="Sprites/UI/Portrait/EliteSukeban"
+
+        AllyInfo="Sukeban"
+    />
+
+    <AyakageJersey
+        DisplayName="하즈키노미야 아야카게(체육복)"
+        ActionGraph="Assets/Data/Character/Elite/01_AyakageJersey/AyakageJerseyAction.xml"
+        AIGraph="Assets/Data/Character/Elite/01_AyakageJersey/AyakageJerseyAI.xml"
+        StatusInfoName="AyakageJerseyStatus"
 
         HeadUpOffset="0.5"
         CollisionRadius="0.2"
@@ -58,30 +120,424 @@
 
         AllyInfo="CommonBattle"
     />
+    
+    <Olive
+        DisplayName="시스터 올리브"
+        ActionGraph="Assets/Data/Character/Elite/02_Olive/OliveAction.xml"
+        AIGraph="Assets/Data/Character/Elite/02_Olive/OliveAI.xml"
+        StatusInfoName="HelenaStatus"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
 
-    <TestZako
-        DisplayName="자코"
-        ActionGraph="Assets/Data/Character/TestZako/TestZako.xml"
-        AIGraph="Assets/Data/Character/TestZako/TestZakoAI.xml"
+        AllyInfo="Sister"
+    />
+<!-- Elite -->
+
+<!-- Mob :: TODO -->
+    <PerfectRapier
+        DisplayName="선도부 레이피어"
+        ActionGraph="Assets/Data/Character/Enemy/01_PerfectRapier/PerfectRapierAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/01_PerfectRapier/PerfectRapierAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+        RankBadgeID="0"
+
+        AllyInfo="PerfectTeam"
+    />
+
+    <PerfectLuger
+        DisplayName="선도부 루거"
+        ActionGraph="Assets/Data/Character/Enemy/01_PerfectLuger/PerfectLugerAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/01_PerfectLuger/PerfectLugerAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+        RankBadgeID="0"
+
+        AllyInfo="PerfectTeam"
+    />
+
+    <PerfectBarricade
+        DisplayName="선도부 바리케이드"
+        ActionGraph="Assets/Data/Character/Enemy/01_PerfectBarricade/PerfectBarricadeAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/01_PerfectBarricade/PerfectBarricadeAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+        RankBadgeID="2"
+
+        AllyInfo="PerfectTeam"
+    />
+
+    <SukebanKatana
+        DisplayName="스케반 카타나"
+        ActionGraph="Assets/Data/Character/Enemy/02_SukebanKatana/SukebanKatanaAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/02_SukebanKatana/SukebanKatanaAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+        RankBadgeID="0"
+
+        AllyInfo="Sukeban"
+    />
+
+    <BrainWashedSukebanKatanaChan
+        DisplayName="세뇌당한 스케반 카타나쨩"
+        ActionGraph="Assets/Data/Character/Enemy/02_SukebanKatana/SukebanMeleeBrainWashedAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/02_SukebanKatana/SukebanKatanaAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+        RankBadgeID="0"
+
+        AllyInfo="Sister"
+    />
+
+    <SukebanUzi
+        DisplayName="스케반 우지쨩"
+        ActionGraph="Assets/Data/Character/Enemy/02_SukebanUzi/SukebanUziAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/02_SukebanUzi/SukebanUziAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+        RankBadgeID="0"
+
+        AllyInfo="Sukeban"
+    />
+
+    <BrainWashedSukebanUziChan
+        DisplayName="세뇌당한 스케반 우지쨩"
+        ActionGraph="Assets/Data/Character/Enemy/02_SukebanUzi/SukebanRangedBrainWashedAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/02_SukebanUzi/SukebanUziAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+        RankBadgeID="0"
+
+        AllyInfo="Sister"
+    />
+
+    <SukebanTaishouChan
+        DisplayName="스케반 타이쇼쨩"
+        ActionGraph="Assets/Data/Character/Enemy/02_SukebanTaishou/SukebanTaishouAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/02_SukebanTaishou/SukebanTaishouAI.xml"
+        StatusInfoName="SukebanTaishouChanStatus"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="Sukeban"
+    />
+
+    <SportsBatter
+        DisplayName="운동부 밧타"
+        ActionGraph="Assets/Data/Character/Enemy/03_SportsBatter/SportsBatterAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/03_SportsBatter/SportsBatterAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+        RankBadgeID="0"
+
+        AllyInfo="SportsClub"
+    />
+    <SportsPitcher
+        DisplayName="운동부 핏쳐"
+        ActionGraph="Assets/Data/Character/Enemy/03_SportsPitcher/SportsPitcherAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/03_SportsPitcher/SportsPitcherAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+        RankBadgeID="0"
+
+        AllyInfo="SportsClub"
+    />
+
+    <SportsManager
+        DisplayName="운동부 매니저"
+        ActionGraph="Assets/Data/Character/Enemy/03_SportsManager/SportsManagerAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/03_SportsManager/SportsManagerAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+        RankBadgeID="0"
+
+        AllyInfo="SportsClub"
+    />
+    
+    <SportsBarbell
+        DisplayName="운동부 바벨"
+        ActionGraph="Assets/Data/Character/Enemy/03_SportsBarbell/SportsBarbellAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/03_SportsBarbell/SportsBarbellAI.xml"
+        StatusInfoName="CommonHpThreeEnemyStatus"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+        RankBadgeID="2"
+
+        AllyInfo="SportsClub"
+    />    
+    <SportsDumbell
+        DisplayName="운동부 덤벨"
+        ActionGraph="Assets/Data/Character/Enemy/03_SportsDumbell/SportsDumbellAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/03_SportsDumbell/SportsDumbellAI.xml"
+        StatusInfoName="CommonHpTwoEnemyStatus"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+        RankBadgeID="1"
+
+        AllyInfo="SportsClub"
+    />
+    <SportsBarbellLowHP
+        DisplayName="운동부 바벨"
+        ActionGraph="Assets/Data/Character/Enemy/03_SportsBarbell/SportsBarbellAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/03_SportsBarbell/SportsBarbellAI.xml"
+        StatusInfoName="CommonHpTwoEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+        RankBadgeID="1"
+
+        AllyInfo="SportsClub"
+    />    
+    <SportsDumbellLowHP
+        DisplayName="운동부 덤벨"
+        ActionGraph="Assets/Data/Character/Enemy/03_SportsDumbell/SportsDumbellAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/03_SportsDumbell/SportsDumbellAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+        RankBadgeID="0"
+
+        AllyInfo="SportsClub"
+    />
+    <SportsRunner
+        DisplayName="운동부 러너"
+        ActionGraph="Assets/Data/Character/Enemy/03_SportsRunner/SportsRunnerAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/03_SportsRunner/SportsRunnerAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        ProjectileCollisionRadius=""
+        RankBadgeID="0"
+
+        AllyInfo="SportsClub"
+    />
+
+    <SisterNormal
+        DisplayName="시스터 노말"
+        ActionGraph="Assets/Data/Character/Enemy/04_SisterNormal/SisterNormalAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/04_SisterNormal/SisterNormalAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+        RankBadgeID="0"
+
+        AllyInfo="Sister"
+    />
+    <SisterLibrarian
+        DisplayName="시스터 라이브러리안"
+        ActionGraph="Assets/Data/Character/Enemy/04_SisterLibrarian/SisterLibrarianAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/04_SisterLibrarian/SisterLibrarianAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+        RankBadgeID="0"
+
+        AllyInfo="Sister"
+    />
+    <SisterStaff
+        DisplayName="시스터 스태프"
+        ActionGraph="Assets/Data/Character/Enemy/04_SisterStaff/SisterStaffAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/04_SisterStaff/SisterStaffAI.xml"
+        StatusInfoName="CommonHpFourEnemyStatus"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+        RankBadgeID="0"
+
+        AllyInfo="Sister"
+    />
+    <SisterGrimore
+        DisplayName="시스터 그리모어"
+        ActionGraph="Assets/Data/Character/Enemy/04_SisterGrimore/SisterGrimoreAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/04_SisterGrimore/SisterGrimoreAI.xml"
+        StatusInfoName="CommonHpFiveEnemyStatus"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+        RankBadgeID="0"
+
+        AllyInfo="Sister"
+    />
+
+    <SisterSpear
+        DisplayName="시스터 스피어"
+        ActionGraph="Assets/Data/Character/Enemy/04_SisterSpear/SisterSpearAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/04_SisterSpear/SisterSpearAI.xml"
+        StatusInfoName="CommonHpFiveEnemyStatus"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+        RankBadgeID="2"
+
+        AllyInfo="Sister"
+    />
+
+    <PoliceOmawariChan
+        DisplayName="폴리스 오마와리쨩"
+        ActionGraph="Assets/Data/Character/Enemy/05_PoliceOmawari/PoliceOmawariAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/05_PoliceOmawari/PoliceOmawariAI.xml"
+        StatusInfoName="CommonHpThreeEnemyStatus"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+        RankBadgeID="2"
+
+        AllyInfo="Police"
+    />
+
+    <PoliceTaihoChan
+        DisplayName="폴리스 택티컬 스태프쨩"
+        ActionGraph="Assets/Data/Character/Enemy/05_PoliceTaticalStaff/PoliceTacticalStaffAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/05_PoliceTaticalStaff/PoliceTacticalStaffAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+        RankBadgeID="0"
+
+        AllyInfo="Police"
+    />
+
+    <PolicePointChan
+        DisplayName="폴리스 포인트쨩"
+        ActionGraph="Assets/Data/Character/Enemy/05_PolicePoint/PolicePointAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/05_PolicePoint/PolicePointAI.xml"
+        StatusInfoName="CommonHpThreeEnemyStatus"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+        RankBadgeID="2"
+
+        AllyInfo="Police"
+    />
+<!-- Mob -->
+
+<!-- NPC :: TODO -->
+    <IinchoChan
+        DisplayName="반장쨩"
+        ActionGraph="Assets/Data/Character/IinchoChan/IinchoChanAction.xml"
+        AIGraph="Assets/Data/AILibrary/Graph/CommonPlayerTargetAIGraph.xml"
         StatusInfoName="CommonEnemyStatus"
 
         CollisionRadius="0.2"
-        ProjectileCollisionRadius=""
+        HeadUpOffset="0.5"
 
         AllyInfo="CommonBattle"
     />
-    <TutorialStudentTest
-        DisplayName="튜토리얼 더미 체력 개많음"
-        ActionGraph="Assets/Data/Character/TutorialStudent/TutorialStudentAction.xml"
-        AIGraph="Assets/Data/Character/TutorialStudent/TutorialStudentAI.xml"
-        StatusInfoName="CommonEnemyStatusNoUITest"
+
+    <TutorialTeacher
+        DisplayName="튜토리얼 선생"
+        ActionGraph="Assets/Data/Character/TutorialTeacher/TurorialTeacherAction.xml"
+        AIGraph="Assets/Data/AILibrary/Graph/CommonEnemyAI.xml"
+        StatusInfoName="CommonEnemyStatusNoUI"
 
         CollisionRadius="0.35"
+        HeadUpOffset="0.5"
         ProjectileCollisionRadius=""
 
         AllyInfo="CommonBattle"
     />
 
+    <YakisobaChan
+        DisplayName="야끼소바쨩"
+        ActionGraph="Assets/Data/Character/Deco/YakisobaChan.xml"
+        AIGraph="Assets/Data/AILibrary/Graph/EmptyAIGraph.xml"
+        StatusInfoName="CommonEnemyStatus"
+
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        IndicatorVisible="False"
+        ProjectileCollisionRadius=""
+        UseCameraBoundLock="False"
+
+        AllyInfo="Deco"
+    />
+
+    <YakisobaChanFollow
+        DisplayName="따라오는 야끼소바쨩"
+        ActionGraph="Assets/Data/Character/YakisobaChanFollow/YakisobaChanFollowAction.xml"
+        AIGraph="Assets/Data/Character/YakisobaChanFollow/YakisobaChanFollowAI.xml"
+        StatusInfoName="CommonEnemyStatus"
+
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        IndicatorVisible="False"
+        ProjectileCollisionRadius=""
+        UseCameraBoundLock="False"
+
+        AllyInfo="Deco"
+    />
+
+    <SetsumeiChan
+        DisplayName="세츠메이쨩"
+        ActionGraph="Assets/Data/Character/SetsumeiChan/SetsumeiChanAction.xml"
+        AIGraph="Assets/Data/AILibrary/Graph/EmptyAIGraph.xml"
+        StatusInfoName="CommonEnemyStatus"
+
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        IndicatorVisible="False"
+        ProjectileCollisionRadius=""
+        UseCameraBoundLock="False"
+
+        PortraitPath="Sprites/UI/Portrait/Setsumei"
+
+        AllyInfo="Deco"
+    />
+<!-- NPC -->
+
+<!-- Object :: TODO -->
     <TutorialStudent
         DisplayName="튜토리얼 더미"
         ActionGraph="Assets/Data/Character/TutorialStudent/TutorialStudentAction.xml"
@@ -107,22 +563,10 @@
 
         AllyInfo="CommonBattle"
     />
-
-    <IinchoChan
-        DisplayName="반장쨩"
-        ActionGraph="Assets/Data/Character/IinchoChan/IinchoChanAction.xml"
-        AIGraph="Assets/Data/AILibrary/Graph/CommonPlayerTargetAIGraph.xml"
-        StatusInfoName="CommonEnemyStatus"
-
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-
-        AllyInfo="CommonBattle"
-    />
-
-    <Chair
-        DisplayName="의자"
-        ActionGraph="Assets/Data/Character/Object/Chair/ChairObject.xml"
+    
+    <Obj_CommonChair
+        DisplayName="OBJ 공용 의자"
+        ActionGraph="Assets/Data/Character/Object/99_CommonChair/CommonChairObject.xml"
         AIGraph="Assets/Data/AILibrary/Graph/CommonEnemyAI.xml"
         StatusInfoName="CommonEnemyStatusNoUI"
 
@@ -131,6 +575,357 @@
 
         AllyInfo="InteractObject"
     />
+
+    <Obj_YurahaUzi
+        DisplayName="OBJ 유라하 우지 "
+        ActionGraph="Assets/Data/Character/Object/00_YurahaUzi/YurahaUziAction.xml"
+        AIGraph="Assets/Data/Character/Object/00_YurahaUzi/YurahaUziAI.xml"
+        StatusInfoName="CommonHpTwoEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        RankBadgeID="1"
+
+        AllyInfo="Sukeban"
+    />
+    
+    <Obj_ReitoGauntlet
+        DisplayName="OBJ 레이토 건틀렛"
+        ActionGraph="Assets/Data/Character/Object/00_ReitoGauntlet/ReitoGauntletAction.xml"
+        AIGraph="Assets/Data/Character/Object/00_ReitoGauntlet/ReitoGauntletAI.xml"
+        StatusInfoName="ReitoGauntletStatus"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="CommonBattle"
+    />
+    <Obj_ReitoMissile
+        DisplayName="OBJ 레이토 미사일"
+        ActionGraph="Assets/Data/Character/Object/00_ReitoMissile/ReitoMissileAction.xml"
+        AIGraph="Assets/Data/Character/Object/00_ReitoMissile/ReitoMissileAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="CommonBattle"
+    />
+    
+    <Obj_PerfectMissile
+        DisplayName="OBJ 선도부 미사일"
+        ActionGraph="Assets/Data/Character/Object/00_ReitoMissile/ReitoMissileAction.xml"
+        AIGraph="Assets/Data/Character/Object/00_ReitoMissile/ReitoMissileAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="CommonBattle"
+    />
+
+    <Obj_AobaEmp
+        DisplayName="OBJ 아오바 EMP"
+        ActionGraph="Assets/Data/Character/Object/00_AobaEmp/AobaEmpAction.xml"
+        AIGraph="Assets/Data/Character/Object/00_AobaEmp/AobaEmpAI.xml"
+        StatusInfoName="ActionProjectileStatus"
+        
+        CollisionRadius="0.2"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="CommonBattle"
+    />
+
+    <Obj_AobaDrone
+        DisplayName="OBJ 아오바 드론"
+        ActionGraph="Assets/Data/Character/Object/00_AobaDrone/AobaDroneAction.xml"
+        AIGraph="Assets/Data/Character/Object/00_AobaDrone/AobaDroneAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+
+        CollisionRadius="0.2"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="Police"
+    />
+
+    <Obj_SportsMachine
+        DisplayName="OBJ 운동부 머신"
+        ActionGraph="Assets/Data/Character/Object/03_SportsMachine/SportsMachineAction.xml"
+        AIGraph="Assets/Data/Character/Object/03_SportsMachine/SportsMachineAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+        RankBadgeID="0"
+
+        AllyInfo="SportsClub"
+    />
+
+    <Obj_SportsBaseball
+        DisplayName="OBJ 운동부 야구공"
+        ActionGraph="Assets/Data/Character/Object/03_SportsBaseball/SportsBaseballAction.xml"
+        AIGraph="Assets/Data/Character/Object/03_SportsBaseball/SportsBaseballAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+
+        CollisionRadius="0.1"
+        HeadUpOffset="0.0"
+        ProjectileCollisionRadius="0.1"
+        RankBadgeID="0"
+        IndicatorVisible="False"
+        UseCameraBoundLock="False"
+
+        AllyInfo="SportsClub"
+    />
+
+    <Obj_SisterTracer
+        DisplayName="OBJ 시스터 트레이서"
+        ActionGraph="Assets/Data/Character/Object/04_SisterTracer/SisterTracerAction.xml"
+        AIGraph="Assets/Data/Character/Object/04_SisterTracer/SisterTracerAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="Sister"
+    />
+
+    <Obj_SisterKnife
+        DisplayName="OBJ 시스터 나이프"
+        ActionGraph="Assets/Data/Character/Object/04_SisterKnife/SisterKnifeAction.xml"
+        AIGraph="Assets/Data/Character/Object/04_SisterKnife/SisterKnifeAI.xml"
+        StatusInfoName="CommonHpTenthsEnemyStatus"
+        
+        CollisionRadius="0.1"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="Sister"
+    />
+
+    <Obj_HelenaGrimoire
+        DisplayName="OBJ 헬레나 마도서"
+        ActionGraph="Assets/Data/Character/Object/00_HelenaGrimoire/HelenaGrimoireAction.xml"
+        AIGraph="Assets/Data/Character/Object/00_HelenaGrimoire/HelenaGrimoireAI.xml"
+        StatusInfoName="CommonEnemyStatus"
+
+        CollisionRadius="0.2"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="Sister"
+    />
+
+    <Obj_HelenaStorm
+        DisplayName="OBJ 헬레나 스톰"
+        ActionGraph="Assets/Data/Character/Object/00_HelenaStorm/HelenaStormAction.xml"
+        AIGraph="Assets/Data/Character/Object/00_HelenaStorm/HelenaStormAI.xml"
+        StatusInfoName="CommonHpOneEnemyStatusNoUI"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="Sister"
+    />
+
+    <Obj_SisterGrimoire
+        DisplayName="OBJ 시스터 마도서"
+        ActionGraph="Assets/Data/Character/Object/00_HelenaGrimoire/HelenaGrimoireAction.xml"
+        AIGraph="Assets/Data/Character/Object/00_HelenaGrimoire/NormalGrimoireAI.xml"
+        StatusInfoName="CommonEnemyStatus"
+
+        CollisionRadius="0.2"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="Sister"
+    />
+
+    <Obj_VendingMachine
+        DisplayName="OBJ 공용 자판기"
+        ActionGraph="Assets/Data/Character/Object/99_VendingMachine/VendingMachineAction.xml"
+        AIGraph="Assets/Data/Character/Object/99_VendingMachine/VendingMachineAI.xml"
+        StatusInfoName="CommonEnemyStatusNoUI"
+
+        CollisionRadius="0.5"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="CommonBattle"
+    />
+
+    <FireworkBullet
+        DisplayName="폭죽탄"
+        ActionGraph="Assets/Data/Character/Object/FireworkBullet/FireworkBulletAction.xml"
+        AIGraph="Assets/Data/Character/Object/FireworkBullet/FireworkBulletAI.xml"
+        StatusInfoName="ActionProjectileStatus"
+        
+        CollisionRadius="0.2"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="CommonBattle"
+    />
+
+    <SchoolDoor
+        DisplayName="학교 문"
+        ActionGraph="Assets/Data/Character/Object/BigDoor/BigDoor.xml"
+        AIGraph="Assets/Data/AILibrary/Graph/CommonEnemyAI.xml"
+        StatusInfoName="CommonEnemyStatusNoUI"
+
+        CollisionRadius="0.35"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="InteractObject"
+    />
+
+    <ProjectileShotCharacter
+        DisplayName="프로젝타일 생성용 캐릭터"
+        ActionGraph="Assets/Data/Character/Object/ProjectileShot/ProjectileShotCharacter.xml"
+        AIGraph="Assets/Data/AILibrary/Graph/EmptyAIGraph.xml"
+        StatusInfoName="CommonEnemyStatus"
+
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        IndicatorVisible="False"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="EnemyAllNeutral"
+    />
+    
+    <LaserShotCharacter
+        DisplayName="레이저 생성용 캐릭터"
+        ActionGraph="Assets/Data/Character/Object/ProjectileShot/ProjectileShotCharacter.xml"
+        AIGraph="Assets/Data/AILibrary/Graph/LaserAIGraph.xml"
+        StatusInfoName="CommonEnemyStatus"
+
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        IndicatorVisible="False"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="EnemyAllNeutral"
+    />
+
+
+
+<!-- Object -->
+
+<!-- Test -->
+    <TestZako
+        DisplayName="자코"
+        ActionGraph="Assets/Data/Character/TestZako/TestZako.xml"
+        AIGraph="Assets/Data/Character/TestZako/TestZakoAI.xml"
+        StatusInfoName="CommonEnemyStatus"
+
+        CollisionRadius="0.2"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="CommonBattle"
+    />
+    <TutorialStudentTest
+        DisplayName="튜토리얼 더미 체력 개많음"
+        ActionGraph="Assets/Data/Character/TutorialStudent/TutorialStudentAction.xml"
+        AIGraph="Assets/Data/Character/TutorialStudent/TutorialStudentAI.xml"
+        StatusInfoName="CommonEnemyStatusNoUITest"
+
+        CollisionRadius="0.35"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="CommonBattle"
+    />
+
+    <MeleePreset
+        DisplayName="근접 프리셋 테스트 캐릭터"
+        ActionGraph="Assets/Data/CharacterPreset/_ActionPreset/MeleeAction.xml"
+        AIGraph="Assets/Data/CharacterPreset/_AIPreset/PresetAI.xml"
+        StatusInfoName="CommonHpThreeEnemyStatus"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="CommonBattle"
+    />
+
+    <RangedPreset
+        DisplayName="원거리 프리셋 테스트 캐릭터"
+        ActionGraph="Assets/Data/CharacterPreset/_ActionPreset/RangedAction.xml"
+        AIGraph="Assets/Data/CharacterPreset/_AIPreset/PresetAI.xml"
+        StatusInfoName="CommonHpThreeEnemyStatus"
+        
+        CollisionRadius="0.2"
+        HeadUpOffset="0.5"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="CommonBattle"
+    />
+    <ScriptTester
+        DisplayName="스크립트 테스터"
+        ActionGraph="Assets/Data/Character/TestCharacter/TestAction.xml"
+        AIGraph="Assets/Data/Character/TestCharacter/TestAIGraph.xml"
+        StatusInfoName="CommonEnemyStatus"
+
+        CollisionRadius="0.2"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="CommonBattle"
+    />
+
+    <AttackTester
+        DisplayName="공격 테스터"
+        ActionGraph="Assets/Data/Character/AttackTester/AttackTesterAction.xml"
+        AIGraph="Assets/Data/AILibrary/Graph/EmptyAIGraph.xml"
+        StatusInfoName="CommonEnemyStatusNoUITest"
+
+        CollisionRadius="0.2"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="CommonBattle"
+    />
+
+    <StudentAlphaChan
+        DisplayName="학생 알파쨩"
+        ActionGraph="Assets/Data/Character/TestZako/TestZako.xml"
+        AIGraph="Assets/Data/AILibrary/Graph/EmptyAIGraph.xml"
+        StatusInfoName="CommonEnemyStatus"
+
+        CollisionRadius="0.2"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="CommonBattle"
+    />
+
+    <StudentBetaChan
+        DisplayName="학생 베타쨩"
+        ActionGraph="Assets/Data/Character/TestZako/TestZako.xml"
+        AIGraph="Assets/Data/AILibrary/Graph/EmptyAIGraph.xml"
+        StatusInfoName="CommonEnemyStatus"
+
+        CollisionRadius="0.2"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="CommonBattle"
+    />
+
+    <BasePreset
+        DisplayName="베이스 프리셋 캐릭터"
+        ActionGraph="Assets/Data/CharacterPreset/_ActionPreset/BaseAction.xml"
+        AIGraph="Assets/Data/CharacterPreset/_AIPreset/BasePresetAI.xml"
+        StatusInfoName="TestEnemyStatus"
+
+        CollisionRadius="0.5"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="CommonBattle"
+    /> 
+
+<!-- Test -->
+
+<!-- CrossHair -->
 
     <OsananaNajimiCrossHair
         DisplayName="나지미 크로스헤어"
@@ -189,699 +984,9 @@
 
         AllyInfo="EnemyAllNeutral"
     />
+<!-- CrossHair -->
 
-    <TutorialTeacher
-        DisplayName="튜토리얼 선생"
-        ActionGraph="Assets/Data/Character/TutorialTeacher/TurorialTeacherAction.xml"
-        AIGraph="Assets/Data/AILibrary/Graph/CommonEnemyAI.xml"
-        StatusInfoName="CommonEnemyStatusNoUI"
-
-        CollisionRadius="0.35"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="CommonBattle"
-    />
-
-    <OsananaNajimiAlpha
-        DisplayName="오사나나 나지미"
-        ActionGraph="Assets/Data/Character/Boss/OsananaNajimiAlpha/NajimiChanAlphaAction.xml"
-        AIGraph="Assets/Data/Character/Boss/OsananaNajimiAlpha/NajimiChanAlphaAI.xml"
-        StatusInfoName="OsananaNajimiStatus"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-
-        PortraitPath="Sprites/UI/Portrait/Najimi"
-
-        AllyInfo="SportsClub"
-    />
-
-    <KantoReito
-        DisplayName="칸토 레이토"
-        ActionGraph="Assets/Data/Character/Boss/KantoReito/ReitoChanAction.xml"
-        AIGraph="Assets/Data/Character/Boss/KantoReito/ReitoChanAI.xml"
-        StatusInfoName="KantoReitoStatus"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="CommonBattle"
-    />
-
-    <NozawaAoba
-        DisplayName="노자와 아오바"
-        ActionGraph="Assets/Data/Character/Boss/NozawaAoba/AobaChanAction.xml"
-        AIGraph="Assets/Data/Character/Boss/NozawaAoba/AobaChanAI.xml"
-        StatusInfoName="NozawaAobaStatus"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="Police"
-    />
-
-    <Gauntlet
-        DisplayName="건틀렛"
-        ActionGraph="Assets/Data/Character/Object/Gauntlet/GauntletAction.xml"
-        AIGraph="Assets/Data/Character/Object/Gauntlet/GauntletAI.xml"
-        StatusInfoName="GauntletStatus"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="CommonBattle"
-    />
-    <Missile
-        DisplayName="미사일"
-        ActionGraph="Assets/Data/Character/Object/Gauntlet_Missile/MissileAction.xml"
-        AIGraph="Assets/Data/Character/Object/Gauntlet_Missile/MissileAI.xml"
-        StatusInfoName="CommonHpOneEnemyStatusNoUI"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="CommonBattle"
-    />
-
-    <FireworkBullet
-        DisplayName="폭죽탄"
-        ActionGraph="Assets/Data/Character/Object/FireworkBullet/FireworkBulletAction.xml"
-        AIGraph="Assets/Data/Character/Object/FireworkBullet/FireworkBulletAI.xml"
-        StatusInfoName="ActionProjectileStatus"
-        
-        CollisionRadius="0.2"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="CommonBattle"
-    />
-
-    <EmpGrenade
-        DisplayName="EMP그레네이드"
-        ActionGraph="Assets/Data/Character/Object/EmpGrenade/EmpGrenadeAction.xml"
-        AIGraph="Assets/Data/Character/Object/EmpGrenade/EmpGrenadeAI.xml"
-        StatusInfoName="ActionProjectileStatus"
-        
-        CollisionRadius="0.2"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="CommonBattle"
-    />
-    
-    <RapierChan
-        DisplayName="선도부 선봉부대 레이피어쨩"
-        ActionGraph="Assets/Data/Character/Enemy/01_RapierChan/RapierChanAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/01_RapierChan/RapierChanAI.xml"
-        StatusInfoName="CommonHpOneEnemyStatusNoUI"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-        RankBadgeID="0"
-
-        AllyInfo="PerfectTeam"
-    />
-
-    <LugerChan
-        DisplayName="선도부 마법부대 루거쨩"
-        ActionGraph="Assets/Data/Character/Enemy/01_LugerChan/LugerChanAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/01_LugerChan/LugerChanAI.xml"
-        StatusInfoName="CommonHpOneEnemyStatusNoUI"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-        RankBadgeID="0"
-
-        AllyInfo="PerfectTeam"
-    />
-
-    <BarricadeChan
-        DisplayName="선도부 마법부대 바리케이드쨩"
-        ActionGraph="Assets/Data/Character/Enemy/01_BarricadeChan/BarricadeChanAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/01_BarricadeChan/BarricadeChanAI.xml"
-        StatusInfoName="CommonHpOneEnemyStatusNoUI"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-        RankBadgeID="2"
-
-        AllyInfo="PerfectTeam"
-    />
-
-    <SisterHelena
-        DisplayName="시스터 헬레나"
-        ActionGraph="Assets/Data/Character/Boss/SisterHelena/SisterChanAction.xml"
-        AIGraph="Assets/Data/Character/Boss/SisterHelena/SisterChanAI.xml"
-        StatusInfoName="SisterHelenaStatus"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="Sister"
-    />
-
-    <MeleePreset
-        DisplayName="근접 프리셋 테스트 캐릭터"
-        ActionGraph="Assets/Data/CharacterPreset/_ActionPreset/MeleeAction.xml"
-        AIGraph="Assets/Data/CharacterPreset/_AIPreset/PresetAI.xml"
-        StatusInfoName="CommonHpThreeEnemyStatus"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="CommonBattle"
-    />
-
-    <RangedPreset
-        DisplayName="원거리 프리셋 테스트 캐릭터"
-        ActionGraph="Assets/Data/CharacterPreset/_ActionPreset/RangedAction.xml"
-        AIGraph="Assets/Data/CharacterPreset/_AIPreset/PresetAI.xml"
-        StatusInfoName="CommonHpThreeEnemyStatus"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="CommonBattle"
-    />
-
-    <SchoolDoor
-        DisplayName="학교 문"
-        ActionGraph="Assets/Data/Character/Object/BigDoor/BigDoor.xml"
-        AIGraph="Assets/Data/AILibrary/Graph/CommonEnemyAI.xml"
-        StatusInfoName="CommonEnemyStatusNoUI"
-
-        CollisionRadius="0.35"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="InteractObject"
-    />
-
-    <SukebanKatanaChan
-        DisplayName="스케반 카타나쨩"
-        ActionGraph="Assets/Data/Character/Enemy/02_SukebanMelee/SukebanMeleeAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/02_SukebanMelee/SukebanMeleeAI.xml"
-        StatusInfoName="CommonHpOneEnemyStatusNoUI"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-        RankBadgeID="0"
-
-        AllyInfo="Sukeban"
-    />
-
-    <BrainWashedSukebanKatanaChan
-        DisplayName="세뇌당한 스케반 카타나쨩"
-        ActionGraph="Assets/Data/Character/Enemy/02_SukebanMelee/SukebanMeleeBrainWashedAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/02_SukebanMelee/SukebanMeleeAI.xml"
-        StatusInfoName="CommonHpOneEnemyStatusNoUI"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-        RankBadgeID="0"
-
-        AllyInfo="Sister"
-    />
-
-    <SukebanEliteChan
-        DisplayName="스케반 엘리트쨩"
-        ActionGraph="Assets/Data/Character/Enemy/02_SukebanMelee_Elite/SukebanMeleeEliteAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/02_SukebanMelee_Elite/SukebanMeleeEliteAI.xml"
-        StatusInfoName="SukebanEliteChanStatus"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-        RankBadgeID="3"
-
-        PortraitPath="Sprites/UI/Portrait/EliteSukeban"
-
-        AllyInfo="Sukeban"
-    />
-
-    <BrainWashedSukebanEliteChan
-        DisplayName="세뇌당한 스케반 엘리트쨩"
-        ActionGraph="Assets/Data/Character/Enemy/02_SukebanMelee_Elite/SukebanMeleeEliteBrainWashedAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/02_SukebanMelee_Elite/SukebanMeleeEliteAI.xml"
-        StatusInfoName="SukebanEliteChanStatus"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-        RankBadgeID="3"
-
-        AllyInfo="Sister"
-    />
-
-    <Uzi
-        DisplayName="스케반 엘리트의 우지 "
-        ActionGraph="Assets/Data/Character/Object/Uzi/UziAction.xml"
-        AIGraph="Assets/Data/Character/Object/Uzi/UziAI.xml"
-        StatusInfoName="CommonHpTwoEnemyStatusNoUI"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-
-        RankBadgeID="1"
-
-        AllyInfo="Sukeban"
-    />
-
-    <SukebanUziChan
-        DisplayName="스케반 우지쨩"
-        ActionGraph="Assets/Data/Character/Enemy/02_SukebanRanged/SukebanRangedAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/02_SukebanRanged/SukebanRangedAI.xml"
-        StatusInfoName="CommonHpOneEnemyStatusNoUI"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-        RankBadgeID="0"
-
-        AllyInfo="Sukeban"
-    />
-
-    <BrainWashedSukebanUziChan
-        DisplayName="세뇌당한 스케반 우지쨩"
-        ActionGraph="Assets/Data/Character/Enemy/02_SukebanRanged/SukebanRangedBrainWashedAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/02_SukebanRanged/SukebanRangedAI.xml"
-        StatusInfoName="CommonHpOneEnemyStatusNoUI"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-        RankBadgeID="0"
-
-        AllyInfo="Sister"
-    />
-
-    <SukebanTaishouChan
-        DisplayName="스케반 타이쇼쨩"
-        ActionGraph="Assets/Data/Character/Enemy/02_SukebanTaishou/SukebanTaishouAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/02_SukebanTaishou/SukebanTaishouAI.xml"
-        StatusInfoName="SukebanTaishouChanStatus"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="Sukeban"
-    />
-
-    <SportsBatterChan
-        DisplayName="운동부 밧타쨩"
-        ActionGraph="Assets/Data/Character/Enemy/03_SportsBatter/SportsBatterAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/03_SportsBatter/SportsBatterAI.xml"
-        StatusInfoName="CommonHpOneEnemyStatusNoUI"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-        RankBadgeID="0"
-
-        AllyInfo="SportsClub"
-    />
-    <SportsPitcherChan
-        DisplayName="운동부 핏쳐쨩"
-        ActionGraph="Assets/Data/Character/Enemy/03_SportsPitcher/SportsPitcherAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/03_SportsPitcher/SportsPitcherAI.xml"
-        StatusInfoName="CommonHpOneEnemyStatusNoUI"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-        RankBadgeID="0"
-
-        AllyInfo="SportsClub"
-    />
-    <SportsMachine
-        DisplayName="운동부 머신"
-        ActionGraph="Assets/Data/Character/Enemy/03_SportsMachine/SportsMachineAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/03_SportsMachine/SportsMachineAI.xml"
-        StatusInfoName="CommonHpOneEnemyStatusNoUI"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-        RankBadgeID="0"
-
-        AllyInfo="SportsClub"
-    />
-    <BaseBall
-        DisplayName="야구공"
-        ActionGraph="Assets/Data/Character/Object/BaseBall/BaseBallAction.xml"
-        AIGraph="Assets/Data/Character/Object/BaseBall/BaseBallAI.xml"
-        StatusInfoName="CommonHpOneEnemyStatusNoUI"
-
-        CollisionRadius="0.1"
-        HeadUpOffset="0.0"
-        ProjectileCollisionRadius="0.1"
-        RankBadgeID="0"
-        IndicatorVisible="False"
-        UseCameraBoundLock="False"
-
-        AllyInfo="SportsClub"
-    />
-
-    <SportsManager
-        DisplayName="운동부 매니저쨩"
-        ActionGraph="Assets/Data/Character/Enemy/03_SportsManager/SportsManagerAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/03_SportsManager/SportsManagerAI.xml"
-        StatusInfoName="CommonHpOneEnemyStatusNoUI"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-        RankBadgeID="0"
-
-        AllyInfo="SportsClub"
-    />
-    
-    <BarbellChan
-        DisplayName="운동부 바벨쨩"
-        ActionGraph="Assets/Data/Character/Enemy/03_BarbellMelee/BarbellMeleeAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/03_BarbellMelee/BarbellMeleeAI.xml"
-        StatusInfoName="CommonHpThreeEnemyStatus"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-        RankBadgeID="2"
-
-        AllyInfo="SportsClub"
-    />    
-    <DumbellChan
-        DisplayName="운동부 덤벨쨩"
-        ActionGraph="Assets/Data/Character/Enemy/03_DumbellRanged/DumbellRangedAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/03_DumbellRanged/DumbellRangedAI.xml"
-        StatusInfoName="CommonHpTwoEnemyStatus"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-        RankBadgeID="1"
-
-        AllyInfo="SportsClub"
-    />
-    <BarbellChan_najimi
-        DisplayName="운동부 바벨쨩"
-        ActionGraph="Assets/Data/Character/Enemy/03_BarbellMelee/BarbellMeleeAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/03_BarbellMelee/BarbellMeleeAI.xml"
-        StatusInfoName="CommonHpTwoEnemyStatusNoUI"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-        RankBadgeID="1"
-
-        AllyInfo="SportsClub"
-    />    
-    <DumbellChan_najimi
-        DisplayName="운동부 덤벨쨩"
-        ActionGraph="Assets/Data/Character/Enemy/03_DumbellRanged/DumbellRangedAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/03_DumbellRanged/DumbellRangedAI.xml"
-        StatusInfoName="CommonHpOneEnemyStatusNoUI"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-        RankBadgeID="0"
-
-        AllyInfo="SportsClub"
-    />
-    <RunnerChan
-        DisplayName="운동부 러너쨩"
-        ActionGraph="Assets/Data/Character/Enemy/03_RunnerChan/RunnerChanAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/03_RunnerChan/RunnerChanAI.xml"
-        StatusInfoName="CommonHpOneEnemyStatusNoUI"
-        
-        CollisionRadius="0.2"
-        ProjectileCollisionRadius=""
-        RankBadgeID="0"
-
-        AllyInfo="SportsClub"
-    />
-
-    <SisterNormal
-        DisplayName="시스터 노말"
-        ActionGraph="Assets/Data/Character/Enemy/04_SisterNormal/SisterNormalAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/04_SisterNormal/SisterNormalAI.xml"
-        StatusInfoName="CommonHpOneEnemyStatusNoUI"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-        RankBadgeID="0"
-
-        AllyInfo="Sister"
-    />
-    <SisterLibrarian
-        DisplayName="시스터 라이브러리안"
-        ActionGraph="Assets/Data/Character/Enemy/04_SisterLibrarian/SisterLibrarianAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/04_SisterLibrarian/SisterLibrarianAI.xml"
-        StatusInfoName="CommonHpOneEnemyStatusNoUI"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-        RankBadgeID="0"
-
-        AllyInfo="Sister"
-    />
-    <SisterStaffChan
-        DisplayName="시스터 스태프쨩"
-        ActionGraph="Assets/Data/Character/Enemy/04_SisterStaff/SisterStaffAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/04_SisterStaff/SisterStaffAI.xml"
-        StatusInfoName="CommonHpFourEnemyStatus"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-        RankBadgeID="0"
-
-        AllyInfo="Sister"
-    />
-    
-    <SisterWandChan
-        DisplayName="시스터 완드쨩"
-        ActionGraph="Assets/Data/Character/Enemy/04_SisterWand/SisterWandAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/04_SisterWand/SisterWandAI.xml"
-        StatusInfoName="CommonHpOneEnemyStatusNoUI"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-        RankBadgeID="0"
-
-        AllyInfo="Sister"
-    />
-    <SisterGrimore
-        DisplayName="시스터 그리모어"
-        ActionGraph="Assets/Data/Character/Enemy/04_SisterGrimore/SisterGrimoreAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/04_SisterGrimore/SisterGrimoreAI.xml"
-        StatusInfoName="CommonHpFiveEnemyStatus"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-        RankBadgeID="0"
-
-        AllyInfo="Sister"
-    />
-
-    <SisterSisterSpearChan
-        DisplayName="시스터 스피어쨩"
-        ActionGraph="Assets/Data/Character/Enemy/04_SisterSpear/SisterSpearAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/04_SisterSpear/SisterSpearAI.xml"
-        StatusInfoName="CommonHpFiveEnemyStatus"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-        RankBadgeID="2"
-
-        AllyInfo="Sister"
-    />
-    
-    <ThunderFloor_Chase
-        DisplayName="헬레나 전기장판 (추격)"
-        ActionGraph="Assets/Data/Character/Object/ThunderFloor/ThunderFloor_ChaseAction.xml"
-        AIGraph="Assets/Data/Character/Object/ThunderFloor/ThunderFloor_ChaseAI.xml"
-        StatusInfoName="CommonHpOneEnemyStatusNoUI"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="Sister"
-    />
-    <ThunderFloor_Shoot
-        DisplayName="헬레나 전기장판 (발사)"
-        ActionGraph="Assets/Data/Character/Object/ThunderFloor/ThunderFloor_ShootAction.xml"
-        AIGraph="Assets/Data/Character/Object/ThunderFloor/ThunderFloor_ShootAI.xml"
-        StatusInfoName="CommonHpOneEnemyStatusNoUI"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="Sister"
-    />
-    <Sister_Knife
-        DisplayName="시스터 그리모어의 나이프"
-        ActionGraph="Assets/Data/Character/Object/SisterKnife/SisterKnifeAction.xml"
-        AIGraph="Assets/Data/Character/Object/SisterKnife/SisterKnifeAI.xml"
-        StatusInfoName="CommonHpTenthsEnemyStatus"
-        
-        CollisionRadius="0.1"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="Sister"
-    />
-
-    <PoliceOmawariChan
-        DisplayName="폴리스 오마와리쨩"
-        ActionGraph="Assets/Data/Character/Enemy/05_PoliceOmawari/PoliceOmawariAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/05_PoliceOmawari/PoliceOmawariAI.xml"
-        StatusInfoName="CommonHpThreeEnemyStatus"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-        RankBadgeID="2"
-
-        AllyInfo="Police"
-    />
-
-    <PoliceTaihoChan
-        DisplayName="폴리스 택티컬 스태프쨩"
-        ActionGraph="Assets/Data/Character/Enemy/05_PoliceTaticalStaff/PoliceTacticalStaffAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/05_PoliceTaticalStaff/PoliceTacticalStaffAI.xml"
-        StatusInfoName="CommonHpOneEnemyStatusNoUI"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-        RankBadgeID="0"
-
-        AllyInfo="Police"
-    />
-
-    <PolicePointChan
-        DisplayName="폴리스 포인트쨩"
-        ActionGraph="Assets/Data/Character/Enemy/05_PolicePoint/PolicePointAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/05_PolicePoint/PolicePointAI.xml"
-        StatusInfoName="CommonHpThreeEnemyStatus"
-        
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        ProjectileCollisionRadius=""
-        RankBadgeID="2"
-
-        AllyInfo="Police"
-    />
-
-    <StudentAlphaChan
-        DisplayName="학생 알파쨩"
-        ActionGraph="Assets/Data/Character/TestZako/TestZako.xml"
-        AIGraph="Assets/Data/AILibrary/Graph/EmptyAIGraph.xml"
-        StatusInfoName="CommonEnemyStatus"
-
-        CollisionRadius="0.2"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="CommonBattle"
-    />
-
-    <StudentBetaChan
-        DisplayName="학생 베타쨩"
-        ActionGraph="Assets/Data/Character/TestZako/TestZako.xml"
-        AIGraph="Assets/Data/AILibrary/Graph/EmptyAIGraph.xml"
-        StatusInfoName="CommonEnemyStatus"
-
-        CollisionRadius="0.2"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="CommonBattle"
-    />
-
-    <Helena_CrimsonGrimoire
-        DisplayName="헬레나의 붉은 마도서"
-        ActionGraph="Assets/Data/Character/Object/Helena_CrimsonGirmoire/CrimsonGirmoireAction.xml"
-        AIGraph="Assets/Data/Character/Object/Helena_CrimsonGirmoire/CrimsonGirmoireAI.xml"
-        StatusInfoName="CommonEnemyStatus"
-
-        CollisionRadius="0.2"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="Sister"
-    />
-    <CrimsonGrimoire
-        DisplayName="붉은 마도서"
-        ActionGraph="Assets/Data/Character/Object/Helena_CrimsonGirmoire/CrimsonGirmoireAction.xml"
-        AIGraph="Assets/Data/Character/Object/Helena_CrimsonGirmoire/NormalCrimsonGirmoireAI.xml"
-        StatusInfoName="CommonEnemyStatus"
-
-        CollisionRadius="0.2"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="Sister"
-    />
-
-    <NozawaAoba_Drone
-        DisplayName="아오바의 자폭 드론"
-        ActionGraph="Assets/Data/Character/Object/Aoba_Drone/AobaDroneAction.xml"
-        AIGraph="Assets/Data/Character/Object/Aoba_Drone/AobaDroneAI.xml"
-        StatusInfoName="CommonHpOneEnemyStatusNoUI"
-
-        CollisionRadius="0.2"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="Police"
-    />
-
-    <ScriptTester
-        DisplayName="스크립트 테스터"
-        ActionGraph="Assets/Data/Character/TestCharacter/TestAction.xml"
-        AIGraph="Assets/Data/Character/TestCharacter/TestAIGraph.xml"
-        StatusInfoName="CommonEnemyStatus"
-
-        CollisionRadius="0.2"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="CommonBattle"
-    />
-
-    <AttackTester
-        DisplayName="공격 테스터"
-        ActionGraph="Assets/Data/Character/AttackTester/AttackTesterAction.xml"
-        AIGraph="Assets/Data/AILibrary/Graph/EmptyAIGraph.xml"
-        StatusInfoName="CommonEnemyStatusNoUITest"
-
-        CollisionRadius="0.2"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="CommonBattle"
-    />
-
-
-
-
-
-
+<!-- Deco -->
     <DecoStudent_0
         DisplayName="데코 학생 0"
         ActionGraph="Assets/Data/Character/Deco/DecoStudent_0.xml"
@@ -1030,82 +1135,7 @@
 
         AllyInfo="CommonBattle"
     />
-
-    <YakisobaChan
-        DisplayName="야끼소바쨩"
-        ActionGraph="Assets/Data/Character/Deco/YakisobaChan.xml"
-        AIGraph="Assets/Data/AILibrary/Graph/EmptyAIGraph.xml"
-        StatusInfoName="CommonEnemyStatus"
-
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        IndicatorVisible="False"
-        ProjectileCollisionRadius=""
-        UseCameraBoundLock="False"
-
-        AllyInfo="Deco"
-    />
-
-    <YakisobaChanFollow
-        DisplayName="따라오는 야끼소바쨩"
-        ActionGraph="Assets/Data/Character/YakisobaChanFollow/YakisobaChanFollowAction.xml"
-        AIGraph="Assets/Data/Character/YakisobaChanFollow/YakisobaChanFollowAI.xml"
-        StatusInfoName="CommonEnemyStatus"
-
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        IndicatorVisible="False"
-        ProjectileCollisionRadius=""
-        UseCameraBoundLock="False"
-
-        AllyInfo="Deco"
-    />
-
-    <SetsumeiChan
-        DisplayName="세츠메이쨩"
-        ActionGraph="Assets/Data/Character/SetsumeiChan/SetsumeiChanAction.xml"
-        AIGraph="Assets/Data/AILibrary/Graph/EmptyAIGraph.xml"
-        StatusInfoName="CommonEnemyStatus"
-
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        IndicatorVisible="False"
-        ProjectileCollisionRadius=""
-        UseCameraBoundLock="False"
-
-        PortraitPath="Sprites/UI/Portrait/Setsumei"
-
-        AllyInfo="Deco"
-    />
-
-    <ProjectileShotCharacter
-        DisplayName="프로젝타일 생성용 캐릭터"
-        ActionGraph="Assets/Data/Character/Object/ProjectileShot/ProjectileShotCharacter.xml"
-        AIGraph="Assets/Data/AILibrary/Graph/EmptyAIGraph.xml"
-        StatusInfoName="CommonEnemyStatus"
-
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        IndicatorVisible="False"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="EnemyAllNeutral"
-    />
     
-    <LaserShotCharacter
-        DisplayName="레이저 생성용 캐릭터"
-        ActionGraph="Assets/Data/Character/Object/ProjectileShot/ProjectileShotCharacter.xml"
-        AIGraph="Assets/Data/AILibrary/Graph/LaserAIGraph.xml"
-        StatusInfoName="CommonEnemyStatus"
-
-        CollisionRadius="0.2"
-        HeadUpOffset="0.5"
-        IndicatorVisible="False"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="EnemyAllNeutral"
-    />
-
     <TalkCharacter
         DisplayName="대화용 캐릭터"
         ActionGraph="Assets/Data/Character/Empty/EmptyAction.xml"
@@ -1121,18 +1151,10 @@
 
         AllyInfo="Deco"
     />
+<!-- Deco -->
 
-    <VendingMachine
-        DisplayName="자판기"
-        ActionGraph="Assets/Data/Character/Object/VendingMachine/VendingMachineAction.xml"
-        AIGraph="Assets/Data/Character/Object/VendingMachine/VendingMachineAI.xml"
-        StatusInfoName="CommonEnemyStatusNoUI"
+<!-- Training -->
 
-        CollisionRadius="0.5"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="CommonBattle"
-    />
     <Signboard
         DisplayName="간판"
         ActionGraph="Assets/Data/Character/Object/Signboard/SignboardAction.xml"
@@ -1242,11 +1264,11 @@
 
     <SukebanMeleeBatter
         DisplayName="스케반베트쨩"
-        ActionGraph="Assets/Data/Character/Enemy/02_SukebanMelee_Batter/SukebanMeleeBatterAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/02_SukebanMelee_Batter/SukebanMeleeBatterAI.xml"
+        ActionGraph="Assets/Data/Character/Enemy/02_SukebanMeleeBatter/SukebanMeleeBatterAction.xml"
+        AIGraph="Assets/Data/Character/Enemy/02_SukebanMeleeBatter/SukebanMeleeBatterAI.xml"
         StatusInfoName="SukebanMeleeBatter"
 
-        CollisionRadius="0.5"
+        CollisionRadius="0.2"
         ProjectileCollisionRadius=""
 
         AllyInfo="CommonBattle"
@@ -1258,34 +1280,13 @@
         AIGraph="Assets/Data/Character/Object/BigGrenade/BigGrenadeAI.xml"
         StatusInfoName="BigGrenade"
 
-        CollisionRadius="0.5"
+        CollisionRadius="0.2"
         ProjectileCollisionRadius=""
 
         AllyInfo="CommonBattle"
     /> 
 
-    <BasePreset
-        DisplayName="베이스 프리셋 캐릭터"
-        ActionGraph="Assets/Data/CharacterPreset/_ActionPreset/BaseAction.xml"
-        AIGraph="Assets/Data/CharacterPreset/_AIPreset/BasePresetAI.xml"
-        StatusInfoName="TestEnemyStatus"
+<!-- Training -->
 
-        CollisionRadius="0.5"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="CommonBattle"
-    /> 
-
-    <RadioMagicGirlEgoSmallLaser
-        DisplayName="전파탑소녀작은레이져분신"
-        ActionGraph="Assets/Data/Character/Enemy/04_RadioMagicGirlEgoSmallLaser/RadioMagicGirlEgoSmallLaserAction.xml"
-        AIGraph="Assets/Data/Character/Enemy/04_RadioMagicGirlEgoSmallLaser/RadioMagicGirlEgoSmallLaserAI.xml"
-        StatusInfoName="RadioMagicGirlEgoSmallLaser"
-
-        CollisionRadius="0.5"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="CommonBattle"
-    /> 
 
 </CharacterInfo>

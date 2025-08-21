@@ -1,0 +1,58 @@
+<ActionGraph Name="VendingMachineAction" DefaultAction="AC_Idle" DefaultFramePerSecond="12">
+<!-- AnimationHeader MasterPath -->
+<GlobalVariable Name="gv_MasterPath" Value="Sprites/Object/VendingMachine/"/>
+<GlobalVariable Name="gv_DeadPath" Value="Resources/Sprites/Object/VendingMachine/1_idle/"/>
+
+    <AC_Idle MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Keep" DefenceType="Guard" DefenceAngle="360" Flags="OutlineGuard">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="1_idle" XFlip="true" Duration="1.0">
+            
+        </Animation>
+
+        <Trigger Condition="DefenceSuccess">
+            <FrameEvent Type="AudioPlay" ID="4915" Attach="true"/>
+        </Trigger>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_Idle>
+    
+    <AC_Hit_L MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Keep" DefenceType="Guard" DefenceAngle="360" Flags="OutlineGuard">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="2_hit_L" XFlip="true" Duration="1.0">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="4913" Attach="true"/>
+            <!-- Projectile Attack -->
+            <FrameEvent Type="Projectile" StartTime="0" GraphName="Drink" Offset="0.0 -0.1 0.0" UseFlip="true" DirectionType="AI" SpawnTargetType="Self"/>
+            
+        </Animation>
+        <Trigger Condition="DefenceSuccess">
+            <FrameEvent Type="AudioPlay" ID="4915" Attach="true"/>
+        </Trigger>
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_Hit_L>
+    
+    <AC_Hit_R MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction" RotationType="Keep" DefenceType="Guard" DefenceAngle="360" Flags="OutlineGuard">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="3_hit_R" XFlip="true" Duration="1.0">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="4913" Attach="true"/>
+            <FrameEvent Type="Projectile" StartTime="0" GraphName="Drink" Offset="0.0 -0.1 0.0" UseFlip="true" DirectionType="AI" SpawnTargetType="Self"/>
+        </Animation>
+        <Trigger Condition="DefenceSuccess">
+            <FrameEvent Type="AudioPlay" ID="4915" Attach="true"/>
+        </Trigger>
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_Hit_R>
+
+    <Dead DirectionType="Keep" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="1_idle" XFlip="true" Duration="1">
+            <FrameEvent Type="Effect" StartTime="0" Path="gv_DeadPath" FramePerSecond="0.2" CastShadow="True">
+                <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
+            </FrameEvent>
+            
+            <FrameEvent Type="KillEntity" StartTime="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Dead"/>
+    </Dead>
+
+</ActionGraph>

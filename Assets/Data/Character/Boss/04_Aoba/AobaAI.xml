@@ -1,0 +1,317 @@
+<AIGraph Name="AobaAI" DefaultState="Entry_Battle">
+    <!-- 옵션 설정 -->
+    <!-- 공격 거리 설정 -->
+    <GlobalVariable Name="gv_MeleeAttackRangeMin"           Value="0.0"/>       <!-- 최소 공격 사거리 : Value보다 PC가 가까우면 공격하지 않는다. -->
+    <GlobalVariable Name="gv_MeleeAttackRangeMax"           Value="2.0"/>       <!-- 최대 사거리 : Value보다 PC가 멀면 추격이동으로 이행한다. -->
+
+    <!-- 가드 옵션 설정 -->
+    <GlobalVariable Name="gv_GuardTime"                     Value="1.5"/>       <!-- 방어 지속 시간 -->
+    <GlobalVariable Name="gv_GuardBrokenThreshold"          Value="0.0"/>       <!-- 가드 브레이크 공격을 막을 수 있는 횟수 -->
+    <!-- 이동 타입 설정 -->
+    <GlobalVariable Name="gv_bIsSystemChase"                Value="True"/>     <!-- 시스템 추격: 일정 거리 이상일 시 PC로 워프한다. (카메라 밖에서 동작) -->
+    <!-- 이동 거리 설정 -->
+    <GlobalVariable Name="gv_SystemChaseThreshold"          Value="9.75"/>     <!-- 시스템 추격 거리: 카메라 범위 값. 카메라 바깥으로 사라지지 않게 추격 -->
+    <GlobalVariable Name="gv_MoveThreshold"                 Value="3.0"/>       <!-- 최대 거리 : PC와 Value 이상 거리가 벌어진 경우 이동한다. -->
+    <GlobalVariable Name="gv_StopThreshold"                 Value="2.7"/>       <!-- 최소 거리 : PC와 Value 이상 거리가 가까워진 경우 정지 또는 경계한다. -->
+    <GlobalVariable Name="gv_AwayThreshold"                 Value="1.5"/>       <!-- 최소 거리 : PC와 Value 이상 거리가 가까워진 경우 거리를 벌린다. -->
+    <!-- 패시브 방어 반응 임계치 설정 -->
+    <GlobalVariable Name="gv_HitCountFast"                  Value="3.0"/>       <!-- 누적 피격 허용 횟수 (빠름)-->
+    <GlobalVariable Name="gv_HitCountNormal"                Value="4.0"/>       <!-- 누적 피격 허용 횟수 (보통)-->
+    <GlobalVariable Name="gv_HitCountSlow"                  Value="5.0"/>       <!-- 누적 피격 허용 횟수 (느림)-->
+    <GlobalVariable Name="gv_GuardCountThreshold"           Value="2.0"/>       <!-- 누적 가드 횟수 트리거 : 해당 횟수 충족 시 패시브 방어 동작 (가드 중 모든 피격 시 카운트) -->
+    <!-- 패시브 방어(누적 피격) 반응 타입 설정 -->
+        <!-- TODO: 피격 리액션이 상황에 따라 다른 것으로 실행될 수 있음. 복수 선택 가능하게. -->
+    <GlobalVariable Name="gv_bIsDodgeToPassiveDef_Hit"      Value="True"/>      <!-- 누적 피격 시 패시브 방어 : 회피 타입 -->
+    <GlobalVariable Name="gv_bIsCounterToPassiveDef_Hit"    Value="True"/>      <!-- 누적 피격 시 패시브 방어 : 반격 타입 -->
+    <GlobalVariable Name="gv_bIsGuardToPassiveDef_Hit"      Value="False"/>      <!-- 누적 피격 시 패시브 방어 : 방어 타입 -->
+    <!-- 패시브 방어(누적 가드) 반응 타입 설정 -->
+    <GlobalVariable Name="gv_bIsDodgeToPassiveDef_Guard"    Value="False"/>      <!-- 누적 피격 시 패시브 방어 : 회피 타입 -->
+    <GlobalVariable Name="gv_bIsCounterToPassiveDef_Guard"  Value="False"/>     <!-- 누적 피격 시 패시브 방어 : 반격 타입 -->
+    <!-- 패시브 방어 실행 지연 시간 설정 -->
+    <GlobalVariable Name="gv_PassiveDef_Hit_DelayTime" Value="0.0"/>            <!-- 누적 피격 반응 지연 시간-->
+    <GlobalVariable Name="gv_PassiveDef_Guard_DelayTime" Value="0.2"/>            <!-- 누적 가드 반응 지연 시간-->
+
+    <Include Path="Assets/Data/AILibrary/Package/CommonTestPackage.xml"/>
+
+    <Include Path="Assets/Data/AILibrary/Package/CommonDeadPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonHitPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonChasePackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonIdlePackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonGuardBrokenPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonGroggyPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonDashPackage.xml"/>
+    <Include Path="Assets/Data/AILibrary/Package/CommonSelfHealPackage.xml"/>
+
+    <Include Path="Assets/Data/Character/Boss/03_Aoba/AobaStormRaisenPackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/03_Aoba/AobaChargeRaisenPackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/03_Aoba/AobaUnwaverRaisenPackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/03_Aoba/AobaEmpPackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/03_Aoba/AobaWarpChasePackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/03_Aoba/AobaTsubaPackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/03_Aoba/AobaTsubaReadyPackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/03_Aoba/AobaDodgePackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/03_Aoba/AobaSpawnDronePackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/03_Aoba/AobaThrustPackage.xml"/>
+    <Include Path="Assets/Data/Character/Boss/03_Aoba/AobaKickPackage.xml"/>
+
+    <CustomValue Name="CurrentRaisenCount" Value="0.0"/>
+    <CustomValue Name="CurrentStormCount" Value="0.0"/>
+
+    <CustomEvent_CountRaisen>
+        <AIEvent Type="AddCustomValue" Name="CurrentRaisenCount" Value="1.0"/>
+    </CustomEvent_CountRaisen>
+    <CustomEvent_ResetRaisen>
+        <AIEvent Type="SetCustomValue" Name="CurrentRaisenCount" Value="0.0"/>
+    </CustomEvent_ResetRaisen>
+    <CustomEvent_CountStorm>
+        <AIEvent Type="AddCustomValue" Name="CurrentStormCount" Value="1.0"/>
+    </CustomEvent_CountStorm>
+    <CustomEvent_ResetStorm>
+        <AIEvent Type="SetCustomValue" Name="CurrentStormCount" Value="0.0"/>
+    </CustomEvent_ResetStorm>
+
+    
+    <!-- Test -->
+        <Test Package="AobaUnwaverRaisenPackage">
+            <Branch Condition="Hit && getFrameTag_HitAvail" Execute="TestHit"/>
+            <Branch Condition="(GuardBreakFail || GuardBroken) && getFrameTag_GbAvail" Execute="TestGuardBroken"/>
+            <Branch Condition="CurrentPackageEnd" Execute="Test"/>
+
+        </Test>
+
+        <Test2 Package="AobaTsubaPackage">
+            <Branch Condition="Hit && getFrameTag_HitAvail" Execute="TestHit"/>
+            <Branch Condition="(GuardBreakFail || GuardBroken) && getFrameTag_GbAvail" Execute="TestGuardBroken"/>
+            <Branch Condition="CurrentPackageEnd" Execute="Test"/>
+        </Test2>
+
+        <TestHit Package="CommonHitPackage">
+            <Branch Condition="CurrentPackageEnd" Execute="Test"/>
+        </TestHit>
+
+        <TestGuardBroken Package="CommonGuardBrokenPackage">
+            <Branch Condition="CurrentPackageEnd" Execute="Test"/>
+        </TestGuardBroken>
+    <!-- Test -->
+    
+    <!-- BranchSet -->
+    <BranchSet Name="SystemChaseSet">
+        <Branch Condition="TargetDistance >= gv_SystemChaseThreshold" Execute="SystemChase"/>
+    </BranchSet>
+
+    <BranchSet Name="HitReactionSet">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="getTargetFrameTag_Dead" Execute="EnemyWin"/>
+        <Branch Weight="AobaDodge^True" Condition="Hit && getFrameTag_HitAvail && (aiGraphCoolTime_UnwaverRaisen && aiGraphCoolTime_UnwaverRaisenDodge)" Execute="UnwaverRaisenDodge"/> <!-- 확정 회피 패턴 (수평회피 부동뢰섬)-->
+        <Branch Weight="AobaDodge^True" Condition="Hit && getFrameTag_HitAvail && aiGraphCoolTime_Kick" Execute="Kick"/> <!-- 확정 회피 패턴 (발차기)-->
+        <Branch Condition="Hit && getFrameTag_HitAvail" Execute="Hit"/>
+        <Branch Condition="(GuardBreakFail || GuardBroken) && getFrameTag_GbAvail" Execute="GuardBroken"/>
+        <Branch Weight="NajimiJudgeDodge^Fast" 
+                Condition="(gv_bIsDodgeToPassiveDef_Hit || gv_bIsGuardToPassiveDef_Hit || gv_bIsCounterToPassiveDef_Hit) 
+                        && (gv_HitCountFast <= getStat_HitCount)
+                        && (gv_PassiveDef_Hit_DelayTime <= GraphExecutedTime)" 
+                Execute="Battle_DefenseByHit"/>
+
+        <Branch Weight="NajimiJudgeDodge^Normal" 
+                Condition="(gv_bIsDodgeToPassiveDef_Hit || gv_bIsGuardToPassiveDef_Hit || gv_bIsCounterToPassiveDef_Hit) 
+                        && (gv_HitCountNormal <= getStat_HitCount)
+                        && (gv_PassiveDef_Hit_DelayTime <= GraphExecutedTime)" 
+                Execute="Battle_DefenseByHit"/>
+
+        <Branch Weight="NajimiJudgeDodge^Slow" 
+                Condition="(gv_bIsDodgeToPassiveDef_Hit || gv_bIsGuardToPassiveDef_Hit || gv_bIsCounterToPassiveDef_Hit) 
+                        && (gv_HitCountSlow <= getStat_HitCount)
+                        && (gv_PassiveDef_Hit_DelayTime <= GraphExecutedTime)" 
+                Execute="Battle_DefenseByHit"/>
+    </BranchSet>
+
+    <!-- 전투 패시브 방어 분기 브랜치 셋 -->
+    <BranchSet Name="BattleDefenseByHitJudgeSet">
+        <Branch Weight="AobaHitReaction^Dodge"   Condition="gv_bIsDodgeToPassiveDef_Hit"      Execute="Dodge"/>
+        <Branch Weight="AobaHitReaction^Tsuba" Condition="gv_bIsCounterToPassiveDef_Hit"    Execute="Tsuba"/>
+        <Branch Condition="gv_bIsGuardToPassiveDef_Hit"      Execute="Entry_Battle"/>
+    </BranchSet>
+    <BranchSet Name="BattleDefenseByGuardJudgeSet">
+        <Branch Condition="gv_bIsDodgeToPassiveDef_Guard"    Execute="Dodge"/>
+        <Branch Condition="gv_bIsCounterToPassiveDef_Guard"  Execute="Tsuba"/>
+    </BranchSet>
+
+    <!-- 전투 행동 분기 브랜치 셋-->
+    <BranchSet Name="BattleEntrySet">
+        <Branch Condition="gv_bIsSystemChase && (TargetDistance >= gv_SystemChaseThreshold)" Execute="SystemChase"/>
+        <Branch Condition="(TargetDistance >= gv_MeleeAttackRangeMin)"  Execute="Battle_Attack"/>
+        <Branch Condition="(TargetDistance >= gv_MeleeAttackRangeMin)" Execute="Battle_Move"/>
+    </BranchSet>
+    <!-- 전투 공격 분기 브랜치 셋 -->
+    <BranchSet Name="BattleAttackJudgeSet">
+        <Branch Condition="(TargetDistance > gv_MeleeAttackRangeMax)" Execute="JudgeRangedAttack"/>
+        <Branch Condition="(TargetDistance <= gv_MeleeAttackRangeMax)" Execute="JudgeMeleeAttack"/>
+    </BranchSet>
+
+    <!-- 전투 행동 초기화 브랜치 셋 -->
+    <BranchSet Name="BattlePackageEndSet">
+        <Branch Condition="CurrentPackageEnd" Execute="Entry_Battle"/>
+    </BranchSet>
+
+    <!-- BranchSet -->
+
+    <!-- Preset State -->
+    <Entry_Battle Package="CommonIdlePackage">
+        <UseBranchSet Name="BattleEntrySet"/>
+    </Entry_Battle>
+    
+    <Battle_Move Package="CommonIdlePackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </Battle_Move>
+
+    <Battle_Attack Package="CommonIdlePackage">
+        <UseBranchSet Name="BattleAttackJudgeSet"/>
+    </Battle_Attack>
+
+    <Battle_DefenseByHit Package="CommonIdlePackage">
+        <UseBranchSet Name="BattleDefenseByHitJudgeSet"/>
+    </Battle_DefenseByHit>
+
+    <Battle_DefenseByGuard Package="CommonIdlePackage">
+        <UseBranchSet Name="BattleDefenseByGuardJudgeSet"/>
+    </Battle_DefenseByGuard>
+
+    <Battle_CounterAttack Package="CommonIdlePackage">
+        <Branch Condition="true" Execute="TsubaReady"/>
+    </Battle_CounterAttack>
+    <!-- Preset State -->
+
+    <!-- AI 스테이트 : 전투 분기 -->
+    <JudgeMeleeAttack Package="CommonIdlePackage">
+        <!-- 근거리 -->
+        <!-- 부동 뢰섬 : Cool 10.0s && 20.0s -->
+        <Branch Condition="(aiGraphCoolTime_UnwaverRaisen && aiGraphCoolTime_UnwaverRaisenDodge)" Execute="UnwaverRaisen"/>
+        <!-- 자루찌르기 : Cool 4.0s -->
+        <Branch Condition="aiGraphCoolTime_Thrust" Execute="Thrust"/>
+        <!-- 발차기 : Cool 4.0s -->
+        <Branch Condition="aiGraphCoolTime_Kick" Execute="Kick"/>
+        <!-- 닷지 패턴 : Cool 5.0s -->
+        <Branch Condition="aiGraphCoolTime_Dodge" Execute="Dodge"/>
+        <!-- 츠바 패턴 : 0.0s (드론 소환 직후 제외) -->
+        <Branch Condition="aiGraphCoolTime_SpawnDrones_Start" Execute="TsubaReady"/>
+    </JudgeMeleeAttack>
+
+    <JudgeRangedAttack Package="CommonIdlePackage">
+        <!-- 원거리 -->
+        <!-- 폭풍 뢰섬 : Cool 10.0s -->
+        <Branch Condition="aiGraphCoolTime_StormRaisen" Execute="StormRaisen"/>
+        <!-- 드론 소환 : Cool 15.0s -->
+        <Branch Condition="aiGraphCoolTime_SpawnDronesMain" Execute="SpawnDrones_Start"/>
+        <!-- EMP 약진 뢰섬 : Cool 12.0s -->
+        <Branch Condition="aiGraphCoolTime_EmpGrenadeToCharge" Execute="EmpGrenadeToCharge"/>
+        <!-- 츠바(공격) : Cool 8.0s -->
+        <Branch Condition="aiGraphCoolTime_TsubaReady && aiGraphCoolTime_SpawnDrones_Start" Execute="TsubaReady"/>
+        <!-- 폭풍 뢰섬 : No Cool -->
+        <Branch Condition="true" Execute="StormRaisen"/>
+
+    </JudgeRangedAttack>
+
+    <Dodge Package="AobaDodgePackage" CoolTime="5.0">      
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </Dodge>
+
+    <!-- 원거리 공격: 폭풍 뢰섬 -->
+    <StormRaisen Package="AobaStormRaisenPackage" CoolTime="10.0">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </StormRaisen>
+
+    <!-- 원거리 공격: 드론 소환 -->
+    <SpawnDrones_Start Package="CommonIdlePackage" CoolTime="2.0">
+        <Branch Condition="true" Execute="SpawnDronesMain"/>
+    </SpawnDrones_Start>
+    <SpawnDronesMain Package="AobaSpawnDronePackage" CoolTime="15.0">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </SpawnDronesMain>
+
+    <!-- 원거리 공격: EMP 약진 뢰섬 -->
+    <EmpGrenadeToCharge Package="AobaEmpPackage" CoolTime="10.0">
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="CurrentPackageEnd" Execute="ChargeRaisen"/>
+    </EmpGrenadeToCharge>
+    <ChargeRaisen Package="AobaChargeRaisenPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </ChargeRaisen>
+
+    <!-- 근거리 공격 : 자루찌르기 -->
+    <Thrust Package="AobaThrustPackage" CoolTime="4.0">
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="AttackSuccess && aiGraphCoolTime_Shotgun" Execute="Shotgun"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </Thrust>
+    <Shotgun Package="AobaThrustPackage" EntryNode="AI_ShotgunReady" CoolTime="10.0">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </Shotgun>
+
+
+    <!-- AI 스테이트 : 전투 상태 : 패시브 방어 -->
+    <!-- 피격 반격: 부동뢰섬 -->
+    <UnwaverRaisenDodge Package="AobaUnwaverRaisenPackage" CoolTime="20.0">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </UnwaverRaisenDodge>
+    <UnwaverRaisen Package="AobaUnwaverRaisenPackage" CoolTime="10.0" EntryNode="AI_IdleToDodge">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </UnwaverRaisen>
+
+    <!-- 피격 반격 : 발차기 -->
+    <Kick Package="AobaKickPackage" CoolTime="12.0">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </Kick>
+
+    <!-- 잡기: 츠바(코등이 싸움) -->
+    <TsubaReady Package="AobaTsubaReadyPackage" CoolTime="5.0">
+        <Branch Condition="Hit" Execute="Tsuba"/>
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Tsuba"/>
+    </TsubaReady>
+    <!-- AI 스테이트 : 전투 상태 : 패시브 방어 -->
+    <Tsuba Package="AobaTsubaPackage">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="getTargetFrameTag_Dead" Execute="EnemyWin"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </Tsuba>
+
+    <!-- 시스템 추격 -->
+    <SystemChase Package="AobaWarpChasePackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </SystemChase>   
+
+    <!-- AI 스테이트 : 전투 상태 : 피격 상태 -->
+    <GuardBroken Package="CommonGuardBrokenPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </GuardBroken>
+
+    <Hit Package="CommonHitPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <UseBranchSet Name="BattlePackageEndSet"/>
+    </Hit>
+
+    <Dead Package="CommonDeadPackage">
+    </Dead>
+
+    <EnemyWin Package="CommonIdlePackage">
+        <Branch Condition="End" Execute="HealSelf"/>
+    </EnemyWin>
+    <HealSelf Package="CommonSelfHealPackage">
+        <Branch Condition="CurrentPackageEnd" Execute="Wait"/>
+    </HealSelf>
+    <Wait Package="CommonIdlePackage">
+        <Branch Condition="getTargetFrameTag_Dead == false" Execute="Entry_Battle"/>
+    </Wait>
+
+</AIGraph>

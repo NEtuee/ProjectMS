@@ -134,7 +134,7 @@
         <Stat Type="Custom" Name="Posture" Max="100" Min="0" Init="100"/>
     </TutorialBossStatus>
 
-    <TateChanStatus>
+    <AyakageJerseyStatus>
         <Stat Type="HP" Max="14" Min="0" Init="14"/>
         <Stat Type="Blood" Max="100" Min="0" Init="3"/>
         <Stat Type="Battle" Max="0" Min="0" Init="0"/>
@@ -143,16 +143,16 @@
         <Stat Type="Custom" Name="Phase" Max="2" Min="0" Init="1"/>
         <Stat Type="Custom" Name="GuardPoint" Max="2" Min="0" Init="2"/>
         <Stat Type="Custom" Name="AttackDelay" Max="1" Min="0" Init="1"/>
-    </TateChanStatus>
+    </AyakageJerseyStatus>
 
-    <SukebanEliteChanStatus>
+    <YurahaStatus>
         <Stat Type="HP" Max="30" Min="0" Init="30"/>
         <Stat Type="Blood" Max="100" Min="0" Init="3"/>
         <Stat Type="Battle" Max="0" Min="0" Init="0"/>
         <Stat Type="HitCount" Max="999" Min="0" Init="0"/>
         <Stat Type="GuardCount" Max="999" Min="0" Init="0"/>
         <Stat Type="Custom" Name="Phase" Max="2" Min="0" Init="1"/>
-    </SukebanEliteChanStatus>
+    </YurahaStatus>
 
     <SukebanTaishouChanStatus>
         <Stat Type="HP" Max="21" Min="0" Init="21"/>
@@ -171,7 +171,7 @@
         <Stat Type="Custom" Name="GuardPoint" Max="3" Min="0" Init="3"/>
     </TestEnemyStatus>
 
-    <OsananaNajimiStatus>
+    <NajimiStatus>
         <Stat Type="HP" Max="60" Min="0" Init="60"/>
         <Stat Type="Blood" Max="100" Min="0" Init="3"/>
         <Stat Type="Battle" Max="20" Min="0" Init="0"/>
@@ -182,9 +182,9 @@
         <Stat Type="Custom" Name="RushCount" Max="11" Min="0" Init="0"/>
         <Stat Type="Custom" Name="PistolCount" Max="3" Min="0" Init="0"/>
         
-    </OsananaNajimiStatus>
+    </NajimiStatus>
 
-    <KantoReitoStatus>
+    <ReitoStatus>
         <Stat Type="HP" Max="60" Min="0" Init="60"/>
         <Stat Type="Blood" Max="100" Min="0" Init="3"/>
         <Stat Type="Battle" Max="20" Min="0" Init="0"/>
@@ -196,9 +196,9 @@
         <DeclareGraphicInterface Target="HP" Color="1 0 0 1" HorizontalGap="0.1"/>
         <DeclareGraphicInterface Target="Battle" Color="1 0.749 0 1" HorizontalGap="0.1"/>
         
-    </KantoReitoStatus>
+    </ReitoStatus>
 
-    <NozawaAobaStatus>
+    <AobaStatus>
         <Stat Type="HP" Max="60" Min="0" Init="60"/>
         <Stat Type="Blood" Max="100" Min="0" Init="3"/>
         <Stat Type="Battle" Max="20" Min="0" Init="0"/>
@@ -208,14 +208,14 @@
 
         <DeclareGraphicInterface Target="HP" Color="1 0 0 1" HorizontalGap="0.1"/>
         <DeclareGraphicInterface Target="Battle" Color="1 0.749 0 1" HorizontalGap="0.1"/>
-    </NozawaAobaStatus>
+    </AobaStatus>
 
-    <GauntletStatus>
+    <ReitoGauntletStatus>
         <Stat Type="HP" Max="3" Min="0" Init="3"/>
         <Stat Type="Battle" Max="20" Min="0" Init="0"/>
-    </GauntletStatus>
+    </ReitoGauntletStatus>
 
-    <SisterHelenaStatus>
+    <HelenaStatus>
         <Stat Type="HP" Max="60" Min="0" Init="60"/>
         <Stat Type="Blood" Max="100" Min="0" Init="3"/>
         <Stat Type="Battle" Max="20" Min="0" Init="0"/>
@@ -223,7 +223,7 @@
         
         <Stat Type="HitCount" Max="999" Min="0" Init="0"/>
         <Stat Type="GuardCount" Max="999" Min="0" Init="0"/>
-    </SisterHelenaStatus>
+    </HelenaStatus>
     
     <ActionProjectileStatus>
         <Stat Type="HP" Max="1" Min="0" Init="1"/>
@@ -284,13 +284,8 @@
     </SukebanMeleeBatter>
 
     <BigGrenade>
-        <Stat Type="HP" Max="1" Min="0" Init="5"/>
+        <Stat Type="HP" Max="1" Min="0" Init="1"/>
         <Stat Type="Battle" Max="1" Min="0" Init="0"/>
     </BigGrenade>
-
-    <RadioMagicGirlEgoSmallLaser>
-        <Stat Type="HP" Max="1" Min="0" Init="2"/>
-        <Stat Type="Battle" Max="1" Min="0" Init="0"/>
-    </RadioMagicGirlEgoSmallLaser>
 
 </StatusInfo>

@@ -41,7 +41,7 @@
         <DefaultShotInfo Velocity="2" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="1"/>
         <Event>
             <OnEnd>
-                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="Missile" Offset="0 0 0" Inherit="true" InheritDirection="true"/>
+                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="Obj_ReitoMissile" Offset="0 0 0" Inherit="true" InheritDirection="true"/>
             </OnEnd>
         </Event>
     </TestShot>
@@ -269,7 +269,7 @@
             </OnHitEnd>
     
             <OnEnd>
-                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="Gauntlet" Offset="0 0 0" Inherit="true"/>
+                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="Obj_ReitoGauntlet" Offset="0 0 0" Inherit="true"/>
             </OnEnd>
         </Event>
     </Gauntlet>
@@ -283,7 +283,7 @@
         
         <Event>
             <OnEnd>
-                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="Missile" Offset="0 0 0" Inherit="true" InheritDirection="true" AllyInfo="CommonBattleObject"/>
+                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="Obj_ReitoMissile" Offset="0 0 0" Inherit="true" InheritDirection="true" AllyInfo="CommonBattleObject"/>
                 
             </OnEnd>
         </Event>
@@ -624,7 +624,7 @@
     </UziBullet_tail>
 
     <!-- 헬레나의 붉은 마도서-->
-    <Helena_CrimsonGrimoire DefaultFramePerSecond="4" UseSpriteRotation="false" PenetrateCount="1">
+    <HelenaGrimoire DefaultFramePerSecond="4" UseSpriteRotation="false" PenetrateCount="1">
         <Animation Preset="Sprites/Enemy/Helena_CrimsonGrimoire/0_default/2_move" XFlip="true" Duration="0.8">
         </Animation>
 
@@ -633,10 +633,10 @@
         
         <Event>
             <OnEnd>
-                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="Helena_CrimsonGrimoire" Offset="0 0 0" Inherit="true"/>
+                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="Obj_HelenaGrimoire" Offset="0 0 0" Inherit="true"/>
             </OnEnd>
         </Event>
-    </Helena_CrimsonGrimoire>
+    </HelenaGrimoire>
 
     <CrimsonGrimoire DefaultFramePerSecond="4" UseSpriteRotation="false" PenetrateCount="1" Gravity="-9.8" CastShadow="True">
         <Animation Preset="Sprites/Enemy/Helena_CrimsonGrimoire/0_default/5_spawn/1_move" XFlip="true" Duration="10.0">
@@ -647,7 +647,7 @@
         
         <Event>
             <OnEnd>
-                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="CrimsonGrimoire" Offset="0 0 0" Inherit="true" InheritDirection="true"/>
+                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="Obj_SisterGrimoire" Offset="0 0 0" Inherit="true" InheritDirection="true"/>
             </OnEnd>
         </Event>
     </CrimsonGrimoire>
@@ -738,9 +738,9 @@
         <DefaultShotInfo Velocity="0" Acceleration="0" Friction="0" Angle="0" AngularAcceleration="0" LifeTime="0.02"/>
         <Event>
             <OnEnd>
-                <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="RunnerChan" Offset="0 -1.5 0"     InheritDirection="true" AINode="Entry"/>
-                <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="RunnerChan" Offset="0 0 0"        InheritDirection="true" AINode="Entry"/>
-                <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="RunnerChan" Offset="0 1.5 0"      InheritDirection="true" AINode="Entry"/>
+                <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="SportsRunner" Offset="0 -1.5 0"     InheritDirection="true" AINode="Entry"/>
+                <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="SportsRunner" Offset="0 0 0"        InheritDirection="true" AINode="Entry"/>
+                <FrameEvent Type="SpawnCharacter" StartTime="0" CharacterKey="SportsRunner" Offset="0 1.5 0"      InheritDirection="true" AINode="Entry"/>
             </OnEnd>
         </Event>
     </RunnerSpawner>
@@ -773,7 +773,7 @@
         
         <Event>
             <OnEnd>
-                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="NozawaAoba_Drone" Offset="0 0 0" Inherit="true" InheritDirection="true"/>
+                <FrameEvent Type="SpawnCharacter" StartFrame="0" CharacterKey="Obj_AobaDrone" Offset="0 0 0" Inherit="true" InheritDirection="true"/>
             </OnEnd>
         </Event>
     </Aoba_Drone>

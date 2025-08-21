@@ -1,7 +1,7 @@
 <SequencerGraph Name="Stage_3_1_1">
 
     <InitializePhase>
-        <BlockAI UniqueKey="TateChan" Enable="True"/>
+        <BlockAI UniqueKey="AyakageJersey" Enable="True"/>
         <BlockAI UniqueKey="YakisobaChan" Enable="True"/>
 
         <BlockInput Enable="True"/>
@@ -16,30 +16,30 @@
         <WaitSecond Time="1.0"/>
 
         <SetCameraZoom Size="2.0" Speed="5"/>
-        <SetCameraTarget UniqueKey="TateChan" CameraMode="TargetCenterMode"/>
-        <TalkBalloon UniqueKey="TateChan" SimpleTalkKey="Talk_Stage03_1_4" Wait="True"/>
+        <SetCameraTarget UniqueKey="AyakageJersey" CameraMode="TargetCenterMode"/>
+        <TalkBalloon UniqueKey="AyakageJersey" SimpleTalkKey="Talk_Stage03_1_4" Wait="True"/>
 
         <SetCameraTarget UniqueKey="Player" CameraMode="TargetCenterMode"/>
         <TalkBalloon UniqueKey="Player" SimpleTalkKey="Talk_Stage03_1_5" Wait="True"/>
 
-        <SetCameraTarget UniqueKey="TateChan" CameraMode="TargetCenterMode"/>
-        <TalkBalloon UniqueKey="TateChan" SimpleTalkKey="Talk_Stage03_1_6" Wait="True"/>
-        <TalkBalloon UniqueKey="TateChan" SimpleTalkKey="Talk_Stage03_1_7" Wait="True"/>
+        <SetCameraTarget UniqueKey="AyakageJersey" CameraMode="TargetCenterMode"/>
+        <TalkBalloon UniqueKey="AyakageJersey" SimpleTalkKey="Talk_Stage03_1_6" Wait="True"/>
+        <TalkBalloon UniqueKey="AyakageJersey" SimpleTalkKey="Talk_Stage03_1_7" Wait="True"/>
 
         <SetCameraTarget UniqueKey="Player" CameraMode="TargetCenterMode"/>
         <SetCameraZoom Size="0.0" Speed="5"/>
 
-        <BlockAI UniqueKey="TateChan" Enable="False"/>
+        <BlockAI UniqueKey="AyakageJersey" Enable="False"/>
         <SetAction UniqueKey="YakisobaChan" Action="CurseAkane"/>
 
-        <ActiveBossHp UniqueKey="TateChan"/>
+        <ActiveBossHp UniqueKey="AyakageJersey"/>
         <AudioParameter Key="9004" ParameterID="90041" ParameterValue="1" ParameterType="Local"/>
 
         <BlockInput Enable="False"/>
         <SetHideUI Hide="False"/>
         <LetterBoxHide/>
 
-        <DeadFence UniqueKey="TateChan"/>
+        <DeadFence UniqueKey="AyakageJersey"/>
         <DisableBossHp/>
 
         <EffectPreset UniqueKey="Player" EffectPreset="ExplodeBig"/>

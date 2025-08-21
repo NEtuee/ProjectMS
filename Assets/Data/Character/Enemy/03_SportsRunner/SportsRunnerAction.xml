@@ -1,0 +1,94 @@
+<ActionGraph Name="SportsRunnerAction" DefaultAction="AC_Idle" DefaultFramePerSecond="12">
+<GlobalVariable Name="gv_MasterPath" Value="Sprites/Enemy/RunnerChan/"/>
+
+    <AC_Idle MovementType="Empty" DirectionType="AI">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/1_idle" XFlip="true" Duration="0.5">
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_Idle>
+
+    <AC_Move_Slow MovementType="GraphPreset" MovementGraphPreset="Runner_Slow" DirectionType="Keep" FlipType="Direction" Flags="OutlineNormal">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/2_move" XFlip="true" Duration="4.0">
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+            <FrameEvent Type="Attack" StartTime="0" EndTime="4.0" AttackPreset="Runner_Normal">
+                <OnHit>
+                    <FrameEvent Type="AudioPlay" StartTime="0" ID="4902" Attach="true"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonQuarterAttack"/>
+                    <FrameEvent Type="StopUpdate" Time="0.1"/>
+                    <FrameEvent Type="SetTimeScale" Scale="0.1" Time="0.1" BlendTime="0.1"/>
+                    <FrameEvent Type="ShakeEffect" Scale="0.1" Speed="10.0" Time="0.1"/>
+                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+                    <FrameEvent Type="AudioPlay" StartTime="0" ID="1001" Attach="true"/>
+                </OnHit>
+            </FrameEvent>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Move_Slow"/>
+    </AC_Move_Slow>
+    <AC_Move_Normal MovementType="GraphPreset" MovementGraphPreset="Runner_Normal" DirectionType="Keep" FlipType="Direction" Flags="OutlineNormal">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/2_move" XFlip="true" Duration="4.0">
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+            <FrameEvent Type="Attack" StartTime="0" EndTime="4.0" AttackPreset="Runner_Normal">
+                <OnHit>
+                    <FrameEvent Type="AudioPlay" StartTime="0" ID="4902" Attach="true"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonQuarterAttack"/>
+                    <FrameEvent Type="StopUpdate" Time="0.1"/>
+                    <FrameEvent Type="SetTimeScale" Scale="0.1" Time="0.1" BlendTime="0.1"/>
+                    <FrameEvent Type="ShakeEffect" Scale="0.1" Speed="10.0" Time="0.1"/>
+                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+                    <FrameEvent Type="AudioPlay" StartTime="0" ID="1001" Attach="true"/>
+                </OnHit>
+            </FrameEvent>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Move_Normal"/>
+    </AC_Move_Normal>
+    <AC_Move_Fast MovementType="GraphPreset" MovementGraphPreset="Runner_Fast" DirectionType="Keep" FlipType="Direction" Flags="OutlineNormal">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/2_move" XFlip="true" Duration="4.0">
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+            <FrameEvent Type="Attack" StartTime="0" EndTime="4.0" AttackPreset="Runner_Normal">
+                <OnHit>
+                    <FrameEvent Type="AudioPlay" StartTime="0" ID="4902" Attach="true"/>
+                    <FrameEvent Type="ApplyBuffTarget" ApplyBuff="CommonQuarterAttack"/>
+                    <FrameEvent Type="StopUpdate" Time="0.1"/>
+                    <FrameEvent Type="SetTimeScale" Scale="0.1" Time="0.1" BlendTime="0.1"/>
+                    <FrameEvent Type="ShakeEffect" Scale="0.1" Speed="10.0" Time="0.1"/>
+                    <FrameEvent Type="EffectPreset" StartTime="0" Key="Smash"/>
+                    <FrameEvent Type="AudioPlay" StartTime="0" ID="1001" Attach="true"/>
+                </OnHit>
+            </FrameEvent>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Move_Fast"/>
+    </AC_Move_Fast>
+
+    <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/3_hit" XFlip="true" Duration="1.25">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2108" Attach="true"/>
+
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
+
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="HitAvail"/>
+            <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_Hit>
+
+    <Dead MovementType="Empty" DirectionType="AI">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/4_dead" XFlip="true" Duration="0.5">
+
+            <FrameEvent Type="KillEntity" StartTime="0"/>
+            
+        </Animation>
+        <Branch Condition="End == true" Execute="Dead"/>
+    </Dead>
+
+</ActionGraph>

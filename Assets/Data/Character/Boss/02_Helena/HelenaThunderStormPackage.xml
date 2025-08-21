@@ -1,0 +1,62 @@
+<AIPackage Name="HelenaThunderStormPackage" DefaultState="AI_ThunderStorm">
+
+    <AIState>
+        <AI_ThunderStorm UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget"/>
+            </Event_OnExecute>
+            
+            <Branch Condition="(AngleToTarget >= 135.0) && (AngleToTarget <= 225.0) " Execute="AI_Left"/>
+            <Branch Condition="(AngleToTarget >= 315.0) || (AngleToTarget <= 45.0)" Execute="AI_Right"/>
+            <Branch Condition="(AngleToTarget >= 225.0) && (AngleToTarget <= 315.0)" Execute="AI_Down"/>
+            <Branch Condition="(AngleToTarget >= 45.0) && (AngleToTarget <= 135.0)" Execute="AI_Up"/>
+        </AI_ThunderStorm>
+        <AI_ThunderStorm_Random UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+        
+            <Branch Weight="RandDirection^Left" Condition="true" Execute="AI_Left"/>
+            <Branch Weight="RandDirection^Right" Condition="true" Execute="AI_Right"/>
+            <Branch Weight="RandDirection^Up" Condition="true" Execute="AI_Up"/>
+            <Branch Weight="RandDirection^Down" Condition="true" Execute="AI_Down"/>
+        </AI_ThunderStorm_Random>
+        <AI_Left UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="AC_ThunderStorm_Left"/>
+            </Event_OnExecute>
+
+            <Branch Condition="End" Execute="TerminatePackage"/>
+        </AI_Left>
+        <AI_Right UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="AC_ThunderStorm_Right"/>
+            </Event_OnExecute>
+
+            <Branch Condition="End" Execute="TerminatePackage"/>
+        </AI_Right>
+        <AI_Up UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="AC_ThunderStorm_Up"/>
+            </Event_OnExecute>
+
+            <Branch Condition="End" Execute="TerminatePackage"/>
+        </AI_Up>
+        <AI_Down UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="AC_ThunderStorm_Down"/>
+            </Event_OnExecute>
+
+            <Branch Condition="End" Execute="TerminatePackage"/>
+        </AI_Down>
+
+        <TerminatePackage>
+            <Event_OnExecute>
+                <AIEvent Type="TerminatePackage"/>
+            </Event_OnExecute>
+        </TerminatePackage>
+
+    </AIState>
+
+</AIPackage>
