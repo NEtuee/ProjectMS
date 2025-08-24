@@ -31,7 +31,7 @@ public class AdditionalCollisionInfo
     public bool update(float deltaTime)
     {
         if(_lifeTime < 0 || _collisionCount == 0)
-            return true;
+            return false;
 
         _currentTime += deltaTime;
         return _currentTime < _lifeTime;
@@ -907,6 +907,7 @@ public class GameEntityBase : SequencerObjectBase
                         additionalColor = Color.Lerp(Color.red, Color.yellow, lifeRatio);
                     }
                     _additionalCollisions[i]._collisionInfo.drawCollosionArea(additionalColor);
+                    debugTextManager.updateDebugText("AdditionalCollision" + i, "   CollisionCount: " + _additionalCollisions[i]._collisionCount, Color.red);
                 }
             }
         }
