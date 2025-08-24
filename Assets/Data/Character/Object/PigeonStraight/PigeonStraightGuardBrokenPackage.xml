@@ -1,0 +1,32 @@
+<AIPackage Name="PigeonStraightGuardBrokenPackage" DefaultState="AI_GuardBroken">
+
+    <AIState>
+
+        <AI_GuardBroken UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Type="SetAction" Action="AC_GuardBroken"/>
+            </Event_OnExecute>
+
+            <Branch Condition="End" Execute="AI_Idle"/>
+            <Branch Condition="Hit" Execute="Dead"/>
+            <Branch Condition="GuardBreakFail || GuardBroken" Execute="AI_GuardBroken"/>
+        </AI_GuardBroken>
+
+        <AI_Idle UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Type="SetDirectionToTarget"/>
+                <AIEvent Type="SetAction" Action="AC_Idle"/>
+            </Event_OnExecute>
+            
+            <Branch Condition="Hit" Execute="Dead"/>
+            <Branch Condition="GuardBreakFail || GuardBroken" Execute="AI_GuardBroken"/>
+        </AI_Idle>
+
+        <Dead UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Type="SetAction" Action="Dead"/>
+            </Event_OnExecute>
+        </Dead>      
+    </AIState>
+
+</AIPackage>

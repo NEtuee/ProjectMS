@@ -1286,6 +1286,41 @@
         AllyInfo="CommonBattle"
     /> 
 
+    <PigeonStraight
+        DisplayName="직선이동비둘기"
+        ActionGraph="Assets/Data/Character/Object/PigeonStraight/PigeonStraightAction.xml"
+        AIGraph="Assets/Data/Character/Object/PigeonStraight/PigeonStraightAI.xml"
+        StatusInfoName="PigeonStraight"
+
+        CollisionRadius="0.2"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="InteractObject"
+    /> 
+
+    <PigeonHovering
+        DisplayName="맴도는비둘기"
+        ActionGraph="Assets/Data/Character/Object/BigGrenade/BigGrenadeAction.xml"
+        AIGraph="Assets/Data/Character/Object/BigGrenade/BigGrenadeAI.xml"
+        StatusInfoName="PigeonHovering"
+
+        CollisionRadius="0.2"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="InteractObject"
+    /> 
+
+    <PigeonGetaway
+        DisplayName="도주비둘기"
+        ActionGraph="Assets/Data/Character/Object/PigeonStraight/PigeonStraightAction.xml"
+        AIGraph="Assets/Data/Character/Object/BigGrenade/BigGrenadeAI.xml"
+        StatusInfoName="PigeonGetaway"
+
+        CollisionRadius="0.2"
+        ProjectileCollisionRadius=""
+
+        AllyInfo="InteractObject"
+    /> 
 <!-- Training -->
 
 
