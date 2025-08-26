@@ -1,0 +1,103 @@
+<AIGraph Name="PigeonGetawayAI" DefaultState="Entry_Peace">
+
+<!-- 옵션 설정 -->
+    <!-- 인지 옵션값 설정 -->
+    <GlobalVariable Name="gv_CognitiveRange"    Value="1.0"/>   <!-- PC 인지 거리 : 해당 거리 내 PC 존재 시 인지한다. -->
+    <GlobalVariable Name="gv_CognitiveDelay"    Value="4.5"/>   <!-- 인지 지연 시간 : 해당 거리 내 PC 존재 시 인지까지 이루어지는 지연 시간. -->
+
+    <!-- 평화 행동 설정-->
+    <GlobalVariable Name="gv_IsPeaceMotion"           Value="True"/>       <!-- 평화 모션 사용 : True일 시 평화 모션 재생, False일 경우 랜덤 이동 -->
+    
+    <!-- 간격 거리 설정 -->
+    <GlobalVariable Name="gv_AttackRangeMin"           Value="1.0"/>       <!-- 근거리 기준 : 해당 값보다 낮으면 근거리로 판단한다. -->
+    <GlobalVariable Name="gv_AttackRangeMax"           Value="2.0"/>       <!-- 원거리 기준 : 해당 값보다 높으면 원거리로 판단한다. -->
+
+    <!-- 가드 옵션 설정 -->
+    <GlobalVariable Name="gv_GuardTime"                     Value="3.0"/>       <!-- 방어 지속 시간 -->
+    <GlobalVariable Name="gv_GuardBrokenThreshold"          Value="3.0"/>       <!-- 가드 브레이크 공격을 막을 수 있는 횟수 -->
+    
+    <!-- 패시브 방어 반응 임계치 설정 -->
+    <GlobalVariable Name="gv_HitCountThreshold"             Value="2.0"/>       <!-- 누적 피격 횟수 트리거 : 해당 횟수 충족 시 패시브 방어 동작 (가드를 제외한 모든 피격 카운트) -->
+    <GlobalVariable Name="gv_GuardCountThreshold"           Value="2.0"/>       <!-- 누적 가드 횟수 트리거 : 해당 횟수 충족 시 패시브 방어 동작 (가드 성공 시 카운트) -->
+
+    <!-- 행동 딜레이 설정 -->
+    <GlobalVariable Name="gv_TransitionDelay"               Value="0.2"/>
+<!-- 옵션 설정 -->
+
+<!-- 패키지 인클루드 -->
+    <!-- 패키지 인클루드 : 공통 리액션 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonDeadPackage.xml"/>          <!-- 사망 패키지 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonHitPackage.xml"/>           <!-- 피격 패키지 -->
+    <Include Path="Assets/Data/Character/Object/PigeonStraight/PigeonStraightGuardBrokenPackage.xml"/>   <!-- 가드 해제 패키지 -->
+    
+    <!-- 패키지 인클루드 : 평화 모션 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonPeaceMotionPackage.xml"/>    <!-- 평화 모션 패키지 -->
+
+    <!-- 패키지 인클루드 : 이동 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonIdlePackage.xml"/>          <!-- 대기 패키지 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonAwayPackage.xml"/>          <!-- 후진 이동 패키지 -->
+    <Include Path="Assets/Data/AILibrary/Package/CommonRandMovePackage.xml"/>      <!-- 랜덤 이동 패키지-->
+
+    
+<!-- 패키지 인클루드 -->
+
+<!-- 브랜치 셋 -->
+
+    <!-- 피격 리액션 브랜치 셋 -->
+    <BranchSet Name="HitReactionSet">
+        <Branch Condition="Dead" Execute="Dead"/>
+        <Branch Condition="Hit" Execute="Hit"/>
+        
+        <!-- 가드브레이크를 피격한 경우 -->
+        <Branch Condition="GuardBreakFail || GuardBroken" Execute="GuardBroken"/>
+
+    </BranchSet>
+<!-- 브랜치 셋 -->
+
+<!-- 스테이트 -->
+
+    <!-- 고정 AI 스테이트 : 평화 상태 -->
+    <Entry_Peace Package="CommonIdlePackage">
+        <Branch Condition="gv_IsPeaceMotion" Execute="Peace_MotionStart"/>
+        <Branch Condition="true" Execute="Peace_MotionStart"/>
+    </Entry_Peace>
+
+    <Peace_MotionStart Package="CommonPeaceMotionPackage" EntryNode="AI_Loop">
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="TargetDistance <= gv_CognitiveRange" Execute="Peace_MotionEnd"/>
+        <Branch Condition="(TargetDistance <= gv_CognitiveRange)
+                && (GraphExecutedTime >= gv_CognitiveDelay)" Execute="Peace_MotionEnd"/>
+    </Peace_MotionStart>
+
+    <Peace_MotionEnd Package="CommonPeaceMotionPackage" EntryNode="AI_End">
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="CurrentPackageEnd" Execute="Peace_RandMove"/>
+    </Peace_MotionEnd>
+
+    <Peace_RandMove Package="CommonRandMovePackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <Branch Condition="(TargetDistance <= gv_CognitiveRange)
+                        && (GraphExecutedTime >= gv_CognitiveDelay)" Execute="Idle"/>
+    </Peace_RandMove>
+    <!-- 고정 AI 스테이트 : 평화 상태 -->
+
+    <!-- AI 스테이트 : 전투 상태 : 이동 -->
+    <Idle Package="CommonIdlePackage">
+        <UseBranchSet Name="HitReactionSet"/>
+        <!-- Movement Release Sample -->
+    </Idle>
+
+    <!-- 고정 AI 스테이트 : 피격 상태 -->
+    <Hit Package="CommonHitPackage">
+        <UseBranchSet Name="HitReactionSet"/>
+    </Hit>
+
+    <GuardBroken Package="PigeonStraightGuardBrokenPackage">
+        <Branch Condition="(GraphExecutedTime >= 1.0)" Execute="Peace_RandMove"/>    
+    </GuardBroken>
+
+    <Dead Package="CommonDeadPackage">
+    </Dead>
+<!-- 스테이트 -->
+
+</AIGraph>
