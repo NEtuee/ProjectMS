@@ -131,7 +131,7 @@
     <AC_KnifeReady MovementType="FrameEvent" DirectionType="AI" FlipType="Direction" Flags="OutlineNormal">
         <AnimationHeader MasterPath="gv_MasterPath"/>
         <Animation Preset="2_skill/2_knife/1_ready" XFlip="true" Duration="1.0">
-            <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/> 
             <FrameEvent Type="FrameTag" StartTime="0" EndTime="999" Tag="GbAvail"/>
             <FrameEvent Type="SetRotateSlotValue" StartTime="0" Speed="10" Radius="1.0"/>
 
@@ -147,6 +147,7 @@
             <FrameEvent Type="CallAIEvent"      StartTime="0.5" EventName="AddKnife" EventTargetType="Self"/>
             <FrameEvent Type="SpawnCharacter"   StartTime="0.5" CharacterKey="Obj_SisterKnife" Offset="0 0 0" UseFlip="true"/>
             <FrameEvent Type="CallAIEvent"      StartTime="0.5" EventName="AddKnife" EventTargetType="Self"/>
+            <!--
             <FrameEvent Type="SpawnCharacter"   StartTime="0.5" CharacterKey="Obj_SisterKnife" Offset="0 0 0" UseFlip="true"/>
             <FrameEvent Type="CallAIEvent"      StartTime="0.5" EventName="AddKnife" EventTargetType="Self"/>
             <FrameEvent Type="SpawnCharacter"   StartTime="0.5" CharacterKey="Obj_SisterKnife" Offset="0 0 0" UseFlip="true"/>
@@ -157,6 +158,7 @@
             <FrameEvent Type="CallAIEvent"      StartTime="0.5" EventName="AddKnife" EventTargetType="Self"/>
             <FrameEvent Type="SpawnCharacter"   StartTime="0.5" CharacterKey="Obj_SisterKnife" Offset="0 0 0" UseFlip="true"/>
             <FrameEvent Type="CallAIEvent"      StartTime="0.5" EventName="AddKnife" EventTargetType="Self"/>
+            -->
             <FrameEvent Type="SetRotateSlotValue" StartTime="1.0" Speed="10" Radius="2.0"/>
 
         </Animation>

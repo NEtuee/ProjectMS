@@ -162,7 +162,7 @@
         </Battle_Closer>
         <Battle_Range Package="CommonIdlePackage">
             <Branch Condition="(customValue_HasKnife == 1.0) && aiGraphCoolTime_KnifeRelease" Execute="KnifeRelease"/>
-            <Branch Condition="aiGraphCoolTime_Knife && (customValue_HasKnife == 0.0) && (customValue_KnifeCount <= 3.0)" Execute="Knife"/>
+            <Branch Condition="aiGraphCoolTime_Knife && (customValue_HasKnife == 0.0) && (customValue_KnifeCount <= 0.0)" Execute="Knife"/>
             <Branch Weight="RandBoolean^True" Condition="(customValue_IsBarriorOn == 0.0) && aiGraphCoolTime_Barrior" Execute="Barrior"/>
             <Branch Condition="aiGraphCoolTime_Pray" Execute="Pray"/>
             <Branch Condition="true" Execute="Alert"/>

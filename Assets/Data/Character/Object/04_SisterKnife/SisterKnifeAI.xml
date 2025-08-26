@@ -88,7 +88,7 @@
     </Spawn>
     <Release Package="KnifeChasePackage" EntryNode="AI_Release">
         <Branch Condition="Dead" Execute="Dead"/>
-        <Branch Condition="GuardBroken || GuardBreakFail" Execute="Reverse"/>
+        <Branch Condition="GuardBroken || GuardBreakFail" Execute="Dead"/>
         <Branch Condition="customValue_AttackCount >= 3.0" Execute="Dead"/>
     </Release>
     <Reverse Package="KnifeChasePackage" EntryNode="AI_Reverse">
