@@ -1166,52 +1166,6 @@
 
         AllyInfo="CommonBattle"
     />
-    <SignboardHpType
-        DisplayName="대간판"
-        ActionGraph="Assets/Data/Character/Object/SignboardHpType/SignboardHpType.xml"
-        AIGraph="Assets/Data/Character/Object/SignboardHpType/SignboardHpTypeAI.xml"
-        StatusInfoName="SignboardHpType"
-
-        CollisionRadius="0.5"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="CommonBattle"
-    />
-    <SignboardRotationType
-        DisplayName="회전간판"
-        ActionGraph="Assets/Data/Character/Object/SignboardRotationType/SignboardRotationType.xml"
-        AIGraph="Assets/Data/Character/Object/SignboardRotationType/SignboardRotationTypeAI.xml"
-        StatusInfoName="SignboardRotationType"
-
-        CollisionRadius="0.5"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="CommonBattle"
-
-    />
-    <SignboardMoveType
-        DisplayName="이동간판"
-        ActionGraph="Assets/Data/Character/Object/SignboardMoveType/SignboardMoveType.xml"
-        AIGraph="Assets/Data/Character/Object/SignboardMoveType/SignboardMoveTypeAI.xml"
-        StatusInfoName="SignboardMoveType"
-
-        CollisionRadius="0.5"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="CommonBattle"
-    />
-
-    <SignboardGuardType
-        DisplayName="가드간판"
-        ActionGraph="Assets/Data/Character/Object/SignboardGuardType/SignboardGuardType.xml"
-        AIGraph="Assets/Data/Character/Object/SignboardGuardType/SignboardGuardTypeAI.xml"
-        StatusInfoName="SignboardGuardType"
-
-        CollisionRadius="0.5"
-        ProjectileCollisionRadius=""
-
-        AllyInfo="CommonBattle"
-    />
 
     <PropanegasCylinder
         DisplayName="프로판가스통"
@@ -1300,8 +1254,8 @@
 
     <PigeonHovering
         DisplayName="맴도는비둘기"
-        ActionGraph="Assets/Data/Character/Object/BigGrenade/BigGrenadeAction.xml"
-        AIGraph="Assets/Data/Character/Object/BigGrenade/BigGrenadeAI.xml"
+        ActionGraph="Assets/Data/Character/Object/99_PigeonHovering/PigeonHoveringAction.xml"
+        AIGraph="Assets/Data/Character/Object/99_PigeonHovering/PigeonHoveringAI.xml"
         StatusInfoName="PigeonHovering"
 
         CollisionRadius="0.2"
@@ -1312,8 +1266,8 @@
 
     <PigeonGetaway
         DisplayName="도주비둘기"
-        ActionGraph="Assets/Data/Character/Object/PigeonStraight/PigeonStraightAction.xml"
-        AIGraph="Assets/Data/Character/Object/BigGrenade/BigGrenadeAI.xml"
+        ActionGraph="Assets/Data/Character/Object/99_PigeonGetaway/PigeonGetawayAction.xml"
+        AIGraph="Assets/Data/Character/Object/99_PigeonGetaway/PigeonGetawayAI.xml"
         StatusInfoName="PigeonGetaway"
 
         CollisionRadius="0.2"

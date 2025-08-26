@@ -1,0 +1,105 @@
+<ActionGraph Name="PigeonStraightAction" DefaultAction="AC_Idle" DefaultFramePerSecond="12">
+<!-- AnimationHeader MasterPath -->
+<GlobalVariable Name="gv_MasterPath" Value="Sprites/Object/PigeonHovering/"/>
+<GlobalVariable Name="gv_DeadPath" Value="Sprites/Object/PigeonGetaway/0_default/4_dead"/>
+<!-- Defualt Action -->
+    <AC_Idle MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/1_idle" XFlip="true" Duration="3">
+            <FrameEvent Type="Movement" StartTime="0" Friction="3" MaxVelocity="1.5" Speed="10"/>
+            
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+        <Branch Condition="Hit" Execute="AC_Hit"/>
+    </AC_Idle>
+
+    <AC_Move MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/2_move" XFlip="true" Duration="3">
+            <FrameEvent Type="Movement" StartFrame="0" Friction="3" MaxVelocity="1.5" Speed="10"/>
+
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Move"/>
+    </AC_Move>
+
+    <AC_Hit MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/3_hit" XFlip="true" Duration="0.1">
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
+
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Dead"/>
+    </AC_Hit>
+
+    <Dead DirectionType="Keep" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/4_dead" XFlip="true" Duration="1">
+            <FrameEvent Type="Effect" StartTime="0" Path="gv_DeadPath" FramePerSecond="0.2" CastShadow="True">
+                <Physics UseGravity="True" Velocity="Random_-2.5^2.5 Random_1.5^3.5" Friction="1" Torque="Random_-30^30" AngularFriction="10.0"/>
+            </FrameEvent>
+
+            <FrameEvent Type="KillEntity" StartTime="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="Dead"/>
+    </Dead>
+
+    <Exit MovementType="Empty" DirectionType="Keep">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/6_exit" Duration="0.016">
+            <FrameEvent Type="KillEntity" StartTime="0"/>
+        </Animation>
+
+        <Branch Condition="End" Execute="Exit"/>
+    </Exit>
+    
+    <AC_PeaceMotionLoop_A MovementType="GraphPreset" MovementGraphPreset="Reito_RotateStep_L" DirectionType="AI" FlipType="Direction" RotationType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/5_peace/1_peacemotionloopa" XFlip="true" Duration="1">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+            
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_PeaceMotionLoop_A>
+
+    <AC_PeaceMotionLoop_B  MovementType="GraphPreset" MovementGraphPreset="Reito_RotateStep_R" DirectionType="AI" FlipType="Direction" RotationType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/5_peace/2_peacemotionloopb" XFlip="true" Duration="1">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+            
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_PeaceMotionLoop_B>
+
+
+    <AC_PeaceMotionEnd MovementType="FrameEvent" DirectionType="AI" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="0_default/5_peace/3_end" XFlip="true" Duration="1">
+            <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
+            
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_PeaceMotionEnd>
+<!-- Defualt Action -->
+
+
+<!-- Defense Action -->
+    <AC_GuardBroken MovementType="FrameEvent" DirectionType="AttackedPoint" FlipType="Direction">
+        <AnimationHeader MasterPath="gv_MasterPath"/>
+        <Animation Preset="1_defense/2_guardBroken" XFlip="true" Duration="1.25">
+            <FrameEvent Type="AudioPlay" StartTime="0" ID="2202" Attach="true"/>
+            <FrameEvent Type="Movement" StartTime="0" Friction="0" Speed="0" Velocity="0"/>
+        </Animation>
+
+        <Branch Condition="End == true" Execute="AC_Idle"/>
+    </AC_GuardBroken>
+<!-- Defense Action -->
+
+
+</ActionGraph>

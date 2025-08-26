@@ -1,0 +1,48 @@
+<AIPackage Name="PigeonHoveringPeaceLoopPackage" DefaultState="AI_PeaceMotionLoop_A">
+
+    <AIState>
+
+        <AI_PeaceMotionLoop_A UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Type="SetAction" Action="AC_PeaceMotionLoop_A"/>
+            </Event_OnExecute>
+
+            <Branch Condition="End" Execute="AC_PeaceMotionLoop_B"/>
+            <Branch Condition="Hit" Execute="Dead"/>
+            <Branch Condition="GuardBreakFail || GuardBroken" Execute="AI_GuardBroken"/>
+        </AI_PeaceMotionLoop_A>
+
+        <AI_PeaceMotionLoop_B UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Type="SetAction" Action="AC_PeaceMotionLoop_B"/>
+            </Event_OnExecute>
+
+            <Branch Condition="End" Execute="AC_PeaceMotionLoop_A"/>           
+            <Branch Condition="Hit" Execute="Dead"/>
+            <Branch Condition="GuardBreakFail || GuardBroken" Execute="AI_GuardBroken"/>
+        </AI_PeaceMotionLoop_B>
+
+        <AI_End UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Type="SetAction" Action="AC_PeaceMotionEnd"/>
+            </Event_OnExecute>
+
+            <Branch Condition="End" Execute="TerminatePackage"/>
+        </AI_End>
+
+        <Dead UpdateTime="0.0" TargetSearchType="Near" TargetSearchRange="999.0" AllyTarget="Enemy">
+            <Event_OnExecute>
+                <AIEvent Type="SetAction" Action="Dead"/>
+            </Event_OnExecute>
+        </Dead>      
+
+        <TerminatePackage>
+            <Event_OnExecute>
+                <AIEvent Type="TerminatePackage"/>
+            </Event_OnExecute>
+        </TerminatePackage>
+
+    </AIState>
+    
+
+</AIPackage>
