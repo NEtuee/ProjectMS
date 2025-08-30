@@ -295,7 +295,10 @@ public class StageProcessor
                     _spawnedCharacterEntityDictionary[index].Add(entityInfo);
                 
                     if(characterSpawnData._keepAlive)
+                    {
+                        DebugUtil.assert(entityInfo._uniqueKey != "", "UniqueKey가 없는데 KeepAlive로 설정되어 있습니다 [key: {0}] [index: {1}]", characterSpawnData._characterKey, index);
                         _keepUniqueMap.Add(entityInfo._uniqueKey, entityInfo._characterEntity);
+                    }
                 }
 
                 if(characterSpawnData._startAIState != "")

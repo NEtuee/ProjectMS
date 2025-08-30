@@ -61,7 +61,7 @@
 
     <AC_PeaceMotionLoop MovementType="FrameEvent" DirectionType="Keep" FlipType="Direction">
         <AnimationHeader MasterPath="gv_MasterPath"/>
-        <Animation Preset="0_default/5_peace/1_loop" XFlip="true" Duration="1">
+        <Animation Preset="0_default/5_peace/1_loop" XFlip="true" Duration="2">
             <FrameEvent Type="Movement" StartTime="0" Friction="12" Speed="0"/>
             
             <FrameEvent Type="ApplyBuff" StartTime="0" ApplyBuff="HitCountClear"/>
