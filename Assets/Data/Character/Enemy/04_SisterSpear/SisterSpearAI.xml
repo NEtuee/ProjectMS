@@ -6,7 +6,7 @@
     <GlobalVariable Name="gv_CognitiveDelay"    Value="0.5"/>   <!-- 인지 지연 시간 : 해당 거리 내 PC 존재 시 인지까지 이루어지는 지연 시간. -->
     
     <!-- 평화 행동 설정-->
-    <GlobalVariable Name="gv_IsPeaceMotion"           Value="false"/>       <!-- 평화 모션 사용 : True일 시 평화 모션 재생, False일 경우 랜덤 이동 -->
+    <GlobalVariable Name="gv_IsPeaceMotion"           Value="true"/>       <!-- 평화 모션 사용 : True일 시 평화 모션 재생, False일 경우 랜덤 이동 -->
         
     <!-- 간격 거리 설정 -->
     <GlobalVariable Name="gv_AttackRangeMin"           Value="0.5"/>       <!-- 근거리 기준 : 해당 값보다 낮으면 근거리로 판단한다. -->
